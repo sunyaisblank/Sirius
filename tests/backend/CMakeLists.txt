@@ -1,6 +1,7 @@
 # CPU transport remains testable without Vulkan development files or Slang.
 # Device tests extend the same executable when their backend is available.
 add_executable(sirius_backend_tests
+    portable_binary32_test.cpp
     cpu_jacobi_oracle_test.cpp
     cpu_trace_boundary_test.cpp
     coupled_transport_test.cpp
@@ -14,6 +15,24 @@ add_executable(sirius_backend_tests
 target_link_libraries(sirius_backend_tests PRIVATE sirius_backend_cpu GTest::gtest_main)
 target_include_directories(sirius_backend_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 sirius_configure_target(sirius_backend_tests CONTRACT_MODE 2)
+
+# Independent exact expectations are generated once and bound into the normal
+# build receipt. The test reads these bytes; it does not duplicate the algorithm.
+set(portable_reference "${CMAKE_CURRENT_BINARY_DIR}/portable_binary32_reference.bin")
+add_custom_command(
+    OUTPUT "${portable_reference}"
+    COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_SOURCE_DIR}/tests/support/portable_binary32/reference.py"
+        --output "${portable_reference}"
+    DEPENDS "${CMAKE_SOURCE_DIR}/tests/support/portable_binary32/reference.py"
+    COMMENT "Generating independent exact binary32 arithmetic expectations"
+    VERBATIM)
+add_custom_target(sirius_portable_binary32_test_inputs DEPENDS "${portable_reference}")
+set_property(TARGET sirius_portable_binary32_test_inputs PROPERTY
+    SIRIUS_TEST_INPUT_ARTIFACTS "portable_binary32_reference=${portable_reference}")
+add_dependencies(sirius_backend_tests sirius_portable_binary32_test_inputs)
+target_compile_definitions(sirius_backend_tests PRIVATE
+    SIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1)
 
 gtest_discover_tests(
     sirius_backend_tests
@@ -34,6 +53,7 @@ target_sources(sirius_backend_tests PRIVATE
     kernel_camera_frame_test.cpp
     retained_camera_program_test.cpp
     retained_compute_test.cpp
+    retained_dopri_test.cpp
     kernel_infinity_test.cpp
     kernel_trace_test.cpp
     kernel_beam_test.cpp
@@ -45,10 +65,14 @@ target_sources(sirius_backend_tests PRIVATE
 # of render orchestration. Actual renderer/session tests belong to tests/render.
 target_link_libraries(sirius_backend_tests PRIVATE
     sirius_backend sirius_render)
+if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OPT)
+    target_include_directories(sirius_backend_tests PRIVATE
+        "${CMAKE_BINARY_DIR}/src/sirius/backend/retained")
+endif()
 
 if(TARGET sirius_kernels)
     target_compile_definitions(sirius_backend_tests
-        PRIVATE SIRIUS_KERNEL_DIR="${SIRIUS_KERNEL_BINARY_DIR}")
+        PRIVATE SIRIUS_TEST_HAS_KERNELS=1)
     add_dependencies(sirius_backend_tests sirius_kernels)
 
     find_program(SIRIUS_SPIRV_AS spirv-as)
@@ -86,6 +110,6 @@ if(TARGET sirius_kernels)
         add_dependencies(sirius_backend_tests sirius_retained_camera_test_inputs)
         target_include_directories(sirius_backend_tests PRIVATE "${retained_build}")
         target_compile_definitions(sirius_backend_tests PRIVATE
-            SIRIUS_RETAINED_CAMERA_TEST_DIR="${retained_build}")
+            SIRIUS_TEST_HAS_RETAINED_CAMERA=1)
     endif()
 endif()

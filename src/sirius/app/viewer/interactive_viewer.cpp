@@ -11,6 +11,9 @@
 namespace sirius::app {
 
 namespace {
+// A preview callback may Stop its viewer. It requests cancellation here and
+// leaves the render-thread join to an external owner, never joining itself.
+thread_local InteractiveViewer* rendering_viewer = nullptr;
 
 double NormaliseAzimuth(double phi) {
     return std::remainder(phi, 2.0 * core::constants::math::kPi);
@@ -116,6 +119,7 @@ bool InteractiveViewer::Initialise(const ViewerConfig& config) {
         std::lock_guard<std::mutex> lock(frame_mutex_);
         last_error_.clear();
         frame_buffer_.clear();
+        ++preview_generation_;
     }
 
     return true;
@@ -124,6 +128,11 @@ bool InteractiveViewer::Initialise(const ViewerConfig& config) {
 void InteractiveViewer::SetFrameCallback(FrameCallback callback) {
     std::lock_guard<std::mutex> lock(frame_mutex_);
     frame_callback_ = std::move(callback);
+}
+
+void InteractiveViewer::SetPreviewCallback(PreviewCallback callback) {
+    std::lock_guard<std::mutex> lock(frame_mutex_);
+    preview_callback_ = std::move(callback);
 }
 
 bool InteractiveViewer::Start() {
@@ -151,12 +160,14 @@ bool InteractiveViewer::Start() {
 
 void InteractiveViewer::Stop() {
     stop_requested_ = true;
+    ++preview_generation_;
     {
         std::lock_guard<std::mutex> lock(session_mutex_);
         if (session_) {
             (void)session_->Cancel();
         }
     }
+    if (rendering_viewer == this) return;
     std::lock_guard<std::mutex> lock(thread_mutex_);
     if (render_thread_.joinable()) {
         render_thread_.join();
@@ -165,6 +176,7 @@ void InteractiveViewer::Stop() {
 }
 
 void InteractiveViewer::Restart() {
+    ++preview_generation_;
     {
         std::lock_guard<std::mutex> lock(state_mutex_);
         refinement_.needs_restart = true;
@@ -336,18 +348,20 @@ void InteractiveViewer::GetResolutionForLevel(int level, int& width, int& height
         std::lock_guard<std::mutex> lock(state_mutex_);
         config = config_;
     }
-    float t = static_cast<float>(level) / std::max(1, config.refinement_levels - 1);
+    const int last_level = config.refinement_levels - 1;
+    level = std::clamp(level, 0, last_level);
+    // A sole pass is already the final pass. Partial-edge tiles preserve the
+    // requested image dimensions, so the ladder needs no image-axis alignment.
+    if (level == last_level) {
+        width = config.final_width;
+        height = config.final_height;
+        return;
+    }
+    const float t = static_cast<float>(level) / last_level;
     width =
         static_cast<int>(config.preview_width + t * (config.final_width - config.preview_width));
     height =
         static_cast<int>(config.preview_height + t * (config.final_height - config.preview_height));
-
-    // Round to a multiple of 8 for tile alignment.
-    width = (width / 8) * 8;
-    height = (height / 8) * 8;
-
-    width = std::max(64, width);
-    height = std::max(64, height);
 }
 
 render::SessionConfig InteractiveViewer::CreateSessionConfig(int width, int height, int spp) const {
@@ -362,6 +376,7 @@ render::SessionConfig InteractiveViewer::CreateSessionConfig(int width, int heig
 }
 
 void InteractiveViewer::RenderThread() {
+    rendering_viewer = this;
     {
         std::lock_guard<std::mutex> lock(state_mutex_);
         refinement_.start_time = std::chrono::steady_clock::now();
@@ -413,7 +428,9 @@ void InteractiveViewer::RenderThread() {
                 std::chrono::duration<double, std::milli>(now - refinement_.start_time).count();
         }
     }
+    ++preview_generation_;  // Retire any provisional pixels after an error/stop.
     running_ = false;
+    rendering_viewer = nullptr;
 }
 
 bool InteractiveViewer::RenderStep() {
@@ -435,7 +452,60 @@ bool InteractiveViewer::RenderStep() {
         refinement_.current_samples_per_pixel = samples_per_pixel;
     }
 
+    const auto generation = preview_generation_.load();
     render::SessionConfig config = CreateSessionConfig(width, height, samples_per_pixel);
+    const auto current_generation = [&] {
+        return generation == preview_generation_.load() && !stop_requested_ && !restart_requested_;
+    };
+
+    // One provisional radiance owner per pass. Tile workers only copy; the
+    // viewer render owner processes snapshots and delivers user callbacks.
+    render::DisplayBuffer preview;
+    bool preview_enabled = false;
+    {
+        std::lock_guard<std::mutex> lock(frame_mutex_);
+        preview_enabled = static_cast<bool>(preview_callback_);
+    }
+    if (preview_enabled) {
+        try {
+            preview.Initialise(width, height);
+        } catch (...) {
+            preview_enabled = false;  // Provisional storage is optional.
+        }
+    }
+    std::uint64_t preview_updates = 0;
+    const auto publish_preview = [&] {
+        if (!preview_enabled || !current_generation()) return;
+        const auto updates = preview.GetUpdateCounter();
+        if (updates == preview_updates) return;
+        std::vector<float> pixels;
+        try {
+            pixels = preview.SnapshotFloatData();
+            preview_updates = updates;
+            render::ApplySessionDisplayPipeline(pixels, width, height, config);
+        } catch (...) {
+            // Provisional display work cannot turn a complete physical render
+            // into a failed owner thread. Its final output path is unchanged.
+            preview_enabled = false;
+            return;
+        }
+        if (!std::all_of(pixels.begin(), pixels.end(),
+                         [](float value) { return std::isfinite(value); }))
+            return;
+        try {
+            PreviewCallback callback;
+            {
+                std::lock_guard<std::mutex> lock(frame_mutex_);
+                if (!current_generation()) return;
+                callback = preview_callback_;
+            }
+            if (callback && current_generation())
+                callback(pixels.data(), width, height, generation);
+        } catch (...) {
+            // Preview delivery/copy is advisory; a failed consumer cannot
+            // change the complete physical frame or strand the render owner.
+        }
+    };
 
     render::RenderSession* session = nullptr;
     {
@@ -452,7 +522,35 @@ bool InteractiveViewer::RenderStep() {
         last_error_ = configured.error().Description();
         return false;
     }
-    const render::SessionState final_state = session->Execute();
+    if (preview_enabled) {
+        try {
+            session->SetCompletedTileCallback(
+                [&](int x, int y, int tile_width, int tile_height, std::span<const float> rgba) {
+                    if (current_generation())
+                        preview.UpdateTile(x, y, tile_width, tile_height, rgba.data());
+                });
+        } catch (...) {
+            preview_enabled = false;
+        }
+    }
+    if (!session->Start()) {
+        std::lock_guard<std::mutex> lock(frame_mutex_);
+        last_error_ = "viewer render session could not start";
+        return false;
+    }
+    // Stop/Restart may have reached session_ while it was still Idle, when
+    // Cancel cannot latch a request. Start resets its token; cancel the obsolete
+    // generation now, while subsequent requests see a live session directly.
+    if (!current_generation()) (void)session->Cancel();
+    if (preview_enabled) {
+        while (!session->IsComplete()) {
+            publish_preview();
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+    }
+    session->WaitForCompletion();
+    publish_preview();
+    const render::SessionState final_state = session->GetState();
     if (final_state != render::SessionState::Complete) {
         if (final_state == render::SessionState::Cancelled &&
             (stop_requested_ || restart_requested_)) {
@@ -463,6 +561,7 @@ bool InteractiveViewer::RenderStep() {
         return false;
     }
 
+    if (!current_generation()) return !stop_requested_;
     const std::vector<float> snapshot = session->GetDisplayBuffer().SnapshotFloatData();
     const std::size_t size = static_cast<std::size_t>(width) * static_cast<std::size_t>(height) * 4;
     if (snapshot.size() != size) {
@@ -472,6 +571,7 @@ bool InteractiveViewer::RenderStep() {
     }
     {
         std::lock_guard<std::mutex> lock(frame_mutex_);
+        if (!current_generation()) return !stop_requested_;
         frame_buffer_ = snapshot;
     }
 

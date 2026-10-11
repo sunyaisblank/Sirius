@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 // Full-image smoke gate for the trace kernel (workstream deliverable 3): a
 // 64x64 Kerr render with no disk, background shaded by escape direction, must
 // dispatch on Lavapipe and produce a finite, non-constant field whose
@@ -46,7 +48,7 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
 }
 
 TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #else
     const auto devices = EnumerateVulkanDevices();
@@ -59,7 +61,7 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
 
-    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
+    const auto spirv = LoadSpirv(sirius::test::ResourcePath("kernels/trace.spv"));
     ASSERT_FALSE(spirv.empty()) << "trace.spv missing or empty";
     const auto kernel = (*device)->LoadKernel(spirv);
     ASSERT_TRUE(kernel.has_value()) << kernel.error().Description();
@@ -149,7 +151,7 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
 #endif
 }
 
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
 // Dispatch one 64x64 Kerr scene (the same scene as the smoke gate above)
 // through the given SPIR-V module and return the RGBA radiance field. Keep the
 // direct probe under the product's 64-active-pixel work bound. This helper
@@ -220,7 +222,7 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
 // fp32 module, by requiring the artefact to load, dispatch, and stay finite
 // on a shaderFloat64 device (Lavapipe reports it).
 TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #else
     const auto devices = EnumerateVulkanDevices();
@@ -232,8 +234,8 @@ TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
     ASSERT_TRUE(selected.has_value()) << selected.error().Description();
     auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
-    const auto spirv32 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
-    const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace_fp64.spv");
+    const auto spirv32 = LoadSpirv(sirius::test::ResourcePath("kernels/trace.spv"));
+    const auto spirv64 = LoadSpirv(sirius::test::ResourcePath("kernels/trace_fp64.spv"));
     ASSERT_FALSE(spirv32.empty()) << "trace.spv missing";
     ASSERT_FALSE(spirv64.empty()) << "trace_fp64.spv missing";
 
@@ -306,7 +308,7 @@ TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
 // well as plain fp32 does (within slack for noise; on hardware with sloppier
 // fp32 the compensation's gain is larger, which this bound also admits).
 TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #else
     const auto devices = EnumerateVulkanDevices();
@@ -318,9 +320,9 @@ TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
     ASSERT_TRUE(selected.has_value()) << selected.error().Description();
     auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
-    const auto spirv32 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
-    const auto spirvC = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace_fp32comp.spv");
-    const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace_fp64.spv");
+    const auto spirv32 = LoadSpirv(sirius::test::ResourcePath("kernels/trace.spv"));
+    const auto spirvC = LoadSpirv(sirius::test::ResourcePath("kernels/trace_fp32comp.spv"));
+    const auto spirv64 = LoadSpirv(sirius::test::ResourcePath("kernels/trace_fp64.spv"));
     ASSERT_FALSE(spirv32.empty());
     ASSERT_FALSE(spirvC.empty()) << "trace_fp32comp.spv missing";
     ASSERT_FALSE(spirv64.empty());
@@ -370,7 +372,7 @@ TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
 #endif
 }
 
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
 // Direct production trace ABI. A one-pixel launch has seven valid bindings;
 // the empty CSR covers every sky cell so the pupil-bundle diagnostic never
 // relies on an out-of-bounds dummy index. No production timing/state hook.
@@ -420,7 +422,7 @@ sirius::base::Expected<std::array<float, 4>> TracePixel(
 #endif
 
 TEST(KernelTrace, ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs) {
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
     const auto devices = EnumerateVulkanDevices();
     ASSERT_TRUE(devices.has_value()) << devices.error().Description();
     if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
@@ -431,7 +433,7 @@ TEST(KernelTrace, ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs) {
     auto& device = **opened;
     for (const char* name : {"trace.spv", "trace_fp32comp.spv", "trace_fp64.spv"}) {
         SCOPED_TRACE(name);
-        const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/" + name);
+        const auto words = LoadSpirv(sirius::test::ResourcePath(std::string("kernels/") + name));
         ASSERT_FALSE(words.empty());
         const auto kernel = device.LoadKernel(words);
         if (std::string(name) == "trace_fp64.spv" && !device.Info().supports_fp64) {
@@ -572,7 +574,7 @@ TEST(KernelTrace, ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs) {
 }
 
 TEST(KernelTrace, ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs) {
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
     const auto devices = EnumerateVulkanDevices();
     ASSERT_TRUE(devices.has_value()) << devices.error().Description();
     if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
@@ -583,7 +585,7 @@ TEST(KernelTrace, ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs) 
     auto& device = **opened;
     for (const char* name : {"trace.spv", "trace_fp32comp.spv", "trace_fp64.spv"}) {
         SCOPED_TRACE(name);
-        const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/" + name);
+        const auto words = LoadSpirv(sirius::test::ResourcePath(std::string("kernels/") + name));
         ASSERT_FALSE(words.empty());
         const auto kernel = device.LoadKernel(words);
         if (std::string(name) == "trace_fp64.spv" && !device.Info().supports_fp64) {

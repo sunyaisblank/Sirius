@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 // Vulkan render-path gates (specification programmes 3 and 4). Three concerns:
 //   1. a Kerr render through the RenderSession Vulkan path yields finite,
 //      non-constant radiance with a bounded horizon shadow (64x64 and 160x120,
@@ -25,6 +27,7 @@
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <bit>
 #include <cmath>
 #include <cstdint>
@@ -34,6 +37,7 @@
 #include <functional>
 #include <limits>
 #include <numbers>
+#include <numeric>
 #include <span>
 #include <string>
 #include <string_view>
@@ -78,6 +82,17 @@ using sirius::render::test::MakeStationaryKerrObserver;
 using sirius::render::test::ProjectBardeenAtFiniteObserver;
 
 constexpr double kPi = std::numbers::pi;
+
+// These are the renderer's zero-active software preparations. Film Camera is
+// unused; DP sampling participates in preparation, reuse and recovery.
+using RetainedKernelStage = sirius::backend::RetainedCompute::KernelStage;
+constexpr std::array kSoftwarePreparationStages{
+    static_cast<std::size_t>(RetainedKernelStage::kRayCamera),
+    static_cast<std::size_t>(RetainedKernelStage::kInitialize),
+    static_cast<std::size_t>(RetainedKernelStage::kTransport),
+    static_cast<std::size_t>(RetainedKernelStage::kEndpoint),
+    static_cast<std::size_t>(RetainedKernelStage::kDense),
+    static_cast<std::size_t>(RetainedKernelStage::kDopriPhase)};
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -183,14 +198,14 @@ struct KernelFixture {
 
 KernelFixture OpenKernel() {
     KernelFixture f;
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
     const auto devices = EnumerateVulkanDevices();
     if (!devices.has_value() || devices->empty()) return f;
     const auto selected = ResolveVulkanDeviceIndex(*devices);
     if (!selected.has_value()) return f;
     auto device = CreateVulkanDevice(*selected);
     if (!device.has_value()) return f;
-    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
+    const auto spirv = LoadSpirv(sirius::test::ResourcePath("kernels/trace.spv"));
     if (spirv.empty()) return f;
     auto kernel = (*device)->LoadKernel(spirv);
     if (!kernel.has_value()) return f;
@@ -681,12 +696,27 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
     ASSERT_TRUE(selected.has_value());
     const bool software = (*devices)[*selected].kind == sirius::backend::DeviceKind::kSoftware;
     const auto check_initialization = [software](const auto& stats) {
-        EXPECT_EQ(stats.initialization_dispatches, software && !stats.retained_intervals ? 1 : 0);
+        EXPECT_EQ(stats.initialization_dispatches,
+                  software ? (stats.retained_intervals
+                                  ? static_cast<int>(kSoftwarePreparationStages.size())
+                                  : 1)
+                           : 0);
         EXPECT_TRUE(std::isfinite(stats.initialization_seconds));
         EXPECT_TRUE(std::isfinite(stats.initialization_submit_wait_ms));
         EXPECT_GE(stats.initialization_seconds, 0.0);
         EXPECT_GE(stats.initialization_submit_wait_ms, 0.0);
         EXPECT_GE(stats.seconds, stats.initialization_seconds);
+        if (stats.retained_intervals) {
+            EXPECT_EQ(stats.retained_preparation.stages[0].attempts, 0U);
+            EXPECT_EQ(stats.retained_preparation.stages[0].completed_dispatches, 0U);
+            for (const auto i : kSoftwarePreparationStages) {
+                const auto& stage = stats.retained_preparation.stages[i];
+                EXPECT_EQ(stage.completed_dispatches, software ? 1U : 0U);
+                EXPECT_EQ(stage.completed, software ? 1U : 0U);
+                EXPECT_EQ(stage.write_buffer_bytes, software ? 8U : 0U);
+                EXPECT_EQ(stage.header_restored, software);
+            }
+        }
         if (!software && !stats.retained_intervals) {
             EXPECT_EQ(stats.initialization_seconds, 0.0);
             EXPECT_EQ(stats.initialization_submit_wait_ms, 0.0);
@@ -764,7 +794,7 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
 }
 
 TEST(VulkanRenderSession, ZeroActiveTracePreservesRadianceAcrossPrecisionRungs) {
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
     KernelFixture fixture = OpenKernel();
     if (!fixture.ready) GTEST_SKIP() << "Vulkan device or trace kernel unavailable";
     auto& device = *fixture.device;
@@ -787,7 +817,7 @@ TEST(VulkanRenderSession, ZeroActiveTracePreservesRadianceAcrossPrecisionRungs) 
     }
     for (const char* module : {"trace.spv", "trace_fp32comp.spv", "trace_fp64.spv"}) {
         SCOPED_TRACE(module);
-        const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/" + module);
+        const auto spirv = LoadSpirv(sirius::test::ResourcePath(std::string("kernels/") + module));
         ASSERT_FALSE(spirv.empty());
         const auto kernel = device.LoadKernel(spirv);
         if (std::string_view(module) == "trace_fp64.spv" && !device.Info().supports_fp64) {
@@ -1335,10 +1365,25 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     DisplayBuffer display;
     display.Initialise(config.width, config.height);
     int tiles = 0;
-    const auto rendered = RenderVulkanToDisplay(config, display, [&](int completed, int total) {
-        EXPECT_LE(completed, total);
-        ++tiles;
-    });
+    DisplayBuffer provisional;
+    provisional.Initialise(config.width, config.height);
+    std::atomic<unsigned> preview_tiles{0};
+    const auto rendered = RenderVulkanToDisplay(
+        config, display,
+        [&](int completed, int total) {
+            EXPECT_LE(completed, total);
+            ++tiles;
+        },
+        {},
+        [&](int x, int y, int width, int height, std::span<const float> rgba) {
+            EXPECT_EQ(display.GetUpdateCounter(), 0U)
+                << "completed-tile previews must not commit the caller display";
+            EXPECT_TRUE(std::all_of(rgba.begin(), rgba.end(),
+                                    [](float value) { return std::isfinite(value); }));
+            EXPECT_EQ(rgba.size(), static_cast<std::size_t>(width) * height * 4);
+            provisional.UpdateTile(x, y, width, height, rgba.data());
+            ++preview_tiles;
+        });
     ASSERT_TRUE(rendered.has_value()) << rendered.error().Description();
     EXPECT_EQ(tiles, rendered->tiles_rendered);
     ASSERT_GT(rendered->work_tile_edge, 0);
@@ -1353,6 +1398,19 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
         std::int64_t submissions = 0;
         for (const auto count : rendered->retained_stage_dispatches) submissions += count;
         EXPECT_EQ(rendered->band_dispatches, submissions);
+        for (std::size_t i = 0; i < rendered->retained_stages.size(); ++i) {
+            const auto& stage = rendered->retained_stages[i];
+            std::uint64_t commands = 0, rows = 0;
+            EXPECT_EQ(stage.command_row_counts.size(),
+                      rendered->retained_timing.projection_capacity + 1);
+            for (std::size_t prefix = 0; prefix < stage.command_row_counts.size(); ++prefix) {
+                commands += stage.command_row_counts[prefix];
+                rows += prefix * stage.command_row_counts[prefix];
+            }
+            EXPECT_EQ(commands, static_cast<std::uint64_t>(rendered->retained_stage_dispatches[i]));
+            EXPECT_EQ(rows, stage.completion_flag_counts[0] + stage.completion_flag_counts[1] +
+                                stage.completion_flag_counts[2]);
+        }
     } else {
         EXPECT_GT(rendered->continuation_dispatches[0], 0);
         EXPECT_GT(rendered->continuation_dispatches[1], 0);
@@ -1369,6 +1427,8 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     EXPECT_GT(rendered->maximum_dispatch_ms, 0.0);
     EXPECT_LE(rendered->maximum_dispatch_ms, 1000.0);
     const auto complete = display.SnapshotFloatData();
+    EXPECT_GT(preview_tiles.load(), 0U);
+    EXPECT_EQ(provisional.SnapshotFloatData(), complete);
     EXPECT_TRUE(std::all_of(complete.begin(), complete.end(),
                             [](float value) { return std::isfinite(value); }));
     float maximum_rgb = 0.0f;
@@ -1381,6 +1441,77 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     RecordProperty("maximum_submit_ms", std::to_string(rendered->maximum_dispatch_ms));
     RecordProperty("explicit_allocation_bytes",
                    std::to_string(rendered->explicit_buffer_allocation_bytes));
+    const auto selected_index = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected_index) << selected_index.error().Description();
+    const auto& selected = (*devices)[*selected_index];
+    const auto nonzero = [](const auto& uuid) {
+        return std::any_of(uuid.begin(), uuid.end(), [](auto byte) { return byte != 0; });
+    };
+    const bool reusable_software =
+        selected.kind == sirius::backend::DeviceKind::kSoftware && nonzero(selected.device_uuid) &&
+        nonzero(selected.driver_uuid) &&
+        std::count_if(devices->begin(), devices->end(), [&](const auto& other) {
+            return other.device_uuid == selected.device_uuid &&
+                   other.driver_uuid == selected.driver_uuid;
+        }) == 1;
+    const auto expect_fresh_frame_stats = [&](const VulkanRenderStats& stats) {
+        EXPECT_EQ(stats.explicit_buffer_allocation_bytes,
+                  rendered->explicit_buffer_allocation_bytes);
+        EXPECT_LE(stats.explicit_buffer_allocation_bytes, stats.tile_plan.usable_bytes);
+        EXPECT_EQ(stats.continuation_capacity, rendered->continuation_capacity);
+        EXPECT_LE(stats.maximum_dispatch_ms, 1000.0);
+        if (!stats.retained_intervals) return;
+        // The fresh executor counts camera batches independently of the reused
+        // compute owner. An accumulated physical count fails this equality.
+        EXPECT_EQ(stats.retained_stage_dispatches[5], stats.camera_batches);
+        for (std::size_t stage = 0; stage < stats.retained_stages.size(); ++stage)
+            EXPECT_EQ(std::accumulate(stats.retained_stages[stage].command_row_counts.begin(),
+                                      stats.retained_stages[stage].command_row_counts.end(),
+                                      std::uint64_t{}),
+                      static_cast<std::uint64_t>(stats.retained_stage_dispatches[stage]));
+        if (selected.kind != sirius::backend::DeviceKind::kSoftware) return;
+        EXPECT_EQ(stats.initialization_dispatches,
+                  static_cast<int>(kSoftwarePreparationStages.size()));
+        EXPECT_EQ(stats.retained_preparation.stages[0].attempts, 0U);
+        EXPECT_EQ(stats.retained_preparation.stages[0].completed_dispatches, 0U);
+        for (const auto stage : kSoftwarePreparationStages) {
+            EXPECT_EQ(stats.retained_preparation.stages[stage].completed_dispatches, 1U);
+            EXPECT_TRUE(stats.retained_preparation.stages[stage].header_restored);
+        }
+    };
+    expect_fresh_frame_stats(*rendered);
+    // The identical scene must publish identical finite radiance without
+    // accumulating buffers, statistics or pipeline creation on an idle owner.
+    DisplayBuffer repeated;
+    repeated.Initialise(config.width, config.height);
+    const auto repeat = RenderVulkanToDisplay(config, repeated);
+    ASSERT_TRUE(repeat) << repeat.error().Description();
+    EXPECT_EQ(repeated.GetUpdateCounter(), 1U);
+    EXPECT_EQ(repeated.SnapshotFloatData(), complete);
+    expect_fresh_frame_stats(*repeat);
+    if (repeat->retained_intervals && reusable_software) {
+        for (const auto stage : kSoftwarePreparationStages)
+            EXPECT_FALSE(repeat->retained_preparation.stages[stage].timing.pipeline_created);
+    }
+    RecordProperty("repeated_initialization_seconds",
+                   std::to_string(repeat->initialization_seconds));
+    // Compatible residency must still upload the new camera inputs.
+    auto changed_config = config;
+    changed_config.camera_beta_right = -0.12;
+    DisplayBuffer changed;
+    changed.Initialise(config.width, config.height);
+    const auto changed_frame = RenderVulkanToDisplay(changed_config, changed);
+    ASSERT_TRUE(changed_frame) << changed_frame.error().Description();
+    EXPECT_EQ(changed.GetUpdateCounter(), 1U);
+    const auto changed_pixels = changed.SnapshotFloatData();
+    EXPECT_NE(changed_pixels, complete);
+    EXPECT_TRUE(std::all_of(changed_pixels.begin(), changed_pixels.end(),
+                            [](float value) { return std::isfinite(value); }));
+    expect_fresh_frame_stats(*changed_frame);
+    if (changed_frame->retained_intervals && reusable_software) {
+        for (const auto stage : kSoftwarePreparationStages)
+            EXPECT_FALSE(changed_frame->retained_preparation.stages[stage].timing.pipeline_created);
+    }
     // Cancel during frame preparation or tracing. The previously published
     // image and its publication counter must remain unchanged.
     int polls = 0;
@@ -1404,6 +1535,20 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
         EXPECT_FALSE(refused.has_value());
         EXPECT_EQ(display.GetUpdateCounter(), 1u);
         EXPECT_EQ(display.SnapshotFloatData(), complete);
+    }
+    // Cancellation and an insufficient budget retire the leased pair. A
+    // subsequent normal render must recover within the original budget and
+    // publish the original scene, rather than inheriting failed-frame state.
+    DisplayBuffer recovered;
+    recovered.Initialise(config.width, config.height);
+    const auto recovery = RenderVulkanToDisplay(config, recovered);
+    ASSERT_TRUE(recovery) << recovery.error().Description();
+    EXPECT_EQ(recovered.GetUpdateCounter(), 1U);
+    EXPECT_EQ(recovered.SnapshotFloatData(), complete);
+    expect_fresh_frame_stats(*recovery);
+    if (recovery->retained_intervals && reusable_software) {
+        for (const auto stage : kSoftwarePreparationStages)
+            EXPECT_TRUE(recovery->retained_preparation.stages[stage].timing.pipeline_created);
     }
 }
 

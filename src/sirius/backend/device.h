@@ -8,11 +8,14 @@
 
 #include "sirius/base/error.h"
 
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <span>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace sirius::backend {
@@ -59,7 +62,37 @@ struct DeviceInfo {
     bool preserves_fp32_denormals = false;
     bool rounds_fp32_to_nearest = false;
     bool rounds_fp64_to_nearest = false;
+    bool preserves_fp32_signed_zero_inf_nan = false;
+    // True only after this logical device enables the advertised FMA32 feature
+    // with all required binary32 controls. Inventory alone cannot admit it.
+    bool fma_fp32_enabled = false;
+    // In-process ownership identity from VkPhysicalDeviceIDProperties. Missing
+    // or ambiguous identities cannot admit reuse of an existing logical device.
+    std::array<std::uint8_t, 16> device_uuid{};
+    std::array<std::uint8_t, 16> driver_uuid{};
+    bool operator==(const DeviceInfo&) const = default;
 };
+
+// Native expansion operations need both binary32 controls. The embedded
+// integer implementation supplies their numerical semantics on other devices;
+// inventory continues to report the actual hardware capabilities unchanged.
+[[nodiscard]] inline bool RetainedUsesPortableArithmetic(const DeviceInfo& device) {
+    return !device.preserves_fp32_denormals || !device.rounds_fp32_to_nearest;
+}
+
+// The factory and automatic backend selection share this precision contract.
+// Keep the existing FP64 rung's conservative support/refusal boundary even
+// though retained exact products no longer assume native binary64 accuracy.
+[[nodiscard]] inline std::optional<std::string_view> RetainedArithmeticIssue(
+    const DeviceInfo& device, bool fp64_products = false) {
+#ifndef SIRIUS_HAS_RETAINED_COMPUTE
+    if (RetainedUsesPortableArithmetic(device))
+        return "device lacks binary32 subnormal preservation or round-to-nearest control";
+#endif
+    if (fp64_products && (!device.supports_fp64 || !device.rounds_fp64_to_nearest))
+        return "device lacks binary64 products or round-to-nearest control";
+    return std::nullopt;
+}
 
 // Opaque per-device handles; values are indices into the owning device's
 // tables and are meaningless across devices.
@@ -90,6 +123,19 @@ struct DispatchTiming {
     bool pipeline_created = false;
 };
 
+struct ComputeDispatch {
+    KernelHandle kernel;
+    std::span<const BufferHandle> buffers;
+    std::uint32_t groups_x = 1, groups_y = 1, groups_z = 1;
+};
+
+// Two independent commands share one synchronous queue submission. The complete
+// host interval belongs to the pair; it cannot be attributed to either kernel.
+struct IndependentPairTiming {
+    DispatchTiming combined;
+    std::uint32_t pipeline_creations = 0;
+};
+
 // One compute device. Synchronous by design at this seam: a Dispatch
 // returns when results are readable. Tile-level parallelism lives above
 // (the scheduler overlaps tiles, not intra-tile commands), which keeps
@@ -108,6 +154,11 @@ class ComputeDevice {
     [[nodiscard]] virtual base::Expected<BufferHandle> CreateBuffer(std::uint64_t size_bytes,
                                                                     BufferUsage usage) = 0;
 
+    // Query the actual allocation required by the same descriptor as CreateBuffer.
+    // No explicit device memory is allocated; resident bytes/owned handles stay unchanged.
+    [[nodiscard]] virtual base::Expected<std::uint64_t> RequiredBufferAllocationBytes(
+        std::uint64_t size_bytes, BufferUsage usage) = 0;
+
     [[nodiscard]] virtual base::Expected<void> WriteBuffer(BufferHandle buffer,
                                                            std::span<const std::byte> data) = 0;
 
@@ -119,6 +170,17 @@ class ComputeDevice {
     [[nodiscard]] virtual base::Expected<void> Dispatch(
         KernelHandle kernel, std::span<const BufferHandle> buffers, std::uint32_t groups_x,
         std::uint32_t groups_y, std::uint32_t groups_z, DispatchTiming* timing = nullptr) = 0;
+
+    [[nodiscard]] virtual bool SupportsIndependentPair() const noexcept { return false; }
+    // All bound buffers must be disjoint. Both results are readable on success;
+    // no result may be consumed after a failure. The owner serializes this with
+    // all other device work, just as with Dispatch.
+    [[nodiscard]] virtual base::Expected<void> DispatchIndependentPair(
+        const std::array<ComputeDispatch, 2>&, IndependentPairTiming* timing = nullptr) {
+        if (timing) *timing = {};
+        return base::Fail(base::ErrorDomain::kDevice, "dispatch independent compute pair",
+                          "device does not support a shared submission");
+    }
 
     // Bound actual explicit device allocations, including adapter-required
     // padding. Lowering below already resident bytes must fail without changing

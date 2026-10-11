@@ -6,9 +6,12 @@
 #include <algorithm>
 #include <charconv>
 #include <chrono>
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <format>
+#include <mutex>
+#include <new>
 #include <string_view>
 #include <utility>
 
@@ -27,6 +30,31 @@ using base::Fail;
 // Headers on the measured toolchain are Vulkan 1.3 while the loader is 1.4;
 // requesting 1.3 is compatible with both (specification section 1.7 evidence).
 constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
+
+VkBufferCreateInfo BufferCreateInfo(std::uint64_t size_bytes, BufferUsage usage) {
+    const VkBufferUsageFlags usage_flags = usage == BufferUsage::kStorage
+                                               ? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+                                               : VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+    return {
+        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+        .size = size_bytes,
+        .usage = usage_flags,
+        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+    };
+}
+
+// One bounded serialized blob survives fresh render devices. Vulkan objects and
+// buffers retain their existing per-device lifetime. Concurrent device exports
+// replace this slot; they cannot accumulate entries for different adapters.
+struct ProcessPipelineCache {
+    std::mutex mutex;
+    std::vector<std::byte> data;
+};
+
+ProcessPipelineCache& PipelineCacheStore() {
+    static ProcessPipelineCache cache;
+    return cache;
+}
 
 [[nodiscard]] std::string VkResultText(VkResult result) {
     return std::format("VkResult {}", static_cast<int>(result));
@@ -53,9 +81,13 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES,
         .pNext = &float_controls,
     };
+    VkPhysicalDeviceIDProperties identity{
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES,
+        .pNext = &driver,
+    };
     VkPhysicalDeviceProperties2 properties2{
         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
-        .pNext = &driver,
+        .pNext = &identity,
     };
     vkGetPhysicalDeviceProperties2(physical, &properties2);
     const VkPhysicalDeviceProperties& properties = properties2.properties;
@@ -71,18 +103,12 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         }
     }
 
-    constexpr VkMemoryPropertyFlags kRenderMemory =
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     std::uint64_t render_memory = 0;
-    for (std::uint32_t i = 0; i < memory.memoryTypeCount; ++i) {
-        if ((memory.memoryTypes[i].propertyFlags & kRenderMemory) != kRenderMemory) {
-            continue;
-        }
-        const std::uint32_t heap = memory.memoryTypes[i].heapIndex;
-        render_memory = std::max(render_memory, memory.memoryHeaps[heap].size);
+    if (const auto type = detail::VulkanHostMemoryType(memory, ~std::uint32_t{0})) {
+        render_memory = memory.memoryHeaps[memory.memoryTypes[*type].heapIndex].size;
     }
 
-    return DeviceInfo{
+    DeviceInfo info{
         .name = properties.deviceName,
         .driver_name = driver.driverName,
         .driver_info = driver.driverInfo,
@@ -97,7 +123,12 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         .preserves_fp32_denormals = float_controls.shaderDenormPreserveFloat32 == VK_TRUE,
         .rounds_fp32_to_nearest = float_controls.shaderRoundingModeRTEFloat32 == VK_TRUE,
         .rounds_fp64_to_nearest = float_controls.shaderRoundingModeRTEFloat64 == VK_TRUE,
+        .preserves_fp32_signed_zero_inf_nan =
+            float_controls.shaderSignedZeroInfNanPreserveFloat32 == VK_TRUE,
     };
+    std::copy_n(identity.deviceUUID, info.device_uuid.size(), info.device_uuid.begin());
+    std::copy_n(identity.driverUUID, info.driver_uuid.size(), info.driver_uuid.begin());
+    return info;
 }
 
 [[nodiscard]] Expected<void> RetainDozenThreadRuntime(const DeviceInfo& info) {
@@ -219,7 +250,9 @@ Expected<VkInstance> CreateInstanceWithPortability(
 Expected<VkDevice> CreateDeviceWithPortability(VkPhysicalDevice physical,
                                                VkDeviceCreateInfo create_info,
                                                PFN_vkEnumerateDeviceExtensionProperties enumerate,
-                                               PFN_vkCreateDevice create) {
+                                               PFN_vkCreateDevice create, DeviceInfo* device_info,
+                                               PFN_vkGetPhysicalDeviceFeatures2 get_features) {
+    if (device_info) device_info->fma_fp32_enabled = false;
     std::uint32_t count = 0;
     if (const VkResult r = enumerate(physical, nullptr, &count, nullptr); r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "enumerate Vulkan device extensions", VkResultText(r));
@@ -246,16 +279,94 @@ Expected<VkDevice> CreateDeviceWithPortability(VkPhysicalDevice physical,
         })) {
         enabled.push_back(kPortabilitySubset);
     }
+    ShaderFmaFeatures fma{.sType = kShaderFmaFeaturesType};
+    constexpr const char* kShaderFma = "VK_KHR_shader_fma";
+    const bool eligible =
+        device_info && device_info->preserves_fp32_denormals &&
+        device_info->rounds_fp32_to_nearest && device_info->preserves_fp32_signed_zero_inf_nan &&
+        std::any_of(advertised.begin(), advertised.end(), [](const auto& extension) {
+            return std::strcmp(extension.extensionName, kShaderFma) == 0;
+        });
+    bool enable_fma = false;
+    if (eligible) {
+        VkPhysicalDeviceFeatures2 features{.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
+                                           .pNext = &fma};
+        get_features(physical, &features);
+        enable_fma = fma.shaderFmaFloat32 == VK_TRUE;
+        if (enable_fma) {
+            // Preserve the caller's chain and legacy Float64 admission. Only
+            // binary32 FMA is needed by the optional retained Transport module.
+            fma.pNext = const_cast<void*>(create_info.pNext);
+            fma.shaderFmaFloat16 = VK_FALSE;
+            fma.shaderFmaFloat64 = VK_FALSE;
+            create_info.pNext = &fma;
+            enabled.push_back(kShaderFma);
+        }
+    }
     create_info.enabledExtensionCount = static_cast<std::uint32_t>(enabled.size());
     create_info.ppEnabledExtensionNames = enabled.empty() ? nullptr : enabled.data();
     VkDevice device = VK_NULL_HANDLE;
     if (const VkResult r = create(physical, &create_info, nullptr, &device); r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "create Vulkan logical device", VkResultText(r));
     }
+    if (device_info) device_info->fma_fp32_enabled = enable_fma;
     return device;
 }
 
 }  // namespace detail
+
+std::optional<std::uint32_t> detail::VulkanHostMemoryType(
+    const VkPhysicalDeviceMemoryProperties& properties, std::uint32_t memory_type_bits) {
+    constexpr VkMemoryPropertyFlags kRequired =
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    std::optional<std::uint32_t> selected;
+    VkDeviceSize selected_heap_size = 0;
+    for (std::uint32_t i = 0; i < properties.memoryTypeCount; ++i) {
+        const auto& type = properties.memoryTypes[i];
+        const auto heap_size = properties.memoryHeaps[type.heapIndex].size;
+        if ((memory_type_bits & (1u << i)) != 0 && (type.propertyFlags & kRequired) == kRequired &&
+            heap_size > selected_heap_size) {
+            selected = i;
+            selected_heap_size = heap_size;
+        }
+    }
+    if (!selected) return std::nullopt;
+
+    const auto& original = properties.memoryTypes[*selected];
+    const auto preferred_flags = original.propertyFlags | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+    // Uncached coherent memory is commonly write-combined; reading the retained
+    // output then costs much more than cached host memory. Keep the original
+    // heap/capacity, and add only host caching, never feature-dependent flags.
+    for (std::uint32_t i = 0; i < properties.memoryTypeCount; ++i) {
+        const auto& type = properties.memoryTypes[i];
+        if ((memory_type_bits & (1u << i)) != 0 && type.heapIndex == original.heapIndex &&
+            type.propertyFlags == preferred_flags) {
+            return i;
+        }
+    }
+    return selected;
+}
+
+bool detail::VulkanPipelineCacheDataCompatible(std::span<const std::byte> data,
+                                               const VkPhysicalDeviceProperties& properties) {
+    // Version-one fields are tightly packed little-endian bytes, independent of
+    // the host's byte order or C structure packing. Only Vulkan-exported bytes
+    // reach the driver; this guard discards incompatible optimization data.
+    // https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineCacheHeaderVersionOne.html
+    constexpr std::size_t kHeaderBytes = 32;
+    if (data.size() < kHeaderBytes || data.size() > kVulkanPipelineCacheBlobLimit) return false;
+    const auto word = [&](std::size_t offset) {
+        std::uint32_t value = 0;
+        for (std::size_t byte = 0; byte < 4; ++byte)
+            value |= std::uint32_t(std::to_integer<unsigned char>(data[offset + byte]))
+                     << (8 * byte);
+        return value;
+    };
+    return word(0) == kHeaderBytes &&
+           word(4) == static_cast<std::uint32_t>(VK_PIPELINE_CACHE_HEADER_VERSION_ONE) &&
+           word(8) == properties.vendorID && word(12) == properties.deviceID &&
+           std::memcmp(data.data() + 16, properties.pipelineCacheUUID, VK_UUID_SIZE) == 0;
+}
 
 Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {
     auto instance = CreateInstance();
@@ -279,11 +390,11 @@ Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {
 }
 
 Expected<std::size_t> ResolveVulkanDeviceIndex(std::span<const DeviceInfo> devices) {
-    if (devices.empty()) {
-        return Fail(ErrorDomain::kDevice, "select Vulkan device", "no devices were enumerated");
-    }
     const char* raw = std::getenv("SIRIUS_VULKAN_DEVICE");
     if (raw == nullptr || *raw == '\0') {
+        if (devices.empty()) {
+            return Fail(ErrorDomain::kDevice, "select Vulkan device", "no devices were enumerated");
+        }
         return std::size_t{0};
     }
 
@@ -359,12 +470,18 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
         .pQueueCreateInfos = &queue_info,
         .pEnabledFeatures = &enabled,
     };
-    auto logical = detail::CreateDeviceWithPortability(device->physical_, device_info);
+    auto logical = detail::CreateDeviceWithPortability(device->physical_, device_info,
+                                                       vkEnumerateDeviceExtensionProperties,
+                                                       vkCreateDevice, &device->info_);
     if (!logical) {
         return std::unexpected(logical.error());
     }
     device->device_ = *logical;
     vkGetDeviceQueue(device->device_, family, 0, &device->queue_);
+
+    device->InitialisePipelineCache();
+    device->timestamp_properties_ = {families[family].timestampValidBits,
+                                     device->pipeline_cache_properties_.limits.timestampPeriod};
 
     const VkCommandPoolCreateInfo pool_info{
         .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
@@ -401,19 +518,40 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
 
 VulkanDevice::~VulkanDevice() {
     if (device_ != VK_NULL_HANDLE) {
-        vkDeviceWaitIdle(device_);
+        const auto completion = vkDeviceWaitIdle(device_);
+        // Device loss establishes the same pending/in-use lifetime boundary as
+        // success, but another error leaves completion unproven. Retain the
+        // entire device/instance chain until process termination in that case.
+        // https://docs.vulkan.org/spec/latest/chapters/devsandqueues.html#devsandqueues-lost-device
+        if (completion != VK_SUCCESS && completion != VK_ERROR_DEVICE_LOST) return;
+        if (pending_dispatch_) {
+            vkFreeDescriptorSets(device_, descriptor_pool_, pending_dispatch_->set_count,
+                                 pending_dispatch_->sets.data());
+        }
+        // Export while the owning device is alive and no operations can modify
+        // its cache. A failed optimization snapshot must not escape a destructor.
+        if (pipeline_cache_modified_) {
+            try {
+                (void)SnapshotPipelineCache();
+            } catch (const std::bad_alloc&) {
+            }
+        }
         for (auto& [key, pipeline] : pipelines_) {
             vkDestroyPipeline(device_, pipeline.pipeline, nullptr);
             vkDestroyPipelineLayout(device_, pipeline.layout, nullptr);
             vkDestroyDescriptorSetLayout(device_, pipeline.set_layout, nullptr);
         }
-        for (VkShaderModule module : kernels_) {
-            vkDestroyShaderModule(device_, module, nullptr);
+        for (const Kernel& kernel : kernels_) {
+            vkDestroyShaderModule(device_, kernel.module, nullptr);
         }
         for (Buffer& buffer : buffers_) {
             vkDestroyBuffer(device_, buffer.buffer, nullptr);
             vkFreeMemory(device_, buffer.memory, nullptr);
         }
+        if (pipeline_cache_ != VK_NULL_HANDLE)
+            vkDestroyPipelineCache(device_, pipeline_cache_, nullptr);
+        if (timestamp_pool_ != VK_NULL_HANDLE)
+            vkDestroyQueryPool(device_, timestamp_pool_, nullptr);
         vkDestroyDescriptorPool(device_, descriptor_pool_, nullptr);
         vkDestroyCommandPool(device_, command_pool_, nullptr);
         vkDestroyDevice(device_, nullptr);
@@ -423,18 +561,152 @@ VulkanDevice::~VulkanDevice() {
     }
 }
 
+void VulkanDevice::InitialisePipelineCache() {
+    vkGetPhysicalDeviceProperties(physical_, &pipeline_cache_properties_);
+    std::vector<std::byte> seed;
+    try {
+        auto& stored = PipelineCacheStore();
+        std::lock_guard lock(stored.mutex);
+        if (detail::VulkanPipelineCacheDataCompatible(stored.data, pipeline_cache_properties_))
+            seed = stored.data;
+        else if (!stored.data.empty())
+            pipeline_cache_stats_.import_discarded = true;
+    } catch (const std::bad_alloc&) {
+        // Import is optional; an empty cache remains usable if the host cannot
+        // afford the bounded serialized copy.
+        seed.clear();
+        pipeline_cache_stats_.import_discarded = true;
+    }
+    // Default flags preserve Vulkan's internally synchronized pipeline creation.
+    // https://docs.vulkan.org/refpages/latest/refpages/source/vkCreatePipelineCache.html
+    VkPipelineCacheCreateInfo cache_info{
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
+        .initialDataSize = seed.size(),
+        .pInitialData = seed.empty() ? nullptr : seed.data(),
+    };
+    auto result = vkCreatePipelineCache(device_, &cache_info, nullptr, &pipeline_cache_);
+    if (result != VK_SUCCESS && !seed.empty()) {
+        // Cache import cannot add a product admission requirement. Retry empty,
+        // then retain the original uncached pipeline path if allocation fails.
+        pipeline_cache_ = VK_NULL_HANDLE;
+        seed.clear();
+        pipeline_cache_stats_.import_discarded = true;
+        cache_info.initialDataSize = 0;
+        cache_info.pInitialData = nullptr;
+        result = vkCreatePipelineCache(device_, &cache_info, nullptr, &pipeline_cache_);
+    }
+    pipeline_cache_stats_.creation_result = result;
+    pipeline_cache_stats_.enabled = result == VK_SUCCESS;
+    if (result == VK_SUCCESS)
+        pipeline_cache_stats_.imported_bytes = seed.size();
+    else
+        pipeline_cache_ = VK_NULL_HANDLE;
+}
+
+std::optional<double> detail::VulkanTimestampSpanMs(std::uint64_t begin, std::uint64_t end,
+                                                    std::uint32_t valid_bits, double period_ns,
+                                                    double host_completion_ms) {
+    if (valid_bits < 36 || valid_bits > 64 || !std::isfinite(period_ns) || period_ns <= 0 ||
+        !std::isfinite(host_completion_ms) || host_completion_ms < 0)
+        return std::nullopt;
+    const double wrap_ms = std::ldexp(period_ns * 1e-6, static_cast<int>(valid_bits));
+    if (!std::isfinite(wrap_ms) || host_completion_ms >= wrap_ms) return std::nullopt;
+    const std::uint64_t mask = std::numeric_limits<std::uint64_t>::max() >> (64 - valid_bits);
+    return static_cast<double>((end - begin) & mask) * period_ns * 1e-6;
+}
+
+Expected<void> VulkanDevice::SetDispatchTimestampsEnabled(bool enabled) {
+    if (pending_dispatch_)
+        return Fail(ErrorDomain::kDevice, "configure dispatch timestamps",
+                    "earlier submitted work has no confirmed completion");
+    last_dispatch_timestamp_.reset();
+    if (!enabled) {
+        if (timestamp_pool_ != VK_NULL_HANDLE)
+            vkDestroyQueryPool(device_, timestamp_pool_, nullptr);
+        timestamp_pool_ = VK_NULL_HANDLE;
+        return {};
+    }
+    if (timestamp_pool_ != VK_NULL_HANDLE) return {};
+    if (timestamp_properties_.valid_bits < 36 || timestamp_properties_.valid_bits > 64 ||
+        !std::isfinite(timestamp_properties_.period_ns) || timestamp_properties_.period_ns <= 0)
+        return Fail(ErrorDomain::kDevice, "enable dispatch timestamps",
+                    "selected compute queue has no supported timestamp counter");
+    const VkQueryPoolCreateInfo info{
+        .sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
+        .queryType = VK_QUERY_TYPE_TIMESTAMP,
+        .queryCount = 2,
+    };
+    if (const auto result = vkCreateQueryPool(device_, &info, nullptr, &timestamp_pool_);
+        result != VK_SUCCESS) {
+        timestamp_pool_ = VK_NULL_HANDLE;
+        return Fail(ErrorDomain::kDevice, "create dispatch timestamp pool", VkResultText(result));
+    }
+    return {};
+}
+
+bool detail::VulkanSubmissionNeedsCompletion(VkResult submitted, VkResult waited) {
+    if (submitted == VK_SUCCESS) return waited != VK_SUCCESS && waited != VK_ERROR_DEVICE_LOST;
+    return submitted != VK_ERROR_OUT_OF_HOST_MEMORY && submitted != VK_ERROR_OUT_OF_DEVICE_MEMORY;
+}
+
+Expected<VulkanPipelineCacheStats> VulkanDevice::SnapshotPipelineCache() {
+    if (pipeline_cache_ == VK_NULL_HANDLE)
+        return Fail(ErrorDomain::kDevice, "snapshot pipeline cache", "cache is not initialized");
+    std::size_t available = 0;
+    if (const auto result = vkGetPipelineCacheData(device_, pipeline_cache_, &available, nullptr);
+        result != VK_SUCCESS)
+        return Fail(ErrorDomain::kDevice, "size pipeline cache", VkResultText(result));
+    pipeline_cache_stats_.available_bytes = available;
+    if (!pipeline_cache_modified_) return pipeline_cache_stats_;
+    pipeline_cache_stats_.exported_bytes = 0;
+    pipeline_cache_stats_.export_discarded = false;
+    const auto discard = [&] {
+        pipeline_cache_stats_.export_discarded = true;
+        pipeline_cache_modified_ = false;
+        return pipeline_cache_stats_;
+    };
+    // Never truncate a blob or allocate an unbounded serialization buffer. The
+    // driver's internal cache is separate from this bound and explicit buffers.
+    if (available < 32 || available > detail::kVulkanPipelineCacheBlobLimit) return discard();
+    std::vector<std::byte> data;
+    try {
+        data.resize(available);
+    } catch (const std::bad_alloc&) {
+        return discard();
+    }
+    std::size_t written = available;
+    const auto result = vkGetPipelineCacheData(device_, pipeline_cache_, &written, data.data());
+    if (result == VK_INCOMPLETE || written > data.size()) return discard();
+    if (result != VK_SUCCESS)
+        return Fail(ErrorDomain::kDevice, "export pipeline cache", VkResultText(result));
+    data.resize(written);
+    if (!detail::VulkanPipelineCacheDataCompatible(data, pipeline_cache_properties_))
+        return discard();
+    auto& stored = PipelineCacheStore();
+    std::lock_guard lock(stored.mutex);
+    stored.data = std::move(data);
+    pipeline_cache_stats_.exported_bytes = written;
+    pipeline_cache_modified_ = false;
+    return pipeline_cache_stats_;
+}
+
 Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spirv,
-                                             bool supports_fp64) {
+                                             bool supports_fp64, bool fma_fp32_enabled) {
     // SPIR-V binary encoding: five-word header, high 16 bits instruction word
     // count, low 16 bits opcode; OpCapability=17 and Float64=10. Khronos authority:
     // https://github.com/KhronosGroup/SPIRV-Headers/blob/main/include/spirv/unified1/spirv.hpp11
     constexpr std::uint32_t kMagic = 0x07230203u;
     constexpr std::uint32_t kOpCapability = 17u;
     constexpr std::uint32_t kFloat64 = 10u;
+    constexpr std::uint32_t kFmaKHR = 6030u;
+    constexpr std::uint32_t kOpFmaKHR = 4427u;
     if (spirv.size() <= 5 || spirv[0] != kMagic || spirv[4] != 0) {
         return Fail(ErrorDomain::kKernel, "validate shader module", "malformed SPIR-V header");
     }
     bool needs_fp64 = false;
+    bool needs_fma = false;
+    std::map<std::uint32_t, std::uint32_t> float_widths;
+    std::vector<std::uint32_t> fma_types;
     for (std::size_t offset = 5; offset < spirv.size();) {
         const std::uint32_t word_count = spirv[offset] >> 16;
         const std::uint32_t opcode = spirv[offset] & 0xffffu;
@@ -448,6 +720,16 @@ Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spir
                             "malformed SPIR-V OpCapability");
             }
             needs_fp64 = needs_fp64 || spirv[offset + 1] == kFloat64;
+            needs_fma = needs_fma || spirv[offset + 1] == kFmaKHR;
+        }
+        needs_fma = needs_fma || opcode == kOpFmaKHR;
+        if (opcode == 22u && word_count == 3)
+            float_widths.emplace(spirv[offset + 1], spirv[offset + 2]);
+        if (opcode == kOpFmaKHR) {
+            if (word_count != 6)
+                return Fail(ErrorDomain::kKernel, "validate shader module",
+                            "malformed SPIR-V OpFmaKHR");
+            fma_types.push_back(spirv[offset + 1]);
         }
         offset += word_count;
     }
@@ -455,24 +737,50 @@ Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spir
         return Fail(ErrorDomain::kKernel, "load shader precision",
                     "SPIR-V Float64 requested but the device lacks shaderFloat64");
     }
+    if (needs_fma && !fma_fp32_enabled)
+        return Fail(ErrorDomain::kKernel, "load shader precision",
+                    "SPIR-V FMAKHR requested but the logical device has not enabled "
+                    "shaderFmaFloat32 with required controls");
+    for (const auto type : fma_types) {
+        const auto width = float_widths.find(type);
+        if (width == float_widths.end() || width->second != 32u)
+            return Fail(ErrorDomain::kKernel, "load shader precision",
+                        "only binary32 OpFmaKHR is enabled on this logical device");
+    }
     return {};
 }
 
 Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> spirv) {
-    if (auto precision = ValidateVulkanKernelPrecision(spirv, info_.supports_fp64); !precision) {
+    if (auto precision =
+            ValidateVulkanKernelPrecision(spirv, info_.supports_fp64, info_.fma_fp32_enabled);
+        !precision) {
         return std::unexpected(precision.error());
+    }
+    // Identical modules share their device-lived pipelines even when a new
+    // retained compute instance owns different input and output buffers.
+    for (std::size_t index = 0; index < kernels_.size(); ++index) {
+        if (std::ranges::equal(kernels_[index].words, spirv))
+            return KernelHandle{static_cast<std::uint32_t>(index)};
+    }
+    Kernel kernel;
+    try {
+        kernel.words.assign(spirv.begin(), spirv.end());
+        // Complete host allocations before acquiring the Vulkan object.
+        kernels_.reserve(kernels_.size() + 1);
+    } catch (const std::bad_alloc&) {
+        return Fail(ErrorDomain::kKernel, "load shader module",
+                    "host shader storage allocation failed");
     }
     const VkShaderModuleCreateInfo create_info{
         .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-        .codeSize = spirv.size_bytes(),
-        .pCode = spirv.data(),
+        .codeSize = kernel.words.size() * sizeof(std::uint32_t),
+        .pCode = kernel.words.data(),
     };
-    VkShaderModule module = VK_NULL_HANDLE;
-    if (const VkResult r = vkCreateShaderModule(device_, &create_info, nullptr, &module);
+    if (const VkResult r = vkCreateShaderModule(device_, &create_info, nullptr, &kernel.module);
         r != VK_SUCCESS) {
         return Fail(ErrorDomain::kKernel, "create shader module", VkResultText(r));
     }
-    kernels_.push_back(module);
+    kernels_.push_back(std::move(kernel));
     return KernelHandle{static_cast<std::uint32_t>(kernels_.size() - 1)};
 }
 
@@ -491,15 +799,7 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
         return Fail(ErrorDomain::kDevice, "allocate buffer memory",
                     "requested buffer exceeds the remaining explicit allocation budget");
     }
-    const VkBufferUsageFlags usage_flags = usage == BufferUsage::kStorage
-                                               ? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-                                               : VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
-    const VkBufferCreateInfo buffer_info{
-        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-        .size = size_bytes,
-        .usage = usage_flags,
-        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
-    };
+    const auto buffer_info = BufferCreateInfo(size_bytes, usage);
     Buffer buffer{.size_bytes = size_bytes, .usage = usage};
     if (const VkResult r = vkCreateBuffer(device_, &buffer_info, nullptr, &buffer.buffer);
         r != VK_SUCCESS) {
@@ -516,23 +816,9 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
     VkPhysicalDeviceMemoryProperties memory_properties{};
     vkGetPhysicalDeviceMemoryProperties(physical_, &memory_properties);
 
-    // Host-visible coherent memory in this increment; device-local staging
-    // is governor work, where the budget model decides placement.
-    constexpr VkMemoryPropertyFlags kWanted =
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-    std::uint32_t type_index = memory_properties.memoryTypeCount;
-    std::uint64_t selected_heap_size = 0;
-    for (std::uint32_t i = 0; i < memory_properties.memoryTypeCount; ++i) {
-        const bool allowed = (requirements.memoryTypeBits & (1u << i)) != 0;
-        const bool suitable = (memory_properties.memoryTypes[i].propertyFlags & kWanted) == kWanted;
-        const std::uint64_t heap_size =
-            memory_properties.memoryHeaps[memory_properties.memoryTypes[i].heapIndex].size;
-        if (allowed && suitable && heap_size > selected_heap_size) {
-            type_index = i;
-            selected_heap_size = heap_size;
-        }
-    }
-    if (type_index == memory_properties.memoryTypeCount) {
+    const auto type_index =
+        detail::VulkanHostMemoryType(memory_properties, requirements.memoryTypeBits);
+    if (!type_index) {
         vkDestroyBuffer(device_, buffer.buffer, nullptr);
         return Fail(ErrorDomain::kDevice, "allocate buffer memory",
                     "no host-visible coherent memory type");
@@ -541,7 +827,7 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
     const VkMemoryAllocateInfo allocate_info{
         .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
         .allocationSize = requirements.size,
-        .memoryTypeIndex = type_index,
+        .memoryTypeIndex = *type_index,
     };
     if (const VkResult r = vkAllocateMemory(device_, &allocate_info, nullptr, &buffer.memory);
         r != VK_SUCCESS) {
@@ -560,7 +846,28 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
     return BufferHandle{static_cast<std::uint32_t>(buffers_.size() - 1)};
 }
 
+Expected<std::uint64_t> VulkanDevice::RequiredBufferAllocationBytes(std::uint64_t size_bytes,
+                                                                    BufferUsage usage) {
+    if (size_bytes == 0)
+        return Fail(ErrorDomain::kDevice, "query buffer allocation",
+                    "buffer size must be positive");
+    const auto buffer_info = BufferCreateInfo(size_bytes, usage);
+    VkBuffer buffer = VK_NULL_HANDLE;
+    if (const VkResult r = vkCreateBuffer(device_, &buffer_info, nullptr, &buffer); r != VK_SUCCESS)
+        return Fail(ErrorDomain::kDevice, "query buffer allocation", VkResultText(r));
+    VkMemoryRequirements requirements{};
+    vkGetBufferMemoryRequirements(device_, buffer, &requirements);
+    vkDestroyBuffer(device_, buffer, nullptr);
+    if (requirements.size < size_bytes)
+        return Fail(ErrorDomain::kDevice, "query buffer allocation",
+                    "driver allocation requirement is smaller than the requested buffer");
+    return requirements.size;
+}
+
 Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const std::byte> data) {
+    if (pending_dispatch_)
+        return Fail(ErrorDomain::kDevice, "write buffer",
+                    "earlier submitted work has no confirmed completion");
     SIRIUS_PRE(handle.value < buffers_.size());
     Buffer& buffer = buffers_[handle.value];
     SIRIUS_PRE(data.size_bytes() <= buffer.size_bytes);
@@ -575,6 +882,9 @@ Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const st
 }
 
 Expected<void> VulkanDevice::ReadBuffer(BufferHandle handle, std::span<std::byte> out) {
+    if (pending_dispatch_)
+        return Fail(ErrorDomain::kDevice, "read buffer",
+                    "earlier submitted work has no confirmed completion");
     SIRIUS_PRE(handle.value < buffers_.size());
     Buffer& buffer = buffers_[handle.value];
     SIRIUS_PRE(out.size_bytes() <= buffer.size_bytes);
@@ -642,18 +952,20 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
             VkPipelineShaderStageCreateInfo{
                 .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                 .stage = VK_SHADER_STAGE_COMPUTE_BIT,
-                .module = kernels_[kernel.value],
+                .module = kernels_[kernel.value].module,
                 .pName = "main",
             },
         .layout = pipeline.layout,
     };
-    if (const VkResult r = vkCreateComputePipelines(device_, VK_NULL_HANDLE, 1, &pipeline_info,
+    if (const VkResult r = vkCreateComputePipelines(device_, pipeline_cache_, 1, &pipeline_info,
                                                     nullptr, &pipeline.pipeline);
         r != VK_SUCCESS) {
         vkDestroyPipelineLayout(device_, pipeline.layout, nullptr);
         vkDestroyDescriptorSetLayout(device_, pipeline.set_layout, nullptr);
         return Fail(ErrorDomain::kKernel, "create compute pipeline", VkResultText(r));
     }
+
+    pipeline_cache_modified_ = pipeline_cache_ != VK_NULL_HANDLE;
 
     auto [inserted, _] = pipelines_.emplace(std::move(key), pipeline);
     if (created != nullptr) *created = true;
@@ -663,100 +975,157 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
 Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const BufferHandle> buffers,
                                       std::uint32_t groups_x, std::uint32_t groups_y,
                                       std::uint32_t groups_z, DispatchTiming* timing) {
-    SIRIUS_PRE(kernel.value < kernels_.size());
-    SIRIUS_PRE(groups_x > 0 && groups_y > 0 && groups_z > 0);
-    for (const BufferHandle handle : buffers) {
-        SIRIUS_PRE(handle.value < buffers_.size());
+    const ComputeDispatch command{kernel, buffers, groups_x, groups_y, groups_z};
+    return DispatchCommands(std::span(&command, 1), timing, nullptr);
+}
+
+Expected<void> VulkanDevice::DispatchIndependentPair(const std::array<ComputeDispatch, 2>& commands,
+                                                     IndependentPairTiming* timing) {
+    last_dispatch_timestamp_.reset();
+    if (timing) *timing = {};
+    for (const auto first : commands[0].buffers)
+        for (const auto second : commands[1].buffers)
+            if (first.value == second.value)
+                return Fail(ErrorDomain::kDevice, "dispatch independent compute pair",
+                            "commands share a bound buffer");
+    return DispatchCommands(commands, timing ? &timing->combined : nullptr,
+                            timing ? &timing->pipeline_creations : nullptr);
+}
+
+Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> commands,
+                                              DispatchTiming* timing,
+                                              std::uint32_t* pipeline_creations) {
+    SIRIUS_PRE(!commands.empty() && commands.size() <= 2);
+    for (const auto& item : commands) {
+        SIRIUS_PRE(item.kernel.value < kernels_.size());
+        SIRIUS_PRE(item.groups_x > 0 && item.groups_y > 0 && item.groups_z > 0);
+        for (const BufferHandle handle : item.buffers) SIRIUS_PRE(handle.value < buffers_.size());
     }
 
     if (timing != nullptr) *timing = {};
+    last_dispatch_timestamp_.reset();
+    if (pipeline_creations) *pipeline_creations = 0;
+    if (pending_dispatch_)
+        return Fail(ErrorDomain::kDevice, "dispatch compute commands",
+                    "earlier submitted work has no confirmed completion");
     const auto dispatch_start = std::chrono::steady_clock::now();
-    auto pipeline = GetOrCreatePipeline(kernel, buffers,
-                                        timing != nullptr ? &timing->pipeline_created : nullptr);
-    const auto pipeline_end = std::chrono::steady_clock::now();
-    if (!pipeline) {
-        return std::unexpected(pipeline.error());
+    std::array<Pipeline*, 2> pipelines{};
+    std::array<VkDescriptorSetLayout, 2> layouts{};
+    for (std::size_t i = 0; i < commands.size(); ++i) {
+        bool created = false;
+        auto pipeline = GetOrCreatePipeline(commands[i].kernel, commands[i].buffers, &created);
+        if (timing) timing->pipeline_created = timing->pipeline_created || created;
+        if (pipeline_creations) *pipeline_creations += created ? 1 : 0;
+        if (!pipeline) return std::unexpected(pipeline.error());
+        pipelines[i] = *pipeline;
+        layouts[i] = (*pipeline)->set_layout;
     }
+    const auto pipeline_end = std::chrono::steady_clock::now();
 
     const VkDescriptorSetAllocateInfo set_info{
         .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
         .descriptorPool = descriptor_pool_,
-        .descriptorSetCount = 1,
-        .pSetLayouts = &(*pipeline)->set_layout,
+        .descriptorSetCount = static_cast<std::uint32_t>(commands.size()),
+        .pSetLayouts = layouts.data(),
     };
-    VkDescriptorSet set = VK_NULL_HANDLE;
-    if (const VkResult r = vkAllocateDescriptorSets(device_, &set_info, &set); r != VK_SUCCESS) {
+    std::array<VkDescriptorSet, 2> sets{};
+    if (const VkResult r = vkAllocateDescriptorSets(device_, &set_info, sets.data());
+        r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "allocate descriptor set", VkResultText(r));
     }
-
-    std::vector<VkDescriptorBufferInfo> buffer_infos(buffers.size());
-    std::vector<VkWriteDescriptorSet> writes(buffers.size());
-    for (std::uint32_t i = 0; i < buffers.size(); ++i) {
-        const Buffer& buffer = buffers_[buffers[i].value];
-        buffer_infos[i] = VkDescriptorBufferInfo{
-            .buffer = buffer.buffer,
-            .offset = 0,
-            .range = buffer.size_bytes,
-        };
-        writes[i] = VkWriteDescriptorSet{
-            .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-            .dstSet = set,
-            .dstBinding = i,
-            .descriptorCount = 1,
-            .descriptorType = buffer.usage == BufferUsage::kStorage
-                                  ? VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-                                  : VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-            .pBufferInfo = &buffer_infos[i],
-        };
-    }
-    vkUpdateDescriptorSets(device_, static_cast<std::uint32_t>(writes.size()), writes.data(), 0,
-                           nullptr);
-
-    const VkCommandBufferAllocateInfo command_info{
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-        .commandPool = command_pool_,
-        .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-        .commandBufferCount = 1,
+    const auto free_sets = [&] {
+        vkFreeDescriptorSets(device_, descriptor_pool_, set_info.descriptorSetCount, sets.data());
     };
-    VkCommandBuffer command = VK_NULL_HANDLE;
-    if (const VkResult r = vkAllocateCommandBuffers(device_, &command_info, &command);
-        r != VK_SUCCESS) {
-        vkFreeDescriptorSets(device_, descriptor_pool_, 1, &set);
-        return Fail(ErrorDomain::kDevice, "allocate command buffer", VkResultText(r));
+
+    for (std::size_t command_index = 0; command_index < commands.size(); ++command_index) {
+        const auto buffers = commands[command_index].buffers;
+        std::vector<VkDescriptorBufferInfo> buffer_infos(buffers.size());
+        std::vector<VkWriteDescriptorSet> writes(buffers.size());
+        for (std::uint32_t i = 0; i < buffers.size(); ++i) {
+            const Buffer& buffer = buffers_[buffers[i].value];
+            buffer_infos[i] = VkDescriptorBufferInfo{
+                .buffer = buffer.buffer,
+                .offset = 0,
+                .range = buffer.size_bytes,
+            };
+            writes[i] = VkWriteDescriptorSet{
+                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                .dstSet = sets[command_index],
+                .dstBinding = i,
+                .descriptorCount = 1,
+                .descriptorType = buffer.usage == BufferUsage::kStorage
+                                      ? VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+                                      : VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                .pBufferInfo = &buffer_infos[i],
+            };
+        }
+        vkUpdateDescriptorSets(device_, static_cast<std::uint32_t>(writes.size()), writes.data(), 0,
+                               nullptr);
     }
 
+    if (dispatch_command_ == VK_NULL_HANDLE) {
+        const VkCommandBufferAllocateInfo command_info{
+            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+            .commandPool = command_pool_,
+            .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+            .commandBufferCount = 1,
+        };
+        if (const VkResult r = vkAllocateCommandBuffers(device_, &command_info, &dispatch_command_);
+            r != VK_SUCCESS) {
+            free_sets();
+            return Fail(ErrorDomain::kDevice, "allocate command buffer", VkResultText(r));
+        }
+    }
+    const auto command = dispatch_command_;
+
+    // This reset-capable pool lets Begin implicitly reset a completed one-time
+    // command, including descriptor/query invalidation. The pending guard above
+    // prevents touching a command whose completion is still unproven.
     const VkCommandBufferBeginInfo begin_info{
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
         .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
     };
     if (const auto result = vkBeginCommandBuffer(command, &begin_info); result != VK_SUCCESS) {
-        vkFreeCommandBuffers(device_, command_pool_, 1, &command);
-        vkFreeDescriptorSets(device_, descriptor_pool_, 1, &set);
+        vkFreeCommandBuffers(device_, command_pool_, 1, &dispatch_command_);
+        dispatch_command_ = VK_NULL_HANDLE;
+        free_sets();
         return Fail(ErrorDomain::kDevice, "begin compute command buffer", VkResultText(result));
     }
-    const VkMemoryBarrier before{
-        .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
-        .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_HOST_WRITE_BIT,
-        .dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-    };
-    vkCmdPipelineBarrier(command, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_HOST_BIT,
-                         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1, &before, 0, nullptr, 0,
-                         nullptr);
-    vkCmdBindPipeline(command, VK_PIPELINE_BIND_POINT_COMPUTE, (*pipeline)->pipeline);
-    vkCmdBindDescriptorSets(command, VK_PIPELINE_BIND_POINT_COMPUTE, (*pipeline)->layout, 0, 1,
-                            &set, 0, nullptr);
-    vkCmdDispatch(command, groups_x, groups_y, groups_z);
-    const VkMemoryBarrier after{
-        .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
-        .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
-        .dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_HOST_READ_BIT,
-    };
-    vkCmdPipelineBarrier(command, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-                         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_HOST_BIT, 0, 1,
-                         &after, 0, nullptr, 0, nullptr);
+    if (timestamp_pool_ != VK_NULL_HANDLE) {
+        // Core Vulkan query ordering; the original barriers/commands stay intact.
+        // https://docs.vulkan.org/refpages/latest/refpages/source/vkCmdWriteTimestamp.html
+        vkCmdResetQueryPool(command, timestamp_pool_, 0, 2);
+        vkCmdWriteTimestamp(command, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, timestamp_pool_, 0);
+    }
+    for (std::size_t i = 0; i < commands.size(); ++i) {
+        const auto& item = commands[i];
+        const VkMemoryBarrier before{
+            .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+            .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_HOST_WRITE_BIT,
+            .dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+        };
+        vkCmdPipelineBarrier(
+            command, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_HOST_BIT,
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1, &before, 0, nullptr, 0, nullptr);
+        vkCmdBindPipeline(command, VK_PIPELINE_BIND_POINT_COMPUTE, pipelines[i]->pipeline);
+        vkCmdBindDescriptorSets(command, VK_PIPELINE_BIND_POINT_COMPUTE, pipelines[i]->layout, 0, 1,
+                                &sets[i], 0, nullptr);
+        vkCmdDispatch(command, item.groups_x, item.groups_y, item.groups_z);
+        const VkMemoryBarrier after{
+            .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+            .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
+            .dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_HOST_READ_BIT,
+        };
+        vkCmdPipelineBarrier(command, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_HOST_BIT, 0,
+                             1, &after, 0, nullptr, 0, nullptr);
+    }
+    if (timestamp_pool_ != VK_NULL_HANDLE)
+        vkCmdWriteTimestamp(command, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, timestamp_pool_, 1);
     if (const auto result = vkEndCommandBuffer(command); result != VK_SUCCESS) {
-        vkFreeCommandBuffers(device_, command_pool_, 1, &command);
-        vkFreeDescriptorSets(device_, descriptor_pool_, 1, &set);
+        vkFreeCommandBuffers(device_, command_pool_, 1, &dispatch_command_);
+        dispatch_command_ = VK_NULL_HANDLE;
+        free_sets();
         return Fail(ErrorDomain::kDevice, "end compute command buffer", VkResultText(result));
     }
 
@@ -767,13 +1136,40 @@ Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const Buffe
     };
     const auto submit_start = std::chrono::steady_clock::now();
     VkResult submit_result = vkQueueSubmit(queue_, 1, &submit_info, VK_NULL_HANDLE);
+    const VkResult submitted = submit_result;
+    const auto queue_submit_end =
+        timestamp_pool_ != VK_NULL_HANDLE ? std::chrono::steady_clock::now() : submit_start;
     if (submit_result == VK_SUCCESS) {
         submit_result = vkQueueWaitIdle(queue_);
     }
 
     const auto submit_end = std::chrono::steady_clock::now();
-    vkFreeCommandBuffers(device_, command_pool_, 1, &command);
-    vkFreeDescriptorSets(device_, descriptor_pool_, 1, &set);
+    if (submit_result == VK_SUCCESS && timestamp_pool_ != VK_NULL_HANDLE) {
+        const auto ms = [](auto span) {
+            return std::chrono::duration<double, std::milli>(span).count();
+        };
+        VulkanDispatchTimestamp observation{
+            .properties = timestamp_properties_,
+            .host_submit_ms = ms(queue_submit_end - submit_start),
+            .host_wait_ms = ms(submit_end - queue_submit_end),
+        };
+        std::array<std::uint64_t, 4> data{};
+        observation.query_result = vkGetQueryPoolResults(
+            device_, timestamp_pool_, 0, 2, sizeof(data), data.data(), 2 * sizeof(std::uint64_t),
+            VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
+        observation.ticks = {data[0], data[2]};
+        observation.availability = {data[1], data[3]};
+        if (observation.query_result == VK_SUCCESS && data[1] != 0 && data[3] != 0)
+            observation.device_span_ms = detail::VulkanTimestampSpanMs(
+                data[0], data[2], timestamp_properties_.valid_bits, timestamp_properties_.period_ns,
+                ms(submit_end - submit_start));
+        last_dispatch_timestamp_ = observation;
+    }
+    if (detail::VulkanSubmissionNeedsCompletion(submitted, submit_result)) {
+        pending_dispatch_ = PendingDispatch{sets, set_info.descriptorSetCount};
+    } else {
+        free_sets();
+    }
     const auto dispatch_end = std::chrono::steady_clock::now();
     if (timing != nullptr) {
         const auto milliseconds = [](auto duration) {

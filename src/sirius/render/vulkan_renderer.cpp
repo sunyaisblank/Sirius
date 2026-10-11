@@ -31,6 +31,7 @@
 #include "stb_image.h"
 
 #include <algorithm>
+#include <atomic>
 #include <bit>
 #include <chrono>
 #include <cmath>
@@ -41,6 +42,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <mutex>
 #include <span>
 #include <string>
 #include <vector>
@@ -146,35 +148,21 @@ struct KernelScene {
 }
 
 // Selects the precision-ladder rung (docs/ARCHITECTURE.md section 6).
-// SIRIUS_PRECISION=fp64 selects the double-precision trace kernel
+// For legacy metrics, SIRIUS_PRECISION=fp64 selects the double-precision trace kernel
 // (trace_fp64.spv); it requires the device to report shaderFloat64 and
 // declines loudly otherwise, never silently running fp32 (docs/STYLE.md
-// section 4). SIRIUS_PRECISION=fp32-comp selects the compensated rung
-// (trace_fp32comp.spv, Kahan state accumulation), which any device runs.
-// Unset keeps the plain fp32 rung, the default: fp64 costs multiples of fp32
-// throughput on consumer GPUs and the fp32 path passes the parity gate. Any
-// other value is a loud error, not a silent default.
+// section 4). fp32-comp selects compensated legacy accumulation; retained
+// metric transport shares the expanded binary32 route with fp32. Retained
+// FP64 transport uses exact two-word products; all retained modes require the
+// factory's arithmetic controls. Unset keeps the fp32 default. Unknown requests
+// are configuration errors.
 [[nodiscard]] Expected<PrecisionRung> SelectPrecisionRung(bool device_supports_fp64) {
-    const char* precision = std::getenv("SIRIUS_PRECISION");
-    if (precision == nullptr || *precision == '\0') {
-        return PrecisionRung::Fp32;
-    }
-    const std::string requested(precision);
-    if (requested == "fp32") {
-        return PrecisionRung::Fp32;
-    }
-    if (requested == "fp32-comp") {
-        return PrecisionRung::Fp32Comp;
-    }
-    if (requested == "fp64") {
-        if (!device_supports_fp64) {
-            return Fail(ErrorDomain::kDevice, "select precision rung",
-                        "SIRIUS_PRECISION=fp64 requested but the device lacks shaderFloat64");
-        }
-        return PrecisionRung::Fp64;
-    }
-    return Fail(ErrorDomain::kDevice, "select precision rung",
-                "unknown SIRIUS_PRECISION '" + requested + "' (accepted: fp32, fp32-comp, fp64)");
+    auto requested = ResolveVulkanPrecisionRequest();
+    if (!requested) return std::unexpected(requested.error());
+    if (*requested == PrecisionRung::Fp64 && !device_supports_fp64)
+        return Fail(ErrorDomain::kDevice, "select precision rung",
+                    "SIRIUS_PRECISION=fp64 requested but the device lacks shaderFloat64");
+    return *requested;
 }
 
 [[nodiscard]] const char* RungName(PrecisionRung rung) {
@@ -356,19 +344,23 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
 }
 
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
-Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayBuffer& display,
-                                           backend::ComputeDevice& device, PrecisionRung rung,
-                                           const std::function<void(int, int)>& on_tile,
-                                           const std::function<bool()>& should_cancel) {
-    const auto started = std::chrono::steady_clock::now();
+struct RetainedRenderPlan {
+    std::uint64_t budget = 0, allocation = 0;
+    double target = 0;
+    std::size_t capacity = 0, ray_capacity = 0, work_count = 0;
+    int work_edge = 1;
+    TilePlan tiles;
+};
+
+Expected<RetainedRenderPlan> PlanRetainedRender(const SessionConfig& config,
+                                                backend::ComputeDevice& device) {
     const auto budget = ResolveBudgetBytes(device.Info().render_memory_bytes);
     if (!budget) return std::unexpected(budget.error());
     const auto usable = static_cast<std::uint64_t>(double(*budget) * kResidencyFraction);
     const auto target = ResolveDispatchTargetMs(kDefaultDispatchTargetMs);
     if (!target) return std::unexpected(target.error());
-    // Physical point detectors share image discovery within canonical screen
-    // blocks. Assign each block to one worker, otherwise independent pixel workers
-    // would repeat the same discovery. Other retained scenes keep pixel jobs.
+    // This device belongs solely to one retained owner. Replanning must not
+    // charge its existing twelve buffers a second time.
     const int work_edge =
         config.point_starfield && config.black_hole_charge == 0 && config.cosmological_constant == 0
             ? kPointDetectorBlockEdge
@@ -377,40 +369,191 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                             ((config.height + work_edge - 1) / work_edge);
     const auto rays_per_work =
         work_edge == kPointDetectorBlockEdge ? kPointDetectorProbeBatchSize : 1;
-    std::size_t capacity = std::min<std::size_t>(64, work_count * rays_per_work);
-    while (capacity > 0 && backend::RetainedCompute::RequiredBufferBytes(capacity) +
-                                   kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel >
-                               usable)
+    const auto physical = device.Info().kind == backend::DeviceKind::kIntegratedGpu ||
+                          device.Info().kind == backend::DeviceKind::kDiscreteGpu;
+    const std::size_t row_limit =
+        physical || device.Info().kind == backend::DeviceKind::kSoftware ? 128 : 64;
+    const auto desired_rays = std::min<std::size_t>(64, work_count * rays_per_work);
+    std::size_t capacity = std::min(row_limit, 2 * desired_rays);
+    constexpr auto minimum_tile_bytes = kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel;
+    std::uint64_t allocation = 0;
+    while (capacity > 0) {
+        auto required = backend::RetainedCompute::RequiredAllocationBytes(device, capacity);
+        if (!required) return std::unexpected(required.error());
+        if (*required <= usable && minimum_tile_bytes <= usable - *required) {
+            allocation = *required;
+            break;
+        }
         --capacity;
+    }
     if (capacity == 0)
         return Fail(ErrorDomain::kDevice, "allocate retained renderer",
                     "budget cannot seat one bounded ray batch");
-    const auto planned = backend::RetainedCompute::RequiredBufferBytes(capacity);
-    // Device scratch reserves a minimum tile independently of the number of
-    // host pixels. A tiny image still fits within that existing reservation.
-    const auto plan = DeriveTilePlan(*budget, std::max(config.width, kMinTileEdge),
-                                     std::max(config.height, kMinTileEdge), planned, kMinTileEdge);
+    const auto tiles =
+        DeriveTilePlan(*budget, std::max(config.width, kMinTileEdge),
+                       std::max(config.height, kMinTileEdge), allocation, kMinTileEdge);
+    if (!tiles) return std::unexpected(tiles.error());
+    return RetainedRenderPlan{
+        *budget,    allocation, *target, capacity, std::min(desired_rays, capacity),
+        work_count, work_edge,  *tiles};
+}
+
+struct RetainedRenderOwner {
+    // Handles cannot be released separately. Retire the entire pair, with
+    // compute destroyed before its device.
+    std::unique_ptr<backend::ComputeDevice> device;
+    std::unique_ptr<backend::RetainedCompute> compute;
+    backend::DeviceInfo inventory;
+    std::size_t device_index = 0;
+    PrecisionRung rung = PrecisionRung::Fp32;
+    RetainedRenderPlan plan;
+    bool cacheable = false;
+};
+
+struct RetainedOwnerStore;
+constinit std::atomic<RetainedOwnerStore*> existing_retained_store{nullptr};
+struct RetainedOwnerStore {
+    std::mutex mutex;
+    std::unique_ptr<RetainedRenderOwner> idle;
+    RetainedOwnerStore() { existing_retained_store.store(this, std::memory_order_release); }
+    ~RetainedOwnerStore() { existing_retained_store.store(nullptr, std::memory_order_release); }
+};
+
+void RetainCompletedOwner(std::unique_ptr<RetainedRenderOwner> owner) {
+    if (!owner->cacheable) return;
+    // Initialize only after device creation initialized the backend process
+    // pipeline cache. The idle device is consequently destroyed first.
+    static RetainedOwnerStore store;
+    std::lock_guard lock(store.mutex);
+    if (!store.idle) store.idle = std::move(owner);
+    // An unused concurrent owner is destroyed after the lock is released.
+}
+
+Expected<std::unique_ptr<RetainedRenderOwner>> AcquireRetainedOwner(
+    const SessionConfig& config, std::span<const backend::DeviceInfo> inventory, std::size_t index,
+    PrecisionRung rung) {
+    const auto& selected = inventory[index];
+    const auto nonzero = [](const auto& uuid) {
+        return std::any_of(uuid.begin(), uuid.end(), [](auto byte) { return byte != 0; });
+    };
+    const bool cacheable =
+        selected.kind == backend::DeviceKind::kSoftware && nonzero(selected.device_uuid) &&
+        nonzero(selected.driver_uuid) &&
+        std::count_if(inventory.begin(), inventory.end(), [&](const auto& other) {
+            return other.device_uuid == selected.device_uuid &&
+                   other.driver_uuid == selected.driver_uuid;
+        }) == 1;
+    std::unique_ptr<RetainedRenderOwner> owner;
+    if (auto* store = existing_retained_store.load(std::memory_order_acquire)) {
+        std::lock_guard lock(store->mutex);
+        owner = std::move(store->idle);
+    }
+    // Never hold the slot lock during device work or callbacks. An overlapping
+    // or recursive render obtains a fresh device as before.
+    if (owner && cacheable && owner->inventory == selected && owner->device_index == index &&
+        owner->rung == rung) {
+        const auto plan = PlanRetainedRender(config, *owner->device);
+        if (!plan) return std::unexpected(plan.error());
+        if (owner->plan.budget == plan->budget && owner->plan.target == plan->target &&
+            owner->compute->Capacity() == plan->capacity &&
+            owner->device->BufferAllocationBytes() == plan->allocation) {
+            auto limit = owner->device->SetBufferAllocationLimit(plan->tiles.usable_bytes);
+            if (!limit) return std::unexpected(limit.error());
+            owner->plan = *plan;
+            owner->compute->ResetStatistics();
+            return owner;
+        }
+    }
+    // Replacing only compute would leave its old buffers in the device tables.
+    // Incompatible capacity, precision, budget, target or identity retires both.
+    owner.reset();
+    auto opened = backend::CreateVulkanDevice(index);
+    if (!opened) return std::unexpected(opened.error());
+    auto actual = (*opened)->Info();
+    // Inventory cannot enable the logical-device FMA feature.
+    actual.fma_fp32_enabled = selected.fma_fp32_enabled;
+    if (actual != selected)
+        return Fail(ErrorDomain::kDevice, "open retained render device",
+                    "selected device inventory changed while opening it");
+    const auto plan = PlanRetainedRender(config, **opened);
     if (!plan) return std::unexpected(plan.error());
-    auto limit = device.SetBufferAllocationLimit(usable);
+    auto limit = (*opened)->SetBufferAllocationLimit(plan->tiles.usable_bytes);
     if (!limit) return std::unexpected(limit.error());
-    auto compute =
-        backend::RetainedCompute::Create(device, capacity, rung == PrecisionRung::Fp64, *target);
+    auto compute = backend::RetainedCompute::Create(**opened, plan->capacity,
+                                                    rung == PrecisionRung::Fp64, plan->target);
     if (!compute) return std::unexpected(compute.error());
-    if (device.BufferAllocationBytes() != planned)
-        return Fail(ErrorDomain::kInternal, "allocate retained renderer",
-                    "buffer plan differs from actual allocation");
+    if ((*opened)->BufferAllocationBytes() != plan->allocation)
+        return Fail(
+            ErrorDomain::kInternal, "allocate retained renderer",
+            std::format("buffer plan differs from actual allocation: planned_bytes={}, "
+                        "actual_bytes={}, capacity={}",
+                        plan->allocation, (*opened)->BufferAllocationBytes(), plan->capacity));
+    owner = std::make_unique<RetainedRenderOwner>();
+    owner->device = std::move(*opened);
+    owner->compute = std::move(*compute);
+    owner->inventory = selected;
+    owner->device_index = index;
+    owner->rung = rung;
+    owner->plan = *plan;
+    owner->cacheable = cacheable;
+    return owner;
+}
+
+Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayBuffer& display,
+                                           RetainedRenderOwner& owner,
+                                           const std::function<void(int, int)>& on_tile,
+                                           const std::function<bool()>& should_cancel,
+                                           const CompletedTileCallback& on_completed_tile) {
+    auto& device = *owner.device;
+    auto& compute = owner.compute;
+    const auto rung = owner.rung;
+    const auto& plan = owner.plan.tiles;
+    const auto capacity = owner.plan.capacity, ray_capacity = owner.plan.ray_capacity;
+    const auto work_edge = owner.plan.work_edge;
     std::cout << "[Vulkan] Retained renderer: " << device.Info().name << ", " << RungName(rung)
-              << "; budget " << (*budget / (1024 * 1024)) << " MiB, " << capacity << " ray rows, "
-              << work_count << " host work tiles of " << work_edge << "px" << std::endl;
+              << "; budget " << (owner.plan.budget / (1024 * 1024)) << " MiB, " << ray_capacity
+              << " ray rows, " << capacity << " projection slots, " << owner.plan.work_count
+              << " host work tiles of " << work_edge << "px" << std::endl;
+    backend::RetainedCompute::PreparationStats preparation;
+    if (device.Info().kind == backend::DeviceKind::kSoftware) {
+        std::cout << "[Vulkan] initialising software retained kernels with zero active rays"
+                  << std::endl;
+        const auto prepared = compute->PrepareSoftwareRendererStages(preparation, should_cancel);
+        for (std::size_t i = 0; i < preparation.stages.size(); ++i) {
+            const auto& stage = preparation.stages[i];
+            if (stage.attempts == 0) continue;
+            std::cout << "[Vulkan] software retained initialization: "
+                      << backend::RetainedCompute::StageName(
+                             static_cast<backend::RetainedCompute::KernelStage>(i))
+                      << ", attempts=" << stage.attempts
+                      << ", dispatch_attempts=" << stage.dispatch_attempts
+                      << ", completed_dispatches=" << stage.completed_dispatches
+                      << ", completed=" << stage.completed
+                      << ", pipeline_setup_ms=" << stage.timing.pipeline_setup_ms
+                      << ", command_setup_ms=" << stage.timing.command_setup_ms
+                      << ", submit_wait_ms=" << stage.timing.submit_wait_ms
+                      << ", cleanup_ms=" << stage.timing.cleanup_ms
+                      << ", dispatch_total_ms=" << stage.timing.total_ms
+                      << ", pipeline_created=" << stage.timing.pipeline_created
+                      << ", write_buffer_calls=" << stage.write_buffer_calls
+                      << ", write_buffer_ms=" << stage.write_buffer_ms
+                      << ", write_buffer_bytes=" << stage.write_buffer_bytes
+                      << ", header_restored=" << stage.header_restored << ", 0 active rays"
+                      << std::endl;
+        }
+        std::cout << "[Vulkan] software retained initialization wall: "
+                  << preparation.wall_ms / 1000 << "s" << std::endl;
+        if (!prepared) return std::unexpected(prepared.error());
+    }
     // Poll the owner on this thread; device workers consume only the atomic
     // result, so an ordinary stateful cancellation callback is never raced.
     std::atomic<bool> cancelled{false};
     backend::RetainedTraceExecutor executor(
-        **compute, [&] { return cancelled.load(); }, kDispatchStopMs);
+        *compute, [&] { return cancelled.load(); }, kDispatchStopMs, ray_capacity);
     // Host work items are screen blocks or pixels, independent of device residency.
     // Independent detector probes also feed this capacity. Each trace worker
     // has at most one pending interval; device residency stays bounded here.
-    RenderSession session(executor, static_cast<int>(capacity), work_edge);
+    RenderSession session(executor, static_cast<int>(ray_capacity), work_edge);
     auto worker_config = config;
     worker_config.write_output = false;
     worker_config.output_path = SessionConfig{}.output_path;
@@ -419,6 +562,7 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     if (on_tile)
         session.SetProgressCallback(
             [&](float, int done, int total, double) { on_tile(done, total); });
+    if (on_completed_tile) session.SetCompletedTileCallback(on_completed_tile);
     if (!session.Start())
         return Fail(ErrorDomain::kInternal, "start retained renderer",
                     "worker session did not start");
@@ -439,7 +583,88 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                       << progress.initialized_phases << " phase initializations, "
                       << progress.reused_phases << " phase reuses, " << progress.batch_subdivisions
                       << " batch subdivisions, " << progress.safety_fallbacks
-                      << " safety reductions\n";
+                      << " safety reductions, " << progress.coalescing_wait_ms / 1000
+                      << "s coalescing, " << progress.execute_ms / 1000 << "s batch execution, "
+                      << progress.acceleration_ms / 1000 << "s summed worker acceleration\n";
+            std::clog << std::format(
+                "[Vulkan] Retained dispatcher first-request wait: completed_waits={}, "
+                "completed_wait_ms={:.6f}, maximum_completed_wait_ms={:.6f}, "
+                "awaiting_first_request={}, current_wait_ms={:.6f}\n",
+                progress.first_request_waits, progress.first_request_wait_ms,
+                progress.maximum_first_request_wait_ms, progress.awaiting_first_request,
+                progress.current_first_request_wait_ms);
+            const auto measured = progress.interval_measurements;
+            std::clog << std::format(
+                "[Vulkan] Retained attempt attribution: measured_rows={}, "
+                "h_min={:.9g}, h_mean={:.9g}, h_max={:.9g}, "
+                "h_frequency_over_length_min={:.9g}, h_frequency_over_length_mean={:.9g}, "
+                "h_frequency_over_length_max={:.9g}, dense_growth_limits={}, tracer_rollbacks={}\n",
+                measured, progress.interval_min,
+                measured ? progress.interval_sum / static_cast<double>(measured) : 0,
+                progress.interval_max, progress.scaled_interval_min,
+                measured ? progress.scaled_interval_sum / static_cast<double>(measured) : 0,
+                progress.scaled_interval_max, progress.dense_growth_limits,
+                progress.tracer_rollbacks);
+            constexpr std::array check_names{"embedded_phase", "projected_physical",
+                                             "dense_midpoint_physical", "refined_physical"};
+            for (std::size_t i = 0; i < check_names.size(); ++i) {
+                const auto& check = progress.error_checks[i];
+                const auto finite = check.rows - check.refused - check.invalid;
+                std::clog << std::format(
+                    "[Vulkan] Retained error attribution: {}, observed_rows={}, refused={}, "
+                    "invalid={}, finite_ratio_mean={:.9g}, finite_ratio_max={:.9g}, over_one={}, "
+                    "dominant_admitted={}, dominant_rejected={}\n",
+                    check_names[i], check.rows, check.refused, check.invalid,
+                    finite ? check.finite_ratio_sum / static_cast<double>(finite) : 0,
+                    check.finite_ratio_max, check.over_one, progress.dominant_admitted_checks[i],
+                    progress.dominant_rejected_checks[i]);
+            }
+            std::clog << "[Vulkan] Retained scaled interval bins "
+                         "(<=1e-6,1e-5,1e-4,1e-3,1e-2,1e-1,1,10,above10):";
+            for (const auto count : progress.scaled_interval_bins) std::clog << ' ' << count;
+            std::clog << "\n[Vulkan] Retained dominant error fields "
+                         "(physical variation components8..39, central_RMS40, unavailable41):";
+            for (std::size_t i = 0; i < progress.limiting_error_fields.size(); ++i)
+                if (progress.limiting_error_fields[i])
+                    std::clog << ' ' << i << ':' << progress.limiting_error_fields[i];
+            std::clog << '\n';
+            // These cumulative host counters come from the dispatcher's locked
+            // completed-batch snapshot. Shared submit timing is reported once
+            // below; individual command counts still include both shared commands.
+            for (std::size_t i = 0; i < progress.stage_timing.size(); ++i) {
+                const auto& stage = progress.stage_timing[i];
+                std::clog << std::format(
+                    "[Vulkan] Retained cumulative physical stage: {}, "
+                    "kernel_commands_including_shared={}, individual_submit_wait_ms={:.6f}, "
+                    "individual_pipeline_setup_ms={:.6f}, individual_command_setup_ms={:.6f}, "
+                    "individual_cleanup_ms={:.6f}, individual_dispatch_total_ms_inclusive={:.6f}, "
+                    "write_buffer_ms={:.6f}, read_buffer_ms={:.6f}\n",
+                    backend::RetainedCompute::StageName(
+                        static_cast<backend::RetainedCompute::KernelStage>(i)),
+                    stage.submissions, stage.submit_wait_ms, stage.pipeline_setup_ms,
+                    stage.command_setup_ms, stage.cleanup_ms, stage.dispatch_total_ms,
+                    stage.write_buffer_ms, stage.read_buffer_ms);
+                std::clog << "[Vulkan] Retained stage prefixes: "
+                          << backend::RetainedCompute::StageName(
+                                 static_cast<backend::RetainedCompute::KernelStage>(i))
+                          << " (successful kernel commands, including shared and inactive rows):";
+                for (std::size_t rows = 1; rows < stage.command_row_counts.size(); ++rows)
+                    if (stage.command_row_counts[rows])
+                        std::clog << ' ' << rows << ':' << stage.command_row_counts[rows];
+                std::clog << std::format(
+                    "; raw completion flags zero/one/other={}/{}/{} "
+                    "(successful readbacks, not host admission)\n",
+                    stage.completion_flag_counts[0], stage.completion_flag_counts[1],
+                    stage.completion_flag_counts[2]);
+            }
+            const auto& shared = progress.endpoint_dense_timing;
+            std::clog << std::format(
+                "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: "
+                "queue_submissions={}, submit_wait_ms={:.6f}, pipeline_setup_ms={:.6f}, "
+                "command_setup_ms={:.6f}, cleanup_ms={:.6f}, "
+                "dispatch_total_ms_inclusive={:.6f}\n",
+                shared.submissions, shared.submit_wait_ms, shared.pipeline_setup_ms,
+                shared.command_setup_ms, shared.cleanup_ms, shared.dispatch_total_ms);
             next_progress = std::chrono::steady_clock::now() + std::chrono::seconds(30);
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -462,18 +687,48 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     stats.device_name = device.Info().name;
     stats.metric_name = core::MetricInfoFor(config.metric_id).canonical_name;
     stats.precision = rung;
-    stats.tile_plan = *plan;
+    stats.tile_plan = plan;
     stats.explicit_buffer_allocation_bytes = device.BufferAllocationBytes();
-    stats.continuation_capacity = capacity;
+    stats.continuation_capacity = ray_capacity;
     stats.retained_intervals = true;
     stats.camera_batches = execution.camera_batches;
     stats.accepted_intervals = execution.accepted_intervals;
+    stats.retained_preparation = preparation;
+    stats.initialization_seconds = preparation.wall_ms / 1000;
+    for (const auto& stage : preparation.stages) {
+        stats.initialization_dispatches += static_cast<int>(stage.completed_dispatches);
+        stats.initialization_submit_wait_ms += stage.timing.submit_wait_ms;
+    }
+    auto& timing = stats.retained_timing;
+    timing.projection_capacity = capacity;
+    timing.batches = execution.batches;
+    timing.full_batches = execution.full_batches;
+    timing.interval_rows = execution.interval_rows;
+    timing.camera_rows = execution.camera_rows;
+    timing.sample_batches = execution.sample_batches;
+    timing.sample_rows = execution.sample_rows;
+    timing.batch_row_counts = execution.batch_row_counts;
+    timing.first_request_waits = execution.first_request_waits;
+    timing.first_request_wait_ms = execution.first_request_wait_ms;
+    timing.maximum_first_request_wait_ms = execution.maximum_first_request_wait_ms;
+    timing.awaiting_first_request = execution.awaiting_first_request;
+    timing.current_first_request_wait_ms = execution.current_first_request_wait_ms;
+    timing.coalescing_timeouts = execution.coalescing_timeouts;
+    timing.coalescing_underfilled = execution.coalescing_underfilled;
+    timing.coalescing_stopped = execution.coalescing_stopped;
+    timing.coalescing_traces_ready = execution.coalescing_traces_ready;
+    timing.coalescing_wait_ms = execution.coalescing_wait_ms;
+    timing.maximum_coalescing_wait_ms = execution.maximum_coalescing_wait_ms;
+    timing.execute_ms = execution.execute_ms;
+    timing.acceleration_calls = execution.acceleration_calls;
+    timing.acceleration_ms = execution.acceleration_ms;
     stats.dispatch_fallbacks = static_cast<int>(execution.safety_fallbacks);
     stats.dispatch_subdivisions = static_cast<std::int64_t>(execution.batch_subdivisions);
     stats.tiles_rendered = session.GetTileScheduler().GetCompletedCount();
     stats.work_tile_edge = work_edge;
     stats.maximum_dispatch_rays = static_cast<std::int64_t>(execution.maximum_batch_rows);
-    const auto stages = (*compute)->Statistics();
+    const auto stages = compute->Statistics();
+    stats.retained_stages = stages;
     for (std::size_t i = 0; i < stages.size(); ++i) {
         stats.retained_stage_dispatches[i] = static_cast<std::int64_t>(stages[i].submissions);
         stats.band_dispatches += stats.retained_stage_dispatches[i];
@@ -482,14 +737,47 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
             std::max(stats.maximum_dispatch_ms, stages[i].maximum_submit_wait_ms);
         stats.initialization_seconds += stages[i].pipeline_setup_ms / 1000;
         stats.dispatch_target_overshoots += static_cast<std::int64_t>(stages[i].target_overshoots);
+        timing.pipeline_setup_ms += stages[i].pipeline_setup_ms;
+        timing.command_setup_ms += stages[i].command_setup_ms;
+        timing.submit_wait_ms += stages[i].submit_wait_ms;
+        timing.cleanup_ms += stages[i].cleanup_ms;
+        timing.dispatch_total_ms += stages[i].dispatch_total_ms;
+        timing.write_buffer_ms += stages[i].write_buffer_ms;
+        timing.read_buffer_ms += stages[i].read_buffer_ms;
+        timing.write_buffer_bytes += stages[i].write_buffer_bytes;
+        timing.read_buffer_bytes += stages[i].read_buffer_bytes;
+        timing.pipeline_creations += stages[i].pipeline_creations;
     }
-    stats.seconds =
-        std::chrono::duration<double>(std::chrono::steady_clock::now() - started).count();
+    const auto paired = compute->EndpointDenseStatistics();
+    stats.endpoint_dense_timing = paired;
+    stats.queue_submissions =
+        static_cast<std::uint64_t>(stats.band_dispatches) - paired.submissions;
+    stats.dispatch_seconds += paired.submit_wait_ms / 1000;
+    stats.maximum_dispatch_ms = std::max(stats.maximum_dispatch_ms, paired.maximum_submit_wait_ms);
+    stats.initialization_seconds += paired.pipeline_setup_ms / 1000;
+    stats.dispatch_target_overshoots += static_cast<std::int64_t>(paired.target_overshoots);
+    timing.pipeline_setup_ms += paired.pipeline_setup_ms;
+    timing.command_setup_ms += paired.command_setup_ms;
+    timing.submit_wait_ms += paired.submit_wait_ms;
+    timing.cleanup_ms += paired.cleanup_ms;
+    timing.dispatch_total_ms += paired.dispatch_total_ms;
+    timing.pipeline_creations += paired.pipeline_creations;
     return stats;
 }
 #endif
 
 }  // namespace
+
+Expected<PrecisionRung> ResolveVulkanPrecisionRequest() {
+    const char* precision = std::getenv("SIRIUS_PRECISION");
+    if (precision == nullptr || *precision == '\0') return PrecisionRung::Fp32;
+    const std::string requested(precision);
+    if (requested == "fp32") return PrecisionRung::Fp32;
+    if (requested == "fp32-comp") return PrecisionRung::Fp32Comp;
+    if (requested == "fp64") return PrecisionRung::Fp64;
+    return Fail(ErrorDomain::kConfiguration, "select precision rung",
+                "unknown SIRIUS_PRECISION '" + requested + "' (accepted: fp32, fp32-comp, fp64)");
+}
 
 VulkanDispatchLimits ResolveVulkanDispatchLimits(PrecisionRung precision, bool ray_bundles,
                                                  bool point_starfield) {
@@ -576,7 +864,8 @@ Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config) {
 Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                                                   DisplayBuffer& display,
                                                   const std::function<void(int, int)>& on_tile,
-                                                  const std::function<bool()>& should_cancel) {
+                                                  const std::function<bool()>& should_cancel,
+                                                  const CompletedTileCallback& on_completed_tile) {
     const auto start = std::chrono::steady_clock::now();
 
     if (auto compatible = ValidateVulkanRenderConfig(config); !compatible) {
@@ -603,28 +892,34 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     if (!device_index) {
         return std::unexpected(device_index.error());
     }
-    auto device_result = backend::CreateVulkanDevice(*device_index);
-    if (!device_result) {
-        return std::unexpected(device_result.error());
-    }
-    backend::ComputeDevice& device = **device_result;
-    const backend::DeviceInfo& info = device.Info();
-
-    auto rung = SelectPrecisionRung(info.supports_fp64);
-    if (!rung) {
-        return std::unexpected(rung.error());
-    }
-
     if (scene->metric_id == kDispatchKerrSchild) {
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
-        auto result = RenderRetained(config, display, device, *rung, on_tile, should_cancel);
-        if (result) result->device_index = *device_index;
+        auto rung = SelectPrecisionRung((*devices)[*device_index].supports_fp64);
+        if (!rung) return std::unexpected(rung.error());
+        auto owner = AcquireRetainedOwner(config, *devices, *device_index, *rung);
+        if (!owner) return std::unexpected(owner.error());
+        auto result =
+            RenderRetained(config, display, **owner, on_tile, should_cancel, on_completed_tile);
+        // RenderRetained has destroyed and joined its fresh session/executor.
+        // Failures and cancellation retire the complete owner.
+        if (result) {
+            result->device_index = *device_index;
+            RetainCompletedOwner(std::move(*owner));
+            result->seconds =
+                std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+        }
         return result;
 #else
         return Fail(ErrorDomain::kKernel, "load retained renderer",
                     "bounded retained kernels were not compiled");
 #endif
     }
+    auto device_result = backend::CreateVulkanDevice(*device_index);
+    if (!device_result) return std::unexpected(device_result.error());
+    backend::ComputeDevice& device = **device_result;
+    const backend::DeviceInfo& info = device.Info();
+    auto rung = SelectPrecisionRung(info.supports_fp64);
+    if (!rung) return std::unexpected(rung.error());
 
     const auto spirv = LoadSpirv(*rung);
     if (spirv.empty()) {
@@ -1023,6 +1318,23 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                 }
             }
 
+            if (on_completed_tile && (!should_cancel || !should_cancel())) {
+                try {
+                    std::vector<float> completed(static_cast<std::size_t>(tw) * th * 4);
+                    for (int row = 0; row < th; ++row) {
+                        const auto source =
+                            frame_pixels.begin() +
+                            (static_cast<std::size_t>(oy + row) * config.width + ox) * 4;
+                        std::copy_n(source, static_cast<std::size_t>(tw) * 4,
+                                    completed.begin() + static_cast<std::size_t>(row) * tw * 4);
+                    }
+                    if (std::all_of(completed.begin(), completed.end(),
+                                    [](float value) { return std::isfinite(value); }))
+                        on_completed_tile(ox, oy, tw, th, completed);
+                } catch (...) {
+                    std::cerr << "[Vulkan] completed-tile preview failed; radiance retained\n";
+                }
+            }
             ++tiles_done;
             if (on_tile) {
                 on_tile(tiles_done, tiles_total);

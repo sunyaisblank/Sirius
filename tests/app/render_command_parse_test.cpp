@@ -281,6 +281,62 @@ TEST(ViewCommandOperational, RelativisticJetsDeclineBeforeViewerInitialisation) 
     EXPECT_EQ(view.Execute({"--jets"}, globals, config), 1);
 }
 
+TEST(ViewCommandOperational, RefinementLadderPreservesRequestedDimensions) {
+    const auto check = [](const ViewerConfig& config) {
+        InteractiveViewer viewer;
+        ASSERT_TRUE(viewer.Initialise(config));
+        int previous_width = config.preview_width;
+        int previous_height = config.preview_height;
+        for (int level = 0; level < config.refinement_levels; ++level) {
+            SCOPED_TRACE(level);
+            int width = 0;
+            int height = 0;
+            viewer.GetResolutionForLevel(level, width, height);
+            EXPECT_GE(width, previous_width);
+            EXPECT_GE(height, previous_height);
+            EXPECT_LE(width, config.final_width);
+            EXPECT_LE(height, config.final_height);
+            if (level == config.refinement_levels - 1) {
+                EXPECT_EQ(width, config.final_width);
+                EXPECT_EQ(height, config.final_height);
+            } else if (level == 0) {
+                EXPECT_EQ(width, config.preview_width);
+                EXPECT_EQ(height, config.preview_height);
+            }
+            const auto session = viewer.CreateSessionConfig(width, height, 1);
+            EXPECT_EQ(session.width, width);
+            EXPECT_EQ(session.height, height);
+            EXPECT_FALSE(render::SessionConfigIssue(session).has_value());
+            previous_width = width;
+            previous_height = height;
+        }
+    };
+    ASSERT_NO_FATAL_FAILURE(check(ViewerConfig{}));
+
+    ViewerConfig config;
+    config.preview_width = 64;
+    config.preview_height = 64;
+    config.final_width = 257;
+    config.final_height = 129;
+    ASSERT_NO_FATAL_FAILURE(check(config));
+
+    config.final_width = 67;
+    config.final_height = 65;
+    config.refinement_levels = 1;
+    ASSERT_NO_FATAL_FAILURE(check(config));
+
+    config.preview_width = 67;
+    config.preview_height = 65;
+    config.final_width = 69;
+    config.final_height = 67;
+    config.refinement_levels = 32;
+    ASSERT_NO_FATAL_FAILURE(check(config));
+
+    config.final_width = 8192;
+    config.final_height = 8192;
+    ASSERT_NO_FATAL_FAILURE(check(config));
+}
+
 TEST(ViewCommandOperational, InputStateHandlesPressRepeatReleaseMouseAndScroll) {
     ViewerConfig config;
     config.move_speed = 2.0f;

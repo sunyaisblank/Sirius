@@ -86,7 +86,7 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
     }
     // Human progress is deliberately separate from this versioned wire record.
     // In particular, retained ray rows are neither pixels nor residency tiles.
-    const nlohmann::ordered_json evidence = {
+    nlohmann::ordered_json evidence = {
         {"schema", "sirius-vulkan-render-v1"},
         {"route", stats.retained_intervals ? "retained" : "legacy"},
         {"source_owner", stats.retained_intervals ? "host" : "device"},
@@ -116,6 +116,109 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
         {"initialization_dispatches", stats.initialization_dispatches},
         {"initialization_seconds", stats.initialization_seconds},
         {"initialization_submit_wait_ms", stats.initialization_submit_wait_ms}};
+    if (stats.retained_intervals) {
+        nlohmann::ordered_json stage_rows = nlohmann::ordered_json::array();
+        for (std::size_t i = 0; i < stats.retained_stages.size(); ++i) {
+            const auto& stage = stats.retained_stages[i];
+            stage_rows.push_back(
+                {{"stage", backend::RetainedCompute::StageName(
+                               static_cast<backend::RetainedCompute::KernelStage>(i))},
+                 {"submissions", stage.submissions},
+                 {"command_row_counts", stage.command_row_counts},
+                 {"completion_flag_counts", stage.completion_flag_counts}});
+        }
+        evidence["retained_stage_rows"] = {
+            {"scope",
+             "successful kernel commands indexed by active prefix, including shared commands "
+             "and inactive placeholders; preparation excluded; raw completion flags zero/one/other "
+             "from successful readbacks; one does not establish host validity or admission; "
+             "later read/decode failure does not erase earlier observations"},
+            {"stages", std::move(stage_rows)}};
+        nlohmann::ordered_json preparation_stages = nlohmann::ordered_json::array();
+        for (std::size_t i = 0; i < stats.retained_preparation.stages.size(); ++i) {
+            const auto& stage = stats.retained_preparation.stages[i];
+            preparation_stages.push_back(
+                {{"stage", backend::RetainedCompute::StageName(
+                               static_cast<backend::RetainedCompute::KernelStage>(i))},
+                 {"attempts", stage.attempts},
+                 {"dispatch_attempts", stage.dispatch_attempts},
+                 {"completed_dispatches", stage.completed_dispatches},
+                 {"completed", stage.completed},
+                 {"header_restored", stage.header_restored},
+                 {"pipeline_setup_ms", stage.timing.pipeline_setup_ms},
+                 {"command_setup_ms", stage.timing.command_setup_ms},
+                 {"submit_wait_ms", stage.timing.submit_wait_ms},
+                 {"cleanup_ms", stage.timing.cleanup_ms},
+                 {"dispatch_total_ms", stage.timing.total_ms},
+                 {"pipeline_created", stage.timing.pipeline_created},
+                 {"write_buffer_calls", stage.write_buffer_calls},
+                 {"write_buffer_ms", stage.write_buffer_ms},
+                 {"write_buffer_bytes", stage.write_buffer_bytes}});
+        }
+        evidence["retained_preparation"] = {
+            {"scope",
+             "explicit software initialization before workers; zero active rays; "
+             "transfers and dispatch phases are nested in preparation wall time; "
+             "excluded from governed work and feedback; included in render wall time"},
+            {"wall_ms", stats.retained_preparation.wall_ms},
+            {"stages", std::move(preparation_stages)}};
+        const auto& timing = stats.retained_timing;
+        const auto& paired = stats.endpoint_dense_timing;
+        evidence["queue_submissions"] = stats.queue_submissions;
+        evidence["shared_endpoint_dense"] = {
+            {"scope",
+             "one shared submit/wait per independent Endpoint+Dense pair; included once "
+             "in total timing; retained_stage_dispatches count both kernel commands"},
+            {"submissions", paired.submissions},
+            {"submit_wait_ms", paired.submit_wait_ms},
+            {"maximum_submit_wait_ms", paired.maximum_submit_wait_ms},
+            {"pipeline_setup_ms", paired.pipeline_setup_ms},
+            {"command_setup_ms", paired.command_setup_ms},
+            {"cleanup_ms", paired.cleanup_ms},
+            {"dispatch_total_ms", paired.dispatch_total_ms},
+            {"pipeline_creations", paired.pipeline_creations},
+            {"target_overshoots", paired.target_overshoots}};
+        evidence["retained_timing"] = {
+            {"scope",
+             "host steady-clock wall observations; worker acceleration sums overlap "
+             "dispatcher work and other workers; dispatch phases are nested in Execute"},
+            {"projection_capacity", timing.projection_capacity},
+            {"batches", timing.batches},
+            {"full_batches", timing.full_batches},
+            {"interval_rows", timing.interval_rows},
+            {"camera_rows", timing.camera_rows},
+            {"sample_batches", timing.sample_batches},
+            {"sample_rows", timing.sample_rows},
+            {"batch_row_counts", timing.batch_row_counts},
+            {"first_request_wait_scope",
+             "empty-queue predicate waits including lock reacquisition; completed waits end in "
+             "a request before coalescing, excluding stop-only wakes; the separate current wait "
+             "can include startup/session-tail idle and is not CPU/GPU starvation attribution"},
+            {"first_request_waits", timing.first_request_waits},
+            {"first_request_wait_ms", timing.first_request_wait_ms},
+            {"maximum_first_request_wait_ms", timing.maximum_first_request_wait_ms},
+            {"awaiting_first_request", timing.awaiting_first_request},
+            {"current_first_request_wait_ms", timing.current_first_request_wait_ms},
+            {"coalescing_timeouts", timing.coalescing_timeouts},
+            {"coalescing_underfilled", timing.coalescing_underfilled},
+            {"coalescing_stopped", timing.coalescing_stopped},
+            {"coalescing_traces_ready", timing.coalescing_traces_ready},
+            {"coalescing_wait_ms", timing.coalescing_wait_ms},
+            {"maximum_coalescing_wait_ms", timing.maximum_coalescing_wait_ms},
+            {"execute_ms", timing.execute_ms},
+            {"acceleration_calls", timing.acceleration_calls},
+            {"acceleration_ms", timing.acceleration_ms},
+            {"pipeline_setup_ms", timing.pipeline_setup_ms},
+            {"command_setup_ms", timing.command_setup_ms},
+            {"submit_wait_ms", timing.submit_wait_ms},
+            {"cleanup_ms", timing.cleanup_ms},
+            {"dispatch_total_ms", timing.dispatch_total_ms},
+            {"write_buffer_ms", timing.write_buffer_ms},
+            {"read_buffer_ms", timing.read_buffer_ms},
+            {"write_buffer_bytes", timing.write_buffer_bytes},
+            {"read_buffer_bytes", timing.read_buffer_bytes},
+            {"pipeline_creations", timing.pipeline_creations}};
+    }
     return evidence.dump();
 }
 

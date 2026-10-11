@@ -1,4 +1,5 @@
 import retained_scratch;
+import retained_scalar;
 // Batched retained camera launch. All rows share an immutable arithmetic program.
 import retained_pair;
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
@@ -6,29 +7,46 @@ import retained_pair;
 uint ReadInput(uint index, uint row, uint rows) {
     return inputs[index < 45 ? 1 + 225 * row + 5 * index : 1 + 225 * rows + index - 45];
 }
+#ifdef SIRIUS_RETAINED_PORTABLE
+// Each portable group has one invocation and owns its decoded input cache.
+groupshared uint originalTerms[180];
+RetainedPair ReadOriginalInput(uint index, uint row) {
+#else
 RetainedPair ReadOriginal(uint index, uint row) {
+#endif
     uint base = 1 + 225 * row + 5 * index;
     if (inputs[base + 4] != 1) return RPInvalid();
-    RetainedPair r =
-        RPPack(asfloat(inputs[base]), asfloat(inputs[base + 1]), asfloat(inputs[base + 3]));
+    RetainedPair r = RPPack(RPFromBits(inputs[base]), RPFromBits(inputs[base + 1]),
+                            RPFromBits(inputs[base + 3]));
     // Retain the third input term through the camera pair's rounding radius.
-    return RPAdd(r, RPConstant(asfloat(inputs[base + 2])));
+    return RPAdd(r, RPConstant(RPFromBits(inputs[base + 2])));
 }
-bool Exact(RetainedPair value, float x) {
-    return value.valid != 0 && value.hi == x && value.lo == 0 && value.error == 0;
+#ifdef SIRIUS_RETAINED_PORTABLE
+RetainedPair ReadOriginal(uint index, uint row) {
+    RetainedPair r;
+    r.hi = RPFromBits(originalTerms[4 * index]);
+    r.lo = RPFromBits(originalTerms[4 * index + 1]);
+    r.error = RPFromBits(originalTerms[4 * index + 2]);
+    r.valid = originalTerms[4 * index + 3];
+    return r;
+}
+#endif
+bool Exact(RetainedPair value, RPScalar x) {
+    return value.valid != 0 && RPScalarEqual(value.hi, x) && RPScalarEqual(value.lo, RPZero()) &&
+           RPScalarEqual(value.error, RPZero());
 }
 RetainedPair ReadValue(uint index, uint rowBase) {
     RetainedPair r;
-    r.hi = asfloat(ScratchRead(index, 0, rowBase, 576));
-    r.lo = asfloat(ScratchRead(index, 1, rowBase, 576));
-    r.error = asfloat(ScratchRead(index, 2, rowBase, 576));
+    r.hi = RPFromBits(ScratchRead(index, 0, rowBase, 576));
+    r.lo = RPFromBits(ScratchRead(index, 1, rowBase, 576));
+    r.error = RPFromBits(ScratchRead(index, 2, rowBase, 576));
     r.valid = ScratchRead(index, 3, rowBase, 576);
     return r;
 }
 void WriteValue(uint index, RetainedPair r, uint rowBase) {
-    ScratchWrite(index, 0, rowBase, 576, asuint(r.hi));
-    ScratchWrite(index, 1, rowBase, 576, asuint(r.lo));
-    ScratchWrite(index, 2, rowBase, 576, asuint(r.error));
+    ScratchWrite(index, 0, rowBase, 576, RPBits(r.hi));
+    ScratchWrite(index, 1, rowBase, 576, RPBits(r.lo));
+    ScratchWrite(index, 2, rowBase, 576, RPBits(r.error));
     ScratchWrite(index, 3, rowBase, 576, r.valid);
 }
 bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) {
@@ -38,24 +56,36 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
     if (destination >= registers || op > 11) return false;
     RetainedPair r = RPInvalid();
     if (op == 0)
-        r = RPConstant(asfloat(a));
+        r = RPConstant(RPFromBits(a));
     else if (op == 1) {
         if (a >= 45) return false;
         r = ReadOriginal(a, row);
     } else {
         if (a >= registers) return false;
         RetainedPair av = ReadValue(a, rowBase);
+#ifdef SIRIUS_RETAINED_PORTABLE
+        if (op >= 2 && op <= 6) {
+            RetainedPair bv = RPInvalid();
+            if (op != 6) {
+                if (b >= registers) return false;
+                bv = ReadValue(b, rowBase);
+            }
+            r = RPEvaluateArithmetic(av, bv, op);
+        }
+#else
         if (op == 6)
             r = RPSqrt(av);
+#endif
         else if (op == 7)
             r = RPNegate(av);
         else if (op == 8) {
-            float bound = RPAbsoluteUpper(av);
-            if (av.valid != 0 && bound > 0)
+            RPScalar bound = RPAbsoluteUpper(av);
+            if (av.valid != 0 && RPScalarGreater(bound, RPZero()))
                 r = RPConstant(RPPowerOfTwo(RPFloorExponent(bound) + 1));
         } else {
             if (b >= registers) return false;
             RetainedPair bv = ReadValue(b, rowBase);
+#ifndef SIRIUS_RETAINED_PORTABLE
             if (op == 2)
                 r = RPAdd(av, bv);
             else if (op == 3)
@@ -64,15 +94,19 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
                 r = RPMultiply(av, bv);
             else if (op == 5)
                 r = RPDivide(av, bv);
-            else if (op == 9) {
+            else
+#endif
+            if (op == 9) {
                 if (av.valid != 0 && bv.valid != 0)
-                    r = RPConstant(max(RPAbsoluteUpper(av), RPAbsoluteUpper(bv)));
+                    r = RPConstant(RPScalarMax(RPAbsoluteUpper(av), RPAbsoluteUpper(bv)));
             } else if (op == 10 || op == 11) {
                 if (c >= registers) return false;
                 RetainedPair cv = ReadValue(c, rowBase);
                 if (cv.valid != 0) {
-                    bool choose =
-                        op == 10 ? cv.hi >= 0 : (cv.hi == 0 && cv.lo == 0 && cv.error == 0);
+                    bool choose = op == 10 ? RPScalarGreaterEqual(cv.hi, RPZero())
+                                           : (RPScalarEqual(cv.hi, RPZero()) &&
+                                              RPScalarEqual(cv.lo, RPZero()) &&
+                                              RPScalarEqual(cv.error, RPZero()));
                     r = choose ? av : bv;
                 }
             }
@@ -82,7 +116,7 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
 
     return true;
 }
-[shader("compute")][numthreads(SIRIUS_RETAINED_LANES, 1, 1)] void ComputeMain(uint3 id
+[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
                                                                               : SV_GroupID,
                                                                                 uint lane
                                                                               : SV_GroupIndex) {
@@ -96,30 +130,48 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
         return;
     uint row = id.x, no = rawNo / rows, ni = rawNi - 1 - 225 * rows + 45, rowBase = row * no;
     if (no < 576) return;
-    for (uint i = lane; i < no; i += SIRIUS_RETAINED_LANES) outputs[rowBase + i] = 0;
+    for (uint i = lane; i < no; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
+#endif
     if (ni < 151) return;
     uint count = ReadInput(45, row, rows), registers = ReadInput(46, row, rows);
     if (count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
         ni != 151 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 || no != 576 + 4 * registers)
         return;
     if (lane == 0) {
-        outputs[rowBase + 0] = asuint(271832.0f);
-        outputs[rowBase + 1] = asuint(45.0f);
+        outputs[rowBase + 0] = RPBits(RPFromUnsigned(271832u));
+        outputs[rowBase + 1] = RPBits(RPFromUnsigned(45u));
 #ifdef SIRIUS_FP32_COMP
-        outputs[rowBase + 2] = asuint(1.0f);
+        outputs[rowBase + 2] = RPBits(RPFromUnsigned(1u));
 #endif
         outputs[rowBase + 4] = ReadInput(30, row, rows);
-        outputs[rowBase + 5] = asuint(float(ni));
-        outputs[rowBase + 6] = asuint(float(no));
+        outputs[rowBase + 5] = RPBits(RPFromUnsigned(ni));
+        outputs[rowBase + 6] = RPBits(RPFromUnsigned(no));
         for (uint i = 0; i < 225; ++i) outputs[rowBase + 8 + i] = inputs[1 + 225 * row + i];
     }
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Inputs stay immutable during dispatch. Successful decoded words are
+    // initialized here before any precondition or program reads the cache.
+    for (uint i = 0; i < 45; ++i) {
+        RetainedPair r = ReadOriginalInput(i, row);
+        if (r.valid == 0) return;
+        originalTerms[4 * i] = RPBits(r.hi);
+        originalTerms[4 * i + 1] = RPBits(r.lo);
+        originalTerms[4 * i + 2] = RPBits(r.error);
+        originalTerms[4 * i + 3] = r.valid;
+    }
+#else
     for (uint i = 0; i < 45; ++i)
         if (ReadOriginal(i, row).valid == 0) return;
-    if (RPAbsoluteUpper(ReadOriginal(1, row)) != 0 && RPAbsoluteUpper(ReadOriginal(3, row)) != 0)
+#endif
+    if (!RPScalarEqual(RPAbsoluteUpper(ReadOriginal(1, row)), RPZero()) &&
+        !RPScalarEqual(RPAbsoluteUpper(ReadOriginal(3, row)), RPZero()))
         return;
     if (lane == 0) retainedStatus = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
+#endif
     uint layerBase = 151 + 5 * count;
     if (ReadInput(layerBase, row, rows) != 0 ||
         ReadInput(layerBase + SIRIUS_RETAINED_LAYERS, row, rows) != count)
@@ -130,9 +182,20 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
              end = ReadInput(layerBase + layer + 1, row, rows);
         if (start != expected || end <= start || end > count || end - start > SIRIUS_RETAINED_LANES)
             RejectRetainedProgram();
+#ifdef SIRIUS_RETAINED_PORTABLE
+        else {
+            // Layer destinations are disjoint from every input register and
+            // from one another; the generated plan releases inputs afterwards.
+            for (uint node = start; node < end; ++node)
+                if (!EvaluateOne(node, row, rowBase, rows, registers)) RejectRetainedProgram();
+        }
+#else
         else if (start + lane < end && !EvaluateOne(start + lane, row, rowBase, rows, registers))
             RejectRetainedProgram();
+#endif
+#ifndef SIRIUS_RETAINED_PORTABLE
         GroupMemoryBarrierWithGroupSync();
+#endif
         if (retainedStatus != 0) return;
         expected = end;
     }
@@ -145,9 +208,9 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
     for (uint i = 0; i < 104; ++i) {
         uint index = ReadInput(47 + i, row, rows);
         RetainedPair r = ReadValue(index, rowBase);
-        outputs[rowBase + 233 + 3 * i] = asuint(r.hi);
-        outputs[rowBase + 234 + 3 * i] = asuint(r.lo);
-        outputs[rowBase + 235 + 3 * i] = asuint(r.error);
+        outputs[rowBase + 233 + 3 * i] = RPBits(r.hi);
+        outputs[rowBase + 234 + 3 * i] = RPBits(r.lo);
+        outputs[rowBase + 235 + 3 * i] = RPBits(r.error);
     }
-    outputs[rowBase + 3] = asuint(1.0f);
+    outputs[rowBase + 3] = RPBits(RPFromUnsigned(1u));
 }

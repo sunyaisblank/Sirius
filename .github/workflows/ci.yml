@@ -232,6 +232,12 @@ jobs:
             libvulkan-dev mesa-vulkan-drivers spirv-tools \
             xorg-dev libgl1-mesa-dev libwayland-dev \
             wayland-protocols libxkbcommon-dev
+      - name: Select required Lavapipe provider
+        run: |
+          set -euo pipefail
+          manifests=(/usr/share/vulkan/icd.d/lvp_icd*.json)
+          test "${#manifests[@]}" -eq 1 && test -f "${manifests[0]}"
+          echo "VK_DRIVER_FILES=${manifests[0]}" >> "$GITHUB_ENV"
       - name: Slang
         run: |
           TAG=v2026.12.0.1
@@ -286,6 +292,12 @@ jobs:
             libvulkan-dev mesa-vulkan-drivers spirv-tools \
             xorg-dev libgl1-mesa-dev libwayland-dev \
             wayland-protocols libxkbcommon-dev
+      - name: Select required Lavapipe provider
+        run: |
+          set -euo pipefail
+          manifests=(/usr/share/vulkan/icd.d/lvp_icd*.json)
+          test "${#manifests[@]}" -eq 1 && test -f "${manifests[0]}"
+          echo "VK_DRIVER_FILES=${manifests[0]}" >> "$GITHUB_ENV"
       - name: Slang
         run: |
           TAG=v2026.12.0.1
@@ -297,7 +309,7 @@ jobs:
             | sha256sum --check -
           sudo mkdir -p /opt/slang && sudo tar xzf "$archive" -C /opt/slang
       - name: Configure
-        run: cmake --preset linux-gcc-sanitize
+        run: cmake --preset linux-gcc-sanitize -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
       - name: Build and mandatory ASan/UBSan/LSan gate
         run: cmake --build --preset linux-gcc-sanitize -j"$(nproc)"
       - name: Preserve gate diagnostics
@@ -362,12 +374,73 @@ jobs:
           if ($manifest.ICD.library_path -ne ".\vk_swiftshader.dll") {
             throw "pinned SwiftShader ICD selects an unexpected driver"
           }
+          # Hosted Windows runs elevated; the loader ignores ICD environment overrides.
+          if (-not [Environment]::Is64BitProcess) { throw "qualification requires the 64-bit registry view" }
+          $registry = "HKLM:\SOFTWARE\Khronos\Vulkan\Drivers"
+          New-Item -Path $registry -Force | Out-Null
+          New-ItemProperty -Path $registry -Name $icd -PropertyType DWord -Value 0 -Force | Out-Null
+          $registered = Get-Item -Path $registry
+          if ($registered.GetValueKind($icd) -ne [Microsoft.Win32.RegistryValueKind]::DWord -or
+              $registered.GetValue($icd) -ne 0) {
+            throw "pinned SwiftShader ICD registry enablement failed"
+          }
       - name: Configure
         run: >-
           cmake --preset windows-msvc
           -DSIRIUS_ALIGNMENT_MODE=qualification
           -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
           -DCMAKE_CONFIGURATION_TYPES=Release
+      - name: Build Vulkan preflight executables
+        run: >-
+          cmake --build --preset windows-msvc --config Release
+          --target sirius sirius_backend_tests --parallel 2
+      - name: Prove SwiftShader inventory and original dispatch before Mandatory numerics
+        timeout-minutes: 5
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $directory = (Resolve-Path "bin/windows-msvc/generated/sirius").Path
+          $app = (Resolve-Path "bin/windows-msvc/src/sirius/app/Release/sirius.exe").Path
+          $inventoryPath = Join-Path $directory "windows_vulkan_preflight_inventory.json"
+          $identityPath = Join-Path $directory "windows_vulkan_preflight_identity.json"
+          $log = Join-Path $directory "windows_vulkan_preflight.log"
+          $xml = Join-Path $directory "windows_vulkan_preflight.xml"
+          $identityArgs = @("scripts/runtime_identity.py", "--source-root", ".",
+            "--source-revision", $env:GITHUB_SHA, "--source-tree-clean", "true",
+            "--executable", $app, "--require-vulkan", "true")
+          python @identityArgs --output $inventoryPath 2>&1 | Tee-Object -FilePath $log
+          if ($LASTEXITCODE -ne 0) { throw "first-party Vulkan inventory capture failed" }
+          $inventory = Get-Content -Raw $inventoryPath | ConvertFrom-Json
+          $swiftShaderDevices = @($inventory.inventory.backends.vulkan.devices | Where-Object {
+            $_.name -eq "SwiftShader Device (Subzero)" -and $_.driver_id -eq 10 -and $_.kind -eq "software"
+          })
+          if ($swiftShaderDevices.Count -ne 1) { throw "pinned SwiftShader device is absent or ambiguous" }
+          $env:SIRIUS_VULKAN_DEVICE = [string]$swiftShaderDevices[0].index
+          "SIRIUS_VULKAN_DEVICE=$env:SIRIUS_VULKAN_DEVICE" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          python @identityArgs --output $identityPath 2>&1 | Tee-Object -FilePath $log -Append
+          if ($LASTEXITCODE -ne 0) { throw "selected first-party Vulkan identity capture failed" }
+          $identity = Get-Content -Raw $identityPath | ConvertFrom-Json
+          if ($identity.selected_device.index -ne $swiftShaderDevices[0].index -or
+              $identity.selected_device.driver_id -ne 10 -or
+              $identity.selected_device.name -ne "SwiftShader Device (Subzero)" -or
+              $identity.selected_device.kind -ne "software") {
+            throw "actual selected Vulkan provider differs from pinned SwiftShader"
+          }
+          # Actual float-control booleans are recorded; portable admission does not require them true.
+          ctest --test-dir bin/windows-msvc -C Release --output-on-failure --no-tests=error `
+            -R '^VulkanBackend\.SlangKernelMatchesCpuReference$' --output-junit $xml `
+            2>&1 | Tee-Object -FilePath $log -Append
+          if ($LASTEXITCODE -ne 0) { throw "original qualification Vulkan dispatch failed" }
+          [xml]$result = Get-Content -Raw $xml
+          $suite = $result.DocumentElement
+          $cases = @($suite.testcase)
+          if ($suite.LocalName -ne "testsuite" -or $suite.tests -ne "1" -or
+              $suite.failures -ne "0" -or $suite.GetAttribute("errors") -notin @("", "0") -or $suite.skipped -ne "0" -or
+              $cases.Count -ne 1 -or $cases[0].name -ne "VulkanBackend.SlangKernelMatchesCpuReference" -or
+              $cases[0].SelectNodes("failure|error|skipped").Count -ne 0) {
+            throw "qualification Vulkan preflight requires the original single case with zero failures/skips"
+          }
       - name: Build
         run: cmake --build --preset windows-msvc
       - name: Full source-available test estate
@@ -407,6 +480,10 @@ jobs:
             linux-tests.xml
             windows-tests.xml
             macos-tests.xml
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight_inventory.json
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight_identity.json
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight.xml
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight.log
           if-no-files-found: ignore
 
   macos-build:

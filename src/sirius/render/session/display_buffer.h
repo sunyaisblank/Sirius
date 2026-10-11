@@ -8,11 +8,18 @@
 #include <atomic>
 #include <cmath>
 #include <cstdint>
+#include <functional>
 #include <mutex>
 #include <optional>
+#include <span>
 #include <vector>
 
 namespace sirius::render {
+
+// Advisory completed physical radiance. The span is borrowed only for the call;
+// consumers copy it before returning. Delivery can occur on a tile worker.
+using CompletedTileCallback =
+    std::function<void(int x, int y, int width, int height, std::span<const float> rgba)>;
 
 // Holds the accumulating render as linear RGBA float; workers write tiles and
 // readers take stable snapshots.
@@ -67,6 +74,21 @@ class DisplayBuffer {
         const std::size_t expected_size = pixel_data_.size();
         callback(pixel_data_);
         SIRIUS_POST(pixel_data_.size() == expected_size);
+    }
+
+    // Copy one completed rectangle without exposing storage across the lock.
+    [[nodiscard]] std::vector<float> SnapshotTileData(int x, int y, int width, int height) const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        SIRIUS_PRE(x >= 0 && y >= 0 && width > 0 && height > 0);
+        SIRIUS_PRE(x < width_ && y < height_ && width <= width_ - x && height <= height_ - y);
+        std::vector<float> tile(static_cast<std::size_t>(width) * height * 4);
+        for (int row = 0; row < height; ++row) {
+            const auto source =
+                pixel_data_.begin() + (static_cast<std::size_t>(y + row) * width_ + x) * 4;
+            std::copy_n(source, static_cast<std::size_t>(width) * 4,
+                        tile.begin() + static_cast<std::size_t>(row) * width * 4);
+        }
+        return tile;
     }
 
     // Stable copy for consumers that may overlap a render-thread update.

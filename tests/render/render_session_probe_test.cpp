@@ -281,7 +281,21 @@ TEST(RenderSessionProbe, CpuThinDiskPublishedLinearChannelsMatchIndependentFirst
         RenderSession session;
         const auto configured = session.Configure(config);
         ASSERT_TRUE(configured) << configured.error().Description();
-        std::vector<float> linear;
+        std::vector<float> linear, tile_linear;
+        session.SetCompletedTileCallback(
+            [&](int x, int y, int width, int height, std::span<const float> rgba) {
+                EXPECT_EQ(x, 0);
+                EXPECT_EQ(y, 0);
+                EXPECT_EQ(width, config.width);
+                EXPECT_EQ(height, config.height);
+                EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 1);
+                EXPECT_TRUE(std::all_of(rgba.begin(), rgba.end(),
+                                        [](float value) { return std::isfinite(value); }));
+                tile_linear.assign(rgba.begin(), rgba.end());
+                // Callback replacement and snapshots reenter owner APIs safely.
+                session.SetCompletedTileCallback({});
+                EXPECT_EQ(session.GetDisplayBuffer().SnapshotFloatData(), tile_linear);
+            });
         // CPU UpdateTile publishes complete physical radiance before reporting
         // completion. The final in-memory display later receives fixed shadow
         // lift/clipping even when output and tonemapping are disabled.
@@ -289,6 +303,7 @@ TEST(RenderSessionProbe, CpuThinDiskPublishedLinearChannelsMatchIndependentFirst
             if (done == total) linear = session.GetDisplayBuffer().SnapshotFloatData();
         });
         ASSERT_EQ(session.Execute(), SessionState::Complete) << session.GetErrorMessage();
+        EXPECT_EQ(tile_linear, linear);
         ASSERT_NO_FATAL_FAILURE(CheckDiskComposition(config, linear, witnesses, "cpu"));
         EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 1);
     }
@@ -568,6 +583,40 @@ TEST(RenderSessionProbe, StartIsAsynchronousAndCancellationIsTerminalWithoutOutp
     EXPECT_EQ(session.GetState(), SessionState::Cancelled);
     EXPECT_FALSE(fs::exists(output));
     EXPECT_FALSE(session.Start()) << "a terminal session must not be silently restarted";
+
+    const auto tile_output = temporary_directory.path() / "cancelled-completed-tile.ppm";
+    SessionConfig tile_config;
+    tile_config.width = tile_config.height = 4;
+    tile_config.tile_size = 1;
+    tile_config.thread_count = 2;
+    tile_config.samples_per_pixel = 1;
+    tile_config.metric_id = sirius::core::MetricId::Minkowski;
+    tile_config.black_hole_mass = tile_config.black_hole_spin = 0;
+    tile_config.enable_disk = false;
+    tile_config.output_path = tile_output.string();
+    RenderSession tile_session;
+    ASSERT_TRUE(tile_session.Configure(tile_config));
+    std::atomic<unsigned> delivered{0};
+    std::atomic<bool> callback_cancelled{false}, callback_wait_returned{false};
+    tile_session.SetCompletedTileCallback(
+        [&](int x, int y, int width, int height, std::span<const float> rgba) {
+            EXPECT_GE(x, 0);
+            EXPECT_GE(y, 0);
+            EXPECT_EQ(rgba.size(), static_cast<std::size_t>(width) * height * 4);
+            EXPECT_TRUE(std::all_of(rgba.begin(), rgba.end(),
+                                    [](float value) { return std::isfinite(value); }));
+            if (delivered.fetch_add(1) == 0) {
+                tile_session.SetCompletedTileCallback({});
+                callback_cancelled = tile_session.Cancel();
+                tile_session.WaitForCompletion();  // A tile worker cannot join its owner.
+                callback_wait_returned = true;
+            }
+        });
+    ASSERT_EQ(tile_session.Execute(), SessionState::Cancelled);
+    EXPECT_GT(delivered.load(), 0U);
+    EXPECT_TRUE(callback_cancelled.load());
+    EXPECT_TRUE(callback_wait_returned.load());
+    EXPECT_FALSE(fs::exists(tile_output));
 }
 
 TEST(RenderSessionProbe, CancellationInterruptsAnActivePrivateRayBeforePublication) {
@@ -603,6 +652,9 @@ TEST(RenderSessionProbe, CancellationInterruptsAnActivePrivateRayBeforePublicati
     config.backend = sirius::render::RenderBackend::Vulkan;
     const auto configured = session.Configure(config);
     ASSERT_TRUE(configured) << configured.error().Description();
+    std::atomic<unsigned> tile_deliveries{0};
+    session.SetCompletedTileCallback(
+        [&](int, int, int, int, std::span<const float>) { ++tile_deliveries; });
     ASSERT_TRUE(session.Start());
     const bool active = entered.wait_for(std::chrono::seconds(5)) == std::future_status::ready;
     const bool cancelled = session.Cancel();
@@ -611,6 +663,7 @@ TEST(RenderSessionProbe, CancellationInterruptsAnActivePrivateRayBeforePublicati
     ASSERT_TRUE(active) << "the private ray did not start";
     EXPECT_TRUE(cancelled);
     EXPECT_EQ(session.GetState(), SessionState::Cancelled);
+    EXPECT_EQ(tile_deliveries.load(), 0U);
     EXPECT_EQ(executor.steps, 1);
     EXPECT_EQ(executor.rejected, 1);
     EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 0);

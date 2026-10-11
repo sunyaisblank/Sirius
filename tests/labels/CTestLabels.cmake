@@ -160,6 +160,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    ChargedReference.ExteriorChartShiftMatchesIndependentQuadrature
+    ChargedReference.SphericalRadialCaptureMatchesExactAffineAndTangent
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     ChristoffelTests.FlatSpaceChristoffelAllZero
     ChristoffelTests.TorsionFreeSymmetry
     ChristoffelTests.SphericalGammaRThetaTheta
@@ -349,6 +355,8 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CpuTraceBoundary.RetainedQuarticEventsKeepOriginalFractionsAndExcludeLaterDisk
+    CpuTraceBoundary.RetainedQuarticVolumeFailurePublishesNothingAndRecovers
     CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay
     CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent
     CpuTraceBoundary.CancellationDiscardsPrivateRayDataAndAllowsTracerReuse
@@ -361,6 +369,10 @@ set_tests_properties(
     CpuTraceBoundary.OrdinaryEscapeExcludesDiskAndVolumeBeyondBoundary
     CpuTraceBoundary.OneSheetEllisNamesTheRegularThroatBoundary
     CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity
+    CpuTraceBoundary.EllisReferenceRetainsExactRadialLengthAndIndependentRefinement
+    CpuTraceBoundary.NonradialEllisFiniteEventsMatchIndependentQuadrature
+    CpuTraceBoundary.KottlerReferenceRetainsExactDeSitterAndRadialIdentities
+    CpuTraceBoundary.NonradialKottlerFiniteEventsMatchIndependentQuadrature
     CpuTraceBoundary.KottlerBothPastHorizonsRetainRadialAffineOracleAndTracerReuse
     CpuTraceBoundary.KottlerOverlapPreservesCoupledSourceMapAgainstNativeChart
     PROPERTIES LABELS "Mandatory;Correctness"
@@ -386,6 +398,16 @@ set_tests_properties(
 set_tests_properties(
     DiskCoordinateTest.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain
     DiskCoordinateTest.AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    DopriPositionSegment.SamplesTheQuarticAndItsAffineDerivative
+    DopriPositionSegment.DegreeEightIsolationCoversEveryRootWithoutGridSampling
+    DopriPositionSegment.SameSideQuarticContactsRespectDirectionAndOriginalRestriction
+    DopriPositionSegment.TangenciesAndKerrEllipsoidUseTheSameQuartic
+    DopriPositionSegment.DiskRootsIncludeTangenciesAndKeepOriginalFractions
+    DopriPositionSegment.IncrementBoundarySurvivesLargeOriginsAndInvalidInputsFailClosed
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -427,8 +449,10 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    FullPathAcceptance.CpuChargedFiniteEventsMapsAndRefinement
     FullPathAcceptance.CpuIndependentCarterEventsMapsAndRefinement
     FullPathAcceptance.VulkanRetainedIndependentCarterEventsMapsAndRefinement
+    FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -869,6 +893,7 @@ set_tests_properties(
 set_tests_properties(
     PolarisationAcceptance.NormalEmissionHasFiniteUnpolarisedStokes
     PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction
+    PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -880,10 +905,16 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    PortableBinary32.MatchesIndependentExactCorpus
+    PROPERTIES LABELS "Mandatory;Stability"
+)
+
+set_tests_properties(
     RK45IntegratorTests.DefaultConfigReasonable
     RK45IntegratorTests.OptimalStepIncreasesForSmallError
     RK45IntegratorTests.OptimalStepDecreasesForLargeError
     RK45IntegratorTests.OptimalStepRespectsBounds
+    RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth
     RK45IntegratorTests.MinkowskiStraightLine
     RK45IntegratorTests.MinkowskiNullConstraint
     RK45IntegratorTests.SchwarzschildIntegration
@@ -895,6 +926,7 @@ set_tests_properties(
     RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating
     RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay
     RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap
+    RK45IntegratorTests.AcceptedEndpointsReuseOwnedGeometryAndPreserveAccelerationWords
     RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection
     RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch
     RK45IntegratorTests.NoNaNInResults
@@ -954,6 +986,8 @@ set_tests_properties(
     RenderSessionProbe.LowLevelTracerRejectsUnownedOrPartialFeatureControls
     RenderSessionProbe.FilmFinishPresetsRetainUnspecifiedPresetControls
     RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities
+    RenderSessionProbe.BackendAutoPreservesStrictDeviceAndPrecisionRequests
+    RenderSessionProbe.BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent
     RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
     RenderSessionProbe.InMemoryPreviewRejectsInactiveOutputPath
     PROPERTIES LABELS "Mandatory;Operational"
@@ -973,16 +1007,42 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading
+    RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation
+    RetainedComputeAdmission.CameraCancellationPrecedesNumericalRefusal
+    RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows
+    RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback
     RetainedComputeTest.SmoothRayCameraPreservesPhysicalLensDerivatives
     RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError
+    RetainedComputeTest.SchwarzschildStagesPreserveIndependentFieldsAndGeneralFallback
+    RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal
+    RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission
     RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation
     RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives
+    RetainedComputeTest.ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal
     RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual
+    RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults
+    RetainedComputeTest.WideDeviceTimestampsPreserveOriginalIntervalResults
     RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement
+    RetainedComputeTest.SharedEndpointDensePreservesPrivateIntervalsAndSerialRetry
+    RetainedComputeTest.ProjectionReserveKeepsLogicalCohortsBounded
     RetainedComputeTest.SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState
     RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates
     RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    RetainedDopriTest.IndependentQuarticPreservesCompletePhase
+    RetainedDopriTest.MalformedRowsRefuseAndRecover
+    RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection
+    RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets
+    RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1257,6 +1317,7 @@ set_tests_properties(
 set_tests_properties(
     ViewCommandOperational.StrictParsingAndSessionProjection
     ViewCommandOperational.RelativisticJetsDeclineBeforeViewerInitialisation
+    ViewCommandOperational.RefinementLadderPreservesRequestedDimensions
     ViewCommandOperational.InputStateHandlesPressRepeatReleaseMouseAndScroll
     PROPERTIES LABELS "Mandatory;Operational"
 )
@@ -1286,13 +1347,22 @@ set_tests_properties(
     VulkanBackend.PortabilityInstanceOptInRequiresAdvertisedExtension
     VulkanBackend.PortabilityDeviceEnablesSubsetWithoutChangingPrecisionOrQueues
     VulkanBackend.PortabilityEnumerationErrorsDeclineBeforeCreation
+    VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl
     VulkanBackend.PortabilityCreationFailuresRemainExplicit
+    VulkanBackend.PipelineCacheImportRequiresExactDeviceIdentityAndHeader
+    VulkanBackend.PipelineCacheImportRejectsOversizeWithoutTruncation
     VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions
+    VulkanBackend.KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled
     VulkanBackend.EnumerationReportsInsteadOfThrowing
+    VulkanBackend.HostMemoryPreferencePreservesCompatibleHeapAndCoherence
     VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers
     VulkanBackend.SlangKernelMatchesCpuReference
     VulkanBackend.WorkerThreadDispatchTearsDownSafely
     VulkanBackend.DeviceSelectionIsStrictAndRangeChecked
+    VulkanBackend.IdenticalKernelWordsReusePipelineAcrossBuffers
+    VulkanBackend.IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffers
+    VulkanBackend.TimestampSpansBoundWrapAndInvalidCounters
+    VulkanBackend.SubmissionErrorsDoNotImplyIdleCompletion
     PROPERTIES LABELS "Mandatory;Operational"
 )
 
@@ -1325,6 +1395,7 @@ set_tests_properties(
     CameraWorldlineTest.InvalidInternalWorldlineFailsClosed
     CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels
     CameraWorldlineTest.ZeroVelocityIsExactlyRepresented
+    CpuAlcubierreAcceptance.PublicCentreRaysMatchIndependentFiniteAxialOrbits
     CpuTraceBoundary.HorizonlessKerrSchildFamiliesKeepTheirNativeTraceChart
     CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength
     CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent
@@ -1372,6 +1443,8 @@ set_tests_properties(
     PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport
     PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes
     PointSourceDetector.RetainedMovingKerrFluxMatchesIndependentSeparatedImageAndBand
+    PointSourceDetector.RetainedRotatingIsolatedStarMatchesIndependentSharedRegionBrightness
+    PointSourceDetector.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness
     PointSourceDetector.SharedDiscoveryDeclinesMalformedExhaustedAndCancelledBatches
     PointSourceDetector.SharedDiscoveryDeclinesUncertainOriginalSupportOwnership
     PointSourceDetector.SharedDiscoveryPreservesDistinctGaussianShapesAndTransfer
@@ -1389,6 +1462,8 @@ set_tests_properties(
     RayWorkQueue.RejectsUnboundedWorkBeforeCallingTracer
     RayWorkQueue.WorkerFailureDrainsBatchAndQueueRemainsUsable
     ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p
+    ShadowBoundary.RetainedFp32ProductsKerrNearExtremalBardeenBoundaryAt1080p
+    ShadowBoundary.RetainedFp64ProductsKerrNearExtremalBardeenBoundaryAt1080p
     ShadowBoundary.SchwarzschildCriticalImpactParameterMatchesAnalyticAt1080p
     SpectralEmissionTest.BlackbodyColourDirection
     SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor
@@ -1490,6 +1565,7 @@ set_tests_properties(
     RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest
     RenderEvidence.DeviceIdentityEscapesJsonWithoutChangingItsValue
     RenderEvidence.RetainedWireRecordsFeedAttestationControls
+    RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd
     RenderSessionProbe.CancellationInterruptsAnActivePrivateRayBeforePublication
     RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
@@ -1524,6 +1600,7 @@ set_tests_properties(
     TileScheduler.ReinitialiseResetsCompletionLedger
     TileScheduler.WorkGroupsPreserveEveryOriginalTileAndOwnEachRegionOnce
     ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
+    ViewCommandOperational.SoleRefinementPublishesExactRequestedDimensions
     ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames
     VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics
     VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics

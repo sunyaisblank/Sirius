@@ -127,7 +127,7 @@ def inspect_test_input_evidence(gate, artifacts):
 
 
 def copy_qualification_test_inputs(gate_path, build_root, output=None):
-    """Check live build inputs against the gate; optionally copy their bound bytes."""
+    """Check canonical and consumed inputs; optionally export the canonical bytes."""
     gate = json.loads(gate_path.read_text(encoding="utf-8"))
     verifier = load_build_gate_verifier()
     require(isinstance(gate, dict), "test input gate must be a JSON object")
@@ -147,6 +147,15 @@ def copy_qualification_test_inputs(gate_path, build_root, output=None):
                 f"generated test input is absent or resolves to a substituted path: {logical_name}")
         sources[evidence_name] = source
     inspect_test_input_evidence(gate, sources)
+    tested_paths = {}
+    for consumer in ("sirius_backend_tests", "sirius_render_tests"):
+        record = gate["tested_artifacts"][consumer]
+        require(isinstance(record, dict) and record.get("root") == "build",
+                f"test input consumer must be anchored to the build root: {consumer}")
+        tested_paths[consumer] = verifier.resolve_record(record, root, root)
+    verifier.verify_test_input_copies(
+        tested_paths, gate["product_artifacts"], gate["test_input_artifacts"]
+    )
     if output is None:
         return list(sources.values())
     copied = {}
@@ -440,12 +449,44 @@ def verify_governed_scene_transcript(
             f"{label} completion does not cover the canonical detector regions")
     require(0 < completion["maximum_dispatch_rays"] <= completion["ray_capacity"] <= 64,
             f"{label} completion exceeds the retained ray capacity")
+    # Preserve the original six-stage evidence contract. The appended phase
+    # sampler is an optional measured stage until the trace owner installs it;
+    # zero here never establishes a DP interpolation or performance claim.
     stages = completion.get("retained_stage_dispatches")
-    require(isinstance(stages, list) and len(stages) == 6
+    require(isinstance(stages, list) and len(stages) in (6, 7)
             and all(type(count) is int and count >= 0 for count in stages)
-            and all(count > 0 for count in stages[1:])
+            and all(count > 0 for count in stages[1:6])
             and sum(stages) == completion["dispatches"],
             f"{label} completion does not prove the retained device stages")
+    # Older schema-v1 records count individual commands only. When the writer
+    # reports shared Endpoint+Dense waits, require both the physical queue count
+    # and its separately owned timing without changing the scientific criteria.
+    if "queue_submissions" in completion or "shared_endpoint_dense" in completion:
+        require_positive_integer(completion.get("queue_submissions"), f"{label} queue_submissions")
+        paired = completion.get("shared_endpoint_dense")
+        require(isinstance(paired, dict), f"{label} shared Endpoint+Dense timing is missing")
+        for field in ("submissions", "pipeline_creations", "target_overshoots"):
+            require(type(paired.get(field)) is int and paired[field] >= 0,
+                    f"{label} shared Endpoint+Dense {field} must be a nonnegative integer")
+        count = paired["submissions"]
+        require(count <= min(stages[2], stages[3])
+                and completion["queue_submissions"] == sum(stages) - count
+                and paired["pipeline_creations"] <= 2 * count
+                and paired["target_overshoots"] <= count,
+                f"{label} shared Endpoint+Dense counts contradict the kernel commands")
+        for field in ("submit_wait_ms", "maximum_submit_wait_ms", "pipeline_setup_ms",
+                      "command_setup_ms", "cleanup_ms", "dispatch_total_ms"):
+            value = paired.get(field)
+            require(type(value) in (int, float) and math.isfinite(value) and value >= 0,
+                    f"{label} shared Endpoint+Dense {field} must be finite and nonnegative")
+        phases = sum(paired[field] for field in
+                     ("submit_wait_ms", "pipeline_setup_ms", "command_setup_ms", "cleanup_ms"))
+        require(paired["maximum_submit_wait_ms"] <= paired["submit_wait_ms"]
+                and paired["submit_wait_ms"] <= count * paired["maximum_submit_wait_ms"] +
+                    max(1e-6, paired["submit_wait_ms"] * 1e-6)
+                and math.isclose(phases, paired["dispatch_total_ms"], rel_tol=1e-6, abs_tol=1e-6)
+                and (count > 0 or phases == 0),
+                f"{label} shared Endpoint+Dense phases are inconsistent")
     for field in ("target_overshoots", "batch_subdivisions", "safety_fallbacks",
                   "initialization_dispatches"):
         require(type(completion.get(field)) is int and completion[field] >= 0,
@@ -456,6 +497,12 @@ def verify_governed_scene_transcript(
         require(type(value) in (int, float) and math.isfinite(value) and value >= 0,
                 f"{label} {field} must be finite and nonnegative")
     rendered_seconds = completion["wall_seconds"]
+    if "shared_endpoint_dense" in completion:
+        require(completion["shared_endpoint_dense"]["submit_wait_ms"] <=
+                completion["dispatch_seconds"] * 1000
+                and completion["shared_endpoint_dense"]["maximum_submit_wait_ms"] <=
+                    completion["maximum_dispatch_ms"],
+                f"{label} shared Endpoint+Dense wait exceeds total device wait or peak")
     claimed_seconds = float(render.get("wall_seconds"))
     require(0 < completion["dispatch_seconds"] <= rendered_seconds
             and completion["maximum_dispatch_ms"] > 0
@@ -1109,7 +1156,15 @@ def verify_document(data, location, expected_operating_model_sha256=None):
             and "tested_artifacts" in document
             and "product_artifacts" in document
         ]
-        require(len(json_artifacts) == 4,
+        runtime_identities = [
+            (path, document) for path, document in json_artifacts.items()
+            if isinstance(document, dict) and document.get("kind") == "sirius-runtime-identity"
+        ]
+        identity_claim = claims.get("runtime_identity")
+        native_runtime = bool({"windows-native-vulkan", "macos-moltenvk"}.intersection(domains))
+        require(not native_runtime or identity_claim is not None,
+                "native runtime attestation requires the actual identity sidecar")
+        require(len(json_artifacts) == 4 + (1 if identity_claim is not None else 0),
                 "runtime attestation has an unclassified JSON artifact")
         require(len(inventories) == 1,
                 "runtime attestation requires one hashed device inventory")
@@ -1120,6 +1175,22 @@ def verify_document(data, location, expected_operating_model_sha256=None):
         require(len(gates) == 1,
                 "runtime attestation requires one qualification build gate")
         inventory = inventories[0][1]
+        if identity_claim is not None:
+            require(isinstance(identity_claim, str) and len(runtime_identities) == 1,
+                    "runtime identity claim requires one hashed sidecar")
+            identity_path, identity_document = runtime_identities[0]
+            require(artifact_files.get(identity_claim) == identity_path,
+                    "runtime identity claim names a different artifact")
+            identity_spec = importlib.util.spec_from_file_location(
+                "sirius_runtime_identity", Path(__file__).with_name("runtime_identity.py")
+            )
+            require(identity_spec is not None and identity_spec.loader is not None,
+                    "runtime identity validator is unavailable")
+            identity_validator = importlib.util.module_from_spec(identity_spec)
+            identity_spec.loader.exec_module(identity_validator)
+            candidate_claim = claims.get("qualification_executable", {})
+            identity_validator.validate_record(identity_document, source_revision, candidate_claim,
+                                               inventory, required=True, clean=True)
         inspect_build_alignment_receipt(receipts[0], source_revision)
         inspect_qualification_build_gate(
             gates[0], source_revision, receipts[0], reports[0],
@@ -1970,7 +2041,53 @@ def self_test(render_test_executable=None):
                 return original_transcript.replace(lines[prefix], prefix + json.dumps(record))
 
             check_completion()
+            paired = completion.get("shared_endpoint_dense", {
+                "submissions": 1, "submit_wait_ms": 1.0, "maximum_submit_wait_ms": 1.0,
+                "pipeline_setup_ms": 0.0, "command_setup_ms": 0.0, "cleanup_ms": 0.0,
+                "dispatch_total_ms": 1.0, "pipeline_creations": 0, "target_overshoots": 0,
+            })
+            pair_fields = {"shared_endpoint_dense": paired,
+                           "queue_submissions": completion["dispatches"] - paired["submissions"]}
+            transcript.write_text(replace_record(VULKAN_EVIDENCE_PREFIX, pair_fields), encoding="utf-8")
+            check_completion()
+            legacy = dict(completion)
+            legacy.pop("queue_submissions", None)
+            legacy.pop("shared_endpoint_dense", None)
+            transcript.write_text(original_transcript.replace(
+                completion_line, VULKAN_EVIDENCE_PREFIX + json.dumps(legacy)), encoding="utf-8")
+            check_completion()
+            transcript.write_text(original_transcript, encoding="utf-8")
             mutations = []
+            for description, changes in (
+                    ("contradictory physical queue count", {"queue_submissions": completion["dispatches"] + 1}),
+                    ("non-integer physical queue count", {"queue_submissions": True}),
+                    ("missing shared timing", {"shared_endpoint_dense": None}),
+                    ("excessive pair count", {"shared_endpoint_dense": {
+                        **paired, "submissions": completion["dispatches"] + 1}}),
+                    ("invalid pair timing", {"shared_endpoint_dense": {
+                        **paired, "submit_wait_ms": float("inf")}}),
+                    ("contradictory pair peak", {"shared_endpoint_dense": {
+                        **paired, "maximum_submit_wait_ms": paired["submit_wait_ms"] + 1}}),
+                    ("contradictory pair phases", {"shared_endpoint_dense": {
+                        **paired, "dispatch_total_ms": paired["dispatch_total_ms"] + 1}})):
+                mutations.append((description, replace_record(
+                    VULKAN_EVIDENCE_PREFIX, {**pair_fields, **changes})))
+            for missing in pair_fields:
+                partial = {**completion, **pair_fields}
+                partial.pop(missing)
+                mutations.append(("missing " + missing, original_transcript.replace(
+                    completion_line, VULKAN_EVIDENCE_PREFIX + json.dumps(partial))))
+            peak = completion["maximum_dispatch_ms"]
+            for description, wait, maximum in (
+                    ("pair peak concealed by global peak", peak + 1, peak + 1),
+                    ("pair sum exceeds count times peak", 2 * peak, peak)):
+                one_pair = {"submissions": 1, "submit_wait_ms": wait,
+                            "maximum_submit_wait_ms": maximum, "pipeline_setup_ms": 0,
+                            "command_setup_ms": 0, "cleanup_ms": 0, "dispatch_total_ms": wait,
+                            "pipeline_creations": 0, "target_overshoots": 0}
+                mutations.append((description, replace_record(VULKAN_EVIDENCE_PREFIX, {
+                    "shared_endpoint_dense": one_pair,
+                    "queue_submissions": completion["dispatches"] - 1})))
             for prefix, line in lines.items():
                 for description, replacement in (("missing", ""), ("duplicate", line + "\n" + line),
                                                  ("non-object", prefix + "[]"),
@@ -2204,6 +2321,8 @@ def self_test(render_test_executable=None):
             ),
         ]
         for domain, platform_name, preset, native_device in native_runtime_controls:
+            native_device = {**native_device, "preserves_fp32_denormals": False,
+                             "rounds_fp32_to_nearest": False, "rounds_fp64_to_nearest": False}
             native_inventory = root / f"{domain}-device.json"
             native_inventory.write_text(
                 json.dumps({
@@ -2211,6 +2330,8 @@ def self_test(render_test_executable=None):
                     "wsl2": False,
                     "backends": {
                         "vulkan": {
+                            "compiled": True,
+                            "available": True,
                             "selected_device_index": 0,
                             "devices": [native_device],
                         }
@@ -2218,6 +2339,43 @@ def self_test(render_test_executable=None):
                 }),
                 encoding="utf-8",
             )
+            # Synthetic metadata controls only: these bytes are never loaded
+            # as a provider or asserted to be a real hosted identity capture.
+            import base64
+            native_inventory_document = json.loads(native_inventory.read_text())
+            raw_inventory = native_inventory.read_bytes()
+            synthetic_input = {
+                "path": str(native_inventory), "bytes": len(raw_inventory),
+                "sha256": hashlib.sha256(raw_inventory).hexdigest(),
+            }
+            synthetic_manifest = json.dumps({"ICD": {"library_path": "synthetic library"}}).encode()
+            native_identity = root / f"{domain}-identity.json"
+            native_identity_document = {
+                "schema_version": 1, "kind": "sirius-runtime-identity", "status": "captured",
+                "qualification_claimed": False, "numerics_executed": False,
+                "phase": "before_native_runtime_estate", "source": {"revision": source_revision, "clean": True},
+                "executable": {**qualification_claim, "path": "synthetic executable"},
+                "classification": "vulkan_selected", "selected_device": native_device,
+                "inventory": native_inventory_document, "environment": {"VK_DRIVER_FILES": "synthetic.json"},
+                "host": {"platform": "win32" if platform_name == "windows" else "darwin"},
+                "ci": {"hosted": False, **dict.fromkeys(("repository", "run_id", "run_attempt", "job", "runner", "os", "arch"))},
+                "query": {"argv": ["--json", "info", "system"], "exit_code": 0,
+                          "stdout_base64": base64.b64encode(raw_inventory).decode(),
+                          "stdout_sha256": hashlib.sha256(raw_inventory).hexdigest(),
+                          "stderr_base64": "", "stderr_sha256": hashlib.sha256(b"").hexdigest()},
+                "provider_inputs": {
+                    "scope": "hashed input candidates; not actual loaded-module or per-ICD execution proof",
+                    "selector": {"name": "VK_DRIVER_FILES", "value": "synthetic.json", "kind": "explicit_manifest_list"},
+                    "manifests": [{"selector_path": "synthetic.json",
+                                   "manifest": {"path": "synthetic.json", "bytes": len(synthetic_manifest),
+                                                "sha256": hashlib.sha256(synthetic_manifest).hexdigest()},
+                                   "contents_base64": base64.b64encode(synthetic_manifest).decode(),
+                                   "library_path": "synthetic library",
+                                   "driver_candidates": [synthetic_input]}],
+                    "loader_candidates": [synthetic_input],
+                },
+            }
+            native_identity.write_text(json.dumps(native_identity_document), encoding="utf-8")
             native_transcript = root / f"{domain}-transcript.log"
             native_transcript.write_text(
                 f"== source revision: {source_revision}\n"
@@ -2241,6 +2399,7 @@ def self_test(render_test_executable=None):
                     "test_report": valid["claims"]["test_report"],
                     "qualification_executable": qualification_claim,
                     "runtime_ready": True,
+                    "runtime_identity": native_identity.name,
                 },
                 "artifacts": {
                     "frame.png": valid["artifacts"]["frame.png"],
@@ -2259,6 +2418,11 @@ def self_test(render_test_executable=None):
                         "path": native_inventory.name,
                         "bytes": native_inventory.stat().st_size,
                         "sha256": hashlib.sha256(native_inventory.read_bytes()).hexdigest(),
+                    },
+                    native_identity.name: {
+                        "path": native_identity.name,
+                        "bytes": native_identity.stat().st_size,
+                        "sha256": hashlib.sha256(native_identity.read_bytes()).hexdigest(),
                     },
                     native_transcript.name: {
                         "path": native_transcript.name,
@@ -2279,6 +2443,7 @@ def self_test(render_test_executable=None):
                 "qualification-gate-log",
                 *(path.name for path in (*self_test_products.values(), *self_test_inputs.values())),
                 native_inventory.name,
+                native_identity.name,
                 native_transcript.name,
             ):
                 candidate = json.loads(json.dumps(native_document))
@@ -2290,6 +2455,34 @@ def self_test(render_test_executable=None):
                 raise ValueError(
                     f"negative control accepted: {domain} without {missing_artifact}"
                 )
+            missing_identity_claim = json.loads(json.dumps(native_document))
+            missing_identity_claim["claims"].pop("runtime_identity")
+            try:
+                verify_document(missing_identity_claim, root / "attestation.json")
+            except ValueError:
+                pass
+            else:
+                raise ValueError(f"negative control accepted: {domain} without identity claim")
+            for mutation in ("query_digest", "executable_digest", "source_clean", "driver_input", "control"):
+                changed = json.loads(json.dumps(native_identity_document))
+                if mutation == "query_digest": changed["query"]["stdout_sha256"] = "0" * 64
+                if mutation == "executable_digest": changed["executable"]["sha256"] = "0" * 64
+                if mutation == "source_clean": changed["source"]["clean"] = False
+                if mutation == "driver_input": changed["provider_inputs"]["manifests"][0]["driver_candidates"] = []
+                if mutation == "control": changed["selected_device"].pop("rounds_fp32_to_nearest")
+                native_identity.write_text(json.dumps(changed), encoding="utf-8")
+                changed_document = json.loads(json.dumps(native_document))
+                changed_document["artifacts"][native_identity.name].update(
+                    bytes=native_identity.stat().st_size,
+                    sha256=hashlib.sha256(native_identity.read_bytes()).hexdigest(),
+                )
+                try:
+                    verify_document(changed_document, root / "attestation.json")
+                except ValueError:
+                    pass
+                else:
+                    raise ValueError(f"negative control accepted: {domain} altered identity {mutation}")
+            native_identity.write_text(json.dumps(native_identity_document), encoding="utf-8")
 
         corruptions = [
             ("software device", lambda doc: doc["device"].update(kind="software")),
@@ -2493,7 +2686,11 @@ def self_test(render_test_executable=None):
             }
 
         native_tested = {
-            logical_name: native_gate_record(path.name, path.read_bytes())
+            logical_name: native_gate_record(
+                f"consumers/{logical_name}/{path.name}"
+                if logical_name in {"sirius_backend_tests", "sirius_render_tests"}
+                else path.name, path.read_bytes()
+            )
             for logical_name, path in native_test_products.items()
         }
         candidate_payload = qualification_executable.read_bytes()
@@ -2613,12 +2810,120 @@ def self_test(render_test_executable=None):
             path = input_build / relative_path
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(self_test_inputs[name].read_bytes())
+        input_consumers = {}
+        for consumer in ("sirius_backend_tests", "sirius_render_tests"):
+            executable = input_build / native_tested[consumer]["path"]
+            executable.parent.mkdir(parents=True, exist_ok=True)
+            executable.write_bytes(native_test_products[consumer].read_bytes())
+            input_consumers[consumer] = executable
+            resources = executable.parent / "resources"
+            for name, relative_path in test_input_paths.items():
+                destination = resources / relative_path
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(self_test_inputs[name].read_bytes())
+            for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"):
+                destination = resources / build_gate_verifier.INSTALLED_PRODUCTS[
+                    name].removeprefix("share/sirius/")
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(self_test_products[name].read_bytes())
         copied_inputs = copy_qualification_test_inputs(
             native_build_gate, input_build, input_bundle
         )
         require({path.name for path in copied_inputs}
                 == set(QUALIFICATION_TEST_INPUT_EVIDENCE.values()),
                 "generated test input producer failed its positive control")
+        require({path.name for path in copy_qualification_test_inputs(
+                    native_build_gate, input_build)}
+                == {Path(path).name for path in test_input_paths.values()},
+                "generated test input live check failed its positive control")
+        # The full-estate document takes the same live-consumer path. This is a
+        # synthetic authority fixture, not evidence of an executed estate.
+        input_mandatory_gate = root / "input-mandatory-gate.json"
+        input_mandatory_document = json.loads(mandatory_gate.read_text(encoding="utf-8"))
+        for consumer in input_consumers:
+            input_mandatory_document["tested_artifacts"][consumer] = native_tested[consumer]
+        input_mandatory_gate.write_text(json.dumps(input_mandatory_document), encoding="utf-8")
+        copy_qualification_test_inputs(input_mandatory_gate, input_build)
+
+        rejected_bundle = root / "input-rejected-bundle"
+        rejected_bundle.mkdir()
+
+        def reject_live_input_copy(label):
+            for destination in (None, rejected_bundle):
+                try:
+                    copy_qualification_test_inputs(native_build_gate, input_build, destination)
+                except (OSError, ValueError):
+                    pass
+                else:
+                    raise ValueError(f"producer accepted {label}")
+                require(not any(rejected_bundle.iterdir()),
+                        "producer exported bytes before rejecting a consumed-copy failure")
+
+        from unittest.mock import patch
+        original_resolve = Path.resolve
+        probe = input_build / "symlink-capability-control"
+        try:
+            probe.symlink_to(input_build / test_input_paths["portable_binary32_reference"])
+            filesystem_symlinks = True
+        except (OSError, NotImplementedError):
+            filesystem_symlinks = False
+        finally:
+            if probe.is_symlink():
+                probe.unlink()
+        print("live-consumer escaping-copy controls: " +
+              ("filesystem symlinks" if filesystem_symlinks else
+               "simulated resolved paths (filesystem symlink creation unavailable)"))
+        for consumer, executable in input_consumers.items():
+            consumed = (executable.parent / "resources" /
+                        test_input_paths["portable_binary32_reference"])
+            original = consumed.read_bytes()
+            try:
+                consumed.unlink()
+                reject_live_input_copy(f"missing {consumer} consumed copy")
+                replacement = bytearray(original)
+                replacement[-1] ^= 1
+                consumed.write_bytes(replacement)
+                reject_live_input_copy(f"tampered {consumer} consumed copy")
+                consumed.unlink()
+                outside = input_build / f"escaping-copy-{consumer}"
+                outside.write_bytes(original)
+                if filesystem_symlinks:
+                    consumed.symlink_to(outside)
+                    reject_live_input_copy(f"same-byte escaping {consumer} consumed copy")
+                else:
+                    consumed.write_bytes(original)
+
+                    def resolve_copy(path, *args, **kwargs):
+                        return outside if path == consumed else original_resolve(path, *args, **kwargs)
+
+                    with patch.object(Path, "resolve", resolve_copy):
+                        reject_live_input_copy(f"same-byte escaping {consumer} consumed copy")
+            finally:
+                consumed.unlink(missing_ok=True)
+                consumed.write_bytes(original)
+            original_executable = executable.read_bytes()
+            try:
+                executable.write_bytes(original_executable + b"changed consumer\n")
+                reject_live_input_copy(f"tampered {consumer} executable")
+                executable.unlink()
+                outside_executable = root / f"outside-build-{consumer}"
+                outside_executable.write_bytes(original_executable)
+                if filesystem_symlinks:
+                    executable.symlink_to(outside_executable)
+                    reject_live_input_copy(f"same-byte escaping {consumer} executable")
+                else:
+                    executable.write_bytes(original_executable)
+
+                    def resolve_executable(path, *args, **kwargs):
+                        return (outside_executable if path == executable else
+                                original_resolve(path, *args, **kwargs))
+
+                    with patch.object(Path, "resolve", resolve_executable):
+                        reject_live_input_copy(f"same-byte escaping {consumer} executable")
+            finally:
+                executable.unlink(missing_ok=True)
+                executable.write_bytes(original_executable)
+        copy_qualification_test_inputs(native_build_gate, input_build)
         for name, relative_path in test_input_paths.items():
             path = input_build / relative_path
             original = path.read_bytes()
@@ -2634,8 +2939,6 @@ def self_test(render_test_executable=None):
                 path.write_bytes(original)
         # Model a same-byte symlink target through the actual resolver boundary.
         # This also runs on Windows hosts without symbolic-link privileges.
-        from unittest.mock import patch
-        original_resolve = Path.resolve
         for name, relative_path in test_input_paths.items():
             canonical = input_build / relative_path
             substitute = input_build / f"same-byte-substitute-{name}"

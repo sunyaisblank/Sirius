@@ -500,7 +500,10 @@ int InfoCommand::ShowSystem(const GlobalOptions& globals) {
                                         {"driver_id", d.driver_id},
                                         {"device_local_bytes", d.device_local_bytes},
                                         {"render_memory_bytes", d.render_memory_bytes},
-                                        {"supports_fp64", d.supports_fp64}});
+                                        {"supports_fp64", d.supports_fp64},
+                                        {"preserves_fp32_denormals", d.preserves_fp32_denormals},
+                                        {"rounds_fp32_to_nearest", d.rounds_fp32_to_nearest},
+                                        {"rounds_fp64_to_nearest", d.rounds_fp64_to_nearest}});
             }
             j["backends"]["vulkan"]["devices"] = device_array;
             if (!devices->empty()) {

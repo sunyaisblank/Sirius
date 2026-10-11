@@ -2,6 +2,7 @@
 #include "sirius/core/camera.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/render/session/point_source_detector.h"
+#include "sirius/render/session/ray_work_queue.h"
 
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
 #include "sirius/backend/retained_compute.h"
@@ -10,12 +11,17 @@
 
 #include <gtest/gtest.h>
 
+#include "../support/flat_point_star_reference.h"
 #include "../support/point_source_band_reference.h"
 #include "../support/separated_geodesic_reference.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
+#include <cstdint>
 #include <format>
+#include <limits>
+#include <memory>
 #include <numbers>
 #include <stdexcept>
 #include <vector>
@@ -257,6 +263,345 @@ TEST(PointSourceDetector, RetainedMovingKerrFluxMatchesIndependentSeparatedImage
     EXPECT_GT(statistics.interval_batches, 0u);
     RecordProperty("camera_batches", std::to_string(statistics.camera_batches));
     RecordProperty("interval_batches", std::to_string(statistics.interval_batches));
+#else
+    GTEST_SKIP() << "retained compute kernels unavailable; numerical backend unqualified";
+#endif
+}
+
+void CheckRotatingIsolatedStarBrightness(backend::TraceStepExecutor* executor = nullptr) {
+    namespace reference = flat_point_star_reference;
+    constexpr int edge = 12;
+    constexpr std::size_t worker_count = 4;
+    constexpr std::array phases{.125, .375, .625, .875};
+    constexpr std::array widths{1.0, .3};
+    core::CameraConfig camera_config;
+    camera_config.width = camera_config.height = edge;
+    camera_config.r = 8;
+    camera_config.fov = 1;
+    core::PinholeCamera camera(camera_config);
+    core::KerrSchildFamily metric(core::KerrSchildParams::Kerr(0, 0));
+    backend::TracerConfig trace_config;
+    trace_config.enable_disk = false;
+    trace_config.escape_radius = 40;
+    trace_config.max_steps = 64;
+    trace_config.integrator.initial_step = trace_config.integrator.max_step = 1;
+    trace_config.integrator.min_step = 1e-6f;
+    trace_config.integrator.abs_tolerance = trace_config.integrator.rel_tolerance = 1e-7f;
+    std::vector<std::unique_ptr<backend::GeodesicTracer>> tracers;
+    for (std::size_t worker = 0; worker < worker_count; ++worker) {
+        auto tracer = std::make_unique<backend::GeodesicTracer>(&metric, trace_config);
+        tracer->SetStepExecutor(executor);
+        tracers.push_back(std::move(tracer));
+    }
+    std::array<std::uint64_t, worker_count> central_stages{}, variation_stages{};
+    // Queue ownership makes each worker's tracer and counters exclusive. Every
+    // Execute joins its entire batch before geometry or counters are inspected.
+    RayWorkQueue workers(worker_count, [&](std::size_t worker, const core::CameraRay& ray) {
+        auto result = tracers[worker]->TracePointSource(ray);
+        central_stages[worker] += result.central_stages;
+        variation_stages[worker] += result.variation_stages;
+        return result;
+    });
+    core::StarEntry star{};
+    star.direction_x = 1;
+    star.distance_pc = 10;
+    star.magnitude = 4;
+    star.temperature_K = 6500;
+    core::StarfieldSpatialIndex catalogue({star});
+    const auto band = point_source_band_reference::Reference(star.temperature_K, 1);
+    const long double source_flux = std::pow(10.L, -.4L * star.magnitude);
+    // Match the declared stored tangent coefficient, not a quantized ray or a
+    // traced centre. CameraFilmDifferential tests qualify this lens convention.
+    const float stored_tangent =
+        std::tan(camera_config.fov * static_cast<float>(std::numbers::pi) / 360.0f);
+    const double tangent = stored_tangent;
+    const double pixel_scale = 2 * tangent / edge;
+    const double angular_pixel = camera_config.fov * std::numbers::pi / 180 / edge;
+    PointDetectorPolicy policy;  // Preserve the production root and RGB allowances.
+    std::array<std::array<double, phases.size()>, widths.size()> brightness{},
+        reference_brightness{};
+    const auto sum_stages = [](const auto& values) {
+        std::uint64_t sum = 0;
+        for (const auto value : values) sum += value;
+        return sum;
+    };
+    for (std::size_t frame = 0; frame < phases.size(); ++frame) {
+        // A quarter-pixel diagonal rotation at a fixed event and zero velocity
+        // changes neither physical magnification nor g=1. The eighth-pixel
+        // offset keeps this smooth-footprint corpus off the hard |z|=4 edge;
+        // the detector's separate ownership tests exercise that discontinuity.
+        camera_config.pitch = static_cast<float>(std::atan(pixel_scale * (phases[frame] - .5)));
+        camera_config.yaw =
+            static_cast<float>(std::numbers::pi + std::atan(pixel_scale * (phases[frame] - .5) *
+                                                            std::cos(camera_config.pitch)));
+        camera.SetConfig(camera_config);
+        const reference::Geometry geometry{
+            edge,
+            tangent,
+            camera_config.yaw,
+            camera_config.pitch,
+            {std::sin(static_cast<long double>(camera_config.theta)),
+             std::cos(static_cast<long double>(camera_config.theta)), 0}};
+        const auto image = geometry.Image();
+        const double phase_rounding =
+            4 * std::numeric_limits<float>::epsilon() * std::abs(camera_config.yaw) / pixel_scale;
+        for (int axis = 0; axis < 2; ++axis) {
+            ASSERT_NEAR(static_cast<double>(image[axis]), 5.5 + phases[frame], phase_rounding);
+            ASSERT_GT(image[axis], 4.5L);
+            ASSERT_LT(image[axis], edge - 4.5L);
+        }
+        ::testing::Test::RecordProperty(
+            std::format("frame_{}_image", frame),
+            std::format("{:.17g},{:.17g}", double(image[0]), double(image[1])));
+        for (std::size_t mode = 0; mode < widths.size(); ++mode) {
+            SCOPED_TRACE(::testing::Message() << "frame=" << frame << " width=" << widths[mode]);
+            const auto prefix = std::format("{}_frame_{}", mode == 0 ? "beam" : "pinhole", frame);
+            const double sigma = widths[mode] * angular_pixel;
+            trace_config.enable_ray_bundles = mode == 0;
+            trace_config.bundle_point_source = mode == 0;
+            trace_config.bundle_angular_size = mode == 0
+                                                   ? static_cast<float>(angular_pixel)
+                                                   : backend::TracerConfig{}.bundle_angular_size;
+            for (auto& tracer : tracers) tracer->SetConfig(trace_config);
+            std::vector<PointDetectorFootprint> footprints;
+            std::vector<std::array<double, 3>> expected;
+            std::vector<long double> solid_angles;
+            long double minimum_support_margin = 4;
+            for (int y = 0; y < edge; ++y)
+                for (int x = 0; x < edge; ++x) {
+                    const auto film = camera.ProjectFilmForObserver(x + .5, y + .5);
+                    ASSERT_TRUE(film && film->ray.active && film->differential);
+                    const auto& p = film->differential->angular_jacobian;
+                    const double determinant = std::fma(p[0][0], p[1][1], -p[0][1] * p[1][0]);
+                    ASSERT_NE(determinant, 0);
+                    // These are the production original camera footprints,
+                    // not an envelope or an expected answer from the oracle.
+                    footprints.push_back(
+                        {{double(x), double(y)},
+                         {{{sigma * p[1][1] / determinant, -sigma * p[0][1] / determinant},
+                           {-sigma * p[1][0] / determinant, sigma * p[0][0] / determinant}}}});
+                    const reference::Coordinate centre{x + .5L, y + .5L};
+                    const auto response = geometry.OriginalResponse(image, centre, sigma);
+                    minimum_support_margin =
+                        std::min(minimum_support_margin, std::abs(response.standard_radius - 4));
+                    std::array<double, 3> rgb{};
+                    for (int channel = 0; channel < 3; ++channel)
+                        rgb[channel] =
+                            static_cast<double>(band[channel] * source_flux * response.density);
+                    expected.push_back(rgb);
+                    solid_angles.push_back(geometry.PixelSolidAngle(centre));
+                }
+            ASSERT_GT(minimum_support_margin, .01L);
+            // Every original in the immediate outside rim has zero response:
+            // the complete compact star image lies inside the measured patch.
+            for (int y = -1; y <= edge; ++y) {
+                for (int x = -1; x <= edge; ++x) {
+                    if (x == -1 || x == edge || y == -1 || y == edge) {
+                        ASSERT_EQ(
+                            geometry.OriginalResponse(image, {x + .5L, y + .5L}, sigma).density, 0);
+                    }
+                }
+            }
+            double maximum_frequency_error = 0;
+            const PointDetectorProbeBatchSampler batch =
+                [&](std::span<const DetectorCoordinate> coordinates) {
+                    std::vector<core::CameraFilmProjection> films;
+                    std::vector<core::CameraRay> rays;
+                    for (const auto& q : coordinates) {
+                        const auto film = camera.ProjectFilmOffsetForObserver(.5, .5, q[0], q[1]);
+                        if (!film || !film->ray.active || !film->differential)
+                            return PointDetectorProbeBatch(
+                                coordinates.size(),
+                                std::unexpected(PointDetectorFailure::ProjectionUnavailable));
+                        films.push_back(*film);
+                        rays.push_back(film->ray);
+                    }
+                    const auto traced = workers.Execute(rays);
+                    if (!traced)
+                        return PointDetectorProbeBatch(
+                            coordinates.size(), std::unexpected(PointDetectorFailure::TraceFailed));
+                    PointDetectorProbeBatch values;
+                    for (std::size_t i = 0; i < films.size(); ++i) {
+                        const auto& ray = (*traced)[i];
+                        if (ray.cancelled || ray.numerical_failure ||
+                            ray.outcome != backend::TraceResult::Outcome::Escaped ||
+                            !ray.beam.infinity_source_map || (mode == 0 && !ray.beam.valid)) {
+                            values.push_back(std::unexpected(PointDetectorFailure::TraceFailed));
+                            continue;
+                        }
+                        const auto& sky = *ray.beam.infinity_source_map;
+                        PointDetectorProbe point;
+                        point.visible = true;
+                        point.direction = sky.map.direction;
+                        point.camera_over_source_frequency = 1 / sky.frequency;
+                        point.inner_attempts = static_cast<std::size_t>(ray.steps_taken);
+                        point.tail_attempts = sky.attempted_steps;
+                        maximum_frequency_error =
+                            std::max(maximum_frequency_error,
+                                     std::abs(point.camera_over_source_frequency - 1));
+                        for (int row = 0; row < 2; ++row)
+                            for (int column = 0; column < 2; ++column)
+                                for (int angular = 0; angular < 2; ++angular)
+                                    point.source_derivative[row][column] +=
+                                        sky.map.jacobian[row][angular] *
+                                        films[i].differential->angular_jacobian[angular][column];
+                        values.push_back(point);
+                    }
+                    return values;
+                };
+            const PointDetectorSampler sample = [&](const DetectorCoordinate& q) {
+                const std::array<DetectorCoordinate, 1> coordinates{q};
+                return batch(coordinates).front();
+            };
+            const auto central_before = sum_stages(central_stages);
+            const auto variation_before = sum_stages(variation_stages);
+            const auto result =
+                EvaluatePointDetectorGroup(catalogue, 1, footprints, sample, {}, policy, batch);
+            const auto& statistics = result ? result->statistics : result.error().statistics;
+            ::testing::Test::RecordProperty(prefix + "_probes", std::to_string(statistics.probes));
+            ::testing::Test::RecordProperty(prefix + "_probe_batches",
+                                            std::to_string(statistics.probe_batches));
+            ::testing::Test::RecordProperty(
+                prefix + "_central_stages",
+                std::to_string(sum_stages(central_stages) - central_before));
+            ::testing::Test::RecordProperty(
+                prefix + "_variation_stages",
+                std::to_string(sum_stages(variation_stages) - variation_before));
+            ::testing::Test::RecordProperty(prefix + "_tail_attempts",
+                                            std::to_string(statistics.tail_attempts));
+            ::testing::Test::RecordProperty(prefix + "_inner_attempts",
+                                            std::to_string(statistics.inner_attempts));
+            ASSERT_TRUE(result) << "failure=" << static_cast<int>(result.error().reason)
+                                << " probes=" << statistics.probes << " cells=" << statistics.cells
+                                << " roots=" << statistics.roots;
+            ASSERT_EQ(result->samples.size(), edge * edge);
+            EXPECT_GT(statistics.roots, 0u);
+            EXPECT_GT(statistics.inner_attempts, 0u);
+            EXPECT_GT(sum_stages(central_stages) - central_before, 0u);
+            EXPECT_GT(sum_stages(variation_stages) - variation_before, 0u);
+            EXPECT_GT(statistics.probe_batches, 0u);
+            EXPECT_EQ(statistics.maximum_probe_batch, kPointDetectorProbeBatchSize);
+            long double observed_flux = 0, expected_flux = 0, total_solid_angle = 0;
+            double maximum_relative_error = 0;
+            for (std::size_t i = 0; i < expected.size(); ++i) {
+                total_solid_angle += solid_angles[i];
+                for (int channel = 0; channel < 3; ++channel) {
+                    const double actual = result->samples[i].rgb[channel];
+                    ASSERT_TRUE(std::isfinite(actual));
+                    EXPECT_NEAR(actual, expected[i][channel],
+                                policy.absolute_rgb_error +
+                                    policy.relative_rgb_error * expected[i][channel])
+                        << "original=" << i << " channel=" << channel;
+                    if (expected[i][channel] > 0)
+                        maximum_relative_error = std::max(
+                            maximum_relative_error,
+                            std::abs(actual - expected[i][channel]) / expected[i][channel]);
+                    observed_flux += actual * solid_angles[i];
+                    expected_flux += expected[i][channel] * solid_angles[i];
+                }
+            }
+            ASSERT_GT(expected_flux, 0);
+            ASSERT_GT(observed_flux, 0);
+            brightness[mode][frame] = static_cast<double>(observed_flux);
+            reference_brightness[mode][frame] = static_cast<double>(expected_flux);
+            EXPECT_NEAR(
+                brightness[mode][frame], reference_brightness[mode][frame],
+                static_cast<double>(policy.relative_rgb_error * reference_brightness[mode][frame] +
+                                    policy.absolute_rgb_error * 3 * total_solid_angle));
+            ::testing::Test::RecordProperty(prefix + "_brightness",
+                                            std::format("{:.17g}", brightness[mode][frame]));
+            ::testing::Test::RecordProperty(
+                prefix + "_reference_brightness",
+                std::format("{:.17g}", reference_brightness[mode][frame]));
+            ::testing::Test::RecordProperty(prefix + "_maximum_relative_rgb_error",
+                                            std::format("{:.17g}", maximum_relative_error));
+            ::testing::Test::RecordProperty(prefix + "_maximum_frequency_error",
+                                            std::format("{:.17g}", maximum_frequency_error));
+            ::testing::Test::RecordProperty(prefix + "_minimum_support_margin",
+                                            std::format("{:.17g}", double(minimum_support_margin)));
+        }
+    }
+    const auto cv = [](const auto& sequence) {
+        double mean = 0, variance = 0;
+        for (const auto value : sequence) mean += value / sequence.size();
+        for (const auto value : sequence)
+            variance += (value - mean) * (value - mean) / sequence.size();
+        return std::sqrt(variance) / mean;
+    };
+    const auto [minimum, maximum] = std::minmax_element(brightness[0].begin(), brightness[0].end());
+    const auto [reference_minimum, reference_maximum] =
+        std::minmax_element(reference_brightness[0].begin(), reference_brightness[0].end());
+    // SPECIFICATION's DNGR fidelity bar: James et al. 2015, Appendix A.3.1,
+    // arxiv.org/pdf/1502.03808, allows at most 2% brightest/dimmest variation
+    // for small smoothly changing footprints. This finite flat-space check
+    // does not demand constant flux when actual lensing or Doppler shift varies.
+    ASSERT_LE(*reference_maximum / *reference_minimum, 1.02);
+    EXPECT_LE(*maximum / *minimum, 1.02);
+    const double beam_cv = cv(brightness[0]), pinhole_cv = cv(brightness[1]);
+    const double reference_beam_cv = cv(reference_brightness[0]);
+    const double reference_pinhole_cv = cv(reference_brightness[1]);
+    ASSERT_GT(reference_pinhole_cv / std::max(reference_beam_cv, 1e-12), 1.5);
+    EXPECT_LT(beam_cv, pinhole_cv);
+    EXPECT_GT(pinhole_cv / std::max(beam_cv, 1e-12), 1.5);
+    ::testing::Test::RecordProperty("tracked_star_count", 1);
+    ::testing::Test::RecordProperty("complete_original_footprints_per_frame", edge * edge);
+    ::testing::Test::RecordProperty("frame_count", static_cast<int>(phases.size()));
+    ::testing::Test::RecordProperty("trace_workers", static_cast<int>(worker_count));
+    ::testing::Test::RecordProperty("detector_probe_batch_limit",
+                                    static_cast<int>(kPointDetectorProbeBatchSize));
+    ::testing::Test::RecordProperty("beam_brightest_over_dimmest",
+                                    std::format("{:.17g}", *maximum / *minimum));
+    ::testing::Test::RecordProperty(
+        "reference_beam_brightest_over_dimmest",
+        std::format("{:.17g}", *reference_maximum / *reference_minimum));
+    ::testing::Test::RecordProperty("beam_brightness_cv", std::format("{:.17g}", beam_cv));
+    ::testing::Test::RecordProperty("pinhole_brightness_cv", std::format("{:.17g}", pinhole_cv));
+    ::testing::Test::RecordProperty("reference_beam_brightness_cv",
+                                    std::format("{:.17g}", reference_beam_cv));
+    ::testing::Test::RecordProperty("reference_pinhole_brightness_cv",
+                                    std::format("{:.17g}", reference_pinhole_cv));
+    ::testing::Test::RecordProperty(
+        "evidence_scope",
+        "one complete isolated star, four optical rotations at a fixed unboosted flat-space event, "
+        "original physical Gaussian responses and mapped escape with vacuum infinity handoff; "
+        "conditional smooth-footprint photometry, no "
+        "full-frame Kerr or interactive qualification");
+}
+
+TEST(PointSourceDetector, RotatingIsolatedStarMatchesIndependentSharedRegionBrightness) {
+    RecordProperty("numerical_backend", "cpu_binary64");
+    ASSERT_NO_FATAL_FAILURE(CheckRotatingIsolatedStarBrightness());
+}
+
+TEST(PointSourceDetector, RetainedRotatingIsolatedStarMatchesIndependentSharedRegionBrightness) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+    const auto inventory = backend::EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    if (inventory->empty()) GTEST_SKIP() << "no Vulkan device; numerical backend unqualified";
+    const auto index = backend::ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    auto device = backend::CreateVulkanDevice(*index);
+    ASSERT_TRUE(device) << device.error().Description();
+    const auto buffer_bytes =
+        backend::RetainedCompute::RequiredBufferBytes(kPointDetectorProbeBatchSize);
+    ASSERT_LE(buffer_bytes, 8u * 1024 * 1024);
+    auto compute = backend::RetainedCompute::Create(**device, kPointDetectorProbeBatchSize, false);
+    ASSERT_TRUE(compute) << compute.error().Description();
+    backend::RetainedTraceExecutor executor(**compute);
+    RecordProperty("numerical_backend", "vulkan_retained_fp32");
+    RecordProperty("precision_products", "binary32");
+    RecordProperty("retained_storage", "three_component_binary32");
+    RecordProperty("device", (*device)->Info().name);
+    RecordProperty("retained_buffer_bytes", std::to_string(buffer_bytes));
+    ASSERT_NO_FATAL_FAILURE(CheckRotatingIsolatedStarBrightness(&executor));
+    EXPECT_FALSE(executor.Error());
+    const auto statistics = executor.Statistics();
+    EXPECT_GT(statistics.camera_batches, 0u);
+    EXPECT_GT(statistics.interval_batches, 0u);
+    EXPECT_LE(statistics.maximum_batch_rows, kPointDetectorProbeBatchSize);
+    RecordProperty("camera_batches", std::to_string(statistics.camera_batches));
+    RecordProperty("interval_batches", std::to_string(statistics.interval_batches));
+    RecordProperty("maximum_retained_batch_rows", std::to_string(statistics.maximum_batch_rows));
 #else
     GTEST_SKIP() << "retained compute kernels unavailable; numerical backend unqualified";
 #endif

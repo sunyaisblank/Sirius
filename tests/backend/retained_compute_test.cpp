@@ -3,6 +3,7 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/backend/retained_integrator.h"
 #include "sirius/backend/retained_trace_executor.h"
+#include "sirius/base/sha256.h"
 #include "sirius/core/twofold.h"
 
 #include <gtest/gtest.h>
@@ -11,26 +12,749 @@
 #include <array>
 #include <atomic>
 #include <bit>
+#include <chrono>
 #include <cmath>
 #include <cstring>
+#include <format>
+#include <functional>
 #include <future>
 #include <iomanip>
+#include <iostream>
 #include <limits>
 #include <numbers>
+#include <optional>
+#include <string>
+#include <string_view>
+#include <vector>
 
-#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+#include "retained_kernels.h"
+#endif
+
+#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_TEST_HAS_RETAINED_CAMERA)
 #define SIRIUS_RETAINED_TESTS_AVAILABLE 1
+#include "sirius/backend/vulkan/vulkan_device.h"
+
 #include "program_fixture.h"
 #include "support/cpu_critical/transport_reference.h"
 #include "support/retained_camera/continuous_reference.h"
 #include "support/retained_camera/ray_reference.h"
 #include "support/retained_transport/dense_reference.h"
+#include "support/retained_transport/dopri_reference.h"
+#include "support/retained_transport/endpoint_factor_reference.h"
 #include "support/retained_transport/endpoint_reference.h"
 #include "support/retained_transport/reference_cases.h"
+#include "support/retained_transport/schwarzschild_endpoint_reference.h"
+#include "support/retained_transport/schwarzschild_reference_cases.h"
+#endif
+
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+namespace sirius::backend {
+struct RetainedTraceExecutorTestPeer {
+    static std::optional<RetainedTraceExecutor::Stats> WaitForFirstRequest(
+        RetainedTraceExecutor& executor) {
+        // A deadlock watchdog, not a duration/performance acceptance threshold.
+        const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(5);
+        do {
+            const auto stats = executor.Statistics();
+            if (stats.awaiting_first_request) return stats;
+            std::this_thread::yield();
+        } while (std::chrono::steady_clock::now() < deadline);
+        return std::nullopt;
+    }
+    static std::array<std::size_t, 3> WaitForQueued(RetainedTraceExecutor& executor) {
+        std::unique_lock lock(executor.mutex_);
+        executor.available_.wait(lock, [&] { return !executor.requests_.empty(); });
+        return {executor.requests_.size(), executor.queued_registered_,
+                executor.active_traces_.size()};
+    }
+    static void WaitForQueued(RetainedTraceExecutor& executor, std::size_t rows) {
+        std::unique_lock lock(executor.mutex_);
+        executor.available_.wait(lock, [&] { return executor.requests_.size() >= rows; });
+    }
+    static std::array<std::size_t, 3> QueueState(RetainedTraceExecutor& executor) {
+        std::lock_guard lock(executor.mutex_);
+        return {executor.requests_.size(), executor.queued_registered_,
+                executor.active_traces_.size()};
+    }
+};
+}  // namespace sirius::backend
 #endif
 
 namespace {
 using namespace sirius::backend;
+
+// Arithmetic admission must finish before any external shader or buffer work.
+// The sentinel gives that boundary an observable positive path without a device.
+class AdmissionDevice final : public ComputeDevice {
+  public:
+    DeviceInfo info;
+    unsigned kernel_calls = 0, buffer_calls = 0, query_calls = 0;
+    unsigned query_failure_call = 0;
+    std::uint64_t query_padding = 0;
+    std::optional<std::uint64_t> fixed_requirement;
+    std::vector<std::uint64_t> queried_spans;
+    bool kernel_has_float = false;
+    const DeviceInfo& Info() const noexcept override { return info; }
+    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
+        ++kernel_calls;
+        // Inspect the actual selected module: OpTypeFloat is opcode 22.
+        for (std::size_t offset = 5; offset < code.size();) {
+            const auto words = code[offset] >> 16;
+            if (words == 0 || words > code.size() - offset) break;
+            kernel_has_float |= (code[offset] & 0xffffU) == 22U;
+            offset += words;
+        }
+        return sirius::base::Fail(sirius::base::ErrorDomain::kKernel, "admission sentinel",
+                                  "arithmetic admitted; external kernel loading reached");
+    }
+    sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t, BufferUsage) override {
+        ++buffer_calls;
+        return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "admission sentinel",
+                                  "unexpected buffer allocation");
+    }
+    sirius::base::Expected<std::uint64_t> RequiredBufferAllocationBytes(
+        std::uint64_t bytes, BufferUsage usage) override {
+        ++query_calls;
+        queried_spans.push_back(bytes);
+        if (usage != BufferUsage::kStorage || query_calls == query_failure_call)
+            return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
+                                      "allocation query sentinel", "injected query failure");
+        return fixed_requirement ? *fixed_requirement : bytes + query_padding;
+    }
+    sirius::base::Expected<void> WriteBuffer(BufferHandle, std::span<const std::byte>) override {
+        return Unused();
+    }
+    sirius::base::Expected<void> ReadBuffer(BufferHandle, std::span<std::byte>) override {
+        return Unused();
+    }
+    sirius::base::Expected<void> Dispatch(KernelHandle, std::span<const BufferHandle>,
+                                          std::uint32_t, std::uint32_t, std::uint32_t,
+                                          DispatchTiming*) override {
+        return Unused();
+    }
+    sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t) override {
+        return Unused();
+    }
+    std::uint64_t BufferAllocationBytes() const noexcept override { return 0; }
+
+  private:
+    sirius::base::Expected<void> Unused() {
+        return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "admission sentinel",
+                                  "unexpected device work");
+    }
+};
+
+TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+    const DeviceInfo complete{.supports_fp64 = true,
+                              .preserves_fp32_denormals = true,
+                              .rounds_fp32_to_nearest = true,
+                              .rounds_fp64_to_nearest = true};
+    for (const bool wide : {false, true}) {
+        // Missing native binary32 controls select actual integer modules. The
+        // binary64 rung still refuses absent support before external work.
+        for (unsigned missing = 0; missing < 6; ++missing) {
+            SCOPED_TRACE(wide);
+            SCOPED_TRACE(missing);
+            AdmissionDevice device;
+            device.info = complete;
+            if (missing == 1) device.info.preserves_fp32_denormals = false;
+            if (missing == 2) device.info.rounds_fp32_to_nearest = false;
+            if (missing == 3) device.info.supports_fp64 = false;
+            if (missing == 4) device.info.rounds_fp64_to_nearest = false;
+            if (missing == 5) {
+                device.info.preserves_fp32_denormals = false;
+                device.info.rounds_fp32_to_nearest = false;
+            }
+            const bool admitted = !wide || (missing != 3 && missing != 4);
+            const auto created = RetainedCompute::Create(device, 1, wide);
+            ASSERT_FALSE(created);
+            EXPECT_EQ(device.kernel_calls, admitted ? 1U : 0U);
+            EXPECT_EQ(device.buffer_calls, 0U);
+            EXPECT_EQ(device.query_calls, 0U);
+            if (admitted) {
+                EXPECT_EQ(device.kernel_has_float, missing != 1 && missing != 2 && missing != 5);
+            }
+            EXPECT_EQ(created.error().domain(), admitted ? sirius::base::ErrorDomain::kKernel
+                                                         : sirius::base::ErrorDomain::kDevice);
+            EXPECT_EQ(created.error().operation(),
+                      admitted ? "admission sentinel" : "create retained compute stages");
+        }
+    }
+    // A driver's allocation requirement can exceed every logical shader span.
+    // These fixed layout totals are independent of the production planner.
+    for (const auto& [capacity, logical] : std::array<std::pair<std::size_t, std::uint64_t>, 3>{
+             {{1, 704192}, {24, 3334012}, {64, 7907612}}}) {
+        AdmissionDevice padded;
+        padded.query_padding = 128;
+        const auto required = RetainedCompute::RequiredAllocationBytes(padded, capacity);
+        ASSERT_TRUE(required) << required.error().Description();
+        EXPECT_EQ(RetainedCompute::RequiredBufferBytes(capacity), logical);
+        EXPECT_EQ(*required, logical + 14 * 128);
+        EXPECT_EQ(padded.query_calls, 14U);
+        EXPECT_EQ(padded.kernel_calls, 0U);
+        EXPECT_EQ(padded.buffer_calls, 0U);
+        EXPECT_EQ(padded.BufferAllocationBytes(), 0U);
+        if (capacity == 24) {
+            EXPECT_EQ(padded.queried_spans,
+                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 106176, 367584,
+                                                  181492, 410784, 61292, 193344, 145452, 308736,
+                                                  216520, 398304}));
+        }
+    }
+    AdmissionDevice invalid;
+    EXPECT_FALSE(RetainedCompute::RequiredAllocationBytes(invalid, 0));
+    EXPECT_FALSE(RetainedCompute::RequiredAllocationBytes(invalid, 65536));
+    EXPECT_EQ(invalid.query_calls, 0U);
+    AdmissionDevice failing;
+    failing.query_failure_call = 3;
+    const auto failure = RetainedCompute::RequiredAllocationBytes(failing, 24);
+    ASSERT_FALSE(failure);
+    EXPECT_EQ(failure.error().operation(), "allocation query sentinel");
+    EXPECT_EQ(failing.query_calls, 3U);
+    EXPECT_EQ(failing.kernel_calls + failing.buffer_calls, 0U);
+    AdmissionDevice overflow;
+    overflow.fixed_requirement = std::numeric_limits<std::uint64_t>::max();
+    const auto too_large = RetainedCompute::RequiredAllocationBytes(overflow, 24);
+    ASSERT_FALSE(too_large);
+    EXPECT_NE(too_large.error().detail().find("overflows"), std::string::npos);
+    EXPECT_EQ(overflow.query_calls, 2U);
+    EXPECT_EQ(overflow.kernel_calls + overflow.buffer_calls, 0U);
+    AdmissionDevice undersized;
+    undersized.fixed_requirement = 1;
+    const auto too_small = RetainedCompute::RequiredAllocationBytes(undersized, 24);
+    ASSERT_FALSE(too_small);
+    EXPECT_NE(too_small.error().detail().find("smaller"), std::string::npos);
+    EXPECT_EQ(undersized.query_calls, 1U);
+    EXPECT_EQ(undersized.kernel_calls + undersized.buffer_calls, 0U);
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+// Host-only model of the genuine ComputeDevice boundary. It does not claim
+// shader execution; the separately selectable device control checks that join.
+class PreparationProbeDevice final : public ComputeDevice {
+  public:
+    struct Write {
+        BufferHandle buffer;
+        std::size_t bytes;
+        std::uint32_t header;
+    };
+    DeviceInfo info{.kind = DeviceKind::kSoftware};
+    std::vector<std::vector<std::byte>> buffers;
+    std::vector<Write> writes;
+    std::vector<std::uint32_t> kernels;
+    std::vector<std::vector<std::uint32_t>> loaded_codes;
+    std::vector<std::size_t> failed_writes;
+    std::function<void()> after_write, after_dispatch;
+    DispatchTiming observation{.submit_wait_ms = 5000,
+                               .pipeline_setup_ms = 1,
+                               .command_setup_ms = 2,
+                               .cleanup_ms = 3,
+                               .total_ms = 5006,
+                               .pipeline_created = true};
+    bool fail_dispatch = false;
+    bool independent_pair = false;
+    std::uint32_t expected_groups_x = 1;
+    unsigned loads = 0, reads = 0;
+    const DeviceInfo& Info() const noexcept override { return info; }
+    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
+        loaded_codes.emplace_back(code.begin(), code.end());
+        return KernelHandle{loads++};
+    }
+    sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t bytes,
+                                                      BufferUsage usage) override {
+        EXPECT_EQ(usage, BufferUsage::kStorage);
+        const BufferHandle result{static_cast<std::uint32_t>(buffers.size())};
+        buffers.emplace_back(bytes, std::byte{0xa5});
+        return result;
+    }
+    sirius::base::Expected<std::uint64_t> RequiredBufferAllocationBytes(std::uint64_t bytes,
+                                                                        BufferUsage) override {
+        return bytes;
+    }
+    sirius::base::Expected<void> WriteBuffer(BufferHandle buffer,
+                                             std::span<const std::byte> data) override {
+        if (buffer.value >= buffers.size() || data.size() > buffers[buffer.value].size())
+            return Failure("range");
+        std::uint32_t header = 0;
+        if (data.size() >= sizeof(header)) std::memcpy(&header, data.data(), sizeof(header));
+        writes.push_back({buffer, data.size(), header});
+        if (std::ranges::find(failed_writes, writes.size()) != failed_writes.end())
+            return Failure("write");
+        std::copy(data.begin(), data.end(), buffers[buffer.value].begin());
+        if (after_write) after_write();
+        return {};
+    }
+    sirius::base::Expected<void> ReadBuffer(BufferHandle buffer,
+                                            std::span<std::byte> data) override {
+        ++reads;
+        if (buffer.value >= buffers.size() || data.size() > buffers[buffer.value].size())
+            return Failure("range");
+        std::copy_n(buffers[buffer.value].begin(), data.size(), data.begin());
+        return {};
+    }
+    sirius::base::Expected<void> Dispatch(KernelHandle kernel,
+                                          std::span<const BufferHandle> bindings, std::uint32_t x,
+                                          std::uint32_t y, std::uint32_t z,
+                                          DispatchTiming* timing) override {
+        EXPECT_EQ(bindings.size(), 2U);
+        EXPECT_EQ(x, expected_groups_x);
+        EXPECT_EQ(y, 1U);
+        EXPECT_EQ(z, 1U);
+        kernels.push_back(kernel.value);
+        if (timing) *timing = observation;
+        if (after_dispatch) after_dispatch();
+        if (fail_dispatch) return Failure("dispatch");
+        std::uint32_t rows = 0;
+        std::memcpy(&rows, buffers[bindings[0].value].data(), sizeof(rows));
+        // A physical control returns a declined, zero-stage row; only its
+        // actual submission/feedback ownership is tested against this model.
+        if (rows != 0) std::ranges::fill(buffers[bindings[1].value], std::byte{0});
+        return {};
+    }
+    sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t) override { return {}; }
+    bool SupportsIndependentPair() const noexcept override { return independent_pair; }
+    sirius::base::Expected<void> DispatchIndependentPair(
+        const std::array<sirius::backend::ComputeDispatch, 2>& commands,
+        sirius::backend::IndependentPairTiming* timing) override {
+        if (!independent_pair) return ComputeDevice::DispatchIndependentPair(commands, timing);
+        for (const auto& command : commands) {
+            auto status = Dispatch(command.kernel, command.buffers, command.groups_x,
+                                   command.groups_y, command.groups_z, nullptr);
+            if (!status) return status;
+        }
+        if (timing) *timing = {.combined = observation, .pipeline_creations = 2};
+        return {};
+    }
+    std::uint64_t BufferAllocationBytes() const noexcept override {
+        std::uint64_t bytes = 0;
+        for (const auto& buffer : buffers) bytes += buffer.size();
+        return bytes;
+    }
+
+  private:
+    static sirius::base::Expected<void> Failure(const char* operation) {
+        return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
+                                  std::string("preparation probe ") + operation,
+                                  "injected returned failure");
+    }
+};
+
+void ExpectPhysicalStatsEqual(
+    const std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount>& actual,
+    const std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount>& expected) {
+    for (std::size_t i = 0; i < actual.size(); ++i) {
+        SCOPED_TRACE(i);
+        EXPECT_EQ(actual[i].submissions, expected[i].submissions);
+        if (expected[i].command_row_counts.empty())
+            EXPECT_TRUE(std::all_of(actual[i].command_row_counts.begin(),
+                                    actual[i].command_row_counts.end(),
+                                    [](auto count) { return count == 0; }));
+        else
+            EXPECT_EQ(actual[i].command_row_counts, expected[i].command_row_counts);
+        EXPECT_EQ(actual[i].completion_flag_counts, expected[i].completion_flag_counts);
+        EXPECT_EQ(actual[i].submit_wait_ms, expected[i].submit_wait_ms);
+        EXPECT_EQ(actual[i].maximum_submit_wait_ms, expected[i].maximum_submit_wait_ms);
+        EXPECT_EQ(actual[i].pipeline_setup_ms, expected[i].pipeline_setup_ms);
+        EXPECT_EQ(actual[i].command_setup_ms, expected[i].command_setup_ms);
+        EXPECT_EQ(actual[i].cleanup_ms, expected[i].cleanup_ms);
+        EXPECT_EQ(actual[i].dispatch_total_ms, expected[i].dispatch_total_ms);
+        EXPECT_EQ(actual[i].write_buffer_ms, expected[i].write_buffer_ms);
+        EXPECT_EQ(actual[i].read_buffer_ms, expected[i].read_buffer_ms);
+        EXPECT_EQ(actual[i].write_buffer_bytes, expected[i].write_buffer_bytes);
+        EXPECT_EQ(actual[i].read_buffer_bytes, expected[i].read_buffer_bytes);
+        EXPECT_EQ(actual[i].pipeline_creations, expected[i].pipeline_creations);
+        EXPECT_EQ(actual[i].target_overshoots, expected[i].target_overshoots);
+    }
+}
+#endif
+
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAllocation) {
+    using namespace sirius::backend::retained_program;
+    for (unsigned mask = 0; mask < 16; ++mask) {
+        for (const bool wide : {false, true}) {
+            SCOPED_TRACE(mask);
+            SCOPED_TRACE(wide);
+            PreparationProbeDevice control, candidate;
+            control.info.supports_fp64 = control.info.rounds_fp64_to_nearest = true;
+            control.info.preserves_fp32_denormals = (mask & 1u) != 0;
+            control.info.rounds_fp32_to_nearest = (mask & 2u) != 0;
+            control.info.preserves_fp32_signed_zero_inf_nan = (mask & 4u) != 0;
+            candidate.info = control.info;
+            candidate.info.fma_fp32_enabled = (mask & 8u) != 0;
+            auto baseline = RetainedCompute::Create(control, 2, wide);
+            auto created = RetainedCompute::Create(candidate, 2, wide);
+            ASSERT_TRUE(baseline);
+            ASSERT_TRUE(created);
+            ASSERT_EQ(control.loaded_codes.size(), RetainedCompute::kStageCount);
+            ASSERT_EQ(candidate.loaded_codes.size(), RetainedCompute::kStageCount);
+            const bool portable = (mask & 3u) != 3u;
+            const auto expected = [portable, wide](std::span<const std::uint32_t> native,
+                                                   std::span<const std::uint32_t> native_wide,
+                                                   std::span<const std::uint32_t> integer,
+                                                   std::span<const std::uint32_t> integer_wide) {
+                return portable ? (wide ? integer_wide : integer) : (wide ? native_wide : native);
+            };
+            std::array<std::span<const std::uint32_t>, RetainedCompute::kStageCount> stages{
+                expected(kCameraShader, kCameraFp64Shader, kCameraPortableShader,
+                         kCameraPortableFp64Shader),
+                expected(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
+                         kTransportPortableFp64Shader),
+                expected(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
+                         kEndpointPortableFp64Shader),
+                expected(kDenseShader, kDenseFp64Shader, kDensePortableShader,
+                         kDensePortableFp64Shader),
+                expected(kInitializeShader, kInitializeFp64Shader, kInitializePortableShader,
+                         kInitializePortableFp64Shader),
+                expected(kRayCameraShader, kRayCameraFp64Shader, kRayCameraPortableShader,
+                         kRayCameraPortableFp64Shader),
+                expected(kDopriPhaseShader, kDopriPhaseFp64Shader, kDopriPhasePortableShader,
+                         kDopriPhasePortableFp64Shader)};
+            if ((mask & 3u) == 2u) {
+                stages[1] = std::span(kTransportPortableNormalSumShader);
+                stages[2] = std::span(kEndpointPortableNormalSumShader);
+                stages[6] = std::span(kDopriPhasePortableNormalSumShader);
+            }
+            const bool eligible = wide && mask == 15u;
+            for (std::size_t stage = 0; stage < RetainedCompute::kStageCount; ++stage) {
+                // The baseline excludes FMA and independently checks native,
+                // pure-integer fallback and RTE32-only Transport/Endpoint/DP selection.
+                EXPECT_EQ(control.loaded_codes[stage],
+                          (std::vector<std::uint32_t>(stages[stage].begin(), stages[stage].end())));
+                if (stage == 1 && eligible && kTransportFmaAvailable) {
+                    EXPECT_EQ(candidate.loaded_codes[stage],
+                              (std::vector<std::uint32_t>(kTransportFmaShader.begin(),
+                                                          kTransportFmaShader.end())));
+                    EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                } else if (stage == 2 && eligible && kEndpointFmaAvailable) {
+                    EXPECT_EQ(candidate.loaded_codes[stage],
+                              (std::vector<std::uint32_t>(kEndpointFmaShader.begin(),
+                                                          kEndpointFmaShader.end())));
+                    EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                } else {
+                    EXPECT_EQ(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                }
+            }
+            EXPECT_EQ(candidate.buffers.size(), 2 * RetainedCompute::kStageCount);
+            ASSERT_EQ(candidate.buffers.size(), control.buffers.size());
+            for (std::size_t i = 0; i < candidate.buffers.size(); ++i)
+                EXPECT_EQ(candidate.buffers[i].size(), control.buffers[i].size());
+            const auto required = RetainedCompute::RequiredAllocationBytes(candidate, 2);
+            ASSERT_TRUE(required);
+            EXPECT_EQ(candidate.BufferAllocationBytes(), *required);
+        }
+    }
+    for (const bool has_fp64 : {false, true}) {
+        PreparationProbeDevice refused;
+        refused.info = {.supports_fp64 = has_fp64,
+                        .preserves_fp32_denormals = true,
+                        .rounds_fp32_to_nearest = true,
+                        .rounds_fp64_to_nearest = !has_fp64,
+                        .preserves_fp32_signed_zero_inf_nan = true,
+                        .fma_fp32_enabled = true};
+        EXPECT_FALSE(RetainedCompute::Create(refused, 2, true));
+        EXPECT_EQ(refused.loads, 0U);
+        EXPECT_TRUE(refused.buffers.empty());
+    }
+}
+#endif
+
+TEST(RetainedComputeAdmission, CameraCancellationPrecedesNumericalRefusal) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+    // Exercise the real tracer/executor join through the existing model of the
+    // external device boundary. This does not claim camera shader execution.
+    for (const bool point_source : {false, true}) {
+        for (const bool dispatch_error : {false, true}) {
+            SCOPED_TRACE(point_source);
+            SCOPED_TRACE(dispatch_error);
+            PreparationProbeDevice probe;
+            probe.fail_dispatch = dispatch_error;
+            probe.observation.submit_wait_ms = 8;
+            probe.observation.total_ms = 14;
+            auto created = RetainedCompute::Create(probe, 1);
+            ASSERT_TRUE(created) << created.error().Description();
+            std::atomic<bool> cancelled{false};
+            RetainedTraceExecutor executor(**created, [&] { return cancelled.load(); }, 1000);
+            sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+            TracerConfig config;
+            config.enable_polarisation = true;
+            ASSERT_TRUE(IsRepresentedTracerConfig(config));
+            GeodesicTracer tracer(&metric, config);
+            tracer.SetStepExecutor(&executor);
+            tracer.SetCancellationCallback([&] { return cancelled.load(); });
+            unsigned observations = 0;
+            tracer.SetPolarisationObserver([&](const auto&, auto) { ++observations; });
+            sirius::core::CameraRay ray;
+            ray.origin(1) = 5;
+            ray.origin(2) = std::numbers::pi / 2;
+            ray.direction(1) = 1;
+            const auto trace = [&] {
+                return point_source ? tracer.TracePointSource(ray) : tracer.Trace(ray);
+            };
+            probe.after_dispatch = [&] { cancelled = true; };
+            const auto stopped = trace();
+            EXPECT_TRUE(stopped.cancelled);
+            EXPECT_FALSE(stopped.numerical_failure);
+            EXPECT_EQ(stopped.integrator_termination, 0);
+            EXPECT_EQ(stopped.steps_taken, 0);
+            EXPECT_EQ(stopped.affine_length, 0);
+            EXPECT_FALSE(stopped.final_tangent);
+            EXPECT_FALSE(stopped.beam.valid);
+            EXPECT_FALSE(stopped.volumetric_hit);
+            EXPECT_EQ(stopped.num_disk_crossings, 0);
+            EXPECT_EQ(observations, 0U);
+            EXPECT_EQ(probe.kernels.size(), 1U);
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+            EXPECT_EQ(RetainedTraceExecutorTestPeer::QueueState(executor),
+                      (std::array<std::size_t, 3>{0, 0, 0}));
+#endif
+
+            // Cancellation must not hide later noncancelled refusal, including
+            // the dispatch error's existing sticky drain without new device work.
+            probe.after_dispatch = {};
+            cancelled = false;
+            const auto refused = trace();
+            EXPECT_FALSE(refused.cancelled);
+            EXPECT_TRUE(refused.numerical_failure);
+            EXPECT_EQ(refused.integrator_termination, 3);
+            EXPECT_EQ(refused.steps_taken, 0);
+            EXPECT_EQ(probe.kernels.size(), dispatch_error ? 1U : 2U);
+            EXPECT_EQ(executor.Statistics().camera_rows, dispatch_error ? 1U : 2U);
+            EXPECT_EQ(executor.Statistics().interval_rows, 0U);
+            EXPECT_EQ(executor.Statistics().sample_rows, 0U);
+            EXPECT_EQ(executor.Error().has_value(), dispatch_error);
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+            EXPECT_EQ(RetainedTraceExecutorTestPeer::QueueState(executor),
+                      (std::array<std::size_t, 3>{0, 0, 0}));
+#endif
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccounting) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+    using Stats = RetainedCompute::PreparationStats;
+    for (const auto kind :
+         {DeviceKind::kIntegratedGpu, DeviceKind::kDiscreteGpu, DeviceKind::kOther}) {
+        PreparationProbeDevice probe;
+        probe.info.kind = kind;
+        probe.info.preserves_fp32_denormals = true;
+        probe.info.rounds_fp32_to_nearest = true;
+        auto created = RetainedCompute::Create(probe, 2);
+        ASSERT_TRUE(created);
+        Stats observation;
+        observation.stages[0].attempts = 42;
+        const auto refused = (*created)->PrepareSoftwareRendererStages(observation);
+        ASSERT_FALSE(refused);
+        EXPECT_NE(refused.error().detail().find("software"), std::string::npos);
+        EXPECT_TRUE(probe.writes.empty());
+        EXPECT_TRUE(probe.kernels.empty());
+        for (const auto& stage : observation.stages) EXPECT_EQ(stage.attempts, 0U);
+    }
+    PreparationProbeDevice probe;
+    auto created = RetainedCompute::Create(probe, 2);
+    ASSERT_TRUE(created);
+    auto& compute = **created;
+    ASSERT_EQ(probe.loads, RetainedCompute::kStageCount);
+    ASSERT_EQ(probe.buffers.size(), 2 * RetainedCompute::kStageCount);
+    ASSERT_TRUE(probe.writes.empty());
+    ASSERT_TRUE(probe.kernels.empty()) << "Create must remain free of preparation work";
+    const auto allocated = probe.BufferAllocationBytes();
+    // Preserve an existing physical observation, including an adjacent hard
+    // boundary overshoot, rather than merely proving zero stays zero.
+    probe.observation.submit_wait_ms = std::nextafter(1000.0, INFINITY);
+    const std::array<RetainedStepInput, 1> input{};
+    ASSERT_TRUE(compute.Step(input));
+    const auto physical = compute.Statistics();
+    auto expected_buffers = probe.buffers;
+    const auto before_writes = probe.writes.size();
+    probe.observation.submit_wait_ms = 5000;  // Controlled initialization observation only.
+    Stats observation;
+    ASSERT_TRUE(compute.PrepareSoftwareRendererStages(observation));
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(compute.Statistics(), physical));
+    EXPECT_EQ(probe.BufferAllocationBytes(), allocated);
+    EXPECT_EQ(probe.kernels, (std::vector<std::uint32_t>{1, 5, 4, 1, 2, 3, 6}));
+    ASSERT_EQ(probe.writes.size(), before_writes + 12);
+    for (std::size_t i = 0; i < 6; ++i) {
+        const auto& zero = probe.writes[before_writes + 2 * i];
+        const auto& restored = probe.writes[before_writes + 2 * i + 1];
+        EXPECT_EQ(zero.bytes, 4U);
+        EXPECT_EQ(zero.header, 0U);
+        EXPECT_EQ(restored.bytes, 4U);
+        EXPECT_EQ(restored.header, compute.Capacity());
+        EXPECT_EQ(zero.buffer.value, restored.buffer.value);
+        const std::uint32_t capacity = static_cast<std::uint32_t>(compute.Capacity());
+        std::memcpy(expected_buffers[zero.buffer.value].data(), &capacity, sizeof(capacity));
+    }
+    EXPECT_EQ(probe.buffers, expected_buffers) << "Only the six capacity headers may change";
+    for (std::size_t i = 0; i < observation.stages.size(); ++i) {
+        const auto& stage = observation.stages[i];
+        const auto count = i == 0 ? 0U : 1U;
+        EXPECT_EQ(stage.attempts, count);
+        EXPECT_EQ(stage.dispatch_attempts, count);
+        EXPECT_EQ(stage.completed_dispatches, count);
+        EXPECT_EQ(stage.completed, count);
+        EXPECT_EQ(stage.header_restored, i != 0);
+        EXPECT_EQ(stage.write_buffer_calls, 2 * count);
+        EXPECT_EQ(stage.write_buffer_bytes, 8 * count);
+        EXPECT_EQ(stage.timing.submit_wait_ms, i == 0 ? 0 : 5000);
+        EXPECT_EQ(stage.timing.pipeline_setup_ms, i == 0 ? 0 : 1);
+        EXPECT_EQ(stage.timing.command_setup_ms, i == 0 ? 0 : 2);
+        EXPECT_EQ(stage.timing.cleanup_ms, i == 0 ? 0 : 3);
+        EXPECT_EQ(stage.timing.total_ms, i == 0 ? 0 : 5006);
+        EXPECT_GE(stage.write_buffer_ms, 0);
+    }
+    const auto feedback = compute.TakeSubmissionFeedback();
+    EXPECT_EQ(feedback.peak_ms, std::nextafter(1000.0, INFINITY));
+    EXPECT_EQ(feedback.peak_rows, 1U);
+    EXPECT_EQ(feedback.maximum_rows, 1U);
+    EXPECT_EQ(feedback.maximum_one_row_ms, feedback.peak_ms);
+    EXPECT_EQ(feedback.maximum_one_row_stage, RetainedCompute::KernelStage::kTransport);
+    // A previously uploaded stage keeps its prefix behavior; an unused Camera
+    // still needs its first complete program upload after preparation.
+    ASSERT_TRUE(compute.Step(input));
+    EXPECT_EQ(probe.writes.back().bytes, 4U + sizeof(RetainedStepInput));
+    const std::array<RetainedCameraInput, 1> camera{};
+    ASSERT_TRUE(compute.Camera(camera));
+    EXPECT_EQ(probe.writes.back().bytes, probe.buffers[0].size());
+
+    // A retained owner starts a fresh observation after all prior synchronous
+    // work. Exercise every stage plus the shared pair so old maxima/counts and
+    // feedback cannot leak into a later render's governor or report.
+    const std::array<sirius::backend::RetainedEndpointInput, 2> endpoint{};
+    const std::array<sirius::backend::RetainedDenseInput, 2> dense{};
+    const std::array<sirius::backend::RetainedInitializeInput, 1> initialize{};
+    const std::array<sirius::backend::RetainedRayCameraInput, 1> ray_camera{};
+    probe.expected_groups_x = 2;
+    ASSERT_TRUE(compute.Endpoint(endpoint));
+    ASSERT_TRUE(compute.Dense(dense));
+    probe.expected_groups_x = 1;
+    ASSERT_TRUE(compute.Initialize(initialize));
+    ASSERT_TRUE(compute.RayCamera(ray_camera));
+    const std::array<RetainedDopriPhaseInput, 1> dopri{};
+    ASSERT_TRUE(compute.DopriPhase(dopri));
+    probe.independent_pair = true;
+    probe.expected_groups_x = 2;
+    ASSERT_TRUE(compute.EndpointAndDense(endpoint, dense));
+    for (const auto& stage : compute.Statistics()) EXPECT_GT(stage.submissions, 0U);
+    EXPECT_GT(compute.EndpointDenseStatistics().submissions, 0U);
+    const auto unchanged_buffers = probe.buffers;
+    compute.ResetStatistics();
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(compute.Statistics(), {}));
+    for (const auto& stage : compute.Statistics())
+        EXPECT_EQ(stage.command_row_counts.size(), compute.Capacity() + 1);
+    std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> reset_shared{};
+    reset_shared[0] = compute.EndpointDenseStatistics();
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(reset_shared, {}));
+    const auto reset_feedback = compute.TakeSubmissionFeedback();
+    EXPECT_EQ(reset_feedback.peak_ms, 0);
+    EXPECT_EQ(reset_feedback.peak_rows, 0U);
+    EXPECT_EQ(reset_feedback.maximum_rows, 0U);
+    EXPECT_EQ(reset_feedback.maximum_one_row_ms, 0);
+    EXPECT_FALSE(reset_feedback.maximum_one_row_stage.has_value());
+    EXPECT_EQ(probe.buffers, unchanged_buffers);
+    EXPECT_EQ(probe.loads, RetainedCompute::kStageCount);
+    EXPECT_EQ(probe.buffers.size(), 2 * RetainedCompute::kStageCount);
+    probe.observation.submit_wait_ms = 8;
+    probe.expected_groups_x = 1;
+    ASSERT_TRUE(compute.Step(input));
+    EXPECT_EQ(probe.writes.back().bytes, 4U + sizeof(RetainedStepInput));
+    EXPECT_EQ(compute.Statistics()[1].submissions, 1U);
+    EXPECT_EQ(compute.Statistics()[1].maximum_submit_wait_ms, 8);
+    EXPECT_EQ(compute.TakeSubmissionFeedback().peak_ms, 8);
+
+    for (unsigned mode = 0; mode < 8; ++mode) {
+        SCOPED_TRACE(mode);
+        PreparationProbeDevice failing;
+        auto prepared = RetainedCompute::Create(failing, 2);
+        ASSERT_TRUE(prepared);
+        bool cancelled = mode == 4;
+        if (mode == 0) failing.failed_writes = {1};
+        if (mode == 1 || mode == 3) failing.fail_dispatch = true;
+        if (mode == 2 || mode == 3) failing.failed_writes.push_back(2);
+        if (mode == 5) failing.after_write = [&] { cancelled = true; };
+        if (mode == 6) failing.after_dispatch = [&] { cancelled = true; };
+        if (mode == 7)
+            failing.after_write = [&] {
+                if (failing.writes.size() == 2) cancelled = true;
+            };
+        const auto owner = std::this_thread::get_id();
+        Stats partial;
+        const auto result = (*prepared)->PrepareSoftwareRendererStages(partial, [&] {
+            EXPECT_EQ(std::this_thread::get_id(), owner);
+            return cancelled;
+        });
+        ASSERT_FALSE(result);
+        EXPECT_EQ(result.error().operation(), mode == 0 || mode == 2 ? "preparation probe write"
+                                              : mode == 1 || mode == 3
+                                                  ? "preparation probe dispatch"
+                                                  : "prepare retained renderer");
+        const auto& stage = partial.stages[5];
+        EXPECT_EQ(stage.attempts, mode == 4 ? 0U : 1U);
+        EXPECT_EQ(stage.dispatch_attempts, mode == 0 || mode == 4 || mode == 5 ? 0U : 1U);
+        EXPECT_EQ(stage.completed_dispatches, mode == 2 || mode == 6 || mode == 7 ? 1U : 0U);
+        EXPECT_EQ(stage.completed, mode == 6 || mode == 7 ? 1U : 0U);
+        EXPECT_EQ(stage.header_restored, mode != 2 && mode != 3 && mode != 4);
+        EXPECT_EQ(stage.write_buffer_calls, mode == 4 ? 0U : 2U);
+        EXPECT_EQ(stage.write_buffer_bytes, mode == 4                             ? 0U
+                                            : mode == 0 || mode == 2 || mode == 3 ? 4U
+                                                                                  : 8U);
+        if (stage.dispatch_attempts) {
+            EXPECT_EQ(stage.timing.total_ms, 5006);
+        }
+        EXPECT_TRUE(std::isfinite(partial.wall_ms));
+        EXPECT_GE(partial.wall_ms, stage.write_buffer_ms);
+        for (std::size_t i = 0; i < RetainedCompute::kStageCount; ++i) {
+            if (i != 5) {
+                EXPECT_EQ(partial.stages[i].attempts, 0U);
+            }
+        }
+        EXPECT_EQ((*prepared)->TakeSubmissionFeedback().peak_ms, 0);
+        ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual((*prepared)->Statistics(), {}));
+        if (stage.header_restored) {
+            std::uint32_t header = 0;
+            std::memcpy(&header, failing.buffers[10].data(), sizeof(header));
+            EXPECT_EQ(header, 2U);
+        }
+    }
+    for (double DispatchTiming::*field :
+         {&DispatchTiming::pipeline_setup_ms, &DispatchTiming::command_setup_ms,
+          &DispatchTiming::submit_wait_ms, &DispatchTiming::cleanup_ms,
+          &DispatchTiming::total_ms}) {
+        for (const double invalid : {-1.0, std::numeric_limits<double>::quiet_NaN(),
+                                     std::numeric_limits<double>::infinity()}) {
+            PreparationProbeDevice invalid_timing;
+            invalid_timing.observation.*field = invalid;
+            auto prepared = RetainedCompute::Create(invalid_timing, 2);
+            ASSERT_TRUE(prepared);
+            Stats partial;
+            const auto result = (*prepared)->PrepareSoftwareRendererStages(partial);
+            ASSERT_FALSE(result);
+            EXPECT_EQ(result.error().detail(), "invalid submission timing");
+            EXPECT_EQ(partial.stages[5].dispatch_attempts, 1U);
+            EXPECT_EQ(partial.stages[5].completed_dispatches, 0U);
+            EXPECT_EQ(partial.stages[5].completed, 0U);
+            EXPECT_TRUE(partial.stages[5].header_restored);
+            EXPECT_EQ(partial.stages[5].write_buffer_bytes, 8U);
+            for (std::size_t i = 0; i < RetainedCompute::kStageCount; ++i) {
+                if (i != 5) {
+                    EXPECT_EQ(partial.stages[i].attempts, 0U);
+                }
+            }
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
 
 class RetainedComputeTest : public ::testing::Test {
   protected:
@@ -45,8 +769,12 @@ class RetainedComputeTest : public ::testing::Test {
         ASSERT_TRUE(opened) << opened.error().Description();
         device = std::move(*opened);
         ASSERT_TRUE(device->SetBufferAllocationLimit(8 * 1024 * 1024));
+        auto required = RetainedCompute::RequiredAllocationBytes(*device, 24);
+        ASSERT_TRUE(required) << required.error().Description();
+        EXPECT_EQ(device->BufferAllocationBytes(), 0U);
         auto created = RetainedCompute::Create(*device, 24);
         ASSERT_TRUE(created) << created.error().Description();
+        EXPECT_EQ(device->BufferAllocationBytes(), *required);
         compute = std::move(*created);
 #else
         GTEST_SKIP() << "Retained compute build tools unavailable";
@@ -54,15 +782,389 @@ class RetainedComputeTest : public ::testing::Test {
     }
     std::unique_ptr<ComputeDevice> device;
     std::unique_ptr<RetainedCompute> compute;
+    void CheckOriginalIntervalTimestamps(bool fp64_products);
 };
 
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+// Observe real Vulkan transfers; injected returned errors stop at this seam.
+class TransferProbeDevice final : public ComputeDevice {
+  public:
+    enum class Failure { None, Write, Dispatch, Read };
+    struct Allocation {
+        BufferHandle handle;
+        std::uint64_t bytes;
+        BufferUsage usage;
+    };
+    struct Transfer {
+        BufferHandle handle;
+        std::size_t bytes;
+        std::uint32_t capacity = 0;
+    };
+    struct Submission {
+        std::array<BufferHandle, 2> buffers;
+        std::size_t binding_count;
+        std::uint32_t x, y, z;
+    };
+    explicit TransferProbeDevice(ComputeDevice& device, bool decline_rte32 = false)
+        : device_(device) {
+        if (decline_rte32) {
+            info_ = device.Info();
+            info_->rounds_fp32_to_nearest = false;
+        }
+    }
+    Failure fail_next = Failure::None;
+    std::vector<Allocation> allocations;
+    std::vector<Transfer> writes, reads;
+    std::vector<Submission> submissions;
+    std::uint64_t dispatch_calls = 0, forwarded_dispatches = 0;
+    // Optional control-test observations. Physical outputs still come from the
+    // actual device; injected timing never sleeps or claims hardware duration.
+    std::function<void(std::span<const std::uint32_t>)> after_load;
+    std::function<double(BufferHandle, std::uint32_t)> submission_ms;
+    std::function<void()> before_dispatch;
+    std::function<void(std::span<const BufferHandle>, const DispatchTiming*)> after_dispatch;
+    std::optional<BufferHandle> capture_output;
+    std::vector<std::vector<std::byte>> readbacks;
+    bool independent_pairs = false;
+    std::uint64_t pair_calls = 0;
+    std::function<void()> after_pair;
+    std::function<void(const IndependentPairTiming*)> after_pair_timing;
+    std::optional<double> pair_submit_ms;
+    std::function<void(BufferHandle, std::span<std::byte>)> after_read;
+    std::function<void(BufferHandle, std::span<std::byte>)> before_write;
+
+    const DeviceInfo& Info() const noexcept override { return info_ ? *info_ : device_.Info(); }
+    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
+        auto loaded = device_.LoadKernel(code);
+        if (loaded && after_load) after_load(code);
+        return loaded;
+    }
+    sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t bytes,
+                                                      BufferUsage usage) override {
+        auto buffer = device_.CreateBuffer(bytes, usage);
+        if (buffer) allocations.push_back({*buffer, bytes, usage});
+        return buffer;
+    }
+    sirius::base::Expected<void> WriteBuffer(BufferHandle buffer,
+                                             std::span<const std::byte> data) override {
+        std::uint32_t capacity = 0;
+        if (data.size_bytes() >= sizeof(capacity))
+            std::memcpy(&capacity, data.data(), sizeof(capacity));
+        writes.push_back({buffer, data.size_bytes(), capacity});
+        if (fail_next == Failure::Write) return Inject("write");
+        if (before_write) {
+            std::vector<std::byte> changed(data.begin(), data.end());
+            before_write(buffer, changed);
+            return device_.WriteBuffer(buffer, changed);
+        }
+        return device_.WriteBuffer(buffer, data);
+    }
+    sirius::base::Expected<void> ReadBuffer(BufferHandle buffer,
+                                            std::span<std::byte> data) override {
+        reads.push_back({buffer, data.size_bytes()});
+        if (fail_next == Failure::Read) return Inject("read");
+        auto status = device_.ReadBuffer(buffer, data);
+        if (status && capture_output && buffer.value == capture_output->value)
+            readbacks.emplace_back(data.begin(), data.end());
+        if (status && after_read) after_read(buffer, data);
+        return status;
+    }
+    bool SupportsIndependentPair() const noexcept override {
+        return independent_pairs && device_.SupportsIndependentPair();
+    }
+    sirius::base::Expected<void> DispatchIndependentPair(
+        const std::array<ComputeDispatch, 2>& commands, IndependentPairTiming* timing) override {
+        ++pair_calls;
+        if (fail_next == Failure::Dispatch) return Inject("pair dispatch");
+        auto status = device_.DispatchIndependentPair(commands, timing);
+        if (status && timing && pair_submit_ms) {
+            timing->combined.submit_wait_ms = *pair_submit_ms;
+            timing->combined.total_ms = timing->combined.pipeline_setup_ms +
+                                        timing->combined.command_setup_ms + *pair_submit_ms +
+                                        timing->combined.cleanup_ms;
+        }
+        if (status && after_pair) after_pair();
+        if (status && after_pair_timing) after_pair_timing(timing);
+        return status;
+    }
+    sirius::base::Expected<void> Dispatch(KernelHandle kernel,
+                                          std::span<const BufferHandle> buffers, std::uint32_t x,
+                                          std::uint32_t y, std::uint32_t z,
+                                          DispatchTiming* timing) override {
+        ++dispatch_calls;
+        submissions.push_back({{buffers.empty() ? BufferHandle{} : buffers[0],
+                                buffers.size() < 2 ? BufferHandle{} : buffers[1]},
+                               buffers.size(),
+                               x,
+                               y,
+                               z});
+        if (before_dispatch) before_dispatch();
+        if (fail_next == Failure::Dispatch) return Inject("dispatch");
+        ++forwarded_dispatches;
+        auto status = device_.Dispatch(kernel, buffers, x, y, z, timing);
+        if (status && timing && submission_ms) {
+            timing->submit_wait_ms = submission_ms(buffers[0], x);
+            timing->total_ms = timing->pipeline_setup_ms + timing->command_setup_ms +
+                               timing->submit_wait_ms + timing->cleanup_ms;
+        }
+        if (status && after_dispatch) after_dispatch(buffers, timing);
+        return status;
+    }
+    sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t bytes) override {
+        return device_.SetBufferAllocationLimit(bytes);
+    }
+    std::uint64_t BufferAllocationBytes() const noexcept override {
+        return device_.BufferAllocationBytes();
+    }
+    sirius::base::Expected<std::uint64_t> RequiredBufferAllocationBytes(
+        std::uint64_t bytes, BufferUsage usage) override {
+        return device_.RequiredBufferAllocationBytes(bytes, usage);
+    }
+
+  private:
+    sirius::base::Expected<void> Inject(const char* operation) {
+        fail_next = Failure::None;
+        return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
+                                  std::string("retained transfer probe ") + operation,
+                                  "injected returned failure");
+    }
+    ComputeDevice& device_;
+    std::optional<DeviceInfo> info_;
+};
+
+void CheckStickyErrorDrainsQueuedRequests(ComputeDevice& device) {
+    for (const bool queued_camera : {true, false}) {
+        SCOPED_TRACE(queued_camera ? "queued camera" : "queued interval");
+        TransferProbeDevice probe(device);
+        auto created = RetainedCompute::Create(probe, 1, false);
+        ASSERT_TRUE(created) << created.error().Description();
+        auto& compute = **created;
+        RetainedTraceExecutor executor(compute, {}, 1000);
+        std::promise<void> first_dispatch, release_dispatch;
+        auto entered = first_dispatch.get_future();
+        auto release = release_dispatch.get_future();
+        probe.before_dispatch = [&] {
+            if (probe.dispatch_calls == 1) {
+                first_dispatch.set_value();
+                release.wait();
+            } else if (!queued_camera) {
+                // Bound the old implementation's unnecessary interval work:
+                // expose the extra call before forwarding any further stages.
+                probe.fail_next = TransferProbeDevice::Failure::Dispatch;
+            }
+        };
+        const double overshoot = std::nextafter(1000.0, std::numeric_limits<double>::infinity());
+        probe.submission_ms = [overshoot](BufferHandle, std::uint32_t) { return overshoot; };
+        sirius::core::CameraRay camera;
+        camera.origin(1) = 5;
+        camera.origin(2) = std::numbers::pi / 2;
+        camera.direction(1) = 1;
+        auto first = std::async(std::launch::async, [&] {
+            sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+            executor.BeginTrace();
+            const auto result = executor.Launch(metric, 0, camera);
+            executor.EndTrace();
+            return result.has_value();
+        });
+        entered.wait();
+        // The dispatcher is held in execution, after its first-request wait.
+        const auto dispatching = executor.Statistics();
+        EXPECT_FALSE(dispatching.awaiting_first_request);
+        EXPECT_EQ(dispatching.current_first_request_wait_ms, 0);
+        sirius::core::Lightray ray{};
+        ray.position(1) = 5;
+        ray.velocity(0) = -1;
+        ray.velocity(1) = 1;
+        ray.step_size = 1;
+        const auto original = ray;
+        sirius::core::Rk45CoupledState columns;
+        columns.length_scale = columns.frequency_scale = 1;
+        columns.tolerance = 1e-9;
+        columns.variations[0].derivative(2) = .001;
+        columns.variations[1].derivative(3) = .001;
+        columns.variations[2].displacement(2) = 1;
+        columns.variations[3].displacement(3) = 1;
+        sirius::core::IntegratorConfig config;
+        config.min_step = .01f;
+        config.max_step = 2;
+        sirius::core::Rk45CoupledComparison comparison;
+        auto second = std::async(std::launch::async, [&] {
+            sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+            executor.BeginTrace();
+            const bool result = queued_camera
+                                    ? executor.Launch(metric, 0, camera).has_value()
+                                    : executor.Step(ray, metric, config, columns, comparison);
+            executor.EndTrace();
+            return result;
+        });
+        // The first dispatch is held, so this observes the second request's
+        // actual queue membership before failure; elapsed time is not the proof.
+        const auto queued = RetainedTraceExecutorTestPeer::WaitForQueued(executor);
+        release_dispatch.set_value();
+        EXPECT_FALSE(first.get());
+        EXPECT_FALSE(second.get());
+        EXPECT_EQ(queued, (std::array<std::size_t, 3>{1, 1, 2}));
+        EXPECT_EQ(RetainedTraceExecutorTestPeer::QueueState(executor),
+                  (std::array<std::size_t, 3>{0, 0, 0}));
+        ASSERT_TRUE(executor.Error());
+        EXPECT_EQ(executor.Error()->detail(),
+                  "single-row submission exceeded the safety duration: "
+                  "stage=ray_camera, active_rows=1, "
+                  "submit_wait_ms=1000.0000000000001, limit_ms=1000");
+        EXPECT_EQ(probe.dispatch_calls, 1U);
+        EXPECT_EQ(probe.forwarded_dispatches, 1U);
+        EXPECT_EQ(probe.writes.size(), 1U);
+        EXPECT_EQ(probe.reads.size(), 1U);
+        ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+        for (std::size_t stage = 0; stage < compute.Statistics().size(); ++stage)
+            EXPECT_EQ(compute.Statistics()[stage].submissions, stage == 5 ? 1U : 0U);
+        const auto stats = executor.Statistics();
+        EXPECT_EQ(stats.batches, 2U);
+        // Both gathered requests complete, but the sticky drain dispatches none.
+        EXPECT_EQ(stats.stage_timing[5].command_row_counts, (std::vector<std::uint64_t>{0, 1}));
+        EXPECT_EQ(stats.stage_timing[5].completion_flag_counts,
+                  (std::array<std::uint64_t, 3>{0, 1, 0}));
+        ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(stats.stage_timing, compute.Statistics()));
+        EXPECT_EQ(stats.batch_row_counts[1], 2U);
+        EXPECT_EQ(stats.camera_rows, queued_camera ? 2U : 1U);
+        EXPECT_EQ(stats.interval_rows, queued_camera ? 0U : 1U);
+        EXPECT_EQ(stats.accepted_intervals, 0U);
+        EXPECT_EQ(stats.rejected_intervals, queued_camera ? 0U : 1U);
+        EXPECT_EQ(stats.paired_projection_retries, 0U);
+        EXPECT_EQ(stats.safety_fallbacks, 0U);
+        EXPECT_EQ(stats.acceleration_calls, 0U);
+        if (!queued_camera) {
+            EXPECT_EQ(ray.terminated, 3);
+            EXPECT_EQ(columns.failure, sirius::core::CoupledStepFailure::InvalidState);
+            EXPECT_EQ(columns.central_stages, 0U);
+            EXPECT_EQ(columns.variation_stages, 0U);
+            for (int axis = 0; axis < 4; ++axis) {
+                EXPECT_EQ(ray.position(axis), original.position(axis));
+                EXPECT_EQ(ray.velocity(axis), original.velocity(axis));
+            }
+        }
+        ::testing::Test::RecordProperty(queued_camera ? "sticky_error_queued_camera_dispatches"
+                                                      : "sticky_error_queued_interval_dispatches",
+                                        std::to_string(probe.dispatch_calls));
+    }
+}
+
 bool Encloses(const RetainedValue& value, long double expected, long double reference_gap) {
     if (!value.IsRepresented()) return false;
     const long double center = (static_cast<long double>(value.high) + value.low) + value.tail;
     const long double rounding =
         16 * std::numeric_limits<long double>::epsilon() * (std::abs(center) + std::abs(expected));
     return std::abs(center - expected) <= value.radius + reference_gap + rounding;
+}
+
+// Compare stored words, not a rounded expansion center or structure padding.
+::testing::AssertionResult IntervalBitsAgree(const RetainedIntervalOutput& actual,
+                                             const RetainedIntervalOutput& expected) {
+    if (actual.admissible != expected.admissible || actual.failure != expected.failure ||
+        actual.attempted_stages != expected.attempted_stages ||
+        std::bit_cast<std::uint64_t>(actual.error_ratio) !=
+            std::bit_cast<std::uint64_t>(expected.error_ratio) ||
+        std::bit_cast<std::uint64_t>(actual.embedded_projected_error_ratio) !=
+            std::bit_cast<std::uint64_t>(expected.embedded_projected_error_ratio))
+        return ::testing::AssertionFailure() << "interval admission metadata differs";
+    for (std::size_t i = 0; i < actual.error_checks.size(); ++i) {
+        const auto& a = actual.error_checks[i];
+        const auto& b = expected.error_checks[i];
+        if (std::bit_cast<std::uint64_t>(a.ratio) != std::bit_cast<std::uint64_t>(b.ratio) ||
+            a.field != b.field || a.observed != b.observed || a.evaluated != b.evaluated)
+            return ::testing::AssertionFailure() << "passive error observation differs: " << i;
+    }
+    const auto values_agree = [](const auto& first, const auto& second,
+                                 const std::string& name) -> ::testing::AssertionResult {
+        for (std::size_t i = 0; i < first.size(); ++i) {
+            const auto a = std::bit_cast<std::array<std::uint32_t, 5>>(first[i]);
+            const auto b = std::bit_cast<std::array<std::uint32_t, 5>>(second[i]);
+            for (std::size_t word = 0; word < a.size(); ++word)
+                if (a[word] != b[word])
+                    return ::testing::AssertionFailure()
+                           << name << " component " << i << " word " << word << " actual=0x"
+                           << std::hex << a[word] << " expected=0x" << b[word];
+        }
+        return ::testing::AssertionSuccess();
+    };
+    const std::array first{&actual.full, &actual.lower, &actual.midpoint, &actual.refined};
+    const std::array second{&expected.full, &expected.lower, &expected.midpoint, &expected.refined};
+    constexpr std::array names{"full", "lower", "midpoint", "refined"};
+    for (std::size_t i = 0; i < first.size(); ++i) {
+        if (first[i]->valid != second[i]->valid || first[i]->component != second[i]->component)
+            return ::testing::AssertionFailure() << names[i] << " projection metadata differs";
+        const auto phase =
+            values_agree(first[i]->phase, second[i]->phase, std::string(names[i]) + " phase");
+        if (!phase) return phase;
+        const auto physical = values_agree(first[i]->physical, second[i]->physical,
+                                           std::string(names[i]) + " physical");
+        if (!physical) return physical;
+    }
+    const std::array increments{&actual.full_increment, &actual.lower_increment,
+                                &actual.midpoint_increment, &actual.refined_increment};
+    const std::array expected_increments{&expected.full_increment, &expected.lower_increment,
+                                         &expected.midpoint_increment, &expected.refined_increment};
+    for (std::size_t i = 0; i < increments.size(); ++i) {
+        const auto result = values_agree(*increments[i], *expected_increments[i],
+                                         std::string(names[i]) + " increment");
+        if (!result) return result;
+    }
+    if (bool(actual.dopri) != bool(expected.dopri))
+        return ::testing::AssertionFailure() << "DP capsule presence differs";
+    if (actual.dopri) {
+        const auto& a = *actual.dopri;
+        const auto& b = *expected.dopri;
+        const auto same_double = [](double first, double second) {
+            return std::bit_cast<std::uint64_t>(first) == std::bit_cast<std::uint64_t>(second);
+        };
+        const auto metric = values_agree(a.metric, b.metric, "DP metric");
+        if (!metric) return metric;
+        if (!same_double(a.chart, b.chart) ||
+            !same_double(a.control.length_scale, b.control.length_scale) ||
+            !same_double(a.control.frequency_scale, b.control.frequency_scale) ||
+            !same_double(a.control.tolerance, b.control.tolerance))
+            return ::testing::AssertionFailure() << "DP chart/component control differs";
+        for (std::size_t column = 0; column < a.control.column_scale.size(); ++column)
+            if (!same_double(a.control.column_scale[column], b.control.column_scale[column]))
+                return ::testing::AssertionFailure() << "DP column control differs: " << column;
+        const auto step_words = [](const sirius::core::IntegratorConfig& control) {
+            return std::bit_cast<std::array<std::uint32_t, 8>>(
+                std::array{control.abs_tolerance, control.rel_tolerance, control.min_step,
+                           control.max_step, control.initial_step, control.safety_factor,
+                           control.step_grow_max, control.step_shrink_min});
+        };
+        if (step_words(a.control.integrator) != step_words(b.control.integrator))
+            return ::testing::AssertionFailure() << "DP integrator control differs";
+        for (std::size_t trial = 0; trial < a.packets.size(); ++trial) {
+            const auto packet = values_agree(a.packets[trial].values, b.packets[trial].values,
+                                             "DP packet " + std::to_string(trial));
+            if (!packet) return packet;
+            for (const auto& endpoints : {std::pair{&a.starts[trial], &b.starts[trial]},
+                                          std::pair{&a.endpoints[trial], &b.endpoints[trial]}}) {
+                if (endpoints.first->valid != endpoints.second->valid ||
+                    endpoints.first->component != endpoints.second->component)
+                    return ::testing::AssertionFailure() << "DP endpoint metadata differs";
+                const auto phase = values_agree(endpoints.first->phase, endpoints.second->phase,
+                                                "DP endpoint phase");
+                if (!phase) return phase;
+                const auto physical = values_agree(
+                    endpoints.first->physical, endpoints.second->physical, "DP endpoint physical");
+                if (!physical) return physical;
+            }
+            const auto& p = a.positions[trial];
+            const auto& q = b.positions[trial];
+            if (!same_double(p.interval, q.interval) ||
+                !same_double(p.parameter_limit, q.parameter_limit))
+                return ::testing::AssertionFailure() << "DP position interval differs";
+            for (const auto& coefficient :
+                 {std::pair{&p.origin, &q.origin}, std::pair{&p.increment, &q.increment},
+                  std::pair{&p.a, &q.a}, std::pair{&p.b, &q.b}, std::pair{&p.c, &q.c}})
+                for (int axis = 0; axis < 4; ++axis)
+                    if (!same_double((*coefficient.first)(axis), (*coefficient.second)(axis)))
+                        return ::testing::AssertionFailure() << "DP position coefficient differs";
+        }
+    }
+    return ::testing::AssertionSuccess();
 }
 
 template <typename Fixture>
@@ -129,14 +1231,97 @@ template <typename Fixture>
     return ::testing::AssertionSuccess();
 }
 
+::testing::AssertionResult SchwarzschildStepAgrees(
+    const RetainedStepOutput& output, const sirius::test::retained_schwarzschild::Case& fixture) {
+    if (!output.valid || output.stages != 7) return ::testing::AssertionFailure();
+    const bool flat = std::string_view(fixture.name) == "frozen-analytic-flat";
+    if (output.rhs_valid == flat) return ::testing::AssertionFailure() << "RHS classification";
+    const std::array records{&output.fifth, &output.fourth, &output.increment, &output.error};
+    const auto get = [&](std::size_t index) -> const RetainedValue& {
+        return index < 160 ? (*records[index / 40])[index % 40]
+                           : output.rhs[(index - 160) / 40][index % 40];
+    };
+    // The unchanged flat oracle has no performed RHS records. Curved cases
+    // check all 160 final and 280 independently differentiated RHS fields.
+    const std::size_t limit = flat ? 160 : 440;
+    for (std::size_t begin = 0; begin < limit; begin += 4) {
+        long double error = 0, scale = 0;
+        for (std::size_t axis = 0; axis < 4; ++axis) {
+            const auto index = begin + axis;
+            const auto& value = get(index);
+            if (!value.IsRepresented()) return ::testing::AssertionFailure();
+            const auto reference = fixture.reference[index];
+            const sirius::core::Twofold exact(reference.high, reference.low);
+            const auto center = sirius::core::Twofold(value.high) +
+                                sirius::core::Twofold(value.low) +
+                                sirius::core::Twofold(value.tail);
+            const double difference = std::abs((center - exact).Rounded());
+            constexpr double epsilon = std::numeric_limits<double>::epsilon();
+            const double rounding =
+                128 * epsilon * epsilon * (std::abs(reference.high) + std::abs(value.high));
+            if (difference > value.radius + fixture.gap[index] + rounding)
+                return ::testing::AssertionFailure()
+                       << "Schwarzschild component " << index << " difference=" << difference
+                       << " radius=" << value.radius;
+            error = std::max(
+                error, std::abs((static_cast<long double>(value.high) + value.low + value.tail) -
+                                (static_cast<long double>(reference.high) + reference.low)));
+            const auto scale_index = index >= 120 && index < 160 ? index - 40 : index;
+            const auto scale_reference = fixture.reference[scale_index];
+            scale = std::max(scale, std::abs(static_cast<long double>(scale_reference.high) +
+                                             scale_reference.low));
+        }
+        if (error > 1e-11L * scale)
+            return ::testing::AssertionFailure() << "Schwarzschild group " << begin;
+    }
+    return ::testing::AssertionSuccess();
+}
+
 #endif
 
 TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
-    const auto allocation = device->BufferAllocationBytes();
+    const auto initial_allocation = device->BufferAllocationBytes();
     EXPECT_FALSE(RetainedCompute::Create(*device, 0));
     EXPECT_FALSE(RetainedCompute::Create(*device, 65536));
-    EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+    EXPECT_EQ(device->BufferAllocationBytes(), initial_allocation);
+    TransferProbeDevice probe(*device);
+    const auto required = RetainedCompute::RequiredAllocationBytes(probe, compute->Capacity());
+    ASSERT_TRUE(required) << required.error().Description();
+    EXPECT_EQ(device->BufferAllocationBytes(), initial_allocation);
+    auto observed = RetainedCompute::Create(probe, compute->Capacity());
+    ASSERT_TRUE(observed) << observed.error().Description();
+    auto& camera_compute = **observed;
+    const auto allocation = device->BufferAllocationBytes();
+    EXPECT_GT(allocation, initial_allocation);
+    EXPECT_EQ(allocation - initial_allocation, *required);
+    EXPECT_LE(allocation, 8ull * 1024 * 1024);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+    for (const auto& buffer : probe.allocations) EXPECT_EQ(buffer.usage, BufferUsage::kStorage);
+    EXPECT_TRUE(probe.writes.empty());
+    const auto full_input_bytes = probe.allocations[0].bytes;
+    const auto output_row_bytes = probe.allocations[1].bytes / camera_compute.Capacity();
+    const auto expect_transfer = [&](std::size_t rows, bool first_upload = false) {
+        ASSERT_FALSE(probe.writes.empty());
+        EXPECT_EQ(probe.writes.back().handle.value, probe.allocations[0].handle.value);
+        EXPECT_EQ(probe.writes.back().capacity, camera_compute.Capacity());
+        EXPECT_EQ(probe.writes.back().bytes,
+                  first_upload ? full_input_bytes
+                               : sizeof(std::uint32_t) + rows * sizeof(RetainedCameraInput));
+    };
+    const auto expect_read = [&](std::size_t rows) {
+        ASSERT_FALSE(probe.reads.empty());
+        EXPECT_EQ(probe.reads.back().handle.value, probe.allocations[1].handle.value);
+        EXPECT_EQ(probe.reads.back().bytes, rows * output_row_bytes);
+    };
+    const auto expect_reset_timing = [](const DispatchTiming& timing) {
+        EXPECT_EQ(timing.submit_wait_ms, 0);
+        EXPECT_EQ(timing.pipeline_setup_ms, 0);
+        EXPECT_EQ(timing.command_setup_ms, 0);
+        EXPECT_EQ(timing.cleanup_ms, 0);
+        EXPECT_EQ(timing.total_ms, 0);
+        EXPECT_FALSE(timing.pipeline_created);
+    };
     std::vector<RetainedCameraInput> inputs;
     for (const auto& fixture : sirius::test::retained_camera::kCases) {
         RetainedCameraInput input;
@@ -144,8 +1329,57 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
             input.values[i] = RetainedValue::FromDouble(std::bit_cast<float>(fixture.input[i]));
         inputs.push_back(input);
     }
-    auto outputs = compute->Camera(inputs);
+    const auto original_inputs = inputs;
+    DispatchTiming timing{.submit_wait_ms = 1,
+                          .pipeline_setup_ms = 2,
+                          .command_setup_ms = 3,
+                          .cleanup_ms = 4,
+                          .total_ms = 10,
+                          .pipeline_created = true};
+    probe.fail_next = TransferProbeDevice::Failure::Write;
+    auto failed = camera_compute.Camera(inputs, &timing);
+    ASSERT_FALSE(failed);
+    EXPECT_EQ(failed.error().operation(), "retained transfer probe write");
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size(), true));
+    ASSERT_NO_FATAL_FAILURE(expect_reset_timing(timing));
+    EXPECT_EQ(probe.dispatch_calls, 0U);
+    EXPECT_TRUE(probe.reads.empty());
+    auto stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.submissions, 0U);
+    EXPECT_EQ(stats.write_buffer_bytes, 0U);
+    EXPECT_EQ(stats.read_buffer_bytes, 0U);
+    EXPECT_EQ(stats.command_row_counts, std::vector<std::uint64_t>(camera_compute.Capacity() + 1));
+    EXPECT_EQ(stats.completion_flag_counts, (std::array<std::uint64_t, 3>{}));
+
+    // A successful full write seeds the immutable program even if submission
+    // then fails. The following retry must use the active prefix.
+    probe.fail_next = TransferProbeDevice::Failure::Dispatch;
+    failed = camera_compute.Camera(inputs, &timing);
+    ASSERT_FALSE(failed);
+    EXPECT_EQ(failed.error().operation(), "retained transfer probe dispatch");
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size(), true));
+    ASSERT_NO_FATAL_FAILURE(expect_reset_timing(timing));
+    EXPECT_EQ(probe.dispatch_calls, 1U);
+    EXPECT_EQ(probe.forwarded_dispatches, 0U);
+    EXPECT_TRUE(probe.reads.empty());
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.submissions, 0U);
+    EXPECT_EQ(stats.write_buffer_bytes, full_input_bytes);
+    EXPECT_EQ(stats.read_buffer_bytes, 0U);
+    EXPECT_EQ(stats.command_row_counts, std::vector<std::uint64_t>(camera_compute.Capacity() + 1));
+    EXPECT_EQ(stats.completion_flag_counts, (std::array<std::uint64_t, 3>{}));
+
+    auto outputs = camera_compute.Camera(inputs, &timing);
     ASSERT_TRUE(outputs) << outputs.error().Description();
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.submissions, 1U);
+    EXPECT_EQ(stats.command_row_counts[inputs.size()], 1U);
+    EXPECT_EQ(stats.completion_flag_counts, (std::array<std::uint64_t, 3>{0, inputs.size(), 0}));
+    EXPECT_EQ(stats.write_buffer_bytes, full_input_bytes + sizeof(std::uint32_t) +
+                                            inputs.size() * sizeof(RetainedCameraInput));
+    EXPECT_EQ(stats.read_buffer_bytes, inputs.size() * output_row_bytes);
     ASSERT_EQ(outputs->size(), inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
         SCOPED_TRACE(row);
@@ -155,10 +1389,31 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
         for (auto& value : narrowed.values) value.low = 0;
         EXPECT_FALSE(CameraAgrees(narrowed, fixture));
     }
+    const auto before_read_failure = camera_compute.Statistics()[0];
+    const auto forwarded_before = probe.forwarded_dispatches;
+    probe.fail_next = TransferProbeDevice::Failure::Read;
+    failed = camera_compute.Camera(inputs, &timing);
+    ASSERT_FALSE(failed);
+    EXPECT_EQ(failed.error().operation(), "retained transfer probe read");
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
+    EXPECT_EQ(probe.forwarded_dispatches, forwarded_before + 1);
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.submissions, before_read_failure.submissions + 1);
+    EXPECT_EQ(stats.submit_wait_ms, before_read_failure.submit_wait_ms + timing.submit_wait_ms);
+    EXPECT_EQ(stats.write_buffer_bytes, before_read_failure.write_buffer_bytes +
+                                            sizeof(std::uint32_t) +
+                                            inputs.size() * sizeof(RetainedCameraInput));
+    EXPECT_EQ(stats.read_buffer_bytes, before_read_failure.read_buffer_bytes);
+    EXPECT_EQ(stats.command_row_counts[inputs.size()], 2U);
+    EXPECT_EQ(stats.completion_flag_counts, before_read_failure.completion_flag_counts);
+
     inputs[2].values[20].high = std::numeric_limits<float>::quiet_NaN();
     inputs[6].values[29] = RetainedValue::FromDouble(2);
-    outputs = compute->Camera(inputs);
+    outputs = camera_compute.Camera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
     for (std::size_t row = 0; row < inputs.size(); ++row) {
         if (row == 2 || row == 6) {
             EXPECT_FALSE((*outputs)[row].valid);
@@ -167,11 +1422,27 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
             EXPECT_TRUE(CameraAgrees((*outputs)[row], sirius::test::retained_camera::kCases[row]));
         }
     }
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.command_row_counts[inputs.size()], 3U);
+    EXPECT_EQ(stats.completion_flag_counts,
+              (std::array<std::uint64_t, 3>{2, 2 * inputs.size() - 2, 0}));
     inputs.resize(1);
-    outputs = compute->Camera(inputs);
+    outputs = camera_compute.Camera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
     ASSERT_EQ(outputs->size(), 1U);
     EXPECT_TRUE(CameraAgrees(outputs->front(), sirius::test::retained_camera::kCases.front()));
+    // Grow after shrinking and replace previously invalid rows, preserving all
+    // original independent physical-column expectations.
+    inputs = original_inputs;
+    outputs = camera_compute.Camera(inputs);
+    ASSERT_TRUE(outputs) << outputs.error().Description();
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
+    ASSERT_EQ(outputs->size(), inputs.size());
+    for (std::size_t row = 0; row < inputs.size(); ++row)
+        EXPECT_TRUE(CameraAgrees((*outputs)[row], sirius::test::retained_camera::kCases[row]));
     inputs.clear();
     for (const auto& fixture : sirius::test::continuous_retained_camera::cases) {
         RetainedCameraInput input;
@@ -183,7 +1454,7 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
     ASSERT_NE(inputs[0].values[25].low, inputs[1].values[25].low);
     ASSERT_EQ(inputs[0].values[27].high, inputs[2].values[27].high);
     ASSERT_NE(inputs[0].values[27].low, inputs[2].values[27].low);
-    outputs = compute->Camera(inputs);
+    outputs = camera_compute.Camera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
     for (std::size_t row = 0; row < inputs.size(); ++row)
         EXPECT_TRUE(
@@ -193,11 +1464,198 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
             value.low = 0;
             value.tail = 0;
         }
-    outputs = compute->Camera(inputs);
+    outputs = camera_compute.Camera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
     EXPECT_FALSE(CameraAgrees((*outputs)[1], sirius::test::continuous_retained_camera::cases[1]));
     EXPECT_FALSE(CameraAgrees((*outputs)[2], sirius::test::continuous_retained_camera::cases[2]));
+    // Malformed raw flag encodings are observations, never host admissions.
+    // Every read still comes from the real provider before this injected seam.
+    inputs = {original_inputs.front()};
+    for (const std::uint32_t flag : {0U, 0x3f800000U, 0x80000000U, 0x7fc00000U, 1U}) {
+        const auto before = camera_compute.Statistics()[0];
+        probe.after_read = [flag](BufferHandle, std::span<std::byte> bytes) {
+            std::memcpy(bytes.data() + 3 * sizeof(flag), &flag, sizeof(flag));
+        };
+        outputs = camera_compute.Camera(inputs);
+        if (flag == 0 || flag == 0x3f800000U) {
+            ASSERT_TRUE(outputs);
+            EXPECT_EQ(outputs->front().valid, flag != 0);
+        } else {
+            ASSERT_FALSE(outputs);
+            EXPECT_EQ(outputs.error().operation(), "read retained camera");
+        }
+        const auto after = camera_compute.Statistics()[0];
+        EXPECT_EQ(after.command_row_counts[1], before.command_row_counts[1] + 1);
+        auto flags = before.completion_flag_counts;
+        ++flags[flag == 0 ? 0 : (flag == 0x3f800000U ? 1 : 2)];
+        EXPECT_EQ(after.completion_flag_counts, flags);
+    }
+    // A completion flag one can still fail full value decoding.
+    const auto before_bad_value = camera_compute.Statistics()[0];
+    probe.after_read = [](BufferHandle, std::span<std::byte> bytes) {
+        const std::uint32_t nan = 0x7fc00000U;
+        std::memcpy(bytes.data() + 168 * sizeof(nan), &nan, sizeof(nan));
+    };
+    outputs = camera_compute.Camera(inputs);
+    ASSERT_FALSE(outputs);
+    EXPECT_EQ(outputs.error().detail(), "invalid retained value");
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.completion_flag_counts[1], before_bad_value.completion_flag_counts[1] + 1);
+    probe.after_read = {};
+    camera_compute.ResetStatistics();
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(camera_compute.Statistics(), {}));
+    const auto writes_before_recovery = probe.writes.size();
+    outputs = camera_compute.Camera(inputs);
+    ASSERT_TRUE(outputs);
+    EXPECT_TRUE(CameraAgrees(outputs->front(), sirius::test::retained_camera::kCases.front()));
+    EXPECT_EQ(probe.writes.size(), writes_before_recovery + 1);
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(1));  // Reset preserves the uploaded program.
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.command_row_counts[1], 1U);
+    EXPECT_EQ(stats.completion_flag_counts, (std::array<std::uint64_t, 3>{0, 1, 0}));
     EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    if (device->Info().kind != DeviceKind::kSoftware) {
+        const auto before = compute->Statistics();
+        const auto allocated = device->BufferAllocationBytes();
+        RetainedCompute::PreparationStats observation;
+        const auto result = compute->PrepareSoftwareRendererStages(observation);
+        ASSERT_FALSE(result);
+        EXPECT_NE(result.error().detail().find("software"), std::string::npos);
+        for (const auto& stage : observation.stages) {
+            EXPECT_EQ(stage.attempts, 0U);
+            EXPECT_EQ(stage.dispatch_attempts, 0U);
+            EXPECT_EQ(stage.write_buffer_calls, 0U);
+        }
+        ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(compute->Statistics(), before));
+        EXPECT_EQ(device->BufferAllocationBytes(), allocated);
+        EXPECT_EQ(compute->TakeSubmissionFeedback().peak_ms, 0);
+        RecordProperty("software_preparation_disposition", "nonsoftware_refused_without_work");
+        return;
+    }
+    TransferProbeDevice probe(*device);
+    auto created = RetainedCompute::Create(probe, compute->Capacity());
+    ASSERT_TRUE(created) << created.error().Description();
+    auto& prepared = **created;
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+    EXPECT_TRUE(probe.writes.empty());
+    EXPECT_EQ(probe.dispatch_calls, 0U);
+    const auto allocated = device->BufferAllocationBytes();
+    std::vector<std::vector<std::byte>> expected;
+    for (std::size_t i = 0; i < probe.allocations.size(); ++i) {
+        expected.emplace_back(probe.allocations[i].bytes, std::byte(i % 2 ? 0x5a : 0xa5));
+        ASSERT_TRUE(device->WriteBuffer(probe.allocations[i].handle, expected.back()));
+    }
+    RetainedCompute::PreparationStats observation;
+    const auto result = prepared.PrepareSoftwareRendererStages(observation);
+    // Publish all observations even if preparation failed; these are actual
+    // initialization host intervals, not physical work or GPU timestamps.
+    RecordProperty("software_preparation_scope",
+                   "six explicit zero-row initialization submissions; preparation is outside "
+                   "physical feedback; subsequent RayCamera is not cold-render qualification");
+    RecordProperty("software_preparation_wall_ms", std::to_string(observation.wall_ms));
+    for (std::size_t i = 0; i < observation.stages.size(); ++i) {
+        const auto& stage = observation.stages[i];
+        const auto name = RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(i));
+        const std::string prefix = std::string("software_preparation_") + name;
+        std::string message = "[Retained preparation] " + std::string(name);
+        const auto record = [&](const char* key, const auto value) {
+            const auto text = std::format("{}", value);
+            RecordProperty(prefix + "_" + key, text);
+            message += std::format(" {}={}", key, text);
+        };
+        record("attempts", stage.attempts);
+        record("dispatch_attempts", stage.dispatch_attempts);
+        record("completed_dispatches", stage.completed_dispatches);
+        record("completed", stage.completed);
+        record("header_restored", stage.header_restored);
+        record("pipeline_setup_ms", stage.timing.pipeline_setup_ms);
+        record("command_setup_ms", stage.timing.command_setup_ms);
+        record("submit_wait_ms", stage.timing.submit_wait_ms);
+        record("cleanup_ms", stage.timing.cleanup_ms);
+        record("dispatch_total_ms", stage.timing.total_ms);
+        record("pipeline_created", stage.timing.pipeline_created);
+        record("write_buffer_calls", stage.write_buffer_calls);
+        record("write_buffer_ms", stage.write_buffer_ms);
+        record("write_buffer_bytes", stage.write_buffer_bytes);
+        std::cerr << message << std::endl;
+    }
+    ASSERT_TRUE(result) << result.error().Description();
+    const std::array<std::size_t, 6> order{5, 4, 1, 2, 3, 6};
+    ASSERT_EQ(probe.submissions.size(), order.size());
+    ASSERT_EQ(probe.writes.size(), 2 * order.size());
+    EXPECT_TRUE(probe.reads.empty());
+    for (std::size_t j = 0; j < order.size(); ++j) {
+        const auto i = order[j];
+        const auto input = probe.allocations[2 * i].handle;
+        const auto output = probe.allocations[2 * i + 1].handle;
+        EXPECT_EQ(probe.submissions[j].buffers[0].value, input.value);
+        EXPECT_EQ(probe.submissions[j].buffers[1].value, output.value);
+        EXPECT_EQ(probe.submissions[j].binding_count, 2U);
+        EXPECT_EQ(probe.submissions[j].x, 1U);
+        EXPECT_EQ(probe.submissions[j].y, 1U);
+        EXPECT_EQ(probe.submissions[j].z, 1U);
+        EXPECT_EQ(probe.writes[2 * j].bytes, 4U);
+        EXPECT_EQ(probe.writes[2 * j].capacity, 0U);
+        EXPECT_EQ(probe.writes[2 * j + 1].bytes, 4U);
+        EXPECT_EQ(probe.writes[2 * j + 1].capacity, prepared.Capacity());
+        const auto capacity = static_cast<std::uint32_t>(prepared.Capacity());
+        std::memcpy(expected[2 * i].data(), &capacity, sizeof(capacity));
+        const auto& stage = observation.stages[i];
+        EXPECT_EQ(stage.attempts, 1U);
+        EXPECT_EQ(stage.dispatch_attempts, 1U);
+        EXPECT_EQ(stage.completed_dispatches, 1U);
+        EXPECT_EQ(stage.completed, 1U);
+        EXPECT_TRUE(stage.header_restored);
+        EXPECT_EQ(stage.write_buffer_calls, 2U);
+        EXPECT_EQ(stage.write_buffer_bytes, 8U);
+        EXPECT_GE(stage.timing.submit_wait_ms, 0);
+    }
+    EXPECT_EQ(observation.stages[0].attempts, 0U);
+    for (std::size_t i = 0; i < expected.size(); ++i) {
+        SCOPED_TRACE(i);
+        std::vector<std::byte> actual(expected[i].size());
+        ASSERT_TRUE(device->ReadBuffer(probe.allocations[i].handle, actual));
+        EXPECT_EQ(actual, expected[i]) << "zero rows must preserve output and nonheader inputs";
+    }
+    EXPECT_EQ(device->BufferAllocationBytes(), allocated);
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(prepared.Statistics(), {}));
+    const auto empty_feedback = prepared.TakeSubmissionFeedback();
+    EXPECT_EQ(empty_feedback.peak_ms, 0);
+    EXPECT_EQ(empty_feedback.maximum_rows, 0U);
+    EXPECT_FALSE(empty_feedback.maximum_one_row_stage);
+    const auto& fixture = sirius::test::retained_ray_camera::cases.front();
+    const std::array input{std::bit_cast<RetainedRayCameraInput>(fixture.input)};
+    DispatchTiming timing;
+    const auto physical = prepared.RayCamera(input, &timing);
+    RecordProperty("prepared_ray_camera_physical_submit_wait_ms",
+                   std::to_string(timing.submit_wait_ms));
+    RecordProperty("prepared_ray_camera_physical_pipeline_setup_ms",
+                   std::to_string(timing.pipeline_setup_ms));
+    RecordProperty("prepared_ray_camera_physical_dispatch_total_ms",
+                   std::to_string(timing.total_ms));
+    std::cerr << std::format(
+                     "[Retained preparation] subsequent physical RayCamera: submit/wait "
+                     "{}ms, pipeline {}ms, total {}ms",
+                     timing.submit_wait_ms, timing.pipeline_setup_ms, timing.total_ms)
+              << std::endl;
+    ASSERT_TRUE(physical) << physical.error().Description();
+    ASSERT_EQ(physical->size(), 1U);
+    ASSERT_TRUE(CameraAgrees(physical->front(), fixture));
+    EXPECT_EQ(probe.writes.back().bytes, probe.allocations[10].bytes)
+        << "preparation must not claim the immutable program was uploaded";
+    const auto feedback = prepared.TakeSubmissionFeedback();
+    EXPECT_EQ(feedback.peak_ms, timing.submit_wait_ms);
+    EXPECT_EQ(feedback.maximum_rows, 1U);
+    EXPECT_EQ(feedback.maximum_one_row_ms, timing.submit_wait_ms);
+    EXPECT_EQ(feedback.maximum_one_row_stage, RetainedCompute::KernelStage::kRayCamera);
+    EXPECT_EQ(prepared.Statistics()[5].submissions, 1U);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
@@ -209,6 +1667,72 @@ TEST_F(RetainedComputeTest, SmoothRayCameraPreservesPhysicalLensDerivatives) {
     std::vector<RetainedRayCameraInput> inputs;
     for (const auto& fixture : sirius::test::retained_ray_camera::cases)
         inputs.push_back(std::bit_cast<RetainedRayCameraInput>(fixture.input));
+
+    // Observe first use and repetition of exactly the same original row on the
+    // fresh fixture compute. These are host intervals, not GPU timestamps or a
+    // claim about driver cache state or the operational renderer's hard guard.
+    RecordProperty("ray_camera_reuse_device", device->Info().name);
+    RecordProperty("ray_camera_reuse_row", sirius::test::retained_ray_camera::cases.front().name);
+    RecordProperty("ray_camera_reuse_timing_scope",
+                   "same original row twice on fresh fixture compute; host timings exclude "
+                   "SetUp; no speed threshold, cache attribution or cold render qualification");
+    const auto observe = [&](const std::string& prefix) {
+        const auto before =
+            compute
+                ->Statistics()[static_cast<std::size_t>(RetainedCompute::KernelStage::kRayCamera)];
+        DispatchTiming timing;
+        std::cerr << "[RayCamera reuse] " << prefix << " started" << std::endl;
+        const auto started = std::chrono::steady_clock::now();
+        auto result = compute->RayCamera(std::span(inputs.data(), 1), &timing);
+        const auto finished = std::chrono::steady_clock::now();
+        const auto after =
+            compute
+                ->Statistics()[static_cast<std::size_t>(RetainedCompute::KernelStage::kRayCamera)];
+        auto message = std::format("[RayCamera reuse] {} completed", prefix);
+        const auto record = [&](const char* key, const auto& value) {
+            const auto text = std::format("{}", value);
+            RecordProperty(prefix + "_" + key, text);
+            message += std::format(" {}={}", key, text);
+        };
+        record("success", result.has_value());
+        record("wall_ms", std::chrono::duration<double, std::milli>(finished - started).count());
+        record("submit_wait_ms", timing.submit_wait_ms);
+        record("pipeline_setup_ms", timing.pipeline_setup_ms);
+        record("command_setup_ms", timing.command_setup_ms);
+        record("cleanup_ms", timing.cleanup_ms);
+        record("dispatch_total_ms", timing.total_ms);
+        record("pipeline_created", timing.pipeline_created);
+        record("stage_submissions", after.submissions - before.submissions);
+        record("stage_submit_wait_ms", after.submit_wait_ms - before.submit_wait_ms);
+        record("stage_pipeline_setup_ms", after.pipeline_setup_ms - before.pipeline_setup_ms);
+        record("stage_command_setup_ms", after.command_setup_ms - before.command_setup_ms);
+        record("stage_cleanup_ms", after.cleanup_ms - before.cleanup_ms);
+        record("stage_dispatch_total_ms", after.dispatch_total_ms - before.dispatch_total_ms);
+        record("stage_write_buffer_ms", after.write_buffer_ms - before.write_buffer_ms);
+        record("stage_read_buffer_ms", after.read_buffer_ms - before.read_buffer_ms);
+        record("stage_write_buffer_bytes", after.write_buffer_bytes - before.write_buffer_bytes);
+        record("stage_read_buffer_bytes", after.read_buffer_bytes - before.read_buffer_bytes);
+        record("stage_pipeline_creations", after.pipeline_creations - before.pipeline_creations);
+        record("stage_target_overshoots", after.target_overshoots - before.target_overshoots);
+        if (!result) message += std::format(" error={}", result.error().Description());
+        std::cerr << message << std::endl;
+        return result;
+    };
+    const auto first = observe("ray_camera_first");
+    ASSERT_TRUE(first) << first.error().Description();
+    ASSERT_EQ(first->size(), 1U);
+    ASSERT_TRUE(CameraAgrees(first->front(), sirius::test::retained_ray_camera::cases.front()));
+    const auto repeated = observe("ray_camera_repeat");
+    ASSERT_TRUE(repeated) << repeated.error().Description();
+    ASSERT_EQ(repeated->size(), 1U);
+    ASSERT_TRUE(CameraAgrees(repeated->front(), sirius::test::retained_ray_camera::cases.front()));
+    EXPECT_EQ(repeated->front().valid, first->front().valid);
+    for (std::size_t i = 0; i < first->front().values.size(); ++i) {
+        SCOPED_TRACE(i);
+        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(repeated->front().values[i])),
+                  (std::bit_cast<std::array<std::uint32_t, 5>>(first->front().values[i])));
+    }
+
     auto outputs = compute->RayCamera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
     ASSERT_EQ(outputs->size(), inputs.size());
@@ -278,6 +1802,833 @@ TEST_F(RetainedComputeTest, JointRkStagesRetainCriticalIncrementsAndEmbeddedErro
 #endif
 }
 
+TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGeneralFallback) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    namespace fixture = sirius::test::retained_schwarzschild;
+    std::vector<RetainedStepInput> witnesses;
+    for (const auto& item : fixture::cases)
+        witnesses.push_back(std::bit_cast<RetainedStepInput>(item.input));
+    ASSERT_EQ(witnesses.size(), 23U);
+    std::vector<RetainedStepInput> mixed{witnesses[0], witnesses[1], witnesses[0], witnesses[0]};
+    // Normalization, rather than raw high-word equality, determines exact zero.
+    mixed[2].values[1] = {0.5F, -0.5F, -0.0F, 0.0F, 1};
+    mixed[3].values[0] = {2.0F, -1.0F, 0.0F, 0.0F, 1};
+    mixed.push_back(
+        std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases.front().input));
+    mixed.push_back(
+        std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases.back().input));
+    for (std::size_t parameter = 1; parameter <= 3; ++parameter) {
+        auto row = witnesses[0];
+        // A nonzero lower limb must not be swallowed by a high-word-only gate.
+        row.values[parameter] = {0.0F, 0x1p-40F, 0.0F, 0.0F, 1};
+        mixed.push_back(row);
+    }
+    for (std::size_t parameter = 1; parameter <= 3; ++parameter) {
+        auto row = witnesses[0];
+        row.values[parameter].radius = 0x1p-40F;
+        mixed.push_back(row);
+    }
+    const auto good_rows = mixed.size();
+    auto bad = witnesses[0];
+    bad.values[4].high = std::numeric_limits<float>::quiet_NaN();
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    bad.values[43].valid = 0;
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    bad.values[44] = RetainedValue::FromDouble(0);
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    bad.values[45] = RetainedValue::FromDouble(0);
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    bad.values[0].radius = -1;
+    mixed.push_back(bad);
+    // The retained radius rejects a sign bit even when its magnitude is zero.
+    bad = mixed[2];
+    bad.values[1].radius = -0.0F;
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    for (std::size_t i = 5; i < 8; ++i) bad.values[i] = RetainedValue::FromDouble(0);
+    mixed.push_back(bad);
+    ASSERT_LE(mixed.size(), 24U);
+
+    // Locate the second immutable table from the general table's terminal
+    // layer offset, without depending on the specialized instruction count.
+    const auto& program = sirius::backend::retained_program::kTransportProgram;
+    std::size_t specialized = 43 + 5 * program[0];
+    ASSERT_LT(specialized, program.size());
+    ASSERT_EQ(program[specialized], 0U);
+    while (specialized < program.size() && program[specialized] != program[0]) ++specialized;
+    ++specialized;
+    ASSERT_LT(specialized + 2, program.size());
+    ASSERT_EQ(program[specialized + 1], program[1]);
+    ASSERT_EQ(program[specialized + 2], 40U);
+
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    RecordProperty("schwarzschild_normal_default_exercised", 0);
+    RecordProperty("schwarzschild_normal_fp64_exercised", 0);
+    for (const bool decline_rte32 : {false, true}) {
+        for (const bool wide : {false, true}) {
+            SCOPED_TRACE(decline_rte32 ? "conservative integer admission" : "actual admission");
+            SCOPED_TRACE(wide ? "fp64 products" : "default products");
+            auto opened = CreateVulkanDevice(*index);
+            ASSERT_TRUE(opened) << opened.error().Description();
+            ASSERT_EQ((*opened)->Info(), device->Info());
+            ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+            TransferProbeDevice probe(**opened, decline_rte32);
+            auto expected_info = device->Info();
+            if (decline_rte32) expected_info.rounds_fp32_to_nearest = false;
+            ASSERT_EQ(probe.Info(), expected_info);
+            auto created = RetainedCompute::Create(probe, 24, wide);
+            if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
+                ASSERT_FALSE(created);
+                EXPECT_NE(created.error().detail().find("binary64"), std::string::npos);
+                EXPECT_TRUE(probe.allocations.empty());
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), 0U);
+                continue;
+            }
+            ASSERT_TRUE(created) << created.error().Description();
+            auto& instance = **created;
+            const auto allocation = (*opened)->BufferAllocationBytes();
+            const auto required = RetainedCompute::RequiredAllocationBytes(probe, 24);
+            ASSERT_TRUE(required) << required.error().Description();
+            EXPECT_EQ(allocation, *required);
+            ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+            const auto transport_input = probe.allocations[2].handle;
+            probe.capture_output = probe.allocations[3].handle;
+            const auto row_bytes = probe.allocations[3].bytes / instance.Capacity();
+            ASSERT_EQ(row_bytes, sirius::backend::retained_program::kTransportRowWords * 4U);
+            if (!decline_rte32 && RetainedUsesPortableArithmetic(probe.Info()) &&
+                probe.Info().rounds_fp32_to_nearest) {
+                RecordProperty(wide ? "schwarzschild_normal_fp64_exercised"
+                                    : "schwarzschild_normal_default_exercised",
+                               1);
+            }
+            if (decline_rte32) {
+                EXPECT_TRUE(RetainedUsesPortableArithmetic(probe.Info()));
+                RecordProperty(wide ? "schwarzschild_integer_fp64_exercised"
+                                    : "schwarzschild_integer_default_exercised",
+                               1);
+            }
+            std::vector<RetainedStepOutput> outputs;
+            std::vector<std::byte> raw;
+            const auto step = [&](std::span<const RetainedStepInput> rows) {
+                probe.readbacks.clear();
+                const auto returned = instance.Step(rows);
+                ASSERT_TRUE(returned) << returned.error().Description();
+                ASSERT_EQ(returned->size(), rows.size());
+                ASSERT_EQ(probe.readbacks.size(), 1U);
+                ASSERT_EQ(probe.readbacks.front().size(), rows.size() * row_bytes);
+                outputs = *returned;
+                raw = probe.readbacks.front();
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
+            };
+            const auto erased = [](const RetainedStepOutput& output) {
+                EXPECT_FALSE(output.valid);
+                EXPECT_FALSE(output.rhs_valid);
+                EXPECT_LE(output.stages, 7U);
+                for (const auto* record :
+                     {&output.fifth, &output.fourth, &output.increment, &output.error}) {
+                    for (const auto& value : *record)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                }
+                for (const auto& record : output.rhs) {
+                    for (const auto& value : record)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                }
+            };
+            ASSERT_NO_FATAL_FAILURE(step(witnesses));
+            for (std::size_t row = 0; row < witnesses.size(); ++row) {
+                SCOPED_TRACE(fixture::cases[row].name);
+                ASSERT_TRUE(SchwarzschildStepAgrees(outputs[row], fixture::cases[row]));
+            }
+            ASSERT_NO_FATAL_FAILURE(step(mixed));
+            for (std::size_t row = 0; row < good_rows; ++row) {
+                ASSERT_TRUE(outputs[row].valid) << row;
+                EXPECT_EQ(outputs[row].stages, 7U);
+                EXPECT_EQ(outputs[row].rhs_valid, row != 5);
+            }
+            for (std::size_t row = good_rows; row < mixed.size(); ++row) erased(outputs[row]);
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[0], fixture::cases[0]));
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[1], fixture::cases[1]));
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[2], fixture::cases[0]));
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[3], fixture::cases[0]));
+            ASSERT_TRUE(StepAgrees(outputs[4], sirius::test::retained_transport::cases.front()));
+            ASSERT_TRUE(StepAgrees(outputs[5], sirius::test::retained_transport::cases.back()));
+            const auto initial_raw = raw;
+            const auto same_row = [&](std::size_t row, std::size_t initial_row) {
+                const auto current = std::span(raw).subspan(row * row_bytes, row_bytes);
+                const auto initial =
+                    std::span(initial_raw).subspan(initial_row * row_bytes, row_bytes);
+                EXPECT_TRUE(
+                    std::equal(current.begin(), current.end(), initial.begin(), initial.end()))
+                    << "raw row " << row << " reference row " << initial_row;
+            };
+            // Smaller reordered batches still own complete active rows; no
+            // claim is made about untouched inactive capacity or cross-route words.
+            const std::array<std::size_t, 6> order{11, 5, 1, 4, 8, 2};
+            std::vector<RetainedStepInput> reordered;
+            for (const auto row : order) reordered.push_back(mixed[row]);
+            ASSERT_NO_FATAL_FAILURE(step(reordered));
+            for (std::size_t row = 0; row < order.size(); ++row) same_row(row, order[row]);
+
+            // An invalid specialized header is harmless to all general/flat
+            // rows. This distinguishes tiny nonzero/radius inputs from exact
+            // Schwarzschild parameters without deriving new tiny-input goldens.
+            // Ordinary Step uploads cache this immutable tail. The explicit
+            // full-span writes below perturb and restore only this test seam.
+            const auto table = 1 + instance.Capacity() * 230;
+            std::vector<std::uint32_t> complete_input(table + program.size());
+            complete_input[0] = static_cast<std::uint32_t>(instance.Capacity());
+            std::memcpy(complete_input.data() + 1, mixed.data(),
+                        mixed.size() * sizeof(RetainedStepInput));
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            std::size_t changed_uploads = 0;
+            probe.before_write = [&](BufferHandle buffer, std::span<std::byte> data) {
+                if (buffer.value != transport_input.value) return;
+                const auto table_bytes = table * sizeof(std::uint32_t);
+                ASSERT_EQ(data.size(), table_bytes + program.size() * sizeof(std::uint32_t));
+                ASSERT_EQ(std::memcmp(data.data() + table_bytes, program.data(),
+                                      program.size() * sizeof(std::uint32_t)),
+                          0);
+                const auto wrong_registers = program[1] ^ 1U;
+                std::memcpy(data.data() + table_bytes + (specialized + 1) * sizeof(std::uint32_t),
+                            &wrong_registers, sizeof(wrong_registers));
+                ++changed_uploads;
+            };
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            probe.before_write = {};
+            ASSERT_NO_FATAL_FAILURE(step(mixed));
+            ASSERT_EQ(changed_uploads, 1U);
+            for (std::size_t row = 0; row < 4; ++row) {
+                erased(outputs[row]);
+                EXPECT_EQ(outputs[row].stages, 0U);
+                const auto words = std::span(raw).subspan(row * row_bytes, row_bytes);
+                EXPECT_TRUE(std::all_of(words.begin(), words.end(),
+                                        [](std::byte word) { return word == std::byte{}; }));
+            }
+            for (std::size_t row = 4; row < good_rows; ++row) {
+                ASSERT_TRUE(outputs[row].valid) << row;
+                same_row(row, row);
+            }
+            for (std::size_t row = good_rows; row < mixed.size(); ++row) erased(outputs[row]);
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(step(mixed));
+            for (std::size_t row = 0; row < good_rows; ++row) same_row(row, row);
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[0], fixture::cases[0]));
+            ASSERT_TRUE(StepAgrees(outputs[4], sirius::test::retained_transport::cases.front()));
+            ASSERT_TRUE(StepAgrees(outputs[5], sirius::test::retained_transport::cases.back()));
+            ASSERT_NO_FATAL_FAILURE(step(std::span(witnesses).first(1)));
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs.front(), fixture::cases.front()));
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, MixedIndependentTransportLayersPreserveWordsAndRefusal) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    namespace fixture = sirius::test::retained_transport;
+    std::vector<RetainedStepInput> witnesses;
+    for (const auto& item : fixture::cases)
+        witnesses.push_back(std::bit_cast<RetainedStepInput>(item.input));
+    ASSERT_EQ(witnesses.size(), 15U);
+
+    const auto& program = sirius::backend::retained_program::kTransportProgram;
+    const auto layer_base = 43U + 5U * program[0];
+    ASSERT_LT(layer_base + 2, program.size());
+    ASSERT_EQ(program[2], 40U);
+    ASSERT_EQ(program[layer_base], 0U);
+    ASSERT_EQ(program[layer_base + 1], 40U);
+    ASSERT_EQ(program[layer_base + 2], 47U);
+    // These input/constant producers read no scratch and own distinct writes.
+    // Moving six constants into the first layer preserves all dependencies,
+    // instruction order, layer count, register frame and both table positions.
+    for (std::size_t node = 0; node < 47; ++node) {
+        ASSERT_EQ(program[43 + 5 * node], node < 40 ? 1U : 0U);
+        ASSERT_EQ(program[44 + 5 * node], node);
+    }
+    for (std::size_t parameter = 0; parameter < 4; ++parameter)
+        ASSERT_EQ(witnesses.back().values[parameter].Center(), 0);
+    for (std::size_t row = 0; row + 1 < witnesses.size(); ++row)
+        ASSERT_TRUE(std::any_of(witnesses[row].values.begin(), witnesses[row].values.begin() + 4,
+                                [](const auto& value) { return value.Center() != 0; }));
+
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    for (const bool decline_rte32 : {false, true}) {
+        for (const bool wide : {false, true}) {
+            SCOPED_TRACE(decline_rte32 ? "conservative integer admission" : "actual admission");
+            SCOPED_TRACE(wide ? "fp64 products" : "default products");
+            auto opened = CreateVulkanDevice(*index);
+            ASSERT_TRUE(opened) << opened.error().Description();
+            ASSERT_EQ((*opened)->Info(), device->Info());
+            ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+            TransferProbeDevice probe(**opened, decline_rte32);
+            auto created = RetainedCompute::Create(probe, 24, wide);
+            if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
+                ASSERT_FALSE(created);
+                EXPECT_NE(created.error().detail().find("binary64"), std::string::npos);
+                EXPECT_TRUE(probe.allocations.empty());
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), 0U);
+                continue;
+            }
+            ASSERT_TRUE(created) << created.error().Description();
+            auto& instance = **created;
+            ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+            const auto transport_input = probe.allocations[2].handle;
+            probe.capture_output = probe.allocations[3].handle;
+            const auto row_bytes = probe.allocations[3].bytes / instance.Capacity();
+            ASSERT_EQ(row_bytes, sirius::backend::retained_program::kTransportRowWords * 4U);
+            const auto allocation = (*opened)->BufferAllocationBytes();
+            const auto required = RetainedCompute::RequiredAllocationBytes(probe, 24);
+            ASSERT_TRUE(required) << required.error().Description();
+            EXPECT_EQ(allocation, *required);
+            std::vector<RetainedStepOutput> observed;
+            std::vector<std::byte> raw;
+            const auto step = [&] {
+                probe.readbacks.clear();
+                const auto returned = instance.Step(witnesses);
+                ASSERT_TRUE(returned) << returned.error().Description();
+                ASSERT_EQ(returned->size(), witnesses.size());
+                ASSERT_EQ(probe.readbacks.size(), 1U);
+                ASSERT_EQ(probe.readbacks.front().size(), witnesses.size() * row_bytes);
+                observed = *returned;
+                raw = probe.readbacks.front();
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
+            };
+            const auto science = [&] {
+                for (std::size_t row = 0; row < witnesses.size(); ++row) {
+                    SCOPED_TRACE(fixture::cases[row].name);
+                    ASSERT_TRUE(StepAgrees(observed[row], fixture::cases[row]));
+                }
+            };
+            ASSERT_NO_FATAL_FAILURE(step());
+            ASSERT_NO_FATAL_FAILURE(science());
+            const auto original_raw = raw;
+
+            // Warmed Step uploads only its row prefix. This explicit full-span
+            // seam changes the actual device table, then restores that owner.
+            const auto table = 1 + instance.Capacity() * 230;
+            std::vector<std::uint32_t> complete_input(table + program.size());
+            complete_input[0] = static_cast<std::uint32_t>(instance.Capacity());
+            std::memcpy(complete_input.data() + 1, witnesses.data(),
+                        witnesses.size() * sizeof(RetainedStepInput));
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            complete_input[table + layer_base + 1] = 46;
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(step());
+            ASSERT_NO_FATAL_FAILURE(science());
+            // Includes every active RHS, final field, status and reserved word.
+            EXPECT_EQ(raw, original_raw);
+
+            complete_input[table + 43 + 5 * 40] = 12;
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(step());
+            for (std::size_t row = 0; row + 1 < witnesses.size(); ++row) {
+                SCOPED_TRACE(fixture::cases[row].name);
+                EXPECT_FALSE(observed[row].valid);
+                EXPECT_FALSE(observed[row].rhs_valid);
+                EXPECT_EQ(observed[row].stages, 1U);
+                std::array<std::uint32_t, 3> completion{};
+                std::memcpy(completion.data(), raw.data() + row * row_bytes, sizeof(completion));
+                EXPECT_EQ(completion, (std::array<std::uint32_t, 3>{0, 1, 0}));
+                for (const auto* values : {&observed[row].fifth, &observed[row].fourth,
+                                           &observed[row].increment, &observed[row].error})
+                    for (const auto& value : *values)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                for (const auto& values : observed[row].rhs)
+                    for (const auto& value : values)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+            }
+            // Analytic flat transport bypasses the bytecode interpreter.
+            ASSERT_TRUE(StepAgrees(observed.back(), fixture::cases.back()));
+            const auto flat_offset = (witnesses.size() - 1) * row_bytes;
+            EXPECT_TRUE(std::equal(raw.begin() + flat_offset, raw.end(),
+                                   original_raw.begin() + flat_offset, original_raw.end()));
+
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(step());
+            ASSERT_NO_FATAL_FAILURE(science());
+            EXPECT_EQ(raw, original_raw);
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    namespace fixture = sirius::test::retained_endpoint_factor;
+    namespace additional = sirius::test::retained_schwarzschild_endpoint;
+    constexpr std::size_t capacity = 32;
+    std::vector<RetainedEndpointInput> inputs;
+    std::size_t alternatives = 0;
+    for (const auto& item : fixture::cases) {
+        inputs.push_back(std::bit_cast<RetainedEndpointInput>(item.input));
+        ASSERT_GE(item.alternatives, 1U);
+        ASSERT_LE(item.alternatives, item.expected.size());
+        alternatives += item.alternatives;
+    }
+    ASSERT_EQ(inputs.size(), 29U);
+    ASSERT_EQ(alternatives, 30U);
+    std::vector<RetainedEndpointInput> additional_inputs;
+    std::size_t required_admissions = 0;
+    for (const auto& item : additional::cases) {
+        additional_inputs.push_back(std::bit_cast<RetainedEndpointInput>(item.input));
+        ASSERT_GE(item.alternatives, 1U);
+        ASSERT_LE(item.alternatives, item.expected.size());
+        required_admissions += item.admission_required;
+    }
+    ASSERT_EQ(additional_inputs.size(), 27U);
+    ASSERT_EQ(required_admissions, 23U);
+    ASSERT_LE(additional_inputs.size(), capacity);
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    const bool mask_useful =
+        RetainedUsesPortableArithmetic(device->Info()) && device->Info().rounds_fp32_to_nearest;
+    RecordProperty("factored_endpoint_normal_default_exercised", 0);
+    RecordProperty("factored_endpoint_normal_fp64_exercised", 0);
+    RecordProperty("factored_endpoint_integer_default_exercised", 0);
+    RecordProperty("factored_endpoint_integer_fp64_exercised", 0);
+    for (const bool decline_rte32 : {false, true}) {
+        if (decline_rte32 && !mask_useful) continue;
+        for (const bool wide : {false, true}) {
+            SCOPED_TRACE(decline_rte32 ? "conservative integer admission" : "actual admission");
+            SCOPED_TRACE(wide ? "fp64 products" : "default products");
+            auto opened = CreateVulkanDevice(*index);
+            ASSERT_TRUE(opened) << opened.error().Description();
+            ASSERT_EQ((*opened)->Info(), device->Info());
+            ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+            TransferProbeDevice probe(**opened, decline_rte32);
+            auto expected_info = device->Info();
+            if (decline_rte32) expected_info.rounds_fp32_to_nearest = false;
+            ASSERT_EQ(probe.Info(), expected_info);
+            std::vector<std::string> loaded_shaders;
+            probe.after_load = [&](std::span<const std::uint32_t> code) {
+                const auto digest = sirius::base::Sha256Hex(std::span(
+                    reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+                ASSERT_TRUE(digest) << digest.error();
+                loaded_shaders.push_back(*digest);
+            };
+            std::clog << "[FactoredEndpoint] create: portable="
+                      << RetainedUsesPortableArithmetic(probe.Info()) << ";wide=" << wide
+                      << ";decline_rte32=" << decline_rte32
+                      << ";fma_enabled=" << probe.Info().fma_fp32_enabled << std::endl;
+            auto created = RetainedCompute::Create(probe, capacity, wide);
+            std::clog << "[FactoredEndpoint] create returned: success=" << bool(created)
+                      << std::endl;
+            if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
+                ASSERT_FALSE(created);
+                EXPECT_NE(created.error().detail().find("binary64"), std::string::npos);
+                EXPECT_TRUE(probe.allocations.empty());
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), 0U);
+                continue;
+            }
+            ASSERT_TRUE(created) << created.error().Description();
+            ASSERT_EQ(loaded_shaders.size(), RetainedCompute::kStageCount);
+            for (std::size_t stage = 0; stage < loaded_shaders.size(); ++stage)
+                std::clog << "[FactoredEndpoint] selected_stage="
+                          << RetainedCompute::StageName(
+                                 static_cast<RetainedCompute::KernelStage>(stage))
+                          << ";sha256=" << loaded_shaders[stage] << std::endl;
+            std::clog
+                << "[FactoredEndpoint] selected_endpoint_sha256="
+                << loaded_shaders[static_cast<std::size_t>(RetainedCompute::KernelStage::kEndpoint)]
+                << std::endl;
+            auto& instance = **created;
+            ASSERT_EQ(instance.Capacity(), capacity);
+            ASSERT_EQ(probe.allocations.size(), 14U);
+            const auto allocation = (*opened)->BufferAllocationBytes();
+            const auto required = RetainedCompute::RequiredAllocationBytes(probe, capacity);
+            ASSERT_TRUE(required) << required.error().Description();
+            ASSERT_EQ(allocation, *required);
+            probe.capture_output = probe.allocations[5].handle;
+            ASSERT_EQ(probe.allocations[5].bytes % capacity, 0U);
+            const auto row_bytes = probe.allocations[5].bytes / capacity;
+            ASSERT_EQ(row_bytes, retained_program::kEndpointRowWords * sizeof(std::uint32_t));
+            ASSERT_GE(row_bytes, 504U * sizeof(std::uint32_t));
+            if (mask_useful) {
+                RecordProperty(decline_rte32
+                                   ? (wide ? "factored_endpoint_integer_fp64_exercised"
+                                           : "factored_endpoint_integer_default_exercised")
+                                   : (wide ? "factored_endpoint_normal_fp64_exercised"
+                                           : "factored_endpoint_normal_default_exercised"),
+                               1);
+            }
+            std::vector<RetainedEndpointOutput> outputs;
+            std::vector<std::byte> raw;
+            std::size_t endpoint_calls = 0;
+            const auto endpoint = [&](std::span<const RetainedEndpointInput> rows) {
+                probe.readbacks.clear();
+                const auto call = endpoint_calls++;
+                std::clog << "[FactoredEndpoint] begin: call=" << call << ";rows=" << rows.size()
+                          << ";wide=" << wide << ";decline_rte32=" << decline_rte32 << std::endl;
+                DispatchTiming timing;
+                const auto returned = instance.Endpoint(rows, &timing);
+                std::clog << "[FactoredEndpoint] returned: call=" << call
+                          << ";success=" << bool(returned)
+                          << ";pipeline_ms=" << timing.pipeline_setup_ms
+                          << ";submit_wait_ms=" << timing.submit_wait_ms
+                          << ";total_ms=" << timing.total_ms << std::endl;
+                ASSERT_TRUE(returned) << returned.error().Description();
+                ASSERT_EQ(returned->size(), rows.size());
+                ASSERT_EQ(probe.readbacks.size(), 1U);
+                ASSERT_EQ(probe.readbacks.front().size(), rows.size() * row_bytes);
+                outputs = *returned;
+                raw = probe.readbacks.front();
+                const auto digest = sirius::base::Sha256Hex(
+                    std::span(reinterpret_cast<const std::uint8_t*>(raw.data()), raw.size()));
+                ASSERT_TRUE(digest) << digest.error();
+                RecordProperty("factored_endpoint_readback_" + std::to_string(decline_rte32) + "_" +
+                                   std::to_string(wide) + "_" + std::to_string(call),
+                               "rows=" + std::to_string(rows.size()) +
+                                   ";bytes=" + std::to_string(raw.size()) + ";sha256=" + *digest);
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
+                EXPECT_EQ(probe.allocations.size(), 14U);
+            };
+            const auto agrees_item = [&](std::size_t row, const auto& item) {
+                SCOPED_TRACE(item.name);
+                ASSERT_TRUE(outputs[row].valid);
+                decltype(item.expected.data()) oracle = nullptr;
+                for (std::size_t i = 0; i < item.alternatives; ++i) {
+                    if (item.expected[i].component == outputs[row].component)
+                        oracle = &item.expected[i];
+                }
+                ASSERT_NE(oracle, nullptr) << "component=" << outputs[row].component;
+                for (std::size_t field = 0; field < 100; ++field) {
+                    SCOPED_TRACE(field);
+                    std::array<std::uint32_t, 5> words{};
+                    std::memcpy(
+                        words.data(),
+                        raw.data() + row * row_bytes + (4 + 5 * field) * sizeof(std::uint32_t),
+                        sizeof(words));
+                    const auto value = std::bit_cast<RetainedValue>(words);
+                    ASSERT_TRUE(value.IsRepresented());
+                    const auto reference = oracle->reference[field];
+                    const auto center = sirius::core::Twofold(value.high) +
+                                        sirius::core::Twofold(value.low) +
+                                        sirius::core::Twofold(value.tail);
+                    const double difference = std::abs(
+                        (center - sirius::core::Twofold(reference.high, reference.low)).Rounded());
+                    ASSERT_TRUE(std::isfinite(difference));
+                    ASSERT_GE(oracle->gap[field], 0.0);
+                    EXPECT_LE(difference, value.radius + oracle->gap[field] +
+                                              1e-29 * (1 + std::abs(reference.high)));
+                    EXPECT_LE(difference, 1e-11 * (1 + std::abs(reference.high)));
+                    if (field >= 20) {
+                        const auto& decoded = field < 60 ? outputs[row].phase[field - 20]
+                                                         : outputs[row].physical[field - 60];
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(decoded)), words);
+                    }
+                }
+            };
+            const auto agrees = [&](std::size_t row, std::size_t reference_row) {
+                ASSERT_NO_FATAL_FAILURE(agrees_item(row, fixture::cases[reference_row]));
+            };
+            ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
+            for (std::size_t row = 0; row < inputs.size(); ++row) {
+                ASSERT_NO_FATAL_FAILURE(agrees(row, row));
+            }
+            const auto initial_raw = raw;
+            const auto same_row = [&](std::size_t row, std::size_t reference_row) {
+                const auto current = std::span(raw).subspan(row * row_bytes, row_bytes);
+                const auto initial =
+                    std::span(initial_raw).subspan(reference_row * row_bytes, row_bytes);
+                EXPECT_TRUE(
+                    std::equal(current.begin(), current.end(), initial.begin(), initial.end()))
+                    << "raw row " << row << " reference row " << reference_row;
+            };
+            // Compare every active status, stored root, input and scratch word
+            // within this arithmetic route; inactive capacity is not observed.
+            ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
+            EXPECT_EQ(raw, initial_raw);
+            auto reordered = inputs;
+            std::reverse(reordered.begin(), reordered.end());
+            ASSERT_NO_FATAL_FAILURE(endpoint(reordered));
+            for (std::size_t row = 0; row < inputs.size(); ++row) {
+                same_row(row, inputs.size() - 1 - row);
+            }
+            constexpr std::array<std::size_t, 4> order{18, 16, 28, 0};
+            std::vector<RetainedEndpointInput> shrunk;
+            for (const auto row : order) shrunk.push_back(inputs[row]);
+            ASSERT_NO_FATAL_FAILURE(endpoint(shrunk));
+            for (std::size_t row = 0; row < order.size(); ++row) {
+                same_row(row, order[row]);
+                ASSERT_NO_FATAL_FAILURE(agrees(row, order[row]));
+            }
+            // The distinct large-column boundary witnesses remain admitted
+            // beside late normalization failures and a nonphysical chart.
+            constexpr std::array<std::size_t, 5> good{16, 17, 18, 19, 28};
+            ASSERT_STREQ(fixture::cases[16].name, "weak-large-gradient-outgoing");
+            ASSERT_STREQ(fixture::cases[18].name, "small-radius-large-X-outgoing");
+            std::vector<RetainedEndpointInput> mixed;
+            for (const auto row : good) mixed.push_back(inputs[row]);
+            auto bad = inputs[16];
+            bad.values[43].valid = 0;
+            mixed.push_back(bad);
+            bad = inputs[18];
+            bad.values[0].radius = -0.0F;
+            mixed.push_back(bad);
+            bad = inputs[0];
+            bad.values[44] = RetainedValue::FromDouble(2);
+            mixed.push_back(bad);
+            ASSERT_NO_FATAL_FAILURE(endpoint(mixed));
+            for (std::size_t row = 0; row < good.size(); ++row) {
+                same_row(row, good[row]);
+                ASSERT_NO_FATAL_FAILURE(agrees(row, good[row]));
+            }
+            for (std::size_t row = good.size(); row < mixed.size(); ++row) {
+                EXPECT_FALSE(outputs[row].valid);
+                EXPECT_EQ(outputs[row].component, 4U);
+                for (const auto* record : {&outputs[row].phase, &outputs[row].physical}) {
+                    for (const auto& value : *record) {
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                    }
+                }
+            }
+            ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
+            EXPECT_EQ(raw, initial_raw);
+            for (std::size_t row = 0; row < inputs.size(); ++row) {
+                ASSERT_NO_FATAL_FAILURE(agrees(row, row));
+            }
+
+            // The independent Schwarzschild authority retains all 100 roots,
+            // including both projected physical and covariant columns. Four
+            // large-axis probes permit refusal, but every admitted row must
+            // meet the same enclosure, precision and decoding checks above.
+            const auto erased = [&](std::size_t row) {
+                EXPECT_FALSE(outputs[row].valid);
+                EXPECT_EQ(outputs[row].component, 4U);
+                for (const auto* record : {&outputs[row].phase, &outputs[row].physical}) {
+                    for (const auto& value : *record) {
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                    }
+                }
+            };
+            ASSERT_NO_FATAL_FAILURE(endpoint(additional_inputs));
+            for (std::size_t row = 0; row < additional_inputs.size(); ++row) {
+                const auto& item = additional::cases[row];
+                SCOPED_TRACE(item.name);
+                if (item.admission_required) {
+                    ASSERT_TRUE(outputs[row].valid);
+                }
+                if (outputs[row].valid) {
+                    ASSERT_NO_FATAL_FAILURE(agrees_item(row, item));
+                } else {
+                    ASSERT_NO_FATAL_FAILURE(erased(row));
+                }
+            }
+            const auto additional_raw = raw;
+            ASSERT_NO_FATAL_FAILURE(endpoint(additional_inputs));
+            EXPECT_EQ(raw, additional_raw);
+
+            // Locate the second immutable table from the first table's final
+            // layer offset, rather than guessing its physical input position.
+            const auto& program = retained_program::kEndpointProgram;
+            ASSERT_GE(program.size(), 103U);
+            ASSERT_EQ(program[1], 612U);
+            ASSERT_EQ(program[2], 100U);
+            std::size_t specialized = 103 + 5 * program[0];
+            ASSERT_LT(specialized, program.size());
+            ASSERT_EQ(program[specialized], 0U);
+            while (specialized < program.size() && program[specialized] != program[0]) {
+                ++specialized;
+            }
+            ++specialized;
+            ASSERT_LT(specialized + 102, program.size());
+            ASSERT_EQ(program[specialized + 1], program[1]);
+            ASSERT_EQ(program[specialized + 2], 100U);
+            const auto specialized_offsets = specialized + 103 + 5 * program[specialized];
+            ASSERT_LT(specialized_offsets, program.size());
+            ASSERT_EQ(program[specialized_offsets], 0U);
+            ASSERT_EQ(program.back(), program[specialized]);
+            const auto topology = [&](std::size_t base, std::size_t offsets, std::size_t end,
+                                      std::uint32_t prefix) {
+                ASSERT_LT(offsets, end);
+                ASSERT_EQ(program[offsets], 0U);
+                ASSERT_EQ(program[end - 1], program[base]);
+                ASSERT_NE(std::find(program.begin() + offsets, program.begin() + end, prefix),
+                          program.begin() + end);
+                for (std::size_t i = offsets + 1; i < end; ++i) {
+                    ASSERT_GT(program[i], program[i - 1]);
+                    ASSERT_LE(program[i], program[base]);
+                    ASSERT_LE(program[i] - program[i - 1], 64U);
+                }
+                for (std::size_t node = 0; node < program[base]; ++node) {
+                    const auto instruction = base + 103 + 5 * node;
+                    if (program[instruction] == 1 && program[instruction + 2] >= 45 &&
+                        program[instruction + 2] <= 52) {
+                        ASSERT_GE(node, prefix);
+                    }
+                }
+            };
+            ASSERT_NO_FATAL_FAILURE(topology(0, 103 + 5 * program[0], specialized, 250));
+            ASSERT_NO_FATAL_FAILURE(
+                topology(specialized, specialized_offsets, program.size(), 202));
+
+            std::vector<RetainedEndpointInput> selection;
+            for (std::size_t row = 20; row < 26; ++row) selection.push_back(inputs[row]);
+            // This raw overlapping packet normalizes to the first witness's
+            // exact zero spin; the selector must use all normalized words.
+            auto normalized_zero = inputs[20];
+            normalized_zero.values[1] = {0.5F, -0.5F, -0.0F, 0.0F, 1};
+            selection.push_back(normalized_zero);
+            const auto specialized_rows = selection.size();
+            const auto general_row = selection.size();
+            selection.push_back(inputs[0]);
+            const auto flat_row = selection.size();
+            ASSERT_STREQ(sirius::test::retained_endpoint::cases[14].name, "analytic-flat");
+            selection.push_back(std::bit_cast<RetainedEndpointInput>(
+                sirius::test::retained_endpoint::cases[14].input));
+            for (std::size_t parameter = 1; parameter <= 3; ++parameter) {
+                for (unsigned kind = 0; kind < 3; ++kind) {
+                    auto row = inputs[20];
+                    if (kind == 0) row.values[parameter] = RetainedValue::FromDouble(0x1p-80);
+                    if (kind == 1) row.values[parameter].low = 0x1p-90F;
+                    if (kind == 2) row.values[parameter].radius = 0x1p-90F;
+                    selection.push_back(row);
+                }
+            }
+            const auto good_rows = selection.size();
+            for (std::size_t parameter = 1; parameter <= 3; ++parameter) {
+                auto row = inputs[20];
+                row.values[parameter].radius = -0.0F;
+                selection.push_back(row);
+            }
+            const auto singular_first = selection.size();
+            for (const bool uncertain : {false, true}) {
+                auto row = inputs[20];
+                for (std::size_t field = 5; field < 8; ++field) {
+                    row.values[field] = RetainedValue::FromDouble(0);
+                }
+                if (uncertain) {
+                    row.values[5] = RetainedValue::FromDouble(.25);
+                    row.values[5].radius = .5F;
+                }
+                selection.push_back(row);
+            }
+            ASSERT_EQ(selection.size(), 23U);
+            ASSERT_LE(selection.size(), capacity);
+            ASSERT_NO_FATAL_FAILURE(endpoint(selection));
+            for (std::size_t row = 0; row < good_rows; ++row) {
+                ASSERT_TRUE(outputs[row].valid) << row;
+            }
+            for (std::size_t row = good_rows; row < selection.size(); ++row) {
+                // Singular profiles may decline after publishing a metric
+                // prefix, so only the decoded phase/physical erasure is required.
+                ASSERT_NO_FATAL_FAILURE(erased(row));
+            }
+            for (std::size_t row = 0; row < 6; ++row) {
+                ASSERT_NO_FATAL_FAILURE(agrees_item(row, fixture::cases[20 + row]));
+            }
+            ASSERT_NO_FATAL_FAILURE(agrees_item(6, fixture::cases[20]));
+            ASSERT_NO_FATAL_FAILURE(agrees_item(general_row, fixture::cases[0]));
+            const auto selection_raw = raw;
+            const auto same_selection_row = [&](std::size_t row, std::size_t reference_row) {
+                const auto current = std::span(raw).subspan(row * row_bytes, row_bytes);
+                const auto initial =
+                    std::span(selection_raw).subspan(reference_row * row_bytes, row_bytes);
+                EXPECT_TRUE(
+                    std::equal(current.begin(), current.end(), initial.begin(), initial.end()))
+                    << "selection row " << row << " reference row " << reference_row;
+            };
+            const auto public_erased = [&](std::size_t row) {
+                ASSERT_NO_FATAL_FAILURE(erased(row));
+                const auto public_words =
+                    std::span(raw).subspan(row * row_bytes, 504U * sizeof(std::uint32_t));
+                EXPECT_TRUE(std::all_of(public_words.begin(), public_words.end(),
+                                        [](std::byte word) { return word == std::byte{}; }));
+            };
+
+            // Ordinary Endpoint calls upload only the active packet prefix
+            // after creation. Explicit full-span writes poison and restore the
+            // cached second-table header without changing the general table.
+            const auto endpoint_input = probe.allocations[4].handle;
+            const auto table = 1 + instance.Capacity() * 225;
+            std::vector<std::uint32_t> complete_input(table + program.size());
+            complete_input[0] = static_cast<std::uint32_t>(instance.Capacity());
+            std::memcpy(complete_input.data() + 1, selection.data(),
+                        selection.size() * sizeof(RetainedEndpointInput));
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            std::size_t changed_uploads = 0;
+            probe.before_write = [&](BufferHandle buffer, std::span<std::byte> data) {
+                if (buffer.value != endpoint_input.value) return;
+                const auto table_bytes = table * sizeof(std::uint32_t);
+                ASSERT_EQ(data.size(), table_bytes + program.size() * sizeof(std::uint32_t));
+                ASSERT_EQ(std::memcmp(data.data() + table_bytes, program.data(),
+                                      program.size() * sizeof(std::uint32_t)),
+                          0);
+                const auto wrong_registers = program[1] ^ 1U;
+                std::memcpy(data.data() + table_bytes + (specialized + 1) * sizeof(std::uint32_t),
+                            &wrong_registers, sizeof(wrong_registers));
+                ++changed_uploads;
+            };
+            ASSERT_TRUE(
+                probe.WriteBuffer(endpoint_input, std::as_bytes(std::span(complete_input))));
+            probe.before_write = {};
+            ASSERT_NO_FATAL_FAILURE(endpoint(selection));
+            ASSERT_EQ(changed_uploads, 1U);
+            for (std::size_t row = 0; row < specialized_rows; ++row) {
+                ASSERT_NO_FATAL_FAILURE(public_erased(row));
+            }
+            for (std::size_t row = specialized_rows; row < good_rows; ++row) {
+                ASSERT_TRUE(outputs[row].valid) << row;
+                same_selection_row(row, row);
+            }
+            for (std::size_t row = good_rows; row < singular_first; ++row) {
+                ASSERT_NO_FATAL_FAILURE(erased(row));
+            }
+            for (std::size_t row = singular_first; row < selection.size(); ++row) {
+                ASSERT_NO_FATAL_FAILURE(public_erased(row));
+            }
+            ASSERT_TRUE(
+                probe.WriteBuffer(endpoint_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(endpoint(selection));
+            EXPECT_EQ(raw, selection_raw);
+            const std::array<std::size_t, 4> selection_order{specialized_rows - 1, general_row,
+                                                             flat_row, good_rows - 1};
+            std::vector<RetainedEndpointInput> selection_shrunk;
+            for (const auto row : selection_order) selection_shrunk.push_back(selection[row]);
+            ASSERT_NO_FATAL_FAILURE(endpoint(selection_shrunk));
+            for (std::size_t row = 0; row < selection_order.size(); ++row) {
+                ASSERT_TRUE(outputs[row].valid);
+                same_selection_row(row, selection_order[row]);
+            }
+            ASSERT_NO_FATAL_FAILURE(endpoint(std::span(inputs).subspan(20, 1)));
+            ASSERT_NO_FATAL_FAILURE(agrees_item(0, fixture::cases[20]));
+            same_selection_row(0, 0);
+            ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
+            EXPECT_EQ(raw, initial_raw);
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
 TEST_F(RetainedComputeTest, ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
     const auto allocation = device->BufferAllocationBytes();
@@ -320,14 +2671,395 @@ TEST_F(RetainedComputeTest, ProjectedEndpointsKeepPhysicalColumnsAndRetainedCont
     }
     inputs[0].values[4].valid = 0;
     inputs[1].values[8] = RetainedValue::FromDouble(100);
+    // Validly packed flat inputs reach Project, where their tangent products
+    // refuse. Complete cached invalid terms must retain that row's refusal.
+    ASSERT_STREQ(sirius::test::retained_endpoint::cases[14].name, "analytic-flat");
+    inputs[2] =
+        std::bit_cast<RetainedEndpointInput>(sirius::test::retained_endpoint::cases[14].input);
+    inputs[2].values[8] = RetainedValue::FromDouble(0x1p70);
     const auto invalid = compute->Endpoint(inputs);
     ASSERT_TRUE(invalid) << invalid.error().Description();
-    for (std::size_t row = 0; row < 2; ++row) {
+    for (std::size_t row = 0; row < 3; ++row) {
         EXPECT_FALSE((*invalid)[row].valid);
         for (const auto& value : (*invalid)[row].physical) EXPECT_EQ(value.valid, 0U);
         for (const auto& value : (*invalid)[row].phase) EXPECT_EQ(value.valid, 0U);
     }
+    // Both represented temporal roots near -1 +/- 2^-45 fail the denominator
+    // guard: at M=1,r=1,chart=+1 their denominator magnitudes (~2^-45) are
+    // below its ~2^-43 cutoff. The accepted root must therefore be spatial.
+    {
+        SCOPED_TRACE("guarded temporal roots use spatial fallback");
+        RetainedEndpointInput fallback_input;
+        fallback_input.values.fill(RetainedValue::FromDouble(0));
+        fallback_input.values[0] = RetainedValue::FromDouble(1);
+        fallback_input.values[5] = RetainedValue::FromDouble(1);
+        fallback_input.values[9] = RetainedValue::FromDouble(-.5);
+        fallback_input.values[10] = std::bit_cast<RetainedValue>(
+            std::array<std::uint32_t, 5>{0x3f000000U, 0x92800000U, 0U, 0U, 1U});
+        fallback_input.values[44] = RetainedValue::FromDouble(1);
+        const std::array fallback_inputs{fallback_input};
+        const auto fallback = compute->Endpoint(fallback_inputs);
+        ASSERT_TRUE(fallback) << fallback.error().Description();
+        ASSERT_EQ(fallback->size(), 1U);
+        const auto& endpoint = fallback->front();
+        ASSERT_TRUE(endpoint.valid);
+        ASSERT_TRUE(endpoint.component == 1 || endpoint.component == 2);
+        // Independent dyadic centers retain delta in low limbs. Component 1
+        // approximation error is below 13*delta^2 < 8.5e-54; component 2 is exact.
+        constexpr double delta = 0x1p-90;
+        using sirius::core::Twofold;
+        std::array<Twofold, 40> phase_reference{}, physical_reference{};
+        phase_reference[1] = physical_reference[1] = Twofold(1);
+        physical_reference[4] = Twofold(-1);
+        if (endpoint.component == 1) {
+            phase_reference[4] = Twofold(-2 * delta);
+            phase_reference[5] = Twofold(-.5, -3 * delta);
+            phase_reference[6] = Twofold(.5, -delta);
+            physical_reference[5] = physical_reference[6] = Twofold(.5, -delta);
+        } else {
+            phase_reference[5] = Twofold(-.5);
+            phase_reference[6] = Twofold(.5);
+            physical_reference[5] = physical_reference[6] = Twofold(.5);
+        }
+        for (std::size_t i = 0; i < 80; ++i) {
+            SCOPED_TRACE(i);
+            const auto& value = i < 40 ? endpoint.phase[i] : endpoint.physical[i - 40];
+            const auto& oracle = i < 40 ? phase_reference[i] : physical_reference[i - 40];
+            const auto center = Twofold(value.high) + Twofold(value.low) + Twofold(value.tail);
+            const double difference = std::abs((center - oracle).Rounded());
+            EXPECT_LE(difference, value.radius + 1e-29 * (1 + std::abs(oracle.hi)));
+            EXPECT_LE(difference, 1e-11 * (1 + std::abs(oracle.hi)));
+        }
+    }
+    // Curved projection must refuse invalid retained tangent products before
+    // publishing a root. Observe the prefix and untouched
+    // projected-input slots so a later suffix refusal cannot hide this failure.
+    RecordProperty("curved_projection_default_exercised", 0);
+    RecordProperty("curved_projection_fp64_exercised", 0);
+    const auto curved_inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(curved_inventory) << curved_inventory.error().Description();
+    const auto curved_index = ResolveVulkanDeviceIndex(*curved_inventory);
+    ASSERT_TRUE(curved_index) << curved_index.error().Description();
+    for (const bool wide : {false, true}) {
+        SCOPED_TRACE(wide ? "curved fp64 projection refusal" : "curved default projection refusal");
+        auto opened = CreateVulkanDevice(*curved_index);
+        ASSERT_TRUE(opened) << opened.error().Description();
+        ASSERT_EQ((*opened)->Info(), device->Info());
+        ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+        EXPECT_EQ((*opened)->BufferAllocationBytes(), 0U);
+        const auto required = RetainedCompute::RequiredAllocationBytes(**opened, 1);
+        ASSERT_TRUE(required) << required.error().Description();
+        TransferProbeDevice probe(**opened);
+        auto created = RetainedCompute::Create(probe, 1, wide);
+        if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
+            ASSERT_FALSE(created);
+            EXPECT_TRUE(probe.allocations.empty());
+            continue;
+        }
+        ASSERT_TRUE(created) << created.error().Description();
+        EXPECT_EQ((*opened)->BufferAllocationBytes(), *required);
+        ASSERT_EQ(probe.allocations.size(), 14U);
+        probe.capture_output = probe.allocations[5].handle;
+        namespace curved = sirius::test::retained_schwarzschild_endpoint;
+        ASSERT_STREQ(curved::cases[0].name, "axis-1-negative-outgoing");
+        const auto original = std::bit_cast<RetainedEndpointInput>(curved::cases[0].input);
+        const std::array original_rows{original};
+        auto accepted = (*created)->Endpoint(original_rows);
+        ASSERT_TRUE(accepted) << accepted.error().Description();
+        ASSERT_EQ(accepted->size(), 1U);
+        ASSERT_TRUE(accepted->front().valid);
+        ASSERT_EQ(probe.readbacks.size(), 1U);
+        const auto accepted_raw = probe.readbacks.front();
+        ASSERT_EQ(accepted_raw.size(), retained_program::kEndpointRowWords * sizeof(std::uint32_t));
+        auto bad = original;
+        bad.values[10] = RetainedValue::FromDouble(0x1p80);
+        const std::array bad_rows{bad};
+        probe.readbacks.clear();
+        const auto refused = (*created)->Endpoint(bad_rows);
+        ASSERT_TRUE(refused) << refused.error().Description();
+        ASSERT_EQ(refused->size(), 1U);
+        ASSERT_FALSE(refused->front().valid);
+        ASSERT_EQ(probe.readbacks.size(), 1U);
+        const auto& refused_raw = probe.readbacks.front();
+        ASSERT_EQ(refused_raw.size(), accepted_raw.size());
+        const auto words = [&](std::size_t first) {
+            std::array<std::uint32_t, 5> value{};
+            std::memcpy(value.data(), refused_raw.data() + first * sizeof(std::uint32_t),
+                        sizeof(value));
+            return value;
+        };
+        for (std::size_t field = 0; field < 20; ++field) {
+            SCOPED_TRACE(field);
+            EXPECT_TRUE(std::bit_cast<RetainedValue>(words(4 + 5 * field)).IsRepresented());
+            if (field == 18) continue;
+            const auto offset = (4 + 5 * field) * sizeof(std::uint32_t);
+            EXPECT_EQ(std::memcmp(refused_raw.data() + offset, accepted_raw.data() + offset,
+                                  5 * sizeof(std::uint32_t)),
+                      0);
+        }
+        const std::array<std::uint32_t, 5> one{0x3f800000U, 0U, 0U, 0U, 1U};
+        const std::array<std::uint32_t, 5> zero{0U, 0U, 0U, 0U, 1U};
+        // g_yy is exactly one; subtraction can leave signed zero low limbs.
+        // Its complete word identity is already checked against the valid row.
+        const auto transverse_metric = words(4 + 5 * 10);
+        EXPECT_EQ(transverse_metric[0], 0x3f800000U);
+        EXPECT_EQ(transverse_metric[1] & 0x7fffffffU, 0U);
+        EXPECT_EQ(transverse_metric[2] & 0x7fffffffU, 0U);
+        EXPECT_EQ(transverse_metric[3], 0U);
+        EXPECT_EQ(transverse_metric[4], 1U);
+        EXPECT_EQ(words(4 + 5 * 18), (std::array<std::uint32_t, 5>{0x67800000U, 0U, 0U, 0U, 1U}));
+        for (std::size_t field = 45; field < 53; ++field)
+            EXPECT_EQ(words(504 + 5 * field), field == 49 ? one : zero);
+        for (const auto& value : refused->front().phase) EXPECT_EQ(value.valid, 0U);
+        for (const auto& value : refused->front().physical) EXPECT_EQ(value.valid, 0U);
+        const auto erased = [&](std::size_t first, std::size_t count) {
+            const auto bytes =
+                std::span(refused_raw)
+                    .subspan(first * sizeof(std::uint32_t), count * sizeof(std::uint32_t));
+            EXPECT_TRUE(std::all_of(bytes.begin(), bytes.end(),
+                                    [](std::byte word) { return word == std::byte{}; }));
+        };
+        erased(0, 4);
+        erased(104, 400);
+        RecordProperty(
+            wide ? "curved_projection_fp64_exercised" : "curved_projection_default_exercised", 1);
+        probe.readbacks.clear();
+        const auto recovered = (*created)->Endpoint(original_rows);
+        ASSERT_TRUE(recovered) << recovered.error().Description();
+        ASSERT_EQ(recovered->size(), 1U);
+        ASSERT_TRUE(recovered->front().valid);
+        ASSERT_EQ(probe.readbacks.size(), 1U);
+        EXPECT_EQ(probe.readbacks.front(), accepted_raw);
+    }
     EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+
+    // Compare the optional cooperative input path with the real integer
+    // Endpoint module, including the packed prefix left by an early refusal.
+    // The reference only declines RTE32; every transfer and submission is real.
+    RecordProperty("endpoint_normal_default_exercised", 0);
+    RecordProperty("endpoint_normal_fp64_exercised", 0);
+    if (!RetainedUsesPortableArithmetic(device->Info()) || !device->Info().rounds_fp32_to_nearest)
+        return;
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    for (const bool wide : {false, true}) {
+        SCOPED_TRACE(wide ? "fp64 products input parity" : "default products input parity");
+        const auto current_inventory = EnumerateVulkanDevices();
+        ASSERT_TRUE(current_inventory) << current_inventory.error().Description();
+        ASSERT_EQ(*current_inventory, *inventory);
+        auto normal_device = CreateVulkanDevice(*index);
+        auto integer_device = CreateVulkanDevice(*index);
+        ASSERT_TRUE(normal_device) << normal_device.error().Description();
+        ASSERT_TRUE(integer_device) << integer_device.error().Description();
+        ASSERT_EQ((*normal_device)->Info(), device->Info());
+        ASSERT_EQ((*integer_device)->Info(), device->Info());
+        ASSERT_TRUE((*normal_device)->SetBufferAllocationLimit(8 * 1024 * 1024));
+        ASSERT_TRUE((*integer_device)->SetBufferAllocationLimit(8 * 1024 * 1024));
+        ASSERT_EQ((*normal_device)->BufferAllocationBytes(), 0U);
+        ASSERT_EQ((*integer_device)->BufferAllocationBytes(), 0U);
+        TransferProbeDevice normal_probe(**normal_device);
+        TransferProbeDevice integer_probe(**integer_device, true);
+        auto expected_info = device->Info();
+        expected_info.rounds_fp32_to_nearest = false;
+        EXPECT_EQ(integer_probe.Info(), expected_info);
+        auto normal_created = RetainedCompute::Create(normal_probe, 24, wide);
+        auto integer_created = RetainedCompute::Create(integer_probe, 24, wide);
+        if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
+            ASSERT_FALSE(normal_created);
+            ASSERT_FALSE(integer_created);
+            EXPECT_NE(normal_created.error().detail().find("binary64"), std::string::npos);
+            EXPECT_NE(integer_created.error().detail().find("binary64"), std::string::npos);
+            EXPECT_TRUE(normal_probe.allocations.empty());
+            EXPECT_TRUE(integer_probe.allocations.empty());
+            EXPECT_EQ((*normal_device)->BufferAllocationBytes(), 0U);
+            EXPECT_EQ((*integer_device)->BufferAllocationBytes(), 0U);
+            continue;
+        }
+        ASSERT_TRUE(normal_created) << normal_created.error().Description();
+        ASSERT_TRUE(integer_created) << integer_created.error().Description();
+        auto& normal_compute = **normal_created;
+        auto& integer_compute = **integer_created;
+        const auto normal_required = RetainedCompute::RequiredAllocationBytes(normal_probe, 24);
+        const auto integer_required = RetainedCompute::RequiredAllocationBytes(integer_probe, 24);
+        ASSERT_TRUE(normal_required) << normal_required.error().Description();
+        ASSERT_TRUE(integer_required) << integer_required.error().Description();
+        EXPECT_EQ((*normal_device)->BufferAllocationBytes(), *normal_required);
+        EXPECT_EQ((*integer_device)->BufferAllocationBytes(), *integer_required);
+        ASSERT_EQ(normal_probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+        ASSERT_EQ(integer_probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+        normal_probe.capture_output = normal_probe.allocations[5].handle;
+        integer_probe.capture_output = integer_probe.allocations[5].handle;
+        const auto row_bytes = normal_probe.allocations[5].bytes / normal_compute.Capacity();
+        ASSERT_EQ(integer_probe.allocations[5].bytes / integer_compute.Capacity(), row_bytes);
+        ASSERT_GE(row_bytes, 769U * sizeof(std::uint32_t));
+        RecordProperty(
+            wide ? "endpoint_normal_fp64_exercised" : "endpoint_normal_default_exercised", 1);
+        const auto same_output = [](const RetainedEndpointOutput& actual,
+                                    const RetainedEndpointOutput& expected) {
+            EXPECT_EQ(actual.valid, expected.valid);
+            EXPECT_EQ(actual.component, expected.component);
+            for (std::size_t i = 0; i < 80; ++i) {
+                SCOPED_TRACE(i);
+                const auto& a = i < 40 ? actual.phase[i] : actual.physical[i - 40];
+                const auto& b = i < 40 ? expected.phase[i] : expected.physical[i - 40];
+                EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(a)),
+                          (std::bit_cast<std::array<std::uint32_t, 5>>(b)));
+            }
+        };
+        const auto erased = [](const RetainedEndpointOutput& output) {
+            EXPECT_FALSE(output.valid);
+            EXPECT_EQ(output.component, 4U);
+            for (const auto* record : {&output.phase, &output.physical}) {
+                for (const auto& value : *record) {
+                    EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                              (std::array<std::uint32_t, 5>{}));
+                }
+            }
+        };
+        std::vector<RetainedEndpointOutput> paired_output;
+        const auto compare = [&](std::span<const RetainedEndpointInput> rows) {
+            normal_probe.readbacks.clear();
+            integer_probe.readbacks.clear();
+            const auto normal = normal_compute.Endpoint(rows);
+            const auto integer = integer_compute.Endpoint(rows);
+            ASSERT_TRUE(normal) << normal.error().Description();
+            ASSERT_TRUE(integer) << integer.error().Description();
+            ASSERT_EQ(normal->size(), rows.size());
+            ASSERT_EQ(integer->size(), rows.size());
+            ASSERT_EQ(normal_probe.readbacks.size(), 1U);
+            ASSERT_EQ(integer_probe.readbacks.size(), 1U);
+            ASSERT_EQ(normal_probe.readbacks.front().size(), rows.size() * row_bytes);
+            ASSERT_EQ(integer_probe.readbacks.front().size(), rows.size() * row_bytes);
+            EXPECT_EQ(normal_probe.readbacks.front(), integer_probe.readbacks.front());
+            for (std::size_t row = 0; row < rows.size(); ++row) {
+                SCOPED_TRACE(row);
+                same_output((*normal)[row], (*integer)[row]);
+            }
+            paired_output = *normal;
+            EXPECT_EQ((*normal_device)->BufferAllocationBytes(), *normal_required);
+            EXPECT_EQ((*integer_device)->BufferAllocationBytes(), *integer_required);
+        };
+        std::vector<RetainedEndpointInput> original;
+        for (const auto& fixture : sirius::test::retained_endpoint::cases)
+            original.push_back(std::bit_cast<RetainedEndpointInput>(fixture.input));
+        ASSERT_NO_FATAL_FAILURE(compare(original));
+        const auto original_output = paired_output;
+        for (std::size_t row = 0; row < original.size(); ++row) {
+            const auto& fixture = sirius::test::retained_endpoint::cases[row];
+            SCOPED_TRACE(fixture.name);
+            const auto& output = original_output[row];
+            ASSERT_TRUE(output.valid);
+            EXPECT_EQ(output.component, fixture.component);
+            for (std::size_t i = 0; i < 80; ++i) {
+                SCOPED_TRACE(i);
+                const auto& value = i < 40 ? output.phase[i] : output.physical[i - 40];
+                const auto oracle = fixture.reference[i];
+                const auto center = sirius::core::Twofold(value.high) +
+                                    sirius::core::Twofold(value.low) +
+                                    sirius::core::Twofold(value.tail);
+                const double difference =
+                    std::abs((center - sirius::core::Twofold(oracle.high, oracle.low)).Rounded());
+                EXPECT_LE(difference, value.radius + 1e-29 * (1 + std::abs(oracle.high)));
+                EXPECT_LE(difference, 1e-11 * (1 + std::abs(oracle.high)));
+            }
+        }
+        auto continued = original;
+        for (std::size_t row = 0; row < continued.size(); ++row)
+            std::copy(original_output[row].phase.begin(), original_output[row].phase.end(),
+                      continued[row].values.begin() + 4);
+        ASSERT_NO_FATAL_FAILURE(compare(continued));
+        for (std::size_t row = 0; row < continued.size(); ++row) {
+            ASSERT_TRUE(paired_output[row].valid);
+            for (std::size_t i = 0; i < 40; ++i)
+                EXPECT_NEAR(paired_output[row].physical[i].Center(),
+                            original_output[row].physical[i].Center(),
+                            1e-11 * (1 + std::abs(original_output[row].physical[i].Center())));
+        }
+        auto reordered = original;
+        std::reverse(reordered.begin(), reordered.end());
+        ASSERT_NO_FATAL_FAILURE(compare(reordered));
+        for (std::size_t row = 0; row < reordered.size(); ++row)
+            same_output(paired_output[row], original_output[original.size() - 1 - row]);
+        constexpr std::size_t flat_index = 14;
+        ASSERT_STREQ(sirius::test::retained_endpoint::cases[flat_index].name, "analytic-flat");
+        const std::array shrunk{original[flat_index], original.front()};
+        ASSERT_NO_FATAL_FAILURE(compare(shrunk));
+        same_output(paired_output[0], original_output[flat_index]);
+        same_output(paired_output[1], original_output.front());
+
+        // One earliest invalid flag at every input position, surrounded by
+        // good flat/curved rows, discriminates prefix length and row isolation.
+        for (std::size_t first = 0; first < 45; first += 22) {
+            const auto count = std::min<std::size_t>(22, 45 - first);
+            std::vector<RetainedEndpointInput> rows{original[flat_index]};
+            for (std::size_t offset = 0; offset < count; ++offset) {
+                auto bad = original.front();
+                bad.values[first + offset].valid = 0;
+                rows.push_back(bad);
+            }
+            rows.push_back(original.front());
+            ASSERT_NO_FATAL_FAILURE(compare(rows));
+            same_output(paired_output.front(), original_output[flat_index]);
+            same_output(paired_output.back(), original_output.front());
+            for (std::size_t offset = 0; offset < count; ++offset) {
+                SCOPED_TRACE(first + offset);
+                const auto row = offset + 1;
+                erased(paired_output[row]);
+                for (std::size_t i = 0; i < 45; ++i) {
+                    std::uint32_t valid_word = 0;
+                    const auto address = row * row_bytes + (504 + 5 * i + 4) * sizeof(valid_word);
+                    std::memcpy(&valid_word, normal_probe.readbacks.front().data() + address,
+                                sizeof(valid_word));
+                    EXPECT_EQ(valid_word, i < first + offset ? 1U : 0U);
+                }
+            }
+        }
+        auto two_invalid = original.front();
+        two_invalid.values[3].valid = two_invalid.values[44].valid = 0;
+        const std::array ordered_refusal{two_invalid, original.front()};
+        ASSERT_NO_FATAL_FAILURE(compare(ordered_refusal));
+        erased(paired_output.front());
+        same_output(paired_output.back(), original_output.front());
+        for (std::size_t i = 0; i < 45; ++i) {
+            std::uint32_t valid_word = 0;
+            std::memcpy(
+                &valid_word,
+                normal_probe.readbacks.front().data() + (504 + 5 * i + 4) * sizeof(valid_word),
+                sizeof(valid_word));
+            EXPECT_EQ(valid_word, i < 3 ? 1U : 0U);
+        }
+
+        std::vector<RetainedEndpointInput> malformed(11, original.front());
+        malformed[0].values[44].high = std::numeric_limits<float>::quiet_NaN();
+        malformed[1].values[43].low = std::numeric_limits<float>::infinity();
+        malformed[2].values[42].tail = std::numeric_limits<float>::quiet_NaN();
+        malformed[3].values[43].radius = -1;
+        malformed[4].values[44].radius = std::numeric_limits<float>::infinity();
+        malformed[5].values[44].valid = 2;
+        malformed[6].values[44] = RetainedValue::FromDouble(0);
+        malformed[7].values[44] = RetainedValue::FromDouble(2);
+        malformed[8].values[44] = {-1, 0x1p-24f, 0, 0, 1};
+        malformed[9].values[3] = RetainedValue::FromDouble(.01);  // Existing nonzero spin.
+        malformed[10].values[41].high = 0x1p121f;
+        malformed.push_back(original.front());
+        ASSERT_NO_FATAL_FAILURE(compare(malformed));
+        for (std::size_t row = 0; row + 1 < malformed.size(); ++row) {
+            SCOPED_TRACE(row);
+            erased(paired_output[row]);
+        }
+        same_output(paired_output.back(), original_output.front());
+        auto noncanonical = original.front();
+        noncanonical.values[44] = {-1, .5f, -.5f, 0, 1};
+        const std::array recovered{noncanonical, original[flat_index], original.front()};
+        ASSERT_NO_FATAL_FAILURE(compare(recovered));
+        same_output(paired_output[0], original_output.front());
+        same_output(paired_output[1], original_output[flat_index]);
+        same_output(paired_output[2], original_output.front());
+        // RetainedCompute does not release numeric buffer handles itself;
+        // both entire logical device owners leave scope before the next mode.
+    }
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
@@ -335,97 +3067,404 @@ TEST_F(RetainedComputeTest, ProjectedEndpointsKeepPhysicalColumnsAndRetainedCont
 
 TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivatives) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
-    const auto allocation = device->BufferAllocationBytes();
-    const auto& cases = sirius::test::retained_dense::cases;
-    for (std::size_t begin = 0; begin < cases.size(); begin += compute->Capacity()) {
-        const auto count = std::min(compute->Capacity(), cases.size() - begin);
-        std::vector<RetainedDenseInput> inputs;
-        for (std::size_t i = 0; i < count; ++i)
-            inputs.push_back(std::bit_cast<RetainedDenseInput>(cases[begin + i].input));
-        const auto outputs = compute->Dense(inputs);
-        ASSERT_TRUE(outputs) << outputs.error().Description();
-        for (std::size_t row = 0; row < count; ++row) {
-            const auto& fixture = cases[begin + row];
-            SCOPED_TRACE(fixture.name);
-            ASSERT_TRUE((*outputs)[row].valid);
-            for (std::size_t i = 0; i < 40; ++i) {
-                SCOPED_TRACE(i);
-                const auto& value = (*outputs)[row].physical[i];
-                const auto oracle = fixture.reference[i];
-                const auto center = sirius::core::Twofold(value.high) +
-                                    sirius::core::Twofold(value.low) +
-                                    sirius::core::Twofold(value.tail);
-                const double difference =
-                    std::abs((center - sirius::core::Twofold(oracle.high, oracle.low)).Rounded());
-                EXPECT_LE(difference, value.radius + 1e-28 * (1 + std::abs(oracle.high)));
-                EXPECT_LE(difference, 1e-10 * (1 + std::abs(oracle.high)));
+    const auto check = [&](RetainedCompute& sampler, ComputeDevice& owner) {
+        const auto allocation = owner.BufferAllocationBytes();
+        const auto& cases = sirius::test::retained_dense::cases;
+        for (std::size_t begin = 0; begin < cases.size(); begin += sampler.Capacity()) {
+            const auto count = std::min(sampler.Capacity(), cases.size() - begin);
+            std::vector<RetainedDenseInput> inputs;
+            for (std::size_t i = 0; i < count; ++i)
+                inputs.push_back(std::bit_cast<RetainedDenseInput>(cases[begin + i].input));
+            const auto outputs = sampler.Dense(inputs);
+            ASSERT_TRUE(outputs) << outputs.error().Description();
+            for (std::size_t row = 0; row < count; ++row) {
+                const auto& fixture = cases[begin + row];
+                SCOPED_TRACE(fixture.name);
+                ASSERT_TRUE((*outputs)[row].valid);
+                for (std::size_t i = 0; i < 40; ++i) {
+                    SCOPED_TRACE(i);
+                    const auto& value = (*outputs)[row].physical[i];
+                    const auto oracle = fixture.reference[i];
+                    const auto center = sirius::core::Twofold(value.high) +
+                                        sirius::core::Twofold(value.low) +
+                                        sirius::core::Twofold(value.tail);
+                    const double difference = std::abs(
+                        (center - sirius::core::Twofold(oracle.high, oracle.low)).Rounded());
+                    EXPECT_LE(difference, value.radius + 1e-28 * (1 + std::abs(oracle.high)));
+                    EXPECT_LE(difference, 1e-10 * (1 + std::abs(oracle.high)));
+                }
             }
         }
-    }
-    // Endpoint ownership evaluates the retained sum directly. Cancellation
-    // must promote the surviving sparse term into the leading output limb.
-    const std::array<RetainedValue, 3> first{{
-        {1, 0x1.000002p-35f, 0x1p-120f, 0, 1},
-        {0x1p60f, 1, 0x1p-90f, 0, 1},
-        {0x1p120f, -0x1p95f, -0x1p70f, 0, 1},
-    }};
-    const std::array<RetainedValue, 3> delta{{
-        {-1, -0x1.000002p-35f, 0, 0, 1},
-        {-0x1p60f, -1, 0x1p-100f, 0, 1},
-        {-0x1p120f, 0x1p95f, 0x1p69f, 0, 1},
-    }};
-    const std::array<float, 3> sums{0x1p-120f, 0x1.004p-90f, -0x1p69f};
-    std::vector<RetainedDenseInput> cancellation(4);
-    for (auto& row : cancellation) {
-        row.values.fill(RetainedValue::FromDouble(0));
-        row.values[104] = row.values[105] = row.values[111] = RetainedValue::FromDouble(1);
-    }
-    for (std::size_t row = 0; row < first.size(); ++row) {
-        cancellation[row].values[5] = first[row];
-        cancellation[row].values[45] = RetainedValue::FromDouble(sums[row]);
-        cancellation[row].values[85] = delta[row];
-    }
-    // With zero displacement and opposite endpoint slopes, the midpoint is
-    // h*v/4. For e=2^-24, (1+e+e^2)*(1-e+e^2)/4 = (1+e^2+e^4)/4.
-    auto& product = cancellation.back();
-    product.values[9] = {1, 0x1p-24f, 0x1p-48f, 0, 1};
-    product.values[49] = {-1, -0x1p-24f, -0x1p-48f, 0, 1};
-    product.values[104] = {1, -0x1p-24f, 0x1p-48f, 0, 1};
-    product.values[105] = RetainedValue::FromDouble(.5);
-    const auto cancelled = compute->Dense(cancellation);
-    ASSERT_TRUE(cancelled) << cancelled.error().Description();
-    for (std::size_t row = 0; row < first.size(); ++row) {
-        SCOPED_TRACE(row);
-        ASSERT_TRUE((*cancelled)[row].valid);
-        const auto& value = (*cancelled)[row].physical[1];
-        EXPECT_EQ(value.high, sums[row]);
-        EXPECT_EQ(value.low, 0);
-        EXPECT_EQ(value.tail, 0);
-        EXPECT_EQ(value.radius, 0);
-    }
-    ASSERT_TRUE(cancelled->back().valid);
-    const auto& value = cancelled->back().physical[1];
-    const auto center = sirius::core::Twofold(value.high) + sirius::core::Twofold(value.low) +
-                        sirius::core::Twofold(value.tail);
-    const auto exact = sirius::core::Twofold(.25) + sirius::core::Twofold(0x1p-50) +
-                       sirius::core::Twofold(0x1p-98);
-    EXPECT_LE(std::abs((center - exact).Rounded()), value.radius);
-    EXPECT_LT(value.radius, 0x1p-60);
-    EXPECT_NE(value.low, 0);
+        // Endpoint ownership evaluates the retained sum directly. Cancellation
+        // must promote the surviving sparse term into the leading output limb.
+        const std::array<RetainedValue, 3> first{{
+            {1, 0x1.000002p-35f, 0x1p-120f, 0, 1},
+            {0x1p60f, 1, 0x1p-90f, 0, 1},
+            {0x1p120f, -0x1p95f, -0x1p70f, 0, 1},
+        }};
+        const std::array<RetainedValue, 3> delta{{
+            {-1, -0x1.000002p-35f, 0, 0, 1},
+            {-0x1p60f, -1, 0x1p-100f, 0, 1},
+            {-0x1p120f, 0x1p95f, 0x1p69f, 0, 1},
+        }};
+        const std::array<float, 3> sums{0x1p-120f, 0x1.004p-90f, -0x1p69f};
+        std::vector<RetainedDenseInput> cancellation(4);
+        for (auto& row : cancellation) {
+            row.values.fill(RetainedValue::FromDouble(0));
+            row.values[104] = row.values[105] = row.values[111] = RetainedValue::FromDouble(1);
+        }
+        for (std::size_t row = 0; row < first.size(); ++row) {
+            cancellation[row].values[5] = first[row];
+            cancellation[row].values[45] = RetainedValue::FromDouble(sums[row]);
+            cancellation[row].values[85] = delta[row];
+        }
+        // With zero displacement and opposite endpoint slopes, the midpoint is
+        // h*v/4. For e=2^-24, (1+e+e^2)*(1-e+e^2)/4 = (1+e^2+e^4)/4.
+        auto& product = cancellation.back();
+        product.values[9] = {1, 0x1p-24f, 0x1p-48f, 0, 1};
+        product.values[49] = {-1, -0x1p-24f, -0x1p-48f, 0, 1};
+        product.values[104] = {1, -0x1p-24f, 0x1p-48f, 0, 1};
+        product.values[105] = RetainedValue::FromDouble(.5);
+        const auto cancelled = sampler.Dense(cancellation);
+        ASSERT_TRUE(cancelled) << cancelled.error().Description();
+        for (std::size_t row = 0; row < first.size(); ++row) {
+            SCOPED_TRACE(row);
+            ASSERT_TRUE((*cancelled)[row].valid);
+            const auto& value = (*cancelled)[row].physical[1];
+            EXPECT_EQ(value.high, sums[row]);
+            EXPECT_EQ(value.low, 0);
+            EXPECT_EQ(value.tail, 0);
+            EXPECT_EQ(value.radius, 0);
+        }
+        ASSERT_TRUE(cancelled->back().valid);
+        const auto& value = cancelled->back().physical[1];
+        const auto center = sirius::core::Twofold(value.high) + sirius::core::Twofold(value.low) +
+                            sirius::core::Twofold(value.tail);
+        const auto exact = sirius::core::Twofold(.25) + sirius::core::Twofold(0x1p-50) +
+                           sirius::core::Twofold(0x1p-98);
+        EXPECT_LE(std::abs((center - exact).Rounded()), value.radius);
+        EXPECT_LT(value.radius, 0x1p-60);
+        EXPECT_NE(value.low, 0);
 
-    auto input = std::bit_cast<RetainedDenseInput>(cases[1].input);
-    for (std::size_t i = 106; i < 110; ++i) input.values[i] = RetainedValue::FromDouble(0);
-    auto invalid = compute->Dense(std::span(&input, 1));
-    ASSERT_TRUE(invalid) << invalid.error().Description();
-    EXPECT_FALSE(invalid->front().valid);
-    for (const auto& rejected_value : invalid->front().physical)
-        EXPECT_EQ(rejected_value.valid, 0U);
-    input = std::bit_cast<RetainedDenseInput>(cases[0].input);
-    input.values[105] = RetainedValue::FromDouble(1.01);
-    invalid = compute->Dense(std::span(&input, 1));
-    ASSERT_TRUE(invalid) << invalid.error().Description();
-    EXPECT_FALSE(invalid->front().valid);
-    EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+        // Exact endpoints own their values even when the interior secant exceeds
+        // the retained divide domain. This synthetic packet tests representation,
+        // rather than a unit-speed geodesic with this displacement and duration.
+        std::array<RetainedDenseInput, 3> endpoint_masks;
+        const std::array<double, 3> fractions{0, 1, .5};
+        for (std::size_t row = 0; row < endpoint_masks.size(); ++row) {
+            auto& input = endpoint_masks[row];
+            input.values.fill(RetainedValue::FromDouble(0));
+            input.values[8] = input.values[9] = RetainedValue::FromDouble(1);
+            input.values[48] = input.values[49] = RetainedValue::FromDouble(1);
+            input.values[104] = RetainedValue::FromDouble(0x1p-100);
+            input.values[44] = input.values[84] = input.values[104];
+            input.values[45] = input.values[85] = RetainedValue::FromDouble(1);
+            input.values[105] = RetainedValue::FromDouble(fractions[row]);
+            input.values[111] = RetainedValue::FromDouble(1);
+        }
+        const auto masked = sampler.Dense(endpoint_masks);
+        ASSERT_TRUE(masked) << masked.error().Description();
+        ASSERT_EQ(masked->size(), endpoint_masks.size());
+        for (std::size_t row = 0; row < 2; ++row) {
+            SCOPED_TRACE(row);
+            ASSERT_TRUE((*masked)[row].valid);
+            for (std::size_t i = 0; i < 40; ++i) {
+                SCOPED_TRACE(i);
+                const auto expected = endpoint_masks[row].values[(row == 0 ? 4 : 44) + i];
+                EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>((*masked)[row].physical[i])),
+                          (std::bit_cast<std::array<std::uint32_t, 5>>(expected)));
+            }
+        }
+        EXPECT_FALSE(masked->back().valid);
+
+        auto input = std::bit_cast<RetainedDenseInput>(cases[1].input);
+        for (std::size_t i = 106; i < 110; ++i) input.values[i] = RetainedValue::FromDouble(0);
+        auto invalid = sampler.Dense(std::span(&input, 1));
+        ASSERT_TRUE(invalid) << invalid.error().Description();
+        EXPECT_FALSE(invalid->front().valid);
+        for (const auto& rejected_value : invalid->front().physical)
+            EXPECT_EQ(rejected_value.valid, 0U);
+        input = std::bit_cast<RetainedDenseInput>(cases[0].input);
+        input.values[105] = RetainedValue::FromDouble(1.01);
+        invalid = sampler.Dense(std::span(&input, 1));
+        ASSERT_TRUE(invalid) << invalid.error().Description();
+        EXPECT_FALSE(invalid->front().valid);
+        EXPECT_EQ(owner.BufferAllocationBytes(), allocation);
+    };
+    ASSERT_NO_FATAL_FAILURE(check(*compute, *device));
+
+    // The same independent witnesses and refusal controls also exercise the
+    // admitted wide product route, with a fresh original 24-row/8-MiB owner.
+    const auto original_info = device->Info();
+    compute.reset();
+    device.reset();
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    auto opened = CreateVulkanDevice(*index);
+    ASSERT_TRUE(opened) << opened.error().Description();
+    device = std::move(*opened);
+    ASSERT_EQ(device->Info(), original_info);
+    ASSERT_TRUE(device->SetBufferAllocationLimit(8 * 1024 * 1024));
+    ASSERT_EQ(device->BufferAllocationBytes(), 0U);
+    TransferProbeDevice probe(*device);
+    std::vector<std::string> loaded;
+    probe.after_load = [&](std::span<const std::uint32_t> code) {
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+        ASSERT_TRUE(digest) << digest.error();
+        loaded.push_back(*digest);
+    };
+    auto wide = RetainedCompute::Create(probe, 24, true);
+    RecordProperty("dense_wide_exercised", 0);
+    if (!original_info.supports_fp64 || !original_info.rounds_fp64_to_nearest) {
+        ASSERT_FALSE(wide);
+        EXPECT_NE(wide.error().detail().find("binary64"), std::string::npos);
+        EXPECT_TRUE(loaded.empty());
+        EXPECT_EQ(device->BufferAllocationBytes(), 0U);
+        return;
+    }
+    ASSERT_TRUE(wide) << wide.error().Description();
+    ASSERT_EQ(loaded.size(), RetainedCompute::kStageCount);
+    RecordProperty("dense_wide_shader_sha256", loaded[3]);
+    SCOPED_TRACE("fp64 products");
+    ASSERT_NO_FATAL_FAILURE(check(**wide, probe));
+    RecordProperty("dense_wide_exercised", 1);
+
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    const auto& cases = sirius::test::retained_dense::cases;
+
+    // Exact-zero curved arrivals own supplied endpoint fields even when
+    // discarded interpolation arithmetic refuses. Compare the complete row
+    // against the original interpreter, including its reserved zero suffix.
+    using namespace sirius::backend::retained_program;
+    const auto curved = std::find_if(cases.begin(), cases.end(), [](const auto& item) {
+        const auto row = std::bit_cast<RetainedDenseInput>(item.input);
+        return row.values[0].Center() != 0 && row.values[110].Center() == 1;
+    });
+    ASSERT_NE(curved, cases.end());
+    std::array<RetainedDenseInput, 8> arrivals;
+    arrivals.fill(std::bit_cast<RetainedDenseInput>(curved->input));
+    for (auto& row : arrivals) row.values[105] = RetainedValue::FromDouble(0);
+    arrivals[1].values[104] = RetainedValue::FromDouble(0x1p-100);
+    arrivals[2].values[16] = {-0.0f, 0, -0.0f, 0, 1};
+    arrivals[2].values[17] = {1, 0x1p-26f, 0x1p-90f, 0x1p-100f, 1};
+    auto& late = arrivals[3];
+    for (std::size_t i = 8; i < 44; ++i) late.values[i] = RetainedValue::FromDouble(0);
+    late.values[8] = RetainedValue::FromDouble(0x1p-100);
+    late.values[9] = RetainedValue::FromDouble(1);
+    late.values[36] = RetainedValue::FromDouble(0x1p100);
+    for (std::size_t i = 106; i < 110; ++i) late.values[i] = RetainedValue::FromDouble(0);
+    late.values[106] = RetainedValue::FromDouble(1);
+    arrivals[4].values[43].valid = 2;
+    for (std::size_t i = 106; i < 110; ++i) arrivals[5].values[i] = RetainedValue::FromDouble(0);
+    arrivals[6] = std::bit_cast<RetainedDenseInput>(curved->input);
+    const auto flat = std::find_if(cases.begin(), cases.end(), [](const auto& item) {
+        const auto row = std::bit_cast<RetainedDenseInput>(item.input);
+        return row.values[0].Center() == 0 && row.values[110].Center() == 1;
+    });
+    ASSERT_NE(flat, cases.end());
+    arrivals[7] = std::bit_cast<RetainedDenseInput>(flat->input);
+    arrivals[7].values[105] = RetainedValue::FromDouble(0);
+    const std::array<bool, 8> admitted{true, true, true, false, false, false, true, true};
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    for (const bool wide : {false, true}) {
+        SCOPED_TRACE(wide ? "fp64 arrivals" : "default arrivals");
+        auto opened = CreateVulkanDevice(*index);
+        ASSERT_TRUE(opened) << opened.error().Description();
+        ASSERT_EQ((*opened)->Info(), device->Info());
+        ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+        TransferProbeDevice probe(**opened);
+        auto created = RetainedCompute::Create(probe, arrivals.size(), wide);
+        if (wide && (!probe.Info().supports_fp64 || !probe.Info().rounds_fp64_to_nearest)) {
+            ASSERT_FALSE(created);
+            EXPECT_EQ(probe.BufferAllocationBytes(), 0U);
+            continue;
+        }
+        ASSERT_TRUE(created) << created.error().Description();
+        auto& instance = **created;
+        ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+        const auto dense_input = probe.allocations[6].handle;
+        probe.capture_output = probe.allocations[7].handle;
+        const auto resident = probe.BufferAllocationBytes();
+        const auto row_bytes = kDenseRowWords * sizeof(std::uint32_t);
+        const std::string mode = wide ? "zero_arrival_fp64" : "zero_arrival_default";
+        RecordProperty(mode + "_device", probe.Info().name);
+        RecordProperty(mode + "_driver",
+                       probe.Info().driver_name + ": " + probe.Info().driver_info);
+        std::vector<std::byte> raw;
+        std::vector<RetainedDenseOutput> results;
+        const auto dense = [&](std::span<const RetainedDenseInput> rows) {
+            const auto readbacks = probe.readbacks.size();
+            const auto submissions = probe.submissions.size();
+            const auto output = instance.Dense(rows);
+            ASSERT_TRUE(output) << output.error().Description();
+            ASSERT_EQ(probe.submissions.size(), submissions + 1);
+            const auto& command = probe.submissions.back();
+            EXPECT_EQ(command.binding_count, 2U);
+            EXPECT_EQ(command.buffers[0].value, dense_input.value);
+            EXPECT_EQ(command.buffers[1].value, probe.capture_output->value);
+            EXPECT_EQ(command.x, rows.size());
+            EXPECT_EQ(command.y, 1U);
+            EXPECT_EQ(command.z, 1U);
+            ASSERT_EQ(probe.readbacks.size(), readbacks + 1);
+            raw = probe.readbacks.back();
+            results = *output;
+            ASSERT_EQ(raw.size(), rows.size() * row_bytes);
+            EXPECT_EQ(probe.BufferAllocationBytes(), resident);
+            const auto digest = sirius::base::Sha256Hex(
+                std::span(reinterpret_cast<const std::uint8_t*>(raw.data()), raw.size()));
+            ASSERT_TRUE(digest) << digest.error();
+            RecordProperty(mode + "_command_" + std::to_string(submissions),
+                           std::format("stage=dense;rows={};bytes={};sha256={}", command.x,
+                                       raw.size(), *digest));
+        };
+        ASSERT_NO_FATAL_FAILURE(dense(arrivals));
+        for (std::size_t row = 0; row < arrivals.size(); ++row) {
+            SCOPED_TRACE(row);
+            EXPECT_EQ(results[row].valid, admitted[row]);
+            const auto words = std::span(raw).subspan(row * row_bytes, row_bytes);
+            if (!admitted[row]) {
+                EXPECT_TRUE(std::all_of(words.begin(), words.end(),
+                                        [](std::byte word) { return word == std::byte{}; }));
+            } else {
+                EXPECT_TRUE(std::all_of(words.begin() + 204 * sizeof(std::uint32_t), words.end(),
+                                        [](std::byte word) { return word == std::byte{}; }));
+            }
+        }
+        const auto original_raw = raw;
+        const auto original_outputs = results;
+        const auto same_row = [&](std::size_t row, std::size_t original_row) {
+            const auto actual = std::span(raw).subspan(row * row_bytes, row_bytes);
+            const auto expected =
+                std::span(original_raw).subspan(original_row * row_bytes, row_bytes);
+            EXPECT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin(), expected.end()));
+        };
+        const auto table = 1 + instance.Capacity() * 560;
+        std::vector<std::uint32_t> complete_input(table + kDenseProgram.size());
+        complete_input[0] = static_cast<std::uint32_t>(instance.Capacity());
+        std::memcpy(complete_input.data() + 1, arrivals.data(), sizeof(arrivals));
+        const auto upload = [&](const std::vector<std::uint32_t>& program) {
+            ASSERT_EQ(program.size(), kDenseProgram.size());
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            ASSERT_TRUE(probe.WriteBuffer(dense_input, std::as_bytes(std::span(complete_input))));
+        };
+        const std::vector<std::uint32_t> canonical(kDenseProgram.begin(), kDenseProgram.end());
+        auto changed = canonical;
+        std::size_t constant = 43;
+        while (constant < 43 + 5 * kDenseProgram[0] && changed[constant] != 0) constant += 5;
+        ASSERT_LT(constant, 43 + 5 * kDenseProgram[0]);
+        // Constant opcodes ignore c. This changed table has identical semantics
+        // and forces the canonical shortcut to use the original interpreter.
+        changed[constant + 4] ^= 1U;
+        ASSERT_NO_FATAL_FAILURE(upload(changed));
+        ASSERT_NO_FATAL_FAILURE(dense(arrivals));
+        EXPECT_EQ(raw, original_raw);
+
+        // A legal root-map mutation must retain supplied-program authority.
+        changed = canonical;
+        changed[3] = changed[4];
+        ASSERT_NE(changed[3], canonical[3]);
+        ASSERT_NO_FATAL_FAILURE(upload(changed));
+        ASSERT_NO_FATAL_FAILURE(dense(std::span(arrivals).first(3)));
+        for (std::size_t row = 0; row < 3; ++row) {
+            ASSERT_TRUE(results[row].valid);
+            for (std::size_t field = 0; field < 40; ++field) {
+                const auto& expected = original_outputs[row].physical[field == 0 ? 1 : field];
+                EXPECT_EQ(
+                    (std::bit_cast<std::array<std::uint32_t, 5>>(results[row].physical[field])),
+                    (std::bit_cast<std::array<std::uint32_t, 5>>(expected)));
+            }
+        }
+        for (const auto location :
+             {constant, std::size_t{3}, std::size_t{43 + 5 * kDenseProgram[0]}}) {
+            changed = canonical;
+            changed[location] = location == constant ? 12U : location == 3 ? kDenseProgram[1] : 1U;
+            ASSERT_NO_FATAL_FAILURE(upload(changed));
+            ASSERT_NO_FATAL_FAILURE(dense(std::span(arrivals).first(3)));
+            for (const auto& output : results) EXPECT_FALSE(output.valid);
+            EXPECT_TRUE(std::all_of(raw.begin(), raw.end(),
+                                    [](std::byte word) { return word == std::byte{}; }));
+        }
+        ASSERT_NO_FATAL_FAILURE(upload(canonical));
+        ASSERT_NO_FATAL_FAILURE(dense(std::span(arrivals).first(3)));
+        for (std::size_t row = 0; row < 3; ++row) same_row(row, row);
+        const std::array<RetainedDenseInput, 4> reordered{arrivals[3], arrivals[2], arrivals[0],
+                                                          arrivals[7]};
+        ASSERT_NO_FATAL_FAILURE(dense(reordered));
+        const std::array<std::size_t, 4> order{3, 2, 0, 7};
+        for (std::size_t row = 0; row < order.size(); ++row) same_row(row, order[row]);
+        ASSERT_NO_FATAL_FAILURE(dense(std::span(arrivals).first(1)));
+        same_row(0, 0);
+
+        // A physically shorter, well-formed table retains its own authority.
+        // One constant producer per original layer maps all roots to +1;
+        // the identity comparator must not read beyond this supplied span.
+        const auto layers = kDenseProgram.size() - 43 - 5 * kDenseProgram[0] - 1;
+        std::vector<std::uint32_t> short_input(561);
+        short_input[0] = 1;
+        std::memcpy(short_input.data() + 1, arrivals.data(), sizeof(RetainedDenseInput));
+        short_input.push_back(static_cast<std::uint32_t>(layers));
+        short_input.push_back(kDenseProgram[1]);
+        short_input.push_back(40);
+        short_input.insert(short_input.end(), 40, 0);
+        for (std::size_t node = 0; node < layers; ++node)
+            short_input.insert(short_input.end(), {0, 0, std::bit_cast<std::uint32_t>(1.0f), 0, 0});
+        for (std::size_t layer = 0; layer <= layers; ++layer)
+            short_input.push_back(static_cast<std::uint32_t>(layer));
+        const auto small_input =
+            probe.CreateBuffer(short_input.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
+        const auto small_output = probe.CreateBuffer(row_bytes, BufferUsage::kStorage);
+        ASSERT_TRUE(small_input);
+        ASSERT_TRUE(small_output);
+        const bool portable = RetainedUsesPortableArithmetic(probe.Info());
+        using ShaderWords = std::span<const std::uint32_t>;
+        const ShaderWords code =
+            portable
+                ? (wide ? ShaderWords(kDensePortableFp64Shader) : ShaderWords(kDensePortableShader))
+                : (wide ? ShaderWords(kDenseFp64Shader) : ShaderWords(kDenseShader));
+        const auto kernel = probe.LoadKernel(code);
+        ASSERT_TRUE(kernel);
+        ASSERT_TRUE(probe.WriteBuffer(*small_input, std::as_bytes(std::span(short_input))));
+        const std::array<BufferHandle, 2> bindings{*small_input, *small_output};
+        ASSERT_EQ(probe.submissions.size(), 9U);
+        ASSERT_TRUE(probe.Dispatch(*kernel, bindings, 1, 1, 1, nullptr));
+        ASSERT_EQ(probe.submissions.size(), 10U);
+        const auto& command = probe.submissions.back();
+        EXPECT_EQ(command.binding_count, 2U);
+        EXPECT_EQ(command.buffers[0].value, small_input->value);
+        EXPECT_EQ(command.buffers[1].value, small_output->value);
+        EXPECT_EQ(command.x, 1U);
+        EXPECT_EQ(command.y, 1U);
+        EXPECT_EQ(command.z, 1U);
+        std::vector<std::uint32_t> short_words(kDenseRowWords);
+        ASSERT_TRUE(
+            probe.ReadBuffer(*small_output, std::as_writable_bytes(std::span(short_words))));
+        std::vector<std::uint32_t> expected_words(kDenseRowWords);
+        expected_words[0] = 1;
+        for (std::size_t field = 0; field < 40; ++field) {
+            expected_words[4 + 5 * field] = std::bit_cast<std::uint32_t>(1.0f);
+            expected_words[8 + 5 * field] = 1;
+        }
+        EXPECT_EQ(short_words, expected_words);
+        const auto bytes = std::as_bytes(std::span(short_words));
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(bytes.data()), bytes.size()));
+        ASSERT_TRUE(digest) << digest.error();
+        RecordProperty(
+            mode + "_command_9",
+            std::format("stage=dense-short;rows=1;bytes={};sha256={}", bytes.size(), *digest));
+    }
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
@@ -475,8 +3514,561 @@ TEST_F(RetainedComputeTest, PhysicalInitializationRetainsTheHamiltonianResidual)
 #endif
 }
 
+void RetainedComputeTest::CheckOriginalIntervalTimestamps(bool fp64_products) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    auto* vulkan = dynamic_cast<VulkanDevice*>(device.get());
+    ASSERT_NE(vulkan, nullptr);
+    const auto properties = vulkan->TimestampProperties();
+    RecordProperty("timestamp_valid_bits", std::to_string(properties.valid_bits));
+    RecordProperty("timestamp_period_ns", std::format("{:.17g}", properties.period_ns));
+    RecordProperty("timestamp_scope",
+                   "opt-in device marker span includes original barriers and scheduling; not "
+                   "isolated shader time or calibrated host/driver overhead; existing host "
+                   "governor unchanged; finite original critical0/critical1/flat intervals, "
+                   "plus current 12-row Schwarzschild DP/sample cohorts; not frame, cold, "
+                   "full-science or release qualification");
+    const auto enabled = vulkan->SetDispatchTimestampsEnabled(true);
+    if (properties.valid_bits == 0) {
+        ASSERT_FALSE(enabled);
+        RecordProperty("timestamp_observation", "unsupported selected queue explicitly declined");
+        return;
+    }
+    ASSERT_TRUE(enabled) << enabled.error().Description();
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
+    std::vector<RetainedEndpointInput> launch_inputs;
+    for (const auto index :
+         {std::size_t{0}, std::size_t{1}, sirius::test::retained_transport::cases.size() - 1}) {
+        const auto step =
+            std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases[index].input);
+        RetainedEndpointInput endpoint;
+        std::copy_n(step.values.begin(), 45, endpoint.values.begin());
+        launch_inputs.push_back(endpoint);
+    }
+    const auto launches = compute->Endpoint(launch_inputs);
+    ASSERT_TRUE(launches) << launches.error().Description();
+    std::vector<RetainedIntervalInput> inputs(launch_inputs.size());
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        const auto index = row < 2 ? row : sirius::test::retained_transport::cases.size() - 1;
+        const auto step =
+            std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases[index].input);
+        auto& input = inputs[row];
+        std::copy_n(step.values.begin(), 4, input.metric.begin());
+        input.start = (*launches)[row];
+        input.chart = step.values[44].Center();
+        input.interval = step.values[45].Center();
+        input.control.length_scale = input.control.frequency_scale = 1;
+        input.control.tolerance = 1e-4 / (4 * 30000);
+        input.control.integrator.min_step = static_cast<float>(input.interval);
+        input.control.integrator.max_step = 1;
+        input.control.integrator.abs_tolerance = input.control.integrator.rel_tolerance = 1e-9f;
+    }
+    const auto baseline = AttemptRetainedIntervals(*compute, inputs);
+    ASSERT_TRUE(baseline) << baseline.error().Description();
+    EXPECT_FALSE(vulkan->LastDispatchTimestamp());
+    TransferProbeDevice probe(*device);
+    probe.independent_pairs = true;
+    std::size_t modules = 0;
+    probe.after_load = [&](std::span<const std::uint32_t> code) {
+        ASSERT_LT(modules, RetainedCompute::kStageCount);
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+        ASSERT_TRUE(digest) << digest.error();
+        RecordProperty("selected_module_" + std::to_string(modules),
+                       std::format("stage={};bytes={};sha256={}",
+                                   RetainedCompute::StageName(
+                                       static_cast<RetainedCompute::KernelStage>(modules)),
+                                   code.size_bytes(), *digest));
+        ++modules;
+    };
+    auto observed = RetainedCompute::Create(probe, 24, fp64_products);
+    ASSERT_TRUE(observed) << observed.error().Description();
+    ASSERT_EQ(modules, RetainedCompute::kStageCount);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+    const auto resident = device->BufferAllocationBytes();
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(true));
+    std::size_t samples = 0;
+    std::string phase;
+    const auto capture = [&](const std::string& stage, const DispatchTiming* host) {
+        ASSERT_LT(samples, 64U);
+        ASSERT_NE(host, nullptr);
+        const auto timestamp = vulkan->LastDispatchTimestamp();
+        ASSERT_TRUE(timestamp);
+        ASSERT_EQ(timestamp->query_result, VK_SUCCESS);
+        ASSERT_NE(timestamp->availability[0], 0U);
+        ASSERT_NE(timestamp->availability[1], 0U);
+        ASSERT_TRUE(timestamp->device_span_ms);
+        EXPECT_TRUE(std::isfinite(*timestamp->device_span_ms));
+        EXPECT_GE(*timestamp->device_span_ms, 0);
+        EXPECT_NEAR(timestamp->host_submit_ms + timestamp->host_wait_ms, host->submit_wait_ms,
+                    1e-9 * std::max(1., host->submit_wait_ms));
+        RecordProperty(
+            "device_observation_" + std::to_string(samples++),
+            std::format("phase={};stage={};begin={};end={};available0={};available1={};"
+                        "device_ms={:.17g};host_submit_ms={:.17g};host_wait_ms={:.17g};"
+                        "host_completion_ms={:.17g};pipeline_ms={:.17g};setup_ms={:.17g};"
+                        "cleanup_ms={:.17g};total_ms={:.17g}",
+                        phase, stage, timestamp->ticks[0], timestamp->ticks[1],
+                        timestamp->availability[0], timestamp->availability[1],
+                        *timestamp->device_span_ms, timestamp->host_submit_ms,
+                        timestamp->host_wait_ms, host->submit_wait_ms, host->pipeline_setup_ms,
+                        host->command_setup_ms, host->cleanup_ms, host->total_ms));
+    };
+    probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
+        ASSERT_FALSE(bound.empty());
+        for (std::size_t i = 0; i < probe.allocations.size(); i += 2)
+            if (bound[0].value == probe.allocations[i].handle.value) {
+                capture(
+                    RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(i / 2)),
+                    host);
+                return;
+            }
+        FAIL() << "unknown observed stage binding";
+    };
+    probe.after_pair_timing = [&](const IndependentPairTiming* host) {
+        ASSERT_NE(host, nullptr);
+        capture("endpoint+dense", &host->combined);
+    };
+    using Clock = std::chrono::steady_clock;
+    const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
+        return std::chrono::duration<double, std::milli>(finished - started).count();
+    };
+    using Readback = std::pair<RetainedCompute::KernelStage, std::vector<std::byte>>;
+    std::vector<Readback> readbacks;
+    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+        for (std::size_t i = 1; i < probe.allocations.size(); i += 2)
+            if (buffer.value == probe.allocations[i].handle.value) {
+                readbacks.emplace_back(static_cast<RetainedCompute::KernelStage>(i / 2),
+                                       std::vector<std::byte>(bytes.begin(), bytes.end()));
+                return;
+            }
+        FAIL() << "unknown observed readback stage";
+    };
+    RecordProperty("legacy_call_timing_scope",
+                   "original synchronous interval call including allocation, packing, decoding "
+                   "and existing marker/readback observers; excludes SetUp, assertions, digest "
+                   "serialization and result disposal; unchanged general-Kerr/flat inputs and "
+                   "projection budget; no cold, frame or release claim");
+    for (unsigned repeat = 0; repeat < 3; ++repeat) {
+        phase = "legacy_repeat" + std::to_string(repeat);
+        readbacks.clear();
+        const auto started = Clock::now();
+        const auto output = AttemptRetainedIntervals(**observed, inputs);
+        const auto finished = Clock::now();
+        RecordProperty(phase + "_complete_call_ms",
+                       std::format("{:.17g}", milliseconds(started, finished)));
+        ASSERT_TRUE(output) << output.error().Description();
+        for (std::size_t index = 0; index < readbacks.size(); ++index) {
+            const auto& [stage, bytes] = readbacks[index];
+            const auto digest = sirius::base::Sha256Hex(
+                std::span(reinterpret_cast<const std::uint8_t*>(bytes.data()), bytes.size()));
+            ASSERT_TRUE(digest) << digest.error();
+            RecordProperty(phase + "_readback_" + std::to_string(index),
+                           std::format("stage={};bytes={};sha256={}",
+                                       RetainedCompute::StageName(stage), bytes.size(), *digest));
+        }
+        ASSERT_EQ(output->size(), baseline->size());
+        for (std::size_t row = 0; row < output->size(); ++row) {
+            const auto& actual = (*output)[row];
+            const auto& expected = (*baseline)[row];
+            ASSERT_TRUE(actual.admissible);
+            EXPECT_TRUE(IntervalBitsAgree(actual, expected));
+            EXPECT_EQ(actual.attempted_stages, 21U);
+        }
+        EXPECT_EQ(device->BufferAllocationBytes(), resident);
+    }
+    // Same complete coupled route as the frame, with two projection slots per
+    // logical row. These frozen inputs and budgets do not measure frame throughput.
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
+    probe.after_dispatch = {};
+    probe.after_pair_timing = {};
+    namespace schwarzschild = sirius::test::retained_schwarzschild;
+    ASSERT_STREQ(schwarzschild::cases[16].name, "null_weak-outgoing");
+    ASSERT_STREQ(schwarzschild::cases[17].name, "null_weak-ingoing");
+    std::vector<RetainedStepInput> steps;
+    std::vector<RetainedEndpointInput> starts;
+    for (std::size_t row = 0; row < 12; ++row) {
+        steps.push_back(std::bit_cast<RetainedStepInput>(schwarzschild::cases[16 + row % 2].input));
+        RetainedEndpointInput start;
+        std::copy_n(steps.back().values.begin(), 45, start.values.begin());
+        starts.push_back(start);
+    }
+    const auto independent = compute->Step(steps);
+    ASSERT_TRUE(independent) << independent.error().Description();
+    for (std::size_t row = 0; row < steps.size(); ++row)
+        ASSERT_TRUE(
+            SchwarzschildStepAgrees((*independent)[row], schwarzschild::cases[16 + row % 2]));
+    const auto initial = compute->Endpoint(starts);
+    ASSERT_TRUE(initial) << initial.error().Description();
+    std::vector<RetainedIntervalInput> coupled(steps.size());
+    for (std::size_t row = 0; row < steps.size(); ++row) {
+        auto& input = coupled[row];
+        ASSERT_TRUE((*initial)[row].valid);
+        std::copy_n(steps[row].values.begin(), 4, input.metric.begin());
+        input.start = (*initial)[row];
+        input.chart = steps[row].values[44].Center();
+        input.interval = steps[row].values[45].Center();
+        input.control = inputs.front().control;
+        input.control.integrator.min_step = static_cast<float>(input.interval);
+    }
+    RecordProperty("coupled_rows", std::to_string(coupled.size()));
+    RecordProperty("coupled_projection_budget", "24");
+    RecordProperty("product_mode", fp64_products ? "fp64" : "default");
+    RecordProperty("fma_fp32_enabled", device->Info().fma_fp32_enabled);
+    RecordProperty("preserves_fp32_signed_zero_inf_nan",
+                   device->Info().preserves_fp32_signed_zero_inf_nan);
+    RecordProperty("selected_device", device->Info().name);
+    RecordProperty("selected_driver",
+                   device->Info().driver_name + ": " + device->Info().driver_info);
+    RecordProperty(
+        "retained_scalar_route",
+        device->Info().preserves_fp32_denormals && device->Info().rounds_fp32_to_nearest
+            ? "native binary32"
+            : (device->Info().rounds_fp32_to_nearest ? "portable with guarded normal sums"
+                                                     : "conservative portable integer"));
+    const auto sample_inputs = [](const std::vector<RetainedIntervalOutput>& output) {
+        std::vector<RetainedDopriSampleInput> result;
+        for (const auto& interval : output) result.push_back({interval.dopri, 0, 3. / 8., {}});
+        return result;
+    };
+    readbacks.clear();
+    const auto coupled_baseline = AttemptRetainedDopriIntervals(**observed, coupled, 24);
+    ASSERT_TRUE(coupled_baseline) << coupled_baseline.error().Description();
+    for (const auto& interval : *coupled_baseline) {
+        ASSERT_TRUE(interval.admissible);
+        ASSERT_TRUE(interval.dopri);
+    }
+    const auto sample_baseline =
+        SampleRetainedDopriIntervals(**observed, sample_inputs(*coupled_baseline), 24);
+    ASSERT_TRUE(sample_baseline) << sample_baseline.error().Description();
+    EXPECT_FALSE(vulkan->LastDispatchTimestamp());
+    const auto baseline_readbacks = std::move(readbacks);
+    ASSERT_EQ(baseline_readbacks.size(), 11U);
+    for (std::size_t index = 0; index < baseline_readbacks.size(); ++index) {
+        const auto& [stage, bytes] = baseline_readbacks[index];
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(bytes.data()), bytes.size()));
+        ASSERT_TRUE(digest) << digest.error();
+        RecordProperty("coupled_readback_" + std::to_string(index),
+                       std::format("stage={};bytes={};sha256={}", RetainedCompute::StageName(stage),
+                                   bytes.size(), *digest));
+    }
+    // The sampler/event consumer needs the complete private capsule. A changed
+    // packet tail, event curve, physical endpoint or control must not escape equality.
+    for (unsigned mutation = 0; mutation < 7; ++mutation) {
+        SCOPED_TRACE(mutation);
+        auto changed = coupled_baseline->front();
+        auto capsule = std::make_shared<RetainedDopriInterval>(*changed.dopri);
+        changed.dopri = capsule;
+        switch (mutation) {
+            case 0:
+                capsule->packets[3].values[319].tail = std::bit_cast<float>(
+                    std::bit_cast<std::uint32_t>(capsule->packets[3].values[319].tail) ^ 1U);
+                break;
+            case 1:
+                capsule->positions[2].c(3) += 0.125;
+                break;
+            case 2:
+                capsule->starts[1].physical[39].valid ^= 1U;
+                break;
+            case 3:
+                capsule->endpoints[3].phase[38].radius = std::bit_cast<float>(
+                    std::bit_cast<std::uint32_t>(capsule->endpoints[3].phase[38].radius) ^ 1U);
+                break;
+            case 4:
+                capsule->control.column_scale[3] += 0.125;
+                break;
+            case 5:
+                capsule->metric[1].valid ^= 1U;
+                break;
+            case 6:
+                changed.dopri.reset();
+                break;
+        }
+        EXPECT_FALSE(IntervalBitsAgree(changed, coupled_baseline->front()));
+    }
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(true));
+    std::vector<std::pair<RetainedCompute::KernelStage, std::uint32_t>> stream;
+    probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
+        ASSERT_FALSE(bound.empty());
+        ASSERT_FALSE(probe.writes.empty());
+        for (std::size_t i = 0; i < probe.allocations.size(); i += 2)
+            if (bound[0].value == probe.allocations[i].handle.value) {
+                const auto stage = static_cast<RetainedCompute::KernelStage>(i / 2);
+                // The header is immutable allocation capacity. After the disabled
+                // baseline uploads each program, transfer size names the active rows.
+                const auto stride = stage == RetainedCompute::KernelStage::kTransport
+                                        ? sizeof(RetainedStepInput)
+                                    : stage == RetainedCompute::KernelStage::kEndpoint
+                                        ? sizeof(RetainedEndpointInput)
+                                    : stage == RetainedCompute::KernelStage::kDopriPhase
+                                        ? sizeof(RetainedDopriPhaseInput)
+                                        : 0;
+                ASSERT_GT(stride, 0U);
+                const auto payload_bytes = probe.writes.back().bytes - sizeof(std::uint32_t);
+                ASSERT_EQ(payload_bytes % stride, 0U);
+                const auto rows = static_cast<std::uint32_t>(payload_bytes / stride);
+                stream.emplace_back(stage, rows);
+                capture(std::string(RetainedCompute::StageName(stage)) +
+                            ":rows=" + std::to_string(rows),
+                        host);
+                return;
+            }
+        FAIL() << "unknown current coupled stage";
+    };
+    using Stage = RetainedCompute::KernelStage;
+    const std::vector<std::pair<Stage, std::uint32_t>> expected_stream{
+        {Stage::kTransport, 12},  {Stage::kEndpoint, 24},   {Stage::kTransport, 12},
+        {Stage::kEndpoint, 24},   {Stage::kTransport, 12},  {Stage::kEndpoint, 24},
+        {Stage::kDopriPhase, 24}, {Stage::kDopriPhase, 24}, {Stage::kEndpoint, 12},
+        {Stage::kDopriPhase, 12}, {Stage::kEndpoint, 12}};
+    RecordProperty("coupled_call_timing_scope",
+                   "sum of synchronous construction and interior sampling calls, including "
+                   "allocation, packing, decoding and existing marker/readback observers; "
+                   "excludes SetUp, assertions between calls and result disposal; unchanged "
+                   "12-row inputs and projection budget; no cold, frame or release claim");
+    for (unsigned repeat = 0; repeat < 3; ++repeat) {
+        phase = "coupled_repeat" + std::to_string(repeat);
+        stream.clear();
+        readbacks.clear();
+        const auto attempt_started = Clock::now();
+        const auto output = AttemptRetainedDopriIntervals(**observed, coupled, 24);
+        const auto attempt_finished = Clock::now();
+        ASSERT_TRUE(output) << output.error().Description();
+        ASSERT_EQ(output->size(), coupled_baseline->size());
+        for (std::size_t row = 0; row < output->size(); ++row) {
+            SCOPED_TRACE(row);
+            ASSERT_TRUE((*output)[row].admissible);
+            EXPECT_TRUE(IntervalBitsAgree((*output)[row], (*coupled_baseline)[row]));
+        }
+        const auto sample_started = Clock::now();
+        const auto sampled = SampleRetainedDopriIntervals(**observed, sample_inputs(*output), 24);
+        const auto sample_finished = Clock::now();
+        const auto attempt_ms = milliseconds(attempt_started, attempt_finished);
+        const auto sample_ms = milliseconds(sample_started, sample_finished);
+        RecordProperty(phase + "_attempt_ms", std::format("{:.17g}", attempt_ms));
+        RecordProperty(phase + "_sample_ms", std::format("{:.17g}", sample_ms));
+        RecordProperty(phase + "_complete_call_ms", std::format("{:.17g}", attempt_ms + sample_ms));
+        ASSERT_TRUE(sampled) << sampled.error().Description();
+        ASSERT_EQ(sampled->size(), sample_baseline->size());
+        for (std::size_t row = 0; row < sampled->size(); ++row) {
+            ASSERT_TRUE((*sampled)[row].valid);
+            EXPECT_EQ((*sampled)[row].valid, (*sample_baseline)[row].valid);
+            EXPECT_EQ(std::memcmp((*sampled)[row].physical.data(),
+                                  (*sample_baseline)[row].physical.data(),
+                                  sizeof((*sampled)[row].physical)),
+                      0);
+            EXPECT_EQ(std::memcmp((*sampled)[row].polynomial_tangent.data(),
+                                  (*sample_baseline)[row].polynomial_tangent.data(),
+                                  sizeof((*sampled)[row].polynomial_tangent)),
+                      0);
+        }
+        EXPECT_EQ(stream, expected_stream);
+        EXPECT_EQ(readbacks, baseline_readbacks);
+        EXPECT_EQ(device->BufferAllocationBytes(), resident);
+    }
+    EXPECT_GT(samples, 0U);
+    EXPECT_GT(probe.pair_calls, 0U);
+    RecordProperty("device_observations", std::to_string(samples));
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
+    if (fp64_products) RecordProperty("wide_exercised", 1);
+#else
+    (void)fp64_products;
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
+    ASSERT_NO_FATAL_FAILURE(CheckOriginalIntervalTimestamps(false));
+}
+
+TEST_F(RetainedComputeTest, WideDeviceTimestampsPreserveOriginalIntervalResults) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    const auto original_info = device->Info();
+    compute.reset();
+    device.reset();
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    auto opened = CreateVulkanDevice(*index);
+    ASSERT_TRUE(opened) << opened.error().Description();
+    device = std::move(*opened);
+    ASSERT_EQ(device->Info(), original_info);
+    ASSERT_TRUE(device->SetBufferAllocationLimit(8 * 1024 * 1024));
+    ASSERT_EQ(device->BufferAllocationBytes(), 0U);
+    auto created = RetainedCompute::Create(*device, 24, true);
+    RecordProperty("wide_exercised", 0);
+    if (!original_info.supports_fp64 || !original_info.rounds_fp64_to_nearest) {
+        ASSERT_FALSE(created);
+        EXPECT_NE(created.error().detail().find("binary64"), std::string::npos);
+        EXPECT_EQ(device->BufferAllocationBytes(), 0U);
+        return;
+    }
+    ASSERT_TRUE(created) << created.error().Description();
+    const auto required = RetainedCompute::RequiredAllocationBytes(*device, 24);
+    ASSERT_TRUE(required) << required.error().Description();
+    EXPECT_EQ(device->BufferAllocationBytes(), *required);
+    compute = std::move(*created);
+    ASSERT_NO_FATAL_FAILURE(CheckOriginalIntervalTimestamps(true));
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
 TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    using Clock = std::chrono::steady_clock;
+    using Stats = std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount>;
+    const auto fixture_started = Clock::now();
+    const auto fixture_before = compute->Statistics();
+    const auto fixture_pair_before = compute->EndpointDenseStatistics();
+    const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
+        return std::chrono::duration<double, std::milli>(finished - started).count();
+    };
+    auto record_timing = [&, previous_pair = fixture_pair_before](
+                             const std::string& prefix, const Stats& before, const Stats& after,
+                             double wall_ms, bool lifetime_maxima = false) mutable {
+        std::uint64_t submissions = 0, pipeline_creations = 0, target_overshoots = 0;
+        std::uint64_t write_buffer_bytes = 0, read_buffer_bytes = 0;
+        double submit_wait_ms = 0, pipeline_setup_ms = 0, maximum_submit_wait_ms = 0;
+        double command_setup_ms = 0, cleanup_ms = 0, dispatch_total_ms = 0;
+        double write_buffer_ms = 0, read_buffer_ms = 0;
+        for (std::size_t stage = 0; stage < after.size(); ++stage) {
+            const auto count = after[stage].submissions - before[stage].submissions;
+            const auto wait = after[stage].submit_wait_ms - before[stage].submit_wait_ms;
+            const auto pipeline = after[stage].pipeline_setup_ms - before[stage].pipeline_setup_ms;
+            const auto command = after[stage].command_setup_ms - before[stage].command_setup_ms;
+            const auto cleanup = after[stage].cleanup_ms - before[stage].cleanup_ms;
+            const auto dispatch = after[stage].dispatch_total_ms - before[stage].dispatch_total_ms;
+            const auto write = after[stage].write_buffer_ms - before[stage].write_buffer_ms;
+            const auto read = after[stage].read_buffer_ms - before[stage].read_buffer_ms;
+            const auto written_bytes =
+                after[stage].write_buffer_bytes - before[stage].write_buffer_bytes;
+            const auto read_bytes =
+                after[stage].read_buffer_bytes - before[stage].read_buffer_bytes;
+            const auto creations =
+                after[stage].pipeline_creations - before[stage].pipeline_creations;
+            const auto overshoots =
+                after[stage].target_overshoots - before[stage].target_overshoots;
+            submissions += count;
+            submit_wait_ms += wait;
+            pipeline_setup_ms += pipeline;
+            command_setup_ms += command;
+            cleanup_ms += cleanup;
+            dispatch_total_ms += dispatch;
+            write_buffer_ms += write;
+            read_buffer_ms += read;
+            write_buffer_bytes += written_bytes;
+            read_buffer_bytes += read_bytes;
+            pipeline_creations += creations;
+            target_overshoots += overshoots;
+            maximum_submit_wait_ms =
+                std::max(maximum_submit_wait_ms, after[stage].maximum_submit_wait_ms);
+            const auto key =
+                prefix + "_" +
+                RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(stage));
+            RecordProperty(key + "_submissions", std::to_string(count));
+            RecordProperty(key + "_submit_wait_ms", std::to_string(wait));
+            RecordProperty(key + "_pipeline_setup_ms", std::to_string(pipeline));
+            RecordProperty(key + "_command_setup_ms", std::to_string(command));
+            RecordProperty(key + "_cleanup_ms", std::to_string(cleanup));
+            RecordProperty(key + "_dispatch_total_ms", std::to_string(dispatch));
+            RecordProperty(key + "_write_buffer_ms", std::to_string(write));
+            RecordProperty(key + "_read_buffer_ms", std::to_string(read));
+            RecordProperty(key + "_write_buffer_bytes", std::to_string(written_bytes));
+            RecordProperty(key + "_read_buffer_bytes", std::to_string(read_bytes));
+            RecordProperty(key + "_pipeline_creations", std::to_string(creations));
+            RecordProperty(key + "_target_overshoots", std::to_string(overshoots));
+            if (lifetime_maxima) {
+                RecordProperty(key + "_maximum_submit_wait_ms",
+                               std::to_string(after[stage].maximum_submit_wait_ms));
+            }
+        }
+        const auto pair = compute->EndpointDenseStatistics();
+        const auto pair_before = lifetime_maxima ? fixture_pair_before : previous_pair;
+        const auto shared = pair.submissions - pair_before.submissions;
+        submit_wait_ms += pair.submit_wait_ms - pair_before.submit_wait_ms;
+        pipeline_setup_ms += pair.pipeline_setup_ms - pair_before.pipeline_setup_ms;
+        command_setup_ms += pair.command_setup_ms - pair_before.command_setup_ms;
+        cleanup_ms += pair.cleanup_ms - pair_before.cleanup_ms;
+        dispatch_total_ms += pair.dispatch_total_ms - pair_before.dispatch_total_ms;
+        pipeline_creations += pair.pipeline_creations - pair_before.pipeline_creations;
+        target_overshoots += pair.target_overshoots - pair_before.target_overshoots;
+        maximum_submit_wait_ms = std::max(maximum_submit_wait_ms, pair.maximum_submit_wait_ms);
+        previous_pair = pair;
+        RecordProperty(prefix + "_shared_endpoint_dense_submissions", std::to_string(shared));
+        RecordProperty(prefix + "_shared_endpoint_dense_submit_wait_ms",
+                       std::to_string(pair.submit_wait_ms - pair_before.submit_wait_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_pipeline_setup_ms",
+                       std::to_string(pair.pipeline_setup_ms - pair_before.pipeline_setup_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_command_setup_ms",
+                       std::to_string(pair.command_setup_ms - pair_before.command_setup_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_cleanup_ms",
+                       std::to_string(pair.cleanup_ms - pair_before.cleanup_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_dispatch_total_ms",
+                       std::to_string(pair.dispatch_total_ms - pair_before.dispatch_total_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_pipeline_creations",
+                       std::to_string(pair.pipeline_creations - pair_before.pipeline_creations));
+        RecordProperty(prefix + "_shared_endpoint_dense_target_overshoots",
+                       std::to_string(pair.target_overshoots - pair_before.target_overshoots));
+        RecordProperty(prefix + "_queue_submissions", std::to_string(submissions - shared));
+        RecordProperty(prefix + "_submissions", std::to_string(submissions));
+        RecordProperty(prefix + "_submit_wait_ms", std::to_string(submit_wait_ms));
+        RecordProperty(prefix + "_pipeline_setup_ms", std::to_string(pipeline_setup_ms));
+        RecordProperty(prefix + "_command_setup_ms", std::to_string(command_setup_ms));
+        RecordProperty(prefix + "_cleanup_ms", std::to_string(cleanup_ms));
+        RecordProperty(prefix + "_dispatch_total_ms", std::to_string(dispatch_total_ms));
+        RecordProperty(prefix + "_write_buffer_ms", std::to_string(write_buffer_ms));
+        RecordProperty(prefix + "_read_buffer_ms", std::to_string(read_buffer_ms));
+        RecordProperty(prefix + "_write_buffer_bytes", std::to_string(write_buffer_bytes));
+        RecordProperty(prefix + "_read_buffer_bytes", std::to_string(read_buffer_bytes));
+        RecordProperty(prefix + "_pipeline_creations", std::to_string(pipeline_creations));
+        RecordProperty(prefix + "_target_overshoots", std::to_string(target_overshoots));
+        const double measured_interface_ms = write_buffer_ms + dispatch_total_ms + read_buffer_ms;
+        RecordProperty(prefix + "_measured_interface_ms", std::to_string(measured_interface_ms));
+        RecordProperty(prefix + "_dispatch_total_minus_phases_ms",
+                       std::to_string(dispatch_total_ms - pipeline_setup_ms - command_setup_ms -
+                                      submit_wait_ms - cleanup_ms));
+        RecordProperty(prefix + "_wall_ms", std::to_string(wall_ms));
+        RecordProperty(prefix + "_wall_minus_measured_ms",
+                       std::to_string(wall_ms - measured_interface_ms));
+        // Peaks are lifetime maxima, not additive counters. Only the complete
+        // fresh-compute fixture can report them as maxima for its own window.
+        if (lifetime_maxima)
+            RecordProperty(prefix + "_maximum_submit_wait_ms",
+                           std::to_string(maximum_submit_wait_ms));
+    };
+    RecordProperty("device", device->Info().name);
+    RecordProperty("retained_capacity", std::to_string(compute->Capacity()));
+    RecordProperty("explicit_buffer_bytes", std::to_string(device->BufferAllocationBytes()));
+    auto* vulkan = dynamic_cast<VulkanDevice*>(device.get());
+    ASSERT_NE(vulkan, nullptr);
+    const auto cache_initial = vulkan->PipelineCacheStatistics();
+    RecordProperty("pipeline_cache_enabled", cache_initial.enabled ? "true" : "false");
+    RecordProperty("pipeline_cache_creation_result",
+                   std::to_string(static_cast<int>(cache_initial.creation_result)));
+    RecordProperty("pipeline_cache_imported_bytes", std::to_string(cache_initial.imported_bytes));
+    RecordProperty("pipeline_cache_import_discarded",
+                   cache_initial.import_discarded ? "true" : "false");
+    RecordProperty("pipeline_cache_blob_bound_bytes",
+                   std::to_string(detail::kVulkanPipelineCacheBlobLimit));
+    RecordProperty("timing_scope",
+                   "host wall-clock observations, not GPU execution timestamps; interval fixture "
+                   "excludes device/compute SetUp; wall-minus-measured subtracts WriteBuffer, "
+                   "ReadBuffer and inclusive Dispatch total once, leaving host packing, decoding, "
+                   "coordination, assertions and diagnostic bookkeeping; no frame or interactive "
+                   "qualification");
+    RecordProperty("timing_failure_scope",
+                   "buffer timers include returned errors; buffer byte counters include only "
+                   "successful spans; dispatch phases and pipeline creations "
+                   "require device Dispatch success with valid submission timing; read failure "
+                   "retains successful dispatch observations; failed dispatch partial phases are "
+                   "not accumulated");
+    RecordProperty(
+        "pipeline_cache_scope",
+        "initial Endpoint warms projection; first interval first uses transport/dense; "
+        "repeated intervals reuse stage kernels; pipeline_creations counts successful dispatches "
+        "that created a pipeline object, not driver pipeline-cache hits");
     std::vector<RetainedEndpointInput> initial;
     for (const auto& fixture : sirius::test::retained_transport::cases) {
         const auto step = std::bit_cast<RetainedStepInput>(fixture.input);
@@ -504,8 +4096,15 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         input.control.integrator.abs_tolerance = 1e-9f;
         input.control.integrator.rel_tolerance = 1e-9f;
     }
+    const auto original_inputs = inputs;
+    const auto first_before = compute->Statistics();
+    const auto first_started = Clock::now();
     const auto outputs = AttemptRetainedIntervals(*compute, inputs);
+    const auto first_finished = Clock::now();
+    record_timing("first_interval", first_before, compute->Statistics(),
+                  milliseconds(first_started, first_finished));
     ASSERT_TRUE(outputs) << outputs.error().Description();
+    bool positive_embedded_projected_error = false;
     for (std::size_t row = 0; row < inputs.size(); ++row) {
         SCOPED_TRACE(sirius::test::retained_transport::cases[row].name);
         const auto& output = (*outputs)[row];
@@ -514,11 +4113,28 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
             << " failure=" << sirius::core::CoupledStepFailureName(output.failure);
         EXPECT_EQ(output.attempted_stages, 21U);
         EXPECT_LE(output.error_ratio, 1);
+        EXPECT_GE(output.embedded_projected_error_ratio, 0);
+        EXPECT_LE(output.embedded_projected_error_ratio, output.error_ratio);
+        for (const auto& check : output.error_checks) {
+            EXPECT_TRUE(check.observed);
+            EXPECT_TRUE(check.evaluated);
+            EXPECT_TRUE(std::isfinite(check.ratio));
+            EXPECT_LE(check.ratio, output.error_ratio);
+            EXPECT_GE(check.field, 8U);
+            EXPECT_LE(check.field, 40U);
+        }
+        positive_embedded_projected_error =
+            positive_embedded_projected_error || output.embedded_projected_error_ratio > 0;
+        RecordProperty("embedded_projected_error_" + std::to_string(row),
+                       std::to_string(output.embedded_projected_error_ratio));
+        RecordProperty("combined_error_" + std::to_string(row), std::to_string(output.error_ratio));
     }
+    EXPECT_TRUE(positive_embedded_projected_error);
     // Exact flat flow remains exact through all three independent candidates.
     const auto& flat = outputs->back();
     ASSERT_TRUE(flat.admissible);
     EXPECT_EQ(flat.error_ratio, 0);
+    EXPECT_EQ(flat.embedded_projected_error_ratio, 0);
     EXPECT_EQ(flat.full.physical[0].Center(), .75);
     EXPECT_EQ(flat.full.physical[3].Center(), 4.25);
     EXPECT_EQ(flat.midpoint.physical[0].Center(), .875);
@@ -528,7 +4144,12 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     // when the embedded error is exactly zero in flat space.
     auto sparse = inputs.back();
     sparse.start.phase[13] = sparse.start.physical[13] = {1, 0x1.000002p-35f, 0x1p-120f, 0, 1};
+    const auto sparse_before = compute->Statistics();
+    const auto sparse_started = Clock::now();
     const auto sparse_output = AttemptRetainedIntervals(*compute, {&sparse, 1});
+    const auto sparse_finished = Clock::now();
+    record_timing("repeated_sparse_interval", sparse_before, compute->Statistics(),
+                  milliseconds(sparse_started, sparse_finished));
     ASSERT_TRUE(sparse_output) << sparse_output.error().Description();
     ASSERT_TRUE(sparse_output->front().admissible);
     const auto& full_increment = sparse_output->front().full_increment[5];
@@ -541,8 +4162,21 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     inputs.resize(2);
     inputs[0].control.tolerance = 1e-30;
     inputs[1].start.phase[5].valid = 0;
+    const auto rejected_before = compute->Statistics();
+    const auto rejected_started = Clock::now();
     const auto rejected = AttemptRetainedIntervals(*compute, inputs);
+    const auto rejected_finished = Clock::now();
+    record_timing("repeated_rejection_interval", rejected_before, compute->Statistics(),
+                  milliseconds(rejected_started, rejected_finished));
     ASSERT_TRUE(rejected) << rejected.error().Description();
+    EXPECT_TRUE((*rejected)[0].error_checks[1].observed);
+    EXPECT_TRUE((*rejected)[0].error_checks[1].evaluated);
+    double largest_observed = 0;
+    for (const auto& check : (*rejected)[0].error_checks)
+        if (check.observed) largest_observed = std::max(largest_observed, check.ratio);
+    EXPECT_GT(largest_observed, 1);
+    EXPECT_EQ(largest_observed, (*rejected)[0].error_ratio);
+    for (const auto& check : (*rejected)[1].error_checks) EXPECT_FALSE(check.observed);
     for (const auto& output : *rejected) {
         EXPECT_FALSE(output.admissible);
         EXPECT_NE(output.failure, sirius::core::CoupledStepFailure::None);
@@ -551,6 +4185,533 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         EXPECT_FALSE(output.midpoint.valid);
         EXPECT_FALSE(output.refined.valid);
         for (const auto& value : output.full_increment) EXPECT_EQ(value.valid, 0U);
+    }
+    record_timing("interval_fixture", fixture_before, compute->Statistics(),
+                  milliseconds(fixture_started, Clock::now()), true);
+    // Keep serialization outside the unchanged interval timing window. A
+    // repeated gtest iteration creates a fresh device but can import this blob.
+    if (cache_initial.enabled) {
+        const auto cache_started = Clock::now();
+        const auto cache = vulkan->SnapshotPipelineCache();
+        RecordProperty("pipeline_cache_snapshot_wall_ms",
+                       std::to_string(milliseconds(cache_started, Clock::now())));
+        if (cache) {
+            RecordProperty("pipeline_cache_available_bytes",
+                           std::to_string(cache->available_bytes));
+            RecordProperty("pipeline_cache_exported_bytes", std::to_string(cache->exported_bytes));
+            RecordProperty("pipeline_cache_export_discarded",
+                           cache->export_discarded ? "true" : "false");
+            EXPECT_LE(cache->exported_bytes, detail::kVulkanPipelineCacheBlobLimit);
+        } else {
+            // Cache export is optional in the product. An export failure leaves
+            // its performance benefit unmeasured, not its physics disproved.
+            RecordProperty("pipeline_cache_export_error", cache.error().Description());
+        }
+    }
+    RecordProperty("pipeline_cache_memory_scope",
+                   "one process-lived serialized blob is bounded; driver-internal pipeline/cache "
+                   "allocations are separate from explicit_buffer_bytes; no frame qualification");
+    // These bounded equivalence and governor checks are outside the original
+    // interval timing window and keep its independent science cases unchanged.
+    TransferProbeDevice probe(*device);
+    const auto initial_allocation = device->BufferAllocationBytes();
+    // An intentionally tiny soft target exercises actual feedback/subdivision;
+    // its elapsed timings do not claim a production performance result.
+    auto observed = RetainedCompute::Create(probe, 4, false, 1e-12);
+    ASSERT_TRUE(observed) << observed.error().Description();
+    auto& paired_compute = **observed;
+    const auto allocated = device->BufferAllocationBytes();
+    EXPECT_GT(allocated, initial_allocation);
+    EXPECT_LE(allocated, 8ull * 1024 * 1024);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+    const auto endpoint_input = probe.allocations[4].handle;
+    const auto endpoint_output = probe.allocations[5].handle;
+    const auto endpoint_row_bytes = probe.allocations[5].bytes / paired_compute.Capacity();
+    const auto check_endpoint_transfers = [&](std::size_t rows, std::size_t calls,
+                                              std::size_t writes_begin, std::size_t reads_begin,
+                                              std::size_t submissions_begin) {
+        std::size_t writes = 0, reads = 0, submissions = 0;
+        for (std::size_t i = writes_begin; i < probe.writes.size(); ++i)
+            if (probe.writes[i].handle.value == endpoint_input.value) {
+                ++writes;
+                EXPECT_EQ(probe.writes[i].capacity, paired_compute.Capacity());
+                EXPECT_EQ(probe.writes[i].bytes,
+                          sizeof(std::uint32_t) + rows * sizeof(RetainedEndpointInput));
+            }
+        for (std::size_t i = reads_begin; i < probe.reads.size(); ++i)
+            if (probe.reads[i].handle.value == endpoint_output.value) {
+                ++reads;
+                EXPECT_EQ(probe.reads[i].bytes, rows * endpoint_row_bytes);
+            }
+        for (std::size_t i = submissions_begin; i < probe.submissions.size(); ++i)
+            if (probe.submissions[i].buffers[0].value == endpoint_input.value) {
+                ++submissions;
+                EXPECT_EQ(probe.submissions[i].binding_count, 2U);
+                EXPECT_EQ(probe.submissions[i].buffers[1].value, endpoint_output.value);
+                // The existing retained shader gives each row one workgroup.
+                EXPECT_EQ(probe.submissions[i].x, rows);
+                EXPECT_EQ(probe.submissions[i].y, 1U);
+                EXPECT_EQ(probe.submissions[i].z, 1U);
+            }
+        EXPECT_EQ(writes, calls);
+        EXPECT_EQ(reads, calls);
+        EXPECT_EQ(submissions, calls);
+    };
+    const auto run = [&](std::span<const RetainedIntervalInput> batch, std::size_t budget,
+                         std::uint64_t endpoint_calls, std::size_t endpoint_rows,
+                         bool first_upload = false) {
+        const auto before = paired_compute.Statistics();
+        const auto writes_begin = probe.writes.size(), reads_begin = probe.reads.size(),
+                   submissions_begin = probe.submissions.size();
+        const auto dispatches = probe.forwarded_dispatches;
+        auto result = AttemptRetainedIntervals(paired_compute, batch, budget);
+        const auto after = paired_compute.Statistics();
+        EXPECT_EQ(after[1].submissions - before[1].submissions, 3U);
+        EXPECT_EQ(after[2].submissions - before[2].submissions, endpoint_calls);
+        EXPECT_EQ(after[3].submissions - before[3].submissions, 1U);
+        EXPECT_EQ(probe.forwarded_dispatches - dispatches, 4 + endpoint_calls);
+        EXPECT_EQ(device->BufferAllocationBytes(), allocated);
+        EXPECT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+        if (!first_upload)
+            check_endpoint_transfers(endpoint_rows, endpoint_calls, writes_begin, reads_begin,
+                                     submissions_begin);
+        return result;
+    };
+    // Include a critical curved row and the independently pinned sparse flat
+    // row. Four projection rows exactly fit capacity; budget three must fall back.
+    const std::array pair_inputs{original_inputs.front(), sparse};
+    const auto serialized_before = paired_compute.Statistics();
+    const auto serialized = run(pair_inputs, 2, 6, 2, true);
+    const auto serialized_endpoint_calls =
+        paired_compute.Statistics()[2].submissions - serialized_before[2].submissions;
+    ASSERT_TRUE(serialized) << serialized.error().Description();
+    for (const auto& output : *serialized) ASSERT_TRUE(output.admissible);
+    const auto paired_before = paired_compute.Statistics();
+    const auto paired = run(pair_inputs, 4, 3, 4);
+    const auto paired_endpoint_calls =
+        paired_compute.Statistics()[2].submissions - paired_before[2].submissions;
+    ASSERT_TRUE(paired) << paired.error().Description();
+    const auto fallback = run(pair_inputs, 3, 6, 2);
+    ASSERT_TRUE(fallback) << fallback.error().Description();
+    for (std::size_t row = 0; row < pair_inputs.size(); ++row) {
+        SCOPED_TRACE(row);
+        EXPECT_TRUE(IntervalBitsAgree((*paired)[row], (*serialized)[row]));
+        EXPECT_TRUE(IntervalBitsAgree((*fallback)[row], (*serialized)[row]));
+    }
+    auto mixed = pair_inputs;
+    mixed[1].start.phase[5].valid = 0;
+    const auto mixed_paired = run(mixed, 4, 3, 4);
+    const auto mixed_serialized = run(mixed, 2, 6, 2);
+    ASSERT_TRUE(mixed_paired) << mixed_paired.error().Description();
+    ASSERT_TRUE(mixed_serialized) << mixed_serialized.error().Description();
+    ASSERT_TRUE((*mixed_paired)[0].admissible);
+    EXPECT_TRUE(IntervalBitsAgree((*mixed_paired)[0], (*paired)[0]));
+    EXPECT_FALSE((*mixed_paired)[1].admissible);
+    EXPECT_EQ((*mixed_paired)[1].failure, sirius::core::CoupledStepFailure::InvalidState);
+    for (std::size_t row = 0; row < mixed.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*mixed_paired)[row], (*mixed_serialized)[row]));
+    auto rejected_pair = pair_inputs;
+    rejected_pair[0].control.tolerance = 1e-30;
+    const auto rejected_paired = run(rejected_pair, 4, 3, 4);
+    const auto rejected_serialized = run(rejected_pair, 2, 6, 2);
+    ASSERT_TRUE(rejected_paired) << rejected_paired.error().Description();
+    ASSERT_TRUE(rejected_serialized) << rejected_serialized.error().Description();
+    ASSERT_FALSE((*rejected_paired)[0].admissible);
+    ASSERT_TRUE((*rejected_paired)[1].admissible);
+    EXPECT_TRUE(IntervalBitsAgree((*rejected_paired)[1], (*paired)[1]));
+    for (std::size_t row = 0; row < rejected_pair.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*rejected_paired)[row], (*rejected_serialized)[row]));
+    for (const auto* rejected_row : {&(*mixed_paired)[1], &(*rejected_paired)[0]}) {
+        for (const auto* endpoint : {&rejected_row->full, &rejected_row->lower,
+                                     &rejected_row->midpoint, &rejected_row->refined}) {
+            EXPECT_FALSE(endpoint->valid);
+            for (const auto& value : endpoint->phase) EXPECT_EQ(value.valid, 0U);
+            for (const auto& value : endpoint->physical) EXPECT_EQ(value.valid, 0U);
+        }
+        for (const auto* increment :
+             {&rejected_row->full_increment, &rejected_row->lower_increment,
+              &rejected_row->midpoint_increment, &rejected_row->refined_increment})
+            for (const auto& value : *increment) EXPECT_EQ(value.valid, 0U);
+    }
+    const auto writes_before_invalid = probe.writes.size();
+    const auto dispatches_before_invalid = probe.dispatch_calls;
+    for (const std::size_t budget : {0U, 1U, 5U}) {
+        const auto invalid = AttemptRetainedIntervals(paired_compute, pair_inputs, budget);
+        EXPECT_FALSE(invalid);
+    }
+    EXPECT_EQ(probe.writes.size(), writes_before_invalid);
+    EXPECT_EQ(probe.dispatch_calls, dispatches_before_invalid);
+    const auto default_before = paired_compute.Statistics();
+    const auto capacity_default = AttemptRetainedIntervals(paired_compute, pair_inputs);
+    ASSERT_TRUE(capacity_default) << capacity_default.error().Description();
+    EXPECT_EQ(paired_compute.Statistics()[2].submissions - default_before[2].submissions, 3U);
+    for (std::size_t row = 0; row < pair_inputs.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*capacity_default)[row], (*serialized)[row]));
+
+    // Prove the live coordinator forwards its reduced limit, rather than the
+    // static capacity. The first one-row attempt can pair; measured positive
+    // submission time exceeds the tiny target and the next attempt's limit is one.
+    EXPECT_GT(paired_compute.TakeSubmissionPeakMs(), 0);
+    RetainedTraceExecutor bounded_executor(paired_compute);
+    sirius::core::KerrSchildFamily flat_metric(sirius::core::KerrSchildParams::Minkowski());
+    sirius::core::Lightray ray{};
+    ray.position(1) = 5;
+    ray.velocity(0) = -1;
+    ray.velocity(1) = 1;
+    ray.step_size = 1;
+    sirius::core::Rk45CoupledState coupled;
+    coupled.length_scale = coupled.frequency_scale = 1;
+    coupled.tolerance = 1e-9;
+    coupled.variations[0].derivative(2) = .001;
+    coupled.variations[1].derivative(3) = .001;
+    coupled.variations[2].displacement(2) = 1;
+    coupled.variations[3].displacement(3) = 1;
+    sirius::core::IntegratorConfig control;
+    control.min_step = .01f;
+    control.max_step = 2;
+    sirius::core::Rk45CoupledComparison comparison;
+    const auto first_governed = paired_compute.Statistics();
+    ASSERT_TRUE(bounded_executor.Step(ray, flat_metric, control, coupled, comparison));
+    EXPECT_EQ(paired_compute.Statistics()[2].submissions - first_governed[2].submissions, 4U);
+    ASSERT_GT(bounded_executor.Statistics().batch_subdivisions, 0U);
+    const auto second_governed = paired_compute.Statistics();
+    const auto governed_writes = probe.writes.size(), governed_reads = probe.reads.size(),
+               governed_submissions = probe.submissions.size();
+    ASSERT_TRUE(bounded_executor.Step(ray, flat_metric, control, coupled, comparison));
+    EXPECT_EQ(paired_compute.Statistics()[1].submissions - second_governed[1].submissions, 3U);
+    EXPECT_EQ(paired_compute.Statistics()[2].submissions - second_governed[2].submissions, 6U);
+    EXPECT_EQ(paired_compute.Statistics()[3].submissions - second_governed[3].submissions, 1U);
+    ASSERT_NO_FATAL_FAILURE(
+        check_endpoint_transfers(1, 6, governed_writes, governed_reads, governed_submissions));
+    EXPECT_EQ(device->BufferAllocationBytes(), allocated);
+    std::uint32_t maximum_governed_endpoint_rows = 0;
+    for (std::size_t i = governed_submissions; i < probe.submissions.size(); ++i)
+        if (probe.submissions[i].buffers[0].value == endpoint_input.value)
+            maximum_governed_endpoint_rows =
+                std::max(maximum_governed_endpoint_rows, probe.submissions[i].x);
+    RecordProperty("endpoint_pairing_paired_endpoint_submissions",
+                   std::to_string(paired_endpoint_calls));
+    RecordProperty("endpoint_pairing_serialized_endpoint_submissions",
+                   std::to_string(serialized_endpoint_calls));
+    RecordProperty("endpoint_pairing_governed_endpoint_rows",
+                   std::to_string(maximum_governed_endpoint_rows));
+    RecordProperty("endpoint_pairing_scope",
+                   "stored-word equivalence within one product mode; capacity-four fit/fallback, "
+                   "inactive and rejected row positions, and actual tiny-target subdivision; "
+                   "outside interval_fixture timing, no frame-speed claim");
+
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, SharedEndpointDensePreservesPrivateIntervalsAndSerialRetry) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    TransferProbeDevice probe(*device);
+    ASSERT_TRUE(device->SupportsIndependentPair());
+    auto created = RetainedCompute::Create(probe, 4, false, 250);
+    ASSERT_TRUE(created) << created.error().Description();
+    auto& observed = **created;
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+    const auto endpoint_output = probe.allocations[5].handle;
+    const auto dense_output = probe.allocations[7].handle;
+    const auto resident = device->BufferAllocationBytes();
+    std::array<RetainedEndpointInput, 2> initial{};
+    std::array<RetainedIntervalInput, 2> inputs{};
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        const auto step =
+            std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases[row].input);
+        std::copy_n(step.values.begin(), 45, initial[row].values.begin());
+        auto& input = inputs[row];
+        std::copy_n(step.values.begin(), 4, input.metric.begin());
+        input.chart = step.values[44].Center();
+        input.interval = step.values[45].Center();
+        input.control.length_scale = input.control.frequency_scale = 1;
+        input.control.tolerance = 1e-4 / (4 * 30000);
+        input.control.integrator.min_step = static_cast<float>(input.interval);
+        input.control.integrator.max_step = 1;
+        input.control.integrator.abs_tolerance = input.control.integrator.rel_tolerance = 1e-9f;
+    }
+    const auto launched = observed.Endpoint(initial);
+    ASSERT_TRUE(launched) << launched.error().Description();
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        ASSERT_TRUE((*launched)[row].valid);
+        inputs[row].start = (*launched)[row];
+    }
+    const auto serial = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_TRUE(serial) << serial.error().Description();
+    for (const auto& row : *serial) ASSERT_TRUE(row.admissible);
+    probe.independent_pairs = true;
+    ASSERT_TRUE(observed.SupportsIndependentPair());
+    const auto paired = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_TRUE(paired) << paired.error().Description();
+    EXPECT_EQ(probe.pair_calls, 1U);
+    for (std::size_t row = 0; row < inputs.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*paired)[row], (*serial)[row]));
+
+    // The third Endpoint is the final projection in both execution schedules.
+    // Its rejected row must not acquire a speculative Dense decode error.
+    unsigned endpoint_reads = 0;
+    bool corrupt_dense = false;
+    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+        std::uint32_t flag = 0;
+        if (buffer.value == endpoint_output.value && ++endpoint_reads == 3) {
+            std::memcpy(bytes.data(), &flag, sizeof(flag));
+        } else if (corrupt_dense && buffer.value == dense_output.value) {
+            flag = 2;
+            std::memcpy(bytes.data(), &flag, sizeof(flag));
+        }
+    };
+    probe.independent_pairs = false;
+    const auto rejected_serial = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_TRUE(rejected_serial);
+    ASSERT_FALSE(rejected_serial->front().admissible);
+    ASSERT_TRUE(rejected_serial->back().admissible);
+    EXPECT_EQ(rejected_serial->front().failure, sirius::core::CoupledStepFailure::Projection);
+    endpoint_reads = 0;
+    corrupt_dense = true;
+    probe.independent_pairs = true;
+    const auto rejected_pair = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_TRUE(rejected_pair) << rejected_pair.error().Description();
+    for (std::size_t row = 0; row < inputs.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*rejected_pair)[row], (*rejected_serial)[row]));
+
+    // A malformed ACTIVE dense result remains a global error; a zero-input row
+    // already inactive before speculation also keeps the original decode veto.
+    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+        if (buffer.value == dense_output.value) {
+            const std::uint32_t malformed = 2;
+            std::memcpy(bytes.data(), &malformed, sizeof(malformed));
+        }
+    };
+    for (const bool initially_inactive : {false, true}) {
+        auto malformed_input = inputs;
+        if (initially_inactive) malformed_input[0].start.phase[5].valid = 0;
+        const auto malformed = AttemptRetainedIntervals(observed, malformed_input, 4);
+        ASSERT_FALSE(malformed);
+        EXPECT_EQ(malformed.error().operation(), "read retained dense segment");
+    }
+    probe.after_read = {};
+    const auto before_failed_read = observed.EndpointDenseStatistics();
+    probe.after_pair = [&] { probe.fail_next = TransferProbeDevice::Failure::Read; };
+    const auto failed_read = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_FALSE(failed_read);
+    EXPECT_EQ(failed_read.error().operation(), "retained transfer probe read");
+    EXPECT_EQ(observed.EndpointDenseStatistics().submissions - before_failed_read.submissions, 1U);
+    EXPECT_GT(observed.EndpointDenseStatistics().submit_wait_ms - before_failed_read.submit_wait_ms,
+              0);
+    probe.after_pair = {};
+    EXPECT_EQ(device->BufferAllocationBytes(), resident);
+
+    // Synthetic governor timings are explicit controls, not physical duration.
+    // The actual device still calculates every private candidate and retry.
+    probe.submission_ms = [](BufferHandle, std::uint32_t) { return 100.; };
+    probe.pair_submit_ms = 1200;
+    (void)observed.TakeSubmissionFeedback();
+    RetainedTraceExecutor executor(observed, {}, 1000);
+    sirius::core::KerrSchildFamily flat(sirius::core::KerrSchildParams::Minkowski());
+    sirius::core::Lightray ray{};
+    ray.position(1) = 5;
+    ray.velocity(0) = -1;
+    ray.velocity(1) = 1;
+    ray.step_size = 1;
+    sirius::core::Rk45CoupledState columns;
+    columns.length_scale = columns.frequency_scale = 1;
+    columns.tolerance = 1e-9;
+    columns.variations[0].derivative(2) = .001;
+    columns.variations[1].derivative(3) = .001;
+    columns.variations[2].displacement(2) = 1;
+    columns.variations[3].displacement(3) = 1;
+    sirius::core::IntegratorConfig control;
+    control.min_step = .01f;
+    control.max_step = 2;
+    sirius::core::Rk45CoupledComparison comparison;
+    const auto pairs_before = probe.pair_calls;
+    ASSERT_TRUE(executor.Step(ray, flat, control, columns, comparison));
+    EXPECT_EQ(probe.pair_calls - pairs_before, 1U);
+    EXPECT_EQ(executor.Statistics().paired_projection_retries, 1U);
+    EXPECT_EQ(columns.central_stages, 42U);
+    ASSERT_TRUE(executor.Step(ray, flat, control, columns, comparison));
+    EXPECT_EQ(probe.pair_calls - pairs_before, 1U);  // Sticky budget one is fully serialized.
+    // A pair has two different active prefixes, not two copies of their max.
+    std::array<RetainedDenseInput, 2> inactive_dense{};
+    for (const bool reverse : {false, true}) {
+        const auto endpoint_rows = reverse ? 1U : 2U;
+        const auto dense_rows = reverse ? 2U : 1U;
+        const auto before = observed.Statistics();
+        const auto asymmetric = observed.EndpointAndDense(
+            std::span(initial).first(endpoint_rows), std::span(inactive_dense).first(dense_rows));
+        ASSERT_TRUE(asymmetric) << asymmetric.error().Description();
+        const auto after = observed.Statistics();
+        EXPECT_EQ(after[2].command_row_counts[endpoint_rows],
+                  before[2].command_row_counts[endpoint_rows] + 1);
+        EXPECT_EQ(after[3].command_row_counts[dense_rows],
+                  before[3].command_row_counts[dense_rows] + 1);
+        EXPECT_EQ(after[2].completion_flag_counts[1],
+                  before[2].completion_flag_counts[1] + endpoint_rows);
+        EXPECT_EQ(after[3].completion_flag_counts[0],
+                  before[3].completion_flag_counts[0] + dense_rows);
+        EXPECT_TRUE(observed.EndpointDenseStatistics().command_row_counts.empty());
+    }
+    // Endpoint decode fails before Dense readback, after both commands complete.
+    const auto before_decode_failure = observed.Statistics();
+    probe.after_read = [endpoint_output](BufferHandle buffer, std::span<std::byte> bytes) {
+        if (buffer.value == endpoint_output.value) {
+            const std::uint32_t malformed = 2;
+            std::memcpy(bytes.data(), &malformed, sizeof(malformed));
+        }
+    };
+    const auto bad_pair = observed.EndpointAndDense(initial, inactive_dense);
+    ASSERT_FALSE(bad_pair);
+    EXPECT_EQ(bad_pair.error().operation(), "read retained endpoint");
+    const auto after_decode_failure = observed.Statistics();
+    EXPECT_EQ(after_decode_failure[2].command_row_counts[2],
+              before_decode_failure[2].command_row_counts[2] + 1);
+    EXPECT_EQ(after_decode_failure[3].command_row_counts[2],
+              before_decode_failure[3].command_row_counts[2] + 1);
+    EXPECT_EQ(after_decode_failure[2].completion_flag_counts[2],
+              before_decode_failure[2].completion_flag_counts[2] + 1);
+    EXPECT_EQ(after_decode_failure[3].completion_flag_counts,
+              before_decode_failure[3].completion_flag_counts);
+    probe.after_read = {};
+    EXPECT_EQ(device->BufferAllocationBytes(), resident);
+    RecordProperty("device", device->Info().name);
+    RecordProperty("scope",
+                   "actual pair arithmetic/word equivalence and injected rejection/read/governor "
+                   "controls; no frame-speed qualification");
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, ProjectionReserveKeepsLogicalCohortsBounded) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory);
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index);
+    for (const std::size_t rays : {3U, 7U, 8U, 13U}) {
+        SCOPED_TRACE(rays);
+        // ComputeDevice owns its buffers until destruction. Each finite case
+        // gets a separate device so its unchanged 8 MiB bound includes all rows.
+        auto opened = CreateVulkanDevice(*index);
+        ASSERT_TRUE(opened) << opened.error().Description();
+        auto& cohort_device = **opened;
+        ASSERT_TRUE(cohort_device.SetBufferAllocationLimit(8 * 1024 * 1024));
+        TransferProbeDevice probe(cohort_device);
+        const auto resident_before = cohort_device.BufferAllocationBytes();
+        const auto required = RetainedCompute::RequiredAllocationBytes(probe, 2 * rays);
+        ASSERT_TRUE(required);
+        auto created = RetainedCompute::Create(probe, 2 * rays, false, rays == 3 ? 100 : 250);
+        ASSERT_TRUE(created) << created.error().Description();
+        auto& reserved = **created;
+        EXPECT_EQ(cohort_device.BufferAllocationBytes(), resident_before + *required);
+        const auto endpoint_input = probe.allocations[4].handle;
+        std::promise<void> entered, release;
+        auto dispatched = entered.get_future();
+        auto released = release.get_future().share();
+        probe.before_dispatch = [&] {
+            if (probe.dispatch_calls == 1) {
+                entered.set_value();
+                released.wait();
+            }
+        };
+        // Timing feedback is controlled at the device seam; numerical outputs
+        // still come from the real stages. This makes queue limits deterministic.
+        bool reduced = false;
+        probe.submission_ms = [&](BufferHandle input, std::uint32_t rows) {
+            if (rays == 3 && !reduced && input.value == endpoint_input.value && rows == 6) {
+                reduced = true;
+                return 160.0;
+            }
+            return 1.0;
+        };
+        RetainedTraceExecutor executor(reserved, {}, 1000, rays);
+        auto held = std::async(std::launch::async, [&] {
+            sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+            sirius::core::CameraRay camera;
+            camera.origin(1) = 5;
+            camera.origin(2) = std::numbers::pi / 2;
+            camera.direction(1) = 1;
+            return executor.Launch(metric, 0, camera).has_value();
+        });
+        dispatched.wait();
+        std::vector<std::future<void>> workers;
+        // Extra queued rays prove that storage capacity does not also increase
+        // logical gathering. Hold a real preceding dispatch while all requests
+        // enter the queue; no elapsed-time assumption establishes it.
+        const std::size_t row_count = rays == 3 ? 12 : rays + 1;
+        for (std::size_t row = 0; row < row_count; ++row)
+            workers.push_back(std::async(std::launch::async, [&, row] {
+                sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+                sirius::core::Lightray ray{};
+                ray.position(1) = 5 + static_cast<double>(row);
+                ray.velocity(0) = -1;
+                ray.velocity(1) = 1;
+                ray.step_size = 1;
+                sirius::core::Rk45CoupledState columns;
+                columns.length_scale = columns.frequency_scale = 1;
+                columns.tolerance = 1e-9;
+                columns.variations[0].derivative(2) = .001;
+                columns.variations[1].derivative(3) = .001;
+                columns.variations[2].displacement(2) = 1;
+                columns.variations[3].displacement(3) = 1;
+                sirius::core::IntegratorConfig config;
+                config.min_step = .01f;
+                config.max_step = 2;
+                sirius::core::Rk45CoupledComparison comparison;
+                executor.BeginTrace();
+                const bool completed = executor.Step(ray, metric, config, columns, comparison);
+                executor.EndTrace();
+                EXPECT_TRUE(completed);
+                EXPECT_EQ(ray.position(0), -1);
+                EXPECT_EQ(ray.position(1), 6 + static_cast<double>(row));
+                EXPECT_EQ(ray.velocity(0), -1);
+                EXPECT_EQ(ray.velocity(1), 1);
+                EXPECT_EQ(columns.central_stages, 21U);
+                EXPECT_EQ(columns.variation_stages, 21U);
+            }));
+        RetainedTraceExecutorTestPeer::WaitForQueued(executor, row_count);
+        release.set_value();
+        EXPECT_TRUE(held.get());
+        for (auto& worker : workers) worker.get();
+        EXPECT_FALSE(executor.Error());
+        const auto stats = executor.Statistics();
+        EXPECT_EQ(stats.maximum_batch_rows, rays);
+        EXPECT_EQ(stats.full_batches, rays == 3 ? 5U : 1U);
+        EXPECT_EQ(stats.batch_row_counts[rays], rays == 3 ? 3U : 1U);
+        EXPECT_EQ(stats.batch_row_counts[1], 2U);
+        if (rays == 3) {
+            EXPECT_EQ(stats.batch_row_counts[2], 1U);
+        }
+        EXPECT_EQ(stats.camera_rows, 1U);
+        EXPECT_EQ(stats.interval_rows, row_count);
+        EXPECT_EQ(stats.accepted_intervals, row_count);
+        EXPECT_EQ(stats.batch_subdivisions, rays == 3 ? 1U : 0U);
+        EXPECT_EQ(stats.safety_fallbacks, 0U);
+        std::vector<std::uint32_t> projection_rows;
+        for (const auto& submission : probe.submissions)
+            if (submission.buffers[0].value == endpoint_input.value)
+                projection_rows.push_back(submission.x);
+        std::vector<std::uint64_t> expected_prefixes(reserved.Capacity() + 1);
+        for (const auto rows : projection_rows) ++expected_prefixes[rows];
+        EXPECT_EQ(stats.stage_timing[2].command_row_counts, expected_prefixes);
+        if (rays == 3) {
+            // The first soft overshoot gives budgets 6->1->2->4->6.
+            // Logical gathers 3,1,2,3,3 must recover pairing in the last cohort;
+            // comparing fullness against budget four would incorrectly stall.
+            EXPECT_EQ(projection_rows,
+                      (std::vector<std::uint32_t>{3, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2,
+                                                  2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 6, 6, 6}));
+        } else {
+            EXPECT_EQ(projection_rows,
+                      (std::vector<std::uint32_t>{
+                          static_cast<std::uint32_t>(rays), static_cast<std::uint32_t>(2 * rays),
+                          static_cast<std::uint32_t>(2 * rays),
+                          static_cast<std::uint32_t>(2 * rays), 1, 2, 2, 2}));
+        }
+        EXPECT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+        EXPECT_EQ(cohort_device.BufferAllocationBytes(), resident_before + *required);
     }
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
@@ -650,6 +4811,171 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     EXPECT_GT(executor.Statistics().reused_phases, 0U);
     EXPECT_EQ(executor.Statistics().initialized_phases, 4U);
 
+    // All original trace workers have joined. Later direct calibration calls
+    // share this compute owner but are outside these executor request counts.
+    const auto cohort = executor.Statistics();
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(cohort.stage_timing, compute->Statistics()));
+    const auto record_histogram = [&](const std::string& key,
+                                      const std::vector<std::uint64_t>& bins) {
+        EXPECT_EQ(bins.size(), compute->Capacity() + 1);
+        if (bins.empty()) return std::array<std::uint64_t, 2>{};
+        EXPECT_EQ(bins.front(), 0U);
+        std::string encoded;
+        std::array<std::uint64_t, 2> totals{};
+        for (std::size_t rows = 0; rows < bins.size(); ++rows) {
+            if (rows) encoded += ',';
+            encoded += std::to_string(bins[rows]);
+            totals[0] += bins[rows];
+            totals[1] += rows * bins[rows];
+        }
+        RecordProperty(key, encoded);
+        return totals;
+    };
+    RecordProperty("mixed_tracer_scope",
+                   "Original two launches and four joined flat/curved traces, before direct "
+                   "calibration and injected guard controls. Gathered cohorts differ from stage "
+                   "prefixes; raw flags are not physical admission; timings are inclusive host "
+                   "observations, not exclusive GPU costs.");
+    RecordProperty("mixed_tracer_device", device->Info().name);
+    RecordProperty("mixed_tracer_capacity", std::to_string(compute->Capacity()));
+    const auto gathered =
+        record_histogram("mixed_tracer_gather_prefix_counts", cohort.batch_row_counts);
+    EXPECT_EQ(gathered[0], cohort.batches);
+    EXPECT_EQ(gathered[1], cohort.camera_rows + cohort.sample_rows + cohort.interval_rows);
+    EXPECT_EQ(cohort.interval_rows, cohort.accepted_intervals + cohort.rejected_intervals);
+    const auto record_count = [&](const std::string& key, std::uint64_t value) {
+        RecordProperty("mixed_tracer_" + key, std::to_string(value));
+    };
+    record_count("batches", cohort.batches);
+    record_count("full_batches", cohort.full_batches);
+    record_count("camera_batches", cohort.camera_batches);
+    record_count("camera_rows", cohort.camera_rows);
+    record_count("sample_batches", cohort.sample_batches);
+    record_count("sample_rows", cohort.sample_rows);
+    record_count("interval_batches", cohort.interval_batches);
+    record_count("interval_rows", cohort.interval_rows);
+    record_count("accepted_intervals", cohort.accepted_intervals);
+    record_count("rejected_intervals", cohort.rejected_intervals);
+    EXPECT_TRUE(cohort.endpoint_dense_timing.command_row_counts.empty());
+    record_count("shared_endpoint_dense_submissions", cohort.endpoint_dense_timing.submissions);
+    RecordProperty("mixed_tracer_shared_endpoint_dense_submit_wait_ms",
+                   std::to_string(cohort.endpoint_dense_timing.submit_wait_ms));
+    RecordProperty("mixed_tracer_shared_endpoint_dense_dispatch_total_ms",
+                   std::to_string(cohort.endpoint_dense_timing.dispatch_total_ms));
+    for (std::size_t i = 0; i < RetainedCompute::kStageCount; ++i) {
+        const auto& stage = cohort.stage_timing[i];
+        const std::string key =
+            RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(i));
+        const auto prefixes =
+            record_histogram("mixed_tracer_" + key + "_prefix_counts", stage.command_row_counts);
+        EXPECT_EQ(prefixes[0], stage.submissions);
+        EXPECT_EQ(prefixes[1], stage.completion_flag_counts[0] + stage.completion_flag_counts[1] +
+                                   stage.completion_flag_counts[2]);
+        record_count(key + "_commands", stage.submissions);
+        record_count(key + "_prefix_rows", prefixes[1]);
+        record_count(key + "_raw_flag_zero", stage.completion_flag_counts[0]);
+        record_count(key + "_raw_flag_one", stage.completion_flag_counts[1]);
+        record_count(key + "_raw_flag_other", stage.completion_flag_counts[2]);
+        record_count(key + "_read_buffer_bytes", stage.read_buffer_bytes);
+        RecordProperty("mixed_tracer_" + key + "_submit_wait_ms",
+                       std::to_string(stage.submit_wait_ms));
+        RecordProperty("mixed_tracer_" + key + "_dispatch_total_ms",
+                       std::to_string(stage.dispatch_total_ms));
+        if (i == static_cast<std::size_t>(RetainedCompute::KernelStage::kRayCamera)) {
+            EXPECT_EQ(stage.submissions, cohort.camera_batches);
+            EXPECT_EQ(prefixes[1], cohort.camera_rows);
+        }
+    }
+
+    // Calibrate only this controller regression's budgets against genuine
+    // device stages. The original scientific fixtures above remain unchanged.
+    // Reinitialization uses the same public state as the actual Step consumer.
+    {
+        sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Kerr(1, .5));
+        sirius::core::CameraRay camera;
+        camera.origin(1) = 5;
+        camera.origin(2) = 1.1;
+        camera.direction(1) = .7;
+        camera.direction(2) = .2;
+        camera.direction(3) = .1;
+        camera.direction = camera.direction / std::sqrt(.7 * .7 + .2 * .2 + .1 * .1);
+        // Differentiate normalized sky coordinates and the two pupil axes so
+        // this growth control exercises physical beam columns as well as x,k.
+        camera.phase_space.emplace();
+        camera.phase_space->direction[1][0] = 1;
+        camera.phase_space->direction[2][1] = 1;
+        camera.phase_space->pupil_right[2] = 1;
+        camera.phase_space->pupil_up[3] = 1;
+        const auto launch = sirius::core::LaunchCameraRay(metric, .5, camera);
+        ASSERT_TRUE(launch);
+        sirius::core::Lightray candidate{};
+        candidate.position = launch->position;
+        candidate.velocity = launch->tangent;
+        // At h=1 the genuine DP midpoint disagreement dominates the embedded
+        // check; the measured calibration below requires that fact explicitly.
+        candidate.step_size = 1;
+        sirius::core::Rk45CoupledState columns;
+        columns.variations = launch->variations;
+        columns.length_scale = columns.frequency_scale = 1;
+        columns.tolerance = 1e-3;
+        sirius::core::IntegratorConfig control;
+        control.min_step = 1e-6f;
+        control.max_step = 2;
+        control.abs_tolerance = control.rel_tolerance = 1e-3f;
+        RetainedInitializeInput initialization;
+        initialization.values[0] = RetainedValue::FromDouble(1);
+        initialization.values[1] = RetainedValue::FromDouble(.5);
+        initialization.values[2] = initialization.values[3] = RetainedValue::FromDouble(0);
+        for (int axis = 0; axis < 4; ++axis) {
+            initialization.values[4 + axis] = RetainedValue::FromDouble(candidate.position(axis));
+            initialization.values[8 + axis] = RetainedValue::FromDouble(candidate.velocity(axis));
+            for (std::size_t column = 0; column < 4; ++column) {
+                initialization.values[12 + 8 * column + axis] =
+                    RetainedValue::FromDouble(columns.variations[column].displacement(axis));
+                initialization.values[16 + 8 * column + axis] =
+                    RetainedValue::FromDouble(columns.variations[column].derivative(axis));
+            }
+        }
+        initialization.values[44] = RetainedValue::FromDouble(1);
+        const auto start = compute->Initialize({&initialization, 1});
+        ASSERT_TRUE(start);
+        ASSERT_TRUE(start->front().valid);
+        RetainedEndpointInput projection;
+        std::copy_n(initialization.values.begin(), 4, projection.values.begin());
+        std::copy(start->front().phase.begin(), start->front().phase.end(),
+                  projection.values.begin() + 4);
+        projection.values[44] = RetainedValue::FromDouble(1);
+        const auto projected = compute->Endpoint({&projection, 1});
+        ASSERT_TRUE(projected);
+        ASSERT_TRUE(projected->front().valid);
+        RetainedIntervalInput interval;
+        std::copy_n(initialization.values.begin(), 4, interval.metric.begin());
+        interval.start = projected->front();
+        interval.chart = 1;
+        interval.interval = candidate.step_size;
+        interval.control = {control, 1, 1, columns.tolerance, columns.column_scale};
+        const auto calibration = AttemptRetainedDopriIntervals(*compute, {&interval, 1});
+        ASSERT_TRUE(calibration);
+        const auto& output = calibration->front();
+        ASSERT_TRUE(output.admissible);
+        ASSERT_GT(output.error_ratio, 0);
+        ASSERT_LT(output.embedded_projected_error_ratio, .5 * output.error_ratio);
+        const double scale = output.error_ratio / .8;
+        control.abs_tolerance *= static_cast<float>(scale);
+        control.rel_tolerance *= static_cast<float>(scale);
+        columns.tolerance *= scale;
+        const float accepted_interval = candidate.step_size;
+        sirius::core::Rk45CoupledComparison comparison;
+        const auto growth_limits = executor.Statistics().dense_growth_limits;
+        ASSERT_TRUE(executor.Step(candidate, metric, control, columns, comparison));
+        ASSERT_GT(comparison.error_ratio, .79);
+        ASSERT_LT(comparison.error_ratio, .81);
+        EXPECT_FLOAT_EQ(candidate.step_size, accepted_interval);
+        EXPECT_EQ(executor.Statistics().dense_growth_limits, growth_limits + 1);
+        EXPECT_EQ(columns.central_stages, 21U);
+        EXPECT_EQ(columns.variation_stages, 21U);
+    }
+
     sirius::core::KerrSchildFamily flat(sirius::core::KerrSchildParams::Minkowski());
     sirius::core::Lightray ray{};
     ray.position(1) = 5;
@@ -673,9 +4999,13 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     ASSERT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
     const auto midpoint = comparison.midpoint;
     const auto reused = executor.Statistics().reused_phases;
+    const auto rollbacks = executor.Statistics().tracer_rollbacks;
     // Mimic a rejected localized event: restore the original public state and
     // retry half the interval. The future phase must not contaminate this retry.
     executor.RejectLastInterval();
+    EXPECT_EQ(executor.Statistics().tracer_rollbacks, rollbacks + 1);
+    executor.RejectLastInterval();
+    EXPECT_EQ(executor.Statistics().tracer_rollbacks, rollbacks + 1);
     ray = before;
     coupled = columns;
     ray.step_size = .5f;
@@ -689,6 +5019,85 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     ray.proper_time = std::nextafter(ray.proper_time, std::numeric_limits<float>::infinity());
     ASSERT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
     EXPECT_GT(executor.Statistics().reused_phases, phase_reuses);
+
+    // Nested scopes count one live thread. Ending the inner scope must leave
+    // that thread registered; standalone calls after the outer end use the
+    // bounded fallback rather than falsely claiming all live traces are queued.
+    executor.BeginTrace();
+    executor.BeginTrace();
+    auto trace_ready = executor.Statistics().coalescing_traces_ready;
+    EXPECT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
+    EXPECT_GT(executor.Statistics().coalescing_traces_ready, trace_ready);
+    executor.EndTrace();
+    trace_ready = executor.Statistics().coalescing_traces_ready;
+    EXPECT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
+    EXPECT_GT(executor.Statistics().coalescing_traces_ready, trace_ready);
+    executor.EndTrace();
+    trace_ready = executor.Statistics().coalescing_traces_ready;
+    EXPECT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
+    EXPECT_EQ(executor.Statistics().coalescing_traces_ready, trace_ready);
+
+    {
+        // One registered worker is deliberately doing host work. A concurrent
+        // standalone camera request cannot stand in for that missing worker.
+        executor.BeginTrace();
+        std::promise<void> registered, release;
+        const auto released = release.get_future().share();
+        auto held = std::async(std::launch::async, [&] {
+            executor.BeginTrace();
+            registered.set_value();
+            released.wait();
+            executor.EndTrace();
+        });
+        struct ReleaseHeldTrace {
+            std::promise<void>& release;
+            std::future<void>& held;
+            RetainedTraceExecutor& executor;
+            ~ReleaseHeldTrace() {
+                release.set_value();
+                held.wait();
+                executor.EndTrace();
+            }
+        } release_scope{release, held, executor};
+        registered.get_future().wait();
+        const auto waiting = RetainedTraceExecutorTestPeer::WaitForFirstRequest(executor);
+        ASSERT_TRUE(waiting);
+        const auto mixed_before = executor.Statistics();
+        EXPECT_TRUE(mixed_before.awaiting_first_request);
+        EXPECT_EQ(mixed_before.first_request_waits, waiting->first_request_waits);
+        EXPECT_EQ(mixed_before.first_request_wait_ms, waiting->first_request_wait_ms);
+        EXPECT_EQ(mixed_before.maximum_first_request_wait_ms,
+                  waiting->maximum_first_request_wait_ms);
+        EXPECT_TRUE(std::isfinite(waiting->current_first_request_wait_ms));
+        EXPECT_GE(waiting->current_first_request_wait_ms, 0);
+        EXPECT_GE(mixed_before.current_first_request_wait_ms,
+                  waiting->current_first_request_wait_ms);
+        trace_ready = executor.Statistics().coalescing_traces_ready;
+        auto standalone = std::async(std::launch::async, [&] {
+            sirius::core::KerrSchildFamily camera_metric(
+                sirius::core::KerrSchildParams::Minkowski());
+            sirius::core::CameraRay camera;
+            camera.origin(1) = 5;
+            camera.origin(2) = std::numbers::pi / 2;
+            camera.direction(1) = 1;
+            return executor.Launch(camera_metric, 0, camera);
+        });
+        EXPECT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
+        EXPECT_TRUE(standalone.get());
+        const auto mixed_after = executor.Statistics();
+        EXPECT_GT(mixed_after.first_request_waits, mixed_before.first_request_waits);
+        EXPECT_GE(mixed_after.maximum_first_request_wait_ms,
+                  mixed_before.current_first_request_wait_ms);
+        EXPECT_EQ(mixed_after.coalescing_traces_ready, trace_ready);
+        const auto mixed_batches = mixed_after.batches - mixed_before.batches;
+        EXPECT_GT(mixed_batches, 0U);
+        // Prior feedback can shrink the batch limit until these two requests
+        // fill it. The held trace forbids traces-ready, but permits a full batch
+        // or the bounded timeout; no stopping occurs inside this window.
+        EXPECT_EQ(mixed_after.coalescing_timeouts - mixed_before.coalescing_timeouts +
+                      mixed_after.full_batches - mixed_before.full_batches,
+                  mixed_batches);
+    }
     const auto accepted = ray;
     const auto submissions = executor.Statistics().interval_batches;
     cancelled = true;
@@ -698,6 +5107,519 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         EXPECT_EQ(ray.position(axis), accepted.position(axis));
         EXPECT_EQ(ray.velocity(axis), accepted.velocity(axis));
     }
+    const auto timing = executor.Statistics();
+    std::uint64_t observed_batches = 0, observed_rows = 0;
+    for (std::size_t rows = 0; rows < timing.batch_row_counts.size(); ++rows) {
+        observed_batches += timing.batch_row_counts[rows];
+        observed_rows += rows * timing.batch_row_counts[rows];
+    }
+    EXPECT_EQ(timing.batch_row_counts.size(), compute->Capacity() + 1);
+    EXPECT_EQ(timing.batch_row_counts.front(), 0U);
+    EXPECT_EQ(observed_batches, timing.batches);
+    EXPECT_EQ(observed_rows, timing.interval_rows + timing.camera_rows + timing.sample_rows);
+    EXPECT_EQ(timing.interval_rows, timing.accepted_intervals + timing.rejected_intervals);
+    std::uint64_t scaled_rows = 0;
+    for (const auto rows : timing.scaled_interval_bins) scaled_rows += rows;
+    EXPECT_EQ(scaled_rows, timing.interval_measurements);
+    EXPECT_LE(timing.interval_measurements, timing.interval_rows);
+    EXPECT_GT(timing.interval_min, 0);
+    EXPECT_GT(timing.scaled_interval_min, 0);
+    EXPECT_LE(timing.interval_min, timing.interval_max);
+    EXPECT_LE(timing.scaled_interval_min, timing.scaled_interval_max);
+    EXPECT_EQ(timing.acceleration_calls, timing.accepted_intervals);
+    EXPECT_LE(timing.full_batches, timing.batches);
+    EXPECT_LE(timing.coalescing_timeouts, timing.batches);
+    EXPECT_LE(timing.coalescing_timeouts, timing.coalescing_underfilled);
+    EXPECT_LE(timing.coalescing_underfilled, timing.batches);
+    EXPECT_EQ(timing.coalescing_stopped, 0U);
+    EXPECT_GT(timing.coalescing_traces_ready, 0U);
+    EXPECT_LE(timing.coalescing_timeouts + timing.coalescing_traces_ready, timing.batches);
+    RecordProperty("coordinator_batches", std::to_string(timing.batches));
+    RecordProperty("coordinator_full_batches", std::to_string(timing.full_batches));
+    RecordProperty("coordinator_rows", std::to_string(observed_rows));
+    RecordProperty("first_request_waits", std::to_string(timing.first_request_waits));
+    RecordProperty("first_request_wait_ms", std::to_string(timing.first_request_wait_ms));
+    RecordProperty("maximum_first_request_wait_ms",
+                   std::to_string(timing.maximum_first_request_wait_ms));
+    RecordProperty("awaiting_first_request", timing.awaiting_first_request ? "true" : "false");
+    RecordProperty("current_first_request_wait_ms",
+                   std::to_string(timing.current_first_request_wait_ms));
+    RecordProperty("coalescing_timeouts", std::to_string(timing.coalescing_timeouts));
+    RecordProperty("coalescing_underfilled", std::to_string(timing.coalescing_underfilled));
+    RecordProperty("coalescing_traces_ready", std::to_string(timing.coalescing_traces_ready));
+    RecordProperty("coalescing_wait_ms", std::to_string(timing.coalescing_wait_ms));
+    RecordProperty("maximum_coalescing_wait_ms", std::to_string(timing.maximum_coalescing_wait_ms));
+    RecordProperty("coordinator_execute_ms", std::to_string(timing.execute_ms));
+    RecordProperty("worker_acceleration_calls", std::to_string(timing.acceleration_calls));
+    RecordProperty("worker_acceleration_ms", std::to_string(timing.acceleration_ms));
+
+    // Deterministic hard-guard timings at the real ComputeDevice seam. This is
+    // a controller witness, not a measured Radeon/software-driver duration.
+    TransferProbeDevice guard_probe(*device);
+    auto guard_created = RetainedCompute::Create(guard_probe, 4, false, 0);
+    ASSERT_TRUE(guard_created) << guard_created.error().Description();
+    auto& guard_compute = **guard_created;
+    const auto guard_allocation = device->BufferAllocationBytes();
+    EXPECT_LE(guard_allocation, 8ull * 1024 * 1024);
+    ASSERT_EQ(guard_probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+    const auto transport_input = guard_probe.allocations[2].handle;
+    const auto endpoint_input = guard_probe.allocations[4].handle;
+    guard_probe.capture_output = guard_probe.allocations[5].handle;
+    const auto endpoint_row_bytes = guard_probe.allocations[5].bytes / guard_compute.Capacity();
+    enum class GuardTiming {
+        Normal,
+        Reducible,
+        Irreducible,
+        RetryIrreducible,
+        FailedPair,
+        FailedRetry,
+        Cancelled,
+        CancelledRetry
+    };
+    GuardTiming guard_timing = GuardTiming::Normal;
+    std::size_t paired_endpoint_calls = 0;
+    std::atomic<bool> guard_cancelled{false};
+    guard_probe.submission_ms = [&](BufferHandle input, std::uint32_t rows) {
+        if (input.value == endpoint_input.value && rows == 2) {
+            ++paired_endpoint_calls;
+            if (guard_timing == GuardTiming::Cancelled) guard_cancelled = true;
+            if (guard_timing == GuardTiming::FailedPair)
+                guard_probe.fail_next = TransferProbeDevice::Failure::Read;
+            return guard_timing == GuardTiming::Normal ? 800.0 : 1200.0;
+        }
+        if (input.value == endpoint_input.value && rows == 1 && paired_endpoint_calls == 3) {
+            if (guard_timing == GuardTiming::FailedRetry)
+                guard_probe.fail_next = TransferProbeDevice::Failure::Read;
+            if (guard_timing == GuardTiming::CancelledRetry) guard_cancelled = true;
+        }
+        if (input.value == transport_input.value && rows == 1 &&
+            (guard_timing == GuardTiming::Irreducible ||
+             (guard_timing == GuardTiming::RetryIrreducible && paired_endpoint_calls == 3)))
+            return 1100.0;
+        return 600.0;
+    };
+    const auto make_ray = [] {
+        sirius::core::Lightray result{};
+        result.position(1) = 5;
+        result.velocity(0) = -1;
+        result.velocity(1) = 1;
+        result.step_size = 1;
+        return result;
+    };
+    const auto make_columns = [] {
+        sirius::core::Rk45CoupledState result;
+        result.length_scale = result.frequency_scale = 1;
+        result.tolerance = 1e-9;
+        result.variations[0].derivative(2) = .001;
+        result.variations[1].derivative(3) = .001;
+        result.variations[2].displacement(2) = 1;
+        result.variations[3].displacement(3) = 1;
+        return result;
+    };
+    const auto seed = make_ray();
+    const auto seed_columns = make_columns();
+    RetainedInitializeInput seed_input;
+    for (std::size_t axis = 0; axis < 4; ++axis) {
+        seed_input.values[axis] = RetainedValue::FromDouble(0);
+        seed_input.values[4 + axis] =
+            RetainedValue::FromDouble(seed.position(static_cast<int>(axis)));
+        seed_input.values[8 + axis] =
+            RetainedValue::FromDouble(seed.velocity(static_cast<int>(axis)));
+        for (std::size_t column = 0; column < 4; ++column) {
+            seed_input.values[12 + 8 * column + axis] = RetainedValue::FromDouble(
+                seed_columns.variations[column].displacement(static_cast<int>(axis)));
+            seed_input.values[16 + 8 * column + axis] = RetainedValue::FromDouble(
+                seed_columns.variations[column].derivative(static_cast<int>(axis)));
+        }
+    }
+    seed_input.values[44] = RetainedValue::FromDouble(1);
+    const auto phase = guard_compute.Initialize({&seed_input, 1});
+    ASSERT_TRUE(phase) << phase.error().Description();
+    ASSERT_TRUE(phase->front().valid);
+    RetainedEndpointInput projection_input;
+    std::copy_n(seed_input.values.begin(), 4, projection_input.values.begin());
+    std::copy(phase->front().phase.begin(), phase->front().phase.end(),
+              projection_input.values.begin() + 4);
+    projection_input.values[44] = RetainedValue::FromDouble(1);
+    const auto initial = guard_compute.Endpoint({&projection_input, 1});
+    ASSERT_TRUE(initial) << initial.error().Description();
+    ASSERT_TRUE(initial->front().valid);
+    RetainedIntervalInput serial_input;
+    std::copy_n(seed_input.values.begin(), 4, serial_input.metric.begin());
+    serial_input.start = initial->front();
+    serial_input.chart = 1;
+    serial_input.interval = 1;
+    serial_input.control = {config, seed_columns.length_scale, seed_columns.frequency_scale,
+                            seed_columns.tolerance, seed_columns.column_scale};
+    guard_probe.readbacks.clear();
+    const auto serial = AttemptRetainedIntervals(guard_compute, {&serial_input, 1}, 1);
+    ASSERT_TRUE(serial) << serial.error().Description();
+    ASSERT_TRUE(serial->front().admissible);
+    const auto serial_rows = guard_probe.readbacks;
+    ASSERT_EQ(serial_rows.size(), 6U);
+    const auto serial_feedback = guard_compute.TakeSubmissionFeedback();
+    EXPECT_EQ(serial_feedback.peak_ms, 600);
+    EXPECT_EQ(serial_feedback.peak_rows, 1U);
+    EXPECT_EQ(serial_feedback.maximum_rows, 1U);
+    EXPECT_EQ(serial_feedback.maximum_one_row_ms, 600);
+    ASSERT_TRUE(serial_feedback.maximum_one_row_stage);
+    EXPECT_EQ(*serial_feedback.maximum_one_row_stage, RetainedCompute::KernelStage::kDense);
+    const auto consumed = guard_compute.TakeSubmissionFeedback();
+    EXPECT_EQ(consumed.peak_ms, 0);
+    EXPECT_EQ(consumed.maximum_rows, 0U);
+    EXPECT_EQ(consumed.maximum_one_row_ms, 0);
+    EXPECT_FALSE(consumed.maximum_one_row_stage);
+    const auto compare_row = [&](const std::vector<std::byte>& actual, std::size_t row,
+                                 const std::vector<std::byte>& expected) {
+        ASSERT_EQ(expected.size(), endpoint_row_bytes);
+        ASSERT_GE(actual.size(), (row + 1) * endpoint_row_bytes);
+        const auto first = actual.begin() + row * endpoint_row_bytes;
+        EXPECT_TRUE(std::equal(expected.begin(), expected.end(), first));
+    };
+    for (const auto mode :
+         {GuardTiming::Normal, GuardTiming::Reducible, GuardTiming::Irreducible,
+          GuardTiming::RetryIrreducible, GuardTiming::FailedPair, GuardTiming::FailedRetry,
+          GuardTiming::Cancelled, GuardTiming::CancelledRetry}) {
+        SCOPED_TRACE(static_cast<unsigned>(mode));
+        guard_timing = mode;
+        paired_endpoint_calls = 0;
+        guard_cancelled = false;
+        guard_probe.readbacks.clear();
+        auto guarded_ray = make_ray();
+        auto guarded_columns = make_columns();
+        sirius::core::Rk45CoupledComparison guarded_comparison;
+        RetainedTraceExecutor guarded_executor(
+            guard_compute, [&] { return guard_cancelled.load(); }, 1000, 1);
+        const bool completed =
+            guarded_executor.Step(guarded_ray, flat, config, guarded_columns, guarded_comparison);
+        const auto guarded_stats = guarded_executor.Statistics();
+        const bool recovered = mode == GuardTiming::Normal || mode == GuardTiming::Reducible;
+        EXPECT_EQ(completed, recovered);
+        EXPECT_EQ(guarded_stats.accepted_intervals, recovered ? 1U : 0U);
+        EXPECT_EQ(guarded_stats.rejected_intervals, recovered ? 0U : 1U);
+        EXPECT_EQ(guarded_stats.interval_rows, 1U);
+        EXPECT_EQ(guarded_stats.paired_projection_retries,
+                  mode == GuardTiming::Reducible || mode == GuardTiming::RetryIrreducible ||
+                          mode == GuardTiming::FailedRetry || mode == GuardTiming::CancelledRetry
+                      ? 1U
+                      : 0U);
+        const auto completed_stages = mode == GuardTiming::FailedPair ? 0U
+                                      : mode == GuardTiming::Reducible ||
+                                              mode == GuardTiming::RetryIrreducible ||
+                                              mode == GuardTiming::CancelledRetry
+                                          ? 42U
+                                          : 21U;
+        EXPECT_EQ(guarded_columns.central_stages, completed_stages);
+        EXPECT_EQ(guarded_columns.variation_stages, completed_stages);
+        EXPECT_EQ(guard_probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+        EXPECT_EQ(device->BufferAllocationBytes(), guard_allocation);
+        if (recovered) {
+            EXPECT_FALSE(guarded_executor.Error());
+            ASSERT_EQ(guard_probe.readbacks.size(), mode == GuardTiming::Normal ? 4U : 10U);
+            for (std::size_t part = 0; part < 3; ++part)
+                for (std::size_t order = 0; order < 2; ++order)
+                    ASSERT_NO_FATAL_FAILURE(compare_row(guard_probe.readbacks[part + 1], order,
+                                                        serial_rows[part * 2 + order]));
+            EXPECT_EQ(guarded_columns.central_stages, mode == GuardTiming::Normal ? 21U : 42U);
+            for (int axis = 0; axis < 4; ++axis) {
+                EXPECT_EQ(guarded_ray.position(axis), serial->front().full.physical[axis].Center());
+                EXPECT_EQ(guarded_ray.velocity(axis),
+                          serial->front().full.physical[4 + axis].Center());
+            }
+            if (mode == GuardTiming::Reducible) {
+                for (std::size_t row = 0; row < serial_rows.size(); ++row)
+                    ASSERT_NO_FATAL_FAILURE(
+                        compare_row(guard_probe.readbacks[4 + row], 0, serial_rows[row]));
+                EXPECT_EQ(guarded_stats.safety_fallbacks, 1U);
+                const auto after_recovery = guard_compute.Statistics();
+                ASSERT_TRUE(guarded_executor.Step(guarded_ray, flat, config, guarded_columns,
+                                                  guarded_comparison));
+                EXPECT_EQ(paired_endpoint_calls, 3U);
+                EXPECT_EQ(guard_compute.Statistics()[2].submissions - after_recovery[2].submissions,
+                          6U);
+                EXPECT_EQ(guarded_executor.Statistics().paired_projection_retries, 1U);
+                EXPECT_FALSE(guarded_executor.Error());
+                RecordProperty("paired_guard_recovery_retries",
+                               std::to_string(guarded_stats.paired_projection_retries));
+                RecordProperty("paired_guard_recovery_charged_stages",
+                               std::to_string(guarded_columns.central_stages - 21));
+            }
+        } else {
+            const bool fatal =
+                mode != GuardTiming::Cancelled && mode != GuardTiming::CancelledRetry;
+            EXPECT_EQ(guarded_executor.Error().has_value(), fatal);
+            EXPECT_EQ(guarded_ray.terminated, 3);
+            for (int axis = 0; axis < 4; ++axis) {
+                EXPECT_EQ(guarded_ray.position(axis), seed.position(static_cast<int>(axis)));
+                EXPECT_EQ(guarded_ray.velocity(axis), seed.velocity(static_cast<int>(axis)));
+                for (std::size_t column = 0; column < 4; ++column) {
+                    EXPECT_EQ(guarded_columns.variations[column].displacement(axis),
+                              seed_columns.variations[column].displacement(static_cast<int>(axis)));
+                    EXPECT_EQ(guarded_columns.variations[column].derivative(axis),
+                              seed_columns.variations[column].derivative(static_cast<int>(axis)));
+                }
+            }
+            EXPECT_EQ(guarded_ray.proper_time, seed.proper_time);
+            EXPECT_EQ(guarded_ray.step_size, seed.step_size);
+            EXPECT_EQ(guard_probe.readbacks.size(),
+                      mode == GuardTiming::RetryIrreducible || mode == GuardTiming::CancelledRetry
+                          ? 10U
+                      : mode == GuardTiming::FailedPair ? 1U
+                                                        : 4U);
+            if (mode == GuardTiming::FailedPair || mode == GuardTiming::FailedRetry) {
+                ASSERT_TRUE(guarded_executor.Error());
+                EXPECT_EQ(guarded_executor.Error()->operation(), "retained transfer probe read");
+            }
+            if (mode == GuardTiming::Irreducible || mode == GuardTiming::RetryIrreducible) {
+                ASSERT_TRUE(guarded_executor.Error());
+                EXPECT_EQ(guarded_executor.Error()->operation(), "dispatch retained renderer");
+                // The paired endpoint peak is 1200ms. The terminal one-row
+                // observation is transport at 1100ms, including a retry-only
+                // overshoot after a preceding window with different stage identity.
+                EXPECT_EQ(guarded_executor.Error()->detail(),
+                          "single-row submission exceeded the safety duration: "
+                          "stage=transport, active_rows=1, submit_wait_ms=1100, limit_ms=1000");
+            }
+            if (fatal) {
+                const auto calls = guard_probe.dispatch_calls;
+                EXPECT_FALSE(guarded_executor.Step(guarded_ray, flat, config, guarded_columns,
+                                                   guarded_comparison));
+                EXPECT_EQ(guard_probe.dispatch_calls, calls);
+                EXPECT_EQ(guarded_columns.central_stages, completed_stages);
+                EXPECT_EQ(guarded_columns.variation_stages, completed_stages);
+            }
+        }
+    }
+    RecordProperty("paired_guard_timing_scope",
+                   "injected valid seam observations only: single rows 600ms, paired endpoints "
+                   "800/1200ms, transport overshoot 1100ms, hard bound 1000ms; no sleeps and no "
+                   "hardware-duration claim; real device outputs compare bitwise to serialization");
+
+    // The curved DP packet has four independent private trials. A packed
+    // overshoot must retry all of them at budget one before publishing a ray.
+    const auto dp_original =
+        std::bit_cast<RetainedStepInput>(sirius::test::retained_dopri::connection.input);
+    RetainedEndpointInput dp_projection;
+    std::copy_n(dp_original.values.begin(), 45, dp_projection.values.begin());
+    guard_probe.submission_ms = [](BufferHandle, std::uint32_t) { return 600.0; };
+    const auto dp_start = guard_compute.Endpoint({&dp_projection, 1});
+    ASSERT_TRUE(dp_start) << dp_start.error().Description();
+    ASSERT_TRUE(dp_start->front().valid);
+    RetainedIntervalInput dp_input;
+    std::copy_n(dp_original.values.begin(), 4, dp_input.metric.begin());
+    dp_input.start = dp_start->front();
+    dp_input.chart = dp_original.values[44].Center();
+    dp_input.interval = dp_original.values[45].Center();
+    dp_input.control.length_scale = dp_input.control.frequency_scale = 1;
+    dp_input.control.tolerance = 1e-4 / (4 * 30000);
+    dp_input.control.integrator.min_step = static_cast<float>(dp_input.interval);
+    dp_input.control.integrator.max_step = 1;
+    dp_input.control.integrator.abs_tolerance = dp_input.control.integrator.rel_tolerance = 1e-9f;
+    const auto rounded = [](const RetainedValue& value) {
+        return (sirius::core::Twofold(value.high) + sirius::core::Twofold(value.low) +
+                sirius::core::Twofold(value.tail))
+            .Rounded();
+    };
+    sirius::core::KerrSchildFamily dp_family(
+        {dp_input.metric[0].Center(), dp_input.metric[1].Center(), dp_input.metric[2].Center(),
+         dp_input.metric[3].Center()});
+    sirius::core::OutgoingKerrSchild dp_metric(dp_family);
+    ASSERT_EQ(dp_input.chart, -1);
+    auto dp_ray = sirius::core::Lightray{};
+    dp_ray.step_size = static_cast<float>(dp_input.interval);
+    sirius::core::Rk45CoupledState dp_columns;
+    dp_columns.length_scale = dp_columns.frequency_scale = 1;
+    dp_columns.tolerance = dp_input.control.tolerance;
+    dp_columns.column_scale = dp_input.control.column_scale;
+    for (int axis = 0; axis < 4; ++axis) {
+        dp_ray.position(axis) = rounded(dp_input.start.physical[axis]);
+        dp_ray.velocity(axis) = rounded(dp_input.start.physical[4 + axis]);
+        for (std::size_t column = 0; column < 4; ++column) {
+            dp_columns.variations[column].displacement(axis) =
+                rounded(dp_input.start.physical[8 + 8 * column + axis]);
+            dp_columns.variations[column].derivative(axis) =
+                rounded(dp_input.start.physical[12 + 8 * column + axis]);
+        }
+    }
+    // Step initializes from the public rounded physical state, not the
+    // fixture's original retained phase. Use that identical start for serial.
+    RetainedInitializeInput dp_initialization;
+    for (std::size_t parameter = 0; parameter < 4; ++parameter)
+        dp_initialization.values[parameter] =
+            RetainedValue::FromDouble(dp_input.metric[parameter].Center());
+    for (std::size_t field = 0; field < 40; ++field)
+        dp_initialization.values[4 + field] =
+            RetainedValue::FromDouble(rounded(dp_input.start.physical[field]));
+    dp_initialization.values[44] = RetainedValue::FromDouble(dp_input.chart);
+    const auto dp_phase = guard_compute.Initialize({&dp_initialization, 1});
+    ASSERT_TRUE(dp_phase) << dp_phase.error().Description();
+    ASSERT_TRUE(dp_phase->front().valid);
+    RetainedEndpointInput dp_serial_projection;
+    std::copy_n(dp_initialization.values.begin(), 4, dp_serial_projection.values.begin());
+    std::copy(dp_phase->front().phase.begin(), dp_phase->front().phase.end(),
+              dp_serial_projection.values.begin() + 4);
+    dp_serial_projection.values[44] = dp_initialization.values[44];
+    const auto dp_serial_start = guard_compute.Endpoint({&dp_serial_projection, 1});
+    ASSERT_TRUE(dp_serial_start) << dp_serial_start.error().Description();
+    ASSERT_TRUE(dp_serial_start->front().valid);
+    auto dp_serial_input = dp_input;
+    std::copy_n(dp_initialization.values.begin(), 4, dp_serial_input.metric.begin());
+    dp_serial_input.start = dp_serial_start->front();
+    guard_probe.readbacks.clear();
+    const auto dp_serial = AttemptRetainedDopriIntervals(guard_compute, {&dp_serial_input, 1}, 1);
+    ASSERT_TRUE(dp_serial) << dp_serial.error().Description();
+    ASSERT_TRUE(dp_serial->front().admissible);
+    ASSERT_TRUE(dp_serial->front().dopri);
+    EXPECT_EQ(dp_serial->front().attempted_stages, 21U);
+    const auto dp_serial_rows = guard_probe.readbacks;
+    ASSERT_EQ(dp_serial_rows.size(), 7U);
+    guard_probe.readbacks.clear();
+    const auto dp_input_buffer = guard_probe.allocations[12].handle;
+    const auto dp_output_buffer = guard_probe.allocations[13].handle;
+    std::vector<std::uint32_t> dp_dispatch_rows;
+    guard_probe.submission_ms = [&](BufferHandle input, std::uint32_t rows) {
+        if (input.value == dp_input_buffer.value) {
+            dp_dispatch_rows.push_back(rows);
+            return rows == 4 ? 1200.0 : 600.0;
+        }
+        return 600.0;
+    };
+    {
+        RetainedTraceExecutor dp_executor(guard_compute, {}, 1000, 1);
+        sirius::core::Rk45CoupledComparison dp_comparison;
+        ASSERT_TRUE(dp_executor.Step(dp_ray, dp_metric, dp_input.control.integrator, dp_columns,
+                                     dp_comparison));
+        EXPECT_FALSE(dp_executor.Error());
+        EXPECT_EQ(dp_dispatch_rows, (std::vector<std::uint32_t>{4, 1, 1, 1, 1}));
+        EXPECT_EQ(dp_executor.Statistics().accepted_intervals, 1U);
+        EXPECT_EQ(dp_executor.Statistics().paired_projection_retries, 1U);
+        EXPECT_EQ(dp_executor.Statistics().safety_fallbacks, 1U);
+        EXPECT_EQ(dp_columns.central_stages, 42U);
+        EXPECT_EQ(dp_columns.variation_stages, 42U);
+        ASSERT_EQ(guard_probe.readbacks.size(), 12U);
+        for (std::size_t part = 0; part < 3; ++part)
+            for (std::size_t order = 0; order < 2; ++order)
+                ASSERT_NO_FATAL_FAILURE(compare_row(guard_probe.readbacks[part + 1], order,
+                                                    dp_serial_rows[part * 2 + order]));
+        ASSERT_NO_FATAL_FAILURE(compare_row(guard_probe.readbacks[4], 0, dp_serial_rows[6]));
+        for (std::size_t row = 0; row < dp_serial_rows.size(); ++row)
+            ASSERT_NO_FATAL_FAILURE(
+                compare_row(guard_probe.readbacks[5 + row], 0, dp_serial_rows[row]));
+        for (int axis = 0; axis < 4; ++axis) {
+            EXPECT_EQ(dp_ray.position(axis), rounded(dp_serial->front().full.physical[axis]));
+            EXPECT_EQ(dp_ray.velocity(axis), rounded(dp_serial->front().full.physical[4 + axis]));
+            for (std::size_t column = 0; column < 4; ++column) {
+                EXPECT_EQ(dp_columns.variations[column].displacement(axis),
+                          rounded(dp_serial->front().full.physical[8 + 8 * column + axis]));
+                EXPECT_EQ(dp_columns.variations[column].derivative(axis),
+                          rounded(dp_serial->front().full.physical[12 + 8 * column + axis]));
+            }
+        }
+        dp_dispatch_rows.clear();
+        ASSERT_TRUE(dp_executor.Step(dp_ray, dp_metric, dp_input.control.integrator, dp_columns,
+                                     dp_comparison));
+        EXPECT_FALSE(dp_executor.Error());
+        EXPECT_EQ(dp_dispatch_rows, (std::vector<std::uint32_t>{1, 1, 1, 1}));
+        EXPECT_EQ(dp_executor.Statistics().accepted_intervals, 2U);
+        EXPECT_EQ(dp_executor.Statistics().paired_projection_retries, 1U);
+        EXPECT_EQ(dp_executor.Statistics().safety_fallbacks, 1U);
+        EXPECT_EQ(dp_columns.central_stages, 63U);
+        EXPECT_EQ(dp_columns.variation_stages, 63U);
+    }
+
+    // Decode every performed trial before applying a Full-row refusal. A
+    // malformed later Lower completion cannot be masked by that refusal.
+    guard_probe.submission_ms = [](BufferHandle, std::uint32_t) { return 600.0; };
+    const auto dp_reference = AttemptRetainedDopriIntervals(guard_compute, {&dp_input, 1}, 4);
+    ASSERT_TRUE(dp_reference) << dp_reference.error().Description();
+    ASSERT_TRUE(dp_reference->front().admissible);
+    ASSERT_TRUE(dp_reference->front().dopri);
+    const auto dp_row_bytes = guard_probe.allocations[13].bytes / guard_compute.Capacity();
+    for (const bool malformed_lower : {false, true}) {
+        SCOPED_TRACE(malformed_lower);
+        std::size_t dp_reads = 0;
+        guard_probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+            if (buffer.value != dp_output_buffer.value) return;
+            ++dp_reads;
+            ASSERT_EQ(bytes.size(), 4 * dp_row_bytes);
+            const std::uint32_t refused = 0;
+            std::memcpy(bytes.data(), &refused, sizeof(refused));
+            if (malformed_lower) {
+                const std::uint32_t malformed = 2;
+                std::memcpy(bytes.data() + dp_row_bytes, &malformed, sizeof(malformed));
+            }
+        };
+        const auto refused = AttemptRetainedDopriIntervals(guard_compute, {&dp_input, 1}, 4);
+        EXPECT_EQ(dp_reads, 1U);
+        if (malformed_lower) {
+            ASSERT_FALSE(refused);
+            EXPECT_EQ(refused.error().operation(), "read retained DP phase");
+            EXPECT_EQ(refused.error().detail(), "invalid completion state");
+        } else {
+            ASSERT_TRUE(refused) << refused.error().Description();
+            const auto& row = refused->front();
+            EXPECT_FALSE(row.admissible);
+            EXPECT_FALSE(row.dopri);
+            EXPECT_EQ(row.failure, sirius::core::CoupledStepFailure::Interpolation);
+            EXPECT_EQ(row.attempted_stages, 21U);
+            for (const auto* endpoint : {&row.full, &row.lower, &row.midpoint, &row.refined}) {
+                EXPECT_FALSE(endpoint->valid);
+                EXPECT_EQ(endpoint->component, 4U);
+                for (const auto* values : {&endpoint->phase, &endpoint->physical})
+                    for (const auto& value : *values)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+            }
+            for (const auto* increment : {&row.full_increment, &row.lower_increment,
+                                          &row.midpoint_increment, &row.refined_increment})
+                for (const auto& value : *increment)
+                    EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                              (std::array<std::uint32_t, 5>{}));
+        }
+        guard_probe.after_read = {};
+        const auto recovered = AttemptRetainedDopriIntervals(guard_compute, {&dp_input, 1}, 4);
+        ASSERT_TRUE(recovered) << recovered.error().Description();
+        ASSERT_TRUE(recovered->front().admissible);
+        ASSERT_TRUE(recovered->front().dopri);
+        EXPECT_TRUE(IntervalBitsAgree(recovered->front(), dp_reference->front()));
+    }
+
+    // A failed camera launch has no accepted interval through which to export
+    // timings. Preserve that stage in the error, including an adjacent timing
+    // above the unchanged strict 1000ms guard which coarse decimals could hide.
+    sirius::core::CameraRay guard_camera;
+    guard_camera.origin(1) = 5;
+    guard_camera.origin(2) = std::numbers::pi / 2;
+    guard_camera.direction(1) = 1;
+    const auto ray_camera_input = guard_probe.allocations[10].handle;
+    for (const double duration :
+         {1000.0, std::nextafter(1000.0, std::numeric_limits<double>::infinity())}) {
+        guard_probe.submission_ms = [&, duration](BufferHandle input, std::uint32_t rows) {
+            EXPECT_EQ(input.value, ray_camera_input.value);
+            EXPECT_EQ(rows, 1U);
+            return duration;
+        };
+        RetainedTraceExecutor guarded_executor(guard_compute, {}, 1000);
+        const auto launch = guarded_executor.Launch(flat, 0, guard_camera);
+        const bool permitted = duration == 1000;
+        EXPECT_EQ(launch.has_value(), permitted);
+        EXPECT_EQ(guarded_executor.Statistics().initialized_phases, 0U);
+        EXPECT_EQ(guarded_executor.Statistics().interval_rows, 0U);
+        if (permitted) {
+            EXPECT_FALSE(guarded_executor.Error());
+        } else {
+            ASSERT_TRUE(guarded_executor.Error());
+            EXPECT_EQ(guarded_executor.Error()->detail(),
+                      "single-row submission exceeded the safety duration: "
+                      "stage=ray_camera, active_rows=1, "
+                      "submit_wait_ms=1000.0000000000001, limit_ms=1000");
+            const auto calls = guard_probe.dispatch_calls;
+            EXPECT_FALSE(guarded_executor.Launch(flat, 0, guard_camera));
+            EXPECT_EQ(guard_probe.dispatch_calls, calls);
+        }
+    }
+    ASSERT_NO_FATAL_FAILURE(CheckStickyErrorDrainsQueuedRequests(*device));
+
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
@@ -739,17 +5661,156 @@ TEST_F(RetainedComputeTest, RejectedStepRowsCannotExposeOldOrPartialCandidates) 
 
 TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
-    auto wide = RetainedCompute::Create(*device, 24, true);
+    RecordProperty("fma_fp32_enabled", static_cast<int>(device->Info().fma_fp32_enabled));
+    RecordProperty("selected_device", device->Info().name);
+    RecordProperty("selected_driver",
+                   device->Info().driver_name + ": " + device->Info().driver_info);
+    RecordProperty("product_mode", "fp64 requested; selected modules recorded independently");
+    RecordProperty("preserves_fp32_denormals", device->Info().preserves_fp32_denormals);
+    RecordProperty("rounds_fp32_to_nearest", device->Info().rounds_fp32_to_nearest);
+    RecordProperty("supports_fp64", device->Info().supports_fp64);
+    RecordProperty("rounds_fp64_to_nearest", device->Info().rounds_fp64_to_nearest);
+    TransferProbeDevice probe(*device);
+    probe.independent_pairs = true;
+    std::size_t modules = 0;
+    probe.after_load = [&](std::span<const std::uint32_t> code) {
+        ASSERT_LT(modules, RetainedCompute::kStageCount);
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+        ASSERT_TRUE(digest) << digest.error();
+        RecordProperty("selected_module_" + std::to_string(modules),
+                       std::format("stage={};bytes={};sha256={}",
+                                   RetainedCompute::StageName(
+                                       static_cast<RetainedCompute::KernelStage>(modules)),
+                                   code.size_bytes(), *digest));
+        ++modules;
+    };
+    auto wide = RetainedCompute::Create(probe, 24, true);
     if (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest) {
         ASSERT_FALSE(wide);
         EXPECT_NE(wide.error().detail().find("binary64"), std::string::npos);
         return;
     }
     ASSERT_TRUE(wide) << wide.error().Description();
+    ASSERT_EQ(modules, RetainedCompute::kStageCount);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+    auto* vulkan = dynamic_cast<VulkanDevice*>(device.get());
+    ASSERT_NE(vulkan, nullptr);
+    const auto properties = vulkan->TimestampProperties();
+    RecordProperty("timestamp_valid_bits", std::to_string(properties.valid_bits));
+    RecordProperty("timestamp_period_ns", std::format("{:.17g}", properties.period_ns));
+    const auto timestamps = vulkan->SetDispatchTimestampsEnabled(true);
+    RecordProperty("timestamp_observation",
+                   timestamps ? "enabled" : timestamps.error().Description());
+    RecordProperty("observation_scope",
+                   "unchanged original FP64 science calls, no repeats; wide-only ordered "
+                   "dispatch/readback observations, narrow call has only a host span; device spans "
+                   "include barriers/scheduling, not isolated shader or calibrated driver time; "
+                   "complete-call spans include marker/capture observers and exclude digest "
+                   "serialization, assertions and result disposal; no frame/cold/release claim");
+    using Stage = RetainedCompute::KernelStage;
+    using Readback = std::pair<Stage, std::vector<std::byte>>;
+    std::vector<Readback> readbacks;
+    std::string phase;
+    std::size_t observations = 0;
+    const auto capture = [&](const std::string& stage, const DispatchTiming* host) {
+        ASSERT_NE(host, nullptr);
+        const auto key = "device_observation_" + std::to_string(observations++);
+        auto value = std::format(
+            "phase={};stage={};pipeline_ms={:.17g};setup_ms={:.17g};"
+            "host_completion_ms={:.17g};cleanup_ms={:.17g};total_ms={:.17g}",
+            phase, stage, host->pipeline_setup_ms, host->command_setup_ms, host->submit_wait_ms,
+            host->cleanup_ms, host->total_ms);
+        if (const auto& timestamp = vulkan->LastDispatchTimestamp(); timestamp) {
+            value += std::format(
+                ";query_result={};begin={};end={};available0={};available1={};"
+                "host_submit_ms={:.17g};host_wait_ms={:.17g};device_ms={}",
+                static_cast<int>(timestamp->query_result), timestamp->ticks[0], timestamp->ticks[1],
+                timestamp->availability[0], timestamp->availability[1], timestamp->host_submit_ms,
+                timestamp->host_wait_ms,
+                timestamp->device_span_ms ? std::format("{:.17g}", *timestamp->device_span_ms)
+                                          : "unavailable");
+        }
+        RecordProperty(key, value);
+    };
+    probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
+        ASSERT_FALSE(bound.empty());
+        ASSERT_FALSE(probe.submissions.empty());
+        for (std::size_t i = 0; i < probe.allocations.size(); i += 2)
+            if (bound[0].value == probe.allocations[i].handle.value) {
+                capture(std::format("{};groups_x={}",
+                                    RetainedCompute::StageName(static_cast<Stage>(i / 2)),
+                                    probe.submissions.back().x),
+                        host);
+                return;
+            }
+        FAIL() << "unknown FP64 observation stage";
+    };
+    probe.after_pair_timing = [&](const IndependentPairTiming* host) {
+        ASSERT_NE(host, nullptr);
+        ASSERT_GE(probe.writes.size(), 2U);
+        const auto& endpoint_write = probe.writes[probe.writes.size() - 2];
+        const auto& dense_write = probe.writes.back();
+        ASSERT_EQ(endpoint_write.handle.value, probe.allocations[4].handle.value);
+        ASSERT_EQ(dense_write.handle.value, probe.allocations[6].handle.value);
+        ASSERT_GE(endpoint_write.bytes, sizeof(std::uint32_t));
+        ASSERT_GE(dense_write.bytes, sizeof(std::uint32_t));
+        // Both programs were already uploaded by the preceding original calls;
+        // these two transfers contain only their actual active row prefixes.
+        const auto endpoint_bytes = endpoint_write.bytes - sizeof(std::uint32_t);
+        const auto dense_bytes = dense_write.bytes - sizeof(std::uint32_t);
+        ASSERT_EQ(endpoint_bytes % sizeof(RetainedEndpointInput), 0U);
+        ASSERT_EQ(dense_bytes % sizeof(RetainedDenseInput), 0U);
+        capture(std::format("endpoint+dense;endpoint_rows={};dense_rows={}",
+                            endpoint_bytes / sizeof(RetainedEndpointInput),
+                            dense_bytes / sizeof(RetainedDenseInput)),
+                &host->combined);
+    };
+    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+        for (std::size_t i = 1; i < probe.allocations.size(); i += 2)
+            if (buffer.value == probe.allocations[i].handle.value) {
+                readbacks.emplace_back(static_cast<Stage>(i / 2),
+                                       std::vector<std::byte>(bytes.begin(), bytes.end()));
+                return;
+            }
+        FAIL() << "unknown FP64 readback stage";
+    };
+    const auto observe = [&](const char* name, std::size_t expected_reads, auto&& operation) {
+        phase = name;
+        readbacks.clear();
+        const auto started = std::chrono::steady_clock::now();
+        auto result = operation();
+        const auto finished = std::chrono::steady_clock::now();
+        if (result) {
+            EXPECT_EQ(readbacks.size(), expected_reads);
+        }
+        RecordProperty(
+            phase + "_complete_call_ms",
+            std::format("{:.17g}",
+                        std::chrono::duration<double, std::milli>(finished - started).count()));
+        for (std::size_t index = 0; index < readbacks.size(); ++index) {
+            const auto& [stage, bytes] = readbacks[index];
+            const auto stride =
+                probe.allocations[2 * static_cast<std::size_t>(stage) + 1].bytes / 24;
+            EXPECT_GT(stride, 0U);
+            if (stride == 0) continue;
+            EXPECT_EQ(bytes.size() % stride, 0U);
+            const auto digest = sirius::base::Sha256Hex(
+                std::span(reinterpret_cast<const std::uint8_t*>(bytes.data()), bytes.size()));
+            EXPECT_TRUE(digest);
+            if (digest)
+                RecordProperty(phase + "_readback_" + std::to_string(index),
+                               std::format("stage={};rows={};bytes={};sha256={}",
+                                           RetainedCompute::StageName(stage), bytes.size() / stride,
+                                           bytes.size(), *digest));
+        }
+        RecordProperty(phase + "_readbacks", std::to_string(readbacks.size()));
+        return result;
+    };
     std::vector<RetainedRayCameraInput> cameras;
     for (const auto& fixture : sirius::test::retained_ray_camera::cases)
         cameras.push_back(std::bit_cast<RetainedRayCameraInput>(fixture.input));
-    const auto launched = (*wide)->RayCamera(cameras);
+    const auto launched = observe("ray_camera", 1, [&] { return (*wide)->RayCamera(cameras); });
     ASSERT_TRUE(launched) << launched.error().Description();
     for (std::size_t row = 0; row < cameras.size(); ++row)
         EXPECT_TRUE(CameraAgrees((*launched)[row], sirius::test::retained_ray_camera::cases[row]));
@@ -761,11 +5822,11 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
         std::copy_n(steps.back().values.begin(), 45, endpoint.values.begin());
         endpoints.push_back(endpoint);
     }
-    const auto stepped = (*wide)->Step(steps);
+    const auto stepped = observe("transport", 1, [&] { return (*wide)->Step(steps); });
     ASSERT_TRUE(stepped) << stepped.error().Description();
     for (std::size_t row = 0; row < steps.size(); ++row)
         EXPECT_TRUE(StepAgrees((*stepped)[row], sirius::test::retained_transport::cases[row]));
-    const auto projected = (*wide)->Endpoint(endpoints);
+    const auto projected = observe("endpoint", 1, [&] { return (*wide)->Endpoint(endpoints); });
     ASSERT_TRUE(projected) << projected.error().Description();
     std::vector<RetainedIntervalInput> intervals(steps.size());
     std::vector<RetainedInitializeInput> physical(steps.size());
@@ -788,11 +5849,14 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
                   physical[row].values.begin() + 4);
         physical[row].values[44] = steps[row].values[44];
     }
-    const auto initialized = (*wide)->Initialize(physical);
+    const auto initialized =
+        observe("initialize", 1, [&] { return (*wide)->Initialize(physical); });
     ASSERT_TRUE(initialized) << initialized.error().Description();
     for (const auto& row : *initialized) EXPECT_TRUE(row.valid);
-    const auto narrow_intervals = AttemptRetainedIntervals(*compute, intervals);
-    const auto wide_intervals = AttemptRetainedIntervals(**wide, intervals);
+    const auto narrow_intervals = observe(
+        "narrow_intervals", 0, [&] { return AttemptRetainedIntervals(*compute, intervals); });
+    const auto wide_intervals =
+        observe("wide_intervals", 10, [&] { return AttemptRetainedIntervals(**wide, intervals); });
     ASSERT_TRUE(narrow_intervals) << narrow_intervals.error().Description();
     ASSERT_TRUE(wide_intervals) << wide_intervals.error().Description();
     for (std::size_t row = 0; row < intervals.size(); ++row) {
@@ -806,6 +5870,25 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
                                   (*narrow_intervals)[row].full.physical, intervals[row].control),
             1e-4);
     }
+    const auto pair_inputs = std::span<const RetainedIntervalInput>(intervals).first(2);
+    const auto serialized_before = (*wide)->Statistics();
+    const auto serialized =
+        observe("serialized", 10, [&] { return AttemptRetainedIntervals(**wide, pair_inputs, 2); });
+    ASSERT_TRUE(serialized) << serialized.error().Description();
+    EXPECT_EQ((*wide)->Statistics()[2].submissions - serialized_before[2].submissions, 6U);
+    const auto paired_before = (*wide)->Statistics();
+    const auto paired =
+        observe("paired", 7, [&] { return AttemptRetainedIntervals(**wide, pair_inputs, 4); });
+    ASSERT_TRUE(paired) << paired.error().Description();
+    EXPECT_EQ((*wide)->Statistics()[2].submissions - paired_before[2].submissions, 3U);
+    for (std::size_t row = 0; row < pair_inputs.size(); ++row) {
+        SCOPED_TRACE(row);
+        ASSERT_TRUE((*paired)[row].admissible);
+        EXPECT_TRUE(IntervalBitsAgree((*paired)[row], (*serialized)[row]));
+    }
+    RecordProperty("device_observations", std::to_string(observations));
+    EXPECT_EQ(observations, 30U);
+    EXPECT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
@@ -835,8 +5918,26 @@ TEST(RetainedValue, Binary64InputsKeepTheirRepresentationResidual) {
     control.tolerance = 1e-40;
     const double expected = 0x1p-120 / (control.tolerance * (1 + first[8].Center()));
     EXPECT_DOUBLE_EQ(RetainedPhysicalError(first, second, control), expected);
+    std::size_t limiting_field = 41;
+    EXPECT_DOUBLE_EQ(RetainedPhysicalError(first, second, control, &limiting_field), expected);
+    EXPECT_EQ(limiting_field, 8U);
     EXPECT_DOUBLE_EQ(RetainedPhysicalError(second, first, control), expected);
     EXPECT_EQ(RetainedPhysicalError(first, first, control), 0);
+    EXPECT_EQ(RetainedPhysicalError(first, first, control, &limiting_field), 0);
+    EXPECT_EQ(limiting_field, 40U);
+    first.fill(RetainedValue::FromDouble(0));
+    second = first;
+    first[0] = RetainedValue::FromDouble(1);
+    control.integrator.abs_tolerance = control.integrator.rel_tolerance = 1;
+    // One physical central component contributes 1/2; the norm is its RMS
+    // over eight components, rather than that largest single contributor.
+    EXPECT_DOUBLE_EQ(RetainedPhysicalError(first, second, control, &limiting_field),
+                     .5 / std::sqrt(8.));
+    EXPECT_EQ(limiting_field, 40U);
+    second[8].valid = 0;
+    EXPECT_EQ(RetainedPhysicalError(first, second, control, &limiting_field),
+              std::numeric_limits<double>::infinity());
+    EXPECT_EQ(limiting_field, 41U);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif

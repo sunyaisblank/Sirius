@@ -215,6 +215,11 @@ struct SessionConfig {
 // and every enum/feature dependency are enforced before allocation or dispatch.
 [[nodiscard]] std::optional<std::string> SessionConfigIssue(const SessionConfig& config);
 
+// Same configured display-linear transformation for final output and a separate
+// provisional viewer snapshot. It never mutates the renderer's radiance owner.
+void ApplySessionDisplayPipeline(std::vector<float>& pixels, int width, int height,
+                                 const SessionConfig& config);
+
 // Orchestrates shared camera, trace, detector and output work.
 class RenderSession {
   public:
@@ -276,6 +281,15 @@ class RenderSession {
         completion_callback_ = std::move(cb);
     }
     void SetProgressCallback(ProgressCallback cb) { progress_.SetCallback(cb); }
+    // Advisory tiles do not commit a Vulkan caller display or output file.
+    // Install before Start; delivery may clear/replace an installed callback.
+    // Callbacks run without session/display/scheduler locks. Cancel is safe;
+    // WaitForCompletion from a tile callback defers joining to the owning caller.
+    // The session and callback captures must outlive that owner's final wait.
+    void SetCompletedTileCallback(CompletedTileCallback cb) {
+        std::lock_guard<std::mutex> lock(callback_mutex_);
+        completed_tile_callback_ = std::move(cb);
+    }
 
   private:
     void SetupActions();
@@ -284,6 +298,8 @@ class RenderSession {
     [[nodiscard]] base::Expected<void> Initialise();
     void ScheduleNextTile();
     void RenderTile(Tile* tile);
+    void PublishCompletedTile(int x, int y, int width, int height, std::span<const float> rgba);
+    void PublishCompletedTile(const Tile& tile);
     // Vulkan render path: dispatches the trace kernel per governed tile and
     // fills the display buffer, then fires AllTilesComplete so WriteOutput
     // applies the host display pipeline. Declines loudly (Error) when the
@@ -326,6 +342,7 @@ class RenderSession {
     std::thread render_thread_;
     std::string error_message_;
     CompletionCallback completion_callback_;
+    CompletedTileCallback completed_tile_callback_;
     mutable std::mutex callback_mutex_;
 
     // Physics components. metric_ is null when the CPU path cannot represent the

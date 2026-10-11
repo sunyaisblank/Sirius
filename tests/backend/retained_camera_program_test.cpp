@@ -2,6 +2,8 @@
 
 #include <gtest/gtest.h>
 
+#include "support/test_resource.h"
+
 #include <algorithm>
 #include <array>
 #include <bit>
@@ -14,7 +16,7 @@
 #include <string>
 #include <vector>
 
-#ifdef SIRIUS_RETAINED_CAMERA_TEST_DIR
+#ifdef SIRIUS_TEST_HAS_RETAINED_CAMERA
 #include "program_fixture.h"
 
 namespace {
@@ -68,9 +70,9 @@ void CheckProgram(bool compensated) {
     ::testing::Test::RecordProperty("retained_camera_driver", device->Info().driver_info);
     ::testing::Test::RecordProperty("retained_camera_registers", std::to_string(kRegisters));
     ::testing::Test::RecordProperty("retained_camera_instructions", std::to_string(kInstructions));
-    const std::string shader =
-        std::string(SIRIUS_RETAINED_CAMERA_TEST_DIR) +
-        (compensated ? "/program_camera_probe-fp32comp.spv" : "/program_camera_probe-fp32.spv");
+    const std::string shader = sirius::test::ResourcePath(
+        compensated ? "tests/backend/retained_camera/program_camera_probe-fp32comp.spv"
+                    : "tests/backend/retained_camera/program_camera_probe-fp32.spv");
     std::ifstream file(shader, std::ios::binary | std::ios::ate);
     ASSERT_TRUE(file) << shader;
     const auto size = file.tellg();
@@ -178,7 +180,7 @@ void CheckProgram(bool compensated) {
 #endif
 
 TEST(RetainedCameraProgram, Fp32CompletePhysicalLaunchAndRefusals) {
-#ifdef SIRIUS_RETAINED_CAMERA_TEST_DIR
+#ifdef SIRIUS_TEST_HAS_RETAINED_CAMERA
     ASSERT_NO_FATAL_FAILURE(CheckProgram(false));
 #else
     GTEST_SKIP() << "Retained camera compiler and SPIR-V tools are not configured";
@@ -186,7 +188,7 @@ TEST(RetainedCameraProgram, Fp32CompletePhysicalLaunchAndRefusals) {
 }
 
 TEST(RetainedCameraProgram, CompensatedCompletePhysicalLaunchAndRefusals) {
-#ifdef SIRIUS_RETAINED_CAMERA_TEST_DIR
+#ifdef SIRIUS_TEST_HAS_RETAINED_CAMERA
     ASSERT_NO_FATAL_FAILURE(CheckProgram(true));
 #else
     GTEST_SKIP() << "Retained camera compiler and SPIR-V tools are not configured";

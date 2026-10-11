@@ -3,6 +3,9 @@ if(NOT DEFINED SIRIUS_RENDER_TESTS OR NOT EXISTS "${SIRIUS_RENDER_TESTS}")
 endif()
 
 execute_process(
+    COMMAND_ECHO STDOUT
+    ECHO_OUTPUT_VARIABLE
+    ECHO_ERROR_VARIABLE
     # Disable Mesa's disk cache to cover cold startup, including software
     # compilation deferred until submission. This also covers cold Dozen on
     # physical runs; real output must succeed under the unchanged ray limits.

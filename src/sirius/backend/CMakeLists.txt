@@ -70,7 +70,14 @@ endif()
 # not depend on a test fixture or an extra installed runtime file.
 find_program(SIRIUS_SPIRV_AS spirv-as)
 find_program(SIRIUS_SPIRV_DIS spirv-dis)
-if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
+find_program(SIRIUS_SPIRV_OPT spirv-opt)
+if(SIRIUS_REQUIRE_VULKAN_RUNTIME AND
+   (NOT SIRIUS_SPIRV_VAL OR NOT SIRIUS_SPIRV_AS OR
+    NOT SIRIUS_SPIRV_DIS OR NOT SIRIUS_SPIRV_OPT))
+    message(FATAL_ERROR
+        "Required retained compute needs spirv-val, spirv-as, spirv-dis and spirv-opt.")
+endif()
+if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OPT)
     set(retained_build "${CMAKE_CURRENT_BINARY_DIR}/retained")
     set(retained_header "${retained_build}/retained_kernels.h")
     add_custom_command(
@@ -83,16 +90,40 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
                    "${retained_build}/retained_ray_camera.spv"
                    "${retained_build}/retained_camera_fp64.spv"
                    "${retained_build}/retained_transport_fp64.spv"
+                   "${retained_build}/retained_transport_fma.spv"
                    "${retained_build}/retained_endpoint_fp64.spv"
+                   "${retained_build}/retained_endpoint_fma.spv"
                    "${retained_build}/retained_dense_fp64.spv"
                    "${retained_build}/retained_initialize_fp64.spv"
                    "${retained_build}/retained_ray_camera_fp64.spv"
+                   "${retained_build}/retained_camera_portable.spv"
+                   "${retained_build}/retained_transport_portable.spv"
+                   "${retained_build}/retained_transport_portable_normal_sum.spv"
+                   "${retained_build}/retained_endpoint_portable.spv"
+                   "${retained_build}/retained_endpoint_portable_normal_sum.spv"
+                   "${retained_build}/retained_dense_portable.spv"
+                   "${retained_build}/retained_initialize_portable.spv"
+                   "${retained_build}/retained_ray_camera_portable.spv"
+                   "${retained_build}/retained_camera_portable_fp64.spv"
+                   "${retained_build}/retained_transport_portable_fp64.spv"
+                   "${retained_build}/retained_endpoint_portable_fp64.spv"
+                   "${retained_build}/retained_dense_portable_fp64.spv"
+                   "${retained_build}/retained_initialize_portable_fp64.spv"
+                   "${retained_build}/retained_ray_camera_portable_fp64.spv"
+                   "${retained_build}/retained_dopri_phase.spv"
+                   "${retained_build}/retained_dopri_phase_fp64.spv"
+                   "${retained_build}/retained_dopri_phase_portable.spv"
+                   "${retained_build}/retained_dopri_phase_portable_normal_sum.spv"
+                   "${retained_build}/retained_dopri_phase_portable_fp64.spv"
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
             --output "${retained_header}" --compiler "${SIRIUS_SLANGC}"
             --assembler "${SIRIUS_SPIRV_AS}" --disassembler "${SIRIUS_SPIRV_DIS}"
-            --validator "${SIRIUS_SPIRV_VAL}"
+            --validator "${SIRIUS_SPIRV_VAL}" --optimizer "${SIRIUS_SPIRV_OPT}"
         DEPENDS "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
+                "${SIRIUS_SPIRV_OPT}"
                 "${SIRIUS_KERNEL_DIR}/retained_program.py"
+                "${SIRIUS_KERNEL_DIR}/portable_binary32.h"
+                "${SIRIUS_KERNEL_DIR}/retained_scalar.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_pair.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_triple.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_scratch.slang"
@@ -102,6 +133,7 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
                 "${SIRIUS_KERNEL_DIR}/retained_dense.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_initialize.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_ray_camera.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_dopri_phase.slang"
         COMMENT "Building bounded retained camera and joint transport stages"
         VERBATIM)
     target_sources(sirius_backend PRIVATE retained_compute.cpp retained_integrator.cpp
@@ -109,6 +141,8 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
     target_link_libraries(sirius_backend PUBLIC sirius_core)
     target_include_directories(sirius_backend PRIVATE "${retained_build}")
     target_compile_definitions(sirius_backend PUBLIC SIRIUS_HAS_RETAINED_COMPUTE=1)
+else()
+    message(STATUS "Retained compute unavailable: SPIR-V build tools are incomplete")
 endif()
 
 set(SIRIUS_KERNEL_OUTPUTS "")

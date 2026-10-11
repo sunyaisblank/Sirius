@@ -1,6 +1,77 @@
 if(BUILD_TESTS)
     FetchContent_MakeAvailable(googletest)
     add_subdirectory(tests)
+    set(sirius_generated_test_inputs)
+    foreach(input_target sirius_portable_binary32_test_inputs sirius_retained_camera_test_inputs)
+        if(TARGET ${input_target})
+            get_target_property(generated_inputs ${input_target} SIRIUS_TEST_INPUT_ARTIFACTS)
+            foreach(generated_input IN LISTS generated_inputs)
+                list(APPEND sirius_generated_test_inputs
+                    "${generated_input}")
+            endforeach()
+        endif()
+    endforeach()
+    if(TARGET sirius_kernels)
+        # Preserve canonical generated artifact identities; stage their exact bytes
+        # beside both consumers below.
+        list(APPEND sirius_generated_test_inputs
+            "smoke_spv=${SIRIUS_KERNEL_BINARY_DIR}/smoke.spv"
+            "parity_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe.spv"
+                "parity_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp32comp.spv"
+                "parity_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp64.spv"
+            "infinity_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/infinity_probe.spv"
+                "infinity_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/infinity_probe_fp32comp.spv"
+                "infinity_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/infinity_probe_fp64.spv"
+                "metric_consistency_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/metric_consistency_probe.spv"
+                "metric_consistency_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/metric_consistency_probe_fp32comp.spv"
+                "metric_consistency_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/metric_consistency_probe_fp64.spv"
+                "camera_frame_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/camera_frame_probe.spv"
+                "camera_frame_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/camera_frame_probe_fp32comp.spv"
+                "camera_frame_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/camera_frame_probe_fp64.spv"
+                "coupled_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/coupled_probe_fp64.spv"
+            "trace_cuda=${SIRIUS_KERNEL_BINARY_DIR}/portability/trace.cu"
+            "trace_metal=${SIRIUS_KERNEL_BINARY_DIR}/portability/trace.metal")
+    endif()
+
+
+    # Refresh input volumes on every consumer build, even when a regenerated
+    # shader does not require relinking the executable. The gate checks these
+    # consumed copies against the canonical input/product records pre/post CTest.
+    set(sirius_test_input_dependencies sirius_portable_binary32_test_inputs)
+    foreach(input_target sirius_retained_camera_test_inputs sirius_kernels)
+        if(TARGET ${input_target})
+            list(APPEND sirius_test_input_dependencies ${input_target})
+        endif()
+    endforeach()
+    foreach(test_target sirius_backend_tests sirius_render_tests)
+        set(volume_commands)
+        foreach(generated_input IN LISTS sirius_generated_test_inputs)
+            string(REGEX REPLACE "^[^=]+=" "" input_path "${generated_input}")
+            file(RELATIVE_PATH input_relative "${CMAKE_BINARY_DIR}" "${input_path}")
+            get_filename_component(input_directory "${input_relative}" DIRECTORY)
+            list(APPEND volume_commands
+                COMMAND "${CMAKE_COMMAND}" -E make_directory
+                    "$<TARGET_FILE_DIR:${test_target}>/resources/${input_directory}"
+                COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${input_path}"
+                    "$<TARGET_FILE_DIR:${test_target}>/resources/${input_relative}")
+        endforeach()
+        if(TARGET sirius_kernels)
+            list(APPEND volume_commands
+                COMMAND "${CMAKE_COMMAND}" -E make_directory
+                    "$<TARGET_FILE_DIR:${test_target}>/resources/kernels"
+                COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                    "${SIRIUS_KERNEL_BINARY_DIR}/trace.spv"
+                    "${SIRIUS_KERNEL_BINARY_DIR}/trace_fp32comp.spv"
+                    "${SIRIUS_KERNEL_BINARY_DIR}/trace_fp64.spv"
+                    "$<TARGET_FILE_DIR:${test_target}>/resources/kernels")
+        endif()
+        add_custom_target(${test_target}_input_volume
+            ${volume_commands}
+            DEPENDS ${sirius_test_input_dependencies}
+            COMMENT "Staging exact qualification inputs beside ${test_target}"
+            VERBATIM)
+        add_dependencies(${test_target} ${test_target}_input_volume)
+    endforeach()
     add_custom_target(SiriusSourceGovernance ALL
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/scripts/generate-ctest-labels.py"
             --check
@@ -51,50 +122,16 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
                 "viewer_rdsd003a_fragment=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD003A.frag")
     endif()
     set(sirius_gate_test_input_artifacts)
-    if(TARGET sirius_retained_camera_test_inputs)
-        get_target_property(retained_camera_inputs sirius_retained_camera_test_inputs
-            SIRIUS_TEST_INPUT_ARTIFACTS)
-        foreach(retained_camera_input IN LISTS retained_camera_inputs)
-            list(APPEND sirius_gate_test_input_artifacts
-                --test-input-artifact "${retained_camera_input}")
-        endforeach()
-    endif()
+    foreach(generated_input IN LISTS sirius_generated_test_inputs)
+        list(APPEND sirius_gate_test_input_artifacts
+            --test-input-artifact "${generated_input}")
+    endforeach()
     if(TARGET sirius_kernels)
         list(APPEND sirius_gate_product_artifacts
             --product-artifact "trace_spv=${SIRIUS_KERNEL_BINARY_DIR}/trace.spv"
             --product-artifact
                 "trace_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/trace_fp32comp.spv"
             --product-artifact "trace_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/trace_fp64.spv")
-        # These generated inputs are consumed by Mandatory tests but are not
-        # installed runtime products. Bind their actual test paths separately.
-        list(APPEND sirius_gate_test_input_artifacts
-            --test-input-artifact "smoke_spv=${SIRIUS_KERNEL_BINARY_DIR}/smoke.spv"
-            --test-input-artifact "parity_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe.spv"
-            --test-input-artifact
-                "parity_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp32comp.spv"
-            --test-input-artifact
-                "parity_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp64.spv"
-            --test-input-artifact "infinity_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/infinity_probe.spv"
-            --test-input-artifact
-                "infinity_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/infinity_probe_fp32comp.spv"
-            --test-input-artifact
-                "infinity_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/infinity_probe_fp64.spv"
-            --test-input-artifact
-                "metric_consistency_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/metric_consistency_probe.spv"
-            --test-input-artifact
-                "metric_consistency_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/metric_consistency_probe_fp32comp.spv"
-            --test-input-artifact
-                "metric_consistency_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/metric_consistency_probe_fp64.spv"
-            --test-input-artifact
-                "camera_frame_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/camera_frame_probe.spv"
-            --test-input-artifact
-                "camera_frame_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/camera_frame_probe_fp32comp.spv"
-            --test-input-artifact
-                "camera_frame_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/camera_frame_probe_fp64.spv"
-            --test-input-artifact
-                "coupled_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/coupled_probe_fp64.spv"
-            --test-input-artifact "trace_cuda=${SIRIUS_KERNEL_BINARY_DIR}/portability/trace.cu"
-            --test-input-artifact "trace_metal=${SIRIUS_KERNEL_BINARY_DIR}/portability/trace.metal")
     endif()
 
     set(sirius_mandatory_gate_command
@@ -111,6 +148,19 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
         ${sirius_gate_test_artifacts}
         ${sirius_gate_product_artifacts}
         ${sirius_gate_test_input_artifacts})
+    if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
+        set(sirius_identity_require_vulkan true)
+    else()
+        set(sirius_identity_require_vulkan false)
+    endif()
+    set(sirius_runtime_identity_command
+        "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/scripts/runtime_identity.py"
+        --source-root "${CMAKE_SOURCE_DIR}"
+        --source-revision "${SIRIUS_SOURCE_REVISION}"
+        --source-tree-clean "${SIRIUS_SOURCE_TREE_CLEAN}"
+        --executable "$<TARGET_FILE:sirius>"
+        --require-vulkan "${sirius_identity_require_vulkan}"
+        --output "${CMAKE_BINARY_DIR}/generated/sirius/mandatory_runtime_identity_gate.json")
     if(NOT SIRIUS_SANITIZERS STREQUAL "none")
         set(sirius_mandatory_gate_command
             "${CMAKE_COMMAND}" -E env
@@ -118,11 +168,19 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
             "LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1"
             "UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1"
             ${sirius_mandatory_gate_command})
+        set(sirius_runtime_identity_command
+            "${CMAKE_COMMAND}" -E env
+            "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1:strict_string_checks=1"
+            "LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1"
+            "UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1"
+            ${sirius_runtime_identity_command})
     endif()
 
     add_custom_target(RunMandatoryTests ALL
         COMMAND "${CMAKE_COMMAND}" -E rm -f
+            "${SIRIUS_MANDATORY_GATE_STAMP}"
             "$<TARGET_FILE_DIR:sirius>/resources/model/mandatory_gate.json"
+        COMMAND ${sirius_runtime_identity_command}
         COMMAND ${sirius_mandatory_gate_command}
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different
             "${SIRIUS_MANDATORY_GATE_STAMP}"
@@ -134,6 +192,7 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
             SiriusAlignmentGate SiriusSourceGovernance
         BYPRODUCTS
             "${SIRIUS_MANDATORY_GATE_STAMP}"
+            "${CMAKE_BINARY_DIR}/generated/sirius/mandatory_runtime_identity_gate.json"
             "${CMAKE_BINARY_DIR}/generated/sirius/mandatory_gate_junit.xml"
             "${CMAKE_BINARY_DIR}/generated/sirius/mandatory_gate_ctest.log"
         COMMENT "=== MANDATORY TEST GATE ==="

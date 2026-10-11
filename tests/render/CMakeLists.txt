@@ -6,6 +6,7 @@
 # lib/stb and lib/tinyexr include paths.
 
 add_executable(sirius_render_tests
+    alcubierre_acceptance_test.cpp
     app_render_execution_test.cpp
     geodesic_tracer_test.cpp
     exr_writer_test.cpp
@@ -56,13 +57,11 @@ if(TARGET sirius)
         RUNTIME_OUTPUT_DIRECTORY "$<TARGET_FILE_DIR:sirius>")
 endif()
 
-# The Vulkan render/parity gate loads the compiled trace kernel; point it at the
-# kernel binary dir when slangc produced one (sirius_render carries the same
-# SIRIUS_HAS_VULKAN_BACKEND define transitively). The tests skip cleanly when the
-# device or the kernel is absent.
+# The marker declares configured kernels; readers use their executable volume.
+# Missing staged inputs fail rather than searching an obsolete build directory.
 if(TARGET sirius_kernels)
     target_compile_definitions(sirius_render_tests
-        PRIVATE SIRIUS_KERNEL_DIR="${SIRIUS_KERNEL_BINARY_DIR}")
+        PRIVATE SIRIUS_TEST_HAS_KERNELS=1)
     add_dependencies(sirius_render_tests sirius_kernels)
 endif()
 

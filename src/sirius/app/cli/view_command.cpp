@@ -42,6 +42,12 @@ struct DisplayFrame {
     int width = 0;
     int height = 0;
     bool needs_upload = false;
+    std::vector<float> preview_pixels;
+    int preview_width = 0;
+    int preview_height = 0;
+    std::uint64_t preview_generation = 0;
+    bool preview_needs_upload = false;
+    bool displaying_preview = false;
 };
 
 struct ViewerCallbackState {
@@ -434,6 +440,7 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
             display_frame.width = width;
             display_frame.height = height;
             display_frame.needs_upload = true;
+            display_frame.preview_needs_upload = false;
         }
         if (callback_state.transcript != nullptr) {
             std::lock_guard<std::mutex> lock(callback_state.transcript_mutex);
@@ -442,6 +449,27 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
                 << (backend == render::RenderBackend::Vulkan ? "Vulkan" : "Cpu")
                 << " width=" << width << " height=" << height << '\n'
                 << std::flush;
+        }
+    });
+
+    viewer.SetPreviewCallback([&display_frame, &callback_state, &viewer](const float* data,
+                                                                         int width, int height,
+                                                                         std::uint64_t generation) {
+        {
+            std::lock_guard<std::mutex> lock(display_frame.mutex);
+            if (generation != viewer.GetPreviewGeneration()) return;
+            display_frame.preview_pixels.assign(
+                data, data + static_cast<std::size_t>(width) * height * 4);
+            display_frame.preview_width = width;
+            display_frame.preview_height = height;
+            display_frame.preview_generation = generation;
+            display_frame.preview_needs_upload = true;
+        }
+        if (callback_state.transcript != nullptr) {
+            std::lock_guard<std::mutex> lock(callback_state.transcript_mutex);
+            *callback_state.transcript << "tile-preview-published generation=" << generation
+                                       << " width=" << width << " height=" << height << '\n'
+                                       << std::flush;
         }
     });
 
@@ -512,14 +540,38 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
 
         {
             std::lock_guard<std::mutex> lock(display_frame.mutex);
-            if (display_frame.needs_upload && !display_frame.pixels.empty()) {
+            const auto upload = [&](const float* pixels, int width, int height) {
                 glBindTexture(GL_TEXTURE_2D, texture);
-                // RenderSession publishes display-linear RGBA. Preserve those
-                // values in a float texture until the fragment transfer encode.
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, display_frame.width,
-                             display_frame.height, 0, GL_RGBA, GL_FLOAT,
-                             display_frame.pixels.data());
+                // Both owners publish configured display-linear RGBA. The
+                // fragment shader alone applies the transfer encode.
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT,
+                             pixels);
+            };
+            if (display_frame.preview_generation != viewer.GetPreviewGeneration()) {
+                display_frame.preview_needs_upload = false;
+                if (display_frame.displaying_preview) {
+                    // Restore the last completed frame after a cancelled/restarted
+                    // provisional generation; before the first final frame use black.
+                    const float black[4] = {0, 0, 0, 1};
+                    if (display_frame.pixels.empty()) {
+                        upload(black, 1, 1);
+                    } else {
+                        upload(display_frame.pixels.data(), display_frame.width,
+                               display_frame.height);
+                    }
+                    display_frame.displaying_preview = false;
+                }
+            }
+            if (display_frame.needs_upload && !display_frame.pixels.empty()) {
+                upload(display_frame.pixels.data(), display_frame.width, display_frame.height);
                 display_frame.needs_upload = false;
+                display_frame.displaying_preview = false;
+            } else if (display_frame.preview_needs_upload &&
+                       display_frame.preview_generation == viewer.GetPreviewGeneration()) {
+                upload(display_frame.preview_pixels.data(), display_frame.preview_width,
+                       display_frame.preview_height);
+                display_frame.preview_needs_upload = false;
+                display_frame.displaying_preview = true;
             }
         }
 
