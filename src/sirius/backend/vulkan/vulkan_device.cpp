@@ -467,14 +467,14 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
     // Temporary issue-44 diagnostic branch: device clock only, with the existing
     // float64/FMA/portability feature chain preserved by the creation helper.
     std::uint32_t extension_count = 0;
-    auto extension_result = vkEnumerateDeviceExtensionProperties(
-        device->physical_, nullptr, &extension_count, nullptr);
+    auto extension_result =
+        vkEnumerateDeviceExtensionProperties(device->physical_, nullptr, &extension_count, nullptr);
     if (extension_result != VK_SUCCESS)
         return Fail(ErrorDomain::kDevice, "query diagnostic clock extension",
                     VkResultText(extension_result));
     std::vector<VkExtensionProperties> extensions(extension_count);
-    extension_result = vkEnumerateDeviceExtensionProperties(
-        device->physical_, nullptr, &extension_count, extensions.data());
+    extension_result = vkEnumerateDeviceExtensionProperties(device->physical_, nullptr,
+                                                            &extension_count, extensions.data());
     if (extension_result != VK_SUCCESS)
         return Fail(ErrorDomain::kDevice, "query diagnostic clock extension",
                     VkResultText(extension_result));

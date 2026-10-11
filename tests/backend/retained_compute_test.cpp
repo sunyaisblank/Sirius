@@ -34,9 +34,9 @@
 #if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_TEST_HAS_RETAINED_CAMERA)
 #define SIRIUS_RETAINED_TESTS_AVAILABLE 1
 #include "sirius/backend/vulkan/vulkan_device.h"
-#include "shader_clock_observer.h"
 
 #include "program_fixture.h"
+#include "shader_clock_observer.h"
 #include "support/cpu_critical/transport_reference.h"
 #include "support/retained_camera/continuous_reference.h"
 #include "support/retained_camera/ray_reference.h"
