@@ -1,0 +1,734 @@
+{
+  "action": "profiler-counter-event22",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "linux_owner_pid": 2576303,
+  "linux_owner_start_ticks": "18343169",
+  "input_seals": {
+    "out/native-counter-views/run_profiler_counter_event.py": {
+      "bytes": 12691,
+      "sha256": "af1fc97c3e29e14ea85ea78fa11ab2d7be6d39c3b3a8210d3806c2423a890c6b"
+    },
+    "out/native-counter-views/profiler_counter_event.ps1": {
+      "bytes": 30424,
+      "sha256": "795daf4d0735c3ac76f9d20076b71884c375332ac25d5ead4bcc57beae063ecd"
+    },
+    "out/native-counter-views/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "out/native-counter-views/source.json": {
+      "bytes": 420,
+      "sha256": "e973b0af0ef04f8e2bd37fcf407813e6225eede602cb381989e1a7cdaeb28b45"
+    },
+    "out/native-counter-views/tools-extraction.json": {
+      "bytes": 20539,
+      "sha256": "233f8aaf4e43dde97e8ea4095a7ec4184254355bbed75a3997be6bcec4ba2a50"
+    },
+    "out/native-counter-views/counter-event-source-review.json": {
+      "bytes": 1409,
+      "sha256": "f0bb656a7f137b93979052e68fcbbae3b8ee75f6df518ea0d4d6b508de32f111"
+    },
+    "out/native-counter-views/tools-gui-extraction.json": {
+      "bytes": 4632,
+      "sha256": "425db59727b5ff68813836e4caa012e53904ef57e85e051a14849f5633f79e0d"
+    },
+    "out/native-counter-views/counter-event-plan.json": {
+      "bytes": 1140,
+      "sha256": "531e6eac62f2db7374a97fc71abfd3a467179d4e9a502201e389772d54953bbd"
+    },
+    "out/native-counter-views/prepare_counter_event.py": {
+      "bytes": 13107,
+      "sha256": "667ea0a6eafd8722d087f1d31e680beed92b54453e226a8e28b25871eef81764"
+    },
+    "out/native-counter-views/profiler-counter-controls-bridge.json": {
+      "bytes": 27355,
+      "sha256": "88b9ed3d42228746ab35e6aa34d4aa7dbcc362744d73ff57c8e51ac653b3c7c9"
+    },
+    "out/native-counter-views/profiler-counter-controls/events-automation.json": {
+      "bytes": 113975,
+      "sha256": "ff919e97cc219eb5a5e71d9b08bde13f0664e75c1909b374331457157ea3b076"
+    },
+    "out/native-counter-views/profiler-counter-controls/counter-graphs-automation.json": {
+      "bytes": 129069,
+      "sha256": "535e8936701cdba15f86ec5eb0fc80cd468615cc074237b90a5aa6883faeb118"
+    },
+    "out/native-counter-views/counter-controls-plan.json": {
+      "bytes": 1003,
+      "sha256": "9f5ae708e7564d6b8f6aebfa0f5b4e453d5fc451e8a7ff258708eb75c8941f3c"
+    },
+    "out/native-counter-views/prepare_counter_controls.py": {
+      "bytes": 9151,
+      "sha256": "6aa3a18f422c6dbcce31edce67b9273ffbc82b70aa2e85a24199dab49da4b31c"
+    },
+    "out/native-counter-views/profiler-counter-inventory-bridge.json": {
+      "bytes": 22294,
+      "sha256": "61db64a7a4b67c4f1d0fa3dcad432835284f2dd5681208cfc2fc66b01c3c981e"
+    },
+    "out/native-counter-views/profiler-counter-inventory/automation.json": {
+      "bytes": 84313,
+      "sha256": "2b948a697f4bfae95146ddf16687ee46bd9639c210c917eefc877319146a789b"
+    },
+    "out/native-counter-views/counter-enabled-interval.rgp": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "out/native-counter-views/counter-view-plan.json": {
+      "bytes": 2994,
+      "sha256": "6301917e453c014842d79f285a0e4df0612d52c918960b9bc1e5842cdf102294"
+    },
+    "out/native-counter-views/prepare_counter_views.py": {
+      "bytes": 4572,
+      "sha256": "e3b9628342769bb2199fbfd989d5eba1c2051b78b0dee4aaa563c077ee9cc4fd"
+    },
+    "out/native-counter-views/prepare_trace_path.py": {
+      "bytes": 1691,
+      "sha256": "259f0628965917076289c08f0310f52e70e94b12e41d681e4807c42e65e78527"
+    },
+    "attestations/native-vulkan/6be3132/native-spm-cost/manifest.json": {
+      "bytes": 320566,
+      "sha256": "f9e5f1f757eb182577becf412973831546110d63e2e5deee78841f92203b2b32"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/amdgpu_dis.dll": {
+      "bytes": 17501960,
+      "sha256": "f89c6d0d4b02a3ef6ee48e91837bf25f3e0db6965809208651caecd6a9f7443b"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/amd_comgr_3.dll": {
+      "bytes": 135028488,
+      "sha256": "5ea87f7e97bdb009bfe545c12d545a5e36cc1e0f9aae2e96f35a3d398685d12e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/concrt140.dll": {
+      "bytes": 324208,
+      "sha256": "2405355f0a58067b258f8df33c327e3a3d716eaac5a3a5aebb757842d85bd376"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/EULA.txt": {
+      "bytes": 19812,
+      "sha256": "731c35187e13b0ebe887f280040bdead24fdba540b81d0a36157934046fcff70"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/GPUPerfAPICounters-x64.dll": {
+      "bytes": 3753224,
+      "sha256": "97336fc9276ecf6df5aa84e459c73f9a10238e2f46b8be1bf26d3f9ca53b1ae5"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/bug_report.rst.txt": {
+      "bytes": 443,
+      "sha256": "6370149b09ccbe86206b3d8ce822ec99047cc8bc680e9f496b897020a25defdc"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/capture.rst.txt": {
+      "bytes": 6198,
+      "sha256": "4c6a20145ad2c48414c6b91130f7aa30109e57fca211629349f1464a90b31f5b"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/features.rst.txt": {
+      "bytes": 12532,
+      "sha256": "35b3301974cc336543340018f9e4d046ad757ab40267b4673d55aa94d1a045ce"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/index.rst.txt": {
+      "bytes": 4966,
+      "sha256": "5be2eef258469c677853d9ff72011b6a8289d61dcbf573195380079528c22bcb"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/initial_setup.rst.txt": {
+      "bytes": 1837,
+      "sha256": "7e2cd6f3949670e46c3877e411143085791ee0a271a3c2ec19dbc1c7cbb0b3ae"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/known_issues.rst.txt": {
+      "bytes": 9187,
+      "sha256": "16d46c51ef668c2089fdf5ed23e2fac2a3b3382ec662341ea03f8e4193a12501"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/radeon_developer_panel_cli.rst.txt": {
+      "bytes": 13550,
+      "sha256": "25c167e151e4868bf5884317ab98f22718d243697a1e71c7870cdc3ee6f7f8fa"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/radeon_developer_service.rst.txt": {
+      "bytes": 2553,
+      "sha256": "ee2dfe6ed995b6a5081140961b5892e50a7623a92ee60d82b472a1912969d1a2"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/remote_connections.rst.txt": {
+      "bytes": 636,
+      "sha256": "fe51f562f23a64a0d6c8042277f64e56086c40e74d993e8078e9aa1b26c7eb5c"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/settings.rst.txt": {
+      "bytes": 1433,
+      "sha256": "b67ad08e6cd8beec7bf45ae1e06b7514f72827106e4ae81f67399abecad9f467"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/system.rst.txt": {
+      "bytes": 24159,
+      "sha256": "77b901d8f62203f56d0a5b8f13e7dc83cc87dae57a46e6ddb931f99f9b63cd20"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/api_shader_stage_control.rst.txt": {
+      "bytes": 1953,
+      "sha256": "5c26b1ecc3c42d0bc0d7234415cf0b2417f90f23d3540db6de1ef777ba585373"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/events_windows.rst.txt": {
+      "bytes": 64900,
+      "sha256": "ccba561af13ec7fc3530f3baf65943948e0dc00fbf53713c982dc339db6c431e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/index.rst.txt": {
+      "bytes": 6443,
+      "sha256": "9779ba3c657b8fc62e867832f56d38a0a9a296cfa3d2518b65c121c898f40ef6"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/isa_view.rst.txt": {
+      "bytes": 2350,
+      "sha256": "47fa8393e018e8bca8f6e6826c70485c0f7f6c6379eafb08a7fbe478ab6ea1be"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/overview_windows.rst.txt": {
+      "bytes": 32136,
+      "sha256": "dda0087d92b0938f0304a1e01673553ddcd714cf453da5f2ca723b55da06453f"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/quickstart.rst.txt": {
+      "bytes": 6345,
+      "sha256": "dc7780c0d1219f80377c0cadad8ae96550c95ea3ba1d465c4a4b1466b738dcab"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/renderdoc_and_rgp_interop.rst.txt": {
+      "bytes": 7136,
+      "sha256": "23e83827b13a9a650761e328b619c3f52ea0151c1298dd18455696d5f079a392"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/rga_and_rgp_interop.rst.txt": {
+      "bytes": 2937,
+      "sha256": "c590d002f7184af1c7b5234ab5059a6b0838e1295b2103d67d39d6c95ce26b2a"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/settings.rst.txt": {
+      "bytes": 6890,
+      "sha256": "30f22a005fdf0fe8dfe9c37766c07467c1f1d028e8e6831f1cd8f7011a2214bf"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/user_debug_markers.rst.txt": {
+      "bytes": 21693,
+      "sha256": "d5e5a8e3a9e15c54244e9d54938cfef50fac536a4f8be35e5f76764ef73059e3"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/zoom_controls.rst.txt": {
+      "bytes": 3831,
+      "sha256": "81205415a3838fc454fbcc7273d0d6f3c7cb4c172436e19e800d8ed376a8fbc6"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/LICENSE.txt": {
+      "bytes": 1113,
+      "sha256": "c07533eda6ec6635fcf1f2b57f47c1c3d75e3983ecb44987d81eb2aee419a185"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140.dll": {
+      "bytes": 557728,
+      "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140_1.dll": {
+      "bytes": 35952,
+      "sha256": "bfad5aef4c63a669e3c140655cdfdf395b6c979b400a447bd5dcb65ed8826c3d"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140_2.dll": {
+      "bytes": 280200,
+      "sha256": "3ea06f0ee098b4823cb79599df3780e7f23cce52c19aac31d2a0d47efe33a5e9"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140_atomic_wait.dll": {
+      "bytes": 50304,
+      "sha256": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140_codecvt_ids.dll": {
+      "bytes": 31872,
+      "sha256": "f2069a52880ec885ee7f0511186100eb7fada0411a2b4948fafea7735b878a18"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Core.dll": {
+      "bytes": 6394584,
+      "sha256": "fac6623c015b4747b261844c6a3b36c6ed06d769f0fb94b82c1409345bbbeeec"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Gui.dll": {
+      "bytes": 9033432,
+      "sha256": "8c898ce2166d4c9af201e9e365bd9ceb33950eb1d65e45e0c3b2d8d3e81d51cc"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Network.dll": {
+      "bytes": 1715416,
+      "sha256": "9b5111bde72291826323d2fad5cfdc5f87dee3fc44b607eff08139e4d7f0b8bc"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Svg.dll": {
+      "bytes": 500952,
+      "sha256": "ab7fc1e71ff6a85162019fcb2cc2d976a712bf29c2625af53aa353ad41f31139"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Widgets.dll": {
+      "bytes": 6573272,
+      "sha256": "5d97cd6e699c9a37f6ce4c55b18303bd245b94a69717420e0e65aaec3d1269a6"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RadeonDeveloperPanelCLI.exe": {
+      "bytes": 670984,
+      "sha256": "4b1fc3d2c73b02fe357927baab931d534916ea18d97f9afdce657d931d4959f1"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RadeonDeveloperServiceCLI.exe": {
+      "bytes": 2009360,
+      "sha256": "5ac9f2d7a01fd176e9ed24df470dabaeab8821cf3a7f982f60cd9e5e0378ec19"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RadeonGPUProfiler.exe": {
+      "bytes": 20497680,
+      "sha256": "e9a76dce98553f717a4b0162d4a04a9a33872dbf3aad7e11a947838bd700dac1"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RdpCaptureApi.dll": {
+      "bytes": 3684624,
+      "sha256": "b099f6148aabec7623bb45e3183658b68b416c358da96881ec1ddb6bef7331b2"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RDP_NOTICES.txt": {
+      "bytes": 103880,
+      "sha256": "d3037787bcdb2fbd1b5a04d0122f227713a42d22495e438431671460717eadb6"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RDP_RELEASE_NOTES.txt": {
+      "bytes": 8089,
+      "sha256": "eb6ec40f6d467bf683b385682f81bfaeaf981549b4e2c4a1a8ec41aa8b9d707e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGA_NOTICES.txt": {
+      "bytes": 19148,
+      "sha256": "9e302dd6a0bd26c0c6d56aa576a658eb7de42c83c28429002a5916cee49adb30"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGA_RELEASE_NOTES.txt": {
+      "bytes": 13213,
+      "sha256": "c7844d4a853213a45749e56c209cfbb19407daa8318fda60443145401b48783e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGD_NOTICES.txt": {
+      "bytes": 1380,
+      "sha256": "2e11d85b98fb40dbfe526f4159c49f16571c604c7e348268258efe01439c8b73"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGD_RELEASE_NOTES.txt": {
+      "bytes": 5365,
+      "sha256": "c6b5f9df42e1107d0353e3dfbd2c4a55c6f85d0fc2b46708e9b5c593b0ab28b0"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGP_NOTICES.txt": {
+      "bytes": 69048,
+      "sha256": "78ff5adb3950efe978a9d8527ab9823603f3450a7fcec7a1cccb47e8c314d8d2"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGP_RELEASE_NOTES.txt": {
+      "bytes": 37509,
+      "sha256": "8338069703367758ff48ab1957cada34610fb5e713d08587afd29bee2efeafee"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RMV_NOTICES.txt": {
+      "bytes": 15213,
+      "sha256": "7c8fc4ca491ee58cd35555d850c1b8a835d8a61e7d444ee7f5cb31a6b70ad883"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RMV_RELEASE_NOTES.txt": {
+      "bytes": 8760,
+      "sha256": "c4372605322a4bbbd38811e9fef851d0282d0d2fc5e98ea88388cf3a352ce6ff"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RRA_NOTICES.txt": {
+      "bytes": 24878,
+      "sha256": "08751465696cd59c14e33be8a612c4861e61d66be5ab53fd02576e30747aa8e3"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RRA_RELEASE_NOTES.txt": {
+      "bytes": 9277,
+      "sha256": "5cc7b575a42ddaa7eefb86303adce396e77d9e597048a6e92ede92cfd84332f9"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/rtda.exe": {
+      "bytes": 6712584,
+      "sha256": "f568fbe4d5d94d5810d38e6053a811ac271426e72a68229ba1f0705a8ffc54e3"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/vccorlib140.dll": {
+      "bytes": 352384,
+      "sha256": "19839407c3fdbc824e5bce189bf68ddf8097f12ec28b757797ffa0415c144ddd"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/vcruntime140.dll": {
+      "bytes": 124544,
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/vcruntime140_1.dll": {
+      "bytes": 49792,
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/iconengines/qsvgicon.dll": {
+      "bytes": 71432,
+      "sha256": "0243078bb440960bd0fe3fe01a535877a477721989a54eeb37d487da48cb713e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qgif.dll": {
+      "bytes": 47368,
+      "sha256": "3010c2bcaa75f6ec8afaff0629508f821bfecc91102d31eaab6f2a08192edc06"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qicns.dll": {
+      "bytes": 56584,
+      "sha256": "9e7fa035c27fccf69df37f2ae264482408685f3a85c071456d5f896d8b6887ef"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qico.dll": {
+      "bytes": 45840,
+      "sha256": "15428148fd62e0ac23821e97a3ddbc999ca23173792b15c17d5bd982d0b23c3f"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qjpeg.dll": {
+      "bytes": 566024,
+      "sha256": "5070735701df53baa1aa1cd25d27a94b5f6389caa37665d10293f68b5a8d7991"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qsvg.dll": {
+      "bytes": 39176,
+      "sha256": "19ef04d92da43101f7d094643af09bb8a44e5a729877723f2fd55cf2f3c93aff"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qtga.dll": {
+      "bytes": 37648,
+      "sha256": "1fd48a8be4a1b43e650d4c5ab944e3c5bd654e089c910657484dafa194468f6a"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qtiff.dll": {
+      "bytes": 426248,
+      "sha256": "a05f5d2b972e119394c6a437fc6d1d1c0fe7ebc3dc536f28b96eaafd1f097831"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qwbmp.dll": {
+      "bytes": 36616,
+      "sha256": "94175e1923537ce2941f3fea02be30a9af938ce862c8072d216f270b629e0abc"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qwebp.dll": {
+      "bytes": 539400,
+      "sha256": "23d3d8dd7b25bfaab6d74c4e562385144a17f658a7efecd8ae1b8da8fb7a5a1f"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/platforms/qwindows.dll": {
+      "bytes": 910600,
+      "sha256": "325596cd447c2a430b0256b6d22196aca981ac87c7c2dc594fd5924f3c622a57"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/styles/qmodernwindowsstyle.dll": {
+      "bytes": 194832,
+      "sha256": "6c0274c91c8cd491bfcaff94ce4948393c1fad29f6b6e1341bffd5213175662a"
+    }
+  },
+  "arguments": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler_counter_event.ps1",
+    "-Tools",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\rdts-2026-10-02-1872\\tools",
+    "-Output",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22",
+    "-Action",
+    "profiler-counter-event22",
+    "-ExpectedHash",
+    "e9a76dce98553f717a4b0162d4a04a9a33872dbf3aad7e11a947838bd700dac1",
+    "-LiveRevision",
+    "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+    "-Trace",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\counter-enabled-interval.rgp",
+    "-TraceHash",
+    "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9",
+    "-EventName",
+    "22 vkCmdDispatch(6, 1, 1)"
+  ],
+  "deadline_seconds": 120,
+  "errors": [],
+  "outer_stop": false,
+  "scope": "Owned saved-profile EVENTS and Wavefront occupancy selection and window observation only. Intentional owned stop after observation; no service/science/device capture; recorded tool/controller ownership and finite accessible developer-process check.",
+  "linux_child_pid": 2576318,
+  "linux_child_start_ticks": "18343209",
+  "controller_signals": [],
+  "returncode": 0,
+  "elapsed_seconds": 57.2056409479992,
+  "linux_child_birth_absent": true,
+  "accepted": true,
+  "Windows_owner": {
+    "action": "profiler-counter-event22",
+    "owner_pid": 8964,
+    "owner_start_time_utc": "2026-10-11T10:29:44.4977038Z",
+    "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\rdts-2026-10-02-1872\\tools\\RadeonGPUProfiler.exe",
+    "test_executable_sha256": "e9a76dce98553f717a4b0162d4a04a9a33872dbf3aad7e11a947838bd700dac1",
+    "arguments": [
+      "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\counter-enabled-interval.rgp"
+    ],
+    "trace_sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9",
+    "trace_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\counter-enabled-interval.rgp",
+    "intentional_owned_stop": true,
+    "window_observation": [
+      {
+        "handle": 2884102,
+        "pid": 7156,
+        "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+        "width": 1216,
+        "height": 739,
+        "print_window_succeeded": true,
+        "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\event-owned-window-2c0206.png",
+        "image_bytes": 79144,
+        "image_sha256": "72eda648a43c0c1beff45c028a5cefa054d16b261e9217ccef75871befd909ee"
+      },
+      {
+        "handle": 2884102,
+        "pid": 7156,
+        "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+        "width": 1216,
+        "height": 739,
+        "print_window_succeeded": true,
+        "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\pipeline-owned-window-2c0206.png",
+        "image_bytes": 45552,
+        "image_sha256": "4db41422259ae9aefbd5a7397d1d96298be93c11d04b27bd78e3dcb10721f5b2"
+      },
+      {
+        "handle": 2884102,
+        "pid": 7156,
+        "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+        "width": 1216,
+        "height": 739,
+        "print_window_succeeded": true,
+        "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\region-owned-window-2c0206.png",
+        "image_bytes": 111325,
+        "image_sha256": "64938effdce78e63bc86f4a4a22be797d1bd8eb902e626e5fc422c0b255a7d3f"
+      },
+      {
+        "handle": 2884102,
+        "pid": 7156,
+        "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+        "width": 1216,
+        "height": 739,
+        "print_window_succeeded": true,
+        "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\counter-graphs-owned-window-2c0206.png",
+        "image_bytes": 200864,
+        "image_sha256": "28b95e6f186f8a680b76b6f1fc6986ec126babfe6c2849363f4d86375ca4252c"
+      },
+      {
+        "handle": 2884102,
+        "pid": 7156,
+        "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+        "width": 1216,
+        "height": 739,
+        "print_window_succeeded": true,
+        "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\cache-tooltip-owned-window-2c0206.png",
+        "image_bytes": 200864,
+        "image_sha256": "28b95e6f186f8a680b76b6f1fc6986ec126babfe6c2849363f4d86375ca4252c"
+      },
+      {
+        "handle": 2884102,
+        "pid": 7156,
+        "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+        "width": 1216,
+        "height": 739,
+        "print_window_succeeded": true,
+        "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\lds-tooltip-owned-window-2c0206.png",
+        "image_bytes": 200864,
+        "image_sha256": "28b95e6f186f8a680b76b6f1fc6986ec126babfe6c2849363f4d86375ca4252c"
+      },
+      {
+        "handle": 2884102,
+        "pid": 7156,
+        "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+        "width": 1216,
+        "height": 739,
+        "print_window_succeeded": true,
+        "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\memory-tooltip-owned-window-2c0206.png",
+        "image_bytes": 200864,
+        "image_sha256": "28b95e6f186f8a680b76b6f1fc6986ec126babfe6c2849363f4d86375ca4252c"
+      }
+    ],
+    "live_source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+    "polling_guard_seconds": 60,
+    "blocked_call_bridge_guard_seconds": 120,
+    "rss_guard_bytes": 1073741824,
+    "outer_stop": false,
+    "status": "observed-and-stopped",
+    "scope": "Owned current-profile selected dispatch/pipeline, explicit graph-region and counter hover observations; actual returned data needed for semantics; positional file opening is a bounded probe of the documented executable-drop route. HWND PID checked before and after PrintWindow; synchronous call is subject to outer bridge recovery. Deliberate owned stop after sealed PNG observation; no service/capture/scientific result or clock/driver changes.",
+    "ui_unavailable_pid_zero": 0,
+    "test_pid": 7156,
+    "test_start_time_utc": "2026-10-11T10:29:48.6357506Z",
+    "navigation_history": [
+      "EVENTS",
+      "Event timing",
+      "Pipeline state",
+      "Wavefront occupancy"
+    ],
+    "observations": [
+      {
+        "label": "event",
+        "automation_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\event-automation.json",
+        "ui_elements": 193,
+        "window_observation": [
+          {
+            "handle": 2884102,
+            "pid": 7156,
+            "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+            "width": 1216,
+            "height": 739,
+            "print_window_succeeded": true,
+            "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\event-owned-window-2c0206.png",
+            "image_bytes": 79144,
+            "image_sha256": "72eda648a43c0c1beff45c028a5cefa054d16b261e9217ccef75871befd909ee"
+          }
+        ]
+      },
+      {
+        "label": "pipeline",
+        "automation_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\pipeline-automation.json",
+        "ui_elements": 128,
+        "window_observation": [
+          {
+            "handle": 2884102,
+            "pid": 7156,
+            "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+            "width": 1216,
+            "height": 739,
+            "print_window_succeeded": true,
+            "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\pipeline-owned-window-2c0206.png",
+            "image_bytes": 45552,
+            "image_sha256": "4db41422259ae9aefbd5a7397d1d96298be93c11d04b27bd78e3dcb10721f5b2"
+          }
+        ]
+      },
+      {
+        "label": "region",
+        "automation_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\region-automation.json",
+        "ui_elements": 229,
+        "window_observation": [
+          {
+            "handle": 2884102,
+            "pid": 7156,
+            "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+            "width": 1216,
+            "height": 739,
+            "print_window_succeeded": true,
+            "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\region-owned-window-2c0206.png",
+            "image_bytes": 111325,
+            "image_sha256": "64938effdce78e63bc86f4a4a22be797d1bd8eb902e626e5fc422c0b255a7d3f"
+          }
+        ]
+      },
+      {
+        "label": "counter-graphs",
+        "automation_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\counter-graphs-automation.json",
+        "ui_elements": 229,
+        "window_observation": [
+          {
+            "handle": 2884102,
+            "pid": 7156,
+            "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+            "width": 1216,
+            "height": 739,
+            "print_window_succeeded": true,
+            "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\counter-graphs-owned-window-2c0206.png",
+            "image_bytes": 200864,
+            "image_sha256": "28b95e6f186f8a680b76b6f1fc6986ec126babfe6c2849363f4d86375ca4252c"
+          }
+        ]
+      },
+      {
+        "label": "cache-tooltip",
+        "automation_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\cache-tooltip-automation.json",
+        "ui_elements": 229,
+        "window_observation": [
+          {
+            "handle": 2884102,
+            "pid": 7156,
+            "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+            "width": 1216,
+            "height": 739,
+            "print_window_succeeded": true,
+            "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\cache-tooltip-owned-window-2c0206.png",
+            "image_bytes": 200864,
+            "image_sha256": "28b95e6f186f8a680b76b6f1fc6986ec126babfe6c2849363f4d86375ca4252c"
+          }
+        ]
+      },
+      {
+        "label": "lds-tooltip",
+        "automation_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\lds-tooltip-automation.json",
+        "ui_elements": 229,
+        "window_observation": [
+          {
+            "handle": 2884102,
+            "pid": 7156,
+            "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+            "width": 1216,
+            "height": 739,
+            "print_window_succeeded": true,
+            "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\lds-tooltip-owned-window-2c0206.png",
+            "image_bytes": 200864,
+            "image_sha256": "28b95e6f186f8a680b76b6f1fc6986ec126babfe6c2849363f4d86375ca4252c"
+          }
+        ]
+      },
+      {
+        "label": "memory-tooltip",
+        "automation_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\memory-tooltip-automation.json",
+        "ui_elements": 229,
+        "window_observation": [
+          {
+            "handle": 2884102,
+            "pid": 7156,
+            "title": "counter-enabled-interval.rgp - Vulkan - Instruction tracing: Full frame, limited to Shader Engine 0 - Radeon GPU Profiler - V2.7.1.13",
+            "width": 1216,
+            "height": 739,
+            "print_window_succeeded": true,
+            "image_path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-counter-views\\profiler-counter-event22\\memory-tooltip-owned-window-2c0206.png",
+            "image_bytes": 200864,
+            "image_sha256": "28b95e6f186f8a680b76b6f1fc6986ec126babfe6c2849363f4d86375ca4252c"
+          }
+        ]
+      }
+    ],
+    "requested_event": "22 vkCmdDispatch(6, 1, 1)",
+    "navigation_requested": "Wavefront occupancy SelectionItemPattern.Select on exact owned root",
+    "last_owned_click": {
+      "rect": [
+        789,
+        129,
+        30,
+        24
+      ],
+      "name": "",
+      "id": "MainWindow.main_widget_.main_tab_widget_.qt_tabwidget_stackedwidget.events_tab_.events_sub_tab_.qt_tabwidget_stackedwidget.wavefront_occupancy_tab_.scroll_area_.qt_scrollarea_viewport.scroll_area_contents_.views_widget_.zoom_to_selection_"
+    },
+    "last_owned_click_result": "Owned HWND WM_LBUTTONDOWN/UP completed at client 795,109; no global input/cursor/focus API used",
+    "selected_event_confirmed": true,
+    "loaded_profile_observed": true,
+    "wavefront_selected_name": "22 vkCmdDispatch(6, 1, 1)",
+    "region_request": {
+      "scope": "Explicit interior of event-zoomed visible ruler; actual returned region endpoints/duration authoritative. No exclusive shader attribution.",
+      "rect": [
+        319,
+        193,
+        608,
+        100
+      ],
+      "graph_id": "wavefront_occupancy_view_",
+      "requested_horizontal_fraction": [
+        0.1,
+        0.9
+      ],
+      "event": "22 vkCmdDispatch(6, 1, 1)"
+    },
+    "region_message_result": "Owned graph drag at client x=371..857,y=211; no global cursor/input API",
+    "counter_scroll_request": {
+      "before": 0,
+      "container": "MainWindow.main_widget_.main_tab_widget_.qt_tabwidget_stackedwidget.events_tab_.events_sub_tab_.qt_tabwidget_stackedwidget.wavefront_occupancy_tab_.scroll_area_.qt_scrollarea_viewport.scroll_area_contents_.views_widget_.customizable_widget_scroll_area_.qt_scrollarea_vcontainer",
+      "maximum": 357
+    },
+    "counter_hovers": [
+      {
+        "rect": [
+          319,
+          286,
+          608,
+          100
+        ],
+        "message": "Owned graph hover at client x=371..857,y=304; no global cursor/input API",
+        "id": "spm_view_Cache_"
+      },
+      {
+        "rect": [
+          319,
+          386,
+          608,
+          100
+        ],
+        "message": "Owned graph hover at client x=371..857,y=404; no global cursor/input API",
+        "id": "spm_view_LDS_"
+      },
+      {
+        "rect": [
+          319,
+          486,
+          608,
+          100
+        ],
+        "message": "Owned graph hover at client x=371..857,y=504; no global cursor/input API",
+        "id": "spm_view_Memory (%)_"
+      }
+    ],
+    "navigation_completed": true,
+    "returncode": 4294967295,
+    "exit_code_source": "GetExitCodeProcess on preacquired owned handle after WaitForExit",
+    "owned_process_absent": true,
+    "tool_already_exited_on_finally_entry": true,
+    "exception_cleanup_kill_requested": false,
+    "terminal_returncode": 4294967295,
+    "terminal_exit_code_source": "Held native handle after terminal wait, including failed observation",
+    "elapsed_seconds": 54.7544985,
+    "peak_sampled_rss_bytes": 580509696,
+    "trace_unchanged": true,
+    "tool_unchanged": true,
+    "accessible_remaining_developer_processes": [],
+    "developer_census_completed": true,
+    "cleanup_errors": []
+  },
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
