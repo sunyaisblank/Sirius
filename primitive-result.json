@@ -1,0 +1,90 @@
+{
+  "pass": true,
+  "source_revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+  "cases_per_variant": 60347,
+  "words_per_variant": 301735,
+  "classes": {
+    "zero_before_bounds": 340,
+    "integer_fallback": 23811,
+    "bounds_sentinel": 8829,
+    "positive_normal_guard": 27367
+  },
+  "halfway_parities": {
+    "odd": 606,
+    "even": 1208
+  },
+  "variants": {
+    "baseline": {
+      "selected": {
+        "scope": "isolated raw-word prototype device identity",
+        "device": "llvmpipe (LLVM 20.1.2, 256 bits)",
+        "kind": "software",
+        "driver": "llvmpipe",
+        "driver_info": "Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+        "resident_driver_path": "/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "vendor_id": 65541,
+        "device_id": 0,
+        "api_version": 4211006,
+        "driver_id": 13,
+        "denorm32": 0,
+        "RTE32": 1,
+        "fp64": 1,
+        "RTE64": 1
+      },
+      "actual": {
+        "completed_dispatches": 1,
+        "cases": 60347,
+        "observed_words": 301735,
+        "mismatches": 0,
+        "untouched_complement_words": 0,
+        "requested_bytes": 1931108,
+        "actual_resident_bytes": 1931108,
+        "host_dispatch_timing_ms": {
+          "pipeline": 3.626273,
+          "command": 0.041316,
+          "submit_wait": 44.535315,
+          "cleanup": 0.030749,
+          "total": 48.233653
+        }
+      },
+      "owner_wall_seconds": 0.48838396099745296
+    },
+    "candidate": {
+      "selected": {
+        "scope": "isolated raw-word prototype device identity",
+        "device": "llvmpipe (LLVM 20.1.2, 256 bits)",
+        "kind": "software",
+        "driver": "llvmpipe",
+        "driver_info": "Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+        "resident_driver_path": "/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "vendor_id": 65541,
+        "device_id": 0,
+        "api_version": 4211006,
+        "driver_id": 13,
+        "denorm32": 0,
+        "RTE32": 1,
+        "fp64": 1,
+        "RTE64": 1
+      },
+      "actual": {
+        "completed_dispatches": 1,
+        "cases": 60347,
+        "observed_words": 301735,
+        "mismatches": 0,
+        "untouched_complement_words": 0,
+        "requested_bytes": 1931108,
+        "actual_resident_bytes": 1931108,
+        "host_dispatch_timing_ms": {
+          "pipeline": 4.17865,
+          "command": 0.035147,
+          "submit_wait": 17.014247,
+          "cleanup": 0.028674,
+          "total": 21.256718
+        }
+      },
+      "owner_wall_seconds": 0.13946844000020064
+    }
+  },
+  "expected_sha256": "30964b32f248fce98de1d0d71d39e284131d9e0da29013ca4d199bff6440f361",
+  "scope": "Finite actual RPUpMultiply Vulkan invocation against independent exact-Fraction words, old and candidate; selected software provider and full output canaries verified. Not universal proof, primitive performance or frame/science qualification."
+}

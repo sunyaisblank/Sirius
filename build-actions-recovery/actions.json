@@ -1,0 +1,60 @@
+{
+  "configure": {
+    "revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+    "kind": "build",
+    "scope": "Issue94 candidate source/build or diagnostic preparation only. No Vulkan numerical/performance/full qualification invocation.",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification"
+    ]
+  },
+  "build": {
+    "revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+    "kind": "build",
+    "scope": "Issue94 candidate source/build or diagnostic preparation only. No Vulkan numerical/performance/full qualification invocation.",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--target",
+      "SiriusAlignmentGate",
+      "SiriusSourceGovernance",
+      "sirius",
+      "sirius_app_tests",
+      "sirius_render_tests",
+      "sirius_backend_tests",
+      "-j2"
+    ]
+  },
+  "prepare-primitive": {
+    "revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+    "kind": "build",
+    "scope": "Issue94 candidate source/build or diagnostic preparation only. No Vulkan numerical/performance/full qualification invocation.",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "out/guarded-upmultiply-review/prepare_primitive.py"
+    ]
+  }
+}

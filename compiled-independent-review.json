@@ -1,0 +1,15 @@
+{
+  "reviewer": "retained_latency_review",
+  "source_revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+  "pass": true,
+  "compiled_controls_sha256": "e87da40d055311a605cc8e82e31382fd157ca9fc88986ccb1905560cc8aa59f9",
+  "checks": [
+    "Actual T/E zero/bounds ordering and all guard predicates dominate one FMul",
+    "NoContraction Float32 multiply, RTE32 capability/mode, LocalSize16",
+    "True result bitcast and uint+1; false OrderedMultiply32/PB32Multiply and original+1",
+    "Actual constants match minimumnormal/upperbound/128/23/1",
+    "Actual SPV bytes join complete generated payloads; only two intended changes; other38unchanged",
+    "DP has no FMul"
+  ],
+  "scope": "Bounded independent compiled source review. No reviewer build/device invocation; actual executable/runtimes assessed separately by root."
+}

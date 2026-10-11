@@ -1,0 +1,125 @@
+{
+  "source_revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+  "stages": {
+    "transport": {
+      "prequalification_checker_pass": true,
+      "single_upmultiply_required": true,
+      "compiled_FMul_count": 1,
+      "negative_controls": [
+        {
+          "control": "preexisting_RTE_mode",
+          "reason": "portable normal sum introduced an optional type or capability"
+        },
+        {
+          "control": "relaxed_arithmetic",
+          "reason": "portable normal sum introduced relaxed or fused arithmetic"
+        },
+        {
+          "control": "wide_float_type",
+          "reason": "portable normal sum introduced an optional type or capability"
+        },
+        {
+          "control": "lost_multiply_NoContraction",
+          "reason": "portable normal sum lost binary32 operation ordering or NoContraction"
+        },
+        {
+          "control": "wrong_floating_owner",
+          "reason": "portable normal sum changed its ordered three-operation body"
+        },
+        {
+          "control": "DP_admission_of_multiply",
+          "reason": "normal upward bound changed its single multiply body"
+        },
+        {
+          "control": "wrong_multiply_operation",
+          "reason": "normal upward bound changed its single multiply body"
+        },
+        {
+          "control": "duplicate_multiply_operation",
+          "reason": "normal upward bound changed its single multiply body"
+        },
+        {
+          "control": "broken_FastTwoSum_dependency",
+          "reason": "portable normal sum changed its FastTwoSum dependency chain"
+        }
+      ],
+      "module_bytes": 104880,
+      "module_sha256": "731ae18ca7b5137964ff42d9475bb92e10f5773e5345933f260a6bf1b0eb4531"
+    },
+    "endpoint": {
+      "prequalification_checker_pass": true,
+      "single_upmultiply_required": true,
+      "compiled_FMul_count": 1,
+      "negative_controls": [
+        {
+          "control": "preexisting_RTE_mode",
+          "reason": "portable normal sum introduced an optional type or capability"
+        },
+        {
+          "control": "relaxed_arithmetic",
+          "reason": "portable normal sum introduced relaxed or fused arithmetic"
+        },
+        {
+          "control": "wide_float_type",
+          "reason": "portable normal sum introduced an optional type or capability"
+        },
+        {
+          "control": "lost_multiply_NoContraction",
+          "reason": "portable normal sum lost binary32 operation ordering or NoContraction"
+        },
+        {
+          "control": "wrong_floating_owner",
+          "reason": "portable normal sum changed its ordered three-operation body"
+        },
+        {
+          "control": "DP_admission_of_multiply",
+          "reason": "normal upward bound changed its single multiply body"
+        },
+        {
+          "control": "wrong_multiply_operation",
+          "reason": "normal upward bound changed its single multiply body"
+        },
+        {
+          "control": "duplicate_multiply_operation",
+          "reason": "normal upward bound changed its single multiply body"
+        },
+        {
+          "control": "broken_FastTwoSum_dependency",
+          "reason": "portable normal sum changed its FastTwoSum dependency chain"
+        }
+      ],
+      "module_bytes": 152240,
+      "module_sha256": "9733afb5bd84178cde5006e3d61b6b1ba30d4afa8842a0cdb9e0f55b68c045a8"
+    },
+    "dopri_phase": {
+      "prequalification_checker_pass": true,
+      "single_upmultiply_required": false,
+      "compiled_FMul_count": 0,
+      "negative_controls": [
+        {
+          "control": "preexisting_RTE_mode",
+          "reason": "portable normal sum introduced an optional type or capability"
+        },
+        {
+          "control": "relaxed_arithmetic",
+          "reason": "portable normal sum introduced relaxed or fused arithmetic"
+        },
+        {
+          "control": "wide_float_type",
+          "reason": "portable normal sum introduced an optional type or capability"
+        },
+        {
+          "control": "missing_required_multiply",
+          "reason": "normal upward multiply disagrees with the selected stage"
+        },
+        {
+          "control": "broken_FastTwoSum_dependency",
+          "reason": "portable normal sum changed its FastTwoSum dependency chain"
+        }
+      ],
+      "module_bytes": 96752,
+      "module_sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+    }
+  },
+  "scope": "Actual emitted module whitelist/type/mode/dependency checks and finite rejecting mutations; not universal semantic equivalence or runtime qualification."
+}

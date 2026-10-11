@@ -1,0 +1,37 @@
+{
+  "candidate_revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+  "baseline_revision": "7f028007a4935ffdefe5ee9c886b138299f50dd8",
+  "executables": {
+    "baseline": {
+      "path": "out/guarded-upmultiply-review/baseline-backend-tests",
+      "source_revision": "7f028007a4935ffdefe5ee9c886b138299f50dd8",
+      "bytes": 13082752,
+      "sha256": "9a8f8e766d7f8bf6bbc7f74c4fbfb34e0b43aa764e60a8a76ae2b678c0310623"
+    },
+    "candidate": {
+      "path": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "source_revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+      "bytes": 13082752,
+      "sha256": "01a583b92766f740d7e565afec8559d9d6dbe673f33cbe6cd817d09229e09f7b"
+    }
+  },
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "within_slot_repeats": 3,
+  "complete_call_minimum_improvement_percent": 5,
+  "every_inclusive_stage_minimum_improvement_percent": -5,
+  "all20_gates_required": true,
+  "reader_sha256": "2a089e496948fb84091ccac8face2cc5645e0c1be7250f6b36d21f2548841ec7",
+  "comparator_sha256": "cbbbb2469b452704c373f312e9759d94f02e3545f99ba5f2d6e66d6b266be298",
+  "actions_sha256": "f20c32078ddf28cb10cf12b18cdeea365004a35acf55372bd8c74d4463621a63",
+  "canonical_resource_files": 23,
+  "baseline_resource_views": 23,
+  "resource_symlink_target": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources",
+  "scope": "Before any complete-call ABBA invocation, add reviewed explicit sequence receipt and exact initial executable-seal joins. Original v1 numerical/timing gates, providers, references, source, executable payloads and budgets remain unchanged. V1 remains preserved for already completed primitive/admission/Transport controls; no repeated dispatch.",
+  "launcher_sha256": "a5a086ab0ab7589ad7c8251e0188418c0ac8617e016e25cae36b8fc8ce5a45df",
+  "prior_primitive_control_freeze_sha256": "19fda661b89f85f784536bb7c97db594901690a093bb2018289a3bf7fd63e80e"
+}
