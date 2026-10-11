@@ -1,0 +1,32 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "inspection_sha256": "2cc0df32ad34e5c11f9a09863177654770c58a3b57ed66b7a960dfa45d464cff",
+  "reader_sha256": "effdb48c09352773a715b6caa77ff4970c5ed481e95bcbd7bd22262df4be903f",
+  "opcode_5_selector": {
+    "pc": "0x847c",
+    "target": "0x8a50",
+    "ir": "EvaluateOne -> RTDivide_0"
+  },
+  "complete_correction_loop": {
+    "counter_init_pc": "0x92b8",
+    "initial_count": 3,
+    "decrement_pc": "0xcdc4",
+    "continuation_target": "0x9320",
+    "last_continuation_pc": "0xcde8",
+    "final_residual_after": "0xcdec"
+  },
+  "retained_denominator_metadata": {
+    "absolute_value": "v31 at0x8b9c",
+    "exponent_bits": "v2 at0x9004",
+    "clz": "v3 at0x9008",
+    "no_destination_writes_across_complete_loop": true
+  },
+  "remaining_repeated_integer_steps": {
+    "exponent_selection": 5,
+    "mantissa_reconstruction": 6,
+    "correction_reciprocal_pc": "0xc2cc"
+  },
+  "disposition": "No material removal or benefit established. Original division guards, refinements/residuals/packing remain required for general values. Do not replace OrderedDivide32 with cached reciprocal. No new metadata trial.",
+  "scope": "Bounded source attribution, independent ISA/ELF bytes and2293 directbranch displacement joins. Not complete CFG proof, exclusivecost or runtime benefit."
+}

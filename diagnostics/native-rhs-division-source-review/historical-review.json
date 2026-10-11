@@ -1,0 +1,50 @@
+{
+  "accepted": true,
+  "reviewers": [
+    "/root/command_owner_review",
+    "/root/retained_latency_review"
+  ],
+  "evidence": {
+    "transport32_patch": {
+      "path": "attestations/native-vulkan/3045067/transport-lanes32-rejected/prototype.patch",
+      "bytes": 1438,
+      "sha256": "f42f8676ede9ec5046d0a077b2a48019c880d12859f1f81acae29a4fdfc2f1a1"
+    },
+    "transport32_analysis": {
+      "path": "attestations/native-vulkan/3045067/transport-lanes32-rejected/analysis.json",
+      "bytes": 14065,
+      "sha256": "ba914eb00c79d275cc18af3951c2af395bb1ea1bf85c839b534ca65162ea2584"
+    },
+    "transport32_final_review": {
+      "path": "attestations/native-vulkan/3045067/transport-lanes32-rejected/independent-final-review.json",
+      "bytes": 648,
+      "sha256": "335efe5dbfb4cd6222e72d131008a2207c2902c682fc429cfc3d56da25fb1706"
+    },
+    "zero_quotient_review": {
+      "path": "attestations/review/7f02800/guarded-upmultiply-source-review/independent-source-review.json",
+      "bytes": 1308,
+      "sha256": "2ed6997ebb4c21e2bca5dd43f2e7b480c6973005d78713768bac12c9ee0136d3"
+    }
+  },
+  "transport32": {
+    "disposition": "previously rejected; no repeat",
+    "dispatches": 528,
+    "matched_blocks": 16,
+    "regressed_in_both_clocks": 14,
+    "independent_fields": 32960,
+    "complete_words_preserved": true,
+    "original_source_mechanism": "Native LocalSize32 and stride32 complete node coverage, original64-wide layer admission"
+  },
+  "zero_quotient": {
+    "disposition": "previously source-screened; no new material premise",
+    "existing_zero_shortcuts": [
+      "RPDivideSeed bypasses native division",
+      "RTMultiply bypasses products",
+      "RPRatioUpper bypasses exponent work"
+    ],
+    "unit_denominator_precedence_preserved": true,
+    "universal_native_zero_sign_identity_proved": false,
+    "runtime_trial_launched": false
+  },
+  "scope": "Exact prior mechanism/readout reviewed against unchanged current arithmetic. New diagnostic clock observations are attribution, not a changed candidate or workload. No new compilation/native/frame/qualification run."
+}
