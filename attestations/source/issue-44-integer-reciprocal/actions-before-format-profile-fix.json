@@ -1,0 +1,649 @@
+{
+  "generate-input": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Independent Fraction fixture construction; original174268 records plus final-word boundary inputs",
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/generate_input.py"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/generate_input.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/portable_binary32_reference.bin"
+    ]
+  },
+  "compile-cpu": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Strict isolated shared-source scalar probe compile",
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/src",
+      "-I/home/astra/.project/Sirius/out/portable-integer-reciprocal",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/cpu_probe.cpp",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu_probe",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu_probe.d"
+    ],
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/ld",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/cpu_probe.cpp",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/word_io.h"
+    ]
+  },
+  "compile-original-corpus": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "compiler",
+    "scope": "Isolated current source strict compilation; canonical object unchanged",
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/corpus.o",
+      "-c",
+      "/home/astra/.project/Sirius/tests/backend/portable_binary32_test.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/corpus.o.d"
+    ],
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/ld",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json"
+    ]
+  },
+  "compile-vulkan": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "compiler",
+    "scope": "Isolated current source strict compilation; canonical object unchanged",
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/vulkan.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/vulkan.o.d"
+    ],
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/ld",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json"
+    ]
+  },
+  "link-original-corpus": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Original exact corpus test private link",
+    "argv": [
+      "/usr/bin/g++-14",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/corpus.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/corpus.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu-corpus-tests"
+    ],
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/ld",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/corpus.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a"
+    ]
+  },
+  "original-cpu-corpus": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "test",
+    "scope": "Original174268 exact reference records on changed shared source",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu-corpus-tests",
+      "--gtest_filter=PortableBinary32.MatchesIndependentExactCorpus"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu-corpus-tests",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/resources/tests/backend/portable_binary32_reference.bin"
+    ]
+  },
+  "cpu-boundaries": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Original corpus plus independent final quotient boundary raw words on C++",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu_probe",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/input.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/expected.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/cpu-actual.bin"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu_probe",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/input.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/expected.bin"
+    ]
+  },
+  "compile-gpu-host": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Actual Vulkan private primitive host; current provider object, no old backend archive",
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/src",
+      "-I/home/astra/.project/Sirius/out/portable-integer-reciprocal",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/gpu_probe.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/gpu.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/gpu_probe",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/gpu_probe.d"
+    ],
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/ld",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/gpu_probe.cpp",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/word_io.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so"
+    ]
+  },
+  "compile-shader-baseline": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Isolated full scalar shared header Slang module",
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/division_probe.slang",
+      "-target",
+      "spirv",
+      "-profile",
+      "glsl_450",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-O3",
+      "-I",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline.spv"
+    ],
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/division_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline/portable_binary32.h"
+    ]
+  },
+  "validate-shader-baseline": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Complete actual module validation",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.1",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline.spv"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline.spv"
+    ]
+  },
+  "disassemble-baseline": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Complete scalar IR control flow/capability review",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline.spvasm"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline.spv"
+    ]
+  },
+  "gpu-baseline": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Actual selected software Vulkan complete independent scalar corpus; device buffer8MiB bound",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline.spv",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/input-v2.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/expected-v2.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/baseline-gpu-actual.bin",
+      "--dispatch"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/baseline.spv",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/input-v2.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/expected-v2.bin",
+      "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so"
+    ],
+    "software_provider": true
+  },
+  "compile-shader-candidate": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Isolated full scalar shared header Slang module",
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/division_probe.slang",
+      "-target",
+      "spirv",
+      "-profile",
+      "glsl_450",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-O3",
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/kernels",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/candidate.spv"
+    ],
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/division_probe.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/portable_binary32.h"
+    ]
+  },
+  "validate-shader-candidate": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Complete actual module validation",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.1",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/candidate.spv"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/candidate.spv"
+    ]
+  },
+  "disassemble-candidate": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Complete scalar IR control flow/capability review",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/candidate.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/candidate.spvasm"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/candidate.spv"
+    ]
+  },
+  "gpu-candidate": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Actual selected software Vulkan complete independent scalar corpus; device buffer8MiB bound",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/candidate.spv",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/input-v2.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/expected-v2.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/candidate-gpu-actual.bin",
+      "--dispatch"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/candidate.spv",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/input-v2.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/expected-v2.bin",
+      "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so"
+    ],
+    "software_provider": true
+  },
+  "compile-cpu-tool-path-corrected": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Strict isolated shared-source scalar probe compile",
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/src",
+      "-I/home/astra/.project/Sirius/out/portable-integer-reciprocal",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/cpu_probe.cpp",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu_probe",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu_probe.d"
+    ],
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/ld",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/cpu_probe.cpp",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/word_io.h"
+    ]
+  },
+  "generate-input-rounding-subset": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Original exact corpus plus independent digit and final underflow/minnormal/overflow-boundary raw words",
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/generate_input.py"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/generate_input.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/portable_binary32_reference.bin"
+    ]
+  },
+  "cpu-boundaries-v2": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Original corpus plus independent final quotient boundary raw words on C++",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu_probe",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/input-v2.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/expected-v2.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/cpu-actual-v2.bin"
+    ],
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/cpu_probe",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/input-v2.bin",
+      "/home/astra/.project/Sirius/out/portable-integer-reciprocal/expected-v2.bin"
+    ]
+  },
+  "generate-all-products": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/build-retained-kernels.py",
+      "--output",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-integer-reciprocal/products/retained_kernels.h",
+      "--compiler",
+      "/opt/slang/bin/slangc",
+      "--optimizer",
+      "/usr/bin/spirv-opt",
+      "--assembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--disassembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "--validator",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+    ],
+    "scope": "Complete current35-product generation from shared integer reciprocal candidate; canonical products unchanged. Exact program arrays/native product and barrier/capability review required; no runtime or release claim."
+  },
+  "first-party-format": {
+    "revision": "49bfb434b0a31df958572448acebf655eb192296",
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "scope": "Complete first-party C++ header/source format check; source/build only",
+    "argv": [
+      "python3",
+      "-B",
+      "-c",
+      "from pathlib import Path; import subprocess; files=sorted(str(p) for root in ('src/sirius','tests') for p in Path(root).rglob('*') if p.is_file() and p.suffix in ('.cpp','.h','.hpp')); assert files; subprocess.run(['/usr/bin/clang-format-18','--dry-run','--Werror',*files],check=True); print(len(files))"
+    ],
+    "frozen_inputs": [
+      "/usr/bin/clang-format-18"
+    ]
+  }
+}
