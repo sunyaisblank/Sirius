@@ -872,8 +872,7 @@ std::optional<std::uint64_t> VulkanDevice::BufferMutationEpoch(BufferHandle hand
 
 void VulkanDevice::AdvanceBufferMutation(BufferHandle handle) {
     auto& epoch = buffers_[handle.value].mutation_epoch;
-    if (epoch != 0)
-        epoch = epoch == std::numeric_limits<std::uint64_t>::max() ? 0 : epoch + 1;
+    if (epoch != 0) epoch = epoch == std::numeric_limits<std::uint64_t>::max() ? 0 : epoch + 1;
 }
 
 Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const std::byte> data) {
@@ -1026,10 +1025,9 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
     // adapter need not infer SPIR-V access modes. Repeated bindings count once.
     for (const auto& item : commands)
         for (std::size_t i = 0; i < item.buffers.size(); ++i)
-            if (std::none_of(item.buffers.begin(), item.buffers.begin() + i,
-                             [&](BufferHandle earlier) {
-                                 return earlier.value == item.buffers[i].value;
-                             }))
+            if (std::none_of(
+                    item.buffers.begin(), item.buffers.begin() + i,
+                    [&](BufferHandle earlier) { return earlier.value == item.buffers[i].value; }))
                 AdvanceBufferMutation(item.buffers[i]);
     std::array<Pipeline*, 2> pipelines{};
     std::array<VkDescriptorSetLayout, 2> layouts{};
