@@ -207,7 +207,7 @@ def build():
     assert len(scientific) == 104
     return [v.i for v in scientific]
 
-def compile_parallel_program(outputs, live, prefix_outputs=None, homogeneous=False):
+def compile_parallel_program(outputs, live, prefix_outputs=None, homogeneous=False, with_plan=False):
     """Schedule independent DAG nodes together, without changing any expression.
 
     A layer never reuses its inputs' registers. They become available only after
@@ -278,6 +278,7 @@ def compile_parallel_program(outputs, live, prefix_outputs=None, homogeneous=Fal
             released[level].append(old)
     slots, free, program, offsets = {}, [], [], [0]
     owners = {}
+    write_order = [] if with_plan else None
     registers = 0
     for level, layer in enumerate(layers):
         inputs = {slots[d] for old in layer for d in dependencies(old)}
@@ -302,15 +303,25 @@ def compile_parallel_program(outputs, live, prefix_outputs=None, homogeneous=Fal
             slots[old] = destination
             owners[destination] = old
             program.extend((op, destination, a, b, c))
+            if with_plan:
+                write_order.append(old)
         offsets.append(len(program) // 5)
         free.extend(slots[old] for old in released[level])
     assert all(owners[slots[old]] == old for old in outputs)
-    return {'instructions': len(live), 'registers': registers,
-            'outputs': [slots[i] for i in outputs], 'operations': program,
-            'layer_offsets': offsets}
+    result = {'instructions': len(live), 'registers': registers,
+              'outputs': [slots[i] for i in outputs], 'operations': program,
+              'layer_offsets': offsets}
+    if with_plan:
+        # Snapshot source identity at each actual write, before another builder
+        # clears the DAG. This observes allocation; it never changes scheduling.
+        result['source_plan'] = {'operations': tuple(ops), 'writes': tuple(write_order),
+                                 'outputs': tuple(outputs)}
+    return result
 
 
-def compile_program(outputs, parallel=False, prefix_outputs=None, homogeneous=False):
+def compile_program(outputs, parallel=False, prefix_outputs=None, homogeneous=False, with_plan=False):
+    if with_plan and not parallel:
+        raise ValueError('source write metadata requires the parallel allocator')
     live = set()
 
     def visit(i):
@@ -327,7 +338,7 @@ def compile_program(outputs, parallel=False, prefix_outputs=None, homogeneous=Fa
     for i in outputs:
         visit(i)
     if parallel:
-        return compile_parallel_program(outputs, live, prefix_outputs, homogeneous)
+        return compile_parallel_program(outputs, live, prefix_outputs, homogeneous, with_plan)
     sequence = sorted(live)
     last_use = {i: i for i in sequence}
     for old in sequence:
@@ -441,17 +452,18 @@ def build_hamiltonian_rhs():
 
 
 
-def build_transport_program(parallel=False):
+def build_transport_program(parallel=False, with_plan=False):
     # Ready opcode cohorts reduce mixed arithmetic paths without changing the
     # complete coupled expression DAG or its per-layer ownership rules.
-    program = compile_program(build_hamiltonian_rhs(), parallel, homogeneous=parallel)
+    program = compile_program(build_hamiltonian_rhs(), parallel, homogeneous=parallel,
+                              with_plan=with_plan)
     if parallel:
         # Preserve the existing Transport storage span across arithmetic modes.
         program['registers'] = max(program['registers'], 459)
     return program
 
 
-def build_schwarzschild_transport_program(parallel=False):
+def build_schwarzschild_transport_program(parallel=False, with_plan=False):
     """Coupled Schwarzschild RHS for exact a=Q=Lambda=0 and r>0.
 
     The shader owns parameter admission and its prior analytic flat bypass.
@@ -490,7 +502,8 @@ def build_schwarzschild_transport_program(parallel=False):
     for column in range(4):
         seeds = {4 + i: row[12 + 8 * column + i] for i in range(8)}
         outputs.extend(differentiate(central, seeds))
-    program = compile_program([v.i for v in outputs], parallel, homogeneous=parallel)
+    program = compile_program([v.i for v in outputs], parallel, homogeneous=parallel,
+                              with_plan=with_plan)
     if parallel:
         # Keep the existing Transport scratch and output span in every mode.
         program['registers'] = max(program['registers'], 459)
@@ -510,17 +523,17 @@ def schwarzschild_metric_profile(position, row):
     return factor, ell, node(9, row[0], p(0))
 
 
-def build_endpoint_program(parallel=False):
-    return build_endpoint_profile_program(parallel, metric_profile)
+def build_endpoint_program(parallel=False, with_plan=False):
+    return build_endpoint_profile_program(parallel, metric_profile, with_plan)
 
 
-def build_schwarzschild_endpoint_program(parallel=False):
+def build_schwarzschild_endpoint_program(parallel=False, with_plan=False):
     # Arithmetic regrouping needs independent numerical acceptance; it does
     # not promise the general graph's exact words or enclosure widths.
-    return build_endpoint_profile_program(parallel, schwarzschild_metric_profile)
+    return build_endpoint_profile_program(parallel, schwarzschild_metric_profile, with_plan)
 
 
-def build_endpoint_profile_program(parallel, profile):
+def build_endpoint_profile_program(parallel, profile, with_plan=False):
     """Metric and projected physical columns from the complete phase expansion.
 
     The endpoint kernel first consumes the metric/tangent outputs to select a
@@ -609,7 +622,8 @@ def build_endpoint_profile_program(parallel, profile):
         physical.extend(X + V)
     outputs = [v.v for line in g for v in line] + tangent + phase + physical
     assert len(outputs) == 100
-    program = compile_program([v.i for v in outputs], parallel, [v.i for v in outputs[:20]])
+    program = compile_program([v.i for v in outputs], parallel, [v.i for v in outputs[:20]],
+                              with_plan=with_plan)
     if parallel:
         # Preserve the existing Endpoint scratch and 3829-word output row.
         program['registers'] = max(program['registers'], 612)
@@ -620,6 +634,86 @@ def build_endpoint_profile_program(parallel, profile):
     if parallel:
         program['prefix_instructions'] = next(end for end in program['layer_offsets'] if end >= program['prefix_instructions'])
     return program
+
+
+def build_stage_seven_owner_plan():
+    """Map identical live expressions to their original T/E write ordinals.
+
+    Keys preserve opcode, constant/input words and dependency order. Runtime
+    replay additionally requires canonical tables, matching operand words and
+    arithmetic mode, valid owned records and a successful high-row generation.
+    This source mapping is not a native floating-point word-equivalence proof.
+    """
+    pure_inputs = frozenset((*range(8), 44))
+
+    def dependencies(operation):
+        op, a, b, c = operation
+        assert 0 <= op <= 11
+        return (() if op in (0, 1) else
+                (a,) + (() if op in (6, 7, 8) else (b,)) + ((c,) if op in (10, 11) else ()))
+
+    families = {}
+    for family, transport, endpoint in (
+            ('general', build_transport_program, build_endpoint_program),
+            ('schwarzschild', build_schwarzschild_transport_program,
+             build_schwarzschild_endpoint_program)):
+        programs = {'transport': transport(True, with_plan=True),
+                    'endpoint': endpoint(True, with_plan=True)}
+        intern, eligible = {}, {}
+        for stage, program in programs.items():
+            source = program['source_plan']
+            operations, writes = source['operations'], source['writes']
+            assert len(writes) == program['instructions'] == len(set(writes))
+            ordinals = {node: ordinal for ordinal, node in enumerate(writes)}
+            ids, inputs = [], []
+            matching = {}
+            for node, operation in enumerate(operations):
+                op, a, _, _ = operation
+                deps = dependencies(operation)
+                assert all(dependency < node for dependency in deps)
+                key = (op, a) if op in (0, 1) else (op, tuple(ids[d] for d in deps))
+                if key not in intern:
+                    intern[key] = len(intern)
+                ids.append(intern[key])
+                inputs.append(frozenset((a,)) if op == 1 else
+                              frozenset().union(*(inputs[d] for d in deps)))
+                if node in ordinals and inputs[node] <= pure_inputs:
+                    assert ids[node] not in matching, 'duplicate live expression'
+                    matching[ids[node]] = (node, ordinals[node], inputs[node])
+
+            # Independently reconstruct every encoded tuple from the observed
+            # write order, including recycled registers and pinned roots.
+            destinations = {node: program['operations'][5 * ordinal + 1]
+                            for ordinal, node in enumerate(writes)}
+            for ordinal, node in enumerate(writes):
+                op, a, b, c = operations[node]
+                deps = dependencies(operations[node])
+                assert all(d in ordinals and ordinals[d] < ordinal for d in deps)
+                if op not in (0, 1):
+                    a = destinations[a]
+                    b = 0 if op in (6, 7, 8) else destinations[b]
+                    c = destinations[c] if op in (10, 11) else 0
+                assert tuple(program['operations'][5 * ordinal:5 * ordinal + 5]) == (
+                    op, destinations[node], a, b, c)
+            assert [destinations[node] for node in source['outputs']] == program['outputs']
+            eligible[stage] = matching
+
+        pairs = []
+        for key in eligible['transport'].keys() & eligible['endpoint'].keys():
+            t_node, t_ordinal, t_inputs = eligible['transport'][key]
+            _, e_ordinal, e_inputs = eligible['endpoint'][key]
+            assert t_inputs == e_inputs
+            opcode = programs['transport']['source_plan']['operations'][t_node][0]
+            if opcode not in (0, 1):
+                pairs.append((t_node, t_ordinal, e_ordinal))
+        # Preserve original source order so the executable observer's records
+        # and future owner slots have the same independently reviewed identity.
+        pairs.sort()
+        families[family] = {'programs': {stage: {k: v for k, v in program.items()
+                                               if k != 'source_plan'}
+                                         for stage, program in programs.items()},
+                            'writes': tuple((t, e) for _, t, e in pairs)}
+    return families
 
 
 def chart_metric_profile(position, row, chart, profile=metric_profile):
