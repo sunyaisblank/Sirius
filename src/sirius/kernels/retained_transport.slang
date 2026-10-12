@@ -510,6 +510,15 @@ RetainedTriple ReadCoefficient(uint index) {
         if (original.valid == 0) return;
         if (lane == 0 && (i < 4 || i == 44)) S7Key(i, original);
     }
+#elif defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+    // Check every original field once per row, then refuse uniformly before
+    // any phase work. Invalid input retains the complete zero output.
+    if (lane == 0) retainedStatus = 0;
+    GroupMemoryBarrierWithGroupSync();
+    for (uint i = lane; i < 46; i += SIRIUS_RETAINED_EXECUTION_LANES)
+        if (ReadOriginal(i, row).valid == 0) RejectRetainedProgram();
+    GroupMemoryBarrierWithGroupSync();
+    if (retainedStatus != 0) return;
 #else
     for (uint i = 0; i < 46; ++i)
         if (ReadOriginal(i, row).valid == 0) return;
