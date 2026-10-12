@@ -1,0 +1,196 @@
+{
+  "compare-products": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compare_generated_products.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/portable-stage-seven-owner-construction/compare_generated_products.py",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_initialize_portable_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_portable.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_initialize_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_dopri_phase_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_portable_normal_sum.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_ray_camera_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_dopri_phase_portable_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_dense_portable_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_portable_normal_sum.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_dopri_phase.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_portable_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_portable.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_portable_stage7_owner.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_dopri_phase_portable_normal_sum.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_ray_camera.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_fma.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_camera.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_ray_camera_portable_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_ray_camera_portable.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_portable_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_initialize.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_initialize_portable.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_camera_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_dense_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_dense_portable.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_dense.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_portable_stage7_owner.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_fma.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_camera_portable.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_dopri_phase_portable.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_camera_portable_fp64.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.slang",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable_fp64.spv",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang"
+    ],
+    "scope": "Complete source/build original40arrays/33products exact comparison and newheader-binary join only. No runtime or qualification."
+  },
+  "transport-disassemble": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_portable_stage7_owner.spv",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_portable_stage7_owner.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_portable_stage7_owner.spv"
+    ],
+    "scope": "New dynamic-grant optional shader disassembly only."
+  },
+  "endpoint-disassemble": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_portable_stage7_owner.spv",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_portable_stage7_owner.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_portable_stage7_owner.spv"
+    ],
+    "scope": "New dynamic-grant optional shader disassembly only."
+  },
+  "inspect-ir": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/check_full_owner_ir.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/portable-stage-seven-owner-construction/check_full_owner_ir.py",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_portable_stage7_owner.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_portable_stage7_owner.spv",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_transport_portable_stage7_owner.spvasm",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_endpoint_portable_stage7_owner.spvasm"
+    ],
+    "scope": "New exact dynamic-grant module IR only: original arithmetic controls, bindings, LocalSize, shared bytes. No allocation, replay, benefit or qualification."
+  },
+  "operating-model": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/verify-operating-model.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [],
+    "scope": "Source operating-model registration/coverage and unchanged policy requirements only; not Mandatory runtime qualification."
+  },
+  "labels-check": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/generate-ctest-labels.py",
+      "--check"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [],
+    "scope": "Generated Mandatory test labels source drift check only; not test execution."
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "compile-stock-renderer": {
+    "revision": "f4583b03b94eb07733c11b10b0f2caf62acfab16",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/lib/stb",
+      "-I/home/astra/.project/Sirius/lib/tinyexr",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/renderer_stock.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/render/vulkan_renderer.cpp"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "/usr/bin/ld",
+      "attestations/software-vulkan/dc714b9/guarded-upmultiply-trial/diagnostic/actions.json"
+    ],
+    "scope": "Configured-preset compilation of the restored stock renderer against current experimental API; no product rebuild, GPU, performance rerun or full qualification."
+  }
+}

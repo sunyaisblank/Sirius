@@ -1,0 +1,502 @@
+{
+  "transport-compile": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_transport.slang",
+      "-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42",
+      "-DSIRIUS_RETAINED_NORMAL_SUM32=1",
+      "-DSIRIUS_RETAINED_PORTABLE=1",
+      "-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1",
+      "-DSIRIUS_RETAINED_STAGE7_OWNER=1",
+      "-DSIRIUS_RETAINED_COEFFICIENTS=25",
+      "-DSIRIUS_RETAINED_REGISTERS=459",
+      "-DSIRIUS_RETAINED_TERMS=5",
+      "-DSIRIUS_RETAINED_LANES=64",
+      "-DSIRIUS_RETAINED_EXECUTION_LANES=16",
+      "-DSIRIUS_RETAINED_LAYERS=117",
+      "-DSIRIUS_RETAINED_PREFIX=0",
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/kernels",
+      "-I",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/owner-layout",
+      "-O0",
+      "-target",
+      "spirv",
+      "-profile",
+      "spirv_1_5",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/compiler.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation transport owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "transport-optimize": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/spirv-opt",
+      "--target-env=vulkan1.2",
+      "--ssa-rewrite",
+      "--eliminate-dead-code-aggressive",
+      "--preserve-bindings",
+      "--preserve-interface",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/compiler.spv",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/optimized.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/transport/compiler.spv"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation transport owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "transport-disassemble": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/optimized.spv",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/optimized.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/transport/optimized.spv"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation transport owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "transport-controls": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/optimized.spvasm",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/controlled.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/transport/optimized.spvasm"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation transport owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "transport-assemble": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--target-env",
+      "spv1.5",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/controlled.spvasm",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/owner.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/transport/controlled.spvasm"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation transport owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "transport-validate": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.2",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/owner.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/transport/owner.spv"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation transport owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "endpoint-compile": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_endpoint.slang",
+      "-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=11240",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=9903",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=84",
+      "-DSIRIUS_RETAINED_NORMAL_SUM32=1",
+      "-DSIRIUS_RETAINED_PORTABLE=1",
+      "-DSIRIUS_RETAINED_PARALLEL_ENDPOINT=1",
+      "-DSIRIUS_RETAINED_STAGE7_OWNER=1",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_PREFIX=202",
+      "-DSIRIUS_RETAINED_REGISTERS=612",
+      "-DSIRIUS_RETAINED_TERMS=5",
+      "-DSIRIUS_RETAINED_LANES=64",
+      "-DSIRIUS_RETAINED_EXECUTION_LANES=16",
+      "-DSIRIUS_RETAINED_LAYERS=111",
+      "-DSIRIUS_RETAINED_PREFIX=250",
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/kernels",
+      "-I",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/owner-layout",
+      "-O0",
+      "-target",
+      "spirv",
+      "-profile",
+      "spirv_1_5",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/compiler.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation endpoint owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "endpoint-optimize": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/spirv-opt",
+      "--target-env=vulkan1.2",
+      "--ssa-rewrite",
+      "--eliminate-dead-code-aggressive",
+      "--preserve-bindings",
+      "--preserve-interface",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/compiler.spv",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/optimized.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/endpoint/compiler.spv"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation endpoint owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "endpoint-disassemble": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/optimized.spv",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/optimized.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/endpoint/optimized.spv"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation endpoint owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "endpoint-controls": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/optimized.spvasm",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/controlled.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/endpoint/optimized.spvasm"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation endpoint owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "endpoint-assemble": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--target-env",
+      "spv1.5",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/controlled.spvasm",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/owner.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/endpoint/controlled.spvasm"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation endpoint owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  },
+  "endpoint-validate": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.2",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/owner.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/apply_controls.py",
+      "out/portable-stage-seven-owner-construction/owner-layout/retained_owner_layout.slang",
+      "out/portable-stage-seven-owner-construction/compiler-screen/endpoint/owner.spv"
+    ],
+    "scope": "Bounded source/compiler screen of opt-in portable NORMAL_SUM32 sixteen-invocation endpoint owner only; original controls and 60s/512MiB/2GiB reserve. Not runtime, replay, performance, scientific or release qualification."
+  }
+}

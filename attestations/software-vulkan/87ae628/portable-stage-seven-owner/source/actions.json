@@ -1,0 +1,25 @@
+{
+  "plan-validation": {
+    "revision": "d4576926ae2bbabba214138da0f448b737c8f0e4",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "out/portable-stage-seven-owner-construction/validate_plan.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/portable-stage-seven-owner-construction/validate_plan.py",
+      "out/portable-stage-seven-owner-construction/baseline_retained_program.py",
+      "out/portable-stage-seven-owner-construction/source-review.json",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "attestations/review/9fbd0e8/stage7-write-mapping/files/mapping-result.json"
+    ],
+    "scope": "Original60s/512MiB analysis bound; sampled complete session+controller with2GiBreserve. Eighteen original/current default builder comparisons,7complete generated program joins,71/26exact historical arithmetic write pairs. No compiler/dispatch/science/performance/qualification verdict."
+  }
+}

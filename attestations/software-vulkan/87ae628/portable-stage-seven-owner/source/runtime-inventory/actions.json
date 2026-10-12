@@ -1,0 +1,67 @@
+{
+  "compile-inventory": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/inventory",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/runtime-inventory/inventory.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-pthread"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/portable-stage-seven-owner-construction/runtime-inventory/inventory.cpp",
+      "bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+      "bin/linux-gcc/src/sirius/libsirius_base.a",
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "/usr/bin/ld"
+    ],
+    "scope": "Read-only actual Vulkan inventory helper built from configured linux-gcc flags and unchanged adapter object. No GPU dispatch, allocation, replay, performance or qualification."
+  },
+  "read-software-inventory": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/inventory"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "frozen_inputs": [
+      "bin/linux-gcc/portable-stage-seven-owner/inventory",
+      "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+    ],
+    "scope": "Actual pinned llvmpipe inventory/property screen only. No feature fabrication, dispatch, allocation or qualification."
+  }
+}

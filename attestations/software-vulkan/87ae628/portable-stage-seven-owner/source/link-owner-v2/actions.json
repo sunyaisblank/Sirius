@@ -1,0 +1,42 @@
+{
+  "host-tests-link": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/compute.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/host-tests.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-pthread",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/owner_host_tests"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp",
+      "out/portable-stage-seven-owner-construction/cxx-screen/subset-join.json",
+      "bin/linux-gcc/portable-stage-seven-owner/compute.o",
+      "bin/linux-gcc/portable-stage-seven-owner/host-tests.o",
+      "bin/linux-gcc/lib/libgtest_main.a",
+      "bin/linux-gcc/lib/libgtest.a",
+      "/usr/bin/ld",
+      "bin/linux-gcc/src/sirius/libsirius_base.a",
+      "out/portable-stage-seven-owner-construction/cxx-screen/host-tests-link/owner.json"
+    ],
+    "scope": "Host diagnostic link with unchanged preset base contract library resolving originalheader contract helpers; candidatecompute.o and exactthreeTESTsubset.o only. Keep first incomplete-link failure. No GPU/runtime/science/release qualification."
+  }
+}

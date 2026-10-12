@@ -1,0 +1,67 @@
+{
+  "transport-final-disassemble": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/owner.spv",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/transport/final.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "out/portable-stage-seven-owner-construction/compiler-screen/transport/owner.spv"
+    ],
+    "scope": "Exact validated final optional module disassembly only; no runtime or qualification."
+  },
+  "endpoint-final-disassemble": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/owner.spv",
+      "-o",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/compiler-screen/endpoint/final.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "out/portable-stage-seven-owner-construction/compiler-screen/endpoint/owner.spv"
+    ],
+    "scope": "Exact validated final optional module disassembly only; no runtime or qualification."
+  },
+  "inspect-owner-ir": {
+    "revision": "51675c0d1ceeb321da36a1af2b4fb9bf2e62a28d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/check_owner_ir.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/portable-stage-seven-owner-construction/check_owner_ir.py",
+      "out/portable-stage-seven-owner-construction/compiler-screen/transport/owner.spv",
+      "out/portable-stage-seven-owner-construction/compiler-screen/transport/final.spvasm",
+      "out/portable-stage-seven-owner-construction/compiler-screen/endpoint/owner.spv",
+      "out/portable-stage-seven-owner-construction/compiler-screen/endpoint/final.spvasm"
+    ],
+    "scope": "Actual optional module structure only: bindings, LocalSize, arithmetic controls and charged workgroup bytes. No allocation, device replay, performance or qualification."
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "compute-compile": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/compute.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp",
+      "out/portable-stage-seven-owner-construction/cxx-screen/subset-join.json",
+      "attestations/native-vulkan/5f27ddc/stage-seven-word-witness/files/build-owner/actions.json",
+      "out/portable-stage-seven-owner-construction/cxx-screen/compute-compile/owner.json"
+    ],
+    "scope": "Use existing local C++ build governor300s/4GiB/2GiBreserve (prior admitted build-owner/actions.json), correcting earlier misclassified512MiBshader diagnostic limit. Same source/preset flags and diagnostic outputs; no canonical product mutation, runtime/replay/gain/science/release qualification."
+  },
+  "renderer-compile": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/lib/stb",
+      "-I/home/astra/.project/Sirius/lib/tinyexr",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/renderer.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/render/vulkan_renderer.cpp"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp",
+      "out/portable-stage-seven-owner-construction/cxx-screen/subset-join.json",
+      "attestations/native-vulkan/5f27ddc/stage-seven-word-witness/files/build-owner/actions.json",
+      "out/portable-stage-seven-owner-construction/cxx-screen/renderer-compile/owner.json"
+    ],
+    "scope": "Use existing local C++ build governor300s/4GiB/2GiBreserve (prior admitted build-owner/actions.json), correcting earlier misclassified512MiBshader diagnostic limit. Same source/preset flags and diagnostic outputs; no canonical product mutation, runtime/replay/gain/science/release qualification."
+  }
+}

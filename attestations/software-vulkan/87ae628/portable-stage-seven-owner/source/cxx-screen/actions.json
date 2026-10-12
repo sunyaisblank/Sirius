@@ -1,0 +1,252 @@
+{
+  "compute-compile": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/compute.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp",
+      "out/portable-stage-seven-owner-construction/cxx-screen/subset-join.json"
+    ],
+    "scope": "Actual compute compile with existinglinux-gcc preset flags (host-tests exact three seam bodies only), diagnostic objects underbin/linux-gcc. No canonical artifact mutation, fulltarget build, GPU replay or scientific/release qualification."
+  },
+  "integrator-compile": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/integrator.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_integrator.cpp"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp",
+      "out/portable-stage-seven-owner-construction/cxx-screen/subset-join.json"
+    ],
+    "scope": "Actual integrator compile with existinglinux-gcc preset flags (host-tests exact three seam bodies only), diagnostic objects underbin/linux-gcc. No canonical artifact mutation, fulltarget build, GPU replay or scientific/release qualification."
+  },
+  "renderer-compile": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/lib/stb",
+      "-I/home/astra/.project/Sirius/lib/tinyexr",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/renderer.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/render/vulkan_renderer.cpp"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp",
+      "out/portable-stage-seven-owner-construction/cxx-screen/subset-join.json"
+    ],
+    "scope": "Actual renderer compile with existinglinux-gcc preset flags (host-tests exact three seam bodies only), diagnostic objects underbin/linux-gcc. No canonical artifact mutation, fulltarget build, GPU replay or scientific/release qualification."
+  },
+  "host-tests-compile": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/full-builder/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/host-tests.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp",
+      "out/portable-stage-seven-owner-construction/cxx-screen/subset-join.json"
+    ],
+    "scope": "Actual host-tests compile with existinglinux-gcc preset flags (host-tests exact three seam bodies only), diagnostic objects underbin/linux-gcc. No canonical artifact mutation, fulltarget build, GPU replay or scientific/release qualification."
+  },
+  "host-tests-link": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/compute.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/host-tests.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "-pthread",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/owner_host_tests"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp",
+      "out/portable-stage-seven-owner-construction/cxx-screen/subset-join.json",
+      "bin/linux-gcc/portable-stage-seven-owner/compute.o",
+      "bin/linux-gcc/portable-stage-seven-owner/host-tests.o",
+      "bin/linux-gcc/lib/libgtest_main.a",
+      "bin/linux-gcc/lib/libgtest.a",
+      "/usr/bin/ld"
+    ],
+    "scope": "Link source-bound host seam diagnostic only; no production target or qualification."
+  },
+  "host-tests-run": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-stage-seven-owner/owner_host_tests",
+      "--gtest_filter=RetainedComputeAdmission.StageSeven*"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_layout.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_owner_kernels.h",
+      "out/portable-stage-seven-owner-construction/full-builder/products/retained_kernels.h",
+      "out/portable-stage-seven-owner-construction/cxx-screen/owner_host_tests.cpp",
+      "out/portable-stage-seven-owner-construction/cxx-screen/subset-join.json",
+      "bin/linux-gcc/portable-stage-seven-owner/owner_host_tests"
+    ],
+    "scope": "Execute three actual source host/device seam tests only. No simulated arithmetic verdict, real shader, device allocation or science/release qualification."
+  }
+}

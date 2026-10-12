@@ -1,0 +1,20 @@
+{
+  "operating-model-self-test": {
+    "revision": "87ae628f25ac99e8e4c412c4d21eb868753dce60",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/verify-operating-model.py",
+      "--self-test"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [],
+    "scope": "Source operating-model verifier adversarial self-test after addingthreeMandatory evidence identities. Existing criteria/domains/profilepolicy retained. No fullMandatory/GPU/scientific/release qualification."
+  }
+}
