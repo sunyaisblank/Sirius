@@ -431,6 +431,9 @@ base::Expected<void> RetainedCompute::CheckStageSevenEpochs(std::uint32_t change
         if (!matches) {
             unexpected = true;
             owner.tables_verified.fill(false);
+            // A failed/uncertain submission can have altered the owner prefix
+            // within its otherwise expected advance. Quarantine before return.
+            owner.prefix_verified = false;
             std::fill(owner.issued.begin(), owner.issued.end(), false);
             if (i == 2 || !current) owner.active = false;
         }

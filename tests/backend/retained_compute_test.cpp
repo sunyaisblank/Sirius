@@ -671,8 +671,9 @@ TEST(RetainedComputeAdmission, SealedOwnerMutationRetiresReuseAndLateInputEditsR
 }
 
 TEST(RetainedComputeAdmission, SealedDispatchFailureRechecksOwnerPrefixBeforeRecovery) {
-    for (const bool corrupt_prefix : {false, true}) {
-        SCOPED_TRACE(corrupt_prefix);
+    for (const unsigned mode : {0U, 1U, 2U}) {
+        SCOPED_TRACE(mode);
+        const bool corrupt_prefix = mode != 0;
         PreparationProbeDevice device;
         device.info.rounds_fp32_to_nearest = true;
         device.track_epochs = true;
@@ -689,6 +690,11 @@ TEST(RetainedComputeAdmission, SealedDispatchFailureRechecksOwnerPrefixBeforeRec
         device.after_dispatch = [&] {
             // An admitted failed dispatch may have changed any bound bytes.
             if (corrupt_prefix) device.buffers.back()[17 * 4] ^= std::byte{1};
+            if (mode == 2) {
+                const auto input = device.buffers[2];
+                ASSERT_TRUE(device.WriteBuffer(BufferHandle{2}, input));
+                ASSERT_TRUE(device.WriteBuffer(BufferHandle{2}, input));
+            }
         };
         EXPECT_FALSE(compute.Step(packets));
         device.fail_dispatch = false;
