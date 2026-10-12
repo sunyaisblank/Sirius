@@ -79,7 +79,7 @@ RPScalar RTAbsoluteLower(RetainedTriple a) {
 // TwoSum preserves overlapping limbs; each discarded fourth term is enclosed
 // immediately. Normalize once before magnitude estimates consume the limbs.
 RetainedTriple RTAccumulateTerm(RetainedTriple a,RPScalar x) {
-#ifdef SIRIUS_RETAINED_PORTABLE
+#if defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     if(a.valid==0||!RPBounded(x,0x7b800000u)) return RTInvalid();
     RetainedTriple r=RTInvalid();
     RPScalar carry=x;
