@@ -95,8 +95,8 @@ for sample in targets[0].rglob("samples.jsonl"):
 fresh = []
 for pid, saved in sorted(births):
     try:
-        stat = Path(f"/proc/{pid}/stat").read_text()
-        current = stat[stat.rfind(")") + 2:].split()[19]
+        proc_stat_text = Path(f"/proc/{pid}/stat").read_text()
+        current = proc_stat_text[proc_stat_text.rfind(")") + 2:].split()[19]
     except (FileNotFoundError, ProcessLookupError):
         current = None
     assert current != saved, (pid, saved, "saved birth still exists")
