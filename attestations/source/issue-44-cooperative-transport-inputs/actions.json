@@ -1,0 +1,124 @@
+{
+  "generate-all-products": {
+    "revision": "46ecc521c96c8a797d0f1d0aefd1506e40e3129d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/build-retained-kernels.py",
+      "--output",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/products/retained_kernels.h",
+      "--compiler",
+      "/opt/slang/bin/slangc",
+      "--optimizer",
+      "/usr/bin/spirv-opt",
+      "--assembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--disassembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "--validator",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+    ],
+    "scope": "Complete35 private products for cooperative46-field stock portable Transport input admission; all32 unaffected SPVs and37 arrays exact, all7 program tables/native16/optionalowner2 exact; original barriers plus exactly2new group joins in each of3 portable stock Transport modules."
+  },
+  "compile-admission": {
+    "revision": "46ecc521c96c8a797d0f1d0aefd1506e40e3129d",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-I/home/astra/.project/Sirius/src",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/out/cooperative-transport-inputs",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/products",
+      "/home/astra/.project/Sirius/out/cooperative-transport-inputs/admission.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/admission.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/admission",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/admission.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/ld",
+      "/home/astra/.project/Sirius/out/cooperative-transport-inputs/admission.cpp",
+      "/home/astra/.project/Sirius/out/cooperative-transport-inputs/original_transport.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/products/retained_kernels.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/home/astra/.project/Sirius/tests/support/retained_transport/reference_cases.h",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json"
+    ],
+    "scope": "Strict private original/candidate full-word input-admission control; exact reused unchanged Vulkan provider. No canonical configure/build."
+  },
+  "run-admission": {
+    "revision": "46ecc521c96c8a797d0f1d0aefd1506e40e3129d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/admission",
+      "{folder}"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/admission",
+      "/home/astra/.project/Sirius/out/cooperative-transport-inputs/admission.cpp",
+      "/home/astra/.project/Sirius/out/cooperative-transport-inputs/original_transport.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/products/retained_kernels.h",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "software_provider": true,
+    "scope": "Actual original/candidate complete stock Transport words at all46 invalid-validity/negative-radius positions plus35 boundary malformed cases;16/64-lane/default/wide variants, full-zero refusal, neighbor isolation and valid recovery. Original8MiB device allocation limit and300s/4GiB RSS/2GiB reserve. No benefit/full-science/qualification claim."
+  }
+}

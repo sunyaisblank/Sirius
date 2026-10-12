@@ -1,0 +1,47 @@
+{
+  "generate-all-products": {
+    "revision": "46ecc521c96c8a797d0f1d0aefd1506e40e3129d",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/build-retained-kernels.py",
+      "--output",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-transport-inputs/products/retained_kernels.h",
+      "--compiler",
+      "/opt/slang/bin/slangc",
+      "--optimizer",
+      "/usr/bin/spirv-opt",
+      "--assembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--disassembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "--validator",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+    ],
+    "scope": "Complete35 private products for cooperative46-field stock portable Transport input admission; all32 unaffected SPVs and37 arrays exact, all7 program tables/native16/optionalowner2 exact; original barriers plus exactly2new group joins in each of3 portable stock Transport modules."
+  }
+}
