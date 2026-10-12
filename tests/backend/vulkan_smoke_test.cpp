@@ -12,6 +12,7 @@
 
 #include "support/scoped_environment.h"
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstddef>
@@ -879,6 +880,7 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
     const auto variant = device.LoadKernel(words);
     ASSERT_TRUE(variant);
     std::array<std::array<sirius::backend::BufferHandle, 3>, 2> bindings{};
+    std::array<std::array<std::uint64_t, 3>, 2> expected_epochs{};
     std::array<float, 194> radii{}, untouched{};
     for (std::size_t i = 0; i < radii.size(); ++i) radii[i] = float(4U << (i % 3));
     untouched.fill(-42);
@@ -893,9 +895,32 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
         ASSERT_TRUE(out);
         ASSERT_TRUE(params);
         bindings[i] = {*in, *out, *params};
+        for (std::size_t j = 0; j < bindings[i].size(); ++j) {
+            const auto epoch = device.BufferMutationEpoch(bindings[i][j]);
+            ASSERT_TRUE(epoch);
+            ASSERT_NE(*epoch, 0U);
+            expected_epochs[i][j] = *epoch;
+        }
         ASSERT_TRUE(device.WriteBuffer(*in, std::as_bytes(std::span(radii))));
+        ++expected_epochs[i][0];
         ASSERT_TRUE(device.WriteBuffer(*params, std::as_bytes(std::span(parameters))));
+        ++expected_epochs[i][2];
     }
+    const auto check_epochs = [&] {
+        for (std::size_t row = 0; row < bindings.size(); ++row)
+            for (std::size_t i = 0; i < bindings[row].size(); ++i)
+                EXPECT_EQ(device.BufferMutationEpoch(bindings[row][i]), expected_epochs[row][i]);
+    };
+    const auto advance_bound_epochs = [&](std::span<const sirius::backend::BufferHandle> bound) {
+        for (std::size_t row = 0; row < bindings.size(); ++row)
+            for (std::size_t i = 0; i < bindings[row].size(); ++i)
+                if (std::any_of(bound.begin(), bound.end(), [&](auto handle) {
+                        return handle.value == bindings[row][i].value;
+                    }))
+                    ++expected_epochs[row][i];
+    };
+    check_epochs();
+    EXPECT_FALSE(device.BufferMutationEpoch({std::numeric_limits<std::uint32_t>::max()}));
     const auto resident = device.BufferAllocationBytes();
     std::array<sirius::backend::ComputeDispatch, 2> commands{
         sirius::backend::ComputeDispatch{*original, bindings[0], 2, 1, 1},
@@ -933,16 +958,23 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
         } else {
             EXPECT_FALSE(configured);  // Unsupported diagnostics do not disable ordinary work.
         }
-        for (const auto& bound : bindings)
-            ASSERT_TRUE(device.WriteBuffer(bound[1], std::as_bytes(std::span(untouched))));
+        for (std::size_t row = 0; row < bindings.size(); ++row) {
+            ASSERT_TRUE(device.WriteBuffer(bindings[row][1], std::as_bytes(std::span(untouched))));
+            ++expected_epochs[row][1];
+        }
+        check_epochs();
         if (invocation == 1) {
             sirius::backend::DispatchTiming single;
             const auto& first_command = commands[0];
             ASSERT_TRUE(device.Dispatch(first_command.kernel, first_command.buffers,
                                         first_command.groups_x, 1, 1, &single));
+            advance_bound_epochs(first_command.buffers);
+            check_epochs();
             check_timestamp("single", single, timestamps_supported);
         }
         ASSERT_TRUE(device.DispatchIndependentPair(commands, &timing));
+        for (const auto& command : commands) advance_bound_epochs(command.buffers);
+        check_epochs();
         check_timestamp("pair_" + std::to_string(invocation), timing.combined,
                         requested && timestamps_supported);
         EXPECT_EQ(timing.pipeline_creations, invocation == 0 ? 2U : 0U);
@@ -965,15 +997,19 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
                     EXPECT_EQ(actual[i], untouched[i]);
             }
         }
+        check_epochs();  // ReadBuffer and timestamp observation preserve authority.
         std::swap(commands[0], commands[1]);
     }
-    for (const auto& bound : bindings)
-        ASSERT_TRUE(device.WriteBuffer(bound[1], std::as_bytes(std::span(untouched))));
+    for (std::size_t row = 0; row < bindings.size(); ++row) {
+        ASSERT_TRUE(device.WriteBuffer(bindings[row][1], std::as_bytes(std::span(untouched))));
+        ++expected_epochs[row][1];
+    }
     auto overlapping = bindings[1];
     overlapping[1] = bindings[0][1];
     commands[1].buffers = overlapping;
     const auto refused = device.DispatchIndependentPair(commands, &timing);
     ASSERT_FALSE(refused);
+    check_epochs();  // Shared-buffer refusal precedes a mutation attempt.
     EXPECT_FALSE(vulkan->LastDispatchTimestamp());  // Refusal cannot retain a prior sample.
     EXPECT_EQ(refused.error().operation(), "dispatch independent compute pair");
     EXPECT_EQ(timing.combined.total_ms, 0);
@@ -990,6 +1026,8 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
     sirius::backend::DispatchTiming recovered_single;
     ASSERT_TRUE(device.Dispatch(commands[0].kernel, commands[0].buffers, commands[0].groups_x, 1, 1,
                                 &recovered_single));
+    advance_bound_epochs(commands[0].buffers);
+    check_epochs();
     EXPECT_FALSE(vulkan->LastDispatchTimestamp());
     for (std::size_t row = 0; row < bindings.size(); ++row) {
         std::array<float, 194> actual{};
@@ -1001,6 +1039,8 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
                 EXPECT_EQ(actual[i], untouched[i]);
     }
     ASSERT_TRUE(device.DispatchIndependentPair(commands, &timing));
+    for (const auto& command : commands) advance_bound_epochs(command.buffers);
+    check_epochs();
     EXPECT_FALSE(vulkan->LastDispatchTimestamp());
     EXPECT_EQ(timing.pipeline_creations, 0U);
     EXPECT_EQ(device.BufferAllocationBytes(), resident);
@@ -1013,6 +1053,11 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
             else
                 EXPECT_EQ(actual[i], untouched[i]);
     }
+    check_epochs();
+    RecordProperty("buffer_mutation_epochs",
+                   std::format("{},{},{};{},{},{}", expected_epochs[0][0], expected_epochs[0][1],
+                               expected_epochs[0][2], expected_epochs[1][0], expected_epochs[1][1],
+                               expected_epochs[1][2]));
 #endif
 }
 

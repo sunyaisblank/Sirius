@@ -123,6 +123,9 @@ class VulkanDevice final : public ComputeDevice {
     [[nodiscard]] base::Expected<void> ReadBuffer(BufferHandle buffer,
                                                   std::span<std::byte> out) override;
 
+    [[nodiscard]] std::optional<std::uint64_t> BufferMutationEpoch(
+        BufferHandle buffer) const noexcept override;
+
     [[nodiscard]] base::Expected<void> Dispatch(KernelHandle kernel,
                                                 std::span<const BufferHandle> buffers,
                                                 std::uint32_t groups_x, std::uint32_t groups_y,
@@ -142,6 +145,7 @@ class VulkanDevice final : public ComputeDevice {
         VkDeviceMemory memory = VK_NULL_HANDLE;
         std::uint64_t size_bytes = 0;
         BufferUsage usage = BufferUsage::kStorage;
+        std::uint64_t mutation_epoch = 1;  // Zero permanently means exhausted.
     };
 
     // Pipelines are cached per kernel and binding signature; the signature
@@ -164,6 +168,7 @@ class VulkanDevice final : public ComputeDevice {
     [[nodiscard]] base::Expected<void> DispatchCommands(std::span<const ComputeDispatch> commands,
                                                         DispatchTiming* timing,
                                                         std::uint32_t* pipeline_creations);
+    void AdvanceBufferMutation(BufferHandle buffer);
     void InitialisePipelineCache();
 
     // At most one accepted submission can lack a confirmed completion. Further

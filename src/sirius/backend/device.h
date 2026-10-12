@@ -187,6 +187,16 @@ class ComputeDevice {
     // the prior limit. Driver-internal allocations remain outside this count.
     [[nodiscard]] virtual base::Expected<void> SetBufferAllocationLimit(std::uint64_t bytes) = 0;
     [[nodiscard]] virtual std::uint64_t BufferAllocationBytes() const noexcept = 0;
+
+    // Optional mutation visibility for a serialized owner. A known epoch is
+    // nonzero and advances once for each admitted WriteBuffer attempt and each
+    // dispatch attempt binding this buffer (even read-only bindings/failures).
+    // Reads do not advance it. Unknown completion or exhaustion returns nullopt.
+    // Compare expected advances; this does not lock out concurrent writers.
+    [[nodiscard]] virtual std::optional<std::uint64_t> BufferMutationEpoch(
+        BufferHandle) const noexcept {
+        return std::nullopt;
+    }
 };
 
 // Enumerates Vulkan-visible devices (empty vector when no loader or ICD is

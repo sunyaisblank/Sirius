@@ -864,6 +864,18 @@ Expected<std::uint64_t> VulkanDevice::RequiredBufferAllocationBytes(std::uint64_
     return requirements.size;
 }
 
+std::optional<std::uint64_t> VulkanDevice::BufferMutationEpoch(BufferHandle handle) const noexcept {
+    if (pending_dispatch_ || handle.value >= buffers_.size()) return std::nullopt;
+    const auto epoch = buffers_[handle.value].mutation_epoch;
+    return epoch == 0 ? std::nullopt : std::optional(epoch);
+}
+
+void VulkanDevice::AdvanceBufferMutation(BufferHandle handle) {
+    auto& epoch = buffers_[handle.value].mutation_epoch;
+    if (epoch != 0)
+        epoch = epoch == std::numeric_limits<std::uint64_t>::max() ? 0 : epoch + 1;
+}
+
 Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const std::byte> data) {
     if (pending_dispatch_)
         return Fail(ErrorDomain::kDevice, "write buffer",
@@ -871,6 +883,7 @@ Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const st
     SIRIUS_PRE(handle.value < buffers_.size());
     Buffer& buffer = buffers_[handle.value];
     SIRIUS_PRE(data.size_bytes() <= buffer.size_bytes);
+    AdvanceBufferMutation(handle);
     void* mapped = nullptr;
     if (const VkResult r = vkMapMemory(device_, buffer.memory, 0, data.size_bytes(), 0, &mapped);
         r != VK_SUCCESS) {
@@ -1009,6 +1022,15 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
         return Fail(ErrorDomain::kDevice, "dispatch compute commands",
                     "earlier submitted work has no confirmed completion");
     const auto dispatch_start = std::chrono::steady_clock::now();
+    // Invalidate before any possible submission, including failed setup. The
+    // adapter need not infer SPIR-V access modes. Repeated bindings count once.
+    for (const auto& item : commands)
+        for (std::size_t i = 0; i < item.buffers.size(); ++i)
+            if (std::none_of(item.buffers.begin(), item.buffers.begin() + i,
+                             [&](BufferHandle earlier) {
+                                 return earlier.value == item.buffers[i].value;
+                             }))
+                AdvanceBufferMutation(item.buffers[i]);
     std::array<Pipeline*, 2> pipelines{};
     std::array<VkDescriptorSetLayout, 2> layouts{};
     for (std::size_t i = 0; i < commands.size(); ++i) {
