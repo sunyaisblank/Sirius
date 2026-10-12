@@ -1,0 +1,641 @@
+{
+  "compile-baseline-observer": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/baseline/include",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/baseline-observer.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/baseline/retained_compute_test.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/baseline-observer.o.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/baseline/retained_compute_test.cpp",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/baseline/include/sirius/backend/retained_compute.h"
+    ],
+    "scope": "Strict original-control private preparation; no canonical configure/build"
+  },
+  "compile-baseline-dopri": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/baseline/include",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/baseline-dopri.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/baseline/retained_dopri_test.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/baseline-dopri.o.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/baseline/retained_dopri_test.cpp",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/baseline/include/sirius/backend/retained_compute.h"
+    ],
+    "scope": "Strict original-control private preparation; no canonical configure/build"
+  },
+  "compile-candidate-observer": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/candidate-observer.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/candidate/retained_compute_test.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/candidate-observer.o.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/candidate/retained_compute_test.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products/retained_kernels.h"
+    ],
+    "scope": "Strict original-control private preparation; no canonical configure/build"
+  },
+  "compile-candidate-dopri": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/candidate-dopri.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/candidate/retained_dopri_test.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/candidate-dopri.o.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/out/cooperative-dense-inputs/original-controls/candidate/retained_dopri_test.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products/retained_kernels.h"
+    ],
+    "scope": "Strict original-control private preparation; no canonical configure/build"
+  },
+  "compile-compute": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/compute.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/compute.o.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products/retained_kernels.h"
+    ],
+    "scope": "Strict original-control private preparation; no canonical configure/build"
+  },
+  "compile-integrator": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/integrator.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_integrator.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/integrator.o.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products/retained_kernels.h"
+    ],
+    "scope": "Strict original-control private preparation; no canonical configure/build"
+  },
+  "compile-trace": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/trace.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_trace_executor.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/trace.o.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products/retained_kernels.h"
+    ],
+    "scope": "Strict original-control private preparation; no canonical configure/build"
+  },
+  "link-baseline": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-DNDEBUG",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/baseline-observer.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/baseline-dopri.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "-ldl",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/baseline.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_baseline_controls"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/baseline-observer.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/baseline-dopri.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a"
+    ],
+    "scope": "Private stock-route link. Baseline9fbd source/products and candidatecurrent products share exact current Vulkan object/provider; candidate overrides all old Compute/integrator/trace archive members."
+  },
+  "link-candidate": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-DNDEBUG",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/candidate-observer.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/candidate-dopri.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/compute.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/integrator.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/trace.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "-ldl",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/candidate.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/candidate-observer.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/candidate-dopri.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/compute.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/integrator.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/trace.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a"
+    ],
+    "scope": "Private stock-route link. Baseline9fbd source/products and candidatecurrent products share exact current Vulkan object/provider; candidate overrides all old Compute/integrator/trace archive members."
+  },
+  "control-1": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "--gtest_filter=RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Unchanged original finite scientific/source/ordered-stream/refusal/recovery filter on changed shared portable arithmetic; not full science/release qualification"
+  },
+  "control-2": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "--gtest_filter=RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Unchanged original finite scientific/source/ordered-stream/refusal/recovery filter on changed shared portable arithmetic; not full science/release qualification"
+  },
+  "control-3": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "--gtest_filter=RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Unchanged original finite scientific/source/ordered-stream/refusal/recovery filter on changed shared portable arithmetic; not full science/release qualification"
+  },
+  "control-4": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "--gtest_filter=RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Unchanged original finite scientific/source/ordered-stream/refusal/recovery filter on changed shared portable arithmetic; not full science/release qualification"
+  },
+  "control-5": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "--gtest_filter=RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Unchanged original finite scientific/source/ordered-stream/refusal/recovery filter on changed shared portable arithmetic; not full science/release qualification"
+  },
+  "control-6": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "--gtest_filter=RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Unchanged original finite scientific/source/ordered-stream/refusal/recovery filter on changed shared portable arithmetic; not full science/release qualification"
+  },
+  "control-7": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "--gtest_filter=RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Unchanged original finite scientific/source/ordered-stream/refusal/recovery filter on changed shared portable arithmetic; not full science/release qualification"
+  },
+  "control-8": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/original_candidate_controls",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Unchanged original finite scientific/source/ordered-stream/refusal/recovery filter on changed shared portable arithmetic; not full science/release qualification"
+  }
+}

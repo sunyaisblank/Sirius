@@ -1,0 +1,47 @@
+{
+  "generate-all-products": {
+    "revision": "5ca24440b3afdf9380700fecb6f28b4fe1cd47a2",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/build-retained-kernels.py",
+      "--output",
+      "/home/astra/.project/Sirius/bin/linux-gcc/cooperative-dense-inputs/products/retained_kernels.h",
+      "--compiler",
+      "/opt/slang/bin/slangc",
+      "--optimizer",
+      "/usr/bin/spirv-opt",
+      "--assembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--disassembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "--validator",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+    ],
+    "scope": "Complete current35 private generated products for cooperative112-field portable Dense admission. Preserve all40arrays except2Dense portable shader arrays; all33 other modules exact, original barriers plus exactly2new group joins in each changed Dense module, same layouts/caps/types/native16."
+  }
+}
