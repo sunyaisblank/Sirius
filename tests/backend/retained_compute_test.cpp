@@ -401,7 +401,9 @@ TEST(RetainedComputeAdmission, StageSevenGrantsPreservePayloadAndConsumeTokens) 
         std::vector<std::uint32_t> words(bytes.size() / 4);
         for (std::size_t row = 0; row < 2; ++row) {
             auto* out = words.data() + row * retained_program::kTransportRowWords;
-            out[0] = 1; out[1] = 7; out[2] = 1;
+            out[0] = 1;
+            out[1] = 7;
+            out[2] = 1;
             for (std::size_t group = 0; group < 4; ++group)
                 for (std::size_t i = 0; i < 40; ++i) out[4 + group * 200 + i * 5 + 4] = 1;
             for (std::size_t stage = 0; stage < 7; ++stage)
@@ -421,7 +423,8 @@ TEST(RetainedComputeAdmission, StageSevenGrantsPreservePayloadAndConsumeTokens) 
     std::array<RetainedEndpointInput, 2> upper;
     for (std::size_t row = 0; row < 2; ++row) {
         std::copy_n(packets[row].values.begin(), 4, upper[row].values.begin());
-        std::copy((*step)[row].fifth.begin(), (*step)[row].fifth.end(), upper[row].values.begin() + 4);
+        std::copy((*step)[row].fifth.begin(), (*step)[row].fifth.end(),
+                  upper[row].values.begin() + 4);
         upper[row].values[44] = packets[row].values[44];
     }
     std::array<StageSevenToken, 2> tokens{compute.LastStepOwner(0), {}};
@@ -472,7 +475,9 @@ TEST(RetainedComputeAdmission, StageSevenFailureCannotPublishPartialOrOldIssuanc
         std::vector<std::uint32_t> words(bytes.size() / 4);
         for (std::size_t row = 0; row < 2; ++row) {
             auto* out = words.data() + row * retained_program::kTransportRowWords;
-            out[0] = 1; out[1] = malformed_second && row == 1 ? 6 : 7; out[2] = 1;
+            out[0] = 1;
+            out[1] = malformed_second && row == 1 ? 6 : 7;
+            out[2] = 1;
             for (std::size_t group = 0; group < 4; ++group)
                 for (std::size_t i = 0; i < 40; ++i) out[4 + group * 200 + i * 5 + 4] = 1;
             for (std::size_t stage = 0; stage < 7; ++stage)

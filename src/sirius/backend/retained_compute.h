@@ -253,8 +253,7 @@ class RetainedCompute {
         return device_.SupportsIndependentPair();
     }
     [[nodiscard]] base::Expected<RetainedEndpointDenseOutput> EndpointAndDense(
-        std::span<const RetainedEndpointInput> endpoints,
-        std::span<const RetainedDenseInput> dense,
+        std::span<const RetainedEndpointInput> endpoints, std::span<const RetainedDenseInput> dense,
         std::span<const StageSevenToken> owners = {});
     [[nodiscard]] base::Expected<std::vector<RetainedInitializeOutput>> Initialize(
         std::span<const RetainedInitializeInput> inputs, DispatchTiming* timing = nullptr);

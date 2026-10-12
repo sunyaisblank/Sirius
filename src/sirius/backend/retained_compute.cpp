@@ -116,9 +116,11 @@ bool RetainedValue::IsRepresented() const {
            std::abs(double(tail)) <= spacing(low) && (high != 0 || (low == 0 && tail == 0));
 }
 
-base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
-    ComputeDevice& device, std::size_t capacity, bool fp64_products, double dispatch_target_ms,
-    bool stage_seven_owner) {
+base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(ComputeDevice& device,
+                                                                         std::size_t capacity,
+                                                                         bool fp64_products,
+                                                                         double dispatch_target_ms,
+                                                                         bool stage_seven_owner) {
     if (capacity == 0 || capacity > kMaximumCapacity)
         return Fail(ErrorDomain::kDevice, "create retained compute stages", "invalid capacity");
     if (!std::isfinite(dispatch_target_ms) || dispatch_target_ms < 0)
@@ -229,20 +231,26 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         };
         copy(std::span(kTransportProgram), retained_owner::kTransportReferenceOffset);
         copy(std::span(kEndpointProgram), retained_owner::kEndpointReferenceOffset);
-        copy(std::span(retained_owner::kGeneralTransportMap), retained_owner::kGeneralTransportMapOffset);
-        copy(std::span(retained_owner::kGeneralEndpointMap), retained_owner::kGeneralEndpointMapOffset);
-        copy(std::span(retained_owner::kSchwarzschildTransportMap), retained_owner::kSchwarzschildTransportMapOffset);
-        copy(std::span(retained_owner::kSchwarzschildEndpointMap), retained_owner::kSchwarzschildEndpointMapOffset);
+        copy(std::span(retained_owner::kGeneralTransportMap),
+             retained_owner::kGeneralTransportMapOffset);
+        copy(std::span(retained_owner::kGeneralEndpointMap),
+             retained_owner::kGeneralEndpointMapOffset);
+        copy(std::span(retained_owner::kSchwarzschildTransportMap),
+             retained_owner::kSchwarzschildTransportMapOffset);
+        copy(std::span(retained_owner::kSchwarzschildEndpointMap),
+             retained_owner::kSchwarzschildEndpointMapOffset);
         auto uploaded = device.WriteBuffer(owner.buffer, std::as_bytes(std::span(words)));
         if (!uploaded) return std::unexpected(uploaded.error());
         std::vector<std::uint32_t> verified(words.size());
         auto read = device.ReadBuffer(owner.buffer, std::as_writable_bytes(std::span(verified)));
         if (!read) return std::unexpected(read.error());
         if (words != verified)
-            return Fail(ErrorDomain::kDevice, "provision stage-seven owner", "buffer verification mismatch");
+            return Fail(ErrorDomain::kDevice, "provision stage-seven owner",
+                        "buffer verification mismatch");
         result->stage_seven_ = std::move(owner);
-        result->stage_seven_provisioning_ms_ = std::chrono::duration<double, std::milli>(
-            std::chrono::steady_clock::now() - started).count();
+        result->stage_seven_provisioning_ms_ =
+            std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - started)
+                .count();
     }
     return result;
 }
@@ -356,7 +364,8 @@ base::Expected<std::uint64_t> RetainedCompute::RequiredStageSevenOwnerAllocation
     auto required = device.RequiredBufferAllocationBytes(bytes, BufferUsage::kStorage);
     if (!required) return std::unexpected(required.error());
     if (*required < bytes)
-        return Fail(ErrorDomain::kDevice, "plan stage-seven owner", "allocation requirement is too small");
+        return Fail(ErrorDomain::kDevice, "plan stage-seven owner",
+                    "allocation requirement is too small");
     return *required;
 }
 
@@ -373,11 +382,13 @@ void RetainedCompute::InvalidateStageSevenOwner() {
 
 base::Expected<void> RetainedCompute::WriteStageSevenControl(Stage& stage) {
     const auto started = std::chrono::steady_clock::now();
-    auto status = device_.WriteBuffer(stage_seven_->buffer,
-                                     std::as_bytes(std::span(stage_seven_->control)));
-    stage.stats.write_buffer_ms += std::chrono::duration<double, std::milli>(
-        std::chrono::steady_clock::now() - started).count();
-    if (status) stage.stats.write_buffer_bytes += stage_seven_->control.size() * sizeof(std::uint32_t);
+    auto status =
+        device_.WriteBuffer(stage_seven_->buffer, std::as_bytes(std::span(stage_seven_->control)));
+    stage.stats.write_buffer_ms +=
+        std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - started)
+            .count();
+    if (status)
+        stage.stats.write_buffer_bytes += stage_seven_->control.size() * sizeof(std::uint32_t);
     return status;
 }
 
@@ -401,13 +412,15 @@ base::Expected<bool> RetainedCompute::AuthorizeStageSevenEndpoint(
         for (std::size_t row = 0; row < inputs.size(); ++row) {
             const auto& token = tokens[row];
             if (token.issuer_.lock() != owner.identity || token.generation_ != owner.generation ||
-                token.row_ != row || !owner.issued[row]) continue;
+                token.row_ != row || !owner.issued[row])
+                continue;
             const auto* original = transport_.input.data() + 1 + row * 230;
             const auto* high = transport_.output.data() + row * kTransportRowWords + 4;
             const auto* candidate = inputs[row].values.data();
             if (std::memcmp(candidate, original, 4 * sizeof(RetainedValue)) != 0 ||
                 std::memcmp(candidate + 4, high, 40 * sizeof(RetainedValue)) != 0 ||
-                std::memcmp(candidate + 44, original + 220, sizeof(RetainedValue)) != 0) continue;
+                std::memcmp(candidate + 44, original + 220, sizeof(RetainedValue)) != 0)
+                continue;
             owner.control[retained_owner::kControlWords + row / 32] |= 1U << (row % 32);
             granted = true;
         }
@@ -464,10 +477,12 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     const std::array owned_buffers{stage.buffers[0], stage.buffers[1],
                                    owned ? stage_seven_->buffer : BufferHandle{}};
     const auto kernel = owned ? (stage.kind == KernelStage::kTransport ? stage_seven_->transport
-                                                                      : stage_seven_->endpoint)
+                                                                       : stage_seven_->endpoint)
                               : stage.kernel;
     status = device_.Dispatch(
-        kernel, owned ? std::span<const BufferHandle>(owned_buffers) : std::span<const BufferHandle>(stage.buffers),
+        kernel,
+        owned ? std::span<const BufferHandle>(owned_buffers)
+              : std::span<const BufferHandle>(stage.buffers),
         static_cast<std::uint32_t>((active_rows + kRetainedGroupRows - 1) / kRetainedGroupRows), 1,
         1, observed);
     if (!status) return status;
@@ -723,7 +738,7 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
     const std::array owned_buffers{endpoint_.buffers[0], endpoint_.buffers[1],
                                    *owned ? stage_seven_->buffer : BufferHandle{}};
     const auto endpoint_buffers = *owned ? std::span<const BufferHandle>(owned_buffers)
-                                        : std::span<const BufferHandle>(endpoint_.buffers);
+                                         : std::span<const BufferHandle>(endpoint_.buffers);
     const std::array commands{
         ComputeDispatch{*owned ? stage_seven_->endpoint : endpoint_.kernel, endpoint_buffers,
                         static_cast<std::uint32_t>((endpoints.size() + kRetainedGroupRows - 1) /
