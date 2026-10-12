@@ -1,0 +1,1226 @@
+{
+  "generate-all-products": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/build-retained-kernels.py",
+      "--output",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/products/retained_kernels.h",
+      "--compiler",
+      "/opt/slang/bin/slangc",
+      "--optimizer",
+      "/usr/bin/spirv-opt",
+      "--assembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--disassembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "--validator",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+    ],
+    "scope": "Complete35 products and unchanged binary structural controls for local portable triple denominator preparation. Native16/tables7 exact; no source or consumer adoption/qualification claim."
+  },
+  "disassemble-retained_transport_portable": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/products/retained_transport_portable.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/retained_transport_portable.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/products/retained_transport_portable.spv"
+    ],
+    "scope": "Exact complete generated production module CFG for prepared op5 route, reciprocal domination and unchanged generic/sqrt paths; not runtime or speed."
+  },
+  "disassemble-retained_transport_portable_normal_sum": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/products/retained_transport_portable_normal_sum.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/retained_transport_portable_normal_sum.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/products/retained_transport_portable_normal_sum.spv"
+    ],
+    "scope": "Exact complete generated production module CFG for prepared op5 route, reciprocal domination and unchanged generic/sqrt paths; not runtime or speed."
+  },
+  "disassemble-retained_endpoint_portable_normal_sum": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/products/retained_endpoint_portable_normal_sum.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/retained_endpoint_portable_normal_sum.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/products/retained_endpoint_portable_normal_sum.spv"
+    ],
+    "scope": "Exact complete generated production module CFG for prepared op5 route, reciprocal domination and unchanged generic/sqrt paths; not runtime or speed."
+  },
+  "disassemble-retained_dopri_phase_portable_normal_sum": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/products/retained_dopri_phase_portable_normal_sum.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/retained_dopri_phase_portable_normal_sum.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/products/retained_dopri_phase_portable_normal_sum.spv"
+    ],
+    "scope": "Exact complete generated production module CFG for prepared op5 route, reciprocal domination and unchanged generic/sqrt paths; not runtime or speed."
+  },
+  "generate-input": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/generate_input.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/generate_input.py",
+      "/home/astra/.project/Sirius/tests/support/portable_binary32/reference.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/portable_binary32_reference.bin"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "compile-cpu-baseline": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_PREPARED_BASELINE=1",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline",
+      "-I/home/astra/.project/Sirius/out/portable-denominator-preparation",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/cpu_probe.cpp",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline-cpu-probe",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline-cpu-probe.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/cpu_probe.cpp",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/word_io.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/portable_binary32.h"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "compile-cpu-candidate": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/src/sirius/kernels",
+      "-I/home/astra/.project/Sirius/out/portable-denominator-preparation",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/cpu_probe.cpp",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate-cpu-probe",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate-cpu-probe.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/cpu_probe.cpp",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/word_io.h",
+      "/home/astra/.project/Sirius/src/sirius/kernels/portable_binary32.h"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "cpu-baseline": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline-cpu-probe",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/expected.bin",
+      "{folder}/actual.bin"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline-cpu-probe",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/expected.bin"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "cpu-candidate": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate-cpu-probe",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/expected.bin",
+      "{folder}/actual.bin"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate-cpu-probe",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/expected.bin"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "compile-gpu-host": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/src",
+      "-I/home/astra/.project/Sirius/out/portable-denominator-preparation",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/gpu_probe.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/gpu.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/gpu_probe",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/gpu_probe.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/gpu_probe.cpp",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/word_io.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "compile-shader-baseline": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "-DSIRIUS_PREPARED_BASELINE=1",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/primitive_probe.slang",
+      "-target",
+      "spirv",
+      "-profile",
+      "glsl_450",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-O3",
+      "-I",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/primitive_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/portable_binary32.h"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "compile-shader-candidate": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/primitive_probe.slang",
+      "-target",
+      "spirv",
+      "-profile",
+      "glsl_450",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-O3",
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/kernels",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/primitive_probe.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/portable_binary32.h"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "validate-shader-baseline": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.1",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline.spv"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "validate-shader-candidate": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.1",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate.spv"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "disassemble-baseline": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline.spv"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "disassemble-candidate": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate.spv"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. "
+  },
+  "gpu-baseline": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/expected.bin",
+      "{folder}/actual.bin",
+      "--dispatch"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/expected.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. Actual pinned software provider and8MiB total allocation; complementinitialized full4wordoutputs.",
+    "software_provider": true
+  },
+  "gpu-candidate": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/expected.bin",
+      "{folder}/actual.bin",
+      "--dispatch"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/expected.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Original174268 complete-record prefix plus independently generated normalized division partitions. Baselineoperation14 uses originalPB32Divide; candidateoperation14 uses normalized significands/exactpreparedreciprocal. All full words/status/padding and original4GiB300s2GiBreserve or60s512MiBtool budgets remain. Finite primitive evidence only; preparedseed/triple/integration/benefit/qualification separate. Actual pinned software provider and8MiB total allocation; complementinitialized full4wordoutputs.",
+    "software_provider": true
+  },
+  "generate-seeds": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/generate_seeds.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/generate_seeds.py",
+      "tests/support/portable_binary32/reference.py"
+    ],
+    "scope": "Independent Fraction-lattice prepared seed zero/exponent/sign and distinct scaling-round boundaries; no production algorithm generates expected words."
+  },
+  "compile-seed-host": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/src",
+      "-I/home/astra/.project/Sirius/out/portable-denominator-preparation",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed_gpu.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/seed-gpu.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/seed_gpu",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/seed_gpu.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed_gpu.cpp",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/packed_word_io.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so"
+    ],
+    "scope": "Fresh strict8word seed host with exact unaffected provider object and8MiB actualallocation."
+  },
+  "compile-seed-baseline": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_seeds.py",
+      "baseline"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_seeds.py",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_pair.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_scalar.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/portable_binary32.h",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis"
+    ],
+    "scope": "Actual original/prepared seed shader, productionO0+SSA/deadcode controls, integer32Shaderonly; full validation and disassembly."
+  },
+  "gpu-seed-baseline": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/seed_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline-seed.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed-expected.bin",
+      "{folder}/actual.bin",
+      "--dispatch"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/seed_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline-seed.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed-expected.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual pinned software Vulkan full8word prepared-seed expectation against independent Fraction normalization and BOTH separate scaling rounds, zero/exponent/sign policy; no complete triple/benefit/qualification claim.",
+    "software_provider": true
+  },
+  "compile-seed-candidate": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_seeds.py",
+      "candidate"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_seeds.py",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed_probe.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_pair.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_scalar.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/portable_binary32.h",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis"
+    ],
+    "scope": "Actual original/prepared seed shader, productionO0+SSA/deadcode controls, integer32Shaderonly; full validation and disassembly."
+  },
+  "gpu-seed-candidate": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/seed_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate-seed.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed-expected.bin",
+      "{folder}/actual.bin",
+      "--dispatch"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/seed_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/candidate-seed.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/seed-expected.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual pinned software Vulkan full8word prepared-seed expectation against independent Fraction normalization and BOTH separate scaling rounds, zero/exponent/sign policy; no complete triple/benefit/qualification claim.",
+    "software_provider": true
+  },
+  "generate-triples": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/generate_triples.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/generate_triples.py",
+      "tests/support/portable_binary32/reference.py"
+    ],
+    "scope": "Full triple partition inputs and independent mathematical obligations; captured originals used only for word comparison, no numerical oracle copied from production."
+  },
+  "compile-triple-host": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/src",
+      "-I/home/astra/.project/Sirius/out/portable-denominator-preparation",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple_gpu.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-gpu.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple_gpu.cpp",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple_word_io.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so"
+    ],
+    "scope": "Fresh strict16input/8output fulltriple capture/comparison host; explicit baseline capture plus wire predicates, mathematical validation follows."
+  },
+  "compile-triple-baseline-integer": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "baseline",
+      "integer"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_pair.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_scalar.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/portable_binary32.h",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_triple.slang",
+      "scripts/build-retained-kernels.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as"
+    ],
+    "scope": "Actual original/candidate completeRTPack+RTDivide modules across integer/normal/normalTransport, productionO0+SSA/float controls, complete validation/assembly. No runtime or timing verdict."
+  },
+  "gpu-triple-baseline-integer": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-baseline-integer.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-capture-shape.bin",
+      "{folder}/actual.bin",
+      "--capture"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-baseline-integer.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-capture-shape.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual fulltriple original capture or candidate complete-word comparison; baseline capture completion/wire only, both independent exact quotient intervals/refusal/unit/recovery checks must follow. Original300s4GiB2GiBreserve8MiB limits, pinnedsoftware provider; no timing/qualification claim.",
+    "software_provider": true
+  },
+  "compile-triple-baseline-normal": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "baseline",
+      "normal"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_pair.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_scalar.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/portable_binary32.h",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_triple.slang",
+      "scripts/build-retained-kernels.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as"
+    ],
+    "scope": "Actual original/candidate completeRTPack+RTDivide modules across integer/normal/normalTransport, productionO0+SSA/float controls, complete validation/assembly. No runtime or timing verdict."
+  },
+  "gpu-triple-baseline-normal": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-baseline-normal.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-capture-shape.bin",
+      "{folder}/actual.bin",
+      "--capture"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-baseline-normal.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-capture-shape.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual fulltriple original capture or candidate complete-word comparison; baseline capture completion/wire only, both independent exact quotient intervals/refusal/unit/recovery checks must follow. Original300s4GiB2GiBreserve8MiB limits, pinnedsoftware provider; no timing/qualification claim.",
+    "software_provider": true
+  },
+  "compile-triple-baseline-normal_transport": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "baseline",
+      "normal_transport"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_pair.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_scalar.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/portable_binary32.h",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/baseline/retained_triple.slang",
+      "scripts/build-retained-kernels.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as"
+    ],
+    "scope": "Actual original/candidate completeRTPack+RTDivide modules across integer/normal/normalTransport, productionO0+SSA/float controls, complete validation/assembly. No runtime or timing verdict."
+  },
+  "gpu-triple-baseline-normal_transport": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-baseline-normal_transport.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-capture-shape.bin",
+      "{folder}/actual.bin",
+      "--capture"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-baseline-normal_transport.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-capture-shape.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual fulltriple original capture or candidate complete-word comparison; baseline capture completion/wire only, both independent exact quotient intervals/refusal/unit/recovery checks must follow. Original300s4GiB2GiBreserve8MiB limits, pinnedsoftware provider; no timing/qualification claim.",
+    "software_provider": true
+  },
+  "compile-triple-candidate-integer": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "candidate",
+      "integer"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple_probe.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_pair.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_scalar.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/portable_binary32.h",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_triple.slang",
+      "scripts/build-retained-kernels.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as"
+    ],
+    "scope": "Actual original/candidate completeRTPack+RTDivide modules across integer/normal/normalTransport, productionO0+SSA/float controls, complete validation/assembly. No runtime or timing verdict."
+  },
+  "gpu-triple-candidate-integer": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-candidate-integer.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/gpu-triple-baseline-integer/actual.bin",
+      "{folder}/actual.bin",
+      "--dispatch"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-candidate-integer.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/gpu-triple-baseline-integer/actual.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual fulltriple original capture or candidate complete-word comparison; baseline capture completion/wire only, both independent exact quotient intervals/refusal/unit/recovery checks must follow. Original300s4GiB2GiBreserve8MiB limits, pinnedsoftware provider; no timing/qualification claim.",
+    "software_provider": true
+  },
+  "compile-triple-candidate-normal": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "candidate",
+      "normal"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple_probe.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_pair.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_scalar.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/portable_binary32.h",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_triple.slang",
+      "scripts/build-retained-kernels.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as"
+    ],
+    "scope": "Actual original/candidate completeRTPack+RTDivide modules across integer/normal/normalTransport, productionO0+SSA/float controls, complete validation/assembly. No runtime or timing verdict."
+  },
+  "gpu-triple-candidate-normal": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-candidate-normal.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/gpu-triple-baseline-normal/actual.bin",
+      "{folder}/actual.bin",
+      "--dispatch"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-candidate-normal.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/gpu-triple-baseline-normal/actual.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual fulltriple original capture or candidate complete-word comparison; baseline capture completion/wire only, both independent exact quotient intervals/refusal/unit/recovery checks must follow. Original300s4GiB2GiBreserve8MiB limits, pinnedsoftware provider; no timing/qualification claim.",
+    "software_provider": true
+  },
+  "compile-triple-candidate-normal_transport": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "candidate",
+      "normal_transport"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/compile_triples.py",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple_probe.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_pair.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_scalar.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/portable_binary32.h",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/src/sirius/kernels/retained_triple.slang",
+      "scripts/build-retained-kernels.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as"
+    ],
+    "scope": "Actual original/candidate completeRTPack+RTDivide modules across integer/normal/normalTransport, productionO0+SSA/float controls, complete validation/assembly. No runtime or timing verdict."
+  },
+  "gpu-triple-candidate-normal_transport": {
+    "revision": "41fe5f27b32892f62e3db6955c30ca5afc185ebb",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-candidate-normal_transport.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/gpu-triple-baseline-normal_transport/actual.bin",
+      "{folder}/actual.bin",
+      "--dispatch"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple_gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-denominator-preparation/triple-candidate-normal_transport.spv",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/triple-input.bin",
+      "/home/astra/.project/Sirius/out/portable-denominator-preparation/gpu-triple-baseline-normal_transport/actual.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual fulltriple original capture or candidate complete-word comparison; baseline capture completion/wire only, both independent exact quotient intervals/refusal/unit/recovery checks must follow. Original300s4GiB2GiBreserve8MiB limits, pinnedsoftware provider; no timing/qualification claim.",
+    "software_provider": true
+  }
+}
