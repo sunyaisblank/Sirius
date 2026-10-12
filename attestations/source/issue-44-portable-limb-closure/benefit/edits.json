@@ -1,0 +1,39 @@
+{
+  "original_numeric20_and2_accounting_loop_byte_exact": true,
+  "original_comparator_sha256": "41635f002a4d5f6bb801ee42f1acd4b9ece4ecbda354ec68c4671feaa469489a",
+  "original_reader_sha256": "5178ff2430befe75ddcd5333ac22e07fe6713e8c5c34ca1b5addfafc51bbecfc",
+  "edits": [
+    {
+      "old": "    expected_tables = {'actual_table_verification_0', 'actual_table_verification_1'} if producer == 'candidate' else set()\n    assert {key for key in props if key.startswith('actual_table_verification_')} == expected_tables\n    tables = [fields(props[key]) for key in sorted(expected_tables)]\n    for table, role in zip(tables, ('transport', 'endpoint')):\n        assert set(table) == {'stage', 'bytes', 'sha256'} and table['stage'] == role\n        packet_words = 230 if role == 'transport' else 225\n        program_bytes = document(WORK / 'build-and-arrays.json')['arrays']['k' + role.title() + 'Program']['bytes']\n        assert int(table['bytes']) == 4 + 24 * packet_words * 4 + program_bytes\n        assert re.fullmatch(r'[0-9a-f]{64}', table['sha256'])\n    result['actual_table_verifications'] = tables\n    optional = document(WORK / 'owner-module-authority.json')\n    assert {k for k in props if k.startswith('optional_module_')} == ({'optional_module_7', 'optional_module_8', 'optional_module_9', 'optional_module_10'} if producer == 'candidate' else set())\n    if producer == 'candidate':\n        for index, role in [(7, 'checked_transport'), (8, 'checked_endpoint'), (9, 'transport'), (10, 'endpoint')]:\n            assert fields(props[f'optional_module_{index}']) == {'stage':role.removeprefix('checked_'), 'bytes':str(optional[role]['bytes']), 'sha256':optional[role]['sha256']}\n",
+      "new": "    assert not any(key.startswith(('actual_table_verification_', 'optional_module_')) for key in props)\n"
+    },
+    {
+      "old": "            if producer == 'candidate' and role == 'transport': index = 9\n            if producer == 'candidate' and role == 'endpoint' and (':rows=' not in stage_text or stage_text.endswith(':rows=24')): index = 10\n",
+      "new": ""
+    },
+    {
+      "old": "            authority = optional[role] if index >= 7 else {'bytes':selected[role]['bytes'], 'sha256':selected[role]['sha256']}",
+      "new": "            authority = {'bytes':selected[role]['bytes'], 'sha256':selected[role]['sha256']}"
+    },
+    {
+      "old": "            assert module['bindings'] == ('3' if index >= 7 else '2')",
+      "new": "            assert module['bindings'] == '2'"
+    },
+    {
+      "old": "    assert (provisioning > 0) == (producer == 'candidate')",
+      "new": "    assert provisioning == 0"
+    },
+    {
+      "old": "    assert new == old  # Factory stock selections are unchanged; reader checks actual owner/stock commands separately.",
+      "new": "    assert {stage:new[stage]['array'] for stage in new} == {stage:old[stage]['array'] for stage in old}\n    assert new == records['a1' if producer == 'baseline' else 'b1']['selected_modules']  # Each producer joins its exact compiled-array authority in the reader."
+    },
+    {
+      "old": "assert freeze['comparator_sha256']==sha(WORK/'compare_software.py')",
+      "new": "assert freeze['comparator_sha256']==sha(WORK/'compare_software.py')\nassert freeze['actions_sha256']==sha(WORK/'actions.json')\nactions=document(WORK/'actions.json')"
+    },
+    {
+      "old": "    assert owner['argv']==[freeze['executables'][producer]['path'],'--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults']",
+      "new": "    assert owner['argv']==actions[label]['argv']\n    assert actions[label]['argv']==['python3','-B',str(WORK/'run_limb_benefit_slot.py'),freeze['executables'][producer]['path'],'--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults']"
+    }
+  ]
+}
