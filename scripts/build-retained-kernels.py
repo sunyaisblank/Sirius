@@ -288,10 +288,14 @@ def generate_owner_layout(module, directory):
     return references
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False, stage_seven_sealed=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    if stage_seven_sealed and not stage_seven_owner:
+        raise ValueError("sealed tables require the portable stage-seven owner route")
+    if stage_seven_sealed:
+        definitions += ["-DSIRIUS_RETAINED_STAGE7_SEALED=1"]
     if transport_specialized is not None:
         if source.stem != "retained_transport":
             raise ValueError("the second transport table belongs only to Transport")
@@ -524,6 +528,18 @@ def main():
                 optimizer=args.optimizer, normal_sum32=True, stage_seven_owner=True,
                 transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
             owner_lines.append(f"inline constexpr std::array<std::uint32_t, {len(code)}> k{kind}Shader{{{{")
+            for start in range(0, len(code), 16):
+                owner_lines.append(",".join(str(v)+"u" for v in code[start:start+16])+",")
+            owner_lines.append("}};")
+            code = compile_shader(source / (stem + ".slang"),
+                args.output.parent / (stem + "_portable_stage7_sealed.spv"),
+                args.compiler, args.assembler, args.disassembler, args.validator,
+                program["registers"], terms, len(program["layer_offsets"])-1,
+                program.get("prefix_instructions", 0), portable=True,
+                optimizer=args.optimizer, normal_sum32=True, stage_seven_owner=True,
+                stage_seven_sealed=True, transport_specialized=transport_specialized,
+                endpoint_specialized=endpoint_specialized)
+            owner_lines.append(f"inline constexpr std::array<std::uint32_t, {len(code)}> k{kind}SealedShader{{{{")
             for start in range(0, len(code), 16):
                 owner_lines.append(",".join(str(v)+"u" for v in code[start:start+16])+",")
             owner_lines.append("}};")
