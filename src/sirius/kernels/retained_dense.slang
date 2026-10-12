@@ -404,19 +404,8 @@ bool FlatDense(uint row, uint rowBase, RetainedTriple h, RetainedTriple s, Retai
         ni != programBase + 43 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
         rowWords != 204 + 5 * registers)
         return;
-#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_DENSE)
-    // Check every original field once per row. All lanes join before refusal,
-    // preserving the complete zero output for any invalid represented input.
-    if (lane == 0) retainedStatus = 0;
-    GroupMemoryBarrierWithGroupSync();
-    for (uint i = lane; i < 112; i += SIRIUS_RETAINED_EXECUTION_LANES)
-        if (ReadOriginal(i, row).valid == 0) RejectRetainedProgram();
-    GroupMemoryBarrierWithGroupSync();
-    if (retainedStatus != 0) return;
-#else
     for (uint i = 0; i < 112; ++i)
         if (ReadOriginal(i, row).valid == 0) return;
-#endif
     RetainedTriple chart = ReadOriginal(111, row);
     if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
     if (!RPScalarEqual(RTAbsoluteUpper(ReadOriginal(1, row)), RPZero()) &&
