@@ -334,6 +334,84 @@ TEST(ViewCommandOperational, SoleRefinementPublishesExactRequestedDimensions) {
         EXPECT_FLOAT_EQ(snapshot[alpha], 1.0f);
 }
 
+TEST(ViewCommandOperational, CommittedFrameRemainsCoherentDuringRefinementAndReinitialisation) {
+    ViewerConfig config;
+    config.preview_width = 64;
+    config.preview_height = 64;
+    config.final_width = 67;
+    config.final_height = 65;
+    config.refinement_levels = 2;
+    config.samples_per_level = 1;
+    config.backend = render::RenderBackend::Cpu;
+    config.metric_id = core::MetricId::Schwarzschild;
+    config.black_hole_spin = 0.0;
+    config.observer_distance = 5.0;
+    config.observer_fov = 1.0f;
+    config.enable_disk = false;
+    config.session_template.tile_size = 8;
+    config.session_template.thread_count = 2;
+    config.session_template.enable_bloom = false;
+
+    InteractiveViewer viewer;
+    ASSERT_TRUE(viewer.Initialise(config));
+    EXPECT_TRUE(viewer.GetFrameBufferSnapshot().empty());
+    EXPECT_EQ(viewer.GetFrameWidth(), 0);
+    EXPECT_EQ(viewer.GetFrameHeight(), 0);
+    std::vector<float> first_frame;
+    unsigned completed_frames = 0;
+    bool next_pass_seen = false;
+    std::promise<void> interrupted;
+    auto interruption = interrupted.get_future();
+    viewer.SetFrameCallback([&](const float* pixels, int width, int height) {
+        ++completed_frames;
+        EXPECT_EQ(width, 64);
+        EXPECT_EQ(height, 64);
+        first_frame.assign(pixels, pixels + static_cast<std::size_t>(width) * height * 4);
+        EXPECT_EQ(viewer.GetFrameBufferSnapshot(), first_frame);
+        EXPECT_EQ(viewer.GetFrameWidth(), 64);
+        EXPECT_EQ(viewer.GetFrameHeight(), 64);
+    });
+    viewer.SetPreviewCallback([&](const float*, int width, int height, std::uint64_t generation) {
+        if (width != 67 || height != 65 || next_pass_seen) return;
+        next_pass_seen = true;
+        EXPECT_EQ(generation, viewer.GetPreviewGeneration());
+        EXPECT_EQ(completed_frames, 1U);
+        const auto active_pass = viewer.GetRefinementState();
+        EXPECT_EQ(active_pass.current_width, 67);
+        EXPECT_EQ(active_pass.current_height, 65);
+        EXPECT_EQ(viewer.GetFrameBufferSnapshot(), first_frame);
+        EXPECT_EQ(viewer.GetFrameWidth(), 64);
+        EXPECT_EQ(viewer.GetFrameHeight(), 64);
+        // A provisional next-pass image must not relabel the completed owner.
+        viewer.Stop();
+        EXPECT_NE(generation, viewer.GetPreviewGeneration());
+        interrupted.set_value();
+    });
+    ASSERT_TRUE(viewer.Start());
+    const bool stopped = interruption.wait_for(std::chrono::minutes(2)) == std::future_status::ready;
+    viewer.Stop();  // Join before accessing captures or starting a new epoch.
+
+    ASSERT_TRUE(stopped) << viewer.GetLastError();
+    EXPECT_TRUE(viewer.GetLastError().empty()) << viewer.GetLastError();
+    EXPECT_TRUE(next_pass_seen);
+    EXPECT_EQ(completed_frames, 1U);
+    ASSERT_EQ(first_frame.size(), 64U * 64U * 4U);
+    EXPECT_TRUE(std::all_of(first_frame.begin(), first_frame.end(),
+                            [](float value) { return std::isfinite(value); }));
+    for (std::size_t alpha = 3; alpha < first_frame.size(); alpha += 4)
+        EXPECT_FLOAT_EQ(first_frame[alpha], 1.0f);
+    const auto saved_frame = viewer.GetFrameBufferSnapshot();
+    EXPECT_EQ(saved_frame, first_frame);
+    EXPECT_EQ(viewer.GetFrameWidth(), 64);
+    EXPECT_EQ(viewer.GetFrameHeight(), 64);
+
+    ASSERT_TRUE(viewer.Initialise(config));
+    EXPECT_TRUE(viewer.GetFrameBufferSnapshot().empty());
+    EXPECT_EQ(viewer.GetFrameWidth(), 0);
+    EXPECT_EQ(viewer.GetFrameHeight(), 0);
+    EXPECT_EQ(saved_frame, first_frame);
+}
+
 TEST(ViewCommandOperational, VulkanRefinementPublishesProgressiveFrames) {
 #ifndef SIRIUS_HAS_VULKAN_BACKEND
     GTEST_SKIP() << "Vulkan backend was not compiled";

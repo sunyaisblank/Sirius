@@ -1602,6 +1602,7 @@ set_tests_properties(
     TileScheduler.ParallelAcquisitionNeverDuplicatesAGroupOrTile
     TileScheduler.ReinitialiseResetsCompletionLedger
     TileScheduler.WorkGroupsPreserveEveryOriginalTileAndOwnEachRegionOnce
+    ViewCommandOperational.CommittedFrameRemainsCoherentDuringRefinementAndReinitialisation
     ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
     ViewCommandOperational.SoleRefinementPublishesExactRequestedDimensions
     ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames

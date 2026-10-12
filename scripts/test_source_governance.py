@@ -25,6 +25,7 @@ APP_RENDERING_TESTS = frozenset({
     "RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath",
     "RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest",
     "RenderCommandParse.CliCpuOverridesLowerLayerVulkanBackend",
+    "ViewCommandOperational.CommittedFrameRemainsCoherentDuringRefinementAndReinitialisation",
     "ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame",
     "ViewCommandOperational.SoleRefinementPublishesExactRequestedDimensions",
     "ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames",
