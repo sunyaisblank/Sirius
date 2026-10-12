@@ -188,11 +188,20 @@ SIRIUS_PB32_INLINE uint PB32Divide(uint a, uint b) {
     // then the same 26 fractional bits in exact radix-256/4 chunks.
     uint quotient = 1u;
     remainder -= bb.significand;
+    // With 2^23 <= d < 2^24 and numerator < 2^32, the high word
+    // of numerator * floor((2^32 - 1) / d) is the exact digit or one
+    // less. Its product with d never exceeds numerator; one subtraction
+    // corrects the remainder without widening or changing rounding.
+    const uint reciprocal = 0xffffffffu / bb.significand;
     for (uint chunk = 0u; chunk < 4u; ++chunk) {
         const uint bits = chunk == 3u ? 2u : 8u;
         const uint numerator = remainder << bits;
-        const uint digit = numerator / bb.significand;
+        uint digit = PB32WideProduct(numerator, reciprocal).hi;
         remainder = numerator - digit * bb.significand;
+        if (remainder >= bb.significand) {
+            ++digit;
+            remainder -= bb.significand;
+        }
         quotient = (quotient << bits) | digit;
     }
     if (remainder != 0u) quotient |= 1u;
