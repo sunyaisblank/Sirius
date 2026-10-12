@@ -82,16 +82,16 @@ RetainedTriple RTAccumulateTerm(RetainedTriple a,RPScalar x) {
 #ifdef SIRIUS_RETAINED_PORTABLE
     if(a.valid==0||!RPBounded(x,0x7b800000u)) return RTInvalid();
     RetainedTriple r=RTInvalid();
-    RPScalar limbs[3]={a.hi,a.lo,a.tail};
     RPScalar carry=x;
-    // Visit each original limb once, carrying every residual in order.
+    // Preserve hi/low/tail accumulation and every residual in the same order.
     [loop] for(uint i=0;i<3;++i) {
         RPScalar upper,lower;
-        RetainedSum32(limbs[i],carry,upper,lower);
-        limbs[i]=upper;
+        RetainedSum32(i==0?a.hi:(i==1?a.lo:a.tail),carry,upper,lower);
+        if(i==0) r.hi=upper;
+        else if(i==1) r.lo=upper;
+        else r.tail=upper;
         carry=lower;
     }
-    r.hi=limbs[0];r.lo=limbs[1];r.tail=limbs[2];
     r.error=RPUpAdd(a.error,RPAbs(carry));
     if(!RPBounded(r.hi,0x7d800000u)||!RPBounded(r.lo,0x7d800000u)||
        !RPBounded(r.tail,0x7d800000u)||!RPBounded(r.error,0x7d800000u)) return RTInvalid();
