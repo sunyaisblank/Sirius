@@ -2,6 +2,9 @@ import retained_scratch;
 import retained_scalar;
 import retained_triple;
 import retained_pair;
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+import retained_owner;
+#endif
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
 [[vk::binding(1, 0)]] RWStructuredBuffer<uint> outputs;
 #if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
@@ -56,6 +59,12 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
     } else {
         if (a >= registers) return false;
         RetainedTriple av = ReadValue(a, rowBase);
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+        if (S7Replay(index, r)) {
+            if (op != 6 && op != 7 && op != 8 && b >= registers) return false;
+            if ((op == 10 || op == 11) && c >= registers) return false;
+        } else {
+#endif
 #ifdef SIRIUS_RETAINED_PORTABLE
         if (op >= 2 && op <= 6) {
             RetainedTriple bv = RTInvalid();
@@ -105,6 +114,9 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
                 }
             }
         }
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+        }
+#endif
     }
     WriteValue(destination, r, rowBase);
 
@@ -579,6 +591,9 @@ bool SelectEndpointProgram(uint rowBase, inout uint programBase, inout uint coun
         RTExact(ReadStored(rowBase + 514), RPZero()) &&
         RTExact(ReadStored(rowBase + 519), RPZero());
     if (!flat && !SelectEndpointProgram(rowBase, programBase, count, registers, layers, prefix)) return;
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+    S7EndpointTable(inputs, outputs, programBase, rowBase + 504, row, rows, flat, lane);
+#endif
     uint component = 4;
     RetainedTriple root = RTInvalid();
     // Preserve flat initialization or the curved metric prefix, projection,

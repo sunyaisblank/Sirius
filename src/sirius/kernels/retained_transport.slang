@@ -2,6 +2,9 @@ import retained_scratch;
 import retained_scalar;
 import retained_triple;
 import retained_pair;
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+import retained_owner;
+#endif
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
 [[vk::binding(1, 0)]] RWStructuredBuffer<uint> outputs;
 RetainedTriple ReadStored(uint base) {
@@ -48,7 +51,11 @@ void WriteValue(uint index, RetainedTriple r, uint rowBase) {
     ScratchWrite(index, 4, rowBase, 2404, r.valid);
 }
 
-bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint registers) {
+bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint registers
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+                 , uint stage
+#endif
+                 ) {
     uint address = programBase + 43 + 5 * index, op = inputs[address],
          destination = inputs[address + 1], a = inputs[address + 2], b = inputs[address + 3],
          c = inputs[address + 4];
@@ -113,6 +120,9 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
         }
     }
     WriteValue(destination, r, rowBase);
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+    if (stage == 6) S7Capture(index, r);
+#endif
 
     return true;
 }
@@ -138,19 +148,31 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
             // Layer destinations are disjoint from every input register and
             // from one another; the generated plan releases inputs afterwards.
             for (uint node = start; node < end; ++node)
-                if (!EvaluateOne(node, row, rowBase, programBase, registers)) RejectRetainedProgram();
+                if (!EvaluateOne(node, row, rowBase, programBase, registers
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+                                 , stage
+#endif
+                                 )) RejectRetainedProgram();
         }
 #elif defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
         else {
             // Cover the original complete layer before its publication barrier.
             for (uint node = start + lane; node < end;
                  node += SIRIUS_RETAINED_EXECUTION_LANES)
-                if (!EvaluateOne(node, row, rowBase, programBase, registers))
+                if (!EvaluateOne(node, row, rowBase, programBase, registers
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+                                 , stage
+#endif
+                                 ))
                     RejectRetainedProgram();
         }
 #else
         else if (start + lane < end &&
-                 !EvaluateOne(start + lane, row, rowBase, programBase, registers))
+                 !EvaluateOne(start + lane, row, rowBase, programBase, registers
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+                                 , stage
+#endif
+                                 ))
             RejectRetainedProgram();
 #endif
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
@@ -468,6 +490,9 @@ RetainedTriple ReadCoefficient(uint index) {
          registers = inputs[programBase + 1];
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 2404) return;
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+    S7ResetTransport(row, rows, lane);
+#endif
     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     AllMemoryBarrierWithGroupSync();
@@ -479,8 +504,16 @@ RetainedTriple ReadCoefficient(uint index) {
                             SIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS ||
         rowWords != 2404 + 5 * registers)
         return;
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+    for (uint i = 0; i < 46; ++i) {
+        RetainedTriple original = ReadOriginal(i, row);
+        if (original.valid == 0) return;
+        if (lane == 0 && (i < 4 || i == 44)) S7Key(i, original);
+    }
+#else
     for (uint i = 0; i < 46; ++i)
         if (ReadOriginal(i, row).valid == 0) return;
+#endif
     RetainedTriple chart = ReadOriginal(44, row);
     if ((!RPScalarEqual(chart.hi, RPOne()) && !RPScalarEqual(chart.hi, RPScalarNegate(RPOne()))) ||
         !RPScalarEqual(chart.lo, RPZero()) || !RPScalarEqual(chart.tail, RPZero()) ||
@@ -529,6 +562,9 @@ RetainedTriple ReadCoefficient(uint index) {
             43 + 5 * count + layers + 1 != SIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS)
             return;
     }
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+    S7TransportTable(inputs, programBase, rows, lane);
+#endif
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     // The immutable plan leaves never-assigned slots invalid across all stages.
     // The existing stage-zero barrier publishes this disjoint validity clear.
@@ -576,6 +612,9 @@ RetainedTriple ReadCoefficient(uint index) {
             }
             if (value.valid == 0) RejectRetainedProgram();
             WriteStored(rowBase + 804 + i * 5, value);
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+            if (stage == 6 && i < 4) S7Key(4 + i, value);
+#endif
         }
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
         AllMemoryBarrierWithGroupSync();
@@ -610,4 +649,7 @@ RetainedTriple ReadCoefficient(uint index) {
     if (lane == 0) outputs[rowBase] = 1;
     // Unlike the analytic flat path, this row owns seven complete RHS records.
     if (lane == 0) outputs[rowBase + 2] = 1;
+#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+    if (lane == 0) S7Publish();
+#endif
 }
