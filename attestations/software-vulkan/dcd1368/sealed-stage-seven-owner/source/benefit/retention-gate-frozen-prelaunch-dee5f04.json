@@ -1,0 +1,34 @@
+{
+  "candidate_revision": "dee5f04ec97887df20c6b011029e7b312c32d5cd",
+  "baseline_revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+  "executables": {
+    "baseline": {
+      "path": "bin/linux-gcc/sealed-stage-seven-owner/original_baseline_controls",
+      "source_revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+      "bytes": 10438264,
+      "sha256": "0b09d84893b44f19bc3500384b850c64db6b20b8bee761c0c7718d4f8fa1b27c"
+    },
+    "candidate": {
+      "path": "bin/linux-gcc/sealed-stage-seven-owner/original_candidate_controls",
+      "source_revision": "dee5f04ec97887df20c6b011029e7b312c32d5cd",
+      "bytes": 11089120,
+      "sha256": "31193c4e60e38818a3253e9a043c70cd35398e3479d2817671456a0ea168807c"
+    }
+  },
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "within_slot_repeats": 3,
+  "complete_call_minimum_improvement_percent": 5,
+  "every_inclusive_stage_minimum_improvement_percent": -5,
+  "all20_gates_required": true,
+  "observed_instance_api_minimum_improvement_percent": 0,
+  "reader_sha256": "5178ff2430befe75ddcd5333ac22e07fe6713e8c5c34ca1b5addfafc51bbecfc",
+  "comparator_sha256": "41635f002a4d5f6bb801ee42f1acd4b9ece4ecbda354ec68c4671feaa469489a",
+  "launcher_sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342",
+  "actions_sha256": "3fe53a30b24f01b6950cb697bacc5349b123ee7e9a0064f412b873b71e359a88",
+  "scope": "Frozen before a single fixedABBA invocation. Original20+2 comparator byte-exact, all thresholds/counts/resource profiles unchanged. Baseline accepted9fbd Compute/integrator and candidate mutation-sealed Compute/integrator/executor both use the newly rebuilt epoch-capable Vulkan prerequisite. No setup or first-use subtraction, pooled orders, reruns or qualification promotion."
+}

@@ -1,0 +1,329 @@
+{
+  "generate-all-products": {
+    "revision": "80f5986b9bf291b779d423be8053893ac2711b6c",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/build-retained-kernels.py",
+      "--output",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/products/retained_kernels.h",
+      "--compiler",
+      "/opt/slang/bin/slangc",
+      "--optimizer",
+      "/usr/bin/spirv-opt",
+      "--assembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--disassembler",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "--validator",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "scripts/build-retained-kernels.py",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+    ],
+    "scope": "Complete 37-product generation under the ignored existing linux-gcc preset, without canonical configure/build. Requires exact original 40 arrays, 33 stock SPVs and two checked-owner SPVs. Source/build only."
+  },
+  "compile-compute": {
+    "revision": "34ec1ff08520d9d3d98508164b03533b68943452",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/compute.d",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/compute.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_layout.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_kernels.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_kernels.h"
+    ],
+    "scope": "Source-bound private compute object with existing linux-gcc preset strict flags. No canonical outputs or qualification."
+  },
+  "compile-integrator": {
+    "revision": "34ec1ff08520d9d3d98508164b03533b68943452",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/integrator.d",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/integrator.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_integrator.cpp"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_layout.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_kernels.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_kernels.h"
+    ],
+    "scope": "Source-bound private integrator object with existing linux-gcc preset strict flags. No canonical outputs or qualification."
+  },
+  "compile-trace": {
+    "revision": "34ec1ff08520d9d3d98508164b03533b68943452",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/trace.d",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/trace.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_trace_executor.cpp"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_layout.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_kernels.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_kernels.h"
+    ],
+    "scope": "Source-bound private trace object with existing linux-gcc preset strict flags. No canonical outputs or qualification."
+  },
+  "compile-vulkan": {
+    "revision": "34ec1ff08520d9d3d98508164b03533b68943452",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/vulkan.d",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/vulkan.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_layout.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_kernels.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_kernels.h"
+    ],
+    "scope": "Source-bound private vulkan object with existing linux-gcc preset strict flags. No canonical outputs or qualification."
+  },
+  "compile-host": {
+    "revision": "34ec1ff08520d9d3d98508164b03533b68943452",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/products",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/host.d",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/host.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/sealed-stage-seven-owner/host_protocol_tests.cpp"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/bin/as",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_layout.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_owner_kernels.h",
+      "bin/linux-gcc/sealed-stage-seven-owner/products/retained_kernels.h",
+      "out/sealed-stage-seven-owner/host_protocol_tests.cpp",
+      "out/sealed-stage-seven-owner/subset-join.json"
+    ],
+    "scope": "Source-bound private host object with existing linux-gcc preset strict flags. No canonical outputs or qualification."
+  },
+  "link-host": {
+    "revision": "34ec1ff08520d9d3d98508164b03533b68943452",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/compute.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/host.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/host.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/host_protocol_tests"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/sealed-stage-seven-owner/compute.o",
+      "bin/linux-gcc/sealed-stage-seven-owner/host.o",
+      "bin/linux-gcc/lib/libgtest_main.a",
+      "bin/linux-gcc/lib/libgtest.a",
+      "/usr/bin/ld"
+    ],
+    "scope": "Link private protocol tests using only new compute object and source-derived six test bodies; no old backend archive."
+  },
+  "host-controls": {
+    "revision": "34ec1ff08520d9d3d98508164b03533b68943452",
+    "kind": "test",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/sealed-stage-seven-owner/host_protocol_tests",
+      "--gtest_filter=RetainedComputeAdmission.StageSeven*:RetainedComputeAdmission.Sealed*"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "bin/linux-gcc/sealed-stage-seven-owner/host_protocol_tests",
+      "out/sealed-stage-seven-owner/subset-join.json",
+      "out/sealed-stage-seven-owner/host_protocol_tests.cpp"
+    ],
+    "scope": "Execute six exact current source host seam tests. External mutation model only; no arithmetic/Vulkan/scientific qualification."
+  }
+}
