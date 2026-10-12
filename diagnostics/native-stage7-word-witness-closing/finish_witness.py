@@ -15,7 +15,7 @@ HEAD = '9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9'
 TRIAL = '5f27ddcfd8cc776a18dddf530e49cf905a2646b2'
 NATIVE = ROOT/'bin/windows-msvc/native-5f27ddc-stage-seven-word-witness'
 BRANCH = 'diagnostic/stage-seven-word-witness-2026-10-12'
-TAG = 'evidence/issue-44-native-stage7-word-witness-closing-9fbd0e8'
+TAG = 'evidence/issue-44-native-stage7-word-witness-closing-9fbd0e8-v2'
 
 def read(p): return json.loads(p.read_text(encoding='utf-8-sig'))
 def seal(p):
@@ -75,7 +75,7 @@ def versions():
         s = seal(p); local.setdefault((s['bytes'],s['sha256']), str(p.relative_to(ROOT)))
     tracked = set(git('ls-tree','-r','--name-only',TRIAL).decode().splitlines())
     source_paths={}
-    for filename in ('source-preservation-pushed.json','closing-source-preservation.json'):
+    for filename in ('source-preservation-pushed.json','closing-source-preservation.json','closing-source-preservation-v2.json'):
         if not (WORK/filename).exists(): continue
         source=read(WORK/filename)
         for name,r in source['source_versions'].items():
@@ -161,22 +161,23 @@ if sys.argv[1]=='source':
     index=WORK/'closing-source.index'; assert not index.exists()
     env=dict(os.environ,GIT_INDEX_FILE=str(index)); records={}
     try:
-        git('read-tree',initial['source_commit'],env=env)
-        for name in ('prepare_final_retirement.py','run_final_retirement.py','verify_final_retirement.ps1','run_cleanup_retirement.py','finish_witness.py','versions/finish_witness.v1.py'):
+        parent=read(WORK/'closing-source-preservation.json')['source_commit']
+        git('read-tree',parent,env=env)
+        for name in ('prepare_final_retirement.py','run_final_retirement.py','verify_final_retirement.ps1','run_cleanup_retirement.py','finish_witness.py','versions/finish_witness.v1.py','versions/finish_witness.v2.py'):
             p=WORK/name; target='diagnostics/native-stage7-word-witness-closing/'+name
             blob=git('hash-object','-w','--stdin',input=p.read_bytes()).decode().strip()
             git('update-index','--add','--cacheinfo','100644,'+blob+','+target,env=env)
             records[name]={'git_path':target,**seal(p)}
         tree=git('write-tree',env=env).decode().strip()
         message='Preserve completed native word witness closing source (#44)\n\nAll three original controls pass;162 curved high pairs match5022 complete five-word results. Production9fbd and six baseline products are restored byte-exact; qualification remains2/8 build-only. Preserve bounded retirement and exact input recovery/deletion guards. No optimization, rendering gain, universal word theorem or full qualification is admitted.\n'
-        commit=git('commit-tree',tree,'-p',initial['source_commit'],input=message.encode()).decode().strip()
+        commit=git('commit-tree',tree,'-p',parent,input=message.encode()).decode().strip()
         git('update-ref','refs/tags/'+TAG,commit); git('push','origin','refs/tags/'+TAG)
         r={'accepted':True,'pushed':True,'source_revision':HEAD,'source_tag':TAG,'source_commit':commit,'source_versions':records}
-        pushed(r);save(WORK/'closing-source-preservation.json',r)
+        pushed(r);save(WORK/'closing-source-preservation-v2.json',r)
     finally: index.unlink(missing_ok=True)
     print(json.dumps({'source_tag':TAG,'source_commit':commit,'useful_sources':len(records)}))
 elif sys.argv[1]=='recovery':
-    pushed(read(WORK/'closing-source-preservation.json'))
+    pushed(read(WORK/'closing-source-preservation-v2.json'))
     recovered=versions()
     save(WORK/'input-recovery.json',{'accepted':True,'records':recovered,'origin_versions':len(recovered),'missing':0,'scope':'All recorded owned input seals, including historical aliases, diagnostic products and restored current inputs.'})
     print(json.dumps({'recovered_origin_versions':len(recovered)}))
@@ -184,7 +185,7 @@ else:
     clearance=read(WORK/'cleanup-clearance.json'); assert clearance['accepted']
     for name,expected in clearance['approved_seals'].items(): assert seal(WORK/name)==expected
     assert clearance['approved_seals']['finish_witness.py']==seal(Path(__file__))
-    closing=read(WORK/'closing-source-preservation.json'); pushed(closing)
+    closing=read(WORK/'closing-source-preservation-v2.json'); pushed(closing)
     assert read(WORK/'publication-accepted.json')['accepted']
     for name,expected in read(WORK/'publication-accepted.json')['readback_seals'].items(): assert seal(WORK/name)==expected
     assert read(WORK/'input-recovery.json')['records']==versions()
@@ -198,9 +199,11 @@ else:
     for refs in (BRANCH+'...origin/'+BRANCH,): assert git('rev-list','--left-right','--count',refs).split()==[b'0',b'0']
     assert git('rev-parse',BRANCH).decode().strip()==TRIAL
     records=[]
+    directory_sets={str(base.relative_to(ROOT)):sorted(str(p.relative_to(base)) for p in base.rglob('*') if p.is_dir()) for base in (WORK,NATIVE)}
     for base,part in ((WORK,'files'),(NATIVE,'native-stage')):
         for p in files(base):
             q=ARCHIVE/part/p.relative_to(base); expected=seal(p)
+            if p==Path(__file__).resolve(): q=ARCHIVE/'closing-v2/finish_witness.py'
             if q.exists(): assert seal(q)==expected,(p,q)
             else: q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
             assert seal(p)==seal(q)==expected
@@ -227,8 +230,15 @@ else:
         assert not q.exists();q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
         assert seal(q)==expected
         records.append({'origin':origin,'recovery':str(q.relative_to(ROOT)),**expected})
+    # Refuse changed bytes, new entries or root/symlink replacement between
+    # copying and removal. Fresh observer outputs have already joined records.
+    for base in (WORK,NATIVE):
+        expected={r['origin']:{k:r[k] for k in ('bytes','sha256')} for r in records if (ROOT/r['origin']).is_relative_to(base)}
+        assert {str(p.relative_to(ROOT)):seal(p) for p in files(base)}==expected
+        assert sorted(str(p.relative_to(base)) for p in base.rglob('*') if p.is_dir())==directory_sets[str(base.relative_to(ROOT))]
+    state();restored()
     births=terminal_births();census_linux=consumers()
-    save(ARCHIVE/'closing-ledger.json',{'accepted':True,'records':records,'linux_births':births,'linux_consumers':census_linux,'source_tag':closing['source_tag'],'source_commit':closing['source_commit'],'scope':'Complete local byte recovery and pushed useful source; finite saved births/accessibility only. No hidden/global/scheduled-consumer absence claim.'})
+    save(ARCHIVE/'closing-ledger.json',{'accepted':True,'records':records,'directories':directory_sets,'linux_births':births,'linux_consumers':census_linux,'source_tag':closing['source_tag'],'source_commit':closing['source_commit'],'scope':'Complete local byte recovery and pushed useful source; finite saved births/accessibility only. No hidden/global/scheduled-consumer absence claim.'})
     shutil.rmtree(NATIVE); shutil.rmtree(WORK)
     git('push','origin','--delete',BRANCH)
     git('branch','-D',BRANCH)
