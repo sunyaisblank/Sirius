@@ -133,9 +133,6 @@ SIRIUS_PB32_INLINE uint PB32Add(uint a, uint b) {
     if (PB32Zero(a) && PB32Zero(b)) return (a & b) & 0x80000000u;
     if (PB32Zero(a)) return b;
     if (PB32Zero(b)) return a;
-    // Finite opposite equal magnitudes produce the same exact +0 as ax-bx.
-    // Keep special values and both zero signs under their original precedence.
-    if ((a ^ b) == 0x80000000u) return 0u;
     if (PB32Abs(a) < PB32Abs(b)) {
         uint t = a;
         a = b;
