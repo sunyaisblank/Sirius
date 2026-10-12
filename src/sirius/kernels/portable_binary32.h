@@ -198,34 +198,6 @@ SIRIUS_PB32_INLINE uint PB32Divide(uint a, uint b) {
     if (remainder != 0u) quotient |= 1u;
     return PB32Round(sign, exponent, quotient);
 }
-// Both significands are in [2^23,2^24); reciprocal is floor((2^32-1)/d).
-// For numerator < 2^32 the product's high word is the exact digit or one
-// less. Its remainder is nonnegative and below 2*d, so one correction gives
-// the original radix-256/4 division and sticky bit. The caller owns d and
-// its reciprocal together across divisions of normalized positive mantissas.
-SIRIUS_PB32_INLINE uint PB32DivideNormalized(uint a, uint d, uint reciprocal) {
-    int exponent = 0;
-    uint remainder = a;
-    if (remainder < d) {
-        remainder <<= 1;
-        --exponent;
-    }
-    uint quotient = 1u;
-    remainder -= d;
-    for (uint chunk = 0u; chunk < 4u; ++chunk) {
-        const uint bits = chunk == 3u ? 2u : 8u;
-        const uint numerator = remainder << bits;
-        uint digit = PB32WideProduct(numerator, reciprocal).hi;
-        remainder = numerator - digit * d;
-        if (remainder >= d) {
-            ++digit;
-            remainder -= d;
-        }
-        quotient = (quotient << bits) | digit;
-    }
-    if (remainder != 0u) quotient |= 1u;
-    return PB32Round(0u, exponent, quotient);
-}
 SIRIUS_PB32_INLINE uint PB32Sqrt(uint a) {
     if (PB32Nan(a)) return 0x7fc00000u;
     if (PB32Zero(a)) return a;

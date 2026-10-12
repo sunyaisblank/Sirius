@@ -268,32 +268,6 @@ RPScalar RPDivideSeed(RPScalar a,RPScalar b) {
     seed=OrderedMultiply32(seed,RPPowerOfTwo(exponent));
     return RPFromBits(RPBits(seed)^((RPBits(a)^RPBits(b))&0x80000000u));
 }
-#ifdef SIRIUS_RETAINED_PORTABLE
-// Owned by one admitted division; the denominator stays unchanged while its
-// initial seed and three residual corrections consume these exact facts.
-struct RPDivideSeedDenominator { uint significand; uint reciprocal; int exponent; uint sign; }
-RPDivideSeedDenominator RPPrepareDivideSeedDenominator(RPScalar b) {
-    RPScalar bb=RPAbs(b);
-    RPDivideSeedDenominator r;
-    r.significand=(RPBits(RPMantissa(bb))&0x007fffffu)|0x00800000u;
-    r.reciprocal=0xffffffffu/r.significand;
-    r.exponent=RPFloorExponent(bb);
-    r.sign=RPBits(b)&0x80000000u;
-    return r;
-}
-RPScalar RPDivideSeedPrepared(RPScalar a,RPDivideSeedDenominator b) {
-    if(RPScalarEqual(a,RPZero()))return RPZero();
-    RPScalar aa=RPAbs(a);
-    int exponent=RPFloorExponent(aa)-b.exponent;
-    if(exponent < -151 || exponent > 120)return RPZero();
-    uint significand=(RPBits(RPMantissa(aa))&0x007fffffu)|0x00800000u;
-    RPScalar seed=RPFromBits(PB32DivideNormalized(significand,b.significand,b.reciprocal));
-    if(!RPBounded(seed,0x40800000u))return RPZero();
-    if(exponent < -126){seed=OrderedMultiply32(seed,RPFromBits(0x00800000u));exponent+=126;}
-    seed=OrderedMultiply32(seed,RPPowerOfTwo(exponent));
-    return RPFromBits(RPBits(seed)^((RPBits(a)&0x80000000u)^b.sign));
-}
-#endif
 RPScalar RPSqrtSeed(RPScalar positive) {
     int exponent=RPFloorExponent(positive),odd=exponent&1;
     RPScalar mantissa=RPMantissa(positive);
