@@ -1,0 +1,29 @@
+{
+  "emit-endpoint": {
+    "revision": "95c4293f598c1dbf4cd13ece7b06ffff5383b81a",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/emit_backend.py",
+      "endpoint"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/emit_backend.py",
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/b5d2abf/optimized-ir-stage-code-binding/capture/optimized-05.ll",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/b5d2abf/jit-stage-linked-byte-binding/capture/jit-10.elf",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/b5d2abf/optimized-ir-stage-code-binding/optimized-ir-artifact-summary.json",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/9624562/jit-dispatch-profile/lp_bld_misc.cpp",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/9624562/jit-dispatch-profile/lp_bld_init.c",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+    ],
+    "scope": "Offline assembly/object emission from protected actual optimized Endpoint IR using existing pinned LLVM backend. Reconstructed CPU/features/options require separate exact full artifact equality before offset mapping; no GPU, original benchmark/frame retry, source operation attribution, speed or full qualification claim."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "command": [
+    "gcc",
+    "-std=c11",
+    "-D_GNU_SOURCE",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fPIC",
+    "-shared",
+    "-O2",
+    "out/jit-pass-return-ir-local-binding/optimizer_observer.c",
+    "-ldl",
+    "-o",
+    "out/jit-pass-return-ir-local-binding/optimizer_observer.so"
+  ],
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "",
+  "compiler_version": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "source_sha256": "82073f2f958e8b5a53324a3a87f1ada7baf2610d0a9810d4c03de0f72fa5737a",
+  "observer_sha256": "a1f8808cd8a3a793c59eeed10d78515a08d5aa09b1080ac47281c1a78c04fd68",
+  "product_build": false,
+  "already_loaded_only": true,
+  "installed_real_runpasses_offset": "0x473aad0"
+}
