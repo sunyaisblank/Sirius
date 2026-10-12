@@ -422,11 +422,11 @@ base::Expected<void> RetainedCompute::CheckStageSevenEpochs(std::uint32_t change
     for (std::size_t i = 0; i < tracked.size(); ++i) {
         const auto before = owner.epochs[i];
         const auto current = device_.BufferMutationEpoch(tracked[i]);
-        const auto advanced = before && *before < std::numeric_limits<std::uint64_t>::max()
-                                  ? std::optional(*before + 1)
-                                  : std::nullopt;
+        bool advanced_matches = !current;
+        if (before && *before < std::numeric_limits<std::uint64_t>::max())
+            advanced_matches = current && *current == *before + 1;
         const bool matches = (changed & (1U << i)) != 0
-                                 ? current == advanced || (!succeeded && current == before)
+                                 ? advanced_matches || (!succeeded && current == before)
                                  : current == before;
         if (!matches) {
             unexpected = true;
