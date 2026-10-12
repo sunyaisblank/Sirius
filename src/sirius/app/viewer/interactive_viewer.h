@@ -81,6 +81,12 @@ struct RefinementState {
 // completed frame to a callback.
 class InteractiveViewer {
   public:
+    struct FrameSnapshot {
+        std::vector<float> pixels;
+        int width = 0;
+        int height = 0;
+    };
+
     using FrameCallback = std::function<void(const float* data, int width, int height)>;
     // A provisional, configured display-linear snapshot. Borrowed pixels last
     // for the call; a presentation owner checks the generation again at upload.
@@ -118,6 +124,9 @@ class InteractiveViewer {
 
     [[nodiscard]] RefinementState GetRefinementState() const;
 
+    // Copy pixels and geometry from one completed publication. The legacy
+    // accessors each read committed state, but separate calls can span frames.
+    [[nodiscard]] FrameSnapshot GetFrameSnapshot() const;
     [[nodiscard]] std::vector<float> GetFrameBufferSnapshot() const;
     [[nodiscard]] int GetFrameWidth() const;
     [[nodiscard]] int GetFrameHeight() const;
@@ -149,7 +158,7 @@ class InteractiveViewer {
     mutable std::mutex thread_mutex_;
     mutable std::mutex session_mutex_;
     mutable std::mutex frame_mutex_;
-    std::vector<float> frame_buffer_;
+    FrameSnapshot frame_;
     std::string last_error_;
 
     FrameCallback frame_callback_;

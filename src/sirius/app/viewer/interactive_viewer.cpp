@@ -118,7 +118,7 @@ bool InteractiveViewer::Initialise(const ViewerConfig& config) {
         // frame mutex for this state. Reinitialisation starts a fresh epoch.
         std::lock_guard<std::mutex> lock(frame_mutex_);
         last_error_.clear();
-        frame_buffer_.clear();
+        frame_ = {};
         ++preview_generation_;
     }
 
@@ -322,19 +322,24 @@ RefinementState InteractiveViewer::GetRefinementState() const {
     return refinement_;
 }
 
+InteractiveViewer::FrameSnapshot InteractiveViewer::GetFrameSnapshot() const {
+    std::lock_guard<std::mutex> lock(frame_mutex_);
+    return frame_;
+}
+
 std::vector<float> InteractiveViewer::GetFrameBufferSnapshot() const {
     std::lock_guard<std::mutex> lock(frame_mutex_);
-    return frame_buffer_;
+    return frame_.pixels;
 }
 
 int InteractiveViewer::GetFrameWidth() const {
-    std::lock_guard<std::mutex> lock(state_mutex_);
-    return refinement_.current_width;
+    std::lock_guard<std::mutex> lock(frame_mutex_);
+    return frame_.width;
 }
 
 int InteractiveViewer::GetFrameHeight() const {
-    std::lock_guard<std::mutex> lock(state_mutex_);
-    return refinement_.current_height;
+    std::lock_guard<std::mutex> lock(frame_mutex_);
+    return frame_.height;
 }
 
 std::string InteractiveViewer::GetLastError() const {
@@ -572,7 +577,9 @@ bool InteractiveViewer::RenderStep() {
     {
         std::lock_guard<std::mutex> lock(frame_mutex_);
         if (!current_generation()) return !stop_requested_;
-        frame_buffer_ = snapshot;
+        frame_.pixels = snapshot;
+        frame_.width = width;
+        frame_.height = height;
     }
 
     NotifyFrame();
@@ -581,15 +588,14 @@ bool InteractiveViewer::RenderStep() {
 
 void InteractiveViewer::NotifyFrame() {
     FrameCallback callback;
-    std::vector<float> frame;
+    FrameSnapshot frame;
     {
         std::lock_guard<std::mutex> lock(frame_mutex_);
         callback = frame_callback_;
-        frame = frame_buffer_;
+        frame = frame_;
     }
     if (callback) {
-        const RefinementState refinement = GetRefinementState();
-        callback(frame.data(), refinement.current_width, refinement.current_height);
+        callback(frame.pixels.data(), frame.width, frame.height);
     }
 }
 
