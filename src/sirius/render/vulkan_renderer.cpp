@@ -350,7 +350,6 @@ struct RetainedRenderPlan {
     std::size_t capacity = 0, ray_capacity = 0, work_count = 0;
     int work_edge = 1;
     TilePlan tiles;
-    bool stage_seven_owner = false;
 };
 
 Expected<RetainedRenderPlan> PlanRetainedRender(const SessionConfig& config,
@@ -361,7 +360,7 @@ Expected<RetainedRenderPlan> PlanRetainedRender(const SessionConfig& config,
     const auto target = ResolveDispatchTargetMs(kDefaultDispatchTargetMs);
     if (!target) return std::unexpected(target.error());
     // This device belongs solely to one retained owner. Replanning must not
-    // charge its existing buffers a second time.
+    // charge its existing twelve buffers a second time.
     const int work_edge =
         config.point_starfield && config.black_hole_charge == 0 && config.cosmological_constant == 0
             ? kPointDetectorBlockEdge
@@ -390,23 +389,13 @@ Expected<RetainedRenderPlan> PlanRetainedRender(const SessionConfig& config,
     if (capacity == 0)
         return Fail(ErrorDomain::kDevice, "allocate retained renderer",
                     "budget cannot seat one bounded ray batch");
-    auto tiles =
+    const auto tiles =
         DeriveTilePlan(*budget, std::max(config.width, kMinTileEdge),
                        std::max(config.height, kMinTileEdge), allocation, kMinTileEdge);
     if (!tiles) return std::unexpected(tiles.error());
-    auto owner_bytes = backend::RetainedCompute::RequiredStageSevenOwnerAllocationBytes(device, capacity);
-    const bool owner_fits = owner_bytes && *owner_bytes != 0 && allocation <= tiles->usable_bytes &&
-        tiles->tile_working_set_bytes <= tiles->usable_bytes - allocation &&
-        *owner_bytes <= tiles->usable_bytes - allocation - tiles->tile_working_set_bytes;
-    if (owner_fits) {
-        // Retain the original capacity, ray cohort and tile edge. Ownership is
-        // optional when its actual padded allocation fits the remaining budget.
-        allocation += *owner_bytes;
-        tiles->fixed_overhead_bytes = allocation;
-    }
     return RetainedRenderPlan{
         *budget,    allocation, *target, capacity, std::min(desired_rays, capacity),
-        work_count, work_edge,  *tiles, owner_fits};
+        work_count, work_edge,  *tiles};
 }
 
 struct RetainedRenderOwner {
@@ -467,7 +456,6 @@ Expected<std::unique_ptr<RetainedRenderOwner>> AcquireRetainedOwner(
         if (!plan) return std::unexpected(plan.error());
         if (owner->plan.budget == plan->budget && owner->plan.target == plan->target &&
             owner->compute->Capacity() == plan->capacity &&
-            owner->compute->StageSevenOwnershipEnabled() == plan->stage_seven_owner &&
             owner->device->BufferAllocationBytes() == plan->allocation) {
             auto limit = owner->device->SetBufferAllocationLimit(plan->tiles.usable_bytes);
             if (!limit) return std::unexpected(limit.error());
@@ -492,8 +480,7 @@ Expected<std::unique_ptr<RetainedRenderOwner>> AcquireRetainedOwner(
     auto limit = (*opened)->SetBufferAllocationLimit(plan->tiles.usable_bytes);
     if (!limit) return std::unexpected(limit.error());
     auto compute = backend::RetainedCompute::Create(**opened, plan->capacity,
-                                                    rung == PrecisionRung::Fp64, plan->target,
-                                                    plan->stage_seven_owner);
+                                                    rung == PrecisionRung::Fp64, plan->target);
     if (!compute) return std::unexpected(compute.error());
     if ((*opened)->BufferAllocationBytes() != plan->allocation)
         return Fail(

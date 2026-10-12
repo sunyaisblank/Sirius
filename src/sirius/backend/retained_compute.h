@@ -217,6 +217,8 @@ class RetainedCompute {
         ComputeDevice& device, std::size_t capacity);
     [[nodiscard]] static base::Expected<std::uint64_t> RequiredStageSevenOwnerAllocationBytes(
         ComputeDevice& device, std::size_t capacity);
+    // Experimental ownership is opt in; the renderer uses stock stages.
+    // Issue #44 requires the whole-call benefit gate before adoption.
     [[nodiscard]] static base::Expected<std::unique_ptr<RetainedCompute>> Create(
         ComputeDevice& device, std::size_t capacity, bool fp64_products = false,
         double dispatch_target_ms = 250, bool stage_seven_owner = false);
