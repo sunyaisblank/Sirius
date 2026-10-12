@@ -590,21 +590,21 @@ TEST(RetainedComputeAdmission, SealedTablesReuseVerificationAndPreserveChangedTa
     for (auto& packet : upper) packet.values.fill(RetainedValue::FromDouble(0));
     ASSERT_TRUE(compute.Step(packets));
     EXPECT_EQ(device.kernels.back(), 9U);
-    const auto transport_reads = std::ranges::count(device.read_buffers, BufferHandle{2});
+    const auto transport_reads = std::ranges::count(device.read_buffers, 2U, &BufferHandle::value);
     EXPECT_EQ(transport_reads, 1);
     ASSERT_TRUE(compute.Step(packets));
-    EXPECT_EQ(std::ranges::count(device.read_buffers, BufferHandle{2}), transport_reads);
+    EXPECT_EQ(std::ranges::count(device.read_buffers, 2U, &BufferHandle::value), transport_reads);
     std::array<StageSevenToken, 2> tokens{compute.LastStepOwner(0), {}};
     ASSERT_TRUE(compute.Endpoint(upper, nullptr, tokens));
     EXPECT_EQ(device.kernels.back(), 10U);
-    EXPECT_EQ(std::ranges::count(device.read_buffers, BufferHandle{4}), 1);
+    EXPECT_EQ(std::ranges::count(device.read_buffers, 4U, &BufferHandle::value), 1);
     ASSERT_TRUE(compute.Step(packets));
     tokens = {compute.LastStepOwner(0), {}};
     std::array<RetainedDenseInput, 2> dense{};
     ASSERT_TRUE(compute.EndpointAndDense(upper, dense, tokens));
     ASSERT_GE(device.kernels.size(), 2U);
     EXPECT_EQ(device.kernels[device.kernels.size() - 2], 10U);
-    EXPECT_EQ(std::ranges::count(device.read_buffers, BufferHandle{4}), 1);
+    EXPECT_EQ(std::ranges::count(device.read_buffers, 4U, &BufferHandle::value), 1);
 
     ASSERT_TRUE(compute.Step(packets));
     tokens = {compute.LastStepOwner(0), {}};
@@ -624,7 +624,7 @@ TEST(RetainedComputeAdmission, SealedTablesReuseVerificationAndPreserveChangedTa
         if (input.value == 2) {
             EXPECT_EQ(device.kernels.back(), 1U);
             EXPECT_EQ(device.buffers[2].back(), changed.back());
-            EXPECT_EQ(std::ranges::count(device.read_buffers, BufferHandle{2}), 2);
+            EXPECT_EQ(std::ranges::count(device.read_buffers, 2U, &BufferHandle::value), 2);
             // Restore through an admitted write; no CPU upload repairs it.
             changed.back() ^= std::byte{1};
             ASSERT_TRUE(device.WriteBuffer(input, changed));
@@ -635,7 +635,7 @@ TEST(RetainedComputeAdmission, SealedTablesReuseVerificationAndPreserveChangedTa
             ASSERT_TRUE(compute.EndpointAndDense(upper, dense, tokens));
             EXPECT_EQ(device.kernels[device.kernels.size() - 2], 2U);
             EXPECT_EQ(device.buffers[4].back(), changed.back());
-            EXPECT_EQ(std::ranges::count(device.read_buffers, BufferHandle{4}), 2);
+            EXPECT_EQ(std::ranges::count(device.read_buffers, 4U, &BufferHandle::value), 2);
         }
     }
 }
@@ -701,9 +701,9 @@ TEST(RetainedComputeAdmission, SealedDispatchFailureRechecksOwnerPrefixBeforeRec
         EXPECT_FALSE(compute.Step(packets));
         device.fail_dispatch = false;
         device.after_dispatch = {};
-        const auto reads = std::ranges::count(device.read_buffers, BufferHandle{14});
+        const auto reads = std::ranges::count(device.read_buffers, 14U, &BufferHandle::value);
         ASSERT_TRUE(compute.Step(packets));
-        EXPECT_EQ(std::ranges::count(device.read_buffers, BufferHandle{14}), reads + 1);
+        EXPECT_EQ(std::ranges::count(device.read_buffers, 14U, &BufferHandle::value), reads + 1);
         EXPECT_EQ(device.kernels.back(), corrupt_prefix ? 1U : 9U);
         EXPECT_EQ(compute.StageSevenOwnershipEnabled(), !corrupt_prefix);
     }
