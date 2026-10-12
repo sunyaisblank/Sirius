@@ -204,6 +204,8 @@ RetainedTriple RTEvaluateArithmetic(RetainedTriple a,RetainedTriple b,uint op) {
     bool square_root=op==6;
     RetainedTriple q=RTInvalid(),correction=RTInvalid();
     RPScalar lower=RPZero();
+    RPDivideSeedDenominator prepared;
+    prepared.significand=0;prepared.reciprocal=0;prepared.exponent=0;prepared.sign=0;
     if(direct_add) {
         if(op==3) b=RTNegate(b);
     } else if(direct_product) {
@@ -223,7 +225,8 @@ RetainedTriple RTEvaluateArithmetic(RetainedTriple a,RetainedTriple b,uint op) {
            RPScalarGreater(RPRatioUpper(RTAbsoluteUpper(a),lower),RPFromBits(0x5e000000u)))
             return RTInvalid();
         if(RTExact(b,RPOne())) return a;
-        q=RTConstant(RPDivideSeed(a.hi,b.hi));
+        prepared=RPPrepareDivideSeedDenominator(b.hi);
+        q=RTConstant(RPDivideSeedPrepared(a.hi,prepared));
     }
     [loop] for(uint phase=0;phase<7;++phase) {
         bool correcting=(phase&1u)!=0u;
@@ -268,7 +271,8 @@ RetainedTriple RTEvaluateArithmetic(RetainedTriple a,RetainedTriple b,uint op) {
             if(result.valid==0||
                RPScalarGreater(RPRatioUpper(RPAbs(result.hi),magnitude),RPFromBits(0x5d000000u)))
                 return RTInvalid();
-            correction=RTConstant(RPDivideSeed(result.hi,denominator));
+            correction=RTConstant(square_root?RPDivideSeed(result.hi,denominator):
+                RPDivideSeedPrepared(result.hi,prepared));
         }
     }
     return RTInvalid();
