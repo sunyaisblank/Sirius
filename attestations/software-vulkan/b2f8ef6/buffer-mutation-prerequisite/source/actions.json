@@ -1,0 +1,149 @@
+{
+  "compile-vulkan": {
+    "revision": "b2f8ef65265caa11cc96b23dc6834dc1cd88d351",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "compiler",
+    "scope": "Isolated strict compile of vulkan_device.cpp; canonical object unchanged",
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/vulkan-buffer-mutation/vulkan_device.cpp.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/vulkan-buffer-mutation/vulkan_device.cpp.d"
+    ],
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14"
+    ]
+  },
+  "compile-test": {
+    "revision": "b2f8ef65265caa11cc96b23dc6834dc1cd88d351",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "compiler",
+    "scope": "Isolated strict compile of vulkan_smoke_test.cpp; canonical object unchanged",
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/vulkan-buffer-mutation/vulkan_smoke_test.cpp.o",
+      "-c",
+      "/home/astra/.project/Sirius/tests/backend/vulkan_smoke_test.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/vulkan-buffer-mutation/vulkan_smoke_test.cpp.d"
+    ],
+    "frozen_inputs": [
+      "bin/linux-gcc/compile_commands.json",
+      "/usr/bin/g++-14"
+    ]
+  },
+  "link": {
+    "revision": "b2f8ef65265caa11cc96b23dc6834dc1cd88d351",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "linker",
+    "scope": "Private smoke control linked with new Vulkan and test objects only; no old backend objects",
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-DNDEBUG",
+      "/home/astra/.project/Sirius/bin/linux-gcc/vulkan-buffer-mutation/vulkan_smoke_test.cpp.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/vulkan-buffer-mutation/vulkan_device.cpp.o",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/vulkan-buffer-mutation/link.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/vulkan-buffer-mutation/mutation-controls",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-pthread"
+    ],
+    "frozen_inputs": [
+      "bin/linux-gcc/vulkan-buffer-mutation/vulkan_smoke_test.cpp.o",
+      "bin/linux-gcc/vulkan-buffer-mutation/vulkan_device.cpp.o",
+      "bin/linux-gcc/lib/libgtest_main.a",
+      "bin/linux-gcc/lib/libgtest.a",
+      "bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/usr/bin/g++-14",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so"
+    ]
+  },
+  "control": {
+    "revision": "b2f8ef65265caa11cc96b23dc6834dc1cd88d351",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "test",
+    "software_provider": true,
+    "scope": "Original twelve-command paired smoke numerical/refusal/recovery case plus six-buffer mutation visibility; not retained-owner or full qualification",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/vulkan-buffer-mutation/mutation-controls",
+      "--gtest_filter=VulkanBackend.IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffers",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "frozen_inputs": [
+      "bin/linux-gcc/vulkan-buffer-mutation/mutation-controls",
+      "bin/linux-gcc/vulkan-buffer-mutation/resources/kernels/smoke.spv",
+      "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so"
+    ]
+  }
+}
