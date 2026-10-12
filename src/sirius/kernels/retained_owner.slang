@@ -72,15 +72,10 @@ uint S7Family(uint actualBase, uint rows, uint packetWords, uint generalWords) {
 // A miss changes only owner eligibility; it never touches retainedStatus.
 void S7Recognize(StructuredBuffer<uint> actual, uint actualBase,
                  uint referenceBase, uint words, uint lane) {
-#ifndef SIRIUS_RETAINED_STAGE7_SEALED
     if (s7Enabled != 0)
         for (uint i = lane; i < words; i += SIRIUS_RETAINED_EXECUTION_LANES)
             if (actual[actualBase + i] != stageSevenOwner[referenceBase + stageSevenOwner[5] + i])
                 InterlockedOr(s7Invalid, 1u);
-#endif
-    // Sealed modules require host verification of these actual buffer bytes
-    // and exact mutation advances through submission. Keep the key/record
-    // rejection join even when the immutable table comparison is already owned.
     GroupMemoryBarrierWithGroupSync();
     if (lane == 0 && s7Invalid != 0) s7Enabled = 0;
     GroupMemoryBarrierWithGroupSync();

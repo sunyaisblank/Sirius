@@ -239,13 +239,6 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(Compute
              retained_owner::kSchwarzschildTransportMapOffset);
         copy(std::span(retained_owner::kSchwarzschildEndpointMap),
              retained_owner::kSchwarzschildEndpointMapOffset);
-        const std::array tracked{result->transport_.buffers[0], result->endpoint_.buffers[0],
-                                 owner.buffer};
-        for (std::size_t i = 0; i < tracked.size(); ++i)
-            owner.epochs[i] = device.BufferMutationEpoch(tracked[i]);
-        owner.sealed = std::ranges::all_of(owner.epochs, [](auto epoch) {
-            return epoch && *epoch < std::numeric_limits<std::uint64_t>::max();
-        });
         auto uploaded = device.WriteBuffer(owner.buffer, std::as_bytes(std::span(words)));
         if (!uploaded) return std::unexpected(uploaded.error());
         std::vector<std::uint32_t> verified(words.size());
@@ -254,21 +247,6 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(Compute
         if (words != verified)
             return Fail(ErrorDomain::kDevice, "provision stage-seven owner",
                         "buffer verification mismatch");
-        if (owner.sealed) {
-            ++*owner.epochs[2];
-            for (std::size_t i = 0; i < tracked.size(); ++i)
-                if (device.BufferMutationEpoch(tracked[i]) != owner.epochs[i])
-                    return Fail(ErrorDomain::kDevice, "provision stage-seven owner",
-                                "unexpected buffer mutation");
-            auto sealed_transport = device.LoadKernel(retained_owner::kTransportSealedShader);
-            if (!sealed_transport) return std::unexpected(sealed_transport.error());
-            auto sealed_endpoint = device.LoadKernel(retained_owner::kEndpointSealedShader);
-            if (!sealed_endpoint) return std::unexpected(sealed_endpoint.error());
-            owner.sealed_transport = *sealed_transport;
-            owner.sealed_endpoint = *sealed_endpoint;
-            owner.canonical_prefix.assign(words.begin() + retained_owner::kControlWords + shift,
-                                          words.begin() + retained_owner::kPrefixWords + shift);
-        }
         result->stage_seven_ = std::move(owner);
         result->stage_seven_provisioning_ms_ =
             std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - started)
@@ -280,7 +258,6 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(Compute
 base::Expected<void> RetainedCompute::PrepareSoftwareRendererStages(
     PreparationStats& observation, const std::function<bool()>& should_cancel) {
     InvalidateStageSevenOwner();
-    if (stage_seven_) stage_seven_->tables_verified.fill(false);
     using Clock = std::chrono::steady_clock;
     observation = {};
     const auto started = Clock::now();
@@ -392,99 +369,8 @@ base::Expected<std::uint64_t> RetainedCompute::RequiredStageSevenOwnerAllocation
     return *required;
 }
 
-void RetainedCompute::RefreshStageSevenContext() {
-    if (!stage_seven_ || !stage_seven_->sealed || !stage_seven_->active) return;
-    auto& owner = *stage_seven_;
-    const std::array tracked{transport_.buffers[0], endpoint_.buffers[0], owner.buffer};
-    for (std::size_t i = 0; i < tracked.size(); ++i) {
-        const auto current = device_.BufferMutationEpoch(tracked[i]);
-        if (!current || (i == 2 && current != owner.epochs[i])) {
-            owner.active = false;
-            owner.tables_verified.fill(false);
-            std::fill(owner.issued.begin(), owner.issued.end(), false);
-            return;
-        }
-        if (current != owner.epochs[i]) {
-            // A caller may edit a warmed table between operations. Revoke its
-            // certificate, preserve the actual tail, and read-verify it again.
-            owner.tables_verified[i] = false;
-            std::fill(owner.issued.begin(), owner.issued.end(), false);
-            owner.epochs[i] = current;
-        }
-    }
-}
-
-base::Expected<void> RetainedCompute::CheckStageSevenEpochs(std::uint32_t changed, bool succeeded) {
-    if (!stage_seven_ || !stage_seven_->sealed || !stage_seven_->active) return {};
-    auto& owner = *stage_seven_;
-    const std::array tracked{transport_.buffers[0], endpoint_.buffers[0], owner.buffer};
-    bool unexpected = false;
-    for (std::size_t i = 0; i < tracked.size(); ++i) {
-        const auto before = owner.epochs[i];
-        const auto current = device_.BufferMutationEpoch(tracked[i]);
-        bool advanced_matches = !current;
-        if (before && *before < std::numeric_limits<std::uint64_t>::max())
-            advanced_matches = current && *current == *before + 1;
-        const bool matches = (changed & (1U << i)) != 0
-                                 ? advanced_matches || (!succeeded && current == before)
-                                 : current == before;
-        if (!matches) {
-            unexpected = true;
-            owner.tables_verified.fill(false);
-            // A failed/uncertain submission can have altered the owner prefix
-            // within its otherwise expected advance. Quarantine before return.
-            owner.prefix_verified = false;
-            std::fill(owner.issued.begin(), owner.issued.end(), false);
-            if (i == 2 || !current) owner.active = false;
-        }
-        owner.epochs[i] = current;
-        if (!current) owner.active = false;
-    }
-    if (unexpected)
-        return Fail(ErrorDomain::kDevice, "check stage-seven buffer epochs",
-                    "unexpected mutation during retained operation");
-    if (!succeeded) {
-        owner.tables_verified.fill(false);
-        owner.prefix_verified = false;
-        std::fill(owner.issued.begin(), owner.issued.end(), false);
-    }
-    if (!owner.active) {
-        owner.tables_verified.fill(false);
-        std::fill(owner.issued.begin(), owner.issued.end(), false);
-    }
-    return {};
-}
-
-base::Expected<void> RetainedCompute::VerifyStageSevenPrefix(Stage& stage) {
-    if (!StageSevenOwnershipEnabled() || !stage_seven_->sealed || stage_seven_->prefix_verified)
-        return {};
-    auto& owner = *stage_seven_;
-    auto stable = CheckStageSevenEpochs();
-    if (!stable) return stable;
-    const auto shift = StageSevenGrantWords(capacity_);
-    const auto first = retained_owner::kControlWords + shift;
-    const auto started = std::chrono::steady_clock::now();
-    std::vector<std::uint32_t> actual(retained_owner::kPrefixWords + shift);
-    auto read = device_.ReadBuffer(owner.buffer, std::as_writable_bytes(std::span(actual)));
-    auto epochs = CheckStageSevenEpochs(0, read.has_value());
-    stage.stats.read_buffer_ms +=
-        std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - started)
-            .count();
-    if (read) stage.stats.read_buffer_bytes += actual.size() * sizeof(std::uint32_t);
-    if (!epochs) return epochs;
-    if (!read) return read;
-    owner.prefix_verified =
-        std::ranges::equal(std::span(actual).subspan(first), owner.canonical_prefix);
-    if (!owner.prefix_verified) {
-        owner.active = false;
-        std::fill(owner.issued.begin(), owner.issued.end(), false);
-    }
-    return {};
-}
-
 void RetainedCompute::InvalidateStageSevenOwner() {
     if (!stage_seven_) return;
-    RefreshStageSevenContext();
     auto& owner = *stage_seven_;
     std::fill(owner.issued.begin(), owner.issued.end(), false);
     if (++owner.generation == 0) {
@@ -495,7 +381,6 @@ void RetainedCompute::InvalidateStageSevenOwner() {
 }
 
 base::Expected<void> RetainedCompute::WriteStageSevenControl(Stage& stage) {
-    if (!StageSevenOwnershipEnabled()) return {};
     const auto started = std::chrono::steady_clock::now();
     auto status =
         device_.WriteBuffer(stage_seven_->buffer, std::as_bytes(std::span(stage_seven_->control)));
@@ -504,14 +389,12 @@ base::Expected<void> RetainedCompute::WriteStageSevenControl(Stage& stage) {
             .count();
     if (status)
         stage.stats.write_buffer_bytes += stage_seven_->control.size() * sizeof(std::uint32_t);
-    auto epochs = CheckStageSevenEpochs(4, status.has_value());
-    if (!epochs) return epochs;
     return status;
 }
 
 StageSevenToken RetainedCompute::LastStepOwner(std::size_t row) const {
     StageSevenToken token;
-    if (StageSevenOwnershipEnabled() && row < capacity_ && stage_seven_->issued[row]) {
+    if (stage_seven_ && row < capacity_ && stage_seven_->issued[row]) {
         token.issuer_ = stage_seven_->identity;
         token.generation_ = stage_seven_->generation;
         token.row_ = row;
@@ -521,8 +404,7 @@ StageSevenToken RetainedCompute::LastStepOwner(std::size_t row) const {
 
 base::Expected<bool> RetainedCompute::AuthorizeStageSevenEndpoint(
     std::span<const RetainedEndpointInput> inputs, std::span<const StageSevenToken> tokens) {
-    RefreshStageSevenContext();
-    if (!StageSevenOwnershipEnabled()) return false;
+    if (!stage_seven_) return false;
     auto& owner = *stage_seven_;
     std::fill(owner.control.begin() + retained_owner::kControlWords, owner.control.end(), 0U);
     bool granted = false;
@@ -548,7 +430,7 @@ base::Expected<bool> RetainedCompute::AuthorizeStageSevenEndpoint(
     // issuance before dispatch so every write/dispatch/read/decode failure closes it.
     InvalidateStageSevenOwner();
     if (!status) return std::unexpected(status.error());
-    return granted && StageSevenOwnershipEnabled();
+    return granted;
 }
 
 std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> RetainedCompute::Statistics()
@@ -569,72 +451,6 @@ void RetainedCompute::ResetStatistics() {
     submission_feedback_ = {};
 }
 
-base::Expected<void> RetainedCompute::UploadStage(Stage& stage, std::size_t active_rows) {
-    const auto started = std::chrono::steady_clock::now();
-    auto stable = CheckStageSevenEpochs();
-    if (!stable) return stable;
-    auto input = std::span(stage.input);
-    if (stage.program_uploaded) input = input.first(1 + active_rows * stage.input_words_per_row);
-    if (!stage.program_uploaded && stage_seven_) {
-        if (stage.kind == KernelStage::kTransport) stage_seven_->tables_verified[0] = false;
-        if (stage.kind == KernelStage::kEndpoint) stage_seven_->tables_verified[1] = false;
-    }
-    auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(input));
-    const auto changed = stage.kind == KernelStage::kTransport  ? 1U
-                         : stage.kind == KernelStage::kEndpoint ? 2U
-                                                                : 0U;
-    auto epochs = CheckStageSevenEpochs(changed, status.has_value());
-    stage.stats.write_buffer_ms +=
-        std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - started)
-            .count();
-    if (status) {
-        stage.program_uploaded = true;
-        stage.stats.write_buffer_bytes += input.size_bytes();
-    }
-    if (!epochs) return epochs;
-    return status;
-}
-
-base::Expected<bool> RetainedCompute::SelectStageSevenKernel(Stage& stage, bool requested) {
-    if (!requested || !StageSevenOwnershipEnabled()) return false;
-    auto& owner = *stage_seven_;
-    if (!owner.sealed) return true;
-    if (!owner.prefix_verified) return false;  // Fresh Step must re-establish it after failure.
-    auto stable = CheckStageSevenEpochs();
-    if (!stable) return std::unexpected(stable.error());
-    // Do not enter a sealed numerical dispatch when its mutation counter
-    // cannot still distinguish one own advance from an intervening write.
-    if (std::ranges::any_of(owner.epochs, [](auto epoch) {
-            return !epoch || *epoch == std::numeric_limits<std::uint64_t>::max();
-        })) {
-        owner.active = false;
-        owner.tables_verified.fill(false);
-        std::fill(owner.issued.begin(), owner.issued.end(), false);
-        return false;
-    }
-    const auto index = stage.kind == KernelStage::kTransport ? 0U : 1U;
-    if (!owner.tables_verified[index]) {
-        const auto started = std::chrono::steady_clock::now();
-        std::vector<std::uint32_t> actual(stage.input.size());
-        auto read = device_.ReadBuffer(stage.buffers[0], std::as_writable_bytes(std::span(actual)));
-        auto epochs = CheckStageSevenEpochs(0, read.has_value());
-        stage.stats.read_buffer_ms +=
-            std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - started)
-                .count();
-        if (read) stage.stats.read_buffer_bytes += actual.size() * sizeof(std::uint32_t);
-        if (!epochs) return std::unexpected(epochs.error());
-        if (!read) return std::unexpected(read.error());
-        const auto tail = 1 + capacity_ * stage.input_words_per_row;
-        const auto& layout = kStageLayouts[static_cast<std::size_t>(stage.kind)];
-        owner.tables_verified[index] =
-            actual[0] == capacity_ &&
-            std::ranges::equal(std::span(actual).subspan(tail), layout.program);
-        // A changed warmed tail remains changed. The original generic module
-        // interprets it, including its original malformed-stream refusal.
-    }
-    return owner.tables_verified[index];
-}
-
 base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_rows,
                                                DispatchTiming* timing, bool owned) {
     using Clock = std::chrono::steady_clock;
@@ -643,40 +459,32 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     };
     // A failed write must not leave the caller's previous dispatch observation.
     if (timing) *timing = {};
-    auto status = UploadStage(stage, active_rows);
+    auto input = std::span(stage.input);
+    // The fixed-capacity header and program tail define shader indexing. Once
+    // that immutable tail has reached the device, only requested rows change.
+    if (stage.program_uploaded) input = input.first(1 + active_rows * stage.input_words_per_row);
+    const auto write_started = Clock::now();
+    auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(input));
+    const auto write_finished = Clock::now();
+    stage.stats.write_buffer_ms += milliseconds(write_started, write_finished);
     if (!status) return status;
-    auto selected = SelectStageSevenKernel(stage, owned);
-    if (!selected) return std::unexpected(selected.error());
-    owned = *selected;
-    if (stage_seven_ && stage.kind == KernelStage::kTransport)
-        stage_seven_->transport_owned = owned;
+    stage.program_uploaded = true;
+    stage.stats.write_buffer_bytes += input.size_bytes();
     DispatchTiming measured;
     auto* observed = timing ? timing : &measured;
     // Buffer strides and the immutable program retain their capacity layout.
     // Only requested rows execute; a later larger batch clears its own rows.
     const std::array owned_buffers{stage.buffers[0], stage.buffers[1],
                                    owned ? stage_seven_->buffer : BufferHandle{}};
-    const auto kernel = owned ? (stage.kind == KernelStage::kTransport
-                                     ? (stage_seven_->sealed ? stage_seven_->sealed_transport
-                                                             : stage_seven_->transport)
-                                     : (stage_seven_->sealed ? stage_seven_->sealed_endpoint
-                                                             : stage_seven_->endpoint))
+    const auto kernel = owned ? (stage.kind == KernelStage::kTransport ? stage_seven_->transport
+                                                                       : stage_seven_->endpoint)
                               : stage.kernel;
-    status = CheckStageSevenEpochs();
-    if (!status) return status;
     status = device_.Dispatch(
         kernel,
         owned ? std::span<const BufferHandle>(owned_buffers)
               : std::span<const BufferHandle>(stage.buffers),
         static_cast<std::uint32_t>((active_rows + kRetainedGroupRows - 1) / kRetainedGroupRows), 1,
         1, observed);
-    const auto changed = stage.kind == KernelStage::kTransport  ? 1U
-                         : stage.kind == KernelStage::kEndpoint ? 2U
-                                                                : 0U;
-    // An owned dispatch also writes only the sidecar rows. Check both exact
-    // advances together; neither arbitrary returned epoch can authorize reuse.
-    auto epochs = CheckStageSevenEpochs(changed | (owned ? 4U : 0U), status.has_value());
-    if (!epochs) return epochs;
     if (!status) return status;
     if (!std::isfinite(observed->submit_wait_ms) || observed->submit_wait_ms < 0)
         return Fail(ErrorDomain::kDevice, "dispatch retained stage", "invalid submission timing");
@@ -704,15 +512,12 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     auto output = std::span(stage.output).first(active_rows * (stage.output.size() / capacity_));
     const auto read_started = Clock::now();
     status = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(output));
-    epochs = CheckStageSevenEpochs(0, status.has_value());
     const auto read_finished = Clock::now();
     stage.stats.read_buffer_ms += milliseconds(read_started, read_finished);
     if (status) {
         stage.stats.read_buffer_bytes += output.size_bytes();
-        if (!epochs) return epochs;
         ObserveReadback(stage, active_rows);
     }
-    if (!epochs) return epochs;
     return status;
 }
 
@@ -767,23 +572,20 @@ base::Expected<std::vector<RetainedCameraOutput>> RetainedCompute::Camera(
 base::Expected<std::vector<RetainedStepOutput>> RetainedCompute::Step(
     std::span<const RetainedStepInput> inputs, DispatchTiming* timing) {
     InvalidateStageSevenOwner();
-    if (stage_seven_) stage_seven_->transport_owned = false;
     if (timing) *timing = {};
     if (inputs.empty() || inputs.size() > capacity_)
         return Fail(ErrorDomain::kDevice, "dispatch retained transport", "invalid batch size");
-    auto prefix = VerifyStageSevenPrefix(transport_);
-    if (!prefix) return std::unexpected(prefix.error());
     static_assert(sizeof(RetainedStepInput) == 230 * sizeof(std::uint32_t));
     std::fill_n(transport_.input.begin() + 1, capacity_ * 230, 0U);
     std::memcpy(transport_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    if (StageSevenOwnershipEnabled()) {
+    if (stage_seven_) {
         auto& owner = *stage_seven_;
         owner.control[2] = static_cast<std::uint32_t>(owner.generation);
         owner.control[3] = static_cast<std::uint32_t>(owner.generation >> 32);
         auto written = WriteStageSevenControl(transport_);
         if (!written) return std::unexpected(written.error());
     }
-    auto status = Dispatch(transport_, inputs.size(), timing, StageSevenOwnershipEnabled());
+    auto status = Dispatch(transport_, inputs.size(), timing, stage_seven_.has_value());
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedStepOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -817,7 +619,7 @@ base::Expected<std::vector<RetainedStepOutput>> RetainedCompute::Step(
                 }
         output.valid = true;
     }
-    if (StageSevenOwnershipEnabled() && stage_seven_->transport_owned)
+    if (stage_seven_)
         for (std::size_t row = 0; row < result.size(); ++row)
             stage_seven_->issued[row] = result[row].valid && result[row].rhs_valid;
     return result;
@@ -917,22 +719,28 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
     std::memcpy(endpoint_.input.data() + 1, endpoints.data(), endpoints.size_bytes());
     std::fill_n(dense_.input.begin() + 1, capacity_ * 560, 0U);
     std::memcpy(dense_.input.data() + 1, dense.data(), dense.size_bytes());
-    auto status = UploadStage(endpoint_, endpoints.size());
+    const auto write = [&](Stage& stage, std::size_t active) -> base::Expected<void> {
+        auto input = std::span(stage.input);
+        if (stage.program_uploaded) input = input.first(1 + active * stage.input_words_per_row);
+        const auto started = Clock::now();
+        auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(input));
+        stage.stats.write_buffer_ms += milliseconds(started, Clock::now());
+        if (status) {
+            stage.program_uploaded = true;
+            stage.stats.write_buffer_bytes += input.size_bytes();
+        }
+        return status;
+    };
+    auto status = write(endpoint_, endpoints.size());
     if (!status) return std::unexpected(status.error());
-    status = UploadStage(dense_, dense.size());
+    status = write(dense_, dense.size());
     if (!status) return std::unexpected(status.error());
-    auto selected = SelectStageSevenKernel(endpoint_, *owned);
-    if (!selected) return std::unexpected(selected.error());
-    const bool use_owner = *selected;
     const std::array owned_buffers{endpoint_.buffers[0], endpoint_.buffers[1],
-                                   use_owner ? stage_seven_->buffer : BufferHandle{}};
-    const auto endpoint_buffers = use_owner ? std::span<const BufferHandle>(owned_buffers)
-                                            : std::span<const BufferHandle>(endpoint_.buffers);
-    const auto endpoint_kernel =
-        use_owner ? (stage_seven_->sealed ? stage_seven_->sealed_endpoint : stage_seven_->endpoint)
-                  : endpoint_.kernel;
+                                   *owned ? stage_seven_->buffer : BufferHandle{}};
+    const auto endpoint_buffers = *owned ? std::span<const BufferHandle>(owned_buffers)
+                                         : std::span<const BufferHandle>(endpoint_.buffers);
     const std::array commands{
-        ComputeDispatch{endpoint_kernel, endpoint_buffers,
+        ComputeDispatch{*owned ? stage_seven_->endpoint : endpoint_.kernel, endpoint_buffers,
                         static_cast<std::uint32_t>((endpoints.size() + kRetainedGroupRows - 1) /
                                                    kRetainedGroupRows),
                         1, 1},
@@ -941,11 +749,7 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
                                                    kRetainedGroupRows),
                         1, 1}};
     IndependentPairTiming observed;
-    status = CheckStageSevenEpochs();
-    if (!status) return std::unexpected(status.error());
     status = device_.DispatchIndependentPair(commands, &observed);
-    auto epochs = CheckStageSevenEpochs(2U | (use_owner ? 4U : 0U), status.has_value());
-    if (!epochs) return std::unexpected(epochs.error());
     if (!status) return std::unexpected(status.error());
     const auto& timing = observed.combined;
     if (!std::isfinite(timing.submit_wait_ms) || timing.submit_wait_ms < 0)
@@ -977,14 +781,11 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
         auto output = std::span(stage.output).first(active * (stage.output.size() / capacity_));
         const auto started = Clock::now();
         auto result = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(output));
-        auto stable = CheckStageSevenEpochs(0, result.has_value());
         stage.stats.read_buffer_ms += milliseconds(started, Clock::now());
         if (result) {
             stage.stats.read_buffer_bytes += output.size_bytes();
-            if (!stable) return stable;
             ObserveReadback(stage, active);
         }
-        if (!stable) return stable;
         return result;
     };
     status = read(endpoint_, endpoints.size());

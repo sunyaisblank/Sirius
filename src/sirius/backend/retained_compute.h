@@ -238,9 +238,7 @@ class RetainedCompute {
     [[nodiscard]] base::Expected<std::vector<RetainedStepOutput>> Step(
         std::span<const RetainedStepInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] StageSevenToken LastStepOwner(std::size_t row) const;
-    [[nodiscard]] bool StageSevenOwnershipEnabled() const {
-        return stage_seven_ && stage_seven_->active;
-    }
+    [[nodiscard]] bool StageSevenOwnershipEnabled() const { return stage_seven_.has_value(); }
     // Provisioning is outside stage call timings and must be charged separately
     // by a complete-call comparison. Includes upload and verification readback.
     [[nodiscard]] double StageSevenProvisioningMs() const { return stage_seven_provisioning_ms_; }
@@ -300,28 +298,15 @@ class RetainedCompute {
     };
     struct StageSevenOwner {
         KernelHandle transport, endpoint;
-        KernelHandle sealed_transport, sealed_endpoint;
         BufferHandle buffer;
         std::vector<std::uint32_t> control;
         std::vector<bool> issued;
         std::shared_ptr<const std::uint8_t> identity = std::make_shared<const std::uint8_t>(0);
         std::uint64_t generation = 0;
-        bool active = true, sealed = false, transport_owned = false, prefix_verified = true;
-        std::vector<std::uint32_t> canonical_prefix;
-        // Separate from value generations. Handles/layout belong to this
-        // compute instance; only exact own mutation advances preserve a seal.
-        std::array<std::optional<std::uint64_t>, 3> epochs;
-        std::array<bool, 2> tables_verified{};
     };
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
                                                 DispatchTiming* timing, bool owned = false);
     void InvalidateStageSevenOwner();
-    void RefreshStageSevenContext();
-    [[nodiscard]] base::Expected<void> CheckStageSevenEpochs(std::uint32_t changed = 0,
-                                                             bool succeeded = true);
-    [[nodiscard]] base::Expected<void> VerifyStageSevenPrefix(Stage& stage);
-    [[nodiscard]] base::Expected<void> UploadStage(Stage& stage, std::size_t active_rows);
-    [[nodiscard]] base::Expected<bool> SelectStageSevenKernel(Stage& stage, bool requested);
     [[nodiscard]] base::Expected<void> WriteStageSevenControl(Stage& stage);
     [[nodiscard]] base::Expected<bool> AuthorizeStageSevenEndpoint(
         std::span<const RetainedEndpointInput> inputs, std::span<const StageSevenToken> owners);

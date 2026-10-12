@@ -145,9 +145,6 @@ class IntegerReferenceDevice final : public ComputeDevice {
     std::uint64_t BufferAllocationBytes() const noexcept override {
         return device_.BufferAllocationBytes();
     }
-    std::optional<std::uint64_t> BufferMutationEpoch(BufferHandle buffer) const noexcept override {
-        return device_.BufferMutationEpoch(buffer);
-    }
 
   private:
     ComputeDevice& device_;
