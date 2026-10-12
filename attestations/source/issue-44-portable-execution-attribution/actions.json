@@ -1,0 +1,129 @@
+{
+  "emit-endpoint": {
+    "revision": "95c4293f598c1dbf4cd13ece7b06ffff5383b81a",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/emit_backend.py",
+      "endpoint"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/emit_backend.py",
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/b5d2abf/optimized-ir-stage-code-binding/capture/optimized-05.ll",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/b5d2abf/jit-stage-linked-byte-binding/capture/jit-10.elf",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/b5d2abf/optimized-ir-stage-code-binding/optimized-ir-artifact-summary.json",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/9624562/jit-dispatch-profile/lp_bld_misc.cpp",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/9624562/jit-dispatch-profile/lp_bld_init.c",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+    ],
+    "scope": "Offline assembly/object emission from protected actual optimized Endpoint IR using existing pinned LLVM backend. Reconstructed CPU/features/options require separate exact full artifact equality before offset mapping; no GPU, original benchmark/frame retry, source operation attribution, speed or full qualification claim."
+  },
+  "assemble-labels": {
+    "revision": "95c4293f598c1dbf4cd13ece7b06ffff5383b81a",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/assemble_labels.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/assemble_labels.py",
+      "/usr/bin/as",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint.s",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint.o"
+    ],
+    "scope": "Assemble preserved verbose output with local labels retained. Labels are unusable unless complete function/code/constant/relocation correspondence passes. Auxiliary unwind encoding may differ between assemblers and must be separately stated; no generated code execution/attribution/speed/qualification claim."
+  },
+  "assemble-LLVM-labels": {
+    "revision": "95c4293f598c1dbf4cd13ece7b06ffff5383b81a",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/assemble_llvm_labels.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/assemble_llvm_labels.py",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/emission-settings.json",
+      "/usr/bin/llvm-mc-18",
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.18.1",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint.s",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint.o"
+    ],
+    "scope": "Existing LLVM MC assembler for exact byte-compatible labels, with same reconstructed CPU/features and large-code-model CFI. No generated-code/GPU execution or mapping accepted until complete code/constant/relocation equality passes."
+  },
+  "assemble-machine-blocks": {
+    "revision": "95c4293f598c1dbf4cd13ece7b06ffff5383b81a",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/assemble_machine_blocks.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/assemble_machine_blocks.py",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/emission-settings.json",
+      "/usr/bin/llvm-mc-18",
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.18.1",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint.s",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint-llvm-labels.o"
+    ],
+    "scope": "Offline insertion of zero-byte start/end labels at every emitted machine-block header, including unlabeled fall-through blocks; padding excluded. Existing LLVM MC only. Complete functions, allocated bytes and symbolic relocations must still match before any historical offset join; no generated-code/GPU execution or exclusive-cost/current-PC/source-operation/qualification claim."
+  },
+  "verify-machine-blocks": {
+    "revision": "95c4293f598c1dbf4cd13ece7b06ffff5383b81a",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/verify_machine_blocks.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/verify_machine_blocks.py",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/elf_layout.py",
+      "/home/astra/.project/Sirius/out/portable-execution-attribution/machine-block-assembly.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint.s",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint-machine-blocks.s",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-execution-attribution/endpoint-machine-blocks.o",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/b5d2abf/jit-stage-linked-byte-binding/capture/jit-10.elf",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/9624562/jit-dispatch-profile/corrected-pid-namespace/jit-10.elf",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/9624562/jit-dispatch-profile/corrected-pid-namespace/jit-attribution.json",
+      "/usr/bin/objdump"
+    ],
+    "scope": "Full artifact and instruction-boundary verification plus historical sample-to-machine-block join. All code/constant/unwind bytes and symbolic relocations remain exact; disassembler never executes generated code. Complete block headers with padding and instruction interiors classified. No original-source-operation/exclusive-latency/current-PC/speed/release-qualification claim."
+  }
+}
