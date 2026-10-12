@@ -16,19 +16,21 @@ groupshared uint s7Family;
 groupshared uint s7Invalid;
 groupshared uint s7Captured;
 
-// Control: version, capacity, generation low/high, arithmetic mode.
-// Row header: ready, authorized, family, generation low/high, reserved[3].
+// Control: version, capacity, generation low/high, arithmetic mode, grant words.
+// Capacity-indexed grant bits follow control and shift every immutable offset.
+// Row header: ready, reserved, family, generation low/high, reserved[3].
 bool S7Shape(uint row, uint rows, out uint base) {
     base = 0;
     uint words, stride;
     stageSevenOwner.GetDimensions(words, stride);
-    if (rows == 0 || row >= rows || words < S7PrefixWords ||
-        (words - S7PrefixWords) % S7RowWords != 0 ||
-        (words - S7PrefixWords) / S7RowWords != rows) return false;
+    uint grants = (rows + 31u) / 32u;
+    if (rows == 0 || row >= rows || words < S7PrefixWords + grants ||
+        (words - S7PrefixWords - grants) % S7RowWords != 0 ||
+        (words - S7PrefixWords - grants) / S7RowWords != rows) return false;
     if (stageSevenOwner[0] != 1 || stageSevenOwner[1] != rows ||
-        stageSevenOwner[4] != 1 ||
+        stageSevenOwner[4] != 1 || stageSevenOwner[5] != grants ||
         (stageSevenOwner[2] | stageSevenOwner[3]) == 0) return false;
-    base = S7PrefixWords + row * S7RowWords;
+    base = S7PrefixWords + grants + row * S7RowWords;
     return true;
 }
 void S7ResetTransport(uint row, uint rows, uint lane) {
@@ -72,7 +74,7 @@ void S7Recognize(StructuredBuffer<uint> actual, uint actualBase,
                  uint referenceBase, uint words, uint lane) {
     if (s7Enabled != 0)
         for (uint i = lane; i < words; i += SIRIUS_RETAINED_EXECUTION_LANES)
-            if (actual[actualBase + i] != stageSevenOwner[referenceBase + i])
+            if (actual[actualBase + i] != stageSevenOwner[referenceBase + stageSevenOwner[5] + i])
                 InterlockedOr(s7Invalid, 1u);
     GroupMemoryBarrierWithGroupSync();
     if (lane == 0 && s7Invalid != 0) s7Enabled = 0;
@@ -93,7 +95,7 @@ void S7Capture(uint ordinal, RetainedTriple value) {
     uint count = s7Family == 0 ? S7GeneralTransportInstructions : S7SchwarzschildTransportInstructions;
     if (ordinal >= count) return;
     uint map = s7Family == 0 ? S7GeneralTransportMapOffset : S7SchwarzschildTransportMapOffset;
-    uint slot = stageSevenOwner[map + ordinal];
+    uint slot = stageSevenOwner[map + stageSevenOwner[5] + ordinal];
     if (slot == 0xffffffffu) return;
     if (slot >= S7ValueCount()) { InterlockedOr(s7Invalid, 1u); return; }
     S7Store(s7RowBase + S7ValuesOffset + 5 * slot, value);
@@ -118,7 +120,8 @@ void S7EndpointTable(StructuredBuffer<uint> actual, RWStructuredBuffer<uint> pac
         uint base;
         if (!flat && s7Family < 2 && S7Shape(row, rows, base)) {
             s7RowBase = base;
-            if (stageSevenOwner[base] == 1 && stageSevenOwner[base + 1] == 1 &&
+            if (stageSevenOwner[base] == 1 &&
+                (stageSevenOwner[S7ControlWords + row / 32u] & (1u << (row % 32u))) != 0 &&
                 stageSevenOwner[base + 2] == s7Family &&
                 stageSevenOwner[base + 3] == stageSevenOwner[2] &&
                 stageSevenOwner[base + 4] == stageSevenOwner[3]) s7Enabled = 1;
@@ -147,7 +150,7 @@ bool S7Replay(uint ordinal, out RetainedTriple value) {
     uint count = s7Family == 0 ? S7GeneralEndpointInstructions : S7SchwarzschildEndpointInstructions;
     if (ordinal >= count) return false;
     uint map = s7Family == 0 ? S7GeneralEndpointMapOffset : S7SchwarzschildEndpointMapOffset;
-    uint slot = stageSevenOwner[map + ordinal];
+    uint slot = stageSevenOwner[map + stageSevenOwner[5] + ordinal];
     if (slot >= S7ValueCount()) return false;
     uint base = s7RowBase + S7ValuesOffset + 5 * slot;
     RetainedTriple candidate;

@@ -82,6 +82,9 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OP
     set(retained_header "${retained_build}/retained_kernels.h")
     add_custom_command(
         OUTPUT "${retained_header}"
+               "${retained_build}/retained_owner_kernels.h"
+               "${retained_build}/retained_owner_layout.h"
+               "${retained_build}/retained_owner_layout.slang"
         BYPRODUCTS "${retained_build}/retained_camera.spv"
                    "${retained_build}/retained_transport.spv"
                    "${retained_build}/retained_endpoint.spv"
@@ -99,8 +102,10 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OP
                    "${retained_build}/retained_camera_portable.spv"
                    "${retained_build}/retained_transport_portable.spv"
                    "${retained_build}/retained_transport_portable_normal_sum.spv"
+                   "${retained_build}/retained_transport_portable_stage7_owner.spv"
                    "${retained_build}/retained_endpoint_portable.spv"
                    "${retained_build}/retained_endpoint_portable_normal_sum.spv"
+                   "${retained_build}/retained_endpoint_portable_stage7_owner.spv"
                    "${retained_build}/retained_dense_portable.spv"
                    "${retained_build}/retained_initialize_portable.spv"
                    "${retained_build}/retained_ray_camera_portable.spv"
@@ -127,6 +132,7 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OP
                 "${SIRIUS_KERNEL_DIR}/retained_pair.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_triple.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_scratch.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_owner.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_camera.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_transport.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_endpoint.slang"

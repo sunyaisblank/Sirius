@@ -113,12 +113,26 @@ struct RetainedInitializeOutput {
     bool valid = false;
 };
 
+// A candidate from one successfully decoded Step, consumed by its immediate
+// upper Endpoint attempt. This carries no physical packet or device lifetime.
+class StageSevenToken {
+  private:
+    friend class RetainedCompute;
+    std::weak_ptr<const std::uint8_t> issuer_;
+    std::uint64_t generation_ = 0;
+    std::size_t row_ = 0;
+};
+
 // Fixed-capacity device stages. The caller owns admission, continuation and
 // source publication; a private RK candidate is never an accepted trajectory.
 // No device allocation occurs during Camera or Step. Device must outlive this
 // object, and callers must serialize its synchronous submissions.
 class RetainedCompute {
   public:
+    RetainedCompute(const RetainedCompute&) = delete;
+    RetainedCompute& operator=(const RetainedCompute&) = delete;
+    RetainedCompute(RetainedCompute&&) = delete;
+    RetainedCompute& operator=(RetainedCompute&&) = delete;
     enum class KernelStage {
         kCamera,
         kTransport,
@@ -201,9 +215,11 @@ class RetainedCompute {
     [[nodiscard]] static std::uint64_t RequiredBufferBytes(std::size_t capacity);
     [[nodiscard]] static base::Expected<std::uint64_t> RequiredAllocationBytes(
         ComputeDevice& device, std::size_t capacity);
+    [[nodiscard]] static base::Expected<std::uint64_t> RequiredStageSevenOwnerAllocationBytes(
+        ComputeDevice& device, std::size_t capacity);
     [[nodiscard]] static base::Expected<std::unique_ptr<RetainedCompute>> Create(
         ComputeDevice& device, std::size_t capacity, bool fp64_products = false,
-        double dispatch_target_ms = 250);
+        double dispatch_target_ms = 250, bool stage_seven_owner = false);
     // Explicit software-render initialization, never implicit in Create. The
     // caller must own all submissions and run this before starting workers.
     // One real workgroup per used stage has zero active rows. Outputs, host
@@ -219,8 +235,14 @@ class RetainedCompute {
         std::span<const RetainedRayCameraInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] base::Expected<std::vector<RetainedStepOutput>> Step(
         std::span<const RetainedStepInput> inputs, DispatchTiming* timing = nullptr);
+    [[nodiscard]] StageSevenToken LastStepOwner(std::size_t row) const;
+    [[nodiscard]] bool StageSevenOwnershipEnabled() const { return stage_seven_.has_value(); }
+    // Provisioning is outside stage call timings and must be charged separately
+    // by a complete-call comparison. Includes upload and verification readback.
+    [[nodiscard]] double StageSevenProvisioningMs() const { return stage_seven_provisioning_ms_; }
     [[nodiscard]] base::Expected<std::vector<RetainedEndpointOutput>> Endpoint(
-        std::span<const RetainedEndpointInput> inputs, DispatchTiming* timing = nullptr);
+        std::span<const RetainedEndpointInput> inputs, DispatchTiming* timing = nullptr,
+        std::span<const StageSevenToken> owners = {});
     [[nodiscard]] base::Expected<std::vector<RetainedDenseOutput>> Dense(
         std::span<const RetainedDenseInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] base::Expected<std::vector<RetainedDopriPhaseOutput>> DopriPhase(
@@ -230,7 +252,8 @@ class RetainedCompute {
     }
     [[nodiscard]] base::Expected<RetainedEndpointDenseOutput> EndpointAndDense(
         std::span<const RetainedEndpointInput> endpoints,
-        std::span<const RetainedDenseInput> dense);
+        std::span<const RetainedDenseInput> dense,
+        std::span<const StageSevenToken> owners = {});
     [[nodiscard]] base::Expected<std::vector<RetainedInitializeOutput>> Initialize(
         std::span<const RetainedInitializeInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] std::size_t Capacity() const { return capacity_; }
@@ -272,14 +295,28 @@ class RetainedCompute {
         bool program_uploaded = false;
         StageStats stats;
     };
+    struct StageSevenOwner {
+        KernelHandle transport, endpoint;
+        BufferHandle buffer;
+        std::vector<std::uint32_t> control;
+        std::vector<bool> issued;
+        std::shared_ptr<const std::uint8_t> identity = std::make_shared<const std::uint8_t>(0);
+        std::uint64_t generation = 0;
+    };
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
-                                                DispatchTiming* timing);
+                                                DispatchTiming* timing, bool owned = false);
+    void InvalidateStageSevenOwner();
+    [[nodiscard]] base::Expected<void> WriteStageSevenControl(Stage& stage);
+    [[nodiscard]] base::Expected<bool> AuthorizeStageSevenEndpoint(
+        std::span<const RetainedEndpointInput> inputs, std::span<const StageSevenToken> owners);
     void ObserveReadback(Stage& stage, std::size_t active_rows);
     ComputeDevice& device_;
     std::size_t capacity_;
     double dispatch_target_ms_ = 250;
     SubmissionFeedback submission_feedback_;
     StageStats endpoint_dense_stats_;
+    std::optional<StageSevenOwner> stage_seven_;
+    double stage_seven_provisioning_ms_ = 0;
     Stage camera_, transport_, endpoint_, dense_, initialize_, ray_camera_, dopri_phase_;
 };
 

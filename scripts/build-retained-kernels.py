@@ -227,7 +227,68 @@ def validate_portable_coefficients(source):
             raise ValueError(f"retained tableau slot {slot} does not enclose its exact rational")
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None):
+def generate_owner_layout(module, directory):
+    """Emit owner maps from original source order; reuse existing program payloads."""
+    families=module.build_stage_seven_owner_plan()
+    def encode(p):
+        return tuple([p['instructions'],p['registers'],len(p['outputs'])]+p['outputs']+p['operations']+p['layer_offsets'])
+    references={};table_offsets={};maps={}
+    for stage in ('transport','endpoint'):
+        reference=()
+        for family in ('general','schwarzschild'):
+            program=families[family]['programs'][stage]
+            table_offsets[(family,stage)]=len(reference)
+            reference+=encode(program)
+            index=0 if stage=='transport' else 1
+            slots=[0xffffffff]*program['instructions']
+            for slot,pair in enumerate(families[family]['writes']):
+                ordinal=pair[index];assert slots[ordinal]==0xffffffff;slots[ordinal]=slot
+            maps[(family,stage)]=tuple(slots)
+        references[stage]=reference
+
+    # Mutable control is disjoint from the once-verified immutable prefix and
+    # per-row storage. Capacity-indexed grant words shift these static offsets.
+    constants={'ControlWords':16,'RowHeaderWords':8,'KeyCount':9,'ValueWords':5,
+               'MaximumValues':max(len(f['writes']) for f in families.values())}
+    cursor=constants['ControlWords']
+    for stage in ('transport','endpoint'):
+        constants[stage.title()+'ReferenceOffset']=cursor
+        constants[stage.title()+'ReferenceWords']=len(references[stage]);cursor+=len(references[stage])
+    for family in ('general','schwarzschild'):
+        for stage in ('transport','endpoint'):
+            label=family.title()+stage.title()
+            constants[label+'MapOffset']=cursor
+            constants[label+'Instructions']=len(maps[(family,stage)])
+            constants[label+'TableOffset']=table_offsets[(family,stage)]
+            constants[label+'TableWords']=len(encode(families[family]['programs'][stage]))
+            cursor+=len(maps[(family,stage)])
+        constants[family.title()+'Values']=len(families[family]['writes'])
+    constants['PrefixWords']=cursor
+    constants['KeyOffset']=constants['RowHeaderWords']
+    constants['ValuesOffset']=constants['KeyOffset']+constants['KeyCount']*constants['ValueWords']
+    constants['RowWords']=constants['ValuesOffset']+constants['MaximumValues']*constants['ValueWords']
+    assert constants['MaximumValues']==71 and constants['SchwarzschildValues']==26
+    assert constants['RowWords']==408
+
+    cpp=['// Generated optional owner layout/maps; original program arrays remain authoritative.',
+         '#pragma once','#include <array>','#include <cstddef>','#include <cstdint>',
+         'namespace sirius::backend::retained_owner {']
+    slang=['// Generated scalar owner layout only; references/maps reside in the device buffer.']
+    for name,value in constants.items():
+        cpp.append(f'inline constexpr std::uint32_t k{name} = {value}u;')
+        slang.append(f'static const uint S7{name} = {value}u;')
+    for (family,stage),values in maps.items():
+        name=family.title()+stage.title()+'Map'
+        cpp.append(f'inline constexpr std::array<std::uint32_t, {len(values)}> k{name}{{{{')
+        for start in range(0,len(values),16):cpp.append(','.join(str(v)+'u' for v in values[start:start+16])+',')
+        cpp.append('}};')
+    cpp.append('} // namespace sirius::backend::retained_owner')
+    for name,lines in (('retained_owner_layout.h',cpp),('retained_owner_layout.slang',slang)):
+        (directory/name).write_text('\n'.join(lines)+'\n')
+    return references
+
+
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
@@ -255,6 +316,10 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     # with sixteen invocations and stride over their complete producer sets.
     execution_lanes = (16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
                        else WORKGROUP_LANES if portable_parallel or not portable else 1)
+    if stage_seven_owner:
+        if not portable or not normal_sum32 or source.stem not in ("retained_transport", "retained_endpoint") or execution_lanes != 16:
+            raise ValueError("stage-seven ownership requires parallel portable normal-sum Transport or Endpoint")
+        definitions.append("-DSIRIUS_RETAINED_STAGE7_OWNER=1")
     # Projection publishes its root and sixteen complete weighted tangent terms.
     projection_words = 7 + 16 * 5 if portable and source.stem == "retained_endpoint" else 0
     if normal_sum32:
@@ -283,7 +348,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     coefficients = 25 if source.stem == "retained_transport" else 0
     if coefficients:
         definitions.append(f"-DSIRIUS_RETAINED_COEFFICIENTS={coefficients}")
-    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words) * 4 + 8 > 16384:
+    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words) * 4 + 8 + (20 if stage_seven_owner else 0) > 16384:
         raise ValueError("retained program exceeds the portable shared-memory bound")
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",
@@ -295,7 +360,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     # Bound inlining to the two portable camera stages.
     optimization = ("-O1" if portable and source.stem in ("retained_camera", "retained_ray_camera")
                     else "-O0")
-    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), optimization,
+    owner_include = ["-I", str(destination.parent)] if stage_seven_owner else []
+    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), *owner_include, optimization,
                     "-target", "spirv", "-profile", "spirv_1_5", "-entry", "ComputeMain",
                     "-stage", "compute", *float_controls, "-o", str(raw)],
                    check=True)
@@ -364,6 +430,10 @@ def main():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    owner_references = generate_owner_layout(module, args.output.parent)
+    owner_lines = ["// Generated optional portable owner shaders; do not edit.",
+                   "#pragma once", "#include <array>", "#include <cstdint>",
+                   "namespace sirius::backend::retained_owner {"]
     fma_available = supports_fma32(args.output.parent, args.compiler, args.assembler,
                                   args.disassembler, args.validator)
     lines = ["// Generated retained programs and validated shaders; do not edit.",
@@ -414,6 +484,8 @@ def main():
                                     specialized["prefix_instructions"])
             # Allocation and both Endpoint consumers charge the complete span.
             encoded += specialized_words
+        if kind in ("Transport", "Endpoint") and tuple(encoded) != owner_references[kind.lower()]:
+            raise ValueError("owner references diverged from the original program payload")
         array("k" + kind + "Program", encoded)
         stem = "retained_" + ({"RayCamera": "ray_camera", "DopriPhase": "dopri_phase"}.get(kind, kind.lower()))
         terms = 4 if kind in ("Camera", "RayCamera") else 5
@@ -444,6 +516,18 @@ def main():
                 optimizer=args.optimizer, normal_sum32=True, transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
             array("k" + kind + "PortableNormalSumShader", code)
         if kind in ("Transport", "Endpoint"):
+            code = compile_shader(source / (stem + ".slang"),
+                args.output.parent / (stem + "_portable_stage7_owner.spv"),
+                args.compiler, args.assembler, args.disassembler, args.validator,
+                program["registers"], terms, len(program["layer_offsets"])-1,
+                program.get("prefix_instructions", 0), portable=True,
+                optimizer=args.optimizer, normal_sum32=True, stage_seven_owner=True,
+                transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
+            owner_lines.append(f"inline constexpr std::array<std::uint32_t, {len(code)}> k{kind}Shader{{{{")
+            for start in range(0, len(code), 16):
+                owner_lines.append(",".join(str(v)+"u" for v in code[start:start+16])+",")
+            owner_lines.append("}};")
+        if kind in ("Transport", "Endpoint"):
             destination = args.output.parent / (stem + "_fma.spv")
             lines.append(f"inline constexpr bool k{kind}FmaAvailable = {'true' if fma_available else 'false'};")
             if fma_available:
@@ -464,6 +548,8 @@ def main():
               "registers;", sizes, "native/native-wide/portable/portable-wide shader bytes", flush=True)
     lines.append("} // namespace sirius::backend::retained_program")
     args.output.write_text("\n".join(lines) + "\n")
+    owner_lines.append("} // namespace sirius::backend::retained_owner")
+    (args.output.parent / "retained_owner_kernels.h").write_text("\n".join(owner_lines) + "\n")
 
 
 if __name__ == "__main__":

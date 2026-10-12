@@ -1,6 +1,8 @@
 #include "sirius/backend/retained_compute.h"
 
 #include "retained_kernels.h"
+#include "retained_owner_kernels.h"
+#include "retained_owner_layout.h"
 
 #include <algorithm>
 #include <bit>
@@ -16,6 +18,15 @@ using base::Fail;
 using namespace retained_program;
 // One ray owns one workgroup; stay within Vulkan's portable X dispatch bound.
 constexpr std::size_t kMaximumCapacity = 65535;
+
+bool UsesStageSevenOwner(const DeviceInfo& info) {
+    return RetainedUsesPortableArithmetic(info) && info.rounds_fp32_to_nearest;
+}
+std::size_t StageSevenGrantWords(std::size_t capacity) { return (capacity + 31) / 32; }
+std::uint64_t StageSevenBufferBytes(std::size_t capacity) {
+    return 4 * (retained_owner::kPrefixWords + StageSevenGrantWords(capacity) +
+                std::uint64_t(capacity) * retained_owner::kRowWords);
+}
 
 struct StageLayout {
     std::span<const std::uint32_t> program;
@@ -106,7 +117,8 @@ bool RetainedValue::IsRepresented() const {
 }
 
 base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
-    ComputeDevice& device, std::size_t capacity, bool fp64_products, double dispatch_target_ms) {
+    ComputeDevice& device, std::size_t capacity, bool fp64_products, double dispatch_target_ms,
+    bool stage_seven_owner) {
     if (capacity == 0 || capacity > kMaximumCapacity)
         return Fail(ErrorDomain::kDevice, "create retained compute stages", "invalid capacity");
     if (!std::isfinite(dispatch_target_ms) || dispatch_target_ms < 0)
@@ -191,11 +203,53 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
                             kDopriPhasePortableFp64Shader);
     status = create(result->dopri_phase_, KernelStage::kDopriPhase, dopri_phase);
     if (!status) return std::unexpected(status.error());
+    if (stage_seven_owner && normal_sum) {
+        const auto started = std::chrono::steady_clock::now();
+        StageSevenOwner owner;
+        auto transport_kernel = device.LoadKernel(retained_owner::kTransportShader);
+        if (!transport_kernel) return std::unexpected(transport_kernel.error());
+        auto endpoint_kernel = device.LoadKernel(retained_owner::kEndpointShader);
+        if (!endpoint_kernel) return std::unexpected(endpoint_kernel.error());
+        auto buffer = device.CreateBuffer(StageSevenBufferBytes(capacity), BufferUsage::kStorage);
+        if (!buffer) return std::unexpected(buffer.error());
+        owner.transport = *transport_kernel;
+        owner.endpoint = *endpoint_kernel;
+        owner.buffer = *buffer;
+        const auto shift = StageSevenGrantWords(capacity);
+        owner.control.resize(retained_owner::kControlWords + shift);
+        owner.control[0] = 1;
+        owner.control[1] = static_cast<std::uint32_t>(capacity);
+        owner.control[4] = 1;
+        owner.control[5] = static_cast<std::uint32_t>(shift);
+        owner.issued.resize(capacity);
+        std::vector<std::uint32_t> words(StageSevenBufferBytes(capacity) / 4);
+        std::copy(owner.control.begin(), owner.control.end(), words.begin());
+        const auto copy = [&](auto values, std::size_t offset) {
+            std::copy(values.begin(), values.end(), words.begin() + offset + shift);
+        };
+        copy(std::span(kTransportProgram), retained_owner::kTransportReferenceOffset);
+        copy(std::span(kEndpointProgram), retained_owner::kEndpointReferenceOffset);
+        copy(std::span(retained_owner::kGeneralTransportMap), retained_owner::kGeneralTransportMapOffset);
+        copy(std::span(retained_owner::kGeneralEndpointMap), retained_owner::kGeneralEndpointMapOffset);
+        copy(std::span(retained_owner::kSchwarzschildTransportMap), retained_owner::kSchwarzschildTransportMapOffset);
+        copy(std::span(retained_owner::kSchwarzschildEndpointMap), retained_owner::kSchwarzschildEndpointMapOffset);
+        auto uploaded = device.WriteBuffer(owner.buffer, std::as_bytes(std::span(words)));
+        if (!uploaded) return std::unexpected(uploaded.error());
+        std::vector<std::uint32_t> verified(words.size());
+        auto read = device.ReadBuffer(owner.buffer, std::as_writable_bytes(std::span(verified)));
+        if (!read) return std::unexpected(read.error());
+        if (words != verified)
+            return Fail(ErrorDomain::kDevice, "provision stage-seven owner", "buffer verification mismatch");
+        result->stage_seven_ = std::move(owner);
+        result->stage_seven_provisioning_ms_ = std::chrono::duration<double, std::milli>(
+            std::chrono::steady_clock::now() - started).count();
+    }
     return result;
 }
 
 base::Expected<void> RetainedCompute::PrepareSoftwareRendererStages(
     PreparationStats& observation, const std::function<bool()>& should_cancel) {
+    InvalidateStageSevenOwner();
     using Clock = std::chrono::steady_clock;
     observation = {};
     const auto started = Clock::now();
@@ -293,6 +347,79 @@ base::Expected<std::uint64_t> RetainedCompute::RequiredAllocationBytes(ComputeDe
     return total;
 }
 
+base::Expected<std::uint64_t> RetainedCompute::RequiredStageSevenOwnerAllocationBytes(
+    ComputeDevice& device, std::size_t capacity) {
+    if (capacity == 0 || capacity > kMaximumCapacity)
+        return Fail(ErrorDomain::kDevice, "plan stage-seven owner", "invalid capacity");
+    if (!UsesStageSevenOwner(device.Info())) return std::uint64_t{0};
+    const auto bytes = StageSevenBufferBytes(capacity);
+    auto required = device.RequiredBufferAllocationBytes(bytes, BufferUsage::kStorage);
+    if (!required) return std::unexpected(required.error());
+    if (*required < bytes)
+        return Fail(ErrorDomain::kDevice, "plan stage-seven owner", "allocation requirement is too small");
+    return *required;
+}
+
+void RetainedCompute::InvalidateStageSevenOwner() {
+    if (!stage_seven_) return;
+    auto& owner = *stage_seven_;
+    std::fill(owner.issued.begin(), owner.issued.end(), false);
+    if (++owner.generation == 0) {
+        owner.identity = std::make_shared<const std::uint8_t>(0);
+        owner.generation = 1;
+    }
+    std::fill(owner.control.begin() + retained_owner::kControlWords, owner.control.end(), 0U);
+}
+
+base::Expected<void> RetainedCompute::WriteStageSevenControl(Stage& stage) {
+    const auto started = std::chrono::steady_clock::now();
+    auto status = device_.WriteBuffer(stage_seven_->buffer,
+                                     std::as_bytes(std::span(stage_seven_->control)));
+    stage.stats.write_buffer_ms += std::chrono::duration<double, std::milli>(
+        std::chrono::steady_clock::now() - started).count();
+    if (status) stage.stats.write_buffer_bytes += stage_seven_->control.size() * sizeof(std::uint32_t);
+    return status;
+}
+
+StageSevenToken RetainedCompute::LastStepOwner(std::size_t row) const {
+    StageSevenToken token;
+    if (stage_seven_ && row < capacity_ && stage_seven_->issued[row]) {
+        token.issuer_ = stage_seven_->identity;
+        token.generation_ = stage_seven_->generation;
+        token.row_ = row;
+    }
+    return token;
+}
+
+base::Expected<bool> RetainedCompute::AuthorizeStageSevenEndpoint(
+    std::span<const RetainedEndpointInput> inputs, std::span<const StageSevenToken> tokens) {
+    if (!stage_seven_) return false;
+    auto& owner = *stage_seven_;
+    std::fill(owner.control.begin() + retained_owner::kControlWords, owner.control.end(), 0U);
+    bool granted = false;
+    if (tokens.size() == inputs.size())
+        for (std::size_t row = 0; row < inputs.size(); ++row) {
+            const auto& token = tokens[row];
+            if (token.issuer_.lock() != owner.identity || token.generation_ != owner.generation ||
+                token.row_ != row || !owner.issued[row]) continue;
+            const auto* original = transport_.input.data() + 1 + row * 230;
+            const auto* high = transport_.output.data() + row * kTransportRowWords + 4;
+            const auto* candidate = inputs[row].values.data();
+            if (std::memcmp(candidate, original, 4 * sizeof(RetainedValue)) != 0 ||
+                std::memcmp(candidate + 4, high, 40 * sizeof(RetainedValue)) != 0 ||
+                std::memcmp(candidate + 44, original + 220, sizeof(RetainedValue)) != 0) continue;
+            owner.control[retained_owner::kControlWords + row / 32] |= 1U << (row % 32);
+            granted = true;
+        }
+    base::Expected<void> status;
+    if (granted) status = WriteStageSevenControl(endpoint_);
+    // The submitted grant bytes remain unchanged on the device. Consume CPU
+    // issuance before dispatch so every write/dispatch/read/decode failure closes it.
+    InvalidateStageSevenOwner();
+    if (!status) return std::unexpected(status.error());
+    return granted;
+}
+
 std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> RetainedCompute::Statistics()
     const {
     return {camera_.stats,     transport_.stats,  endpoint_.stats,   dense_.stats,
@@ -300,6 +427,7 @@ std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> RetainedCo
 }
 
 void RetainedCompute::ResetStatistics() {
+    InvalidateStageSevenOwner();
     for (auto* stage :
          {&camera_, &transport_, &endpoint_, &dense_, &initialize_, &ray_camera_, &dopri_phase_}) {
         auto counts = std::move(stage->stats.command_row_counts);
@@ -311,7 +439,7 @@ void RetainedCompute::ResetStatistics() {
 }
 
 base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_rows,
-                                               DispatchTiming* timing) {
+                                               DispatchTiming* timing, bool owned) {
     using Clock = std::chrono::steady_clock;
     const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
         return std::chrono::duration<double, std::milli>(finished - started).count();
@@ -333,8 +461,13 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     auto* observed = timing ? timing : &measured;
     // Buffer strides and the immutable program retain their capacity layout.
     // Only requested rows execute; a later larger batch clears its own rows.
+    const std::array owned_buffers{stage.buffers[0], stage.buffers[1],
+                                   owned ? stage_seven_->buffer : BufferHandle{}};
+    const auto kernel = owned ? (stage.kind == KernelStage::kTransport ? stage_seven_->transport
+                                                                      : stage_seven_->endpoint)
+                              : stage.kernel;
     status = device_.Dispatch(
-        stage.kernel, stage.buffers,
+        kernel, owned ? std::span<const BufferHandle>(owned_buffers) : std::span<const BufferHandle>(stage.buffers),
         static_cast<std::uint32_t>((active_rows + kRetainedGroupRows - 1) / kRetainedGroupRows), 1,
         1, observed);
     if (!status) return status;
@@ -393,6 +526,7 @@ double RetainedCompute::TakeSubmissionPeakMs() { return TakeSubmissionFeedback()
 
 base::Expected<std::vector<RetainedCameraOutput>> RetainedCompute::Camera(
     std::span<const RetainedCameraInput> inputs, DispatchTiming* timing) {
+    InvalidateStageSevenOwner();
     if (inputs.empty() || inputs.size() > capacity_)
         return Fail(ErrorDomain::kDevice, "dispatch retained camera", "invalid batch size");
     static_assert(sizeof(RetainedCameraInput) == 160 * sizeof(std::uint32_t));
@@ -422,12 +556,21 @@ base::Expected<std::vector<RetainedCameraOutput>> RetainedCompute::Camera(
 
 base::Expected<std::vector<RetainedStepOutput>> RetainedCompute::Step(
     std::span<const RetainedStepInput> inputs, DispatchTiming* timing) {
+    InvalidateStageSevenOwner();
+    if (timing) *timing = {};
     if (inputs.empty() || inputs.size() > capacity_)
         return Fail(ErrorDomain::kDevice, "dispatch retained transport", "invalid batch size");
     static_assert(sizeof(RetainedStepInput) == 230 * sizeof(std::uint32_t));
     std::fill_n(transport_.input.begin() + 1, capacity_ * 230, 0U);
     std::memcpy(transport_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    auto status = Dispatch(transport_, inputs.size(), timing);
+    if (stage_seven_) {
+        auto& owner = *stage_seven_;
+        owner.control[2] = static_cast<std::uint32_t>(owner.generation);
+        owner.control[3] = static_cast<std::uint32_t>(owner.generation >> 32);
+        auto written = WriteStageSevenControl(transport_);
+        if (!written) return std::unexpected(written.error());
+    }
+    auto status = Dispatch(transport_, inputs.size(), timing, stage_seven_.has_value());
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedStepOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -461,17 +604,26 @@ base::Expected<std::vector<RetainedStepOutput>> RetainedCompute::Step(
                 }
         output.valid = true;
     }
+    if (stage_seven_)
+        for (std::size_t row = 0; row < result.size(); ++row)
+            stage_seven_->issued[row] = result[row].valid && result[row].rhs_valid;
     return result;
 }
 
 base::Expected<std::vector<RetainedEndpointOutput>> RetainedCompute::Endpoint(
-    std::span<const RetainedEndpointInput> inputs, DispatchTiming* timing) {
-    if (inputs.empty() || inputs.size() > capacity_)
+    std::span<const RetainedEndpointInput> inputs, DispatchTiming* timing,
+    std::span<const StageSevenToken> owners) {
+    if (timing) *timing = {};
+    if (inputs.empty() || inputs.size() > capacity_) {
+        InvalidateStageSevenOwner();
         return Fail(ErrorDomain::kDevice, "dispatch retained endpoint", "invalid batch size");
+    }
+    auto owned = AuthorizeStageSevenEndpoint(inputs, owners);
+    if (!owned) return std::unexpected(owned.error());
     static_assert(sizeof(RetainedEndpointInput) == 225 * sizeof(std::uint32_t));
     std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);
     std::memcpy(endpoint_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    auto status = Dispatch(endpoint_, inputs.size(), timing);
+    auto status = Dispatch(endpoint_, inputs.size(), timing, *owned);
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedEndpointOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -484,6 +636,7 @@ base::Expected<std::vector<RetainedEndpointOutput>> RetainedCompute::Endpoint(
 
 base::Expected<std::vector<RetainedDenseOutput>> RetainedCompute::Dense(
     std::span<const RetainedDenseInput> inputs, DispatchTiming* timing) {
+    InvalidateStageSevenOwner();
     if (inputs.empty() || inputs.size() > capacity_)
         return Fail(ErrorDomain::kDevice, "dispatch retained dense segment", "invalid batch size");
     static_assert(sizeof(RetainedDenseInput) == 560 * sizeof(std::uint32_t));
@@ -502,6 +655,7 @@ base::Expected<std::vector<RetainedDenseOutput>> RetainedCompute::Dense(
 
 base::Expected<std::vector<RetainedDopriPhaseOutput>> RetainedCompute::DopriPhase(
     std::span<const RetainedDopriPhaseInput> inputs, DispatchTiming* timing) {
+    InvalidateStageSevenOwner();
     if (inputs.empty() || inputs.size() > capacity_)
         return Fail(ErrorDomain::kDevice, "dispatch retained DP phase", "invalid batch size");
     static_assert(sizeof(RetainedDopriPhaseInput) == 1810 * sizeof(std::uint32_t));
@@ -531,12 +685,17 @@ base::Expected<std::vector<RetainedDopriPhaseOutput>> RetainedCompute::DopriPhas
 }
 
 base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
-    std::span<const RetainedEndpointInput> endpoints, std::span<const RetainedDenseInput> dense) {
+    std::span<const RetainedEndpointInput> endpoints, std::span<const RetainedDenseInput> dense,
+    std::span<const StageSevenToken> owners) {
     const auto rows = std::max(endpoints.size(), dense.size());
     if (!SupportsIndependentPair() || endpoints.empty() || dense.empty() || rows <= 1 ||
-        rows > capacity_)
+        rows > capacity_) {
+        InvalidateStageSevenOwner();
         return Fail(ErrorDomain::kDevice, "dispatch retained endpoint and dense",
                     "invalid or unsupported independent pair");
+    }
+    auto owned = AuthorizeStageSevenEndpoint(endpoints, owners);
+    if (!owned) return std::unexpected(owned.error());
     using Clock = std::chrono::steady_clock;
     const auto milliseconds = [](auto started, auto finished) {
         return std::chrono::duration<double, std::milli>(finished - started).count();
@@ -561,8 +720,12 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
     if (!status) return std::unexpected(status.error());
     status = write(dense_, dense.size());
     if (!status) return std::unexpected(status.error());
+    const std::array owned_buffers{endpoint_.buffers[0], endpoint_.buffers[1],
+                                   *owned ? stage_seven_->buffer : BufferHandle{}};
+    const auto endpoint_buffers = *owned ? std::span<const BufferHandle>(owned_buffers)
+                                        : std::span<const BufferHandle>(endpoint_.buffers);
     const std::array commands{
-        ComputeDispatch{endpoint_.kernel, endpoint_.buffers,
+        ComputeDispatch{*owned ? stage_seven_->endpoint : endpoint_.kernel, endpoint_buffers,
                         static_cast<std::uint32_t>((endpoints.size() + kRetainedGroupRows - 1) /
                                                    kRetainedGroupRows),
                         1, 1},
@@ -629,6 +792,7 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
 
 base::Expected<std::vector<RetainedInitializeOutput>> RetainedCompute::Initialize(
     std::span<const RetainedInitializeInput> inputs, DispatchTiming* timing) {
+    InvalidateStageSevenOwner();
     if (inputs.empty() || inputs.size() > capacity_)
         return Fail(ErrorDomain::kDevice, "dispatch retained initialization", "invalid batch size");
     static_assert(sizeof(RetainedInitializeInput) == 225 * sizeof(std::uint32_t));
@@ -656,6 +820,7 @@ base::Expected<std::vector<RetainedInitializeOutput>> RetainedCompute::Initializ
 
 base::Expected<std::vector<RetainedCameraOutput>> RetainedCompute::RayCamera(
     std::span<const RetainedRayCameraInput> inputs, DispatchTiming* timing) {
+    InvalidateStageSevenOwner();
     if (inputs.empty() || inputs.size() > capacity_)
         return Fail(ErrorDomain::kDevice, "dispatch retained ray camera", "invalid batch size");
     static_assert(sizeof(RetainedRayCameraInput) == 225 * sizeof(std::uint32_t));

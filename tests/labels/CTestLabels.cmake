@@ -1008,6 +1008,9 @@ set_tests_properties(
 
 set_tests_properties(
     RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading
+    RetainedComputeAdmission.StageSevenGrantsPreservePayloadAndConsumeTokens
+    RetainedComputeAdmission.StageSevenFailureCannotPublishPartialOrOldIssuance
+    RetainedComputeAdmission.StageSevenRequestKeepsStockUnsupportedArithmetic
     RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation
     RetainedComputeAdmission.CameraCancellationPrecedesNumericalRefusal
     RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting

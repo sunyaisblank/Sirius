@@ -286,6 +286,8 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
         if (!stepped) return std::unexpected(stepped.error());
         std::vector<RetainedEndpointInput> upper(paired_projections ? 2 * count : count),
             lower(paired_projections ? 0 : count);
+        std::vector<StageSevenToken> upper_owners;
+        if (compute.StageSevenOwnershipEnabled()) upper_owners.resize(upper.size());
         for (std::size_t row = 0; row < count; ++row)
             if (active[row]) {
                 auto& state = work[row];
@@ -334,6 +336,9 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
                         }
                     }
                 }
+                // Only the admitted fifth-order row owns stage-seven values.
+                // Lower rows remain token-free even in the same projection batch.
+                if (!upper_owners.empty()) upper_owners[row] = compute.LastStepOwner(row);
             }
         base::Expected<std::vector<RetainedEndpointOutput>> projected;
         // Dense uses only the already projected full state and original start.
@@ -343,13 +348,13 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
         if (legacy_dense && part == 2 && paired_projections && projection_row_budget > 1 &&
             compute.SupportsIndependentPair()) {
             const auto dense_inputs = dense_packets();
-            auto paired = compute.EndpointAndDense(upper, dense_inputs);
+            auto paired = compute.EndpointAndDense(upper, dense_inputs, upper_owners);
             if (!paired) return std::unexpected(paired.error());
             shared = std::move(*paired);
             projected = std::move(shared->endpoints);
             speculative_dense = active;
         } else {
-            projected = compute.Endpoint(upper);
+            projected = compute.Endpoint(upper, nullptr, upper_owners);
         }
         if (!projected) return std::unexpected(projected.error());
         std::vector<RetainedEndpointOutput> projected_lower;
