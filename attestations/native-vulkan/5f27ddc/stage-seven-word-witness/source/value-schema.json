@@ -1,0 +1,2841 @@
+{
+  "version": 1,
+  "row_words": 768,
+  "key_base": 16,
+  "key_record_words": 7,
+  "key_records": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    44
+  ],
+  "arithmetic_base": 96,
+  "arithmetic_record_words": 9,
+  "key_kind_bits": {
+    "normalized_admission_or_endpoint_pack": 1,
+    "stage6_stored_coordinate": 2,
+    "actual_mapped_op1_result": 4
+  },
+  "arithmetic_fields": [
+    "presence",
+    "ordinal",
+    "destination",
+    "kind_shift8_or_opcode",
+    "hi",
+    "lo",
+    "tail",
+    "error",
+    "valid"
+  ],
+  "key_fields": [
+    "kind_presence_bits",
+    "input_record",
+    "hi",
+    "lo",
+    "tail",
+    "error",
+    "valid"
+  ],
+  "header_fields": {
+    "0": "version",
+    "1": "stage1Transport2Endpoint",
+    "2": "offset_family1General2Schwarzschild",
+    "3": "actual_programBase",
+    "4": "stored_rows",
+    "5": "last_successful_root_count",
+    "6": "publication_bits1TransportStage7_2EndpointPrefix_4EndpointSuffix"
+  },
+  "scope": "Capture only. Family derives from selected offset; canonical-table classification is deferred to complete actual input snapshots. Invalid/unvisited/flat/refused rows remain distinguishable. No result substitution.",
+  "families": {
+    "Transport": {
+      "general": {
+        "arithmetic": [
+          {
+            "slot": 0,
+            "ordinal": 47,
+            "source_node": 48,
+            "destination": 47,
+            "opcode": 4,
+            "inputs": [
+              5
+            ]
+          },
+          {
+            "slot": 1,
+            "ordinal": 48,
+            "source_node": 49,
+            "destination": 48,
+            "opcode": 4,
+            "inputs": [
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 2,
+            "ordinal": 49,
+            "source_node": 50,
+            "destination": 49,
+            "opcode": 4,
+            "inputs": [
+              7
+            ]
+          },
+          {
+            "slot": 3,
+            "ordinal": 113,
+            "source_node": 51,
+            "destination": 35,
+            "opcode": 9,
+            "inputs": [
+              5,
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 4,
+            "ordinal": 114,
+            "source_node": 52,
+            "destination": 28,
+            "opcode": 9,
+            "inputs": [
+              1,
+              7
+            ]
+          },
+          {
+            "slot": 5,
+            "ordinal": 116,
+            "source_node": 53,
+            "destination": 0,
+            "opcode": 9,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 6,
+            "ordinal": 120,
+            "source_node": 54,
+            "destination": 14,
+            "opcode": 8,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 7,
+            "ordinal": 121,
+            "source_node": 55,
+            "destination": 0,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 8,
+            "ordinal": 122,
+            "source_node": 61,
+            "destination": 35,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 9,
+            "ordinal": 123,
+            "source_node": 67,
+            "destination": 7,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 10,
+            "ordinal": 124,
+            "source_node": 73,
+            "destination": 33,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 11,
+            "ordinal": 139,
+            "source_node": 77,
+            "destination": 1,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 12,
+            "ordinal": 140,
+            "source_node": 81,
+            "destination": 105,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 13,
+            "ordinal": 141,
+            "source_node": 88,
+            "destination": 106,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 14,
+            "ordinal": 142,
+            "source_node": 95,
+            "destination": 107,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 15,
+            "ordinal": 197,
+            "source_node": 102,
+            "destination": 104,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 16,
+            "ordinal": 241,
+            "source_node": 106,
+            "destination": 145,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 17,
+            "ordinal": 225,
+            "source_node": 111,
+            "destination": 161,
+            "opcode": 7,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 18,
+            "ordinal": 246,
+            "source_node": 113,
+            "destination": 167,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 19,
+            "ordinal": 251,
+            "source_node": 118,
+            "destination": 141,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 20,
+            "ordinal": 252,
+            "source_node": 132,
+            "destination": 142,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 21,
+            "ordinal": 345,
+            "source_node": 136,
+            "destination": 189,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 22,
+            "ordinal": 366,
+            "source_node": 142,
+            "destination": 143,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 23,
+            "ordinal": 394,
+            "source_node": 147,
+            "destination": 216,
+            "opcode": 6,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 24,
+            "ordinal": 397,
+            "source_node": 149,
+            "destination": 106,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 25,
+            "ordinal": 395,
+            "source_node": 154,
+            "destination": 143,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 26,
+            "ordinal": 398,
+            "source_node": 160,
+            "destination": 115,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 27,
+            "ordinal": 253,
+            "source_node": 170,
+            "destination": 143,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 28,
+            "ordinal": 346,
+            "source_node": 173,
+            "destination": 188,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 29,
+            "ordinal": 384,
+            "source_node": 179,
+            "destination": 106,
+            "opcode": 7,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 30,
+            "ordinal": 396,
+            "source_node": 184,
+            "destination": 107,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 31,
+            "ordinal": 399,
+            "source_node": 189,
+            "destination": 143,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 32,
+            "ordinal": 634,
+            "source_node": 202,
+            "destination": 118,
+            "opcode": 10,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 33,
+            "ordinal": 662,
+            "source_node": 207,
+            "destination": 179,
+            "opcode": 6,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 34,
+            "ordinal": 663,
+            "source_node": 208,
+            "destination": 118,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 35,
+            "ordinal": 664,
+            "source_node": 213,
+            "destination": 209,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 36,
+            "ordinal": 665,
+            "source_node": 223,
+            "destination": 179,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 37,
+            "ordinal": 50,
+            "source_node": 236,
+            "destination": 50,
+            "opcode": 4,
+            "inputs": [
+              1
+            ]
+          },
+          {
+            "slot": 38,
+            "ordinal": 860,
+            "source_node": 240,
+            "destination": 226,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 39,
+            "ordinal": 666,
+            "source_node": 245,
+            "destination": 189,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 40,
+            "ordinal": 87,
+            "source_node": 256,
+            "destination": 34,
+            "opcode": 4,
+            "inputs": [
+              1,
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 41,
+            "ordinal": 861,
+            "source_node": 261,
+            "destination": 178,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 42,
+            "ordinal": 934,
+            "source_node": 266,
+            "destination": 168,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 43,
+            "ordinal": 667,
+            "source_node": 279,
+            "destination": 117,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 44,
+            "ordinal": 88,
+            "source_node": 288,
+            "destination": 33,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 45,
+            "ordinal": 100,
+            "source_node": 292,
+            "destination": 46,
+            "opcode": 7,
+            "inputs": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 46,
+            "ordinal": 862,
+            "source_node": 295,
+            "destination": 143,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 47,
+            "ordinal": 935,
+            "source_node": 300,
+            "destination": 181,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 48,
+            "ordinal": 680,
+            "source_node": 313,
+            "destination": 216,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 49,
+            "ordinal": 51,
+            "source_node": 326,
+            "destination": 51,
+            "opcode": 4,
+            "inputs": [
+              0
+            ]
+          },
+          {
+            "slot": 50,
+            "ordinal": 668,
+            "source_node": 330,
+            "destination": 180,
+            "opcode": 4,
+            "inputs": [
+              0,
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 51,
+            "ordinal": 52,
+            "source_node": 340,
+            "destination": 52,
+            "opcode": 4,
+            "inputs": [
+              2
+            ]
+          },
+          {
+            "slot": 52,
+            "ordinal": 101,
+            "source_node": 344,
+            "destination": 5,
+            "opcode": 7,
+            "inputs": [
+              2
+            ]
+          },
+          {
+            "slot": 53,
+            "ordinal": 863,
+            "source_node": 346,
+            "destination": 193,
+            "opcode": 2,
+            "inputs": [
+              0,
+              1,
+              2,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 54,
+            "ordinal": 688,
+            "source_node": 351,
+            "destination": 95,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 55,
+            "ordinal": 702,
+            "source_node": 361,
+            "destination": 146,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 56,
+            "ordinal": 864,
+            "source_node": 374,
+            "destination": 196,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 57,
+            "ordinal": 936,
+            "source_node": 379,
+            "destination": 192,
+            "opcode": 5,
+            "inputs": [
+              0,
+              1,
+              2,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 58,
+            "ordinal": 669,
+            "source_node": 392,
+            "destination": 52,
+            "opcode": 4,
+            "inputs": [
+              1,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 59,
+            "ordinal": 689,
+            "source_node": 402,
+            "destination": 169,
+            "opcode": 4,
+            "inputs": [
+              1,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 60,
+            "ordinal": 937,
+            "source_node": 416,
+            "destination": 191,
+            "opcode": 5,
+            "inputs": [
+              1,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 61,
+            "ordinal": 1155,
+            "source_node": 426,
+            "destination": 321,
+            "opcode": 2,
+            "inputs": [
+              0,
+              1,
+              2,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 62,
+            "ordinal": 117,
+            "source_node": 431,
+            "destination": 14,
+            "opcode": 9,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 63,
+            "ordinal": 115,
+            "source_node": 432,
+            "destination": 21,
+            "opcode": 9,
+            "inputs": [
+              0,
+              1
+            ]
+          },
+          {
+            "slot": 64,
+            "ordinal": 119,
+            "source_node": 433,
+            "destination": 6,
+            "opcode": 4,
+            "inputs": [
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 65,
+            "ordinal": 2505,
+            "source_node": 434,
+            "destination": 14,
+            "opcode": 9,
+            "inputs": [
+              2,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 66,
+            "ordinal": 2506,
+            "source_node": 435,
+            "destination": 6,
+            "opcode": 9,
+            "inputs": [
+              0,
+              1,
+              2,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 67,
+            "ordinal": 53,
+            "source_node": 436,
+            "destination": 53,
+            "opcode": 4,
+            "inputs": [
+              44
+            ]
+          },
+          {
+            "slot": 68,
+            "ordinal": 963,
+            "source_node": 439,
+            "destination": 97,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 69,
+            "ordinal": 964,
+            "source_node": 441,
+            "destination": 33,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 70,
+            "ordinal": 690,
+            "source_node": 443,
+            "destination": 218,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "ordinal": 0,
+            "input": 0
+          },
+          {
+            "ordinal": 1,
+            "input": 1
+          },
+          {
+            "ordinal": 2,
+            "input": 2
+          },
+          {
+            "ordinal": 3,
+            "input": 3
+          },
+          {
+            "ordinal": 4,
+            "input": 5
+          },
+          {
+            "ordinal": 5,
+            "input": 6
+          },
+          {
+            "ordinal": 6,
+            "input": 7
+          },
+          {
+            "ordinal": 39,
+            "input": 44
+          }
+        ],
+        "selected_table_offset_words": 0
+      },
+      "Schwarzschild": {
+        "arithmetic": [
+          {
+            "slot": 0,
+            "ordinal": 60,
+            "source_node": 48,
+            "destination": 40,
+            "opcode": 4,
+            "inputs": [
+              5
+            ]
+          },
+          {
+            "slot": 1,
+            "ordinal": 37,
+            "source_node": 49,
+            "destination": 37,
+            "opcode": 4,
+            "inputs": [
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 2,
+            "ordinal": 61,
+            "source_node": 50,
+            "destination": 38,
+            "opcode": 4,
+            "inputs": [
+              7
+            ]
+          },
+          {
+            "slot": 3,
+            "ordinal": 71,
+            "source_node": 51,
+            "destination": 31,
+            "opcode": 9,
+            "inputs": [
+              5,
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 4,
+            "ordinal": 72,
+            "source_node": 52,
+            "destination": 29,
+            "opcode": 9,
+            "inputs": [
+              7
+            ]
+          },
+          {
+            "slot": 5,
+            "ordinal": 73,
+            "source_node": 53,
+            "destination": 24,
+            "opcode": 9,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 6,
+            "ordinal": 74,
+            "source_node": 54,
+            "destination": 29,
+            "opcode": 8,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 7,
+            "ordinal": 75,
+            "source_node": 55,
+            "destination": 24,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 8,
+            "ordinal": 76,
+            "source_node": 61,
+            "destination": 31,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 9,
+            "ordinal": 77,
+            "source_node": 67,
+            "destination": 22,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 10,
+            "ordinal": 90,
+            "source_node": 73,
+            "destination": 61,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 11,
+            "ordinal": 91,
+            "source_node": 80,
+            "destination": 62,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 12,
+            "ordinal": 117,
+            "source_node": 87,
+            "destination": 60,
+            "opcode": 2,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 13,
+            "ordinal": 92,
+            "source_node": 91,
+            "destination": 63,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 14,
+            "ordinal": 130,
+            "source_node": 98,
+            "destination": 87,
+            "opcode": 2,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 15,
+            "ordinal": 139,
+            "source_node": 103,
+            "destination": 83,
+            "opcode": 6,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 16,
+            "ordinal": 140,
+            "source_node": 105,
+            "destination": 87,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 17,
+            "ordinal": 141,
+            "source_node": 110,
+            "destination": 84,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 18,
+            "ordinal": 142,
+            "source_node": 120,
+            "destination": 83,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 19,
+            "ordinal": 143,
+            "source_node": 133,
+            "destination": 85,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 20,
+            "ordinal": 144,
+            "source_node": 146,
+            "destination": 86,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 21,
+            "ordinal": 62,
+            "source_node": 159,
+            "destination": 32,
+            "opcode": 4,
+            "inputs": [
+              0
+            ]
+          },
+          {
+            "slot": 22,
+            "ordinal": 145,
+            "source_node": 163,
+            "destination": 22,
+            "opcode": 5,
+            "inputs": [
+              0,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 23,
+            "ordinal": 150,
+            "source_node": 176,
+            "destination": 87,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 24,
+            "ordinal": 151,
+            "source_node": 177,
+            "destination": 3,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 25,
+            "ordinal": 152,
+            "source_node": 178,
+            "destination": 8,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "ordinal": 0,
+            "input": 0
+          },
+          {
+            "ordinal": 1,
+            "input": 5
+          },
+          {
+            "ordinal": 2,
+            "input": 6
+          },
+          {
+            "ordinal": 3,
+            "input": 7
+          },
+          {
+            "ordinal": 36,
+            "input": 44
+          }
+        ],
+        "selected_table_offset_words": 13096
+      },
+      "source_edits": [
+        {
+          "old": "\nRetainedTriple ReadStored(uint base) {",
+          "new": "\n// BEGIN PRIVATE WORD OBSERVER: no original arithmetic, writes or joins removed.\n[[vk::binding(2, 0)]] RWStructuredBuffer<uint> wordObservations;\nbool WordRowAvailable(uint row) {\n    uint words, stride;\n    wordObservations.GetDimensions(words, stride);\n    return row < words / 768u;\n}\nuint WordFamily(uint programBase) {\n    uint originalBase = 1u + 230u * inputs[0];\n    if (programBase == originalBase) return 1u;\n    if (programBase == originalBase + SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS) return 2u;\n    return 0u;\n}\nvoid WordCopy(uint base, RetainedTriple value) {\n    wordObservations[base] = RPBits(value.hi);\n    wordObservations[base + 1u] = RPBits(value.lo);\n    wordObservations[base + 2u] = RPBits(value.tail);\n    wordObservations[base + 3u] = RPBits(value.error);\n    wordObservations[base + 4u] = value.valid;\n}\nvoid WordKey(uint row, uint inputIndex, RetainedTriple value, uint kind) {\n    if (!WordRowAvailable(row) || (inputIndex > 7u && inputIndex != 44u)) return;\n    uint slot = inputIndex == 44u ? 8u : inputIndex;\n    uint base = row * 768u + 16u + slot * 7u;\n    wordObservations[base + 1u] = inputIndex;\n    WordCopy(base + 2u, value);\n    uint previous;\n    InterlockedOr(wordObservations[base], kind, previous);\n}\nuint WordLookupArithmeticGeneral(uint index) {\n    switch (index) {\n    case 47u: return 0u;\n    case 48u: return 1u;\n    case 49u: return 2u;\n    case 113u: return 3u;\n    case 114u: return 4u;\n    case 116u: return 5u;\n    case 120u: return 6u;\n    case 121u: return 7u;\n    case 122u: return 8u;\n    case 123u: return 9u;\n    case 124u: return 10u;\n    case 139u: return 11u;\n    case 140u: return 12u;\n    case 141u: return 13u;\n    case 142u: return 14u;\n    case 197u: return 15u;\n    case 241u: return 16u;\n    case 225u: return 17u;\n    case 246u: return 18u;\n    case 251u: return 19u;\n    case 252u: return 20u;\n    case 345u: return 21u;\n    case 366u: return 22u;\n    case 394u: return 23u;\n    case 397u: return 24u;\n    case 395u: return 25u;\n    case 398u: return 26u;\n    case 253u: return 27u;\n    case 346u: return 28u;\n    case 384u: return 29u;\n    case 396u: return 30u;\n    case 399u: return 31u;\n    case 634u: return 32u;\n    case 662u: return 33u;\n    case 663u: return 34u;\n    case 664u: return 35u;\n    case 665u: return 36u;\n    case 50u: return 37u;\n    case 860u: return 38u;\n    case 666u: return 39u;\n    case 87u: return 40u;\n    case 861u: return 41u;\n    case 934u: return 42u;\n    case 667u: return 43u;\n    case 88u: return 44u;\n    case 100u: return 45u;\n    case 862u: return 46u;\n    case 935u: return 47u;\n    case 680u: return 48u;\n    case 51u: return 49u;\n    case 668u: return 50u;\n    case 52u: return 51u;\n    case 101u: return 52u;\n    case 863u: return 53u;\n    case 688u: return 54u;\n    case 702u: return 55u;\n    case 864u: return 56u;\n    case 936u: return 57u;\n    case 669u: return 58u;\n    case 689u: return 59u;\n    case 937u: return 60u;\n    case 1155u: return 61u;\n    case 117u: return 62u;\n    case 115u: return 63u;\n    case 119u: return 64u;\n    case 2505u: return 65u;\n    case 2506u: return 66u;\n    case 53u: return 67u;\n    case 963u: return 68u;\n    case 964u: return 69u;\n    case 690u: return 70u;\n    default: return 0xffffffffu;\n    }\n}\nuint WordLookupArithmeticSchwarzschild(uint index) {\n    switch (index) {\n    case 60u: return 0u;\n    case 37u: return 1u;\n    case 61u: return 2u;\n    case 71u: return 3u;\n    case 72u: return 4u;\n    case 73u: return 5u;\n    case 74u: return 6u;\n    case 75u: return 7u;\n    case 76u: return 8u;\n    case 77u: return 9u;\n    case 90u: return 10u;\n    case 91u: return 11u;\n    case 117u: return 12u;\n    case 92u: return 13u;\n    case 130u: return 14u;\n    case 139u: return 15u;\n    case 140u: return 16u;\n    case 141u: return 17u;\n    case 142u: return 18u;\n    case 143u: return 19u;\n    case 144u: return 20u;\n    case 62u: return 21u;\n    case 145u: return 22u;\n    case 150u: return 23u;\n    case 151u: return 24u;\n    case 152u: return 25u;\n    default: return 0xffffffffu;\n    }\n}\nuint WordLookupLeavesGeneral(uint index) {\n    switch (index) {\n    case 0u: return 0u;\n    case 1u: return 1u;\n    case 2u: return 2u;\n    case 3u: return 3u;\n    case 4u: return 5u;\n    case 5u: return 6u;\n    case 6u: return 7u;\n    case 39u: return 44u;\n    default: return 0xffffffffu;\n    }\n}\nuint WordLookupLeavesSchwarzschild(uint index) {\n    switch (index) {\n    case 0u: return 0u;\n    case 1u: return 5u;\n    case 2u: return 6u;\n    case 3u: return 7u;\n    case 36u: return 44u;\n    default: return 0xffffffffu;\n    }\n}\nvoid WordEvaluated(uint row, uint programBase, uint index, uint destination,\n                   uint op, uint a, RetainedTriple value, uint kind) {\n    if (!WordRowAvailable(row)) return;\n    if (kind != 6u) return;\n    uint family = WordFamily(programBase);\n    if (family == 0u) return;\n    uint leaf = family == 1u ? WordLookupLeavesGeneral(index) : WordLookupLeavesSchwarzschild(index);\n    // Only the original unique mapped leaf write may update its key. Altered\n    // tables cannot turn arbitrary simultaneous writes into key writers.\n    if (leaf != 0xffffffffu && op == 1u && a == leaf) WordKey(row, leaf, value, 4u);\n    uint slot = family == 1u ? WordLookupArithmeticGeneral(index) : WordLookupArithmeticSchwarzschild(index);\n    if (slot == 0xffffffffu) return;\n    uint base = row * 768u + 96u + slot * 9u;\n    wordObservations[base + 1u] = index;\n    wordObservations[base + 2u] = destination;\n    wordObservations[base + 3u] = (kind << 8u) | op;\n    WordCopy(base + 4u, value);\n    wordObservations[base] = 1u; // Presence is separate from numerical valid0.\n}\nvoid WordPublished(uint row, uint programBase, uint roots, uint bits) {\n    if (!WordRowAvailable(row)) return;\n    uint base = row * 768u;\n    wordObservations[base] = 1u;\n    wordObservations[base + 1u] = 1u;\n    wordObservations[base + 2u] = WordFamily(programBase);\n    wordObservations[base + 3u] = programBase;\n    wordObservations[base + 4u] = inputs[0];\n    wordObservations[base + 5u] = roots;\n    uint previous;\n    InterlockedOr(wordObservations[base + 6u], bits, previous);\n}\n// END PRIVATE WORD OBSERVER.\n\nRetainedTriple ReadStored(uint base) {",
+          "count": 1
+        },
+        {
+          "old": "uint programBase, uint registers) {",
+          "new": "uint programBase, uint registers, uint wordKind) {",
+          "count": 1
+        },
+        {
+          "old": "    WriteValue(destination, r, rowBase);\n",
+          "new": "    WriteValue(destination, r, rowBase);\n    WordEvaluated(row, programBase, index, destination, op, a, r, wordKind);\n",
+          "count": 1
+        },
+        {
+          "old": "EvaluateOne(node, row, rowBase, programBase, registers)",
+          "new": "EvaluateOne(node, row, rowBase, programBase, registers, stage)",
+          "count": 2
+        },
+        {
+          "old": "EvaluateOne(start + lane, row, rowBase, programBase, registers)",
+          "new": "EvaluateOne(start + lane, row, rowBase, programBase, registers, stage)",
+          "count": 1
+        },
+        {
+          "old": "    for (uint i = 0; i < 46; ++i)\n        if (ReadOriginal(i, row).valid == 0) return;",
+          "new": "    for (uint i = 0; i < 46; ++i) {\n        RetainedTriple wordOriginal = ReadOriginal(i, row);\n        if (lane == 0 && (i < 4 || i == 44)) WordKey(row, i, wordOriginal, 1u);\n        if (wordOriginal.valid == 0) return;\n    }",
+          "count": 1
+        },
+        {
+          "old": "            WriteStored(rowBase + 804 + i * 5, value);",
+          "new": "            WriteStored(rowBase + 804 + i * 5, value);\n            if (stage == 6 && i < 4) WordKey(row, 4 + i, value, 2u);",
+          "count": 1
+        },
+        {
+          "old": "    return true;\n}\nRetainedTriple Rational",
+          "new": "    if (lane == 0 && stage == 6) WordPublished(row, programBase, 40u, 1u);\n    return true;\n}\nRetainedTriple Rational",
+          "count": 1
+        }
+      ]
+    },
+    "Endpoint": {
+      "general": {
+        "arithmetic": [
+          {
+            "slot": 0,
+            "ordinal": 19,
+            "source_node": 56,
+            "destination": 19,
+            "opcode": 4,
+            "inputs": [
+              5
+            ]
+          },
+          {
+            "slot": 1,
+            "ordinal": 20,
+            "source_node": 57,
+            "destination": 20,
+            "opcode": 4,
+            "inputs": [
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 2,
+            "ordinal": 21,
+            "source_node": 58,
+            "destination": 21,
+            "opcode": 4,
+            "inputs": [
+              7
+            ]
+          },
+          {
+            "slot": 3,
+            "ordinal": 29,
+            "source_node": 59,
+            "destination": 29,
+            "opcode": 9,
+            "inputs": [
+              5,
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 4,
+            "ordinal": 30,
+            "source_node": 60,
+            "destination": 30,
+            "opcode": 9,
+            "inputs": [
+              1,
+              7
+            ]
+          },
+          {
+            "slot": 5,
+            "ordinal": 32,
+            "source_node": 61,
+            "destination": 31,
+            "opcode": 9,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 6,
+            "ordinal": 35,
+            "source_node": 62,
+            "destination": 29,
+            "opcode": 8,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 7,
+            "ordinal": 36,
+            "source_node": 63,
+            "destination": 32,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 8,
+            "ordinal": 37,
+            "source_node": 69,
+            "destination": 31,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 9,
+            "ordinal": 38,
+            "source_node": 75,
+            "destination": 27,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 10,
+            "ordinal": 39,
+            "source_node": 81,
+            "destination": 33,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 11,
+            "ordinal": 41,
+            "source_node": 85,
+            "destination": 30,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 12,
+            "ordinal": 42,
+            "source_node": 89,
+            "destination": 35,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 13,
+            "ordinal": 43,
+            "source_node": 96,
+            "destination": 36,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 14,
+            "ordinal": 44,
+            "source_node": 103,
+            "destination": 37,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 15,
+            "ordinal": 46,
+            "source_node": 110,
+            "destination": 34,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 16,
+            "ordinal": 50,
+            "source_node": 114,
+            "destination": 37,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 17,
+            "ordinal": 49,
+            "source_node": 119,
+            "destination": 40,
+            "opcode": 7,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 18,
+            "ordinal": 53,
+            "source_node": 121,
+            "destination": 34,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 19,
+            "ordinal": 54,
+            "source_node": 126,
+            "destination": 37,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 20,
+            "ordinal": 47,
+            "source_node": 140,
+            "destination": 25,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 21,
+            "ordinal": 51,
+            "source_node": 144,
+            "destination": 36,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 22,
+            "ordinal": 56,
+            "source_node": 150,
+            "destination": 42,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 23,
+            "ordinal": 57,
+            "source_node": 155,
+            "destination": 37,
+            "opcode": 6,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 24,
+            "ordinal": 296,
+            "source_node": 157,
+            "destination": 120,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 25,
+            "ordinal": 58,
+            "source_node": 162,
+            "destination": 42,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 26,
+            "ordinal": 60,
+            "source_node": 168,
+            "destination": 40,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 27,
+            "ordinal": 48,
+            "source_node": 178,
+            "destination": 39,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 28,
+            "ordinal": 52,
+            "source_node": 181,
+            "destination": 41,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 29,
+            "ordinal": 55,
+            "source_node": 187,
+            "destination": 40,
+            "opcode": 7,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 30,
+            "ordinal": 59,
+            "source_node": 192,
+            "destination": 36,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 31,
+            "ordinal": 61,
+            "source_node": 197,
+            "destination": 43,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 32,
+            "ordinal": 62,
+            "source_node": 210,
+            "destination": 41,
+            "opcode": 10,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 33,
+            "ordinal": 63,
+            "source_node": 215,
+            "destination": 40,
+            "opcode": 6,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 34,
+            "ordinal": 298,
+            "source_node": 216,
+            "destination": 122,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 35,
+            "ordinal": 64,
+            "source_node": 221,
+            "destination": 41,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 36,
+            "ordinal": 65,
+            "source_node": 231,
+            "destination": 44,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 37,
+            "ordinal": 22,
+            "source_node": 244,
+            "destination": 22,
+            "opcode": 4,
+            "inputs": [
+              1
+            ]
+          },
+          {
+            "slot": 38,
+            "ordinal": 71,
+            "source_node": 248,
+            "destination": 21,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 39,
+            "ordinal": 66,
+            "source_node": 253,
+            "destination": 45,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 40,
+            "ordinal": 26,
+            "source_node": 264,
+            "destination": 26,
+            "opcode": 4,
+            "inputs": [
+              1,
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 41,
+            "ordinal": 72,
+            "source_node": 269,
+            "destination": 50,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 42,
+            "ordinal": 78,
+            "source_node": 274,
+            "destination": 46,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 43,
+            "ordinal": 67,
+            "source_node": 287,
+            "destination": 46,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 44,
+            "ordinal": 27,
+            "source_node": 296,
+            "destination": 27,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 45,
+            "ordinal": 31,
+            "source_node": 300,
+            "destination": 24,
+            "opcode": 7,
+            "inputs": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 46,
+            "ordinal": 73,
+            "source_node": 303,
+            "destination": 51,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 47,
+            "ordinal": 79,
+            "source_node": 308,
+            "destination": 45,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 48,
+            "ordinal": 70,
+            "source_node": 321,
+            "destination": 49,
+            "opcode": 5,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 49,
+            "ordinal": 23,
+            "source_node": 334,
+            "destination": 23,
+            "opcode": 4,
+            "inputs": [
+              0
+            ]
+          },
+          {
+            "slot": 50,
+            "ordinal": 68,
+            "source_node": 338,
+            "destination": 47,
+            "opcode": 4,
+            "inputs": [
+              0,
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 51,
+            "ordinal": 24,
+            "source_node": 348,
+            "destination": 24,
+            "opcode": 4,
+            "inputs": [
+              2
+            ]
+          },
+          {
+            "slot": 52,
+            "ordinal": 28,
+            "source_node": 352,
+            "destination": 28,
+            "opcode": 7,
+            "inputs": [
+              2
+            ]
+          },
+          {
+            "slot": 53,
+            "ordinal": 74,
+            "source_node": 354,
+            "destination": 52,
+            "opcode": 2,
+            "inputs": [
+              0,
+              1,
+              2,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 54,
+            "ordinal": 75,
+            "source_node": 359,
+            "destination": 53,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 55,
+            "ordinal": 77,
+            "source_node": 369,
+            "destination": 47,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 56,
+            "ordinal": 81,
+            "source_node": 382,
+            "destination": 54,
+            "opcode": 2,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 57,
+            "ordinal": 82,
+            "source_node": 387,
+            "destination": 47,
+            "opcode": 5,
+            "inputs": [
+              0,
+              1,
+              2,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 58,
+            "ordinal": 69,
+            "source_node": 400,
+            "destination": 48,
+            "opcode": 4,
+            "inputs": [
+              1,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 59,
+            "ordinal": 76,
+            "source_node": 410,
+            "destination": 54,
+            "opcode": 4,
+            "inputs": [
+              1,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 60,
+            "ordinal": 80,
+            "source_node": 424,
+            "destination": 24,
+            "opcode": 5,
+            "inputs": [
+              1,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 61,
+            "ordinal": 83,
+            "source_node": 434,
+            "destination": 52,
+            "opcode": 2,
+            "inputs": [
+              0,
+              1,
+              2,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 62,
+            "ordinal": 33,
+            "source_node": 439,
+            "destination": 32,
+            "opcode": 9,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 63,
+            "ordinal": 25,
+            "source_node": 440,
+            "destination": 25,
+            "opcode": 9,
+            "inputs": [
+              0,
+              1
+            ]
+          },
+          {
+            "slot": 64,
+            "ordinal": 34,
+            "source_node": 441,
+            "destination": 30,
+            "opcode": 4,
+            "inputs": [
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 65,
+            "ordinal": 40,
+            "source_node": 442,
+            "destination": 34,
+            "opcode": 9,
+            "inputs": [
+              2,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 66,
+            "ordinal": 45,
+            "source_node": 443,
+            "destination": 38,
+            "opcode": 9,
+            "inputs": [
+              0,
+              1,
+              2,
+              3,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 67,
+            "ordinal": 313,
+            "source_node": 1322,
+            "destination": 137,
+            "opcode": 4,
+            "inputs": [
+              44
+            ]
+          },
+          {
+            "slot": 68,
+            "ordinal": 315,
+            "source_node": 1326,
+            "destination": 40,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 69,
+            "ordinal": 316,
+            "source_node": 1335,
+            "destination": 42,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 70,
+            "ordinal": 317,
+            "source_node": 1344,
+            "destination": 37,
+            "opcode": 4,
+            "inputs": [
+              1,
+              5,
+              6,
+              7,
+              44
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "ordinal": 7,
+            "input": 0
+          },
+          {
+            "ordinal": 8,
+            "input": 1
+          },
+          {
+            "ordinal": 9,
+            "input": 2
+          },
+          {
+            "ordinal": 10,
+            "input": 3
+          },
+          {
+            "ordinal": 11,
+            "input": 5
+          },
+          {
+            "ordinal": 12,
+            "input": 6
+          },
+          {
+            "ordinal": 13,
+            "input": 7
+          },
+          {
+            "ordinal": 18,
+            "input": 44
+          }
+        ],
+        "selected_table_offset_words": 0
+      },
+      "Schwarzschild": {
+        "arithmetic": [
+          {
+            "slot": 0,
+            "ordinal": 13,
+            "source_node": 56,
+            "destination": 13,
+            "opcode": 4,
+            "inputs": [
+              5
+            ]
+          },
+          {
+            "slot": 1,
+            "ordinal": 14,
+            "source_node": 57,
+            "destination": 14,
+            "opcode": 4,
+            "inputs": [
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 2,
+            "ordinal": 15,
+            "source_node": 58,
+            "destination": 15,
+            "opcode": 4,
+            "inputs": [
+              7
+            ]
+          },
+          {
+            "slot": 3,
+            "ordinal": 18,
+            "source_node": 59,
+            "destination": 18,
+            "opcode": 9,
+            "inputs": [
+              5,
+              6,
+              44
+            ]
+          },
+          {
+            "slot": 4,
+            "ordinal": 19,
+            "source_node": 60,
+            "destination": 19,
+            "opcode": 9,
+            "inputs": [
+              7
+            ]
+          },
+          {
+            "slot": 5,
+            "ordinal": 20,
+            "source_node": 61,
+            "destination": 20,
+            "opcode": 9,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 6,
+            "ordinal": 21,
+            "source_node": 62,
+            "destination": 19,
+            "opcode": 8,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 7,
+            "ordinal": 22,
+            "source_node": 63,
+            "destination": 20,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 8,
+            "ordinal": 23,
+            "source_node": 69,
+            "destination": 18,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 9,
+            "ordinal": 24,
+            "source_node": 75,
+            "destination": 21,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 10,
+            "ordinal": 25,
+            "source_node": 81,
+            "destination": 22,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 11,
+            "ordinal": 26,
+            "source_node": 88,
+            "destination": 23,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 12,
+            "ordinal": 28,
+            "source_node": 95,
+            "destination": 25,
+            "opcode": 2,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 13,
+            "ordinal": 27,
+            "source_node": 99,
+            "destination": 24,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 14,
+            "ordinal": 29,
+            "source_node": 106,
+            "destination": 23,
+            "opcode": 2,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 15,
+            "ordinal": 30,
+            "source_node": 111,
+            "destination": 25,
+            "opcode": 6,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 16,
+            "ordinal": 246,
+            "source_node": 113,
+            "destination": 92,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 17,
+            "ordinal": 31,
+            "source_node": 118,
+            "destination": 23,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 18,
+            "ordinal": 32,
+            "source_node": 128,
+            "destination": 24,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 19,
+            "ordinal": 33,
+            "source_node": 141,
+            "destination": 22,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 20,
+            "ordinal": 34,
+            "source_node": 154,
+            "destination": 26,
+            "opcode": 5,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 21,
+            "ordinal": 16,
+            "source_node": 167,
+            "destination": 16,
+            "opcode": 4,
+            "inputs": [
+              0
+            ]
+          },
+          {
+            "slot": 22,
+            "ordinal": 35,
+            "source_node": 171,
+            "destination": 27,
+            "opcode": 5,
+            "inputs": [
+              0,
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 23,
+            "ordinal": 252,
+            "source_node": 1067,
+            "destination": 98,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 24,
+            "ordinal": 253,
+            "source_node": 1076,
+            "destination": 99,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          },
+          {
+            "slot": 25,
+            "ordinal": 254,
+            "source_node": 1085,
+            "destination": 100,
+            "opcode": 4,
+            "inputs": [
+              5,
+              6,
+              7,
+              44
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "ordinal": 4,
+            "input": 0
+          },
+          {
+            "ordinal": 5,
+            "input": 5
+          },
+          {
+            "ordinal": 6,
+            "input": 6
+          },
+          {
+            "ordinal": 7,
+            "input": 7
+          },
+          {
+            "ordinal": 12,
+            "input": 44
+          }
+        ],
+        "selected_table_offset_words": 11240
+      },
+      "source_edits": [
+        {
+          "old": "\nRetainedTriple ReadStored(uint base) {",
+          "new": "\n// BEGIN PRIVATE WORD OBSERVER: no original arithmetic, writes or joins removed.\n[[vk::binding(2, 0)]] RWStructuredBuffer<uint> wordObservations;\nbool WordRowAvailable(uint row) {\n    uint words, stride;\n    wordObservations.GetDimensions(words, stride);\n    return row < words / 768u;\n}\nuint WordFamily(uint programBase) {\n    uint originalBase = 1u + 225u * inputs[0];\n    if (programBase == originalBase) return 1u;\n    if (programBase == originalBase + SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS) return 2u;\n    return 0u;\n}\nvoid WordCopy(uint base, RetainedTriple value) {\n    wordObservations[base] = RPBits(value.hi);\n    wordObservations[base + 1u] = RPBits(value.lo);\n    wordObservations[base + 2u] = RPBits(value.tail);\n    wordObservations[base + 3u] = RPBits(value.error);\n    wordObservations[base + 4u] = value.valid;\n}\nvoid WordKey(uint row, uint inputIndex, RetainedTriple value, uint kind) {\n    if (!WordRowAvailable(row) || (inputIndex > 7u && inputIndex != 44u)) return;\n    uint slot = inputIndex == 44u ? 8u : inputIndex;\n    uint base = row * 768u + 16u + slot * 7u;\n    wordObservations[base + 1u] = inputIndex;\n    WordCopy(base + 2u, value);\n    uint previous;\n    InterlockedOr(wordObservations[base], kind, previous);\n}\nuint WordLookupArithmeticGeneral(uint index) {\n    switch (index) {\n    case 19u: return 0u;\n    case 20u: return 1u;\n    case 21u: return 2u;\n    case 29u: return 3u;\n    case 30u: return 4u;\n    case 32u: return 5u;\n    case 35u: return 6u;\n    case 36u: return 7u;\n    case 37u: return 8u;\n    case 38u: return 9u;\n    case 39u: return 10u;\n    case 41u: return 11u;\n    case 42u: return 12u;\n    case 43u: return 13u;\n    case 44u: return 14u;\n    case 46u: return 15u;\n    case 50u: return 16u;\n    case 49u: return 17u;\n    case 53u: return 18u;\n    case 54u: return 19u;\n    case 47u: return 20u;\n    case 51u: return 21u;\n    case 56u: return 22u;\n    case 57u: return 23u;\n    case 296u: return 24u;\n    case 58u: return 25u;\n    case 60u: return 26u;\n    case 48u: return 27u;\n    case 52u: return 28u;\n    case 55u: return 29u;\n    case 59u: return 30u;\n    case 61u: return 31u;\n    case 62u: return 32u;\n    case 63u: return 33u;\n    case 298u: return 34u;\n    case 64u: return 35u;\n    case 65u: return 36u;\n    case 22u: return 37u;\n    case 71u: return 38u;\n    case 66u: return 39u;\n    case 26u: return 40u;\n    case 72u: return 41u;\n    case 78u: return 42u;\n    case 67u: return 43u;\n    case 27u: return 44u;\n    case 31u: return 45u;\n    case 73u: return 46u;\n    case 79u: return 47u;\n    case 70u: return 48u;\n    case 23u: return 49u;\n    case 68u: return 50u;\n    case 24u: return 51u;\n    case 28u: return 52u;\n    case 74u: return 53u;\n    case 75u: return 54u;\n    case 77u: return 55u;\n    case 81u: return 56u;\n    case 82u: return 57u;\n    case 69u: return 58u;\n    case 76u: return 59u;\n    case 80u: return 60u;\n    case 83u: return 61u;\n    case 33u: return 62u;\n    case 25u: return 63u;\n    case 34u: return 64u;\n    case 40u: return 65u;\n    case 45u: return 66u;\n    case 313u: return 67u;\n    case 315u: return 68u;\n    case 316u: return 69u;\n    case 317u: return 70u;\n    default: return 0xffffffffu;\n    }\n}\nuint WordLookupArithmeticSchwarzschild(uint index) {\n    switch (index) {\n    case 13u: return 0u;\n    case 14u: return 1u;\n    case 15u: return 2u;\n    case 18u: return 3u;\n    case 19u: return 4u;\n    case 20u: return 5u;\n    case 21u: return 6u;\n    case 22u: return 7u;\n    case 23u: return 8u;\n    case 24u: return 9u;\n    case 25u: return 10u;\n    case 26u: return 11u;\n    case 28u: return 12u;\n    case 27u: return 13u;\n    case 29u: return 14u;\n    case 30u: return 15u;\n    case 246u: return 16u;\n    case 31u: return 17u;\n    case 32u: return 18u;\n    case 33u: return 19u;\n    case 34u: return 20u;\n    case 16u: return 21u;\n    case 35u: return 22u;\n    case 252u: return 23u;\n    case 253u: return 24u;\n    case 254u: return 25u;\n    default: return 0xffffffffu;\n    }\n}\nuint WordLookupLeavesGeneral(uint index) {\n    switch (index) {\n    case 7u: return 0u;\n    case 8u: return 1u;\n    case 9u: return 2u;\n    case 10u: return 3u;\n    case 11u: return 5u;\n    case 12u: return 6u;\n    case 13u: return 7u;\n    case 18u: return 44u;\n    default: return 0xffffffffu;\n    }\n}\nuint WordLookupLeavesSchwarzschild(uint index) {\n    switch (index) {\n    case 4u: return 0u;\n    case 5u: return 5u;\n    case 6u: return 6u;\n    case 7u: return 7u;\n    case 12u: return 44u;\n    default: return 0xffffffffu;\n    }\n}\nvoid WordEvaluated(uint row, uint programBase, uint index, uint destination,\n                   uint op, uint a, RetainedTriple value, uint kind) {\n    if (!WordRowAvailable(row)) return;\n    \n    uint family = WordFamily(programBase);\n    if (family == 0u) return;\n    uint leaf = family == 1u ? WordLookupLeavesGeneral(index) : WordLookupLeavesSchwarzschild(index);\n    // Only the original unique mapped leaf write may update its key. Altered\n    // tables cannot turn arbitrary simultaneous writes into key writers.\n    if (leaf != 0xffffffffu && op == 1u && a == leaf) WordKey(row, leaf, value, 4u);\n    uint slot = family == 1u ? WordLookupArithmeticGeneral(index) : WordLookupArithmeticSchwarzschild(index);\n    if (slot == 0xffffffffu) return;\n    uint base = row * 768u + 96u + slot * 9u;\n    wordObservations[base + 1u] = index;\n    wordObservations[base + 2u] = destination;\n    wordObservations[base + 3u] = (kind << 8u) | op;\n    WordCopy(base + 4u, value);\n    wordObservations[base] = 1u; // Presence is separate from numerical valid0.\n}\nvoid WordPublished(uint row, uint programBase, uint roots, uint bits) {\n    if (!WordRowAvailable(row)) return;\n    uint base = row * 768u;\n    wordObservations[base] = 1u;\n    wordObservations[base + 1u] = 2u;\n    wordObservations[base + 2u] = WordFamily(programBase);\n    wordObservations[base + 3u] = programBase;\n    wordObservations[base + 4u] = inputs[0];\n    wordObservations[base + 5u] = roots;\n    uint previous;\n    InterlockedOr(wordObservations[base + 6u], bits, previous);\n}\n// END PRIVATE WORD OBSERVER.\n\nRetainedTriple ReadStored(uint base) {",
+          "count": 1
+        },
+        {
+          "old": "uint programBase, uint registers) {",
+          "new": "uint programBase, uint registers, uint wordKind) {",
+          "count": 1
+        },
+        {
+          "old": "    WriteValue(destination, r, rowBase);\n",
+          "new": "    WriteValue(destination, r, rowBase);\n    WordEvaluated(row, programBase, index, destination, op, a, r, wordKind);\n",
+          "count": 1
+        },
+        {
+          "old": "EvaluateOne(node, row, rowBase, programBase, registers)",
+          "new": "EvaluateOne(node, row, rowBase, programBase, registers, required)",
+          "count": 2
+        },
+        {
+          "old": "EvaluateOne(start + lane, row, rowBase, programBase, registers)",
+          "new": "EvaluateOne(start + lane, row, rowBase, programBase, registers, required)",
+          "count": 1
+        },
+        {
+          "old": "        if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);",
+          "new": "        if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);\n        if (lane == 0) WordKey(row, i, value, 1u);",
+          "count": 2
+        },
+        {
+          "old": "    return true;\n}\n\nRetainedTriple Metric",
+          "new": "    if (lane == 0) WordPublished(row, programBase, required, required == 20 ? 2u : 4u);\n    return true;\n}\n\nRetainedTriple Metric",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

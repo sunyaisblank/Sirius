@@ -1,0 +1,360 @@
+{
+  "transport-slang": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42",
+      "-DSIRIUS_RETAINED_COEFFICIENTS=25",
+      "-DSIRIUS_RETAINED_REGISTERS=459",
+      "-DSIRIUS_RETAINED_TERMS=5",
+      "-DSIRIUS_RETAINED_LANES=64",
+      "-DSIRIUS_RETAINED_EXECUTION_LANES=64",
+      "-DSIRIUS_RETAINED_LAYERS=117",
+      "-DSIRIUS_RETAINED_PREFIX=0",
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/kernels",
+      "-O0",
+      "-target",
+      "spirv",
+      "-profile",
+      "spirv_1_5",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-denorm-mode-fp32",
+      "preserve",
+      "-o",
+      "/home/astra/.project/Sirius/out/native-stage-seven-value-witness/kernels/retained_transport.compiler.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  },
+  "transport-disassemble": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.compiler.spv",
+      "-o",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.compiler.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.compiler.spv"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  },
+  "transport-controls": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "transport"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.compiler.spvasm"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  },
+  "transport-assemble": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--target-env",
+      "spv1.5",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.spvasm",
+      "-o",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.spvasm"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  },
+  "transport-validate": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.2",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.spv"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  },
+  "endpoint-slang": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=11240",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=9903",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=84",
+      "-DSIRIUS_RETAINED_SCHWARZSCHILD_PREFIX=202",
+      "-DSIRIUS_RETAINED_REGISTERS=612",
+      "-DSIRIUS_RETAINED_TERMS=5",
+      "-DSIRIUS_RETAINED_LANES=64",
+      "-DSIRIUS_RETAINED_EXECUTION_LANES=64",
+      "-DSIRIUS_RETAINED_LAYERS=111",
+      "-DSIRIUS_RETAINED_PREFIX=250",
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/kernels",
+      "-O0",
+      "-target",
+      "spirv",
+      "-profile",
+      "spirv_1_5",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-denorm-mode-fp32",
+      "preserve",
+      "-o",
+      "/home/astra/.project/Sirius/out/native-stage-seven-value-witness/kernels/retained_endpoint.compiler.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  },
+  "endpoint-disassemble": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.compiler.spv",
+      "-o",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.compiler.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.compiler.spv"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  },
+  "endpoint-controls": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "endpoint"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.compiler.spvasm"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  },
+  "endpoint-assemble": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--target-env",
+      "spv1.5",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.spvasm",
+      "-o",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.spvasm"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  },
+  "endpoint-validate": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.2",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "out/native-stage-seven-value-witness/prepare_value_observers.py",
+      "out/native-stage-seven-value-witness/apply_native_controls.py",
+      "out/native-stage-seven-value-witness/preparation.json",
+      "out/native-stage-seven-value-witness/value-schema.json",
+      "out/native-stage-seven-value-witness/kernels/retained_transport.slang",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.slang",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "out/native-stage-seven-value-witness/kernels/retained_endpoint.spv"
+    ],
+    "scope": "Existing60s/512MiB compiler bound; complete session+controller sampled and2GiBreserve retained. Private native-default word observer compiler/control/validator only. No device/pipeline/scientific/performance or qualification verdict."
+  }
+}
