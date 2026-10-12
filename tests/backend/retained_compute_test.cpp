@@ -311,14 +311,16 @@ class PreparationProbeDevice final : public ComputeDevice {
                                           std::span<const BufferHandle> bindings, std::uint32_t x,
                                           std::uint32_t y, std::uint32_t z,
                                           DispatchTiming* timing) override {
-        if (expected_bindings != 0) EXPECT_EQ(bindings.size(), expected_bindings);
+        if (expected_bindings != 0) {
+            EXPECT_EQ(bindings.size(), expected_bindings);
+        }
         EXPECT_EQ(x, expected_groups_x);
         EXPECT_EQ(y, 1U);
         EXPECT_EQ(z, 1U);
         kernels.push_back(kernel.value);
         for (std::size_t i = 0; i < bindings.size(); ++i)
-            if (std::find(bindings.begin(), bindings.begin() + i, bindings[i]) ==
-                bindings.begin() + i)
+            if (std::none_of(bindings.begin(), bindings.begin() + i,
+                             [&](auto bound) { return bound.value == bindings[i].value; }))
                 ++epochs[bindings[i].value];
         if (timing) *timing = observation;
         if (after_dispatch) after_dispatch();
