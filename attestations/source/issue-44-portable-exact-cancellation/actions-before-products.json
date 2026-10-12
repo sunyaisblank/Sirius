@@ -1,0 +1,415 @@
+{
+  "generate-input": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/generate_input.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/generate_input.py",
+      "/home/astra/.project/Sirius/tests/support/portable_binary32/reference.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/portable_binary32_reference.bin"
+    ],
+    "scope": "Independent exact cancellation partitions retain every original174268 record, unchanged Fraction oracle; no device call."
+  },
+  "compile-cpu-baseline": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline",
+      "-I/home/astra/.project/Sirius/out/portable-exact-cancellation",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/cpu_probe.cpp",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline-cpu-probe",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline-cpu-probe.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/cpu_probe.cpp",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/word_io.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline/portable_binary32.h"
+    ],
+    "scope": "Strict private C++ primitive; original/candidate source scopes explicit, no canonical object replacement."
+  },
+  "cpu-baseline": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline-cpu-probe",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/expected.bin",
+      "{folder}/actual.bin"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline-cpu-probe",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/expected.bin"
+    ],
+    "scope": "Complete four-word primitive corpus equals unchanged independent expectation; no complete-sum/frame/adoption/qualification claim."
+  },
+  "compile-shader-baseline": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/primitive_probe.slang",
+      "-target",
+      "spirv",
+      "-profile",
+      "glsl_450",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-O3",
+      "-I",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/primitive_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline/portable_binary32.h"
+    ],
+    "scope": "Actual direct shared-header integer primitive module; baseline/candidate include identities explicit."
+  },
+  "validate-shader-baseline": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.1",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline.spv"
+    ],
+    "scope": "Validate complete actual primitive module."
+  },
+  "disassemble-baseline": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline.spv"
+    ],
+    "scope": "Preserve actual complete primitive IR for source/control/capability review."
+  },
+  "gpu-baseline": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline.spv",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/expected.bin",
+      "{folder}/actual.bin",
+      "--dispatch"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/baseline.spv",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/expected.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual pinned llvmpipe primitive comparison: full input, complement-initialized complete four-word output and8MiB allocation cap. Finite primitive evidence only.",
+    "software_provider": true
+  },
+  "compile-cpu-candidate": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/src/sirius/kernels",
+      "-I/home/astra/.project/Sirius/out/portable-exact-cancellation",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/cpu_probe.cpp",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate-cpu-probe",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate-cpu-probe.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/cpu_probe.cpp",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/word_io.h",
+      "/home/astra/.project/Sirius/src/sirius/kernels/portable_binary32.h"
+    ],
+    "scope": "Strict private C++ primitive; original/candidate source scopes explicit, no canonical object replacement."
+  },
+  "cpu-candidate": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate-cpu-probe",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/expected.bin",
+      "{folder}/actual.bin"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate-cpu-probe",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/expected.bin"
+    ],
+    "scope": "Complete four-word primitive corpus equals unchanged independent expectation; no complete-sum/frame/adoption/qualification claim."
+  },
+  "compile-shader-candidate": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/primitive_probe.slang",
+      "-target",
+      "spirv",
+      "-profile",
+      "glsl_450",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-O3",
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/kernels",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/primitive_probe.slang",
+      "/home/astra/.project/Sirius/src/sirius/kernels/portable_binary32.h"
+    ],
+    "scope": "Actual direct shared-header integer primitive module; baseline/candidate include identities explicit."
+  },
+  "validate-shader-candidate": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.1",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate.spv"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate.spv"
+    ],
+    "scope": "Validate complete actual primitive module."
+  },
+  "disassemble-candidate": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate.spvasm"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate.spv"
+    ],
+    "scope": "Preserve actual complete primitive IR for source/control/capability review."
+  },
+  "gpu-candidate": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate.spv",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/expected.bin",
+      "{folder}/actual.bin",
+      "--dispatch"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/candidate.spv",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/input.bin",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/expected.bin",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "/usr/share/vulkan/icd.d/lvp_icd.json"
+    ],
+    "scope": "Actual pinned llvmpipe primitive comparison: full input, complement-initialized complete four-word output and8MiB allocation cap. Finite primitive evidence only.",
+    "software_provider": true
+  },
+  "compile-gpu-host": {
+    "revision": "1d59f1742e43c55019aabba9dce4073ad8ee6e4e",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/home/astra/.project/Sirius/src",
+      "-I/home/astra/.project/Sirius/out/portable-exact-cancellation",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/gpu_probe.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/gpu.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/gpu_probe",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/gpu_probe.d"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/gpu_probe.cpp",
+      "/home/astra/.project/Sirius/out/portable-exact-cancellation/word_io.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-exact-cancellation/vulkan.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so"
+    ],
+    "scope": "Fresh strict primitive host using exact unaffected provider object; no retained old-arithmetic archive."
+  }
+}
