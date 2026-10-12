@@ -264,16 +264,30 @@ RPScalar RPDivideSeed(RPScalar a,RPScalar b) {
     RPScalar am=RPMantissa(aa),bm=RPMantissa(bb);
     RPScalar seed=OrderedDivide32(am,bm);
     if(!RPBounded(seed,0x40800000u))return RPZero();
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Keep both original rounds when the first scaling reaches subnormals.
+    if(exponent < -126){seed=PB32ScalePowerOfTwo(seed,-126);exponent+=126;}
+    seed=PB32ScalePowerOfTwo(seed,exponent);
+#else
     if(exponent < -126){seed=OrderedMultiply32(seed,RPFromBits(0x00800000u));exponent+=126;}
     seed=OrderedMultiply32(seed,RPPowerOfTwo(exponent));
+#endif
     return RPFromBits(RPBits(seed)^((RPBits(a)^RPBits(b))&0x80000000u));
 }
 RPScalar RPSqrtSeed(RPScalar positive) {
     int exponent=RPFloorExponent(positive),odd=exponent&1;
     RPScalar mantissa=RPMantissa(positive);
+#ifdef SIRIUS_RETAINED_PORTABLE
+    if(odd!=0)mantissa=PB32ScalePowerOfTwo(mantissa,1);
+#else
     if(odd!=0)mantissa=OrderedMultiply32(mantissa,RPFromBits(0x40000000u));
+#endif
     RPScalar seed=OrderedSqrt32(mantissa);if(!RPBounded(seed,0x40800000u))return RPZero();
+#ifdef SIRIUS_RETAINED_PORTABLE
+    return PB32ScalePowerOfTwo(seed,(exponent-odd)/2);
+#else
     return OrderedMultiply32(seed,RPPowerOfTwo((exponent-odd)/2));
+#endif
 }
 #ifdef SIRIUS_RETAINED_PORTABLE
 // Camera bytecode admits op 2..6. Direct operations return in phase zero;
