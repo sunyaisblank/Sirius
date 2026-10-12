@@ -504,7 +504,7 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "13d6137cf844ca1bd7b0dfffb421f9081268f51165a390e3853101cba0bf04e9",
+    "acceptance_criteria": "20137be1765c4e87520086c165be76703acad46004eb86613ca68be4478e0c5f",
     "required_dimensions": "155eb58c17545a5e0a817ca93e390fd7c7c698e413ba48a84dbd3daf49dd83c0",
     "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
 }
