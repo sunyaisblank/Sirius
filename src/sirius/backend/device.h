@@ -190,7 +190,7 @@ class ComputeDevice {
 
     // Optional mutation visibility for a serialized owner. A known epoch is
     // nonzero and advances once for each admitted WriteBuffer attempt and each
-    // dispatch attempt binding this buffer (even read-only bindings/failures).
+    // admitted dispatch attempt binding this buffer (even read-only bindings/failures).
     // Reads do not advance it. Unknown completion or exhaustion returns nullopt.
     // Compare expected advances; this does not lock out concurrent writers.
     [[nodiscard]] virtual std::optional<std::uint64_t> BufferMutationEpoch(
