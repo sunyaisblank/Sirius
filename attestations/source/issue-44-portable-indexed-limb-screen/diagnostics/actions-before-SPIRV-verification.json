@@ -1,0 +1,97 @@
+{
+  "compile-screen": {
+    "revision": "a05763a68fa371e927eda1b7f83cc97c98465323",
+    "kind": "compiler",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-indexed-limb-accumulation/compile_screen.py"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-indexed-limb-accumulation/compile_screen.py",
+      "/home/astra/.project/Sirius/out/portable-indexed-limb-accumulation/candidate-source.json",
+      "/home/astra/.project/Sirius/out/portable-indexed-limb-accumulation/candidate-source.patch",
+      "/home/astra/.project/Sirius/scripts/build-retained-kernels.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "/opt/slang/bin/slangc",
+      "/usr/bin/spirv-opt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/camera_frame_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/coupled_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_camera.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_coupled.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_deviation.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_disk.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_ellis_topology.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_integrator.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_kerr_infinity.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_metrics.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_point_star.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_trace_continuation.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_trace_event.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/gr_types.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/infinity_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/metric_consistency_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/parity_probe.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/portable_binary32.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_camera.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_dense.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_dopri_phase.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_endpoint.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_initialize.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_owner.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_pair.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_program.py",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_ray_camera.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_scalar.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_scratch.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_transport.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/retained_triple.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/smoke.slang",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/kernels/trace.slang",
+      "/opt/slang/lib/libslang-compiler.so",
+      "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "/opt/slang/lib/libslang-llvm.so",
+      "/opt/slang/lib/libslang-rt.so",
+      "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "/opt/slang/lib/libslang.so"
+    ],
+    "scope": "Compile one staged normal Endpoint private-array accumulator using the unchanged original production recipe. One retained three-trip loop and one sum body; production sources/canonical outputs untouched. Product, source, private-frame and machine checks are required before any runtime premise."
+  },
+  "verify-screen": {
+    "revision": "a05763a68fa371e927eda1b7f83cc97c98465323",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-indexed-limb-accumulation/verify_screen.py"
+    ],
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 524288,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/home/astra/.project/Sirius/out/portable-indexed-limb-accumulation/verify_screen.py",
+      "/home/astra/.project/Sirius/out/portable-indexed-limb-accumulation/candidate-source.json",
+      "/home/astra/.project/Sirius/out/portable-indexed-limb-accumulation/independent-source-review.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-indexed-limb-accumulation/retained_endpoint_portable_normal_sum.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis"
+    ],
+    "scope": "Both original normal Endpoint accumulator specializations retain one loop and one ordered sum body, radius and bounds; validate exact modes/barriers/capabilities/types/binding layouts/NoContraction shapes. No machine, arithmetic runtime or benefit verdict."
+  }
+}
