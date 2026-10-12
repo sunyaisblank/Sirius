@@ -79,24 +79,6 @@ RPScalar RTAbsoluteLower(RetainedTriple a) {
 // TwoSum preserves overlapping limbs; each discarded fourth term is enclosed
 // immediately. Normalize once before magnitude estimates consume the limbs.
 RetainedTriple RTAccumulateTerm(RetainedTriple a,RPScalar x) {
-#ifdef SIRIUS_RETAINED_PORTABLE
-    if(a.valid==0||!RPBounded(x,0x7b800000u)) return RTInvalid();
-    RetainedTriple r=RTInvalid();
-    RPScalar carry=x;
-    // Preserve hi/low/tail accumulation and every residual in the same order.
-    [loop] for(uint i=0;i<3;++i) {
-        RPScalar upper,lower;
-        RetainedSum32(i==0?a.hi:(i==1?a.lo:a.tail),carry,upper,lower);
-        if(i==0) r.hi=upper;
-        else if(i==1) r.lo=upper;
-        else r.tail=upper;
-        carry=lower;
-    }
-    r.error=RPUpAdd(a.error,RPAbs(carry));
-    if(!RPBounded(r.hi,0x7d800000u)||!RPBounded(r.lo,0x7d800000u)||
-       !RPBounded(r.tail,0x7d800000u)||!RPBounded(r.error,0x7d800000u)) return RTInvalid();
-    r.valid=1;return r;
-#else
     if(a.valid==0||!RPBounded(x,0x7b800000u)) return RTInvalid();
     RPScalar hi,lo,tail,first,second,last;
     RetainedSum32(a.hi,x,hi,first);
@@ -109,7 +91,6 @@ RetainedTriple RTAccumulateTerm(RetainedTriple a,RPScalar x) {
     if(!RPBounded(hi,0x7d800000u)||!RPBounded(lo,0x7d800000u)||
        !RPBounded(tail,0x7d800000u)||!RPBounded(error,0x7d800000u)) return RTInvalid();
     RetainedTriple r;r.hi=hi;r.lo=lo;r.tail=tail;r.error=error;r.valid=1;return r;
-#endif
 }
 RetainedTriple RTAdd(RetainedTriple a,RetainedTriple b) {
     if(a.valid==0||b.valid==0) return RTInvalid();
