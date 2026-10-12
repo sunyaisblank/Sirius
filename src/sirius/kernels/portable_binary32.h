@@ -171,15 +171,6 @@ SIRIUS_PB32_INLINE uint PB32Multiply(uint a, uint b) {
     uint extended = PB32WideShiftJam(product, upper ? 21u : 20u);
     return PB32Round(sign, aa.exponent + bb.exponent + (upper ? 1 : 0), extended);
 }
-// Caller supplies -149 <= exponent <= 127, so 2^exponent is a positive,
-// finite binary32 value. Its multiplication changes only the unpacked exponent;
-// the existing rounder still owns underflow, overflow, ties and signed zero.
-SIRIUS_PB32_INLINE uint PB32ScalePowerOfTwo(uint a, int exponent) {
-    if (PB32Nan(a)) return 0x7fc00000u;
-    if (PB32Infinity(a) || PB32Zero(a)) return a;
-    PB32Finite value = PB32Unpack(a);
-    return PB32Round(a >> 31, value.exponent + exponent, value.significand << 3);
-}
 SIRIUS_PB32_INLINE uint PB32Divide(uint a, uint b) {
     uint sign = (a ^ b) >> 31;
     if (PB32Nan(a) || PB32Nan(b)) return 0x7fc00000u;
