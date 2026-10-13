@@ -754,6 +754,8 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
     auto opened = CreateVulkanDevice(*selected);
     ASSERT_TRUE(opened) << opened.error().Description();
     auto& device = **opened;
+    auto* vulkan = dynamic_cast<sirius::backend::VulkanDevice*>(&device);
+    ASSERT_NE(vulkan, nullptr);
     auto words = LoadSpirv(sirius::test::ResourcePath("kernels/smoke.spv"));
     ASSERT_GE(words.size(), 5U);
     const auto unchanged = words;
@@ -809,11 +811,15 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
         ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
         const std::array bindings{*in, *out, *parameters};
         sirius::backend::DispatchTiming timing;
+        const auto before = vulkan->DescriptorBindingStatistics();
         ASSERT_TRUE(device.Dispatch(invocation == 2   ? *variant
                                     : invocation == 0 ? *first
                                                       : *again,
                                     bindings, 1, 1, 1, &timing));
         EXPECT_EQ(timing.pipeline_created, invocation != 1);
+        const auto after = vulkan->DescriptorBindingStatistics();
+        EXPECT_EQ(after.created - before.created, 1U);
+        EXPECT_EQ(after.reused, before.reused);
         prior_outputs[invocation] = *out;
         // Rebinding a cached pipeline must write this output, leaving every
         // previous output unchanged. Keep the original smoke tolerance:
@@ -825,6 +831,32 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
             if (prior == invocation) {
                 for (std::size_t value = 0; value < actual.size(); ++value)
                     EXPECT_NEAR(actual[value], expected[prior][value], 1e-6f);
+                saved_outputs[prior] = actual;
+            } else {
+                EXPECT_EQ(std::memcmp(actual.data(), saved_outputs[prior].data(), sizeof(actual)),
+                          0);
+            }
+        }
+        // Contents can change without changing bindings. A cache hit must read
+        // the new inputs and parameters, then write the current output only.
+        constexpr std::array<float, 4> new_radii{8, 4, 2, 1};
+        const std::array<float, 2> new_params{masses[invocation] + .25f, 4};
+        ASSERT_TRUE(device.WriteBuffer(*in, std::as_bytes(std::span(new_radii))));
+        ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(new_params))));
+        ASSERT_TRUE(device.WriteBuffer(*out, std::as_bytes(std::span(unwritten))));
+        ASSERT_TRUE(device.Dispatch(invocation == 2 ? *variant : *first, bindings, 1, 1, 1));
+        const auto repeated = vulkan->DescriptorBindingStatistics();
+        EXPECT_EQ(repeated.created, after.created);
+        EXPECT_EQ(repeated.reused - after.reused, 1U);
+        for (std::size_t prior = 0; prior <= invocation; ++prior) {
+            std::array<float, 4> actual{};
+            ASSERT_TRUE(device.ReadBuffer(prior_outputs[prior],
+                                          std::as_writable_bytes(std::span(actual))));
+            if (prior == invocation) {
+                for (std::size_t value = 0; value < actual.size(); ++value)
+                    EXPECT_NEAR(actual[value],
+                                1 - (invocation == 2 ? 4 : 2) * new_params[0] / new_radii[value],
+                                1e-6f);
                 saved_outputs[prior] = actual;
             } else {
                 EXPECT_EQ(std::memcmp(actual.data(), saved_outputs[prior].data(), sizeof(actual)),
@@ -966,13 +998,21 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
         if (invocation == 1) {
             sirius::backend::DispatchTiming single;
             const auto& first_command = commands[0];
+            const auto before = vulkan->DescriptorBindingStatistics();
             ASSERT_TRUE(device.Dispatch(first_command.kernel, first_command.buffers,
                                         first_command.groups_x, 1, 1, &single));
             advance_bound_epochs(first_command.buffers);
             check_epochs();
             check_timestamp("single", single, timestamps_supported);
+            const auto after = vulkan->DescriptorBindingStatistics();
+            EXPECT_EQ(after.created, before.created);
+            EXPECT_EQ(after.reused - before.reused, 1U);
         }
+        const auto before_pair = vulkan->DescriptorBindingStatistics();
         ASSERT_TRUE(device.DispatchIndependentPair(commands, &timing));
+        const auto after_pair = vulkan->DescriptorBindingStatistics();
+        EXPECT_EQ(after_pair.created - before_pair.created, invocation == 0 ? 2U : 0U);
+        EXPECT_EQ(after_pair.reused - before_pair.reused, invocation == 0 ? 0U : 2U);
         for (const auto& command : commands) advance_bound_epochs(command.buffers);
         check_epochs();
         check_timestamp("pair_" + std::to_string(invocation), timing.combined,
@@ -1007,6 +1047,7 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
     auto overlapping = bindings[1];
     overlapping[1] = bindings[0][1];
     commands[1].buffers = overlapping;
+    const auto before_refusal = vulkan->DescriptorBindingStatistics();
     const auto refused = device.DispatchIndependentPair(commands, &timing);
     ASSERT_FALSE(refused);
     check_epochs();  // Shared-buffer refusal precedes a mutation attempt.
@@ -1014,6 +1055,10 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
     EXPECT_EQ(refused.error().operation(), "dispatch independent compute pair");
     EXPECT_EQ(timing.combined.total_ms, 0);
     EXPECT_EQ(timing.pipeline_creations, 0U);
+    const auto after_refusal = vulkan->DescriptorBindingStatistics();
+    EXPECT_EQ(after_refusal.created, before_refusal.created);
+    EXPECT_EQ(after_refusal.reused, before_refusal.reused);
+    EXPECT_EQ(after_refusal.evicted, before_refusal.evicted);
     ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
     for (const auto& bound : bindings) {
         std::array<float, 194> actual{};
@@ -1039,6 +1084,9 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
                 EXPECT_EQ(actual[i], untouched[i]);
     }
     ASSERT_TRUE(device.DispatchIndependentPair(commands, &timing));
+    const auto recovered = vulkan->DescriptorBindingStatistics();
+    EXPECT_EQ(recovered.created, before_refusal.created);
+    EXPECT_EQ(recovered.reused - before_refusal.reused, 3U);
     for (const auto& command : commands) advance_bound_epochs(command.buffers);
     check_epochs();
     EXPECT_FALSE(vulkan->LastDispatchTimestamp());
@@ -1058,6 +1106,137 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
                    std::format("{},{},{};{},{},{}", expected_epochs[0][0], expected_epochs[0][1],
                                expected_epochs[0][2], expected_epochs[1][0], expected_epochs[1][1],
                                expected_epochs[1][2]));
+#endif
+}
+
+TEST(VulkanBackend, DescriptorReusePreservesOrderedBindingsThroughEviction) {
+#ifndef SIRIUS_TEST_HAS_KERNELS
+    GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
+#else
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    if (inventory->empty()) GTEST_SKIP() << "no Vulkan device present";
+    const auto selected = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(selected);
+    auto opened = CreateVulkanDevice(*selected);
+    ASSERT_TRUE(opened);
+    auto& device = **opened;
+    auto* vulkan = dynamic_cast<sirius::backend::VulkanDevice*>(&device);
+    ASSERT_NE(vulkan, nullptr);
+    const auto words = LoadSpirv(sirius::test::ResourcePath("kernels/smoke.spv"));
+    ASSERT_GE(words.size(), 5U);
+    const auto kernel = device.LoadKernel(words);
+    ASSERT_TRUE(kernel);
+    constexpr std::array<float, 8> radii{1, 2, 4, 8, 16, 32, 64, 128};
+    constexpr std::array<float, 8> canary{-42, -42, -42, -42, -42, -42, -42, -42};
+    constexpr unsigned count = 5;
+    const auto input = device.CreateBuffer(sizeof(radii), BufferUsage::kStorage);
+    const auto parameters = device.CreateBuffer(2 * sizeof(float), BufferUsage::kStorage);
+    ASSERT_TRUE(input);
+    ASSERT_TRUE(parameters);
+    ASSERT_TRUE(device.WriteBuffer(*input, std::as_bytes(std::span(radii))));
+    std::array<sirius::backend::BufferHandle, 3> uniforms{};
+    for (auto& handle : uniforms) {
+        const auto created = device.CreateBuffer(16, BufferUsage::kUniform);
+        ASSERT_TRUE(created);
+        handle = *created;
+    }
+    // Unused extra bindings are legal. Three uniforms per set exercise the
+    // existing 64-uniform pool budget before its 64-set limit, using only
+    // binding counts within the Vulkan core minimum per-stage limits.
+    std::array<sirius::backend::BufferHandle, 96> outputs{};
+    for (auto& handle : outputs) {
+        const auto created = device.CreateBuffer(sizeof(canary), BufferUsage::kStorage);
+        ASSERT_TRUE(created);
+        handle = *created;
+        ASSERT_TRUE(device.WriteBuffer(handle, std::as_bytes(std::span(canary))));
+    }
+    const auto resident_bytes = device.BufferAllocationBytes();
+    const auto check = [&](sirius::backend::BufferHandle output, float mass) {
+        std::array<float, 8> actual{};
+        ASSERT_TRUE(device.ReadBuffer(output, std::as_writable_bytes(std::span(actual))));
+        for (std::size_t i = 0; i < actual.size(); ++i)
+            if (i < count)
+                EXPECT_NEAR(actual[i], 1 - 2 * mass / radii[i], 1e-6f);
+            else
+                EXPECT_EQ(actual[i], canary[i]);
+    };
+    const auto bindings = [&](sirius::backend::BufferHandle output) {
+        return std::array{*input, output, *parameters, uniforms[0], uniforms[1], uniforms[2]};
+    };
+    for (std::size_t pass = 0; pass < 2; ++pass) {
+        for (std::size_t i = 0; i < outputs.size(); ++i) {
+            const float mass = .25f * float(1 + (i + pass) % 3);
+            const std::array<float, 2> params{mass, float(count)};
+            ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
+            ASSERT_TRUE(device.WriteBuffer(outputs[i], std::as_bytes(std::span(canary))));
+            const auto bound = bindings(outputs[i]);
+            const auto before = vulkan->DescriptorBindingStatistics();
+            ASSERT_TRUE(device.Dispatch(*kernel, bound, 1, 1, 1));
+            const auto after = vulkan->DescriptorBindingStatistics();
+            EXPECT_EQ(after.created - before.created + after.reused - before.reused, 1U);
+            EXPECT_LE(after.resident_sets, 64U);
+            EXPECT_EQ(after.created - after.evicted, after.resident_sets);
+            EXPECT_EQ(device.BufferAllocationBytes(), resident_bytes);
+            check(outputs[i], mass);
+            if (i > 0) check(outputs[i - 1], .25f * float(1 + (i - 1 + pass) % 3));
+        }
+    }
+    const auto full = vulkan->DescriptorBindingStatistics();
+    EXPECT_GT(full.evicted, 0U);
+    ASSERT_GT(full.resident_sets, 0U);
+    ASSERT_LE(full.resident_sets, outputs.size());
+    // All keys were visited once in order. Select the oldest remaining set
+    // first, then a fresh disjoint set that forces a pool-budget eviction.
+    const auto oldest = outputs[outputs.size() - full.resident_sets];
+    const auto first_bound = bindings(oldest);
+    std::array<sirius::backend::BufferHandle, 6> second_bound{};
+    for (std::size_t i = 0; i < second_bound.size(); ++i) {
+        const auto created = device.CreateBuffer(i < 2 ? sizeof(radii) : 16,
+                                                i < 3 ? BufferUsage::kStorage
+                                                      : BufferUsage::kUniform);
+        ASSERT_TRUE(created);
+        second_bound[i] = *created;
+    }
+    const std::array<float, 2> pair_params{.5f, float(count)};
+    ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(pair_params))));
+    ASSERT_TRUE(device.WriteBuffer(second_bound[0], std::as_bytes(std::span(radii))));
+    ASSERT_TRUE(device.WriteBuffer(second_bound[1], std::as_bytes(std::span(canary))));
+    ASSERT_TRUE(device.WriteBuffer(second_bound[2], std::as_bytes(std::span(pair_params))));
+    const std::array commands{
+        sirius::backend::ComputeDispatch{*kernel, first_bound, 1, 1, 1},
+        sirius::backend::ComputeDispatch{*kernel, second_bound, 1, 1, 1}};
+    ASSERT_TRUE(device.DispatchIndependentPair(commands));
+    const auto paired = vulkan->DescriptorBindingStatistics();
+    EXPECT_EQ(paired.created - full.created, 1U);
+    EXPECT_EQ(paired.reused - full.reused, 1U);
+    EXPECT_GT(paired.evicted, full.evicted);
+    check(oldest, .5f);
+    check(second_bound[1], .5f);
+    ASSERT_TRUE(device.Dispatch(*kernel, first_bound, 1, 1, 1));
+    const auto retained = vulkan->DescriptorBindingStatistics();
+    EXPECT_EQ(retained.created, paired.created);
+    EXPECT_EQ(retained.reused - paired.reused, 1U);
+
+    // Reorder same-sized buffers so the former output becomes input. A usage
+    // signature alone cannot identify this binding, or the shorter layout.
+    auto swapped = first_bound;
+    std::swap(swapped[0], swapped[1]);
+    ASSERT_TRUE(device.WriteBuffer(swapped[0], std::as_bytes(std::span(radii))));
+    ASSERT_TRUE(device.WriteBuffer(swapped[1], std::as_bytes(std::span(canary))));
+    ASSERT_TRUE(device.Dispatch(*kernel, swapped, 1, 1, 1));
+    const auto reordered = vulkan->DescriptorBindingStatistics();
+    EXPECT_EQ(reordered.created - retained.created, 1U);
+    check(swapped[1], .5f);
+    std::array<float, 8> unchanged{};
+    ASSERT_TRUE(device.ReadBuffer(swapped[0], std::as_writable_bytes(std::span(unchanged))));
+    EXPECT_EQ(unchanged, radii);
+    ASSERT_TRUE(device.WriteBuffer(swapped[1], std::as_bytes(std::span(canary))));
+    ASSERT_TRUE(device.Dispatch(*kernel, std::span(swapped).first(3), 1, 1, 1));
+    EXPECT_EQ(vulkan->DescriptorBindingStatistics().created - reordered.created, 1U);
+    check(swapped[1], .5f);
+    RecordProperty("descriptor_sets_created", std::to_string(paired.created));
+    RecordProperty("descriptor_sets_evicted", std::to_string(paired.evicted));
 #endif
 }
 

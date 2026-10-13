@@ -59,6 +59,12 @@ struct VulkanTimestampProperties {
     double period_ns = 0;
 };
 
+// Cumulative host binding operations, not GPU completion or isolated cost.
+struct VulkanDescriptorBindingStats {
+    std::uint64_t created = 0, reused = 0, evicted = 0;
+    std::size_t resident_sets = 0;
+};
+
 // One undivided device span, including original barriers and scheduling between
 // the two markers. This is not isolated shader time or calibrated host time.
 // Query failures/unavailable/ambiguous counters have no device_span_ms value.
@@ -85,6 +91,12 @@ class VulkanDevice final : public ComputeDevice {
 
     [[nodiscard]] VulkanPipelineCacheStats PipelineCacheStatistics() const noexcept {
         return pipeline_cache_stats_;
+    }
+    // Serialize observation with other device operations, as with Dispatch.
+    [[nodiscard]] VulkanDescriptorBindingStats DescriptorBindingStatistics() const noexcept {
+        auto result = descriptor_binding_stats_;
+        result.resident_sets = descriptor_bindings_.size();
+        return result;
     }
     // Caller serializes this with other device operations, as with Dispatch.
     // Publish a complete bounded snapshot for later fresh devices; no disk I/O.
@@ -165,6 +177,9 @@ class VulkanDevice final : public ComputeDevice {
 
     [[nodiscard]] base::Expected<Pipeline*> GetOrCreatePipeline(
         KernelHandle kernel, std::span<const BufferHandle> buffers, bool* created);
+    [[nodiscard]] base::Expected<VkDescriptorSet> GetOrCreateDescriptorSet(
+        const Pipeline& pipeline, std::span<const BufferHandle> buffers,
+        std::span<const VkDescriptorSet> protected_sets);
     [[nodiscard]] base::Expected<void> DispatchCommands(std::span<const ComputeDispatch> commands,
                                                         DispatchTiming* timing,
                                                         std::uint32_t* pipeline_creations);
@@ -173,11 +188,7 @@ class VulkanDevice final : public ComputeDevice {
 
     // At most one accepted submission can lack a confirmed completion. Further
     // work/query reuse refuses; destruction waits before releasing its resources.
-    struct PendingDispatch {
-        std::array<VkDescriptorSet, 2> sets{};
-        std::uint32_t set_count = 0;
-    };
-    std::optional<PendingDispatch> pending_dispatch_;
+    bool pending_dispatch_ = false;
 
     VkInstance instance_ = VK_NULL_HANDLE;
     VkPhysicalDevice physical_ = VK_NULL_HANDLE;
@@ -207,6 +218,17 @@ class VulkanDevice final : public ComputeDevice {
     std::uint64_t buffer_allocation_bytes_ = 0;
     std::uint64_t buffer_allocation_limit_ = std::numeric_limits<std::uint64_t>::max();
     std::map<PipelineKey, Pipeline> pipelines_;
+    // Buffer identities, sizes and usages remain fixed for this device's life;
+    // contents and mutation epochs deliberately do not participate in the key.
+    // The pool owns every set, including quarantined submissions at destruction.
+    struct DescriptorBinding {
+        VkDescriptorSetLayout layout = VK_NULL_HANDLE;
+        std::vector<BufferHandle> buffers;
+        VkDescriptorSet set = VK_NULL_HANDLE;
+        std::uint32_t storage_count = 0, uniform_count = 0;
+    };
+    std::vector<DescriptorBinding> descriptor_bindings_;
+    VulkanDescriptorBindingStats descriptor_binding_stats_;
 };
 
 }  // namespace sirius::backend

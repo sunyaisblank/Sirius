@@ -30,6 +30,8 @@ using base::Fail;
 // Headers on the measured toolchain are Vulkan 1.3 while the loader is 1.4;
 // requesting 1.3 is compatible with both (specification section 1.7 evidence).
 constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
+constexpr std::uint32_t kStorageDescriptors = 256, kUniformDescriptors = 64;
+constexpr std::size_t kDescriptorBindingCacheLimit = 32;
 
 VkBufferCreateInfo BufferCreateInfo(std::uint64_t size_bytes, BufferUsage usage) {
     const VkBufferUsageFlags usage_flags = usage == BufferUsage::kStorage
@@ -497,8 +499,8 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
     // Sized for tile-grained dispatch: a handful of sets in flight, each
     // with a handful of bindings; revisited with the memory governor.
     const VkDescriptorPoolSize pool_sizes[] = {
-        {.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, .descriptorCount = 256},
-        {.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, .descriptorCount = 64},
+        {.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, .descriptorCount = kStorageDescriptors},
+        {.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, .descriptorCount = kUniformDescriptors},
     };
     const VkDescriptorPoolCreateInfo descriptor_pool_info{
         .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
@@ -524,10 +526,6 @@ VulkanDevice::~VulkanDevice() {
         // entire device/instance chain until process termination in that case.
         // https://docs.vulkan.org/spec/latest/chapters/devsandqueues.html#devsandqueues-lost-device
         if (completion != VK_SUCCESS && completion != VK_ERROR_DEVICE_LOST) return;
-        if (pending_dispatch_) {
-            vkFreeDescriptorSets(device_, descriptor_pool_, pending_dispatch_->set_count,
-                                 pending_dispatch_->sets.data());
-        }
         // Export while the owning device is alive and no operations can modify
         // its cache. A failed optimization snapshot must not escape a destructor.
         if (pipeline_cache_modified_) {
@@ -552,6 +550,8 @@ VulkanDevice::~VulkanDevice() {
             vkDestroyPipelineCache(device_, pipeline_cache_, nullptr);
         if (timestamp_pool_ != VK_NULL_HANDLE)
             vkDestroyQueryPool(device_, timestamp_pool_, nullptr);
+        // The confirmed completion boundary above permits the pool to free all
+        // cached sets, including those used by a quarantined dispatch.
         vkDestroyDescriptorPool(device_, descriptor_pool_, nullptr);
         vkDestroyCommandPool(device_, command_pool_, nullptr);
         vkDestroyDevice(device_, nullptr);
@@ -984,6 +984,85 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
     return &inserted->second;
 }
 
+Expected<VkDescriptorSet> VulkanDevice::GetOrCreateDescriptorSet(
+    const Pipeline& pipeline, std::span<const BufferHandle> buffers,
+    std::span<const VkDescriptorSet> protected_sets) {
+    SIRIUS_PRE(!pending_dispatch_);
+    for (const auto& binding : descriptor_bindings_) {
+        if (binding.layout == pipeline.set_layout &&
+            std::equal(binding.buffers.begin(), binding.buffers.end(), buffers.begin(), buffers.end(),
+                       [](BufferHandle a, BufferHandle b) { return a.value == b.value; })) {
+            ++descriptor_binding_stats_.reused;
+            return binding.set;
+        }
+    }
+
+    // Complete every host allocation before acquiring a Vulkan set. Reserving
+    // the bounded cache also makes the final move below allocation-free.
+    descriptor_bindings_.reserve(kDescriptorBindingCacheLimit);
+    DescriptorBinding binding{.layout = pipeline.set_layout,
+                              .buffers = {buffers.begin(), buffers.end()}};
+    std::vector<VkDescriptorBufferInfo> buffer_infos(buffers.size());
+    std::vector<VkWriteDescriptorSet> writes(buffers.size());
+    for (std::uint32_t i = 0; i < buffers.size(); ++i) {
+        const Buffer& buffer = buffers_[buffers[i].value];
+        buffer_infos[i] = {.buffer = buffer.buffer, .offset = 0, .range = buffer.size_bytes};
+        const bool storage = buffer.usage == BufferUsage::kStorage;
+        binding.storage_count += storage ? 1 : 0;
+        binding.uniform_count += storage ? 0 : 1;
+        writes[i] = {.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                     .dstBinding = i,
+                     .descriptorCount = 1,
+                     .descriptorType = storage ? VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+                                               : VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                     .pBufferInfo = &buffer_infos[i]};
+    }
+    if (binding.storage_count > kStorageDescriptors ||
+        binding.uniform_count > kUniformDescriptors)
+        return Fail(ErrorDomain::kDevice, "allocate descriptor set", "bindings exceed pool budget");
+
+    auto storage_count = binding.storage_count, uniform_count = binding.uniform_count;
+    for (const auto& cached : descriptor_bindings_) {
+        storage_count += cached.storage_count;
+        uniform_count += cached.uniform_count;
+    }
+    while (descriptor_bindings_.size() >= kDescriptorBindingCacheLimit ||
+           storage_count > kStorageDescriptors || uniform_count > kUniformDescriptors) {
+        const auto victim = std::find_if(
+            descriptor_bindings_.begin(), descriptor_bindings_.end(), [&](const auto& cached) {
+                return std::find(protected_sets.begin(), protected_sets.end(), cached.set) ==
+                       protected_sets.end();
+            });
+        if (victim == descriptor_bindings_.end())
+            return Fail(ErrorDomain::kDevice, "allocate descriptor set",
+                        "independent pair bindings exceed pool budget");
+        const auto result = vkFreeDescriptorSets(device_, descriptor_pool_, 1, &victim->set);
+        storage_count -= victim->storage_count;
+        uniform_count -= victim->uniform_count;
+        // Vulkan invalidates all passed sets after this call, even on failure.
+        descriptor_bindings_.erase(victim);
+        ++descriptor_binding_stats_.evicted;
+        if (result != VK_SUCCESS)
+            return Fail(ErrorDomain::kDevice, "free descriptor set", VkResultText(result));
+    }
+    const VkDescriptorSetAllocateInfo set_info{
+        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+        .descriptorPool = descriptor_pool_,
+        .descriptorSetCount = 1,
+        .pSetLayouts = &pipeline.set_layout,
+    };
+    if (const auto result = vkAllocateDescriptorSets(device_, &set_info, &binding.set);
+        result != VK_SUCCESS)
+        return Fail(ErrorDomain::kDevice, "allocate descriptor set", VkResultText(result));
+    for (auto& write : writes) write.dstSet = binding.set;
+    vkUpdateDescriptorSets(device_, static_cast<std::uint32_t>(writes.size()), writes.data(), 0,
+                           nullptr);
+    const auto set = binding.set;
+    descriptor_bindings_.push_back(std::move(binding));
+    ++descriptor_binding_stats_.created;
+    return set;
+}
+
 Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const BufferHandle> buffers,
                                       std::uint32_t groups_x, std::uint32_t groups_y,
                                       std::uint32_t groups_z, DispatchTiming* timing) {
@@ -1030,7 +1109,6 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
                     [&](BufferHandle earlier) { return earlier.value == item.buffers[i].value; }))
                 AdvanceBufferMutation(item.buffers[i]);
     std::array<Pipeline*, 2> pipelines{};
-    std::array<VkDescriptorSetLayout, 2> layouts{};
     for (std::size_t i = 0; i < commands.size(); ++i) {
         bool created = false;
         auto pipeline = GetOrCreatePipeline(commands[i].kernel, commands[i].buffers, &created);
@@ -1038,49 +1116,16 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
         if (pipeline_creations) *pipeline_creations += created ? 1 : 0;
         if (!pipeline) return std::unexpected(pipeline.error());
         pipelines[i] = *pipeline;
-        layouts[i] = (*pipeline)->set_layout;
     }
     const auto pipeline_end = std::chrono::steady_clock::now();
 
-    const VkDescriptorSetAllocateInfo set_info{
-        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-        .descriptorPool = descriptor_pool_,
-        .descriptorSetCount = static_cast<std::uint32_t>(commands.size()),
-        .pSetLayouts = layouts.data(),
-    };
     std::array<VkDescriptorSet, 2> sets{};
-    if (const VkResult r = vkAllocateDescriptorSets(device_, &set_info, sets.data());
-        r != VK_SUCCESS) {
-        return Fail(ErrorDomain::kDevice, "allocate descriptor set", VkResultText(r));
-    }
-    const auto free_sets = [&] {
-        vkFreeDescriptorSets(device_, descriptor_pool_, set_info.descriptorSetCount, sets.data());
-    };
-
     for (std::size_t command_index = 0; command_index < commands.size(); ++command_index) {
-        const auto buffers = commands[command_index].buffers;
-        std::vector<VkDescriptorBufferInfo> buffer_infos(buffers.size());
-        std::vector<VkWriteDescriptorSet> writes(buffers.size());
-        for (std::uint32_t i = 0; i < buffers.size(); ++i) {
-            const Buffer& buffer = buffers_[buffers[i].value];
-            buffer_infos[i] = VkDescriptorBufferInfo{
-                .buffer = buffer.buffer,
-                .offset = 0,
-                .range = buffer.size_bytes,
-            };
-            writes[i] = VkWriteDescriptorSet{
-                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                .dstSet = sets[command_index],
-                .dstBinding = i,
-                .descriptorCount = 1,
-                .descriptorType = buffer.usage == BufferUsage::kStorage
-                                      ? VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-                                      : VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                .pBufferInfo = &buffer_infos[i],
-            };
-        }
-        vkUpdateDescriptorSets(device_, static_cast<std::uint32_t>(writes.size()), writes.data(), 0,
-                               nullptr);
+        const auto set = GetOrCreateDescriptorSet(
+            *pipelines[command_index], commands[command_index].buffers,
+            std::span<const VkDescriptorSet>(sets.data(), command_index));
+        if (!set) return std::unexpected(set.error());
+        sets[command_index] = *set;
     }
 
     if (dispatch_command_ == VK_NULL_HANDLE) {
@@ -1092,7 +1137,6 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
         };
         if (const VkResult r = vkAllocateCommandBuffers(device_, &command_info, &dispatch_command_);
             r != VK_SUCCESS) {
-            free_sets();
             return Fail(ErrorDomain::kDevice, "allocate command buffer", VkResultText(r));
         }
     }
@@ -1108,7 +1152,6 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
     if (const auto result = vkBeginCommandBuffer(command, &begin_info); result != VK_SUCCESS) {
         vkFreeCommandBuffers(device_, command_pool_, 1, &dispatch_command_);
         dispatch_command_ = VK_NULL_HANDLE;
-        free_sets();
         return Fail(ErrorDomain::kDevice, "begin compute command buffer", VkResultText(result));
     }
     if (timestamp_pool_ != VK_NULL_HANDLE) {
@@ -1145,7 +1188,6 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
     if (const auto result = vkEndCommandBuffer(command); result != VK_SUCCESS) {
         vkFreeCommandBuffers(device_, command_pool_, 1, &dispatch_command_);
         dispatch_command_ = VK_NULL_HANDLE;
-        free_sets();
         return Fail(ErrorDomain::kDevice, "end compute command buffer", VkResultText(result));
     }
 
@@ -1186,9 +1228,7 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
         last_dispatch_timestamp_ = observation;
     }
     if (detail::VulkanSubmissionNeedsCompletion(submitted, submit_result)) {
-        pending_dispatch_ = PendingDispatch{sets, set_info.descriptorSetCount};
-    } else {
-        free_sets();
+        pending_dispatch_ = true;
     }
     const auto dispatch_end = std::chrono::steady_clock::now();
     if (timing != nullptr) {
