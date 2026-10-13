@@ -1176,6 +1176,7 @@ TEST(VulkanBackend, DescriptorReusePreservesOrderedBindingsThroughEviction) {
             const auto after = vulkan->DescriptorBindingStatistics();
             EXPECT_EQ(after.created - before.created + after.reused - before.reused, 1U);
             EXPECT_LE(after.resident_sets, 64U);
+            EXPECT_LE(3U * after.resident_sets, 64U);
             EXPECT_EQ(after.created - after.evicted, after.resident_sets);
             EXPECT_EQ(device.BufferAllocationBytes(), resident_bytes);
             check(outputs[i], mass);
