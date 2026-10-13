@@ -13,15 +13,18 @@
 // metric or scene semantics outside the Vulkan render path and when a requested
 // precision rung is unsupported, never substituting a different render.
 
+#include "sirius/backend/retained_compute.h"
 #include "sirius/base/error.h"
 #include "sirius/render/dispatch_governor.h"
 #include "sirius/render/memory_governor.h"
+#include "sirius/render/session/display_buffer.h"
 
 #include <array>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <string>
+#include <vector>
 
 namespace sirius::render {
 
@@ -32,9 +35,13 @@ class DisplayBuffer;
 enum class PrecisionRung {
     Fp32,      // Retained binary32 Kerr-family transport; scalar legacy metrics.
     Fp32Comp,  // Same retained Kerr-family path; compensated legacy metrics.
-    Fp64,      // Retained Kerr-family transport with exact binary64 products;
+    Fp64,      // Retained Kerr-family transport with exact two-word products;
                // binary64 legacy metrics. Requires shaderFloat64.
 };
+
+// Parse SIRIUS_PRECISION without substituting a different requested mode.
+// Automatic admission and the render boundary share this configuration authority.
+[[nodiscard]] base::Expected<PrecisionRung> ResolveVulkanPrecisionRequest();
 
 // Independent residency and submission caps. Expensive workloads admit at most
 // 256 active fp32 beam/catalogue trajectories in 64x4 bands; fp64 and heavy
@@ -69,13 +76,64 @@ struct VulkanRenderStats {
     std::uint64_t camera_batches = 0;
     std::uint64_t accepted_intervals = 0;
     // Film camera, joint RK, projection, dense sampling, initialization, smooth ray camera.
-    std::array<std::int64_t, 6> retained_stage_dispatches{};
+    // Counts kernel commands, including both commands in a shared submission.
+    // Original six stages followed by the separate DP phase sampler.
+    std::array<std::int64_t, backend::RetainedCompute::kStageCount> retained_stage_dispatches{};
+    std::array<backend::RetainedCompute::StageStats, backend::RetainedCompute::kStageCount>
+        retained_stages{};
+    backend::RetainedCompute::StageStats endpoint_dense_timing;
+    std::uint64_t queue_submissions = 0;
+    struct RetainedTiming {
+        // Allocated stage rows; the adaptive submission budget can be lower.
+        // Ray concurrency is separately recorded in continuation_capacity.
+        std::uint64_t projection_capacity = 0;
+        std::uint64_t batches = 0;
+        std::uint64_t full_batches = 0;
+        std::uint64_t interval_rows = 0;
+        std::uint64_t camera_rows = 0;
+        std::uint64_t sample_batches = 0;
+        std::uint64_t sample_rows = 0;
+        std::vector<std::uint64_t> batch_row_counts;
+        // Request-released waits and a separate live snapshot; include startup
+        // and session-tail idle, not an exclusive CPU/GPU wall-time partition.
+        std::uint64_t first_request_waits = 0;
+        double first_request_wait_ms = 0;
+        double maximum_first_request_wait_ms = 0;
+        bool awaiting_first_request = false;
+        double current_first_request_wait_ms = 0;
+        std::uint64_t coalescing_timeouts = 0;
+        std::uint64_t coalescing_underfilled = 0;
+        std::uint64_t coalescing_stopped = 0;
+        std::uint64_t coalescing_traces_ready = 0;
+        double coalescing_wait_ms = 0;
+        double maximum_coalescing_wait_ms = 0;
+        double execute_ms = 0;
+        // Worker totals overlap the serialized dispatcher and other workers.
+        std::uint64_t acceleration_calls = 0;
+        double acceleration_ms = 0;
+        // Sums of individual stages and shared-pair observations, once each. Dispatch total
+        // includes pipeline/command/submit/cleanup phases; Execute includes all of these and buffer
+        // transfers. These are nested, not additive wall components.
+        double pipeline_setup_ms = 0;
+        double command_setup_ms = 0;
+        double submit_wait_ms = 0;
+        double cleanup_ms = 0;
+        double dispatch_total_ms = 0;
+        double write_buffer_ms = 0;
+        double read_buffer_ms = 0;
+        std::uint64_t write_buffer_bytes = 0;
+        std::uint64_t read_buffer_bytes = 0;
+        std::uint64_t pipeline_creations = 0;
+    } retained_timing;
+    // Explicit software preparation before workers. These zero-active
+    // submissions never contribute to governed stages or feedback.
+    backend::RetainedCompute::PreparationStats retained_preparation;
     PrecisionRung precision = PrecisionRung::Fp32;
     bool starfield_uploaded = false;
     bool point_catalogue_uploaded = false;
     int tiles_rendered = 0;
     int work_tile_edge = 0;            // Host publication work, independent of device residency.
-    std::int64_t band_dispatches = 0;  // governed ray submissions, excluding initialization
+    std::int64_t band_dispatches = 0;  // governed kernel commands, excluding initialization
     double dispatch_seconds = 0.0;
     double maximum_dispatch_ms = 0.0;
     std::int64_t maximum_dispatch_rays = 0;
@@ -97,10 +155,13 @@ struct VulkanRenderStats {
 // progress as (tiles_done, tiles_total). Preconditions: the display buffer is
 // initialised to the config resolution. Postcondition on success: every pixel of
 // `display` holds finite linear radiance; on failure nothing is partially
-// committed to the caller beyond the error return.
+// committed to the caller beyond the error return. The optional completed-tile
+// outlet carries provisional finite linear radiance separately; its borrowed
+// span is valid during the callback and never commits `display`.
 [[nodiscard]] base::Expected<VulkanRenderStats> RenderVulkanToDisplay(
     const SessionConfig& config, DisplayBuffer& display,
     const std::function<void(int tiles_done, int tiles_total)>& on_tile = {},
-    const std::function<bool()>& should_cancel = {});
+    const std::function<bool()>& should_cancel = {},
+    const CompletedTileCallback& on_completed_tile = {});
 
 }  // namespace sirius::render

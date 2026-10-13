@@ -42,11 +42,37 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         stats.work_tile_edge = 32;
         stats.tiles_rendered = imax ? 22528 : 2040;
         stats.continuation_capacity = 64;
+        stats.retained_timing.projection_capacity = 128;
+        stats.retained_timing.first_request_waits = 11;
+        stats.retained_timing.first_request_wait_ms = 12.5;
+        stats.retained_timing.maximum_first_request_wait_ms = 3.25;
+        stats.retained_timing.awaiting_first_request = true;
+        stats.retained_timing.current_first_request_wait_ms = .75;
         stats.maximum_dispatch_rays = 64;
         stats.band_dispatches = imax ? 32736 : 3000;
         stats.retained_stage_dispatches =
-            imax ? std::array<std::int64_t, 6>{0, 5000, 5000, 5000, 5000, 12736}
-                 : std::array<std::int64_t, 6>{0, 500, 500, 500, 500, 1000};
+            imax ? std::array<std::int64_t, 7>{0, 5000, 5000, 5000, 5000, 12736, 0}
+                 : std::array<std::int64_t, 7>{0, 500, 500, 500, 500, 1000, 0};
+        for (std::size_t i = 0; i < stats.retained_stages.size(); ++i) {
+            auto& stage = stats.retained_stages[i];
+            stage.submissions = static_cast<std::uint64_t>(stats.retained_stage_dispatches[i]);
+            stage.command_row_counts.resize(129);
+            stage.command_row_counts[1 + i] = stage.submissions;
+            const auto zero = stage.submissions == 0 ? 0 : i;
+            stage.completion_flag_counts = {zero, stage.submissions * (1 + i) - zero, 0};
+        }
+        auto& paired = stats.endpoint_dense_timing;
+        paired.submissions = imax ? 3000 : 300;
+        paired.submit_wait_ms = imax ? 30000 : 3000;
+        paired.maximum_submit_wait_ms = 25;
+        paired.pipeline_setup_ms = 3;
+        paired.command_setup_ms = 4;
+        paired.cleanup_ms = 5;
+        paired.dispatch_total_ms = paired.submit_wait_ms + 12;
+        paired.pipeline_creations = 2;
+        paired.target_overshoots = 0;
+        stats.queue_submissions =
+            static_cast<std::uint64_t>(stats.band_dispatches) - paired.submissions;
         stats.camera_batches = imax ? 12736 : 1000;
         stats.accepted_intervals = imax ? 10000 : 1000;
         stats.dispatch_seconds = imax ? 90.0 : 15.0;
@@ -62,9 +88,33 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         EXPECT_EQ(decoded["work_items"], imax ? 22528 : 2040);
         EXPECT_EQ(decoded["work_tile_edge"], 32);
         EXPECT_EQ(decoded["maximum_dispatch_rays"], 64);
+        EXPECT_EQ(decoded["ray_capacity"], 64);
+        EXPECT_EQ(decoded["retained_timing"]["projection_capacity"], 128);
+        EXPECT_EQ(decoded["retained_timing"]["first_request_waits"], 11);
+        EXPECT_EQ(decoded["retained_timing"]["first_request_wait_ms"], 12.5);
+        EXPECT_EQ(decoded["retained_timing"]["maximum_first_request_wait_ms"], 3.25);
+        EXPECT_EQ(decoded["retained_timing"]["awaiting_first_request"], true);
+        EXPECT_EQ(decoded["retained_timing"]["current_first_request_wait_ms"], .75);
+        const auto& stage_rows = decoded["retained_stage_rows"]["stages"];
+        ASSERT_EQ(stage_rows.size(), stats.retained_stages.size());
+        for (std::size_t i = 0; i < stage_rows.size(); ++i) {
+            EXPECT_EQ(stage_rows[i]["stage"],
+                      sirius::backend::RetainedCompute::StageName(
+                          static_cast<sirius::backend::RetainedCompute::KernelStage>(i)));
+            EXPECT_EQ(stage_rows[i]["submissions"], stats.retained_stages[i].submissions);
+            EXPECT_EQ(stage_rows[i]["command_row_counts"],
+                      stats.retained_stages[i].command_row_counts);
+            EXPECT_EQ(stage_rows[i]["completion_flag_counts"],
+                      stats.retained_stages[i].completion_flag_counts);
+        }
         EXPECT_EQ(decoded["source_owner"], "host");
         EXPECT_EQ(decoded["route"], "retained");
         EXPECT_TRUE(decoded["dispatches"].is_number_integer());
+        EXPECT_EQ(decoded["dispatches"], stats.band_dispatches);
+        EXPECT_EQ(decoded["queue_submissions"], stats.queue_submissions);
+        EXPECT_EQ(decoded["shared_endpoint_dense"]["submissions"], paired.submissions);
+        EXPECT_EQ(decoded["shared_endpoint_dense"]["submit_wait_ms"], paired.submit_wait_ms);
+        EXPECT_EQ(decoded["shared_endpoint_dense"]["dispatch_total_ms"], paired.dispatch_total_ms);
         std::cout << kSceneEvidencePrefix << scene << '\n'
                   << kSourceSceneEvidencePrefix << scene << '\n'
                   << kVulkanEvidencePrefix << completion << '\n';
@@ -85,4 +135,49 @@ TEST(RenderEvidence, DeviceIdentityEscapesJsonWithoutChangingItsValue) {
     EXPECT_EQ(decoded["precision"], "fp64");
     EXPECT_EQ(decoded["route"], "legacy");
     EXPECT_EQ(decoded["source_owner"], "device");
+    EXPECT_FALSE(decoded.contains("retained_preparation"));
+
+    // Initialization is visible without inventing governed rays or folding
+    // its submission time into physical dispatch measurements.
+    stats.retained_intervals = true;
+    stats.initialization_dispatches = 5;
+    stats.initialization_seconds = 2;
+    stats.initialization_submit_wait_ms = 1500;
+    stats.retained_preparation.wall_ms = 2000;
+    auto& ray_camera = stats.retained_preparation.stages[static_cast<std::size_t>(
+        sirius::backend::RetainedCompute::KernelStage::kRayCamera)];
+    ray_camera.attempts = 1;
+    ray_camera.dispatch_attempts = 1;
+    ray_camera.completed_dispatches = 1;
+    ray_camera.completed = 1;
+    ray_camera.header_restored = true;
+    ray_camera.timing.pipeline_setup_ms = 25;
+    ray_camera.timing.command_setup_ms = 2;
+    ray_camera.timing.submit_wait_ms = 1100;
+    ray_camera.timing.cleanup_ms = 3;
+    ray_camera.timing.total_ms = 1130;
+    ray_camera.timing.pipeline_created = true;
+    ray_camera.write_buffer_calls = 2;
+    ray_camera.write_buffer_ms = 4;
+    ray_camera.write_buffer_bytes = 8;
+    const auto prepared = nlohmann::json::parse(VulkanRenderEvidenceJson(config, stats));
+    EXPECT_EQ(prepared["initialization_dispatches"], 5);
+    EXPECT_EQ(prepared["retained_preparation"]["wall_ms"], 2000);
+    const auto& observed = prepared["retained_preparation"]["stages"][static_cast<std::size_t>(
+        sirius::backend::RetainedCompute::KernelStage::kRayCamera)];
+    EXPECT_EQ(observed["stage"], "ray_camera");
+    EXPECT_EQ(observed["completed_dispatches"], 1);
+    EXPECT_EQ(observed["header_restored"], true);
+    EXPECT_EQ(observed["pipeline_setup_ms"], 25);
+    EXPECT_EQ(observed["command_setup_ms"], 2);
+    EXPECT_EQ(observed["submit_wait_ms"], 1100);
+    EXPECT_EQ(observed["cleanup_ms"], 3);
+    EXPECT_EQ(observed["dispatch_total_ms"], 1130);
+    EXPECT_EQ(observed["pipeline_created"], true);
+    EXPECT_EQ(observed["write_buffer_calls"], 2);
+    EXPECT_EQ(observed["write_buffer_ms"], 4);
+    EXPECT_EQ(observed["write_buffer_bytes"], 8);
+    EXPECT_EQ(prepared["dispatches"], 0);
+    EXPECT_EQ(prepared["dispatch_seconds"], 0);
+    EXPECT_EQ(prepared["retained_timing"]["submit_wait_ms"], 0);
 }

@@ -137,8 +137,8 @@ def metric_profile(position, row):
     return H, ell, flat
 
 
-def metric(position, row):
-    H, ell, flat = metric_profile(position, row)
+def metric(position, row, profile=metric_profile):
+    H, ell, flat = profile(position, row)
     g = []
     inv = []
     for i in range(4):
@@ -207,7 +207,7 @@ def build():
     assert len(scientific) == 104
     return [v.i for v in scientific]
 
-def compile_parallel_program(outputs, live):
+def compile_parallel_program(outputs, live, prefix_outputs=None, homogeneous=False, with_plan=False):
     """Schedule independent DAG nodes together, without changing any expression.
 
     A layer never reuses its inputs' registers. They become available only after
@@ -217,14 +217,54 @@ def compile_parallel_program(outputs, live):
         op, a, b, c = ops[old]
         return [] if op in (0, 1) else [a] + ([] if op in (6, 7, 8) else [b]) + ([c] if op in (10, 11) else [])
 
-    levels = {}
-    for old in sorted(live):
-        levels[old] = 1 + max((levels[d] for d in dependencies(old)), default=-1)
-    layers = [[] for _ in range(max(levels.values()) + 1)]
-    for old in sorted(live):
-        layers[levels[old]].append(old)
-    layers = [sorted(layer, key=lambda i: (ops[i][0], i))[start:start+64]
-              for layer in layers for start in range(0, len(layer), 64)]
+    phases = [live]
+    if prefix_outputs is not None:
+        prefix = set()
+        def visit(old):
+            if old in prefix:
+                return
+            assert old in live
+            prefix.add(old)
+            for dependency in dependencies(old):
+                visit(dependency)
+        for output in prefix_outputs:
+            visit(output)
+        assert prefix and prefix != live
+        phases = [prefix, live - prefix]
+
+    layers = []
+    for phase in phases:
+        if homogeneous:
+            consumers = {old: set() for old in phase}
+            remaining = {}
+            for old in phase:
+                local = set(dependencies(old)) & phase
+                remaining[old] = len(local)
+                for dependency in local:
+                    consumers[dependency].add(old)
+            ready = {old for old in phase if remaining[old] == 0}
+            while ready:
+                grouped = {}
+                for old in sorted(ready):
+                    grouped.setdefault(ops[old][0], []).append(old)
+                opcode = max(grouped, key=lambda op: (len(grouped[op]), -op))
+                layer = grouped[opcode][:64]
+                layers.append(layer)
+                ready.difference_update(layer)
+                for old in layer:
+                    for consumer in consumers[old]:
+                        remaining[consumer] -= 1
+                        if remaining[consumer] == 0:
+                            ready.add(consumer)
+            continue
+        levels = {}
+        for old in sorted(phase):
+            levels[old] = 1 + max((levels[d] for d in dependencies(old) if d in phase), default=-1)
+        phase_layers = [[] for _ in range(max(levels.values()) + 1)]
+        for old in sorted(phase):
+            phase_layers[levels[old]].append(old)
+        layers.extend(sorted(layer, key=lambda i: (ops[i][0], i))[start:start+64]
+                      for layer in phase_layers for start in range(0, len(layer), 64))
     levels = {old: level for level, layer in enumerate(layers) for old in layer}
     last_use = levels.copy()
     for old in sorted(live):
@@ -238,6 +278,7 @@ def compile_parallel_program(outputs, live):
             released[level].append(old)
     slots, free, program, offsets = {}, [], [], [0]
     owners = {}
+    write_order = [] if with_plan else None
     registers = 0
     for level, layer in enumerate(layers):
         inputs = {slots[d] for old in layer for d in dependencies(old)}
@@ -262,15 +303,25 @@ def compile_parallel_program(outputs, live):
             slots[old] = destination
             owners[destination] = old
             program.extend((op, destination, a, b, c))
+            if with_plan:
+                write_order.append(old)
         offsets.append(len(program) // 5)
         free.extend(slots[old] for old in released[level])
     assert all(owners[slots[old]] == old for old in outputs)
-    return {'instructions': len(live), 'registers': registers,
-            'outputs': [slots[i] for i in outputs], 'operations': program,
-            'layer_offsets': offsets}
+    result = {'instructions': len(live), 'registers': registers,
+              'outputs': [slots[i] for i in outputs], 'operations': program,
+              'layer_offsets': offsets}
+    if with_plan:
+        # Snapshot source identity at each actual write, before another builder
+        # clears the DAG. This observes allocation; it never changes scheduling.
+        result['source_plan'] = {'operations': tuple(ops), 'writes': tuple(write_order),
+                                 'outputs': tuple(outputs)}
+    return result
 
 
-def compile_program(outputs, parallel=False):
+def compile_program(outputs, parallel=False, prefix_outputs=None, homogeneous=False, with_plan=False):
+    if with_plan and not parallel:
+        raise ValueError('source write metadata requires the parallel allocator')
     live = set()
 
     def visit(i):
@@ -287,7 +338,7 @@ def compile_program(outputs, parallel=False):
     for i in outputs:
         visit(i)
     if parallel:
-        return compile_parallel_program(outputs, live)
+        return compile_parallel_program(outputs, live, prefix_outputs, homogeneous, with_plan)
     sequence = sorted(live)
     last_use = {i: i for i in sequence}
     for old in sequence:
@@ -401,22 +452,99 @@ def build_hamiltonian_rhs():
 
 
 
-def build_transport_program(parallel=False):
-    return compile_program(build_hamiltonian_rhs(), parallel)
+def build_transport_program(parallel=False, with_plan=False):
+    # Ready opcode cohorts reduce mixed arithmetic paths without changing the
+    # complete coupled expression DAG or its per-layer ownership rules.
+    program = compile_program(build_hamiltonian_rhs(), parallel, homogeneous=parallel,
+                              with_plan=with_plan)
+    if parallel:
+        # Preserve the existing Transport storage span across arithmetic modes.
+        program['registers'] = max(program['registers'], 459)
+    return program
 
 
-def build_endpoint_program(parallel=False):
+def build_schwarzschild_transport_program(parallel=False, with_plan=False):
+    """Coupled Schwarzschild RHS for exact a=Q=Lambda=0 and r>0.
+
+    The shader owns parameter admission and its prior analytic flat bypass.
+    This changes retained arithmetic ordering; it is not an exact-word
+    replacement for the general Kerr expression graph.
+    """
+    ops.clear()
+    cache.clear()
+    row = [inp(i) for i in range(45)]
+    position, momentum = row[4:8], row[8:12]
+    reflection = [row[44], p(1), row[44], p(1)]
+    reflected = [x * c for x, c in zip(position, reflection)]
+    xx, yy, zz = [coord(reflected[i], i) for i in range(1, 4)]
+    bound = node(9, node(9, reflected[1], reflected[2]),
+                 node(9, reflected[3], p(0)))
+    scale = J(node(8, bound))
+    x, y, z = xx / scale, yy / scale, zz / scale
+    radius = scale * (x * x + y * y + z * z).sqrt()
+    ell = [j(1), xx / radius, yy / radius, zz / radius]
+    factor = (2 * j(row[0])) / radius
+    n = [ell[i].v * reflection[i] for i in range(1, 4)]
+    radial_momentum = sum(n[i] * momentum[i + 1] for i in range(3))
+    contraction = -(row[44] * momentum[0]) + radial_momentum
+    tangent = [-momentum[0] + row[44] * factor.v * contraction]
+    tangent.extend(momentum[i + 1] - factor.v * n[i] * contraction
+                   for i in range(3))
+    # K=(eta*p*p-H*S*S)/2, H=2M/r, S=-chart*p0+n.p.
+    # -partial_i K=(H/r)*S*(pi-(n.p+S/2)*ni); stationarity gives F0=0.
+    common = (factor.v / radius.v) * contraction
+    radial_coefficient = radial_momentum + contraction / 2
+    force = [p(0)]
+    force.extend(common * (momentum[i + 1] - radial_coefficient * n[i])
+                 for i in range(3))
+    central = tangent + force
+    outputs = central[:]
+    for column in range(4):
+        seeds = {4 + i: row[12 + 8 * column + i] for i in range(8)}
+        outputs.extend(differentiate(central, seeds))
+    program = compile_program([v.i for v in outputs], parallel, homogeneous=parallel,
+                              with_plan=with_plan)
+    if parallel:
+        # Keep the existing Transport scratch and output span in every mode.
+        program['registers'] = max(program['registers'], 459)
+    return program
+
+
+def schwarzschild_metric_profile(position, row):
+    """Exact a=Q=Lambda=0 profile; the shader owns admission and flat bypass."""
+    xx, yy, zz = [coord(position[i], i) for i in range(1, 4)]
+    bound = node(9, node(9, position[1], position[2]),
+                 node(9, position[3], p(0)))
+    scale = J(node(8, bound))
+    x, y, z = xx / scale, yy / scale, zz / scale
+    radius = scale * (x * x + y * y + z * z).sqrt()
+    ell = [j(1), xx / radius, yy / radius, zz / radius]
+    factor = (2 * j(row[0])) / radius
+    return factor, ell, node(9, row[0], p(0))
+
+
+def build_endpoint_program(parallel=False, with_plan=False):
+    return build_endpoint_profile_program(parallel, metric_profile, with_plan)
+
+
+def build_schwarzschild_endpoint_program(parallel=False, with_plan=False):
+    # Arithmetic regrouping needs independent numerical acceptance; it does
+    # not promise the general graph's exact words or enclosure widths.
+    return build_endpoint_profile_program(parallel, schwarzschild_metric_profile, with_plan)
+
+
+def build_endpoint_profile_program(parallel, profile, with_plan=False):
     """Metric and projected physical columns from the complete phase expansion.
 
     The endpoint kernel first consumes the metric/tangent outputs to select a
-    null root, then evaluates the same program with that retained root and its
+    null root, then resumes the program with that retained root and its
     component selector. No rounded coordinate variation is subtracted from a
     rounded connection to recover a small covariant variation.
     """
     ops.clear()
     cache.clear()
     row = [inp(i) for i in range(53)]
-    g, inverse = chart_geometry(row[4:8], row, row[44])
+    g, inverse = chart_geometry(row[4:8], row, row[44], profile)
     tangent = [sum(inverse[i][k] * row[8+k] for k in range(4)) for i in range(4)]
     projected = row[45:49]
     selected = row[49:53]
@@ -424,32 +552,81 @@ def build_endpoint_program(parallel=False):
     covector = [sum(g[i][k].v * projected[k] for k in range(4)) for i in range(4)]
     denominator = sum(covector[i] * selected[i] for i in range(4))
 
-    def first(a, b, c):
-        return (g[a][c].d[b] + g[a][b].d[c] - g[b][c].d[a]) / 2
+    H, ell = chart_metric_profile(row[4:8], row, row[44], profile)
+    # Weight each derivative before contracting large physical columns. An
+    # unweighted D_X ell or (ell.W)*(ell.X) can exceed retained product bounds
+    # even when the corresponding weak-field metric derivative stays small.
+    weighted_light = [[H.v * ell[i].d[a] for a in range(4)] for i in range(4)]
+    directions = {}
+    metric_changes = {}
+
+    def directional(vector):
+        key = tuple(v.i for v in vector)
+        if key not in directions:
+            contraction = sum(ell[i].v * vector[i] for i in range(4))
+            profile_change = sum(H.d[a] * vector[a] for a in range(4))
+            light_change = [sum(weighted_light[i][a] * vector[a] for a in range(4))
+                            for i in range(4)]
+            # These are transpose contractions, not D_vector ell. Their
+            # distinction retains the rotating Kerr congruence's twist.
+            light_gradient = [sum(weighted_light[i][a] * vector[i] for i in range(4))
+                              for a in range(4)]
+            directions[key] = contraction, profile_change, light_change, light_gradient
+        return directions[key]
+
+    def phi(A, B):
+        # (D_A g) B for g=eta+H*ell*ell^T, holding B fixed.
+        key = tuple(v.i for v in A), tuple(v.i for v in B)
+        if key not in metric_changes:
+            _, profile_change, light_change, _ = directional(A)
+            contraction, _, _, _ = directional(B)
+            scalar = profile_change * contraction + sum(
+                light_change[i] * B[i] for i in range(4))
+            metric_changes[key] = [ell[i].v * scalar + light_change[i] * contraction
+                                   for i in range(4)]
+        return metric_changes[key]
+
+    def gradient(A, B):
+        # grad(A^T g B), with both vectors fixed during differentiation.
+        first, _, _, first_gradient = directional(A)
+        second, _, _, second_gradient = directional(B)
+        return [(H.d[i] * first) * second + first_gradient[i] * second +
+                first * second_gradient[i] for i in range(4)]
+
+    def connection(W, X, swapped=False):
+        dxw, dwx, grad = phi(X, W), phi(W, X), gradient(W, X)
+        if swapped:
+            # Contract the first index instead: Gamma_{a,mu,b} W^a X^b.
+            return [(dxw[i] + grad[i] - dwx[i]) / 2 for i in range(4)]
+        return [(dxw[i] + dwx[i] - grad[i]) / 2 for i in range(4)]
 
     phase = row[4:8] + covector
     physical = row[4:8] + projected
     for column in range(4):
         X = row[12+8*column:16+8*column]
         P = row[16+8*column:20+8*column]
-        lowered = [P[mu] + sum((first(mu, a, b) * delta[a] -
-                                first(a, mu, b) * tangent[a]) * X[b]
-                               for a in range(4) for b in range(4)) for mu in range(4)]
+        correction = connection(delta, X)
+        previous = connection(tangent, X, swapped=True)
+        lowered = [P[mu] + correction[mu] - previous[mu] for mu in range(4)]
         raw = [sum(inverse[mu][nu] * lowered[nu] for nu in range(4)) for mu in range(4)]
         numerator = sum(covector[i] * raw[i] * (1-selected[i]) for i in range(4))
         solved = -numerator / denominator
         V = [(1-selected[i]) * raw[i] + selected[i] * solved for i in range(4)]
         # Preserve P itself. Reconstructing it from g*V and a large connection
         # contraction would discard the very residual retained by transport.
-        corrected = [P[mu] + sum(g[mu][a].d[b] * delta[a] * X[b]
-                                 for a in range(4) for b in range(4)) +
+        changed = phi(X, delta)
+        corrected = [P[mu] + changed[mu] +
                      sum(g[mu][a].v * selected[a] * (V[a]-raw[a]) for a in range(4))
                      for mu in range(4)]
         phase.extend(X + corrected)
         physical.extend(X + V)
     outputs = [v.v for line in g for v in line] + tangent + phase + physical
     assert len(outputs) == 100
-    program = compile_program([v.i for v in outputs], parallel)
+    program = compile_program([v.i for v in outputs], parallel, [v.i for v in outputs[:20]],
+                              with_plan=with_plan)
+    if parallel:
+        # Preserve the existing Endpoint scratch and 3829-word output row.
+        program['registers'] = max(program['registers'], 612)
     # Output registers are pinned through the whole program. Their final writes
     # delimit the metric/tangent prefix needed before selecting the null root.
     last_write = {program['operations'][5*i+1]: i for i in range(program['instructions'])}
@@ -459,10 +636,102 @@ def build_endpoint_program(parallel=False):
     return program
 
 
-def chart_geometry(position, row, chart):
+def build_stage_seven_owner_plan():
+    """Map identical live expressions to their original T/E write ordinals.
+
+    Keys preserve opcode, constant/input words and dependency order. Runtime
+    replay additionally requires canonical tables, matching operand words and
+    arithmetic mode, valid owned records and a successful high-row generation.
+    This source mapping is not a native floating-point word-equivalence proof.
+    """
+    pure_inputs = frozenset((*range(8), 44))
+
+    def dependencies(operation):
+        op, a, b, c = operation
+        assert 0 <= op <= 11
+        return (() if op in (0, 1) else
+                (a,) + (() if op in (6, 7, 8) else (b,)) + ((c,) if op in (10, 11) else ()))
+
+    families = {}
+    for family, transport, endpoint in (
+            ('general', build_transport_program, build_endpoint_program),
+            ('schwarzschild', build_schwarzschild_transport_program,
+             build_schwarzschild_endpoint_program)):
+        programs = {'transport': transport(True, with_plan=True),
+                    'endpoint': endpoint(True, with_plan=True)}
+        intern, eligible = {}, {}
+        for stage, program in programs.items():
+            source = program['source_plan']
+            operations, writes = source['operations'], source['writes']
+            assert len(writes) == program['instructions'] == len(set(writes))
+            ordinals = {node: ordinal for ordinal, node in enumerate(writes)}
+            ids, inputs = [], []
+            matching = {}
+            for node, operation in enumerate(operations):
+                op, a, _, _ = operation
+                deps = dependencies(operation)
+                assert all(dependency < node for dependency in deps)
+                key = (op, a) if op in (0, 1) else (op, tuple(ids[d] for d in deps))
+                if key not in intern:
+                    intern[key] = len(intern)
+                ids.append(intern[key])
+                inputs.append(frozenset((a,)) if op == 1 else
+                              frozenset().union(*(inputs[d] for d in deps)))
+                if node in ordinals and inputs[node] <= pure_inputs:
+                    assert ids[node] not in matching, 'duplicate live expression'
+                    matching[ids[node]] = (node, ordinals[node], inputs[node])
+
+            # Independently reconstruct every encoded tuple from the observed
+            # write order, including recycled registers and pinned roots.
+            destinations = {node: program['operations'][5 * ordinal + 1]
+                            for ordinal, node in enumerate(writes)}
+            for ordinal, node in enumerate(writes):
+                op, a, b, c = operations[node]
+                deps = dependencies(operations[node])
+                assert all(d in ordinals and ordinals[d] < ordinal for d in deps)
+                if op not in (0, 1):
+                    a = destinations[a]
+                    b = 0 if op in (6, 7, 8) else destinations[b]
+                    c = destinations[c] if op in (10, 11) else 0
+                assert tuple(program['operations'][5 * ordinal:5 * ordinal + 5]) == (
+                    op, destinations[node], a, b, c)
+            assert [destinations[node] for node in source['outputs']] == program['outputs']
+            eligible[stage] = matching
+
+        pairs = []
+        for key in eligible['transport'].keys() & eligible['endpoint'].keys():
+            t_node, t_ordinal, t_inputs = eligible['transport'][key]
+            _, e_ordinal, e_inputs = eligible['endpoint'][key]
+            assert t_inputs == e_inputs
+            opcode = programs['transport']['source_plan']['operations'][t_node][0]
+            if opcode not in (0, 1):
+                pairs.append((t_node, t_ordinal, e_ordinal))
+        # Preserve original source order so the executable observer's records
+        # and future owner slots have the same independently reviewed identity.
+        pairs.sort()
+        families[family] = {'programs': {stage: {k: v for k, v in program.items()
+                                               if k != 'source_plan'}
+                                         for stage, program in programs.items()},
+                            'writes': tuple((t, e) for _, t, e in pairs)}
+    return families
+
+
+def chart_metric_profile(position, row, chart, profile=metric_profile):
+    """Rank-one profile and coordinate derivatives in the active chart."""
     reflection = [chart, p(1), chart, p(1)]
     reflected = [position[i] * reflection[i] for i in range(4)]
-    g, inverse = metric(reflected, row)
+    H, ell, _ = profile(reflected, row)
+    H = J(H.v, [H.d[a] * reflection[a] for a in range(4)])
+    ell = [J(ell[i].v * reflection[i],
+             [ell[i].d[a] * reflection[i] * reflection[a] for a in range(4)])
+           for i in range(4)]
+    return H, ell
+
+
+def chart_geometry(position, row, chart, profile=metric_profile):
+    reflection = [chart, p(1), chart, p(1)]
+    reflected = [position[i] * reflection[i] for i in range(4)]
+    g, inverse = metric(reflected, row, profile)
     g = [[J(g[i][k].v * reflection[i] * reflection[k],
             [g[i][k].d[a] * reflection[i] * reflection[k] * reflection[a]
              for a in range(4)]) for k in range(4)] for i in range(4)]
@@ -518,6 +787,58 @@ def build_dense_program(parallel=False):
         # Dk/dlambda=0 cancels the geodesic-flow acceleration and connection
         # terms exactly. Arrival changes X by k*shift and leaves covariant V.
         outputs.extend([X[i]+tangent[i]*shift for i in range(4)] + V)
+    return compile_program([v.i for v in outputs], parallel)
+
+
+def build_dopri_phase_program(parallel=False):
+    """Order-four continuous DP phase extension using the existing seven RHS.
+
+    Hairer/Wanner DOPRI5 CONTD5: https://www.unige.ch/~hairer/prog/nonstiff/dopri5.f
+    Every phase field is interpolated, including momenta and their variations.
+    Physical null projection and event-time differentiation are separate owners.
+    """
+    from fractions import Fraction
+    ops.clear()
+    cache.clear()
+    row = [inp(i) for i in range(362)]
+    h, s = row[360:362]
+    d = [(0, 1), (87487479700, 32700410799),
+         (-10690763975, 1880347072), (701980252875, 199316789632),
+         (-1453857185, 822651844), (69997945, 29380423)]
+    assert sum((Fraction(n, q) for n, q in d), Fraction(0)) == Fraction(12715105075, 11282082432)
+
+    def integer(value):
+        # Base-2^16 digits are exact binary32 constants. Division happens in
+        # retained device arithmetic; no large rational is rounded on the host
+        # or narrowed through the shader's signed-32-bit Rational interface.
+        sign = -1 if value < 0 else 1
+        value = abs(value)
+        digits = []
+        while value:
+            digits.append(value & 65535)
+            value >>= 16
+        result = p(0)
+        for digit in reversed(digits):
+            result = result * 65536 + digit
+        return result if sign > 0 else -result
+
+    weights = [integer(n) / integer(q) for n, q in d]
+    phase, derivative, aa, bb, cc = [], [], [], [], []
+    for i in range(40):
+        original, delta = row[i], row[40+i]
+        k1, k7 = row[80+i], row[320+i]
+        a = h*k1-delta
+        b = 2*delta-h*(k1+k7)
+        # Sum d_i=0 permits this difference form; constant RHS cancels before
+        # any weighted products instead of subtracting large stage values.
+        c = h*sum(weights[j-1]*(row[80+40*j+i]-k1) for j in range(2, 7))
+        value = original+s*(delta+(1-s)*(a+s*(b+(1-s)*c)))
+        rate = (delta+(1-2*s)*a+s*(2-3*s)*b+2*s*(1-s)*(1-2*s)*c)/h
+        value = node(11, original, node(11, original+delta, value, s-1), s)
+        rate = node(11, k1, node(11, k7, rate, s-1), s)
+        phase.append(value); derivative.append(rate)
+        aa.append(a); bb.append(b); cc.append(c)
+    outputs = phase+derivative+aa+bb+cc
     return compile_program([v.i for v in outputs], parallel)
 
 

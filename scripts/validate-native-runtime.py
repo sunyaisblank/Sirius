@@ -22,6 +22,8 @@ from pathlib import Path
 
 from attestation_preflight import self_test as preflight_self_test
 from reuse_qualification_evidence import self_test as qualification_reuse_self_test
+from runtime_identity import capture as capture_runtime_identity
+from runtime_identity import self_test as runtime_identity_self_test
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -199,6 +201,7 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
     output = args.output_root.resolve() / run_id
     output.mkdir(parents=True, exist_ok=False)
     inventory_path = output / "device-inventory.json"
+    runtime_identity_path = output / "runtime-identity.json"
     report_path = output / "native-runtime-tests.xml"
     ctest_inventory_path = output / "ctest-inventory.json"
     transcript_path = output / "native-runtime-transcript.log"
@@ -265,6 +268,11 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
         "selected device did not remain authoritative in the bound inventory",
     )
     inventory_path.write_text(json.dumps(inventory, indent=2) + "\n", encoding="utf-8")
+    runtime_identity = capture_runtime_identity(
+        ROOT, revision, True, binary, True, "before_native_runtime_estate", inventory,
+        environment=environment, output=runtime_identity_path
+    )
+    runtime_identity_path.write_text(json.dumps(runtime_identity, indent=2) + "\n", encoding="utf-8")
 
     readiness = json.loads(
         run(
@@ -362,6 +370,7 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
             frame_path,
             report_path,
             inventory_path,
+            runtime_identity_path,
             transcript_path,
             alignment_receipt_path,
             mandatory_gate_path,
@@ -393,6 +402,7 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
                 ).hexdigest(),
             },
             "runtime_ready": True,
+            "runtime_identity": runtime_identity_path.name,
         },
         "artifacts": artifacts,
     }
@@ -404,6 +414,7 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
 
 
 def self_test() -> None:
+    runtime_identity_self_test()
     preflight_self_test()
     qualification_reuse_self_test()
     windows = profile_for_host("win32")

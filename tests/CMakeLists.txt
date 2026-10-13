@@ -86,6 +86,16 @@ set_tests_properties(
         TIMEOUT 10)
 
 add_test(
+    NAME OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+    COMMAND "${Python3_EXECUTABLE}" -B
+        "${CMAKE_CURRENT_SOURCE_DIR}/operational/retained_shader_controls_test.py")
+set_tests_properties(
+    OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+    PROPERTIES
+        LABELS "Mandatory;Operational"
+        TIMEOUT 10)
+
+add_test(
     NAME OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
     COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_SOURCE_DIR}/scripts/verify-build-gate.py" --self-test)
@@ -167,6 +177,7 @@ add_test(
     NAME OperationalVolume.InstallRelocateInitialiseAndFailClosed
     COMMAND "${CMAKE_COMMAND}"
         -DSIRIUS_TEST_CONFIG=$<CONFIG>
+        -DSIRIUS_BACKEND_TESTS=$<TARGET_FILE:sirius_backend_tests>
         -P "${CMAKE_CURRENT_BINARY_DIR}/volume_initialization.cmake")
 set_tests_properties(
     OperationalVolume.InstallRelocateInitialiseAndFailClosed
@@ -213,8 +224,8 @@ if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
         PROPERTIES
             LABELS "Mandatory;Operational"
             RUN_SERIAL TRUE
-            # Cold Dozen translation plus a governed 128x128 physical render
-            # is measured at about 164 seconds on the target Radeon route.
+            # Bound cold translation plus the complete governed 128x128 render.
+            # This deadline is an acceptance limit, not a performance claim.
             TIMEOUT 300)
 
     add_test(
@@ -227,9 +238,8 @@ if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
         PROPERTIES
             LABELS "Mandatory;Operational;Stability"
             RUN_SERIAL TRUE
-            # Three independent ten-point boundary searches take about five
-            # minutes on the target Dozen route. This is a stability witness,
-            # not a throughput assertion, so retain substantial liveness
-            # margin for cold shader translation and driver variation.
-            TIMEOUT 1200)
+            # Repeated CPU and retained physical classifications include cold
+            # driver translation. Bound liveness without reducing the prescribed
+            # repetitions, classifier points or numerical/work criteria.
+            TIMEOUT 28800)
 endif()

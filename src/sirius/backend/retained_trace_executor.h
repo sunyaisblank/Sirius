@@ -3,12 +3,15 @@
 #include "sirius/backend/retained_integrator.h"
 #include "sirius/backend/trace_step_executor.h"
 
+#include <chrono>
 #include <condition_variable>
 #include <deque>
 #include <functional>
 #include <map>
 #include <mutex>
+#include <optional>
 #include <thread>
+#include <vector>
 
 namespace sirius::backend {
 
@@ -19,7 +22,8 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
   public:
     explicit RetainedTraceExecutor(RetainedCompute& compute,
                                    std::function<bool()> should_cancel = {},
-                                   double maximum_submission_ms = 0);
+                                   double maximum_submission_ms = 0,
+                                   std::size_t maximum_batch_rows = 0);
     ~RetainedTraceExecutor() override;
     void BeginTrace() override;
     void EndTrace() override;
@@ -28,21 +32,92 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
                                              const core::CameraRay& camera) override;
     bool Step(core::Lightray& ray, core::IMetric& metric, const core::IntegratorConfig& config,
               core::Rk45CoupledState& coupled, core::Rk45CoupledComparison& comparison) override;
+    std::optional<core::CoupledSegmentSample> Sample(core::CoupledTrial trial, double fraction,
+                                                     const core::Vec4* normal = nullptr) override;
+    // A submission safety error includes its observed one-row stage and host
+    // submit/wait duration; it does not attribute the driver's compilation work.
+    // Sticky errors complete queued calls without further device work.
     [[nodiscard]] std::optional<base::Error> Error() const;
     struct Stats {
         std::uint64_t interval_batches = 0;
         std::uint64_t camera_batches = 0;
+        std::uint64_t sample_batches = 0;
         std::uint64_t batch_subdivisions = 0;
         std::uint64_t safety_fallbacks = 0;
+        // A private singleton repeated with serialized projection/trial rows
+        // before publication; discarded stage work remains charged.
+        std::uint64_t paired_projection_retries = 0;
         std::size_t maximum_batch_rows = 0;
         std::uint64_t reused_phases = 0;
         std::uint64_t initialized_phases = 0;
         std::uint64_t accepted_intervals = 0;
         std::uint64_t rejected_intervals = 0;
+        // Observations of final returned attempt rows only. Discarded private
+        // projection retries, cancellations and sticky-error defaults can have
+        // no observations; these are not counts per completed ray or frame.
+        struct ErrorStats {
+            std::uint64_t rows = 0, refused = 0, invalid = 0, over_one = 0;
+            double finite_ratio_sum = 0, finite_ratio_max = 0;
+        };
+        std::array<ErrorStats, 4> error_checks{};
+        std::array<std::uint64_t, 4> dominant_admitted_checks{}, dominant_rejected_checks{};
+        std::array<std::uint64_t, 42> limiting_error_fields{};
+        // Requested intervals of completed fanout rows, including error drains
+        // with no returned norm observation. These count unfinished rays too.
+        std::uint64_t interval_measurements = 0;
+        double interval_min = 0, interval_max = 0, interval_sum = 0;
+        double scaled_interval_min = 0, scaled_interval_max = 0, scaled_interval_sum = 0;
+        // h * frequency_scale / length_scale, bins ending at
+        // 1e-6,1e-5,1e-4,1e-3,1e-2,1e-1,1,10; final bin is above10.
+        std::array<std::uint64_t, 9> scaled_interval_bins{};
+        // Actual accepted-step growth clips and distinct valid continuations
+        // discarded by the tracer (event checks or cancellation).
+        std::uint64_t dense_growth_limits = 0;
+        std::uint64_t tracer_rollbacks = 0;
+        // Completed gathered batches; mixed requests and a private retry count
+        // once. Histogram includes rejected interval rows.
+        std::uint64_t batches = 0;
+        std::uint64_t full_batches = 0;
+        std::uint64_t interval_rows = 0;
+        std::uint64_t camera_rows = 0;
+        std::uint64_t sample_rows = 0;
+        std::vector<std::uint64_t> batch_row_counts;
+        // Empty-queue waits released by a request, including startup and lock
+        // reacquisition; stop-only wakes are excluded. Completion precedes
+        // coalescing, so this count can be one ahead of completed batches.
+        std::uint64_t first_request_waits = 0;
+        double first_request_wait_ms = 0;
+        double maximum_first_request_wait_ms = 0;
+        // Read-only live snapshot, separate from completed wait totals. It may
+        // include session-tail idle and does not establish CPU or GPU starvation.
+        bool awaiting_first_request = false;
+        double current_first_request_wait_ms = 0;
+        // Predicate wait wall time includes lock reacquisition. First-request
+        // waiting remains outside this coalescing observation.
+        std::uint64_t coalescing_timeouts = 0;
+        std::uint64_t coalescing_underfilled = 0;
+        std::uint64_t coalescing_stopped = 0;
+        std::uint64_t coalescing_traces_ready = 0;
+        double coalescing_wait_ms = 0;
+        double maximum_coalescing_wait_ms = 0;
+        double execute_ms = 0;  // Serialized, including packing and device calls.
+        // Cumulative physical compute counters, copied by the dispatcher only
+        // after a complete batch (including private retry and returned failures).
+        // Preparation has separate counters. Earlier serialized work on the
+        // same compute, if any, remains included in these cumulative values.
+        // Stage counts include shared commands; shared submission timing lives
+        // only in endpoint_dense_timing, so it must be counted once.
+        std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> stage_timing{};
+        RetainedCompute::StageStats endpoint_dense_timing{};
+        // Summed worker intervals can overlap each other and the dispatcher.
+        // They are not an exclusive component of render wall time.
+        std::uint64_t acceleration_calls = 0;
+        double acceleration_ms = 0;
     };
     [[nodiscard]] Stats Statistics() const;
 
   private:
+    friend struct RetainedTraceExecutorTestPeer;
     struct Snapshot {
         std::array<double, 40> physical{};
         std::array<double, 4> metric{};
@@ -52,28 +127,46 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     struct Continuation {
         Snapshot before, after;
         RetainedEndpointOutput start, finish;
+        std::shared_ptr<const RetainedDopriInterval> dopri;
+        core::Lightray origin{};
     };
     struct Request {
         bool camera = false;
+        bool sampling = false;
         RetainedRayCameraInput camera_input;
         base::Expected<RetainedCameraOutput> camera_result = RetainedCameraOutput{};
         RetainedInitializeInput initialization;
         RetainedIntervalInput interval;
         base::Expected<RetainedIntervalOutput> result = RetainedIntervalOutput{};
+        RetainedDopriSampleInput sample_input;
+        base::Expected<RetainedDopriSampleOutput> sample_result = RetainedDopriSampleOutput{};
+        // Known completed attempts remain charged after retry, error or cancellation.
+        std::uint32_t completed_stages = 0;
         bool completed = false;
+        bool cancelled = false;
+        bool registered = false;
     };
     void Run();
-    void Execute(std::span<Request*> requests);
+    void Execute(std::span<Request*> requests, std::size_t projection_row_budget);
     RetainedCompute& compute_;
+    // A lower logical limit reserves both endpoint orders of each queued ray.
+    // Zero in the constructor selects the complete storage capacity.
+    std::size_t maximum_batch_rows_;
     double maximum_submission_ms_;
     std::function<bool()> should_cancel_;
     mutable std::mutex mutex_;
     std::condition_variable available_, completed_;
     std::deque<Request*> requests_;
     std::map<std::thread::id, Continuation> continuations_;
+    // Synchronous Launch/Step/Sample permits at most one queued request per thread.
+    // Nesting depth preserves distinct membership across nested trace scopes.
+    std::map<std::thread::id, std::size_t> active_traces_;
+    std::size_t queued_registered_ = 0;
     std::optional<base::Error> error_;
     Stats stats_;
     bool stopping_ = false;
+    // Initialized before the constructor starts dispatcher_; mutex-owned.
+    std::optional<std::chrono::steady_clock::time_point> first_request_wait_started_;
     std::thread dispatcher_;
 };
 

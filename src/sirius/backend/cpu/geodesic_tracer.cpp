@@ -6,6 +6,7 @@
 #include "sirius/core/constants.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
+#include "sirius/core/metrics/warp_drive_family.h"
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/spectral/colour_modes.h"
 #include "sirius/core/trace_boundary.h"
@@ -25,6 +26,13 @@ namespace {
 bool FiniteVector(const Vec4& value) {
     for (int component = 0; component < 4; ++component)
         if (!std::isfinite(value(component))) return false;
+    return true;
+}
+
+bool FiniteCoupledSample(const CoupledSegmentSample& sample) {
+    if (!FiniteVector(sample.ray.position) || !FiniteVector(sample.ray.velocity)) return false;
+    for (const auto& column : sample.variations)
+        if (!FiniteVector(column.displacement) || !FiniteVector(column.derivative)) return false;
     return true;
 }
 
@@ -352,6 +360,88 @@ bool GeodesicTracer::FindDiskIntersection(const Vec4& start_position, const Vec4
     return false;
 }
 
+bool GeodesicTracer::FindDiskIntersection(const DopriPositionSegment& segment,
+                                          float& intersection_r, float& intersection_phi,
+                                          double& intersection_fraction,
+                                          Vec4& intersection_position, Vec4& intersection_tangent,
+                                          bool* transverse_event) {
+    if (transverse_event) *transverse_event = false;
+    if (!segment.IsFinite()) return false;
+    const auto coefficients = detail::DopriPositionCoefficients(segment);
+    double scale = 1.0;
+    bool coplanar = true;
+    for (const auto& coefficient : coefficients) {
+        scale = std::max(scale, std::abs(coefficient(3)));
+        coplanar = coplanar && coefficient(3) == 0.0;
+    }
+    const double tolerance = 64.0 * std::numeric_limits<double>::epsilon() * scale;
+    const auto accept = [&](double fraction) {
+        const auto sample = segment.Sample(fraction);
+        const coordinates::Vec4Cart cart{sample.position(0), sample.position(1), sample.position(2),
+                                         sample.position(3)};
+        const double radius = coordinates::KerrSchildRadius(cart, cached_a_ * cached_m_);
+        if (!FiniteVector(sample.position) || !FiniteVector(sample.tangent) ||
+            !std::isfinite(radius) || radius < config_.disk_inner || radius > config_.disk_outer)
+            return false;
+        if (transverse_event)
+            *transverse_event = std::abs(sample.tangent(3) * segment.interval) > tolerance;
+        intersection_fraction = fraction;
+        intersection_position = sample.position;
+        intersection_tangent = sample.tangent;
+        intersection_r = static_cast<float>(radius);
+        intersection_phi = static_cast<float>(std::atan2(sample.position(2), sample.position(1)));
+        return true;
+    };
+    if (!coplanar) {
+        const auto roots = FindDiskPlaneRoots(segment);
+        for (int index = 0; index < roots.count; ++index)
+            if (accept(roots.values[static_cast<std::size_t>(index)])) return true;
+        return false;
+    }
+
+    // In the equatorial plane, annulus edges are circles of radius hypot(r,a).
+    // Partition at every quartic-circle contact rather than sampling a grid.
+    std::array<double, 18> boundaries{};
+    std::size_t count = 1;
+    boundaries[count++] = segment.parameter_limit;
+    for (double radius :
+         {static_cast<double>(config_.disk_inner), static_cast<double>(config_.disk_outer)}) {
+        const double axis = std::hypot(radius, cached_a_ * cached_m_);
+        if (!(std::isfinite(axis) && axis > 0.0)) return false;
+        std::array<double, 9> polynomial{};
+        const int dominant = std::abs(coefficients[0](1)) >= std::abs(coefficients[0](2)) ? 1 : 2;
+        const double origin = std::abs(coefficients[0](dominant) / axis);
+        const double other_origin = coefficients[0](3 - dominant) / axis;
+        polynomial[0] = (origin - 1.0) * (origin + 1.0) + other_origin * other_origin;
+        for (int power = 0; power <= 4; ++power)
+            for (int other = 0; other <= 4; ++other)
+                if (power + other != 0)
+                    for (int spatial = 1; spatial <= 2; ++spatial)
+                        polynomial[power + other] += (coefficients[power](spatial) / axis) *
+                                                     (coefficients[other](spatial) / axis);
+        const auto roots = detail::FindDopriRoots(polynomial, segment.parameter_limit);
+        for (int index = 0; index < roots.count; ++index)
+            boundaries[count++] = roots.values[static_cast<std::size_t>(index)];
+    }
+    std::sort(boundaries.begin(), boundaries.begin() + static_cast<std::ptrdiff_t>(count));
+    for (std::size_t index = 0; index < count; ++index) {
+        if (accept(boundaries[index])) return true;
+        if (index + 1 == count || !(boundaries[index] < boundaries[index + 1])) continue;
+        double inside = (boundaries[index] + boundaries[index + 1]) * 0.5;
+        if (!accept(inside)) continue;
+        double outside = boundaries[index];
+        for (int iteration = 0; iteration < 64; ++iteration) {
+            const double middle = (outside + inside) * 0.5;
+            if (accept(middle))
+                inside = middle;
+            else
+                outside = middle;
+        }
+        return accept(inside);
+    }
+    return false;
+}
+
 // =============================================================================
 // Initialise a Lightray from a camera ray.
 // =============================================================================
@@ -434,16 +524,35 @@ void GeodesicTracer::InitPolarisationFrame(const Lightray& ray,
 }
 
 void GeodesicTracer::AdvancePolarisationFrame(PolarisationFrame& frame, const Vec4& end_position,
-                                              const Vec4& end_tangent, double d_lambda) {
+                                              const Vec4& end_tangent, double d_lambda,
+                                              const CoupledSegmentSample* midpoint) {
     SIRIUS_PRE(d_lambda > 0.0);
     const Vec4 start_position = frame.reference.position;
     const Vec4 start_tangent = frame.reference.velocity;
-    frame.reference.polarisation =
-        ParallelTransportAlongAcceptedSegment(*metric_, start_position, start_tangent, end_position,
-                                              end_tangent, d_lambda, frame.reference.polarisation);
-    frame.perpendicular.polarisation = ParallelTransportAlongAcceptedSegment(
-        *metric_, start_position, start_tangent, end_position, end_tangent, d_lambda,
-        frame.perpendicular.polarisation);
+    const auto transport = [&](const Vec4& initial) {
+        if (!midpoint)
+            return ParallelTransportAlongAcceptedSegment(*metric_, start_position, start_tangent,
+                                                         end_position, end_tangent, d_lambda,
+                                                         initial);
+        // Keep the existing RK4 connection transport, using the retained
+        // physical midpoint instead of fitting another central-ray curve.
+        const auto rhs = [&](const Vec4& position, const Vec4& tangent, const Vec4& value) {
+            Metric4d metric;
+            Tensor<Dual<double>, 4, 4, 4> derivatives;
+            metric_->Evaluate(position, metric, derivatives);
+            return NegConnectionContraction(TensorOps::Christoffel(metric, derivatives), tangent,
+                                            value);
+        };
+        const Vec4 first = rhs(start_position, start_tangent, initial);
+        const Vec4 second =
+            rhs(midpoint->ray.position, midpoint->ray.velocity, initial + first * (0.5 * d_lambda));
+        const Vec4 third = rhs(midpoint->ray.position, midpoint->ray.velocity,
+                               initial + second * (0.5 * d_lambda));
+        const Vec4 fourth = rhs(end_position, end_tangent, initial + third * d_lambda);
+        return initial + (first + second * 2.0 + third * 2.0 + fourth) * (d_lambda / 6.0);
+    };
+    frame.reference.polarisation = transport(frame.reference.polarisation);
+    frame.perpendicular.polarisation = transport(frame.perpendicular.polarisation);
     frame.reference.position = end_position;
     frame.reference.velocity = end_tangent;
     frame.reference.affine += d_lambda;
@@ -593,6 +702,7 @@ TraceResult GeodesicTracer::TraceTo(const CameraRay& camera_ray, bool allow_infi
         worker.outgoing_chart_ = &outgoing;
         worker.step_executor_ = step_executor_;
         worker.should_cancel_ = should_cancel_;
+        worker.polarisation_observer_ = polarisation_observer_;
         // The radial disk profile is immutable during one trace. Reuse the
         // cached profile without moving or mutating the public tracer's state.
         worker.page_thorne_disk_ = page_thorne_disk_;
@@ -634,6 +744,9 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     relativity::ObserverFrame launch_frame;
     GeodesicVariations launch_variations;
     Lightray ray = InitializeLightray(camera_ray, &launch_frame, &launch_variations);
+    // Initialization can return a device refusal after cancellation arrives.
+    // Give cancellation the same precedence as after an attempted interval.
+    if (should_cancel_ && should_cancel_()) return cancelled_result();
 
     if (ray.terminated != 0 || HasInvalidState(ray)) {
         result.final_position = ray.position;
@@ -653,11 +766,14 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     const auto launch_screen = relativity::ObserverScreenBasis(launch_frame, launch_direction);
     SIRIUS_ASSERT(launch_screen.has_value());
 
-    // Every Kerr-family ray monitors the same two angular and two spatial
-    // columns. Output toggles cannot select a different central trajectory.
+    // Kerr-family and moving-warp rays monitor the same two angular and two
+    // spatial columns. Projected endpoint and dense/event comparisons expose
+    // normalization drift that a pre-projection embedded pair can miss.
+    // Output toggles cannot select a different central trajectory.
     const auto* family =
         outgoing_chart_ ? &outgoing_chart_->Source() : dynamic_cast<KerrSchildFamily*>(metric_);
-    const bool use_coupled = family != nullptr;
+    const auto* warp = dynamic_cast<WarpDriveFamily*>(metric_);
+    const bool use_coupled = family != nullptr || warp != nullptr;
     const bool can_handoff_to_infinity =
         allow_infinity_handoff && family && family->GetParams().Q == 0.0 &&
         family->GetParams().Lambda == 0.0 && !config_.finite_causal_boundary;
@@ -671,16 +787,23 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     Rk45CoupledState coupled;
     std::optional<TraceResult::Beam> admitted_source_maps;
     if (use_coupled) {
-        const auto parameters = family->GetParams();
-        coupled.length_scale = parameters.M > 0.0
-                                   ? parameters.M
+        if (family) {
+            const auto parameters = family->GetParams();
+            coupled.length_scale =
+                parameters.M > 0.0 ? parameters.M
                                    : std::hypot(ray.position(1), ray.position(2), ray.position(3));
+        } else {
+            const auto parameters = warp->GetParams();
+            coupled.length_scale = std::max(parameters.R, 1.0 / parameters.sigma);
+        }
         coupled.frequency_scale = ray.ku_uobsu;
         // Local estimator allocation from the 1e-4 source-map accuracy goal.
         // Four columns share the budget over the configured maximum attempts;
         // this is an estimator policy, not a global observable-error proof.
         coupled.tolerance = 1.0e-4 / (4.0 * config_.max_steps);
-        coupled.stationary = true;
+        // The moving wall has nonzero time derivatives. Its variation flow
+        // must evaluate the full Hessian rather than freeze the t column.
+        coupled.stationary = family != nullptr;
         if (camera_ray.phase_space) {
             coupled.variations = launch_variations;
             for (int column = 0; column < 2; ++column) {
@@ -718,6 +841,18 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     if (config_.enable_polarisation) {
         InitPolarisationFrame(ray, *launch_screen, polarisation_frame);
     }
+    std::optional<double> observed_polarisation_affine;
+    const auto observe_polarisation = [&] {
+        if (!config_.enable_polarisation || !polarisation_observer_) return;
+        const double affine = polarisation_frame.reference.affine;
+        if (observed_polarisation_affine && affine == *observed_polarisation_affine) return;
+        observed_polarisation_affine = affine;
+        const std::array sample{polarisation_frame.reference, polarisation_frame.perpendicular};
+        polarisation_observer_(sample, outgoing_chart_
+                                           ? TraceResult::TerminalChart::OutgoingKerrSchild
+                                           : TraceResult::TerminalChart::MetricNative);
+    };
+    observe_polarisation();
 
     // Schwarzschild-de Sitter has two different past horizons. Outgoing
     // Kerr-Schild coordinates are regular at black-hole capture; ingoing
@@ -737,6 +872,9 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
 
     for (int step = 0; step < config_.max_steps; ++step) {
         if (should_cancel_ && should_cancel_()) return cancelled_result();
+        // The previous iteration has finished rejection and event resolution.
+        // Rejected trials retain the same affine value and produce no sample.
+        observe_polarisation();
         if (chart_switch_radius > 0.0) {
             const bool use_outgoing =
                 std::hypot(ray.position(1), ray.position(2), ray.position(3)) < chart_switch_radius;
@@ -848,7 +986,30 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
 
         bool prepared_disk = false;
         float prepared_disk_radius = 0.0f, prepared_disk_phi = 0.0f;
+        std::optional<DopriPositionSegment> accepted_dopri;
+        std::optional<CoupledSegmentSample> polarisation_midpoint;
         if (use_coupled) {
+            const bool has_dopri =
+                std::any_of(comparison.dopri_positions.begin(), comparison.dopri_positions.end(),
+                            [](const auto& curve) { return curve.has_value(); });
+            bool curves_valid = !has_dopri || step_executor_ != nullptr;
+            if (has_dopri) {
+                for (std::size_t trial = 0; trial < kCoupledTrialCount; ++trial) {
+                    const auto& curve = comparison.dopri_positions[trial];
+                    const double interval = attempted_step / (trial < 2 ? 1.0 : 2.0);
+                    curves_valid = curves_valid && curve && curve->IsFinite() &&
+                                   curve->parameter_limit == 1.0 && curve->interval == interval;
+                }
+            }
+            if (!curves_valid) {
+                if (step_executor_) step_executor_->RejectLastInterval();
+                ray = previous_ray;
+                coupled.variations = previous_variations;
+                coupled.failure = CoupledStepFailure::InvalidState;
+                result.integrator_termination = 3;
+                result.numerical_failure = true;
+                break;
+            }
             enum class Event { None, Causal, Capture, Outer, Disk };
             struct Terminal {
                 Lightray ray;
@@ -860,9 +1021,91 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                 float disk_radius = 0.0f, disk_phi = 0.0f;
             };
             const auto locate = [&](const Lightray& beginning, const Lightray& endpoint,
-                                    double interval, const CoupledSegmentIncrement& increment) {
+                                    double interval, const CoupledSegmentIncrement& increment,
+                                    CoupledTrial trial) {
                 Terminal terminal{};
                 terminal.ray = endpoint;
+                if (has_dopri) {
+                    const auto& curve =
+                        *comparison.dopri_positions[static_cast<std::size_t>(trial)];
+                    const auto clip = [&](const AcceptedTraceSegmentSample& event, Event kind) {
+                        // Quartic roots already carry the original trial fraction.
+                        terminal.fraction = event.fraction;
+                        terminal.ray.position = event.position;
+                        terminal.ray.velocity = event.tangent;
+                        terminal.event = kind;
+                    };
+                    const auto endpoint_locator = curve.Sample(1.0);
+                    terminal.ray.position = endpoint_locator.position;
+                    terminal.ray.velocity = endpoint_locator.tangent;
+                    if (config_.finite_causal_boundary) {
+                        const double start_radius =
+                            std::hypot(curve.origin(1), curve.origin(2), curve.origin(3));
+                        if (!(start_radius < config_.escape_radius)) {
+                            terminal.valid = false;
+                        } else if (const auto event = FindSphericalBoundaryEvent(
+                                       curve, config_.escape_radius,
+                                       SphericalBoundarySense::AnyContact)) {
+                            clip(*event, Event::Causal);
+                        } else if (std::hypot(terminal.ray.position(1), terminal.ray.position(2),
+                                              terminal.ray.position(3)) >= config_.escape_radius) {
+                            terminal.valid = false;
+                        }
+                    }
+                    if (terminal.valid && family) {
+                        const double radius = family->OuterHorizonRadius() * config_.horizon_factor;
+                        if (radius > 0.0) {
+                            const auto event = FindKerrEllipsoidBoundaryEvent(
+                                curve.Restricted(terminal.fraction), radius, family->GetParams().a,
+                                SphericalBoundarySense::DecreasingRadius);
+                            if (event)
+                                clip(*event, Event::Capture);
+                            else if (metric_->InsideCaptureSurface(
+                                         terminal.ray.position,
+                                         static_cast<double>(config_.horizon_factor) - 1.0))
+                                terminal.valid = false;
+                        }
+                    }
+                    if (terminal.valid && !config_.finite_causal_boundary &&
+                        terminal.fraction > 0.0) {
+                        const auto event = FindSphericalBoundaryEvent(
+                            curve.Restricted(terminal.fraction), config_.escape_radius,
+                            SphericalBoundarySense::IncreasingRadius);
+                        if (event && (terminal.event != Event::Capture ||
+                                      event->fraction < terminal.fraction))
+                            clip(*event, Event::Outer);
+                        else if (terminal.event != Event::Capture &&
+                                 std::hypot(terminal.ray.position(1), terminal.ray.position(2),
+                                            terminal.ray.position(3)) > config_.escape_radius &&
+                                 terminal.ray.position(1) * terminal.ray.velocity(1) +
+                                         terminal.ray.position(2) * terminal.ray.velocity(2) +
+                                         terminal.ray.position(3) * terminal.ray.velocity(3) >
+                                     0.0)
+                            terminal.valid = false;
+                    }
+                    if (terminal.valid && config_.enable_disk && !config_.enable_volumetric &&
+                        terminal.fraction > 0.0) {
+                        double fraction = 0.0;
+                        Vec4 position, tangent;
+                        if (FindDiskIntersection(curve.Restricted(terminal.fraction),
+                                                 terminal.disk_radius, terminal.disk_phi, fraction,
+                                                 position, tangent, &terminal.transverse_disk))
+                            clip({position, tangent, fraction}, Event::Disk);
+                    }
+                    if (terminal.event == Event::Disk)
+                        terminal.normal(3) = 1.0;
+                    else if (terminal.event != Event::None) {
+                        for (int axis = 1; axis < 4; ++axis)
+                            terminal.normal(axis) = terminal.ray.position(axis);
+                        if (terminal.event == Event::Capture) {
+                            const double radius =
+                                family->OuterHorizonRadius() * config_.horizon_factor;
+                            const double spin = family->GetParams().a;
+                            terminal.normal(3) *= 1.0 + spin * spin / (radius * radius);
+                        }
+                    }
+                    return terminal;
+                }
                 Vec4 current_increment = increment.position;
                 const auto polynomial =
                     detail::MakeIncrementHermite(beginning.position, beginning.velocity,
@@ -942,15 +1185,16 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                 }
                 return terminal;
             };
-            const Terminal fine =
-                locate(previous_ray, ray, attempted_step, comparison.full_increment);
+            const Terminal fine = locate(previous_ray, ray, attempted_step,
+                                         comparison.full_increment, CoupledTrial::Full);
             const Terminal coarse = locate(previous_ray, comparison.lower_order, attempted_step,
-                                           comparison.lower_increment);
+                                           comparison.lower_increment, CoupledTrial::Lower);
             const auto sample = [&](const Terminal& terminal, const Lightray& beginning,
                                     const GeodesicVariations& initial, const Lightray& endpoint,
                                     const GeodesicVariations& variations, double interval,
-                                    const CoupledSegmentIncrement& increment) {
-                if (step_executor_ && terminal.event == Event::None && terminal.fraction == 1.0) {
+                                    const CoupledSegmentIncrement& increment, CoupledTrial trial) {
+                if (!has_dopri && step_executor_ && terminal.event == Event::None &&
+                    terminal.fraction == 1.0) {
                     // The executor already owns a projected physical endpoint.
                     // Reconstructing X from rounded beginning/increment views
                     // would replace its retained phase on the next interval.
@@ -969,6 +1213,19 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                 if (terminal.event == Event::Capture ||
                     (terminal.event == Event::Disk && !terminal.transverse_disk))
                     normal = nullptr;
+                if (has_dopri) {
+                    auto sampled = step_executor_->Sample(trial, terminal.fraction, normal);
+                    if (!sampled || !FiniteCoupledSample(*sampled) ||
+                        !sampled->polynomial_tangent || !FiniteVector(*sampled->polynomial_tangent))
+                        return std::optional<CoupledSegmentSample>{};
+                    Lightray retained_locator = sampled->ray;
+                    retained_locator.velocity = *sampled->polynomial_tangent;
+                    const double locator_error = Geodesic::CoupledStateError(
+                        terminal.ray, sampled->variations, retained_locator, sampled->variations,
+                        step_config, coupled);
+                    if (!std::isfinite(locator_error) || locator_error > 1.0) sampled.reset();
+                    return sampled;
+                }
                 auto sampled = Geodesic::SampleCoupledSegment(
                     metric_, beginning, initial, endpoint, variations, interval, terminal.fraction,
                     normal, &coupled.variation_metric_evaluations, &increment);
@@ -982,14 +1239,16 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                 return sampled;
             };
             const auto fine_sample =
-                fine.valid ? sample(fine, previous_ray, previous_variations, ray,
-                                    coupled.variations, attempted_step, comparison.full_increment)
-                           : std::nullopt;
+                fine.valid
+                    ? sample(fine, previous_ray, previous_variations, ray, coupled.variations,
+                             attempted_step, comparison.full_increment, CoupledTrial::Full)
+                    : std::nullopt;
             const auto coarse_sample =
-                coarse.valid ? sample(coarse, previous_ray, previous_variations,
-                                      comparison.lower_order, comparison.lower_variations,
-                                      attempted_step, comparison.lower_increment)
-                             : std::nullopt;
+                coarse.valid
+                    ? sample(coarse, previous_ray, previous_variations, comparison.lower_order,
+                             comparison.lower_variations, attempted_step,
+                             comparison.lower_increment, CoupledTrial::Lower)
+                    : std::nullopt;
             double event_error =
                 fine_sample && coarse_sample && fine.event == coarse.event
                     ? Geodesic::CoupledStateError(fine_sample->ray, fine_sample->variations,
@@ -997,22 +1256,24 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                                                   step_config, coupled)
                     : std::numeric_limits<double>::infinity();
             const auto first_half = locate(previous_ray, comparison.midpoint, attempted_step * 0.5,
-                                           comparison.midpoint_increment);
+                                           comparison.midpoint_increment, CoupledTrial::FirstHalf);
             const bool event_in_first_half = first_half.event != Event::None;
             const auto independent =
-                event_in_first_half ? first_half
-                                    : locate(comparison.midpoint, comparison.refined_endpoint,
-                                             attempted_step * 0.5, comparison.refined_increment);
+                event_in_first_half
+                    ? first_half
+                    : locate(comparison.midpoint, comparison.refined_endpoint, attempted_step * 0.5,
+                             comparison.refined_increment, CoupledTrial::SecondHalf);
             const auto independent_sample =
                 independent.valid
                     ? (event_in_first_half
                            ? sample(independent, previous_ray, previous_variations,
                                     comparison.midpoint, comparison.midpoint_variations,
-                                    attempted_step * 0.5, comparison.midpoint_increment)
+                                    attempted_step * 0.5, comparison.midpoint_increment,
+                                    CoupledTrial::FirstHalf)
                            : sample(independent, comparison.midpoint,
                                     comparison.midpoint_variations, comparison.refined_endpoint,
                                     comparison.refined_variations, attempted_step * 0.5,
-                                    comparison.refined_increment))
+                                    comparison.refined_increment, CoupledTrial::SecondHalf))
                     : std::nullopt;
             if (!first_half.valid || !independent_sample || independent.event != fine.event ||
                 !fine_sample)
@@ -1030,17 +1291,28 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                 TraceResult::Beam source;
                 const auto angular =
                     CameraAngularVariations(fine_sample->variations, camera_ray.phase_space);
-                accepted = angular && SampleSourceSkyMaps(
-                                          *metric_, fine.ray.position, fine_sample->ray.velocity,
-                                          {(*angular)[0].displacement, (*angular)[1].displacement},
-                                          {(*angular)[0].derivative, (*angular)[1].derivative}, 1.0,
-                                          outgoing_chart_, source);
+                accepted = angular &&
+                           SampleSourceSkyMaps(
+                               *metric_, has_dopri ? fine_sample->ray.position : fine.ray.position,
+                               fine_sample->ray.velocity,
+                               {(*angular)[0].displacement, (*angular)[1].displacement},
+                               {(*angular)[0].derivative, (*angular)[1].derivative}, 1.0,
+                               outgoing_chart_, source);
                 if (source.infinity_source_failure) {
                     accepted = false;
                     retryable = *source.infinity_source_failure ==
                                 relativity::KerrInfinityFailure::InvalidInput;
                 }
                 if (accepted) trial_source_maps = source;
+            }
+            if (accepted && has_dopri && config_.enable_polarisation && fine.fraction > 0.0) {
+                polarisation_midpoint =
+                    step_executor_->Sample(CoupledTrial::Full, fine.fraction * 0.5);
+                accepted = polarisation_midpoint && FiniteCoupledSample(*polarisation_midpoint);
+            }
+            if (has_dopri && should_cancel_ && should_cancel_()) {
+                if (step_executor_) step_executor_->RejectLastInterval();
+                return cancelled_result();
             }
             if (!accepted) {
                 if (step_executor_) step_executor_->RejectLastInterval();
@@ -1058,7 +1330,7 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
             if (trial_source_maps) admitted_source_maps = std::move(trial_source_maps);
             // Only now does the private trial become an interval available to
             // physical bundles, polarisation and source accumulation.
-            ray.position = fine.ray.position;
+            ray.position = has_dopri ? fine_sample->ray.position : fine.ray.position;
             ray.velocity = fine_sample->ray.velocity;
             ray.coordinate_time = static_cast<float>(ray.position(0));
             coupled.variations = fine_sample->variations;
@@ -1069,6 +1341,17 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
             prepared_disk = fine.event == Event::Disk;
             prepared_disk_radius = fine.disk_radius;
             prepared_disk_phi = fine.disk_phi;
+            if (has_dopri) {
+                accepted_dopri = comparison.dopri_positions[0]->Restricted(fine.fraction);
+                if (prepared_disk) {
+                    const coordinates::Vec4Cart cart{ray.position(0), ray.position(1),
+                                                     ray.position(2), ray.position(3)};
+                    prepared_disk_radius = static_cast<float>(
+                        coordinates::KerrSchildRadius(cart, cached_a_ * cached_m_));
+                    prepared_disk_phi =
+                        static_cast<float>(std::atan2(ray.position(2), ray.position(1)));
+                }
+            }
         }
 
         else {
@@ -1240,8 +1523,10 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
             }
         }
         if (config_.enable_polarisation && d_lambda > 0.0) {
-            AdvancePolarisationFrame(polarisation_frame, ray.position, ray.velocity, d_lambda);
+            AdvancePolarisationFrame(polarisation_frame, ray.position, ray.velocity, d_lambda,
+                                     polarisation_midpoint ? &*polarisation_midpoint : nullptr);
             if (!ReconditionPolarisationFrame(polarisation_frame, ray.position, ray.velocity)) {
+                if (step_executor_) step_executor_->RejectLastInterval();
                 ray = previous_ray;
                 coupled.variations = previous_variations;
                 bundle = previous_bundle;
@@ -1272,8 +1557,22 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                 segment_end(i) = ray.position(i);
             }
 
-            AccumulateVolumetricEmission(prev_vel, ray.velocity, d_lambda, ray.ku_uobsu,
-                                         segment_start, segment_end, result);
+            if (!AccumulateVolumetricEmission(prev_vel, ray.velocity, d_lambda, ray.ku_uobsu,
+                                              segment_start, segment_end, result,
+                                              accepted_dopri ? &*accepted_dopri : nullptr)) {
+                if (step_executor_) step_executor_->RejectLastInterval();
+                if (should_cancel_ && should_cancel_()) return cancelled_result();
+                ray = previous_ray;
+                coupled.variations = previous_variations;
+                bundle = previous_bundle;
+                polarisation_frame = previous_polarisation_frame;
+                affine_length = prev_pt;
+                min_r = min_radius_before_step;
+                coupled.failure = CoupledStepFailure::Event;
+                result.integrator_termination = 5;
+                result.numerical_failure = true;
+                break;
+            }
         }
 
         // 2. Thin disk: terminate at the observer-nearest opaque-surface event.
@@ -1334,7 +1633,10 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                         PolarisationFrame crossing_frame = previous_polarisation_frame;
                         if (crossing_fraction > 0.0 && d_lambda > 0.0) {
                             AdvancePolarisationFrame(crossing_frame, crossing_position, ray_vel,
-                                                     crossing_fraction * d_lambda);
+                                                     crossing_fraction * d_lambda,
+                                                     prepared_disk && polarisation_midpoint
+                                                         ? &*polarisation_midpoint
+                                                         : nullptr);
                         }
                         SetDiskPolarisation(crossing_frame, crossing);
                         polarisation_frame = crossing_frame;
@@ -1486,8 +1788,12 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
         }
     }
 
+    // Observe the committed disk/capture/escape frame, including the clipped
+    // disk reconstruction, before the public terminal event is remapped.
+    observe_polarisation();
+
     // Publish the actual terminal central-ray event for every outcome. For an
-    // opaque disk this is the Hermite-rooted crossing, not the accepted RK45
+    // opaque disk this is the localized crossing, not the accepted RK45
     // endpoint beyond it; the bundle and polarisation frames use the same event.
     for (int component = 0; component < 4; ++component) {
         result.final_position(component) = ray.position(component);
@@ -1675,11 +1981,16 @@ float GeodesicTracer::ComputeVolumetricTemperature(float r, [[maybe_unused]] flo
     return ComputeDiskTemperature(r);
 }
 
-void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
+bool GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
                                                   const Vec4& exit_velocity, double affine_length,
                                                   float observer_frequency, const Vec4& entry_pos,
-                                                  const Vec4& exit_pos, TraceResult& result) {
-    if (!std::isfinite(affine_length) || affine_length <= 0.0) return;
+                                                  const Vec4& exit_pos, TraceResult& result,
+                                                  const DopriPositionSegment* curve) {
+    if (!std::isfinite(affine_length)) return false;
+    if (affine_length <= 0.0) return true;
+    if (curve && (!step_executor_ || !curve->IsFinite() ||
+                  affine_length != curve->interval * curve->parameter_limit))
+        return false;
 
     int N = config_.volumetric_samples;
     const double d_lambda = affine_length / N;
@@ -1697,15 +2008,25 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
 
     if (transfer.optical_depth >= max_tau) {
         result.optical_depth = static_cast<float>(max_tau);
-        return;
+        return true;
     }
 
     for (int i = 0; i < N; i++) {
         const double fraction = (static_cast<double>(i) + 0.5) / N;
-        const AcceptedTraceSegmentSample sample = SampleAcceptedTraceSegment(
-            entry_pos, entry_velocity, exit_pos, exit_velocity, affine_length, fraction);
-        const Vec4& position = sample.position;
-        const Vec4& past_velocity = sample.tangent;
+        Vec4 position, past_velocity;
+        if (curve) {
+            if (should_cancel_ && should_cancel_()) return false;
+            const auto sample =
+                step_executor_->Sample(CoupledTrial::Full, curve->parameter_limit * fraction);
+            if (!sample || !FiniteCoupledSample(*sample)) return false;
+            position = sample->ray.position;
+            past_velocity = sample->ray.velocity;
+        } else {
+            const AcceptedTraceSegmentSample sample = SampleAcceptedTraceSegment(
+                entry_pos, entry_velocity, exit_pos, exit_velocity, affine_length, fraction);
+            position = sample.position;
+            past_velocity = sample.tangent;
+        }
         const double x = position(1);
         const double y = position(2);
         const double z = position(3);
@@ -1788,6 +2109,7 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
         if (transfer.optical_depth >= max_tau) break;
     }
 
+    if (curve && should_cancel_ && should_cancel_()) return false;
     result.volumetric_emission[0] = static_cast<float>(transfer.observed_emission[0]);
     result.volumetric_emission[1] = static_cast<float>(transfer.observed_emission[1]);
     result.volumetric_emission[2] = static_cast<float>(transfer.observed_emission[2]);
@@ -1796,6 +2118,7 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
     // Any represented positive layer contributes emission and attenuation.
     // A display-oriented 0.01 cutoff discarded valid optically thin transfer.
     result.volumetric_hit = result.volumetric_hit || (transfer.optical_depth > 0.0);
+    return true;
 }
 
 // =============================================================================

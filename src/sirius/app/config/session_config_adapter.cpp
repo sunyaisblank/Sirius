@@ -10,6 +10,7 @@
 #include "sirius/backend/device.h"
 #endif
 
+#include <cstdlib>
 #include <iostream>
 #include <optional>
 
@@ -174,11 +175,50 @@ base::Expected<render::SessionConfig> MakeSessionConfig(const SiriusConfig& conf
         } else if (auto compatible = render::ValidateVulkanRenderConfig(session); !compatible) {
             std::cout << "[Session] backend auto: " << compatible.error().detail()
                       << "; using the CPU path\n";
-        } else if (auto devices = backend::EnumerateVulkanDevices();
-                   devices.has_value() && !devices->empty()) {
-            session.backend = render::RenderBackend::Vulkan;
         } else {
-            std::cout << "[Session] backend auto: no Vulkan device visible; using the CPU path\n";
+            const auto precision = render::ResolveVulkanPrecisionRequest();
+            if (!precision) return std::unexpected(precision.error());
+            const auto devices = backend::EnumerateVulkanDevices();
+            const char* selector = std::getenv("SIRIUS_VULKAN_DEVICE");
+            const bool explicit_selector = selector && *selector != '\0';
+            std::optional<std::size_t> selected;
+            if (devices && (!devices->empty() || explicit_selector)) {
+                const auto index = backend::ResolveVulkanDeviceIndex(*devices);
+                if (!index) return std::unexpected(index.error());
+                selected = *index;
+            }
+            if (!devices) {
+                // An explicit adapter identity cannot be resolved after an
+                // enumeration failure. Preserve that failure rather than
+                // silently ignoring the selection or inventing an inventory.
+                if (explicit_selector) return std::unexpected(devices.error());
+                std::cout << "[Session] backend auto: " << devices.error().detail()
+                          << "; using the CPU path\n";
+            } else if (!selected) {
+                std::cout
+                    << "[Session] backend auto: no Vulkan device visible; using the CPU path\n";
+            } else if (session.metric_id == core::MetricId::Minkowski ||
+                       session.metric_id == core::MetricId::Schwarzschild ||
+                       session.metric_id == core::MetricId::Kerr) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+                if (const auto issue = backend::RetainedArithmeticIssue(
+                        (*devices)[*selected], *precision == render::PrecisionRung::Fp64)) {
+                    std::cout << "[Session] backend auto: " << *issue << "; using the CPU path\n";
+                } else {
+                    session.backend = render::RenderBackend::Vulkan;
+                }
+#else
+                std::cout << "[Session] backend auto: bounded retained kernels were not compiled; "
+                             "using the CPU path\n";
+#endif
+            } else if (*precision == render::PrecisionRung::Fp64 &&
+                       !(*devices)[*selected].supports_fp64) {
+                std::cout
+                    << "[Session] backend auto: SIRIUS_PRECISION=fp64 requested but the device "
+                       "lacks shaderFloat64; using the CPU path\n";
+            } else {
+                session.backend = render::RenderBackend::Vulkan;
+            }
         }
 #endif
     }

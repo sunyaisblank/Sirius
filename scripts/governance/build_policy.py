@@ -193,6 +193,12 @@ GATE_DIAGNOSTIC_PATHS = (
     "windows-tests.xml",
     "macos-tests.xml",
 )
+WINDOWS_VULKAN_PREFLIGHT_DIAGNOSTIC_PATHS = (
+    "bin/windows-msvc/generated/sirius/windows_vulkan_preflight_inventory.json",
+    "bin/windows-msvc/generated/sirius/windows_vulkan_preflight_identity.json",
+    "bin/windows-msvc/generated/sirius/windows_vulkan_preflight.xml",
+    "bin/windows-msvc/generated/sirius/windows_vulkan_preflight.log",
+)
 MACOS_RUNTIME_DIAGNOSTIC_PATHS = (
     '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-tests.xml',
     '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-transcript.log',
@@ -234,10 +240,13 @@ def workflow_step_field(step: str, field: str) -> list[str]:
                       normalized, re.MULTILINE)
 
 
-def gate_diagnostic_upload_valid(step: str, *, macos_runtime: bool = False) -> bool:
+def gate_diagnostic_upload_valid(step: str, *, macos_runtime: bool = False,
+                                 windows_preflight: bool = False) -> bool:
     # Keep diagnostics unable to publish an attestation or broaden their file
     # scope. Unknown fields/layouts fail closed rather than becoming exceptions.
     paths = GATE_DIAGNOSTIC_PATHS + (MACOS_RUNTIME_DIAGNOSTIC_PATHS if macos_runtime else ())
+    if windows_preflight:
+        paths += WINDOWS_VULKAN_PREFLIGHT_DIAGNOSTIC_PATHS
     pattern = (
         r"\A      - name: Preserve gate diagnostics\n"
         r"        if: always\(\)\n"
@@ -418,7 +427,8 @@ def integration_boundary_errors(workflow: str) -> list[str]:
         diagnostics = [step for step in workflow_steps(job)
                        if workflow_step_field(step, "name") == ["Preserve gate diagnostics"]]
         if len(diagnostics) != 1 or not gate_diagnostic_upload_valid(
-            diagnostics[0], macos_runtime=name == "macos-build"
+            diagnostics[0], macos_runtime=name == "macos-build",
+            windows_preflight=name == "windows-build"
         ):
             errors.append(f"CI full qualification does not retain bounded gate diagnostics: {name}")
         if name in {"windows-build", "macos-build"}:
@@ -509,6 +519,11 @@ def verify_integration_boundary_policy() -> None:
         "".join(f"            {path}\n" for path in MACOS_RUNTIME_DIAGNOSTIC_PATHS)
         + "          if-no-files-found: ignore\n",
     )
+    windows_diagnostics = diagnostics.replace(
+        "          if-no-files-found: ignore\n",
+        "".join(f"            {path}\n" for path in WINDOWS_VULKAN_PREFLIGHT_DIAGNOSTIC_PATHS)
+        + "          if-no-files-found: ignore\n",
+    )
     valid = (
         "on:\n"
         "  workflow_dispatch:\n"
@@ -555,7 +570,8 @@ def verify_integration_boundary_policy() -> None:
                 "          path: attestations\n"
                 if name in {"windows-build", "macos-build"} else ""
             )
-            + (macos_diagnostics if name == "macos-build" else diagnostics)
+            + (macos_diagnostics if name == "macos-build" else
+               windows_diagnostics if name == "windows-build" else diagnostics)
             for name in FULL_QUALIFICATION_JOBS
         )
     )
@@ -647,6 +663,14 @@ def verify_integration_boundary_policy() -> None:
     }
     for description, (before, after) in runtime_mutations.items():
         mutations["macOS " + description] = valid.replace(before, after, 1)
+    for path in WINDOWS_VULKAN_PREFLIGHT_DIAGNOSTIC_PATHS:
+        mutations["Windows missing preflight " + path] = valid.replace(
+            "            " + path + "\n", "", 1)
+    mutations["Windows unbounded preflight diagnostics"] = valid.replace(
+        "            " + WINDOWS_VULKAN_PREFLIGHT_DIAGNOSTIC_PATHS[0] + "\n",
+        "            bin/windows-msvc/generated/sirius/**\n", 1)
+    mutations["preflight diagnostics in integration job"] = valid.replace(
+        diagnostics, windows_diagnostics, 1)
     mutations["macOS upload before producer"] = valid.replace(
         MACOS_RUNTIME_PRODUCER_STEP + macos_runtime_upload,
         macos_runtime_upload + MACOS_RUNTIME_PRODUCER_STEP, 1)

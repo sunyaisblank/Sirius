@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 // Kernel-versus-core parity gate (docs/SPECIFICATION.md section 7,
 // docs/ARCHITECTURE.md section 9). The parity_probe Slang kernel evaluates the
 // live device physics at fixed sample points through the Vulkan adapter.
@@ -359,7 +361,7 @@ struct Fixture {
 
 Fixture OpenProbe(const std::string& artefact = "parity_probe.spv") {
     Fixture f;
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     return f;
 #else
     const auto devices = EnumerateVulkanDevices();
@@ -374,7 +376,7 @@ Fixture OpenProbe(const std::string& artefact = "parity_probe.spv") {
     if (!device.has_value()) {
         return f;
     }
-    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/" + artefact);
+    const auto spirv = LoadSpirv(sirius::test::ResourcePath(std::string("kernels/") + artefact));
     if (spirv.empty()) {
         return f;
     }
@@ -1031,8 +1033,8 @@ TEST(KernelParity, ActualAffineAndJacobiClocksMatchFp64) {
     // dispatched: this test executes exactly one precision's nine samples.
     Fixture fixture = OpenProbe();
     if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
-#ifdef SIRIUS_KERNEL_DIR
-    const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+#ifdef SIRIUS_TEST_HAS_KERNELS
+    const auto words = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp64.spv"));
     ASSERT_FALSE(words.empty());
     const auto loaded = fixture.device->LoadKernel(words);
     if (!fixture.device->Info().supports_fp64) {
@@ -1112,8 +1114,8 @@ TEST(KernelParity, FiniteEscapeUsesFirstOutwardEventAndClippedIntervalAcrossRung
     ASSERT_TRUE(compensated.ready);
     ASSERT_NO_FATAL_FAILURE(check(compensated));
     if (!fp32.device->Info().supports_fp64) {
-#ifdef SIRIUS_KERNEL_DIR
-        const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+#ifdef SIRIUS_TEST_HAS_KERNELS
+        const auto words = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp64.spv"));
         ASSERT_FALSE(words.empty());
         const auto refused = fp32.device->LoadKernel(words);
         ASSERT_FALSE(refused.has_value());
@@ -1622,13 +1624,13 @@ TEST(KernelParity, NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMom
 }
 
 TEST(KernelParity, PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #else
-    const auto fp32 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe.spv");
+    const auto fp32 = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe.spv"));
     const auto compensated =
-        LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp32comp.spv");
-    const auto fp64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+        LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp32comp.spv"));
+    const auto fp64 = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp64.spv"));
     ASSERT_FALSE(fp32.empty());
     ASSERT_FALSE(compensated.empty());
     ASSERT_FALSE(fp64.empty());
@@ -1685,8 +1687,8 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
     EXPECT_LE(drift_compensated, drift32 * 1.25f + 1.0e-7f)
         << "compensated accumulation regressed the invariant envelope";
     if (!fp32.device->Info().supports_fp64) {
-#ifdef SIRIUS_KERNEL_DIR
-        const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+#ifdef SIRIUS_TEST_HAS_KERNELS
+        const auto spirv64 = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp64.spv"));
         ASSERT_FALSE(spirv64.empty());
         const auto refused = fp32.device->LoadKernel(spirv64);
         ASSERT_FALSE(refused.has_value());
@@ -2248,7 +2250,7 @@ void RunTimedCoupledProbe(ComputeDevice& device, KernelHandle kernel, const Samp
 TEST(KernelParity, FourColumnRK4MapMatchesIndependentNeighboursFp64) {
     Fixture fixture = OpenProbe();
     if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
     // Identity belongs to the actual returned device. The recorded index is
     // the exact factory argument retained by Fixture, not a second inventory.
     ASSERT_NE(fixture.selected_index, std::numeric_limits<std::size_t>::max());
@@ -2273,7 +2275,7 @@ TEST(KernelParity, FourColumnRK4MapMatchesIndependentNeighboursFp64) {
     RecordProperty("coupled_initial_allocated_bytes",
                    std::to_string(fixture.device->BufferAllocationBytes()));
     ASSERT_LE(fixture.device->BufferAllocationBytes(), kCoupledDiagnosticAllocationLimit);
-    const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/coupled_probe_fp64.spv");
+    const auto words = LoadSpirv(sirius::test::ResourcePath("kernels/coupled_probe_fp64.spv"));
     ASSERT_FALSE(words.empty());
     const auto loaded = fixture.device->LoadKernel(words);
     if (!fixture.device->Info().supports_fp64) {

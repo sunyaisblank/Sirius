@@ -52,6 +52,14 @@ namespace {
 constexpr int kBloomRadius = 12;
 constexpr float kShadowLift = 0.02f;
 
+// A forwarding tile callback can be nested (inner retained session -> outer
+// session). Neither owner can join the thread currently executing its callback.
+struct TileCallbackFrame {
+    const RenderSession* session;
+    TileCallbackFrame* previous;
+};
+thread_local TileCallbackFrame* tile_callback_frame = nullptr;
+
 core::MetricConstructionParameters MetricConstructionParametersFor(const SessionConfig& config) {
     core::MetricConstructionParameters parameters;
     parameters.mass = config.black_hole_mass;
@@ -66,6 +74,29 @@ core::MetricConstructionParameters MetricConstructionParametersFor(const Session
     return parameters;
 }
 }  // namespace
+
+void ApplySessionDisplayPipeline(std::vector<float>& pixels, int width, int height,
+                                 const SessionConfig& config) {
+    core::PostProcessConfig postprocess_config;
+    postprocess_config.tonemapper = config.tonemapper;
+    postprocess_config.exposure = config.exposure;
+    postprocess_config.gamma = 1.0f;  // Viewer shader/writers own transfer encoding.
+    postprocess_config.enable_bloom = config.enable_bloom;
+    if (config.enable_bloom) {
+        postprocess_config.bloom_intensity = config.bloom_intensity;
+        postprocess_config.bloom_threshold = config.bloom_threshold;
+        postprocess_config.bloom_radius = kBloomRadius;
+    }
+    postprocess_config.saturation = config.saturation;
+    postprocess_config.contrast = config.contrast;
+    postprocess_config.lift = kShadowLift;
+    postprocess_config.gain = 1.0f;
+    core::PostProcessor::Process(pixels, width, height, postprocess_config);
+    if (config.enable_film_finish) {
+        FilmPipeline film(config.film_config);
+        film.Apply(pixels.data(), width, height, 0);
+    }
+}
 
 RenderSession::~RenderSession() {
     (void)Cancel();
@@ -143,6 +174,8 @@ bool RenderSession::Cancel() {
 }
 
 void RenderSession::WaitForCompletion() {
+    for (auto* frame = tile_callback_frame; frame; frame = frame->previous)
+        if (frame->session == this) return;
     std::unique_lock<std::mutex> lock(lifecycle_mutex_);
     const std::thread::id caller = std::this_thread::get_id();
     if (join_in_progress_) {
@@ -821,6 +854,40 @@ void RenderSession::ScheduleNextTile() {
 // =============================================================================
 // Tile rendering.
 // =============================================================================
+void RenderSession::PublishCompletedTile(int x, int y, int width, int height,
+                                         std::span<const float> rgba) {
+    if (IsStopping() || rgba.size() != static_cast<std::size_t>(width) * height * 4 ||
+        !std::all_of(rgba.begin(), rgba.end(), [](float value) { return std::isfinite(value); }))
+        return;
+    CompletedTileCallback callback;
+    {
+        std::lock_guard<std::mutex> lock(callback_mutex_);
+        callback = completed_tile_callback_;
+    }
+    if (!callback || IsStopping()) return;
+    TileCallbackFrame frame{this, tile_callback_frame};
+    tile_callback_frame = &frame;
+    try {
+        callback(x, y, width, height, rgba);
+    } catch (...) {
+        std::cerr << "[Session] completed-tile callback threw; radiance retained" << std::endl;
+    }
+    tile_callback_frame = frame.previous;
+}
+
+void RenderSession::PublishCompletedTile(const Tile& tile) {
+    {
+        std::lock_guard<std::mutex> lock(callback_mutex_);
+        if (!completed_tile_callback_) return;
+    }
+    try {
+        const auto rgba = display_.SnapshotTileData(tile.x, tile.y, tile.width, tile.height);
+        PublishCompletedTile(tile.x, tile.y, tile.width, tile.height, rgba);
+    } catch (...) {
+        std::cerr << "[Session] completed-tile snapshot failed; radiance retained" << std::endl;
+    }
+}
+
 void RenderSession::RenderTile(Tile* tile) {
     if (!tile) return;
 
@@ -845,6 +912,7 @@ void RenderSession::RenderTile(Tile* tile) {
     // The ProgressTracker callback is the single progress surface (the CLI
     // renders it); a second raw carriage-return writer here would fight it.
     progress_.CompleteTile(tile->PixelCount());
+    PublishCompletedTile(*tile);
 
     fsm_.Process(SessionEvent::TileComplete);
 }
@@ -856,6 +924,14 @@ void RenderSession::RenderVulkanPath() {
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
     std::cout << "[Session] Dispatching Vulkan render path..." << std::endl;
 
+    CompletedTileCallback tile_outlet;
+    {
+        std::lock_guard<std::mutex> lock(callback_mutex_);
+        if (completed_tile_callback_)
+            tile_outlet = [this](int x, int y, int width, int height, std::span<const float> rgba) {
+                PublishCompletedTile(x, y, width, height, rgba);
+            };
+    }
     auto stats = RenderVulkanToDisplay(
         config_, display_,
         [this](int /*done*/, int total) {
@@ -867,7 +943,7 @@ void RenderSession::RenderVulkanPath() {
             }
             progress_.CompleteTile(1);
         },
-        [this] { return progress_.GetCancellationToken().IsCancelled(); });
+        [this] { return progress_.GetCancellationToken().IsCancelled(); }, tile_outlet);
 
     if (!stats) {
         if (progress_.GetCancellationToken().IsCancelled()) {
@@ -979,33 +1055,8 @@ base::Expected<void> RenderSession::WriteOutput() {
         // Display pipeline: tonemap and grade to display-linear values. The
         // transfer encode belongs to the writer, so it happens exactly once
         // per format (EXRWriter's PPM boundary and PNGWriter each apply sRGB).
-        core::PostProcessConfig postprocess_config;
-        postprocess_config.tonemapper = config_.tonemapper;
-        postprocess_config.exposure = config_.exposure;
-        postprocess_config.gamma = 1.0f;  // Writers encode.
-
-        postprocess_config.enable_bloom = config_.enable_bloom;
-        if (config_.enable_bloom) {
-            postprocess_config.bloom_intensity = config_.bloom_intensity;
-            postprocess_config.bloom_threshold = config_.bloom_threshold;
-            postprocess_config.bloom_radius = kBloomRadius;
-        }
-
-        postprocess_config.saturation = config_.saturation;
-        postprocess_config.contrast = config_.contrast;
-        postprocess_config.lift = kShadowLift;
-        postprocess_config.gain = 1.0f;
-
         display_.MutateFloatData([&](std::vector<float>& pixels) {
-            core::PostProcessor::Process(pixels, width, height, postprocess_config);
-
-            // Film is a display-referred finishing pipeline. It is intentionally
-            // absent from the EXR branch above, which must retain untouched
-            // linear HDR radiance.
-            if (config_.enable_film_finish) {
-                FilmPipeline film(config_.film_config);
-                film.Apply(pixels.data(), width, height, 0);
-            }
+            ApplySessionDisplayPipeline(pixels, width, height, config_);
         });
 
         if (const auto bad = display_.FirstNonFiniteIndex(); bad.has_value()) {
@@ -1152,6 +1203,7 @@ void RenderSession::WorkerThread(int thread_id) {
                 // Single progress surface: the ProgressTracker callback.
                 progress_.CompleteTile(tile.PixelCount());
             }
+            PublishCompletedTile(tile);
         }
     }
 

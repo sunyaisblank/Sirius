@@ -8,6 +8,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -80,7 +81,17 @@ struct RefinementState {
 // completed frame to a callback.
 class InteractiveViewer {
   public:
+    struct FrameSnapshot {
+        std::vector<float> pixels;
+        int width = 0;
+        int height = 0;
+    };
+
     using FrameCallback = std::function<void(const float* data, int width, int height)>;
+    // A provisional, configured display-linear snapshot. Borrowed pixels last
+    // for the call; a presentation owner checks the generation again at upload.
+    using PreviewCallback =
+        std::function<void(const float* data, int width, int height, std::uint64_t generation)>;
 
     InteractiveViewer();
     ~InteractiveViewer();
@@ -92,6 +103,11 @@ class InteractiveViewer {
 
     bool Initialise(const ViewerConfig& config);
     void SetFrameCallback(FrameCallback callback);
+    // Install before Start. Final FrameCallback retains its complete-frame meaning.
+    void SetPreviewCallback(PreviewCallback callback);
+    [[nodiscard]] std::uint64_t GetPreviewGeneration() const noexcept {
+        return preview_generation_.load();
+    }
 
     bool Start();
     void Stop();
@@ -108,6 +124,9 @@ class InteractiveViewer {
 
     [[nodiscard]] RefinementState GetRefinementState() const;
 
+    // Copy pixels and geometry from one completed publication. The legacy
+    // accessors each read committed state, but separate calls can span frames.
+    [[nodiscard]] FrameSnapshot GetFrameSnapshot() const;
     [[nodiscard]] std::vector<float> GetFrameBufferSnapshot() const;
     [[nodiscard]] int GetFrameWidth() const;
     [[nodiscard]] int GetFrameHeight() const;
@@ -117,11 +136,12 @@ class InteractiveViewer {
     // Public so the non-windowed test estate can prove that operator controls
     // are not discarded before a preview begins.
     [[nodiscard]] render::SessionConfig CreateSessionConfig(int width, int height, int spp) const;
+    // The same zero-based resolution ladder consumed by the live render thread.
+    void GetResolutionForLevel(int level, int& width, int& height) const;
 
   private:
     void RenderThread();
     [[nodiscard]] bool RenderStep();
-    void GetResolutionForLevel(int level, int& width, int& height) const;
     void NotifyFrame();
 
     ViewerConfig config_;
@@ -138,10 +158,12 @@ class InteractiveViewer {
     mutable std::mutex thread_mutex_;
     mutable std::mutex session_mutex_;
     mutable std::mutex frame_mutex_;
-    std::vector<float> frame_buffer_;
+    FrameSnapshot frame_;
     std::string last_error_;
 
     FrameCallback frame_callback_;
+    PreviewCallback preview_callback_;
+    std::atomic<std::uint64_t> preview_generation_{0};
 
     double last_mouse_x_ = 0.0;
     double last_mouse_y_ = 0.0;

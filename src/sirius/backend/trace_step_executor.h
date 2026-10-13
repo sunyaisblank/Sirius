@@ -22,6 +22,12 @@ class TraceStepExecutor {
     virtual bool Step(core::Lightray& ray, core::IMetric& metric,
                       const core::IntegratorConfig& config, core::Rk45CoupledState& coupled,
                       core::Rk45CoupledComparison& comparison) = 0;
+    // Sample the executor-owned trial at its original fraction. A declined
+    // sample never authorizes a host reconstruction of the retained state.
+    virtual std::optional<core::CoupledSegmentSample> Sample(core::CoupledTrial, double,
+                                                             const core::Vec4* = nullptr) {
+        return std::nullopt;
+    }
 };
 
 }  // namespace sirius::backend

@@ -1,6 +1,6 @@
 #pragma once
 
-// An independent, long-double Carter reference for complete vacuum Kerr rays.
+// An independent, long-double Carter reference for neutral-null Kerr-Newman rays.
 // LaunchCameraRay supplies a measured initial event/tangent only. This file
 // uses no product metric, connection, chart map, stepper, event interpolant,
 // Jacobi state or infinity continuation to form its expected answers.
@@ -14,6 +14,9 @@
 // https://arxiv.org/abs/1910.12881, equations 3--9. Exact extremality is not
 // inferred from the paper's elliptic formulas; the differential equations and
 // regular-chart limits below are evaluated directly.
+// Charged potentials: Wang, Lee & Lin, PRD 106, 084048 (2022), equations 1--14,
+// https://arxiv.org/abs/2208.11906. Charged results terminate at a finite event;
+// the vacuum infinity continuation is deliberately not used for them.
 
 #include "sirius/core/camera_launch.h"
 
@@ -80,7 +83,8 @@ struct Geometry {
     }
 };
 
-inline Geometry At(const Four& x, Scalar mass, Scalar spin, bool outgoing = false) {
+inline Geometry At(const Four& x, Scalar mass, Scalar spin, bool outgoing = false,
+                   Scalar charge = 0) {
     const Scalar rho2 = x[1] * x[1] + x[2] * x[2] + x[3] * x[3];
     const Scalar reduced = rho2 - spin * spin;
     const Scalar r2 = (reduced + std::sqrt(reduced * reduced + 4 * spin * spin * x[3] * x[3])) / 2;
@@ -93,7 +97,7 @@ inline Geometry At(const Four& x, Scalar mass, Scalar spin, bool outgoing = fals
     g.ell = {outgoing ? -1.L : 1.L, (g.radius * x[1] + handed * x[2]) / (r2 + spin * spin),
              (g.radius * x[2] - handed * x[1]) / (r2 + spin * spin), x[3] / g.radius};
     const Scalar sigma = r2 + spin * spin * std::cos(g.theta) * std::cos(g.theta);
-    g.h = 2 * mass * g.radius / sigma;
+    g.h = (2 * mass * g.radius - charge * charge) / sigma;
     for (unsigned mu = 0; mu < 4; ++mu)
         for (unsigned nu = 0; nu < 4; ++nu)
             g.metric[mu][nu] =
@@ -128,6 +132,7 @@ namespace detail {
 using State = std::array<Scalar, 7>;
 struct Constants {
     Scalar mass, spin, energy, angular, carter;
+    Scalar charge = 0;
 };
 inline Scalar Combination(const Constants& c) {
     return c.carter + (c.angular - c.spin * c.energy) * (c.angular - c.spin * c.energy);
@@ -138,8 +143,9 @@ inline Scalar Radius(const State& y, Scalar a) {
 // Time/Cartesian-azimuth shifts from ingoing to outgoing, with the same
 // explicitly declared exterior gauge (zero shifts at r=2r+) as the public API.
 inline std::array<Scalar, 2> Shift(Scalar r, const Constants& c) {
-    const Scalar plus = c.mass + std::sqrt(c.mass * c.mass - c.spin * c.spin);
-    const Scalar minus = c.mass - std::sqrt(c.mass * c.mass - c.spin * c.spin);
+    const Scalar separation = std::sqrt(c.mass * c.mass - c.spin * c.spin - c.charge * c.charge);
+    const Scalar plus = c.mass + separation;
+    const Scalar minus = c.mass - separation;
     const Scalar anchor = 2 * plus;
     Scalar time, inverse_delta;
     if (plus == minus) {
@@ -150,7 +156,8 @@ inline std::array<Scalar, 2> Shift(Scalar r, const Constants& c) {
         const Scalar lp = std::log((r - plus) / (anchor - plus));
         const Scalar lm = std::log((r - minus) / (anchor - minus));
         inverse_delta = (lp - lm) / (plus - minus);
-        time = 2 * c.mass * (plus * lp - minus * lm) / (plus - minus);
+        time = 2 * c.mass * (plus * lp - minus * lm) / (plus - minus) -
+               c.charge * c.charge * inverse_delta;
     }
     const Scalar angle = c.spin == 0 ? 0
                                      : -2 * c.spin * inverse_delta +
@@ -161,7 +168,7 @@ inline State Derivative(const State& y, const Constants& c) {
     const Scalar r = y[0], v = y[1], theta = y[2], a = c.spin;
     const Scalar sine = std::sin(theta), cosine = std::cos(theta);
     if (!(std::abs(sine) > 1e-5L)) throw std::runtime_error("reference polar chart conditioning");
-    const Scalar delta = r * r - 2 * c.mass * r + a * a;
+    const Scalar delta = r * r - 2 * c.mass * r + a * a + c.charge * c.charge;
     const Scalar P = c.energy * (r * r + a * a) - a * c.angular;
     const Scalar combination = Combination(c);
     // (P-v)/Delta = K/(P+v) on the inward past branch. It removes the
@@ -169,7 +176,8 @@ inline State Derivative(const State& y, const Constants& c) {
     const Scalar regular = v < 0 && P < 0 ? combination / (P + v) : (P - v) / delta;
     const Scalar azimuth =
         c.angular / (sine * sine) - a * c.energy + a * regular + a * v / (r * r + a * a);
-    const Scalar time = P + 2 * c.mass * r * regular + a * (c.angular - a * c.energy * sine * sine);
+    const Scalar time = P + (2 * c.mass * r - c.charge * c.charge) * regular +
+                        a * (c.angular - a * c.energy * sine * sine);
     return {v,
             2 * c.energy * r * P - (r - c.mass) * combination,
             y[3],
@@ -229,16 +237,18 @@ inline Three Infinity(const State& y, const Constants& c, unsigned steps) {
 }  // namespace detail
 
 inline Result Trace(const core::CameraLaunch& launch, double mass, double spin, double outer_radius,
-                    Scalar refinement = .002L, double disk_inner = 0, double disk_outer = 0) {
+                    Scalar refinement = .002L, double disk_inner = 0, double disk_outer = 0,
+                    double charge = 0) {
     const Scalar scale = mass > 0 ? mass : 1;
     Four x{}, k{};
     for (unsigned i = 0; i < 4; ++i) {
         x[i] = launch.position(static_cast<int>(i)) / scale;
         k[i] = launch.tangent(static_cast<int>(i));
     }
-    const Scalar M = mass / scale, a = spin / scale, outer = outer_radius / scale;
-    const auto initial = At(x, M, a);
-    if (mass == 0 && spin == 0) {
+    const Scalar M = mass / scale, a = spin / scale, Q = charge / scale,
+                 outer = outer_radius / scale;
+    const auto initial = At(x, M, a, false, Q);
+    if (mass == 0 && spin == 0 && charge == 0) {
         const Three position{x[1], x[2], x[3]}, velocity{k[1], k[2], k[3]};
         const Scalar vv = Dot(velocity, velocity), along = Dot(position, velocity);
         const Scalar affine =
@@ -262,7 +272,7 @@ inline Result Trace(const core::CameraLaunch& launch, double mass, double spin, 
     const Scalar carter =
         sigma * sigma * polar * polar +
         cosine * cosine * (angular * angular / (sine * sine) - a * a * energy * energy);
-    const detail::Constants c{M, a, energy, angular, carter};
+    const detail::Constants c{M, a, energy, angular, carter, Q};
     const auto shift = detail::Shift(r, c);
     detail::State y{r,
                     sigma * radial,
@@ -271,7 +281,7 @@ inline Result Trace(const core::CameraLaunch& launch, double mass, double spin, 
                     initial.azimuth + shift[1],
                     x[0] + shift[0],
                     0};
-    const Scalar horizon = M + std::sqrt(M * M - a * a);
+    const Scalar horizon = M + std::sqrt(M * M - a * a - Q * Q);
     unsigned radial_turns = 0, polar_turns = 0, attempts = 0;
     Fate fate = Fate::Escape;
     for (; attempts < 200000; ++attempts) {
@@ -338,12 +348,12 @@ inline Result Trace(const core::CameraLaunch& launch, double mass, double spin, 
         const auto terminal_shift = detail::Shift(rr, c);
         azimuth -= terminal_shift[1];
         time -= terminal_shift[0];
-        const Scalar delta = rr * rr - 2 * M * rr + a * a;
-        time_rate += 4 * M * rr / delta * y[1];
+        const Scalar delta = rr * rr - 2 * M * rr + a * a + Q * Q;
+        time_rate += 2 * (2 * M * rr - Q * Q) / delta * y[1];
         azimuth_rate += (2 * a / delta - 2 * a / (rr * rr + a * a)) * y[1];
         auto incoming = y;
         incoming[4] = azimuth;
-        if (fate == Fate::Escape)
+        if (fate == Fate::Escape && charge == 0)
             infinity = detail::Infinity(incoming, c,
                                         refinement < .001L   ? 8192
                                         : refinement < .002L ? 4096
@@ -358,7 +368,7 @@ inline Result Trace(const core::CameraLaunch& launch, double mass, double spin, 
          (transverse_rate * std::sin(azimuth) + rho * st * std::cos(azimuth) * azimuth_rate) /
              terminal_sigma,
          (ct * y[1] - rr * st * y[3]) / terminal_sigma};
-    const auto terminal = At(x, M, a, fate == Fate::Capture);
+    const auto terminal = At(x, M, a, fate == Fate::Capture, Q);
     const auto finite = terminal.Sky(k);
     for (auto& value : x) value *= scale;
     return {fate,

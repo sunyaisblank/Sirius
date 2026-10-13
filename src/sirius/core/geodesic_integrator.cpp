@@ -374,6 +374,15 @@ float Geodesic::ComputeOptimalStep(float h, float error, float tolerance,
     return std::max(config.min_step, std::min(config.max_step, new_step));
 }
 
+float Geodesic::LimitAcceptedStepGrowth(float interval, float candidate_step, float error_ratio,
+                                        const IntegratorConfig& config) {
+    SIRIUS_PRE(std::isfinite(candidate_step) && candidate_step >= config.min_step &&
+               candidate_step <= config.max_step);
+    SIRIUS_PRE(std::isfinite(error_ratio) && error_ratio >= 0.0f && error_ratio <= 1.0f);
+    return std::min(candidate_step,
+                    std::max(interval, ComputeOptimalStep(interval, error_ratio, 1.0f, config)));
+}
+
 // Covariant momentum p_mu = g_mu_nu k^nu.
 static Vec4 ComputeMomentum(const Vec4& velocity, const Metric4d& g) {
     Vec4 p;
@@ -477,6 +486,21 @@ Metric4d RoundedMetric(const RetainedMetricSample& sample) {
     for (int mu = 0; mu < 4; ++mu)
         for (int nu = 0; nu < 4; ++nu) result(mu, nu) = sample.metric(mu, nu).Rounded();
     return result;
+}
+
+// Preserve the existing binary64 contraction and its operation order. The
+// sample belongs to this candidate's unchanged final position, and velocity
+// is the same post-projection tangent used by CalculateAcceleration.
+inline Vec4 EndpointAcceleration(const Vec4& velocity, const RetainedMetricSample& geometry) {
+    Metric4d inverse;
+    Tensor<Dual<double>, 4, 4, 4> derivative;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu) {
+            inverse(mu, nu) = geometry.inverse(mu, nu).Rounded();
+            for (int axis = 0; axis < 4; ++axis)
+                derivative(axis, mu, nu) = geometry.derivative(axis, mu, nu).Rounded();
+        }
+    return TensorOps::GeodesicAccelerationDirect(velocity, inverse, derivative);
 }
 
 using WideConnection = std::array<std::array<std::array<Twofold, 4>, 4>, 4>;
@@ -590,6 +614,11 @@ using PhaseVariations = std::array<PhaseVariation, 4>;
 // Hessian comes from the metric's exact derivative hook where available. The
 // fallback differentiates its first derivatives with a fourth-order stencil;
 // those samples must be finite, distinct and in the concrete metric chart.
+#if defined(__GNUC__) && !defined(__clang__) && defined(__linux__) && defined(__x86_64__)
+// Keep the baseline implementation for CPUs without FMA. The core build
+// disables implicit contraction; only explicit std::fma operations may fuse.
+__attribute__((target_clones("fma", "default")))
+#endif
 bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const WideVector& tangent,
                             const PhaseVariations& columns, PhaseVariations& rhs,
                             Rk45CoupledState& control, const RetainedMetricSample& geometry) {
@@ -649,14 +678,30 @@ bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const WideVec
     // for each film/pupil direction does not add an independent error estimate.
     Twofold first_contraction[4][4]{};
     Twofold second_contraction[4][4]{};
-    for (int axis = 0; axis < 4; ++axis)
-        for (int a = 0; a < 4; ++a)
-            for (int b = 0; b < 4; ++b) {
-                first_contraction[axis][a] += dg(axis, a, b) * tangent(b);
-                for (int mu = 0; mu < 4; ++mu)
-                    second_contraction[mu][axis] +=
-                        Twofold(second[axis][mu][a][b]) * 0.5 * tangent(a) * tangent(b);
-            }
+    // Zero geometry contributes no Jacobian blocks. Retain the metric/Hessian
+    // evaluation and all column arithmetic, including their finite checks.
+    const bool zero_geometry = [&] {
+        for (const auto& axis : dg.data)
+            for (const auto& row : axis)
+                for (const auto& value : row)
+                    if (value.hi != 0.0 || value.lo != 0.0) return false;
+        for (const auto& axis : second)
+            for (const auto& derivative : axis)
+                for (const auto& row : derivative)
+                    for (double value : row)
+                        if (value != 0.0) return false;
+        return true;
+    }();
+    if (!zero_geometry) {
+        for (int axis = 0; axis < 4; ++axis)
+            for (int a = 0; a < 4; ++a)
+                for (int b = 0; b < 4; ++b) {
+                    first_contraction[axis][a] += dg(axis, a, b) * tangent(b);
+                    for (int mu = 0; mu < 4; ++mu)
+                        second_contraction[mu][axis] +=
+                            Twofold(second[axis][mu][a][b]) * 0.5 * tangent(a) * tangent(b);
+                }
+    }
     for (std::size_t column = 0; column < columns.size(); ++column) {
         WideVector covector = columns[column].p;
         for (int a = 0; a < 4; ++a)
@@ -858,6 +903,16 @@ std::optional<GeodesicVariations> ProjectVariations(const RetainedMetricSample& 
         std::abs(projected_covector[component].Rounded()) <=
             256 * std::numeric_limits<double>::epsilon() * denominator_scale)
         return std::nullopt;
+    // Each column uses the same geometry and central tangent. Keep the
+    // represented products once, then retain each column's accumulation order.
+    WideConnection first_kind_tangent, connection_correction;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b) {
+                first_kind_tangent[mu][a][b] = FirstKind(derivatives, a, mu, b) * unprojected(a);
+                connection_correction[mu][a][b] =
+                    connection[mu][a][b] * (Twofold(projection.tangent(a)) - unprojected(a));
+            }
     GeodesicVariations result;
     for (std::size_t column = 0; column < result.size(); ++column) {
         std::array<Twofold, 4> covector, V;
@@ -865,15 +920,13 @@ std::optional<GeodesicVariations> ProjectVariations(const RetainedMetricSample& 
             covector[mu] = phase[column].p(mu);
             for (int a = 0; a < 4; ++a)
                 for (int b = 0; b < 4; ++b)
-                    covector[mu] -=
-                        FirstKind(derivatives, a, mu, b) * unprojected(a) * phase[column].x(b);
+                    covector[mu] -= first_kind_tangent[mu][a][b] * phase[column].x(b);
         }
         for (int mu = 0; mu < 4; ++mu) {
             for (int nu = 0; nu < 4; ++nu) V[mu] += inverse(mu, nu) * covector[nu];
             for (int a = 0; a < 4; ++a)
                 for (int b = 0; b < 4; ++b)
-                    V[mu] += connection[mu][a][b] *
-                             (Twofold(projection.tangent(a)) - unprojected(a)) * phase[column].x(b);
+                    V[mu] += connection_correction[mu][a][b] * phase[column].x(b);
         }
         Twofold numerator;
         for (int mu = 0; mu < 4; ++mu)
@@ -1303,7 +1356,7 @@ static bool IntegrateStepRk45Candidate(Lightray& ray, IMetric* metric,
     // the candidate state.
     ray.position = new_position;
     ray.velocity = new_velocity;
-    ray.acceleration = Geodesic::CalculateAcceleration(new_velocity, new_position, metric);
+    ray.acceleration = EndpointAcceleration(new_velocity, geometries[6]);
     ray.proper_time += h;
     ray.coordinate_time += static_cast<float>(h * std::abs(new_velocity(0)));
     ray.step_size = Geodesic::ComputeOptimalStep(h, error_norm, 1.0f, config);
@@ -1401,6 +1454,8 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     comparison->refined_endpoint = refined;
     comparison->refined_variations = refined_coupled.variations;
     comparison->error_ratio = std::max({comparison->error_ratio, interior_error, refined_error});
+    ray.step_size = LimitAcceptedStepGrowth(previous.step_size, ray.step_size,
+                                            static_cast<float>(comparison->error_ratio), config);
     return true;
 }
 

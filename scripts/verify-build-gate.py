@@ -39,10 +39,11 @@ TESTED_ARTIFACTS = {
     "sirius_oracle_tests",
     "sirius_render_tests",
 }
-# These paths are the generated files read by the Mandatory kernel tests.
-# Bind selectors to that location as well as bytes: unrelated stable files
-# cannot stand in for the kernels the compiled test executables actually load.
+# Keep generated originals at these canonical schema-v2 selectors. Test readers
+# consume byte-identical executable-adjacent copies, checked separately before
+# and after execution; unrelated stable files cannot substitute for either.
 TEST_INPUT_PATHS = {
+    "portable_binary32_reference": "tests/backend/portable_binary32_reference.bin",
     "retained_camera_fixture": "tests/backend/retained_camera/program_fixture.h",
     "retained_camera_fp32_spv": "tests/backend/retained_camera/program_camera_probe-fp32.spv",
     "retained_camera_fp32comp_spv": "tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
@@ -270,7 +271,8 @@ def git_identity(source_root: Path) -> tuple[str, bool]:
 
 def require_test_input_set(test_inputs: object, mode: str, products: dict) -> None:
     has_trace = bool({"trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"} & set(products))
-    expected = TEST_INPUT_ARTIFACTS if mode != "development" or has_trace else set()
+    expected = (TEST_INPUT_ARTIFACTS if mode != "development" or has_trace
+                else {"portable_binary32_reference"})
     require(isinstance(test_inputs, dict) and set(test_inputs) == expected,
             "build gate does not bind the exact generated test input set")
 
@@ -407,14 +409,19 @@ def validate_native_build_document(document: object) -> dict:
 
 
 def verify_recorded_files(document: dict, source_root: Path, build_dir: Path) -> None:
+    tested_paths = {}
     for collection_name in ("tested_artifacts", "product_artifacts", "test_input_artifacts"):
         collection = document[collection_name]
         for name, record in collection.items():
             require(isinstance(record, dict), "artifact receipt entry is not an object")
             resolved = resolve_record(record, source_root, build_dir)
+            if collection_name == "tested_artifacts":
+                tested_paths[name] = resolved
             if collection_name == "test_input_artifacts":
                 require(resolved == build_dir.resolve() / TEST_INPUT_PATHS[name],
                         f"recorded test input {name} resolves to a substituted kernel path")
+    verify_test_input_copies(tested_paths, document["product_artifacts"],
+                             document["test_input_artifacts"])
     products = document["product_artifacts"]
     require(document["inputs"]["operating_model_sha256"] ==
             products["operating_model"]["sha256"],
@@ -426,6 +433,34 @@ def verify_recorded_files(document: dict, source_root: Path, build_dir: Path) ->
         record = document["ctest"][key]
         require(isinstance(record, dict), f"Mandatory gate {key} record is invalid")
         resolve_record(record, source_root, build_dir)
+
+
+def verify_test_input_copies(tested_paths: dict[str, Path], product_records: dict,
+                             test_input_records: dict) -> None:
+    """Bind executable-adjacent consumed copies to the unchanged schema-v2 records."""
+    expected = [(name, TEST_INPUT_PATHS[name], record)
+                for name, record in test_input_records.items()]
+    for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"):
+        if name in product_records:
+            expected.append((name, INSTALLED_PRODUCTS[name].removeprefix("share/sirius/"),
+                             product_records[name]))
+    for consumer in ("sirius_backend_tests", "sirius_render_tests"):
+        require(consumer in tested_paths, f"test input consumer is absent: {consumer}")
+        resource_root = tested_paths[consumer].parent / "resources"
+        require(resource_root.is_dir(), f"test input volume is absent: {resource_root}")
+        canonical_root = resource_root.resolve()
+        for name, relative, record in expected:
+            path = resource_root / relative
+            resolved = path.resolve()
+            # Match ResolveResourceFromRoot: a copy may resolve within its
+            # selected resource root, but never through an escaping symlink.
+            require(resolved.is_relative_to(canonical_root),
+                    f"consumed test input escapes {consumer} resource volume: {name}")
+            require(resolved.is_file(),
+                    f"consumed test input is missing for {consumer}: {name}")
+            require(resolved.stat().st_size == record["bytes"] and
+                    sha256_file(resolved) == record["sha256"],
+                    f"consumed test input differs from its gate for {consumer}: {name}")
 
 
 def installed_product_path(root: Path, name: str, executable_suffix: str) -> Path:
@@ -470,6 +505,7 @@ def verify_execution_inputs(
     """Reject persistent changes across CTest, allowing restored obstruction fixtures."""
     source_root = args.source_root.resolve()
     build_dir = args.build_dir.resolve()
+    tested_paths = {}
     # Resolve the supplied paths again as well as hashing their contents: replacing
     # a symlink must not leave the check pinned to its former target.
     for values, option, expected in (
@@ -477,9 +513,13 @@ def verify_execution_inputs(
         (args.product_artifact, "--product-artifact", product_records),
         (args.test_input_artifact, "--test-input-artifact", test_input_records),
     ):
-        actual = artifact_records(parse_artifacts(values, option), source_root, build_dir)
+        paths = parse_artifacts(values, option)
+        actual = artifact_records(paths, source_root, build_dir)
         require(actual == expected,
                 f"{option} artifacts changed while CTest ran; no receipt was written")
+        if option == "--tested-artifact":
+            tested_paths = paths
+    verify_test_input_copies(tested_paths, product_records, test_input_records)
     _, _, current_inventory_digest = read_inventory(args.ctest, build_dir, args.config)
     require(current_inventory_digest == inventory_digest,
             "CTest registration changed while CTest ran; no receipt was written")
@@ -537,6 +577,7 @@ def run_gate(args: argparse.Namespace) -> None:
     product_records = artifact_records(products, source_root, build_dir)
     test_input_records = artifact_records(test_inputs, source_root, build_dir)
     validate_test_input_records(test_input_records, args.alignment_mode, products)
+    verify_test_input_copies(tested, product_records, test_input_records)
 
     _, registered_names, inventory_digest = read_inventory(args.ctest, build_dir, args.config)
     command = [
@@ -613,6 +654,7 @@ def run_native_build_gate(args: argparse.Namespace) -> None:
     product_records = artifact_records(products, source_root, build_dir)
     test_input_records = artifact_records(test_inputs, source_root, build_dir)
     validate_test_input_records(test_input_records, args.alignment_mode, products)
+    verify_test_input_copies(tested, product_records, test_input_records)
 
     _, registered_names, inventory_digest = read_inventory(args.ctest, build_dir, args.config)
     selected_names = set(NATIVE_BUILD_EVIDENCE_TESTS)
@@ -740,21 +782,54 @@ def expect_rejection(callback, description: str) -> None:
 
 
 def self_test_execution_inputs(source: Path, build: Path, tested: dict, products: dict,
-                               test_inputs: dict, inventory: dict) -> None:
-    from contextlib import redirect_stderr, redirect_stdout
+                               test_inputs: dict, inventory: dict,
+                               filesystem_symlinks: bool) -> None:
+    from contextlib import nullcontext, redirect_stderr, redirect_stdout
     from io import StringIO
     from unittest.mock import patch
 
     revision = "a" * 40
+    consumed = {}
+    for consumer in ("sirius_backend_tests", "sirius_render_tests"):
+        root = tested[consumer].parent / "resources"
+        for name in test_inputs:
+            consumed[(consumer, name)] = root / TEST_INPUT_PATHS[name]
+        for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"):
+            consumed[(consumer, name)] = root / INSTALLED_PRODUCTS[name].removeprefix(
+                "share/sirius/")
     originals = {
         path: path.read_bytes()
-        for path in (*tested.values(), *products.values(), *test_inputs.values())
+        for path in (*tested.values(), *products.values(), *test_inputs.values(),
+                     *consumed.values())
     }
     mutations = ["none", "restored", "tested", "product", "missing",
                  "revision", "dirty", "registration", "ctest_failure",
                  "input_missing", "input_restored", "input_selector",
                  "input_omitted", "input_extra", "input_wrong_selector"]
     mutations.extend(f"input_changed:{name}" for name in sorted(TEST_INPUT_ARTIFACTS))
+    for consumer in ("sirius_backend_tests", "sirius_render_tests"):
+        mutations.extend(f"copy_{phase}_{action}:{consumer}"
+                         for phase in ("pre", "post")
+                         for action in ("missing", "changed", "escape"))
+        mutations.append(f"copy_restored:{consumer}")
+    # Check every copy's bytes directly. The full producer controls above
+    # separately cover both volumes, producers and execution phases.
+    product_records = artifact_records(products, source, build)
+    test_input_records = artifact_records(test_inputs, source, build)
+    for index, name in enumerate((*sorted(TEST_INPUT_ARTIFACTS),
+                                  "trace_spv", "trace_fp32comp_spv", "trace_fp64_spv")):
+        consumer = ("sirius_backend_tests", "sirius_render_tests")[index % 2]
+        path = consumed[(consumer, name)]
+        try:
+            replacement = bytearray(originals[path])
+            replacement[-1] ^= 1
+            path.write_bytes(replacement)
+            expect_rejection(lambda: verify_test_input_copies(
+                tested, product_records, test_input_records),
+                f"changed {consumer} consumed copy {name}")
+        finally:
+            path.write_bytes(originals[path])
+    verify_test_input_copies(tested, product_records, test_input_records)
     for native, runner in ((False, run_gate), (True, run_native_build_gate)):
         for mutation in mutations:
             stamp = build / "execution-controls" / "gate.json"
@@ -764,6 +839,15 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
             live_revision = revision
             live_status = ""
             executed = False
+            changed_paths = set()
+            escaped_copies = {}
+            original_resolve = Path.resolve
+
+            def resolve_copy(path, *args, **kwargs):
+                if path in escaped_copies:
+                    return escaped_copies[path]
+                return original_resolve(path, *args, **kwargs)
+
             args = argparse.Namespace(
                 source_root=source, build_dir=build, stamp=stamp,
                 source_revision=revision, source_tree_clean="true",
@@ -773,6 +857,31 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                 product_artifact=[f"{name}={path}" for name, path in products.items()],
                 test_input_artifact=[f"{name}={path}" for name, path in test_inputs.items()],
             )
+
+            def mutate_copy(action: str, consumer: str,
+                            name: str = "portable_binary32_reference") -> None:
+                path = consumed[(consumer, name)]
+                changed_paths.add(path)
+                payload = originals[path]
+                if action in {"missing", "restored"}:
+                    path.unlink()
+                    if action == "restored":
+                        path.write_bytes(payload)
+                elif action == "changed":
+                    replacement = bytearray(payload)
+                    replacement[-1] ^= 1
+                    path.write_bytes(replacement)
+                else:
+                    require(action == "escape", "unknown consumed-copy mutation")
+                    outside = build / f"escaping-copy-{consumer}"
+                    outside.write_bytes(payload)  # Hash-identical, outside the selected volume.
+                    if filesystem_symlinks:
+                        path.unlink()
+                        path.symlink_to(outside)
+                    else:
+                        # A Windows host need not grant symlink creation.
+                        # Simulate only this copy's resolved external path.
+                        escaped_copies[path] = outside.resolve()
 
             # Invocation failures must be rejected before any CTest execution.
             if mutation == "input_omitted":
@@ -786,6 +895,9 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                     f"{name}={substitute if name == 'smoke_spv' else path}"
                     for name, path in test_inputs.items()
                 ]
+            elif mutation.startswith("copy_pre_"):
+                action, consumer = mutation.removeprefix("copy_pre_").split(":")
+                mutate_copy(action, consumer)
 
             def external_command(command, **kwargs):
                 nonlocal live_revision, live_status, executed
@@ -813,23 +925,28 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                         return subprocess.CompletedProcess(command, 8)
                     if mutation == "tested":
                         path = tested["sirius_core_tests"]
+                        changed_paths.add(path)
                         path.write_bytes(b"x" * len(originals[path]))
                     elif mutation == "product":
                         path = products["trace_spv"]
+                        changed_paths.add(path)
                         path.write_bytes(b"x" * len(originals[path]))
                     elif mutation in {"missing", "restored"}:
                         path = products["starfield"]
+                        changed_paths.add(path)
                         path.unlink()
                         if mutation == "restored":
                             path.write_bytes(originals[path])
                     elif mutation.startswith("input_changed:"):
                         name = mutation.partition(":")[2]
                         path = test_inputs[name]
+                        changed_paths.add(path)
                         payload = bytearray(originals[path])
                         payload[-1] ^= 1
                         path.write_bytes(payload)
                     elif mutation in {"input_missing", "input_restored"}:
                         path = test_inputs["parity_probe_spv"]
+                        changed_paths.add(path)
                         path.unlink()
                         if mutation == "input_restored":
                             path.write_bytes(originals[path])
@@ -842,6 +959,11 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                             f"{name}={substitute if name == 'smoke_spv' else path}"
                             for name, path in test_inputs.items()
                         ]
+                    elif mutation.startswith("copy_post_"):
+                        action, consumer = mutation.removeprefix("copy_post_").split(":")
+                        mutate_copy(action, consumer)
+                    elif mutation.startswith("copy_restored:"):
+                        mutate_copy("restored", mutation.partition(":")[2])
                     elif mutation == "revision":
                         live_revision = "b" * 40
                     elif mutation == "dirty":
@@ -855,9 +977,13 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
 
             try:
                 captured_stderr = StringIO()
+                resolver = (patch.object(Path, "resolve", resolve_copy)
+                            if not filesystem_symlinks and "escape" in mutation
+                            else nullcontext())
                 with patch.object(subprocess, "run", side_effect=external_command), \
-                     redirect_stdout(StringIO()), redirect_stderr(captured_stderr):
-                    if mutation in {"none", "restored", "input_restored"}:
+                     resolver, redirect_stdout(StringIO()), redirect_stderr(captured_stderr):
+                    if mutation in {"none", "restored", "input_restored"} or \
+                            mutation.startswith("copy_restored:"):
                         runner(args)
                         receipt = json.loads(stamp.read_text(encoding="utf-8"))
                         require(receipt["status"] == "passed" and
@@ -880,12 +1006,19 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                                     "failed CTest diagnostics were lost from console or log")
                 preflight_failure = mutation in {
                     "input_omitted", "input_extra", "input_wrong_selector",
-                }
+                } or mutation.startswith("copy_pre_")
                 require(executed != preflight_failure,
                         "input control did not enforce the CTest execution boundary")
             finally:
-                for path, payload in originals.items():
-                    path.write_bytes(payload)
+                # Reuse the immutable fixture instead of rewriting all its
+                # artifacts after controls which leave most files untouched.
+                for path in changed_paths:
+                    if path.is_symlink():
+                        path.unlink()
+                    path.write_bytes(originals[path])
+    for path, payload in originals.items():
+        require(path.is_file() and not path.is_symlink() and path.read_bytes() == payload,
+                f"execution controls did not restore their fixture: {path}")
 
 
 def self_test_persistent_output(source: Path, build: Path, tested: dict,
@@ -1009,6 +1142,21 @@ runner(args)
 
 
 def self_test() -> None:
+    from contextlib import nullcontext
+    from unittest.mock import patch
+
+    # Qualification receipts must also be readable by the installed authority.
+    # Catch additions that update the Python producer but strand the C++ reader.
+    runtime_source = (Path(__file__).resolve().parents[1] /
+                      "src/sirius/app/alignment_authority.cpp").read_text(encoding="utf-8")
+    runtime_block = re.search(r"kTestInputArtifacts\s*=\s*\{\{(.*?)\}\};",
+                              runtime_source, re.DOTALL)
+    require(runtime_block is not None, "runtime test-input contract is unavailable")
+    runtime_inputs = re.findall(r'\{\s*"([^\"]+)"\s*,\s*"([^\"]+)"\s*\}',
+                                runtime_block[1])
+    require(len(runtime_inputs) == len(TEST_INPUT_PATHS) and
+            dict(runtime_inputs) == TEST_INPUT_PATHS,
+            "build-gate producer and installed reader disagree on generated test inputs")
     with tempfile.TemporaryDirectory(prefix="sirius-build-gate-") as temporary:
         root = Path(temporary)
         source = root / "source"
@@ -1021,6 +1169,8 @@ def self_test() -> None:
         tested_paths = {}
         for name in TESTED_ARTIFACTS:
             path = build / "tests" / name
+            if name in {"sirius_backend_tests", "sirius_render_tests"}:
+                path = path / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(f"tested:{name}\n".encode())
             tested_paths[name] = path
@@ -1037,6 +1187,33 @@ def self_test() -> None:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(f"test-input:{name}\n".encode())
             test_input_paths[name] = path
+
+        # Distinct executable volumes expose omissions of either consumer.
+        # The fixture copies retain the original canonical artifact selectors.
+        for consumer in ("sirius_backend_tests", "sirius_render_tests"):
+            resource_root = tested_paths[consumer].parent / "resources"
+            for name, original in test_input_paths.items():
+                destination = resource_root / TEST_INPUT_PATHS[name]
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(original.read_bytes())
+            for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"):
+                destination = resource_root / INSTALLED_PRODUCTS[name].removeprefix(
+                    "share/sirius/")
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(product_paths[name].read_bytes())
+
+        probe = build / "symlink-capability-control"
+        try:
+            probe.symlink_to(test_input_paths["portable_binary32_reference"])
+            filesystem_symlinks = True
+        except (OSError, NotImplementedError):
+            filesystem_symlinks = False
+        finally:
+            if probe.is_symlink():
+                probe.unlink()
+        print("escaping-copy controls: " +
+              ("filesystem symlinks" if filesystem_symlinks else
+               "simulated resolved paths (filesystem symlink creation unavailable)"))
 
         names = set(NATIVE_BUILD_EVIDENCE_TESTS)
         names.update(
@@ -1166,6 +1343,36 @@ def self_test() -> None:
                 expect_rejection(lambda: verify_recorded_files(authority, source, build),
                                  f"substituted recorded test input file {name}")
                 path.write_bytes(original_input)
+            for consumer in ("sirius_backend_tests", "sirius_render_tests"):
+                consumed = (tested_paths[consumer].parent / "resources" /
+                            TEST_INPUT_PATHS["portable_binary32_reference"])
+                original_copy = consumed.read_bytes()
+                consumed.unlink()
+                expect_rejection(lambda: verify_recorded_files(authority, source, build),
+                                 f"missing {consumer} consumed copy")
+                outside = build / "escaping-recorded-copy"
+                outside.write_bytes(original_copy)
+                original_resolve = Path.resolve
+
+                def resolve_copy(path, *args, **kwargs):
+                    return outside if path == consumed else original_resolve(path, *args, **kwargs)
+
+                if filesystem_symlinks:
+                    consumed.symlink_to(outside)
+                else:
+                    consumed.write_bytes(original_copy)
+                resolver = (nullcontext() if filesystem_symlinks else
+                            patch.object(Path, "resolve", resolve_copy))
+                with resolver:
+                    expect_rejection(lambda: verify_recorded_files(authority, source, build),
+                                     f"hash-identical escaping {consumer} consumed copy")
+                consumed.unlink()
+                replacement = bytearray(original_copy)
+                replacement[-1] ^= 1
+                consumed.write_bytes(replacement)
+                expect_rejection(lambda: verify_recorded_files(authority, source, build),
+                                 f"tampered {consumer} consumed copy")
+                consumed.write_bytes(original_copy)
             verify_recorded_files(authority, source, build)
 
         development = copy.deepcopy(document)
@@ -1177,6 +1384,10 @@ def self_test() -> None:
                          "kernel-enabled development gate omitted test inputs")
         for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"):
             development["product_artifacts"].pop(name)
+        expect_rejection(lambda: validate_document(development),
+                         "kernel-free development gate omitted exact arithmetic expectations")
+        development["test_input_artifacts"] = {
+            "portable_binary32_reference": test_inputs["portable_binary32_reference"]}
         validate_document(development)
         verify_recorded_files(development, source, build)
         development["test_input_artifacts"] = test_inputs
@@ -1253,7 +1464,7 @@ def self_test() -> None:
                          "stale installed product")
 
         self_test_execution_inputs(source, build, tested_paths, product_paths,
-                                   test_input_paths, inventory)
+                                   test_input_paths, inventory, filesystem_symlinks)
         self_test_persistent_output(source, build, tested_paths, product_paths,
                                     test_input_paths, inventory)
 

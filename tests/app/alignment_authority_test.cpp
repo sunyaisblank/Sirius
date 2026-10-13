@@ -133,7 +133,12 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
     for (const std::string_view name : tested_names) {
         tested_records[name] = ArtifactRecord(base::ExecutablePath());
     }
-    constexpr std::array<std::pair<std::string_view, std::string_view>, 16> test_inputs = {{
+    constexpr std::array<std::pair<std::string_view, std::string_view>, 20> test_inputs = {{
+        {"portable_binary32_reference", "tests/backend/portable_binary32_reference.bin"},
+        {"retained_camera_fixture", "tests/backend/retained_camera/program_fixture.h"},
+        {"retained_camera_fp32_spv", "tests/backend/retained_camera/program_camera_probe-fp32.spv"},
+        {"retained_camera_fp32comp_spv",
+         "tests/backend/retained_camera/program_camera_probe-fp32comp.spv"},
         {"smoke_spv", "kernels/smoke.spv"},
         {"parity_probe_spv", "kernels/parity_probe.spv"},
         {"parity_probe_fp32comp_spv", "kernels/parity_probe_fp32comp.spv"},
