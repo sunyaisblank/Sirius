@@ -47,9 +47,9 @@
       "status": "actionable_now"
     },
     {
-      "evidence_and_next_action": "Only 2/8 domains admitted; all eight plus fresh final release gate required, including unconfirmed Apple route",
+      "evidence_and_next_action": "Only 2/8 domains admitted; all eight plus fresh final release gate required, including investigation of historical hosted MoltenVK pipeline failures.",
       "id": "qualification_to_release_alignment",
-      "status": "externally_blocked"
+      "status": "actionable_now"
     },
     {
       "evidence_and_next_action": "70d156f requires pixel identity; 8bd56ca replaces it with semantic/oracle and output invariants; owner acceptance of this change is not recovered",
@@ -97,7 +97,7 @@
       "status": "actionable_now"
     }
   ],
-  "completed_utc": "2026-10-13T20:55:29.453705+00:00",
+  "completed_utc": "2026-10-13T20:58:19.477740+00:00",
   "existing_work": {
     "github_in_progress_and_queued": [
       [],
@@ -109,9 +109,9 @@
   "external_domains": [
     {
       "id": "macos-moltenvk",
-      "reason": "No accessible native Apple runtime identified; obtain a native host/runner route",
+      "reason": "Existing hosted MoltenVK route is reachable; historical f766bed run recorded five pipeline compilation failures. Investigate source/provider compatibility before final qualification.",
       "scope": "Final revision qualification remains required",
-      "status": "externally_blocked"
+      "status": "actionable_now"
     },
     {
       "id": "macos-native-build",
@@ -157,15 +157,15 @@
     }
   ],
   "full_local_review": {
-    "bytes": 509817,
+    "bytes": 512329,
     "path": "/home/astra/.project/Sirius/attestations/fresh-session-review/4bcd987/2026-10-14/review.json",
     "remotely_backed_up": false,
-    "sha256": "4e6f1258bd9785338f38cfd1b26f8330b2a885706f6e77dc372b2fb53df38837"
+    "sha256": "04831bdcef151ffd0a9c53947f4e25b4633af103c4dac8704608723715eaf01f"
   },
   "git_boundary": {
     "branch_and_main_match_live_remote": true,
     "remote_refs": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc\trefs/heads/development/retained-dense-step-control-2026-10-06\n5e706073a3fd2f9afcf8efbcde2f094122050f6a\trefs/heads/main",
-    "review_evidence_tag": "evidence/fresh-session-review-4bcd987-2026-10-14",
+    "review_evidence_tag": "evidence/fresh-session-review-4bcd987-2026-10-14-v2",
     "source_implementation_committed_and_pushed": true,
     "source_worktree_clean": true,
     "worktrees": "worktree /home/astra/.project/Sirius\nHEAD 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc\nbranch refs/heads/development/retained-dense-step-control-2026-10-06"
@@ -173,6 +173,58 @@
   "handoff": {
     "path": "/home/astra/.codex/attachments/316f2e8c-6275-4006-9469-9ed50de6fbaa/pasted-text-1.txt",
     "sha256": "01a89cb9aa3df3c0a5059f8527f91be04f8836c16fe1af058a1b0f90bb339c46"
+  },
+  "historical_moltenvk_observation": {
+    "finished_cases": 718,
+    "last_started": [
+      "719",
+      "KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel"
+    ],
+    "native_route": "GitHub hosted macos-15 ARM64, Apple Paravirtual device, MoltenVK 1.4.1, shaderFloat64=false, FP32 denormal preservation=false; empty Metal displays query. This is an actionable compatibility investigation, not an admitted current physical domain.",
+    "nonpasses": [
+      {
+        "id": 24,
+        "name": "OperationalVulkan.RequiredRuntimeDispatch",
+        "ordinal": 24,
+        "result": "***Failed",
+        "seconds": 214.24
+      },
+      {
+        "id": 25,
+        "name": "OperationalP1.NearExtremalBurnIn",
+        "ordinal": 25,
+        "result": "***Failed",
+        "seconds": 629.29
+      },
+      {
+        "id": 684,
+        "name": "FullPathAcceptance.VulkanRetainedIndependentCarterEventsMapsAndRefinement",
+        "ordinal": 684,
+        "result": "***Failed",
+        "seconds": 188.32
+      },
+      {
+        "id": 685,
+        "name": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+        "ordinal": 685,
+        "result": "***Failed",
+        "seconds": 188.65
+      },
+      {
+        "id": 704,
+        "name": "VolumeAcceptance.RetainedVulkanRadialObservablesMatchIndependentTransfer",
+        "ordinal": 704,
+        "result": "***Failed",
+        "seconds": 185.39
+      }
+    ],
+    "platform": "macos",
+    "result_counts": {
+      "***Failed": 5,
+      "Passed": 713
+    },
+    "scope": "Partial CTest transcript only; no full XML/estate/receipt. No current-head runtime claim.",
+    "source_revision": "f766bed00ac81983d680296610c79ab6b6d1e032"
   },
   "implementation_changes": false,
   "kind": "fresh-session-recovery-review",
@@ -227,12 +279,18 @@
       "manifest": "attestations/software-vulkan/4bcd987/guarded-product-high-benefit/whole-byte-manifest.json",
       "mismatches": 0,
       "sha256": "7af60a075bc5165ff11b1e3700d58bc28331fb42506bbf8d0e28a14b744f0b24"
+    },
+    {
+      "files_verified": 32,
+      "manifest": "attestations/software-vulkan/f766bed/full-qualification-37299266539-final-diagnostics/sha256-manifest.json",
+      "mismatches": 0,
+      "sha256": "d9a4f054738fb7b24852297a897f75e005ce4020e5d7c60b1ab57536fe94efe8"
     }
   ],
   "material_missing_context": [
     "Original user conversation and governing Prompt.md sections 15/19 are not recovered; scope reconstruction rests on immutable specification history, issues, source and raw evidence",
     "Owner authorization for replacing original pixel-identical forensic comparisons with semantic/decode evidence is not independently recovered",
-    "No accessible native Apple runtime route identified; that external domain needs a host/runner",
+    "Hosted MoltenVK execution is available, but the cause of five historical pipeline compilation failures and current-source result are unverified",
     "Raw binary qualification evidence is local ignored data; pushed evidence tags preserve useful tools/findings, not binary backup"
   ],
   "model_requirement_ledger": [
@@ -800,8 +858,8 @@
       "id": "macos_native_build_and_moltenvk",
       "named_witnesses_required": 2,
       "named_witnesses_verified": 2,
-      "scope": "Native build verified; final native runtime requires an accessible Apple host",
-      "status": "externally_blocked"
+      "scope": "Native build verified; hosted MoltenVK route exists. Historical pipeline failures need investigation and final runtime evidence.",
+      "status": "actionable_now"
     },
     {
       "authoritative_definition": "tests/operating_model.json at 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
@@ -968,5 +1026,9 @@
   ],
   "source_branch": "development/retained-dense-step-control-2026-10-06",
   "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "supersedes": {
+    "reason": "Historical full-job recovery establishes an available hosted MoltenVK route and observed pipeline failures. Earlier no-access/external-block classification is withdrawn.",
+    "tag": "evidence/fresh-session-review-4bcd987-2026-10-14"
+  },
   "system_goal_complete": false
 }

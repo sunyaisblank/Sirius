@@ -14,7 +14,7 @@ ROOT = Path.cwd()
 OUTPUT = ROOT / 'attestations/fresh-session-review/4bcd987/2026-10-14'
 REV = '4bcd9875cd9308deabed06a5fa2f17d2321b0cbc'
 BRANCH = 'development/retained-dense-step-control-2026-10-06'
-TAG = 'evidence/fresh-session-review-4bcd987-2026-10-14'
+TAG = 'evidence/fresh-session-review-4bcd987-2026-10-14-v2'
 
 def run(argv, env=None):
     p = subprocess.run(argv, cwd=ROOT, env=env, capture_output=True, text=True)
@@ -85,6 +85,7 @@ bundles = [
     ('attestations/software-vulkan/b34d8c2/cpu-dense-growth-only-integration', 'sha256-manifest.json'),
     ('attestations/software-vulkan/ea0ae34/endpoint-prefix-production', 'sha256-manifest.json'),
     ('attestations/software-vulkan/4bcd987/guarded-product-high-benefit', 'whole-byte-manifest.json'),
+    ('attestations/software-vulkan/f766bed/full-qualification-37299266539-final-diagnostics', 'sha256-manifest.json'),
 ]
 current_witnesses = collections.defaultdict(list)
 xml_records = []
@@ -174,9 +175,9 @@ assert checked(['git', 'rev-parse', REV + '^{tree}']) == checked(['git', 'rev-pa
 domains = []
 for name in readiness['parsed']['ultimate_ideal']['external_domain_ids_required']:
     admitted = name in readiness['parsed']['ultimate_ideal']['external_domain_ids_admitted']
-    status = 'verified_complete' if admitted else 'externally_blocked' if name == 'macos-moltenvk' else 'actionable_now'
+    status = 'verified_complete' if admitted else 'actionable_now'
     domains.append({'id': name, 'status': status, 'scope': 'Exact-current-revision build-only admission' if admitted else 'Final revision qualification remains required',
-                    'reason': 'Independent existing verifier passes' if admitted else 'No accessible native Apple runtime identified; obtain a native host/runner route' if name == 'macos-moltenvk' else 'Windows/WSL2 and physical Radeon 780M are accessible; rendering, full gates and domain-specific preflight remain prerequisites'})
+                    'reason': 'Independent existing verifier passes' if admitted else 'Existing hosted MoltenVK route is reachable; historical f766bed run recorded five pipeline compilation failures, investigate before final qualification' if name == 'macos-moltenvk' else 'Windows/WSL2 and physical Radeon 780M are accessible; rendering, full gates and domain-specific preflight remain prerequisites'})
 
 ledger = []
 for group in ['acceptance_criteria', 'required_dimensions', 'capability_contracts']:
@@ -188,8 +189,8 @@ for group in ['acceptance_criteria', 'required_dimensions', 'capability_contract
             status = 'verified_complete'
             scope = 'Only the complete existing named finite witness set; no full Mandatory/release promotion'
         elif item.get('state') == 'attestation_required' and item['profiles'] == ['macos-native-build', 'macos-moltenvk']:
-            status = 'externally_blocked'
-            scope = 'Native build verified; final native runtime requires an accessible Apple host'
+            status = 'actionable_now'
+            scope = 'Native build verified; hosted MoltenVK route exists, historical pipeline failures need investigation and final runtime evidence'
         else:
             status = 'actionable_now'
             scope = 'Implementation/evidence recovery is possible now; final full criterion is not proved'
@@ -211,7 +212,7 @@ gates = [
     ('kernel_oracle_and_beam_parity', 'actionable_now', 'Finite historical acceptance remains scoped; complete final CPU/device scientific estate required'),
     ('output_decode_transfer_and_roundtrip', 'actionable_now', 'Historical original writer controls verified at b34d8c2; final output estate still required'),
     ('physical_hardware_envelope', 'actionable_now', 'Physical Radeon/Dozen visible; original two full-size governed scenes not qualified'),
-    ('qualification_to_release_alignment', 'externally_blocked', 'Only 2/8 domains admitted; all eight plus fresh final release gate required, including unconfirmed Apple route'),
+    ('qualification_to_release_alignment', 'actionable_now', 'Only 2/8 domains admitted; all eight plus fresh final release gate required, including investigation of historical hosted MoltenVK pipeline failures'),
     ('original_forensic_pixel_identity', 'decision_required', '70d156f requires pixel identity; 8bd56ca replaces it with semantic/oracle and output invariants; owner acceptance of this change is not recovered'),
     ('original_software_cold_frame', 'actionable_now', 'Preserved ea0ae34 raw JUnit times out at 300.027 seconds; original required 128x128/1-SPP fp32 cold Kerr command remains unchanged'),
     ('execution_refusal_recovery_rollback', 'actionable_now', 'Preserve complete 40 fields, 4 columns, 7 RHS records, 3 independent RK trials and 4 quartics and all consumer joins; finite controls do not prove full estate'),
@@ -247,7 +248,7 @@ report = {
     'handoff': {'path': '/home/astra/.codex/attachments/316f2e8c-6275-4006-9469-9ed50de6fbaa/pasted-text-1.txt', 'sha256': sha(Path('/home/astra/.codex/attachments/316f2e8c-6275-4006-9469-9ed50de6fbaa/pasted-text-1.txt'))},
     'recovered_goal': 'Complete the ground-up C++26 Sirius DNGR parity/exceedance rebuild on CPU and consumer Vulkan across Linux/WSL2/Windows and supported macOS, including progressive Radeon 780M rendering and exact governed 1080p/IMAX star scenes within 2048 MiB, full science/execution contracts and final revision release admission',
     'accepted_working_scope': 'Current specification and original issue acceptance are preserved; finite #39, CPU endpoint reuse, retained ownership and coherent viewer publication are subordinate results. Rejected experiments remain rejected. No reduced scenes, settings, counts, independent references, tolerances, precision eligibility or governors.',
-    'material_missing_context': ['Original user conversation and governing Prompt.md sections 15/19 are not recovered; scope reconstruction rests on immutable specification history, issues, source and raw evidence', 'Owner authorization for replacing original pixel-identical forensic comparisons with semantic/decode evidence is not independently recovered', 'No accessible native Apple runtime route identified; that external domain needs a host/runner', 'Raw binary qualification evidence is local ignored data; pushed evidence tags preserve useful tools/findings, not binary backup'],
+    'material_missing_context': ['Original user conversation and governing Prompt.md sections 15/19 are not recovered; scope reconstruction rests on immutable specification history, issues, source and raw evidence', 'Owner authorization for replacing original pixel-identical forensic comparisons with semantic/decode evidence is not independently recovered', 'Hosted MoltenVK execution is available, but the cause of five historical pipeline compilation failures and current-source result are unverified', 'Raw binary qualification evidence is local ignored data; pushed evidence tags preserve useful tools/findings, not binary backup'],
     'scope_and_claim_audit': [
         {'status': 'decision_required', 'finding': 'Pixel-identity acceptance was explicitly relaxed in 8bd56ca; no owner authorization recovered. Do not silently discard the original criterion or treat decode/oracle controls as pixel identity.'},
         {'status': 'unsupported_historical_completion', 'finding': 'Retired July engagement scorecard HOLDS/physical E3 closure claims do not prove the current original beam-filtered moving-ThinLens full-resolution workload or current revision. Its own later historical warning withdraws it as operational authority.'},
