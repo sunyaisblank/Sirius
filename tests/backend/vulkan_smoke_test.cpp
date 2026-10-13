@@ -796,6 +796,7 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
     constexpr std::array<std::array<float, 4>, 3> expected{
         {{0, .5f, .75f, .875f}, {-.5f, .25f, .625f, .8125f}, {-1, 0, .5f, .75f}}};
     std::array<sirius::backend::BufferHandle, 3> prior_outputs{};
+    std::array<std::array<sirius::backend::BufferHandle, 3>, 3> saved_bindings{};
     std::array<std::array<float, 4>, 3> saved_outputs{};
     for (std::size_t invocation = 0; invocation < expected.size(); ++invocation) {
         const std::array<float, 2> params{masses[invocation], 4};
@@ -810,6 +811,7 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
         ASSERT_TRUE(device.WriteBuffer(*out, std::as_bytes(std::span(unwritten))));
         ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
         const std::array bindings{*in, *out, *parameters};
+        saved_bindings[invocation] = bindings;
         sirius::backend::DispatchTiming timing;
         const auto before = vulkan->DescriptorBindingStatistics();
         ASSERT_TRUE(device.Dispatch(invocation == 2   ? *variant
@@ -864,6 +866,26 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
             }
         }
     }
+    // The same ordered tuple under a different actual layout needs its own
+    // entry. Returning to the original layout must reuse its original entry.
+    const auto before_variant = vulkan->DescriptorBindingStatistics();
+    ASSERT_TRUE(device.Dispatch(*variant, saved_bindings[0], 1, 1, 1));
+    const auto after_variant = vulkan->DescriptorBindingStatistics();
+    EXPECT_EQ(after_variant.created - before_variant.created, 1U);
+    EXPECT_EQ(after_variant.reused, before_variant.reused);
+    constexpr std::array<float, 4> variant_expected{.625f, .25f, -.5f, -2};
+    std::array<float, 4> actual{};
+    ASSERT_TRUE(device.ReadBuffer(prior_outputs[0], std::as_writable_bytes(std::span(actual))));
+    for (std::size_t i = 0; i < actual.size(); ++i)
+        EXPECT_NEAR(actual[i], variant_expected[i], 1e-6f);
+    ASSERT_TRUE(device.Dispatch(*first, saved_bindings[0], 1, 1, 1));
+    const auto returned = vulkan->DescriptorBindingStatistics();
+    EXPECT_EQ(returned.created, after_variant.created);
+    EXPECT_EQ(returned.reused - after_variant.reused, 1U);
+    constexpr std::array<float, 4> original_expected{.8125f, .625f, .25f, -.5f};
+    ASSERT_TRUE(device.ReadBuffer(prior_outputs[0], std::as_writable_bytes(std::span(actual))));
+    for (std::size_t i = 0; i < actual.size(); ++i)
+        EXPECT_NEAR(actual[i], original_expected[i], 1e-6f);
 #endif
 }
 
