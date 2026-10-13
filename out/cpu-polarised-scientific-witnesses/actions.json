@@ -1,0 +1,35 @@
+{
+  "remaining-scientific-witnesses": {
+    "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "kind": "check",
+    "expected_exit": 0,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "Execute exactly seven original outstanding polarised_transport_to_film witnesses on unchanged current GCC producers; combine with three already executed and bound controls without relabeling other historical/current results. Full scientific/render/runtime/Mandatory qualification remains incomplete.",
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "bin/linux-gcc",
+      "--output-on-failure",
+      "--no-tests=error",
+      "--output-junit",
+      "{folder}/ctest.xml",
+      "-R",
+      "^(GeodesicTracerTest\\.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation|GeodesicTracerTest\\.PolarisationGaugeRemainsRegularAtPastHorizonCapture|WalkerPenrose\\.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution|WalkerPenrose\\.PolarisationStaysOrthogonalAndNormalisedUnderTransport|WalkerPenrose\\.SchwarzschildEquatorialPerpendicularTransportsRigidly|WalkerPenroseLivePath\\.AgreesWithOracleAcrossCharts|WalkerPenroseLivePath\\.ConservesConstantAndOrthonormality)$"
+    ],
+    "frozen_inputs": [
+      "tests/operating_model.json",
+      "bin/linux-gcc/generated/sirius/alignment_receipt.json",
+      "bin/linux-gcc/src/sirius/app/resources/model/alignment_receipt.json",
+      "bin/linux-gcc/CMakeCache.txt",
+      "bin/linux-gcc/tests/core/sirius_core_tests",
+      "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+      "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+      "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+      "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/polarisation-controls/ctest.xml"
+    ]
+  }
+}
