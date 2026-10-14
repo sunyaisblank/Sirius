@@ -164,7 +164,7 @@ def clean_environment(output, sdk):
                         "MAKEFLAGS", "MFLAGS", "MAKELEVEL", "MAKEFILES", "GNUMAKEFLAGS"}}
     for name in ("tmp", "cache", "module-cache", "cpm-cache"):
         (output / name).mkdir()
-    environment.update(LC_ALL="C", DYLD_PRINT_LIBRARIES="1", MVK_CONFIG_DEBUG="0",
+    environment.update(LC_ALL="C", PYTHONDONTWRITEBYTECODE="1", DYLD_PRINT_LIBRARIES="1", MVK_CONFIG_DEBUG="0",
         MVK_CONFIG_TRACE_VULKAN_CALLS="3", VK_DRIVER_FILES=str(sdk / "share/vulkan/icd.d/MoltenVK_icd.json"),
         DYLD_LIBRARY_PATH=os.pathsep.join(str(path) for path in (sdk / "lib/VulkanLoader/lib", sdk / "lib") if path.is_dir()),
         TMPDIR=str(output / "tmp"), XDG_CACHE_HOME=str(output / "cache"),
@@ -395,13 +395,17 @@ def main():
         shutil.copy2(payload / "cpm-cache/cpm/CPM_0.40.8.cmake", cpm / "CPM_0.40.8.cmake")
         context_path = output / "build-context.json"
         build = REPO / "bin/macos/macos-moltenvk-integration"
+        build_environment = dict(environment)
+        build_environment.pop("DYLD_PRINT_LIBRARIES", None)
         write(context_path, {"payload": str(payload), "output": str(output), "build": str(build),
-                            "toolchain": tools, "content_id": CONTENT_ID, "content_id_is_git_provenance": False})
+                            "toolchain": tools, "content_id": CONTENT_ID, "content_id_is_git_provenance": False,
+                            "build_environment_difference": {"removed": ["DYLD_PRINT_LIBRARIES"],
+                                "scope": "Build tools retain full input seals and the64MiB output cap; runtime provider inventories/queries/controls retain loaded-image logging"}})
         build_inputs = list(dict.fromkeys([*inputs, *selected_tools, *tool_receipts,
                                           context_path, cpm / "CPM_0.40.8.cmake"]))
         build_folder = output / "provider-build"
         owner = common.run_owned([sys.executable, "-B", str(HERE), "--build-child", str(context_path), identity(context_path)["sha256"]],
-                                 environment, build_folder, build_inputs, seconds=900)
+                                 build_environment, build_folder, build_inputs, seconds=900)
         complete_owner(owner)
         verify_payload(payload)
         after_tools, after_links = tool_inputs(tools)
@@ -478,7 +482,8 @@ def main():
             except Exception as error:
                 result["status"] = "incomplete"
                 result["provider_source_inputs_unchanged"] = False
-                result["error"] = str(error)
+                result["provider_source_verification_error"] = str(error)
+                result.setdefault("error", str(error))
         write(output / "integration.json", result)
         print(json.dumps(result), flush=True)
         if common.STOP is not None or result.get("provider_source_inputs_unchanged") is False:
