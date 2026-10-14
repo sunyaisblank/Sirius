@@ -1,0 +1,1144 @@
+{
+  "passed": true,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "expected_names": [
+    "DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication",
+    "DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback",
+    "DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample",
+    "DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState",
+    "DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce",
+    "DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary",
+    "DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals",
+    "DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory"
+  ],
+  "scope": "Eight original model-E3 host continuation scheduling/readback controls only. Synthetic feedback and fixed records; no ICD/device/frame/physical timing, full E3/science/Mandatory/domain/release or performance claim.",
+  "finite_acceptance_scope": {
+    "DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication": {
+      "assertions": "Stop exactly at declared cancellation point, zero publication, unchanged cancellation error and sample/continuation ordering.",
+      "fixture": "Original cancellation after1/2/3/12 submissions."
+    },
+    "DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback": {
+      "assertions": "One complete publication; peak feedback sets NextRows(4,4)=1 without hard safety fallback. No actual performance assertion.",
+      "fixture": "Original synthetic{1,400,1}ms timings, both legacy and continuation callback routes."
+    },
+    "DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample": {
+      "assertions": "Exactly bound submissions, no next sample or publication, original positive-bound/exhaustion device error.",
+      "fixture": "Original continuation bounds0/1/3, never-terminal callback."
+    },
+    "DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState": {
+      "assertions": "All4 stale identity fields; changed trajectory/volume/source; all4x2x4 physical-column components and nonfinite variants; skipped attempt7to9 decline. Original acceptance/refusal unchanged.",
+      "fixture": "Original float and double identity{17,29,3,0x7fc00000}; rejected trial advances attempt7to8 while changing only next-step .25."
+    },
+    "DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce": {
+      "assertions": "Exact original image/pupil coordinates and sample/continuation order;12submissions, zero early publications, one final publication. Sample enumeration is production ForEachCameraSample, not a separate sampling-physics oracle.",
+      "fixture": "Original4 camera samples and3 continuations each, region{5,7,4,1}."
+    },
+    "DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary": {
+      "assertions": "Each of12synthetic cases stops afterbad_ordinal+1 submissions with device refusal and zero publication. These are injected observations, not measured device latencies.",
+      "fixture": "Original bad ordinal0/1/2 crossed with1001ms,-1,Inf,NaN."
+    },
+    "DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals": {
+      "assertions": "Discard parent; restart both sample/continuation ordinals at0, preserve image/pupil samples, disjoint exact pixel coverage{1,1,1,1}, expected child counts and safety fallback.",
+      "fixture": "Original late ninth parent callback returns1001ms or0; width4 parent, width2or1 children."
+    },
+    "DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory": {
+      "assertions": "Only reasons1/2/3/10 finalize; physical trajectory immutable; terminal Advance, nonfinal state and nonzero Initialize attempt decline; original initialized state accepted but incomplete.",
+      "fixture": "Original terminal reasons0..11 and identity{17,29,0,1}."
+    }
+  },
+  "qualification_claimed": false,
+  "e3_complete": false,
+  "mandatory_receipt_created": false,
+  "original_assertions_changed": false,
+  "outer_diagnostic_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "declared_output_environment": {
+    "TMPDIR": "/home/astra/.project/Sirius/out/science-e3-dispatch-continuations-current-source/temporary",
+    "GTEST_OUTPUT": ""
+  },
+  "executed_names": [
+    "DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication",
+    "DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback",
+    "DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample",
+    "DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState",
+    "DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce",
+    "DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary",
+    "DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals",
+    "DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory"
+  ],
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "disabled": 0,
+  "junit": {
+    "bytes": 8860,
+    "sha256": "82ea3ed93a0031f8a5e7e23855a673f2d8e0a58367f6b949c33d3f580fa560ce"
+  },
+  "ctest_output_log": {
+    "bytes": 13000,
+    "sha256": "3de3bcb5dc9e8547269f6245ead0e218b868eb98bd3a7ba1002541e117334de0"
+  },
+  "owner": {
+    "bytes": 2567,
+    "sha256": "cb4ca42ff71569dddf638ab8d5df75ec977b3c617ff1741812d1974ee1507f43"
+  },
+  "source_and_registration_join": {
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "actual_object_dependencies": {
+      "bin/linux-gcc/src/sirius/render/CMakeFiles/sirius_render.dir/dispatch_governor.cpp.o": {
+        "actual_object_mtime_ns": 1791251233076971987,
+        "all_dependency_count": 315,
+        "dependency_source": "bin/linux-gcc/.ninja_deps version4; record IDs/checksums/bounds and exact object mtime checked read-only",
+        "ledger_mtime_ns": 1791251233076971987,
+        "object": {
+          "bytes": 198872,
+          "sha256": "06621697d66ad2b24ecd285400e2282ecb9ba53568b04ec4d243bf24b4d8b003"
+        },
+        "project_dependencies": [
+          "src/sirius/render/dispatch_governor.cpp",
+          "src/sirius/render/dispatch_governor.h",
+          "src/sirius/base/error.h",
+          "src/sirius/render/pixel_sampling.h",
+          "src/sirius/core/camera_sampling.h",
+          "src/sirius/base/contracts.h"
+        ]
+      },
+      "bin/linux-gcc/src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o": {
+        "actual_object_mtime_ns": 1791848378631285667,
+        "all_dependency_count": 450,
+        "dependency_source": "bin/linux-gcc/.ninja_deps version4; record IDs/checksums/bounds and exact object mtime checked read-only",
+        "ledger_mtime_ns": 1791848378631285667,
+        "object": {
+          "bytes": 632448,
+          "sha256": "ff502ef8c5490997dbf097e5e0429485734a92b700f2c248c492bc21d45ac9ba"
+        },
+        "project_dependencies": [
+          "src/sirius/render/vulkan_renderer.cpp",
+          "src/sirius/render/vulkan_renderer.h",
+          "src/sirius/backend/retained_compute.h",
+          "src/sirius/backend/device.h",
+          "src/sirius/base/error.h",
+          "src/sirius/render/dispatch_governor.h",
+          "src/sirius/render/pixel_sampling.h",
+          "src/sirius/core/camera_sampling.h",
+          "src/sirius/base/contracts.h",
+          "src/sirius/render/memory_governor.h",
+          "src/sirius/render/session/display_buffer.h",
+          "src/sirius/backend/retained_trace_executor.h",
+          "src/sirius/backend/retained_integrator.h",
+          "src/sirius/core/dopri_segment.h",
+          "src/sirius/core/trace_boundary.h",
+          "src/sirius/core/tensor.h",
+          "src/sirius/core/dual_number.h",
+          "src/sirius/core/geodesic_integrator.h",
+          "src/sirius/core/metrics/metric.h",
+          "src/sirius/core/twofold.h",
+          "src/sirius/backend/trace_step_executor.h",
+          "src/sirius/core/camera_launch.h",
+          "src/sirius/core/camera.h",
+          "src/sirius/core/celestial_tangent_basis.h",
+          "src/sirius/core/coordinates.h",
+          "src/sirius/core/observer_frame.h",
+          "src/sirius/base/resource_locator.h",
+          "src/sirius/core/constants.h",
+          "src/sirius/core/disk/novikov_thorne_disk.h",
+          "src/sirius/core/disk/disk_model.h",
+          "src/sirius/core/kerr_orbits.h",
+          "src/sirius/core/spectral/spectral_radiance.h",
+          "src/sirius/core/cie1931_observer.h",
+          "src/sirius/core/spectral/blackbody_laws.h",
+          "src/sirius/core/metrics/registry.h",
+          "src/sirius/core/starfield.h",
+          "src/sirius/core/point_source_response.h",
+          "src/sirius/core/point_starfield_config.h",
+          "src/sirius/core/spectral/blackbody.h",
+          "src/sirius/core/srgb_transfer.h",
+          "src/sirius/core/xyz_srgb.h",
+          "src/sirius/core/spectral/point_source_transfer.h",
+          "src/sirius/render/session/render_session.h",
+          "src/sirius/render/film_config.h",
+          "src/sirius/render/render_evidence.h",
+          "src/sirius/render/session/point_source_detector.h",
+          "src/sirius/render/session/progress_tracker.h",
+          "src/sirius/render/session/ray_work_queue.h",
+          "src/sirius/backend/cpu/geodesic_tracer.h",
+          "src/sirius/core/disk/turbulence.h",
+          "src/sirius/core/disk/volumetric_disk.h",
+          "src/sirius/core/kerr_infinity.h",
+          "src/sirius/core/source_sky_map.h",
+          "src/sirius/core/metrics/outgoing_kerr_schild.h",
+          "src/sirius/core/metrics/kerr_schild_family.h",
+          "src/sirius/core/first_order_number.h",
+          "src/sirius/core/second_order_number.h",
+          "src/sirius/core/polarisation/walker_penrose.h",
+          "src/sirius/core/polarisation/stokes.h",
+          "src/sirius/core/relativistic_transfer.h",
+          "src/sirius/core/spectral/colour_modes.h",
+          "src/sirius/render/session/session_events.h",
+          "src/sirius/render/session/session_states.h",
+          "src/sirius/render/session/state_machine.h",
+          "src/sirius/render/session/tile_scheduler.h",
+          "src/sirius/core/disk/disk_defaults.h",
+          "src/sirius/core/feature_defaults.h",
+          "src/sirius/core/metrics/warp_drive_family.h",
+          "src/sirius/core/postprocess.h",
+          "src/sirius/render/trace_continuation.h",
+          "src/sirius/render/trace_domain.h"
+        ]
+      },
+      "bin/linux-gcc/tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o": {
+        "actual_object_mtime_ns": 1791848498993666226,
+        "all_dependency_count": 448,
+        "dependency_source": "bin/linux-gcc/.ninja_deps version4; record IDs/checksums/bounds and exact object mtime checked read-only",
+        "ledger_mtime_ns": 1791848498993666226,
+        "object": {
+          "bytes": 769760,
+          "sha256": "8ce77b2c8655dbeafdfa017b62f4909dce9a68fcd8b0d459c0f66b6a454b6400"
+        },
+        "project_dependencies": [
+          "tests/render/dispatch_governor_test.cpp",
+          "tests/support/fail_on_skip.h",
+          "src/sirius/render/trace_continuation.h",
+          "src/sirius/base/error.h",
+          "src/sirius/render/dispatch_governor.h",
+          "src/sirius/render/pixel_sampling.h",
+          "src/sirius/core/camera_sampling.h",
+          "src/sirius/base/contracts.h",
+          "src/sirius/render/vulkan_renderer.h",
+          "src/sirius/backend/retained_compute.h",
+          "src/sirius/backend/device.h",
+          "src/sirius/render/memory_governor.h",
+          "src/sirius/render/session/display_buffer.h",
+          "tests/support/scoped_environment.h"
+        ]
+      }
+    },
+    "actual_render_archive_member_joins": {
+      "dispatch_governor.cpp.o": {
+        "bytes": 198872,
+        "object": "bin/linux-gcc/src/sirius/render/CMakeFiles/sirius_render.dir/dispatch_governor.cpp.o",
+        "sha256": "06621697d66ad2b24ecd285400e2282ecb9ba53568b04ec4d243bf24b4d8b003"
+      },
+      "vulkan_renderer.cpp.o": {
+        "bytes": 632448,
+        "object": "bin/linux-gcc/src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o",
+        "sha256": "ff502ef8c5490997dbf097e5e0429485734a92b700f2c248c492bc21d45ac9ba"
+      }
+    },
+    "archives": {
+      "bin/linux-gcc/src/sirius/render/libsirius_render.a": {
+        "bytes": 3865894,
+        "sha256": "795e24879b2c6a5fb1efe97fcef8679760ac124efd580c1c930d16aea57116e3"
+      }
+    },
+    "compiler_provenance_limit": "Reuse accepted exact GCC Release ELF/source authority, saved build before/after source seals, strict recipes, actual matching-mtime Ninja dependencies and static archive links. No new build or retrospective compiler-byte execution attestation.",
+    "dependency_ledger": {
+      "bytes": 451316,
+      "format_version": 4,
+      "path": "bin/linux-gcc/.ninja_deps",
+      "records": 249,
+      "sha256": "6342cac567c550f83333393537b104b33e32eacc320ff12ef82867fd029c73e0"
+    },
+    "existing_build_owner": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/owner.json",
+    "external_image_or_device_resources_required": false,
+    "global_test_registration_resource_lock": "Preserve original registrations; no selected body creates a Vulkan device or calls an ICD. The executable still dynamically links its original loader libraries.",
+    "original_compile_commands": [
+      {
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_INTERACTIVE_VIEWER=1 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1 -DSIRIUS_VERSION=\\\"2.0.0\\\" -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/lib/glad/include -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -I/home/astra/.project/Sirius/lib/glfw/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o -c /home/astra/.project/Sirius/tests/render/dispatch_governor_test.cpp",
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "file": "/home/astra/.project/Sirius/tests/render/dispatch_governor_test.cpp",
+        "output": "tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o"
+      },
+      {
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/render/CMakeFiles/sirius_render.dir/dispatch_governor.cpp.o -c /home/astra/.project/Sirius/src/sirius/render/dispatch_governor.cpp",
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "file": "/home/astra/.project/Sirius/src/sirius/render/dispatch_governor.cpp",
+        "output": "src/sirius/render/CMakeFiles/sirius_render.dir/dispatch_governor.cpp.o"
+      },
+      {
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o -c /home/astra/.project/Sirius/src/sirius/render/vulkan_renderer.cpp",
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "file": "/home/astra/.project/Sirius/src/sirius/render/vulkan_renderer.cpp",
+        "output": "src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o"
+      }
+    ],
+    "original_link_ninja_lines": [
+      "build src/sirius/app/sirius_render_tests tests/render/sirius_render_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/render/sirius_render_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_render_tests_Release tests/render/CMakeFiles/sirius_render_tests.dir/alcubierre_acceptance_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/film_pipeline_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/tile_scheduler_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/progress_tracker_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/render_evidence_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/memory_governor_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/ray_bundle_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/starfield_point_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_physics_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/ray_work_queue_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/doppler_toggle_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/pixel_sampling_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/shadow_boundary_test.cpp.o | src/sirius/render/libsirius_render.a src/sirius/app/libsirius_app_lib.a lib/libgtest_main.a src/sirius/render/libsirius_render.a src/sirius/backend/libsirius_backend_cpu.a src/sirius/backend/libsirius_backend.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a /usr/lib/x86_64-linux-gnu/libvulkan.so _deps/ftxui-build/libftxui-component.a _deps/ftxui-build/libftxui-dom.a _deps/ftxui-build/libftxui-screen.a lib/glfw/src/libglfw3.a /usr/lib/x86_64-linux-gnu/librt.a /usr/lib/x86_64-linux-gnu/libm.so /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so lib/libgtest.a || _deps/ftxui-build/libftxui-component.a _deps/ftxui-build/libftxui-dom.a _deps/ftxui-build/libftxui-screen.a lib/glfw/src/libglfw3.a lib/libgtest.a lib/libgtest_main.a sirius_render_tests_input_volume src/sirius/app/libsirius_app_lib.a src/sirius/app/sirius src/sirius/backend/libsirius_backend.a src/sirius/backend/libsirius_backend_cpu.a src/sirius/backend/sirius_kernels src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a src/sirius/render/libsirius_render.a"
+    ],
+    "original_test_TIMEOUT_added": false,
+    "producers": {
+      "render": {
+        "bytes": 12208240,
+        "path": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4",
+        "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+      }
+    },
+    "production_consumers": {
+      "ExecuteDispatchRegions": "src/sirius/render/vulkan_renderer.cpp:1190",
+      "ValidateTraceContinuation": "src/sirius/render/vulkan_renderer.cpp:1271"
+    },
+    "production_headers": [
+      "src/sirius/backend/cpu/geodesic_tracer.h",
+      "src/sirius/backend/device.h",
+      "src/sirius/backend/retained_compute.h",
+      "src/sirius/backend/retained_integrator.h",
+      "src/sirius/backend/retained_trace_executor.h",
+      "src/sirius/backend/trace_step_executor.h",
+      "src/sirius/base/contracts.h",
+      "src/sirius/base/error.h",
+      "src/sirius/base/resource_locator.h",
+      "src/sirius/core/camera.h",
+      "src/sirius/core/camera_launch.h",
+      "src/sirius/core/camera_sampling.h",
+      "src/sirius/core/celestial_tangent_basis.h",
+      "src/sirius/core/cie1931_observer.h",
+      "src/sirius/core/constants.h",
+      "src/sirius/core/coordinates.h",
+      "src/sirius/core/disk/disk_defaults.h",
+      "src/sirius/core/disk/disk_model.h",
+      "src/sirius/core/disk/novikov_thorne_disk.h",
+      "src/sirius/core/disk/turbulence.h",
+      "src/sirius/core/disk/volumetric_disk.h",
+      "src/sirius/core/dopri_segment.h",
+      "src/sirius/core/dual_number.h",
+      "src/sirius/core/feature_defaults.h",
+      "src/sirius/core/first_order_number.h",
+      "src/sirius/core/geodesic_integrator.h",
+      "src/sirius/core/kerr_infinity.h",
+      "src/sirius/core/kerr_orbits.h",
+      "src/sirius/core/metrics/kerr_schild_family.h",
+      "src/sirius/core/metrics/metric.h",
+      "src/sirius/core/metrics/outgoing_kerr_schild.h",
+      "src/sirius/core/metrics/registry.h",
+      "src/sirius/core/metrics/warp_drive_family.h",
+      "src/sirius/core/observer_frame.h",
+      "src/sirius/core/point_source_response.h",
+      "src/sirius/core/point_starfield_config.h",
+      "src/sirius/core/polarisation/stokes.h",
+      "src/sirius/core/polarisation/walker_penrose.h",
+      "src/sirius/core/postprocess.h",
+      "src/sirius/core/relativistic_transfer.h",
+      "src/sirius/core/second_order_number.h",
+      "src/sirius/core/source_sky_map.h",
+      "src/sirius/core/spectral/blackbody.h",
+      "src/sirius/core/spectral/blackbody_laws.h",
+      "src/sirius/core/spectral/colour_modes.h",
+      "src/sirius/core/spectral/point_source_transfer.h",
+      "src/sirius/core/spectral/spectral_radiance.h",
+      "src/sirius/core/srgb_transfer.h",
+      "src/sirius/core/starfield.h",
+      "src/sirius/core/tensor.h",
+      "src/sirius/core/trace_boundary.h",
+      "src/sirius/core/twofold.h",
+      "src/sirius/core/xyz_srgb.h",
+      "src/sirius/render/dispatch_governor.h",
+      "src/sirius/render/film_config.h",
+      "src/sirius/render/memory_governor.h",
+      "src/sirius/render/pixel_sampling.h",
+      "src/sirius/render/render_evidence.h",
+      "src/sirius/render/session/display_buffer.h",
+      "src/sirius/render/session/point_source_detector.h",
+      "src/sirius/render/session/progress_tracker.h",
+      "src/sirius/render/session/ray_work_queue.h",
+      "src/sirius/render/session/render_session.h",
+      "src/sirius/render/session/session_events.h",
+      "src/sirius/render/session/session_states.h",
+      "src/sirius/render/session/state_machine.h",
+      "src/sirius/render/session/tile_scheduler.h",
+      "src/sirius/render/trace_continuation.h",
+      "src/sirius/render/trace_domain.h",
+      "src/sirius/render/vulkan_renderer.h"
+    ],
+    "production_sources": [
+      "src/sirius/render/dispatch_governor.cpp",
+      "src/sirius/render/vulkan_renderer.cpp"
+    ],
+    "registrations": [
+      {
+        "add_test": "add_test([=[DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState]==] --gtest_also_run_disabled_tests)",
+        "name": "DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "properties": "set_tests_properties([=[DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "source": "tests/render/dispatch_governor_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory]==] --gtest_also_run_disabled_tests)",
+        "name": "DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "properties": "set_tests_properties([=[DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "source": "tests/render/dispatch_governor_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce]==] --gtest_also_run_disabled_tests)",
+        "name": "DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "properties": "set_tests_properties([=[DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "source": "tests/render/dispatch_governor_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals]==] --gtest_also_run_disabled_tests)",
+        "name": "DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "properties": "set_tests_properties([=[DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "source": "tests/render/dispatch_governor_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary]==] --gtest_also_run_disabled_tests)",
+        "name": "DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "properties": "set_tests_properties([=[DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "source": "tests/render/dispatch_governor_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication]==] --gtest_also_run_disabled_tests)",
+        "name": "DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "properties": "set_tests_properties([=[DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "source": "tests/render/dispatch_governor_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback]==] --gtest_also_run_disabled_tests)",
+        "name": "DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "properties": "set_tests_properties([=[DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "source": "tests/render/dispatch_governor_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample]==] --gtest_also_run_disabled_tests)",
+        "name": "DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "properties": "set_tests_properties([=[DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "source": "tests/render/dispatch_governor_test.cpp"
+      }
+    ],
+    "render_archive_link": [
+      "build src/sirius/render/libsirius_render.a: CXX_STATIC_LIBRARY_LINKER__sirius_render_Release src/sirius/render/CMakeFiles/sirius_render.dir/exr_writer.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/png_writer.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/render_evidence.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/stb_impl.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/stb_write_impl.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/memory_governor.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/dispatch_governor.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/session/render_session.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/session/pixel_shading.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/session/point_source_detector.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/session/ray_work_queue.cpp.o src/sirius/render/CMakeFiles/sirius_render.dir/__/__/__/lib/tinyexr/miniz.c.o src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o || src/sirius/backend/libsirius_backend.a src/sirius/backend/libsirius_backend_cpu.a src/sirius/backend/sirius_kernels src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+    ],
+    "runtime_resources_bound": [],
+    "source_before_after": [
+      "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-before.json",
+      "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-after.json"
+    ],
+    "source_snapshot_count": 85,
+    "test_sources": [
+      "tests/render/dispatch_governor_test.cpp"
+    ]
+  },
+  "reference": {
+    "independence_limit": "Only host scheduling and typed readback validation are observed. No GPU submission, physical timer, ray integration, image or native progressive-window result.",
+    "independent_reference": "Original independent discrete fixture identities, explicit counter/order/coverage expectations and terminal-reason acceptance set. Timing values are injected; original production sample enumeration supplies coordinate identity, not an independent physical/timing oracle.",
+    "original_model_membership": {
+      "E3": [
+        "DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication",
+        "DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback",
+        "DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample",
+        "DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState",
+        "DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce",
+        "DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary",
+        "DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals",
+        "DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory"
+      ]
+    },
+    "original_source_snapshots": {
+      "CMakeLists.txt": {
+        "build_before_after_equal": true,
+        "bytes": 2217,
+        "git_blob": "24ef7109e04d5ac9678cd918ecae9c120559c237",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "1db2eae7676fb6fc9eefa5aebbcdb36df61abe82e5c3ed21b0fedd64d4de9a3d",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/CMakeLists.txt"
+      },
+      "cmake/sirius_testing.cmake": {
+        "build_before_after_equal": true,
+        "bytes": 12349,
+        "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/cmake/sirius_testing.cmake"
+      },
+      "cmake/sirius_toolchain.cmake": {
+        "build_before_after_equal": true,
+        "bytes": 5383,
+        "git_blob": "7298204a247979e44e31d32402c262eda160057c",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "53bb5f339886172e7552aa37122ec69b12bde6d2c96cfe18abe824310501e189",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/cmake/sirius_toolchain.cmake"
+      },
+      "src/sirius/backend/CMakeLists.txt": {
+        "build_before_after_equal": true,
+        "bytes": 17763,
+        "git_blob": "c629f17fc0611874533f2dbe0b986b685f0f74fc",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/backend/CMakeLists.txt"
+      },
+      "src/sirius/backend/cpu/geodesic_tracer.h": {
+        "build_before_after_equal": true,
+        "bytes": 33728,
+        "git_blob": "8d1b6c68b5f93d32c322f38d999a9cfbd77b9083",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "9277719799f1af802459f451c060e5e04f3a5b811d3fa10a273bc71c3e4fbb85",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/backend/cpu/geodesic_tracer.h"
+      },
+      "src/sirius/backend/device.h": {
+        "build_before_after_equal": true,
+        "bytes": 9669,
+        "git_blob": "328d743ef3b9f03786341f8ae4750257885ab097",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/backend/device.h"
+      },
+      "src/sirius/backend/retained_compute.h": {
+        "build_before_after_equal": true,
+        "bytes": 15862,
+        "git_blob": "b0d487f6192f4037213fafcd54115df5982261a9",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "be59f256c881e47eed888e40fdc32dfd164bdb3eca83f09ffdab44d401b37ee1",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/backend/retained_compute.h"
+      },
+      "src/sirius/backend/retained_integrator.h": {
+        "build_before_after_equal": true,
+        "bytes": 5159,
+        "git_blob": "6f8d7521a71b8f98c6d9d301dbb3d53da4452b70",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "798a3d35ec1b267adddcc146bd43181c6dc72a2bebd8e96ca13c71ef08386f04",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/backend/retained_integrator.h"
+      },
+      "src/sirius/backend/retained_trace_executor.h": {
+        "build_before_after_equal": true,
+        "bytes": 8765,
+        "git_blob": "e139c5642e892da538b290dbc67a20b64b5eb08e",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "ddb502e05c8f53cce27727bcbf7b986044ca1ad8430bdcad6c349d78590d3574",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/backend/retained_trace_executor.h"
+      },
+      "src/sirius/backend/trace_step_executor.h": {
+        "build_before_after_equal": true,
+        "bytes": 1579,
+        "git_blob": "138674b91f8c6b76b1a5421aba313809492e23f9",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "55c9e688cbb12b8ac1e72a98bdf3d95976cb8c9accefdb9a8a3f0d72adf1e4fe",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/backend/trace_step_executor.h"
+      },
+      "src/sirius/base/contracts.h": {
+        "build_before_after_equal": true,
+        "bytes": 3989,
+        "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/base/contracts.h"
+      },
+      "src/sirius/base/error.h": {
+        "build_before_after_equal": true,
+        "bytes": 2283,
+        "git_blob": "3413b6f013061ca844ca9ef794e488c18022c15f",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "6e66cba357b556ecbb0a112227bdfc64ce1fdecf3f6268c614dc8f7dee45ce4a",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/base/error.h"
+      },
+      "src/sirius/base/resource_locator.h": {
+        "build_before_after_equal": true,
+        "bytes": 1665,
+        "git_blob": "4bf298db06231bcffd5d24b5b3152d1b02a8e8e7",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/base/resource_locator.h"
+      },
+      "src/sirius/core/CMakeLists.txt": {
+        "build_before_after_equal": true,
+        "bytes": 878,
+        "git_blob": "c6a0231430331c08c238b1e29d5748f38ebec664",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "ef8f646c3247c372fbfea6a26313a20ccbee6e3464f980dc526e666c44f959b4",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/CMakeLists.txt"
+      },
+      "src/sirius/core/camera.h": {
+        "build_before_after_equal": true,
+        "bytes": 43067,
+        "git_blob": "e1f31aa3d23794b3a1cf5e2261c88a1584ef2f0d",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/camera.h"
+      },
+      "src/sirius/core/camera_launch.h": {
+        "build_before_after_equal": true,
+        "bytes": 8514,
+        "git_blob": "f8fb979c89bf8badba9937d891becf94bce7975a",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "1fd4d6167b35da64246a09fa03649490c4ec0d21f4a29862911a4f37006155df",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/camera_launch.h"
+      },
+      "src/sirius/core/camera_sampling.h": {
+        "build_before_after_equal": true,
+        "bytes": 3255,
+        "git_blob": "a59fecece36a2193eac60801c306317d55d09141",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/camera_sampling.h"
+      },
+      "src/sirius/core/celestial_tangent_basis.h": {
+        "build_before_after_equal": true,
+        "bytes": 5440,
+        "git_blob": "73d7e8ae19ff9288395c0a8b766d7585705c9b73",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "e02003f3d27f4411efd5ab7a551eb95a55fccadc91d1c7a378626cfba8039248",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/celestial_tangent_basis.h"
+      },
+      "src/sirius/core/cie1931_observer.h": {
+        "build_before_after_equal": true,
+        "bytes": 1858,
+        "git_blob": "2ef1c98782c8fc37e2a55349e5d3cb321d26305f",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/cie1931_observer.h"
+      },
+      "src/sirius/core/constants.h": {
+        "build_before_after_equal": true,
+        "bytes": 8558,
+        "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/constants.h"
+      },
+      "src/sirius/core/coordinates.h": {
+        "build_before_after_equal": true,
+        "bytes": 19636,
+        "git_blob": "5a0143f40cee45c22cff55814e72efb42c4081f2",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/coordinates.h"
+      },
+      "src/sirius/core/disk/disk_defaults.h": {
+        "build_before_after_equal": true,
+        "bytes": 375,
+        "git_blob": "e07c42afa6917822d2f076e3fc76a493255b1995",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "435a8d5ad97de28243cf357b7832e5fa8eada9e6abb096d34df34b3e764c2e0d",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/disk/disk_defaults.h"
+      },
+      "src/sirius/core/disk/disk_model.h": {
+        "build_before_after_equal": true,
+        "bytes": 2876,
+        "git_blob": "0340ef7434d0434618966f646b6e536d04d18bb1",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/disk/disk_model.h"
+      },
+      "src/sirius/core/disk/novikov_thorne_disk.h": {
+        "build_before_after_equal": true,
+        "bytes": 16284,
+        "git_blob": "75941e077426512c0bf86f33e644937eeaedb45b",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/disk/novikov_thorne_disk.h"
+      },
+      "src/sirius/core/disk/turbulence.h": {
+        "build_before_after_equal": true,
+        "bytes": 6563,
+        "git_blob": "1a21dee2a72afeb68a8095627188c78c86fcfcde",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "c1eae7f91110b07bf64a866ce0bc1658bd68a7249b01e2ebb0d1a0f803c20531",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/disk/turbulence.h"
+      },
+      "src/sirius/core/disk/volumetric_disk.h": {
+        "build_before_after_equal": true,
+        "bytes": 1993,
+        "git_blob": "b0efd142d83bdc76a52f1a2a72b5741a01caf594",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "5643b4664bca7f2382ae1a9856c86ef1c506818c6b891bbfd04afcb744a43aaf",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/disk/volumetric_disk.h"
+      },
+      "src/sirius/core/dopri_segment.h": {
+        "build_before_after_equal": true,
+        "bytes": 8455,
+        "git_blob": "e6527b9e0cbb78c5c174e9a669d12338427db06a",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "5159fdcf041909ec275f4c515b690c82dd0d3570324a8c0b0fa98bfa19c7e7e9",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/dopri_segment.h"
+      },
+      "src/sirius/core/dual_number.h": {
+        "build_before_after_equal": true,
+        "bytes": 9490,
+        "git_blob": "1938f64eadbd59467cfcc13737999eb0e491d531",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/dual_number.h"
+      },
+      "src/sirius/core/feature_defaults.h": {
+        "build_before_after_equal": true,
+        "bytes": 701,
+        "git_blob": "746b65a7dd509d6c40a6c9f059cb5495149a7d35",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "7d6dc9c1f7046150af5d06ad535786e00e1a1e13077490d5db1a8bdece902e52",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/feature_defaults.h"
+      },
+      "src/sirius/core/first_order_number.h": {
+        "build_before_after_equal": true,
+        "bytes": 1854,
+        "git_blob": "3fc1670bcc5113e4d1e68d07e9defe2d3339a932",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "9ed51f93e11c2528546729c2ff190f66131c011ebab0c26cf51e38643c5b1ec7",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/first_order_number.h"
+      },
+      "src/sirius/core/geodesic_integrator.h": {
+        "build_before_after_equal": true,
+        "bytes": 11150,
+        "git_blob": "3c42183568e5af48bb873b090fd46e287f74aab7",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "f2cc9d749a65e99d2d3a7d912b2067ab35738799415d88c6bc16a05bec3e4f2c",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/geodesic_integrator.h"
+      },
+      "src/sirius/core/kerr_infinity.h": {
+        "build_before_after_equal": true,
+        "bytes": 16594,
+        "git_blob": "ac851a0773937a2bd98c002354393d9c3500bb06",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "7d1789bc66a8cacac64a694cf4fa25f593b5cc2b659d8f6a98e67b5f9a28ec4c",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/kerr_infinity.h"
+      },
+      "src/sirius/core/kerr_orbits.h": {
+        "build_before_after_equal": true,
+        "bytes": 3107,
+        "git_blob": "ce4e906fd865922642e6fa8bb6108be169ddd7a5",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/kerr_orbits.h"
+      },
+      "src/sirius/core/metrics/kerr_schild_family.h": {
+        "build_before_after_equal": true,
+        "bytes": 33851,
+        "git_blob": "074a71d54304b04bae7d1f4002f2d97914b0ae62",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/metrics/kerr_schild_family.h"
+      },
+      "src/sirius/core/metrics/metric.h": {
+        "build_before_after_equal": true,
+        "bytes": 10205,
+        "git_blob": "f1cf026aa31e41efa1a4701d9d35502dd5bcfb87",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "563a7543e118a813c4a26a40763578bb9b930385abecbf6ae5c6bce1c29e742c",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/metrics/metric.h"
+      },
+      "src/sirius/core/metrics/outgoing_kerr_schild.h": {
+        "build_before_after_equal": true,
+        "bytes": 9627,
+        "git_blob": "fbea77e6e29e136184633959cff64e6bea1fd1ca",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "e5244ad78be2aec7580c049ca39059e0879da699d3e4691296df7a0f5c51d34a",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/metrics/outgoing_kerr_schild.h"
+      },
+      "src/sirius/core/metrics/registry.h": {
+        "build_before_after_equal": true,
+        "bytes": 22072,
+        "git_blob": "45dab60601637bcd78d10f9dbf455a89c28511e3",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/metrics/registry.h"
+      },
+      "src/sirius/core/metrics/warp_drive_family.h": {
+        "build_before_after_equal": true,
+        "bytes": 9352,
+        "git_blob": "0c74cc1a7287846a3ad0fe24134fbc736e29de60",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "46d787f8e8a4859cab89f36058627b64e5dcd42db98b9978b3cf94cc6d48dceb",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/metrics/warp_drive_family.h"
+      },
+      "src/sirius/core/observer_frame.h": {
+        "build_before_after_equal": true,
+        "bytes": 13423,
+        "git_blob": "ac56903c77fa55287309fa800cf888031df6446c",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "c09d89c0a2a1ea07fc6dae36cd566bf73670e6a3c3802e7f41f88a5eb236a566",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/observer_frame.h"
+      },
+      "src/sirius/core/point_source_response.h": {
+        "build_before_after_equal": true,
+        "bytes": 18668,
+        "git_blob": "1aa132db8016b95cfb61fd8463856090c38638a2",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "7c5b2fa2e4e593aaf0404d7cade5b31101b6be7a7eed2dad9b0fb465ba8816d3",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/point_source_response.h"
+      },
+      "src/sirius/core/point_starfield_config.h": {
+        "build_before_after_equal": true,
+        "bytes": 1226,
+        "git_blob": "58233064fbf841caba5f93563e159d06531d0ffa",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "20e859cd7773d1ae2f4c30998b7408a99902ddac15b20eae9bdc4a8c2b332117",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/point_starfield_config.h"
+      },
+      "src/sirius/core/polarisation/stokes.h": {
+        "build_before_after_equal": true,
+        "bytes": 10547,
+        "git_blob": "8c3b9e495c8a0947800640b32ca230e7b38e4c68",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "220c618bee8754a5455bd4f2f8c2154bd5ae4c0c2547825395a2473de1a22e2f",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/polarisation/stokes.h"
+      },
+      "src/sirius/core/polarisation/walker_penrose.h": {
+        "build_before_after_equal": true,
+        "bytes": 9435,
+        "git_blob": "083f3d71085883d09a6af842c186bb70f8544e62",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "c0f4d0eee391b5ac55b341a5534cd0f402b190608892b44babca5bef90527b3f",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/polarisation/walker_penrose.h"
+      },
+      "src/sirius/core/postprocess.h": {
+        "build_before_after_equal": true,
+        "bytes": 13808,
+        "git_blob": "b65f2d106708bf8bf7b8a4d6ad889bfb83c66c71",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "d15c44b7847127220215f8292d1afd1288cecebaea98aa7e5eb030483b59bcb3",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/postprocess.h"
+      },
+      "src/sirius/core/relativistic_transfer.h": {
+        "build_before_after_equal": true,
+        "bytes": 11498,
+        "git_blob": "fcd65ad400729de2105752b710bdde70423565d4",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/relativistic_transfer.h"
+      },
+      "src/sirius/core/second_order_number.h": {
+        "build_before_after_equal": true,
+        "bytes": 2404,
+        "git_blob": "25109f8c724dbbf697968c72b7b59309516f9c25",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "12f241e7068971ef4e6ec9cabf76010c71b72cf7ac6749be0b31f0f9dc99c6e5",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/second_order_number.h"
+      },
+      "src/sirius/core/source_sky_map.h": {
+        "build_before_after_equal": true,
+        "bytes": 5397,
+        "git_blob": "2cac8f774793e9b67490e11f1373f3f1f322d913",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "95210f38a40b3d46a213e2a4c696c126d56e177cc72d10336d050ddb0e221e44",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/source_sky_map.h"
+      },
+      "src/sirius/core/spectral/blackbody.h": {
+        "build_before_after_equal": true,
+        "bytes": 6171,
+        "git_blob": "154a07cbe3a919cc0e97f5f2edc80cb89e1b7a9a",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/spectral/blackbody.h"
+      },
+      "src/sirius/core/spectral/blackbody_laws.h": {
+        "build_before_after_equal": true,
+        "bytes": 4322,
+        "git_blob": "824f780ca67787214af3084e507043d6c61feb78",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "3846d9cdf8db6e034585ac3e4dcb14f2edb1c4e57a649a1c2ff8964d408bd0c0",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/spectral/blackbody_laws.h"
+      },
+      "src/sirius/core/spectral/colour_modes.h": {
+        "build_before_after_equal": true,
+        "bytes": 9441,
+        "git_blob": "80edd807006b2c19b8d3c87fad4b4e297b3f82e5",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "97d1f488c79830682012b6ee073f45428ca83eb6bf32a16b6e377af73c70dd50",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/spectral/colour_modes.h"
+      },
+      "src/sirius/core/spectral/point_source_transfer.h": {
+        "build_before_after_equal": true,
+        "bytes": 5372,
+        "git_blob": "0b803cbe8383cbb3e67b4714f65eb69784f75f44",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "2e52055cfb3ae379d9a2d85f687277c010355649e8a6e90f803f32ca3b2f6696",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/spectral/point_source_transfer.h"
+      },
+      "src/sirius/core/spectral/spectral_radiance.h": {
+        "build_before_after_equal": true,
+        "bytes": 5757,
+        "git_blob": "5a9626f468489a55febfb9a078f3fe5718e0e0f5",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/spectral/spectral_radiance.h"
+      },
+      "src/sirius/core/srgb_transfer.h": {
+        "build_before_after_equal": true,
+        "bytes": 1743,
+        "git_blob": "12f371df31556d728413d54cd93075c4509286c5",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "d8bf1764d4dcd55ba079d11bb0fde7cb0a89619e2d1f3a46f144fc46dfa02ba3",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/srgb_transfer.h"
+      },
+      "src/sirius/core/starfield.h": {
+        "build_before_after_equal": true,
+        "bytes": 33009,
+        "git_blob": "ecb9476067c6ac542645d07c4bacfb16a49f18c6",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "caae54c6b509eb7dcaa797bec81bf516820413b4a7eecd880592e867b3fb5cd0",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/starfield.h"
+      },
+      "src/sirius/core/tensor.h": {
+        "build_before_after_equal": true,
+        "bytes": 6421,
+        "git_blob": "4671e6533194a255c978b072f1bf585243bedbea",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/tensor.h"
+      },
+      "src/sirius/core/trace_boundary.h": {
+        "build_before_after_equal": true,
+        "bytes": 17409,
+        "git_blob": "7fa20adc1e7ceb5b844a93c6a6ba95e93717759b",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "d9f8d4e4f1827125bbda98fce3c4101608b93664743964155990103ae42ae78e",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/trace_boundary.h"
+      },
+      "src/sirius/core/twofold.h": {
+        "build_before_after_equal": true,
+        "bytes": 5685,
+        "git_blob": "f2721152700164a2cc7cae68912404350468deb8",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "2ace9a10d430dbf4dab870602dbc8ca0545ada2c2e350ca6cd263dd8c92e93f1",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/twofold.h"
+      },
+      "src/sirius/core/xyz_srgb.h": {
+        "build_before_after_equal": true,
+        "bytes": 1439,
+        "git_blob": "e5806afa0029b2c2c7f6f3c13cff88ff820c7d6e",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/core/xyz_srgb.h"
+      },
+      "src/sirius/render/CMakeLists.txt": {
+        "build_before_after_equal": true,
+        "bytes": 2877,
+        "git_blob": "9d499159c82c0d5228760e39e3433581f53db393",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "f50b3b268206921cc1d9fe23ecf59e057ae9bdd9a2c200fbada1cd738c78a290",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/CMakeLists.txt"
+      },
+      "src/sirius/render/dispatch_governor.cpp": {
+        "build_before_after_equal": true,
+        "bytes": 9243,
+        "git_blob": "79bffb5a84524e3f3a17ec7c7f442eac2e0eebb0",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "b1e92debf12f32adfab38a7f6754b5dd421518d04502c804d37bd05151a4ad87",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/dispatch_governor.cpp"
+      },
+      "src/sirius/render/dispatch_governor.h": {
+        "build_before_after_equal": true,
+        "bytes": 7908,
+        "git_blob": "a690f5c665f771aa1b5e9cc8f153e4b1292f8a99",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/dispatch_governor.h"
+      },
+      "src/sirius/render/film_config.h": {
+        "build_before_after_equal": true,
+        "bytes": 4730,
+        "git_blob": "006a60aa91cb832c551b65fe0b4fe120d6a26c70",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "39a70317e3dc43e7b8189d0da983e41f585407297e5265beb9cbc1716050d6c2",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/film_config.h"
+      },
+      "src/sirius/render/memory_governor.h": {
+        "build_before_after_equal": true,
+        "bytes": 3829,
+        "git_blob": "3ff9cd61f6d2765ded448841590a298a6df56f51",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "9642ae2ebeda66d3fe68f75e9ad3ca2d824b9de6767c7a3f2af762155584a516",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/memory_governor.h"
+      },
+      "src/sirius/render/pixel_sampling.h": {
+        "build_before_after_equal": true,
+        "bytes": 207,
+        "git_blob": "6c39485b0b3f6adb2d6a431bc1c2b3228eac15f3",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "2cbb598c156886799eba95b0cb84f8c98bfe8ad435f5c79f8ecd1bfe732fadc3",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/pixel_sampling.h"
+      },
+      "src/sirius/render/render_evidence.h": {
+        "build_before_after_equal": true,
+        "bytes": 941,
+        "git_blob": "cc2052a4e89222f3e4076b4ab15816e4ff01b982",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "c141930a2239c4fff0f238d527fdef88d9e9c7409d672db51449c0b0ed84d613",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/render_evidence.h"
+      },
+      "src/sirius/render/session/display_buffer.h": {
+        "build_before_after_equal": true,
+        "bytes": 5035,
+        "git_blob": "0379a108d2a692dcfcd99db09a2e742422b8e9af",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "974daabf14d0e6345fbbdd865578c29fa50a884e3b5a73e1582acdcfff7d1c36",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/session/display_buffer.h"
+      },
+      "src/sirius/render/session/point_source_detector.h": {
+        "build_before_after_equal": true,
+        "bytes": 6237,
+        "git_blob": "227c7d067d8c2f24afb48a48916f65a953f54b93",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "243690005cec26cab32a7a76169b08fc6c60af6b017a53d0d1fbd79c6c6e152e",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/session/point_source_detector.h"
+      },
+      "src/sirius/render/session/progress_tracker.h": {
+        "build_before_after_equal": true,
+        "bytes": 5479,
+        "git_blob": "5e8ef4762f7d7439cfa090097c1a93978aa56461",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "ea1ccddc40d1e5231e706000d74baa42acd926abed5505312881342d6bfc5c5d",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/session/progress_tracker.h"
+      },
+      "src/sirius/render/session/ray_work_queue.h": {
+        "build_before_after_equal": true,
+        "bytes": 1604,
+        "git_blob": "04b8ecff0a36e37b717963a87563a1b73140d376",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "4267aba47cb69735258273388de6ac731a4fe1fe3b421f922d240b8fbe995a96",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/session/ray_work_queue.h"
+      },
+      "src/sirius/render/session/render_session.h": {
+        "build_before_after_equal": true,
+        "bytes": 18459,
+        "git_blob": "4bb21f5d95393dd518cce149bd157710399e5ce4",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "7fa8ee2b0dabbbc8a80f6ccfb92c46ed6b4f27e7a9df72b569bd697f56edd169",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/session/render_session.h"
+      },
+      "src/sirius/render/session/session_events.h": {
+        "build_before_after_equal": true,
+        "bytes": 1387,
+        "git_blob": "a039b43825128c1efa9cd27106457b0c8d325a30",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "a9b23e7c947c346375c8d2ed2000696a5365bced6a3d4f434c31fdebf4cde463",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/session/session_events.h"
+      },
+      "src/sirius/render/session/session_states.h": {
+        "build_before_after_equal": true,
+        "bytes": 1900,
+        "git_blob": "eb9adcbd65cdf9581e11d0c81f6b483c6a11f38d",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "feaaf0757025d43ea96408f708a6b0a4dca97296964e7713545f8da2e43635d7",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/session/session_states.h"
+      },
+      "src/sirius/render/session/state_machine.h": {
+        "build_before_after_equal": true,
+        "bytes": 5030,
+        "git_blob": "1d7a16240dd33365949d31abc3ec84cea3c20905",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "86267301f305530a37f22b4ffd7ac6f9a4f34fb96173008d72dba9120dbfd498",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/session/state_machine.h"
+      },
+      "src/sirius/render/session/tile_scheduler.h": {
+        "build_before_after_equal": true,
+        "bytes": 7586,
+        "git_blob": "a33543756f6945f9ecab1b9b354479d3841dd228",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "120990a0d023930d43f3ca6688435a51fa63e32d08c1daeab4ec16e6ededbb57",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/session/tile_scheduler.h"
+      },
+      "src/sirius/render/trace_continuation.h": {
+        "build_before_after_equal": true,
+        "bytes": 7192,
+        "git_blob": "4e61faf3471d19d16a73c8ea080c26b76d472969",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/trace_continuation.h"
+      },
+      "src/sirius/render/trace_domain.h": {
+        "build_before_after_equal": true,
+        "bytes": 5219,
+        "git_blob": "6a02eb6c2c2e15a6d4d5136497ad35ca59247a48",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "225053e0b194c84f81d7d743ae3df4a36b101417fb2adefcad0ac99e7551d84b",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/trace_domain.h"
+      },
+      "src/sirius/render/vulkan_renderer.cpp": {
+        "build_before_after_equal": true,
+        "bytes": 74538,
+        "git_blob": "2dfe1c4a620a19e84e575f2a5922c23b454cd037",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "f4a7b2e9e702369e1f740957485f1e5bc6ba8cf18ae4fa068dccb7876bf669e5",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/vulkan_renderer.cpp"
+      },
+      "src/sirius/render/vulkan_renderer.h": {
+        "build_before_after_equal": true,
+        "bytes": 8350,
+        "git_blob": "bb742471ca815aeaa0918b8fbdebe87a92dbae72",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "5e4174b76d88a0520bff8f941b0ce01b3aed1021a4b142b97d0858cdc6f690fd",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/src/sirius/render/vulkan_renderer.h"
+      },
+      "tests/CMakeLists.txt": {
+        "build_before_after_equal": true,
+        "bytes": 10200,
+        "git_blob": "b7700acf10bf853738cfcf8a24918fb899a36b24",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/tests/CMakeLists.txt"
+      },
+      "tests/labels/CTestLabels.cmake": {
+        "build_before_after_equal": true,
+        "bytes": 78306,
+        "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/tests/labels/CTestLabels.cmake"
+      },
+      "tests/operating_model.json": {
+        "build_before_after_equal": true,
+        "bytes": 130331,
+        "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/tests/operating_model.json"
+      },
+      "tests/render/CMakeLists.txt": {
+        "build_before_after_equal": true,
+        "bytes": 2826,
+        "git_blob": "7a68808e58e7f673002f696871603848e04a2a69",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "23f2ba5b952360171edaf379cf2536730623a8fc4275b14958278b7853e3aa9f",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/tests/render/CMakeLists.txt"
+      },
+      "tests/render/dispatch_governor_test.cpp": {
+        "build_before_after_equal": true,
+        "bytes": 45589,
+        "git_blob": "576db458f1f6e432c9b6c87e35898fce907632aa",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "a831e50944cfe5c67e55ed0c0a2055d251a688a58119aa7406c21ab1a0a38e66",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/tests/render/dispatch_governor_test.cpp"
+      },
+      "tests/support/fail_on_skip.h": {
+        "build_before_after_equal": true,
+        "bytes": 427,
+        "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/tests/support/fail_on_skip.h"
+      },
+      "tests/support/scoped_environment.h": {
+        "build_before_after_equal": true,
+        "bytes": 1593,
+        "git_blob": "32eb8470380a9b6658968a163c4bca49ee356407",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "399fb90582c7972f9e05384fbf6b71ead5440e4badb7c0e3d7b290289aa17bd9",
+        "snapshot": "out/science-e3-dispatch-continuations-current-source/reference/tests/support/scoped_environment.h"
+      }
+    }
+  },
+  "temporary_output": {
+    "path": "/home/astra/.project/Sirius/out/science-e3-dispatch-continuations-current-source/temporary",
+    "uid": 1000,
+    "mode": "0o700",
+    "residual_files": {}
+  }
+}

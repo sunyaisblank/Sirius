@@ -1,0 +1,64 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/ctest",
+    "--test-dir",
+    "bin/linux-gcc",
+    "-V",
+    "--output-on-failure",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/science-e3-dispatch-continuations-current-source/original-eight-dispatch-continuation-controls/ctest.xml",
+    "--output-log",
+    "/home/astra/.project/Sirius/out/science-e3-dispatch-continuations-current-source/original-eight-dispatch-continuation-controls/ctest.log",
+    "-R",
+    "^DispatchGovernor\\.(ContinuationReadbackRejectsStaleOrUncommittedState|OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory|ContinuationsPreserveFourCameraSamplesAndPublishOnce|LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals|EveryContinuationTimingEnforcesThePhysicalSafetyBoundary|CancellationStopsBetweenContinuationsAndBeforePublication|CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback|ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample)$"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "original-eight-dispatch-continuation-controls",
+  "child_exit": 0,
+  "child_pid": 355736,
+  "child_start_ticks": "5437827",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 355726,
+    "pid": 355728,
+    "ppid": 355727,
+    "rss_kib": 31636,
+    "session": 355726,
+    "start_ticks": "5437801",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Eight original model-E3 host continuation scheduling/readback controls only. Synthetic feedback and fixed records; no ICD/device/frame/physical timing, full E3/science/Mandatory/domain/release or performance claim.",
+  "minimum_sampled_available_kib": 20344928,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 355736,
+      "saved_start_ticks": "5437827"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 49684,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Eight original model-E3 host continuation scheduling/readback controls only. Synthetic feedback and fixed records; no ICD/device/frame/physical timing, full E3/science/Mandatory/domain/release or performance claim.",
+  "source": {
+    "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.27656463000312215,
+  "whole_inputs_unchanged": true
+}
