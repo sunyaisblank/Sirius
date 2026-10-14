@@ -1,0 +1,286 @@
+{
+  "baseline": {
+    "all_111_archived_files_byte_joined_to_git": true,
+    "all_639_historical_preparation_inputs_current_or_archived_byte_joined": true,
+    "compile_link_owners_and_source_tool_archive_joins_reused": true,
+    "elf": {
+      "bytes": 273928,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/p4-parity-dont-unroll-setup/setup_probe",
+      "sha256": "1349129193c71b9577cb12d2ecd52e498425adb54244340bfd9589e12b57af01"
+    },
+    "evidence_commit": "4632e77b0cca32fc4402c7b1ce613cd24101a61b",
+    "fresh_compile_claimed": false,
+    "manifest": "attestations/scientific-core/4bcd987/p4-original-setup-diagnostic/manifest.json",
+    "manifest_identity": {
+      "bytes": 21405,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/scientific-core/4bcd987/p4-original-setup-diagnostic/manifest.json",
+      "sha256": "26b3f9a8b9afef0a1016699cb5de5f4f26944dd8beb9eb3cdd04f9539159ae89"
+    },
+    "numerical_acceptance_reused": false,
+    "setup_observation": {
+      "active_records": 0,
+      "allocated_bytes": 1296,
+      "completed_words": 256,
+      "device_index": 0,
+      "device_name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+      "dispatch_total_ms": 230762.148672,
+      "driver_info": "Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+      "driver_name": "llvmpipe",
+      "fixture_records": 4,
+      "flat_words": 64,
+      "module_words": 1390559,
+      "numerical_acceptance": false,
+      "pipeline_setup_ms": 140216.72109,
+      "qualification_claimed": false,
+      "result_words": 256,
+      "schema": "sirius-parity-setup-only-v1",
+      "setup_completed": true,
+      "submit_wait_ms": 90545.345131,
+      "whole_setup_seconds_including_teardown": 231.091495764
+    }
+  },
+  "baseline_reader": "attestations/scientific-core/4bcd987/p4-original-setup-diagnostic/files/out/p4-parity-setup-diagnostic/operate.py",
+  "cost_scope": "Owner wall and driver whole_setup include construction/module read/load/buffers/writes/first pipeline and submit/wait/readback/destruction. Marker overhead remains included; no warm/cold or performance conclusion.",
+  "diagnostic_only_difference": [
+    ".github/workflows/ci.yml",
+    "scripts/diagnose-macos-retained.py",
+    "scripts/governance/build_policy.py",
+    "scripts/macos_metal_probe.py",
+    "scripts/macos_moltenvk_integration.py",
+    "scripts/macos_vulkan_identity.py"
+  ],
+  "distinct_policy_question": {
+    "LLVM20_source_pass_list_has_no_explicit_loop_unroll_pass": true,
+    "actual_loaded_driver_NIR_or_LLVM_stage_observed": false,
+    "dont_unroll_excludes_selected_loops_from_the_local_NIR_unroll_pass_body": true,
+    "gallivm_visit_loop_does_not_transfer_NIR_loop_control_to_its_LLVM_loop_builders": true,
+    "lavapipe_source_calls_NIR_unroll_in_its_optimizer": true,
+    "local_source_to_loaded_driver_build_identity_proven": false,
+    "new_mask": 2,
+    "new_runtime_action_pending": true,
+    "no_unchanged_retained_limb_candidate_retry": true,
+    "none_still_allows_ordinary_NIR_unroll_heuristics": true,
+    "prior_clear_mask": 0,
+    "stock_mask": 1,
+    "whole_LLVM_backend_no_unroll_guarantee": false
+  },
+  "hint_change": {
+    "all_other_words_identical": true,
+    "changed_words": 2494,
+    "dont_unroll_added": true,
+    "no_specialization_precision_mode_arithmetic_or_source_change": true,
+    "only_original_mask_one_replaced_by_two": true,
+    "proof": "out/p4-parity-dont-unroll-setup/unroll-bit-diff.json"
+  },
+  "hint_clear_comparison": {
+    "all_archived_files_joined_to_git": 46,
+    "evidence_commit": "d623208d82a0b9f739beaf69efa916382e366cbe",
+    "manifest": "attestations/scientific-core/4bcd987/p4-unroll-hint-clear-setup/manifest.json",
+    "manifest_identity": {
+      "bytes": 8446,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/scientific-core/4bcd987/p4-unroll-hint-clear-setup/manifest.json",
+      "sha256": "ecc099dbf33dff5e741740780e9fce64d0b1481cf270182c004e08b4ab56013f"
+    },
+    "owner": "attestations/scientific-core/4bcd987/p4-unroll-hint-clear-setup/files/out/p4-parity-unroll-hint-setup/run/owner.json",
+    "result": "attestations/scientific-core/4bcd987/p4-unroll-hint-clear-setup/files/out/p4-parity-unroll-hint-setup/run-result.json",
+    "setup_observation": {
+      "active_records": 0,
+      "allocated_bytes": 1296,
+      "completed_words": 256,
+      "device_index": 0,
+      "device_name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+      "dispatch_total_ms": 224229.448609,
+      "driver_info": "Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+      "driver_name": "llvmpipe",
+      "fixture_records": 4,
+      "flat_words": 64,
+      "module_words": 1390559,
+      "numerical_acceptance": false,
+      "pipeline_setup_ms": 132261.997942,
+      "qualification_claimed": false,
+      "result_words": 256,
+      "schema": "sirius-parity-setup-only-v1",
+      "setup_completed": true,
+      "submit_wait_ms": 91967.348482,
+      "whole_setup_seconds_including_teardown": 224.546265718
+    },
+    "single_observation_per_policy_is_not_a_performance_or_adoption_verdict": true
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "mesa_source_cost_premise": {
+    "actual_loaded_driver_internal_stage_observed": false,
+    "forced_unroll_return_precedes_ordinary_cost_and_iteration_restrictions": true,
+    "ordinary_heuristics_may_still_unroll": true,
+    "runtime_benefit_claimed": false,
+    "source_version": "25.2.8",
+    "sources": [
+      {
+        "identity": {
+          "bytes": 44404,
+          "resolved_path": "/home/astra/.project/Sirius/out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/compiler/nir/nir_opt_loop_unroll.c",
+          "sha256": "9584c8cf644b49f4ef90d6c2ddbc8b65d3de8a7a5feef667aae1b5e217083783"
+        },
+        "lines": [
+          896,
+          924
+        ],
+        "original": "bin/toolchains/mesa-25.2.8/src/compiler/nir/nir_opt_loop_unroll.c",
+        "path": "out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/compiler/nir/nir_opt_loop_unroll.c"
+      },
+      {
+        "identity": {
+          "bytes": 61114,
+          "resolved_path": "/home/astra/.project/Sirius/out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/compiler/spirv/vtn_structured_cfg.c",
+          "sha256": "7f7074d64b3399ae80c3265df1218de15cbb049b5dcf088872b5defb3951a339"
+        },
+        "lines": [
+          1458,
+          1474
+        ],
+        "original": "bin/toolchains/mesa-25.2.8/src/compiler/spirv/vtn_structured_cfg.c",
+        "path": "out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/compiler/spirv/vtn_structured_cfg.c"
+      },
+      {
+        "identity": {
+          "bytes": 58416,
+          "resolved_path": "/home/astra/.project/Sirius/out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_pipeline.c",
+          "sha256": "67427ba594f80cc78c99d8440d87318accf0966c3e1bf32e5c0b099e9729acd8"
+        },
+        "lines": [
+          198,
+          262
+        ],
+        "original": "bin/toolchains/mesa-25.2.8/src/compiler/../gallium/frontends/lavapipe/lvp_pipeline.c",
+        "path": "out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_pipeline.c"
+      },
+      {
+        "identity": {
+          "bytes": 246649,
+          "resolved_path": "/home/astra/.project/Sirius/out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c",
+          "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+        },
+        "lines": [
+          5734,
+          5741
+        ],
+        "original": "bin/toolchains/mesa-25.2.8/src/compiler/../gallium/auxiliary/gallivm/lp_bld_nir_soa.c",
+        "path": "out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c"
+      },
+      {
+        "identity": {
+          "bytes": 16129,
+          "resolved_path": "/home/astra/.project/Sirius/out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_ir_common.c",
+          "sha256": "87ac07777286d733ba23bc9e3622b087913cb4d5b6c80726505af6fe2a23941a"
+        },
+        "lines": [
+          238,
+          330
+        ],
+        "original": "bin/toolchains/mesa-25.2.8/src/compiler/../gallium/auxiliary/gallivm/lp_bld_ir_common.c",
+        "path": "out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_ir_common.c"
+      },
+      {
+        "identity": {
+          "bytes": 7016,
+          "resolved_path": "/home/astra/.project/Sirius/out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_passmgr.c",
+          "sha256": "e998f36e16e2f09bf50f14e25016364c31d066adb4992b99de406067a84b27bf"
+        },
+        "lines": [
+          139,
+          164
+        ],
+        "original": "bin/toolchains/mesa-25.2.8/src/compiler/../gallium/auxiliary/gallivm/lp_bld_passmgr.c",
+        "path": "out/p4-parity-dont-unroll-setup/recovery/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_passmgr.c"
+      }
+    ]
+  },
+  "no_unchanged_retry_or_cap_increase": true,
+  "numerical_acceptance": false,
+  "ordinary_case_observations": [
+    {
+      "numerical_verdict_reused_for_hint_candidate": false,
+      "ordinal": 1,
+      "passed": true,
+      "stop_reason": null,
+      "wall_seconds": 238.4840180080064
+    },
+    {
+      "numerical_verdict_reused_for_hint_candidate": false,
+      "ordinal": 2,
+      "passed": true,
+      "stop_reason": null,
+      "wall_seconds": 247.4071175210047
+    },
+    {
+      "numerical_verdict_reused_for_hint_candidate": false,
+      "ordinal": 3,
+      "passed": false,
+      "stop_reason": "diagnostic_timeout",
+      "wall_seconds": 300.59012534499925
+    }
+  ],
+  "ordinary_cases_4_through_9_unlaunched": true,
+  "original_public_call_contract": {
+    "active_records": 0,
+    "actual_record_dispatches": 0,
+    "buffer_bytes_in_order": [
+      256,
+      1024,
+      16
+    ],
+    "buffer_usage": "storage",
+    "dispatch": [
+      1,
+      1,
+      1
+    ],
+    "fixture_records": 4,
+    "initial_writes_in_order": [
+      "params16bytes",
+      "result1024zero_bytes"
+    ],
+    "opcode": 2,
+    "readback_bytes": 1024,
+    "result_stride": 64,
+    "sample_buffer_write": false,
+    "sample_stride": 16
+  },
+  "owned_product_root": "bin/linux-gcc/p4-parity-dont-unroll-setup",
+  "owned_source_root": "out/p4-parity-dont-unroll-setup",
+  "phases": [
+    "validate",
+    "run"
+  ],
+  "prepared_only": true,
+  "primary_semantics": {
+    "hints_do_not_affect_program_semantics": true,
+    "loop_control": "https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html#_loop_control",
+    "numerical_or_driver_correctness_demonstrated_by_this_preparation": false,
+    "terms": "https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html#_terms",
+    "unroll_and_dont_unroll_are_performance_hints": true
+  },
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "provider_policy": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "scope": "Original explicit LVP/llvmpipe cache-off route; actual loader/LVP/LLVM dev/inode/hash joins required."
+  },
+  "public_failure_boundaries": "Original Vulkan TU bodies and error branches remain unchanged; RAII markers and wrappers only surround original calls at the original sites. No eager pipeline, deferred construction, prewarming, preload/layer, specialization or global driver-control flag.",
+  "qualification_claimed": false,
+  "required_provider_mappings": [
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+  ],
+  "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "runtime_shader": "bin/linux-gcc/p4-parity-dont-unroll-setup/resources/kernels/parity_probe.spv",
+  "schema_version": 1,
+  "scope": "One original-Unroll to DontUnroll full-module setup diagnosis using the unchanged archived instrumented ELF and original zero-record public call order. No numerical, performance, adoption or qualification verdict.",
+  "stock_shader": "out/p4-parity-dont-unroll-setup/resources/stock-parity_probe.spv",
+  "whole_setup_and_teardown_costs_retained": true
+}
