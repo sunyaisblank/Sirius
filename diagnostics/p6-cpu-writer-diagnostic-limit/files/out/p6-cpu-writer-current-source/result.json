@@ -1,0 +1,39 @@
+{
+  "passed": false,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "expected_names": [
+    "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+    "EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode",
+    "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding",
+    "RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter",
+    "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr"
+  ],
+  "qualification_claimed": false,
+  "p6_complete": false,
+  "mandatory_receipt_created": false,
+  "forensic_pixel_identity_claimed": false,
+  "retained_release_image_qualification_claimed": false,
+  "scope": "Five original CPU writer/film controls only; no GPU dispatch, full P6 or final integration claim.",
+  "finite_acceptance_scope": {
+    "png_roundtrip": "Original 8x4 RGB gradient, stbi decode, dimensions, and maximum per-channel error <=1 byte value against the separate existing IEC encoding formula.",
+    "hdr_roundtrip": "Original 16x8 gradient (RGB maxima 3.75/14/0.5), Kerr and Sirius linear RGB metadata, TinyEXR decode/dimensions, and max normalized RGB error <1e-6. Writer and decoder use TinyEXR; no independent-format oracle is inferred.",
+    "ppm_boundary": "Original 2x1 RGBA input, exact P6 header and six RGB payload bytes [0,188,255,0,137,255]; original clipping and alpha omission assertions.",
+    "kerr_ppm_scene": "Original RenderTo/ProbeConfig: 64x64, four SPP, Kerr mass1/spin0.9, tile8, parallel worker pool; all other SessionConfig defaults unchanged. Require Complete, exact P6 64x64/255 header, full RGB payload, EOF and nonconstant bytes.",
+    "film_branch_scene": "Four original 16x12/one-SPP serial Minkowski renders with disk/bloom off and Interstellar film toggled: GetDisplayBuffer snapshots selected by PNG output must differ by >1e-4 in total, and snapshots selected by EXR output must compare exactly equal. This test does not decode its EXR files; the separate HDR roundtrip decodes a file."
+  },
+  "declared_output_environment": {
+    "TMPDIR": "/home/astra/.project/Sirius/out/p6-cpu-writer-current-source/temporary",
+    "GTEST_OUTPUT": ""
+  },
+  "error": "AssertionError({'source': {'revision': 'a1d6e75299a2bf250e5ce7d44ad5965f8acb4299', 'status': ''}, 'case': 'original-five-p6-cpu-writer-controls', 'argv': ['/usr/bin/ctest', '--test-dir', 'bin/linux-gcc', '--output-on-failure', '--no-tests=error', '--output-junit', '/home/astra/.project/Sirius/out/p6-cpu-writer-current-source/original-five-p6-cpu-writer-controls/ctest.xml', '-R', '^(PNGWriterTest\\\\.DecodeRoundTripMatchesSRGBEncoding|EXRRoundTripTests\\\\.HDRGradientSurvivesWriteAndRead|EXRRoundTripTests\\\\.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode|RenderSessionProbe\\\\.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter|RenderSessionProbe\\\\.FilmAffectsDisplayOutputButNeverLinearExr)$'], 'scope': 'Five original CPU writer/film cases with unchanged scene sizes, samples, assertions and cleanup. Preserve logs/XML and natural private-TMPDIR residuals. No GPU, forensic pixel identity, retained release-image, full P6, Mandatory, performance or release claim.', 'limits': {'seconds': 300, 'rss_kib': 4194304, 'reserve_kib': 2097152}, 'declared_output_environment': {'GTEST_OUTPUT': ''}, 'provider_mappings': [], 'controller': {'pid': 111102, 'state': 'R', 'ppid': 1313, 'pgrp': 111102, 'session': 111102, 'start_ticks': '1846160', 'rss_kib': 32668}, 'boot_id': 'ad8dc954-f13d-4920-9e97-797932f20548', 'passed': False, 'cleanup_errors': [], 'observed_births': [{'pid': 111111, 'saved_start_ticks': '1846208', 'current_start_ticks': None, 'absent': True}, {'pid': 111113, 'saved_start_ticks': '1846213', 'current_start_ticks': None, 'absent': True}], 'stop_reason': 'diagnostic_timeout', 'child_pid': 111111, 'child_start_ticks': '1846208', 'status': 'terminal', 'child_exit': -15, 'wall_seconds': 300.148816582001, 'peak_sampled_rss_kib': 146296, 'minimum_sampled_available_kib': 16124608, 'adopted_children_reaped': [{'pid': 111113, 'wait_status': 15}], 'remaining_owned_processes': [], 'source_unchanged': True, 'whole_inputs_unchanged': True})",
+  "temporary_output": {
+    "path": "/home/astra/.project/Sirius/out/p6-cpu-writer-current-source/temporary",
+    "exists": true,
+    "uid": 1000,
+    "mode": "0o700",
+    "residual_files": {},
+    "original_tests_delete_successful_images": true,
+    "successful_image_payload_preservation_claimed": false
+  }
+}

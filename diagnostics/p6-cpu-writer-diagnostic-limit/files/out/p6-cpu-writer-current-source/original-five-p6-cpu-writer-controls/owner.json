@@ -1,0 +1,71 @@
+{
+  "adopted_children_reaped": [
+    {
+      "pid": 111113,
+      "wait_status": 15
+    }
+  ],
+  "argv": [
+    "/usr/bin/ctest",
+    "--test-dir",
+    "bin/linux-gcc",
+    "--output-on-failure",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/p6-cpu-writer-current-source/original-five-p6-cpu-writer-controls/ctest.xml",
+    "-R",
+    "^(PNGWriterTest\\.DecodeRoundTripMatchesSRGBEncoding|EXRRoundTripTests\\.HDRGradientSurvivesWriteAndRead|EXRRoundTripTests\\.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode|RenderSessionProbe\\.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter|RenderSessionProbe\\.FilmAffectsDisplayOutputButNeverLinearExr)$"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "original-five-p6-cpu-writer-controls",
+  "child_exit": -15,
+  "child_pid": 111111,
+  "child_start_ticks": "1846208",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 111102,
+    "pid": 111102,
+    "ppid": 1313,
+    "rss_kib": 32668,
+    "session": 111102,
+    "start_ticks": "1846160",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "minimum_sampled_available_kib": 16124608,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 111111,
+      "saved_start_ticks": "1846208"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 111113,
+      "saved_start_ticks": "1846213"
+    }
+  ],
+  "passed": false,
+  "peak_sampled_rss_kib": 146296,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Five original CPU writer/film cases with unchanged scene sizes, samples, assertions and cleanup. Preserve logs/XML and natural private-TMPDIR residuals. No GPU, forensic pixel identity, retained release-image, full P6, Mandatory, performance or release claim.",
+  "source": {
+    "revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": "diagnostic_timeout",
+  "wall_seconds": 300.148816582001,
+  "whole_inputs_unchanged": true
+}
