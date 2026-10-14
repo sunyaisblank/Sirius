@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/astra/.project/Sirius/out/portable-divide64-screen/screen.py", line 215, in <module>
+    {"pin-context": pin_context, "compile": compile_pair, "review": review_terminal}[sys.argv[1]]()
+  File "/home/astra/.project/Sirius/out/portable-divide64-screen/screen.py", line 142, in compile_pair
+    builder.compile_shader(WORK / owner / "src/sirius/kernels/retained_endpoint.slang",
+  File "/home/astra/.project/Sirius/out/portable-divide64-screen/candidate/scripts/build-retained-kernels.py", line 395, in compile_shader
+    raise ValueError("portable retained stage introduced an optional capability or non-32-bit integer")
+ValueError: portable retained stage introduced an optional capability or non-32-bit integer

@@ -1,0 +1,95 @@
+{
+  "candidate_final_validation_completed": false,
+  "device_or_retained_arithmetic_executed": false,
+  "failure": "Private candidate-only guard expected declarations in Shader,Int64 order; actual Slang emits Int64,Shader. SPIR-V permits capability declaration order. Guard correction must retain the exact multiset and all original stock/type/float/layout/barrier/numerical gates.",
+  "observed_candidate_capability_order": [
+    "Int64",
+    "Shader"
+  ],
+  "observed_candidate_integer_widths": [
+    32,
+    64
+  ],
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-divide64-screen/screen.py",
+      "compile"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "compile-endpoint-normal",
+    "child_exit": 1,
+    "child_pid": 317128,
+    "child_start_ticks": "4398410",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 317060,
+      "pid": 317064,
+      "ppid": 317060,
+      "rss_kib": 20548,
+      "session": 317060,
+      "start_ticks": "4398370",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "minimum_sampled_available_kib": 19083140,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 317128,
+        "saved_start_ticks": "4398410"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 317133,
+        "saved_start_ticks": "4398434"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 317149,
+        "saved_start_ticks": "4398520"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 317153,
+        "saved_start_ticks": "4398589"
+      }
+    ],
+    "passed": false,
+    "peak_sampled_rss_kib": 255808,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "Compiler-only one complete portable normal Endpoint stock/candidate pair; optional candidate Int64 capability only, no Vulkan execution/numerical/benefit qualification.",
+    "source": {
+      "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 2.0843615630001295,
+    "whole_inputs_unchanged": true
+  },
+  "performance_benefit_or_adoption_claimed": false,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false,
+  "reference": "https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html#OpCapability",
+  "schema": "sirius-divide64-compiler-capability-order-diagnostic-v1",
+  "stock_complete_module_equals_canonical": {
+    "bytes": 151400,
+    "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+  }
+}
