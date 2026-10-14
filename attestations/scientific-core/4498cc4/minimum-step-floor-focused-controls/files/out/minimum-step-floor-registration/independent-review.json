@@ -1,0 +1,114 @@
+{
+  "CI_upload_policy": {
+    "actual_workflow_paths_match_full_ordered_global_plus_macos_tuple": true,
+    "added_only": [
+      "${{ runner.temp }}/sirius-macos-runtime/*/native-provider-modules.json",
+      "${{ runner.temp }}/sirius-macos-runtime/*/native-provider-bindings.json",
+      "bin/macos/tests/backend/sirius_backend_tests"
+    ],
+    "gate_diagnostic_upload_valid_regex_and_all_admission_functions_unchanged": true,
+    "macos_tuple_count": 11,
+    "negative_fixture": "Missingproducerlog still targets same literal: oldindex2=newindex5; missingJUnit index0 and all othermutations unchanged.",
+    "positive_fixture": "Existing positivefixture renders entiretuple automatically.",
+    "source_only_future_failure": "Oldtuple would fail repository workflowpolicy. No second executedfailure is claimed."
+  },
+  "P1_authority": {
+    "all_verifier_functions_rejections_unchanged": true,
+    "corrected_required_count": 39,
+    "exact_current_model_evidence_set": true,
+    "exact_prior_union_three": true,
+    "other_criterion_policies_unchanged": true,
+    "prior_required_count": 36
+  },
+  "all11_pins_match": true,
+  "authority_chain": [
+    "Configure: CMakeLists\u2192cmake/sirius_alignment.cmake\u2192verify-operating-model.py, before later compile/test topology.",
+    "Verifier: exact sourcegtest identities\u2192explicit Mandatory label rows\u2192P1 REQUIRED_ACCEPTANCE_EVIDENCE exactset\u2192canonical semanticsectiondigests. All predicates unchanged.",
+    "Registration: tests/CMakeLists attaches tests/labels/CTestLabels.cmake via per-module TEST_INCLUDE_FILES after GoogleTest discovery. No automaticprefix assumption.",
+    "Build: SiriusSourceGovernance invokes generator--check, operatingmodel verifier, repositorystructure verifier and existingbuildpolicy/buildgate checks.",
+    "CIpolicy: repository verifier\u2192governance.repository.verify\u2192integration_boundary_errors(actualworkflow)\u2192gate_diagnostic_upload_valid fullorderedpathregex, plus positive/negative policyfixtures.",
+    "Actual inventory/negativecontrols: existing OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims runs generator selftest, actual CTest inventory, verifier inventory/selftests and repository checks."
+  ],
+  "base_revision": "27f5d9cdc6f9268b598a2b954febca8ec3468394",
+  "blockers": [],
+  "execution_remaining": "Root existing SourceGovernance+backend build and existingOperationalEvidence control can cover positive/generator/verifier/liveinventory/negativecontrols without duplicate standalone executions; then actualmodule-capability and3focused numerical owners with exact postbuild inputs. Currentreview is not their pass result.",
+  "failed_configure_lineage": {
+    "archive": "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop",
+    "configure_owner": {
+      "bytes": 1682,
+      "sha256": "a5f89980f93fabaf040e662ca8af64ed90fcfa927b8ca9e1412bd33301472d18"
+    },
+    "configure_stderr": {
+      "bytes": 1181,
+      "sha256": "4c812b8427e46c7c50a386d252c376b9c0421691bbfc6cbafabb485272e8ed5f"
+    },
+    "evidence_commit": "43ed3034d92a7b94a2d9a6711d8b2cda7a2e46cf",
+    "failed_before_compilation": true,
+    "future_inputs_do_not_reference_live_old_out": true,
+    "manifest": {
+      "bytes": 6526,
+      "sha256": "1781d88fdb35cf261a34778a97b13405ef0d1f3001d76df637bd96c6a675083b"
+    },
+    "old_consumed_packet_unchanged": true
+  },
+  "labels": {
+    "existing_generator_unchanged": "Explicit SUITE_LABELS[KernelParity], sortedsourcepath/sourceorder; no new defaultlabel/prefix bypass.",
+    "explicit_labels": [
+      "Mandatory",
+      "Correctness"
+    ],
+    "full47case_KernelParity_group_matches_three_source_files_in_collector_order": true,
+    "generation_claim": "Source delta agrees with deterministic generatorpolicy; actual root SourceGovernance generator--check still required, not executed here.",
+    "three_names_once_each": true
+  },
+  "new_tests": [
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp64"
+  ],
+  "no_future_inputs_depend_on_old_live_floorout": true,
+  "old_consumed_packet_untouched": true,
+  "passed": true,
+  "passed_meaning": "Static closure review only; no configure/build/numerical/scientific/release qualification.",
+  "patch_exactly_reconstructs_three_candidates": true,
+  "preserved": "All original gtest bodies/assertions/shaders/modelrequirements/currentmodel bytes unchanged. Prior policy evidence, sourcefloor, profile/skip/inventory checks, deadlines and semantic rejection retained.",
+  "reviewed_inputs": {
+    "commands.json": {
+      "bytes": 3007,
+      "sha256": "72749b5d5f4e639b80c2b94203c5e899890691001d50b1e82e490292b44ac5e2"
+    },
+    "registration.patch": {
+      "bytes": 3552,
+      "sha256": "d0b086a792570adc51285d0b4d27bf4ef34e0ab9164c1b83bcbcac1738fb0311"
+    },
+    "semantic-derivation.json": {
+      "bytes": 2831,
+      "sha256": "b51701eddc15659b56b7f1294dd181a8548cb6e01a281d2d8111c6ec50ed57b4"
+    },
+    "source-contracts.json": {
+      "bytes": 6844,
+      "sha256": "f1a65185d4bc40a1cc3c025b8d6d4ae8d424f7f0d5ffd53fb3a1a7cc35a8fd80"
+    },
+    "source-freeze.json": {
+      "bytes": 2117,
+      "sha256": "adab33df951d996b3437ef984fdbcfc948701dac59d7d2b8c1bc40372b96de98"
+    }
+  },
+  "reviewer_scope": "Independent of correction author. Standard-library source/AST-literal/JSON/text and read-onlyGit only; no authored helper/generator/verifier/configure/compiler/test/device execution. No canonical/oldpacket/candidate edits.",
+  "schema_version": 1,
+  "semantic_digest": {
+    "acceptance_criteria": "1c24b316a8392e2da20a967f042cd6d07bbe91cbb776a4e54eea8ac2a99baccf",
+    "canonical_payload": {
+      "bytes": 47927,
+      "sha256": "1c24b316a8392e2da20a967f042cd6d07bbe91cbb776a4e54eea8ac2a99baccf"
+    },
+    "encoding": "json.dumps(model[section],sort_keys=True,separators=(\",\",\":\")).encode(\"utf-8\"), defaultensure_ascii=True",
+    "exact_threeP1rows_explain_prior_digest": true,
+    "not_an_executed_verifier": true,
+    "other_two_sections_unchanged": true,
+    "payload_equals_independent_encoding": true,
+    "prior_acceptance_criteria": "13d6137cf844ca1bd7b0dfffb421f9081268f51165a390e3853101cba0bf04e9"
+  },
+  "status": "SOURCE_ONLY_REGISTRATION_AND_POLICY_CLOSURE_REVIEW_PASS",
+  "three_exact27f_preimages": true
+}

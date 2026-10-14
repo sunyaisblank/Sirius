@@ -1,0 +1,47 @@
+[OUTPUT] 
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+
+[HANDLER_VERBOSE_OUTPUT] 
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+[HANDLER_OUTPUT] 
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+
+[HANDLER_VERBOSE_OUTPUT] 
+Constructing a list of tests
+
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 14
+[HANDLER_OUTPUT] 
+    Start 14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+
+[HANDLER_VERBOSE_OUTPUT] 
+
+14: Test command: /usr/bin/cmake "-DSIRIUS_TEST_CONFIG=Release" "-P" "/home/astra/.project/Sirius/bin/linux-gcc/tests/evidence_governance.cmake"
+
+14: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests
+14: Test timeout computed to be: 30
+14: -- source registration, required P/E criteria, and repository structure are governed
+[HANDLER_OUTPUT] 
+1/1 Test #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims ...
+   Passed    2.75 sec
+[HANDLER_VERBOSE_OUTPUT] 
+
+The following tests passed:
+
+	OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+[HANDLER_OUTPUT] 
+
+100% tests passed, 0 tests failed out of 1
+
+
+Label Time Summary:
+Mandatory      =   2.75 sec*proc (1 test)
+Operational    =   2.75 sec*proc (1 test)
+
+Total Test time (real) =   2.79 sec

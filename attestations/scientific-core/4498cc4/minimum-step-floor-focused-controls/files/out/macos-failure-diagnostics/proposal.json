@@ -1,0 +1,117 @@
+{
+  "actual_paths": [
+    {
+      "artifact": "backend Mach-O executable",
+      "evidence": "current-candidate/inventory/inputs-before.json and matching after; all three identity owners seal this exact backend.",
+      "producer": "Current-source macos topology target sirius_backend_tests",
+      "recorded_failure_identity": {
+        "bytes": 11560584,
+        "sha256": "682b2ef3c91fe2ea46ab97a18096e509cab5d5eb3805a5b886e63acbe00577ad"
+      },
+      "remote_path": "/Users/runner/work/Sirius/Sirius/bin/macos/tests/backend/sirius_backend_tests"
+    },
+    {
+      "artifact": "module metadata sidecar",
+      "evidence": "All three current-candidate12480-input before/after maps preserve this sidecar identity; actual old sidecar is absent from failed upload.",
+      "producer": "scripts/macos_moltenvk_provider.py:247-250, bind_candidate before its identity owners",
+      "recorded_failure_identity": {
+        "bytes": 16451,
+        "sha256": "c020b4c7b2e74979a2a094a9eaa7e0bd3afbaa839ffbf0bb125bf52d36acfef0"
+      },
+      "remote_path": "/Users/runner/work/_temp/sirius-macos-runtime/20261014-141636-308123/native-provider-modules.json"
+    },
+    {
+      "artifact": "candidate/provider binding sidecar",
+      "evidence": "Original source writes after three observed terminal identity owners and before Mandatory; old actual content/hash was not uploaded and is not invented.",
+      "producer": "scripts/macos_moltenvk_provider.py:285-292, bind_candidate return before Mandatory build",
+      "recorded_failure_identity": null,
+      "remote_path": "/Users/runner/work/_temp/sirius-macos-runtime/20261014-141636-308123/native-provider-bindings.json"
+    }
+  ],
+  "base_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "base_workflow": {
+    "bytes": 33642,
+    "sha256": "8c629e05c0f166bc8b3795478abd808c587f28cfb8dfd09f6d431a7e7eb19146"
+  },
+  "candidate": {
+    "bytes": 33866,
+    "path": "ci.yml",
+    "sha256": "bc6e773d2abaa9cc7f1f3530811996312e7155f57f7426695f87ad4dcdf197e1"
+  },
+  "change": {
+    "added_upload_paths": [
+      "${{ runner.temp }}/sirius-macos-runtime/*/native-provider-modules.json",
+      "${{ runner.temp }}/sirius-macos-runtime/*/native-provider-bindings.json",
+      "bin/macos/tests/backend/sirius_backend_tests"
+    ],
+    "condition_preserved": "always()",
+    "helper_changes": false,
+    "job": "macos-build",
+    "only_change": "Three additive path entries; no command, condition, test, assertion, tolerance, timeout, provider admission or artifact-action change.",
+    "step": "Preserve gate diagnostics"
+  },
+  "failure_evidence": {
+    "artifact_id": 11924968602,
+    "bundle": "attestations/qualification/5b5fad9/macos-full-ci-incomplete-38577826600",
+    "evidence_commit": "9413c9f9c24a8ca22c280f105a98d73deb8e62f3",
+    "job_id": 115899499765,
+    "local_manifest_review_equal_immutable_Git": true,
+    "manifest": {
+      "bytes": 18318,
+      "path": "attestations/qualification/5b5fad9/macos-full-ci-incomplete-38577826600/manifest.json",
+      "sha256": "18835bd4bec55e9697680e543c66ecb2402f2adcd90dbf9408c269580d8f44e6"
+    },
+    "remote_tag_verification": "Parent reports push underway; this preparation did not query network.",
+    "review": {
+      "bytes": 35443,
+      "path": "attestations/qualification/5b5fad9/macos-full-ci-incomplete-38577826600/files/out/native-provider-integration/full-ci-38577826600/macos-build/independent-review.json",
+      "sha256": "e766db58d19e41930545202bf9c8a277eedbfe40698b0672c77eacd63b174a8d"
+    },
+    "run_id": 38577826600,
+    "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+    "tag": "evidence/issue-48-macos-full-ci-incomplete-38577826600",
+    "zip": {
+      "bytes": 93920417,
+      "sha256": "0b67da9f14faed909b6051029e79ed6bf7b6ae6395c30523813a3bdf0ea4d6ad"
+    }
+  },
+  "limits": "Cancellation at original300s render acceptance and incomplete case26 remain unchanged. Future failed diagnostic upload can retain these files if created; no guarantee after runner loss/hardtermination. No CI rerun or qualification admission authorized by this proposal.",
+  "module_recovery": {
+    "existing_function": "scripts/diagnose-macos-retained.py::macho_modules(path)",
+    "existing_function_source": {
+      "bytes": 46569,
+      "sha256": "8998d73985e3c330f4d7b55d5a421c33c06ceff5cfa160cda6ea54bb97cd9034"
+    },
+    "failure_run_limit": "This patch cannot retroactively recover missing bytes from the oldCI upload. Recorded backend SHA also equals the existing diagnostic original-export BACKEND_SHA, a separate immutable-reuse lead; this preparation does not claim that recovery was performed.",
+    "inventory": {
+      "retained_owner": 2,
+      "retained_program_FMA": 2,
+      "retained_program_normal_sum": 3,
+      "retained_program_stage_modes": 28,
+      "total": 35
+    },
+    "provider_source": {
+      "bytes": 22818,
+      "sha256": "6736af1ebf985e2c72d0a616acfa9bd9bc37a528f86ecd7d370efbd8d2ed330c"
+    },
+    "return": "(metadata, payloads), keyed by fully qualified shader name; payloads are exact SPIR-V bytes sliced from bounded read-only __TEXT,__const symbols. Metadata records byte count, SHA256 and file_offset.",
+    "why_no_helper": "Uploading the complete actual backend preserves every embedded module byte plus symbol/section bounds. Existing strict parser can recover all35 payloads, then compare the generated metadata to uploaded modules metadata and rehash each slice. Separate new module-dump implementation is unnecessary."
+  },
+  "patch": {
+    "bytes": 710,
+    "path": "changes.patch",
+    "sha256": "d66079ec53bec0d585c8ecba7fadd826c2587c3eb709a293f7d3e2f24e5b4d01"
+  },
+  "schema_version": 1,
+  "scope": "Failure-artifact diagnostic completeness only; no current Mandatory/provider/runtime fix or qualification claim.",
+  "source_only_checks": {
+    "exact_base_HEAD": true,
+    "no_helper_or_workflow_execution": true,
+    "not_applied_to_tracked_source": true,
+    "original_workflow_restored_by_removing_only_three_lines": true,
+    "three_declared_patterns_match_actual_owner_derived_paths": true,
+    "three_paths_are_only_within_macos_always_upload": true
+  },
+  "status": "PREPARED_SOURCE_ONLY_NOT_APPLIED_NOT_EXECUTED",
+  "target": ".github/workflows/ci.yml"
+}

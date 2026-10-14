@@ -1,0 +1,5 @@
+if(EXISTS "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake")
+  include("/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake")
+else()
+  add_test(sirius_backend_tests_NOT_BUILT sirius_backend_tests_NOT_BUILT)
+endif()

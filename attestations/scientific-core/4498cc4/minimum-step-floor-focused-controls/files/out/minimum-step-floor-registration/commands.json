@@ -1,0 +1,92 @@
+{
+  "admitted": false,
+  "after_configure_root_owned_full_source_governance_and_backend_build": [
+    "cmake",
+    "--build",
+    "--preset",
+    "linux-gcc",
+    "--parallel",
+    "2",
+    "--target",
+    "SiriusSourceGovernance",
+    "sirius_backend_tests"
+  ],
+  "base_revision": "27f5d9cdc6f9268b598a2b954febca8ec3468394",
+  "configure_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "execution_revision": "PENDING_ROOT_INTEGRATED_COMMIT",
+  "future_static_input_paths": [
+    "out/minimum-step-floor-registration/registration.patch",
+    "out/minimum-step-floor-registration/source-contracts.json",
+    "out/minimum-step-floor-registration/semantic-derivation.json",
+    "out/minimum-step-floor-registration/acceptance-criteria.canonical.json",
+    "tests/labels/CTestLabels.cmake",
+    "scripts/verify-operating-model.py",
+    "tests/operating_model.json",
+    "tests/backend/kernel_parity_test.cpp",
+    "scripts/generate-ctest-labels.py",
+    "scripts/test_source_governance.py",
+    "cmake/sirius_alignment.cmake",
+    "cmake/sirius_testing.cmake",
+    "tests/operational/evidence_governance.cmake.in",
+    "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop/manifest.json",
+    "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop/files/out/minimum-step-floor-repair/configure/owner.json",
+    "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop/files/out/minimum-step-floor-repair/configure/stderr.log",
+    "out/minimum-step-floor-registration/commands.json",
+    "out/minimum-step-floor-registration/source-freeze.json",
+    "scripts/governance/build_policy.py",
+    ".github/workflows/ci.yml",
+    "scripts/verify-repository-structure.py",
+    "scripts/governance/repository.py"
+  ],
+  "no_compile_or_numerical_command_admitted_yet": true,
+  "prepared_only": true,
+  "root_integration_only_after_first_failure_archive_and_independent_review": [
+    [
+      "git",
+      "apply",
+      "--check",
+      "out/minimum-step-floor-registration/registration.patch"
+    ],
+    [
+      "git",
+      "apply",
+      "out/minimum-step-floor-registration/registration.patch"
+    ]
+  ],
+  "root_owned_source_checks": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "scripts/generate-ctest-labels.py",
+      "--check"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "scripts/generate-ctest-labels.py",
+      "--self-test"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "scripts/verify-operating-model.py"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "scripts/verify-operating-model.py",
+      "--self-test"
+    ]
+  ],
+  "schema": "sirius-minimum-step-registration-future-commands-v1",
+  "stop": "First source check/configure failure is terminal; preserve, no bypass/weakening. Root alone integrates/commits and operates after archive preservation/review; no live old scratch dependency.",
+  "then_existing_strict_configure": [
+    "cmake",
+    "--preset",
+    "linux-gcc"
+  ]
+}

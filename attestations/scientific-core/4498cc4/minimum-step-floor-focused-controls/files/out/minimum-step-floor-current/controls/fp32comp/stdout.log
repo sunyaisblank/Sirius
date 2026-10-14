@@ -1,0 +1,15 @@
+Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp
+[ParityProbe] phase=initialization opcode=25 offset=0 count=0 submit_wait_ms=103807 pipeline_setup_ms=193166 total_ms=296974 success=1
+[ParityProbe] phase=actual opcode=25 offset=0 count=4 submit_wait_ms=0.719243 pipeline_setup_ms=0.001372 total_ms=0.769288 success=1
+[ParityProbe] completed opcode=25 records=4 submissions=1 allocated_bytes=1296
+[       OK ] KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp (297246 ms)
+[----------] 1 test from KernelParity (297246 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (297246 ms total)
+[  PASSED  ] 1 test.

@@ -1,0 +1,157 @@
+{
+  "admitted_external_domains": 0,
+  "claim_limits": [
+    "Live assertions and exact XML/properties passed; no raw float-buffer artifacts saved or byte-identity claim.",
+    "Three precision controls cover the real adaptive attempt and central state/controller; all40 continuation fields and full frame publication are not established.",
+    "Original Ellis finite ray passed separately; no Kerr frame success, CI-failure causality, allMandatory or full scientific/platform/release qualification.",
+    "Build includes original source governance, Slang/SPIR-V validation and portability emissions; existing Slang initialization warnings remain."
+  ],
+  "owners": {
+    "build-backend": {
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 900
+      },
+      "peak_sampled_rss_kib": 1806536,
+      "wall_seconds": 170.34255365499848
+    },
+    "configure": {
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "peak_sampled_rss_kib": 85304,
+      "wall_seconds": 5.6569235650022165
+    },
+    "ellis-physical-ray": {
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "peak_sampled_rss_kib": 1375464,
+      "wall_seconds": 158.52464273499936
+    },
+    "fp32": {
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "peak_sampled_rss_kib": 3608940,
+      "wall_seconds": 220.4192086990006
+    },
+    "fp32comp": {
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "peak_sampled_rss_kib": 3603988,
+      "wall_seconds": 297.57408009600476
+    },
+    "fp64": {
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "peak_sampled_rss_kib": 2559044,
+      "wall_seconds": 203.4231627209956
+    },
+    "module-capabilities": {
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "peak_sampled_rss_kib": 42492,
+      "wall_seconds": 0.2756981580023421
+    },
+    "source-governance": {
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "peak_sampled_rss_kib": 89672,
+      "wall_seconds": 2.8294284750008956
+    }
+  },
+  "pending_external_domains": 8,
+  "previous_configure_refusals": [
+    "43ed3034d92a7b94a2d9a6711d8b2cda7a2e46cf",
+    "b220fa539ea6e3efd9161c6f04914d01b301e031"
+  ],
+  "prior_evidence_is_history_only": true,
+  "qualification_claimed": false,
+  "result": {
+    "cases": [
+      {
+        "accepted": true,
+        "case": "source-governance",
+        "operator_exit": 0,
+        "operator_seconds": 3.778,
+        "owned_wall_seconds": 2.8294284750008956,
+        "peak_sampled_rss_kib": 89672,
+        "xml_case": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims"
+      },
+      {
+        "accepted": true,
+        "case": "module-capabilities",
+        "operator_exit": 0,
+        "operator_seconds": 1.197,
+        "owned_wall_seconds": 0.2756981580023421,
+        "peak_sampled_rss_kib": 42492,
+        "xml_case": "PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability"
+      },
+      {
+        "accepted": true,
+        "case": "fp32",
+        "operator_exit": 0,
+        "operator_seconds": 221.412,
+        "owned_wall_seconds": 220.4192086990006,
+        "peak_sampled_rss_kib": 3608940,
+        "xml_case": "RejectedNeighbourRetriesExactMinimumFp32"
+      },
+      {
+        "accepted": true,
+        "case": "fp32comp",
+        "operator_exit": 0,
+        "operator_seconds": 298.867,
+        "owned_wall_seconds": 297.57408009600476,
+        "peak_sampled_rss_kib": 3603988,
+        "xml_case": "RejectedNeighbourRetriesExactMinimumFp32Comp"
+      },
+      {
+        "accepted": true,
+        "case": "fp64",
+        "operator_exit": 0,
+        "operator_seconds": 204.367,
+        "owned_wall_seconds": 203.4231627209956,
+        "peak_sampled_rss_kib": 2559044,
+        "xml_case": "RejectedNeighbourRetriesExactMinimumFp64"
+      },
+      {
+        "accepted": true,
+        "case": "ellis-physical-ray",
+        "operator_exit": 0,
+        "operator_seconds": 159.461,
+        "owned_wall_seconds": 158.52464273499936,
+        "peak_sampled_rss_kib": 1375464,
+        "xml_case": "EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky"
+      }
+    ],
+    "completed_case_count": 6,
+    "passed": true,
+    "qualification_claimed": false,
+    "required_case_count": 6,
+    "scope": "Finite exact-floor/shared adaptive and original Ellis control only; full science/frame/platform/release qualification remains incomplete.",
+    "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+  },
+  "schema": "sirius-minimum-step-floor-focused-controls-v1",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "static_input_count": 1033
+}

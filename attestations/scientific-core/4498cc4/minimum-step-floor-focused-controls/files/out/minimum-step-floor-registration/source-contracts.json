@@ -1,0 +1,133 @@
+{
+  "CI_diagnostic_policy_join": {
+    "actual_macOS_workflow_diagnostic_paths_equal_general_plus_new_tuple": true,
+    "exact_existing_workflow_paths_added_to_ordered_policy_tuple": [
+      "${{ runner.temp }}/sirius-macos-runtime/*/native-provider-modules.json",
+      "${{ runner.temp }}/sirius-macos-runtime/*/native-provider-bindings.json",
+      "bin/macos/tests/backend/sirius_backend_tests"
+    ],
+    "necessary_fixture_adjustment": "Existing missing producer console log negative mutation changes tuple index2to5 so it still removes exact same producer.log; missingJUnit[0] and every other guard unchanged. Positive fixture already generates paths from tuple.",
+    "position": "After native-runtime-transcript.log; original8paths preserved in order, now11.",
+    "strict_parser_unchanged": true,
+    "workflow": {
+      "bytes": 33866,
+      "path": ".github/workflows/ci.yml",
+      "sha256": "bc6e773d2abaa9cc7f1f3530811996312e7155f57f7426695f87ad4dcdf197e1"
+    }
+  },
+  "authoritative_P1_policy_change": {
+    "candidate_count": 39,
+    "exact_union_three_real_gtests": true,
+    "matches_existing_model_P1_evidence_set": true,
+    "other_criterion_policies_unchanged": true,
+    "prior_count": 36
+  },
+  "base_revision": "27f5d9cdc6f9268b598a2b954febca8ec3468394",
+  "candidate_sources": {
+    "scripts/governance/build_policy.py": {
+      "bytes": 71532,
+      "sha256": "53dbfdc1107c871e38b824746d75142f0edff3ce535bd91d97b393f16e49d142"
+    },
+    "scripts/verify-operating-model.py": {
+      "bytes": 62500,
+      "sha256": "28cd513e844adebfd6659844bddb144dcfb41a3f78d9448bd8a07733252c1dd1"
+    },
+    "tests/labels/CTestLabels.cmake": {
+      "bytes": 78484,
+      "sha256": "c4168340b7c402656661280245cdef5b9352d733a31036e3681090e09666894a"
+    }
+  },
+  "exact_three_identities": [
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp64"
+  ],
+  "executed": false,
+  "existing_model_unchanged": {
+    "bytes": 130611,
+    "sha256": "b1c00980837dbf22070353077cd0cc492c6cc582ae7bf9679571ab63602196e6"
+  },
+  "existing_three_real_test_bodies_unchanged": {
+    "bytes": 123890,
+    "path": "tests/backend/kernel_parity_test.cpp",
+    "sha256": "908fa7e36fa86ec468cd28d108096df00dc1167705d7734bf2aa3406a9a92c47"
+  },
+  "failed_configure_lineage": {
+    "archive": "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop",
+    "configure_owner": {
+      "bytes": 1682,
+      "sha256": "a5f89980f93fabaf040e662ca8af64ed90fcfa927b8ca9e1412bd33301472d18"
+    },
+    "configure_stderr": {
+      "bytes": 1181,
+      "sha256": "4c812b8427e46c7c50a386d252c376b9c0421691bbfc6cbafabb485272e8ed5f"
+    },
+    "evidence_commit": "43ed3034d92a7b94a2d9a6711d8b2cda7a2e46cf",
+    "failed_before_compilation": true,
+    "future_inputs_do_not_reference_live_old_out": true,
+    "manifest": {
+      "bytes": 6526,
+      "sha256": "1781d88fdb35cf261a34778a97b13405ef0d1f3001d76df637bd96c6a675083b"
+    },
+    "old_consumed_packet_unchanged": true
+  },
+  "governed_fixture_assessment": "No generator/model fixture change necessary. One build-policy negative fixture index2to5 is necessary to preserve its original producer.log target after3ordered tuple additions; all strict parser/always/attestation/wildcard/refusal constraints and other fixtures remain unchanged. Existing self-tests and full SiriusSourceGovernance target remain prospective root checks.",
+  "label_generation_authority": {
+    "collector": "scripts/test_source_governance.py",
+    "collector_source": {
+      "bytes": 12188,
+      "sha256": "548409507ffb40569f8e9549e484234102777c878cb2d64798eb262a4b23a7f0"
+    },
+    "generator": "scripts/generate-ctest-labels.py",
+    "generator_source": {
+      "bytes": 20276,
+      "sha256": "1bc203d64a4f0e0569ae22251458ae3c76d3afc9ccc43650d6c7f94530698300"
+    },
+    "policy": "Existing SUITE_LABELS[KernelParity]=Mandatory;Correctness, suites sorted and source-collected cases retain path/source order. The three real TEST declarations occur after UnrepresentedKerrStageShrinksBeforeMetricEvaluation before NullProjectionPreservesConeBranchAndFailsClosed. Candidate output inserts only those3rows in that position. Existing generator is unmodified and root --check must confirm exact regeneration.",
+    "script_was_not_run": true
+  },
+  "original_preimages": {
+    "scripts/governance/build_policy.py": {
+      "bytes": 71323,
+      "sha256": "841560051d11252e75aa1c0e3e2973e401edb1456eb53437af7df1bdf500bc67"
+    },
+    "scripts/verify-operating-model.py": {
+      "bytes": 62283,
+      "sha256": "e10ce7254ba53f6797d8e8864381ead7ae98c4910cf077afc76df1706e6ccd21"
+    },
+    "tests/labels/CTestLabels.cmake": {
+      "bytes": 78306,
+      "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14"
+    }
+  },
+  "patch": {
+    "bytes": 3552,
+    "sha256": "d0b086a792570adc51285d0b4d27bf4ef34e0ab9164c1b83bcbcac1738fb0311"
+  },
+  "prepared_only": true,
+  "required_after_root_integration": [
+    "Existing generate-ctest-labels.py --check and --self-test.",
+    "Existing verify-operating-model.py normal and --self-test; no drift exception.",
+    "Existing full SiriusSourceGovernance target including repository/CI exact diagnostic policy checks and original negative fixtures.",
+    "Strict configure at the new committed source; preserve failure if any before deciding build.",
+    "Then unchanged root-owned original strict build/actual registration and focused numerical controls; no qualification inferred from policy preparation."
+  ],
+  "schema": "sirius-minimum-step-registration-source-contracts-v1",
+  "semantic_derivation": {
+    "bytes": 2831,
+    "sha256": "b51701eddc15659b56b7f1294dd181a8548cb6e01a281d2d8111c6ec50ed57b4"
+  },
+  "source_byte_obligations": [
+    "Restoring the old acceptance digest and removing only3new REQUIRED_ACCEPTANCE_EVIDENCE rows restores the original verifier byte-for-byte.",
+    "Removing only3new generated label rows restores original CTestLabels byte-for-byte.",
+    "All verifier functions/self-tests/source-floor/shape/postcondition/coverage/inventory/profile/capability/refusal logic untouched.",
+    "No gtest/test source, shader, model requirement text, evidence exclusion, expected-name bypass, test deadline or assertion changed.",
+    "All prior required evidence remains required; P1 gains exactly3additional real mandatory witnesses.",
+    "Removing only3new MACOS_RUNTIME_DIAGNOSTIC_PATHS rows and restoring producer.log negative-fixture index5to2 restores the original build_policy.py byte-for-byte; strict gate parser and all other policy logic unchanged."
+  ],
+  "source_files": [
+    "tests/labels/CTestLabels.cmake",
+    "scripts/verify-operating-model.py",
+    "scripts/governance/build_policy.py"
+  ]
+}

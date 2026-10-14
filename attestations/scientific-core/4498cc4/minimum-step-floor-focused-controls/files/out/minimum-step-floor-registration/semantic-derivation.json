@@ -1,0 +1,47 @@
+{
+  "actual_current_model_digests": {
+    "acceptance_criteria": "1c24b316a8392e2da20a967f042cd6d07bbe91cbb776a4e54eea8ac2a99baccf",
+    "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
+    "required_dimensions": "b70fe43e454e79567070f3bbb374414962fcbe5fd8dee9f40ffa50d78d0bc0db"
+  },
+  "authored_helpers_imported_or_executed": false,
+  "authority": {
+    "digest_expression": "hashlib.sha256(payload).hexdigest()",
+    "function": "semantic_policy_errors",
+    "path": "scripts/verify-operating-model.py",
+    "payload_expression": "json.dumps(model.get(section), sort_keys=True, separators=(\",\", \":\")).encode(\"utf-8\")",
+    "source": {
+      "bytes": 62283,
+      "sha256": "e10ce7254ba53f6797d8e8864381ead7ae98c4910cf077afc76df1706e6ccd21"
+    }
+  },
+  "candidate_required_digests": {
+    "acceptance_criteria": "1c24b316a8392e2da20a967f042cd6d07bbe91cbb776a4e54eea8ac2a99baccf",
+    "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
+    "required_dimensions": "b70fe43e454e79567070f3bbb374414962fcbe5fd8dee9f40ffa50d78d0bc0db"
+  },
+  "canonical_acceptance_payload": {
+    "bytes": 47927,
+    "bytes_have_no_trailing_newline": true,
+    "path": "out/minimum-step-floor-registration/acceptance-criteria.canonical.json",
+    "sha256": "1c24b316a8392e2da20a967f042cd6d07bbe91cbb776a4e54eea8ac2a99baccf"
+  },
+  "derivation_method": "Read existing semantic_policy_errors source; reproduce only its standard-library canonical JSON encoding and SHA256 expression in source-preparation code, without importing/executing the authored verifier. Root must execute the existing verifier and self-test after integration.",
+  "input_model": {
+    "bytes": 130611,
+    "path": "tests/operating_model.json",
+    "sha256": "b1c00980837dbf22070353077cd0cc492c6cc582ae7bf9679571ab63602196e6"
+  },
+  "not_an_executed_verifier_or_configure_result": true,
+  "old_required_digests": {
+    "acceptance_criteria": "13d6137cf844ca1bd7b0dfffb421f9081268f51165a390e3853101cba0bf04e9",
+    "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
+    "required_dimensions": "b70fe43e454e79567070f3bbb374414962fcbe5fd8dee9f40ffa50d78d0bc0db"
+  },
+  "prepared_only": true,
+  "prior_model_reconstruction": "Removing exactly the3 new P1 gtest rows yields old13d6137c acceptance digest; every other model field remains identical.",
+  "prior_reconstructed_acceptance_digest": "13d6137cf844ca1bd7b0dfffb421f9081268f51165a390e3853101cba0bf04e9",
+  "schema": "sirius-minimum-step-registration-semantic-derivation-v1",
+  "unchanged_capability_contracts_digest": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
+  "unchanged_required_dimensions_digest": "b70fe43e454e79567070f3bbb374414962fcbe5fd8dee9f40ffa50d78d0bc0db"
+}

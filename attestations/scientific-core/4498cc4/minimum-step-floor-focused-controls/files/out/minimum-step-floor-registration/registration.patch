@@ -1,0 +1,54 @@
+--- a/tests/labels/CTestLabels.cmake
++++ b/tests/labels/CTestLabels.cmake
+@@ -526,6 +526,9 @@
+     KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion
+     KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant
+     KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
++    KernelParity.RejectedNeighbourRetriesExactMinimumFp32
++    KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp
++    KernelParity.RejectedNeighbourRetriesExactMinimumFp64
+     KernelParity.NullProjectionPreservesConeBranchAndFailsClosed
+     KernelParity.WormholeAndWarpMetricMatchLegacy
+     KernelParity.IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets
+--- a/scripts/verify-operating-model.py
++++ b/scripts/verify-operating-model.py
+@@ -100,6 +100,9 @@
+         "gtest:CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
+         "gtest:RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
+         "gtest:RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating",
++        "gtest:KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
++        "gtest:KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
++        "gtest:KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+         "gtest:RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth",
+         "gtest:RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch",
+         "gtest:RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection",
+@@ -501,7 +504,7 @@
+ REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
+ INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
+ REQUIRED_SECTION_POLICY_DIGESTS = {
+-    "acceptance_criteria": "13d6137cf844ca1bd7b0dfffb421f9081268f51165a390e3853101cba0bf04e9",
++    "acceptance_criteria": "1c24b316a8392e2da20a967f042cd6d07bbe91cbb776a4e54eea8ac2a99baccf",
+     "required_dimensions": "b70fe43e454e79567070f3bbb374414962fcbe5fd8dee9f40ffa50d78d0bc0db",
+     "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
+ }
+--- a/scripts/governance/build_policy.py
++++ b/scripts/governance/build_policy.py
+@@ -254,6 +254,9 @@
+ MACOS_RUNTIME_DIAGNOSTIC_PATHS = (
+     '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-tests.xml',
+     '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-transcript.log',
++    '${{ runner.temp }}/sirius-macos-runtime/*/native-provider-modules.json',
++    '${{ runner.temp }}/sirius-macos-runtime/*/native-provider-bindings.json',
++    'bin/macos/tests/backend/sirius_backend_tests',
+     '${{ runner.temp }}/sirius-macos-runtime/producer.log',
+     '${{ runner.temp }}/sirius-macos-runtime/os-version.txt',
+     '${{ runner.temp }}/sirius-macos-runtime/metal-displays.json',
+@@ -795,7 +798,7 @@
+         "runtime artifact collision": ("name: sirius-macos-moltenvk-attestation", "name: sirius-macos-full-native-attestation"),
+         "unbounded runtime upload": ("          path: ${{ runner.temp }}/sirius-macos-runtime", "          path: ${{ runner.temp }}"),
+         "missing runtime failure JUnit": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[0] + "\n", ""),
+-        "missing producer console log": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[2] + "\n", ""),
++        "missing producer console log": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[5] + "\n", ""),
+     }
+     for description, (before, after) in runtime_mutations.items():
+         mutations["macOS " + description] = valid.replace(before, after, 1)

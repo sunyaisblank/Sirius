@@ -1,0 +1,790 @@
+{
+  "schema": "sirius-minimum-step-floor-terminal-consistency-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "reviewer": "/root/forensic_obligations",
+  "role": {
+    "operator": "/root was the sole actual configure/build/control operator.",
+    "preparation_involvement": "Reviewer participated in prior source-only repair/policy/alignment reviews and authored the separate macOS diagnostic-upload proposal. This is independent of the operator, not independent of all packet preparation. prepare_controls.py was authored by /root/sanitizer_gate_contract; root_controls.py and admissions were root-authored.",
+    "prior_review_limit": "Author, source reviewer and operator initially missed explicit Mandatory/P1/digest joins. The initial configure refusal and later stale-attestation refusal remain preserved; prior source PASS did not establish executable acceptance.",
+    "actions_in_this_review": "Read-only source/Git/raw metadata/XML/SPIR-V word parsing, file hashing, and targeted /proc birth checks; wrote only this review. No authored helper, build, compiler, validator, test, device, provider, API or CI execution."
+  },
+  "conclusion": {
+    "configure_and_targeted_build_passed": true,
+    "completed_owners": 8,
+    "completed_cases": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "disabled": 0,
+    "precision_rungs_executed": [
+      "fp32",
+      "fp32comp",
+      "fp64"
+    ],
+    "actual_opcode25_records_per_rung": 4,
+    "actual_opcode19_records": 1,
+    "actual_numerical_submissions": 4,
+    "raw_gpu_readback_buffers_saved": false,
+    "blockers": []
+  },
+  "input_closure": {
+    "static_pins_verified_current": 1033,
+    "unique_consumed_input_paths": 1178,
+    "unique_consumed_input_bytes": 431570446,
+    "maps": [
+      565,
+      565,
+      1147,
+      1151,
+      1155,
+      1159,
+      1163,
+      1167
+    ],
+    "all_eight_before_after_maps_equal_current": true,
+    "every_declared_action_input_present": true,
+    "every_runtime_static_pin_matches_each_owner_before_map": true,
+    "previous_selected_case_owner_inputs_and_xml_frozen_by_later_actions": true,
+    "identities_include_exact_resolved_path_size_and_sha256": true,
+    "tracked_source_pins_byte_equal_current_Git": 425,
+    "owner_guard_copies_byte_equal": true,
+    "source_revision_and_clean_status_recorded_before_after_all_eight": true
+  },
+  "ownership": {
+    "all_terminal_exit_zero_passed": true,
+    "all_within_sampled_limits": true,
+    "observed_birth_records": 105,
+    "all_observed_birth_records_retired_in_receipts": true,
+    "targeted_same_boot_birth_recheck_passed": true,
+    "all_sampled_rss_peaks_and_available_memory_minima_recomputed": true,
+    "all_stop_reasons_null_cleanup_errors_empty_remaining_owned_empty": true,
+    "global_process_absence_claimed": false,
+    "sampling_limit": "RSS and MemAvailable are sampled operational guards; no bound on unobserved peaks or global consumer absence is established.",
+    "tmpdir": {
+      "path": "out/minimum-step-floor-current/tmp",
+      "mode": "0o755",
+      "residual_entries": [],
+      "private_0700_claimed": false
+    }
+  },
+  "producer_and_contracts": {
+    "backend": {
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bytes": 13471976,
+      "sha256": "177666e29cc25264f26e580f5778b4f66e921d7e3157ea61625a5806c1569ea3"
+    },
+    "object": {
+      "path": "bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o",
+      "bytes": 1462744,
+      "sha256": "4f50bb21213e94084825765fe90784d2cb11a78417609c70679ebf60e79c756d"
+    },
+    "strict_cache": {
+      "bytes": 60324,
+      "sha256": "e495eb24cd37e87de7a3ea6346cc967d8884556dfcd90d3a1a3341226e3d0e0f"
+    },
+    "compile_commands": {
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "first_party_contract2_Werror_no_unsafe_math_no_sanitizer_recipes": 33,
+    "parity_recipe": "Actual /usr/bin/g++-14 Release -O3 -DNDEBUG C++2c, contracts2, Werror/Wall/Wextra/Wpedantic, resource lock and fail_on_skip include; exact saved compile_commands entry.",
+    "compiled_dependency_count": 485,
+    "actual_saved_dependency_list_valid": true,
+    "actual_object_and_link_inputs_frozen_current": true,
+    "actual_build_log_contains_kernel_parity_compile_backend_link_and_source_governance_success": true,
+    "parity_module_resources": [
+      {
+        "canonical": "bin/linux-gcc/kernels/parity_probe.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv",
+        "bytes": 6302544,
+        "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f",
+        "capabilities": [
+          1
+        ]
+      },
+      {
+        "canonical": "bin/linux-gcc/kernels/parity_probe_fp32comp.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv",
+        "bytes": 6306768,
+        "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35",
+        "capabilities": [
+          1
+        ]
+      },
+      {
+        "canonical": "bin/linux-gcc/kernels/parity_probe_fp64.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv",
+        "bytes": 6290916,
+        "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74",
+        "capabilities": [
+          10,
+          1
+        ]
+      }
+    ],
+    "module_check": "Independent framing/capability word parse: fp32/comp Shader only; fp64 Float64+Shader; no Int64. Canonical and staged full bytes exact. Original capability test also passed.",
+    "source_semantics": "Shared predicate uses attemptedStep <= minimumStep. Trace, parity-probe and Ellis controllers use it. Real AttemptAdaptiveGeodesicStep, physical acceptance/null/projection/tolerances, counter implementation and downstream publication code were retained; four controls per rung distinguish exact floor, one-rung-ULP neighbour, rejected off-null attempts and accepted companions.",
+    "numerical_scope": "Passed source assertions cover actual adaptive attempts, retry/termination counts, affine and eight central-state values; they do not exercise all40 coupled fields or full trace/radiance/frame publication. No executed old-predicate mutant result is claimed.",
+    "execution_timing_scope": "Full owner wall includes pipeline creation and original zero-active software-driver initialization. The unchanged <=1000ms numerical submission gate applies to actual samples. No benefit/performance or cold-frame deadline claim.",
+    "warnings": {
+      "E41018": 3,
+      "E41035": 3,
+      "source": "src/sirius/kernels/gr_kerr_infinity.slang"
+    }
+  },
+  "registration": {
+    "inventory": {
+      "bytes": 984788,
+      "sha256": "c358483f3aef740882a4061a5dd650121d3583ea36f2e54473925df7eb1a1407"
+    },
+    "exact_saved_current_chain_frozen": true,
+    "cases": [
+      {
+        "case": "ellis-physical-ray",
+        "name": "KernelParity.EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky",
+        "labels": [
+          "Correctness",
+          "Mandatory"
+        ],
+        "timeout": null,
+        "resource_lock": [
+          "sirius_vulkan_device"
+        ]
+      },
+      {
+        "case": "fp32",
+        "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+        "labels": [
+          "Correctness",
+          "Mandatory"
+        ],
+        "timeout": null,
+        "resource_lock": [
+          "sirius_vulkan_device"
+        ]
+      },
+      {
+        "case": "fp32comp",
+        "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+        "labels": [
+          "Correctness",
+          "Mandatory"
+        ],
+        "timeout": null,
+        "resource_lock": [
+          "sirius_vulkan_device"
+        ]
+      },
+      {
+        "case": "fp64",
+        "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+        "labels": [
+          "Correctness",
+          "Mandatory"
+        ],
+        "timeout": null,
+        "resource_lock": [
+          "sirius_vulkan_device"
+        ]
+      },
+      {
+        "case": "module-capabilities",
+        "name": "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
+        "labels": [
+          "Correctness",
+          "Mandatory"
+        ],
+        "timeout": null,
+        "resource_lock": [
+          "sirius_vulkan_device"
+        ]
+      },
+      {
+        "case": "source-governance",
+        "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+        "labels": [
+          "Mandatory",
+          "Operational"
+        ],
+        "timeout": 30,
+        "resource_lock": null
+      }
+    ],
+    "direct_gtests_not_ctest_dispatch": "Five gtests were invoked by exact original filter directly through the actual registered backend; XML independently requires one run/completed case with no skip. Saved CTest identities retain Mandatory/Correctness/resource locks and disabled-case admission. Governance was invoked through original CTest with its30s timeout.",
+    "positive_fp64_execution_required": true,
+    "fp64_unsupported_refusal_not_counted_as_positive": true,
+    "stop_on_first_failed_owner_or_xml": true
+  },
+  "provider": {
+    "forced_icd": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "selected_device": "SIRIUS_VULKAN_DEVICE=0",
+    "cache_policy": "Original default/unset; no LP/MESA/GALLIVM tuning or cache-disable flag.",
+    "actual_maps": "All four numerical owners have actual LVP /proc mappings bound to child birth/session; mapped dev/inode and current byte identity join frozen inputs.",
+    "loader_and_LLVM_scope": "Saved ldd library paths/bytes are frozen inputs. These owners capture actual LVP only; no additional actual loader/LLVM mapping claim.",
+    "hardware_or_new_domain_claimed": false
+  },
+  "qualification": {
+    "alignment_receipt": {
+      "bytes": 1240,
+      "sha256": "30eee51cf2bdd2cd01b2f4171afed0af94a10f3b61eda4007d80906f1efc9257"
+    },
+    "operating_model": {
+      "bytes": 130611,
+      "sha256": "b1c00980837dbf22070353077cd0cc492c6cc582ae7bf9679571ab63602196e6"
+    },
+    "mode": "qualification",
+    "selected_attestation_root": "",
+    "admitted_domains": 0,
+    "pending_domains": 8,
+    "ultimate_ideal_satisfied": false,
+    "release_packaging_disabled": true,
+    "prior_refusals": [
+      {
+        "commit": "43ed3034d92a7b94a2d9a6711d8b2cda7a2e46cf",
+        "bundle": "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop",
+        "manifest": {
+          "bytes": 6526,
+          "sha256": "1781d88fdb35cf261a34778a97b13405ef0d1f3001d76df637bd96c6a675083b"
+        },
+        "Git_manifest_and_result_exact": true
+      },
+      {
+        "commit": "b220fa539ea6e3efd9161c6f04914d01b301e031",
+        "bundle": "attestations/qualification/4498cc4/minimum-step-floor-alignment-stop",
+        "manifest": {
+          "bytes": 4544,
+          "sha256": "18d6ccb28c7dc3b28c1ebf011251be36ddc3b9faa6e3d7e523ae5c19a4a9a259"
+        },
+        "Git_manifest_and_result_exact": true
+      }
+    ],
+    "old_evidence_admitted_or_edited": false
+  },
+  "owners_and_raw_results": [
+    {
+      "case": "configure",
+      "owner": {
+        "bytes": 2904,
+        "sha256": "32136885117de966f15b4a3c80f9e6d50e449ac4d2c2ec5ee433c11fe8573958"
+      },
+      "inputs_before": {
+        "bytes": 135423,
+        "sha256": "312cda67da001b5d952b9a02136e2019eaabbaf0bec844a2bd51ddf7b2e3801b"
+      },
+      "inputs_after": {
+        "bytes": 135423,
+        "sha256": "312cda67da001b5d952b9a02136e2019eaabbaf0bec844a2bd51ddf7b2e3801b"
+      },
+      "frozen_inputs": 565,
+      "declared_inputs": 24,
+      "observed_retired_births": 11,
+      "samples": 22,
+      "wall_seconds": 5.6569235650022165,
+      "peak_sampled_rss_kib": 85304,
+      "minimum_sampled_available_kib": 18065808,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "stdout": {
+        "bytes": 1277,
+        "sha256": "97a5caae72fbfc26beee6d82e7a0b38f3717e719dd7bd3fd564375fdfcf4eea6"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "build-backend",
+      "owner": {
+        "bytes": 12511,
+        "sha256": "5398fbb3885edd2584dba6d97ab4be076b71a965d76325c5d5772ec7e0118247"
+      },
+      "inputs_before": {
+        "bytes": 135423,
+        "sha256": "312cda67da001b5d952b9a02136e2019eaabbaf0bec844a2bd51ddf7b2e3801b"
+      },
+      "inputs_after": {
+        "bytes": 135423,
+        "sha256": "312cda67da001b5d952b9a02136e2019eaabbaf0bec844a2bd51ddf7b2e3801b"
+      },
+      "frozen_inputs": 565,
+      "declared_inputs": 24,
+      "observed_retired_births": 84,
+      "samples": 664,
+      "wall_seconds": 170.34255365499848,
+      "peak_sampled_rss_kib": 1806536,
+      "minimum_sampled_available_kib": 16365300,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 900
+      },
+      "stdout": {
+        "bytes": 5584,
+        "sha256": "efa2a38ff0dacd16331c0d56d7da5cdaf21aa4bf1815f77fdcbaeb29b0cd171d"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "source-governance",
+      "owner": {
+        "bytes": 2478,
+        "sha256": "1a12009bf8b7cd28fa5d1c1003dfb8e649f5b6b0b64a395634067c622589e3f5"
+      },
+      "inputs_before": {
+        "bytes": 271688,
+        "sha256": "43dfaea38767e9ffff7ec1fe3f2bacc5e89884f22e7085c6114db70e80188399"
+      },
+      "inputs_after": {
+        "bytes": 271688,
+        "sha256": "43dfaea38767e9ffff7ec1fe3f2bacc5e89884f22e7085c6114db70e80188399"
+      },
+      "frozen_inputs": 1147,
+      "declared_inputs": 1033,
+      "observed_retired_births": 5,
+      "samples": 11,
+      "wall_seconds": 2.8294284750008956,
+      "peak_sampled_rss_kib": 89672,
+      "minimum_sampled_available_kib": 20089336,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "stdout": {
+        "bytes": 1353,
+        "sha256": "7965557172a7cbfb80b06c159f89aec0b1896ccc5c66d8ad69b668b4398b3596"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "xml": {
+        "bytes": 602,
+        "sha256": "13c0a68b2aded715603991886c06282f641341cab3448f9538bc7413eca1b00b"
+      },
+      "testcase": {
+        "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+        "classname": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+        "time": "2.74645",
+        "status": "run"
+      },
+      "properties": {
+        "cmake_labels": "Mandatory;Operational"
+      },
+      "ctest_log": {
+        "bytes": 1548,
+        "sha256": "397de7becc351ac9feffb6429925dcb061ff170198566bfa49d79bd432c9f01a"
+      }
+    },
+    {
+      "case": "module-capabilities",
+      "owner": {
+        "bytes": 1786,
+        "sha256": "b6aec07821ae018f8e19d3e6bd0071821bb8f68331372ef380678920f17cd2ee"
+      },
+      "inputs_before": {
+        "bytes": 272927,
+        "sha256": "4e36480072ea0507286cdb8f999444228770a0d1a89b241c9f305ee9a1290b83"
+      },
+      "inputs_after": {
+        "bytes": 272927,
+        "sha256": "4e36480072ea0507286cdb8f999444228770a0d1a89b241c9f305ee9a1290b83"
+      },
+      "frozen_inputs": 1151,
+      "declared_inputs": 1037,
+      "observed_retired_births": 1,
+      "samples": 1,
+      "wall_seconds": 0.2756981580023421,
+      "peak_sampled_rss_kib": 42492,
+      "minimum_sampled_available_kib": 20101664,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "stdout": {
+        "bytes": 709,
+        "sha256": "b88a9c1066778b689b4b941aaba971cebab608d3fed1bf15ed3dfafd6305ecbe"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "xml": {
+        "bytes": 612,
+        "sha256": "8648d3c1e280635f232b66faf032f44d5a5e176e0279e6d50a58f3bbceedc5b8"
+      },
+      "testcase": {
+        "name": "PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
+        "file": "/home/astra/.project/Sirius/tests/backend/kernel_parity_test.cpp",
+        "line": "1749",
+        "status": "run",
+        "result": "completed",
+        "time": "0.021",
+        "timestamp": "2026-10-15T08:25:07.081",
+        "classname": "KernelParity"
+      },
+      "properties": {}
+    },
+    {
+      "case": "fp32",
+      "owner": {
+        "bytes": 2417,
+        "sha256": "36e0a86c9c4a414075a88ee399ad1199863c7cd5a5770f7a17010cd6c3c11cd7"
+      },
+      "inputs_before": {
+        "bytes": 274182,
+        "sha256": "f8ad25e9c8bcf890dc4ed20ce6de5e27fb4434a6791ee2c3c6b01045dbd2b8fa"
+      },
+      "inputs_after": {
+        "bytes": 274182,
+        "sha256": "f8ad25e9c8bcf890dc4ed20ce6de5e27fb4434a6791ee2c3c6b01045dbd2b8fa"
+      },
+      "frozen_inputs": 1155,
+      "declared_inputs": 1041,
+      "observed_retired_births": 1,
+      "samples": 8656,
+      "wall_seconds": 220.4192086990006,
+      "peak_sampled_rss_kib": 3608940,
+      "minimum_sampled_available_kib": 16317556,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "stdout": {
+        "bytes": 1002,
+        "sha256": "7e81454c7d225b47ffe368e2e6e500a3f12d9a76f4b1e65a38c85c199dcdbe31"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "xml": {
+        "bytes": 1040,
+        "sha256": "9ffdfc0eecf4b95728ee32691e02b3aff9f5627961128da281cb33a14c291adc"
+      },
+      "testcase": {
+        "name": "RejectedNeighbourRetriesExactMinimumFp32",
+        "file": "/home/astra/.project/Sirius/tests/backend/kernel_parity_test.cpp",
+        "line": "699",
+        "status": "run",
+        "result": "completed",
+        "time": "220.123",
+        "timestamp": "2026-10-15T08:25:08.287",
+        "classname": "KernelParity"
+      },
+      "properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "0.771524",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "actual_lvp_mapping": {
+        "segments": 4,
+        "unique_files": [
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "device": "08:50",
+            "inode": 143595,
+            "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+          }
+        ],
+        "pid": 389618,
+        "start_ticks": "6250995",
+        "session": 389618
+      }
+    },
+    {
+      "case": "fp32comp",
+      "owner": {
+        "bytes": 2438,
+        "sha256": "b809858456c092eac96199bd1f0b4623604d9bf812ae1492ffd2b58d26a65949"
+      },
+      "inputs_before": {
+        "bytes": 275318,
+        "sha256": "8fd5c05bf6e3500a82c315dc89a41577847115ba62fb9585d3fb6db76e565d88"
+      },
+      "inputs_after": {
+        "bytes": 275318,
+        "sha256": "8fd5c05bf6e3500a82c315dc89a41577847115ba62fb9585d3fb6db76e565d88"
+      },
+      "frozen_inputs": 1159,
+      "declared_inputs": 1045,
+      "observed_retired_births": 1,
+      "samples": 10556,
+      "wall_seconds": 297.57408009600476,
+      "peak_sampled_rss_kib": 3603988,
+      "minimum_sampled_available_kib": 14064864,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "stdout": {
+        "bytes": 1014,
+        "sha256": "3c18a22fe33df39a21c92be7979bde97d5e97a5dfadf106898ff0b472fabeb43"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "xml": {
+        "bytes": 1048,
+        "sha256": "0d67a96d136911f6e8de78f28531c2c253b2f7d79967e9760decaeaba1e3f8bc"
+      },
+      "testcase": {
+        "name": "RejectedNeighbourRetriesExactMinimumFp32Comp",
+        "file": "/home/astra/.project/Sirius/tests/backend/kernel_parity_test.cpp",
+        "line": "706",
+        "status": "run",
+        "result": "completed",
+        "time": "297.246",
+        "timestamp": "2026-10-15T08:28:49.836",
+        "classname": "KernelParity"
+      },
+      "properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "0.719243",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32comp_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "actual_lvp_mapping": {
+        "segments": 4,
+        "unique_files": [
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "device": "08:50",
+            "inode": 143595,
+            "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+          }
+        ],
+        "pid": 391146,
+        "start_ticks": "6273145",
+        "session": 391146
+      }
+    },
+    {
+      "case": "fp64",
+      "owner": {
+        "bytes": 2417,
+        "sha256": "1d34a8b3eb017acab7fa1b4721ed04419d13b9fa6b34cc16f8b2e3b7e0252f3e"
+      },
+      "inputs_before": {
+        "bytes": 276486,
+        "sha256": "476909a1807b28e53a529ec10db9a86a2f5f650372c50aa633b00eeab1a1441d"
+      },
+      "inputs_after": {
+        "bytes": 276486,
+        "sha256": "476909a1807b28e53a529ec10db9a86a2f5f650372c50aa633b00eeab1a1441d"
+      },
+      "frozen_inputs": 1163,
+      "declared_inputs": 1049,
+      "observed_retired_births": 1,
+      "samples": 7990,
+      "wall_seconds": 203.4231627209956,
+      "peak_sampled_rss_kib": 2559044,
+      "minimum_sampled_available_kib": 17405124,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "stdout": {
+        "bytes": 1001,
+        "sha256": "c3eb7f59f9895e279539645b1c7c14e49578eb29a95b27a62468af04d3284eec"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "xml": {
+        "bytes": 1040,
+        "sha256": "aa0b63991f3ce9403f5ebf85d5edbd483e8e0a823a7f02080b78e4797660e0aa"
+      },
+      "testcase": {
+        "name": "RejectedNeighbourRetriesExactMinimumFp64",
+        "file": "/home/astra/.project/Sirius/tests/backend/kernel_parity_test.cpp",
+        "line": "713",
+        "status": "run",
+        "result": "completed",
+        "time": "203.096",
+        "timestamp": "2026-10-15T08:33:48.666",
+        "classname": "KernelParity"
+      },
+      "properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "1.146723",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp64_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "actual_lvp_mapping": {
+        "segments": 4,
+        "unique_files": [
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "device": "08:50",
+            "inode": 143595,
+            "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+          }
+        ],
+        "pid": 393556,
+        "start_ticks": "6303026",
+        "session": 393556
+      }
+    },
+    {
+      "case": "ellis-physical-ray",
+      "owner": {
+        "bytes": 2482,
+        "sha256": "83f9afe7f86342749ce1058140875f9a9742e7fd4af2688c8503ce1bd26744c6"
+      },
+      "inputs_before": {
+        "bytes": 277622,
+        "sha256": "0a1731acd2ae76ed8f839d43f1187cffba8e30e6b09f49dc8c19237ceef3cbf7"
+      },
+      "inputs_after": {
+        "bytes": 277622,
+        "sha256": "0a1731acd2ae76ed8f839d43f1187cffba8e30e6b09f49dc8c19237ceef3cbf7"
+      },
+      "frozen_inputs": 1167,
+      "declared_inputs": 1053,
+      "observed_retired_births": 1,
+      "samples": 6221,
+      "wall_seconds": 158.52464273499936,
+      "peak_sampled_rss_kib": 1375464,
+      "minimum_sampled_available_kib": 18678924,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "stdout": {
+        "bytes": 1038,
+        "sha256": "727f355cffb73938c6ff710ed120b87467706f0d76790aba28ec7090d357ed35"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "xml": {
+        "bytes": 957,
+        "sha256": "5a403aa2d61c53e476507b1212b861a26ba179e7cf2d7d6161a4f1a751b874c3"
+      },
+      "testcase": {
+        "name": "EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky",
+        "file": "/home/astra/.project/Sirius/tests/backend/kernel_parity_test.cpp",
+        "line": "1257",
+        "status": "run",
+        "result": "completed",
+        "time": "158.282",
+        "timestamp": "2026-10-15T08:37:13.040",
+        "classname": "KernelParity"
+      },
+      "properties": {
+        "parity_opcode_19_completed_records": "1",
+        "parity_opcode_19_actual_submissions": "1",
+        "parity_opcode_19_maximum_submit_ms": "0.805291",
+        "parity_opcode_19_allocated_bytes": "336"
+      },
+      "actual_lvp_mapping": {
+        "segments": 4,
+        "unique_files": [
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "device": "08:50",
+            "inode": 143595,
+            "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+          }
+        ],
+        "pid": 394171,
+        "start_ticks": "6323461",
+        "session": 394171
+      }
+    }
+  ],
+  "critical_files": {
+    "focused-result.json": {
+      "bytes": 2053,
+      "sha256": "f321979e11f0ff716154952e7662ec32f2cb833d6a78993702202c8622235879"
+    },
+    "root_controls.py": {
+      "bytes": 3472,
+      "sha256": "5223a05fe5be586ad198ffd21174e132446963f408e324a78341d864aada3e4e"
+    },
+    "root_build.py": {
+      "bytes": 711,
+      "sha256": "860897ae68f7e88c8c9cdd1fe5c67a4541bd9cb1bab14862a4586e74b2b0acc7"
+    },
+    "prepare_controls.py": {
+      "bytes": 19834,
+      "sha256": "e49960ea6b47f2651ee403f3930c1ccf5bfed66fc51de88339c2ab89835fcb72"
+    },
+    "root-source-admission.json": {
+      "bytes": 906,
+      "sha256": "ed222a80ebe12e97e9bd15f6060b99bada3e13ddf9df70374144d1166d3f3b6b"
+    },
+    "controls/source-freeze.json": {
+      "bytes": 257059,
+      "sha256": "c8640654d9108fede42574feadf7d503364721bf34362361b5b8d633417d62b8"
+    },
+    "controls/actions.json": {
+      "bytes": 335237,
+      "sha256": "8622b8fdcbad6b990a7597abd9bcea9fb8062a4fd335e37dc81758ab14909cd6"
+    },
+    "controls/readiness.json": {
+      "bytes": 14216,
+      "sha256": "34806814afcbc3ccecd1dafa4e2f8c2726c35106dde35ed1096c16f3b7f3988b"
+    },
+    "controls/commands.json": {
+      "bytes": 1986,
+      "sha256": "d0aff29c4bc7af0e83555017ef18700096c23eaaf7b7e920d7d765a9904afe88"
+    },
+    "controls/root-runtime-admission.json": {
+      "bytes": 558,
+      "sha256": "81003d16b4b10413b2a10456b31d89596981983bdf07a7f01ec17d1097b81613"
+    }
+  },
+  "collector_review": {
+    "source": {
+      "bytes": 160256,
+      "sha256": "2d140544f318f39596a43c908860c60424b978434f554477e85d4e0b23f92478"
+    },
+    "new_kind": "minimum-step-floor-focused-controls",
+    "source_only_passed": true,
+    "not_executed_by_reviewer": true,
+    "exact_template_expansion_preserved": true,
+    "scope": "New branch requires current clean4498, frozen1033/current eight maps and terminal owners, exact six XML/results and 0/8 receipt. It copies complete current/registration/Ellis/macOS-diagnostic packets and actual backend/config/registration/parity/trace/portability evidence; common code creates whole-byte manifest and verifies every selected Git byte using isolated index.",
+    "fixed_issue": "Source-governance action's {folder} placeholders are expanded identically to original owner before argv equality. Other argv are unchanged.",
+    "preservation_not_yet_claimed": true
+  },
+  "claim_limits": [
+    "Finite strict configure/targeted build and six focused controls only. No complete P1/P6/allMandatory/full-science/native-domain/release qualification.",
+    "No preserved raw float readback buffers, all40-field identity, frame image, full TraceContinuation/radiance execution or independent buffer replay.",
+    "Ellis is the unchanged original one-ray finite regression, distinct from Kerr or full frame acceptance.",
+    "No attribution of historical CI failure causality and no remote CI result.",
+    "Existing Slang infinity-probe initialization warnings remain in original build log.",
+    "Source4498 is a real reviewed floor/policy change; no optional64 multiplication adoption."
+  ],
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "tracked_clean": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "this_review": "Ignored diagnostic file, not committed or pushed by reviewer; root owns subsequent evidence preservation."
+  }
+}

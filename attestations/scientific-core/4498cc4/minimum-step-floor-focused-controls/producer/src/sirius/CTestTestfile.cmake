@@ -1,0 +1,11 @@
+# CMake generated Testfile for 
+# Source directory: /home/astra/.project/Sirius/src/sirius
+# Build directory: /home/astra/.project/Sirius/bin/linux-gcc/src/sirius
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+subdirs("core")
+subdirs("oracle")
+subdirs("backend")
+subdirs("render")
+subdirs("app")

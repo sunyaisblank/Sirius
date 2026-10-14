@@ -1,0 +1,12 @@
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -577,6 +577,9 @@
+             macos-tests.xml
+             ${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-tests.xml
+             ${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-transcript.log
++            ${{ runner.temp }}/sirius-macos-runtime/*/native-provider-modules.json
++            ${{ runner.temp }}/sirius-macos-runtime/*/native-provider-bindings.json
++            bin/macos/tests/backend/sirius_backend_tests
+             ${{ runner.temp }}/sirius-macos-runtime/producer.log
+             ${{ runner.temp }}/sirius-macos-runtime/os-version.txt
+             ${{ runner.temp }}/sirius-macos-runtime/metal-displays.json

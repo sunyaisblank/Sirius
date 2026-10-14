@@ -1,0 +1,68 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "--gtest_filter=KernelParity.RejectedNeighbourRetriesExactMinimumFp64"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "fp64",
+  "child_exit": 0,
+  "child_pid": 393556,
+  "child_start_ticks": "6303026",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 389584,
+    "pid": 393545,
+    "ppid": 389584,
+    "rss_kib": 25760,
+    "session": 389584,
+    "start_ticks": "6302975",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/minimum-step-floor-current/controls/fp64/gtest.xml",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64; unchanged original assertions/fixtures and applicable RunProbe1000ms; finite focused control only.",
+  "minimum_sampled_available_kib": 17405124,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 393556,
+      "saved_start_ticks": "6303026"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 2559044,
+  "provider_mappings": [
+    {
+      "maps": [
+        "79a323400000-79a32345b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "79a32345b000-79a32386b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "79a32386b000-79a323ec6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "79a323ec6000-79a323f61000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 393556,
+      "pid": 393556,
+      "start_ticks": "6303026"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64; unchanged original assertions/fixtures and applicable RunProbe1000ms; finite focused control only.",
+  "source": {
+    "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 203.4231627209956,
+  "whole_inputs_unchanged": true
+}

@@ -1,0 +1,68 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "--gtest_filter=KernelParity.EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "ellis-physical-ray",
+  "child_exit": 0,
+  "child_pid": 394171,
+  "child_start_ticks": "6323461",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 389584,
+    "pid": 394167,
+    "ppid": 389584,
+    "rss_kib": 26024,
+    "session": 389584,
+    "start_ticks": "6323412",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/minimum-step-floor-current/controls/ellis-physical-ray/gtest.xml",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "KernelParity.EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky; unchanged original assertions/fixtures and applicable RunProbe1000ms; finite focused control only.",
+  "minimum_sampled_available_kib": 18678924,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 394171,
+      "saved_start_ticks": "6323461"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 1375464,
+  "provider_mappings": [
+    {
+      "maps": [
+        "71d1a7200000-71d1a725b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "71d1a725b000-71d1a766b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "71d1a766b000-71d1a7cc6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "71d1a7cc6000-71d1a7d61000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 394171,
+      "pid": 394171,
+      "start_ticks": "6323461"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "KernelParity.EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky; unchanged original assertions/fixtures and applicable RunProbe1000ms; finite focused control only.",
+  "source": {
+    "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 158.52464273499936,
+  "whole_inputs_unchanged": true
+}
