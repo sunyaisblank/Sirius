@@ -1,0 +1,51 @@
+{
+  "commit": "54c0f3bf45c5a42e1fb87933a5a82823f45b2ccc",
+  "parent": "5b22bee3f15d628998624aceb9ede6e9088a6401",
+  "branch": "refs/heads/development/native-runtime-preflight-order-2026-10-14",
+  "source_only_checks": {
+    "source_only": true,
+    "candidate_policy_valid_and_18_invalid_ordering_continuity_controls": true,
+    "candidate_producer_original_self_tests": true,
+    "parent_rejected": [
+      "native runtime preflight compile must retain the complete integration topology",
+      "native runtime must compile explicit targets before preflight and retain its full Mandatory build",
+      "native runtime must directly preflight its exact candidate/profile/revision and bind the selection before Mandatory",
+      "native runtime does not use the existing preflight authority: inspect_candidate_authority",
+      "native runtime does not use the existing preflight authority: run_preflight",
+      "native runtime must recheck the full existing candidate authority after Mandatory before copying it",
+      "native runtime must bind its final inventory to the preflight device before recording it"
+    ],
+    "integrated_preflight_reuse_viewer_policy": true,
+    "existing_integration_boundary_valid_invalid_controls": true,
+    "native_build_provider_runtime_or_domain_qualification_claimed": false,
+    "parent_revision": "5b22bee3f15d628998624aceb9ede6e9088a6401",
+    "candidate_inputs": {
+      "scripts/validate-native-runtime.py": {
+        "parent": {
+          "bytes": 19335,
+          "sha256": "536d2c256e7600f996c5585e8fbeb07eedbf4ad94bb94352eead34254739a7dc"
+        },
+        "candidate": {
+          "bytes": 21078,
+          "sha256": "ad3708704e3994b2cc2dd59fdafa5444ffcb16c97fa516e908be3ccf9b9d9108"
+        },
+        "parent_git_blob": "3669bbea660a0fca6a94c0de444e2405c57cac2e",
+        "git_mode": "100644"
+      },
+      "scripts/governance/build_policy.py": {
+        "parent": {
+          "bytes": 48257,
+          "sha256": "ddff3a1bd4f9c84af2d56630510a791b0885ff3334fe8d60369f75f52347e06e"
+        },
+        "candidate": {
+          "bytes": 58191,
+          "sha256": "8fb754292e4f0381049902b7b01b68bab97478ab1607f539534934c549992aef"
+        },
+        "parent_git_blob": "a831300c74824b286be3d1f4a04dda6be166b281",
+        "git_mode": "100644"
+      }
+    }
+  },
+  "native_execution_or_qualification_claimed": false,
+  "canonical_checkout_unchanged": true
+}

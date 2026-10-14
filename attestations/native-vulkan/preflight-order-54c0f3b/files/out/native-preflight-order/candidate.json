@@ -1,0 +1,42 @@
+{
+  "parent_revision": "5b22bee3f15d628998624aceb9ede6e9088a6401",
+  "canonical_head_unchanged": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "scope": "Existing native producer compile/preflight/Mandatory ordering and existing-authority/device continuity only",
+  "provider_adoption_fixed": false,
+  "checks_executed": false,
+  "files": {
+    "scripts/validate-native-runtime.py": {
+      "parent": {
+        "bytes": 19335,
+        "sha256": "536d2c256e7600f996c5585e8fbeb07eedbf4ad94bb94352eead34254739a7dc"
+      },
+      "candidate": {
+        "bytes": 21078,
+        "sha256": "ad3708704e3994b2cc2dd59fdafa5444ffcb16c97fa516e908be3ccf9b9d9108"
+      },
+      "parent_git_blob": "3669bbea660a0fca6a94c0de444e2405c57cac2e",
+      "git_mode": "100644"
+    },
+    "scripts/governance/build_policy.py": {
+      "parent": {
+        "bytes": 48257,
+        "sha256": "ddff3a1bd4f9c84af2d56630510a791b0885ff3334fe8d60369f75f52347e06e"
+      },
+      "candidate": {
+        "bytes": 58191,
+        "sha256": "8fb754292e4f0381049902b7b01b68bab97478ab1607f539534934c549992aef"
+      },
+      "parent_git_blob": "a831300c74824b286be3d1f4a04dda6be166b281",
+      "git_mode": "100644"
+    }
+  },
+  "patch": {
+    "bytes": 14906,
+    "sha256": "087666667e09ef575b5f3c87c1edf1fb84e3dd4579bd8e69fac576c7e72430e5"
+  },
+  "continuity_review": {
+    "path": "continuity-review.json",
+    "bytes": 3922,
+    "sha256": "8d6d3322eba73ec2bfd03b72bde4d99cc32e143048a8b90a5d5f0cf9fd2e7358"
+  }
+}

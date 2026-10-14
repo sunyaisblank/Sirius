@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "kind": "native-preflight-continuity-source-review",
+  "disposition": "READY_FOR_ROOT_SOURCE_CHECKS",
+  "parent_revision": "5b22bee3f15d628998624aceb9ede6e9088a6401",
+  "canonical_head_unchanged": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "source_inspection_only": true,
+  "candidate_checks_executed": false,
+  "compiler_or_provider_or_runtime_executed": false,
+  "prior_checked_files": {
+    "scripts/validate-native-runtime.py": {
+      "parent": {
+        "bytes": 19335,
+        "sha256": "536d2c256e7600f996c5585e8fbeb07eedbf4ad94bb94352eead34254739a7dc"
+      },
+      "candidate": {
+        "bytes": 20860,
+        "sha256": "147c99cbb66ba1a2d0f05c9f3ff22380f3e2d4cf465931072167e8ba47e4145d"
+      },
+      "parent_git_blob": "3669bbea660a0fca6a94c0de444e2405c57cac2e",
+      "git_mode": "100644"
+    },
+    "scripts/governance/build_policy.py": {
+      "parent": {
+        "bytes": 48257,
+        "sha256": "ddff3a1bd4f9c84af2d56630510a791b0885ff3334fe8d60369f75f52347e06e"
+      },
+      "candidate": {
+        "bytes": 55394,
+        "sha256": "99e9a0353cce1368b26be68c3a152b0965b549fbe28fff7504d1177284b233ae"
+      },
+      "parent_git_blob": "a831300c74824b286be3d1f4a04dda6be166b281",
+      "git_mode": "100644"
+    }
+  },
+  "prior_checks_preserved": {
+    "path": "root-source-checks-before-continuity-guards.json",
+    "bytes": 1679,
+    "sha256": "031ce336ef2dec6b0e09f4afd66b8101d830c201004823b07cdd2f29efe157c5",
+    "applies_to_prior_checked_files_only": true
+  },
+  "candidate_files": {
+    "scripts/validate-native-runtime.py": {
+      "parent": {
+        "bytes": 19335,
+        "sha256": "536d2c256e7600f996c5585e8fbeb07eedbf4ad94bb94352eead34254739a7dc"
+      },
+      "candidate": {
+        "bytes": 21078,
+        "sha256": "ad3708704e3994b2cc2dd59fdafa5444ffcb16c97fa516e908be3ccf9b9d9108"
+      },
+      "parent_git_blob": "3669bbea660a0fca6a94c0de444e2405c57cac2e",
+      "git_mode": "100644"
+    },
+    "scripts/governance/build_policy.py": {
+      "parent": {
+        "bytes": 48257,
+        "sha256": "ddff3a1bd4f9c84af2d56630510a791b0885ff3334fe8d60369f75f52347e06e"
+      },
+      "candidate": {
+        "bytes": 58191,
+        "sha256": "8fb754292e4f0381049902b7b01b68bab97478ab1607f539534934c549992aef"
+      },
+      "parent_git_blob": "a831300c74824b286be3d1f4a04dda6be166b281",
+      "git_mode": "100644"
+    }
+  },
+  "patch": {
+    "path": "changes.patch",
+    "bytes": 14906,
+    "sha256": "087666667e09ef575b5f3c87c1edf1fb84e3dd4579bd8e69fac576c7e72430e5"
+  },
+  "existing_authority_source": {
+    "path": "scripts/attestation_preflight.py",
+    "bytes": 24125,
+    "sha256": "9b055a45f2a5d9f8c0c6c3f26dbb2a79463c4cbd280f3e0cde42e20c2555e4e2",
+    "direct_import": "inspect_candidate_authority"
+  },
+  "post_mandatory_authority_comparison": {
+    "before_candidate_copy": true,
+    "full_preflight_candidate_equality": true,
+    "fields": [
+      "path",
+      "bytes",
+      "sha256",
+      "alignment_receipt_sha256",
+      "operating_model_sha256"
+    ],
+    "path_resolved": true,
+    "required_resource_presence_and_nonempty_checks_repeated": true,
+    "existing_receipt_revision_clean_mode_and_model_hash_checks_repeated": true,
+    "all_required_resource_bytes_hashed_by_preflight": false,
+    "original_final_product_hash_gates_retained": true,
+    "redundant_executable_only_sha256_guard_removed": true
+  },
+  "final_inventory_comparison": {
+    "full_selected_device_equality_to_preflight": true,
+    "before_inventory_recording": true,
+    "original_selected_index_check_retained": true
+  },
+  "source_controls": {
+    "new_mutation_names": [
+      "missing post-Mandatory authority",
+      "early post-Mandatory authority",
+      "unbound post-Mandatory authority",
+      "missing final device continuity"
+    ],
+    "mutation_count": 18,
+    "executed": false
+  },
+  "production_or_scientific_or_native_qualification_claimed": false
+}

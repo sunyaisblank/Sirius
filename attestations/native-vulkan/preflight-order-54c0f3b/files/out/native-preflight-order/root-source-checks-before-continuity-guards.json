@@ -1,0 +1,41 @@
+{
+  "source_only": true,
+  "candidate_policy_valid_and_14_invalid_ordering_controls": true,
+  "candidate_producer_original_self_tests": true,
+  "parent_rejected": [
+    "native runtime preflight compile must retain the complete integration topology",
+    "native runtime must compile explicit targets before preflight and retain its full Mandatory build",
+    "native runtime must directly preflight its exact candidate/profile/revision and bind the selection before Mandatory",
+    "native runtime does not use the existing preflight authority"
+  ],
+  "native_build_provider_runtime_or_domain_qualification_claimed": false,
+  "parent_revision": "5b22bee3f15d628998624aceb9ede6e9088a6401",
+  "candidate_inputs": {
+    "scripts/validate-native-runtime.py": {
+      "parent": {
+        "bytes": 19335,
+        "sha256": "536d2c256e7600f996c5585e8fbeb07eedbf4ad94bb94352eead34254739a7dc"
+      },
+      "candidate": {
+        "bytes": 20860,
+        "sha256": "147c99cbb66ba1a2d0f05c9f3ff22380f3e2d4cf465931072167e8ba47e4145d"
+      },
+      "parent_git_blob": "3669bbea660a0fca6a94c0de444e2405c57cac2e",
+      "git_mode": "100644"
+    },
+    "scripts/governance/build_policy.py": {
+      "parent": {
+        "bytes": 48257,
+        "sha256": "ddff3a1bd4f9c84af2d56630510a791b0885ff3334fe8d60369f75f52347e06e"
+      },
+      "candidate": {
+        "bytes": 55394,
+        "sha256": "99e9a0353cce1368b26be68c3a152b0965b549fbe28fff7504d1177284b233ae"
+      },
+      "parent_git_blob": "a831300c74824b286be3d1f4a04dda6be166b281",
+      "git_mode": "100644"
+    }
+  },
+  "integrated_preflight_reuse_viewer_policy": true,
+  "existing_integration_boundary_valid_invalid_controls": true
+}
