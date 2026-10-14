@@ -1,0 +1,132 @@
+{
+  "commit": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "parent": "54c0f3bf45c5a42e1fb87933a5a82823f45b2ccc",
+  "branch": "refs/heads/development/native-macos-pinned-provider-2026-10-14",
+  "working_checkout_unchanged": true,
+  "checks": {
+    "source_only": true,
+    "candidate_inputs": {
+      ".github/workflows/ci.yml": {
+        "base": {
+          "bytes": 33199,
+          "sha256": "07de9b9a2333b03b91e0cb2e84d1b805d1911b517c517b5625127bbdb5f16dfa"
+        },
+        "candidate": {
+          "bytes": 33642,
+          "sha256": "8c629e05c0f166bc8b3795478abd808c587f28cfb8dfd09f6d431a7e7eb19146"
+        },
+        "mode": "100644"
+      },
+      "README.md": {
+        "base": {
+          "bytes": 29987,
+          "sha256": "35809d83b87cc99321e9041f2b6489e416874d53b14da1eba31dc095b07fc38c"
+        },
+        "candidate": {
+          "bytes": 31137,
+          "sha256": "753020dd0db592897cf36eabce8cb42c15a656c1e6b8ae149c8ca230805993c4"
+        },
+        "mode": "100644"
+      },
+      "scripts/diagnose-macos-retained.py": {
+        "base": {
+          "bytes": 46266,
+          "sha256": "92bab3d2ac5683876df03a38e8ae1a814e2e39c844710a3cf200f9581db75a90"
+        },
+        "candidate": {
+          "bytes": 46569,
+          "sha256": "8998d73985e3c330f4d7b55d5a421c33c06ceff5cfa160cda6ea54bb97cd9034"
+        },
+        "mode": "100644"
+      },
+      "scripts/governance/build_policy.py": {
+        "base": {
+          "bytes": 58191,
+          "sha256": "8fb754292e4f0381049902b7b01b68bab97478ab1607f539534934c549992aef"
+        },
+        "candidate": {
+          "bytes": 71323,
+          "sha256": "841560051d11252e75aa1c0e3e2973e401edb1456eb53437af7df1bdf500bc67"
+        },
+        "mode": "100644"
+      },
+      "scripts/macos_moltenvk_provider.py": {
+        "base": null,
+        "candidate": {
+          "bytes": 22818,
+          "sha256": "6736af1ebf985e2c72d0a616acfa9bd9bc37a528f86ecd7d370efbd8d2ed330c"
+        },
+        "mode": "100644"
+      },
+      "scripts/validate-native-runtime.py": {
+        "base": {
+          "bytes": 21078,
+          "sha256": "ad3708704e3994b2cc2dd59fdafa5444ffcb16c97fa516e908be3ccf9b9d9108"
+        },
+        "candidate": {
+          "bytes": 22648,
+          "sha256": "1e57273bb962e94783c77d39a29d535d32b5252728de4b8fb6e34ce68fb25871"
+        },
+        "mode": "100644"
+      }
+    },
+    "parent_revision": "54c0f3bf45c5a42e1fb87933a5a82823f45b2ccc",
+    "original18_preflight_order_continuity_controls": true,
+    "new12_source_boundary_controls": true,
+    "provider_portable3_source_and10_metadata_negatives_via_original_producer_selftest": true,
+    "actual_candidate_workflow_policy": true,
+    "existing_workflow_valid_invalid_controls_including_distinct_producer_and_provider_revision_mutations": true,
+    "integrated_preflight_reuse_viewer_policy": true,
+    "no_native_build_provider_candidate_runtime_or_qualification_execution": true
+  },
+  "independent_component_review": {
+    "reviewer": "/root/divide_contract_review",
+    "kind": "bounded-independent-source-wiring-review",
+    "inputs_sha256": {
+      "scripts/macos_moltenvk_provider.py": "6736af1ebf985e2c72d0a616acfa9bd9bc37a528f86ecd7d370efbd8d2ed330c",
+      "scripts/validate-native-runtime.py": "1e57273bb962e94783c77d39a29d535d32b5252728de4b8fb6e34ce68fb25871",
+      "scripts/diagnose-macos-retained.py": "8998d73985e3c330f4d7b55d5a421c33c06ceff5cfa160cda6ea54bb97cd9034"
+    },
+    "material_blockers": [],
+    "execution_performed": false,
+    "confirmed": [
+      "strict-current-source owner callbacks and unchanged default exported-product predicate with exact9nonproduct whitelist paths",
+      "lazy-Darwin imports leave portable metadata path independent of resource",
+      "provider/source/tool/stockSDK seals and actual current-app driver/loader and stock/custom UUID joins",
+      "original preflight-Mandatory-readiness-fullzero-skipestate-frame-verifier gates retained",
+      "exact4member proofZIP names and bytes enter originalartifacthash map without JSONclassifier change",
+      "byte-joined custom-driver and SDK-loader snapshots sealed"
+    ],
+    "limits": [
+      "coreverifier binds proofZIP bytes; producer/helper performs provider semantic checks",
+      "currentembeddedSPV inventory is not freshMSL capture",
+      "doesnot qualify stockSDK provider, relocated install or oldexported4bcd executable",
+      "no nativeexecution/domain/release claim"
+    ]
+  },
+  "independent_workflow_review": {
+    "reviewer": "/root/divide_contract_review",
+    "scope": "remaining workflow/policy/README read-only wiring after independent component review",
+    "workflow_sha256": "8c629e05c0f166bc8b3795478abd808c587f28cfb8dfd09f6d431a7e7eb19146",
+    "policy_sha256": "841560051d11252e75aa1c0e3e2973e401edb1456eb53437af7df1bdf500bc67",
+    "README_sha256": "753020dd0db592897cf36eabce8cb42c15a656c1e6b8ae149c8ca230805993c4",
+    "material_blockers": [],
+    "original_producer_revision_mutations_separately_preserved": true,
+    "provider_revision_mutations_separate": true,
+    "pinnedfetch_provision_currentproducer_order": true,
+    "originalgates_mutualexclusion_diagnosticjob_successpublish_alwaysupload_preserved": true,
+    "execution_performed": false
+  },
+  "product_source_difference_exactly9reviewed_nonproduct_paths": [
+    ".github/workflows/ci.yml",
+    "README.md",
+    "scripts/diagnose-macos-retained.py",
+    "scripts/governance/build_policy.py",
+    "scripts/macos_metal_probe.py",
+    "scripts/macos_moltenvk_integration.py",
+    "scripts/macos_moltenvk_provider.py",
+    "scripts/macos_vulkan_identity.py",
+    "scripts/validate-native-runtime.py"
+  ],
+  "nativeexecution_or_qualification_claimed": false
+}
