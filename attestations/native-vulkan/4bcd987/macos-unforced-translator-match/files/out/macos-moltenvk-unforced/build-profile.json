@@ -1,0 +1,24 @@
+{
+  "build_parallelism": 1,
+  "ccache_enabled": false,
+  "cereal_enabled": true,
+  "configuration": "Release",
+  "deployment_target": "11.0",
+  "diagnostic_provider": true,
+  "library_optimization": "unchanged MoltenVK Default",
+  "native_arch": "arm64",
+  "native_target": "MoltenVK",
+  "native_toolchain": "Root must separately seal the selected Xcode, macOS SDK, clang, CMake and Ninja before build",
+  "public_metal_api_only": true,
+  "schema": 1,
+  "shader_converter_tool": false,
+  "source_overrides": [
+    "SPIRV-Cross",
+    "Vulkan-Headers",
+    "SPIRV-Headers",
+    "SPIRV-Tools",
+    "cereal"
+  ],
+  "spirv_tools_enabled": true,
+  "upstream_git_attestation": false
+}

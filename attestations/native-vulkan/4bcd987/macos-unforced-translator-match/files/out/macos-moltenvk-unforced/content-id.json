@@ -1,0 +1,81 @@
+{
+  "cache_uuid_expected_first_four_bytes_hex": "be16bb0d",
+  "content_id": "be16bb0d2d553356491796fc92a112eeb5f2907b4b2d4ff42e4f8842e8309163",
+  "driver_info_expected": "1.4.1+sirius-issue48-unforced.be16bb0d2d553356491796fc92a112eeb5f2907b4b2d4ff42e4f8842e8309163",
+  "preimage": {
+    "archives": {
+      "MoltenVK": {
+        "bytes": 1251145,
+        "commit": "db445ff2042d9ce348c439ad8451112f354b8d2a",
+        "sha256": "54e1881e8f10c7dcc4828c14d3e0fc699a6f6c563a78ba8a631c626c836ae429",
+        "url": "https://codeload.github.com/KhronosGroup/MoltenVK/tar.gz/db445ff2042d9ce348c439ad8451112f354b8d2a"
+      },
+      "SPIRV-Cross": {
+        "bytes": 1952650,
+        "commit": "adec7acbf41a988713cdb85f93f26c8ca5ea863e",
+        "sha256": "1bed78fb2c43c877058c21bf1d9bfa2332df935960c6901bb141f4ef34cd9f03",
+        "url": "https://codeload.github.com/KhronosGroup/SPIRV-Cross/tar.gz/adec7acbf41a988713cdb85f93f26c8ca5ea863e"
+      },
+      "SPIRV-Headers": {
+        "bytes": 558965,
+        "commit": "b824a462d4256d720bebb40e78b9eb8f78bbb305",
+        "sha256": "c693867f10a7760ef1bcf85419d51783586768cc2c601d03841bc6a8b2554b9c",
+        "url": "https://codeload.github.com/KhronosGroup/SPIRV-Headers/tar.gz/b824a462d4256d720bebb40e78b9eb8f78bbb305"
+      },
+      "SPIRV-Tools": {
+        "bytes": 3428734,
+        "commit": "262bdab48146c937467f826699a40da0fdfc0f1a",
+        "sha256": "8f830936b057003be77e90d37068ff6066eb87a1bab0033f8f2f5feaa966ce56",
+        "url": "https://codeload.github.com/KhronosGroup/SPIRV-Tools/tar.gz/262bdab48146c937467f826699a40da0fdfc0f1a"
+      },
+      "Vulkan-Headers": {
+        "bytes": 2855412,
+        "commit": "6aefb8eb95c8e170d0805fd0f2d02832ec1e099a",
+        "sha256": "f7e54b9e95a3da54802d62ce7b4995cbad03ae2e4325c26377ea4ec04d0429f1",
+        "url": "https://codeload.github.com/KhronosGroup/Vulkan-Headers/tar.gz/6aefb8eb95c8e170d0805fd0f2d02832ec1e099a"
+      },
+      "cereal": {
+        "bytes": 386830,
+        "commit": "a56bad8bbb770ee266e930c95d37fff2a5be7fea",
+        "sha256": "12e10fb541270632f6683286ce8c7e8c321fe4addb53fa91ed498b95c1758f93",
+        "url": "https://codeload.github.com/USCiLab/cereal/tar.gz/a56bad8bbb770ee266e930c95d37fff2a5be7fea"
+      }
+    },
+    "build_profile": {
+      "build_parallelism": 1,
+      "ccache_enabled": false,
+      "cereal_enabled": true,
+      "configuration": "Release",
+      "deployment_target": "11.0",
+      "diagnostic_provider": true,
+      "library_optimization": "unchanged MoltenVK Default",
+      "native_arch": "arm64",
+      "native_target": "MoltenVK",
+      "native_toolchain": "Root must separately seal the selected Xcode, macOS SDK, clang, CMake and Ninja before build",
+      "public_metal_api_only": true,
+      "schema": 1,
+      "shader_converter_tool": false,
+      "source_overrides": [
+        "SPIRV-Cross",
+        "Vulkan-Headers",
+        "SPIRV-Headers",
+        "SPIRV-Tools",
+        "cereal"
+      ],
+      "spirv_tools_enabled": true,
+      "upstream_git_attestation": false
+    },
+    "meaning": "Source/configuration cache discriminator, not a Git commit or native-build identity. The ID itself is excluded from its preimage.",
+    "patches": {
+      "MoltenVK-diagnostic-identity.patch": {
+        "bytes": 3815,
+        "sha256": "2425416a04ebf64ebdf609205ac2338197efa0d0256c0f7990b9579bc7272fa1"
+      },
+      "SPIRV-Cross-unforced.patch": {
+        "bytes": 342,
+        "sha256": "5cbec8718879d3892600d833e7f9fe9a1b205321c81bf5085d04274ca0c24f07"
+      }
+    }
+  },
+  "required_native_check": "Query full stock and diagnostic UUIDs on the same host; require distinct values and the declared diagnostic prefix before original numerical controls."
+}
