@@ -1,0 +1,462 @@
+{
+  "cases": [
+    {
+      "configs": {
+        "legacy": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-png.json",
+        "ported": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-png.json"
+      },
+      "effective_spp": 25,
+      "format": "png",
+      "format_scope": "Kerr public PNG scene; EXR/PPM explicitly selected writer variants",
+      "future_compare_argv_after_owned_render_receipts": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "png",
+        "512",
+        "512",
+        "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-png.png",
+        "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-png.png"
+      ],
+      "future_render_argv_review_only": {
+        "legacy": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/bin/Sirius",
+          "--config",
+          "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-png.json",
+          "--no-color",
+          "--verbose",
+          "render",
+          "--cpu"
+        ],
+        "ported": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/bin/sirius",
+          "--config",
+          "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-png.json",
+          "--no-color",
+          "--verbose",
+          "render",
+          "--cpu"
+        ]
+      },
+      "height": 512,
+      "name": "kerr-png",
+      "rays_per_renderer": 6553600,
+      "requested_spp": 32,
+      "required": true,
+      "sample_rule": "int(sqrt(float(requested_spp))) squared, deterministic subpixel grid",
+      "source_scene": "1cc9e2a4e44de5276ae6ed5403beca7550490e85:render_test.sh Kerr block",
+      "width": 512
+    },
+    {
+      "configs": {
+        "legacy": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-exr.json",
+        "ported": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-exr.json"
+      },
+      "effective_spp": 25,
+      "format": "exr",
+      "format_scope": "Kerr public PNG scene; EXR/PPM explicitly selected writer variants",
+      "future_compare_argv_after_owned_render_receipts": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "exr",
+        "512",
+        "512",
+        "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-exr.exr",
+        "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-exr.exr"
+      ],
+      "future_render_argv_review_only": {
+        "legacy": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/bin/Sirius",
+          "--config",
+          "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-exr.json",
+          "--no-color",
+          "--verbose",
+          "render",
+          "--cpu"
+        ],
+        "ported": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/bin/sirius",
+          "--config",
+          "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-exr.json",
+          "--no-color",
+          "--verbose",
+          "render",
+          "--cpu"
+        ]
+      },
+      "height": 512,
+      "name": "kerr-exr",
+      "rays_per_renderer": 6553600,
+      "requested_spp": 32,
+      "required": true,
+      "sample_rule": "int(sqrt(float(requested_spp))) squared, deterministic subpixel grid",
+      "source_scene": "1cc9e2a4e44de5276ae6ed5403beca7550490e85:render_test.sh Kerr block",
+      "width": 512
+    },
+    {
+      "configs": {
+        "legacy": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/alcubierre-png.json",
+        "ported": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/alcubierre-png.json"
+      },
+      "effective_spp": 64,
+      "format": "png",
+      "format_scope": "Public Alcubierre script emits PPM; PNG is an explicit new-reconstruction writer variant",
+      "future_compare_argv_after_owned_render_receipts": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "png",
+        "1920",
+        "1080",
+        "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/alcubierre-png.png",
+        "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/alcubierre-png.png"
+      ],
+      "future_render_argv_review_only": {
+        "legacy": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/bin/Sirius",
+          "--config",
+          "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/alcubierre-png.json",
+          "--no-color",
+          "--verbose",
+          "render",
+          "--cpu"
+        ],
+        "ported": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/bin/sirius",
+          "--config",
+          "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/alcubierre-png.json",
+          "--no-color",
+          "--verbose",
+          "render",
+          "--cpu"
+        ]
+      },
+      "height": 1080,
+      "name": "alcubierre-png",
+      "rays_per_renderer": 132710400,
+      "requested_spp": 64,
+      "required": true,
+      "sample_rule": "int(sqrt(float(requested_spp))) squared, deterministic subpixel grid",
+      "source_scene": "1cc9e2a4e44de5276ae6ed5403beca7550490e85:render_demo.sh Alcubierre block",
+      "width": 1920
+    },
+    {
+      "configs": {
+        "legacy": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-ppm-optional.json",
+        "ported": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-ppm-optional.json"
+      },
+      "effective_spp": 25,
+      "format": "ppm",
+      "format_scope": "Kerr public PNG scene; EXR/PPM explicitly selected writer variants",
+      "future_compare_argv_after_owned_render_receipts": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "ppm",
+        "512",
+        "512",
+        "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-ppm-optional.ppm",
+        "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-ppm-optional.ppm"
+      ],
+      "future_render_argv_review_only": {
+        "legacy": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/bin/Sirius",
+          "--config",
+          "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-ppm-optional.json",
+          "--no-color",
+          "--verbose",
+          "render",
+          "--cpu"
+        ],
+        "ported": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/bin/sirius",
+          "--config",
+          "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-ppm-optional.json",
+          "--no-color",
+          "--verbose",
+          "render",
+          "--cpu"
+        ]
+      },
+      "height": 512,
+      "name": "kerr-ppm-optional",
+      "rays_per_renderer": 6553600,
+      "requested_spp": 32,
+      "required": false,
+      "sample_rule": "int(sqrt(float(requested_spp))) squared, deterministic subpixel grid",
+      "source_scene": "1cc9e2a4e44de5276ae6ed5403beca7550490e85:render_test.sh Kerr block",
+      "width": 512
+    }
+  ],
+  "child_environment": {
+    "reject": "Nonempty SIRIUS_*, provider/GTest/CTest/loader overrides rejected by preserved owner; build flags/toolchain/include-path overrides rejected by phase.py. No HOME override.",
+    "set": {
+      "GIT_CEILING_DIRECTORIES": "/home/astra/.project/Sirius/out",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_TERMINAL_PROMPT": "0",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TZ": "UTC"
+    },
+    "unset": [
+      "GIT_DIR",
+      "GIT_WORK_TREE",
+      "GIT_INDEX_FILE",
+      "GIT_OBJECT_DIRECTORY",
+      "GIT_ALTERNATE_OBJECT_DIRECTORIES"
+    ]
+  },
+  "claim_limit": "New comparison of explicitly surviving legacy and early-ported CPU components only; no original tape identity, current-physics identity, scientific or release qualification.",
+  "codec_pins": {
+    "lib/stb/stb_image.h": {
+      "bytes": 283010,
+      "git_blob": "9eedabedc45b3e6fd88fae6f14a160b4d53272ec",
+      "git_mode": "100644",
+      "sha256": "594c2fe35d49488b4382dbfaec8f98366defca819d916ac95becf3e75f4200b3"
+    },
+    "lib/stb/stb_image_write.h": {
+      "bytes": 71221,
+      "git_blob": "e4b32ed1bc32ef9c962acbf47a9d10af01939e08",
+      "git_mode": "100644",
+      "sha256": "cbd5f0ad7a9cf4468affb36354a1d2338034f2c12473cf1a8e32053cb6914a05"
+    },
+    "lib/tinyexr/miniz.c": {
+      "bytes": 323085,
+      "git_blob": "fb674701e4ca3721fce332641a81950656844ef8",
+      "git_mode": "100644",
+      "sha256": "8756860e8ab4d8c6942e12496b8081cfd291442cdbc6d13dba4b993905128872"
+    },
+    "lib/tinyexr/miniz.h": {
+      "bytes": 71120,
+      "git_blob": "9fcfffcc8cd7ac9e9d9af271cffdbc8d0a58a9ea",
+      "git_mode": "100644",
+      "sha256": "295d1a0041aea09609598c0f1f35c1977ca05ad662acbadcfdaac44c140af37b"
+    },
+    "lib/tinyexr/tinyexr.h": {
+      "bytes": 296272,
+      "git_blob": "d4001575370a9a0d45fbf878f52480bc9e887d99",
+      "git_mode": "100644",
+      "sha256": "1238e469657b5780a2f69d62dafe8d4896c7ac3ea640f49ef3604fa4c7327a87"
+    }
+  },
+  "comparator_contract": {
+    "controls": "Each format self and same-pixels/different-metadata accepted; valid one-represented-sample perturbation rejected with exactly one pixel/sample mismatch; missing/wrong dimensions refused; wrong format and truncated PNG refused",
+    "encoded_identity_separate": true,
+    "exr": "Four A/B/G/R ZIP HALF scanline channels with declared origin/windows; full decoded RGBA IEEE754 binary32 words under sealed TinyEXR, no epsilon/finite substitution",
+    "limits": "Ordinary nonsymlink input <=256MiB; dimensions<=16384 and <=64Mi samples, all requested scenes inside domain",
+    "metadata_checked": "Format/channel/compression/window/dimension domain plus bounded valid encoding; arbitrary ancillary metadata may differ and is not pixel identity",
+    "png": "Full noninterlaced RGBA8, exact decoded 8-bit channels",
+    "ppm": "Full P6 RGB8, maxval255, exact dimensions/payload/EOF; optional legacy format, not a PNG/EXR substitute",
+    "writer_semantics": "EXR stores linear RGBA HALF; PNG uses sRGB RGB/linear alpha rounding; PPM uses gamma2.2 RGB8. Compare within format; no claim about prequantization buffers."
+  },
+  "configuration_layering": "defaults -> explicit complete JSON -> SIRIUS environment -> CLI; reject SIRIUS overrides; CPU explicit in config and CLI",
+  "dependencies": {
+    "ftxui": {
+      "bytes": 1222676,
+      "file_count": 273,
+      "file_records_sha256": "47d62089e53916a170d1fcc45a19a8a9cdca6fece8c8e80cd184b2e42c33ea42",
+      "git_head": "cdf28903a7781f97ba94d30b79c3a4b0c97ccce7",
+      "git_status": "",
+      "manifest": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/reference/dependency-manifests/ftxui.json",
+      "source_directory": "/home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src"
+    },
+    "googletest": {
+      "bytes": 3994225,
+      "file_count": 245,
+      "file_records_sha256": "e22a9973aba0d524686bfe48e974010af7c3051e7713bfd17de15aaa7c3ca0dc",
+      "git_head": "f8d7d77c06936315286eb55f8de22cd23c188571",
+      "git_status": "",
+      "manifest": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/reference/dependency-manifests/googletest.json",
+      "source_directory": "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src"
+    },
+    "json": {
+      "bytes": 13968124,
+      "file_count": 1090,
+      "file_records_sha256": "dfaaa49850842ec49e8b0184611ef273178235c3c385ee367c79b7075d22a84d",
+      "git_head": "9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03",
+      "git_status": "",
+      "manifest": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/reference/dependency-manifests/json.json",
+      "source_directory": "/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src"
+    }
+  },
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "explicit_gate_replacement": "8bd56cadb4b1de5fd0f0f016dfec918062fd1b42; owner approval to relax original gate not recovered",
+  "future_render_acceptance_dependencies": [
+    "Root-reviewed separate one-shot ownership/deadlines before any of six required renders; no smaller substitute scene",
+    "Actual built ELF/library/compile/cache provenance and binary hashes, complete config/environment/asset loaded without fallback",
+    "Before/after input seals, worker observation, clean terminal ownership and successful complete writer output",
+    "Record raw file SHA256 per role, then compare every declared pixel/channel using the validated comparator; preserve result and files",
+    "Any differences require classification; no blanket expectation across e736ffe or later intentional physics changes"
+  ],
+  "git_discovery": "Plain export has no .git; ceiling at canonical out prevents parent canonical Git identity from being used by source children. Source revision is explicit, never inferred from runner HEAD.",
+  "historical_july_manifest_or_comparator_recovered": false,
+  "historical_tapes_recovered": false,
+  "legacy_origin_proof": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/reference/legacy-origin.json",
+  "legacy_runtime_origin": "ec2d8e506dfd0477e3c9eb4b2b4aa1bee9831fe2",
+  "named_intentional_transition": {
+    "after": "e736ffe0c318dcd637f1453beb3523ad14a15047",
+    "before": "c24c0623f870106e4b1c5718e4b5b884fabae8db",
+    "behavior": "Reduced-step geodesic rejection continues rather than terminating, attempts still count max_steps; Morris-Thorne Cartesian CPU embedding enabled",
+    "no_new_measurement_claim": true,
+    "not_in_selected_build_pair": true
+  },
+  "no_agent_build_test_render_execution": true,
+  "optional_ppm_is_not_replacement": true,
+  "original_revision": "1cc9e2a4e44de5276ae6ed5403beca7550490e85",
+  "original_specification": "70d156f18fb8b72873df22cf0720fd922b0ad72c:docs/SPECIFICATION.md sections 1.6, 6(2), 7",
+  "preparation_commands": {
+    "build-comparator": [
+      [
+        "/usr/bin/gcc-14",
+        "-O2",
+        "-DNDEBUG",
+        "-I/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/tinyexr",
+        "-c",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/tinyexr/miniz.c",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/miniz.o"
+      ],
+      [
+        "/usr/bin/g++-14",
+        "-std=c++17",
+        "-O2",
+        "-DNDEBUG",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-isystem",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/stb",
+        "-isystem",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/tinyexr",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/image_compare.cpp",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/miniz.o",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare"
+      ]
+    ],
+    "build-renderers": [
+      [
+        "/usr/bin/cmake",
+        "--build",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers",
+        "--target",
+        "Sirius",
+        "sirius",
+        "--parallel",
+        "2"
+      ]
+    ],
+    "comparator-controls": [
+      [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "fixtures",
+        "{owned_folder}/fixtures"
+      ],
+      [
+        "See phase.py: 17 comparisons, exact self/metadata/one-pixel outcomes and invalid-input refusal"
+      ]
+    ],
+    "configure-renderers": [
+      [
+        "/usr/bin/cmake",
+        "--preset",
+        "linux-gcc",
+        "-S",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+        "-B",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers",
+        "-DSIRIUS_BUILD_LEGACY=ON",
+        "-DCMAKE_CUDA_COMPILER=NOTFOUND",
+        "-DCMAKE_DISABLE_FIND_PACKAGE_Vulkan=TRUE",
+        "-DFETCHCONTENT_FULLY_DISCONNECTED=ON",
+        "-DFETCHCONTENT_SOURCE_DIR_FTXUI=/home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src",
+        "-DFETCHCONTENT_SOURCE_DIR_JSON=/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src",
+        "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src"
+      ]
+    ]
+  },
+  "preparation_limits": {
+    "meaning": "Imported operational diagnostic budget only; timeout is incomplete evidence, not a scientific mismatch or relaxation of the original Vulkan300s criterion",
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds_per_action": 300
+  },
+  "prepared_utc": "2026-10-14T10:35:39.922659+00:00",
+  "preserved_owner": {
+    "sha256": {
+      "owned_guard.py": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "run_owned.py": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "source_directory": "/home/astra/.project/Sirius/attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source"
+  },
+  "render_authorized_by_this_packet": false,
+  "required_case_count": 3,
+  "required_render_count": 6,
+  "required_total_rays": 291635200,
+  "root_commands": [
+    [
+      "/usr/bin/python3.12",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/run_action.py",
+      "configure-renderers"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/run_action.py",
+      "build-renderers"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/run_action.py",
+      "build-comparator"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/run_action.py",
+      "comparator-controls"
+    ]
+  ],
+  "runner_is_not_export_revision": true,
+  "runner_revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+  "runtime_cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+  "source_export_revision": "b739f920c2ae67847ed7961e011d2350a839e410",
+  "source_manifest": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source-manifest.json",
+  "starfield": {
+    "bytes": 29984397,
+    "git_blob": "2e652a5d1ba4ac1c64df640694d7584f30eb8a0f",
+    "git_mode": "100644",
+    "path": "src/Sirius.Render/Texture/Starfield.png",
+    "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+  },
+  "status": "PREPARED_NOT_EXECUTED",
+  "tools": {
+    "/usr/bin/cmake": {
+      "bytes": 11796472,
+      "resolved_path": "/usr/bin/cmake",
+      "sha256": "1c5227af4edd22d8d689def545e18ee458260c0fd579eba2187967f38817e638"
+    },
+    "/usr/bin/g++-14": {
+      "bytes": 1186944,
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-g++-14",
+      "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+    },
+    "/usr/bin/gcc-14": {
+      "bytes": 1186944,
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-14",
+      "sha256": "ce298ce0c8fbdaa4b43f6e0596e37d25a35a07b5c743cb26f11815b76fccf90d"
+    },
+    "/usr/bin/git": {
+      "bytes": 4066232,
+      "resolved_path": "/usr/bin/git",
+      "sha256": "2a8c18fbf43da9f692d75474c72bea9dfd796c260b0f3dfe456376abc3bbd668"
+    },
+    "/usr/bin/ninja": {
+      "bytes": 248040,
+      "resolved_path": "/usr/bin/ninja",
+      "sha256": "5965527e09fe2b3787772aa4f711d6a36b393e7f2fcaa744a7a96c5a4ddf59cb"
+    },
+    "/usr/bin/python3.12": {
+      "bytes": 8020928,
+      "resolved_path": "/usr/bin/python3.12",
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    }
+  },
+  "worker_behavior": "Both SessionConfig conversions leave threadCount at zero/auto rather than copying render.threadCount. Keep declared 0; observe and record actual worker count in any future owned render, not a promised fixed thread count."
+}

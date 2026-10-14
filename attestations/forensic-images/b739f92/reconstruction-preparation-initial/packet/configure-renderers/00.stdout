@@ -1,0 +1,72 @@
+Preset CMake variables:
+
+  BUILD_TESTS="ON"
+  CMAKE_BUILD_TYPE="Release"
+  CMAKE_CXX_COMPILER="g++-14"
+  CMAKE_C_COMPILER="gcc-14"
+  CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+
+-- The CXX compiler identification is GNU 14.2.0
+-- The C compiler identification is GNU 14.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++-14 - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/gcc-14 - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- ┌─ FTXUI options ─────────────────────
+-- │ FTXUI_ENABLE_INSTALL     : OFF
+-- │ FTXUI_BUILD_EXAMPLES     : OFF
+-- │ FTXUI_QUIET              : OFF
+-- │ FTXUI_BUILD_DOCS         : OFF
+-- │ FTXUI_BUILD_TESTS        : OFF
+-- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+-- │ FTXUI_ENABLE_COVERAGE    : OFF
+-- │ FTXUI_DEV_WARNINGS       : OFF
+-- │ FTXUI_CLANG_TIDY         : OFF
+-- └─────────────────────────────────────
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Using the multi-header code from /home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include/
+-- CUDA compiler not found - OptiX backend disabled (legacy tree)
+-- WSL2 environment detected
+-- Found OpenGL: /usr/lib/x86_64-linux-gnu/libOpenGL.so   
+-- Including Wayland support
+-- Including X11 support
+-- Looking for memfd_create
+-- Looking for memfd_create - found
+-- Found PkgConfig: /usr/bin/pkg-config (found version "1.8.1") 
+-- Checking for modules 'wayland-client>=0.2.7;wayland-cursor>=0.2.7;wayland-egl>=0.2.7;xkbcommon>=0.5.0'
+--   Found wayland-client, version 1.22.0
+--   Found wayland-cursor, version 1.22.0
+--   Found wayland-egl, version 18.1.0
+--   Found xkbcommon, version 1.6.0
+-- Found X11: /usr/include   
+-- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so
+-- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so - found
+-- Looking for gethostbyname
+-- Looking for gethostbyname - found
+-- Looking for connect
+-- Looking for connect - found
+-- Looking for remove
+-- Looking for remove - found
+-- Looking for shmat
+-- Looking for shmat - found
+-- CLI dependencies: FTXUI v5.0.0, nlohmann_json v3.11.3 (via cmake/sirius_dependencies.cmake)
+-- Legacy tree: CPU path only (no CUDA/OptiX)
+-- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+-- 
+-- === Sirius Test Suite ===
+--   Test sources:      65 files (layout mirrors src/)
+-- 
+--   Run all tests:     ctest --test-dir <build>
+--   Run mandatory:     ctest --test-dir <build> -L Mandatory
+-- 
+-- Sirius backend: Vulkan development files not found; Vulkan backend skipped
+-- Sirius tests: backend module absent; backend suite skipped
+-- Configuring incomplete, errors occurred!
