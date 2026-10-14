@@ -1,0 +1,18 @@
+{
+  "reviewer": "/root/divide_contract_review",
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "scope": "Independent source-level argument, not machine-checked proof, exhaustive verification, shader execution or performance evidence",
+  "precondition": "Original exceptional guards and finite nonzero unpack complete; significands A,D in [2^23,2^24), exponents in [-149,127]",
+  "guard": "D == 2^23 identifies every finite normal/subnormal power of two divisor",
+  "invariant": "Original radix loop preserves q*D+r=A*2^t and 0<=r<D; t=0,8,16,24,26",
+  "postcondition": "For D=2^23, no normalization decrement occurs and final q=A<<3,r=0. Original and candidate call exactly PB32Round(sign,ea-eb,A<<3).",
+  "bounds": "A<<3 in [0x04000000,0x07fffff8]; exponent difference [-276,276]; existing rounder handles underflow,ties,signed zero,subnormal promotion,overflow",
+  "frame_conditions": "Original guards/fallback unchanged; RPDivideSeed and its two distinct rounding operations unchanged",
+  "prior_art": "49bfb43 reciprocal multiply-high digits, 41fe5f2 denominator metadata, 73679b1 seed scaling differ materially; this branch uses none of those mechanisms",
+  "future_correctness_checks": [
+    "Original exact Fraction-derived binary32 corpus",
+    "All 277 finite power-of-two divisor exponents,both signs,normal/subnormal numerator boundaries",
+    "Explicit underflow ties,subnormal promotion,self-division,overflow and exceptional precedence",
+    "Stock/candidate complete-source/fallback/seed identity"
+  ]
+}

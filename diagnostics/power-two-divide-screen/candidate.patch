@@ -1,0 +1,12 @@
+--- /home/astra/.project/Sirius/out/power-two-divide-screen/stock/src/sirius/kernels/portable_binary32.h	2026-10-14 16:44:25.733642149 +1100
++++ /home/astra/.project/Sirius/out/power-two-divide-screen/candidate/src/sirius/kernels/portable_binary32.h	2026-10-14 16:44:25.741661867 +1100
+@@ -179,6 +179,9 @@
+     if (PB32Zero(a) || PB32Infinity(b)) return sign << 31;
+     PB32Finite aa = PB32Unpack(a), bb = PB32Unpack(b);
+     int exponent = aa.exponent - bb.exponent;
++    // Exact quotient: the original radix loop yields (aa.significand << 3, 0).
++    if (bb.significand == 0x00800000u)
++        return PB32Round(sign, exponent, aa.significand << 3);
+     uint remainder = aa.significand;
+     if (remainder < bb.significand) {
+         remainder <<= 1;

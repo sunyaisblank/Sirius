@@ -1,0 +1,7 @@
+{
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "issue": 99,
+  "original_needle": "    int exponent = aa.exponent - bb.exponent;\n    uint remainder = aa.significand;",
+  "replacement": "    int exponent = aa.exponent - bb.exponent;\n    // Exact quotient: the original radix loop yields (aa.significand << 3, 0).\n    if (bb.significand == 0x00800000u)\n        return PB32Round(sign, exponent, aa.significand << 3);\n    uint remainder = aa.significand;",
+  "scope": "Only candidate PB32Divide changes; no production edit or adoption."
+}

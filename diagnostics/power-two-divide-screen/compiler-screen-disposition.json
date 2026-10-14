@@ -1,0 +1,189 @@
+{
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "issue": 99,
+  "decision": "ADVANCE_TO_UNCHANGED_ARITHMETIC_AND_INTEGRATED_CONTROLS",
+  "reviewer": "/root/divide_contract_review",
+  "all_five_original_policy_and_code_bindings_passed": true,
+  "fallback_vector_division_static_counts_unchanged": true,
+  "eligible_path_survives": true,
+  "mixed_lane_condition": "Any active ineligible lane re-enters four unmasked vector divisions. All active eligible lanes bypass them; inactive tail lanes do not require fallback. Mixed groups can execute both paths.",
+  "source_cohort_premise": "General Transport layer115 has15 divisions by exact constant2; source-proven all-eligible SIMD8 cohorts exist. Schwarzschild layer32 mixes exact2 with dynamic products. This establishes reachability structure, not successful runtime frequency.",
+  "numeric_semantics_review": "Original guards and fallback unchanged; radix invariant proves same PB32Round arguments for exact power-of-two divisors; separate seed scaling retained. Source reasoning is not machine-checked proof.",
+  "locations": {
+    "endpoint-normal": [
+      183670,
+      183680,
+      183780,
+      183790,
+      183799,
+      183803,
+      183810,
+      183814
+    ],
+    "transport-normal": [
+      129392,
+      129402,
+      129502,
+      129512,
+      129521,
+      129525,
+      129532,
+      129536
+    ]
+  },
+  "code_and_frame_costs": [
+    {
+      "variant": "dense-core",
+      "stock_text_bytes": 535781,
+      "candidate_text_bytes": 537493,
+      "stock_coroutine_frame_bytes": [
+        56992
+      ],
+      "candidate_coroutine_frame_bytes": [
+        57120
+      ],
+      "actual_module": {
+        "words": 29086,
+        "bytes": 116344,
+        "sha256": "77dd22b5d85f67f14daa3bab0da26198ff54590934869c0e64f48b784ec7184a",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_optimized_ir": {
+        "module": 135293684420304,
+        "module_generation": 5,
+        "function": 135293684423800,
+        "successful_optimizer_pass_ids": [
+          10,
+          11
+        ],
+        "path": "optimized-05.ll",
+        "bytes": 7856537,
+        "sha256": "9bb3589652237871e16891af58c776dccddb451e6658e31e5f025c36abc05f40",
+        "optimized_module_observed": true
+      }
+    },
+    {
+      "variant": "dopri_phase-normal",
+      "stock_text_bytes": 492565,
+      "candidate_text_bytes": 494293,
+      "stock_coroutine_frame_bytes": [
+        53280
+      ],
+      "candidate_coroutine_frame_bytes": [
+        53408
+      ],
+      "actual_module": {
+        "words": 24223,
+        "bytes": 96892,
+        "sha256": "d48c6e3cbc9534da151183b5840d80d73ccaa8d19893ebe3ca4c23b84d2e3e02",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_optimized_ir": {
+        "module": 137824225464016,
+        "module_generation": 5,
+        "function": 137824225467512,
+        "successful_optimizer_pass_ids": [
+          10,
+          11
+        ],
+        "path": "optimized-05.ll",
+        "bytes": 6954490,
+        "sha256": "555c68d7a7a55865df5968fe41f0136935a67f9c826f8f8ebf347007598b583c",
+        "optimized_module_observed": true
+      }
+    },
+    {
+      "variant": "endpoint-core",
+      "stock_text_bytes": 880293,
+      "candidate_text_bytes": 880373,
+      "stock_coroutine_frame_bytes": [
+        89664
+      ],
+      "candidate_coroutine_frame_bytes": [
+        89856
+      ],
+      "actual_module": {
+        "words": 36371,
+        "bytes": 145484,
+        "sha256": "599e8eb822f486805a3a07af59b7c829532f528bf51dd1edd68ac9b426a4f3aa",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_optimized_ir": {
+        "module": 127711590747856,
+        "module_generation": 5,
+        "function": 127711590751352,
+        "successful_optimizer_pass_ids": [
+          10,
+          11
+        ],
+        "path": "optimized-05.ll",
+        "bytes": 12550151,
+        "sha256": "1e09e141118462ce779ba560c3607b23a1a199277a1edf8800faa2b20172584f",
+        "optimized_module_observed": true
+      }
+    },
+    {
+      "variant": "endpoint-normal",
+      "stock_text_bytes": 922597,
+      "candidate_text_bytes": 926293,
+      "stock_coroutine_frame_bytes": [
+        89696
+      ],
+      "candidate_coroutine_frame_bytes": [
+        89888
+      ],
+      "actual_module": {
+        "words": 37885,
+        "bytes": 151540,
+        "sha256": "a7f1ad790c8bbf8a4dcb797aa5325c78ce443e9e9c3e222c1b86e7694dd250eb",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_optimized_ir": {
+        "module": 135856929115856,
+        "module_generation": 5,
+        "function": 135856929119352,
+        "successful_optimizer_pass_ids": [
+          10,
+          11
+        ],
+        "path": "optimized-05.ll",
+        "bytes": 13285383,
+        "sha256": "2e6b4b7a5379f22d60b4c9ecda876410ef04fcab4d25c70c342bd737fd51b012",
+        "optimized_module_observed": true
+      }
+    },
+    {
+      "variant": "transport-normal",
+      "stock_text_bytes": 879837,
+      "candidate_text_bytes": 881229,
+      "stock_coroutine_frame_bytes": [
+        89024
+      ],
+      "candidate_coroutine_frame_bytes": [
+        89088
+      ],
+      "actual_module": {
+        "words": 26045,
+        "bytes": 104180,
+        "sha256": "8f29e9856197c30a4645b69f7fabd5b4d8fe26677c05489c9d6449da1df18160",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_optimized_ir": {
+        "module": 138655033200336,
+        "module_generation": 5,
+        "function": 138655033203832,
+        "successful_optimizer_pass_ids": [
+          10,
+          11
+        ],
+        "path": "optimized-05.ll",
+        "bytes": 12926334,
+        "sha256": "f88f6f5ef59e5a1071be3de74590d85b88fafc840352cefc7e9f854f798d87f6",
+        "optimized_module_observed": true
+      }
+    }
+  ],
+  "production_adopted": false,
+  "runtime_benefit_demonstrated": false,
+  "scope": "Source-frozen compiler screen and independently reviewed ordinary loaded/called LLVM/JIT code with bound relocation/section bytes. Short-input canaries do not execute retained arithmetic or establish speed. Full original correctness and benefit gates remain required."
+}

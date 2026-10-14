@@ -1,0 +1,801 @@
+{
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "scope": "Source dependency and SIMD8 cohort classification, using current normal Transport stride16 and actual LLVM vector width8. No dynamic frequency, successful arithmetic count, exclusive cost or speed claim. Earlier exact-unit/validity guards can remove calls before PB32Divide.",
+  "corrected_initial_diagnostic_filter": "Use compiled write index, not original source-DAG node id, for 2557/427 loci.",
+  "results": [
+    {
+      "builder": "build_transport_program",
+      "stats": {
+        "divide_simd_groups": 28,
+        "all_source_known_power_or_unit_groups": 5,
+        "some_source_known_power_or_unit_groups": 5
+      },
+      "interesting_groups": [
+        {
+          "layer": 11,
+          "write_indices": [
+            121,
+            129
+          ],
+          "all_division_lanes_power_or_unit": true,
+          "members": [
+            {
+              "write_index": 121,
+              "source_node": 55,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 122,
+              "source_node": 61,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 123,
+              "source_node": 67,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 124,
+              "source_node": 73,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 125,
+              "source_node": 492,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 126,
+              "source_node": 568,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 127,
+              "source_node": 720,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 128,
+              "source_node": 725,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            }
+          ]
+        },
+        {
+          "layer": 11,
+          "write_indices": [
+            129,
+            137
+          ],
+          "all_division_lanes_power_or_unit": true,
+          "members": [
+            {
+              "write_index": 129,
+              "source_node": 731,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 130,
+              "source_node": 1272,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 131,
+              "source_node": 1277,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 132,
+              "source_node": 1283,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 133,
+              "source_node": 1824,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 134,
+              "source_node": 1829,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 135,
+              "source_node": 1835,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 136,
+              "source_node": 2376,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            }
+          ]
+        },
+        {
+          "layer": 11,
+          "write_indices": [
+            137,
+            139
+          ],
+          "all_division_lanes_power_or_unit": true,
+          "members": [
+            {
+              "write_index": 137,
+              "source_node": 2381,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 138,
+              "source_node": 2387,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            }
+          ]
+        },
+        {
+          "layer": 115,
+          "write_indices": [
+            2557,
+            2565
+          ],
+          "all_division_lanes_power_or_unit": true,
+          "members": [
+            {
+              "write_index": 2557,
+              "source_node": 566,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2558,
+              "source_node": 641,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2559,
+              "source_node": 716,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2560,
+              "source_node": 992,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2561,
+              "source_node": 1129,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2562,
+              "source_node": 1268,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2563,
+              "source_node": 1544,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2564,
+              "source_node": 1681,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            }
+          ]
+        },
+        {
+          "layer": 115,
+          "write_indices": [
+            2565,
+            2572
+          ],
+          "all_division_lanes_power_or_unit": true,
+          "members": [
+            {
+              "write_index": 2565,
+              "source_node": 1820,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2566,
+              "source_node": 2096,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2567,
+              "source_node": 2233,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2568,
+              "source_node": 2372,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2569,
+              "source_node": 2648,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2570,
+              "source_node": 2785,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 2571,
+              "source_node": 2924,
+              "denominator_source_node": 148,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "builder": "build_schwarzschild_transport_program",
+      "stats": {
+        "divide_simd_groups": 8,
+        "all_source_known_power_or_unit_groups": 3,
+        "some_source_known_power_or_unit_groups": 4
+      },
+      "interesting_groups": [
+        {
+          "layer": 8,
+          "write_indices": [
+            75,
+            83
+          ],
+          "all_division_lanes_power_or_unit": true,
+          "members": [
+            {
+              "write_index": 75,
+              "source_node": 55,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 76,
+              "source_node": 61,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 77,
+              "source_node": 67,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 78,
+              "source_node": 216,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 79,
+              "source_node": 221,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 80,
+              "source_node": 227,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 81,
+              "source_node": 330,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 82,
+              "source_node": 335,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            }
+          ]
+        },
+        {
+          "layer": 8,
+          "write_indices": [
+            83,
+            90
+          ],
+          "all_division_lanes_power_or_unit": true,
+          "members": [
+            {
+              "write_index": 83,
+              "source_node": 341,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 84,
+              "source_node": 444,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 85,
+              "source_node": 449,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 86,
+              "source_node": 455,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 87,
+              "source_node": 558,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 88,
+              "source_node": 563,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            },
+            {
+              "write_index": 89,
+              "source_node": 569,
+              "denominator_source_node": 54,
+              "denominator_source": [
+                8,
+                53,
+                46,
+                46
+              ],
+              "kind": "constructed_power_of_two"
+            }
+          ]
+        },
+        {
+          "layer": 32,
+          "write_indices": [
+            427,
+            435
+          ],
+          "all_division_lanes_power_or_unit": false,
+          "members": [
+            {
+              "write_index": 427,
+              "source_node": 203,
+              "denominator_source_node": 104,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 428,
+              "source_node": 298,
+              "denominator_source_node": 110,
+              "denominator_source": [
+                4,
+                54,
+                103,
+                46
+              ],
+              "kind": "unknown"
+            },
+            {
+              "write_index": 429,
+              "source_node": 303,
+              "denominator_source_node": 104,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 430,
+              "source_node": 412,
+              "denominator_source_node": 110,
+              "denominator_source": [
+                4,
+                54,
+                103,
+                46
+              ],
+              "kind": "unknown"
+            },
+            {
+              "write_index": 431,
+              "source_node": 417,
+              "denominator_source_node": 104,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 432,
+              "source_node": 526,
+              "denominator_source_node": 110,
+              "denominator_source": [
+                4,
+                54,
+                103,
+                46
+              ],
+              "kind": "unknown"
+            },
+            {
+              "write_index": 433,
+              "source_node": 531,
+              "denominator_source_node": 104,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            },
+            {
+              "write_index": 434,
+              "source_node": 640,
+              "denominator_source_node": 110,
+              "denominator_source": [
+                4,
+                54,
+                103,
+                46
+              ],
+              "kind": "unknown"
+            }
+          ]
+        },
+        {
+          "layer": 32,
+          "write_indices": [
+            435,
+            436
+          ],
+          "all_division_lanes_power_or_unit": true,
+          "members": [
+            {
+              "write_index": 435,
+              "source_node": 645,
+              "denominator_source_node": 104,
+              "denominator_source": [
+                0,
+                1073741824,
+                0,
+                0
+              ],
+              "kind": "constant_power_of_two"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
