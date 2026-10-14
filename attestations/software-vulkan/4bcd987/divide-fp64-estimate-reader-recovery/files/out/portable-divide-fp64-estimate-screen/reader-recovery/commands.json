@@ -1,0 +1,8 @@
+{
+  "commands": [
+    "python3 -B out/portable-divide-fp64-estimate-screen/reader-recovery/reuse.py pin-context FULL_CLEAN_SOURCE_COMMIT",
+    "python3 -B out/portable-divide-fp64-estimate-screen/reader-recovery/run_owned.py read-completed-endpoint",
+    "python3 -B out/portable-divide-fp64-estimate-screen/reader-recovery/reuse.py review"
+  ],
+  "scope": "Root-only one parse-only owner, then separate post-terminal review; no compiler or shader/tool execution."
+}

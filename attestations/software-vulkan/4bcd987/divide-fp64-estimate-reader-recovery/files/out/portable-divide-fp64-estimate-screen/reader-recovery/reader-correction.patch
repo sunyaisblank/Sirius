@@ -1,0 +1,728 @@
+--- preserved-failed/estimate_graph.py
++++ reader-recovery/estimate_graph.py
+@@ -15,12 +15,33 @@
+     def words(value):
+         return definitions[value].split()
+ 
++    # Function-local CFG only, bounded by this complete Divide body.
++    blocks, location, positions, current = {}, {}, {}, None
++    for line in body.splitlines():
++        line = line.strip()
++        match = re.match(r"(%\S+) = OpLabel$", line)
++        if match:
++            current = match[1]; blocks[current] = []
++        if current is not None:
++            positions[(current, line)] = len(blocks[current]); blocks[current].append(line)
++            match = re.match(r"(%\S+) =", line)
++            if match: location[match[1]] = current
++    predecessors = {label: set() for label in blocks}
++    for label, lines in blocks.items():
++        for line in lines:
++            tokens = line.split()
++            targets = (tokens[1:] if tokens[:1] == ["OpBranch"] else
++                       tokens[2:4] if tokens[:1] == ["OpBranchConditional"] else
++                       [tokens[2], *tokens[4::2]] if tokens[:1] == ["OpSwitch"] else [])
++            for target in targets: predecessors[target].add(label)
++    aliases, choices, slot_proof = {}, {}, {}
++
+     def origin(value):
+         seen = set()
+-        while words(value)[0] == "OpCopyObject":
++        while value in aliases or words(value)[0] == "OpCopyObject":
+             assert value not in seen
+             seen.add(value)
+-            value = words(value)[2]
++            value = aliases[value] if value in aliases else words(value)[2]
+         return value
+ 
+     def isop(value, opcode, *operands):
+@@ -59,66 +80,148 @@
+         a, b = row[2:]
+         return (predicate_a(a) and predicate_b(b)) or (commute and predicate_a(b) and predicate_b(a))
+ 
++    def choice(value, condition, yes, no):
++        value = origin(value); row = words(value)
++        if row[0] == "OpSelect":
++            if condition(row[2]) and yes(row[3]) and no(row[4]):
++                choices[value] = {"entry": location[value], "merge": location[value], "kind": "Select"}
++                return True
++            return False
++        if row[0] != "OpPhi" or len(row) != 6:
++            return False
++        merge = location[value]
++        headers = [label for label, lines in blocks.items() if "OpSelectionMerge " + merge + " None" in lines]
++        if len(headers) != 1: return False
++        header = headers[0]
++        branches = [line.split() for line in blocks[header] if line.startswith("OpBranchConditional ")]
++        if len(branches) != 1 or len(branches[0]) != 4: return False
++        branch = branches[0]
++        if not condition(branch[1]): return False
++        incoming = {row[i + 1]: row[i] for i in (2, 4)}
++        if len(incoming) != 2 or predecessors[merge] != set(incoming): return False
++        def arm(destination, predicate):
++            matches = [label for label, incoming_value in incoming.items() if predicate(incoming_value)]
++            if len(matches) != 1: return False
++            label = matches[0]; incoming_value = origin(incoming[label])
++            if label == destination:
++                return predecessors[destination] == {header} and blocks[destination][-1] == "OpBranch " + merge
++            nested = choices.get(incoming_value)
++            return (nested is not None and nested["entry"] == destination and nested["merge"] == label
++                    and predecessors[destination] == {header} and blocks[label][-1] == "OpBranch " + merge)
++        if not arm(branch[2], yes) or not arm(branch[3], no): return False
++        choices[value] = {"entry": header, "merge": merge, "kind": "closed two-arm Phi", "predicate": branch[1]}
++        return True
++
++    def boolean_constant(value, expected):
++        return words(origin(value))[0] == ("OpConstantTrue" if expected else "OpConstantFalse")
++
++    def logical(value, opcode, left, right):
++        if binary(value, opcode, left, right, True):
++            choices[origin(value)] = {"entry": location[origin(value)], "merge": location[origin(value)], "kind": opcode}
++            return True
++        if opcode == "OpLogicalAnd":
++            return choice(value, left, right, lambda x: boolean_constant(x, False))
++        assert opcode == "OpLogicalOr"
++        return choice(value, left, lambda x: boolean_constant(x, True), right)
++
+     same = lambda value: lambda other: origin(value) == origin(other)
+     number = lambda n: lambda value: constant(value, n)
+     mask = lambda value: binary(value, "OpBitwiseAnd", same(hi), number(0xfff00000), True)
+     range_condition = one(key for key in local if binary(key, "OpIEqual", mask, number(0x41900000), True))
++    # Only the two uniquely written private uint members may resolve a load.
++    # The stores precede the range branch; every load is in its single-entry
++    # true block. All Function-pointer uses are direct Store/Load; no escape,
++    # alias, additional store, side entry or global substitution is admitted.
++    range_header = location[range_condition]
++    range_branch = [line.split() for line in blocks[range_header] if line.startswith("OpBranchConditional ")]
++    assert len(range_branch) == 1 and range_branch[0][1] == range_condition
++    range_true = range_branch[0][2]
++    loads = [key for key in local if words(key)[0] == "OpLoad"]
++    if loads:
++        pointer_rows = [words(words(key)[2]) for key in loads]
++        assert all(row[0] == "OpAccessChain" and len(row) == 4 for row in pointer_rows)
++        roots = {row[2] for row in pointer_rows}; assert len(roots) == 1
++        variable = roots.pop(); variable_row = words(variable)
++        assert variable_row[0] == "OpVariable" and variable_row[2:] == ["Function"]
++        pointer_type = words(variable_row[1]); assert pointer_type[:2] == ["OpTypePointer", "Function"]
++        assert words(pointer_type[2]) == ["OpTypeStruct", u32, u32]
++        members = [key for key in local if words(key)[0] == "OpAccessChain" and words(key)[2] == variable]
++        assert len(members) == 2
++        bindings = {}
++        all_stores = [line for line in body.splitlines() if line.strip().startswith("OpStore ")]
++        assert len(all_stores) == 2
++        for member in members:
++            row = words(member); assert words(row[1]) == ["OpTypePointer", "Function", u32]
++            index = 0 if constant(row[3], 0) else 1 if constant(row[3], 1) else None
++            assert index is not None and index not in bindings
++            stores = [line.strip() for line in all_stores if line.split()[1] == member]
++            assert len(stores) == 1 and origin(stores[0].split()[2]) == origin(lo if index == 0 else hi)
++            assert stores[0] in blocks[range_header] and location[member] == range_header
++            condition_line = next(line for line in blocks[range_header] if line.startswith(range_condition + " ="))
++            assert positions[(range_header, stores[0])] < positions[(range_header, condition_line)]
++            for line in body.splitlines():
++                tokens = line.split()
++                if member not in tokens: continue
++                opcode = tokens[2] if len(tokens) > 2 and tokens[1] == "=" else tokens[0]
++                assert tokens[0] == member or opcode in ("OpStore", "OpLoad"), line
++            bindings[index] = member
++        for line in body.splitlines():
++            tokens = line.split()
++            if variable not in tokens: continue
++            assert tokens[0] == variable or (len(tokens) > 2 and tokens[2] == "OpAccessChain"), line
++        for value in loads:
++            assert words(value)[:2] == ["OpLoad", u32]
++            member = words(value)[2]
++            assert member in bindings.values() and location[value] == range_true and predecessors[range_true] == {range_header}
++            index = next(i for i, pointer in bindings.items() if pointer == member)
++            aliases[value] = lo if index == 0 else hi
++        slot_proof = {"variable": variable, "member_pointers": bindings,
++                      "load_ids": loads, "single_stores_dominate_single_entry_guarded_loads": True,
++                      "direct_only_no_alias_escape_or_extra_store": True}
++    else:
++        assert not re.search(r"\bOpStore\b", body)
+     fraction = lambda value: binary(value, "OpBitwiseAnd", same(hi), number(0xfffff), True)
+     hidden = lambda value: binary(value, "OpBitwiseOr", fraction, number(0x100000), True)
+     upper = lambda value: binary(value, "OpShiftLeftLogical", hidden, number(6))
+     lower = lambda value: binary(value, "OpShiftRightLogical", same(lo), number(26))
+     guess = one(key for key in local if binary(key, "OpBitwiseOr", upper, lower, True))
+-    product = one(key for key in local if words(key)[0] == "OpFunctionCall"
+-                  and names.get(words(key)[2]) == "PB32WideProduct"
+-                  and [origin(x) for x in words(key)[3:]] == [origin(guess), d])
+-    plo = one(key for key in local if words(key)[:3] == ["OpCompositeExtract", u32, product] and words(key)[3:] == ["0"])
+-    phi = one(key for key in local if words(key)[:3] == ["OpCompositeExtract", u32, product] and words(key)[3:] == ["1"])
++    def exact_product(key):
++        row = words(key)
++        if row[0] == "OpUMulExtended": return [origin(x) for x in row[2:]] == [origin(guess), d]
++        return (row[0] == "OpFunctionCall" and names.get(row[2]) == "PB32WideProduct"
++                and [origin(x) for x in row[3:]] == [origin(guess), d])
++    product = one(key for key in local if exact_product(key))
++    assert words(words(product)[1]) == ["OpTypeStruct", u32, u32]
++    def member(index):
++        values = [key for key in local if words(key)[:3] == ["OpCompositeExtract", u32, product]
++                  and words(key)[3:] == [str(index)]]
++        assert 1 <= len(values) <= 2
++        for value in values[1:]: aliases[value] = values[0]
++        return values[0]
++    plo, phi = member(0), member(1)
+     nlo = one(key for key in local if binary(key, "OpShiftLeftLogical", same(m), number(26)))
+     nhi = one(key for key in local if binary(key, "OpShiftRightLogical", same(m), number(6)))
+     below = lambda value: isop(value, "OpULessThan", phi, nhi)
+     equal = lambda value: binary(value, "OpIEqual", same(phi), same(nhi), True)
+     low_ok = lambda value: isop(value, "OpULessThanEqual", plo, nlo)
+-    equal_low_ok = lambda value: binary(value, "OpLogicalAnd", equal, low_ok, True)
+-    not_above = one(key for key in local if binary(key, "OpLogicalOr", below, equal_low_ok, True))
++    equal_low_ok = lambda value: logical(value, "OpLogicalAnd", equal, low_ok)
++    not_above = one(key for key in local if logical(key, "OpLogicalOr", below, equal_low_ok))
+     rlo = one(key for key in local if isop(key, "OpISub", nlo, plo))
+     high_difference = lambda value: isop(value, "OpISub", nhi, phi)
+     borrow_test = one(key for key in local if isop(key, "OpULessThan", nlo, plo))
+-    borrow = lambda value: (words(origin(value))[0] == "OpSelect" and
+-                            origin(words(origin(value))[2]) == origin(borrow_test) and
+-                            constant(words(origin(value))[3], 1) and constant(words(origin(value))[4], 0))
++    borrow = lambda value: choice(value, same(borrow_test), number(1), number(0))
+     rhi = one(key for key in local if binary(key, "OpISub", high_difference, borrow))
+     high_zero = lambda value: binary(value, "OpIEqual", same(rhi), number(0), True)
+     low_small = lambda value: isop(value, "OpULessThan", rlo, d)
+-    verified = one(key for key in local if binary(key, "OpLogicalAnd", high_zero, low_small, True))
++    verified = one(key for key in local if logical(key, "OpLogicalAnd", high_zero, low_small))
+     nonzero = lambda value: binary(value, "OpINotEqual", same(rlo), number(0), True)
+-    sticky = lambda value: (words(origin(value))[0] == "OpSelect" and
+-                            nonzero(words(origin(value))[2]) and
+-                            constant(words(origin(value))[3], 1) and constant(words(origin(value))[4], 0))
++    sticky = lambda value: choice(value, nonzero, number(1), number(0))
+     jam = one(key for key in local if binary(key, "OpBitwiseOr", same(guess), sticky, True))
+     rounded = one(key for key in local if words(key)[0] == "OpFunctionCall"
+                   and names.get(words(key)[2]) == "PB32Round" and origin(words(key)[-1]) == origin(jam))
+ 
+-    # Exact nested single-entry true arms. No guess/product/remainder can bypass
+-    # its preceding acceptance predicate, and success returns this round call.
+-    blocks, location, current = {}, {}, None
+-    for line in body.splitlines():
+-        line = line.strip()
+-        match = re.match(r"(%\S+) = OpLabel$", line)
+-        if match:
+-            current = match[1]
+-            blocks[current] = []
+-        if current is not None:
+-            blocks[current].append(line)
+-            match = re.match(r"(%\S+) =", line)
+-            if match:
+-                location[match[1]] = current
+-    predecessors = {label: set() for label in blocks}
+-    for label, lines in blocks.items():
+-        for line in lines:
+-            tokens = line.split()
+-            targets = tokens[1:] if tokens[:1] == ["OpBranch"] else tokens[2:] if tokens[:1] == ["OpBranchConditional"] else []
+-            for target in targets:
+-                predecessors[target].add(label)
++    # Exact closed control paths from range gate through product, borrow,
++    # remainder gate and sticky. No side entrance can bypass an acceptance gate.
+     def true_arm(condition, expected):
+         label = location[condition]
+         branches = [line.split() for line in blocks[label] if line.startswith("OpBranchConditional ")]
+@@ -126,8 +229,16 @@
+         assert branch[1] == condition and branch[2] == expected and predecessors[expected] == {label}
+     true_arm(range_condition, location[product])
+     assert location[guess] == location[product]
++    assert choices[origin(not_above)]["entry"] == location[product]
+     true_arm(not_above, location[rlo])
+-    true_arm(verified, location[rounded])
++    borrow_value = origin(words(rhi)[3])
++    assert choices[borrow_value]["entry"] == location[rlo]
++    assert choices[borrow_value]["merge"] == location[rhi]
++    assert choices[origin(verified)]["entry"] == location[rhi]
++    jam_words = words(jam)
++    sticky_value = origin(jam_words[3] if origin(jam_words[2]) == origin(guess) else jam_words[2])
++    true_arm(verified, choices[sticky_value]["entry"])
++    assert choices[sticky_value]["merge"] == location[rounded]
+     assert blocks[location[rounded]][-1] == "OpReturnValue " + rounded
+ 
+     # Compare the complete original loop/sticky/round/return suffix after ID
+@@ -178,11 +289,13 @@
+     assert before == after and origin(fallback_m) == m and origin(fallback_d) == d
+     assert [origin(x) for x in words(rounded)[3:5]] == [origin(x) for x in tail_call[3:5]]
+     return {"native_estimate_accuracy_assumed": False, "wide_division": divide,
+-            "guess": guess, "wide_product_call": product, "exact_remainder": [rlo, rhi],
++            "guess": guess, "exact_product": {"id": product, "opcode": words(product)[0]}, "exact_remainder": [rlo, rhi],
+             "acceptance_predicates": [range_condition, not_above, verified],
+             "integer_range_before_guess_extraction": True,
+             "exact_product_remainder_inequalities": True, "exact_remainder_sticky": True,
+             "accepted_path_returns_same_round_sign_exponent": True,
+             "original_complete_fallback_suffix_normalized_equal": True,
+             "unsigned64_or_float_to_uint_required": False,
++            "Function_uint2_member_load_proof": slot_proof, "closed_choice_proofs": choices,
++            "named_PB32WideProduct_required": False,
+             "arithmetic_equivalence_executed": False, "cost_or_hit_rate_established": False}
+--- preserved-failed/screen.py
++++ reader-recovery/reuse.py
+@@ -1,235 +1,142 @@
+-"""Reuse accepted stock, compile one full divide-fp64-estimate Endpoint, then read its terminal owner.
+-
+-No mode creates a Vulkan instance, device, pipeline or dispatch. Root operates
+-the unchanged copied owner; the companion capture is gated by terminal acceptance.
+-"""
++"""One owned pure reader of completed immutable Endpoint compiler products."""
+ from pathlib import Path
+-import hashlib
+-import importlib.util
+-import json
+-import os
+-import re
+-import resource
+-import stat
+-import struct
+-import subprocess
+-import sys
+-
++import hashlib, importlib.util, json, os, re, subprocess, sys
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+ ROOT = WORK.parents[2]
+-PRODUCTS = ROOT / "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler"
+-CANONICAL = ROOT / "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv"
+-PRODUCT_REVISION = "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
++P = json.loads((WORK / "inputs.json").read_text())
+ 
+ 
+ def record(path):
+     path = Path(path)
+-    with path.open("rb") as stream:
+-        digest = hashlib.file_digest(stream, "sha256").hexdigest()
+-    return {"bytes": path.stat().st_size, "sha256": digest,
+-            "mode": stat.S_IMODE(path.stat().st_mode),
+-            "resolved_path": str(path.resolve(strict=True)),
+-            "symlink_target": os.readlink(path) if path.is_symlink() else None}
+-
+-
+-def write(name, value):
+-    (WORK / name).write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
+-
+-
+-def load_module(name, path):
++    return {"bytes": path.stat().st_size, "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
++            "resolved_path": str(path.resolve(strict=True))}
++
++
++def content(path):
++    return {key: value for key, value in record(path).items() if key != "resolved_path"}
++
++
++def load(path):
++    return json.loads(Path(path).read_text())
++
++
++def write(path, value):
++    path = Path(path)
++    assert not path.exists(), path
++    path.write_text(json.dumps(value, sort_keys=True, indent=2, allow_nan=False) + "\n")
++
++
++def module(name, path):
+     spec = importlib.util.spec_from_file_location(name, path)
+-    result = importlib.util.module_from_spec(spec)
+-    spec.loader.exec_module(result)
+-    return result
++    value = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(value)
++    return value
+ 
+ 
+ def verify_frozen():
+-    frozen = json.loads((WORK / "source-freeze.json").read_text())
+-    for name, expected in frozen["private_inputs"].items():
+-        assert record(WORK / name) == expected, name
+-    for name, expected in frozen["external_inputs"].items():
+-        assert record(name) == expected, name
+-    for path in (WORK / "stock/src/sirius/kernels").iterdir():
+-        assert path.read_bytes() == (ROOT / "src/sirius/kernels" / path.name).read_bytes(), path
+-    assert (WORK / "stock/scripts/build-retained-kernels.py").read_bytes() == (
+-        ROOT / "scripts/build-retained-kernels.py").read_bytes()
+-
+-
+-def pin_context():
+-    verify_frozen()
+-    verify_stock_reuse()
+-    assert Path.cwd().resolve() == ROOT
+-    assert not PRODUCTS.exists(), PRODUCTS
+-    assert not (WORK / "compile-endpoint-normal").exists()
+-    assert not (WORK / "operator-context.json").exists(), "pin once before consumption"
+-    assert not subprocess.check_output(["git", "status", "--porcelain=v1"], cwd=ROOT)
+-    revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+-    assert len(sys.argv) == 3 and revision == sys.argv[2] and re.fullmatch(r"[0-9a-f]{40}", revision)
+-    assert (WORK / "actions.json").read_bytes() == (WORK / "actions.unpinned.json").read_bytes()
+-    actions = json.loads((WORK / "actions.json").read_text())
+-    assert list(actions) == ["compile-endpoint-normal"]
+-    assert actions["compile-endpoint-normal"]["revision"] == "PENDING_OPERATOR_CLEAN_CONTEXT"
+-    actions["compile-endpoint-normal"]["revision"] = revision
+-    write("actions.json", actions)
+-    write("operator-context.json", {"revision": revision, "status": "",
+-          "product_revision": PRODUCT_REVISION,
+-          "actions": record(WORK / "actions.json"),
+-          "source_freeze": record(WORK / "source-freeze.json"),
+-          "preparation": record(WORK / "preparation.json"),
+-          "scope": "Clean source pin only; no compiler or device was invoked by pin-context."})
+-    print("Pinned clean operator context", revision, flush=True)
+-
+-
+-def function_body(text, name):
+-    match = re.search(r'OpName (%\S+) "' + re.escape(name) + '"', text)
+-    assert match, name
+-    found = re.search(r"^\s*" + re.escape(match[1]) + r" = OpFunction\b.*?OpFunctionEnd",
+-                      text, re.M | re.S)
+-    assert found, name
+-    return found.group(0) + "\n"
+-
+-
+-def interface_signature(text):
+-    """Normalize IDs only for the complete descriptor/shared type closure."""
+-    definitions = dict(re.findall(r"^\s*(%\S+) = (.+)$", text, re.M))
+-    names = dict(re.findall(r'OpName (%\S+) "([^"]*)"', text))
+-    decorations = {}
+-    for owner, suffix in re.findall(r"Op(?:Member)?Decorate (%\S+) (.+)$", text, re.M):
+-        decorations.setdefault(owner, []).append(suffix)
+-
+-    def signature(identifier, active=()):
+-        assert identifier not in active, "cyclic interface type"
+-        line = definitions[identifier]
+-        assert line.startswith(("OpType", "OpConstant ")), line
+-        values = [signature(word, active + (identifier,)) if word.startswith("%") else word
+-                  for word in line.split()]
+-        return [values, sorted(decorations.get(identifier, []))]
+-
+-    answer = []
+-    for identifier, line in definitions.items():
+-        words = line.split()
+-        if words[0] == "OpVariable" and words[2] in (
+-                "StorageBuffer", "Uniform", "Workgroup", "PushConstant"):
+-            answer.append([names.get(identifier, ""), words[2], signature(words[1]),
+-                           sorted(decorations.get(identifier, []))])
+-    assert answer
+-    return sorted(answer, key=lambda row: json.dumps(row))
+-
+-
+-def content(path):
+-    return {key: record(path)[key] for key in ("bytes", "sha256")}
+-
+-
+-def verify_stock_reuse():
+-    reuse = json.loads((WORK / "stock-reuse.json").read_text())
+-    archive = Path(reuse["archive"])
+-    assert content(archive / "manifest.json")["sha256"] == reuse["manifest_sha256"]
+-    manifest = json.loads((archive / "manifest.json").read_text())
+-    for name, expected in reuse["archive_pins"].items():
+-        assert content(name) == expected, name
+-        if Path(name) != archive / "manifest.json":
+-            assert expected == manifest["files"][str(Path(name).relative_to(archive))]
+-    history = Path(reuse["historical_work"])
+-    owner = json.loads((history / "compile-endpoint-normal/owner.json").read_text())
+-    assert owner["status"] == "terminal" and owner["passed"] is True and owner["child_exit"] == 0
++    for name, pin in load(WORK / "source-freeze.json")["pins"].items():
++        assert record(name) == pin, name
++
++
++def original_path(path):
++    path = Path(path)
++    if not path.is_absolute(): path = ROOT / path
++    archived = Path(P["archive"]) / "files" / path.relative_to(ROOT) if path.is_relative_to(ROOT) else None
++    if archived is not None and archived.is_file(): return archived
++    assert not path.is_relative_to(ROOT / "out/portable-divide-fp64-estimate-screen/compiler")
++    assert not path.is_relative_to(ROOT / "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler")
++    return path
++
++
++def original_completed():
++    archive = Path(P["archive"])
++    assert content(archive / "manifest.json")["sha256"] == P["manifest_sha256"]
++    manifest = load(archive / "manifest.json")
++    for name, expected in manifest["files"].items():
++        assert content(archive / name) == expected
++    old = archive / "files/out/portable-divide-fp64-estimate-screen/compiler"
++    owner = load(old / "compile-endpoint-normal/owner.json")
++    assert owner["status"] == "terminal" and owner["passed"] is False and owner["child_exit"] == 1
+     assert owner["stop_reason"] is None and owner["cleanup_errors"] == []
+     assert owner["source_unchanged"] and owner["whole_inputs_unchanged"]
+-    assert owner["remaining_owned_processes"] == [] and owner["observed_births"]
+-    assert all(row["absent"] for row in owner["observed_births"])
+-    before_path = history / "compile-endpoint-normal/inputs-before.json"
+-    assert before_path.read_bytes() == (history / "compile-endpoint-normal/inputs-after.json").read_bytes()
+-    before = json.loads(before_path.read_text())
+-    for row in reuse["source_joins"]:
+-        expected = {key: before[row["original_input_key"]][key] for key in ("bytes", "sha256")}
+-        assert all(content(row[key]) == expected for key in ("historical", "private", "canonical")), row
+-    for row in reuse["tool_joins"]:
+-        expected = before[row["original_input_key"]]
+-        assert content(row["path"]) == {key: expected[key] for key in ("bytes", "sha256")}
+-        assert str(Path(row["path"]).resolve(strict=True)) == expected["resolved_path"]
+-    result = json.loads((history / "compiler-result.json").read_text())
+-    acceptance = json.loads((history / "compiler-acceptance.json").read_text())
+-    assert acceptance["passed"] and acceptance["compiler_owner"]["sha256"] == content(history / "compile-endpoint-normal/owner.json")["sha256"]
+-    assert acceptance["compiler_result"]["sha256"] == content(history / "compiler-result.json")["sha256"]
+-    assert result["stock_equals_current_canonical"] and result["stock_builder_policy_unchanged"]
+-    for key, name in (("module", "stock_module"), ("assembly", "stock_assembly")):
+-        assert content(reuse[name]) == {field: result["modules"]["stock"][key][field] for field in ("bytes", "sha256")}
+-    assert Path(reuse["stock_module"]).read_bytes() == CANONICAL.read_bytes()
+-    controls = json.loads(Path(reuse["guard_controls"]).read_text())
+-    assert controls["passed"] and len(controls["controls"]) == 12
+-    assert all(row["actual_acceptance"] == row["expected_acceptance"] for row in controls["controls"])
+-    assert sum(row["expected_acceptance"] for row in controls["controls"]) == 2
+-    header = (WORK / "candidate/src/sirius/kernels/portable_binary32.h").read_text()
+-    insertion = (WORK / "candidate-insertion.txt").read_text()
+-    assert header.count(insertion) == 1
+-    assert header.replace(insertion, "", 1) == (WORK / "stock/src/sirius/kernels/portable_binary32.h").read_text()
+-    assert header.replace(insertion, "", 1) == (ROOT / "src/sirius/kernels/portable_binary32.h").read_text()
+-    return {"archive_manifest": record(archive / "manifest.json"), "original_owner": record(history / "compile-endpoint-normal/owner.json"),
+-            "original_acceptance": record(history / "compiler-acceptance.json"), "guard_controls": record(reuse["guard_controls"]),
+-            "source_joins": len(reuse["source_joins"]), "tool_joins": len(reuse["tool_joins"]),
+-            "scope": "Exact accepted full stock/compiler-policy reuse; no stock compiler or original Int64-policy execution repeated. New Float64 estimate policy remains separately scoped."}
+-
+-
+-def normalized_function(text, name):
+-    body = function_body(text, name)
+-    definitions = dict(re.findall(r"^\s*(%\S+) = (.+)$", text, re.M))
+-    names = dict(re.findall(r'OpName (%\S+) "([^"]*)"', text))
+-    local = {identifier: "local" + str(i) for i, identifier in enumerate(re.findall(r"^\s*(%\S+) =", body, re.M))}
+-    def value(identifier):
+-        if identifier in local:
+-            return local[identifier]
+-        expression = definitions[identifier]
+-        if expression.startswith("OpFunction "):
+-            return ["function", names[identifier]]
+-        assert expression.startswith(("OpType", "OpConstant", "OpSpecConstant")), expression
+-        return [value(word) if word.startswith("%") else word for word in expression.split()]
+-    return [[value(word) if word.startswith("%") else word for word in line.split()]
+-            for line in body.splitlines() if line.strip()]
+-
+-
+-def estimate_shape(stock, candidate):
+-    reader = load_module("estimate_graph", WORK / "estimate_graph.py")
+-    return reader.inspect(stock, candidate, function_body)
+-
+-
+-def compile_candidate():
+-    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+-    _, prior = resource.getrlimit(resource.RLIMIT_FSIZE)
+-    limit = 64 * 1024**2 if prior == resource.RLIM_INFINITY else min(prior, 64 * 1024**2)
+-    resource.setrlimit(resource.RLIMIT_FSIZE, (limit, limit))
+-    verify_frozen()
+-    reused = verify_stock_reuse()
+-    context = json.loads((WORK / "operator-context.json").read_text())
+-    assert context["actions"] == record(WORK / "actions.json")
+-    assert context["source_freeze"] == record(WORK / "source-freeze.json")
++    assert owner["remaining_owned_processes"] == [] and len(owner["observed_births"]) == 2
++    assert all(row["absent"] is True for row in owner["observed_births"])
++    assert owner["source"] == {"revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf", "status": ""}
++    assert owner["argv"] == ["/usr/bin/python3", "-B", str(ROOT / "out/portable-divide-fp64-estimate-screen/compiler/screen.py"), "compile"]
++    assert content(old / "compile-endpoint-normal/stderr.log") == P["original_stderr"]
++    assert not (old / "compiler-result.json").exists() and not (old / "compiler-acceptance.json").exists()
++    before_path = old / "compile-endpoint-normal/inputs-before.json"
++    assert before_path.read_bytes() == (old / "compile-endpoint-normal/inputs-after.json").read_bytes()
++    before = load(before_path)
++    frozen = load(old / "source-freeze.json")
++    for kind in ("private_inputs", "external_inputs"):
++        for name, pin in frozen[kind].items():
++            original = ROOT / "out/portable-divide-fp64-estimate-screen/compiler" / name if kind == "private_inputs" else Path(name)
++            assert content(original_path(original)) == {key: pin[key] for key in ("bytes", "sha256")}
++    action = load(old / "actions.json")["compile-endpoint-normal"]
++    for name in action["frozen_inputs"]:
++        original = Path(name); key = str(original.relative_to(ROOT)) if original.is_relative_to(ROOT) else str(original)
++        actual = original_path(original)
++        assert content(actual) == {field: before[key][field] for field in ("bytes", "sha256")}
++        if actual == original:
++            assert record(actual) == before[key]
++        else:
++            # These immutable relocated entries were regular private files,
++            # not the five lexical tool aliases retained at their real paths.
++            assert before[key]["resolved_path"] == str(original)
++    header = old / "candidate/src/sirius/kernels/portable_binary32.h"
++    insertion = (old / "candidate-insertion.txt").read_text()
++    assert header.read_text().count(insertion) == 1
++    assert header.read_text().replace(insertion, "", 1) == (old / "stock/src/sirius/kernels/portable_binary32.h").read_text()
++    assert (old / "stock/src/sirius/kernels/portable_binary32.h").read_bytes() == (ROOT / "src/sirius/kernels/portable_binary32.h").read_bytes()
++    return old, {"original_failed_wrapper": record(old / "compile-endpoint-normal/owner.json"),
++                 "original_passed": False, "original_child_exit": 1,
++                 "exact_post_validation_reader_failure": True,
++                 "archive_manifest": record(archive / "manifest.json"),
++                 "original_input_byte_joins": len(action["frozen_inputs"]),
++                 "no_compiler_validator_or_policy_rerun": True}
++
++
++def pin_context():
++    verify_frozen(); original_completed()
++    assert len(sys.argv) == 3 and re.fullmatch(r"[0-9a-f]{40}", sys.argv[2])
++    assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip() == sys.argv[2]
++    assert not subprocess.check_output(["git", "status", "--porcelain=v1"], cwd=ROOT)
++    assert not (WORK / "operator-context.json").exists() and not (WORK / "read-completed-endpoint").exists()
++    assert (WORK / "actions.json").read_bytes() == (WORK / "actions.unpinned.json").read_bytes()
++    actions = load(WORK / "actions.json")
++    assert list(actions) == ["read-completed-endpoint"]
++    assert actions["read-completed-endpoint"]["revision"] == "PENDING_OPERATOR_CLEAN_CONTEXT"
++    actions["read-completed-endpoint"]["revision"] = sys.argv[2]
++    (WORK / "actions.json").write_text(json.dumps(actions, sort_keys=True, indent=2) + "\n")
++    write(WORK / "operator-context.json", {"revision": sys.argv[2], "actions": record(WORK / "actions.json"),
++          "source_freeze": record(WORK / "source-freeze.json"), "preparation": record(WORK / "preparation.json")})
++
++
++def read_products():
++    verify_frozen(); old, producer = original_completed()
++    context = load(WORK / "operator-context.json")
++    assert context["actions"] == record(WORK / "actions.json") and context["source_freeze"] == record(WORK / "source-freeze.json")
+     assert context["preparation"] == record(WORK / "preparation.json")
+-    assert not PRODUCTS.exists(), PRODUCTS
+-    modules_dir = PRODUCTS / "modules"
+-    modules_dir.mkdir(parents=True)
+-    reuse = json.loads((WORK / "stock-reuse.json").read_text())
+-    import shutil
+-    stock = modules_dir / "stock-endpoint-normal.spv"
+-    stock_assembly = stock.with_suffix(".final.spvasm")
+-    shutil.copyfile(reuse["stock_module"], stock)
+-    shutil.copyfile(reuse["stock_assembly"], stock_assembly)
+-    assert content(stock) == content(reuse["stock_module"]) and content(stock_assembly) == content(reuse["stock_assembly"])
+-    recipe = json.loads((WORK / "generated/endpoint-arguments.json").read_text())
+-    tools = recipe["tools"]
+-    builder = load_module("divide-fp64-estimate_candidate_builder", WORK / "candidate/scripts/build-retained-kernels.py")
+-    candidate = modules_dir / "candidate-endpoint-normal.spv"
+-    builder.compile_shader(WORK / "candidate/src/sirius/kernels/retained_endpoint.slang",
+-        candidate, tools["compiler"], tools["assembler"], tools["disassembler"], tools["validator"],
+-        recipe["registers"], 5, recipe["layers"], recipe["prefix"], portable=True,
+-        optimizer=tools["optimizer"], normal_sum32=True,
+-        endpoint_specialized=tuple(recipe["endpoint_specialized"]), diagnostic_divide_fp64_estimate=True)
+-    candidate_assembly = candidate.with_suffix(".final.spvasm")
+-    subprocess.run([tools["disassembler"], str(candidate), "-o", str(candidate_assembly)], check=True)
+-    texts = {"stock": stock_assembly.read_text(), "candidate": candidate_assembly.read_text()}
+-    shape = estimate_shape(texts["stock"], texts["candidate"])
++    original = module("preserved_compiler_pure_functions", old / "screen.py")
++    graph = module("corrected_estimate_graph", WORK / "estimate_graph.py")
++    controls = module("complete_module_parser_controls", WORK / "parser_controls.py")
++    products = Path(P["products"])
++    texts = {mode: (products / (mode + "-endpoint-normal.final.spvasm")).read_text() for mode in ("stock", "candidate")}
++    shape = graph.inspect(texts["stock"], texts["candidate"], original.function_body)
++    checked = controls.controls(texts["stock"], texts["candidate"], graph, original.function_body)
++    comparisons = {}
+     for name in ("PB32Unpack", "PB32Round", "PB32Multiply", "PB32WideProduct", "PB32ProductResidual"):
+-        assert normalized_function(texts["stock"], name) == normalized_function(texts["candidate"], name)
+-    assert stock.read_bytes() == CANONICAL.read_bytes() and stock.read_bytes() != candidate.read_bytes()
+-    assert interface_signature(texts["stock"]) == interface_signature(texts["candidate"])
++        present = [bool(re.search(r'OpName %\S+ "' + name + '"', texts[mode])) for mode in ("stock", "candidate")]
++        assert present[0] == present[1]
++        if not present[0]:
++            assert name == "PB32WideProduct"
++            comparisons[name] = "No named function in either module; unchanged source intrinsic and actual OpUMulExtended graph checked."
++        else:
++            assert original.normalized_function(texts["stock"], name) == original.normalized_function(texts["candidate"], name)
++            comparisons[name] = "Complete normalized function equal."
++    assert original.interface_signature(texts["stock"]) == original.interface_signature(texts["candidate"])
+     modes = lambda text: sorted(re.findall(r"OpExecutionMode %\S+ (.*)$", text, re.M))
+     assert modes(texts["stock"]) == modes(texts["candidate"])
+     def barriers(text):
+@@ -237,70 +144,59 @@
+         return [[opcode, *[definitions[word] for word in operands.split()]]
+                 for opcode, operands in re.findall(r"^\s*(OpControlBarrier|OpMemoryBarrier) (.+)$", text, re.M)]
+     assert barriers(texts["stock"]) == barriers(texts["candidate"])
++    assert not (WORK / "products").exists(); (WORK / "products").mkdir()
+     modules = {}
+-    for mode, output in (("stock", stock), ("candidate", candidate)):
++    for mode in ("stock", "candidate"):
+         text = texts[mode]
+-        capabilities = re.findall(r"OpCapability (\S+)", text)
+-        assert sorted(capabilities) == sorted(["Shader", "RoundingModeRTE"] + (["Float64"] if mode == "candidate" else []))
+-        widths = dict(re.findall(r"(%\S+) = OpTypeInt (\d+) [01]", text))
+-        assert set(widths.values()) == {"32"}
++        assert sorted(re.findall(r"OpCapability (\S+)", text)) == sorted(["Shader", "RoundingModeRTE"] + (["Float64"] if mode == "candidate" else []))
++        widths = dict(re.findall(r"(%\S+) = OpTypeInt (\d+) [01]", text)); assert set(widths.values()) == {"32"}
+         assert sorted(re.findall(r"OpTypeFloat (\d+)", text)) == (["32", "64"] if mode == "candidate" else ["32"])
+-        divide = function_body(text, "PB32Divide")
+-        assert {widths[kind] for kind in re.findall(r"= OpUDiv (%\S+) ", divide)} == {"32"}
+-        assert divide.count("OpLoopMerge") == 1
++        assert "OpConvertFToU" not in text and "OpConvertFToS" not in text
++        assert original.function_body(text, "PB32Divide").count("OpLoopMerge") == 1
+         assert all(widths[kind] == "32" for kind in re.findall(r"= OpUDiv (%\S+) ", text))
+         bodies = {}
+         for name in ("PB32Multiply", "PB32Divide"):
+-            path = output.with_suffix("." + name + ".spvasm")
+-            path.write_text(function_body(text, name)); bodies[name] = record(path)
+-        modules[mode] = {"module": record(output), "assembly": record(output.with_suffix(".final.spvasm")),
+-                         "bodies": bodies, "capabilities": capabilities, "integer_widths": sorted(set(widths.values()))}
+-    assert "OpConvertFToU" not in texts["candidate"] and "OpConvertFToS" not in texts["candidate"]
+-    verify_frozen()
+-    write("compiler-result.json", {"schema": "sirius-divide-fp64-estimate-compiler-screen/v1",
+-          "stock_reuse": reused, "stock_equals_current_canonical": True, "modules": modules,
+-          "candidate_estimate_graph": shape, "original_multiply_residual_unpack_round_normalized_bodies_equal": True,
+-          "original_fallback_complete_suffix_normalized_equal": True,
+-          "complete_descriptor_and_workgroup_type_decorations_exact": True,
+-          "execution_modes_exact": True, "ordered_barrier_operands_exact": True,
+-          "stock_builder_and_control_policy_reused_unchanged": True,
+-          "candidate_only_allowance": "Explicit Float64-estimate normal Endpoint only; exact Float64 multiset, no Int64. Original normal32 floating/order/layout/barrier policies retained.",
+-          "runtime_or_numerical_admission": False, "candidate_has_no_Int64_or_FToU": True, "benefit_established": False,
+-          "next_review": "Inspect complete ordinary LLVM/native guarded estimate/check/fallback lowering and all frame/stack/code countercosts before numerical admission. Companion candidate-only passive capture is gated by this terminal acceptance."})
+-    print("One full divide-fp64-estimate Endpoint compiled; stock exact reuse. No numerical or cost verdict.", flush=True)
+-
+-
+-def review_terminal():
+-    verify_frozen(); verify_stock_reuse()
+-    context = json.loads((WORK / "operator-context.json").read_text())
+-    folder = WORK / "compile-endpoint-normal"
+-    owner = json.loads((folder / "owner.json").read_text())
+-    action = json.loads((WORK / "actions.json").read_text())["compile-endpoint-normal"]
++            path = WORK / "products" / (mode + "." + name + ".spvasm")
++            path.write_text(original.function_body(text, name)); bodies[name] = record(path)
++        modules[mode] = {"module": record(products / (mode + "-endpoint-normal.spv")),
++                         "assembly": record(products / (mode + "-endpoint-normal.final.spvasm")), "bodies": bodies}
++    assert Path(modules["stock"]["module"]["resolved_path"]).read_bytes() == (ROOT / "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv").read_bytes()
++    write(WORK / "parser-control-result.json", checked)
++    write(WORK / "compiler-result.json", {"passed": True, "producer": producer, "modules": modules,
++          "candidate_estimate_graph": shape, "unchanged_function_comparisons": comparisons,
++          "original_multiply_residual_unpack_round_normalized_bodies_equal": True,
++          "original_fallback_complete_suffix_normalized_equal": True, "candidate_has_no_Int64_or_FToU": True,
++          "complete_descriptor_and_workgroup_type_decorations_exact": True, "execution_modes_exact": True,
++          "ordered_barrier_operands_exact": True, "runtime_or_numerical_admission": False,
++          "parser_controls": record(WORK / "parser-control-result.json"),
++          "scope": "Fresh parse-only acceptance of immutable completed compiler products. Original failed wrapper remains false; no recompilation, shader validation rerun, arithmetic or cost verdict."})
++
++
++def review():
++    verify_frozen(); original_completed()
++    folder = WORK / "read-completed-endpoint"; owner = load(folder / "owner.json")
+     assert owner["status"] == "terminal" and owner["passed"] is True and owner["child_exit"] == 0
+     assert owner["stop_reason"] is None and owner["cleanup_errors"] == [] and owner["remaining_owned_processes"] == []
+     assert owner["source_unchanged"] and owner["whole_inputs_unchanged"]
++    assert owner["observed_births"] and all(row["absent"] is True for row in owner["observed_births"])
++    assert (folder / "inputs-before.json").read_bytes() == (folder / "inputs-after.json").read_bytes()
++    context = load(WORK / "operator-context.json"); action = load(WORK / "actions.json")["read-completed-endpoint"]
+     assert owner["source"] == {"revision": context["revision"], "status": ""}
+     assert owner["argv"] == action["argv"] and owner["limits"] == action["limits"]
+-    assert owner["observed_births"] and all(row["absent"] for row in owner["observed_births"])
+-    before_path = folder / "inputs-before.json"
+-    assert before_path.read_bytes() == (folder / "inputs-after.json").read_bytes()
+-    before = json.loads(before_path.read_text())
++    assert context["actions"] == record(WORK / "actions.json") and context["source_freeze"] == record(WORK / "source-freeze.json")
++    before = load(folder / "inputs-before.json")
+     for name in action["frozen_inputs"]:
+-        path = Path(name)
+-        key = str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
+-        current = record(path)
+-        assert before[key] == {field: current[field] for field in ("bytes", "sha256", "resolved_path")}, name
+-    result = json.loads((WORK / "compiler-result.json").read_text())
+-    for row in result["modules"].values():
+-        for pin in [row["module"], row["assembly"], *row["bodies"].values()]:
+-            assert record(pin["resolved_path"]) == pin
+-    write("compiler-acceptance.json", {"compiler_owner": record(folder / "owner.json"),
+-          "compiler_result": record(WORK / "compiler-result.json"), "passed": True,
+-          "scope": "Terminal compiler ownership, exact stock reuse and complete candidate structure only. No Vulkan/JIT execution, arithmetic, benefit or qualification verdict."})
+-    print("Terminal compiler/source/module joins accepted; ordinary lowering remains untested.", flush=True)
++        path = Path(name); key = str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
++        assert before[key] == record(path)
++    result = load(WORK / "compiler-result.json"); assert result["passed"] and result["producer"]["original_passed"] is False
++    for values in result["modules"].values():
++        for pin in (values["module"], values["assembly"], *values["bodies"].values()): assert record(pin["resolved_path"]) == pin
++    assert record(WORK / "parser-control-result.json") == result["parser_controls"]
++    write(WORK / "compiler-acceptance.json", {"passed": True, "reader_owner": record(folder / "owner.json"),
++          "compiler_result": record(WORK / "compiler-result.json"), "original_failed_wrapper": result["producer"]["original_failed_wrapper"],
++          "original_wrapper_passed": False, "original_wrapper_child_exit": 1,
++          "scope": "Separate terminal pure-reader acceptance; original post-validation wrapper failure preserved. No compiler/provider/numerical execution or benefit claim."})
+ 
+ 
+ if __name__ == "__main__":
+-    {"pin-context": pin_context, "compile": compile_candidate, "review": review_terminal}[sys.argv[1]]()
+-
+-
++    {"pin-context": pin_context, "read": read_products, "review": review}[sys.argv[1]]()

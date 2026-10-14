@@ -1,0 +1,35 @@
+{
+  "archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop",
+  "claim_limits": [
+    "No numerical, estimate-hit-rate, ordinary-driver, performance or adoption verdict.",
+    "No absent named PB32WideProduct claim; actual intrinsic and four other normalized bodies checked.",
+    "Original failed owner and whole archived producer evidence remain unchanged."
+  ],
+  "commands": [
+    "python3 -B out/portable-divide-fp64-estimate-screen/reader-recovery/reuse.py pin-context FULL_CLEAN_SOURCE_COMMIT",
+    "python3 -B out/portable-divide-fp64-estimate-screen/reader-recovery/run_owned.py read-completed-endpoint",
+    "python3 -B out/portable-divide-fp64-estimate-screen/reader-recovery/reuse.py review"
+  ],
+  "evidence_commit": "d547d32330a6f4cabb2a8f4f8345fa1ac3c79a93",
+  "generated_outputs": [
+    "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/parser-control-result.json",
+    "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/compiler-result.json",
+    "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/stock.PB32Multiply.spvasm",
+    "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/stock.PB32Divide.spvasm",
+    "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/candidate.PB32Multiply.spvasm",
+    "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/candidate.PB32Divide.spvasm"
+  ],
+  "manifest_sha256": "0b07beda95b536def6ed21bc9c30b96aa512ef3b31eab276afa45909c915a42e",
+  "negative_controls": 23,
+  "original_products_reused_without_recompile_or_revalidation": true,
+  "original_wrapper_child_exit": 1,
+  "original_wrapper_passed": false,
+  "owned_root": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery",
+  "owner_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "schema": "sirius-fp64-estimate-reader-recovery-preparation-v1",
+  "source_only_preparation": true
+}

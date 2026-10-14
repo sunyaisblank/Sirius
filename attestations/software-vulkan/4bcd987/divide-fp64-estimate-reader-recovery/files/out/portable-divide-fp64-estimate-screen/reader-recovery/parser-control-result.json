@@ -1,0 +1,199 @@
+{
+  "controls": [
+    {
+      "actual_acceptance": true,
+      "expected_acceptance": true,
+      "name": "exact_complete_original_candidate"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "range_mask"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "range_exponent"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "swapped_member_store"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "second_member_store"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "pointer_alias"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "load_result_type"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "switch_side_entrance"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "range_true_side_entrance"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "reversed_product_bound_predicate"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_product_low_bound"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_or_phi_arm"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_product_high_limb"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_product_denominator"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_numerator_high_shift"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_borrow_phi"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "omitted_borrow"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_remainder_bound"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_and_phi_arm"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_sticky_phi"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "wrong_round_exponent"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "load_before_unique_store"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "nested_phi_side_entrance"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "name": "changed_original_fallback"
+    }
+  ],
+  "negative_count": 23,
+  "passed": true,
+  "positive_graph": {
+    "Function_uint2_member_load_proof": {
+      "direct_only_no_alias_escape_or_extra_store": true,
+      "load_ids": [
+        "%2943",
+        "%2947"
+      ],
+      "member_pointers": {
+        "0": "%2934",
+        "1": "%2935"
+      },
+      "single_stores_dominate_single_entry_guarded_loads": true,
+      "variable": "%estimateBits"
+    },
+    "acceptance_predicates": [
+      "%2940",
+      "%2962",
+      "%2977"
+    ],
+    "accepted_path_returns_same_round_sign_exponent": true,
+    "arithmetic_equivalence_executed": false,
+    "closed_choice_proofs": {
+      "%2961": {
+        "entry": "%2954",
+        "kind": "closed two-arm Phi",
+        "merge": "%2956",
+        "predicate": "%2955"
+      },
+      "%2962": {
+        "entry": "%2942",
+        "kind": "closed two-arm Phi",
+        "merge": "%2952",
+        "predicate": "%2951"
+      },
+      "%2971": {
+        "entry": "%2964",
+        "kind": "closed two-arm Phi",
+        "merge": "%2968",
+        "predicate": "%2967"
+      },
+      "%2977": {
+        "entry": "%2968",
+        "kind": "closed two-arm Phi",
+        "merge": "%2973",
+        "predicate": "%2972"
+      },
+      "%2984": {
+        "entry": "%2979",
+        "kind": "closed two-arm Phi",
+        "merge": "%2981",
+        "predicate": "%2980"
+      }
+    },
+    "cost_or_hit_rate_established": false,
+    "exact_product": {
+      "id": "%2949",
+      "opcode": "OpUMulExtended"
+    },
+    "exact_product_remainder_inequalities": true,
+    "exact_remainder": [
+      "%residualLo",
+      "%residualHi"
+    ],
+    "exact_remainder_sticky": true,
+    "guess": "%guess",
+    "integer_range_before_guess_extraction": true,
+    "named_PB32WideProduct_required": false,
+    "native_estimate_accuracy_assumed": false,
+    "original_complete_fallback_suffix_normalized_equal": true,
+    "unsigned64_or_float_to_uint_required": false,
+    "wide_division": "%quotient"
+  },
+  "scope": "Complete immutable candidate disassembly text only. Some pointer/CFG negatives are deliberately malformed parser inputs; no shader validity, execution or numerical claim. Original module tools/validation are reused unchanged."
+}

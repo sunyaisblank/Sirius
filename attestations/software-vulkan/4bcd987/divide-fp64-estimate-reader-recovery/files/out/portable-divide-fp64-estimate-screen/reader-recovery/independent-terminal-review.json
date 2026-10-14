@@ -1,0 +1,267 @@
+{
+  "schema": "sirius-fp64-estimate-reader-recovery-independent-terminal-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "reviewer": "/root/forensic_obligations",
+  "review_role": "Independent source reviewer of the recovery, independent of author and root actual operator. Passive file/hash/JSON/text and targeted birth audit only; no authored parser/controls/helper/compiler/validator/provider/device/API/test/CI reexecution.",
+  "result": {
+    "separate_reader_owner_passed": true,
+    "separate_post_terminal_acceptance_present_and_bound": true,
+    "original_failed_compiler_wrapper_still_false_child1": true,
+    "original_compiler_retried_or_relabelled": false,
+    "static_pins": 126,
+    "declared_future_inputs": 128,
+    "actual_before_after_current_input_records": 659,
+    "all_inputs_current_exact": true,
+    "observed_retired_births": 1,
+    "samples": 7,
+    "wall_seconds": 1.8185773500008509,
+    "peak_sampled_rss_kib": 215860,
+    "minimum_sampled_available_kib": 18281100,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "stop_reason": null,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "global_process_absence_claimed": false,
+    "total_parser_controls": 24,
+    "positive_accepted": 1,
+    "negative_rejected": 23
+  },
+  "controls": {
+    "exact_original_complete_candidate_accepted": true,
+    "all_actual_values_equal_expected": true,
+    "negative_names": [
+      "range_mask",
+      "range_exponent",
+      "swapped_member_store",
+      "second_member_store",
+      "pointer_alias",
+      "load_result_type",
+      "switch_side_entrance",
+      "range_true_side_entrance",
+      "reversed_product_bound_predicate",
+      "wrong_product_low_bound",
+      "wrong_or_phi_arm",
+      "wrong_product_high_limb",
+      "wrong_product_denominator",
+      "wrong_numerator_high_shift",
+      "wrong_borrow_phi",
+      "omitted_borrow",
+      "wrong_remainder_bound",
+      "wrong_and_phi_arm",
+      "wrong_sticky_phi",
+      "wrong_round_exponent",
+      "load_before_unique_store",
+      "nested_phi_side_entrance",
+      "changed_original_fallback"
+    ],
+    "scope": "Full disassembly text reader fixtures only. Some CFG/pointer mutations deliberately malformed; no actual shader validation/numerical execution of mutated inputs.",
+    "no_parser_fixture_reexecution_by_reviewer": true
+  },
+  "graph_receipts": {
+    "exact_inline_product": "OpUMulExtended %PB32Wide %guess %2927 at%2949",
+    "member_load_proof": {
+      "direct_only_no_alias_escape_or_extra_store": true,
+      "load_ids": [
+        "%2943",
+        "%2947"
+      ],
+      "member_pointers": {
+        "0": "%2934",
+        "1": "%2935"
+      },
+      "single_stores_dominate_single_entry_guarded_loads": true,
+      "variable": "%estimateBits"
+    },
+    "closed_choice_proofs": {
+      "%2961": {
+        "entry": "%2954",
+        "kind": "closed two-arm Phi",
+        "merge": "%2956",
+        "predicate": "%2955"
+      },
+      "%2962": {
+        "entry": "%2942",
+        "kind": "closed two-arm Phi",
+        "merge": "%2952",
+        "predicate": "%2951"
+      },
+      "%2971": {
+        "entry": "%2964",
+        "kind": "closed two-arm Phi",
+        "merge": "%2968",
+        "predicate": "%2967"
+      },
+      "%2977": {
+        "entry": "%2968",
+        "kind": "closed two-arm Phi",
+        "merge": "%2973",
+        "predicate": "%2972"
+      },
+      "%2984": {
+        "entry": "%2979",
+        "kind": "closed two-arm Phi",
+        "merge": "%2981",
+        "predicate": "%2980"
+      }
+    },
+    "range_product_borrow_residual_sticky_round_order_retained": true,
+    "full_original_fallback_normalized_equal_receipt": true,
+    "four_named_functions_normalized_equal_receipt": [
+      "PB32Unpack",
+      "PB32Round",
+      "PB32Multiply",
+      "PB32ProductResidual"
+    ],
+    "named_PB32WideProduct_absent_in_both_actual_modules": true,
+    "no_fabricated_WideProduct_function_comparison": true,
+    "actual_raw_extracted_bodies_match_full_immutable_disassembly": true,
+    "raw_Multiply_body_bytes_equal_claimed": false,
+    "Multiply_note": "Raw function text hashes differ due to IDs; equality claim is normalized function equality under the reviewed pure reader.",
+    "interfaces_modes_barriers_capabilities_types_joined_by_reviewed_passed_reader": true,
+    "native_estimate_accuracy_assumed": false,
+    "arithmetic_equivalence_executed": false,
+    "cost_or_hit_rate_established": false
+  },
+  "provenance": {
+    "archive_commit": "d547d32330a6f4cabb2a8f4f8345fa1ac3c79a93",
+    "archive_manifest_sha256": "0b07beda95b536def6ed21bc9c30b96aa512ef3b31eab276afa45909c915a42e",
+    "original_failed_owner_sha256": "0e80cf65191ce371955078bddbecf0425018c94468ce47d26bc3dc05af2ce65e",
+    "whole_failure_bundle_raw_manifest_rechecked": true,
+    "source_admission_verified_all61_Git_files": true,
+    "original85_declared_inputs_bound_in_actual_reader_result": true,
+    "no_live_original_compiler_out_bin_dependency": true,
+    "new_output_receipts_join_exact_immutable_module_assembly_and_extracted_bodies": true,
+    "owner_context_actions_freeze_preparation_and_source_review_unchanged": true,
+    "old_raw_and_source_not_mutated": true
+  },
+  "modules": {
+    "candidate": {
+      "assembly": {
+        "bytes": 427444,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.final.spvasm",
+        "sha256": "0b8b0bfd18ad71bc11fa30a08dfa9f20a9bbd71b8b2a66e48a5d5f0f9a3cf512"
+      },
+      "bodies": {
+        "PB32Divide": {
+          "bytes": 10109,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/candidate.PB32Divide.spvasm",
+          "sha256": "92c27392c6746cbe832906906ac128773ae5317e2d6e1eda3bf1b946f6c881a8"
+        },
+        "PB32Multiply": {
+          "bytes": 4215,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/candidate.PB32Multiply.spvasm",
+          "sha256": "20eb8b900d0ab8c971b0f0baed458998e1902939b635899aa7f98b4d71d7d64b"
+        }
+      },
+      "module": {
+        "bytes": 153168,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.spv",
+        "sha256": "87fc489831e49e8e1bdc7f60e3cf3f778c5a1297f21c4bc5d026968418c9fe7f"
+      }
+    },
+    "stock": {
+      "assembly": {
+        "bytes": 422552,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/stock-endpoint-normal.final.spvasm",
+        "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994"
+      },
+      "bodies": {
+        "PB32Divide": {
+          "bytes": 6186,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/stock.PB32Divide.spvasm",
+          "sha256": "eeebc7bfdcd5aee8293ea5ae9ab4ea6fcfb1837ce5f63f5f2dc4fa27276733fb"
+        },
+        "PB32Multiply": {
+          "bytes": 4215,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/stock.PB32Multiply.spvasm",
+          "sha256": "48dac617ffd727712f86b54f27fc351c48fda2f97a32dc00fd5c8497eeffdb03"
+        }
+      },
+      "module": {
+        "bytes": 151400,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/stock-endpoint-normal.spv",
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      }
+    }
+  },
+  "critical": {
+    "compiler-result.json": {
+      "bytes": 6890,
+      "sha256": "a7a9efb9c30d76536cc4e2f097e8c6c8dcfedab3526d9ae104943de9a2fdc908"
+    },
+    "compiler-acceptance.json": {
+      "bytes": 1145,
+      "sha256": "b2d15fdf12b7de611608a3463e9db705adecd66b544ba3680bdc8715c08a7a38"
+    },
+    "parser-control-result.json": {
+      "bytes": 5117,
+      "sha256": "63c813bdbb4fcca97e8fa434061b470ada4d98ed90e6a49f98a07735d07dd550"
+    },
+    "read-completed-endpoint/owner.json": {
+      "bytes": 1793,
+      "sha256": "741ca5d321dedfff104195655112c20ecd8d08c4243a9f277022d52e54db005b"
+    },
+    "read-completed-endpoint/inputs-before.json": {
+      "bytes": 179056,
+      "sha256": "7c9384b9444bac81581f4cbbfa4b3fa89b85545115ae6228a569785c24f6e1d7"
+    },
+    "read-completed-endpoint/inputs-after.json": {
+      "bytes": 179056,
+      "sha256": "7c9384b9444bac81581f4cbbfa4b3fa89b85545115ae6228a569785c24f6e1d7"
+    },
+    "read-completed-endpoint/samples.jsonl": {
+      "bytes": 1575,
+      "sha256": "9cb9a7c89d98f444cb0450cd2e0272d25829a3cdb96b6e0a80e66a959511b46e"
+    },
+    "read-completed-endpoint/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "read-completed-endpoint/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actions.json": {
+      "bytes": 20918,
+      "sha256": "f527474d10d50d0517d32e84d386c9cca874ad8521845e306c070f993b688d2e"
+    },
+    "operator-context.json": {
+      "bytes": 809,
+      "sha256": "d9e76b039fc09ed5c04bc440c208747f314d1eb7100c22a9c3c78d04b8a984fc"
+    },
+    "source-freeze.json": {
+      "bytes": 76234,
+      "sha256": "d7f7ab28a4a76c62cedee2361751fc9639f826baefe2e1918417e316203a36f1"
+    },
+    "independent-source-review.json": {
+      "bytes": 8778,
+      "sha256": "7dd5fe22582bcdab0e8efd7e16218f9e15134ad92bc2b2ead68d27c601e0cfcd"
+    }
+  },
+  "claim_limits": {
+    "pure_reader_completion_only": true,
+    "new_compiler_provider_or_shader_execution": false,
+    "original_wrapper_success": false,
+    "driver_capture_admitted": false,
+    "logical_device_or_Float64_enablement_established": false,
+    "retained_division_or174268record_arithmetic_established": false,
+    "original8_controls_or20plus2benefit_established": false,
+    "performance_or_production_adoption_or_qualification_claimed": false,
+    "future_driver_dependency": "Use new immutable reader result/acceptance/owner/inputs/helpers plus separately preserved property receipts and exact cache recovery; held unsealed driver is not admitted by this review."
+  },
+  "blockers": [],
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "review_ignored_uncommitted": true
+  }
+}

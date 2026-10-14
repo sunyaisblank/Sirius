@@ -1,0 +1,167 @@
+{
+  "schema": "sirius-fp64-estimate-reader-recovery-independent-source-review-v1",
+  "passed": true,
+  "admitted_component": "reader_recovery_only",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "reviewer": "/root/forensic_obligations",
+  "independent_of_author": true,
+  "operator": "Root alone. Reviewer executed no authored graph/controls/reuse/owner helper, compiler, validator, provider, device, API, test or CI.",
+  "release_and_identity_checks": {
+    "passed": true,
+    "static_pins": 126,
+    "prospective_frozen_inputs": 128,
+    "immutable_Git_files_verified": 61,
+    "old_owner_before_after_equal": 616,
+    "old_declared_inputs_rejoined": 85,
+    "old_tool_symlink_resolutions_retained": 5,
+    "live_original_compiler_or_bin_inputs": 0,
+    "negative_controls": 23,
+    "literal_fixture_anchors_checked": 20,
+    "old_owner_still_false": true,
+    "outputs_absent": true,
+    "critical": {
+      "reuse.py": {
+        "bytes": 13073,
+        "sha256": "634b19b2875a1cb06ee6239919a1edc7ca85923e4c2821c3c1b92b4e86b913a9"
+      },
+      "estimate_graph.py": {
+        "bytes": 17797,
+        "sha256": "22fc14614c7d61bd9077e6e0f1ec33395c07809d71b4042429b17740d418d7ff"
+      },
+      "parser_controls.py": {
+        "bytes": 5215,
+        "sha256": "5743e02dcc9ca15af643060883dc195b2c74e2ebbeb18ecea61dc2414075db46"
+      },
+      "inputs.json": {
+        "bytes": 848,
+        "sha256": "f84670d6b1ad4156c08a3047aafce284c2e8c1817dc8cc1cf50efa60da204ae5"
+      },
+      "preparation.json": {
+        "bytes": 2171,
+        "sha256": "9c1afd4bd38a6810743cd50c0bf5849b854ddbf01a2030e48130ea7c88ed2cba"
+      },
+      "actions.unpinned.json": {
+        "bytes": 20908,
+        "sha256": "c8ae068029f30f31be2f5facb63268bf0fa4f17878f31f5f1723714622493c96"
+      },
+      "source-freeze.json": {
+        "bytes": 76234,
+        "sha256": "d7f7ab28a4a76c62cedee2361751fc9639f826baefe2e1918417e316203a36f1"
+      },
+      "commands.json": {
+        "bytes": 467,
+        "sha256": "a8462e0e22f138c390809944124bf66a557ae3f8088342f0aadd8b13ab12fb49"
+      },
+      "finding.json": {
+        "bytes": 2178,
+        "sha256": "ce1f3388f23bdd8155b7e42459fd11a1c6add6a7f58838dd8a5e1726fa2b7395"
+      }
+    },
+    "archive": {
+      "archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop",
+      "evidence_commit": "d547d32330a6f4cabb2a8f4f8345fa1ac3c79a93",
+      "manifest_sha256": "0b07beda95b536def6ed21bc9c30b96aa512ef3b31eab276afa45909c915a42e",
+      "original_stderr": {
+        "bytes": 1266,
+        "sha256": "1cf758c6b15a22d40a5ef2486d8069031bb82a64912a3d579df04b23895a8c33"
+      },
+      "products": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules",
+      "schema": "sirius-fp64-estimate-completed-reader-inputs-v1",
+      "scope": "Parse-only exact completed module reuse; original failed wrapper false and child1 preserved. No compiler, validation, provider, arithmetic or performance execution."
+    },
+    "modules": {
+      "stock": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      },
+      "candidate": {
+        "bytes": 153168,
+        "sha256": "87fc489831e49e8e1bdc7f60e3cf3f778c5a1297f21c4bc5d026968418c9fe7f"
+      }
+    }
+  },
+  "scope": {
+    "prospective_operations": "Pin clean source context→one parse-only owner read-completed-endpoint→separate post-terminal review.",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "no_shader_tools_or_provider_calls": true,
+    "old_failed_owner_unchanged_and_false": true,
+    "old_compiler_retried": false,
+    "existing_exact_stock_and_candidate_modules_reused": true,
+    "future_driver_capture_admitted": false
+  },
+  "pointer_alias_proof": {
+    "limited_to": "One exact Function PB32Wide{uint,uint} variable and two direct typed uint access chains.",
+    "each_member_exactly_one_store_from_corresponding_untrusted_estimate_bitcast_limb": true,
+    "two_stores_precede_range_condition_in_same_block": true,
+    "each_aliased_load_returns_uint_and_is_in_single_entry_true_block": true,
+    "all_uses_enumerated_no_pointer_copy_escape_additional_store_or_alias": true,
+    "duplicates": "Only one or two typed immutable CompositeExtract values of the exact product field are equated; arbitrary memory or SSA identities are not collapsed."
+  },
+  "control_flow_proof": {
+    "all_actual_successor_forms": "OpBranch, OpBranchConditional and OpSwitch default/case successors are accounted for in predecessor sets.",
+    "closed_choices": "Only exact Select/Logical operations or two-incoming structured selection Phi diamonds are recognized. Each simple arm has only its owning header as predecessor and returns to the exact merge; nested choices require previously proved entry/merge relationships.",
+    "required_gate_order": "Integer estimate range→exact guess/product→lexicographic P<=N→borrow-subtracted remainder→residualHi0 and residualLo<d→sticky→same PB32Round sign/exponent and return.",
+    "single_entry_no_gate_bypass": true,
+    "new_explicit_load_type_and_switch_edge_negatives": true
+  },
+  "arithmetic_and_profile_guards": {
+    "exact_product": "Actual OpUMulExtended result has the same two-uint structure and exact guess*d operands.",
+    "no_fabricated_named_WideProduct_comparison": "PB32WideProduct has no named function in either actual module. Both absence and unchanged source intrinsic are bound; actual inline product graph is checked. The four other named function bodies are compared completely after ID normalization.",
+    "complete_original_fallback_suffix_retained": "Original loop, digit division, sticky and final round/return suffix normalized equal; same original normalized m/d/sign/exponent join retained.",
+    "unchanged_named_functions": [
+      "PB32Unpack",
+      "PB32Round",
+      "PB32Multiply",
+      "PB32ProductResidual"
+    ],
+    "other_required_checks": "Full descriptor/workgroup type/decorations, execution modes, ordered barrier operands, exact capability multisets, Int32-only/Float32+64 candidate, no FloatToInt, original one fallback loop and UInt32 divides.",
+    "normal32_policy": "Original compiled/validated module and frozen builder policy remain immutable; no policy or validator rerun is substituted.",
+    "native_estimate_accuracy_assumed": false,
+    "numerical_equivalence_or_cost_or_hit_rate_established": false
+  },
+  "negative_controls": {
+    "count": 23,
+    "positive": "One exact complete original candidate is required to pass.",
+    "scope": "Complete immutable disassembly text mutations, including range mask/exponent, swapped/extra stores, pointer alias, load type/order, branch/switch side entrances, product comparison arms/limbs/denominator, numerator shift, borrow, residual bounds, sticky, round exponent and original fallback.",
+    "all_expect_rejection": true,
+    "source_fixture_anchors_checked_without_executing_mutators": 20,
+    "special_mutations_reviewed": 3,
+    "some_cfg_pointer_inputs_deliberately_malformed": true,
+    "shader_validity_execution_or_performance_claimed": false,
+    "actually_executed_by_reviewer": false
+  },
+  "provenance": {
+    "all61_preserved_failure_bundle_Git_files_equal_raw_manifest": true,
+    "old_original616_before_after_maps_equal_recorded": true,
+    "all85_declared_original_inputs_rejoined": true,
+    "five_unrelocated_tool_symlink_targets_retained": true,
+    "archival_regular_file_relocation_explicit_and_old_resolved_path_preserved": true,
+    "current_original_compiler_out_or_bin_paths_consumed": 0,
+    "current_parser_owner_and_guard_exact_original_bytes": true,
+    "old_compiler83_sources_outputs_and_owner_not_mutated": true
+  },
+  "acceptance_boundary": {
+    "no_existing_new_owner_context_result_acceptance_at_review": true,
+    "new_result_requires_all_graph_profile_and23negative_checks": true,
+    "new_post_terminal_acceptance_requires_passed_new_owner_and_exact_before_after_current_inputs_outputs": true,
+    "original_wrapper_passed_field_must_remain_false": true,
+    "original_wrapper_child_exit_must_remain_1": true,
+    "no_arithmetic174268_original8_or20plus2benefit_admission": true,
+    "provider_property_and_cache_alias_future_driver_wiring_separate": true,
+    "qualification_claimed": false
+  },
+  "blockers": [],
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "review_ignored_uncommitted": true
+  }
+}

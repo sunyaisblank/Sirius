@@ -1,0 +1,39 @@
+{
+  "actual_representations": {
+    "borrow_and_remainder": "SPV4719..4737 closed Phi ternary and AND diamonds",
+    "estimate_uint2": "SPV4664..4677 FMul/FDiv, uint2 bitcast, distinct member stores; range predicate uses extracted high",
+    "fallback": "StartsSPV4759; source original bytes unchanged",
+    "guess": "SPV4680..4687 reloads two direct Function uint member pointers; each has one store",
+    "not_above": "SPV4693..4712 closed short-circuit OR/AND Phi diamonds",
+    "product": "SPV4688 exact OpUMulExtended, no named PB32WideProduct body in either module",
+    "sticky": "SPV4741..4753 closed1/0 Phi then unchanged-sign/exponent PB32Round"
+  },
+  "author": "Original anticipated reader/packet author; root operated compiler; independent terminal/source review by forensic_obligations",
+  "candidate_assembly": {
+    "bytes": 427444,
+    "sha256": "0b8b0bfd18ad71bc11fa30a08dfa9f20a9bbd71b8b2a66e48a5d5f0f9a3cf512"
+  },
+  "correction_scope": "Fresh bounded reader only; exact memory/CFG/limb/remainder/fallback proofs and meaningful negatives; original failed owner remains false.",
+  "diagnosis": "Anticipated reader was too specific. Source/math review alone did not establish emitted SSA; not a demonstrated arithmetic/compiler defect. The author missed Function-member loads, inline intrinsic, structured Phi forms and absent named intrinsic function.",
+  "first_reader_error": {
+    "assertion": "guess = one(...direct SSA fraction...)",
+    "line": 70,
+    "observed": "[]",
+    "source": "compiler/estimate_graph.py"
+  },
+  "no_helper_compiler_validator_test_provider_execution_by_author": true,
+  "no_original_source_output_or_owner_changed": true,
+  "original_owner": {
+    "bytes": 1625,
+    "sha256": "0e80cf65191ce371955078bddbecf0425018c94468ce47d26bc3dc05af2ce65e"
+  },
+  "original_wrapper_result": {
+    "births_retired": 2,
+    "child_exit": 1,
+    "inputs_stable": true,
+    "passed": false,
+    "scope": "Actual tools completed before strict graph reader rejected first guess match; no compiler-result, device/capture or numeric verdict.",
+    "stop_reason": null
+  },
+  "schema": "sirius-fp64-estimate-compiler-reader-stop-source-finding-v1"
+}

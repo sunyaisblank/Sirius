@@ -1,0 +1,431 @@
+{
+  "compiler_retried": false,
+  "driver_executed": false,
+  "numerical_execution_started": false,
+  "original_wrapper_child_exit": 1,
+  "original_wrapper_passed": false,
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/reuse.py",
+      "read"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "read-completed-endpoint",
+    "child_exit": 0,
+    "child_pid": 401521,
+    "child_start_ticks": "6570801",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 401517,
+      "pid": 401517,
+      "ppid": 1313,
+      "rss_kib": 20700,
+      "session": 401517,
+      "start_ticks": "6570758",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "meaning": "Pure post-terminal reader of exact immutable full normal Endpoint SPV; original wrapper false/child1 retained, exact local slot/closed-Phi/intrinsic/fallback proof and bounded parser negatives; no compiler/validator/provider/numerical execution.",
+    "minimum_sampled_available_kib": 18281100,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 401521,
+        "saved_start_ticks": "6570801"
+      }
+    ],
+    "passed": true,
+    "peak_sampled_rss_kib": 215860,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "Pure post-terminal reader of exact immutable full normal Endpoint SPV; original wrapper false/child1 retained, exact local slot/closed-Phi/intrinsic/fallback proof and bounded parser negatives; no compiler/validator/provider/numerical execution.",
+    "source": {
+      "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 1.8185773500008509,
+    "whole_inputs_unchanged": true
+  },
+  "parser_controls": {
+    "controls": [
+      {
+        "actual_acceptance": true,
+        "expected_acceptance": true,
+        "name": "exact_complete_original_candidate"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "range_mask"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "range_exponent"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "swapped_member_store"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "second_member_store"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "pointer_alias"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "load_result_type"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "switch_side_entrance"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "range_true_side_entrance"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "reversed_product_bound_predicate"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_product_low_bound"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_or_phi_arm"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_product_high_limb"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_product_denominator"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_numerator_high_shift"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_borrow_phi"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "omitted_borrow"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_remainder_bound"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_and_phi_arm"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_sticky_phi"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "wrong_round_exponent"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "load_before_unique_store"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "nested_phi_side_entrance"
+      },
+      {
+        "actual_acceptance": false,
+        "expected_acceptance": false,
+        "name": "changed_original_fallback"
+      }
+    ],
+    "negative_count": 23,
+    "passed": true,
+    "positive_graph": {
+      "Function_uint2_member_load_proof": {
+        "direct_only_no_alias_escape_or_extra_store": true,
+        "load_ids": [
+          "%2943",
+          "%2947"
+        ],
+        "member_pointers": {
+          "0": "%2934",
+          "1": "%2935"
+        },
+        "single_stores_dominate_single_entry_guarded_loads": true,
+        "variable": "%estimateBits"
+      },
+      "acceptance_predicates": [
+        "%2940",
+        "%2962",
+        "%2977"
+      ],
+      "accepted_path_returns_same_round_sign_exponent": true,
+      "arithmetic_equivalence_executed": false,
+      "closed_choice_proofs": {
+        "%2961": {
+          "entry": "%2954",
+          "kind": "closed two-arm Phi",
+          "merge": "%2956",
+          "predicate": "%2955"
+        },
+        "%2962": {
+          "entry": "%2942",
+          "kind": "closed two-arm Phi",
+          "merge": "%2952",
+          "predicate": "%2951"
+        },
+        "%2971": {
+          "entry": "%2964",
+          "kind": "closed two-arm Phi",
+          "merge": "%2968",
+          "predicate": "%2967"
+        },
+        "%2977": {
+          "entry": "%2968",
+          "kind": "closed two-arm Phi",
+          "merge": "%2973",
+          "predicate": "%2972"
+        },
+        "%2984": {
+          "entry": "%2979",
+          "kind": "closed two-arm Phi",
+          "merge": "%2981",
+          "predicate": "%2980"
+        }
+      },
+      "cost_or_hit_rate_established": false,
+      "exact_product": {
+        "id": "%2949",
+        "opcode": "OpUMulExtended"
+      },
+      "exact_product_remainder_inequalities": true,
+      "exact_remainder": [
+        "%residualLo",
+        "%residualHi"
+      ],
+      "exact_remainder_sticky": true,
+      "guess": "%guess",
+      "integer_range_before_guess_extraction": true,
+      "named_PB32WideProduct_required": false,
+      "native_estimate_accuracy_assumed": false,
+      "original_complete_fallback_suffix_normalized_equal": true,
+      "unsigned64_or_float_to_uint_required": false,
+      "wide_division": "%quotient"
+    },
+    "scope": "Complete immutable candidate disassembly text only. Some pointer/CFG negatives are deliberately malformed parser inputs; no shader validity, execution or numerical claim. Original module tools/validation are reused unchanged."
+  },
+  "passed": true,
+  "prior_immutable_producer_commit": "d547d32330a6f4cabb2a8f4f8345fa1ac3c79a93",
+  "qualification_claimed": false,
+  "result": {
+    "candidate_estimate_graph": {
+      "Function_uint2_member_load_proof": {
+        "direct_only_no_alias_escape_or_extra_store": true,
+        "load_ids": [
+          "%2943",
+          "%2947"
+        ],
+        "member_pointers": {
+          "0": "%2934",
+          "1": "%2935"
+        },
+        "single_stores_dominate_single_entry_guarded_loads": true,
+        "variable": "%estimateBits"
+      },
+      "acceptance_predicates": [
+        "%2940",
+        "%2962",
+        "%2977"
+      ],
+      "accepted_path_returns_same_round_sign_exponent": true,
+      "arithmetic_equivalence_executed": false,
+      "closed_choice_proofs": {
+        "%2961": {
+          "entry": "%2954",
+          "kind": "closed two-arm Phi",
+          "merge": "%2956",
+          "predicate": "%2955"
+        },
+        "%2962": {
+          "entry": "%2942",
+          "kind": "closed two-arm Phi",
+          "merge": "%2952",
+          "predicate": "%2951"
+        },
+        "%2971": {
+          "entry": "%2964",
+          "kind": "closed two-arm Phi",
+          "merge": "%2968",
+          "predicate": "%2967"
+        },
+        "%2977": {
+          "entry": "%2968",
+          "kind": "closed two-arm Phi",
+          "merge": "%2973",
+          "predicate": "%2972"
+        },
+        "%2984": {
+          "entry": "%2979",
+          "kind": "closed two-arm Phi",
+          "merge": "%2981",
+          "predicate": "%2980"
+        }
+      },
+      "cost_or_hit_rate_established": false,
+      "exact_product": {
+        "id": "%2949",
+        "opcode": "OpUMulExtended"
+      },
+      "exact_product_remainder_inequalities": true,
+      "exact_remainder": [
+        "%residualLo",
+        "%residualHi"
+      ],
+      "exact_remainder_sticky": true,
+      "guess": "%guess",
+      "integer_range_before_guess_extraction": true,
+      "named_PB32WideProduct_required": false,
+      "native_estimate_accuracy_assumed": false,
+      "original_complete_fallback_suffix_normalized_equal": true,
+      "unsigned64_or_float_to_uint_required": false,
+      "wide_division": "%quotient"
+    },
+    "candidate_has_no_Int64_or_FToU": true,
+    "complete_descriptor_and_workgroup_type_decorations_exact": true,
+    "execution_modes_exact": true,
+    "modules": {
+      "candidate": {
+        "assembly": {
+          "bytes": 427444,
+          "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.final.spvasm",
+          "sha256": "0b8b0bfd18ad71bc11fa30a08dfa9f20a9bbd71b8b2a66e48a5d5f0f9a3cf512"
+        },
+        "bodies": {
+          "PB32Divide": {
+            "bytes": 10109,
+            "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/candidate.PB32Divide.spvasm",
+            "sha256": "92c27392c6746cbe832906906ac128773ae5317e2d6e1eda3bf1b946f6c881a8"
+          },
+          "PB32Multiply": {
+            "bytes": 4215,
+            "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/candidate.PB32Multiply.spvasm",
+            "sha256": "20eb8b900d0ab8c971b0f0baed458998e1902939b635899aa7f98b4d71d7d64b"
+          }
+        },
+        "module": {
+          "bytes": 153168,
+          "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.spv",
+          "sha256": "87fc489831e49e8e1bdc7f60e3cf3f778c5a1297f21c4bc5d026968418c9fe7f"
+        }
+      },
+      "stock": {
+        "assembly": {
+          "bytes": 422552,
+          "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/stock-endpoint-normal.final.spvasm",
+          "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994"
+        },
+        "bodies": {
+          "PB32Divide": {
+            "bytes": 6186,
+            "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/stock.PB32Divide.spvasm",
+            "sha256": "eeebc7bfdcd5aee8293ea5ae9ab4ea6fcfb1837ce5f63f5f2dc4fa27276733fb"
+          },
+          "PB32Multiply": {
+            "bytes": 4215,
+            "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/products/stock.PB32Multiply.spvasm",
+            "sha256": "48dac617ffd727712f86b54f27fc351c48fda2f97a32dc00fd5c8497eeffdb03"
+          }
+        },
+        "module": {
+          "bytes": 151400,
+          "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/stock-endpoint-normal.spv",
+          "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+        }
+      }
+    },
+    "ordered_barrier_operands_exact": true,
+    "original_fallback_complete_suffix_normalized_equal": true,
+    "original_multiply_residual_unpack_round_normalized_bodies_equal": true,
+    "parser_controls": {
+      "bytes": 5117,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/reader-recovery/parser-control-result.json",
+      "sha256": "63c813bdbb4fcca97e8fa434061b470ada4d98ed90e6a49f98a07735d07dd550"
+    },
+    "passed": true,
+    "producer": {
+      "archive_manifest": {
+        "bytes": 12203,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/manifest.json",
+        "sha256": "0b07beda95b536def6ed21bc9c30b96aa512ef3b31eab276afa45909c915a42e"
+      },
+      "exact_post_validation_reader_failure": true,
+      "no_compiler_validator_or_policy_rerun": true,
+      "original_child_exit": 1,
+      "original_failed_wrapper": {
+        "bytes": 1625,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/out/portable-divide-fp64-estimate-screen/compiler/compile-endpoint-normal/owner.json",
+        "sha256": "0e80cf65191ce371955078bddbecf0425018c94468ce47d26bc3dc05af2ce65e"
+      },
+      "original_input_byte_joins": 85,
+      "original_passed": false
+    },
+    "runtime_or_numerical_admission": false,
+    "scope": "Fresh parse-only acceptance of immutable completed compiler products. Original failed wrapper remains false; no recompilation, shader validation rerun, arithmetic or cost verdict.",
+    "unchanged_function_comparisons": {
+      "PB32Multiply": "Complete normalized function equal.",
+      "PB32ProductResidual": "Complete normalized function equal.",
+      "PB32Round": "Complete normalized function equal.",
+      "PB32Unpack": "Complete normalized function equal.",
+      "PB32WideProduct": "No named function in either module; unchanged source intrinsic and actual OpUMulExtended graph checked."
+    }
+  },
+  "schema": "sirius-fp64-estimate-reader-only-recovery-v1",
+  "scope": "Fresh pure-reader acceptance of exact previously compiled/validated complete module, typed local memory/closed Phi/UInt2 graph, full original fallback and profile.23 mutated text negatives refused. No compiler/validator/provider rerun, native estimate accuracy/hit-rate, original arithmetic, benefit, frame or qualification verdict.",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "static_input_count": 126
+}
