@@ -1,0 +1,188 @@
+{
+  "schema": "sirius-fp64-estimate-profile-recovery-independent-terminal-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "reviewer": "/root/forensic_obligations",
+  "independence": "Independent of recovery author and root actual operator. Reviewer performed prior source admission, including the earlier admission that missed the original unsigned-only predicate; this terminal check is passive source/raw consistency, not a second execution.",
+  "method": "Standard-library JSON/byte/hash/header-initializer inspection and targeted /proc reads only; no authored helper/parser/disassembler/compiler/validator/policy/test/provider executed.",
+  "critical_pins": {
+    "actions.json": {
+      "bytes": 318970,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/actions.json",
+      "sha256": "d1a862fe7ff8be8357113baeea89bfdfadbebfa4bdf1bc6f8f80c8ace96b7b38"
+    },
+    "camera_profile.py": {
+      "bytes": 9802,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/camera_profile.py",
+      "sha256": "11c472ff8459488f6eea6ffcb4009d87f3a8d5744a4b88bcb178677ebe86cd0f"
+    },
+    "operator-context.json": {
+      "bytes": 793,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/operator-context.json",
+      "sha256": "0b1558dd288e76708018da2d2e786794ee70eb8c2e33d4a19923cb75679914e9"
+    },
+    "preparation.json": {
+      "bytes": 3979,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/preparation.json",
+      "sha256": "e107e06f4e45eaf8d50fae6b0bf9c8ffd798b745981062777ba9d0920923ab37"
+    },
+    "products_profile.py": {
+      "bytes": 6198,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/products_profile.py",
+      "sha256": "508eecb4b65c6c9fd89eb05d5fb3e6a747977efd5a7d9adf3024c9f930b71577"
+    },
+    "profile-acceptance.json": {
+      "bytes": 6673,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/profile-acceptance.json",
+      "sha256": "0e0972c4996d17b70defdc1d609319f6a6ce2291e12588c1bd5a87c82dbf11f6"
+    },
+    "profile-result.json": {
+      "bytes": 223035,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/profile-result.json",
+      "sha256": "5b993073d0ebe327fb8a658505a1a988f33ce1fa9961238f1d41deb2f46b0bad"
+    },
+    "read-full-profile/inputs-after.json": {
+      "bytes": 876420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/read-full-profile/inputs-after.json",
+      "sha256": "8511e470a4ff4e2ce0808da391b888c3a3b29812e0ab4a8fb35418e230587fe8"
+    },
+    "read-full-profile/inputs-before.json": {
+      "bytes": 876420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/read-full-profile/inputs-before.json",
+      "sha256": "8511e470a4ff4e2ce0808da391b888c3a3b29812e0ab4a8fb35418e230587fe8"
+    },
+    "read-full-profile/output-seal.json": {
+      "bytes": 27290,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/read-full-profile/output-seal.json",
+      "sha256": "66b1e990483aba7300e693ce30050cd20ff18b23f5841b1dc5f71c73916f335a"
+    },
+    "read-full-profile/owner.json": {
+      "bytes": 1915,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/read-full-profile/owner.json",
+      "sha256": "d7229d07243579c7dc163423f1a7da2e181b145446913e80f7e7513068924894"
+    },
+    "read-full-profile/stderr.log": {
+      "bytes": 0,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/read-full-profile/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "read-full-profile/stdout.log": {
+      "bytes": 0,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/read-full-profile/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recover.py": {
+      "bytes": 13449,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/recover.py",
+      "sha256": "585dcd7fb48f94acbeb1b009f8443f472fff6f2a3878279f664139eed5a3a58b"
+    },
+    "source-freeze.json": {
+      "bytes": 954095,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/source-freeze.json",
+      "sha256": "5d81fa0c7353e94fbd8728dabdc453f3397f369ef58a3247f30ade9ceb30a10a"
+    }
+  },
+  "terminal": {
+    "owner_count": 1,
+    "child_exit": 0,
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "minimum_sampled_available_kib": 19047724,
+    "passed": true,
+    "peak_sampled_rss_kib": 100760,
+    "provider_mappings": [],
+    "wall_seconds": 56.67234221698891,
+    "before_after_byte_equal": true,
+    "current_static_pins": 2473,
+    "current_consumed_inputs": 2476,
+    "all_current_bytes_sizes_and_resolved_paths_match": true,
+    "operator_context_actions_freeze_preparation_join": true,
+    "result_and_all64_output_seal_records_match": true,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "targeted_same_boot_births": [
+      {
+        "current_start_ticks": null,
+        "pid": 423855,
+        "same_birth_absent": true,
+        "saved_start_ticks": 7055999
+      },
+      {
+        "current_start_ticks": null,
+        "pid": 424077,
+        "same_birth_absent": true,
+        "saved_start_ticks": 7060536
+      }
+    ],
+    "process_scope": "Only the two sampled recorded births were freshly checked. Both PIDs are absent; no claim that every short disassembler child was sampled or that all system processes are absent.",
+    "provider_scope": "No provider mapping or provider/API execution in this parse/disassembly owner."
+  },
+  "profile": {
+    "complete_modules": 35,
+    "changed_modules": 17,
+    "unchanged_modules": 18,
+    "main_arrays": 40,
+    "changed_main_arrays": 17,
+    "unchanged_main_arrays": 23,
+    "unchanged_owner_arrays": 2,
+    "tables_unchanged": 7,
+    "raw_header_array_payloads_match_complete_module_byte_set": true,
+    "header_namespaces": "Main retained and optional retained_owner arrays were kept separate, including same-named kTransportShader/kEndpointShader symbols.",
+    "arrays_and_product_payloads_passively_read": true,
+    "preserved_compiler_products": 78,
+    "new_assembly": 64,
+    "reused_assembly": 6,
+    "assembly_to_source_module_record_joins": 70,
+    "all_module_and_assembly_records_current": true,
+    "camera_graph_modules": [
+      "retained_camera_portable.spv",
+      "retained_camera_portable_fp64.spv",
+      "retained_ray_camera_portable.spv",
+      "retained_ray_camera_portable_fp64.spv"
+    ],
+    "camera_estimate_sites_per_module": 2,
+    "named_graph_modules": 13,
+    "signature_controls": {
+      "all_rejected": true,
+      "negative": 6,
+      "positive": 2
+    },
+    "recorded_interface_layout_modes_barriers_and_graph_acceptance": true,
+    "emitted_graph_reader_rerun": false,
+    "camera_limit": "The recorded exact estimate/UInt2 product/full-borrow/remainder/sticky/closed-CFG footprints pass. Complete inlined Round/normalization/fallback equivalence remains frozen-source/canonical-O1 reasoning, not independently reconstructed emitted proof."
+  },
+  "historical": {
+    "archive_commit": "b1f0795a168807e28143e45221c5a1c584195630",
+    "manifest_sha256": "806d071b24816b7dde0de3acfe47a7f9c15e4e3daaad96421752fd59c9f52499",
+    "three_completed_producer_owner_input_output_receipts_still_exact": true,
+    "all78_sealed_products_current": true,
+    "original_failed_reader_passed": false,
+    "original_failed_reader_child_exit": 1,
+    "old_failed_owner_sha256": "93c2f1118c5f81ef21adb02d6ef9bc81a6766dc86dc26b392ca350bafdce21d4",
+    "old_failed_reader_promoted": false,
+    "topology": "The new one-owner recovery is explicit and separate from three historical successful producers and the original failed reader. Any downstream producer/eight-control continuation needs its actual own topology and receipts."
+  },
+  "scope": {
+    "profile_recovery_accepted": true,
+    "integrated_numerical_controls_executed": false,
+    "new_arithmetic_execution": false,
+    "hit_rate_claim": false,
+    "performance_claim": false,
+    "benefit_acceptance": false,
+    "production_adopted": false,
+    "public_provider_admission": false,
+    "full_scientific_or_release_qualification": false
+  },
+  "blockers": [],
+  "workspace": {
+    "head": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "source_committed_and_pushed": true,
+    "tracked_tree": "clean",
+    "upstream": "0/0",
+    "sole_worktree": "/home/astra/.project/Sirius",
+    "review_json": "Ignored local review; root owns immutable evidence preservation."
+  }
+}

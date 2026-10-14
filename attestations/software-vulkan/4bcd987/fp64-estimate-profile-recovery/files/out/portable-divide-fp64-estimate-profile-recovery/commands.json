@@ -1,0 +1,8 @@
+{
+  "commands": [
+    "python3 -B out/portable-divide-fp64-estimate-profile-recovery/recover.py pin-context",
+    "python3 -B out/portable-divide-fp64-estimate-profile-recovery/run_owned.py read-full-profile",
+    "python3 -B out/portable-divide-fp64-estimate-profile-recovery/recover.py review"
+  ],
+  "stop": "First failed/incomplete owner/control/profile/receipt: stop and preserve; no compiler/validator/policy or numerical retry."
+}

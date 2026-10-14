@@ -1,0 +1,52 @@
+--- preserved-failed/gate.py:products_review
++++ recovery/products_profile.py:products_review
+@@ -1,4 +1,4 @@
+-def products_review():
++def products_review(P, R, W, T, original_work):
+     from elf_arrays import arrays
+     from interface_signature import interface_signature
+     canonical = R / 'bin/linux-gcc/src/sirius/backend/retained'
+@@ -18,13 +18,19 @@
+         assert paths['stock'].read_bytes() == (canonical / name).read_bytes()
+         changed = paths['stock'].read_bytes() != paths['candidate'].read_bytes()
+         assert changed == (name in P['changed_modules']), name
+-        texts = {}
++        texts = {}; assembly_records = {}
+         for mode, path in paths.items():
+-            target = T / 'analysis' / mode / (name + 'asm')
+-            target.parent.mkdir(parents=True, exist_ok=True)
+-            assert not target.exists()
+-            subprocess.run([P['disassembler'], str(path), '-o', str(target)], cwd=R, check=True)
++            key = mode + '/' + name
++            if key in P['saved_assembly']:
++                target = Path(P['saved_assembly'][key]['path'])
++                assert content(target) == P['saved_assembly'][key]['pin']
++            else:
++                target = W / 'analysis' / mode / (name + 'asm')
++                target.parent.mkdir(parents=True, exist_ok=True)
++                assert not target.exists()
++                subprocess.run([P['disassembler'], str(path), '-o', str(target)], cwd=R, check=True)
+             texts[mode] = target.read_text()
++            assembly_records[mode] = {'assembly':record(target),'source_module':record(path),'reused_saved_assembly':key in P['saved_assembly']}
+         stock, candidate = texts['stock'], texts['candidate']
+         assert interface_signature(stock) == interface_signature(candidate), name
+         modes = lambda text: sorted(re.findall(r'OpExecutionMode %\S+ (.*)$', text, re.M))
+@@ -40,7 +46,7 @@
+             assert not re.search(r'\b(?:RelaxedPrecision|FPFastMathMode|FPFastMathDefault|OpFmaKHR|OpConvertFTo[SU])\b', candidate)
+             footprint = estimated_divide_sites(stock, candidate, name.startswith(('retained_camera_', 'retained_ray_camera_')))
+         rows.append({'module': name, 'changed': changed, 'stock': record(paths['stock']), 'candidate': record(paths['candidate']),
+-                     'complete_public_shared_type_layout_modes_and_ordered_barriers_equal': True, 'divide_footprint': footprint})
++                     'complete_public_shared_type_layout_modes_and_ordered_barriers_equal': True, 'divide_footprint': footprint, 'assembly_binary_joins':assembly_records})
+     headers = {}
+     for name, count in [('retained_kernels.h', 40), ('retained_owner_kernels.h', 2)]:
+         expected = arrays(canonical / name)
+@@ -54,7 +60,7 @@
+         headers[name] = {'changed_arrays': changed, 'stock': record(T / 'stock' / name), 'candidate': record(T / 'candidate' / name)}
+     for name in ('retained_owner_layout.h', 'retained_owner_layout.slang'):
+         assert (canonical / name).read_bytes() == (T / 'stock' / name).read_bytes() == (T / 'candidate' / name).read_bytes()
+-    return {'passed': True, 'stock_reuse': record(W / 'stock-reuse-acceptance.json'), 'modules': rows, 'headers': headers, 'changed_modules': 17, 'unchanged_modules': 18,
++    return {'passed': True, 'stock_reuse': record(original_work / 'stock-reuse-acceptance.json'), 'modules': rows, 'headers': headers, 'changed_modules': 17, 'unchanged_modules': 18,
+             'main_arrays_changed': 17, 'main_arrays_unchanged': 23, 'owner_arrays_unchanged': 2,
+             'all_seven_tables_and_nonarray_ABI_constants_equal': True,
+-            'scope': 'Complete compiler/profile/ABI evidence only; no integrated numeric or benefit verdict.'}
++            'scope': 'Complete preserved compiler products and fresh parse-only35module/profile/ABI evidence; old wrapper remains failed. No integrated numeric or benefit verdict.'}

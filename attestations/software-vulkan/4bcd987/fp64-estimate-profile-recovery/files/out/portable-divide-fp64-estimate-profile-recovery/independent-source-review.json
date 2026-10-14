@@ -1,0 +1,169 @@
+{
+  "schema": "sirius-fp64-estimate-profile-recovery-independent-source-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "reviewer": "/root/forensic_obligations",
+  "review_scope": "Independent of recovery author and actual operator; source/AST/hash/Git/JSON inspection only. Reviewer also admitted the earlier integrated source and missed its overstrict signedness predicate; that failure remains candidly preserved.",
+  "operator": "Root alone may run the prospective context, owned disassembly/profile reader and separate post-terminal reader.",
+  "critical_pins": {
+    "actions.json": {
+      "bytes": 318970,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/actions.json",
+      "sha256": "d1a862fe7ff8be8357113baeea89bfdfadbebfa4bdf1bc6f8f80c8ace96b7b38"
+    },
+    "camera_profile.py": {
+      "bytes": 9802,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/camera_profile.py",
+      "sha256": "11c472ff8459488f6eea6ffcb4009d87f3a8d5744a4b88bcb178677ebe86cd0f"
+    },
+    "elf_arrays.py": {
+      "bytes": 2598,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/elf_arrays.py",
+      "sha256": "93f8fb190501db8bfb990e96d336a2f68dfa44ee613fae7d75fd2276e10489b6"
+    },
+    "estimate_graph.py": {
+      "bytes": 17797,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/estimate_graph.py",
+      "sha256": "22fc14614c7d61bd9077e6e0f1ec33395c07809d71b4042429b17740d418d7ff"
+    },
+    "interface_signature.py": {
+      "bytes": 2510,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/interface_signature.py",
+      "sha256": "fe773d6c65f660d83696cf57d46360d4910284b605543f45afc88ba9ffbec54d"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/owned_guard.py",
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "packet.json": {
+      "bytes": 16420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/packet.json",
+      "sha256": "0ee242d86b917ef60c565b70532e5fe59aad8b1ab22e4ba25d32adf856508831"
+    },
+    "preparation.json": {
+      "bytes": 3979,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/preparation.json",
+      "sha256": "e107e06f4e45eaf8d50fae6b0bf9c8ffd798b745981062777ba9d0920923ab37"
+    },
+    "products_profile.py": {
+      "bytes": 6198,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/products_profile.py",
+      "sha256": "508eecb4b65c6c9fd89eb05d5fb3e6a747977efd5a7d9adf3024c9f930b71577"
+    },
+    "recover.py": {
+      "bytes": 13449,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/recover.py",
+      "sha256": "585dcd7fb48f94acbeb1b009f8443f472fff6f2a3878279f664139eed5a3a58b"
+    },
+    "run_owned.py": {
+      "bytes": 12933,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/run_owned.py",
+      "sha256": "492c75609a0dc8ff5eaa0299f7206820bb8a42f85c3ecc5b9b0af98f2496ba9f"
+    },
+    "source-freeze.json": {
+      "bytes": 954095,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/source-freeze.json",
+      "sha256": "5d81fa0c7353e94fbd8728dabdc453f3397f369ef58a3247f30ade9ceb30a10a"
+    }
+  },
+  "reviewed_changes": [
+    "The camera correction validates each complete-module integer divide/remainder opcode against exact width32 and required signedness, then requires the complete stock/candidate opcode/type/count signatures to match. It retains the prior3UDiv count and loop count, both exact estimate/UInt2 product/full-borrow/remainder/sticky/closed-CFG gates, and honest frozen-source/inlining limitations.",
+    "The inherited full35module profile preserves exact17changed/18unchanged module and40main17changed/23unchanged plus2unchanged owner-array contracts; all7program tables, nonarray ABI/layout, interfaces/execution modes/ordered barriers and capability/type/strict-math guards remain required.",
+    "estimate_graph.py, interface_signature.py, elf_arrays.py, run_owned.py and owned_guard.py match the immutable stopped packet byte-for-byte; estimated_divide_sites AST matches the original helper. No compiler/validator/canonical-policy/provider/numerical rerun is present.",
+    "Explicit archived product/work coordinates preserve regular-file historical lexical resolved identities and live tool/symlink identities; no inferred archived WORK/ROOT or actual old live out/bin input is used.",
+    "All3passed producer owner/before/after/output-seal chains and all2324historical static plus4actual consumed-input maps are byte-joined; original verify-products remains terminal false/child1 with exact failure stderr/owner/terminal-stop review and no old acceptance or output seal.",
+    "Exactly6saved ASM/source-SPV pairs are explicitly keyed and hash-bound; only64missing disassemblies are produced in the fresh root. The new owned child seals result plus all64outputs; separate terminal review checks owner/whole input maps/context/result/output seals and preserves oldfailed status.",
+    "Six prospective complete-module textual negative controls target signedness, opcode, width and missing/extra counts. They are deliberately not assembled and not claimed valid SPIR-V."
+  ],
+  "closure": {
+    "static_pins": 2473,
+    "static_mismatches": 0,
+    "future_owner_count": 1,
+    "future_inputs": 2476,
+    "future_extra_inputs": [
+      "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/operator-context.json",
+      "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/preparation.json",
+      "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/source-freeze.json"
+    ],
+    "compiled_archive_commit": "b1f0795a168807e28143e45221c5a1c584195630",
+    "compiled_archive_manifest_sha256": "806d071b24816b7dde0de3acfe47a7f9c15e4e3daaad96421752fd59c9f52499",
+    "compiled_archive_manifest_members": 252,
+    "compiled_archive_files_including_manifest": 253,
+    "remote_confirmation": "Root reported pushed tag/remote verification; reviewer checked local exact archived bytes.",
+    "original_static": 2324,
+    "old_consumed_current_distinct": 2418,
+    "old_actual_live_packet_inputs": [],
+    "original_owner_results": {
+      "compile-products-candidate": {
+        "child_exit": 0,
+        "inputs": 2327,
+        "owner_sha256": "fc26c11bd20d658e8b37e8b6031afb104fe30f9aad229b60f053a8c2f85f779f",
+        "passed": true
+      },
+      "native-policy-selfcheck": {
+        "child_exit": 0,
+        "inputs": 2414,
+        "owner_sha256": "91f4864b044d66b722a44db915c2481bb76ee3b9584b0d57f15654cd23638313",
+        "passed": true
+      },
+      "reuse-products-stock": {
+        "child_exit": 0,
+        "inputs": 2327,
+        "owner_sha256": "09fa9852850e68e5d1fe87cd021a06c51450b63adfc627df775d853317c1ac57",
+        "passed": true
+      },
+      "verify-products": {
+        "child_exit": 1,
+        "inputs": 2418,
+        "owner_sha256": "93c2f1118c5f81ef21adb02d6ef9bc81a6766dc86dc26b392ca350bafdce21d4",
+        "passed": false
+      }
+    },
+    "three_passed_output_seals": 3,
+    "canonical_current_product_files": 39,
+    "saved_assembly_count": 6,
+    "new_assembly_count": 64,
+    "all_new_owner_context_analysis_result_acceptance_absent": true
+  },
+  "prospective_action": {
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-profile-recovery/recover.py",
+      "phase"
+    ],
+    "expected_exit": 0,
+    "kind": "diagnostic",
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "scope": "Separate pure full35/40+2/profile reader for unchanged completed78products: six saved ASM reused,64missing disassembled; signed32 original op/count correction only. Old wrapper false/1 retained; no compiler/validator/policy/numerical/provider run.",
+    "software_provider": false
+  },
+  "scope": {
+    "source_admitted": true,
+    "actual_recovery_executed": false,
+    "profile_accepted": false,
+    "old_failed_owner_promoted": false,
+    "camera_emitted_complete_round_normalization_fallback_proof": false,
+    "integrated_controls_executed": false,
+    "numerical_acceptance": false,
+    "hit_rate_claim": false,
+    "performance_claim": false,
+    "production_adopted": false,
+    "public_provider_admission": false,
+    "continuation": "Only after a real recovery PASS/preservation may a separately reviewed producer/eight-original-control continuation proceed with its actual changed topology. This review does not manufacture19successful owners or promote the oldfailed reader."
+  },
+  "blockers": [],
+  "workspace": {
+    "tracked_tree": "clean",
+    "head_equals_upstream": true,
+    "sole_worktree": "/home/astra/.project/Sirius",
+    "source_committed_and_pushed": true,
+    "review_json": "Ignored local review apparatus; root owns later evidence preservation."
+  }
+}

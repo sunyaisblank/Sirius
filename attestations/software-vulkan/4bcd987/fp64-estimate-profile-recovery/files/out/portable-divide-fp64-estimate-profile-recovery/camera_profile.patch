@@ -1,0 +1,34 @@
+--- preserved-failed/camera_profile.py
++++ recovery/camera_profile.py
+@@ -1,5 +1,22 @@
+ """Bounded inlined-camera estimate footprint; frozen-source Round is explicit."""
++import collections
+ import re
++
++
++def integer_division_signature(text):
++    """Exact complete-module original32 opcode/signedness/count signature."""
++    definitions = dict(re.findall(r'^\s*(%\S+) = (.+)$', text, re.M))
++    types = {key:(int(bits),int(signed)) for key,bits,signed in re.findall(r'(%\S+) = OpTypeInt (\d+) ([01])',text)}
++    expected = {'OpUDiv':(32,0),'OpUMod':(32,0),'OpSDiv':(32,1),'OpSRem':(32,1),'OpSMod':(32,1)}
++    counts = collections.Counter()
++    for definition in definitions.values():
++        words = definition.split()
++        if words[0] not in expected: continue
++        assert len(words) == 4 and types[words[1]] == expected[words[0]], definition
++        counts[(words[0],*types[words[1]])] += 1
++    assert counts
++    return [{'opcode':opcode,'bits':bits,'signed':signed,'count':count}
++            for (opcode,bits,signed),count in sorted(counts.items())]
+ 
+ 
+ def inspect(stock, candidate):
+@@ -118,5 +135,6 @@
+         rows.append({'estimate':divide,'normalized_numerator':m,'denominator':d,'bitcast':bits,'range_gate':range_cond,'guess':guess,'exact_product':product,'numerator_words':[nlo,nhi],'remainder_words':[rlo,rhi],'verified':verified,'jam':jam,'closed_guarded_success_and_exact_remainder_footprint':True})
+     assert candidate.count('OpUDiv')==stock.count('OpUDiv')==3
+     assert candidate.count('OpLoopMerge')==stock.count('OpLoopMerge')
+-    assert all(word(k)[1]==u32 for k in local if word(k)[0] in ['OpUDiv','OpUMod','OpSRem','OpSMod','OpSDiv'])
+-    return {'sites':rows,'inlined_camera':True,'integer_division_and_loop_counts_unchanged':True,'normalization_and_complete_common_round_equivalence':'Frozen identical source outside insertion, canonical O1 inlining; not independently reconstructed by this footprint reader.','fallback_scope':'Original complete source fallback exact; emitted integer division/loop counts unchanged. Full named-body fallback comparison applies to the other13 changed modules.'}
++    signature = integer_division_signature(candidate)
++    assert signature == integer_division_signature(stock)
++    return {'sites':rows,'inlined_camera':True,'integer_division_signature':signature,'integer_division_and_loop_counts_unchanged':True,'normalization_and_complete_common_round_equivalence':'Frozen identical source outside insertion, canonical O1 inlining; not independently reconstructed by this footprint reader.','fallback_scope':'Original complete source fallback exact; emitted integer division/loop counts unchanged. Full named-body fallback comparison applies to the other13 changed modules.'}
