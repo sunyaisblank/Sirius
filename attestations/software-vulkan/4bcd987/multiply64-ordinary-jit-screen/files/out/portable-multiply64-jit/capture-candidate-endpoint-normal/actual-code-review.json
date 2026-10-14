@@ -1,0 +1,164 @@
+{
+  "actual_entry": {
+    "actual_entry_pc": 130041617952768,
+    "buffers": [
+      0,
+      1
+    ],
+    "dispatch_id": 0,
+    "file": "jit-10.elf",
+    "function": {
+      "address": 130041617952768,
+      "bytes": 314,
+      "name": "cs_variant",
+      "offset": 0,
+      "section": 3
+    },
+    "kernel": 0,
+    "worker_thread": 33
+  },
+  "actual_loaded_module": {
+    "actual_span_matches_frozen_input": true,
+    "bytes": 150236,
+    "sha256": "a2cd60d52011e81fb75125046f613e9ab67ce7ed1c970a39f056284e88678c32",
+    "words": 37559
+  },
+  "case": "capture-candidate-endpoint-normal",
+  "jit_defined_functions": [
+    {
+      "address": 130041617977088,
+      "bytes": 899382,
+      "name": "cs_co_variant.resume",
+      "offset": 24320,
+      "section": 3
+    },
+    {
+      "address": 130041618876480,
+      "bytes": 5,
+      "name": "cs_co_variant.destroy",
+      "offset": 923712,
+      "section": 3
+    },
+    {
+      "address": 130041617952768,
+      "bytes": 314,
+      "name": "cs_variant",
+      "offset": 0,
+      "section": 3
+    },
+    {
+      "address": 130041617953088,
+      "bytes": 23997,
+      "name": "cs_co_variant",
+      "offset": 320,
+      "section": 3
+    }
+  ],
+  "jit_executable_section_bytes": 923717,
+  "jit_object_bytes": 1049120,
+  "linked_section_review": {
+    "file": "jit-10.elf",
+    "live_sections": [
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 923717,
+        "changed_bytes": 29254,
+        "name": ".ltext",
+        "relocation_field_bytes": 40872
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 96,
+        "changed_bytes": 0,
+        "name": ".rodata.cst32",
+        "relocation_field_bytes": 0
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 48,
+        "changed_bytes": 0,
+        "name": ".rodata.cst16",
+        "relocation_field_bytes": 0
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 448,
+        "changed_bytes": 0,
+        "name": ".rodata.cst4",
+        "relocation_field_bytes": 0
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 80,
+        "changed_bytes": 60,
+        "name": ".rodata",
+        "relocation_field_bytes": 80
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 256,
+        "changed_bytes": 32,
+        "name": ".eh_frame",
+        "relocation_field_bytes": 32
+      }
+    ],
+    "relocation_counts": {
+      "1": 5119,
+      "24": 4
+    },
+    "undefined_callback_targets_consistent": {
+      "coro_free": 130041826667616,
+      "coro_malloc": 130041826667632
+    },
+    "undefined_callback_targets_independently_resolved": false,
+    "variant": "endpoint-normal"
+  },
+  "llvm_alloca_instruction_count": 2,
+  "llvm_allocator_call_text": [
+    "@coro_malloc(i32)",
+    "@coro_malloc(i32 %23)"
+  ],
+  "llvm_coroutine_allocator_constant_bytes": [],
+  "llvm_defined_functions": [
+    "cs_variant",
+    "cs_co_variant",
+    "cs_co_variant.resume",
+    "cs_co_variant.destroy"
+  ],
+  "llvm_float_multiply_instruction_count": 0,
+  "llvm_resume_frame_dereferenceable_bytes": [
+    89696
+  ],
+  "ordinary_ir_export": {
+    "bytes": 13243318,
+    "function": 130041543400568,
+    "module": 130041543397072,
+    "module_generation": 5,
+    "optimized_module_observed": true,
+    "path": "optimized-05.ll",
+    "sha256": "18dfe593666a152acf382f1154af79d44bb1b35b69899c0d53e43456b52b3109",
+    "successful_optimizer_pass_ids": [
+      10,
+      11
+    ]
+  },
+  "ordinary_pipelines": [
+    "default<O0>",
+    "sroa,early-cse,simplifycfg,reassociate,mem2reg,instsimplify,instcombine<no-verify-fixpoint>"
+  ],
+  "producer": "candidate",
+  "scope": "Actual loaded complete module -> ordinary successful LLVM passes -> lookup generation -> called JIT entry and allocated-section byte/defined-relocation joins. Short-input canary only; no retained arithmetic or runtime benefit verdict. Undefined callbacks are consistency checked only.",
+  "single_completed_dispatch": {
+    "buffers": [
+      0,
+      1
+    ],
+    "captured_ns": 1792003934973480095,
+    "completed": true,
+    "groups_x": 1,
+    "host_thread": 1,
+    "id": 0,
+    "kernel": 0
+  },
+  "variant": "endpoint-normal"
+}

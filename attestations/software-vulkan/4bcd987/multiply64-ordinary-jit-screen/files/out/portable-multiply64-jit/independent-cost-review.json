@@ -1,0 +1,2676 @@
+{
+  "binding": {
+    "candidate_actual_entry": {
+      "actual_entry_pc": 130041617952768,
+      "buffers": [
+        0,
+        1
+      ],
+      "dispatch_id": 0,
+      "file": "jit-10.elf",
+      "function": {
+        "address": 130041617952768,
+        "bytes": 314,
+        "name": "cs_variant",
+        "offset": 0,
+        "section": 3
+      },
+      "kernel": 0,
+      "worker_thread": 33
+    },
+    "complete_module_IR_callable_section_relocations": "Original post-terminal acceptance and analyzer retained, not re-executed by this review.",
+    "stock_actual_entry": {
+      "actual_entry_pc": 127449533874176,
+      "buffers": [
+        0,
+        1
+      ],
+      "dispatch_id": 0,
+      "file": "jit-10.elf",
+      "function": {
+        "address": 127449533874176,
+        "bytes": 314,
+        "name": "cs_variant",
+        "offset": 0,
+        "section": 3
+      },
+      "kernel": 0,
+      "worker_thread": 31
+    },
+    "undefined_callbacks": "Original independent analyzer consistency-only scope retained; no independent callback target resolution claim."
+  },
+  "conclusion": {
+    "all_cross_word_PB32Multiply_jam_graphs_replaced": true,
+    "arithmetic_equivalence_executed": false,
+    "duplicate_product_removal_observed": true,
+    "net_cost_determined": false,
+    "other_stage_profile_claim": false,
+    "performance_benefit_claim": false,
+    "production_adopted": false,
+    "reason": "56generic products lose duplicate low multiplication;15constant products remove no multiplication and71wide jams plus stack/code growth may offset savings. Distinct work-removal premise is established without a gain or universal domination proof.",
+    "retained_multiply_exercised_by_canary": false
+  },
+  "countercosts": {
+    "coroutine_frame_bytes_both": 89696,
+    "executable_bytes_delta": 1120,
+    "explicit_ZMM_stack_memory_instructions_both": 0,
+    "interpretation": "Static layout/instruction occurrences, not dynamic spill traffic or measured register pressure. Extra stack allocation and memory instructions are concrete countercosts; unchanged coroutine frame does not mean unchanged stack cost. Wide throughput, masks, permutations, frequency, scheduling and512-bit effects are unmeasured.",
+    "llvm_alloca_count_both": 2,
+    "object_bytes_delta": -712,
+    "resume_bytes_delta": 1120,
+    "resume_stack_bytes_candidate": 43072,
+    "resume_stack_bytes_delta": 96,
+    "resume_stack_bytes_stock": 42976,
+    "static_YMM_stack_memory_instructions_delta": 37,
+    "static_rsp_rbp_address_instructions_delta": 24
+  },
+  "decision": "COST_PREMISE_SURVIVES_UNPROVEN",
+  "inputs": {
+    "candidate_capture_acceptance": {
+      "bytes": 2050,
+      "path": "out/portable-multiply64-jit/capture-acceptance.json",
+      "sha256": "e41eddbddce6249c26d118a85a47075bbfb7e7d2ed5476346328a5a4786c3be7"
+    },
+    "candidate_code_review": {
+      "bytes": 4352,
+      "path": "out/portable-multiply64-jit/capture-candidate-endpoint-normal/actual-code-review.json",
+      "sha256": "f1aa90fb5040d2bd19ae89aa9fbdde682abbc73d4f3217ba2e8269f74df9f00b"
+    },
+    "candidate_feature_review": {
+      "bytes": 2160,
+      "path": "out/portable-multiply64-jit/capture-candidate-endpoint-normal/feature-review.json",
+      "sha256": "48c66565a2e6394ff25f1f598fbf4984aa93d408c1e1e01fa5a3d56f6e5e29c4"
+    },
+    "candidate_llvm": {
+      "bytes": 13243318,
+      "path": "out/portable-multiply64-jit/capture-candidate-endpoint-normal/optimized-05.ll",
+      "sha256": "18dfe593666a152acf382f1154af79d44bb1b35b69899c0d53e43456b52b3109"
+    },
+    "candidate_owner": {
+      "bytes": 7585,
+      "path": "out/portable-multiply64-jit/capture-candidate-endpoint-normal/owner.json",
+      "sha256": "4ce684a95ae107648b9bd81717190a9c09224628d555f4090ddd0fd72c2c1d45"
+    },
+    "candidate_source": {
+      "bytes": 13438,
+      "path": "attestations/software-vulkan/4bcd987/multiply64-compiler-screen/files/out/portable-multiply64-screen/candidate/src/sirius/kernels/portable_binary32.h",
+      "sha256": "77b1144c6c177b3c9ad8907ce654c8bd0e9f647fc18a355d105e48cec41578c9"
+    },
+    "canonical_source": {
+      "bytes": 12797,
+      "path": "attestations/software-vulkan/4bcd987/multiply64-compiler-screen/files/out/portable-multiply64-screen/stock/src/sirius/kernels/portable_binary32.h",
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    },
+    "compiler_result": {
+      "bytes": 5830,
+      "path": "attestations/software-vulkan/4bcd987/multiply64-compiler-screen/files/out/portable-multiply64-compiler/compiler-result.json",
+      "sha256": "dfd1e7564ec96e3e0af0b66da547c2855abaf9c6975a16e588033e9fee627a6c"
+    },
+    "object_reader": {
+      "bytes": 390848,
+      "path": "/usr/bin/objdump",
+      "sha256": "d0041e7511460b9ebfd95ce4f9d93c7ffea398ffc1cb2c316a220dd8e533db3d"
+    },
+    "source_contracts": {
+      "bytes": 11951,
+      "path": "attestations/software-vulkan/4bcd987/multiply64-compiler-screen/files/out/portable-multiply64-screen/contracts.json",
+      "sha256": "6724849141fe71ba8ec99267794834c3cc5f376ef3d6bb369c717156c415a846"
+    },
+    "stock_code_review": {
+      "bytes": 4344,
+      "path": "attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/actual-code-review.json",
+      "sha256": "157d036ccc58a5e455e9380d432ade5fd632320b2c653af81c53e74459ee4f48"
+    },
+    "stock_feature_review": {
+      "bytes": 2160,
+      "path": "attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/feature-review.json",
+      "sha256": "48c66565a2e6394ff25f1f598fbf4984aa93d408c1e1e01fa5a3d56f6e5e29c4"
+    },
+    "stock_llvm": {
+      "bytes": 13237373,
+      "path": "attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/optimized-05.ll",
+      "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7"
+    }
+  },
+  "llvm": {
+    "PB32Multiply_is_inlined": true,
+    "all_clone_loci": [
+      {
+        "block": "if-true-block5121",
+        "lanes": 8,
+        "mask_line": 17092,
+        "product_kind": "generic",
+        "product_line": 17083,
+        "shift_line": 17095,
+        "stock_block_lines": [
+          17048,
+          17129
+        ],
+        "stock_high_product_lines": [
+          17084
+        ],
+        "stock_low_mul_lines": [
+          17081
+        ]
+      },
+      {
+        "block": "if-true-block5893",
+        "lanes": 8,
+        "mask_line": 20393,
+        "product_kind": "generic",
+        "product_line": 20384,
+        "shift_line": 20396,
+        "stock_block_lines": [
+          20349,
+          20430
+        ],
+        "stock_high_product_lines": [
+          20385
+        ],
+        "stock_low_mul_lines": [
+          20382
+        ]
+      },
+      {
+        "block": "if-true-block5975",
+        "lanes": 8,
+        "mask_line": 20703,
+        "product_kind": "constant_2_to_23",
+        "product_line": 20694,
+        "shift_line": 20706,
+        "stock_block_lines": [
+          20675,
+          20737
+        ],
+        "stock_constant_product_lines": [
+          20693,
+          20694
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block6731",
+        "lanes": 8,
+        "mask_line": 23873,
+        "product_kind": "generic",
+        "product_line": 23864,
+        "shift_line": 23876,
+        "stock_block_lines": [
+          23822,
+          23907
+        ],
+        "stock_high_product_lines": [
+          23862
+        ],
+        "stock_low_mul_lines": [
+          23859
+        ]
+      },
+      {
+        "block": "if-true-block6815",
+        "lanes": 8,
+        "mask_line": 24242,
+        "product_kind": "generic",
+        "product_line": 24233,
+        "shift_line": 24245,
+        "stock_block_lines": [
+          24191,
+          24276
+        ],
+        "stock_high_product_lines": [
+          24231
+        ],
+        "stock_low_mul_lines": [
+          24228
+        ]
+      },
+      {
+        "block": "if-true-block7046",
+        "lanes": 8,
+        "mask_line": 25201,
+        "product_kind": "generic",
+        "product_line": 25192,
+        "shift_line": 25204,
+        "stock_block_lines": [
+          25150,
+          25235
+        ],
+        "stock_high_product_lines": [
+          25190
+        ],
+        "stock_low_mul_lines": [
+          25187
+        ]
+      },
+      {
+        "block": "if-true-block7568",
+        "lanes": 8,
+        "mask_line": 27319,
+        "product_kind": "generic",
+        "product_line": 27310,
+        "shift_line": 27322,
+        "stock_block_lines": [
+          27270,
+          27353
+        ],
+        "stock_high_product_lines": [
+          27308
+        ],
+        "stock_low_mul_lines": [
+          27305
+        ]
+      },
+      {
+        "block": "if-true-block7943",
+        "lanes": 8,
+        "mask_line": 28842,
+        "product_kind": "generic",
+        "product_line": 28833,
+        "shift_line": 28845,
+        "stock_block_lines": [
+          28793,
+          28876
+        ],
+        "stock_high_product_lines": [
+          28831
+        ],
+        "stock_low_mul_lines": [
+          28828
+        ]
+      },
+      {
+        "block": "if-true-block8171",
+        "lanes": 8,
+        "mask_line": 29778,
+        "product_kind": "generic",
+        "product_line": 29769,
+        "shift_line": 29781,
+        "stock_block_lines": [
+          29729,
+          29812
+        ],
+        "stock_high_product_lines": [
+          29767
+        ],
+        "stock_low_mul_lines": [
+          29764
+        ]
+      },
+      {
+        "block": "if-true-block9044",
+        "lanes": 8,
+        "mask_line": 33621,
+        "product_kind": "generic",
+        "product_line": 33612,
+        "shift_line": 33624,
+        "stock_block_lines": [
+          33574,
+          33655
+        ],
+        "stock_high_product_lines": [
+          33610
+        ],
+        "stock_low_mul_lines": [
+          33607
+        ]
+      },
+      {
+        "block": "if-true-block9816",
+        "lanes": 8,
+        "mask_line": 36922,
+        "product_kind": "generic",
+        "product_line": 36913,
+        "shift_line": 36925,
+        "stock_block_lines": [
+          36875,
+          36956
+        ],
+        "stock_high_product_lines": [
+          36911
+        ],
+        "stock_low_mul_lines": [
+          36908
+        ]
+      },
+      {
+        "block": "if-true-block9898",
+        "lanes": 8,
+        "mask_line": 37232,
+        "product_kind": "constant_2_to_23",
+        "product_line": 37223,
+        "shift_line": 37235,
+        "stock_block_lines": [
+          37201,
+          37263
+        ],
+        "stock_constant_product_lines": [
+          37219,
+          37220
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block10654",
+        "lanes": 8,
+        "mask_line": 40402,
+        "product_kind": "generic",
+        "product_line": 40393,
+        "shift_line": 40405,
+        "stock_block_lines": [
+          40348,
+          40433
+        ],
+        "stock_high_product_lines": [
+          40388
+        ],
+        "stock_low_mul_lines": [
+          40385
+        ]
+      },
+      {
+        "block": "if-true-block10738",
+        "lanes": 8,
+        "mask_line": 40771,
+        "product_kind": "generic",
+        "product_line": 40762,
+        "shift_line": 40774,
+        "stock_block_lines": [
+          40717,
+          40802
+        ],
+        "stock_high_product_lines": [
+          40757
+        ],
+        "stock_low_mul_lines": [
+          40754
+        ]
+      },
+      {
+        "block": "if-true-block10969",
+        "lanes": 8,
+        "mask_line": 41730,
+        "product_kind": "generic",
+        "product_line": 41721,
+        "shift_line": 41733,
+        "stock_block_lines": [
+          41676,
+          41761
+        ],
+        "stock_high_product_lines": [
+          41716
+        ],
+        "stock_low_mul_lines": [
+          41713
+        ]
+      },
+      {
+        "block": "if-true-block11491",
+        "lanes": 8,
+        "mask_line": 43848,
+        "product_kind": "generic",
+        "product_line": 43839,
+        "shift_line": 43851,
+        "stock_block_lines": [
+          43796,
+          43879
+        ],
+        "stock_high_product_lines": [
+          43834
+        ],
+        "stock_low_mul_lines": [
+          43831
+        ]
+      },
+      {
+        "block": "if-true-block11866",
+        "lanes": 8,
+        "mask_line": 45371,
+        "product_kind": "generic",
+        "product_line": 45362,
+        "shift_line": 45374,
+        "stock_block_lines": [
+          45319,
+          45402
+        ],
+        "stock_high_product_lines": [
+          45357
+        ],
+        "stock_low_mul_lines": [
+          45354
+        ]
+      },
+      {
+        "block": "if-true-block12094",
+        "lanes": 8,
+        "mask_line": 46307,
+        "product_kind": "generic",
+        "product_line": 46298,
+        "shift_line": 46310,
+        "stock_block_lines": [
+          46255,
+          46338
+        ],
+        "stock_high_product_lines": [
+          46293
+        ],
+        "stock_low_mul_lines": [
+          46290
+        ]
+      },
+      {
+        "block": "if-true-block14474",
+        "lanes": 8,
+        "mask_line": 59083,
+        "product_kind": "constant_2_to_23",
+        "product_line": 59074,
+        "shift_line": 59086,
+        "stock_block_lines": [
+          59049,
+          59111
+        ],
+        "stock_constant_product_lines": [
+          59067,
+          59068
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block14600",
+        "lanes": 8,
+        "mask_line": 59875,
+        "product_kind": "generic",
+        "product_line": 59866,
+        "shift_line": 59878,
+        "stock_block_lines": [
+          59821,
+          59903
+        ],
+        "stock_high_product_lines": [
+          59858
+        ],
+        "stock_low_mul_lines": [
+          59855
+        ]
+      },
+      {
+        "block": "if-true-block15757",
+        "lanes": 8,
+        "mask_line": 64793,
+        "product_kind": "constant_2_to_23",
+        "product_line": 64784,
+        "shift_line": 64796,
+        "stock_block_lines": [
+          64756,
+          64818
+        ],
+        "stock_constant_product_lines": [
+          64774,
+          64775
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block15824",
+        "lanes": 8,
+        "mask_line": 65102,
+        "product_kind": "generic",
+        "product_line": 65093,
+        "shift_line": 65105,
+        "stock_block_lines": [
+          65045,
+          65127
+        ],
+        "stock_high_product_lines": [
+          65082
+        ],
+        "stock_low_mul_lines": [
+          65079
+        ]
+      },
+      {
+        "block": "if-true-block16598",
+        "lanes": 8,
+        "mask_line": 68826,
+        "product_kind": "generic",
+        "product_line": 68817,
+        "shift_line": 68829,
+        "stock_block_lines": [
+          68770,
+          68851
+        ],
+        "stock_high_product_lines": [
+          68806
+        ],
+        "stock_low_mul_lines": [
+          68803
+        ]
+      },
+      {
+        "block": "if-true-block17370",
+        "lanes": 8,
+        "mask_line": 72127,
+        "product_kind": "generic",
+        "product_line": 72118,
+        "shift_line": 72130,
+        "stock_block_lines": [
+          72071,
+          72152
+        ],
+        "stock_high_product_lines": [
+          72107
+        ],
+        "stock_low_mul_lines": [
+          72104
+        ]
+      },
+      {
+        "block": "if-true-block17452",
+        "lanes": 8,
+        "mask_line": 72437,
+        "product_kind": "constant_2_to_23",
+        "product_line": 72428,
+        "shift_line": 72440,
+        "stock_block_lines": [
+          72397,
+          72459
+        ],
+        "stock_constant_product_lines": [
+          72415,
+          72416
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block18208",
+        "lanes": 8,
+        "mask_line": 75607,
+        "product_kind": "generic",
+        "product_line": 75598,
+        "shift_line": 75610,
+        "stock_block_lines": [
+          75544,
+          75629
+        ],
+        "stock_high_product_lines": [
+          75584
+        ],
+        "stock_low_mul_lines": [
+          75581
+        ]
+      },
+      {
+        "block": "if-true-block18292",
+        "lanes": 8,
+        "mask_line": 75976,
+        "product_kind": "generic",
+        "product_line": 75967,
+        "shift_line": 75979,
+        "stock_block_lines": [
+          75913,
+          75998
+        ],
+        "stock_high_product_lines": [
+          75953
+        ],
+        "stock_low_mul_lines": [
+          75950
+        ]
+      },
+      {
+        "block": "if-true-block18523",
+        "lanes": 8,
+        "mask_line": 76935,
+        "product_kind": "generic",
+        "product_line": 76926,
+        "shift_line": 76938,
+        "stock_block_lines": [
+          76872,
+          76957
+        ],
+        "stock_high_product_lines": [
+          76912
+        ],
+        "stock_low_mul_lines": [
+          76909
+        ]
+      },
+      {
+        "block": "if-true-block19045",
+        "lanes": 8,
+        "mask_line": 79053,
+        "product_kind": "generic",
+        "product_line": 79044,
+        "shift_line": 79056,
+        "stock_block_lines": [
+          78992,
+          79075
+        ],
+        "stock_high_product_lines": [
+          79030
+        ],
+        "stock_low_mul_lines": [
+          79027
+        ]
+      },
+      {
+        "block": "if-true-block19420",
+        "lanes": 8,
+        "mask_line": 80576,
+        "product_kind": "generic",
+        "product_line": 80567,
+        "shift_line": 80579,
+        "stock_block_lines": [
+          80515,
+          80598
+        ],
+        "stock_high_product_lines": [
+          80553
+        ],
+        "stock_low_mul_lines": [
+          80550
+        ]
+      },
+      {
+        "block": "if-true-block19648",
+        "lanes": 8,
+        "mask_line": 81512,
+        "product_kind": "generic",
+        "product_line": 81503,
+        "shift_line": 81515,
+        "stock_block_lines": [
+          81451,
+          81534
+        ],
+        "stock_high_product_lines": [
+          81489
+        ],
+        "stock_low_mul_lines": [
+          81486
+        ]
+      },
+      {
+        "block": "if-true-block22274",
+        "lanes": 8,
+        "mask_line": 92609,
+        "product_kind": "constant_2_to_23",
+        "product_line": 92600,
+        "shift_line": 92612,
+        "stock_block_lines": [
+          92566,
+          92628
+        ],
+        "stock_constant_product_lines": [
+          92584,
+          92585
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block22344",
+        "lanes": 8,
+        "mask_line": 92931,
+        "product_kind": "generic",
+        "product_line": 92922,
+        "shift_line": 92934,
+        "stock_block_lines": [
+          92868,
+          92950
+        ],
+        "stock_high_product_lines": [
+          92905
+        ],
+        "stock_low_mul_lines": [
+          92902
+        ]
+      },
+      {
+        "block": "if-true-block24305",
+        "lanes": 8,
+        "mask_line": 101274,
+        "product_kind": "constant_2_to_23",
+        "product_line": 101265,
+        "shift_line": 101277,
+        "stock_block_lines": [
+          101228,
+          101290
+        ],
+        "stock_constant_product_lines": [
+          101246,
+          101247
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block24946",
+        "lanes": 1,
+        "mask_line": 104906,
+        "product_kind": "generic",
+        "product_line": 104894,
+        "shift_line": 104909,
+        "stock_block_lines": [
+          104838,
+          104936
+        ],
+        "stock_high_product_lines": [
+          104874
+        ],
+        "stock_low_mul_lines": [
+          104871
+        ]
+      },
+      {
+        "block": "if-true-block26646",
+        "lanes": 1,
+        "mask_line": 109217,
+        "product_kind": "generic",
+        "product_line": 109205,
+        "shift_line": 109220,
+        "stock_block_lines": [
+          109149,
+          109247
+        ],
+        "stock_high_product_lines": [
+          109185
+        ],
+        "stock_low_mul_lines": [
+          109182
+        ]
+      },
+      {
+        "block": "if-true-block26764",
+        "lanes": 1,
+        "mask_line": 109602,
+        "product_kind": "constant_2_to_23",
+        "product_line": 109593,
+        "shift_line": 109605,
+        "stock_block_lines": [
+          109550,
+          109630
+        ],
+        "stock_constant_product_lines": [
+          109571,
+          109572
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block28448",
+        "lanes": 1,
+        "mask_line": 113751,
+        "product_kind": "generic",
+        "product_line": 113741,
+        "shift_line": 113754,
+        "stock_block_lines": [
+          113673,
+          113779
+        ],
+        "stock_high_product_lines": [
+          113719
+        ],
+        "stock_low_mul_lines": [
+          113716
+        ]
+      },
+      {
+        "block": "if-true-block28628",
+        "lanes": 1,
+        "mask_line": 114220,
+        "product_kind": "generic",
+        "product_line": 114210,
+        "shift_line": 114223,
+        "stock_block_lines": [
+          114142,
+          114248
+        ],
+        "stock_high_product_lines": [
+          114188
+        ],
+        "stock_low_mul_lines": [
+          114185
+        ]
+      },
+      {
+        "block": "if-true-block29127",
+        "lanes": 1,
+        "mask_line": 115459,
+        "product_kind": "generic",
+        "product_line": 115449,
+        "shift_line": 115462,
+        "stock_block_lines": [
+          115381,
+          115487
+        ],
+        "stock_high_product_lines": [
+          115427
+        ],
+        "stock_low_mul_lines": [
+          115424
+        ]
+      },
+      {
+        "block": "if-true-block30245",
+        "lanes": 1,
+        "mask_line": 118223,
+        "product_kind": "generic",
+        "product_line": 118213,
+        "shift_line": 118226,
+        "stock_block_lines": [
+          118149,
+          118251
+        ],
+        "stock_high_product_lines": [
+          118191
+        ],
+        "stock_low_mul_lines": [
+          118188
+        ]
+      },
+      {
+        "block": "if-true-block31036",
+        "lanes": 1,
+        "mask_line": 120202,
+        "product_kind": "generic",
+        "product_line": 120192,
+        "shift_line": 120205,
+        "stock_block_lines": [
+          120128,
+          120230
+        ],
+        "stock_high_product_lines": [
+          120170
+        ],
+        "stock_low_mul_lines": [
+          120167
+        ]
+      },
+      {
+        "block": "if-true-block31500",
+        "lanes": 1,
+        "mask_line": 121400,
+        "product_kind": "generic",
+        "product_line": 121390,
+        "shift_line": 121403,
+        "stock_block_lines": [
+          121326,
+          121428
+        ],
+        "stock_high_product_lines": [
+          121368
+        ],
+        "stock_low_mul_lines": [
+          121365
+        ]
+      },
+      {
+        "block": "if-true-block37944",
+        "lanes": 1,
+        "mask_line": 136370,
+        "product_kind": "constant_2_to_23",
+        "product_line": 136361,
+        "shift_line": 136373,
+        "stock_block_lines": [
+          136316,
+          136396
+        ],
+        "stock_constant_product_lines": [
+          136337,
+          136338
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block38095",
+        "lanes": 1,
+        "mask_line": 136754,
+        "product_kind": "generic",
+        "product_line": 136744,
+        "shift_line": 136757,
+        "stock_block_lines": [
+          136680,
+          136780
+        ],
+        "stock_high_product_lines": [
+          136720
+        ],
+        "stock_low_mul_lines": [
+          136717
+        ]
+      },
+      {
+        "block": "if-true-block38775",
+        "lanes": 1,
+        "mask_line": 138338,
+        "product_kind": "generic",
+        "product_line": 138326,
+        "shift_line": 138341,
+        "stock_block_lines": [
+          138266,
+          138364
+        ],
+        "stock_high_product_lines": [
+          138302
+        ],
+        "stock_low_mul_lines": [
+          138299
+        ]
+      },
+      {
+        "block": "if-true-block40559",
+        "lanes": 1,
+        "mask_line": 142685,
+        "product_kind": "generic",
+        "product_line": 142673,
+        "shift_line": 142688,
+        "stock_block_lines": [
+          142613,
+          142711
+        ],
+        "stock_high_product_lines": [
+          142649
+        ],
+        "stock_low_mul_lines": [
+          142646
+        ]
+      },
+      {
+        "block": "if-true-block40685",
+        "lanes": 1,
+        "mask_line": 143073,
+        "product_kind": "constant_2_to_23",
+        "product_line": 143064,
+        "shift_line": 143076,
+        "stock_block_lines": [
+          143017,
+          143097
+        ],
+        "stock_constant_product_lines": [
+          143038,
+          143039
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block42441",
+        "lanes": 1,
+        "mask_line": 147245,
+        "product_kind": "generic",
+        "product_line": 147235,
+        "shift_line": 147248,
+        "stock_block_lines": [
+          147163,
+          147269
+        ],
+        "stock_high_product_lines": [
+          147209
+        ],
+        "stock_low_mul_lines": [
+          147206
+        ]
+      },
+      {
+        "block": "if-true-block42629",
+        "lanes": 1,
+        "mask_line": 147717,
+        "product_kind": "generic",
+        "product_line": 147707,
+        "shift_line": 147720,
+        "stock_block_lines": [
+          147635,
+          147741
+        ],
+        "stock_high_product_lines": [
+          147681
+        ],
+        "stock_low_mul_lines": [
+          147678
+        ]
+      },
+      {
+        "block": "if-true-block43152",
+        "lanes": 1,
+        "mask_line": 148964,
+        "product_kind": "generic",
+        "product_line": 148954,
+        "shift_line": 148967,
+        "stock_block_lines": [
+          148882,
+          148988
+        ],
+        "stock_high_product_lines": [
+          148928
+        ],
+        "stock_low_mul_lines": [
+          148925
+        ]
+      },
+      {
+        "block": "if-true-block44326",
+        "lanes": 1,
+        "mask_line": 151746,
+        "product_kind": "generic",
+        "product_line": 151736,
+        "shift_line": 151749,
+        "stock_block_lines": [
+          151668,
+          151770
+        ],
+        "stock_high_product_lines": [
+          151710
+        ],
+        "stock_low_mul_lines": [
+          151707
+        ]
+      },
+      {
+        "block": "if-true-block45157",
+        "lanes": 1,
+        "mask_line": 153738,
+        "product_kind": "generic",
+        "product_line": 153728,
+        "shift_line": 153741,
+        "stock_block_lines": [
+          153660,
+          153762
+        ],
+        "stock_high_product_lines": [
+          153702
+        ],
+        "stock_low_mul_lines": [
+          153699
+        ]
+      },
+      {
+        "block": "if-true-block45645",
+        "lanes": 1,
+        "mask_line": 154944,
+        "product_kind": "generic",
+        "product_line": 154934,
+        "shift_line": 154947,
+        "stock_block_lines": [
+          154866,
+          154968
+        ],
+        "stock_high_product_lines": [
+          154908
+        ],
+        "stock_low_mul_lines": [
+          154905
+        ]
+      },
+      {
+        "block": "if-true-block51700",
+        "lanes": 1,
+        "mask_line": 168955,
+        "product_kind": "constant_2_to_23",
+        "product_line": 168946,
+        "shift_line": 168958,
+        "stock_block_lines": [
+          168897,
+          168977
+        ],
+        "stock_constant_product_lines": [
+          168918,
+          168919
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block51851",
+        "lanes": 1,
+        "mask_line": 169339,
+        "product_kind": "generic",
+        "product_line": 169329,
+        "shift_line": 169342,
+        "stock_block_lines": [
+          169261,
+          169361
+        ],
+        "stock_high_product_lines": [
+          169301
+        ],
+        "stock_low_mul_lines": [
+          169298
+        ]
+      },
+      {
+        "block": "if-true-block53582",
+        "lanes": 8,
+        "mask_line": 177671,
+        "product_kind": "constant_2_to_23",
+        "product_line": 177662,
+        "shift_line": 177674,
+        "stock_block_lines": [
+          177614,
+          177676
+        ],
+        "stock_constant_product_lines": [
+          177632,
+          177633
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block53708",
+        "lanes": 8,
+        "mask_line": 178463,
+        "product_kind": "generic",
+        "product_line": 178454,
+        "shift_line": 178466,
+        "stock_block_lines": [
+          178386,
+          178468
+        ],
+        "stock_high_product_lines": [
+          178423
+        ],
+        "stock_low_mul_lines": [
+          178420
+        ]
+      },
+      {
+        "block": "if-true-block54865",
+        "lanes": 8,
+        "mask_line": 183381,
+        "product_kind": "constant_2_to_23",
+        "product_line": 183372,
+        "shift_line": 183384,
+        "stock_block_lines": [
+          183321,
+          183383
+        ],
+        "stock_constant_product_lines": [
+          183339,
+          183340
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block54932",
+        "lanes": 8,
+        "mask_line": 183690,
+        "product_kind": "generic",
+        "product_line": 183681,
+        "shift_line": 183693,
+        "stock_block_lines": [
+          183610,
+          183692
+        ],
+        "stock_high_product_lines": [
+          183647
+        ],
+        "stock_low_mul_lines": [
+          183644
+        ]
+      },
+      {
+        "block": "if-true-block55706",
+        "lanes": 8,
+        "mask_line": 187414,
+        "product_kind": "generic",
+        "product_line": 187405,
+        "shift_line": 187417,
+        "stock_block_lines": [
+          187335,
+          187416
+        ],
+        "stock_high_product_lines": [
+          187371
+        ],
+        "stock_low_mul_lines": [
+          187368
+        ]
+      },
+      {
+        "block": "if-true-block56478",
+        "lanes": 8,
+        "mask_line": 190715,
+        "product_kind": "generic",
+        "product_line": 190706,
+        "shift_line": 190718,
+        "stock_block_lines": [
+          190636,
+          190717
+        ],
+        "stock_high_product_lines": [
+          190672
+        ],
+        "stock_low_mul_lines": [
+          190669
+        ]
+      },
+      {
+        "block": "if-true-block56560",
+        "lanes": 8,
+        "mask_line": 191025,
+        "product_kind": "constant_2_to_23",
+        "product_line": 191016,
+        "shift_line": 191028,
+        "stock_block_lines": [
+          190962,
+          191024
+        ],
+        "stock_constant_product_lines": [
+          190980,
+          190981
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block57316",
+        "lanes": 8,
+        "mask_line": 194195,
+        "product_kind": "generic",
+        "product_line": 194186,
+        "shift_line": 194198,
+        "stock_block_lines": [
+          194109,
+          194194
+        ],
+        "stock_high_product_lines": [
+          194149
+        ],
+        "stock_low_mul_lines": [
+          194146
+        ]
+      },
+      {
+        "block": "if-true-block57400",
+        "lanes": 8,
+        "mask_line": 194564,
+        "product_kind": "generic",
+        "product_line": 194555,
+        "shift_line": 194567,
+        "stock_block_lines": [
+          194478,
+          194563
+        ],
+        "stock_high_product_lines": [
+          194518
+        ],
+        "stock_low_mul_lines": [
+          194515
+        ]
+      },
+      {
+        "block": "if-true-block57631",
+        "lanes": 8,
+        "mask_line": 195523,
+        "product_kind": "generic",
+        "product_line": 195514,
+        "shift_line": 195526,
+        "stock_block_lines": [
+          195437,
+          195522
+        ],
+        "stock_high_product_lines": [
+          195477
+        ],
+        "stock_low_mul_lines": [
+          195474
+        ]
+      },
+      {
+        "block": "if-true-block58153",
+        "lanes": 8,
+        "mask_line": 197641,
+        "product_kind": "generic",
+        "product_line": 197632,
+        "shift_line": 197644,
+        "stock_block_lines": [
+          197557,
+          197640
+        ],
+        "stock_high_product_lines": [
+          197595
+        ],
+        "stock_low_mul_lines": [
+          197592
+        ]
+      },
+      {
+        "block": "if-true-block58528",
+        "lanes": 8,
+        "mask_line": 199164,
+        "product_kind": "generic",
+        "product_line": 199155,
+        "shift_line": 199167,
+        "stock_block_lines": [
+          199080,
+          199163
+        ],
+        "stock_high_product_lines": [
+          199118
+        ],
+        "stock_low_mul_lines": [
+          199115
+        ]
+      },
+      {
+        "block": "if-true-block58756",
+        "lanes": 8,
+        "mask_line": 200100,
+        "product_kind": "generic",
+        "product_line": 200091,
+        "shift_line": 200103,
+        "stock_block_lines": [
+          200016,
+          200099
+        ],
+        "stock_high_product_lines": [
+          200054
+        ],
+        "stock_low_mul_lines": [
+          200051
+        ]
+      },
+      {
+        "block": "if-true-block61382",
+        "lanes": 8,
+        "mask_line": 211195,
+        "product_kind": "constant_2_to_23",
+        "product_line": 211186,
+        "shift_line": 211198,
+        "stock_block_lines": [
+          211129,
+          211191
+        ],
+        "stock_constant_product_lines": [
+          211147,
+          211148
+        ],
+        "stock_high_product_lines": [],
+        "stock_low_mul_lines": []
+      },
+      {
+        "block": "if-true-block61452",
+        "lanes": 8,
+        "mask_line": 211517,
+        "product_kind": "generic",
+        "product_line": 211508,
+        "shift_line": 211520,
+        "stock_block_lines": [
+          211431,
+          211513
+        ],
+        "stock_high_product_lines": [
+          211468
+        ],
+        "stock_low_mul_lines": [
+          211465
+        ]
+      }
+    ],
+    "block_definition_count": 9377,
+    "branch_target_edge_count": 9371,
+    "candidate_instruction_counts": {
+      "load": 35284,
+      "mul_scalar": 91,
+      "mul_vector": 78,
+      "store": 13492,
+      "udiv_scalar": 42,
+      "udiv_vector": 17,
+      "urem_scalar": 9,
+      "urem_vector": 3
+    },
+    "divide": {
+      "four_quotient_cluster_start_lines_candidate": [
+        64537,
+        92369,
+        136054,
+        168639,
+        183125,
+        210955
+      ],
+      "four_quotient_cluster_start_lines_stock": [
+        64528,
+        92354,
+        136031,
+        168612,
+        183093,
+        210917
+      ],
+      "native_32_bit_div_count_both": 191,
+      "ordinary_u64_udiv_or_urem_count": 0,
+      "original_source_and_normalized_SPV_body_unchanged": true,
+      "scalar32_udiv": 42,
+      "scalar32_urem": 9,
+      "vector32_udiv": 17,
+      "vector32_urem": 3
+    },
+    "named_functions": [
+      "cs_variant",
+      "cs_co_variant",
+      "cs_co_variant.resume",
+      "cs_co_variant.destroy"
+    ],
+    "ordered_all_block_definitions_equal": true,
+    "ordered_block_labels_equal": true,
+    "ordered_branch_target_edges_equal_ignoring_condition_SSA_name": true,
+    "partition": {
+      "constant_2_to_23_scalar": 4,
+      "constant_2_to_23_vector8": 11,
+      "generic_scalar": 18,
+      "generic_vector8": 38
+    },
+    "predicate_scope": "No new CFG branch introduced. Exact source guards/normalization/rounding retained in archived source/compiler proof; target equality alone does not prove predicates or arithmetic.",
+    "remaining_original_low_plus_high_products": {
+      "candidate_wide_mul_lines": [
+        17304,
+        33833,
+        69038,
+        105158,
+        138593,
+        187626
+      ],
+      "scalar": 2,
+      "scope": "Unchanged ProductResidual path; not every original low/high pair disappears.",
+      "vector8": 4
+    },
+    "stock_instruction_counts": {
+      "load": 35284,
+      "mul_scalar": 109,
+      "mul_vector": 116,
+      "store": 13492,
+      "udiv_scalar": 42,
+      "udiv_vector": 17,
+      "urem_scalar": 9,
+      "urem_vector": 3
+    },
+    "unique_block_label_count": 9373,
+    "wide_jam_clones": 71
+  },
+  "module_contract_scope": {
+    "complete_descriptor_workgroup_storage_types_execution_modes_and_ordered_barriers_accepted_by_pinned_compiler_result": true,
+    "no_mode_or_new_layout_change_claim_outside_this_module": true,
+    "normal_Endpoint_only": true,
+    "same_32bit_public_storage_and_original_Divide_source": true,
+    "shared_header_native_FP64_nonFMA_footprint_warning_retained": "This screen opts in normal Endpoint only. Future stage profile must explicitly include or exclude shared-header native-FP64 ProductResidual users; none are admitted by this capture."
+  },
+  "native": {
+    "candidate": {
+      "all_ltext_instruction_occurrences": 152520,
+      "all_native_div_are_32_bit": true,
+      "branch_instruction_occurrences": 5627,
+      "disassembly_text_sha256": "0cbad6a7525c202d19919e91f46704c0ed0ea398d88f152108f703f234604276",
+      "entry_offset": 0,
+      "generic_scalar_product_offsets": [
+        "0x6d388",
+        "0x7165f",
+        "0x757fb",
+        "0x75f81",
+        "0x77283",
+        "0x79cea",
+        "0x7bb10",
+        "0x7cd50",
+        "0x8b7b9",
+        "0x8d3db",
+        "0x91762",
+        "0x95947",
+        "0x960d2",
+        "0x9743a",
+        "0x99f67",
+        "0x9be06",
+        "0x9d097",
+        "0xaab10"
+      ],
+      "jit_object": {
+        "bytes": 1049120,
+        "path": "out/portable-multiply64-jit/capture-candidate-endpoint-normal/jit-10.elf",
+        "sha256": "f34a5dc647882a519ae630a4e8402b3fd44873d711614c8da83419c13e8ff916"
+      },
+      "ltext_address": "0x7645ac71b000",
+      "ltext_bytes": 923717,
+      "mnemonic_occurrences": {
+        "add": 1211,
+        "and": 3288,
+        "bextr": 168,
+        "bzhi": 22,
+        "call": 5,
+        "cdqe": 4,
+        "cmova": 133,
+        "cmovae": 113,
+        "cmovb": 527,
+        "cmovbe": 199,
+        "cmove": 1803,
+        "cmovg": 66,
+        "cmovge": 18,
+        "cmovl": 145,
+        "cmovle": 6,
+        "cmovne": 722,
+        "cmovns": 55,
+        "cmovp": 2,
+        "cmovs": 184,
+        "cmp": 3294,
+        "cs": 9,
+        "data16": 60,
+        "dec": 4,
+        "div": 191,
+        "endbr64": 4,
+        "imul": 84,
+        "inc": 285,
+        "ja": 5,
+        "jae": 32,
+        "jb": 24,
+        "je": 4940,
+        "jg": 13,
+        "jge": 13,
+        "jl": 13,
+        "jmp": 390,
+        "jne": 169,
+        "jns": 14,
+        "js": 14,
+        "kandb": 2336,
+        "kandnb": 194,
+        "kmovb": 1254,
+        "kmovd": 2545,
+        "kmovq": 181,
+        "kmovw": 1813,
+        "knotb": 56,
+        "korb": 623,
+        "kortestb": 1443,
+        "ktestb": 1479,
+        "kxnorb": 2,
+        "kxorb": 2314,
+        "lea": 1325,
+        "lock": 16,
+        "lzcnt": 243,
+        "mfence": 10,
+        "mov": 7342,
+        "movabs": 5109,
+        "movsxd": 164,
+        "movzx": 996,
+        "neg": 521,
+        "nop": 117,
+        "not": 196,
+        "or": 941,
+        "pop": 18,
+        "push": 34,
+        "ret": 4,
+        "sar": 487,
+        "sbb": 846,
+        "seta": 3,
+        "setae": 395,
+        "setb": 182,
+        "setbe": 2,
+        "sete": 310,
+        "setne": 461,
+        "setns": 8,
+        "sets": 4,
+        "shl": 816,
+        "shlx": 396,
+        "shr": 518,
+        "shrx": 261,
+        "sub": 456,
+        "test": 1114,
+        "tzcnt": 1850,
+        "vaddps": 127,
+        "vaddss": 57,
+        "vandnps": 90,
+        "vandps": 573,
+        "vblendvps": 7623,
+        "vbroadcastss": 147,
+        "vextracti128": 17,
+        "vextracti32x4": 5,
+        "vextracti64x4": 49,
+        "vinserti128": 10,
+        "vinserti32x4": 10,
+        "vmovaps": 16057,
+        "vmovd": 154,
+        "vmovdqa": 13043,
+        "vmovdqa32": 6777,
+        "vmovdqa64": 419,
+        "vmovdqu": 5,
+        "vmovdqu64": 12,
+        "vmovdqu8": 396,
+        "vmovq": 1505,
+        "vmovss": 70,
+        "vorps": 157,
+        "vpaddd": 2476,
+        "vpand": 7117,
+        "vpandd": 2211,
+        "vpandn": 2270,
+        "vpandnd": 348,
+        "vpandnq": 49,
+        "vpandq": 4,
+        "vpblendmd": 616,
+        "vpbroadcastd": 4645,
+        "vpcmpeqd": 1800,
+        "vpcmpgtd": 1065,
+        "vpcmpleud": 388,
+        "vpcmpltd": 208,
+        "vpcmpltud": 691,
+        "vpcmpneqd": 30,
+        "vpcmpnleud": 574,
+        "vpcmpnltud": 42,
+        "vpdpwssd": 1,
+        "vpermi2d": 4,
+        "vpermpd": 49,
+        "vpextrd": 132,
+        "vpgatherdd": 45,
+        "vpinsrd": 120,
+        "vplzcntd": 541,
+        "vpmaxsd": 192,
+        "vpmaxud": 388,
+        "vpminud": 249,
+        "vpmovd2m": 38,
+        "vpmovdb": 574,
+        "vpmovm2d": 379,
+        "vpmovqd": 49,
+        "vpmovzxdq": 136,
+        "vpmulld": 31,
+        "vpmuludq": 46,
+        "vpor": 809,
+        "vpord": 634,
+        "vpscatterdd": 19,
+        "vpshldd": 2,
+        "vpshufd": 8,
+        "vpslld": 812,
+        "vpsllq": 11,
+        "vpsllvd": 885,
+        "vpsllvq": 49,
+        "vpsrad": 95,
+        "vpsrld": 1253,
+        "vpsrlvd": 547,
+        "vpsrlvq": 49,
+        "vpsubd": 1695,
+        "vpternlogd": 1694,
+        "vpternlogq": 383,
+        "vptest": 2903,
+        "vptestmb": 34,
+        "vptestmd": 3622,
+        "vptestmq": 49,
+        "vptestnmb": 451,
+        "vptestnmd": 1614,
+        "vpunpcklqdq": 2,
+        "vpxor": 769,
+        "vpxord": 169,
+        "vshufps": 49,
+        "vsubps": 50,
+        "vsubss": 26,
+        "vucomiss": 2,
+        "vxorps": 100,
+        "vzeroupper": 2,
+        "xchg": 15,
+        "xor": 1268,
+        "{evex}": 25
+      },
+      "objdump_args": [
+        "-d",
+        "-M",
+        "intel",
+        "--no-show-raw-insn",
+        "out/portable-multiply64-jit/capture-candidate-endpoint-normal/jit-10.elf"
+      ],
+      "resume_offset": 24320,
+      "resume_stack_allocation": {
+        "bytes": 43072,
+        "instruction": "sub rsp,0xa840",
+        "offset": "0x5f15"
+      },
+      "rsp_rbp_address_instruction_occurrences": 5396,
+      "rsp_rbp_memory_width_occurrences": {
+        "BYTE": 106,
+        "DWORD": 1765,
+        "QWORD": 105,
+        "WORD": 1813,
+        "XMMWORD": 73,
+        "YMMWORD": 1531,
+        "other": 3
+      },
+      "scalar_bzhi_offsets": [
+        "0x6d3c0",
+        "0x7168c",
+        "0x71c22",
+        "0x7581b",
+        "0x75fa1",
+        "0x772a3",
+        "0x79d0c",
+        "0x7bb32",
+        "0x7cd72",
+        "0x8b23b",
+        "0x8b7db",
+        "0x8d40a",
+        "0x9178f",
+        "0x91d38",
+        "0x95967",
+        "0x960f2",
+        "0x9745a",
+        "0x99f89",
+        "0x9be28",
+        "0x9d0b9",
+        "0xaa594",
+        "0xaab32"
+      ],
+      "section_index": 3,
+      "vector_product_offsets_by_width": {
+        "ymm": [
+          "0xeb51",
+          "0xeb60",
+          "0x2020e",
+          "0x2021c",
+          "0x47501",
+          "0x47518",
+          "0xbdb1e",
+          "0xbdb2d"
+        ],
+        "zmm": [
+          "0xe484",
+          "0x11d7c",
+          "0x15545",
+          "0x15bc3",
+          "0x16beb",
+          "0x18f7d",
+          "0x1a919",
+          "0x1b8f9",
+          "0x1fb43",
+          "0x23425",
+          "0x26bd1",
+          "0x27258",
+          "0x2827f",
+          "0x2a5ec",
+          "0x2bf47",
+          "0x2cf15",
+          "0x3d03e",
+          "0x42c2d",
+          "0x46e2d",
+          "0x4a76a",
+          "0x4df6a",
+          "0x4e5e4",
+          "0x4f646",
+          "0x51a41",
+          "0x5348a",
+          "0x544d5",
+          "0x608cb",
+          "0xb3810",
+          "0xb92ef",
+          "0xbd43e",
+          "0xc0d52",
+          "0xc453d",
+          "0xc4bb7",
+          "0xc5bd9",
+          "0xc7f7f",
+          "0xc9985",
+          "0xca9a0",
+          "0xd6e30"
+        ]
+      },
+      "wide_vector_jam_shift_offsets": [
+        "0xe4c5",
+        "0x11db6",
+        "0x12333",
+        "0x15586",
+        "0x15c04",
+        "0x16c2c",
+        "0x18fbe",
+        "0x1a95a",
+        "0x1b93a",
+        "0x1fb84",
+        "0x2345f",
+        "0x239d2",
+        "0x26c12",
+        "0x27299",
+        "0x282c0",
+        "0x2a62d",
+        "0x2bf88",
+        "0x2cf57",
+        "0x3c0d2",
+        "0x3d080",
+        "0x426bf",
+        "0x42c76",
+        "0x46e68",
+        "0x4a7a5",
+        "0x4ad34",
+        "0x4dfa5",
+        "0x4e61f",
+        "0x4f681",
+        "0x51a7c",
+        "0x534c5",
+        "0x54510",
+        "0x60394",
+        "0x60914",
+        "0x693f4",
+        "0xb287f",
+        "0xb3851",
+        "0xb8db7",
+        "0xb9330",
+        "0xbd478",
+        "0xc0d93",
+        "0xc131f",
+        "0xc457e",
+        "0xc4bf8",
+        "0xc5c1a",
+        "0xc7fc0",
+        "0xc99c6",
+        "0xca9e1",
+        "0xd68ee",
+        "0xd6e71"
+      ],
+      "zmm_stack_memory_instruction_occurrences": 0
+    },
+    "common_prefix_ltext_bytes": 24320,
+    "common_prefix_raw_sha256": "e006a88412e2f3eb224a4a0b0d485be7cc8acd44a5dee1e3941624c037743789",
+    "constant_vector_countercost_example": {
+      "candidate": [
+        {
+          "instruction": "vpmovzxdq zmm2,ymm8",
+          "ltext_offset": "0x122e9"
+        },
+        {
+          "instruction": "vpsllq zmm2,zmm2,0x17",
+          "ltext_offset": "0x122ef"
+        },
+        {
+          "instruction": "vextracti64x4 ymm8,zmm2,0x1",
+          "ltext_offset": "0x122f6"
+        },
+        {
+          "instruction": "vshufps ymm8,ymm2,ymm8,0xdd",
+          "ltext_offset": "0x122fd"
+        },
+        {
+          "instruction": "vpermpd ymm8,ymm8,0xd8",
+          "ltext_offset": "0x12303"
+        },
+        {
+          "instruction": "vandps ymm9,ymm8,DWORD BCST [rdx]",
+          "ltext_offset": "0x12309"
+        },
+        {
+          "instruction": "vmovdqa ymm8,YMMWORD PTR [rdi+0x87e0]",
+          "ltext_offset": "0x1230f"
+        },
+        {
+          "instruction": "movabs rdx,0x0",
+          "ltext_offset": "0x12317"
+        },
+        {
+          "instruction": "vptestnmd k7,ymm9,ymm9",
+          "ltext_offset": "0x12321"
+        },
+        {
+          "instruction": "vpandd ymm12{k7},ymm8,DWORD BCST [rdx]",
+          "ltext_offset": "0x12327"
+        },
+        {
+          "instruction": "vpmovzxdq zmm8,ymm12",
+          "ltext_offset": "0x1232d"
+        },
+        {
+          "instruction": "vpsllvq zmm12,zmm28,zmm8",
+          "ltext_offset": "0x12333"
+        },
+        {
+          "instruction": "vpandnq zmm12,zmm12,zmm2",
+          "ltext_offset": "0x12339"
+        },
+        {
+          "instruction": "vpsrlvq zmm2,zmm2,zmm8",
+          "ltext_offset": "0x1233f"
+        },
+        {
+          "instruction": "vpmovqd ymm2,zmm2",
+          "ltext_offset": "0x12345"
+        },
+        {
+          "instruction": "vptestmq k7,zmm12,zmm12",
+          "ltext_offset": "0x1234b"
+        },
+        {
+          "instruction": "vpmovm2d ymm8,k7",
+          "ltext_offset": "0x12351"
+        },
+        {
+          "instruction": "vpsrld ymm8,ymm8,0x1f",
+          "ltext_offset": "0x12357"
+        },
+        {
+          "instruction": "vpor ymm2,ymm8,ymm2",
+          "ltext_offset": "0x1235d"
+        }
+      ],
+      "candidate_llvm_lines": [
+        20693,
+        20712
+      ],
+      "finding": "Constant normalized-significand product was already folded: no multiply removed. Candidate widens then shifts left23 and uses full wide extraction/mask/jam; additional wide-policy cost remains possible.",
+      "stock_llvm_lines": [
+        20693,
+        20707
+      ]
+    },
+    "destroy_five_raw_bytes_equal": true,
+    "generic_scalar_example": {
+      "candidate": [
+        {
+          "instruction": "imul r15,rbx",
+          "ltext_offset": "0x6d388"
+        },
+        {
+          "instruction": "mov rcx,r15",
+          "ltext_offset": "0x6d38c"
+        },
+        {
+          "instruction": "shr rcx,0x20",
+          "ltext_offset": "0x6d38f"
+        },
+        {
+          "instruction": "tzcnt esi,esi",
+          "ltext_offset": "0x6d393"
+        },
+        {
+          "instruction": "and ecx,0x8000",
+          "ltext_offset": "0x6d397"
+        },
+        {
+          "instruction": "mov r8,rcx",
+          "ltext_offset": "0x6d39d"
+        },
+        {
+          "instruction": "and esi,0x7",
+          "ltext_offset": "0x6d3a0"
+        },
+        {
+          "instruction": "movzx esi,BYTE PTR [rdi+rsi*4+0x87e0]",
+          "ltext_offset": "0x6d3a3"
+        },
+        {
+          "instruction": "and sil,0x3f",
+          "ltext_offset": "0x6d3ab"
+        },
+        {
+          "instruction": "test ecx,ecx",
+          "ltext_offset": "0x6d3af"
+        },
+        {
+          "instruction": "mov ecx,0x15",
+          "ltext_offset": "0x6d3b1"
+        },
+        {
+          "instruction": "movzx esi,sil",
+          "ltext_offset": "0x6d3b6"
+        },
+        {
+          "instruction": "cmovne esi,ecx",
+          "ltext_offset": "0x6d3ba"
+        },
+        {
+          "instruction": "xor r13d,r13d",
+          "ltext_offset": "0x6d3bd"
+        },
+        {
+          "instruction": "bzhi rbx,r15,rsi",
+          "ltext_offset": "0x6d3c0"
+        },
+        {
+          "instruction": "shrx rsi,r15,rsi",
+          "ltext_offset": "0x6d3c5"
+        },
+        {
+          "instruction": "setne r13b",
+          "ltext_offset": "0x6d3ca"
+        },
+        {
+          "instruction": "or r13d,esi",
+          "ltext_offset": "0x6d3ce"
+        }
+      ],
+      "finding": "One 32-bit imul removed. Retained64-bit imul feeds bzhi plus64-bit shrx plus sticky setne/or, replacing cross-word32 shlx/shrx sequence.",
+      "stock": [
+        {
+          "instruction": "mov esi,ebx",
+          "ltext_offset": "0x6d1bc"
+        },
+        {
+          "instruction": "imul esi,r15d",
+          "ltext_offset": "0x6d1be"
+        },
+        {
+          "instruction": "imul r15,rbx",
+          "ltext_offset": "0x6d1c2"
+        },
+        {
+          "instruction": "shr r15,0x20",
+          "ltext_offset": "0x6d1c6"
+        },
+        {
+          "instruction": "tzcnt r13d,r13d",
+          "ltext_offset": "0x6d1ca"
+        },
+        {
+          "instruction": "mov ecx,r15d",
+          "ltext_offset": "0x6d1cf"
+        },
+        {
+          "instruction": "and ecx,0x8000",
+          "ltext_offset": "0x6d1d2"
+        },
+        {
+          "instruction": "mov r9,rcx",
+          "ltext_offset": "0x6d1d8"
+        },
+        {
+          "instruction": "and r13d,0x7",
+          "ltext_offset": "0x6d1db"
+        },
+        {
+          "instruction": "movzx r13d,BYTE PTR [rdi+r13*4+0x87e0]",
+          "ltext_offset": "0x6d1df"
+        },
+        {
+          "instruction": "and r13b,0x1f",
+          "ltext_offset": "0x6d1e8"
+        },
+        {
+          "instruction": "test ecx,ecx",
+          "ltext_offset": "0x6d1ec"
+        },
+        {
+          "instruction": "mov ecx,0x15",
+          "ltext_offset": "0x6d1ee"
+        },
+        {
+          "instruction": "movzx r13d,r13b",
+          "ltext_offset": "0x6d1f3"
+        },
+        {
+          "instruction": "sete bl",
+          "ltext_offset": "0x6d1f7"
+        },
+        {
+          "instruction": "cmovne r13d,ecx",
+          "ltext_offset": "0x6d1fa"
+        },
+        {
+          "instruction": "add bl,0xb",
+          "ltext_offset": "0x6d1fe"
+        },
+        {
+          "instruction": "shrx r13d,esi,r13d",
+          "ltext_offset": "0x6d201"
+        },
+        {
+          "instruction": "shlx esi,esi,ebx",
+          "ltext_offset": "0x6d206"
+        },
+        {
+          "instruction": "shlx r15d,r15d,ebx",
+          "ltext_offset": "0x6d20b"
+        },
+        {
+          "instruction": "xor ebx,ebx",
+          "ltext_offset": "0x6d210"
+        },
+        {
+          "instruction": "test esi,esi",
+          "ltext_offset": "0x6d212"
+        },
+        {
+          "instruction": "setne bl",
+          "ltext_offset": "0x6d214"
+        },
+        {
+          "instruction": "or ebx,r15d",
+          "ltext_offset": "0x6d217"
+        },
+        {
+          "instruction": "mov r15,QWORD PTR [rsp+0x20]",
+          "ltext_offset": "0x6d21a"
+        },
+        {
+          "instruction": "or ebx,r13d",
+          "ltext_offset": "0x6d21f"
+        }
+      ]
+    },
+    "generic_vector_example": {
+      "candidate": [
+        {
+          "instruction": "vpmovzxdq zmm1,ymm9",
+          "ltext_offset": "0xe473"
+        },
+        {
+          "instruction": "vpmovzxdq zmm2,ymm2",
+          "ltext_offset": "0xe479"
+        },
+        {
+          "instruction": "vpbroadcastd ymm9,DWORD PTR [r14]",
+          "ltext_offset": "0xe47f"
+        },
+        {
+          "instruction": "vpmuludq zmm2,zmm1,zmm2",
+          "ltext_offset": "0xe484"
+        },
+        {
+          "instruction": "vextracti64x4 ymm1,zmm2,0x1",
+          "ltext_offset": "0xe48a"
+        },
+        {
+          "instruction": "vshufps ymm1,ymm2,ymm1,0xdd",
+          "ltext_offset": "0xe491"
+        },
+        {
+          "instruction": "vpermpd ymm1,ymm1,0xd8",
+          "ltext_offset": "0xe496"
+        },
+        {
+          "instruction": "vandps ymm1,ymm1,DWORD BCST [rdx]",
+          "ltext_offset": "0xe49c"
+        },
+        {
+          "instruction": "movabs rdx,0x0",
+          "ltext_offset": "0xe4a2"
+        },
+        {
+          "instruction": "vptestnmd k6,ymm1,ymm1",
+          "ltext_offset": "0xe4ac"
+        },
+        {
+          "instruction": "vpandd ymm9{k6},ymm8,DWORD BCST [rdx]",
+          "ltext_offset": "0xe4b2"
+        },
+        {
+          "instruction": "vpmovzxdq zmm8,ymm9",
+          "ltext_offset": "0xe4b8"
+        },
+        {
+          "instruction": "vpternlogd zmm9,zmm9,zmm9,0xff",
+          "ltext_offset": "0xe4be"
+        },
+        {
+          "instruction": "vpsllvq zmm9,zmm9,zmm8",
+          "ltext_offset": "0xe4c5"
+        },
+        {
+          "instruction": "vpandnq zmm9,zmm9,zmm2",
+          "ltext_offset": "0xe4cb"
+        },
+        {
+          "instruction": "vpsrlvq zmm2,zmm2,zmm8",
+          "ltext_offset": "0xe4d1"
+        },
+        {
+          "instruction": "vpmovqd ymm2,zmm2",
+          "ltext_offset": "0xe4d7"
+        },
+        {
+          "instruction": "vptestmq k6,zmm9,zmm9",
+          "ltext_offset": "0xe4dd"
+        },
+        {
+          "instruction": "vpmovm2d ymm8,k6",
+          "ltext_offset": "0xe4e3"
+        },
+        {
+          "instruction": "vpsrld ymm8,ymm8,0x1f",
+          "ltext_offset": "0xe4e9"
+        },
+        {
+          "instruction": "vpor ymm2,ymm8,ymm2",
+          "ltext_offset": "0xe4ef"
+        }
+      ],
+      "finding": "Separate low32 vpmulld plus two YMM vpmuludq and high-word permutation become two vpmovzxdq plus one ZMM vpmuludq. Cross-word32 shifts/jam become high-word extract/shuffle/permutation, third widening, wide mask shift, andnot, right shift, narrowing and predicate-to-bit conversion.",
+      "stock": [
+        {
+          "instruction": "vpshufd ymm9,ymm25,0xf5",
+          "ltext_offset": "0xe43b"
+        },
+        {
+          "instruction": "vpaddd ymm8,ymm24,ymm27",
+          "ltext_offset": "0xe442"
+        },
+        {
+          "instruction": "vpand ymm8,ymm8,ymm0",
+          "ltext_offset": "0xe448"
+        },
+        {
+          "instruction": "vpsllvd ymm1,ymm1,ymm8",
+          "ltext_offset": "0xe44c"
+        },
+        {
+          "instruction": "vmovdqa32 ymm1{k5},ymm6",
+          "ltext_offset": "0xe451"
+        },
+        {
+          "instruction": "vmovdqa32 ymm2{k4},ymm1",
+          "ltext_offset": "0xe457"
+        },
+        {
+          "instruction": "vpmulld ymm8,ymm25,ymm2",
+          "ltext_offset": "0xe45d"
+        },
+        {
+          "instruction": "vpmuludq ymm1,ymm25,ymm2",
+          "ltext_offset": "0xe463"
+        },
+        {
+          "instruction": "vpshufd ymm2,ymm2,0xf5",
+          "ltext_offset": "0xe469"
+        },
+        {
+          "instruction": "vpmuludq ymm2,ymm9,ymm2",
+          "ltext_offset": "0xe46e"
+        },
+        {
+          "instruction": "vmovdqa ymm9,YMMWORD PTR [rdx]",
+          "ltext_offset": "0xe472"
+        },
+        {
+          "instruction": "movabs rdx,0x0",
+          "ltext_offset": "0xe476"
+        },
+        {
+          "instruction": "vpermi2d ymm9,ymm1,ymm2",
+          "ltext_offset": "0xe480"
+        },
+        {
+          "instruction": "vpandd ymm1,ymm9,DWORD BCST [rdx]",
+          "ltext_offset": "0xe486"
+        },
+        {
+          "instruction": "movabs rdx,0x0",
+          "ltext_offset": "0xe48c"
+        },
+        {
+          "instruction": "vpbroadcastd ymm2,DWORD PTR [r14]",
+          "ltext_offset": "0xe496"
+        },
+        {
+          "instruction": "vpbroadcastd ymm25,DWORD PTR [rdx]",
+          "ltext_offset": "0xe49b"
+        },
+        {
+          "instruction": "movabs rdx,0x0",
+          "ltext_offset": "0xe4a1"
+        },
+        {
+          "instruction": "vptestnmd k6,ymm1,ymm1",
+          "ltext_offset": "0xe4ab"
+        },
+        {
+          "instruction": "vpandd ymm2{k6},ymm0,YMMWORD PTR [rdi+0x87e0]",
+          "ltext_offset": "0xe4b1"
+        },
+        {
+          "instruction": "vpbroadcastd ymm25{k6},DWORD PTR [rdx]",
+          "ltext_offset": "0xe4bb"
+        },
+        {
+          "instruction": "vpsrlvd ymm2,ymm8,ymm2",
+          "ltext_offset": "0xe4c1"
+        },
+        {
+          "instruction": "vpsllvd ymm8,ymm8,ymm25",
+          "ltext_offset": "0xe4c6"
+        },
+        {
+          "instruction": "vpsllvd ymm9,ymm9,ymm25",
+          "ltext_offset": "0xe4cc"
+        },
+        {
+          "instruction": "vpcmpeqd ymm8,ymm8,ymm6",
+          "ltext_offset": "0xe4d2"
+        },
+        {
+          "instruction": "vpaddd ymm8,ymm9,ymm8",
+          "ltext_offset": "0xe4d6"
+        },
+        {
+          "instruction": "vpsubd ymm8,ymm8,ymm15",
+          "ltext_offset": "0xe4db"
+        },
+        {
+          "instruction": "vpor ymm2,ymm8,ymm2",
+          "ltext_offset": "0xe4e0"
+        }
+      ]
+    },
+    "non_resume_functions_raw_bytes_equal": true,
+    "static_multiply_occurrence_change": {
+      "interpretation": "94 fewer multiply instruction occurrences across complete emitted .ltext; does not weight SIMD widths/latency/dynamic paths or net cost.",
+      "scalar_imul_all": {
+        "candidate": 84,
+        "stock": 102
+      },
+      "vpmulld": {
+        "candidate": 31,
+        "stock": 69
+      },
+      "vpmuludq": {
+        "candidate_ymm": 8,
+        "candidate_zmm": 38,
+        "stock_ymm": 84
+      }
+    },
+    "stock": {
+      "all_ltext_instruction_occurrences": 152625,
+      "all_native_div_are_32_bit": true,
+      "branch_instruction_occurrences": 5627,
+      "disassembly_text_sha256": "c2deb1be96b0cd2a1e370ec33b470791a7b1f0b83af9beafc8a66e4aa1ba20a3",
+      "entry_offset": 0,
+      "generic_scalar_product_offsets": [
+        "0x6d1c2",
+        "0x714ae",
+        "0x7566a",
+        "0x75e06",
+        "0x77149",
+        "0x79c07",
+        "0x7ba4d",
+        "0x7cca7",
+        "0x8b727",
+        "0x8d368",
+        "0x916fc",
+        "0x958f3",
+        "0x96096",
+        "0x97419",
+        "0x99f50",
+        "0x9be14",
+        "0x9d0c2",
+        "0xaab4b"
+      ],
+      "jit_object": {
+        "bytes": 1049832,
+        "path": "attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf",
+        "sha256": "fb2cc33824dafab6bc16f4596c4c230aa641e549782a1eaf670b8184d6438e97"
+      },
+      "ltext_address": "0x73ea28318000",
+      "ltext_bytes": 922597,
+      "mnemonic_occurrences": {
+        "add": 1233,
+        "and": 3288,
+        "bextr": 168,
+        "call": 5,
+        "cdqe": 4,
+        "cmova": 133,
+        "cmovae": 113,
+        "cmovb": 527,
+        "cmovbe": 199,
+        "cmove": 1803,
+        "cmovg": 66,
+        "cmovge": 18,
+        "cmovl": 145,
+        "cmovle": 6,
+        "cmovne": 722,
+        "cmovns": 55,
+        "cmovp": 2,
+        "cmovs": 184,
+        "cmp": 3294,
+        "cs": 10,
+        "data16": 67,
+        "dec": 4,
+        "div": 191,
+        "endbr64": 4,
+        "imul": 102,
+        "inc": 285,
+        "ja": 5,
+        "jae": 32,
+        "jb": 24,
+        "je": 4940,
+        "jg": 13,
+        "jge": 13,
+        "jl": 13,
+        "jmp": 390,
+        "jne": 169,
+        "jns": 14,
+        "js": 14,
+        "kandb": 2336,
+        "kandnb": 194,
+        "kmovb": 1254,
+        "kmovd": 2545,
+        "kmovq": 181,
+        "kmovw": 1813,
+        "knotb": 56,
+        "korb": 623,
+        "kortestb": 1443,
+        "ktestb": 1479,
+        "kxnorb": 2,
+        "kxorb": 2314,
+        "lea": 1325,
+        "lock": 16,
+        "lzcnt": 243,
+        "mfence": 10,
+        "mov": 7397,
+        "movabs": 5185,
+        "movsxd": 164,
+        "movzx": 996,
+        "neg": 521,
+        "nop": 116,
+        "not": 196,
+        "or": 963,
+        "pop": 18,
+        "push": 34,
+        "ret": 4,
+        "sar": 487,
+        "sbb": 846,
+        "seta": 3,
+        "setae": 395,
+        "setb": 182,
+        "setbe": 2,
+        "sete": 332,
+        "setne": 461,
+        "setns": 8,
+        "sets": 4,
+        "shl": 816,
+        "shlx": 440,
+        "shr": 518,
+        "shrx": 261,
+        "sub": 456,
+        "test": 1136,
+        "tzcnt": 1850,
+        "vaddps": 127,
+        "vaddss": 57,
+        "vandnps": 90,
+        "vandps": 526,
+        "vblendvps": 7623,
+        "vbroadcastss": 149,
+        "vextracti128": 16,
+        "vextracti32x4": 6,
+        "vinserti128": 9,
+        "vinserti32x4": 11,
+        "vmovaps": 16048,
+        "vmovd": 154,
+        "vmovdqa": 13049,
+        "vmovdqa32": 6777,
+        "vmovdqa64": 339,
+        "vmovdqu": 5,
+        "vmovdqu64": 12,
+        "vmovdqu8": 396,
+        "vmovq": 1505,
+        "vmovss": 70,
+        "vorps": 157,
+        "vpaddd": 2490,
+        "vpand": 7100,
+        "vpandd": 2275,
+        "vpandn": 2274,
+        "vpandnd": 344,
+        "vpandq": 4,
+        "vpblendmd": 616,
+        "vpbroadcastd": 4741,
+        "vpcmpeqd": 1856,
+        "vpcmpgtd": 1065,
+        "vpcmpleud": 388,
+        "vpcmpltd": 208,
+        "vpcmpltud": 691,
+        "vpcmpneqd": 30,
+        "vpcmpnleud": 574,
+        "vpcmpnltud": 42,
+        "vpdpwssd": 1,
+        "vpermi2d": 42,
+        "vpextrd": 132,
+        "vpgatherdd": 45,
+        "vpinsrd": 120,
+        "vplzcntd": 541,
+        "vpmaxsd": 192,
+        "vpmaxud": 388,
+        "vpminud": 249,
+        "vpmovd2m": 38,
+        "vpmovdb": 574,
+        "vpmovm2d": 330,
+        "vpmulld": 69,
+        "vpmuludq": 84,
+        "vpor": 804,
+        "vpord": 639,
+        "vpscatterdd": 19,
+        "vpshldd": 2,
+        "vpshufd": 84,
+        "vpslld": 823,
+        "vpsllvd": 983,
+        "vpsrad": 95,
+        "vpsrld": 1215,
+        "vpsrlvd": 596,
+        "vpsubd": 1709,
+        "vpternlogd": 1680,
+        "vpternlogq": 383,
+        "vptest": 2903,
+        "vptestmb": 34,
+        "vptestmd": 3622,
+        "vptestnmb": 451,
+        "vptestnmd": 1614,
+        "vpunpcklqdq": 2,
+        "vpxor": 792,
+        "vpxord": 164,
+        "vsubps": 50,
+        "vsubss": 26,
+        "vucomiss": 2,
+        "vxorps": 106,
+        "vzeroupper": 2,
+        "xchg": 14,
+        "xor": 1277,
+        "{evex}": 25
+      },
+      "objdump_args": [
+        "-d",
+        "-M",
+        "intel",
+        "--no-show-raw-insn",
+        "attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf"
+      ],
+      "resume_offset": 24320,
+      "resume_stack_allocation": {
+        "bytes": 42976,
+        "instruction": "sub rsp,0xa7e0",
+        "offset": "0x5f15"
+      },
+      "rsp_rbp_address_instruction_occurrences": 5372,
+      "rsp_rbp_memory_width_occurrences": {
+        "BYTE": 107,
+        "DWORD": 1776,
+        "QWORD": 106,
+        "WORD": 1813,
+        "XMMWORD": 73,
+        "YMMWORD": 1494,
+        "other": 3
+      },
+      "scalar_bzhi_offsets": [],
+      "section_index": 3,
+      "vector_product_offsets_by_width": {
+        "ymm": [
+          "0xe463",
+          "0xe46e",
+          "0xeb3e",
+          "0xeb4d",
+          "0x11d29",
+          "0x11d34",
+          "0x154c8",
+          "0x154d7",
+          "0x15b50",
+          "0x15b5f",
+          "0x16b97",
+          "0x16ba6",
+          "0x18f3a",
+          "0x18f4b",
+          "0x1a8ca",
+          "0x1a8db",
+          "0x1b8b1",
+          "0x1b8c2",
+          "0x1fb22",
+          "0x1fb2d",
+          "0x201fb",
+          "0x20209",
+          "0x233f2",
+          "0x233fd",
+          "0x26b83",
+          "0x26b8e",
+          "0x2720b",
+          "0x27216",
+          "0x28230",
+          "0x2823b",
+          "0x2a595",
+          "0x2a5a0",
+          "0x2bef2",
+          "0x2bf03",
+          "0x2ceba",
+          "0x2cecb",
+          "0x3cfa7",
+          "0x3cfb6",
+          "0x42b3d",
+          "0x42b4b",
+          "0x46d02",
+          "0x46d0d",
+          "0x473e5",
+          "0x473f4",
+          "0x4a61e",
+          "0x4a629",
+          "0x4dde8",
+          "0x4ddf3",
+          "0x4e45e",
+          "0x4e469",
+          "0x4f4f5",
+          "0x4f500",
+          "0x51960",
+          "0x5196b",
+          "0x5337d",
+          "0x53390",
+          "0x543b7",
+          "0x543c9",
+          "0x60769",
+          "0x60777",
+          "0xb3714",
+          "0xb3723",
+          "0xb90f2",
+          "0xb9100",
+          "0xbd1f4",
+          "0xbd207",
+          "0xbd8ff",
+          "0xbd90e",
+          "0xc0afa",
+          "0xc0b03",
+          "0xc426e",
+          "0xc427d",
+          "0xc48ee",
+          "0xc48fd",
+          "0xc591b",
+          "0xc592a",
+          "0xc7cad",
+          "0xc7cbc",
+          "0xc968e",
+          "0xc969f",
+          "0xca6ad",
+          "0xca6be",
+          "0xd6a8a",
+          "0xd6a99"
+        ],
+        "zmm": []
+      },
+      "wide_vector_jam_shift_offsets": [],
+      "zmm_stack_memory_instruction_occurrences": 0
+    }
+  },
+  "next_dependency": "The distinct removal premise survives toward the unchanged original174268-record arithmetic gate. Only after numeric acceptance and explicit mode/profile admission could original integrated controls be considered. No benefit trial or other-stage profile is admitted here.",
+  "schema": "sirius-multiply64-independent-ordinary-code-review/v1",
+  "scope": "One complete normal Endpoint module, ordinary LVP recorded optimization pipelines, actual called canary object. Short input returns before retained arithmetic; no PB32Multiply execution/numerical equivalence/frequency/timing benefit observed."
+}
