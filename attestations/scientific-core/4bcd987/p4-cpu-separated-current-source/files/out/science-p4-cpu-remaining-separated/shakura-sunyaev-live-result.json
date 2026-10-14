@@ -1,0 +1,388 @@
+{
+  "passed": true,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "expected_names": [
+    "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile"
+  ],
+  "scope": "One unchanged original CPU P4 witness: GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile",
+  "finite_acceptance_scope": {
+    "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile": {
+      "original_source": "tests/render/geodesic_tracer_test.cpp:338",
+      "fixture": {
+        "mass": 1,
+        "spin": 0,
+        "camera_size": [
+          64,
+          64
+        ],
+        "camera_radius": 50,
+        "camera_theta": "pi/2",
+        "pixel_range": "x,y=8,10,...,54",
+        "sample": [
+          0.5,
+          0.5
+        ],
+        "disk_inner": 6,
+        "disk_outer": 20,
+        "temperature_scale": 10000,
+        "max_steps_per_trace": 5000
+      },
+      "search": "Unchanged fixture raster search until compared>=12 or exhausted; at most576 Trace calls.",
+      "assertions": "Original each valid crossing temperature agrees within2e-3 with shared ShakuraSunyaevTemperature(scale,r,inner), and compared>=6.",
+      "reference_limit": "Live selected-profile consumer consistency against the production radial helper; no independent radiation or vertical-structure oracle."
+    }
+  },
+  "qualification_claimed": false,
+  "p4_complete": false,
+  "mandatory_receipt_created": false,
+  "original_assertions_changed": false,
+  "outer_diagnostic_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "declared_output_environment": {
+    "TMPDIR": "/home/astra/.project/Sirius/out/science-p4-cpu-remaining-separated/temporary-shakura-sunyaev-live",
+    "GTEST_OUTPUT": ""
+  },
+  "executed_names": [
+    "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile"
+  ],
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "disabled": 0,
+  "junit": {
+    "bytes": 1284,
+    "sha256": "d95c2ea7618462bd21b342f936e56bfe5a7606df1c01ad682cc9bdcebb90e235"
+  },
+  "ctest_output_log": {
+    "bytes": 2448,
+    "sha256": "03c6cdd7c0cd4b9222155b438d19017adb102ca0d8f6f01c93deac60a8048c8f"
+  },
+  "owner": {
+    "bytes": 1975,
+    "sha256": "d1cb1318a7169b31c1d3119609f54f871e1a314294465f0312e1999534fdc8a4"
+  },
+  "source_and_registration_join": {
+    "test_sources": [
+      "tests/render/geodesic_tracer_test.cpp"
+    ],
+    "production_headers": [
+      "src/sirius/core/disk/novikov_thorne_disk.h",
+      "src/sirius/core/disk/disk_model.h",
+      "src/sirius/core/disk/volumetric_disk.h",
+      "src/sirius/core/constants.h",
+      "src/sirius/core/relativistic_transfer.h",
+      "src/sirius/core/kerr_orbits.h",
+      "src/sirius/core/coordinates.h",
+      "src/sirius/core/metrics/kerr_schild_family.h",
+      "src/sirius/core/metrics/outgoing_kerr_schild.h",
+      "src/sirius/core/camera.h",
+      "src/sirius/core/camera_launch.h",
+      "src/sirius/core/observer_frame.h",
+      "src/sirius/core/geodesic_integrator.h",
+      "src/sirius/core/spectral/colour_modes.h",
+      "src/sirius/core/spectral/spectral_radiance.h",
+      "src/sirius/core/disk/turbulence.h",
+      "src/sirius/backend/cpu/geodesic_tracer.h",
+      "src/sirius/backend/cpu/geodesic_tracer.cpp",
+      "src/sirius/backend/trace_step_executor.h",
+      "src/sirius/backend/CMakeLists.txt",
+      "src/sirius/render/trace_domain.h",
+      "tests/render/doppler_toggle_test.cpp",
+      "src/sirius/base/contracts.h"
+    ],
+    "producers": {
+      "render": {
+        "path": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4",
+        "bytes": 12208240,
+        "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+      }
+    },
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_WERROR": "ON",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "CMAKE_CXX_COMPILER": "g++-14"
+    },
+    "original_compile_commands": [
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_INTERACTIVE_VIEWER=1 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1 -DSIRIUS_VERSION=\\\"2.0.0\\\" -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/lib/glad/include -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -I/home/astra/.project/Sirius/lib/glfw/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o -c /home/astra/.project/Sirius/tests/render/geodesic_tracer_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/render/geodesic_tracer_test.cpp",
+        "output": "tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o"
+      }
+    ],
+    "original_link_ninja_lines": [
+      "build src/sirius/app/sirius_render_tests tests/render/sirius_render_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/render/sirius_render_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_render_tests_Release tests/render/CMakeFiles/sirius_render_tests.dir/alcubierre_acceptance_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/film_pipeline_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/tile_scheduler_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/progress_tracker_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/render_evidence_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/memory_governor_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/ray_bundle_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/starfield_point_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_physics_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/ray_work_queue_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/doppler_toggle_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/pixel_sampling_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/shadow_boundary_test.cpp.o | src/sirius/render/libsirius_render.a src/sirius/app/libsirius_app_lib.a lib/libgtest_main.a src/sirius/render/libsirius_render.a src/sirius/backend/libsirius_backend_cpu.a src/sirius/backend/libsirius_backend.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a /usr/lib/x86_64-linux-gnu/libvulkan.so _deps/ftxui-build/libftxui-component.a _deps/ftxui-build/libftxui-dom.a _deps/ftxui-build/libftxui-screen.a lib/glfw/src/libglfw3.a /usr/lib/x86_64-linux-gnu/librt.a /usr/lib/x86_64-linux-gnu/libm.so /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so lib/libgtest.a || _deps/ftxui-build/libftxui-component.a _deps/ftxui-build/libftxui-dom.a _deps/ftxui-build/libftxui-screen.a lib/glfw/src/libglfw3.a lib/libgtest.a lib/libgtest_main.a sirius_render_tests_input_volume src/sirius/app/libsirius_app_lib.a src/sirius/app/sirius src/sirius/backend/libsirius_backend.a src/sirius/backend/libsirius_backend_cpu.a src/sirius/backend/sirius_kernels src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a src/sirius/render/libsirius_render.a"
+    ],
+    "registrations": [
+      {
+        "name": "GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite",
+        "source": "tests/render/geodesic_tracer_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "add_test": "add_test([=[GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests"
+      },
+      {
+        "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
+        "source": "tests/render/geodesic_tracer_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "add_test": "add_test([=[GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests"
+      },
+      {
+        "name": "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile",
+        "source": "tests/render/geodesic_tracer_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "add_test": "add_test([=[GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests"
+      }
+    ],
+    "selected_backend_cases": 0,
+    "selected_render_cases": 3,
+    "live_cpu_production_compile": [
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/src/sirius/.. -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/backend/CMakeFiles/sirius_backend_cpu.dir/cpu/geodesic_tracer.cpp.o -c /home/astra/.project/Sirius/src/sirius/backend/cpu/geodesic_tracer.cpp",
+        "file": "/home/astra/.project/Sirius/src/sirius/backend/cpu/geodesic_tracer.cpp",
+        "output": "src/sirius/backend/CMakeFiles/sirius_backend_cpu.dir/cpu/geodesic_tracer.cpp.o"
+      }
+    ],
+    "live_cpu_archive_link": [
+      "build src/sirius/backend/libsirius_backend_cpu.a: CXX_STATIC_LIBRARY_LINKER__sirius_backend_cpu_Release src/sirius/backend/CMakeFiles/sirius_backend_cpu.dir/cpu/geodesic_tracer.cpp.o || src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+    ],
+    "original_test_TIMEOUT_added": false
+  },
+  "reference": {
+    "original_source_snapshots": {
+      "tests/backend/cpu_trace_boundary_test.cpp": {
+        "bytes": 61159,
+        "sha256": "1fc8c40565eb5d1946550fb6e8db19132666140bf4950f31cde1ff10589181e6",
+        "git_blob": "67b68bc26dfde2f0e1720c18b2e105f4d9ac50c6"
+      },
+      "tests/render/geodesic_tracer_test.cpp": {
+        "bytes": 38427,
+        "sha256": "826262c34e8ec134aff9de70b1c8d120156b69553e98825ade9848a3b4152511",
+        "git_blob": "4f160dd0bc522186098072efd2d9dd51fb969aee"
+      },
+      "src/sirius/core/disk/novikov_thorne_disk.h": {
+        "bytes": 16284,
+        "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f",
+        "git_blob": "75941e077426512c0bf86f33e644937eeaedb45b"
+      },
+      "src/sirius/core/disk/disk_model.h": {
+        "bytes": 2876,
+        "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6",
+        "git_blob": "0340ef7434d0434618966f646b6e536d04d18bb1"
+      },
+      "src/sirius/core/disk/volumetric_disk.h": {
+        "bytes": 1993,
+        "sha256": "5643b4664bca7f2382ae1a9856c86ef1c506818c6b891bbfd04afcb744a43aaf",
+        "git_blob": "b0efd142d83bdc76a52f1a2a72b5741a01caf594"
+      },
+      "src/sirius/core/constants.h": {
+        "bytes": 8558,
+        "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37",
+        "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469"
+      },
+      "src/sirius/core/relativistic_transfer.h": {
+        "bytes": 11498,
+        "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f",
+        "git_blob": "fcd65ad400729de2105752b710bdde70423565d4"
+      },
+      "src/sirius/core/kerr_orbits.h": {
+        "bytes": 3107,
+        "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe",
+        "git_blob": "ce4e906fd865922642e6fa8bb6108be169ddd7a5"
+      },
+      "src/sirius/core/coordinates.h": {
+        "bytes": 19636,
+        "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5",
+        "git_blob": "5a0143f40cee45c22cff55814e72efb42c4081f2"
+      },
+      "src/sirius/core/metrics/kerr_schild_family.h": {
+        "bytes": 33851,
+        "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a",
+        "git_blob": "074a71d54304b04bae7d1f4002f2d97914b0ae62"
+      },
+      "src/sirius/core/metrics/outgoing_kerr_schild.h": {
+        "bytes": 9627,
+        "sha256": "e5244ad78be2aec7580c049ca39059e0879da699d3e4691296df7a0f5c51d34a",
+        "git_blob": "fbea77e6e29e136184633959cff64e6bea1fd1ca"
+      },
+      "src/sirius/core/camera.h": {
+        "bytes": 43067,
+        "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630",
+        "git_blob": "e1f31aa3d23794b3a1cf5e2261c88a1584ef2f0d"
+      },
+      "src/sirius/core/camera_launch.h": {
+        "bytes": 8514,
+        "sha256": "1fd4d6167b35da64246a09fa03649490c4ec0d21f4a29862911a4f37006155df",
+        "git_blob": "f8fb979c89bf8badba9937d891becf94bce7975a"
+      },
+      "src/sirius/core/observer_frame.h": {
+        "bytes": 13423,
+        "sha256": "c09d89c0a2a1ea07fc6dae36cd566bf73670e6a3c3802e7f41f88a5eb236a566",
+        "git_blob": "ac56903c77fa55287309fa800cf888031df6446c"
+      },
+      "src/sirius/core/geodesic_integrator.h": {
+        "bytes": 11150,
+        "sha256": "f2cc9d749a65e99d2d3a7d912b2067ab35738799415d88c6bc16a05bec3e4f2c",
+        "git_blob": "3c42183568e5af48bb873b090fd46e287f74aab7"
+      },
+      "src/sirius/core/spectral/colour_modes.h": {
+        "bytes": 9441,
+        "sha256": "97d1f488c79830682012b6ee073f45428ca83eb6bf32a16b6e377af73c70dd50",
+        "git_blob": "80edd807006b2c19b8d3c87fad4b4e297b3f82e5"
+      },
+      "src/sirius/core/spectral/spectral_radiance.h": {
+        "bytes": 5757,
+        "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664",
+        "git_blob": "5a9626f468489a55febfb9a078f3fe5718e0e0f5"
+      },
+      "src/sirius/core/disk/turbulence.h": {
+        "bytes": 6563,
+        "sha256": "c1eae7f91110b07bf64a866ce0bc1658bd68a7249b01e2ebb0d1a0f803c20531",
+        "git_blob": "1a21dee2a72afeb68a8095627188c78c86fcfcde"
+      },
+      "src/sirius/backend/cpu/geodesic_tracer.h": {
+        "bytes": 33728,
+        "sha256": "9277719799f1af802459f451c060e5e04f3a5b811d3fa10a273bc71c3e4fbb85",
+        "git_blob": "8d1b6c68b5f93d32c322f38d999a9cfbd77b9083"
+      },
+      "src/sirius/backend/cpu/geodesic_tracer.cpp": {
+        "bytes": 129889,
+        "sha256": "3c8527e32f72e191acf86fb62d842c34383002761faf7650c3cff7eece2c43d2",
+        "git_blob": "57aadfc9d287662cafae4dd29851050955bb141c"
+      },
+      "src/sirius/backend/trace_step_executor.h": {
+        "bytes": 1579,
+        "sha256": "55c9e688cbb12b8ac1e72a98bdf3d95976cb8c9accefdb9a8a3f0d72adf1e4fe",
+        "git_blob": "138674b91f8c6b76b1a5421aba313809492e23f9"
+      },
+      "src/sirius/backend/CMakeLists.txt": {
+        "bytes": 17763,
+        "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2",
+        "git_blob": "c629f17fc0611874533f2dbe0b986b685f0f74fc"
+      },
+      "src/sirius/render/trace_domain.h": {
+        "bytes": 5219,
+        "sha256": "225053e0b194c84f81d7d743ae3df4a36b101417fb2adefcad0ac99e7551d84b",
+        "git_blob": "6a02eb6c2c2e15a6d4d5136497ad35ca59247a48"
+      },
+      "tests/render/doppler_toggle_test.cpp": {
+        "bytes": 6283,
+        "sha256": "1a5fc915a2e12ef8e2c5187a77944f909f71834e37a9d4894f43aa2e7b5c9c5a",
+        "git_blob": "b31df2dadbcee3faad79dd7ddaa85ed007618b78"
+      },
+      "src/sirius/base/contracts.h": {
+        "bytes": 3989,
+        "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0",
+        "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1"
+      },
+      "tests/backend/CMakeLists.txt": {
+        "bytes": 5448,
+        "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357",
+        "git_blob": "68735044e5a46054e4449ddc60f6132d2d75e8b7"
+      },
+      "tests/render/CMakeLists.txt": {
+        "bytes": 2826,
+        "sha256": "23f2ba5b952360171edaf379cf2536730623a8fc4275b14958278b7853e3aa9f",
+        "git_blob": "7a68808e58e7f673002f696871603848e04a2a69"
+      },
+      "tests/operating_model.json": {
+        "bytes": 130331,
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b",
+        "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95"
+      },
+      "tests/labels/CTestLabels.cmake": {
+        "bytes": 78306,
+        "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14",
+        "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7"
+      },
+      "tests/support/fail_on_skip.h": {
+        "bytes": 427,
+        "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e",
+        "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf"
+      }
+    },
+    "independent_reference": "Original live-temperature profile/cache checks consume shared production AccretionDiskD/ShakuraSunyaev authorities; the near-extremal scan asserts finite positive inner-disk redshift. Independent flux/radiation controls remain separate completed evidence; no new implementation or threshold.",
+    "cost_scope": {
+      "full_frame_publications": 0,
+      "per_case": {
+        "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile": {
+          "maximum_original_Trace_calls": 576,
+          "max_steps_per_trace": 5000
+        },
+        "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile": {
+          "maximum_original_Trace_calls": 576,
+          "max_steps_per_trace": 5000
+        },
+        "GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite": {
+          "maximum_original_Trace_calls": 1012,
+          "max_steps_per_trace": 20000
+        }
+      },
+      "scope": "Original raster searches stop by their original crossing counters; source work bounds are not timing forecasts. Each imported outer300s budget can produce an incomplete observation."
+    },
+    "scope_boundary": "Finite live profile-consumer/cache and inner-disk redshift assertions only; no independent general radiation proof.",
+    "matching_historical_reuse": {
+      "name": "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth",
+      "xml": "attestations/software-vulkan/ef88b99/retained-dopri-integration/diagnostic/host-controls-junit.xml",
+      "owner": "attestations/software-vulkan/ef88b99/retained-dopri-integration/diagnostic/host-controls/report.json",
+      "input_before": "attestations/software-vulkan/ef88b99/retained-dopri-integration/diagnostic/host-controls-inputs-before.json",
+      "input_after": "attestations/software-vulkan/ef88b99/retained-dopri-integration/diagnostic/host-controls-inputs-after.json",
+      "manifest": "attestations/software-vulkan/ef88b99/retained-dopri-integration/manifest.json",
+      "case": {
+        "name": "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth",
+        "classname": "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth",
+        "time": "0.00422237",
+        "status": "run"
+      },
+      "same_current_core_producer": {
+        "bytes": 5199120,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+      },
+      "source_join": "Original test and closure header byte-equal between ef88b99 and current product4bcd987; producer matches accepted current core exactly.",
+      "reuse_scope": "Reuse the completed finite Gaussian-column assertion; historical owner used1200s/12GiB/2GiB and is not relabelled as the new300s/4GiB action."
+    },
+    "gap_boundary": "Only the started-but-interrupted Shakura case and two unstarted original cases are scheduled; completed first component and other passing/reused controls excluded.",
+    "excluded_completed_component": {
+      "name": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+      "classification": "COMPONENT_PASS_OBSERVED_IN_INCOMPLETE_BATCH",
+      "source_preparation": "out/science-p4-cpu-remaining-separated/prior-interrupted-observation/preparation.json",
+      "stdout": "out/science-p4-cpu-remaining-separated/prior-interrupted-observation/original-four-non-frame-cpu-controls/stdout.log",
+      "raw_owner": "out/science-p4-cpu-remaining-separated/prior-interrupted-observation/original-four-non-frame-cpu-controls/owner.json",
+      "temporary_ctest_log": "out/science-p4-cpu-remaining-separated/prior-interrupted-observation/original-four-non-frame-cpu-controls/ctest.log.tmp7d2d4",
+      "producer": {
+        "path": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149",
+        "bytes": 13440952,
+        "sha256": "e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149"
+      },
+      "scope": "Original first case fully marked GTestOK/PASSED and CTestPassed296.75s; batch remains incomplete. No synthetic XML, standalone passing owner, complete batch or qualification claim."
+    }
+  },
+  "temporary_output": {
+    "path": "/home/astra/.project/Sirius/out/science-p4-cpu-remaining-separated/temporary-shakura-sunyaev-live",
+    "uid": 1000,
+    "mode": "0o700",
+    "residual_files": {}
+  }
+}

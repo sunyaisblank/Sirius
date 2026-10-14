@@ -1,0 +1,80 @@
+{
+  "adopted_children_reaped": [
+    {
+      "pid": 200098,
+      "wait_status": 15
+    }
+  ],
+  "argv": [
+    "/usr/bin/ctest",
+    "--test-dir",
+    "bin/linux-gcc",
+    "-V",
+    "--output-on-failure",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/science-p4-cpu-remainder/original-four-non-frame-cpu-controls/ctest.xml",
+    "--output-log",
+    "/home/astra/.project/Sirius/out/science-p4-cpu-remainder/original-four-non-frame-cpu-controls/ctest.log",
+    "-R",
+    "^(CpuTraceBoundary\\.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge|GeodesicTracerTest\\.LiveDiskTemperatureUsesFullPageThorneProfile|GeodesicTracerTest\\.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile|GeodesicTracerRedshift\\.NearExtremalInnerDiskEmissionRemainsFinite)$"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "original-four-non-frame-cpu-controls",
+  "child_exit": -15,
+  "child_pid": 197856,
+  "child_start_ticks": "2928108",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 197844,
+    "pid": 197845,
+    "ppid": 197844,
+    "rss_kib": 32780,
+    "session": 197844,
+    "start_ticks": "2927957",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "minimum_sampled_available_kib": 17830072,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 197856,
+      "saved_start_ticks": "2928108"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 197858,
+      "saved_start_ticks": "2928138"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 200098,
+      "saved_start_ticks": "2957812"
+    }
+  ],
+  "passed": false,
+  "peak_sampled_rss_kib": 62052,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Four unchanged original finite P4 CPU live-temperature/inner-disk controls only; original central-ray search loops and thresholds, no frame publication/device execution, full P4/science/Mandatory or release qualification.",
+  "source": {
+    "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": "diagnostic_timeout",
+  "wall_seconds": 300.21115653000015,
+  "whole_inputs_unchanged": true
+}
