@@ -179,10 +179,59 @@ def workflow_job(workflow: str, name: str) -> str | None:
     return None if match is None else match.group(1)
 
 
+INTEGRATION_CONDITION = (
+    "github.event_name == 'pull_request' || "
+    "(github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic != true)"
+)
 FULL_QUALIFICATION_CONDITION = (
     "github.event_name == 'push' || "
-    "(github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)"
+    "(github.event_name == 'workflow_dispatch' && inputs.full_qualification == true "
+    "&& inputs.macos_retained_diagnostic != true)"
 )
+MACOS_RETAINED_DIAGNOSTIC_CONDITION = (
+    "github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic == true"
+)
+# This one-off diagnostic reuses an immutable native export. Keep its entire
+# job bounded: no build, qualification producer, attestation upload or extra run.
+MACOS_RETAINED_DIAGNOSTIC_JOB = r"""    if: github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic == true
+    runs-on: macos-15
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Fetch the exported executable's source identity
+        run: git fetch --no-tags --depth=1 origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc
+      - name: Vulkan SDK + MoltenVK diagnostic runtime
+        uses: jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+        with:
+          vulkan_version: 1.4.357.0
+          cache: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fetch pinned native build export
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p out/macos-retained-diagnostic
+          gh api repos/sunyaisblank/Sirius/actions/artifacts/11778215779/zip \
+            > out/macos-retained-diagnostic/export.zip
+      - name: Diagnose retained pipeline compilation without qualification
+        run: |
+          export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
+          python3 -B scripts/diagnose-macos-retained.py \
+            --archive out/macos-retained-diagnostic/export.zip \
+            --output out/macos-retained-diagnostic/observation
+      - name: Preserve diagnostic inputs and observations
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-macos-retained-diagnostic
+          path: |
+            out/macos-retained-diagnostic
+            bin/macos/retained-diagnostic
+          if-no-files-found: error
+"""
 GATE_DIAGNOSTIC_PATHS = (
     "bin/**/generated/sirius/*gate*.json",
     "bin/**/generated/sirius/*gate*.xml",
@@ -273,7 +322,7 @@ def macos_runtime_upload_valid(step: str) -> bool:
     return re.fullmatch(pattern, step) is not None
 
 
-def full_qualification_input_valid(workflow: str) -> bool:
+def default_off_boolean_input_valid(workflow: str, name: str) -> bool:
     header = workflow.split("\njobs:", 1)[0]
     dispatches = re.findall(
         r"^  workflow_dispatch:\n(.*?)(?=^  [A-Za-z0-9_-]+:|\Z)",
@@ -282,7 +331,7 @@ def full_qualification_input_valid(workflow: str) -> bool:
     if len(dispatches) != 1:
         return False
     inputs = re.findall(
-        r"^      full_qualification:\n(.*?)(?=^      [A-Za-z0-9_-]+:|\Z)",
+        rf"^      {re.escape(name)}:\n(.*?)(?=^      [A-Za-z0-9_-]+:|\Z)",
         dispatches[0], re.MULTILINE | re.DOTALL,
     )
     return (len(inputs) == 1
@@ -297,19 +346,21 @@ def full_qualification_input_valid(workflow: str) -> bool:
 def integration_boundary_errors(workflow: str) -> list[str]:
     """Keep cheap integration proof distinct from promotable qualification."""
     errors: list[str] = []
-    if not full_qualification_input_valid(workflow):
-        errors.append("CI full qualification dispatch must use a default-off boolean input")
-    integration_condition = (
-        "github.event_name == 'pull_request' || "
-        "github.event_name == 'workflow_dispatch'"
-    )
+    for name in ("full_qualification", "macos_retained_diagnostic"):
+        if not default_off_boolean_input_valid(workflow, name):
+            errors.append(f"CI {name} dispatch must use a default-off boolean input")
+    diagnostic = workflow_job(workflow, "macos-retained-diagnostic")
+    if (len(re.findall(r"^  macos-retained-diagnostic:\s*$", workflow, re.MULTILINE)) != 1
+            or diagnostic is None
+            or diagnostic.rstrip() != MACOS_RETAINED_DIAGNOSTIC_JOB.rstrip()):
+        errors.append("macOS retained diagnostic must keep its exact manual-only export, owner and non-promoting upload boundary")
     for name in NON_RENDER_INTEGRATION_JOBS:
         integration = workflow_job(workflow, name)
         if integration is None:
             errors.append(f"CI has no non-render integration job: {name}")
             continue
         if re.findall(r"^    if: ([^\n]+)$", integration, re.MULTILINE) != [
-            integration_condition
+            INTEGRATION_CONDITION
         ]:
             errors.append(f"non-render integration has an unsafe event boundary: {name}")
         if "-DSIRIUS_ALIGNMENT_MODE=qualification" not in integration:
@@ -465,12 +516,8 @@ def integration_boundary_errors(workflow: str) -> list[str]:
 def verify_integration_boundary_policy() -> None:
     targets = " ".join(INTEGRATION_TARGETS)
     controls = "|".join(name.replace(".", r"\.") for name in INTEGRATION_CONTROLS)
-    integration_condition = (
-        "    if: github.event_name == 'pull_request' || "
-        "github.event_name == 'workflow_dispatch'\n"
-    )
     integration_body = (
-        integration_condition
+        f"    if: {INTEGRATION_CONDITION}\n"
         + "    steps:\n"
         + "      - run: cmake -DSIRIUS_ALIGNMENT_MODE=qualification\n"
         + "      - run: cmake --build --target "
@@ -531,6 +578,9 @@ def verify_integration_boundary_policy() -> None:
         "      full_qualification:\n"
         "        type: boolean\n"
         "        default: false\n"
+        "      macos_retained_diagnostic:\n"
+        "        type: boolean\n"
+        "        default: false\n"
         "jobs:\n"
         + "".join(
             f"  {name}:\n"
@@ -574,6 +624,7 @@ def verify_integration_boundary_policy() -> None:
                windows_diagnostics if name == "windows-build" else diagnostics)
             for name in FULL_QUALIFICATION_JOBS
         )
+        + "  macos-retained-diagnostic:\n" + MACOS_RETAINED_DIAGNOSTIC_JOB
     )
     if integration_boundary_errors(valid):
         raise RuntimeError("integration-boundary policy rejected the strict split")
@@ -627,6 +678,9 @@ def verify_integration_boundary_policy() -> None:
         "missing runtime default": valid.replace("        default: false\n", "", 1),
         "duplicated runtime default": valid.replace(
             "        default: false\n", "        default: false\n        default: true\n", 1),
+        "missing retained diagnostic": valid.replace(
+            "  macos-retained-diagnostic:\n" + MACOS_RETAINED_DIAGNOSTIC_JOB, "", 1),
+        "duplicated retained diagnostic": valid + "  macos-retained-diagnostic:\n" + MACOS_RETAINED_DIAGNOSTIC_JOB,
     }
     for condition in (
         "true",
@@ -634,8 +688,56 @@ def verify_integration_boundary_policy() -> None:
         "github.event_name == 'push' || inputs.full_qualification == true",
         "github.event_name == 'push' || github.event_name == 'pull_request'",
         "github.event_name == 'push' || github.event_name == 'workflow_dispatch'",
+        "github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic != true)",
+        "github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)",
     ):
         mutations[condition] = valid.replace(FULL_QUALIFICATION_CONDITION, condition, 1)
+    for condition in (
+        "true",
+        "github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'",
+        "github.event_name == 'pull_request' && inputs.macos_retained_diagnostic != true",
+    ):
+        mutations["integration boundary " + condition] = valid.replace(
+            INTEGRATION_CONDITION, condition, 1)
+    diagnostic_input = (
+        "      macos_retained_diagnostic:\n"
+        "        type: boolean\n"
+        "        default: false\n"
+    )
+    for description, replacement in {
+        "default on": diagnostic_input.replace("default: false", "default: true"),
+        "string type": diagnostic_input.replace("type: boolean", "type: string"),
+        "missing default": diagnostic_input.replace("        default: false\n", ""),
+        "duplicate default": diagnostic_input + "        default: false\n",
+        "missing input": "",
+        "duplicate input": diagnostic_input * 2,
+    }.items():
+        mutations["retained diagnostic input " + description] = valid.replace(
+            diagnostic_input, replacement, 1)
+    diagnostic_mutations = {
+        "unconditional dispatch": (MACOS_RETAINED_DIAGNOSTIC_CONDITION, "github.event_name == 'workflow_dispatch'"),
+        "non-manual escape": (MACOS_RETAINED_DIAGNOSTIC_CONDITION, "inputs.macos_retained_diagnostic == true"),
+        "PR execution": (MACOS_RETAINED_DIAGNOSTIC_CONDITION, "github.event_name == 'pull_request' || inputs.macos_retained_diagnostic == true"),
+        "wrong runner": ("    runs-on: macos-15", "    runs-on: macos-15-large"),
+        "unbounded timeout": ("    timeout-minutes: 30", "    timeout-minutes: 180"),
+        "write permission": ("      actions: read", "      actions: write"),
+        "wrong source": ("origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc", "origin main"),
+        "wrong export": ("artifacts/11778215779/zip", "artifacts/1/zip"),
+        "wrong SDK": ("vulkan_version: 1.4.357.0", "vulkan_version: latest"),
+        "preparation only": ("python3 -B scripts/diagnose-macos-retained.py", "python3 -B scripts/diagnose-macos-retained.py --prepare-only"),
+        "rebuild": ("    steps:\n", "    steps:\n      - run: cmake --build --preset macos\n"),
+        "full estate": ("    steps:\n", "    steps:\n      - run: ctest --preset macos\n"),
+        "promotion": ("    steps:\n", "    steps:\n      - run: python3 scripts/verify-attestation.py --record-build\n"),
+        "attestation artifact": ("name: sirius-macos-retained-diagnostic", "name: sirius-macos-moltenvk-attestation"),
+        "unbounded upload": ("            bin/macos/retained-diagnostic", "            attestations/**"),
+        "failure data discarded": ("        if: always()", "        if: success()"),
+        "missing data accepted": ("if-no-files-found: error", "if-no-files-found: ignore"),
+        "extra execution": ("          if-no-files-found: error\n", "          if-no-files-found: error\n      - run: echo bypass\n"),
+    }
+    for description, (before, after) in diagnostic_mutations.items():
+        mutations["retained diagnostic " + description] = valid.replace(
+            MACOS_RETAINED_DIAGNOSTIC_JOB,
+            MACOS_RETAINED_DIAGNOSTIC_JOB.replace(before, after, 1), 1)
     for platform in ("windows", "macos"):
         mutations[f"{platform} full/integration artifact collision"] = valid.replace(
             f"name: sirius-{platform}-full-native-attestation",

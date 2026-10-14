@@ -13,6 +13,10 @@ on:
         description: Run the complete runtime and sanitizer jobs
         type: boolean
         default: false
+      macos_retained_diagnostic:
+        description: Diagnose four retained controls using the pinned macOS export
+        type: boolean
+        default: false
 
 jobs:
   # Pull requests prove that the complete strict topology compiles and that the
@@ -21,7 +25,7 @@ jobs:
   # full_qualification additionally runs the complete runtime and sanitizer
   # jobs; native-build attestations still do not claim native runtime readiness.
   integration-no-render:
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic != true)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -65,7 +69,7 @@ jobs:
         run: python3 scripts/generate-ctest-labels.py --check
 
   integration-windows-no-render:
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic != true)
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -148,7 +152,7 @@ jobs:
           if-no-files-found: ignore
 
   integration-macos-no-render:
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic != true)
     runs-on: macos-15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -221,7 +225,7 @@ jobs:
           if-no-files-found: ignore
 
   linux-gate:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true && inputs.macos_retained_diagnostic != true)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -277,7 +281,7 @@ jobs:
           if-no-files-found: ignore
 
   linux-sanitizers:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true && inputs.macos_retained_diagnostic != true)
     runs-on: ubuntu-24.04
     # The registration-complete Mandatory estate exceeded 71 minutes under
     # three sanitizers on ubuntu-24.04 before the previous job-level timeout
@@ -329,7 +333,7 @@ jobs:
           if-no-files-found: ignore
 
   windows-build:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true && inputs.macos_retained_diagnostic != true)
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -487,7 +491,7 @@ jobs:
           if-no-files-found: ignore
 
   macos-build:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true && inputs.macos_retained_diagnostic != true)
     runs-on: macos-15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -571,3 +575,43 @@ jobs:
             ${{ runner.temp }}/sirius-macos-runtime/metal-displays.json
             ${{ runner.temp }}/sirius-macos-runtime/provider-route.txt
           if-no-files-found: ignore
+
+  macos-retained-diagnostic:
+    if: github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic == true
+    runs-on: macos-15
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Fetch the exported executable's source identity
+        run: git fetch --no-tags --depth=1 origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc
+      - name: Vulkan SDK + MoltenVK diagnostic runtime
+        uses: jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+        with:
+          vulkan_version: 1.4.357.0
+          cache: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fetch pinned native build export
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p out/macos-retained-diagnostic
+          gh api repos/sunyaisblank/Sirius/actions/artifacts/11778215779/zip \
+            > out/macos-retained-diagnostic/export.zip
+      - name: Diagnose retained pipeline compilation without qualification
+        run: |
+          export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
+          python3 -B scripts/diagnose-macos-retained.py \
+            --archive out/macos-retained-diagnostic/export.zip \
+            --output out/macos-retained-diagnostic/observation
+      - name: Preserve diagnostic inputs and observations
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-macos-retained-diagnostic
+          path: |
+            out/macos-retained-diagnostic
+            bin/macos/retained-diagnostic
+          if-no-files-found: error
