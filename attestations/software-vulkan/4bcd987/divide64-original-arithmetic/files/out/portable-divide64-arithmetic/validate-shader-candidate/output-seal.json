@@ -1,0 +1,27 @@
+{
+  "inputs_before": {
+    "bytes": 317224,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/validate-shader-candidate/inputs-before.json",
+    "sha256": "40a68c7c980a60d339fff57bc7b86f839d7e8ba032c9e87b4debc9dfadd9103f"
+  },
+  "label": "validate-shader-candidate",
+  "operator_context": {
+    "bytes": 739,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/operator-context.json",
+    "sha256": "77b5791a8fc735d4d746aa03d0531147c7e201871db2bc25c6458b66fcd335a3"
+  },
+  "outputs": {},
+  "recipe": [
+    [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.2",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spv"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 202454,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/source-freeze.json",
+    "sha256": "3d7fd9f6cb4f4ef8d0e84a30cd96b904923126c60b5ffe563a48e63950c32391"
+  }
+}

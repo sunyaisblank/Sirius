@@ -1,0 +1,80 @@
+{
+  "actions_initial": {
+    "bytes": 964327,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/actions.unpinned.json",
+    "sha256": "6e01a3611b7d2ccb01d61f303950cafe5a0000cdac342ad39797b287a6819e29"
+  },
+  "claim_scope": "Original primitive arithmetic only. Same admitted compiled device path reused; historical actual feature-argument witness remains historical. No retained normal-sum/table/wholecall/performance/adoption/qualification result.",
+  "commands": [
+    "python3 -B out/portable-divide64-arithmetic/gate.py pin-context",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py prepare-build",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py compile-host",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py link-host",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py compile-gpu",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py link-gpu",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py compile-shader-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py optimize-shader-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py validate-shader-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py disassemble-shader-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py compile-shader-candidate",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py optimize-shader-candidate",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py validate-shader-candidate",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py disassemble-shader-candidate",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py verify-build",
+    "python3 -B out/portable-divide64-arithmetic/gate.py pin-runtime",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py execute-host",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py execute-gpu-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py execute-gpu-candidate",
+    "python3 -B out/portable-divide64-arithmetic/gate.py review"
+  ],
+  "corpus_contract": {
+    "bytes": 1651,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/corpus-contract.json",
+    "sha256": "e70c280b09cae830b240afc56a5a07e1d6c0b8cf8667af5a23305d365c6a86fb"
+  },
+  "finite_stop": "Stop on first failed/incomplete owner, unequal input/output, unexpected capability/type/mode/interface/dependency or source/host join. No retry or integrated-control/benefit launch.",
+  "frozen_pin_count": 737,
+  "future_bin_root": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic",
+  "historical_dependencies_only": true,
+  "historical_unconsumed_preimage": {
+    "bytes": 3409,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/historical-preconsumption-e042/preimage.json",
+    "sha256": "34aa2c68db8cf41e401aef3928f340195d79f2dcbd4826b7fa6665af83329b6d"
+  },
+  "independent_review_required": [
+    "Candidate macro/include precedence and immutable header/fallback identity",
+    "Exact original corpus/reference/probe/provider/host assertions and all14op cardinalities",
+    "Int64-object output-seal/historical feature evidence relocation + new strong-link28defs/no-old-archive-member check",
+    "Future product-to-consumer output seals, SPV capability/type/interface/divide checks, source/tool/dependency freeze",
+    "Original provider mapping/cache-off selection, original8MiB allocation admission and terminal final-reader order"
+  ],
+  "no_compiler_numeric_provider_or_CI_executed": true,
+  "out_root": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic",
+  "packet": {
+    "bytes": 13628,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/packet.json",
+    "sha256": "a9900bac1969ac2e9df4955d7c3cd02be6df2c904008bab981b5cfea9865664f"
+  },
+  "prepared_only": true,
+  "prospective_per_owner_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "provenance": {
+    "bytes": 3346,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/provenance.json",
+    "sha256": "b456f8ef3a367f21cc6c3dc9eafd4e67f770e69a6f9bc631a3ad2ab59d58145d"
+  },
+  "reader_binds_exact_original_fourteen_operation_cardinalities": true,
+  "review_corrections": [
+    "Disassembly directly depends on optimized module producer and validator, and freezes actual consumed SPV + both terminal receipts.",
+    "Final reader joins every numerical-owner frozen input and recorded argv to current sealed runtime identities."
+  ],
+  "schema": "sirius-divide64-original-arithmetic-preparation/v1",
+  "source_freeze": {
+    "bytes": 202454,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/source-freeze.json",
+    "sha256": "3d7fd9f6cb4f4ef8d0e84a30cd96b904923126c60b5ffe563a48e63950c32391"
+  }
+}

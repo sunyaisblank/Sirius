@@ -1,0 +1,33 @@
+{
+  "inputs_before": {
+    "bytes": 318414,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/disassemble-shader-stock/inputs-before.json",
+    "sha256": "eeb4134ca7db5246edc844f944867a244ffeef8ab2342e0be3cbfc4921a96433"
+  },
+  "label": "disassemble-shader-stock",
+  "operator_context": {
+    "bytes": 739,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/operator-context.json",
+    "sha256": "77b5791a8fc735d4d746aa03d0531147c7e201871db2bc25c6458b66fcd335a3"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spvasm": {
+      "bytes": 75783,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spvasm",
+      "sha256": "aefc7ead4a18b92ea973931a47e946e6104211ff2d6c56a39db6afa38935856e"
+    }
+  },
+  "recipe": [
+    [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spvasm"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 202454,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/source-freeze.json",
+    "sha256": "3d7fd9f6cb4f4ef8d0e84a30cd96b904923126c60b5ffe563a48e63950c32391"
+  }
+}

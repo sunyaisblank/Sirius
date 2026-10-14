@@ -1,0 +1,12 @@
+    // Normalization gives d <= remainder < 2*d. Emit the leading bit,
+    // then the same 26 fractional bits in exact radix-256/4 chunks.
+    uint quotient = 1u;
+    remainder -= bb.significand;
+    for (uint chunk = 0u; chunk < 4u; ++chunk) {
+        const uint bits = chunk == 3u ? 2u : 8u;
+        const uint numerator = remainder << bits;
+        const uint digit = numerator / bb.significand;
+        remainder = numerator - digit * bb.significand;
+        quotient = (quotient << bits) | digit;
+    }
+    if (remainder != 0u) quotient |= 1u;

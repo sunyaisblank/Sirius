@@ -1,0 +1,373 @@
+{
+  "build_labels": [
+    "prepare-build",
+    "compile-host",
+    "link-host",
+    "compile-gpu",
+    "link-gpu",
+    "compile-shader-stock",
+    "optimize-shader-stock",
+    "validate-shader-stock",
+    "disassemble-shader-stock",
+    "compile-shader-candidate",
+    "optimize-shader-candidate",
+    "validate-shader-candidate",
+    "disassemble-shader-candidate"
+  ],
+  "corpus_operation_cardinalities": {
+    "0": 13674,
+    "1": 13674,
+    "2": 13674,
+    "3": 13674,
+    "4": 4174,
+    "5": 13668,
+    "6": 13668,
+    "7": 13668,
+    "8": 4174,
+    "9": 4174,
+    "10": 4174,
+    "11": 4174,
+    "12": 4174,
+    "13": 53524
+  },
+  "dependencies": {
+    "compile-gpu": [
+      "prepare-build"
+    ],
+    "compile-host": [
+      "prepare-build"
+    ],
+    "compile-shader-candidate": [
+      "prepare-build"
+    ],
+    "compile-shader-stock": [
+      "prepare-build"
+    ],
+    "disassemble-shader-candidate": [
+      "validate-shader-candidate"
+    ],
+    "disassemble-shader-stock": [
+      "validate-shader-stock"
+    ],
+    "link-gpu": [
+      "compile-gpu"
+    ],
+    "link-host": [
+      "compile-host"
+    ],
+    "optimize-shader-candidate": [
+      "compile-shader-candidate"
+    ],
+    "optimize-shader-stock": [
+      "compile-shader-stock"
+    ],
+    "prepare-build": [],
+    "validate-shader-candidate": [
+      "optimize-shader-candidate"
+    ],
+    "validate-shader-stock": [
+      "optimize-shader-stock"
+    ],
+    "verify-build": [
+      "prepare-build",
+      "compile-host",
+      "link-host",
+      "compile-gpu",
+      "link-gpu",
+      "compile-shader-stock",
+      "optimize-shader-stock",
+      "validate-shader-stock",
+      "disassemble-shader-stock",
+      "compile-shader-candidate",
+      "optimize-shader-candidate",
+      "validate-shader-candidate",
+      "disassemble-shader-candidate"
+    ]
+  },
+  "device_object": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+  "division_branch_coverage": {
+    "divide_records": 13674,
+    "non_power_of_two_denominator_significand_records": 10594,
+    "normalization_doubling_records": 5700,
+    "normalization_kept_records": 6563,
+    "optional_finite_nonzero_branch_records": 12263
+  },
+  "historical_host_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen",
+  "historical_host_root": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation",
+  "historical_pair_review": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-pair-review/pair-review.json",
+  "original_fixture_sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e",
+  "original_stock_module": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/arithmetic/stock.spv",
+  "original_symbols": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/recovery/original-symbols.json",
+  "outputs": {
+    "compile-gpu": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.d"
+    ],
+    "compile-host": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/host.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/host.d"
+    ],
+    "compile-shader-candidate": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.raw.spv"
+    ],
+    "compile-shader-stock": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.raw.spv"
+    ],
+    "disassemble-shader-candidate": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spvasm"
+    ],
+    "disassemble-shader-stock": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spvasm"
+    ],
+    "link-gpu": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.map"
+    ],
+    "link-host": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/host"
+    ],
+    "optimize-shader-candidate": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spv"
+    ],
+    "optimize-shader-stock": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spv"
+    ],
+    "prepare-build": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/resources/tests/backend/portable_binary32_reference.bin"
+    ],
+    "validate-shader-candidate": [],
+    "validate-shader-stock": [],
+    "verify-build": [
+      "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/build-review.json"
+    ]
+  },
+  "provider_identities": {
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+      "bytes": 143545784,
+      "device": [
+        8,
+        80
+      ],
+      "inode": 47452,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "bytes": 510592,
+      "device": [
+        8,
+        80
+      ],
+      "inode": 13100,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+      "bytes": 11929384,
+      "device": [
+        8,
+        80
+      ],
+      "inode": 143595,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    }
+  },
+  "recipes": {
+    "compile-gpu": [
+      [
+        "/usr/bin/g++-14",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-I/home/astra/.project/Sirius/src",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.d",
+        "-c",
+        "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/gpu.cpp",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.o"
+      ]
+    ],
+    "compile-host": [
+      [
+        "/usr/bin/g++-14",
+        "-DSIRIUS_PB32_DIVIDE64=1",
+        "-I/home/astra/.project/Sirius/out/portable-divide64-arithmetic/candidate/src",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-DSIRIUS_TEST_HAS_KERNELS=1",
+        "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+        "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+        "-I/home/astra/.project/Sirius/tests",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+        "-O3",
+        "-DNDEBUG",
+        "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/host.o",
+        "-c",
+        "/home/astra/.project/Sirius/tests/backend/portable_binary32_test.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/host.d"
+      ]
+    ],
+    "compile-shader-candidate": [
+      [
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/probe.slang",
+        "-DSIRIUS_PB32_DIVIDE64=1",
+        "-I",
+        "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/candidate/src/sirius/kernels",
+        "-O0",
+        "-target",
+        "spirv",
+        "-profile",
+        "spirv_1_5",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.raw.spv"
+      ]
+    ],
+    "compile-shader-stock": [
+      [
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/probe.slang",
+        "-I",
+        "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/stock/src/sirius/kernels",
+        "-O0",
+        "-target",
+        "spirv",
+        "-profile",
+        "spirv_1_5",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.raw.spv"
+      ]
+    ],
+    "disassemble-shader-candidate": [
+      [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spv",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spvasm"
+      ]
+    ],
+    "disassemble-shader-stock": [
+      [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spv",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spvasm"
+      ]
+    ],
+    "link-gpu": [
+      [
+        "/usr/bin/g++-14",
+        "-O3",
+        "-DNDEBUG",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.o",
+        "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+        "-ldl",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+        "-pthread",
+        "-Wl,-Map,/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.map,--cref",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu"
+      ]
+    ],
+    "link-host": [
+      [
+        "/usr/bin/g++-14",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/host.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+        "-ldl",
+        "-pthread",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/host"
+      ]
+    ],
+    "optimize-shader-candidate": [
+      [
+        "/usr/bin/spirv-opt",
+        "--target-env=vulkan1.2",
+        "--ssa-rewrite",
+        "--eliminate-dead-code-aggressive",
+        "--preserve-bindings",
+        "--preserve-interface",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.raw.spv",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spv"
+      ]
+    ],
+    "optimize-shader-stock": [
+      [
+        "/usr/bin/spirv-opt",
+        "--target-env=vulkan1.2",
+        "--ssa-rewrite",
+        "--eliminate-dead-code-aggressive",
+        "--preserve-bindings",
+        "--preserve-interface",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.raw.spv",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spv"
+      ]
+    ],
+    "prepare-build": [],
+    "validate-shader-candidate": [
+      [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "--target-env",
+        "vulkan1.2",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spv"
+      ]
+    ],
+    "validate-shader-stock": [
+      [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "--target-env",
+        "vulkan1.2",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spv"
+      ]
+    ],
+    "verify-build": []
+  },
+  "runner_preparation_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "schema": "sirius-portable-divide64-original-arithmetic/v1",
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+}

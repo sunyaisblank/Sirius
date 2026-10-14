@@ -1,0 +1,48 @@
+{
+  "inputs_before": {
+    "bytes": 317358,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/link-gpu/inputs-before.json",
+    "sha256": "b7b58cf0ee3c3badd5a282066e5d3aff20b41c4ef8e42f178f4b0307fd9d1a68"
+  },
+  "label": "link-gpu",
+  "operator_context": {
+    "bytes": 739,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/operator-context.json",
+    "sha256": "77b5791a8fc735d4d746aa03d0531147c7e201871db2bc25c6458b66fcd335a3"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu": {
+      "bytes": 258536,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu",
+      "sha256": "93d85da756b93fb242683b1c9a11e2b5731a9f5b24875d07fb504b408bfb16e7"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.map": {
+      "bytes": 2724858,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.map",
+      "sha256": "1cb73c648ea465e374c838ecced574b634532866dfd488f211c05a40c06d4713"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-DNDEBUG",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.o",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "-ldl",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-pthread",
+      "-Wl,-Map,/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu.map,--cref",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 202454,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/source-freeze.json",
+    "sha256": "3d7fd9f6cb4f4ef8d0e84a30cd96b904923126c60b5ffe563a48e63950c32391"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "complete_output_words": 697072,
+  "division_branch_coverage": {
+    "divide_records": 13674,
+    "non_power_of_two_denominator_significand_records": 10594,
+    "normalization_doubling_records": 5700,
+    "normalization_kept_records": 6563,
+    "optional_finite_nonzero_branch_records": 12263
+  },
+  "edge_scope": "Existing original rows include signed zero, NaN/Inf precedence, minsub half tie,3minsub/2 tie,minnormal transition,1/3 and maxfinite overflow; no added/replaced rows.",
+  "operation_cardinalities": {
+    "0": 13674,
+    "1": 13674,
+    "2": 13674,
+    "3": 13674,
+    "4": 4174,
+    "5": 13668,
+    "6": 13668,
+    "7": 13668,
+    "8": 4174,
+    "9": 4174,
+    "10": 4174,
+    "11": 4174,
+    "12": 4174,
+    "13": 53524
+  },
+  "original_fixture": {
+    "bytes": 4182444,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/portable_binary32_reference.bin",
+    "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+  },
+  "original_records": 174268,
+  "original_reference": {
+    "bytes": 13166,
+    "resolved_path": "/home/astra/.project/Sirius/tests/support/portable_binary32/reference.py",
+    "sha256": "6b6474bf66c86713980cba81f0cee1b290f54c8f42700ca9353aa108cf0c185e"
+  },
+  "scope": "Original exact ordered Fraction-derived bytes reused; record classification/source argument only, no new product arithmetic run or exhaustive machine proof.",
+  "source_argument": "After unchanged guards/unpack/normalization, 2^23<=d<2^24 and d<=m<2d. N=m<<26<2^51; q=floor(N/d)<2^27; r=N-q*d in[0,d). q|bool(r) equals original digit-loop extended result before unchanged PB32Round."
+}

@@ -1,0 +1,71 @@
+{
+  "actions_initial": {
+    "bytes": 949457,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/actions.unpinned.json",
+    "sha256": "9db765714b66b8738b16c347e0e32f52740d26c72faf3a49f2d5999d6d8666cf"
+  },
+  "claim_scope": "Original primitive arithmetic only. Same admitted compiled device path reused; historical actual feature-argument witness remains historical. No retained normal-sum/table/wholecall/performance/adoption/qualification result.",
+  "commands": [
+    "python3 -B out/portable-divide64-arithmetic/gate.py pin-context",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py prepare-build",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py compile-host",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py link-host",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py compile-gpu",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py link-gpu",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py compile-shader-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py optimize-shader-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py validate-shader-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py disassemble-shader-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py compile-shader-candidate",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py optimize-shader-candidate",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py validate-shader-candidate",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py disassemble-shader-candidate",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py verify-build",
+    "python3 -B out/portable-divide64-arithmetic/gate.py pin-runtime",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py execute-host",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py execute-gpu-stock",
+    "python3 -B out/portable-divide64-arithmetic/run_owned.py execute-gpu-candidate",
+    "python3 -B out/portable-divide64-arithmetic/gate.py review"
+  ],
+  "corpus_contract": {
+    "bytes": 1651,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/corpus-contract.json",
+    "sha256": "e70c280b09cae830b240afc56a5a07e1d6c0b8cf8667af5a23305d365c6a86fb"
+  },
+  "finite_stop": "Stop on first failed/incomplete owner, unequal input/output, unexpected capability/type/mode/interface/dependency or source/host join. No retry or integrated-control/benefit launch.",
+  "frozen_pin_count": 730,
+  "future_bin_root": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic",
+  "historical_dependencies_only": true,
+  "independent_review_required": [
+    "Candidate macro/include precedence and immutable header/fallback identity",
+    "Exact original corpus/reference/probe/provider/host assertions and all14op cardinalities",
+    "Int64-object output-seal/historical feature evidence relocation + new strong-link28defs/no-old-archive-member check",
+    "Future product-to-consumer output seals, SPV capability/type/interface/divide checks, source/tool/dependency freeze",
+    "Original provider mapping/cache-off selection, original8MiB allocation admission and terminal final-reader order"
+  ],
+  "no_compiler_numeric_provider_or_CI_executed": true,
+  "out_root": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic",
+  "packet": {
+    "bytes": 13562,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/packet.json",
+    "sha256": "baf353bae441cc24b164af2d5938b0cac708052db41343d1433c1292b022bfef"
+  },
+  "prepared_only": true,
+  "prospective_per_owner_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "provenance": {
+    "bytes": 3346,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/provenance.json",
+    "sha256": "b456f8ef3a367f21cc6c3dc9eafd4e67f770e69a6f9bc631a3ad2ab59d58145d"
+  },
+  "reader_binds_exact_original_fourteen_operation_cardinalities": true,
+  "schema": "sirius-divide64-original-arithmetic-preparation/v1",
+  "source_freeze": {
+    "bytes": 199926,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/source-freeze.json",
+    "sha256": "98fc7e8ca751b20c063f640bb5c8e5849949420054e95f0b4ce9ceca0444de1c"
+  }
+}

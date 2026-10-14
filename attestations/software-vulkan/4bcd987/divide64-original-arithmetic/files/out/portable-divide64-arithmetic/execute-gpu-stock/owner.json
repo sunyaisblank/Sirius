@@ -1,0 +1,80 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/gpu",
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/stock.spv",
+    "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/input.bin",
+    "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/expected.bin",
+    "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/execute-gpu-stock/actual.bin"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "execute-gpu-stock",
+  "child_exit": 0,
+  "child_pid": 327593,
+  "child_start_ticks": "4646797",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 327377,
+    "pid": 327589,
+    "ppid": 327378,
+    "rss_kib": 23344,
+    "session": 327377,
+    "start_ticks": "4646741",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "",
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Original complete174268-record arithmetic only; unchanged assertions and8MiB buffer admission, no1s dispatch/performance/integrated qualification claim.",
+  "minimum_sampled_available_kib": 18110852,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 327593,
+      "saved_start_ticks": "4646797"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 139376,
+  "provider_mappings": [
+    {
+      "maps": [
+        "7afc7f000000-7afc87208000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7afc87208000-7afc87209000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7afc87209000-7afc878e6000 rw-p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7afc87a00000-7afc87a5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7afc87a5b000-7afc87e6b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7afc87e6b000-7afc884c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7afc884c6000-7afc88561000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7afc893f9000-7afc893ff000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7afc893ff000-7afc8944b000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7afc8944b000-7afc89475000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7afc89475000-7afc89476000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7afc89476000-7afc89477000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+      ],
+      "owned_session": 327593,
+      "pid": 327593,
+      "start_ticks": "4646797"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "Original complete174268-record arithmetic only; unchanged assertions and8MiB buffer admission, no1s dispatch/performance/integrated qualification claim.",
+  "source": {
+    "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.25485778299480444,
+  "whole_inputs_unchanged": true
+}

@@ -1,0 +1,38 @@
+{
+  "inputs_before": {
+    "bytes": 317224,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/optimize-shader-candidate/inputs-before.json",
+    "sha256": "0043d10b1965a2050c77a0b19d76d81b006cbf8f0d9303217ab021f135eb3a7c"
+  },
+  "label": "optimize-shader-candidate",
+  "operator_context": {
+    "bytes": 739,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/operator-context.json",
+    "sha256": "77b5791a8fc735d4d746aa03d0531147c7e201871db2bc25c6458b66fcd335a3"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spv": {
+      "bytes": 27112,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spv",
+      "sha256": "aca19ff8d08c20d2f41bd556bb916c9d8ea5332b7c349cd231870b44c1ca407e"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/spirv-opt",
+      "--target-env=vulkan1.2",
+      "--ssa-rewrite",
+      "--eliminate-dead-code-aggressive",
+      "--preserve-bindings",
+      "--preserve-interface",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.raw.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-arithmetic/candidate.spv"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 202454,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-arithmetic/source-freeze.json",
+    "sha256": "3d7fd9f6cb4f4ef8d0e84a30cd96b904923126c60b5ffe563a48e63950c32391"
+  }
+}
