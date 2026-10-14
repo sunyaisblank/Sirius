@@ -34,6 +34,7 @@ PAYLOAD_PATH = "attestations/native-vulkan/4bcd987/macos-unforced-translator-mat
 FREEZE_SHA = "71ca1547b3fb616ac99b9e8871a7e2410f25443131a6652b8b1f1c3464f526c9"
 CONTENT_ID = "be16bb0d2d553356491796fc92a112eeb5f2907b4b2d4ff42e4f8842e8309163"
 DIAGNOSTIC_INFO = "1.4.1+sirius-issue48-unforced." + CONTENT_ID
+CMAKE_ROOT_PROBE = 'message(STATUS "SIRIUS_CMAKE_ROOT=${CMAKE_ROOT}")\n'
 STOCK_DRIVER = {"bytes": 10553504, "sha256": "3e2ba682b6006d20f6fd7233cffb826951fef17b98c22e7dedc0fff93f3fba9e"}
 STOCK_LOADER = {"bytes": 1488704, "sha256": "0ed7750a2ee514df7a0daae66e7f2a98bfedca48b98c8f475b2ca8cc5f142094"}
 INITIALIZE_MSL = {"bytes": 82487, "sha256": "80b33059934cc77a685c5738b9413c94379e45f1b18d0e6635a6432ff0407921"}
@@ -184,12 +185,21 @@ def toolchain_child():
         paths[name] = capture(["/usr/bin/xcrun", "--no-cache", "--sdk", "macosx", "--find", name])
     sdk = capture(["/usr/bin/xcrun", "--no-cache", "--sdk", "macosx", "--show-sdk-path"])
     resource = capture([paths["clang"], "-print-resource-dir"])
-    cmake_share = list((Path(paths["cmake"]).parent.parent / "share").glob("cmake-*"))
-    require(len(cmake_share) == 1, "CMake module directory is ambiguous")
+    # Ask the selected executable for its module root; package layouts differ.
+    probe = REPO / "out/macos-moltenvk-integration/observation/discover-cmake-root.cmake"
+    require(Path.cwd().resolve() == REPO / "out/macos-moltenvk-integration/observation/toolchain",
+            "CMake discovery must stay in the owned observation directory")
+    require(probe.read_text() == CMAKE_ROOT_PROBE, "CMake discovery script differs")
+    answer = capture([paths["cmake"], "-P", str(probe)])
+    marker = "-- SIRIUS_CMAKE_ROOT="
+    require(answer.startswith(marker) and "\n" not in answer, "CMake module root query is ambiguous")
+    cmake_root = Path(answer[len(marker):])
+    require(cmake_root.is_absolute() and (cmake_root / "Modules").is_dir(), "CMake reported module root is absent")
     toolchain_usr = Path(paths["clang"]).parent.parent
-    roots = [Path(sdk).resolve(), Path(resource).resolve(), toolchain_usr / "include", toolchain_usr / "lib", cmake_share[0]]
+    roots = [Path(sdk).resolve(), Path(resource).resolve(), toolchain_usr / "include", toolchain_usr / "lib", cmake_root]
     require(all(path.is_dir() for path in roots), "selected SDK/toolchain input root missing")
     print(json.dumps({"paths": paths, "sdk": str(Path(sdk).resolve()), "input_roots": list(dict.fromkeys(str(p.resolve()) for p in roots)),
+          "cmake_root_query": {"script": {"path": str(probe), **identity(probe)}, "stdout": answer},
           "versions": {"xcode": capture(["/usr/bin/xcodebuild", "-version"]),
                        "macos_sdk": capture(["/usr/bin/xcrun", "--no-cache", "--sdk", "macosx", "--show-sdk-version"]),
                        "clang": capture([paths["clang"], "--version"]),
@@ -333,6 +343,10 @@ def main():
         common.memory_self_test()
         common.owner_self_test(output / "owner-self-test", environment, inputs)
 
+        probe = output / "discover-cmake-root.cmake"
+        with probe.open("x") as stream:
+            stream.write(CMAKE_ROOT_PROBE)
+        inputs += [probe]
         tool_folder = output / "toolchain"
         owner = common.run_owned([sys.executable, "-B", str(HERE), "--toolchain-child"], environment, tool_folder, inputs, seconds=60)
         complete_owner(owner)
@@ -340,7 +354,8 @@ def main():
         selected_tools, tool_links = tool_inputs(tools)
         write(output / "toolchain-input-layout.json", {"files": [str(path) for path in selected_tools], "symlinks": tool_links,
               "scope": "Complete regular files under the selected SDK/compiler library/include/module roots plus selected executables. System dyld-cache images are observed, not a hermetic OS attestation."})
-        tool_receipts = [output / "toolchain-input-layout.json", tool_folder / "stdout.log", tool_folder / "owner.json"]
+        tool_receipts = [output / "toolchain-input-layout.json", tool_folder / "stdout.log", tool_folder / "owner.json",
+                         probe]
 
         def inventory(label, env, driver, expected_info):
             folder = output / label
