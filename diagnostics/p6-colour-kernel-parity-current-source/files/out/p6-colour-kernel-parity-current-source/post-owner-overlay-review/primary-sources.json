@@ -1,0 +1,28 @@
+{
+  "commit": "427645e3db3a8896714f22a3d3fe0c3f7b317ad4",
+  "matching_kernel_tag": "linux-msft-wsl-6.6.87.2",
+  "repository": "https://github.com/microsoft/WSL2-Linux-Kernel",
+  "sources": [
+    {
+      "bytes": 39533,
+      "locus": "ovl_map_dev_ino:98-155; pseudo_dev assignment:153; ovl_getattr follows",
+      "sha256": "d36a5f4e564c1a2e41278c560579bd4c4abf0bf45b4387c82972d1190d18abd3",
+      "source_path": "fs/overlayfs/inode.c",
+      "url": "https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/427645e3db3a8896714f22a3d3fe0c3f7b317ad4/fs/overlayfs/inode.c"
+    },
+    {
+      "bytes": 17041,
+      "locus": "ovl_mmap:528-548; vma_set_file(realfile):540",
+      "sha256": "9898160a122ffb31f022aa20464b5ae0a41e239784424728683f92b6f0c23ebd",
+      "source_path": "fs/overlayfs/file.c",
+      "url": "https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/427645e3db3a8896714f22a3d3fe0c3f7b317ad4/fs/overlayfs/file.c"
+    },
+    {
+      "bytes": 50198,
+      "locus": "show_map_vma:261-299; backing s_dev/i_ino:275-276; visible path:299",
+      "sha256": "14eee86371396ba3a83baae8ffc18100fa2df19f5e72ec6133def6ffaddf6f48",
+      "source_path": "fs/proc/task_mmu.c",
+      "url": "https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/427645e3db3a8896714f22a3d3fe0c3f7b317ad4/fs/proc/task_mmu.c"
+    }
+  ]
+}

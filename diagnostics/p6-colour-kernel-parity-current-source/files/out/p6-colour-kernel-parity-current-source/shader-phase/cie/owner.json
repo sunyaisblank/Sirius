@@ -1,0 +1,95 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "--gtest_filter=KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority",
+    "--gtest_color=no"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "cie",
+  "child_exit": 0,
+  "child_pid": 118720,
+  "child_start_ticks": "2023017",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 118693,
+    "pid": 118694,
+    "ppid": 118693,
+    "rss_kib": 20868,
+    "session": 118693,
+    "start_ticks": "2022815",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/shader-phase/cie/gtest.xml",
+    "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/shader-phase/cache",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/share/vulkan/icd.d/dzn_icd.x86_64.json",
+    "XDG_CACHE_HOME": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/shader-phase/cache"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Finite original P6 colour kernel/host parity on exact WSL Dozen Radeon 780M; no native, full P6, scientific-estate or release qualification.",
+  "minimum_sampled_available_kib": 15809332,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 118720,
+      "saved_start_ticks": "2023017"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 3330976,
+  "provider_mappings": [
+    {
+      "maps": [
+        "7a3300521000-7a3300d93000 r--p 00000000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7a3300d93000-7a3304590000 r-xp 00872000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7a3304590000-7a3306fee000 r--p 0406f000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7a3306fee000-7a3307963000 r--p 06acc000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7a3306fee000-7a33079a3000 rw-p 06acc000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7a3307963000-7a33079a3000 rw-p 07441000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7a3307a66000-7a3307ac9000 r--p 00000000 00:23 562949954106598            /usr/lib/wsl/lib/libdxcore.so",
+        "7a3307ac9000-7a3307b46000 r-xp 00062000 00:23 562949954106598            /usr/lib/wsl/lib/libdxcore.so",
+        "7a3307b46000-7a3307b4e000 r--p 000de000 00:23 562949954106598            /usr/lib/wsl/lib/libdxcore.so",
+        "7a3307b4e000-7a3307b4f000 rw-p 000e5000 00:23 562949954106598            /usr/lib/wsl/lib/libdxcore.so",
+        "7a3307b53000-7a3307e36000 r--p 00000000 00:23 562949954106597            /usr/lib/wsl/lib/libd3d12core.so",
+        "7a3307e36000-7a3308191000 r-xp 002e2000 00:23 562949954106597            /usr/lib/wsl/lib/libd3d12core.so",
+        "7a3308191000-7a33081e3000 r--p 0063c000 00:23 562949954106597            /usr/lib/wsl/lib/libd3d12core.so",
+        "7a33081e3000-7a33081e6000 rw-p 0068d000 00:23 562949954106597            /usr/lib/wsl/lib/libd3d12core.so",
+        "7a3308200000-7a330824b000 r--p 00000000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7a330824b000-7a3308609000 r-xp 0004b000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7a3308609000-7a3308bcc000 r--p 00409000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7a3308bcc000-7a3308c5f000 r--p 009cc000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7a3308c5f000-7a3308c62000 rw-p 00a5f000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7a3308d35000-7a3308d7a000 r--p 00000000 00:23 562949954106596            /usr/lib/wsl/lib/libd3d12.so",
+        "7a3308d7a000-7a3308df3000 r-xp 00044000 00:23 562949954106596            /usr/lib/wsl/lib/libd3d12.so",
+        "7a3308df3000-7a3308dfa000 r--p 000bc000 00:23 562949954106596            /usr/lib/wsl/lib/libd3d12.so",
+        "7a3308dfa000-7a3308dfc000 rw-p 000c2000 00:23 562949954106596            /usr/lib/wsl/lib/libd3d12.so",
+        "7a33095a4000-7a33095aa000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7a33095aa000-7a33095f6000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7a33095f6000-7a3309620000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7a3309620000-7a3309621000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7a3309621000-7a3309622000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+      ],
+      "owned_session": 118720,
+      "pid": 118720,
+      "start_ticks": "2023017"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "Finite original P6 colour kernel/host parity on exact WSL Dozen Radeon 780M; no native, full P6, scientific-estate or release qualification.",
+  "source": {
+    "revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 215.93782858299892,
+  "whole_inputs_unchanged": true
+}

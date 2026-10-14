@@ -1,0 +1,76 @@
+{
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "direct_lower_paths_accessible": false,
+  "files": {
+    "/usr/lib/wsl/lib/libd3d12.so": {
+      "backing_mapping_device": [
+        0,
+        35
+      ],
+      "mapping_closed_and_absent": true,
+      "mapping_sha256": "b3d78d409a4dbbe8612551fc0c0d746d3e58d7997ee7eba78ce1064d77cfa8c3",
+      "original_query_mapping_count": 4,
+      "readonly_cpu_mapping": "7bef3ac5b000-7bef3ad1f000 r--p 00000000 00:23 562949954106596            /usr/lib/wsl/lib/libd3d12.so",
+      "visible_identity": {
+        "bytes": 801840,
+        "resolved_path": "/usr/lib/wsl/lib/libd3d12.so",
+        "sha256": "b3d78d409a4dbbe8612551fc0c0d746d3e58d7997ee7eba78ce1064d77cfa8c3"
+      },
+      "visible_inode": 562949954106596,
+      "visible_stat_device": [
+        0,
+        102
+      ]
+    },
+    "/usr/lib/wsl/lib/libd3d12core.so": {
+      "backing_mapping_device": [
+        0,
+        35
+      ],
+      "mapping_closed_and_absent": true,
+      "mapping_sha256": "a4104a2022932d8e6c714f103ebd89db1c5bdbf36fe92151c88d3d93d4e3894d",
+      "original_query_mapping_count": 4,
+      "readonly_cpu_mapping": "7bef3a68f000-7bef3ad1f000 r--p 00000000 00:23 562949954106597            /usr/lib/wsl/lib/libd3d12core.so",
+      "visible_identity": {
+        "bytes": 6880344,
+        "resolved_path": "/usr/lib/wsl/lib/libd3d12core.so",
+        "sha256": "a4104a2022932d8e6c714f103ebd89db1c5bdbf36fe92151c88d3d93d4e3894d"
+      },
+      "visible_inode": 562949954106597,
+      "visible_stat_device": [
+        0,
+        102
+      ]
+    },
+    "/usr/lib/wsl/lib/libdxcore.so": {
+      "backing_mapping_device": [
+        0,
+        35
+      ],
+      "mapping_closed_and_absent": true,
+      "mapping_sha256": "83d1671a839bcf71709349e77cd68341515df2e63080765618876996a0f4190c",
+      "original_query_mapping_count": 4,
+      "readonly_cpu_mapping": "7bef3ac39000-7bef3ad1f000 r--p 00000000 00:23 562949954106598            /usr/lib/wsl/lib/libdxcore.so",
+      "visible_identity": {
+        "bytes": 942048,
+        "resolved_path": "/usr/lib/wsl/lib/libdxcore.so",
+        "sha256": "83d1671a839bcf71709349e77cd68341515df2e63080765618876996a0f4190c"
+      },
+      "visible_inode": 562949954106598,
+      "visible_stat_device": [
+        0,
+        102
+      ]
+    }
+  },
+  "kernel_release": "6.6.87.2-microsoft-standard-WSL2",
+  "lower_path_limitation": "Lower paths are absent in this namespace; /proc/1/root lower paths are permission denied. The real backing dev/inode join is observed through read-only mmap instead.",
+  "mountinfo_sha256": "9b2a6ef5c20a7e41f7154bc603bcc2a353a2fad7fb3f4fc86f6553729667d25d",
+  "overlay_directory_stat_device": [
+    0,
+    100
+  ],
+  "overlay_mount_line": "812 755 0:100 / /usr/lib/wsl/lib rw,nosuid,nodev,noatime - overlay none rw,lowerdir=/gpu_lib_packaged:/gpu_lib_inbox,upperdir=/gpu_lib/rw/upper,workdir=/gpu_lib/rw/work,uuid=on",
+  "overlay_xino_auto": "N",
+  "scope": "Read-only CPU mmap of exactly three pinned files; no ELF loading, provider call or shader/test execution."
+}

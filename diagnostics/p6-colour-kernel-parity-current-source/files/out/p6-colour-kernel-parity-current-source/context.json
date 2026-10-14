@@ -1,0 +1,893 @@
+{
+  "cases": {
+    "cie": {
+      "filter": "KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority",
+      "opcode": 14,
+      "records": 10,
+      "requested_buffer_bytes": 3216
+    },
+    "xyz": {
+      "filter": "KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority",
+      "opcode": 13,
+      "records": 5,
+      "requested_buffer_bytes": 1616
+    }
+  },
+  "compile_command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1 -DSIRIUS_TEST_HAS_RETAINED_CAMERA=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o -c /home/astra/.project/Sirius/tests/backend/kernel_parity_test.cpp",
+  "ordering": [
+    "Root alone executes the inventory query.",
+    "Root waits until the separate CPU writer batch is terminal before cie or xyz.",
+    "Inventory acceptance precedes cie; cie terminal acceptance precedes xyz.",
+    "Stop at any failed/incomplete owner, changed input, missing actual mapping, wrong selector, skip or original numerical assertion failure; no retry."
+  ],
+  "original_inputs": {
+    "/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "bytes": 236616,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/lib/x86_64-linux-gnu/libc.so.6": {
+      "bytes": 2129424,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/lib/x86_64-linux-gnu/libdl.so.2": {
+      "bytes": 14408,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libdl.so.2",
+      "sha256": "c2994527172cc23b7fb0f7d611b71e00a37da27af12c2e5e9e0dc1a742886c96"
+    },
+    "/lib/x86_64-linux-gnu/libdrm.so.2": {
+      "bytes": 92760,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+      "sha256": "ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67"
+    },
+    "/lib/x86_64-linux-gnu/libexpat.so.1": {
+      "bytes": 186624,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+    },
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "bytes": 183024,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "/lib/x86_64-linux-gnu/libm.so.6": {
+      "bytes": 952616,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/lib/x86_64-linux-gnu/libpthread.so.0": {
+      "bytes": 14408,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libpthread.so.0",
+      "sha256": "90491a21ce44efcf3bd4b65ec82501c091d7ebe7f8d9b341dd01d721001d9ecd"
+    },
+    "/lib/x86_64-linux-gnu/libstdc++.so.6": {
+      "bytes": 2592224,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/lib/x86_64-linux-gnu/libvulkan.so.1": {
+      "bytes": 510592,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/lib/x86_64-linux-gnu/libz.so.1": {
+      "bytes": 113000,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "/lib/x86_64-linux-gnu/libzstd.so.1": {
+      "bytes": 755864,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+    },
+    "/lib64/ld-linux-x86-64.so.2": {
+      "bytes": 236616,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/bin/python3": {
+      "bytes": 8020928,
+      "resolved_path": "/usr/bin/python3.12",
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "/usr/bin/readelf": {
+      "bytes": 789280,
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-readelf",
+      "sha256": "871be389739ecf9924b052c2fde4d2a2068a54e882201b9c34897337a5a0a130"
+    },
+    "/usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so": {
+      "bytes": 122163656,
+      "resolved_path": "/usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+      "sha256": "16d05eef66dbad755933e189a22bd2d40cf5036a4797097f4076e6d060d13459"
+    },
+    "/usr/lib/wsl/lib/libd3d12.so": {
+      "bytes": 801840,
+      "resolved_path": "/usr/lib/wsl/lib/libd3d12.so",
+      "sha256": "b3d78d409a4dbbe8612551fc0c0d746d3e58d7997ee7eba78ce1064d77cfa8c3"
+    },
+    "/usr/lib/wsl/lib/libd3d12core.so": {
+      "bytes": 6880344,
+      "resolved_path": "/usr/lib/wsl/lib/libd3d12core.so",
+      "sha256": "a4104a2022932d8e6c714f103ebd89db1c5bdbf36fe92151c88d3d93d4e3894d"
+    },
+    "/usr/lib/wsl/lib/libdxcore.so": {
+      "bytes": 942048,
+      "resolved_path": "/usr/lib/wsl/lib/libdxcore.so",
+      "sha256": "83d1671a839bcf71709349e77cd68341515df2e63080765618876996a0f4190c"
+    },
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "bytes": 236616,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "bytes": 2129424,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/libdl.so.2": {
+      "bytes": 14408,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libdl.so.2",
+      "sha256": "c2994527172cc23b7fb0f7d611b71e00a37da27af12c2e5e9e0dc1a742886c96"
+    },
+    "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0": {
+      "bytes": 92760,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+      "sha256": "ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67"
+    },
+    "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": {
+      "bytes": 186624,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "bytes": 183024,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "bytes": 952616,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libpthread.so.0": {
+      "bytes": 14408,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libpthread.so.0",
+      "sha256": "90491a21ce44efcf3bd4b65ec82501c091d7ebe7f8d9b341dd01d721001d9ecd"
+    },
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "bytes": 2592224,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1": {
+      "bytes": 510592,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "bytes": 510592,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+      "bytes": 113000,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5": {
+      "bytes": 755864,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891": {
+      "bytes": 5562236,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891",
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02": {
+      "bytes": 60385,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
+      "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149": {
+      "bytes": 13440952,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149",
+      "sha256": "e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76": {
+      "bytes": 9725048,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76",
+      "sha256": "eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f": {
+      "bytes": 488537,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f",
+      "sha256": "f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json": {
+      "bytes": 28646,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+      "sha256": "ace3fa3984d49fcabadd2d9ece5b0a40933b696d380ae09a023cb0f95f7765d2"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/authority-controls/inputs-before.json": {
+      "bytes": 216280,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/authority-controls/inputs-before.json",
+      "sha256": "6384357c3c0b1e32abc8d036278c48288f2af6c47d371dc234f58241035745d4"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-after.json": {
+      "bytes": 213162,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-after.json",
+      "sha256": "aec239467fbd63adfb67621f2fd21341209466131382a252bd94507f4fb8f5a8"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-before.json": {
+      "bytes": 213162,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-before.json",
+      "sha256": "aec239467fbd63adfb67621f2fd21341209466131382a252bd94507f4fb8f5a8"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/owner.json": {
+      "bytes": 28169,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/owner.json",
+      "sha256": "1ad37cab4a363eeb546d8d798c4049af49a18ae541cdd57e6389dfe6729cdc01"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/current-product-authority.json": {
+      "bytes": 48059,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/current-product-authority.json",
+      "sha256": "e1ed4b29e0cf1551750d04b2c37fa0a8d0f25c6594eb59f87c59853d331f113c"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/owned_guard.py": {
+      "bytes": 20791,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/owned_guard.py",
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/run_owned.py": {
+      "bytes": 12451,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/run_owned.py",
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/source-bindings.json": {
+      "bytes": 1113,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/source-bindings.json",
+      "sha256": "161e000309cd483a2432c983bddf53283e28d824e527afccf7713eef3d243da8"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/manifest.json": {
+      "bytes": 24274,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/manifest.json",
+      "sha256": "19b73f8105df750fc6739445357cd25bcfe182f23f837227e6409d3714b55681"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e": {
+      "bytes": 212248,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e",
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "bin/linux-gcc/CMakeCache.txt": {
+      "bytes": 60385,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/CMakeCache.txt",
+      "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02"
+    },
+    "bin/linux-gcc/build.ninja": {
+      "bytes": 488537,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/build.ninja",
+      "sha256": "f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f"
+    },
+    "bin/linux-gcc/compile_commands.json": {
+      "bytes": 212248,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "bin/linux-gcc/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe.spv",
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/linux-gcc/src/sirius/app/sirius": {
+      "bytes": 9725048,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius",
+      "sha256": "eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76"
+    },
+    "bin/linux-gcc/tests/backend/CTestTestfile.cmake": {
+      "bytes": 484,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CTestTestfile.cmake",
+      "sha256": "0b251d08427240a6349f5b5f4a117401bd21e3b3c823ad7ea607b4934d6ed660"
+    },
+    "bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv",
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests": {
+      "bytes": 13440952,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "sha256": "e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_include.cmake": {
+      "bytes": 299,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests[1]_include.cmake",
+      "sha256": "749ff39be5b56c22fd091e272f2e1630ab78e37a7a3b694364786161a1c90de3"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake": {
+      "bytes": 110274,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake",
+      "sha256": "455bb6ec639a416fdc7fa0b047c49fca59e226639d72347d022685f3e300b2c3"
+    },
+    "bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so": {
+      "bytes": 11328704,
+      "resolved_path": "/home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+      "sha256": "4e5652ff7388f9c9725234bc86fa03586ebc6c6f205f5f4f8340fbc0fecb5258"
+    },
+    "bin/toolchains/mesa-25.2.8/install/share/vulkan/icd.d/dzn_icd.x86_64.json": {
+      "bytes": 249,
+      "resolved_path": "/home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/share/vulkan/icd.d/dzn_icd.x86_64.json",
+      "sha256": "680c1b608a4940a4436025116919e1287235868c27160124f0e793ed3e240c60"
+    },
+    "cmake/sirius_testing.cmake": {
+      "bytes": 12349,
+      "resolved_path": "/home/astra/.project/Sirius/cmake/sirius_testing.cmake",
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    "src/sirius/app/cli/info_command.cpp": {
+      "bytes": 41145,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/app/cli/info_command.cpp",
+      "sha256": "d5f57a4bba499ed2c262508dbf6cdadab8a3c9348615f6e92c0b43d92622606e"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 56500,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    "src/sirius/base/resource_locator.cpp": {
+      "bytes": 4788,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/base/resource_locator.cpp",
+      "sha256": "6c8c5f9302baa48f46dd1cad9118fd85c0ce5df747b38db90712694a1d5a304e"
+    },
+    "src/sirius/base/resource_locator.h": {
+      "bytes": 1665,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/base/resource_locator.h",
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa"
+    },
+    "src/sirius/core/cie1931_observer.h": {
+      "bytes": 1858,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/core/cie1931_observer.h",
+      "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949"
+    },
+    "src/sirius/core/xyz_srgb.h": {
+      "bytes": 1439,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/core/xyz_srgb.h",
+      "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48"
+    },
+    "src/sirius/kernels/gr_camera.slang": {
+      "bytes": 7542,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_camera.slang",
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+    },
+    "src/sirius/kernels/gr_coupled.slang": {
+      "bytes": 12632,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_coupled.slang",
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    "src/sirius/kernels/gr_deviation.slang": {
+      "bytes": 17259,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang",
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+    },
+    "src/sirius/kernels/gr_disk.slang": {
+      "bytes": 16688,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_disk.slang",
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+    },
+    "src/sirius/kernels/gr_ellis_topology.slang": {
+      "bytes": 9374,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang",
+      "sha256": "de0f2120591ecebbc00325eb6877cf4c6e8ebd0259637e300d4289ef82ab6e0b"
+    },
+    "src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 23338,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang",
+      "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+    },
+    "src/sirius/kernels/gr_kerr_infinity.slang": {
+      "bytes": 23616,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_kerr_infinity.slang",
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c"
+    },
+    "src/sirius/kernels/gr_metrics.slang": {
+      "bytes": 30379,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang",
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    "src/sirius/kernels/gr_point_star.slang": {
+      "bytes": 1773,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_point_star.slang",
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+    },
+    "src/sirius/kernels/gr_trace_continuation.slang": {
+      "bytes": 2212,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang",
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+    },
+    "src/sirius/kernels/gr_trace_event.slang": {
+      "bytes": 15656,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_event.slang",
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang",
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    "src/sirius/kernels/parity_probe.slang": {
+      "bytes": 36380,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/parity_probe.slang",
+      "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+    },
+    "src/sirius/render/dispatch_governor.h": {
+      "bytes": 7908,
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/render/dispatch_governor.h",
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a"
+    },
+    "tests/CMakeLists.txt": {
+      "bytes": 10200,
+      "resolved_path": "/home/astra/.project/Sirius/tests/CMakeLists.txt",
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    "tests/backend/CMakeLists.txt": {
+      "bytes": 5448,
+      "resolved_path": "/home/astra/.project/Sirius/tests/backend/CMakeLists.txt",
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357"
+    },
+    "tests/backend/kernel_parity_test.cpp": {
+      "bytes": 117467,
+      "resolved_path": "/home/astra/.project/Sirius/tests/backend/kernel_parity_test.cpp",
+      "sha256": "8d2e747d4d375e4a8849c32a33d66cce148de7b5dea28977da212138fa97f986"
+    },
+    "tests/operating_model.json": {
+      "bytes": 130331,
+      "resolved_path": "/home/astra/.project/Sirius/tests/operating_model.json",
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "tests/support/fail_on_skip.h": {
+      "bytes": 427,
+      "resolved_path": "/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    },
+    "tests/support/test_resource.h": {
+      "bytes": 796,
+      "resolved_path": "/home/astra/.project/Sirius/tests/support/test_resource.h",
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3"
+    }
+  },
+  "original_owner": {
+    "guard_sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+    "patch": "out/p6-colour-kernel-parity-current-source/owner-provider.patch",
+    "private_changes": "Provider environment/override filtering plus exact Dozen module map collection/requirement only; process ownership, source/input checks, limits and result acceptance logic otherwise unchanged.",
+    "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+    "source": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/run_owned.py"
+  },
+  "owned_root": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source",
+  "prepared_only": true,
+  "product_recovery": [
+    {
+      "bytes": 13440952,
+      "origin": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "recovery": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149",
+      "sha256": "e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149"
+    },
+    {
+      "bytes": 9725048,
+      "origin": "bin/linux-gcc/src/sirius/app/sirius",
+      "recovery": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76",
+      "sha256": "eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76"
+    },
+    {
+      "bytes": 5562236,
+      "origin": "bin/linux-gcc/kernels/parity_probe.spv",
+      "recovery": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891",
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    {
+      "bytes": 60385,
+      "origin": "bin/linux-gcc/CMakeCache.txt",
+      "recovery": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
+      "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02"
+    },
+    {
+      "bytes": 488537,
+      "origin": "bin/linux-gcc/build.ninja",
+      "recovery": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f",
+      "sha256": "f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f"
+    },
+    {
+      "bytes": 212248,
+      "origin": "bin/linux-gcc/compile_commands.json",
+      "recovery": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e",
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    }
+  ],
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "provider_policy": {
+    "actual_required_maps": [
+      "/home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "/usr/lib/wsl/lib/libd3d12.so",
+      "/usr/lib/wsl/lib/libdxcore.so"
+    ],
+    "cache_hit_claimed": false,
+    "cache_output_root": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/cache",
+    "immutable_seed_recovery": [
+      {
+        "bytes": 589,
+        "recovery": "out/p6-colour-kernel-parity-current-source/recovery/cache-seed/01/79f2908c7a755002fb6273bffc85d26881fca8",
+        "relative": "01/79f2908c7a755002fb6273bffc85d26881fca8",
+        "sha256": "37ac94c11558d552eafbf47c8375ed51cd48a2bd614155b5cdfede4c8cdbf1c7",
+        "source": "/home/astra/.project/Sirius/bin/toolchains/shader-cache/mesa_shader_cache/01/79f2908c7a755002fb6273bffc85d26881fca8"
+      },
+      {
+        "bytes": 413,
+        "recovery": "out/p6-colour-kernel-parity-current-source/recovery/cache-seed/17/d3d9bfce9db8dac4e635ce9d7c6a70b14c3516",
+        "relative": "17/d3d9bfce9db8dac4e635ce9d7c6a70b14c3516",
+        "sha256": "33eb2a96219c95307cd91f2f6fb8b4931cecc7d83938ed04d6112601d2251c59",
+        "source": "/home/astra/.project/Sirius/bin/toolchains/shader-cache/mesa_shader_cache/17/d3d9bfce9db8dac4e635ce9d7c6a70b14c3516"
+      },
+      {
+        "bytes": 436,
+        "recovery": "out/p6-colour-kernel-parity-current-source/recovery/cache-seed/41/f0f1127eefeb9f6224e4aec0dfed7971abe086",
+        "relative": "41/f0f1127eefeb9f6224e4aec0dfed7971abe086",
+        "sha256": "5676384bcdb8a1b3baa50ac6c18e6a05e49a3c560dfeaafc1e96f5ff3f50cc0f",
+        "source": "/home/astra/.project/Sirius/bin/toolchains/shader-cache/mesa_shader_cache/41/f0f1127eefeb9f6224e4aec0dfed7971abe086"
+      },
+      {
+        "bytes": 589,
+        "recovery": "out/p6-colour-kernel-parity-current-source/recovery/cache-seed/94/3acaf0953e3a94ae85e81d550356e4f7861cb0",
+        "relative": "94/3acaf0953e3a94ae85e81d550356e4f7861cb0",
+        "sha256": "ee681f81cdaa17f72ce3e557fa995a917de0463b6bd617917d9aedf64fa36fdb",
+        "source": "/home/astra/.project/Sirius/bin/toolchains/shader-cache/mesa_shader_cache/94/3acaf0953e3a94ae85e81d550356e4f7861cb0"
+      },
+      {
+        "bytes": 588,
+        "recovery": "out/p6-colour-kernel-parity-current-source/recovery/cache-seed/f0/949236583ca6a58c7397bfe294966c55ef884d",
+        "relative": "f0/949236583ca6a58c7397bfe294966c55ef884d",
+        "sha256": "f9e86226ecfe6d2a20327c1ff704714cee2d861be7e4707e3bae640b8e08b26e",
+        "source": "/home/astra/.project/Sirius/bin/toolchains/shader-cache/mesa_shader_cache/f0/949236583ca6a58c7397bfe294966c55ef884d"
+      },
+      {
+        "bytes": 1310728,
+        "recovery": "out/p6-colour-kernel-parity-current-source/recovery/cache-seed/index",
+        "relative": "index",
+        "sha256": "8581ed39e61fb0f1685d2e48ea8a0835bc1c0631724012324a55ec576f4899d8",
+        "source": "/home/astra/.project/Sirius/bin/toolchains/shader-cache/mesa_shader_cache/index"
+      }
+    ],
+    "linux_radv_or_native_platform_claimed": false,
+    "loader_dependencies": {
+      "/usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so": [
+        "libz.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "/usr/lib/wsl/lib/libd3d12.so": [
+        "libc.so.6",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libdl.so.2"
+      ],
+      "/usr/lib/wsl/lib/libd3d12core.so": [
+        "libc.so.6",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libdl.so.2",
+        "libdxcore.so"
+      ],
+      "/usr/lib/wsl/lib/libdxcore.so": [
+        "libc.so.6",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libdl.so.2"
+      ],
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": [],
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": [
+        "ld-linux-x86-64.so.2"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libdl.so.2": [
+        "libc.so.6"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0": [
+        "libc.so.6"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": [
+        "libc.so.6"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": [
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": [
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libpthread.so.0": [
+        "libc.so.6"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": [
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2",
+        "libgcc_s.so.1"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": [
+        "libm.so.6",
+        "libc.so.6"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.3": [
+        "libc.so.6"
+      ],
+      "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5": [
+        "libc.so.6"
+      ],
+      "bin/linux-gcc/src/sirius/app/sirius": [
+        "libvulkan.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "bin/linux-gcc/tests/backend/sirius_backend_tests": [
+        "libvulkan.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so": [
+        "libz.so.1",
+        "libzstd.so.1",
+        "libdrm.so.2",
+        "libexpat.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ]
+    },
+    "ordinary_cache_permitted": true,
+    "pinned_additional_possible_maps": [
+      "/usr/lib/wsl/lib/libd3d12core.so",
+      "/usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so"
+    ],
+    "route": "WSL Dozen 25.2.8 on Radeon 780M, candidate finite provider; fresh owned inventory required",
+    "software_llvm_route_executed": false
+  },
+  "qualification_claimed": false,
+  "required_device": {
+    "device_id": 6400,
+    "driver_id": 23,
+    "driver_name": "Dozen",
+    "index": 0,
+    "kind": "integrated",
+    "name": "Microsoft Direct3D12 (AMD Radeon 780M Graphics)",
+    "vendor_id": 4098
+  },
+  "reuse_review": {
+    "current_gcc_sync": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation",
+    "current_source_changes_from_product": [
+      ".github/workflows/ci.yml",
+      "scripts/diagnose-macos-retained.py",
+      "scripts/governance/build_policy.py",
+      "scripts/macos_metal_probe.py"
+    ],
+    "current_sync_original_controls": 19,
+    "existing_results_cover_these_cases": false,
+    "historical_different_provider_inventory": "attestations/software-vulkan/7260586/command-owner/command-owner-7260586/dozen/identity.json",
+    "historical_route": "Different Dozen 26.2.3; no promotion to current25.2.8 and no same-module compile-cost bound",
+    "same_module_capabilities": [
+      1
+    ]
+  },
+  "runner_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "schema_version": 1,
+  "scope": {
+    "cie": "Original double Wyman-Sloan-Shirley host fit cast to float against ordinary Slang fp32 at 379,380,400,440,500,555,630,700,780,781 nm; relative3e-6+absolute2e-7; not a direct official CIE tabulation comparison.",
+    "xyz": "Original float host exact-ratio D65 to linear-light sRGB transform against ordinary Slang fp32 at D65, 3 basis vectors, and outside-gamut point; relative3e-6+absolute2e-7; extended signed channels retained; no transfer/display quantization."
+  },
+  "source_recovery": [
+    {
+      "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74",
+      "path": "cmake/sirius_testing.cmake",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/cmake/sirius_testing.cmake",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    {
+      "git_blob": "19615c7ddaa0297dae24d0629d594d597fd9e984",
+      "path": "src/sirius/app/cli/info_command.cpp",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/app/cli/info_command.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d5f57a4bba499ed2c262508dbf6cdadab8a3c9348615f6e92c0b43d92622606e"
+    },
+    {
+      "git_blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94",
+      "path": "src/sirius/backend/vulkan/vulkan_device.cpp",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    {
+      "git_blob": "8086dcede856c7350bc41838ea5452ee907ddade",
+      "path": "src/sirius/base/resource_locator.cpp",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/base/resource_locator.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6c8c5f9302baa48f46dd1cad9118fd85c0ce5df747b38db90712694a1d5a304e"
+    },
+    {
+      "git_blob": "4bf298db06231bcffd5d24b5b3152d1b02a8e8e7",
+      "path": "src/sirius/base/resource_locator.h",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/base/resource_locator.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa"
+    },
+    {
+      "git_blob": "2ef1c98782c8fc37e2a55349e5d3cb321d26305f",
+      "path": "src/sirius/core/cie1931_observer.h",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/core/cie1931_observer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949"
+    },
+    {
+      "git_blob": "e5806afa0029b2c2c7f6f3c13cff88ff820c7d6e",
+      "path": "src/sirius/core/xyz_srgb.h",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/core/xyz_srgb.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48"
+    },
+    {
+      "git_blob": "3eebdc2becb1ad0bc07f10b605465fef443aa48a",
+      "path": "src/sirius/kernels/gr_camera.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_camera.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+    },
+    {
+      "git_blob": "d6198b51de1c4cfea025024de8331418098ca8f7",
+      "path": "src/sirius/kernels/gr_coupled.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_coupled.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    {
+      "git_blob": "fbceb351e906967ac44fe8d1aa5a0d53eb2fbc8a",
+      "path": "src/sirius/kernels/gr_deviation.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_deviation.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+    },
+    {
+      "git_blob": "1b0f997e779954c133fd03849e4d3f4128b1f136",
+      "path": "src/sirius/kernels/gr_disk.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_disk.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+    },
+    {
+      "git_blob": "d5bd69f2ee71b5363bb357a7aeacc1d8a2ee6923",
+      "path": "src/sirius/kernels/gr_ellis_topology.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_ellis_topology.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "de0f2120591ecebbc00325eb6877cf4c6e8ebd0259637e300d4289ef82ab6e0b"
+    },
+    {
+      "git_blob": "9a672b9beb8b94d8f60c2b748e436facab8909b8",
+      "path": "src/sirius/kernels/gr_integrator.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_integrator.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+    },
+    {
+      "git_blob": "5b773bcf60be603b713b2f386ea26cc43ddd7cb2",
+      "path": "src/sirius/kernels/gr_kerr_infinity.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_kerr_infinity.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c"
+    },
+    {
+      "git_blob": "efd5d207555b4e05dbc7c03745ca0debd14aea13",
+      "path": "src/sirius/kernels/gr_metrics.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_metrics.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    {
+      "git_blob": "1f75de2cf5b032e036c6aeb44d25094303932dbd",
+      "path": "src/sirius/kernels/gr_point_star.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_point_star.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+    },
+    {
+      "git_blob": "c1d67fc0ffecd8181d159384f5ee957c150c8107",
+      "path": "src/sirius/kernels/gr_trace_continuation.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_trace_continuation.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+    },
+    {
+      "git_blob": "dc33ee085f16736de179749a15e6f540a2dc3ca8",
+      "path": "src/sirius/kernels/gr_trace_event.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_trace_event.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+    },
+    {
+      "git_blob": "0d239802eb92efc07c2dba107dbbede4cb03b804",
+      "path": "src/sirius/kernels/gr_types.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/gr_types.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    {
+      "git_blob": "4e15441dccc63f06e652cb5a88bdf2bad8e88ab3",
+      "path": "src/sirius/kernels/parity_probe.slang",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/kernels/parity_probe.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+    },
+    {
+      "git_blob": "a690f5c665f771aa1b5e9cc8f153e4b1292f8a99",
+      "path": "src/sirius/render/dispatch_governor.h",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/src/sirius/render/dispatch_governor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a"
+    },
+    {
+      "git_blob": "b7700acf10bf853738cfcf8a24918fb899a36b24",
+      "path": "tests/CMakeLists.txt",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/tests/CMakeLists.txt",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    {
+      "git_blob": "68735044e5a46054e4449ddc60f6132d2d75e8b7",
+      "path": "tests/backend/CMakeLists.txt",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/tests/backend/CMakeLists.txt",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357"
+    },
+    {
+      "git_blob": "f02e6510afc32bf447f110d74164f450710a893f",
+      "path": "tests/backend/kernel_parity_test.cpp",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/tests/backend/kernel_parity_test.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "8d2e747d4d375e4a8849c32a33d66cce148de7b5dea28977da212138fa97f986"
+    },
+    {
+      "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+      "path": "tests/operating_model.json",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/tests/operating_model.json",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    {
+      "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+      "path": "tests/support/fail_on_skip.h",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/tests/support/fail_on_skip.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    },
+    {
+      "git_blob": "98087810848d204144c13a24c8782f58ffb4a87b",
+      "path": "tests/support/test_resource.h",
+      "recovery": "out/p6-colour-kernel-parity-current-source/recovery/source/tests/support/test_resource.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3"
+    }
+  ],
+  "spirv": {
+    "capabilities": [
+      1
+    ],
+    "version": 66816,
+    "words": 1390559
+  }
+}

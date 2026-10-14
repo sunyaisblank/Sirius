@@ -1,0 +1,126 @@
+{
+  "2048_MiB_scene_qualification_claimed": false,
+  "cache_policy": "Ordinary caches and complete outputs retained; no cache-hit, cold-cost or speed claim.",
+  "cases": {
+    "cie": {
+      "accepted_result": {
+        "bytes": 4808,
+        "resolved_path": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/shader-phase/accepted-cie.json",
+        "sha256": "8fdea07383b908e2986e5e62dec43121c15d819baf566f4e326ff1a4ef770752"
+      },
+      "properties": {
+        "parity_opcode_14_actual_submissions": "1",
+        "parity_opcode_14_allocated_bytes": "3216",
+        "parity_opcode_14_completed_records": "10",
+        "parity_opcode_14_maximum_submit_ms": "19.079228"
+      },
+      "test": "KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority",
+      "xml": {
+        "bytes": 947,
+        "resolved_path": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/shader-phase/cie/gtest.xml",
+        "sha256": "baa1077b4ef7130fc58a4d1fd1a98dc51749d9b6fa9adf1878efd9bff1dbf44c"
+      }
+    },
+    "xyz": {
+      "accepted_result": {
+        "bytes": 4806,
+        "resolved_path": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/shader-phase/accepted-xyz.json",
+        "sha256": "38dbf7e9c9208efa6e2c2f4bfff75b1ea840b745ca272e4f3515215a2e9f33eb"
+      },
+      "properties": {
+        "parity_opcode_13_actual_submissions": "1",
+        "parity_opcode_13_allocated_bytes": "1616",
+        "parity_opcode_13_completed_records": "5",
+        "parity_opcode_13_maximum_submit_ms": "19.077549"
+      },
+      "test": "KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority",
+      "xml": {
+        "bytes": 945,
+        "resolved_path": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/shader-phase/xyz/gtest.xml",
+        "sha256": "3eb5130e6fbba5d801e866ad4c39f538c19d5978df65b502e2de7cf9b33a2140"
+      }
+    }
+  },
+  "consumed_input_bindings_unchanged": 724,
+  "decision": "TWO_ORIGINAL_P6_COLOUR_KERNEL_PARITY_CASES_PASSED",
+  "full_P6_claimed": false,
+  "integrated_main_science_platform_Mandatory_release_claimed": false,
+  "original_postcheck_failure_preserved": true,
+  "owners": {
+    "cie": {
+      "child_exit": 0,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "owner": {
+        "bytes": 6139,
+        "resolved_path": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/shader-phase/cie/owner.json",
+        "sha256": "7bd91bef72dd817677fd1d1dce51782aecb73916cf69ca7d168845e508b614e3"
+      },
+      "passed": true,
+      "peak_sampled_rss_kib": 3330976,
+      "wall_seconds": 215.93782858299892
+    },
+    "inventory": {
+      "child_exit": 0,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 30
+      },
+      "owner": {
+        "bytes": 6048,
+        "resolved_path": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/inventory/owner.json",
+        "sha256": "d380963877be96c0520dc9556386a78df4f2935c24c972775c1c8ee9119184eb"
+      },
+      "passed": true,
+      "peak_sampled_rss_kib": 103940,
+      "wall_seconds": 0.5601552570005879
+    },
+    "xyz": {
+      "child_exit": 0,
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "owner": {
+        "bytes": 6137,
+        "resolved_path": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/shader-phase/xyz/owner.json",
+        "sha256": "b36e0fff9dbe7c28f666d87748428ca7a2c8dfbf09f80181109369aa8c635a76"
+      },
+      "passed": true,
+      "peak_sampled_rss_kib": 1162132,
+      "wall_seconds": 142.3003853659975
+    }
+  },
+  "provider": {
+    "api_version": 4202814,
+    "device_id": 6400,
+    "device_local_bytes": 49162461184,
+    "driver_id": 23,
+    "driver_info": "Mesa 25.2.8 (git-f97d7dcca0)",
+    "driver_name": "Dozen",
+    "index": 0,
+    "kind": "integrated",
+    "name": "Microsoft Direct3D12 (AMD Radeon 780M Graphics)",
+    "preserves_fp32_denormals": true,
+    "render_memory_bytes": 49162461184,
+    "rounds_fp32_to_nearest": true,
+    "rounds_fp64_to_nearest": true,
+    "supports_fp64": true,
+    "vendor_id": 4098
+  },
+  "qualification_claimed": false,
+  "raw_bytes": 16403522,
+  "raw_files": 166,
+  "scope": "Only the two unchanged original ordinary-fp32 kernel/host parity cases on exact WSL Dozen Radeon 780M.",
+  "separate_overlay_analysis": {
+    "bytes": 4439,
+    "resolved_path": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/post-owner-overlay-review/analysis-inventory.json",
+    "sha256": "0718dce91d3f115fd4775afc2625afb08baa864fee5e1ca6236ff73410f141fb"
+  },
+  "timing_scope": "Owner wall time includes the complete process; actual submission milliseconds are the original test's distinct dispatch measurement."
+}

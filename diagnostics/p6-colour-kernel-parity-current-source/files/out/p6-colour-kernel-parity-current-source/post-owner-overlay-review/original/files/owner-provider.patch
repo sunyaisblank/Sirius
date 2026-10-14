@@ -1,0 +1,52 @@
+--- original/run_owned.py
++++ private/run_owned.py
+@@ -66,9 +66,9 @@
+ folder = work / sys.argv[1]
+ folder.mkdir()
+ env = os.environ.copy()
+-allowed = ({'VK_DRIVER_FILES':'/usr/share/vulkan/icd.d/lvp_icd.json', 'SIRIUS_VULKAN_DEVICE':'0', 'MESA_SHADER_CACHE_DISABLE':'true'} if action.get('software_provider') else {})
++allowed = action['provider_environment']
+ overrides = [key for key, value in env.items() if value and allowed.get(key) != value and
+-             (key.startswith(('SIRIUS_', 'VK_', 'LP_', 'MESA_', 'GALLIVM_', 'GTEST_', 'CTEST_'))
++             (key.startswith(('SIRIUS_', 'VK_', 'LP_', 'MESA_', 'GALLIVM_', 'GTEST_', 'CTEST_', 'DZN_', 'D3D12_', 'DXIL_'))
+               or key in {'LD_PRELOAD', 'LD_AUDIT', 'LD_LIBRARY_PATH'})]
+ assert not overrides, sorted(overrides)
+ env.update(allowed)
+@@ -109,17 +109,23 @@
+             members = guard.group_members(child.pid)
+             for item in members:
+                 observed[item['pid']] = item['start_ticks']
+-            if allowed and not report['provider_mappings']:
++            if allowed:
+                 for item in members:
+                     try:
+                         prior = guard.proc(item['pid'])
+                         assert prior['start_ticks'] == item['start_ticks'] and prior['session'] == child.pid
+-                        provider = '/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so'
+-                        lines = [line for line in Path(f"/proc/{item['pid']}/maps").read_text().splitlines() if provider in line]
++                        providers = set(action['provider_modules'])
++                        lines = [line for line in Path(f"/proc/{item['pid']}/maps").read_text().splitlines()
++                                 if len(line.split(None, 5)) == 6 and line.split(None, 5)[5] in providers]
+                         current = guard.proc(item['pid'])
+                         assert current['start_ticks'] == item['start_ticks'] and current['session'] == child.pid
+                         if lines:
+-                            report['provider_mappings'].append({'pid': item['pid'], 'start_ticks': item['start_ticks'], 'owned_session': child.pid, 'maps': lines})
++                            prior_map = next((e for e in report['provider_mappings']
++                                              if e['pid'] == item['pid'] and e['start_ticks'] == item['start_ticks']), None)
++                            if prior_map is None:
++                                report['provider_mappings'].append({'pid': item['pid'], 'start_ticks': item['start_ticks'], 'owned_session': child.pid, 'maps': lines})
++                            else:
++                                prior_map['maps'] = sorted(set(prior_map['maps']) | set(lines))
+                     except (FileNotFoundError, ProcessLookupError):
+                         pass
+             available = guard.available_kib()
+@@ -217,7 +223,8 @@
+ assert report['stop_reason'] is None and not report['cleanup_errors'], report
+ assert report['source_unchanged'] and report['whole_inputs_unchanged']
+ assert report['remaining_owned_processes'] == []
+-assert not allowed or report['provider_mappings'], 'Actual selected software provider mapping was not observed'
++mapped_paths = {line.split(None, 5)[5] for observation in report['provider_mappings'] for line in observation['maps']}
++assert set(action['required_provider_modules']) <= mapped_paths, 'Actual declared Dozen provider module mappings were not observed'
+ assert report['observed_births'] and all(e['absent'] for e in report['observed_births'])
+ assert code == action['expected_exit'], (code, action['expected_exit'])
+ assert guard.STOP is None, ('interrupted before command acceptance', guard.STOP)

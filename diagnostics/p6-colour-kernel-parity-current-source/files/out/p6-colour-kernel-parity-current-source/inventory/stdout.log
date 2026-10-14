@@ -1,0 +1,48 @@
+{
+  "backends": {
+    "cpu": {
+      "available": true
+    },
+    "vulkan": {
+      "available": true,
+      "compiled": true,
+      "device_count": 1,
+      "devices": [
+        {
+          "api_version": 4202814,
+          "device_id": 6400,
+          "device_local_bytes": 49162461184,
+          "driver_id": 23,
+          "driver_info": "Mesa 25.2.8 (git-f97d7dcca0)",
+          "driver_name": "Dozen",
+          "index": 0,
+          "kind": "integrated",
+          "name": "Microsoft Direct3D12 (AMD Radeon 780M Graphics)",
+          "preserves_fp32_denormals": true,
+          "render_memory_bytes": 49162461184,
+          "rounds_fp32_to_nearest": true,
+          "rounds_fp64_to_nearest": true,
+          "supports_fp64": true,
+          "vendor_id": 4098
+        }
+      ],
+      "selected_device_index": 0,
+      "selected_device_name": "Microsoft Direct3D12 (AMD Radeon 780M Graphics)"
+    }
+  },
+  "interactive_viewer": {
+    "compiled": true
+  },
+  "language": {
+    "p2900_contracts": {
+      "implementation": "checked-macro",
+      "native": false
+    },
+    "p2996_reflection": {
+      "implementation": "explicit-schema",
+      "native": false
+    }
+  },
+  "platform": "Linux",
+  "wsl2": true
+}

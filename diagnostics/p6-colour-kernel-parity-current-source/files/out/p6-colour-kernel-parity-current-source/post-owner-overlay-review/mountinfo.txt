@@ -1,0 +1,60 @@
+755 564 8:80 / / rw,relatime - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+756 755 0:2 /init /init ro - rootfs rootfs rw,size=12299432k,nr_inodes=3074858
+757 755 0:5 / /dev rw,nosuid,relatime shared:42 - devtmpfs none rw,size=12299432k,nr_inodes=3074858,mode=755
+758 757 0:105 / /dev/pts rw,nosuid,noexec,noatime shared:45 - devpts devpts rw,gid=5,mode=620,ptmxmode=000
+759 757 0:108 / /dev/shm rw,nosuid,nodev,noatime shared:48 - tmpfs none rw
+793 757 0:112 / /dev/hugepages rw,nosuid,nodev,relatime shared:54 - hugetlbfs hugetlbfs rw,pagesize=2M
+794 757 0:81 / /dev/mqueue rw,nosuid,nodev,noexec,relatime shared:55 - mqueue mqueue rw
+795 755 0:22 / /sys rw,nosuid,nodev,noexec,noatime shared:43 - sysfs sysfs rw
+797 795 0:23 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:51 - cgroup2 cgroup2 rw,nsdelegate
+798 795 0:7 / /sys/kernel/debug rw,nosuid,nodev,noexec,relatime shared:56 - debugfs debugfs rw
+799 795 0:12 / /sys/kernel/tracing rw,nosuid,nodev,noexec,relatime shared:57 - tracefs tracefs rw
+800 795 0:78 / /sys/fs/fuse/connections rw,nosuid,nodev,noexec,relatime shared:58 - fusectl fusectl rw
+801 795 0:113 / /sys/kernel/config rw,nosuid,nodev,noexec,relatime shared:59 - configfs configfs rw
+802 755 0:104 / /proc rw,nosuid,nodev,noexec,noatime shared:44 - proc proc rw
+803 802 0:33 / /proc/sys/fs/binfmt_misc rw,relatime shared:50 - binfmt_misc binfmt_misc rw
+804 755 0:106 / /run rw,nosuid,nodev shared:46 - tmpfs none rw,mode=755
+805 804 0:107 / /run/lock rw,nosuid,nodev,noexec,noatime shared:47 - tmpfs none rw
+806 804 0:108 / /run/shm rw,nosuid,nodev,noatime shared:48 - tmpfs none rw
+807 804 0:109 / /run/user rw,nosuid,nodev,noexec,noatime shared:49 - tmpfs none rw,mode=755
+808 807 0:83 /run/user /run/user rw,relatime shared:30 - tmpfs none rw
+809 808 0:119 / /run/user/1000 rw,nosuid,nodev,relatime shared:271 - tmpfs tmpfs rw,size=2460892k,nr_inodes=615223,mode=700,uid=1000,gid=1000
+810 808 0:124 / /run/user/0 rw,nosuid,nodev,relatime shared:408 - tmpfs tmpfs rw,size=2460892k,nr_inodes=615223,mode=700
+811 755 0:34 / /usr/lib/wsl/drivers ro,nosuid,nodev,noatime - 9p drivers ro,aname=drivers;fmask=222;dmask=222,cache=5,access=client,msize=65536,trans=fd,rfd=8,wfd=8
+812 755 0:100 / /usr/lib/wsl/lib rw,nosuid,nodev,noatime - overlay none rw,lowerdir=/gpu_lib_packaged:/gpu_lib_inbox,upperdir=/gpu_lib/rw/upper,workdir=/gpu_lib/rw/work,uuid=on
+813 755 0:32 / /mnt/wsl rw,relatime shared:1 - tmpfs none rw
+814 813 0:55 /guest-services /mnt/wsl/docker-desktop/shared-sockets/guest-services rw,nosuid,nodev shared:9 - tmpfs none rw,mode=755
+815 813 0:55 /host-services /mnt/wsl/docker-desktop/shared-sockets/host-services rw,nosuid,nodev shared:9 - tmpfs none rw,mode=755
+816 813 7:0 / /mnt/wsl/docker-desktop/cli-tools ro,relatime shared:26 - iso9660 /dev/loop0 ro,nojoliet,check=s,map=n,blocksize=2048,iocharset=utf8
+817 813 8:80 /home/astra/.project/Alaris/.tmp/ib-user-name /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/0e73a9debd261c39c5055ad9623b9e957ffeee5b6e5290a635b11b591d113005 rw,relatime shared:419 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+818 813 8:80 /home/astra/.project/Alaris/.deploy/ibgateway/init-scripts /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/c822d84c1e378771a31de874794092f695091ca5419cbf99355eac6d644c0e43 rw,relatime shared:427 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+819 813 8:80 /home/astra/.project/Alaris/.deploy/scripts/DPHL001A.sh /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/e69c4f6334052db3845903cd0694f0355cd7d495478fec2c95b084cc89cc1699 rw,relatime shared:435 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+820 813 8:80 /home/astra/.project/Alaris/.tmp/ib-password /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/3b3c8d7ea85e6c8bd85c7e7d56d84f757cc1190a81897dfc64ae793028b26691 rw,relatime shared:443 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+821 813 8:80 /home/astra/.local/state/alaris/commissioning/20261003/strict-paper-entry-directives /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/c04ae4422c2d7962406bdaf0e7a9e83011d8f83838988abe87c16430a50a1b68 rw,relatime shared:451 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+822 813 8:80 /home/astra/.project/Alaris/.deploy/influxdb/init-retention.sh /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/baf5fe27e6b77f7f911bbca4745379c8d89e3c093a399bbdca5c864841858a90 rw,relatime shared:459 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+823 813 8:80 /home/astra/.local/share/alaris/operator-authorities-v1/inbox/risk-halt-release /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/58b9ff26ca98120e1f644a9faad7e5e734237e06e948086661a6fc4f32170211 rw,relatime shared:467 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+824 813 8:80 /home/astra/.project/Alaris/appsettings.jsonc /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/fab9a2333a87ba050ce99d2daef0e8b321d140189d727f1af32a5641f1e14c78 rw,relatime shared:475 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+825 813 8:80 /home/astra/.project/Alaris/.tmp/ib-account-code /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/0fbffe732e227c52c0d26fb1aca816cf7e06805625de8d51302e434bb1c70bde rw,relatime shared:483 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+826 813 0:119 /alaris-gateway-recovery /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/47dc299c2d814b38a5bce17653bdc14d6000bd2a1fcf8fbb05057e5a22299b1f rw,nosuid,nodev,relatime shared:271 - tmpfs tmpfs rw,size=2460892k,nr_inodes=615223,mode=700,uid=1000,gid=1000
+827 813 8:80 /home/astra/.local/share/alaris/operator-authorities-v1/public/accounting-import-receipt.spki.der /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/9631a0114fc649a09e08b6834370ac6f111e5be3275a4225a46f0e0ad188d11f rw,relatime shared:498 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+829 813 8:80 /home/astra/.local/share/alaris/operator-authorities-v1/public/owned-execution-ledger.spki.der /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/97465a1efdf1a36e0300b1a259901fa7bce0b7422a550fe58de8ad4586e74a3c rw,relatime shared:506 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+830 813 8:80 /home/astra/.local/lib/alaris/gateway-recovery/gatewaysidecar.sh /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/0eeac2f1b63dcf0c2aefce70986cb1b7df466a62cf638a44cf950f85b0c5d5be rw,relatime shared:514 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+831 813 8:80 /home/astra/.local/share/alaris/operator-authorities-v1/public/broker-finality.spki.der /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/1fd7dc820d3cee834d89821c84a26db184c5e005d1147aba641563799968f990 rw,relatime shared:522 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+835 813 8:80 /home/astra/.local/state/alaris/commissioning/20261008/durable-native-launch/runtime-custody-5a4c34a9 /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/5612c7f1330dd5a9cfe7d4f5f8e22f15ecf1fba4775f295dab97fac417c803b0 rw,relatime shared:530 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+836 813 8:80 /home/astra/.local/share/alaris/operator-authorities-v1/public/risk-halt-release.spki.der /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/a77c48c3488aa9a3cd18ecc5fcacd23f63a16cc87bae3b861f2816d968e48669 rw,relatime shared:538 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+837 813 8:80 /home/astra/.project/Alaris/.deploy/grafana/provisioning /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/66d1dc9c57dc42c8cf3781da360f01ed5aba7f8a76c6a159fe9139197782daea rw,relatime shared:546 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+838 813 0:106 /docker.sock /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/docker.sock rw,nosuid,nodev shared:46 - tmpfs none rw,mode=755
+839 755 0:83 / /mnt/wslg rw,relatime shared:30 - tmpfs none rw
+840 839 8:80 / /mnt/wslg/distro ro,relatime shared:31 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+841 839 0:85 /etc/versions.txt /mnt/wslg/versions.txt rw,relatime shared:52 - overlay none rw,lowerdir=/systemvhd,upperdir=/system/rw/upper,workdir=/system/rw/work,uuid=on
+842 839 0:85 /usr/share/doc /mnt/wslg/doc rw,relatime shared:53 - overlay none rw,lowerdir=/systemvhd,upperdir=/system/rw/upper,workdir=/system/rw/work,uuid=on
+843 839 0:119 / /mnt/wslg/run/user/1000 rw,nosuid,nodev,relatime shared:271 - tmpfs tmpfs rw,size=2460892k,nr_inodes=615223,mode=700,uid=1000,gid=1000
+844 839 0:124 / /mnt/wslg/run/user/0 rw,nosuid,nodev,relatime shared:408 - tmpfs tmpfs rw,size=2460892k,nr_inodes=615223,mode=700
+845 755 0:83 /.X11-unix /tmp/.X11-unix ro,relatime shared:30 - tmpfs none rw
+846 755 0:29 / /usr/lib/modules/6.6.87.2-microsoft-standard-WSL2 rw,nosuid,nodev,noatime - overlay none rw,lowerdir=/modules,upperdir=/lib/modules/6.6.87.2-microsoft-standard-WSL2/rw/upper,workdir=/lib/modules/6.6.87.2-microsoft-standard-WSL2/rw/work,uuid=on
+848 755 0:125 / /Docker/host rw,noatime - 9p C:\134Program\040Files\134Docker\134Docker\134resources rw,aname=drvfs;path=C:\Program Files\Docker\Docker\resources;symlinkroot=/mnt/,cache=5,access=client,msize=65536,trans=fd,rfd=3,wfd=3
+847 755 0:121 / /mnt/c rw,noatime - 9p C:\134 rw,aname=drvfs;path=C:\;uid=1000;gid=1000;symlinkroot=/mnt/,cache=5,access=client,msize=65536,trans=fd,rfd=14,wfd=14
+1566 813 8:80 /home/astra/.project/Alaris/.deploy/scripts /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/100f655a7d70918b3e3f75482e6614e9356ca4c909e82dd1af858a15b676bc25 rw,relatime shared:275 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+1607 813 8:80 /home/astra/.local/state/alaris/tests/20261014T074415Z-50781ad2/p1-restore-drill /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/1b5800a14f2ccbc489a387df17c290f9f9d562e2ac5db5365181f3478b2f997b rw,relatime shared:346 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+1507 813 8:80 /home/astra/.local/state/alaris/checkouts/p1-credit-handoff-20261014/.deploy/scripts /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/1cb10e2e723f4e3cade5522045711cb5d9533715a6982d9c98ae6c14cef98310 rw,relatime shared:255 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered
+1661 813 8:80 /home/astra/.local/state/alaris/tests/20261014T083842Z-fa228ab7/p1-restore-drill /mnt/wsl/docker-desktop-bind-mounts/Ubuntu/adb16f27b8ad99695157d8c3e31369866123c9adbb363e6793feccc917781fb7 rw,relatime shared:263 - ext4 /dev/sdf rw,discard,errors=remount-ro,data=ordered

@@ -1,0 +1,97 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius",
+    "--json",
+    "info",
+    "system"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "inventory",
+  "child_exit": 0,
+  "child_pid": 114196,
+  "child_start_ticks": "1906787",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 114185,
+    "pid": 114185,
+    "ppid": 1313,
+    "rss_kib": 20804,
+    "session": 114185,
+    "start_ticks": "1906615",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "",
+    "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/cache",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/share/vulkan/icd.d/dzn_icd.x86_64.json",
+    "XDG_CACHE_HOME": "/home/astra/.project/Sirius/out/p6-colour-kernel-parity-current-source/cache"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 30
+  },
+  "meaning": "Bounded exact GCC inventory query for WSL Dozen Radeon 780M; no shader compilation/dispatch or numerical verdict.",
+  "minimum_sampled_available_kib": 20146628,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 114196,
+      "saved_start_ticks": "1906787"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 103940,
+  "provider_mappings": [
+    {
+      "maps": [
+        "7dbd7e921000-7dbd7f193000 r--p 00000000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7dbd7f193000-7dbd82990000 r-xp 00872000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7dbd82990000-7dbd853ee000 r--p 0406f000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7dbd853ee000-7dbd85d63000 r--p 06acc000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7dbd853ee000-7dbd85da3000 rw-p 06acc000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7dbd85d63000-7dbd85da3000 rw-p 07441000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7dbd85da3000-7dbd85e66000 r--p 07482000 00:22 1970324836996936           /usr/lib/wsl/drivers/u0203304.inf_amd64_a6e5a337568ce3f0/B026373/amdxc64.so",
+        "7dbd85e66000-7dbd85ec9000 r--p 00000000 00:23 562949954106598            /usr/lib/wsl/lib/libdxcore.so",
+        "7dbd85ec9000-7dbd85f46000 r-xp 00062000 00:23 562949954106598            /usr/lib/wsl/lib/libdxcore.so",
+        "7dbd85f46000-7dbd85f4e000 r--p 000de000 00:23 562949954106598            /usr/lib/wsl/lib/libdxcore.so",
+        "7dbd85f4e000-7dbd85f4f000 rw-p 000e5000 00:23 562949954106598            /usr/lib/wsl/lib/libdxcore.so",
+        "7dbd85f53000-7dbd86236000 r--p 00000000 00:23 562949954106597            /usr/lib/wsl/lib/libd3d12core.so",
+        "7dbd86236000-7dbd86591000 r-xp 002e2000 00:23 562949954106597            /usr/lib/wsl/lib/libd3d12core.so",
+        "7dbd86591000-7dbd865e3000 r--p 0063c000 00:23 562949954106597            /usr/lib/wsl/lib/libd3d12core.so",
+        "7dbd865e3000-7dbd865e6000 rw-p 0068d000 00:23 562949954106597            /usr/lib/wsl/lib/libd3d12core.so",
+        "7dbd86600000-7dbd8664b000 r--p 00000000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7dbd8664b000-7dbd86a09000 r-xp 0004b000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7dbd86a09000-7dbd86fcc000 r--p 00409000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7dbd86fcc000-7dbd8705f000 r--p 009cc000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7dbd8705f000-7dbd87062000 rw-p 00a5f000 08:50 124588                     /home/astra/.project/Sirius/bin/toolchains/mesa-25.2.8/install/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+        "7dbd870db000-7dbd87120000 r--p 00000000 00:23 562949954106596            /usr/lib/wsl/lib/libd3d12.so",
+        "7dbd87120000-7dbd87199000 r-xp 00044000 00:23 562949954106596            /usr/lib/wsl/lib/libd3d12.so",
+        "7dbd87199000-7dbd871a0000 r--p 000bc000 00:23 562949954106596            /usr/lib/wsl/lib/libd3d12.so",
+        "7dbd871a0000-7dbd871a2000 rw-p 000c2000 00:23 562949954106596            /usr/lib/wsl/lib/libd3d12.so",
+        "7dbd8790c000-7dbd87912000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7dbd87912000-7dbd8795e000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7dbd8795e000-7dbd87988000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7dbd87988000-7dbd87989000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7dbd87989000-7dbd8798a000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+      ],
+      "owned_session": 114196,
+      "pid": 114196,
+      "start_ticks": "1906787"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "Bounded exact GCC inventory query for WSL Dozen Radeon 780M; no shader compilation/dispatch or numerical verdict.",
+  "source": {
+    "revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.5601552570005879,
+  "whole_inputs_unchanged": true
+}
