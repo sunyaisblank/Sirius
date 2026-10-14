@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="241"
+	timestamp="2026-10-15T03:06:12"
+	>
+	<testcase name="KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel" classname="KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel" time="241.632" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
+[ParityProbe] phase=initialization opcode=2 offset=0 count=0 submit_wait_ms=90145.5 pipeline_setup_ms=150819 total_ms=240964 success=1
+[ParityProbe] phase=actual opcode=2 offset=0 count=4 submit_wait_ms=0.912461 pipeline_setup_ms=0.002083 total_ms=0.97797 success=1
+[ParityProbe] completed opcode=2 records=4 submissions=1 allocated_bytes=1296
+[       OK ] KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel (241278 ms)
+[----------] 1 test from KernelParity (241278 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (241278 ms total)
+[  PASSED  ] ...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+</testsuite>

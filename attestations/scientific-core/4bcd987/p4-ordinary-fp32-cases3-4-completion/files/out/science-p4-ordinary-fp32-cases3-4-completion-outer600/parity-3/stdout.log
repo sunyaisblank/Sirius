@@ -1,0 +1,43 @@
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 759
+    Start 759: KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
+
+759: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests "--gtest_filter=KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel" "--gtest_also_run_disabled_tests"
+759: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend
+759: Test timeout computed to be: 10000000
+759: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+759: Note: Google Test filter = KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
+759: [==========] Running 1 test from 1 test suite.
+759: [----------] Global test environment set-up.
+759: [----------] 1 test from KernelParity
+759: [ RUN      ] KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
+759: [ParityProbe] phase=initialization opcode=2 offset=0 count=0 submit_wait_ms=90145.5 pipeline_setup_ms=150819 total_ms=240964 success=1
+759: [ParityProbe] phase=actual opcode=2 offset=0 count=4 submit_wait_ms=0.912461 pipeline_setup_ms=0.002083 total_ms=0.97797 success=1
+759: [ParityProbe] completed opcode=2 records=4 submissions=1 allocated_bytes=1296
+759: [       OK ] KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel (241278 ms)
+759: [----------] 1 test from KernelParity (241278 ms total)
+759: 
+759: [----------] Global test environment tear-down
+759: [==========] 1 test from 1 test suite ran. (241278 ms total)
+759: [  PASSED  ] 1 test.
+1/1 Test #759: KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel ...   Passed  241.63 sec
+
+The following tests passed:
+	KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
+
+100% tests passed, 0 tests failed out of 1
+
+Label Time Summary:
+Correctness    = 241.63 sec*proc (1 test)
+Mandatory      = 241.63 sec*proc (1 test)
+
+Total Test time (real) = 241.67 sec

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="282"
+	timestamp="2026-10-15T03:10:16"
+	>
+	<testcase name="KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure" classname="KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure" time="282.136" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure
+[ParityProbe] phase=initialization opcode=9 offset=0 count=0 submit_wait_ms=103108 pipeline_setup_ms=178297 total_ms=281405 success=1
+[ParityProbe] phase=actual opcode=9 offset=0 count=3 submit_wait_ms=0.695047 pipeline_setup_ms=0.000873 total_ms=0.764646 success=1
+[ParityProbe] completed opcode=9 records=3 submissions=1 allocated_bytes=976
+[       OK ] KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure (281775 ms)
+[----------] 1 test from KernelParity (281775 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (281775 ms total)
+[  PA...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+</testsuite>
