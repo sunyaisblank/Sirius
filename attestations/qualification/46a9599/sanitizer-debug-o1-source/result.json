@@ -1,0 +1,124 @@
+{
+  "change": "Only existing sanitizer Debug C/CXX flags add -O1. Debug assertions, enforce contracts, all instrumentation/environments, workloads, deadlines and other presets remain unchanged.",
+  "configure_build_runtime_benefit_deadline_or_qualification_validated": false,
+  "original_failed_Vulkan_retry_performed": false,
+  "qualification_claimed": false,
+  "schema": "sirius-sanitizer-debug-o1-reviewed-source-v1",
+  "source": {
+    "base": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+    "branch": "development/sanitizer-debug-o1-2026-10-15",
+    "changed_paths": [
+      "CMakePresets.json"
+    ],
+    "commit": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "configure_build_runtime_or_qualification_performed": false,
+    "head_and_tracked_bytes_unchanged": true,
+    "independent_root_JSON_byte_patch_checks_passed": true,
+    "two_added_lines_only": true
+  },
+  "static_checks": {
+    "artifacts": {
+      "CMakePresets.base.json": {
+        "bytes": 4902,
+        "sha256": "adaa4a858117532f60821a9d7052ccc8cc4983cecf142510b45c4bc7827f8b8a"
+      },
+      "CMakePresets.json": {
+        "bytes": 5002,
+        "sha256": "605044b054a91099cd71975fa73f4789922759c778f28ef18667aec9c9747270"
+      },
+      "candidate.patch": {
+        "bytes": 491,
+        "sha256": "bf99d096441aca6d2f68363d6fb75af5d492c44afba3786f4916943d886f85bc"
+      }
+    },
+    "base_file": "CMakePresets.json",
+    "base_git_blob": "2b5cdbc32533a4054d23822c77151935596235e5",
+    "base_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+    "change": {
+      "CMAKE_CXX_FLAGS_DEBUG": "-g -O1",
+      "CMAKE_C_FLAGS_DEBUG": "-g -O1"
+    },
+    "effective_sanitizer_cache": {
+      "BUILD_TESTS": "ON",
+      "CMAKE_BUILD_TYPE": "Debug",
+      "CMAKE_CXX_COMPILER": "g++-14",
+      "CMAKE_CXX_FLAGS_DEBUG": "-g -O1",
+      "CMAKE_C_COMPILER": "gcc-14",
+      "CMAKE_C_FLAGS_DEBUG": "-g -O1",
+      "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_SANITIZERS": "address-undefined",
+      "SIRIUS_WERROR": "ON"
+    },
+    "not_performed": [
+      "configure",
+      "compiler",
+      "build",
+      "repository helper execution",
+      "CTest",
+      "device dispatch",
+      "CI",
+      "tracked source edit",
+      "Git commit",
+      "Git push"
+    ],
+    "patch_check": {
+      "current_branch_ahead": 0,
+      "current_branch_behind": 0,
+      "current_checkout_head": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "current_presets_equal_exact_base_bytes": true,
+      "git_apply_check_exit_code": 0,
+      "git_apply_numstat": {
+        "added": 2,
+        "path": "CMakePresets.json",
+        "removed": 0
+      },
+      "pushed_base_reference": "origin/development/native-macos-pinned-provider-2026-10-14",
+      "pushed_base_reference_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+      "tracked_checkout_unchanged_and_clean": true,
+      "worktree_count": 1
+    },
+    "primary_references": [
+      "https://gcc.gnu.org/onlinedocs/gcc-14.3.0/gcc/Instrumentation-Options.html#index-fsanitize_003daddress",
+      "https://gcc.gnu.org/onlinedocs/gcc-14.3.0/gcc/Optimize-Options.html"
+    ],
+    "qualification": "Static candidate only; optimization benefit and both operational deadlines remain unverified.",
+    "rationale": "Retain Debug assertions and all sanitizer instrumentation while enabling modest optimization for numerical workloads.",
+    "schema": "sirius-sanitizer-debug-o1-static-candidate-v1",
+    "source_policy_review": {
+      ".github/workflows/ci.yml": {
+        "sha256": "8c629e05c0f166bc8b3795478abd808c587f28cfb8dfd09f6d431a7e7eb19146"
+      },
+      "cmake/sirius_testing.cmake": {
+        "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+      },
+      "cmake/sirius_toolchain.cmake": {
+        "sha256": "53bb5f339886172e7552aa37122ec69b12bde6d2c96cfe18abe824310501e189"
+      },
+      "scripts/governance/build_policy.py": {
+        "sha256": "841560051d11252e75aa1c0e3e2973e401edb1456eb53437af7df1bdf500bc67"
+      },
+      "scripts/verify-build-policy.py": {
+        "sha256": "83fb2b27255a60713cc3a689bb667fd0ca2341e263c41d36a909310da1e0448b"
+      },
+      "src/sirius/core/CMakeLists.txt": {
+        "sha256": "ef8f646c3247c372fbfea6a26313a20ccbee6e3464f980dc526e666c44f959b4"
+      },
+      "tests/CMakeLists.txt": {
+        "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+      }
+    },
+    "static_checks_passed": [
+      "Base bytes obtained from the exact pushed Git revision.",
+      "Candidate is exactly two added lines and round-trips byte-for-byte to base.",
+      "UTF-8 JSON version 6 remains LF-terminated without carriage returns.",
+      "Removing only the two new cache keys restores the entire parsed base document.",
+      "All other configure presets and their effective caches are unchanged.",
+      "All build presets, test presets and sanitizer environments are unchanged.",
+      "Sanitizer effective build remains Debug, GCC 14, contract mode 2, tests/gate/Werror enabled.",
+      "No NDEBUG, fast-math, timeout, workload or assertion changes exist in the patch.",
+      "Inspected base policy still requires Release and enforce contracts for strict qualification/release."
+    ]
+  }
+}
