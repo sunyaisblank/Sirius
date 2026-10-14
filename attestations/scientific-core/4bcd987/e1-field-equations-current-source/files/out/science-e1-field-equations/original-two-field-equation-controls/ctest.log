@@ -1,0 +1,86 @@
+[OUTPUT] 
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+
+[HANDLER_VERBOSE_OUTPUT] 
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+[HANDLER_OUTPUT] 
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+
+[HANDLER_VERBOSE_OUTPUT] 
+Constructing a list of tests
+
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 235
+[HANDLER_OUTPUT] 
+    Start 235: KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell
+
+[HANDLER_VERBOSE_OUTPUT] 
+
+235: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests "--gtest_filter=KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell" "--gtest_also_run_disabled_tests"
+
+235: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/core
+235: Test timeout computed to be: 10000000
+235: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+235: Note: Google Test filter = KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell
+235: [==========] Running 1 test from 1 test suite.
+235: [----------] Global test environment set-up.
+235: [----------] 1 test from KerrSchildFieldEquations
+235: [ RUN      ] KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell
+235: [       OK ] KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell (1 ms)
+235: [----------] 1 test from KerrSchildFieldEquations (1 ms total)
+235: 
+235: [----------] Global test environment tear-down
+235: [==========] 1 test from 1 test suite ran. (1 ms total)
+235: [  PASSED  ] 1 test.
+[HANDLER_OUTPUT] 
+1/2 Test #235: KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell .....
+   Passed    0.01 sec
+[HANDLER_VERBOSE_OUTPUT] 
+test 236
+
+[HANDLER_OUTPUT] 
+    Start 236: KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing
+
+[HANDLER_VERBOSE_OUTPUT] 
+
+236: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests "--gtest_filter=KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing" "--gtest_also_run_disabled_tests"
+
+236: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/core
+236: Test timeout computed to be: 10000000
+236: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+236: Note: Google Test filter = KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing
+236: [==========] Running 1 test from 1 test suite.
+236: [----------] Global test environment set-up.
+236: [----------] 1 test from KerrSchildFieldEquations
+236: [ RUN      ] KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing
+236: [       OK ] KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing (3 ms)
+236: [----------] 1 test from KerrSchildFieldEquations (3 ms total)
+236: 
+236: [----------] Global test environment tear-down
+236: [==========] 1 test from 1 test suite ran. (3 ms total)
+236: [  PASSED  ] 1 test.
+[HANDLER_OUTPUT] 
+2/2 Test #236: KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing ...
+   Passed    0.01 sec
+[HANDLER_VERBOSE_OUTPUT] 
+
+The following tests passed:
+
+	KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell
+	KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing
+[HANDLER_OUTPUT] 
+
+100% tests passed, 0 tests failed out of 2
+
+
+Label Time Summary:
+Correctness    =   0.02 sec*proc (2 tests)
+Mandatory      =   0.02 sec*proc (2 tests)
+
+Total Test time (real) =   0.06 sec

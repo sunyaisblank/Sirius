@@ -1,0 +1,485 @@
+{
+  "e1_complete": false,
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/ctest",
+      "--test-dir",
+      "bin/linux-gcc",
+      "-V",
+      "--output-on-failure",
+      "--no-tests=error",
+      "--output-junit",
+      "/home/astra/.project/Sirius/out/science-e1-field-equations/original-two-field-equation-controls/ctest.xml",
+      "--output-log",
+      "/home/astra/.project/Sirius/out/science-e1-field-equations/original-two-field-equation-controls/ctest.log",
+      "-R",
+      "^(KerrSchildFieldEquations\\.KerrNewmanPotentialIsSourceFreeOutsideTheRing|KerrSchildFieldEquations\\.LiveCartesianFamilySatisfiesEinsteinMaxwell)$"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "original-two-field-equation-controls",
+    "child_exit": 0,
+    "child_pid": 234388,
+    "child_start_ticks": "3174755",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 234380,
+      "pid": 234381,
+      "ppid": 234380,
+      "rss_kib": 27184,
+      "session": 234380,
+      "start_ticks": "3174724",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "meaning": "Two original finite E1 CPU Cartesian Kerr-Schild field-equation controls:14 Einstein-Maxwell fixtures and8 charged Maxwell fixtures only; no all-event proof, full E1/science/Mandatory or release qualification.",
+    "minimum_sampled_available_kib": 17860368,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 234388,
+        "saved_start_ticks": "3174755"
+      }
+    ],
+    "passed": true,
+    "peak_sampled_rss_kib": 45232,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "Two original finite E1 CPU Cartesian Kerr-Schild field-equation controls:14 Einstein-Maxwell fixtures and8 charged Maxwell fixtures only; no all-event proof, full E1/science/Mandatory or release qualification.",
+    "source": {
+      "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 0.28450174200042966,
+    "whole_inputs_unchanged": true
+  },
+  "qualification_claimed": false,
+  "result": {
+    "ctest_output_log": {
+      "bytes": 3800,
+      "sha256": "dc534cc34e1c4d61e87eec56123e15c24dfb685a6c987c8646308b23dab12b7d"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": "",
+      "TMPDIR": "/home/astra/.project/Sirius/out/science-e1-field-equations/temporary"
+    },
+    "disabled": 0,
+    "e1_complete": false,
+    "errors": 0,
+    "executed_names": [
+      "KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing",
+      "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell"
+    ],
+    "expected_names": [
+      "KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing",
+      "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell"
+    ],
+    "failures": 0,
+    "finite_acceptance_scope": {
+      "KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing": {
+        "assertions": "Four original source-free divergence components of sqrt(-g)*F^{mu nu}; spatial coordinate derivatives use the original fourth-order centred stencil and stationarity.",
+        "charged_subset": "Original loop skips Q==0: only the eight charged fixtures, not all fourteen geometries.",
+        "derivative_step": "2e-4 * radius",
+        "determinant_assertion": "det(g) near -1 with2e-12",
+        "fixture_count": 8,
+        "fixtures": [
+          "Reissner-Nordstrom +Q",
+          "Reissner-Nordstrom -Q",
+          "Kerr-Newman +a,+Q",
+          "Kerr-Newman -a,-Q",
+          "near-extremal horizonless Kerr-Newman",
+          "exact extremal Kerr-Newman",
+          "horizonless Kerr-Newman",
+          "scaled Kerr-Newman"
+        ],
+        "potential_field_step": "4e-5 * radius",
+        "tolerance": "max(2e-8, 2e-4 * abs(Q) / radius^3)"
+      },
+      "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell": {
+        "assertions": "Original scalar R=4*Lambda and all16 Einstein-Maxwell components; original charged/cosmological source magnitude >10*tolerance guards. Original marked horizonless/extremal checks, extremality tolerance2e-15.",
+        "curvature_step": "2e-4 * radius",
+        "domain_note": "Stored binary64 a=.8,Q=.6 fixture is horizonless; exactly extremal fixture is M5,a4,Q3. No all-event or continuous-domain proof.",
+        "fixture_count": 14,
+        "fixtures": [
+          {
+            "charged": false,
+            "name": "Minkowski",
+            "original_parameter_constructor": "KerrSchildParams::Minkowski()",
+            "radius_theta_phi": [
+              3.0,
+              0.8,
+              0.4
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": false,
+            "name": "Schwarzschild",
+            "original_parameter_constructor": "KerrSchildParams::Schwarzschild(1.0)",
+            "radius_theta_phi": [
+              5.0,
+              0.9,
+              -0.3
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": false,
+            "name": "Kerr prograde",
+            "original_parameter_constructor": "KerrSchildParams::Kerr(1.0, 0.7)",
+            "radius_theta_phi": [
+              5.0,
+              0.7,
+              0.6
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": false,
+            "name": "Kerr retrograde",
+            "original_parameter_constructor": "KerrSchildParams::Kerr(1.0, -0.7)",
+            "radius_theta_phi": [
+              5.0,
+              1.1,
+              -0.4
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": true,
+            "name": "Reissner-Nordstrom +Q",
+            "original_parameter_constructor": "KerrSchildParams::ReissnerNordstrom(1.0, 0.6)",
+            "radius_theta_phi": [
+              5.0,
+              0.8,
+              0.5
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": true,
+            "name": "Reissner-Nordstrom -Q",
+            "original_parameter_constructor": "KerrSchildParams::ReissnerNordstrom(1.0, -0.6)",
+            "radius_theta_phi": [
+              4.0,
+              1.2,
+              -0.7
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": true,
+            "name": "Kerr-Newman +a,+Q",
+            "original_parameter_constructor": "KerrSchildParams::KerrNewman(1.0, 0.5, 0.4)",
+            "radius_theta_phi": [
+              5.0,
+              0.9,
+              0.3
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": true,
+            "name": "Kerr-Newman -a,-Q",
+            "original_parameter_constructor": "KerrSchildParams::KerrNewman(1.0, -0.5, -0.4)",
+            "radius_theta_phi": [
+              4.0,
+              1.0,
+              -0.5
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": true,
+            "name": "near-extremal horizonless Kerr-Newman",
+            "original_parameter_constructor": "KerrSchildParams::KerrNewman(1.0, 0.8, 0.6)",
+            "radius_theta_phi": [
+              4.0,
+              0.7,
+              -0.6
+            ],
+            "require_extremal": false,
+            "require_horizonless": true
+          },
+          {
+            "charged": true,
+            "name": "exact extremal Kerr-Newman",
+            "original_parameter_constructor": "KerrSchildParams::KerrNewman(5.0, 4.0, 3.0)",
+            "radius_theta_phi": [
+              20.0,
+              0.7,
+              -0.6
+            ],
+            "require_extremal": true,
+            "require_horizonless": false
+          },
+          {
+            "charged": true,
+            "name": "horizonless Kerr-Newman",
+            "original_parameter_constructor": "KerrSchildParams::KerrNewman(1.0, 0.9, -0.7)",
+            "radius_theta_phi": [
+              4.0,
+              1.2,
+              0.2
+            ],
+            "require_extremal": false,
+            "require_horizonless": true
+          },
+          {
+            "charged": true,
+            "name": "scaled Kerr-Newman",
+            "original_parameter_constructor": "KerrSchildParams::KerrNewman(0.25, 0.15, 0.1)",
+            "radius_theta_phi": [
+              1.5,
+              0.6,
+              0.8
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": false,
+            "name": "de Sitter",
+            "original_parameter_constructor": "KerrSchildParams::DeSitter(0.02)",
+            "radius_theta_phi": [
+              2.0,
+              0.8,
+              -0.2
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          },
+          {
+            "charged": false,
+            "name": "Kottler",
+            "original_parameter_constructor": "KerrSchildParams{1.0, 0.0, 0.0, 0.01}",
+            "radius_theta_phi": [
+              5.0,
+              1.0,
+              0.4
+            ],
+            "require_extremal": false,
+            "require_horizonless": false
+          }
+        ],
+        "potential_field_step": "5e-5 * radius",
+        "tolerance": "max(2e-8 / radius^2, 3e-4 * equation_scale)"
+      }
+    },
+    "junit": {
+      "bytes": 2291,
+      "sha256": "c57eeaa03b87be59e7fe9a5bd7961f642c2fe866f76eb982cc1358c1e83f91f2"
+    },
+    "mandatory_receipt_created": false,
+    "original_assertions_changed": false,
+    "outer_diagnostic_limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "owner": {
+      "bytes": 2144,
+      "sha256": "70e9865a5786389b82803f9fd213e2cbd87c8120bf5d34fc0ac85573081b7a2d"
+    },
+    "passed": true,
+    "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "qualification_claimed": false,
+    "reference": {
+      "execution_gap": "Bounded prior review found no matching preserved current-core execution of these two original names. This preparation executes nothing and does not relabel historical or other witnesses.",
+      "independence_limit": "Live analytic metric/first derivatives enter the connection reference. Both sides use live sampled metric and generic TensorOps inversion to raise/contract; this is finite independent differential consistency, not an independent implementation of all geometry.",
+      "independent_reference": "Original metric_curvature_oracle.h constructs the Levi-Civita connection from live g/dg and differentiates it with a fourth-order centred stencil. Original test separately differentiates A_mu=-Q*r*l_mu/Sigma, assembles F and8*pi*T, and checks its divergence; it never reuses production H or closed-form Ricci/stress.",
+      "original_source_snapshots": {
+        "src/sirius/base/contracts.h": {
+          "bytes": 3989,
+          "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1",
+          "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+        },
+        "src/sirius/core/coordinates.h": {
+          "bytes": 19636,
+          "git_blob": "5a0143f40cee45c22cff55814e72efb42c4081f2",
+          "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+        },
+        "src/sirius/core/dual_number.h": {
+          "bytes": 9490,
+          "git_blob": "1938f64eadbd59467cfcc13737999eb0e491d531",
+          "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9"
+        },
+        "src/sirius/core/first_order_number.h": {
+          "bytes": 1854,
+          "git_blob": "3fc1670bcc5113e4d1e68d07e9defe2d3339a932",
+          "sha256": "9ed51f93e11c2528546729c2ff190f66131c011ebab0c26cf51e38643c5b1ec7"
+        },
+        "src/sirius/core/kerr_orbits.h": {
+          "bytes": 3107,
+          "git_blob": "ce4e906fd865922642e6fa8bb6108be169ddd7a5",
+          "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+        },
+        "src/sirius/core/metrics/kerr_schild_family.h": {
+          "bytes": 33851,
+          "git_blob": "074a71d54304b04bae7d1f4002f2d97914b0ae62",
+          "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a"
+        },
+        "src/sirius/core/metrics/metric.h": {
+          "bytes": 10205,
+          "git_blob": "f1cf026aa31e41efa1a4701d9d35502dd5bcfb87",
+          "sha256": "563a7543e118a813c4a26a40763578bb9b930385abecbf6ae5c6bce1c29e742c"
+        },
+        "src/sirius/core/metrics/registry.h": {
+          "bytes": 22072,
+          "git_blob": "45dab60601637bcd78d10f9dbf455a89c28511e3",
+          "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072"
+        },
+        "src/sirius/core/second_order_number.h": {
+          "bytes": 2404,
+          "git_blob": "25109f8c724dbbf697968c72b7b59309516f9c25",
+          "sha256": "12f241e7068971ef4e6ec9cabf76010c71b72cf7ac6749be0b31f0f9dc99c6e5"
+        },
+        "src/sirius/core/tensor.h": {
+          "bytes": 6421,
+          "git_blob": "4671e6533194a255c978b072f1bf585243bedbea",
+          "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7"
+        },
+        "src/sirius/core/twofold.h": {
+          "bytes": 5685,
+          "git_blob": "f2721152700164a2cc7cae68912404350468deb8",
+          "sha256": "2ace9a10d430dbf4dab870602dbc8ca0545ada2c2e350ca6cd263dd8c92e93f1"
+        },
+        "tests/core/CMakeLists.txt": {
+          "bytes": 1974,
+          "git_blob": "3ebec86b19bc796ff619b839097de35ea858c8ed",
+          "sha256": "bf9c352a0db90b86836ccdd63fb3163f5bd394563fb6eade0f22e1df4640f773"
+        },
+        "tests/core/kerr_schild_field_equation_test.cpp": {
+          "bytes": 13440,
+          "git_blob": "09b560f242d9d01e27fa4ed04e04fdcac08eb719",
+          "sha256": "284a15d97b9b8d8f77be7096439b8845785d6799e8daad9b1c87eddc112e71a9"
+        },
+        "tests/core/metric_curvature_oracle.h": {
+          "bytes": 4084,
+          "git_blob": "8130bf8f88c356ff0d1a25ec7cde924969f2c148",
+          "sha256": "5007af337905f2a1eaa9f4d50bd00c49d6130e5957f4764932245e7c0485a32a"
+        },
+        "tests/labels/CTestLabels.cmake": {
+          "bytes": 78306,
+          "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7",
+          "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14"
+        },
+        "tests/operating_model.json": {
+          "bytes": 130331,
+          "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+          "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+        },
+        "tests/support/fail_on_skip.h": {
+          "bytes": 427,
+          "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+          "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+        }
+      },
+      "scope_boundary": "Exactly the original14 events and8 charged-event subset, stencils and tolerances. No new reference implementation, refinement, fixture, threshold or stronger gate."
+    },
+    "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "scope": "Two original finite E1 CPU Cartesian Kerr-Schild field-equation controls:14 Einstein-Maxwell fixtures and8 charged Maxwell fixtures only; no all-event proof, full E1/science/Mandatory or release qualification.",
+    "skips": 0,
+    "source_and_registration_join": {
+      "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+      "cache_required": {
+        "BUILD_TESTS": "ON",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_COMPILER": "g++-14",
+        "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+        "SIRIUS_ALIGNMENT_MODE": "qualification",
+        "SIRIUS_BUILD_VIEWER": "ON",
+        "SIRIUS_CONTRACT_MODE": "2",
+        "SIRIUS_MANDATORY_TESTS": "ON",
+        "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+        "SIRIUS_SANITIZERS": "none",
+        "SIRIUS_WERROR": "ON"
+      },
+      "independent_reference_sources": [
+        "tests/core/metric_curvature_oracle.h"
+      ],
+      "original_compile_commands": [
+        {
+          "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o -c /home/astra/.project/Sirius/tests/core/kerr_schild_field_equation_test.cpp",
+          "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+          "file": "/home/astra/.project/Sirius/tests/core/kerr_schild_field_equation_test.cpp",
+          "output": "tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o"
+        }
+      ],
+      "original_link_ninja_lines": [
+        "build tests/core/sirius_core_tests tests/core/sirius_core_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/core/sirius_core_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_core_tests_Release tests/core/CMakeFiles/sirius_core_tests.dir/autodiff_dual_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/retained_arithmetic_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/coordinates_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_naninf_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_stability_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/christoffel_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/horizon_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_derivative_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_loader_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_registry_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/reissner_nordstrom_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/schwarzschild_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/walker_penrose_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/warp_drive_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/stokes_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_inverse_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/novikov_thorne_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/turbulence_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/volumetric_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/postprocess_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/starfield_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_transfer_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_map_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+      ],
+      "original_test_TIMEOUT_added": false,
+      "producers": {
+        "core": {
+          "bytes": 5199120,
+          "path": "bin/linux-gcc/tests/core/sirius_core_tests",
+          "recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+          "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+        }
+      },
+      "production_headers": [
+        "src/sirius/base/contracts.h",
+        "src/sirius/core/coordinates.h",
+        "src/sirius/core/dual_number.h",
+        "src/sirius/core/first_order_number.h",
+        "src/sirius/core/kerr_orbits.h",
+        "src/sirius/core/metrics/kerr_schild_family.h",
+        "src/sirius/core/metrics/metric.h",
+        "src/sirius/core/metrics/registry.h",
+        "src/sirius/core/second_order_number.h",
+        "src/sirius/core/tensor.h",
+        "src/sirius/core/twofold.h"
+      ],
+      "registrations": [
+        {
+          "add_test": "add_test([=[KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing]==] --gtest_also_run_disabled_tests)",
+          "name": "KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing",
+          "producer": "bin/linux-gcc/tests/core/sirius_core_tests",
+          "properties": "set_tests_properties([=[KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+          "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+          "source": "tests/core/kerr_schild_field_equation_test.cpp"
+        },
+        {
+          "add_test": "add_test([=[KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell]==] --gtest_also_run_disabled_tests)",
+          "name": "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell",
+          "producer": "bin/linux-gcc/tests/core/sirius_core_tests",
+          "properties": "set_tests_properties([=[KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+          "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+          "source": "tests/core/kerr_schild_field_equation_test.cpp"
+        }
+      ],
+      "selected_core_cases": 2,
+      "selected_oracle_cases": 0,
+      "test_sources": [
+        "tests/core/kerr_schild_field_equation_test.cpp"
+      ]
+    },
+    "temporary_output": {
+      "mode": "0o700",
+      "path": "/home/astra/.project/Sirius/out/science-e1-field-equations/temporary",
+      "residual_files": {},
+      "uid": 1000
+    }
+  },
+  "schema": "sirius-original-finite-e1-controls-v1"
+}
