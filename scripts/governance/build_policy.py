@@ -254,6 +254,9 @@ WINDOWS_VULKAN_PREFLIGHT_DIAGNOSTIC_PATHS = (
 MACOS_RUNTIME_DIAGNOSTIC_PATHS = (
     '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-tests.xml',
     '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-transcript.log',
+    '${{ runner.temp }}/sirius-macos-runtime/*/native-provider-modules.json',
+    '${{ runner.temp }}/sirius-macos-runtime/*/native-provider-bindings.json',
+    'bin/macos/tests/backend/sirius_backend_tests',
     '${{ runner.temp }}/sirius-macos-runtime/producer.log',
     '${{ runner.temp }}/sirius-macos-runtime/os-version.txt',
     '${{ runner.temp }}/sirius-macos-runtime/metal-displays.json',
@@ -795,7 +798,7 @@ def verify_integration_boundary_policy() -> None:
         "runtime artifact collision": ("name: sirius-macos-moltenvk-attestation", "name: sirius-macos-full-native-attestation"),
         "unbounded runtime upload": ("          path: ${{ runner.temp }}/sirius-macos-runtime", "          path: ${{ runner.temp }}"),
         "missing runtime failure JUnit": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[0] + "\n", ""),
-        "missing producer console log": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[2] + "\n", ""),
+        "missing producer console log": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[5] + "\n", ""),
     }
     for description, (before, after) in runtime_mutations.items():
         mutations["macOS " + description] = valid.replace(before, after, 1)

@@ -526,6 +526,9 @@ set_tests_properties(
     KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion
     KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant
     KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
+    KernelParity.RejectedNeighbourRetriesExactMinimumFp32
+    KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp
+    KernelParity.RejectedNeighbourRetriesExactMinimumFp64
     KernelParity.NullProjectionPreservesConeBranchAndFailsClosed
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets
