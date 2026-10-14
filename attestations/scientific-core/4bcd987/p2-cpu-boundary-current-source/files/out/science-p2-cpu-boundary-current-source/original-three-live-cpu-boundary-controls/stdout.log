@@ -1,0 +1,80 @@
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 669
+    Start 669: CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
+
+669: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests "--gtest_filter=CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle" "--gtest_also_run_disabled_tests"
+669: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend
+669: Test timeout computed to be: 10000000
+669: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+669: Note: Google Test filter = CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
+669: [==========] Running 1 test from 1 test suite.
+669: [----------] Global test environment set-up.
+669: [----------] 1 test from CpuTraceBoundary
+669: [ RUN      ] CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
+669: [       OK ] CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle (44 ms)
+669: [----------] 1 test from CpuTraceBoundary (44 ms total)
+669: 
+669: [----------] Global test environment tear-down
+669: [==========] 1 test from 1 test suite ran. (44 ms total)
+669: [  PASSED  ] 1 test.
+1/3 Test #669: CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle ......   Passed    0.05 sec
+test 670
+    Start 670: CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
+
+670: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests "--gtest_filter=CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent" "--gtest_also_run_disabled_tests"
+670: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend
+670: Test timeout computed to be: 10000000
+670: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+670: Note: Google Test filter = CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
+670: [==========] Running 1 test from 1 test suite.
+670: [----------] Global test environment set-up.
+670: [----------] 1 test from CpuTraceBoundary
+670: [ RUN      ] CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
+670: [       OK ] CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent (0 ms)
+670: [----------] 1 test from CpuTraceBoundary (0 ms total)
+670: 
+670: [----------] Global test environment tear-down
+670: [==========] 1 test from 1 test suite ran. (0 ms total)
+670: [  PASSED  ] 1 test.
+2/3 Test #670: CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent ...........   Passed    0.01 sec
+test 671
+    Start 671: CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals
+
+671: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests "--gtest_filter=CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals" "--gtest_also_run_disabled_tests"
+671: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend
+671: Test timeout computed to be: 10000000
+671: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+671: Note: Google Test filter = CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals
+671: [==========] Running 1 test from 1 test suite.
+671: [----------] Global test environment set-up.
+671: [----------] 1 test from CpuTraceBoundary
+671: [ RUN      ] CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals
+671: [       OK ] CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals (0 ms)
+671: [----------] 1 test from CpuTraceBoundary (0 ms total)
+671: 
+671: [----------] Global test environment tear-down
+671: [==========] 1 test from 1 test suite ran. (0 ms total)
+671: [  PASSED  ] 1 test.
+3/3 Test #671: CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals ...   Passed    0.00 sec
+
+The following tests passed:
+	CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
+	CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
+	CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals
+
+100% tests passed, 0 tests failed out of 3
+
+Label Time Summary:
+Correctness    =   0.06 sec*proc (3 tests)
+Mandatory      =   0.06 sec*proc (3 tests)
+
+Total Test time (real) =   0.10 sec

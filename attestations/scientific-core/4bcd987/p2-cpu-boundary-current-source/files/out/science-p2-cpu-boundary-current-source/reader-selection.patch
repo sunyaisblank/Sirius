@@ -1,0 +1,33 @@
+--- accepted/run_oracle.py
++++ cpu-boundary/run_boundary.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""One frozen three-case original P1/E4 CPU oracle action; no build/device/frame work."""
++"""One frozen three-case original live CPU boundary action; no build/device/frame work."""
+ from pathlib import Path
+ import hashlib
+ import json
+@@ -12,8 +12,12 @@
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+ ROOT = WORK.parents[1]
+-CASE = "original-three-p1-e4-oracle-controls"
+-NAMES = {'AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct', 'OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives', 'AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter'}
++CASE = "original-three-live-cpu-boundary-controls"
++NAMES = {
++    'CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle',
++    'CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent',
++    'CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals',
++}
+ LIMITS = {"seconds": 300, "rss_kib": 4194304, "reserve_kib": 2097152}
+ 
+ 
+@@ -58,7 +62,7 @@
+     result = {"passed": False, "product_source_revision": prepared["product_source_revision"],
+               "runner_source_revision": prepared["runner_source_revision"], "expected_names": sorted(NAMES),
+               "scope": prepared["scope"], "finite_acceptance_scope": prepared["finite_acceptance_scope"],
+-              "qualification_claimed": False, "p1_complete": False, "e4_complete": False, "mandatory_receipt_created": False,
++              "qualification_claimed": False, "p2_complete": False, "e1_complete": False, "mandatory_receipt_created": False,
+               "original_assertions_changed": False, "outer_diagnostic_limits": LIMITS,
+               "declared_output_environment": {"TMPDIR": str(temporary), "GTEST_OUTPUT": ""}}
+     write_result(result)
