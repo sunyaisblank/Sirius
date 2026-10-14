@@ -1,0 +1,105 @@
+{
+  "runner_revision": "6e13108d5e77b053ff2b0b391e42984e243733c7",
+  "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "decision": "CURRENT_INITIALIZE_PIPELINE_COMPILE_FAILURE_AND_ENDPOINT_PIPELINE_DEADLINE",
+  "run": 38526893803,
+  "job": 115729265254,
+  "artifact": 11876607522,
+  "raw_bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-6e13108",
+  "raw_manifest_sha256": "45778a94c3abcb642cec2c13ef9b146f84302cec91b3b46ad7d767e6ab71f636",
+  "artifact_pin": {
+    "bytes": 9362078,
+    "sha256": "12060f52a9cadba5dabedb5a99b5f4293893bd066d544f2ba4e58c612d2357db"
+  },
+  "reused_consumed_export": {
+    "bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-db8f439",
+    "path": "files/out/macos-retained-diagnostic/export.zip",
+    "artifact": 11875509003,
+    "artifact_sha256": "ec5ca5e25f4be58fe2938271687d2f5cee8e1f795d60439c8e38b9fbc76e1343",
+    "bytes": 57718924,
+    "sha256": "973d6ada66511b80d2dcf76e0c95a3b38367c32e08a0f16a62c20e0c0a90974d"
+  },
+  "native_owner_self_tests_passed": 3,
+  "native_selected_inventory_queries_passed": 2,
+  "selected_device": "Apple Paravirtual device / MoltenVK1.4.1, no Float64, no FP32 denormals, RTE32",
+  "cases": {
+    "1-PhysicalInitializationRetainsTheHamiltonianResidual": {
+      "child_exit": 1,
+      "stop_reason": null,
+      "containment_complete": true,
+      "observation_complete": true,
+      "wall_seconds": 201.85136108299997,
+      "peak_sampled_rss_kib": 110480,
+      "whole_inputs_unchanged": true,
+      "cleanup_errors": [],
+      "remaining_observed": [],
+      "minimum_sampled_available_kib": 2983744,
+      "sampled_pressure_levels": [
+        1
+      ],
+      "max_observed_sample_interval_seconds": 0.3433591659999138,
+      "stdout.log_vkCreateComputePipelines_count": 0,
+      "stdout.log_vkCmdDispatch_count": 0,
+      "stderr.log_vkCreateComputePipelines_count": 1,
+      "stderr.log_vkCmdDispatch_count": 0,
+      "dump_joins": {
+        "files": {
+          "shader-cs-94cd92f131b7e6d1.metal": {
+            "bytes": 85091,
+            "sha256": "b2d7daec9928356de4ca24a724d135adc59685a330b043e4fa55f2fe2f9b5550"
+          },
+          "shader-cs-94cd92f131b7e6d1.spv": {
+            "bytes": 77444,
+            "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+            "matching_embedded_arrays": [
+              "retained_program::kInitializePortableShader",
+              "retained_program::kInitializePortableFp64Shader"
+            ]
+          }
+        },
+        "all_dumped_spirv_bound": true,
+        "scope": "Byte-exact dumped SPIR-V aliases; raw pipeline-list/MSL associations retained. Loaded modules alone do not prove execution or successful compilation."
+      }
+    },
+    "2-ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation": {
+      "child_exit": -15,
+      "stop_reason": "deadline",
+      "containment_complete": true,
+      "observation_complete": false,
+      "wall_seconds": 300.37578658300004,
+      "peak_sampled_rss_kib": 121328,
+      "whole_inputs_unchanged": true,
+      "cleanup_errors": [],
+      "remaining_observed": [],
+      "minimum_sampled_available_kib": 2887024,
+      "sampled_pressure_levels": [
+        1
+      ],
+      "max_observed_sample_interval_seconds": 0.3923719160000019,
+      "stdout.log_vkCreateComputePipelines_count": 0,
+      "stdout.log_vkCmdDispatch_count": 0,
+      "stderr.log_vkCreateComputePipelines_count": 1,
+      "stderr.log_vkCmdDispatch_count": 0,
+      "dump_joins": {
+        "files": {
+          "shader-cs-6f7037259a301692.metal": {
+            "bytes": 231001,
+            "sha256": "eb1820a192e76b59ddea2edaf169502fb61025ea6909267c63286ba23ef3c634"
+          },
+          "shader-cs-6f7037259a301692.spv": {
+            "bytes": 151400,
+            "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+            "matching_embedded_arrays": [
+              "retained_program::kEndpointPortableNormalSumShader"
+            ]
+          }
+        },
+        "all_dumped_spirv_bound": true,
+        "scope": "Byte-exact dumped SPIR-V aliases; raw pipeline-list/MSL associations retained. Loaded modules alone do not prove execution or successful compilation."
+      }
+    }
+  },
+  "remaining_two_controls_not_launched": true,
+  "qualification_claimed": false,
+  "finding": "The Darwin adapter now passes native exit0/exit7/timeout-tree containment and both physical inventories. Current original Initialize completes with failed first compute pipeline creation, VkResult-3 / Metal Error2 Compilation failed, before dispatch. Its sole dumped SPIR-V byte-matches InitializePortable and its identical PortableFp64 alias, and paired MSL is retained. EndpointPortableNormalSum stops at its unchanged300s deadline inside the first pipeline create; the native containment owner retired it completely but this is no completed numerical verdict. Both captures are bound; the all-four diagnostic remains incomplete. Do not repeat unchanged original controls or claim Float64 caused the failure. Next work must isolate compiler/backend cause from the captured exact MSL/SPIR-V with original limits and numerical semantics preserved."
+}
