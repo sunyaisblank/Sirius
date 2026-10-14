@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="261"
+	timestamp="2026-10-15T02:21:34"
+	>
+	<testcase name="KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority" classname="KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority" time="261.738" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority
+[ParityProbe] phase=initialization opcode=15 offset=0 count=0 submit_wait_ms=100072 pipeline_setup_ms=161047 total_ms=261120 success=1
+[ParityProbe] phase=actual opcode=15 offset=0 count=4 submit_wait_ms=0.689809 pipeline_setup_ms=0.000961 total_ms=0.737694 success=1
+[ParityProbe] completed opcode=15 records=4 submissions=1 allocated_bytes=1296
+[       OK ] KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority (261437 ms)
+[----------] 1 test from KernelParity (261437 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (261437 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+</testsuite>

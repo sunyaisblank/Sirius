@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "name": "KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority",
+  "ordinary_fp32": true,
+  "original_assertions_changed": false,
+  "qualification_claimed": false,
+  "p4_complete": false,
+  "outer_diagnostic_limits": {
+    "seconds": 600,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "owner": {
+    "bytes": 4345,
+    "sha256": "e07c1c2249ce235d1df2a85712e399446919454a54d5dd7a4966ae3689a37705",
+    "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-cases5-9-outer600/parity-6/owner.json"
+  },
+  "gtest": {
+    "bytes": 951,
+    "sha256": "881cf7c59d571470b1e668ded3b63a478df8f4f6a174be061746f69e5eea1bfd",
+    "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-cases5-9-outer600/parity-6/gtest.xml"
+  },
+  "ctest": {
+    "bytes": 1522,
+    "sha256": "2b067808c28468c5b4786a577f7f8ef75679225cbdad921fadc53cf01abf1143",
+    "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-cases5-9-outer600/parity-6/ctest.xml"
+  },
+  "provider_mappings": {
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+      "bytes": 143545784,
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+    }
+  },
+  "original_properties": {
+    "parity_opcode_15_completed_records": "4",
+    "parity_opcode_15_actual_submissions": "1",
+    "parity_opcode_15_maximum_submit_ms": "0.689809",
+    "parity_opcode_15_allocated_bytes": "1296"
+  },
+  "original_dispatch_phases": [
+    [
+      "initialization",
+      "15",
+      "0",
+      "0",
+      "100072",
+      "161047",
+      "261120",
+      "1"
+    ],
+    [
+      "actual",
+      "15",
+      "0",
+      "4",
+      "0.689809",
+      "0.000961",
+      "0.737694",
+      "1"
+    ]
+  ],
+  "reference": "Core KerrZamoFrequencyTransfer including latitude/mass/spin and polar refusal; validity plus g/frequency/omega/u^t unchanged.",
+  "provider_scope": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "cache_policy": "Original mature software-provider policy disables Mesa shader cache; no new cache output or cold-performance gate.",
+    "scope": "Explicit existing Mesa llvmpipe/Lavapipe route only; actual loader/LVP/LLVM mappings required. No Dozen, native platform, performance or cache warmness claim."
+  },
+  "no_performance_or_cache_warmness_claim": true
+}

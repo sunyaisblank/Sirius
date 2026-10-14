@@ -1,0 +1,95 @@
+{
+  "case": "parity-9",
+  "source": {
+    "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "status": ""
+  },
+  "passed": true,
+  "child_exit": 0,
+  "wall_seconds": 256.1827670040002,
+  "peak_sampled_rss_kib": 3329904,
+  "stop_reason": null,
+  "meaning": "Previously unlaunched original ordinary-FP32 P4 cases5..9, separate600s outer diagnostic owners only; no complete P4/science/Mandatory/platform/release or performance claim. Case:KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor"
+}
+{
+  "passed": true,
+  "name": "KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor",
+  "ordinary_fp32": true,
+  "original_assertions_changed": false,
+  "qualification_claimed": false,
+  "p4_complete": false,
+  "outer_diagnostic_limits": {
+    "seconds": 600,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "owner": {
+    "bytes": 4336,
+    "sha256": "42ec50a5f365d84b2431371a7da9ee36601fb4bb976fdea83ad5a0422f30ed9a",
+    "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-cases5-9-outer600/parity-9/owner.json"
+  },
+  "gtest": {
+    "bytes": 943,
+    "sha256": "d72c334e7abd804b5b67fa6b7cc4ddd4ed9960049bbda2bd1c44492a8681be92",
+    "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-cases5-9-outer600/parity-9/gtest.xml"
+  },
+  "ctest": {
+    "bytes": 1504,
+    "sha256": "3e556dde675930711f2df176dddfe459bcfd7bcd826450e15148186b1b31d27e",
+    "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-cases5-9-outer600/parity-9/ctest.xml"
+  },
+  "provider_mappings": {
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+      "bytes": 143545784,
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+    }
+  },
+  "original_properties": {
+    "parity_opcode_5_completed_records": "2",
+    "parity_opcode_5_actual_submissions": "1",
+    "parity_opcode_5_maximum_submit_ms": "0.886401",
+    "parity_opcode_5_allocated_bytes": "656"
+  },
+  "original_dispatch_phases": [
+    [
+      "initialization",
+      "5",
+      "0",
+      "0",
+      "92115.1",
+      "163335",
+      "255450",
+      "1"
+    ],
+    [
+      "actual",
+      "5",
+      "0",
+      "2",
+      "0.886401",
+      "0.000822",
+      "0.922741",
+      "1"
+    ]
+  ],
+  "reference": "Core color_modes::ObservedBolometricIntensity for receding/approaching g; original EXPECT_FLOAT_EQ.",
+  "provider_scope": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "cache_policy": "Original mature software-provider policy disables Mesa shader cache; no new cache output or cold-performance gate.",
+    "scope": "Explicit existing Mesa llvmpipe/Lavapipe route only; actual loader/LVP/LLVM mappings required. No Dozen, native platform, performance or cache warmness claim."
+  },
+  "no_performance_or_cache_warmness_claim": true
+}

@@ -1,0 +1,11 @@
+--- held300/run_parity.py
++++ outer600/run_parity.py
+@@ -14,7 +14,7 @@
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+ ROOT = WORK.parents[1]
+-LIMITS = {"seconds": 300, "rss_kib": 4194304, "reserve_kib": 2097152}
++LIMITS = {"seconds": 600, "rss_kib": 4194304, "reserve_kib": 2097152}
+ 
+ 
+ def require(ok, message):

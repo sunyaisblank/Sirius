@@ -1,0 +1,43 @@
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 763
+    Start 763: KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority
+
+763: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests "--gtest_filter=KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority" "--gtest_also_run_disabled_tests"
+763: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend
+763: Test timeout computed to be: 10000000
+763: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+763: Note: Google Test filter = KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority
+763: [==========] Running 1 test from 1 test suite.
+763: [----------] Global test environment set-up.
+763: [----------] 1 test from KernelParity
+763: [ RUN      ] KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority
+763: [ParityProbe] phase=initialization opcode=16 offset=0 count=0 submit_wait_ms=97869.6 pipeline_setup_ms=166875 total_ms=264745 success=1
+763: [ParityProbe] phase=actual opcode=16 offset=0 count=2 submit_wait_ms=0.666509 pipeline_setup_ms=0.000911 total_ms=0.712908 success=1
+763: [ParityProbe] completed opcode=16 records=2 submissions=1 allocated_bytes=656
+763: [       OK ] KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority (265060 ms)
+763: [----------] 1 test from KernelParity (265061 ms total)
+763: 
+763: [----------] Global test environment tear-down
+763: [==========] 1 test from 1 test suite ran. (265061 ms total)
+763: [  PASSED  ] 1 test.
+1/1 Test #763: KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority ...   Passed  265.36 sec
+
+The following tests passed:
+	KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority
+
+100% tests passed, 0 tests failed out of 1
+
+Label Time Summary:
+Correctness    = 265.36 sec*proc (1 test)
+Mandatory      = 265.36 sec*proc (1 test)
+
+Total Test time (real) = 265.40 sec

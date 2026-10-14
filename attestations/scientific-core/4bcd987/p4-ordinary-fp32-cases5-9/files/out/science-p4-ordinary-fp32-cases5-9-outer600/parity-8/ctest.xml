@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="264"
+	timestamp="2026-10-15T02:30:25"
+	>
+	<testcase name="KernelParity.BlackbodyMatchesIntegratedCoreSpectrum" classname="KernelParity.BlackbodyMatchesIntegratedCoreSpectrum" time="264.412" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
+[ParityProbe] phase=initialization opcode=3 offset=0 count=0 submit_wait_ms=97945.6 pipeline_setup_ms=165822 total_ms=263767 success=1
+[ParityProbe] phase=actual opcode=3 offset=0 count=5 submit_wait_ms=0.780694 pipeline_setup_ms=0.001041 total_ms=0.832923 success=1
+[ParityProbe] completed opcode=3 records=5 submissions=1 allocated_bytes=1616
+[       OK ] KernelParity.BlackbodyMatchesIntegratedCoreSpectrum (264092 ms)
+[----------] 1 test from KernelParity (264092 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (264092 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+</testsuite>

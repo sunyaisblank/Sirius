@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="265"
+	timestamp="2026-10-15T02:25:58"
+	>
+	<testcase name="KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority" classname="KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority" time="265.359" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority
+[ParityProbe] phase=initialization opcode=16 offset=0 count=0 submit_wait_ms=97869.6 pipeline_setup_ms=166875 total_ms=264745 success=1
+[ParityProbe] phase=actual opcode=16 offset=0 count=2 submit_wait_ms=0.666509 pipeline_setup_ms=0.000911 total_ms=0.712908 success=1
+[ParityProbe] completed opcode=16 records=2 submissions=1 allocated_bytes=656
+[       OK ] KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority (265060 ms)
+[----------] 1 test from KernelParity (265061 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (265061 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+</testsuite>

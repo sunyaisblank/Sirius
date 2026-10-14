@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="256"
+	timestamp="2026-10-15T02:34:52"
+	>
+	<testcase name="KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor" classname="KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor" time="256.089" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor
+[ParityProbe] phase=initialization opcode=5 offset=0 count=0 submit_wait_ms=92115.1 pipeline_setup_ms=163335 total_ms=255450 success=1
+[ParityProbe] phase=actual opcode=5 offset=0 count=2 submit_wait_ms=0.886401 pipeline_setup_ms=0.000822 total_ms=0.922741 success=1
+[ParityProbe] completed opcode=5 records=2 submissions=1 allocated_bytes=656
+[       OK ] KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor (255773 ms)
+[----------] 1 test from KernelParity (255773 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (255773 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+</testsuite>
