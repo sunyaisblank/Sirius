@@ -1,0 +1,38 @@
+--- released-diagnostic-tmp/run_scene.py
++++ renders-owned/run_scene.py
+@@ -68,7 +68,7 @@
+     case = prepared["cases"][index]
+     label = case["label"]
+     folder = WORK / label
+-    temporary = WORK / (label + "-temporary")
++    temporary = ROOT / "renders/p4-doppler-scene2-outer1200"
+     result_path = WORK / (label + "-result.json")
+     require(git("rev-parse", "HEAD") == prepared["runner_source_revision"] and not git("status", "--porcelain"), "runner source changed")
+     require(set(git("diff", "--name-only", prepared["product_source_revision"], "HEAD").splitlines()) == set(prepared["diagnostic_only_difference"]), "product difference changed")
+@@ -77,11 +77,14 @@
+         require(identity(ROOT / name) == pin, "prepared input changed:" + name)
+     action = json.loads((WORK / "actions.json").read_text())[label]
+     require(action["limits"] == LIMITS and action["software_provider"] is True, "diagnostic limits/provider changed")
++    require(temporary == ROOT / prepared["owned_render_output"]["root_relative_to_checkout"], "declared render root changed")
++    require(temporary.parent.resolve(strict=True) == ROOT / "renders"
++            and not temporary.exists() and not temporary.is_symlink(), "private render root must be absent under canonical renders")
+     if sys.argv[1] == "--verify-only":
+         print(json.dumps({"verified_only": True, "runtime_actions": 0,
+                           "case": case["name"], "pins": len(prepared["pins"]),
+                           "preparation": identity(WORK / "preparation.json"),
+-                          "outer_diagnostic_limits": LIMITS}, indent=2), flush=True)
++                          "outer_diagnostic_limits": LIMITS, "owned_render_root": str(temporary)}, indent=2), flush=True)
+         return 0
+     require(not any(p.exists() for p in (folder, temporary, result_path)), "one-shot action already attempted")
+     result = {"passed": False, "name": case["name"], "original_assertions_changed": False,
+@@ -147,7 +150,9 @@
+             require(frame["initialization_dispatches"] == 6, "software preparation dispatch count differs")
+         entries = list(temporary.iterdir())
+         require({p.name for p in entries} == set(case["outputs"]) and all(p.is_file() and not p.is_symlink() for p in entries), "owned image output set differs")
+-        outputs = {str(p.relative_to(WORK)): identity(p) for p in sorted(entries)}
++        require(temporary.resolve(strict=True) == temporary
++                and all(p.resolve(strict=True).parent == temporary for p in entries), "render output escaped owned root")
++        outputs = {str(p.relative_to(ROOT)): identity(p) for p in sorted(entries)}
+         headers = {p.name: exr_header(p) for p in sorted(entries)}
+         result.update(passed=True, owner=identity(folder / "owner.json"), gtest=identity(folder / "gtest.xml"),
+                       ctest=identity(folder / "ctest.xml"), output_files=outputs, exr_headers=headers,
