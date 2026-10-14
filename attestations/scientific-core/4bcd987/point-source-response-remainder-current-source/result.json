@@ -1,0 +1,456 @@
+{
+  "full_criterion_complete": false,
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/ctest",
+      "--test-dir",
+      "bin/linux-gcc",
+      "-V",
+      "--output-on-failure",
+      "--no-tests=error",
+      "--output-junit",
+      "/home/astra/.project/Sirius/out/science-point-source-response-remainder-current-source/original-nine-cpu-point-source-response-controls/ctest.xml",
+      "--output-log",
+      "/home/astra/.project/Sirius/out/science-point-source-response-remainder-current-source/original-nine-cpu-point-source-response-controls/ctest.log",
+      "-R",
+      "^(PointSourceResponseTest\\.CatalogueAccumulationPreservesFluxColorAndExactSupport|PointSourceResponseTest\\.CompositionCancellationAndUnrepresentedParityDecline|PointSourceResponseTest\\.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse|PointSourceResponseTest\\.IntegratedDetectorFluxFollowsSignedAffineLensMeasure|PointSourceResponseTest\\.InvalidArithmeticIsDistinctFromEmptyContribution|PointSourceResponseTest\\.MovingThinLensAndSourceMapComposeIntoReceivedFlux|PointSourceResponseTest\\.SingularAndBroadMapsRequestRefinementWithoutFloors|PointSourceResponseTest\\.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure|PointSourceResponseTest\\.UnresolvedImageShapeStaysInDetectorCoordinates)$"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "original-nine-cpu-point-source-response-controls",
+    "child_exit": 0,
+    "child_pid": 331372,
+    "child_start_ticks": "4708888",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 331364,
+      "pid": 331365,
+      "ppid": 331364,
+      "rss_kib": 27440,
+      "session": 331364,
+      "start_ticks": "4708863",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "meaning": "Nine remaining original PointSourceResponseTest CPU source controls only, finite P3/P2/P5 response composition/support/refusal evidence; no full criterion/science/Mandatory/domain/release or performance claim.",
+    "minimum_sampled_available_kib": 18393040,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 331372,
+        "saved_start_ticks": "4708888"
+      }
+    ],
+    "passed": true,
+    "peak_sampled_rss_kib": 44976,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "Nine remaining original PointSourceResponseTest CPU source controls only, finite P3/P2/P5 response composition/support/refusal evidence; no full criterion/science/Mandatory/domain/release or performance claim.",
+    "source": {
+      "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 0.27644659700308694,
+    "whole_inputs_unchanged": true
+  },
+  "qualification_claimed": false,
+  "result": {
+    "ctest_output_log": {
+      "bytes": 14551,
+      "sha256": "79ba781f1a793f9fe068a49ee8c0295d46cfa8e8500d4154954224fec4e40f6b"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": "",
+      "TMPDIR": "/home/astra/.project/Sirius/out/science-point-source-response-remainder-current-source/temporary"
+    },
+    "disabled": 0,
+    "errors": 0,
+    "executed_names": [
+      "PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport",
+      "PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline",
+      "PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse",
+      "PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure",
+      "PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution",
+      "PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux",
+      "PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors",
+      "PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure",
+      "PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates"
+    ],
+    "expected_names": [
+      "PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport",
+      "PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline",
+      "PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse",
+      "PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure",
+      "PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution",
+      "PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux",
+      "PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors",
+      "PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure",
+      "PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates"
+    ],
+    "failures": 0,
+    "finite_acceptance_scope": {
+      "PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport": "Original centre plus bright off-ellipse star: exact equality with centre-only catalogue, direct on-axis Gaussian/brightness intensity bound2e-15*intensity, existing evidenced band helper reused only for colour; invalid view direction declines.",
+      "PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline": "Original cancellation-prone represented lens/film composition requests NeedsRefinement; tiny-lens/huge-film unrepresented parity declines Arithmetic. No tolerance or acceptance changed.",
+      "PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse": "Original anisotropic4-by.25lens: source inside conservative major circle but outside exact minor ellipse contributes exactlyzero, while major-axis point remainspositive.",
+      "PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure": "Original six lenses times sigma=.3/1,4096radial by16angular midpoint quadrature in independently forward-mapped original coordinates. Received catalogueflux3.7/absolute determinant within original3.7e-7/absolute determinant; no additional pixel-area factor.",
+      "PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution": "Original zero/negative/Inf/NaN sigma and NaN density input yield InvalidInput rather than a fabricated empty contribution.",
+      "PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux": "Original four deterministic film/pupil camera samples only at1920x1080coordinate metadata,pixel169/229,r30/theta80deg/fov60/focus30 and original beta. Independent Lorentz omega predicts source angular determinant1/omega^2 within2e-15; independent forward-composed1024x8polar midpoint quadrature gives received fluxomega^2 within1e-6; exactsamplecount4.",
+      "PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors": "Original two singular and one too-broad map request NeedsRefinement without floors; finite identity response spherical-area bound covers independent1-sin(r)/r and stays below.0025.",
+      "PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure": "Original six declared signed/sheared/rotated affine lenses and three original-root positions, direct truncated-Gaussian density2e-13 relative; exactnextafter4-sigma exterior, nonfinite-root and singular/broad-map distinctions retain original assertions, including local-image density1e-20 bound.",
+      "PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates": "Original six lenses and three detector offsets: density/centre equals directly computed exp(-radius_squared/2) within2e-15;4.01-sigma exterior exactlyzero."
+    },
+    "junit": {
+      "bytes": 9925,
+      "sha256": "3c7c85e4ba9bc9b19f6bb25f69f5dbb1c8d16022c02bb13b8166970b95659898"
+    },
+    "mandatory_receipt_created": false,
+    "original_assertions_changed": false,
+    "outer_diagnostic_limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "owner": {
+      "bytes": 2799,
+      "sha256": "a01837d51237d5ccb3adba0faa565a07a89ae7cb9e93fbb620f1c5785566f890"
+    },
+    "p2_complete": false,
+    "p3_complete": false,
+    "p5_complete": false,
+    "passed": true,
+    "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "qualification_claimed": false,
+    "reference": {
+      "accepted_band_helper_evidence": {
+        "archive": "attestations/scientific-core/4bcd987/point-source-transfer-current-source",
+        "junit": "attestations/scientific-core/4bcd987/point-source-transfer-current-source/files/out/science-point-source-transfer-current-source/original-six-cpu-point-source-transfer-controls/ctest.xml",
+        "result": "attestations/scientific-core/4bcd987/point-source-transfer-current-source/files/out/science-point-source-transfer-current-source/result.json",
+        "revision": "f6b5fbee9e2a3cc3e3be03d00ddd18b3103f4f44",
+        "tag": "evidence/issue-53-point-source-transfer-current-source"
+      },
+      "composition_boundary": "Eight selected cases explicitly nameP3; first Gaussian source-support test is original but not explicitly named in model. Finite source assertions only, no completeP2/P3/P5,100000-star raster,beam-oracle,all-map/all-frequency or release claim.",
+      "independent_reference": "Original declared affine lens determinants, direct forward source offsets and truncated-Gaussian formula; original4096x16 midpoint flux quadrature. Moving-lens case independently derives Lorentz omega and source solid-angle determinant, then forward-composes original film/source matrices for1024x8quadrature across four camera samples. Original shape/support, equality/refusal/error assertions remain unchanged. Catalogue colour intentionally reuses the separately evidenced band helper, not a new independent spectral oracle.",
+      "original_model_membership": {
+        "P2": [],
+        "P3": [
+          "PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure",
+          "PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates",
+          "PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse",
+          "PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors",
+          "PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution",
+          "PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport",
+          "PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline",
+          "PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux"
+        ],
+        "P5": []
+      },
+      "original_source_snapshots": {
+        "cmake/sirius_testing.cmake": {
+          "build_before_after_equal": true,
+          "bytes": 12349,
+          "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/cmake/sirius_testing.cmake"
+        },
+        "src/sirius/base/contracts.h": {
+          "build_before_after_equal": true,
+          "bytes": 3989,
+          "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/base/contracts.h"
+        },
+        "src/sirius/core/camera.h": {
+          "build_before_after_equal": true,
+          "bytes": 43067,
+          "git_blob": "e1f31aa3d23794b3a1cf5e2261c88a1584ef2f0d",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/camera.h"
+        },
+        "src/sirius/core/camera_sampling.h": {
+          "build_before_after_equal": true,
+          "bytes": 3255,
+          "git_blob": "a59fecece36a2193eac60801c306317d55d09141",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/camera_sampling.h"
+        },
+        "src/sirius/core/celestial_tangent_basis.h": {
+          "build_before_after_equal": true,
+          "bytes": 5440,
+          "git_blob": "73d7e8ae19ff9288395c0a8b766d7585705c9b73",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "e02003f3d27f4411efd5ab7a551eb95a55fccadc91d1c7a378626cfba8039248",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/celestial_tangent_basis.h"
+        },
+        "src/sirius/core/cie1931_observer.h": {
+          "build_before_after_equal": true,
+          "bytes": 1858,
+          "git_blob": "2ef1c98782c8fc37e2a55349e5d3cb321d26305f",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/cie1931_observer.h"
+        },
+        "src/sirius/core/constants.h": {
+          "build_before_after_equal": true,
+          "bytes": 8558,
+          "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/constants.h"
+        },
+        "src/sirius/core/dual_number.h": {
+          "build_before_after_equal": true,
+          "bytes": 9490,
+          "git_blob": "1938f64eadbd59467cfcc13737999eb0e491d531",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/dual_number.h"
+        },
+        "src/sirius/core/observer_frame.h": {
+          "build_before_after_equal": true,
+          "bytes": 13423,
+          "git_blob": "ac56903c77fa55287309fa800cf888031df6446c",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "c09d89c0a2a1ea07fc6dae36cd566bf73670e6a3c3802e7f41f88a5eb236a566",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/observer_frame.h"
+        },
+        "src/sirius/core/point_source_response.h": {
+          "build_before_after_equal": true,
+          "bytes": 18668,
+          "git_blob": "1aa132db8016b95cfb61fd8463856090c38638a2",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "7c5b2fa2e4e593aaf0404d7cade5b31101b6be7a7eed2dad9b0fb465ba8816d3",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/point_source_response.h"
+        },
+        "src/sirius/core/point_starfield_config.h": {
+          "build_before_after_equal": true,
+          "bytes": 1226,
+          "git_blob": "58233064fbf841caba5f93563e159d06531d0ffa",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "20e859cd7773d1ae2f4c30998b7408a99902ddac15b20eae9bdc4a8c2b332117",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/point_starfield_config.h"
+        },
+        "src/sirius/core/source_sky_map.h": {
+          "build_before_after_equal": true,
+          "bytes": 5397,
+          "git_blob": "2cac8f774793e9b67490e11f1373f3f1f322d913",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "95210f38a40b3d46a213e2a4c696c126d56e177cc72d10336d050ddb0e221e44",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/source_sky_map.h"
+        },
+        "src/sirius/core/spectral/blackbody.h": {
+          "build_before_after_equal": true,
+          "bytes": 6171,
+          "git_blob": "154a07cbe3a919cc0e97f5f2edc80cb89e1b7a9a",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/spectral/blackbody.h"
+        },
+        "src/sirius/core/spectral/blackbody_laws.h": {
+          "build_before_after_equal": true,
+          "bytes": 4322,
+          "git_blob": "824f780ca67787214af3084e507043d6c61feb78",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "3846d9cdf8db6e034585ac3e4dcb14f2edb1c4e57a649a1c2ff8964d408bd0c0",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/spectral/blackbody_laws.h"
+        },
+        "src/sirius/core/spectral/point_source_transfer.h": {
+          "build_before_after_equal": true,
+          "bytes": 5372,
+          "git_blob": "0b803cbe8383cbb3e67b4714f65eb69784f75f44",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "2e52055cfb3ae379d9a2d85f687277c010355649e8a6e90f803f32ca3b2f6696",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/spectral/point_source_transfer.h"
+        },
+        "src/sirius/core/srgb_transfer.h": {
+          "build_before_after_equal": true,
+          "bytes": 1743,
+          "git_blob": "12f371df31556d728413d54cd93075c4509286c5",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "d8bf1764d4dcd55ba079d11bb0fde7cb0a89619e2d1f3a46f144fc46dfa02ba3",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/srgb_transfer.h"
+        },
+        "src/sirius/core/starfield.h": {
+          "build_before_after_equal": true,
+          "bytes": 33009,
+          "git_blob": "ecb9476067c6ac542645d07c4bacfb16a49f18c6",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "caae54c6b509eb7dcaa797bec81bf516820413b4a7eecd880592e867b3fb5cd0",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/starfield.h"
+        },
+        "src/sirius/core/tensor.h": {
+          "build_before_after_equal": true,
+          "bytes": 6421,
+          "git_blob": "4671e6533194a255c978b072f1bf585243bedbea",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/tensor.h"
+        },
+        "src/sirius/core/xyz_srgb.h": {
+          "build_before_after_equal": true,
+          "bytes": 1439,
+          "git_blob": "e5806afa0029b2c2c7f6f3c13cff88ff820c7d6e",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/src/sirius/core/xyz_srgb.h"
+        },
+        "tests/CMakeLists.txt": {
+          "build_before_after_equal": true,
+          "bytes": 10200,
+          "git_blob": "b7700acf10bf853738cfcf8a24918fb899a36b24",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/tests/CMakeLists.txt"
+        },
+        "tests/core/CMakeLists.txt": {
+          "build_before_after_equal": true,
+          "bytes": 1974,
+          "git_blob": "3ebec86b19bc796ff619b839097de35ea858c8ed",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "bf9c352a0db90b86836ccdd63fb3163f5bd394563fb6eade0f22e1df4640f773",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/tests/core/CMakeLists.txt"
+        },
+        "tests/core/point_source_response_test.cpp": {
+          "build_before_after_equal": true,
+          "bytes": 30056,
+          "git_blob": "b9068181e2c90108d1e1a68a3ff0b77279d51758",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "af8da1d1fe8dab0ae8cb42ad7cd77d392005a33bee185b25ddc70b2a1a80524f",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/tests/core/point_source_response_test.cpp"
+        },
+        "tests/operating_model.json": {
+          "build_before_after_equal": true,
+          "bytes": 130331,
+          "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/tests/operating_model.json"
+        },
+        "tests/support/fail_on_skip.h": {
+          "build_before_after_equal": true,
+          "bytes": 427,
+          "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e",
+          "snapshot": "out/science-point-source-response-remainder-current-source/reference/tests/support/fail_on_skip.h"
+        }
+      },
+      "original_support_case_not_explicitly_model_named": [
+        "PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure"
+      ],
+      "practical_work_scope": "Largest fixed loop6lenses\u00d72sigmas\u00d74096radii\u00d716angles=786432density samples, plus four1024x8camera-composition integrals. Only four camera samples, no1920x1080frame, geodesic integration, image output, device/window, catalogueGenerate or new build. No timing/completion guarantee."
+    },
+    "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "scope": "Nine remaining original PointSourceResponseTest CPU source controls only, finite P3/P2/P5 response composition/support/refusal evidence; no full criterion/science/Mandatory/domain/release or performance claim.",
+    "skips": 0,
+    "source_and_registration_join": {
+      "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+      "compiler_provenance_limit": "Reuse existing accepted current core/source authority; current recipe/runtime bytes frozen, no new build or retroactive compiler-byte attestation.",
+      "core_producer": {
+        "bytes": 5199120,
+        "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+      },
+      "core_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+      "existing_build_owner": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/owner.json",
+      "external_image_or_device_resources_required": false,
+      "original_compile_commands": [
+        {
+          "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o -c /home/astra/.project/Sirius/tests/core/point_source_response_test.cpp",
+          "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+          "file": "/home/astra/.project/Sirius/tests/core/point_source_response_test.cpp",
+          "output": "tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o"
+        }
+      ],
+      "original_link_ninja_lines": [
+        "build tests/core/sirius_core_tests tests/core/sirius_core_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/core/sirius_core_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_core_tests_Release tests/core/CMakeFiles/sirius_core_tests.dir/autodiff_dual_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/retained_arithmetic_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/coordinates_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_naninf_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_stability_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/christoffel_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/horizon_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_derivative_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_loader_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_registry_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/reissner_nordstrom_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/schwarzschild_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/walker_penrose_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/warp_drive_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/stokes_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_inverse_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/novikov_thorne_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/turbulence_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/volumetric_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/postprocess_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/starfield_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_transfer_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_map_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+      ],
+      "original_test_TIMEOUT_added": false,
+      "production_headers": [
+        "src/sirius/core/point_source_response.h",
+        "src/sirius/core/starfield.h",
+        "src/sirius/core/camera.h",
+        "src/sirius/core/source_sky_map.h"
+      ],
+      "registrations": {
+        "PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport": {
+          "add_test": "add_test([=[PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport]==] --gtest_also_run_disabled_tests)",
+          "properties": "set_tests_properties([=[PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)"
+        },
+        "PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline": {
+          "add_test": "add_test([=[PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline]==] --gtest_also_run_disabled_tests)",
+          "properties": "set_tests_properties([=[PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)"
+        },
+        "PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse": {
+          "add_test": "add_test([=[PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse]==] --gtest_also_run_disabled_tests)",
+          "properties": "set_tests_properties([=[PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)"
+        },
+        "PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure": {
+          "add_test": "add_test([=[PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure]==] --gtest_also_run_disabled_tests)",
+          "properties": "set_tests_properties([=[PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)"
+        },
+        "PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution": {
+          "add_test": "add_test([=[PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution]==] --gtest_also_run_disabled_tests)",
+          "properties": "set_tests_properties([=[PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)"
+        },
+        "PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux": {
+          "add_test": "add_test([=[PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux]==] --gtest_also_run_disabled_tests)",
+          "properties": "set_tests_properties([=[PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)"
+        },
+        "PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors": {
+          "add_test": "add_test([=[PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors]==] --gtest_also_run_disabled_tests)",
+          "properties": "set_tests_properties([=[PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)"
+        },
+        "PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure": {
+          "add_test": "add_test([=[PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure]==] --gtest_also_run_disabled_tests)",
+          "properties": "set_tests_properties([=[PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)"
+        },
+        "PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates": {
+          "add_test": "add_test([=[PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates]==] --gtest_also_run_disabled_tests)",
+          "properties": "set_tests_properties([=[PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)"
+        }
+      },
+      "runtime_resources_bound": {},
+      "selected_core_cases": [
+        "PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure",
+        "PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure",
+        "PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates",
+        "PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse",
+        "PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors",
+        "PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution",
+        "PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport",
+        "PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline",
+        "PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux"
+      ],
+      "selected_render_cases": [],
+      "source_before_after": [
+        "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-before.json",
+        "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-after.json"
+      ],
+      "source_snapshot_count": 24,
+      "test_sources": [
+        "tests/core/point_source_response_test.cpp"
+      ]
+    },
+    "temporary_output": {
+      "mode": "0o700",
+      "path": "/home/astra/.project/Sirius/out/science-point-source-response-remainder-current-source/temporary",
+      "residual_files": {},
+      "uid": 1000
+    }
+  },
+  "schema": "sirius-original-finite-science-controls-v1"
+}
