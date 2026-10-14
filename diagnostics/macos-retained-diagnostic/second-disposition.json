@@ -1,0 +1,28 @@
+{
+  "runner_revision": "db8f43903f5175eef7ad73fc3dd89c7f364ef9b1",
+  "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "decision": "INCOMPLETE_IN_NATIVE_OWNER_EXIT_ZERO_SELF_TEST_BEFORE_VULKAN",
+  "run": 38525924168,
+  "job": 115726130198,
+  "artifact": 11875509003,
+  "raw_bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-db8f439",
+  "raw_manifest_sha256": "fc9acc6e600faae871e0d2153eb8a3770c63c04f0f6f13927f7a206a1bafa931",
+  "archive": {
+    "bytes": 66018991,
+    "sha256": "ec5ca5e25f4be58fe2938271687d2f5cee8e1f795d60439c8e38b9fbc76e1343"
+  },
+  "consumed_export": {
+    "bytes": 57718924,
+    "sha256": "973d6ada66511b80d2dcf76e0c95a3b38367c32e08a0f16a62c20e0c0a90974d"
+  },
+  "prelaunch_available_kib": 3003920,
+  "pressure_level": 1,
+  "reserve_kib": 2097152,
+  "child_exit": 0,
+  "observed_child_state": "Z<",
+  "remaining_observed": [],
+  "original_four_controls_executed": 0,
+  "qualification_claimed": false,
+  "finding": "The sampled memory adapter admitted the owner self-test. Unconditional killpg against its already-exited zombie-only process group returned EPERM on Darwin; cleanup was conservatively incomplete. No Vulkan provider, original test, shader or numerical result was obtained. Keep the unreaped PGID anchor, signal only when members remain live or unresolved, and accept EPERM only after fresh complete census proves the anchored group drained. Full native owner self-tests remain required.",
+  "reference": "https://github.com/apple-oss-distributions/xnu/blob/xnu-11417.140.69/bsd/kern/kern_sig.c#L1703"
+}
