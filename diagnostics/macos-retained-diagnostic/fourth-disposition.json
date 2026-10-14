@@ -1,0 +1,102 @@
+{
+  "runner_revision": "8612927f9bd0d15e57446a2b6efa103d5a9cc830",
+  "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "decision": "NATIVE_MSL_LIBRARY_AND_FUNCTION_SUCCEEDED; DIAGNOSTIC_DESCRIPTOR_PRECONDITION_REFUSED_BEFORE_PIPELINE",
+  "run": 38530189593,
+  "job": 115739958391,
+  "artifact": 11877556316,
+  "raw_bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-8612927",
+  "raw_manifest_sha256": "cc5158e6757fda2fe259c25909dffe9ba4f02eaf3e3d9cd632ec36bbaf0dbae2",
+  "artifact_pin": {
+    "bytes": 8963090,
+    "sha256": "952a057a9a8a6d98186ddeb3c61203c58b69a5ef20326c746d2af8d409a4131e"
+  },
+  "reused_inputs": [
+    {
+      "bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-db8f439",
+      "path": "files/out/macos-retained-diagnostic/export.zip",
+      "sha256": "973d6ada66511b80d2dcf76e0c95a3b38367c32e08a0f16a62c20e0c0a90974d"
+    },
+    {
+      "bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-6e13108",
+      "path": "artifact.zip",
+      "sha256": "12060f52a9cadba5dabedb5a99b5f4293893bd066d544f2ba4e58c612d2357db"
+    }
+  ],
+  "events": [
+    {
+      "event": "input",
+      "monotonic_seconds": 125.866705833,
+      "utc_ns": 1791963871406463000,
+      "path": "/Users/runner/work/Sirius/Sirius/out/macos-retained-diagnostic/observation/metal-source/initialize.metal",
+      "bytes": 85091,
+      "sha256": "b2d7daec9928356de4ca24a724d135adc59685a330b043e4fa55f2fe2f9b5550",
+      "candidate_source": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "qualification_claimed": false,
+      "route": "synchronous native Metal error-returning methods; no command queue or dispatch"
+    },
+    {
+      "event": "device",
+      "monotonic_seconds": 125.879236041,
+      "utc_ns": 1791963871418993000,
+      "count": 1,
+      "name": "Apple Paravirtual device",
+      "registry_id": 4294967706,
+      "expected_registry_id": null,
+      "registry_scope": "observed and re-enumerated this run; prior Vulkan bundle contains no Metal registryID",
+      "low_power": false,
+      "unified_memory": true
+    },
+    {
+      "event": "compile_options",
+      "monotonic_seconds": 125.879399541,
+      "utc_ns": 1791963871419156000,
+      "language_version": 196610,
+      "fast_math_enabled": true,
+      "math_mode": 2,
+      "math_fp_functions": 0,
+      "preserve_invariance": false,
+      "optimization_level": 0,
+      "provenance": "source-derived MoltenVK v1.4.1 plus pinned SPIRV-Cross adec7ac and exact SPV; original debug=0 did not record option getters"
+    },
+    {
+      "event": "phase_start",
+      "monotonic_seconds": 125.879428166,
+      "utc_ns": 1791963871419185000,
+      "phase": "library"
+    },
+    {
+      "event": "phase_end",
+      "monotonic_seconds": 127.277563458,
+      "utc_ns": 1791963872817323000,
+      "phase": "library",
+      "success": true,
+      "error": null
+    },
+    {
+      "event": "phase_start",
+      "monotonic_seconds": 127.277749166,
+      "utc_ns": 1791963872817506000,
+      "phase": "function"
+    },
+    {
+      "event": "phase_end",
+      "monotonic_seconds": 127.278029083,
+      "utc_ns": 1791963872817786000,
+      "phase": "function",
+      "success": true
+    },
+    {
+      "event": "incomplete",
+      "monotonic_seconds": 127.2782065,
+      "utc_ns": 1791963872817963000,
+      "error": "ValueError: compute descriptor differs from original route"
+    }
+  ],
+  "native_child_exit": 1,
+  "native_child_containment_complete": true,
+  "device_pipeline_attempted": false,
+  "numerics_executed": false,
+  "qualification_claimed": false,
+  "finding": "The exact captured MSL compiled into a Metal library and main0 was retrieved. An overstrict diagnostic predicate then required framework-default descriptor properties to be nil. The predicate refused before pipeline creation, so this is no new product pipeline outcome. MoltenVK leaves those defaults untouched; preserve that frame condition instead of requiring pointer identity, and log each observed descriptor field before checking explicitly assigned function/maxThreads/fullSubgroups. Original product Initialize failure and Endpoint deadline remain unchanged."
+}
