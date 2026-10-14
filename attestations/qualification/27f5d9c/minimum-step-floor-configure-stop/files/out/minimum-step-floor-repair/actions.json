@@ -1,0 +1,71 @@
+{
+  "configure": {
+    "revision": "27f5d9cdc6f9268b598a2b954febca8ec3468394",
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc"
+    ],
+    "kind": "build",
+    "expected_exit": 0,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/cmake",
+      "/usr/bin/ninja",
+      "/usr/bin/g++-14",
+      "/usr/bin/gcc-14",
+      "/usr/bin/ld",
+      "/usr/bin/as",
+      "/usr/bin/python3.12",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis"
+    ],
+    "scope": "Original strict linux-gcc preset configure; prospective owned build boundary, not a rendering/scientific acceptance deadline.",
+    "software_provider": false
+  },
+  "build-backend": {
+    "revision": "27f5d9cdc6f9268b598a2b954febca8ec3468394",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--parallel",
+      "2",
+      "--target",
+      "sirius_backend_tests"
+    ],
+    "kind": "build",
+    "expected_exit": 0,
+    "limits": {
+      "seconds": 900,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/cmake",
+      "/usr/bin/ninja",
+      "/usr/bin/g++-14",
+      "/usr/bin/gcc-14",
+      "/usr/bin/ld",
+      "/usr/bin/as",
+      "/usr/bin/python3.12",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis"
+    ],
+    "scope": "Original strict linux-gcc preset build-backend; prospective owned build boundary, not a rendering/scientific acceptance deadline.",
+    "software_provider": false
+  }
+}

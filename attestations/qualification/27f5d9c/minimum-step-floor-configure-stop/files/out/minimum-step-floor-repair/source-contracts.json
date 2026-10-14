@@ -1,0 +1,141 @@
+{
+  "base_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "base_sources": {
+    "src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 23338,
+      "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+    },
+    "src/sirius/kernels/parity_probe.slang": {
+      "bytes": 36380,
+      "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "bytes": 63419,
+      "sha256": "a66222aa9d6bb3e16b0e2df4b2d903669347badb0118e838091c6e569c590c77"
+    },
+    "tests/backend/kernel_parity_test.cpp": {
+      "bytes": 117467,
+      "sha256": "8d2e747d4d375e4a8849c32a33d66cce148de7b5dea28977da212138fa97f986"
+    },
+    "tests/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    }
+  },
+  "candidate_sources": {
+    "src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 23624,
+      "sha256": "203c0c922e3a51cefef2badb6e8c8cd49b33600ab8e6ed11c1d372eaa527e471"
+    },
+    "src/sirius/kernels/parity_probe.slang": {
+      "bytes": 40925,
+      "sha256": "885272d041e79077a54702534fc2e91ae2bc89166cd49f077c2978bc5c6eb235"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "bytes": 63438,
+      "sha256": "9074a188f407a4e22046db652fd19001387a4773cd25ac90d93f9849cccfe88a"
+    },
+    "tests/backend/kernel_parity_test.cpp": {
+      "bytes": 123890,
+      "sha256": "908fa7e36fa86ec468cd28d108096df00dc1167705d7734bf2aa3406a9a92c47"
+    },
+    "tests/operating_model.json": {
+      "bytes": 130611,
+      "sha256": "b1c00980837dbf22070353077cd0cc492c6cc582ae7bf9679571ab63602196e6"
+    }
+  },
+  "executed": false,
+  "finding_lineage": {
+    "actual_ci_numerical_root_cause_proven": false,
+    "archive": "attestations/scientific-core/4bcd987/p1-kerr-minimum-step-observer-rss-stop",
+    "commit": "11d17cc42761f5c40e925d7ec414178e8697991e",
+    "manifest": {
+      "bytes": 12362,
+      "sha256": "a13e169bbc619866fb8344487a7f27845a1eaed21a124c019873ea9757e9125f"
+    },
+    "original_diagnostic_incomplete": true,
+    "source_finding": {
+      "bytes": 7537,
+      "sha256": "c7fbb5ffde5a15baa213815d8edf3b5a565304ff78e3401dd2c44f9775f0b797"
+    },
+    "source_finding_path": "attestations/scientific-core/4bcd987/p1-kerr-minimum-step-observer-rss-stop/files/out/p1-kerr-minimum-step-observer/minimum-step-source-finding.json"
+  },
+  "focused_controls": {
+    "bytes": 5276,
+    "sha256": "972cb476ea2fbd5a6299130f67bf3b9b9e09986d041c6be3bd63764dd40cd9e3"
+  },
+  "fp64_pipeline_scope": "Acquire device through unchanged EnumerateVulkanDevices/ResolveVulkanDeviceIndex/CreateVulkanDevice calls, then LoadKernel only parity_probe_fp64.spv. No unused ordinary pipeline and no Fixture/OpenProbe API option added; explicit unsupported shaderFloat64 decline remains.",
+  "future_commands": {
+    "bytes": 4656,
+    "sha256": "1bdb54d2865ef8184abf2fd5ba9615568e34557ec5d8e07736e446c7dbedf4e5"
+  },
+  "new_test_only_changes": "Existing parity probe opcode25 and three new separately discovered KernelParity tests use original RunProbe/factory/resource/float-IO ABI. Host nextafter provides rung-exact neighbor. Four real adaptive candidates use unchanged production tolerance functions. Existing modes remain unchanged except original live conservation floor caller.",
+  "no_executed_legacy_or_candidate_gpu_result": true,
+  "original_preimages": {
+    "src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 23338,
+      "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+    },
+    "src/sirius/kernels/parity_probe.slang": {
+      "bytes": 36380,
+      "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "bytes": 63419,
+      "sha256": "a66222aa9d6bb3e16b0e2df4b2d903669347badb0118e838091c6e569c590c77"
+    },
+    "tests/backend/kernel_parity_test.cpp": {
+      "bytes": 117467,
+      "sha256": "8d2e747d4d375e4a8849c32a33d66cce148de7b5dea28977da212138fa97f986"
+    },
+    "tests/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    }
+  },
+  "patch": {
+    "bytes": 15246,
+    "sha256": "2e35d1b9aec00834eec8f75753cc25bb2c3cf0eff8420516e541a3491f972d6c"
+  },
+  "prepared_only": true,
+  "product_change": "Only shared exact attemptedStep<=minimumStep rejection-floor predicate and the two trace/live-parity callers; adaptive selection/max(min,dt*factor) and all accepted/rejected state/refusal paths remain unchanged.",
+  "regression_proof_limits": [
+    "No all40-field coupled state or full TraceContinuation/radiance rollback execution proof; the new branch checks central state and controller counters only.",
+    "Central adaptive candidate/shared floor decision and bounded controller commit only; no full TraceContinuation/radiance ABI run.",
+    "Deliberately off-null negative control is not a physical ray or original CI fixture.",
+    "Original #702/#823/#824 numerical cause, observer RSS stop, complete-frame/scientific qualification remain unproved.",
+    "No original failed frame is scheduled for unchanged retry."
+  ],
+  "required_before_execution": [
+    "Root independent source admission and current benefit evidence preserved.",
+    "Root integration/commit and clean identified branch; canonical46 unchanged by this preparation.",
+    "Root actual strict configure/build/compiler/validator success, current-source module/resource/dependency/registration joins.",
+    "Root prospective owned action closure pins exact new revision/ELF/SPV/provider and all actual inputs; absent outputs/no other local workload.",
+    "Every supported new test and affected module-capability check completes under original limits; source inspection is not numerical validation."
+  ],
+  "schema": "sirius-minimum-step-floor-repair-source-contracts-v1",
+  "single_authority": "gr_integrator.slang::AdaptiveAttemptAlreadyAtMinimumStep called only after a real rejected candidate for termination; dt>min does not itself terminate and selects the original bounded retry; rejected dt<=min may terminate.",
+  "source_byte_checks": {
+    "all_existing_host_test_function_bodies_and_assertions_unchanged": true,
+    "all_original_parity_opcode_bodies_and_callers_unchanged_except_live_floor_predicate": true,
+    "gr_integrator_original_bytes_equal_after_removing_new_predicate": true,
+    "old_cpu_control_and_source_reused_unchanged": true,
+    "operating_model_only_three_new_P1_gtest_evidence_rows": true,
+    "trace_original_bytes_equal_after_restoring_one_predicate_call": true
+  },
+  "unchanged_product_authorities": [
+    "entire AttemptAdaptiveGeodesicStep function",
+    "RK4 represented-stage/domain checks",
+    "unprojected error and null bounds",
+    "branch-preserving null projection",
+    "rung tolerances",
+    "controller factor/clamps",
+    "accepted commit/compensation/Jacobi/source/volume code",
+    "attempt/accept/work limits",
+    "event/capture/escape clipping",
+    "TraceContinuation ABI/identity/rollback validation",
+    "MinimumStep cannot publish radiance",
+    "all original test fixtures/assertions and deadlines",
+    "default/public precision and optional capability policies"
+  ]
+}

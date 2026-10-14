@@ -1,0 +1,30 @@
+CMake Error at cmake/sirius_alignment.cmake:18 (message):
+  Sirius operating-model configuration failed:
+
+  operating model: acceptance_criteria: semantic policy digest differs from
+  verifier policy
+
+  operating model: enabled source GoogleTests are not Mandatory:
+  KernelParity.RejectedNeighbourRetriesExactMinimumFp32,
+  KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp,
+  KernelParity.RejectedNeighbourRetriesExactMinimumFp64
+
+  operating model: acceptance criterion P1: test is not Mandatory:
+  KernelParity.RejectedNeighbourRetriesExactMinimumFp32
+
+  operating model: acceptance criterion P1: test is not Mandatory:
+  KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp
+
+  operating model: acceptance criterion P1: test is not Mandatory:
+  KernelParity.RejectedNeighbourRetriesExactMinimumFp64
+
+  operating model: acceptance criterion P1: evidence policy differs:
+  missing=[],
+  unexpected=['gtest:KernelParity.RejectedNeighbourRetriesExactMinimumFp32',
+  'gtest:KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp',
+  'gtest:KernelParity.RejectedNeighbourRetriesExactMinimumFp64']
+
+Call Stack (most recent call first):
+  CMakeLists.txt:43 (include)
+
+

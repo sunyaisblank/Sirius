@@ -1,0 +1,129 @@
+{
+  "artifact_per_case": [
+    "parity_probe.spv",
+    "parity_probe_fp32comp.spv",
+    "parity_probe_fp64.spv"
+  ],
+  "capability_check_affected_by_new_artifacts": "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
+  "executed": false,
+  "existing_abi": {
+    "result_floats": 64,
+    "sample_floats": 16,
+    "storage_bindings": 3,
+    "workgroup_lanes": 64
+  },
+  "existing_cpu_control_reused": "RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating passed original LinuxCI #326; source/control unchanged and not scheduled for redundant execution.",
+  "finite_work_per_supported_rung": "Four records, each at most2real adaptive attempts; existing RunProbe allocation limit1MiB, one active submission, original separate zero-active software initialization and1000ms active submit/wait refusal. Three independently discovered tests retain separate processes.",
+  "four_records": [
+    {
+      "dt": "next representable Real above minimum",
+      "expected": {
+        "accepts": 0,
+        "affine_progress": 0,
+        "attempts": 2,
+        "central_state_unchanged": true,
+        "first_at_floor": false,
+        "floor_terminal": true,
+        "real_first_rejected": true,
+        "retry_selects_exact_floor": true,
+        "second_real_rejected_at_floor": true
+      },
+      "name": "rejected_neighbour",
+      "tangent": [
+        -0.8,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "dt": "exact minimum",
+      "expected": {
+        "accepts": 0,
+        "affine_progress": 0,
+        "attempts": 1,
+        "central_state_unchanged": true,
+        "first_at_floor": true,
+        "floor_terminal": true,
+        "real_first_rejected": true,
+        "retry_selects_exact_floor": false
+      },
+      "name": "rejected_floor",
+      "tangent": [
+        -0.8,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "dt": "next representable Real above minimum",
+      "expected": {
+        "accepts": 1,
+        "affine_progress": "positive",
+        "attempts": 1,
+        "central_state_advanced": true,
+        "floor_terminal": false,
+        "real_first_accepted": true
+      },
+      "name": "accepted_neighbour",
+      "tangent": [
+        -1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "dt": "exact minimum",
+      "expected": {
+        "accepts": 1,
+        "affine_progress": "positive",
+        "attempts": 1,
+        "central_state_advanced": true,
+        "first_at_floor": true,
+        "floor_terminal": false,
+        "real_first_accepted": true
+      },
+      "name": "accepted_floor",
+      "tangent": [
+        -1,
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "fp64_pipeline_scope": "Acquire device through unchanged EnumerateVulkanDevices/ResolveVulkanDeviceIndex/CreateVulkanDevice calls, then LoadKernel only parity_probe_fp64.spv. No unused ordinary pipeline and no Fixture/OpenProbe API option added; explicit unsupported shaderFloat64 decline remains.",
+  "fp64_unsupported": "Original factory must explicitly decline shaderFloat64 module and record unsupported_kernel_declined; supported fp32/compensated cases still execute.",
+  "inputs_common": {
+    "integration_tolerance": "unchanged AdaptiveIntegrationTolerance()",
+    "metric": "M=a=Q=Lambda=0 finite Cartesian flat space",
+    "minimum_step": "the original .02f widened to Real",
+    "neighbour_quantum": "Host std::nextafter at actual float or widened-double minimum; exact positive power-of-two gap travels in existing aux1 float. No new integer64 type/capability or bitcast.",
+    "null_tolerance": "unchanged AdaptiveNullTolerance()",
+    "position": [
+      0,
+      3,
+      0,
+      0
+    ]
+  },
+  "new_gpu_cases": [
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp64"
+  ],
+  "new_probe_opcode": 25,
+  "nonvacuity": "Host requires opcode-executed flag, rung-preserved positive one-ULP gap, actual candidate acceptance flags/error/null/projection data, rejection null residual>.2 despite projected residual0, actual stepFactor.5/floor retry/counts and all8committed central components. Exactly-null companions must accept and advance. No supplied accepted=false.",
+  "old_window_failure_expectation": "If the shared predicate used original attemptedStep<=minimumStep*1.0001f, rejected_neighbour first_at_floor becomes1, attempts1, no exact-floor retry; multiple existing new assertions fail. This is a source-level expectation, not a performed mutation/old-source run.",
+  "prepared_only": true,
+  "schema": "sirius-minimum-step-focused-controls-v1",
+  "scope_limits": [
+    "No all40-field coupled state or full TraceContinuation/radiance rollback execution proof; the new branch checks central state and controller counters only.",
+    "Central adaptive candidate/shared floor decision and bounded controller commit only; no full TraceContinuation/radiance ABI run.",
+    "Deliberately off-null negative control is not a physical ray or original CI fixture.",
+    "Original #702/#823/#824 numerical cause, observer RSS stop, complete-frame/scientific qualification remain unproved.",
+    "No original failed frame is scheduled for unchanged retry."
+  ]
+}

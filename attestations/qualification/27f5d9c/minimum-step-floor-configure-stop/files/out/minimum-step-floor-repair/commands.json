@@ -1,0 +1,139 @@
+{
+  "activation": "Only root after current benefit terminal evidence is frozen, independent source review and integration/commit on an identified development branch. No operation during preparation. Existing strict alignment/build/source contracts stay enforced.",
+  "admitted": false,
+  "base_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "build_scope": "Existing dependency graph compiles/validates affected product/probe shaders and stages exact resources; no suppressed dependency, private stale source, skipped validator, relaxed contract or hand-edited build output. Root binds actual new source/build receipts and tools before numerical work.",
+  "environment": "Pinned LVP/device0 on local software qualification; preserve default/unset Mesa shader cache, no LP/MESA tuning/cache cleanup. Use reviewed narrow owner cache-default option, not the benefit runner cache-off policy.",
+  "existing_preset_build_commands": [
+    [
+      "cmake",
+      "--preset",
+      "linux-gcc"
+    ],
+    [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--parallel",
+      "2",
+      "--target",
+      "sirius_backend_tests"
+    ]
+  ],
+  "focused_future_owned_actions": {
+    "fp32": {
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "bin/linux-gcc",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "{folder}/ctest.xml",
+        "--output-log",
+        "{folder}/ctest.log",
+        "-R",
+        "^KernelParity\\.RejectedNeighbourRetriesExactMinimumFp32$"
+      ],
+      "execution_revision": "PENDING_ROOT_INTEGRATED_COMMIT_AND_ACTUAL_BUILD_REVIEW",
+      "expected_exit": 0,
+      "kind": "build",
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      }
+    },
+    "fp32comp": {
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "bin/linux-gcc",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "{folder}/ctest.xml",
+        "--output-log",
+        "{folder}/ctest.log",
+        "-R",
+        "^KernelParity\\.RejectedNeighbourRetriesExactMinimumFp32Comp$"
+      ],
+      "execution_revision": "PENDING_ROOT_INTEGRATED_COMMIT_AND_ACTUAL_BUILD_REVIEW",
+      "expected_exit": 0,
+      "kind": "build",
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      }
+    },
+    "fp64": {
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "bin/linux-gcc",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "{folder}/ctest.xml",
+        "--output-log",
+        "{folder}/ctest.log",
+        "-R",
+        "^KernelParity\\.RejectedNeighbourRetriesExactMinimumFp64$"
+      ],
+      "execution_revision": "PENDING_ROOT_INTEGRATED_COMMIT_AND_ACTUAL_BUILD_REVIEW",
+      "expected_exit": 0,
+      "kind": "build",
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      }
+    },
+    "module-capabilities": {
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "bin/linux-gcc",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "{folder}/ctest.xml",
+        "--output-log",
+        "{folder}/ctest.log",
+        "-R",
+        "^KernelParity\\.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability$"
+      ],
+      "execution_revision": "PENDING_ROOT_INTEGRATED_COMMIT_AND_ACTUAL_BUILD_REVIEW",
+      "expected_exit": 0,
+      "kind": "build",
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      }
+    }
+  },
+  "owner_template": "Use existing mature owner/guard only after binding exact integrated source revision, actual generated registrations/product/module/provider files and build review. Each numerical action300s/4GiB sampled aggregateRSS/2GiB host reserve; no limit change, no competing workload. {folder} is the existing runner-owned fresh output directory.",
+  "prepared_only": true,
+  "root_integration_commands": [
+    [
+      "git",
+      "apply",
+      "--check",
+      "out/minimum-step-floor-repair/repair.patch"
+    ],
+    [
+      "git",
+      "apply",
+      "out/minimum-step-floor-repair/repair.patch"
+    ]
+  ],
+  "schema": "sirius-minimum-step-floor-repair-prospective-commands-v1",
+  "stop": "First incomplete owner/build/source/provider/assertion fails: stop and preserve; no unchanged retry, budget/tolerance/grid/settings relaxation or claim that original CI cause is fixed."
+}
