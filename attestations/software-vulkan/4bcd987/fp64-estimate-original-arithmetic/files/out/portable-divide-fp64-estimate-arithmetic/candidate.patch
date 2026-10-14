@@ -1,0 +1,48 @@
+--- a/src/sirius/kernels/portable_binary32.h
++++ b/src/sirius/kernels/portable_binary32.h
+@@ -184,6 +184,45 @@
+         remainder <<= 1;
+         --exponent;
+     }
++#if defined(SIRIUS_PB32_DIVIDE_FP64_ESTIMATE)
++    // Native arithmetic proposes a quotient only. No precision/rounding claim
++    // is used: an exact two-word product and remainder must verify the guess.
++    double numerator = double(remainder), denominator = double(bb.significand);
++#if defined(__cplusplus)
++    double estimate = (numerator * 67108864.0) / denominator;
++    std::uint64_t estimateWord = std::bit_cast<std::uint64_t>(estimate);
++    PB32Wide estimateBits;
++    estimateBits.lo = uint(estimateWord);
++    estimateBits.hi = uint(estimateWord >> 32);
++#else
++    double scale = 67108864.0;
++    double estimate = spirv_asm {
++        OpFMul $$double %scaled $numerator $scale;
++        OpDecorate %scaled NoContraction;
++        OpFDiv $$double %quotient %scaled $denominator;
++        OpDecorate %quotient NoContraction;
++        OpCopyObject $$double result %quotient;
++    };
++    PB32Wide estimateBits;
++    asuint(estimate, estimateBits.lo, estimateBits.hi);
++#endif
++    // This integer sign/exponent test admits exactly positive normal values
++    // in [2^26,2^27). There is no floating-to-integer conversion.
++    if ((estimateBits.hi & 0xfff00000u) == 0x41900000u) {
++        uint guess = (((estimateBits.hi & 0x000fffffu) | 0x00100000u) << 6) |
++                     (estimateBits.lo >> 26);
++        PB32Wide product = PB32WideProduct(guess, bb.significand);
++        uint numeratorLo = remainder << 26, numeratorHi = remainder >> 6;
++        bool notAbove = product.hi < numeratorHi ||
++                        (product.hi == numeratorHi && product.lo <= numeratorLo);
++        if (notAbove) {
++            uint residualLo = numeratorLo - product.lo;
++            uint residualHi = numeratorHi - product.hi - (numeratorLo < product.lo ? 1u : 0u);
++            if (residualHi == 0u && residualLo < bb.significand)
++                return PB32Round(sign, exponent, guess | (residualLo != 0u ? 1u : 0u));
++        }
++    }
++#endif
+     // Normalization gives d <= remainder < 2*d. Emit the leading bit,
+     // then the same 26 fractional bits in exact radix-256/4 chunks.
+     uint quotient = 1u;

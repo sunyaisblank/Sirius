@@ -1,0 +1,54 @@
+{
+  "execution_performed": false,
+  "findings": [
+    {
+      "condition": "Accepted estimate graph may contain integer member_pointers object keys; JSON persistence turns those keys into strings. Direct saved-Python-dict equality would reject that representation. No phase has run.",
+      "correction": "Use accepted complete canonical_json normalization at the two durable-module comparisons. Preserve all values, arrays and graph predicates.",
+      "location": "gate.py pin_runtime/review modules comparisons",
+      "source": "author passive final source review"
+    },
+    {
+      "condition": "verify_output_seal/accepted_folder read prior owner.json and inputs-before/after.json, but those receipts were not declared alongside already-declared prior output seals.",
+      "correction": "Predeclare all three terminal receipts for each already-selected prior dependency ancestor; no owner change.",
+      "location": "actions.json frozen_inputs for later producer/numeric actions",
+      "source": "independent forensic source review, accepted by root"
+    }
+  ],
+  "operator_failure_observed": false,
+  "preimages": {
+    "actions.json": {
+      "bytes": 2070237,
+      "sha256": "aea313a3b988efd766e7f785331fee08e8b2d371ec5a31200f7228b5c028b8a9"
+    },
+    "gate.py": {
+      "bytes": 34163,
+      "sha256": "05158f288b9fc7dcb0071a1a90fb27c463528ea2d47d4e60d198c5b9701126fd"
+    },
+    "gate.py.patch": {
+      "bytes": 21468,
+      "sha256": "bcdd2093e496ed610a72d35d49fcd47f027dadeedb1eb6f2dddabda05ae95277"
+    },
+    "packet.json": {
+      "bytes": 314446,
+      "sha256": "197019e1418d6fc64d8d79eee07357adffa7e29338e4fd35d833547b77fd5451"
+    },
+    "preparation.json": {
+      "bytes": 5230,
+      "sha256": "0859d9b7eb58e785cab03921c2dac30263d247703232ba76515c3aef4b7aecd9"
+    },
+    "source-freeze.json": {
+      "bytes": 651080,
+      "sha256": "1259600ff6441042d6f62502fab187017b9bc13aa783d6e21e19832be9e74ac0"
+    }
+  },
+  "raw_operator_log_created": false,
+  "schema": "sirius-fp64-estimate-arithmetic-prelaunch-evidence-join-finding-v1",
+  "scope": "Unexecuted source/preparation correction. Preliminary root pin/AST reads are not phase or numerical acceptance.",
+  "unchanged": [
+    "candidate header/macro and original fallback",
+    "estimate graph reader",
+    "original corpus/source/assertions",
+    "all producer recipes and output seals",
+    "original owner/guard and300s/4GiB/2GiB bounds"
+  ]
+}

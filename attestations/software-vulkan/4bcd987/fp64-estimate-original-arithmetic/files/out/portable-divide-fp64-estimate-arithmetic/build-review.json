@@ -1,0 +1,380 @@
+{
+  "compiler_and_jit_receipts": {
+    "compiler_acceptance": {
+      "bytes": 1145,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-reader-recovery/files/out/portable-divide-fp64-estimate-screen/reader-recovery/compiler-acceptance.json",
+      "sha256": "b2d15fdf12b7de611608a3463e9db705adecd66b544ba3680bdc8715c08a7a38"
+    },
+    "compiler_manifest": {
+      "bytes": 8594,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-reader-recovery/manifest.json",
+      "sha256": "1d7f0eb781418ff0c3fd6cf5026d95dc319f816eb04b5a401cc72e91275a361c"
+    },
+    "compiler_result": {
+      "bytes": 6890,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-reader-recovery/files/out/portable-divide-fp64-estimate-screen/reader-recovery/compiler-result.json",
+      "sha256": "a7a9efb9c30d76536cc4e2f097e8c6c8dcfedab3526d9ae104943de9a2fdc908"
+    },
+    "historical_exact_cache_recovery": {
+      "bytes": 60385,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-ordinary-jit-screen/files/out/portable-divide-fp64-estimate-screen/driver/recovered-inputs/CMakeCache-historical-exact.txt",
+      "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02"
+    },
+    "jit_capture_acceptance": {
+      "bytes": 2888,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-ordinary-jit-screen/files/out/portable-divide-fp64-estimate-screen/driver/capture-acceptance.json",
+      "sha256": "a2641b943cc5a551d437dd32dbc8dd8a327496a5f9f9f55c9e9d58e89e01c978"
+    },
+    "jit_manifest": {
+      "bytes": 20450,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-ordinary-jit-screen/manifest.json",
+      "sha256": "11bd7d4f61352dcbdbd9719efe3795ed68508fda4a9a2964cfc791aa84a1a68d"
+    },
+    "jit_terminal_review": {
+      "bytes": 14485,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-ordinary-jit-screen/files/out/portable-divide-fp64-estimate-screen/driver/independent-terminal-review.json",
+      "sha256": "3759d4a6728e2594b34a1c8f62a7c0ac69968b1d5ae3f389cbdf53e241a9986b"
+    },
+    "normal_candidate_module": {
+      "bytes": 153168,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.spv",
+      "sha256": "87fc489831e49e8e1bdc7f60e3cf3f778c5a1297f21c4bc5d026968418c9fe7f"
+    },
+    "ordinary_cost_review": {
+      "bytes": 29130,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide-fp64-estimate-ordinary-jit-screen/files/out/portable-divide-fp64-estimate-screen/driver/independent-cost-review.json",
+      "sha256": "40e4ad0b1c87519845e20f670fc3992e33fe7c1061b9a4646e81f325d073933f"
+    },
+    "physical_property_receipt": {
+      "bytes": 11803,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-float-controls-properties/files/out/portable-divide-fp64-estimate-property-query/read-properties/property-accepted.json",
+      "sha256": "0e9946333e2f5882d93cbfaaa1f08f4a7d602fc5487988b776cda2e713b9f4ea"
+    },
+    "scope": "Immutable complete compiler/failed-wrapper/new-reader/property/ordinary JIT receipts. Exact canary host Float64 enablement and unused Int64 are historical to numeric process; no retained arithmetic, estimate accuracy/hit rate or benefit premise executed."
+  },
+  "host_uses_candidate_header_and_explicit_macro": true,
+  "modules": {
+    "candidate": {
+      "assembly": {
+        "bytes": 80699,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/candidate.spvasm",
+        "sha256": "ca86790382eabc09d003fa49b2c264173339939057acf24c36a895e152bb948e"
+      },
+      "capabilities": [
+        "Float64",
+        "Shader"
+      ],
+      "divide_estimate_graph": {
+        "Function_uint2_member_load_proof": {
+          "direct_only_no_alias_escape_or_extra_store": true,
+          "load_ids": [
+            "%956",
+            "%963"
+          ],
+          "member_pointers": {
+            "0": "%943",
+            "1": "%944"
+          },
+          "single_stores_dominate_single_entry_guarded_loads": true,
+          "variable": "%estimateBits"
+        },
+        "acceptance_predicates": [
+          "%953",
+          "%1936",
+          "%1939"
+        ],
+        "accepted_path_returns_same_round_sign_exponent": true,
+        "arithmetic_equivalence_executed": false,
+        "closed_choice_proofs": {
+          "%1936": {
+            "entry": "%826",
+            "kind": "closed two-arm Phi",
+            "merge": "%832",
+            "predicate": "%972"
+          },
+          "%1937": {
+            "entry": "%828",
+            "kind": "closed two-arm Phi",
+            "merge": "%831",
+            "predicate": "%976"
+          },
+          "%1938": {
+            "entry": "%833",
+            "kind": "closed two-arm Phi",
+            "merge": "%836",
+            "predicate": "%990"
+          },
+          "%1939": {
+            "entry": "%836",
+            "kind": "closed two-arm Phi",
+            "merge": "%839",
+            "predicate": "%998"
+          },
+          "%1963": {
+            "entry": "%840",
+            "kind": "closed two-arm Phi",
+            "merge": "%843",
+            "predicate": "%1007"
+          }
+        },
+        "cost_or_hit_rate_established": false,
+        "exact_product": {
+          "id": "%966",
+          "opcode": "OpUMulExtended"
+        },
+        "exact_product_remainder_inequalities": true,
+        "exact_remainder": [
+          "%residualLo",
+          "%residualHi"
+        ],
+        "exact_remainder_sticky": true,
+        "guess": "%guess",
+        "integer_range_before_guess_extraction": true,
+        "named_PB32WideProduct_required": false,
+        "native_estimate_accuracy_assumed": false,
+        "original_complete_fallback_suffix_normalized_equal": true,
+        "unsigned64_or_float_to_uint_required": false,
+        "wide_division": "%quotient"
+      },
+      "divide_loops": 1,
+      "divide_widths": [
+        32
+      ],
+      "float_widths": [
+        "64"
+      ],
+      "integer_widths": [
+        "32"
+      ],
+      "module": {
+        "bytes": 29300,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/candidate.spv",
+        "sha256": "7a4290be1d6d52e8dea78dbe57f9d1465cb50c3ae4b62d2b9b7c9c1ef42930c4"
+      },
+      "op3_actual_Divide_call": {
+        "case3_true_block_only": true,
+        "condition": "%782",
+        "id": "%785",
+        "result_stored": true
+      },
+      "original_divide_complete_fallback_suffix_normalized_equal": true,
+      "original_multiply_residual_unpack_round_normalized_bodies_equal": true
+    },
+    "stock": {
+      "assembly": {
+        "bytes": 75783,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/stock.spvasm",
+        "sha256": "aefc7ead4a18b92ea973931a47e946e6104211ff2d6c56a39db6afa38935856e"
+      },
+      "capabilities": [
+        "Shader"
+      ],
+      "divide_estimate_graph": null,
+      "divide_loops": 1,
+      "divide_widths": [
+        32
+      ],
+      "float_widths": [],
+      "integer_widths": [
+        "32"
+      ],
+      "module": {
+        "bytes": 27500,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/stock.spv",
+        "sha256": "92d261966262c3bc93457bd95cabe2c7a3da007748cc0cf7f46b038311a7b019"
+      },
+      "op3_actual_Divide_call": {
+        "case3_true_block_only": true,
+        "condition": "%782",
+        "id": "%785",
+        "result_stored": true
+      },
+      "original_divide_complete_fallback_suffix_normalized_equal": true,
+      "original_multiply_residual_unpack_round_normalized_bodies_equal": true
+    }
+  },
+  "nm_outputs": {
+    "device-object": "0000000000000000 V DW.ref._ZTISt9bad_alloc\n0000000000000000 V DW.ref.__gxx_personality_v0\n0000000000000000 W _ZN6sirius4base4FailENS0_11ErrorDomainENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_\n0000000000000000 W _ZN6sirius4base5ErrorC1ERKS1_\n0000000000000000 W _ZN6sirius4base5ErrorC2ERKS1_\n00000000000046a0 T _ZN6sirius7backend12VulkanDevice10LoadKernelESt4spanIKjLm18446744073709551615EE\n0000000000004080 T _ZN6sirius7backend12VulkanDevice10ReadBufferENS0_12BufferHandleESt4spanISt4byteLm18446744073709551615EE\n0000000000003a40 T _ZN6sirius7backend12VulkanDevice11WriteBufferENS0_12BufferHandleESt4spanIKSt4byteLm18446744073709551615EE\n0000000000005040 T _ZN6sirius7backend12VulkanDevice12CreateBufferEmNS0_11BufferUsageE\n000000000000a5f0 T _ZN6sirius7backend12VulkanDevice16DispatchCommandsESt4spanIKNS0_15ComputeDispatchELm18446744073709551615EEPNS0_14DispatchTimingEPj\n0000000000005b80 T _ZN6sirius7backend12VulkanDevice19GetOrCreatePipelineENS0_12KernelHandleESt4spanIKNS0_12BufferHandleELm18446744073709551615EEPb\n0000000000001440 T _ZN6sirius7backend12VulkanDevice21AdvanceBufferMutationENS0_12BufferHandleE\n0000000000009bf0 T _ZN6sirius7backend12VulkanDevice21SnapshotPipelineCacheEv\n000000000000ba40 T _ZN6sirius7backend12VulkanDevice23DispatchIndependentPairERKSt5arrayINS0_15ComputeDispatchELm2EEPNS0_21IndependentPairTimingE\n0000000000001050 T _ZN6sirius7backend12VulkanDevice23InitialisePipelineCacheEv\n0000000000001ce0 T _ZN6sirius7backend12VulkanDevice24SetBufferAllocationLimitEm\n0000000000002c80 T _ZN6sirius7backend12VulkanDevice28SetDispatchTimestampsEnabledEb\n0000000000003320 T _ZN6sirius7backend12VulkanDevice29RequiredBufferAllocationBytesEmNS0_11BufferUsageE\n000000000000b9c0 T _ZN6sirius7backend12VulkanDevice8DispatchENS0_12KernelHandleESt4spanIKNS0_12BufferHandleELm18446744073709551615EEjjjPNS0_14DispatchTimingE\n000000000000a5d0 T _ZN6sirius7backend12VulkanDeviceD0Ev\n000000000000a1a0 T _ZN6sirius7backend12VulkanDeviceD1Ev\n000000000000a1a0 T _ZN6sirius7backend12VulkanDeviceD2Ev\n000000000000be00 T _ZN6sirius7backend18CreateVulkanDeviceEm\n0000000000007960 T _ZN6sirius7backend22EnumerateVulkanDevicesEv\n000000000000d690 T _ZN6sirius7backend24ResolveVulkanDeviceIndexESt4spanIKNS0_10DeviceInfoELm18446744073709551615EE\n0000000000001ff0 T _ZN6sirius7backend29ValidateVulkanKernelPrecisionESt4spanIKjLm18446744073709551615EEbb\n0000000000000e70 T _ZN6sirius7backend6detail20VulkanHostMemoryTypeERK32VkPhysicalDeviceMemoryPropertiesj\n0000000000001300 T _ZN6sirius7backend6detail21VulkanTimestampSpanMsEmmjdd\n0000000000008af0 T _ZN6sirius7backend6detail27CreateDeviceWithPortabilityEP18VkPhysicalDevice_T18VkDeviceCreateInfoPF8VkResultS3_PKcPjP21VkExtensionPropertiesEPFS5_S3_PKS4_PK21VkAllocationCallbacksPP10VkDevice_TEPNS0_10DeviceInfoEPFvS3_P25VkPhysicalDeviceFeatures2E\n0000000000006bf0 T _ZN6sirius7backend6detail29CreateInstanceWithPortabilityE20VkInstanceCreateInfoPF8VkResultPKcPjP21VkExtensionPropertiesEPFS3_PKS2_PK21VkAllocationCallbacksPP12VkInstance_TE\n0000000000001420 T _ZN6sirius7backend6detail31VulkanSubmissionNeedsCompletionE8VkResultS2_\n0000000000000f70 T _ZN6sirius7backend6detail33VulkanPipelineCacheDataCompatibleESt4spanIKSt4byteLm18446744073709551615EERK26VkPhysicalDeviceProperties\n0000000000000000 W _ZNK6sirius7backend12VulkanDevice11PipelineKeyssERKS2_\n0000000000000000 T _ZNK6sirius7backend12VulkanDevice19BufferMutationEpochENS0_12BufferHandleE\n0000000000000000 W _ZNK6sirius7backend12VulkanDevice21BufferAllocationBytesEv\n0000000000000000 W _ZNK6sirius7backend12VulkanDevice23SupportsIndependentPairEv\n0000000000000000 W _ZNK6sirius7backend12VulkanDevice4InfoEv\n0000000000000000 W _ZNKSt8__format14__formatter_fpIcE6formatIDF128_NS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000000000 W _ZNKSt8__format14__formatter_fpIcE6formatIdNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000000000 W _ZNKSt8__format14__formatter_fpIcE6formatIeNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000000000 W _ZNKSt8__format14__formatter_fpIcE6formatIfNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000000000 W _ZNKSt8__format15__formatter_intIcE13_M_format_intINS_10_Sink_iterIcEEEENSt20basic_format_contextIT_cE8iteratorESt17basic_string_viewIcSt11char_traitsIcEEmRS7_\n0000000000000000 W _ZNKSt8__format15__formatter_intIcE6formatIhNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000000000 W _ZNKSt8__format15__formatter_intIcE6formatInNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000000000 W _ZNKSt8__format15__formatter_intIcE6formatIoNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000000000 W _ZNKSt8__format15__formatter_intIcE6formatIxNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000000000 W _ZNKSt8__format15__formatter_intIcE6formatIyNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000000000 W _ZNKSt8__format15__formatter_strIcE6formatINS_10_Sink_iterIcEEEET_St17basic_string_viewIcSt11char_traitsIcEERSt20basic_format_contextIS5_cE\n0000000000000000 W _ZNSt12format_errorD0Ev\n0000000000000000 W _ZNSt12format_errorD1Ev\n0000000000000000 W _ZNSt12format_errorD2Ev\n0000000000000000 W _ZNSt16basic_format_argISt20basic_format_contextINSt8__format10_Sink_iterIcEEcEE8_M_visitIZNS1_15__do_vformat_toIS3_cS4_EET_S8_St17basic_string_viewIT0_St11char_traitsISA_EERKSt17basic_format_argsIT1_EPKSt6localeEUlRS8_E_EEDcOS8_NS1_6_Arg_tE\n0000000000000000 W _ZNSt16basic_format_argISt20basic_format_contextINSt8__format10_Sink_iterIcEEcEE8_M_visitIZNS1_19_Formatting_scannerIS3_cE13_M_format_argEmEUlRT_E_EEDcOS9_NS1_6_Arg_tE\n0000000000000000 W _ZNSt6vectorIPKcSaIS1_EE17_M_realloc_appendIJRKS1_EEEvDpOT_\n0000000000000000 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_disposeEv\n0000000000000000 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7reserveEm\n0000000000000000 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm\n0000000000000000 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9push_backEc\n0000000000000000 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EOS4_\n0000000000000000 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2EOS4_\n0000000000000000 W _ZNSt8_Rb_treeIN6sirius7backend12VulkanDevice11PipelineKeyESt4pairIKS3_NS2_8PipelineEESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE24_M_get_insert_unique_posERS5_\n0000000000000000 W _ZNSt8_Rb_treeIN6sirius7backend12VulkanDevice11PipelineKeyESt4pairIKS3_NS2_8PipelineEESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorIS7_ERS5_\n0000000000000000 W _ZNSt8_Rb_treeIjSt4pairIKjjESt10_Select1stIS2_ESt4lessIjESaIS2_EE22_M_emplace_hint_uniqueIJRS1_SA_EEESt17_Rb_tree_iteratorIS2_ESt23_Rb_tree_const_iteratorIS2_EDpOT_\n0000000000000000 W _ZNSt8__detail12__to_chars_8IjEESt15to_chars_resultPcS2_T_\n0000000000000000 W _ZNSt8__detail13__to_chars_10IjEESt15to_chars_resultPcS2_T_\n0000000000000000 W _ZNSt8__detail13__to_chars_16IjEESt15to_chars_resultPcS2_T_\n0000000000000000 u _ZNSt8__detail31__from_chars_alnum_to_val_tableILb0EE5valueE\n0000000000000000 W _ZNSt8__format10_Iter_sinkIcNS_10_Sink_iterIcEEE11_M_overflowEv\n0000000000000000 W _ZNSt8__format14__formatter_fpIcE5parseERSt26basic_format_parse_contextIcE\n0000000000000000 W _ZNSt8__format14__parse_arg_idIcEESt4pairItPKT_ES4_S4_\n0000000000000000 W _ZNSt8__format14__write_paddedINS_10_Sink_iterIcEEcEET_S3_St17basic_string_viewIT0_St11char_traitsIS5_EENS_6_AlignEmDi\n0000000000000000 W _ZNSt8__format15__formatter_intIcE11_M_do_parseERSt26basic_format_parse_contextIcENS_10_Pres_typeE\n0000000000000000 W _ZNSt8__format15__formatter_strIcE5parseERSt26basic_format_parse_contextIcE\n0000000000000000 W _ZNSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcE11_M_on_charsEPKc\n0000000000000000 W _ZNSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcE13_M_format_argEm\n0000000000000000 W _ZNSt8__format22__write_padded_as_specIcNS_10_Sink_iterIcEEEET0_St17basic_string_viewINSt13type_identityIT_E4typeESt11char_traitsIS8_EEmRSt20basic_format_contextIS3_S6_ERKNS_5_SpecIS6_EENS_6_AlignE\n0000000000000000 W _ZNSt8__format29__failed_to_parse_format_specEv\n0000000000000000 W _ZNSt8__format33__invalid_arg_id_in_format_stringEv\n0000000000000000 W _ZNSt8__format39__conflicting_indexing_in_format_stringEv\n0000000000000000 W _ZNSt8__format39__unmatched_left_brace_in_format_stringEv\n0000000000000000 W _ZNSt8__format5_SinkIcE10_M_reserveEm\n0000000000000000 W _ZNSt8__format5_SinkIcE7_M_bumpEm\n0000000000000000 W _ZNSt8__format5_SinkIcE8_M_writeESt17basic_string_viewIcSt11char_traitsIcEE\n0000000000000000 W _ZNSt8__format5_SpecIcE14_M_parse_widthEPKcS3_RSt26basic_format_parse_contextIcE\n0000000000000000 W _ZNSt8__format5_SpecIcE23_M_parse_fill_and_alignEPKcS3_\n0000000000000000 W _ZNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE10_M_reserveEm\n0000000000000000 W _ZNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE11_M_overflowEv\n0000000000000000 W _ZNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE7_M_bumpEm\n0000000000000000 W _ZNSt8expectedIP12VkInstance_TN6sirius4base5ErrorEED1Ev\n0000000000000000 W _ZNSt8expectedIP12VkInstance_TN6sirius4base5ErrorEED1EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n0000000000000000 W _ZNSt8expectedIP12VkInstance_TN6sirius4base5ErrorEED2Ev\n0000000000000000 W _ZNSt8expectedIP12VkInstance_TN6sirius4base5ErrorEED2EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n0000000000000000 W _ZNSt8expectedISt10unique_ptrIN6sirius7backend13ComputeDeviceESt14default_deleteIS3_EENS1_4base5ErrorEEC1IS8_EEOSt10unexpectedIT_E\n0000000000000000 W _ZNSt8expectedISt10unique_ptrIN6sirius7backend13ComputeDeviceESt14default_deleteIS3_EENS1_4base5ErrorEEC2IS8_EEOSt10unexpectedIT_E\n0000000000000000 W _ZNSt8expectedISt6vectorIP18VkPhysicalDevice_TSaIS2_EEN6sirius4base5ErrorEED1Ev\n0000000000000000 W _ZNSt8expectedISt6vectorIP18VkPhysicalDevice_TSaIS2_EEN6sirius4base5ErrorEED1EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n0000000000000000 W _ZNSt8expectedISt6vectorIP18VkPhysicalDevice_TSaIS2_EEN6sirius4base5ErrorEED2Ev\n0000000000000000 W _ZNSt8expectedISt6vectorIP18VkPhysicalDevice_TSaIS2_EEN6sirius4base5ErrorEED2EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n0000000000000000 W _ZNSt8expectedIvN6sirius4base5ErrorEEC1IS2_EEOSt10unexpectedIT_E\n0000000000000000 W _ZNSt8expectedIvN6sirius4base5ErrorEEC2IS2_EEOSt10unexpectedIT_E\n0000000000000000 W _ZNSt8expectedIvN6sirius4base5ErrorEED1Ev\n0000000000000000 W _ZNSt8expectedIvN6sirius4base5ErrorEED1EvQnt27is_trivially_destructible_vIT0_E\n0000000000000000 W _ZNSt8expectedIvN6sirius4base5ErrorEED2Ev\n0000000000000000 W _ZNSt8expectedIvN6sirius4base5ErrorEED2EvQnt27is_trivially_destructible_vIT0_E\n0000000000000000 W _ZNSt9__unicode13_Utf_iteratorIcDiPKcS2_NS_5_ReplEE12_M_read_utf8Ev\n0000000000000000 u _ZNSt9__unicode9__v15_1_011__gcb_edgesE\n0000000000000000 u _ZNSt9__unicode9__v15_1_012__incb_edgesE\n0000000000000000 u _ZNSt9__unicode9__v15_1_013__width_edgesE\n0000000000000000 u _ZNSt9__unicode9__v15_1_014__xpicto_edgesE\n0000000000000000 W _ZNSt9__unicode9__v15_1_022_Grapheme_cluster_viewISt17basic_string_viewIcSt11char_traitsIcEEE9_IteratorppEv\n0000000000000000 W _ZSt14__add_groupingIcEPT_S1_S0_PKcmPKS0_S5_\n0000000000000000 W _ZSt20__throw_format_errorPKc\n0000000000000000 W _ZSt7vformatB5cxx11St17basic_string_viewIcSt11char_traitsIcEESt17basic_format_argsISt20basic_format_contextINSt8__format10_Sink_iterIcEEcEE\n0000000000000000 V _ZTIN6sirius7backend12VulkanDeviceE\n0000000000000000 V _ZTIN6sirius7backend13ComputeDeviceE\n0000000000000000 V _ZTINSt8__format10_Iter_sinkIcNS_10_Sink_iterIcEEEE\n0000000000000000 V _ZTINSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcEE\n0000000000000000 V _ZTINSt8__format5_SinkIcEE\n0000000000000000 V _ZTINSt8__format8_ScannerIcEE\n0000000000000000 V _ZTINSt8__format9_Buf_sinkIcEE\n0000000000000000 V _ZTINSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE\n0000000000000000 V _ZTISt12format_error\n0000000000000000 V _ZTSN6sirius7backend12VulkanDeviceE\n0000000000000000 V _ZTSN6sirius7backend13ComputeDeviceE\n0000000000000000 V _ZTSNSt8__format10_Iter_sinkIcNS_10_Sink_iterIcEEEE\n0000000000000000 V _ZTSNSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcEE\n0000000000000000 V _ZTSNSt8__format5_SinkIcEE\n0000000000000000 V _ZTSNSt8__format8_ScannerIcEE\n0000000000000000 V _ZTSNSt8__format9_Buf_sinkIcEE\n0000000000000000 V _ZTSNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE\n0000000000000000 V _ZTSSt12format_error\n0000000000000000 V _ZTVN6sirius7backend12VulkanDeviceE\n0000000000000000 V _ZTVNSt8__format10_Iter_sinkIcNS_10_Sink_iterIcEEEE\n0000000000000000 V _ZTVNSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcEE\n0000000000000000 V _ZTVNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE\n0000000000000000 V _ZTVSt12format_error\n",
+    "gpu": "0000000000036020 V DW.ref._ZTISt9bad_alloc\n0000000000036010 V DW.ref._ZTISt9exception\n0000000000036018 V DW.ref.__gxx_personality_v0\n000000000002d000 R _IO_stdin_used\n00000000000090c0 T _Z4ReadPKc\n000000000002c340 T _ZN6sirius4base23ReportContractViolationEPKcS2_S2_l\n000000000002c390 T _ZN6sirius4base24EnforceContractViolationEPKcS2_S2_l\n000000000002a0d0 W _ZN6sirius4base4FailENS0_11ErrorDomainENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_\n000000000002ac40 W _ZN6sirius4base5ErrorC1ERKS1_\n000000000002ac40 W _ZN6sirius4base5ErrorC2ERKS1_\n0000000000020b60 T _ZN6sirius7backend12VulkanDevice10LoadKernelESt4spanIKjLm18446744073709551615EE\n0000000000020540 T _ZN6sirius7backend12VulkanDevice10ReadBufferENS0_12BufferHandleESt4spanISt4byteLm18446744073709551615EE\n000000000001ff00 T _ZN6sirius7backend12VulkanDevice11WriteBufferENS0_12BufferHandleESt4spanIKSt4byteLm18446744073709551615EE\n0000000000021500 T _ZN6sirius7backend12VulkanDevice12CreateBufferEmNS0_11BufferUsageE\n0000000000026ab0 T _ZN6sirius7backend12VulkanDevice16DispatchCommandsESt4spanIKNS0_15ComputeDispatchELm18446744073709551615EEPNS0_14DispatchTimingEPj\n0000000000022040 T _ZN6sirius7backend12VulkanDevice19GetOrCreatePipelineENS0_12KernelHandleESt4spanIKNS0_12BufferHandleELm18446744073709551615EEPb\n000000000001d900 T _ZN6sirius7backend12VulkanDevice21AdvanceBufferMutationENS0_12BufferHandleE\n00000000000260b0 T _ZN6sirius7backend12VulkanDevice21SnapshotPipelineCacheEv\n0000000000027f00 T _ZN6sirius7backend12VulkanDevice23DispatchIndependentPairERKSt5arrayINS0_15ComputeDispatchELm2EEPNS0_21IndependentPairTimingE\n000000000001d510 T _ZN6sirius7backend12VulkanDevice23InitialisePipelineCacheEv\n000000000001e1a0 T _ZN6sirius7backend12VulkanDevice24SetBufferAllocationLimitEm\n000000000001f140 T _ZN6sirius7backend12VulkanDevice28SetDispatchTimestampsEnabledEb\n000000000001f7e0 T _ZN6sirius7backend12VulkanDevice29RequiredBufferAllocationBytesEmNS0_11BufferUsageE\n0000000000027e80 T _ZN6sirius7backend12VulkanDevice8DispatchENS0_12KernelHandleESt4spanIKNS0_12BufferHandleELm18446744073709551615EEjjjPNS0_14DispatchTimingE\n0000000000026a90 T _ZN6sirius7backend12VulkanDeviceD0Ev\n0000000000026660 T _ZN6sirius7backend12VulkanDeviceD1Ev\n0000000000026660 T _ZN6sirius7backend12VulkanDeviceD2Ev\n00000000000282c0 T _ZN6sirius7backend18CreateVulkanDeviceEm\n0000000000023e20 T _ZN6sirius7backend22EnumerateVulkanDevicesEv\n0000000000029b50 T _ZN6sirius7backend24ResolveVulkanDeviceIndexESt4spanIKNS0_10DeviceInfoELm18446744073709551615EE\n000000000001e4b0 T _ZN6sirius7backend29ValidateVulkanKernelPrecisionESt4spanIKjLm18446744073709551615EEbb\n000000000001d330 T _ZN6sirius7backend6detail20VulkanHostMemoryTypeERK32VkPhysicalDeviceMemoryPropertiesj\n000000000001d7c0 T _ZN6sirius7backend6detail21VulkanTimestampSpanMsEmmjdd\n0000000000024fb0 T _ZN6sirius7backend6detail27CreateDeviceWithPortabilityEP18VkPhysicalDevice_T18VkDeviceCreateInfoPF8VkResultS3_PKcPjP21VkExtensionPropertiesEPFS5_S3_PKS4_PK21VkAllocationCallbacksPP10VkDevice_TEPNS0_10DeviceInfoEPFvS3_P25VkPhysicalDeviceFeatures2E\n00000000000230b0 T _ZN6sirius7backend6detail29CreateInstanceWithPortabilityE20VkInstanceCreateInfoPF8VkResultPKcPjP21VkExtensionPropertiesEPFS3_PKS2_PK21VkAllocationCallbacksPP12VkInstance_TE\n000000000001d8e0 T _ZN6sirius7backend6detail31VulkanSubmissionNeedsCompletionE8VkResultS2_\n000000000001d430 T _ZN6sirius7backend6detail33VulkanPipelineCacheDataCompatibleESt4spanIKSt4byteLm18446744073709551615EERK26VkPhysicalDeviceProperties\n000000000001a270 W _ZNK6sirius4base5Error11DescriptionB5cxx11Ev\n000000000002aeb0 W _ZNK6sirius7backend12VulkanDevice11PipelineKeyssERKS2_\n000000000001c4c0 T _ZNK6sirius7backend12VulkanDevice19BufferMutationEpochENS0_12BufferHandleE\n000000000002a0b0 W _ZNK6sirius7backend12VulkanDevice21BufferAllocationBytesEv\n000000000002a0c0 W _ZNK6sirius7backend12VulkanDevice23SupportsIndependentPairEv\n000000000002a0a0 W _ZNK6sirius7backend12VulkanDevice4InfoEv\n00000000000135a0 W _ZNKSt8__format14__formatter_fpIcE6formatIDF128_NS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000016180 W _ZNKSt8__format14__formatter_fpIcE6formatIdNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000014b80 W _ZNKSt8__format14__formatter_fpIcE6formatIeNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000017770 W _ZNKSt8__format14__formatter_fpIcE6formatIfNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n00000000000107a0 W _ZNKSt8__format15__formatter_intIcE13_M_format_intINS_10_Sink_iterIcEEEENSt20basic_format_contextIT_cE8iteratorESt17basic_string_viewIcSt11char_traitsIcEEmRS7_\n0000000000010d60 W _ZNKSt8__format15__formatter_intIcE6formatIhNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000012200 W _ZNKSt8__format15__formatter_intIcE6formatInNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000012c00 W _ZNKSt8__format15__formatter_intIcE6formatIoNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000011340 W _ZNKSt8__format15__formatter_intIcE6formatIxNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n0000000000011b00 W _ZNKSt8__format15__formatter_intIcE6formatIyNS_10_Sink_iterIcEEEENSt20basic_format_contextIT0_cE8iteratorET_RS7_\n000000000000f740 W _ZNKSt8__format15__formatter_strIcE6formatINS_10_Sink_iterIcEEEET_St17basic_string_viewIcSt11char_traitsIcEERSt20basic_format_contextIS5_cE\n0000000000009910 W _ZNSt12format_errorD0Ev\n00000000000098f0 W _ZNSt12format_errorD1Ev\n00000000000098f0 W _ZNSt12format_errorD2Ev\n000000000000ad30 W _ZNSt16basic_format_argISt20basic_format_contextINSt8__format10_Sink_iterIcEEcEE8_M_visitIZNS1_15__do_vformat_toIS3_cS4_EET_S8_St17basic_string_viewIT0_St11char_traitsISA_EERKSt17basic_format_argsIT1_EPKSt6localeEUlRS8_E_EEDcOS8_NS1_6_Arg_tE\n0000000000018d80 W _ZNSt16basic_format_argISt20basic_format_contextINSt8__format10_Sink_iterIcEEcEE8_M_visitIZNS1_19_Formatting_scannerIS3_cE13_M_format_argEmEUlRT_E_EEDcOS9_NS1_6_Arg_tE\n000000000002adb0 W _ZNSt6vectorIPKcSaIS1_EE17_M_realloc_appendIJRKS1_EEEvDpOT_\n000000000000ac00 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_disposeEv\n000000000000ac30 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7reserveEm\n000000000000cb70 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm\n000000000000e530 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9push_backEc\n000000000002a630 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EOS4_\n000000000002a630 W _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2EOS4_\n0000000000036040 B _ZNSt7__cxx118numpunctIcE2idE@GLIBCXX_3.4.21\n000000000002b1b0 W _ZNSt8_Rb_treeIN6sirius7backend12VulkanDevice11PipelineKeyESt4pairIKS3_NS2_8PipelineEESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE24_M_get_insert_unique_posERS5_\n000000000002b2f0 W _ZNSt8_Rb_treeIN6sirius7backend12VulkanDevice11PipelineKeyESt4pairIKS3_NS2_8PipelineEESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorIS7_ERS5_\n000000000002af20 W _ZNSt8_Rb_treeIjSt4pairIKjjESt10_Select1stIS2_ESt4lessIjESaIS2_EE22_M_emplace_hint_uniqueIJRS1_SA_EEESt17_Rb_tree_iteratorIS2_ESt23_Rb_tree_const_iteratorIS2_EDpOT_\n000000000000ab40 W _ZNSt8__detail12__to_chars_8IjEESt15to_chars_resultPcS2_T_\n000000000000a8f0 W _ZNSt8__detail13__to_chars_10IjEESt15to_chars_resultPcS2_T_\n000000000000a7c0 W _ZNSt8__detail13__to_chars_16IjEESt15to_chars_resultPcS2_T_\n000000000002eb00 u _ZNSt8__detail31__from_chars_alnum_to_val_tableILb0EE5valueE\n000000000000b770 W _ZNSt8__detaillsIcSt11char_traitsIcERKNSt7__cxx1112basic_stringIcS2_SaIcEEEEERSt13basic_ostreamIT_T0_ESD_RKNS_14_Quoted_stringIT1_SA_EE\n0000000000009940 W _ZNSt8__format10_Iter_sinkIcNS_10_Sink_iterIcEEE11_M_overflowEv\n000000000000da10 W _ZNSt8__format14__formatter_fpIcE5parseERSt26basic_format_parse_contextIcE\n0000000000009da0 W _ZNSt8__format14__parse_arg_idIcEESt4pairItPKT_ES4_S4_\n000000000000e730 W _ZNSt8__format14__write_paddedINS_10_Sink_iterIcEEcEET_S3_St17basic_string_viewIT0_St11char_traitsIS5_EENS_6_AlignEmDi\n000000000000d060 W _ZNSt8__format15__formatter_intIcE11_M_do_parseERSt26basic_format_parse_contextIcENS_10_Pres_typeE\n000000000000c300 W _ZNSt8__format15__formatter_strIcE5parseERSt26basic_format_parse_contextIcE\n0000000000009ab0 W _ZNSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcE11_M_on_charsEPKc\n000000000001afa0 W _ZNSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcE13_M_format_argEm\n000000000000edc0 W _ZNSt8__format22__write_padded_as_specIcNS_10_Sink_iterIcEEEET0_St17basic_string_viewINSt13type_identityIT_E4typeESt11char_traitsIS8_EEmRSt20basic_format_contextIS3_S6_ERKNS_5_SpecIS6_EENS_6_AlignE\n0000000000006e11 W _ZNSt8__format29__failed_to_parse_format_specEv\n0000000000006dfe W _ZNSt8__format33__invalid_arg_id_in_format_stringEv\n0000000000006deb W _ZNSt8__format39__conflicting_indexing_in_format_stringEv\n0000000000006dd8 W _ZNSt8__format39__unmatched_left_brace_in_format_stringEv\n0000000000009880 W _ZNSt8__format5_SinkIcE10_M_reserveEm\n00000000000098e0 W _ZNSt8__format5_SinkIcE7_M_bumpEm\n000000000000e680 W _ZNSt8__format5_SinkIcE8_M_writeESt17basic_string_viewIcSt11char_traitsIcEE\n0000000000009e70 W _ZNSt8__format5_SpecIcE14_M_parse_widthEPKcS3_RSt26basic_format_parse_contextIcE\n000000000000bf20 W _ZNSt8__format5_SpecIcE23_M_parse_fill_and_alignEPKcS3_\n000000000000cd40 W _ZNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE10_M_reserveEm\n0000000000009b80 W _ZNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE11_M_overflowEv\n000000000000cf60 W _ZNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE7_M_bumpEm\n000000000000a300 W _ZNSt8expectedIN6sirius7backend12BufferHandleENS0_4base5ErrorEED1Ev\n000000000000a300 W _ZNSt8expectedIN6sirius7backend12BufferHandleENS0_4base5ErrorEED1EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000000a300 W _ZNSt8expectedIN6sirius7backend12BufferHandleENS0_4base5ErrorEED2Ev\n000000000000a300 W _ZNSt8expectedIN6sirius7backend12BufferHandleENS0_4base5ErrorEED2EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000000a2a0 W _ZNSt8expectedIN6sirius7backend12KernelHandleENS0_4base5ErrorEED1Ev\n000000000000a2a0 W _ZNSt8expectedIN6sirius7backend12KernelHandleENS0_4base5ErrorEED1EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000000a2a0 W _ZNSt8expectedIN6sirius7backend12KernelHandleENS0_4base5ErrorEED2Ev\n000000000000a2a0 W _ZNSt8expectedIN6sirius7backend12KernelHandleENS0_4base5ErrorEED2EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000002a950 W _ZNSt8expectedIP12VkInstance_TN6sirius4base5ErrorEED1Ev\n000000000002a950 W _ZNSt8expectedIP12VkInstance_TN6sirius4base5ErrorEED1EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000002a950 W _ZNSt8expectedIP12VkInstance_TN6sirius4base5ErrorEED2Ev\n000000000002a950 W _ZNSt8expectedIP12VkInstance_TN6sirius4base5ErrorEED2EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000002aa20 W _ZNSt8expectedISt10unique_ptrIN6sirius7backend13ComputeDeviceESt14default_deleteIS3_EENS1_4base5ErrorEEC1IS8_EEOSt10unexpectedIT_E\n000000000002aa20 W _ZNSt8expectedISt10unique_ptrIN6sirius7backend13ComputeDeviceESt14default_deleteIS3_EENS1_4base5ErrorEEC2IS8_EEOSt10unexpectedIT_E\n000000000000a240 W _ZNSt8expectedISt10unique_ptrIN6sirius7backend13ComputeDeviceESt14default_deleteIS3_EENS1_4base5ErrorEED1Ev\n000000000000a240 W _ZNSt8expectedISt10unique_ptrIN6sirius7backend13ComputeDeviceESt14default_deleteIS3_EENS1_4base5ErrorEED1EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000000a240 W _ZNSt8expectedISt10unique_ptrIN6sirius7backend13ComputeDeviceESt14default_deleteIS3_EENS1_4base5ErrorEED2Ev\n000000000000a240 W _ZNSt8expectedISt10unique_ptrIN6sirius7backend13ComputeDeviceESt14default_deleteIS3_EENS1_4base5ErrorEED2EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000000a0f0 W _ZNSt8expectedISt6vectorIN6sirius7backend10DeviceInfoESaIS3_EENS1_4base5ErrorEED1Ev\n000000000000a0f0 W _ZNSt8expectedISt6vectorIN6sirius7backend10DeviceInfoESaIS3_EENS1_4base5ErrorEED1EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000000a0f0 W _ZNSt8expectedISt6vectorIN6sirius7backend10DeviceInfoESaIS3_EENS1_4base5ErrorEED2Ev\n000000000000a0f0 W _ZNSt8expectedISt6vectorIN6sirius7backend10DeviceInfoESaIS3_EENS1_4base5ErrorEED2EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000002a9b0 W _ZNSt8expectedISt6vectorIP18VkPhysicalDevice_TSaIS2_EEN6sirius4base5ErrorEED1Ev\n000000000002a9b0 W _ZNSt8expectedISt6vectorIP18VkPhysicalDevice_TSaIS2_EEN6sirius4base5ErrorEED1EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000002a9b0 W _ZNSt8expectedISt6vectorIP18VkPhysicalDevice_TSaIS2_EEN6sirius4base5ErrorEED2Ev\n000000000002a9b0 W _ZNSt8expectedISt6vectorIP18VkPhysicalDevice_TSaIS2_EEN6sirius4base5ErrorEED2EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000000a1e0 W _ZNSt8expectedImN6sirius4base5ErrorEED1Ev\n000000000000a1e0 W _ZNSt8expectedImN6sirius4base5ErrorEED1EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000000a1e0 W _ZNSt8expectedImN6sirius4base5ErrorEED2Ev\n000000000000a1e0 W _ZNSt8expectedImN6sirius4base5ErrorEED2EvQoont27is_trivially_destructible_vIT_Ent27is_trivially_destructible_vIT0_E\n000000000002a730 W _ZNSt8expectedIvN6sirius4base5ErrorEEC1IS2_EEOSt10unexpectedIT_E\n000000000002a730 W _ZNSt8expectedIvN6sirius4base5ErrorEEC2IS2_EEOSt10unexpectedIT_E\n000000000000a090 W _ZNSt8expectedIvN6sirius4base5ErrorEED1Ev\n000000000000a090 W _ZNSt8expectedIvN6sirius4base5ErrorEED1EvQnt27is_trivially_destructible_vIT0_E\n000000000000a090 W _ZNSt8expectedIvN6sirius4base5ErrorEED2Ev\n000000000000a090 W _ZNSt8expectedIvN6sirius4base5ErrorEED2EvQnt27is_trivially_destructible_vIT0_E\n000000000000a360 W _ZNSt8expectedIvN6sirius4base5ErrorEEaSEOS3_\n000000000000a360 W _ZNSt8expectedIvN6sirius4base5ErrorEEaSEOS3_Qaa23is_move_constructible_vIT0_E20is_move_assignable_vIS5_E\n000000000000bd40 W _ZNSt9__unicode13_Utf_iteratorIcDiPKcS2_NS_5_ReplEE12_M_read_utf8Ev\n000000000002f4a0 u _ZNSt9__unicode9__v15_1_011__gcb_edgesE\n000000000002ee80 u _ZNSt9__unicode9__v15_1_012__incb_edgesE\n0000000000030f40 u _ZNSt9__unicode9__v15_1_013__width_edgesE\n000000000002ec00 u _ZNSt9__unicode9__v15_1_014__xpicto_edgesE\n000000000000efd0 W _ZNSt9__unicode9__v15_1_022_Grapheme_cluster_viewISt17basic_string_viewIcSt11char_traitsIcEEE9_IteratorppEv\n00000000000101a0 W _ZSt14__add_groupingIcEPT_S1_S0_PKcmPKS0_S5_\n0000000000006d7f W _ZSt20__throw_format_errorPKc\n00000000000361c0 B _ZSt4cerr@GLIBCXX_3.4\n0000000000036080 B _ZSt4cout@GLIBCXX_3.4\n000000000002b590 W _ZSt7vformatB5cxx11St17basic_string_viewIcSt11char_traitsIcEESt17basic_format_argsISt20basic_format_contextINSt8__format10_Sink_iterIcEEcEE\n00000000000358d0 V _ZTIN6sirius7backend12VulkanDeviceE\n00000000000358c0 V _ZTIN6sirius7backend13ComputeDeviceE\n0000000000035850 V _ZTINSt8__format10_Iter_sinkIcNS_10_Sink_iterIcEEEE\n0000000000035868 V _ZTINSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcEE\n0000000000035800 V _ZTINSt8__format5_SinkIcEE\n0000000000035840 V _ZTINSt8__format8_ScannerIcEE\n0000000000035810 V _ZTINSt8__format9_Buf_sinkIcEE\n0000000000035828 V _ZTINSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE\n00000000000357e8 V _ZTISt12format_error\n0000000000035750 V _ZTISt13runtime_error@GLIBCXX_3.4\n00000000000315e0 V _ZTSN6sirius7backend12VulkanDeviceE\n00000000000315a0 V _ZTSN6sirius7backend13ComputeDeviceE\n000000000002ea80 V _ZTSNSt8__format10_Iter_sinkIcNS_10_Sink_iterIcEEEE\n000000000002eac0 V _ZTSNSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcEE\n000000000002e9c0 V _ZTSNSt8__format5_SinkIcEE\n000000000002ea50 V _ZTSNSt8__format8_ScannerIcEE\n000000000002e9e0 V _ZTSNSt8__format9_Buf_sinkIcEE\n000000000002ea00 V _ZTSNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE\n000000000002e9a0 V _ZTSSt12format_error\n0000000000035690 V _ZTTNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEEE@GLIBCXX_3.4.21\n0000000000035730 V _ZTTSt14basic_ifstreamIcSt11char_traitsIcEE@GLIBCXX_3.4\n00000000000354c0 V _ZTVN6sirius7backend12VulkanDeviceE\n0000000000035768 V _ZTVNSt7__cxx1115basic_stringbufIcSt11char_traitsIcESaIcEEE@GLIBCXX_3.4.21\n00000000000355f0 V _ZTVNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEEE@GLIBCXX_3.4.21\n0000000000035460 V _ZTVNSt8__format10_Iter_sinkIcNS_10_Sink_iterIcEEEE\n0000000000035488 V _ZTVNSt8__format19_Formatting_scannerINS_10_Sink_iterIcEEcEE\n0000000000035438 V _ZTVNSt8__format9_Seq_sinkINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE\n0000000000035880 V _ZTVSt12format_error\n00000000000356b0 V _ZTVSt13basic_filebufIcSt11char_traitsIcEE@GLIBCXX_3.4\n0000000000035640 V _ZTVSt14basic_ifstreamIcSt11char_traitsIcEE@GLIBCXX_3.4\n0000000000035570 V _ZTVSt15basic_streambufIcSt11char_traitsIcEE@GLIBCXX_3.4\n0000000000035550 V _ZTVSt9basic_iosIcSt11char_traitsIcEE@GLIBCXX_3.4\n0000000000036028 D __TMC_END__\n0000000000036040 B __bss_start\n0000000000036000 D __data_start\n0000000000036008 D __dso_handle\n0000000000036028 D _edata\n0000000000036380 B _end\n000000000002c3d8 T _fini\n0000000000005000 T _init\n0000000000008920 T _start\n0000000000036000 W data_start\n0000000000008040 T main\n00000000000361a0 B stderr@GLIBC_2.2.5\n"
+  },
+  "original_corpus": {
+    "division_branch_coverage": {
+      "divide_records": 13674,
+      "non_power_of_two_denominator_significand_records": 10594,
+      "normalization_doubling_records": 5700,
+      "normalization_kept_records": 6563,
+      "optional_finite_nonzero_branch_records": 12263
+    },
+    "operation_cardinalities": {
+      "0": 13674,
+      "1": 13674,
+      "10": 4174,
+      "11": 4174,
+      "12": 4174,
+      "13": 53524,
+      "2": 13674,
+      "3": 13674,
+      "4": 4174,
+      "5": 13668,
+      "6": 13668,
+      "7": 13668,
+      "8": 4174,
+      "9": 4174
+    },
+    "original_records": 174268,
+    "scope": "Exact original ordered fixture/provider byte joins and source-derived branch partitions; not exhaustive machine proof."
+  },
+  "original_vulkan_archive_member_extracted": false,
+  "output_seals": {
+    "compile-host": {
+      "bytes": 2979,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/compile-host/output-seal.json",
+      "sha256": "10ca56fa8ffaeb26f7d1663fc42a8de3f18e9d754542828381b561858ff548e5"
+    },
+    "compile-shader-candidate": {
+      "bytes": 1768,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/compile-shader-candidate/output-seal.json",
+      "sha256": "e92f823ac41ed46d7e4d0dd2cc8cda13934f18fd08e08df227eded7cc05afb4e"
+    },
+    "disassemble-shader-candidate": {
+      "bytes": 1546,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/disassemble-shader-candidate/output-seal.json",
+      "sha256": "ca99838d486b94d3f05a3d031ecf8ceeb4292ae7680ee4f45266ab1fa63a5b27"
+    },
+    "link-host": {
+      "bytes": 1626,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/link-host/output-seal.json",
+      "sha256": "594d6c9e60eb90be799fcdc3d5afd89c56cf32851366671a912a953cd028b15d"
+    },
+    "optimize-shader-candidate": {
+      "bytes": 1606,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/optimize-shader-candidate/output-seal.json",
+      "sha256": "cdb9ad329417a8fa4f91626faa0ed7c24c3ba584301566999d1217f8ede5ae07"
+    },
+    "prepare-build": {
+      "bytes": 2567,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/prepare-build/output-seal.json",
+      "sha256": "edbd04e2a9919faf2a3f4271284802d3ce18b2d63abbb4f90799a4a4d9dc04c1"
+    },
+    "validate-shader-candidate": {
+      "bytes": 1111,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/validate-shader-candidate/output-seal.json",
+      "sha256": "bfd35452308682f55050df7268f15d80f7e9191a902bf9baf23510851f52d20a"
+    }
+  },
+  "passed": true,
+  "private_object_before_original_archive": true,
+  "probe_source_and_all_original_assertions_unchanged": true,
+  "required_strong_definitions": [
+    "_ZN6sirius7backend12VulkanDevice10LoadKernelESt4spanIKjLm18446744073709551615EE",
+    "_ZN6sirius7backend12VulkanDevice10ReadBufferENS0_12BufferHandleESt4spanISt4byteLm18446744073709551615EE",
+    "_ZN6sirius7backend12VulkanDevice11WriteBufferENS0_12BufferHandleESt4spanIKSt4byteLm18446744073709551615EE",
+    "_ZN6sirius7backend12VulkanDevice12CreateBufferEmNS0_11BufferUsageE",
+    "_ZN6sirius7backend12VulkanDevice16DispatchCommandsESt4spanIKNS0_15ComputeDispatchELm18446744073709551615EEPNS0_14DispatchTimingEPj",
+    "_ZN6sirius7backend12VulkanDevice19GetOrCreatePipelineENS0_12KernelHandleESt4spanIKNS0_12BufferHandleELm18446744073709551615EEPb",
+    "_ZN6sirius7backend12VulkanDevice21AdvanceBufferMutationENS0_12BufferHandleE",
+    "_ZN6sirius7backend12VulkanDevice21SnapshotPipelineCacheEv",
+    "_ZN6sirius7backend12VulkanDevice23DispatchIndependentPairERKSt5arrayINS0_15ComputeDispatchELm2EEPNS0_21IndependentPairTimingE",
+    "_ZN6sirius7backend12VulkanDevice23InitialisePipelineCacheEv",
+    "_ZN6sirius7backend12VulkanDevice24SetBufferAllocationLimitEm",
+    "_ZN6sirius7backend12VulkanDevice28SetDispatchTimestampsEnabledEb",
+    "_ZN6sirius7backend12VulkanDevice29RequiredBufferAllocationBytesEmNS0_11BufferUsageE",
+    "_ZN6sirius7backend12VulkanDevice8DispatchENS0_12KernelHandleESt4spanIKNS0_12BufferHandleELm18446744073709551615EEjjjPNS0_14DispatchTimingE",
+    "_ZN6sirius7backend12VulkanDeviceD0Ev",
+    "_ZN6sirius7backend12VulkanDeviceD1Ev",
+    "_ZN6sirius7backend12VulkanDeviceD2Ev",
+    "_ZN6sirius7backend18CreateVulkanDeviceEm",
+    "_ZN6sirius7backend22EnumerateVulkanDevicesEv",
+    "_ZN6sirius7backend24ResolveVulkanDeviceIndexESt4spanIKNS0_10DeviceInfoELm18446744073709551615EE",
+    "_ZN6sirius7backend29ValidateVulkanKernelPrecisionESt4spanIKjLm18446744073709551615EEbb",
+    "_ZN6sirius7backend6detail20VulkanHostMemoryTypeERK32VkPhysicalDeviceMemoryPropertiesj",
+    "_ZN6sirius7backend6detail21VulkanTimestampSpanMsEmmjdd",
+    "_ZN6sirius7backend6detail27CreateDeviceWithPortabilityEP18VkPhysicalDevice_T18VkDeviceCreateInfoPF8VkResultS3_PKcPjP21VkExtensionPropertiesEPFS5_S3_PKS4_PK21VkAllocationCallbacksPP10VkDevice_TEPNS0_10DeviceInfoEPFvS3_P25VkPhysicalDeviceFeatures2E",
+    "_ZN6sirius7backend6detail29CreateInstanceWithPortabilityE20VkInstanceCreateInfoPF8VkResultPKcPjP21VkExtensionPropertiesEPFS3_PKS2_PK21VkAllocationCallbacksPP12VkInstance_TE",
+    "_ZN6sirius7backend6detail31VulkanSubmissionNeedsCompletionE8VkResultS2_",
+    "_ZN6sirius7backend6detail33VulkanPipelineCacheDataCompatibleESt4spanIKSt4byteLm18446744073709551615EERK26VkPhysicalDeviceProperties",
+    "_ZNK6sirius7backend12VulkanDevice19BufferMutationEpochENS0_12BufferHandleE"
+  ],
+  "same_admitted_host_reuse": {
+    "device_object": {
+      "bytes": 293320,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+      "sha256": "15c4b34606b7cdfd49adb6ba740eaadf312f0e7e4baf57f9d1f083526e463c56"
+    },
+    "historical_pair_review": {
+      "bytes": 25314,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-pair-review/pair-review.json",
+      "sha256": "42faa6ac8b93d4a8f93c4ff5859da4dfd96c7c0fc0e2662488c748ffb781404d"
+    },
+    "original_output_seal": {
+      "bytes": 2171,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/compile-device/output-seal.json",
+      "sha256": "42a18d35b00d387df02c41059cb821d1b240660006f829d23ef5ba0facce748d"
+    },
+    "scope": "Exact accepted compiled Int64 device object/source and historical public-argument witness reused. No fresh numeric-process argument capture is claimed."
+  },
+  "stock_arithmetic_receipt": {
+    "accepted_arithmetic_result": {
+      "bytes": 5677,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/arithmetic-result.json",
+      "sha256": "e9bda925d2504cb4acd44147d4cfedfb234e8bebbcceef5e44a6184da7778b52"
+    },
+    "actual": {
+      "bytes": 2788288,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/execute-gpu-stock/actual.bin",
+      "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+    },
+    "all737_static_inputs_and17_terminal_owners_joined": true,
+    "archive_manifest": {
+      "bytes": 34116,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/manifest.json",
+      "sha256": "b0c5baa9dc01accb442a9d5b58172fe96d2a20c3d5db31ad251062d731e9e9a3"
+    },
+    "build_review": {
+      "bytes": 40762,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/build-review.json",
+      "sha256": "e7b3933d962d97616773a842699926545eb8847b15bb157b44e330c6156f407f"
+    },
+    "consumed_inputs": {
+      "bytes": 337001,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/execute-gpu-stock/inputs-before.json",
+      "sha256": "dc14d4a6791426808447769410d5b8a3ae3bb65d691d444f215963f7aaf8e41f"
+    },
+    "gpu": {
+      "bytes": 258536,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/bin/linux-gcc/portable-divide64-arithmetic/gpu",
+      "sha256": "93d85da756b93fb242683b1c9a11e2b5731a9f5b24875d07fb504b408bfb16e7"
+    },
+    "independent_terminal_review": {
+      "bytes": 1345,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/independent-terminal-review.json",
+      "sha256": "0fac52f306e035d30b8b3d80190400d132c5f9fd7eee2beaa65b3ec6fa71ee33"
+    },
+    "original_expected": {
+      "bytes": 2788288,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/expected.bin",
+      "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+    },
+    "original_input": {
+      "bytes": 2788292,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/input.bin",
+      "sha256": "5eda64c4af63a0d7507802c4f56a728b3a56d9458328e7f5dabeed300012f605"
+    },
+    "owner": {
+      "bytes": 3683,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/execute-gpu-stock/owner.json",
+      "sha256": "87e6985a9759a896d6cf9b6532b718efbb74ee9e804b5ca1f2b1a98904ba372f"
+    },
+    "runtime_context": {
+      "bytes": 7331,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/runtime-context.json",
+      "sha256": "8ac04127d4dfa43cee82c5214367358430382408aaa218793d3c723d23c0bc9f"
+    },
+    "scope": "Exact accepted complete stock arithmetic/source/build/producer/corpus/provider receipt reused. No fresh stock compile or dispatch is claimed.",
+    "stock_module": {
+      "bytes": 27500,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/bin/linux-gcc/portable-divide64-arithmetic/stock.spv",
+      "sha256": "92d261966262c3bc93457bd95cabe2c7a3da007748cc0cf7f46b038311a7b019"
+    }
+  }
+}

@@ -1,0 +1,552 @@
+{
+  "schema": "sirius-independent-terminal-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "component": "portable-divide-fp64-estimate-original-arithmetic",
+  "reviewer": {
+    "agent": "forensic_obligations",
+    "independent_of_packet_author": true,
+    "independent_of_actual_operator": true,
+    "prior_involvement": "Reviewed the source candidate/ancestors and this packet's prelaunch corrections; root alone operated every build/review/numerical owner and the separate final gate.",
+    "method": "Passive standard-library JSON, XML, source/dependency/disassembly-text parsing and byte hashing, plus targeted same-boot recorded-PID/start-tick reads. No authored helper, graph reader, compiler, validator, build, test, Vulkan API, provider or GPU action reexecuted."
+  },
+  "finite_result": {
+    "accepted": true,
+    "original_records": 174268,
+    "original_operations": 14,
+    "full_gpu_output_words": 697072,
+    "full_gpu_output_bytes": 2788288,
+    "candidate_gpu_actual_byte_equal_original_expected": true,
+    "candidate_host_original_xml_case_passed": true,
+    "exact_complete_historical_stock_acceptance_reused": true,
+    "original_fixture_and_input_order_preserved": true,
+    "no_new_or_replaced_records_or_assertions_or_epsilon": true,
+    "scope": "Original finite independent primitive corpus only. This is not exhaustive arithmetic equivalence, estimate verification hit rate, retained-program/integrated controls, stage cost, benefit, product adoption or scientific/release qualification."
+  },
+  "owners": {
+    "actual_count": 10,
+    "build_or_build_review_count": 8,
+    "numerical_count": 2,
+    "all_terminal_passed_child0": true,
+    "guard_stops_or_cleanup_errors_or_remaining_owned_processes": false,
+    "original_limits": {
+      "seconds": 300,
+      "sampled_rss_kib": 4194304,
+      "sampled_available_reserve_kib": 2097152
+    },
+    "all_source_snapshots_exact_clean_4498": true,
+    "all_original_sampled_limits_respected": true,
+    "total_recorded_births": 16,
+    "every_recorded_birth_absent_and_targeted_same_boot_rechecked": true,
+    "global_process_absence_claimed": false,
+    "records": {
+      "compile-host": {
+        "owner": {
+          "bytes": 2028,
+          "sha256": "9d2ea44170e71d2250a3ad48b31d83aa89c7de880846cb30b6f05c64c6fbb192"
+        },
+        "inputs_before": {
+          "bytes": 601575,
+          "sha256": "d70772d4df56ba7e0152a7030d86631134681220af80afd29dcc01d0d2afe627"
+        },
+        "inputs_after": {
+          "bytes": 601575,
+          "sha256": "d70772d4df56ba7e0152a7030d86631134681220af80afd29dcc01d0d2afe627"
+        },
+        "frozen_inputs": 1898,
+        "wall_seconds": 3.1234615860012127,
+        "peak_sampled_rss_kib": 328288,
+        "min_available_kib": 17062412,
+        "births": 3,
+        "samples": 12,
+        "passed": true
+      },
+      "compile-shader-candidate": {
+        "owner": {
+          "bytes": 1924,
+          "sha256": "efeeb938347a759fa069fbe7cc00e7908230ac02c82257fdb26d13e594c17aa7"
+        },
+        "inputs_before": {
+          "bytes": 601575,
+          "sha256": "d70772d4df56ba7e0152a7030d86631134681220af80afd29dcc01d0d2afe627"
+        },
+        "inputs_after": {
+          "bytes": 601575,
+          "sha256": "d70772d4df56ba7e0152a7030d86631134681220af80afd29dcc01d0d2afe627"
+        },
+        "frozen_inputs": 1898,
+        "wall_seconds": 1.3204120820009848,
+        "peak_sampled_rss_kib": 239120,
+        "min_available_kib": 16989724,
+        "births": 2,
+        "samples": 5,
+        "passed": true
+      },
+      "disassemble-shader-candidate": {
+        "owner": {
+          "bytes": 1803,
+          "sha256": "edab21989ef0dfa7fc2e8d0779cbe1b4459138249c7c1ee0391877d7a3e6ed33"
+        },
+        "inputs_before": {
+          "bytes": 606255,
+          "sha256": "021818fbcf2d301fded6475d7fd443a832d59a4b100b83ce8a6ee7a7cf240b2a"
+        },
+        "inputs_after": {
+          "bytes": 606255,
+          "sha256": "021818fbcf2d301fded6475d7fd443a832d59a4b100b83ce8a6ee7a7cf240b2a"
+        },
+        "frozen_inputs": 1912,
+        "wall_seconds": 0.8000959299970418,
+        "peak_sampled_rss_kib": 49188,
+        "min_available_kib": 17135424,
+        "births": 1,
+        "samples": 3,
+        "passed": true
+      },
+      "execute-gpu-candidate": {
+        "owner": {
+          "bytes": 3921,
+          "sha256": "4558a267b44f0484ed9580f7c96a8016b9fbe94ef04e21d4af59849e973807af"
+        },
+        "inputs_before": {
+          "bytes": 613133,
+          "sha256": "329541510b0700eab79ff5ae2e83f9ea81b1810b881ffae1d0b4ad71d7f85cdc"
+        },
+        "inputs_after": {
+          "bytes": 613133,
+          "sha256": "329541510b0700eab79ff5ae2e83f9ea81b1810b881ffae1d0b4ad71d7f85cdc"
+        },
+        "frozen_inputs": 1934,
+        "wall_seconds": 0.28925597899069544,
+        "peak_sampled_rss_kib": 143368,
+        "min_available_kib": 17808756,
+        "births": 1,
+        "samples": 9,
+        "passed": true
+      },
+      "execute-host": {
+        "owner": {
+          "bytes": 1903,
+          "sha256": "59dd2926fb8fc97d93d75888d9d443187a7d6790887e39c0b7abc2ab3bdc9e2b"
+        },
+        "inputs_before": {
+          "bytes": 613133,
+          "sha256": "329541510b0700eab79ff5ae2e83f9ea81b1810b881ffae1d0b4ad71d7f85cdc"
+        },
+        "inputs_after": {
+          "bytes": 613133,
+          "sha256": "329541510b0700eab79ff5ae2e83f9ea81b1810b881ffae1d0b4ad71d7f85cdc"
+        },
+        "frozen_inputs": 1934,
+        "wall_seconds": 0.2866343700006837,
+        "peak_sampled_rss_kib": 27324,
+        "min_available_kib": 17836108,
+        "births": 1,
+        "samples": 1,
+        "passed": true
+      },
+      "link-host": {
+        "owner": {
+          "bytes": 2149,
+          "sha256": "7c60888dea9765351b90162f1844e784f7f88a7552ea7871a91528f852ae1cfa"
+        },
+        "inputs_before": {
+          "bytes": 603405,
+          "sha256": "0567c7ebf0db548e7536496c1201a30652bffa74e8291f6dca143656e4f453ff"
+        },
+        "inputs_after": {
+          "bytes": 603405,
+          "sha256": "0567c7ebf0db548e7536496c1201a30652bffa74e8291f6dca143656e4f453ff"
+        },
+        "frozen_inputs": 1904,
+        "wall_seconds": 1.0651535950019024,
+        "peak_sampled_rss_kib": 71008,
+        "min_available_kib": 17292432,
+        "births": 4,
+        "samples": 4,
+        "passed": true
+      },
+      "optimize-shader-candidate": {
+        "owner": {
+          "bytes": 1797,
+          "sha256": "685445ec49c38f4949b13e96319a5a8fbec9d1a7f8579de6ef35450a572a4ef8"
+        },
+        "inputs_before": {
+          "bytes": 603236,
+          "sha256": "a72b962b624900a546f2d1edc89af1a2121e36170251e9343d28ac00b2b53d62"
+        },
+        "inputs_after": {
+          "bytes": 603236,
+          "sha256": "a72b962b624900a546f2d1edc89af1a2121e36170251e9343d28ac00b2b53d62"
+        },
+        "frozen_inputs": 1903,
+        "wall_seconds": 0.8001432500022929,
+        "peak_sampled_rss_kib": 49260,
+        "min_available_kib": 17151928,
+        "births": 1,
+        "samples": 3,
+        "passed": true
+      },
+      "prepare-build": {
+        "owner": {
+          "bytes": 1773,
+          "sha256": "90369cef250947b363d52eeaf0fc3f3770aa89c476e75e7cf8fc02df1309c0dd"
+        },
+        "inputs_before": {
+          "bytes": 598751,
+          "sha256": "b5340b591a2608dec81b7fe3f103d74fd45b3ba0305a5f30b316f0d34aedfa81"
+        },
+        "inputs_after": {
+          "bytes": 598751,
+          "sha256": "b5340b591a2608dec81b7fe3f103d74fd45b3ba0305a5f30b316f0d34aedfa81"
+        },
+        "frozen_inputs": 1889,
+        "wall_seconds": 0.8014891289931256,
+        "peak_sampled_rss_kib": 49140,
+        "min_available_kib": 17224508,
+        "births": 1,
+        "samples": 3,
+        "passed": true
+      },
+      "validate-shader-candidate": {
+        "owner": {
+          "bytes": 1797,
+          "sha256": "22c43087b57b4f82fa63088100998312a0d2a176d67cb3f9e86e7883ee7c803a"
+        },
+        "inputs_before": {
+          "bytes": 604897,
+          "sha256": "eeb2053e7d3d4be19e60bebf2ec7f893dc2acf105ab8190874ad4b5013e76ef5"
+        },
+        "inputs_after": {
+          "bytes": 604897,
+          "sha256": "eeb2053e7d3d4be19e60bebf2ec7f893dc2acf105ab8190874ad4b5013e76ef5"
+        },
+        "frozen_inputs": 1908,
+        "wall_seconds": 0.7993895719991997,
+        "peak_sampled_rss_kib": 49080,
+        "min_available_kib": 17123612,
+        "births": 1,
+        "samples": 3,
+        "passed": true
+      },
+      "verify-build": {
+        "owner": {
+          "bytes": 1769,
+          "sha256": "a70978a70feeb2b7115aff5b0b3c1f4a2afb8c930c349a63552b78dc3769b1c8"
+        },
+        "inputs_before": {
+          "bytes": 611292,
+          "sha256": "900a471a546fd5ac04e292b97d940d1fe19f2cc410f2e79fb3cbb660d46b70a2"
+        },
+        "inputs_after": {
+          "bytes": 611292,
+          "sha256": "900a471a546fd5ac04e292b97d940d1fe19f2cc410f2e79fb3cbb660d46b70a2"
+        },
+        "frozen_inputs": 1928,
+        "wall_seconds": 4.93093734800641,
+        "peak_sampled_rss_kib": 67104,
+        "min_available_kib": 16891620,
+        "births": 1,
+        "samples": 19,
+        "passed": true
+      }
+    },
+    "timing_limit": "Walls include full original owned process/cleanup scope and are not API-window, performance or benefit evidence."
+  },
+  "consumed_input_and_output_closure": {
+    "static_pins": 1886,
+    "all_static_current_bytes_and_resolved_paths_exact": true,
+    "across_ten_owners_frozen_input_records": 19108,
+    "distinct_declared_consumed_paths": 1934,
+    "every_owner_before_after_current_record_equal": true,
+    "every_actual_argv_equals_frozen_action_with_folder_expansion": true,
+    "all_eight_output_seals": {
+      "compile-host": {
+        "bytes": 2979,
+        "sha256": "10ca56fa8ffaeb26f7d1663fc42a8de3f18e9d754542828381b561858ff548e5"
+      },
+      "compile-shader-candidate": {
+        "bytes": 1768,
+        "sha256": "e92f823ac41ed46d7e4d0dd2cc8cda13934f18fd08e08df227eded7cc05afb4e"
+      },
+      "disassemble-shader-candidate": {
+        "bytes": 1546,
+        "sha256": "ca99838d486b94d3f05a3d031ecf8ceeb4292ae7680ee4f45266ab1fa63a5b27"
+      },
+      "link-host": {
+        "bytes": 1626,
+        "sha256": "594d6c9e60eb90be799fcdc3d5afd89c56cf32851366671a912a953cd028b15d"
+      },
+      "optimize-shader-candidate": {
+        "bytes": 1606,
+        "sha256": "cdb9ad329417a8fa4f91626faa0ed7c24c3ba584301566999d1217f8ede5ae07"
+      },
+      "prepare-build": {
+        "bytes": 2567,
+        "sha256": "edbd04e2a9919faf2a3f4271284802d3ce18b2d63abbb4f90799a4a4d9dc04c1"
+      },
+      "validate-shader-candidate": {
+        "bytes": 1111,
+        "sha256": "bfd35452308682f55050df7268f15d80f7e9191a902bf9baf23510851f52d20a"
+      },
+      "verify-build": {
+        "bytes": 1142,
+        "sha256": "996c7b1323e6e4ea9ad1d7d88371a5a19399981bffed3f04ad7a04b60b208fd0"
+      }
+    },
+    "every_producing_child_seal_matches": "Exact recipe, source-freeze, operator-context, inputs-before and every output's size/hash/resolved path.",
+    "prior_receipt_correction_consumed": true,
+    "prior_receipts": "All already-selected dependency ancestors' owner.json/inputs-before.json/inputs-after.json are present in later frozen maps and match current raw receipts; no live-own-owner self-dependency.",
+    "operator_and_runtime_contexts_join_current_build_review_host_module_fixture_and_seals": true,
+    "durable_module_records": "Saved build/runtime/result module objects are identical in persisted JSON. Full source canonicalization is limited to actual JSON key persistence; no graph fields were projected away."
+  },
+  "numerical_raw": {
+    "host_xml": {
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "disabled": 0,
+      "name": "PortableBinary32.MatchesIndependentExactCorpus",
+      "status": "run",
+      "result": "completed",
+      "properties": {
+        "independent_primitive_cases": "120744",
+        "independent_product_residual_cases": "53524",
+        "independent_exact_records_checked": "174268",
+        "exact_raw_word_mismatches": "0"
+      }
+    },
+    "host_evidence_limit": "The original XML/assertions report exact174268 records and zero raw-word mismatches; no separate host output-word payload was saved or claimed.",
+    "gpu_stdout": {
+      "records": 174268,
+      "complete_words": 697072,
+      "mismatches": 0,
+      "device": "llvmpipe (LLVM 20.1.2, 256 bits)",
+      "driver": "llvmpipe"
+    },
+    "gpu_raw_output": {
+      "bytes": 2788288,
+      "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+    },
+    "independently_rebuilt_expected_words_from_unchanged_reference_fixture_equal_saved_gpu_bytes": true,
+    "initialized_output_sentinel_and_complete_readback": "Original unchanged GPU source initializes all output words, submits the full2723x64-thread range with original row guard, compares every697072 words and writes the successful complete buffer.",
+    "no_ordinary_parity_one_second_deadline_imported": true
+  },
+  "actual_producers": {
+    "host_elf": {
+      "bytes": 615768,
+      "sha256": "5d99d1c17aa9da1850adf6bc3df80cbbc7ad4fc8fd91d093558e139fbf311393"
+    },
+    "host_object": {
+      "bytes": 94056,
+      "sha256": "34410bca6ff87ed8315af814c1bee2192c03d864ac501f91896eedbe76aea531"
+    },
+    "host_depfile": {
+      "bytes": 485,
+      "sha256": "36d85c8d12004f0f3ed152ba0835aaa5e836bfd11725cb57e0e83f7f34054cb2"
+    },
+    "cpp_dependency_paths": 5,
+    "every_cpp_depfile_input_static_pinned": true,
+    "candidate_header_in_actual_host_depfile_and_private_stock_header_absent": true,
+    "explicit_candidate_macro_in_host_and_shader_recipes": true,
+    "gpu_elf": {
+      "bytes": 258536,
+      "sha256": "93d85da756b93fb242683b1c9a11e2b5731a9f5b24875d07fb504b408bfb16e7"
+    },
+    "gpu_link_map": {
+      "bytes": 2724858,
+      "sha256": "1cb73c648ea465e374c838ecced574b634532866dfd488f211c05a40c06d4713"
+    },
+    "original_full_numeric_gpu_exact_reuse": true,
+    "short_input_canary_substitution": false,
+    "required_strong_sirius_definitions": 28,
+    "stored_strong_symbol_records_match_required_set": true,
+    "exact_reused_original_gpu_link_map_has_no_extracted_old_vulkan_archive_member": true,
+    "accepted_private_device_object_before_original_archive_join_retained": true
+  },
+  "actual_shader": {
+    "profiles": {
+      "stock": {
+        "module": {
+          "bytes": 27500,
+          "sha256": "92d261966262c3bc93457bd95cabe2c7a3da007748cc0cf7f46b038311a7b019"
+        },
+        "assembly": {
+          "bytes": 75783,
+          "sha256": "aefc7ead4a18b92ea973931a47e946e6104211ff2d6c56a39db6afa38935856e"
+        },
+        "capabilities": [
+          "Shader"
+        ],
+        "float_widths": [],
+        "integer_widths": [
+          "32"
+        ],
+        "words": 6875
+      },
+      "candidate": {
+        "module": {
+          "bytes": 29300,
+          "sha256": "7a4290be1d6d52e8dea78dbe57f9d1465cb50c3ae4b62d2b9b7c9c1ef42930c4"
+        },
+        "assembly": {
+          "bytes": 80699,
+          "sha256": "ca86790382eabc09d003fa49b2c264173339939057acf24c36a895e152bb948e"
+        },
+        "capabilities": [
+          "Float64",
+          "Shader"
+        ],
+        "float_widths": [
+          "64"
+        ],
+        "integer_widths": [
+          "32"
+        ],
+        "words": 7325
+      }
+    },
+    "module_and_disassembly_seals_match_actual_runtime_input_and_result": true,
+    "Float64_only_no_Int64_or_FToI": true,
+    "exactly_two_NoContraction_float_operations": [
+      "%scaled",
+      "%quotient"
+    ],
+    "exactly_two_uint_to_float_conversions": true,
+    "original_integer_public_interface_local_size_and_zero_barriers_preserved": true,
+    "accepted_actual_graph": {
+      "typed_uint2_member_loads": [
+        "%956",
+        "%963"
+      ],
+      "exact_product_UMulExtended": "%966",
+      "closed_Phi_choices": 5,
+      "integer_range_guard_before_guess_extraction": true,
+      "exact_product_remainder_inequalities_and_sticky": true,
+      "original_complete_fallback_suffix_normalized_equal": true,
+      "original_Multiply_Residual_Unpack_Round_normalized_bodies_equal": true,
+      "op3_actual_Divide_call": "%785",
+      "op3_true_arm_only_sole_predecessor_and_result_stored": true,
+      "standalone_PB32WideProduct_function_not_invented": true,
+      "native_estimate_accuracy_assumed": false,
+      "parser_reexecution_by_reviewer": false,
+      "graph_flag_scope": "The retained structural parser's arithmetic_equivalence_executed=false describes that parser, not this separately completed finite arithmetic corpus. No general equivalence or hit-rate flag was changed."
+    }
+  },
+  "reused_and_fresh_provenance": {
+    "historical_stock_static_joins": 737,
+    "historical_stock_terminal_owners": 17,
+    "all_737_current_actual_file_sizes_hashes_match_original_saved_pins": true,
+    "original_17_stock_owners_passed_and_before_after_records_still_match": true,
+    "exact_stock_module27500_bytes_and_original_complete_stock_gpu_output_reused": true,
+    "known_hash_cache_recovery": "Original60385B/c7d8 historical cache pin retained through exact91c recovered member and declared1dd literal derivation; no current-cache refresh, historical raw discovery claim or source exemption.",
+    "compiler_reader_property_jit_receipts_identical_between_build_and_terminal_result": true,
+    "original_failed_compiler_false_child1_not_relabelled": true,
+    "new_reader_and_property_and_driver_archives_only": true,
+    "fresh_provider_mapping_observations": 1,
+    "fresh_provider_files": {
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+        "bytes": 143545784,
+        "device": [
+          8,
+          80
+        ],
+        "inode": 47452,
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+      },
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+        "bytes": 510592,
+        "device": [
+          8,
+          80
+        ],
+        "inode": 13100,
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+      },
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+        "bytes": 11929384,
+        "device": [
+          8,
+          80
+        ],
+        "inode": 143595,
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      }
+    },
+    "actual_numeric_process_pid": 412375,
+    "actual_numeric_process_start_ticks": "6828417",
+    "actual_numeric_owned_session": 412375,
+    "fresh_all_three_loader_lvp_llvm_bytes_dev_inode_and_birth_session_maps_exact": true,
+    "actual_declared_gpu_environment": {
+      "GTEST_OUTPUT": "",
+      "MESA_SHADER_CACHE_DISABLE": "true",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+    },
+    "feature_enablement_limit": "The exact reused numeric GPU/private device object and immutable actual canary55-feature receipt bind Float64 enablement. Fresh numeric-process vkCreateDevice arguments were not captured. Historical unused host Int64 remains explicit; this shader has none.",
+    "no_native_double_accuracy_or_RTE64_accuracy_premise": true
+  },
+  "critical_files": {
+    "arithmetic-result.json": {
+      "bytes": 17389,
+      "sha256": "a7e56867c7b4600a7e1bd9d3047190873579d4335ea79289dc9d51f7df5d8a39"
+    },
+    "build-review.json": {
+      "bytes": 50288,
+      "sha256": "42b1a3f3f789971bde5bc0304c8b321d98e390fcb968a6059898623b3c54a5c3"
+    },
+    "runtime-context.json": {
+      "bytes": 9182,
+      "sha256": "dda5e2f031e5d7d1c63948f1935c8215f6de2de14a41edab831fb8b92fe062dd"
+    },
+    "operator-context.json": {
+      "bytes": 776,
+      "sha256": "82d5d67f3e934d051f3171a3027af97e2c245e6a9015006d0f058fdc51c73b9e"
+    },
+    "source-freeze.json": {
+      "bytes": 654212,
+      "sha256": "b59df5c88850a198cd2495452478c75a0428c1280b39f86cca59fb822f9da55c"
+    },
+    "actions.json": {
+      "bytes": 2093426,
+      "sha256": "86819fcf8abfc79f507c9bcfeeb3af25a51764101108957149375714d960d4b7"
+    },
+    "preparation.json": {
+      "bytes": 9106,
+      "sha256": "294aed1af369772c725efa1930541a3c2c9fa9aac72bcb8e78c58c80cbac6386"
+    },
+    "independent-source-review.json": {
+      "bytes": 14359,
+      "sha256": "f9ca984f2fd5c375ba5062849a83fdbdadbcf9d8642d0ff1dd4792e92912a48c"
+    },
+    "execute-host/gtest.xml": {
+      "bytes": 927,
+      "sha256": "bb96d7213dd804edba832275dd5ea1beb2463fdd82f485a736ea15ada228082f"
+    },
+    "execute-host/stdout.log": {
+      "bytes": 627,
+      "sha256": "6cb659ca19525d4f0c52ca8dedc1046f740261186073a96f71041285a07f7c35"
+    },
+    "execute-gpu-candidate/stdout.log": {
+      "bytes": 122,
+      "sha256": "5a9ceead3470c44ec71df522d7c8107fe26c62f265987f2ec3ba5886abd95825"
+    },
+    "execute-gpu-candidate/actual.bin": {
+      "bytes": 2788288,
+      "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+    }
+  },
+  "repository": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "source_committed_and_pushed": true,
+    "tracked_source_clean": true,
+    "upstream_equal": true,
+    "sole_canonical_worktree": true,
+    "review_json": "Ignored diagnostic pending root immutable preservation; no Git write by reviewer."
+  },
+  "blockers": []
+}

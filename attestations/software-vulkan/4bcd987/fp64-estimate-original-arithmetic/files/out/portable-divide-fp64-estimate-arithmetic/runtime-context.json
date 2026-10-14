@@ -1,0 +1,228 @@
+{
+  "all_build_output_seals": {
+    "compile-host": {
+      "bytes": 2979,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/compile-host/output-seal.json",
+      "sha256": "10ca56fa8ffaeb26f7d1663fc42a8de3f18e9d754542828381b561858ff548e5"
+    },
+    "compile-shader-candidate": {
+      "bytes": 1768,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/compile-shader-candidate/output-seal.json",
+      "sha256": "e92f823ac41ed46d7e4d0dd2cc8cda13934f18fd08e08df227eded7cc05afb4e"
+    },
+    "disassemble-shader-candidate": {
+      "bytes": 1546,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/disassemble-shader-candidate/output-seal.json",
+      "sha256": "ca99838d486b94d3f05a3d031ecf8ceeb4292ae7680ee4f45266ab1fa63a5b27"
+    },
+    "link-host": {
+      "bytes": 1626,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/link-host/output-seal.json",
+      "sha256": "594d6c9e60eb90be799fcdc3d5afd89c56cf32851366671a912a953cd028b15d"
+    },
+    "optimize-shader-candidate": {
+      "bytes": 1606,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/optimize-shader-candidate/output-seal.json",
+      "sha256": "cdb9ad329417a8fa4f91626faa0ed7c24c3ba584301566999d1217f8ede5ae07"
+    },
+    "prepare-build": {
+      "bytes": 2567,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/prepare-build/output-seal.json",
+      "sha256": "edbd04e2a9919faf2a3f4271284802d3ce18b2d63abbb4f90799a4a4d9dc04c1"
+    },
+    "validate-shader-candidate": {
+      "bytes": 1111,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/validate-shader-candidate/output-seal.json",
+      "sha256": "bfd35452308682f55050df7268f15d80f7e9191a902bf9baf23510851f52d20a"
+    },
+    "verify-build": {
+      "bytes": 1142,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/verify-build/output-seal.json",
+      "sha256": "996c7b1323e6e4ea9ad1d7d88371a5a19399981bffed3f04ad7a04b60b208fd0"
+    }
+  },
+  "build_review": {
+    "bytes": 50288,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/build-review.json",
+    "sha256": "42b1a3f3f789971bde5bc0304c8b321d98e390fcb968a6059898623b3c54a5c3"
+  },
+  "gpu": {
+    "bytes": 258536,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/gpu",
+    "sha256": "93d85da756b93fb242683b1c9a11e2b5731a9f5b24875d07fb504b408bfb16e7"
+  },
+  "host": {
+    "bytes": 615768,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/host",
+    "sha256": "5d99d1c17aa9da1850adf6bc3df80cbbc7ad4fc8fd91d093558e139fbf311393"
+  },
+  "modules": {
+    "candidate": {
+      "assembly": {
+        "bytes": 80699,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/candidate.spvasm",
+        "sha256": "ca86790382eabc09d003fa49b2c264173339939057acf24c36a895e152bb948e"
+      },
+      "capabilities": [
+        "Float64",
+        "Shader"
+      ],
+      "divide_estimate_graph": {
+        "Function_uint2_member_load_proof": {
+          "direct_only_no_alias_escape_or_extra_store": true,
+          "load_ids": [
+            "%956",
+            "%963"
+          ],
+          "member_pointers": {
+            "0": "%943",
+            "1": "%944"
+          },
+          "single_stores_dominate_single_entry_guarded_loads": true,
+          "variable": "%estimateBits"
+        },
+        "acceptance_predicates": [
+          "%953",
+          "%1936",
+          "%1939"
+        ],
+        "accepted_path_returns_same_round_sign_exponent": true,
+        "arithmetic_equivalence_executed": false,
+        "closed_choice_proofs": {
+          "%1936": {
+            "entry": "%826",
+            "kind": "closed two-arm Phi",
+            "merge": "%832",
+            "predicate": "%972"
+          },
+          "%1937": {
+            "entry": "%828",
+            "kind": "closed two-arm Phi",
+            "merge": "%831",
+            "predicate": "%976"
+          },
+          "%1938": {
+            "entry": "%833",
+            "kind": "closed two-arm Phi",
+            "merge": "%836",
+            "predicate": "%990"
+          },
+          "%1939": {
+            "entry": "%836",
+            "kind": "closed two-arm Phi",
+            "merge": "%839",
+            "predicate": "%998"
+          },
+          "%1963": {
+            "entry": "%840",
+            "kind": "closed two-arm Phi",
+            "merge": "%843",
+            "predicate": "%1007"
+          }
+        },
+        "cost_or_hit_rate_established": false,
+        "exact_product": {
+          "id": "%966",
+          "opcode": "OpUMulExtended"
+        },
+        "exact_product_remainder_inequalities": true,
+        "exact_remainder": [
+          "%residualLo",
+          "%residualHi"
+        ],
+        "exact_remainder_sticky": true,
+        "guess": "%guess",
+        "integer_range_before_guess_extraction": true,
+        "named_PB32WideProduct_required": false,
+        "native_estimate_accuracy_assumed": false,
+        "original_complete_fallback_suffix_normalized_equal": true,
+        "unsigned64_or_float_to_uint_required": false,
+        "wide_division": "%quotient"
+      },
+      "divide_loops": 1,
+      "divide_widths": [
+        32
+      ],
+      "float_widths": [
+        "64"
+      ],
+      "integer_widths": [
+        "32"
+      ],
+      "module": {
+        "bytes": 29300,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/candidate.spv",
+        "sha256": "7a4290be1d6d52e8dea78dbe57f9d1465cb50c3ae4b62d2b9b7c9c1ef42930c4"
+      },
+      "op3_actual_Divide_call": {
+        "case3_true_block_only": true,
+        "condition": "%782",
+        "id": "%785",
+        "result_stored": true
+      },
+      "original_divide_complete_fallback_suffix_normalized_equal": true,
+      "original_multiply_residual_unpack_round_normalized_bodies_equal": true
+    },
+    "stock": {
+      "assembly": {
+        "bytes": 75783,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/stock.spvasm",
+        "sha256": "aefc7ead4a18b92ea973931a47e946e6104211ff2d6c56a39db6afa38935856e"
+      },
+      "capabilities": [
+        "Shader"
+      ],
+      "divide_estimate_graph": null,
+      "divide_loops": 1,
+      "divide_widths": [
+        32
+      ],
+      "float_widths": [],
+      "integer_widths": [
+        "32"
+      ],
+      "module": {
+        "bytes": 27500,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/stock.spv",
+        "sha256": "92d261966262c3bc93457bd95cabe2c7a3da007748cc0cf7f46b038311a7b019"
+      },
+      "op3_actual_Divide_call": {
+        "case3_true_block_only": true,
+        "condition": "%782",
+        "id": "%785",
+        "result_stored": true
+      },
+      "original_divide_complete_fallback_suffix_normalized_equal": true,
+      "original_multiply_residual_unpack_round_normalized_bodies_equal": true
+    }
+  },
+  "original_expected": {
+    "bytes": 2788288,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/expected.bin",
+    "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+  },
+  "original_input": {
+    "bytes": 2788292,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/input.bin",
+    "sha256": "5eda64c4af63a0d7507802c4f56a728b3a56d9458328e7f5dabeed300012f605"
+  },
+  "same_admitted_host_reuse": {
+    "device_object": {
+      "bytes": 293320,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+      "sha256": "15c4b34606b7cdfd49adb6ba740eaadf312f0e7e4baf57f9d1f083526e463c56"
+    },
+    "historical_pair_review": {
+      "bytes": 25314,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-pair-review/pair-review.json",
+      "sha256": "42faa6ac8b93d4a8f93c4ff5859da4dfd96c7c0fc0e2662488c748ffb781404d"
+    },
+    "original_output_seal": {
+      "bytes": 2171,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/compile-device/output-seal.json",
+      "sha256": "42a18d35b00d387df02c41059cb821d1b240660006f829d23ef5ba0facce748d"
+    },
+    "scope": "Exact accepted compiled Int64 device object/source and historical public-argument witness reused. No fresh numeric-process argument capture is claimed."
+  },
+  "scope": "Original full binary32 primitive corpus; candidate internal Float64 estimate only. No retained-program/table/normal-sum runtime or estimate-accuracy acceptance."
+}

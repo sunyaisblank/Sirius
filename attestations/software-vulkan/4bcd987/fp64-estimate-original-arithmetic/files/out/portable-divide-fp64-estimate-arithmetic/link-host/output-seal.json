@@ -1,0 +1,38 @@
+{
+  "inputs_before": {
+    "bytes": 603405,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/link-host/inputs-before.json",
+    "sha256": "0567c7ebf0db548e7536496c1201a30652bffa74e8291f6dca143656e4f453ff"
+  },
+  "label": "link-host",
+  "operator_context": {
+    "bytes": 776,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/operator-context.json",
+    "sha256": "82d5d67f3e934d051f3171a3027af97e2c245e6a9015006d0f058fdc51c73b9e"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/host": {
+      "bytes": 615768,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/host",
+      "sha256": "5d99d1c17aa9da1850adf6bc3df80cbbc7ad4fc8fd91d093558e139fbf311393"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/host.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-ldl",
+      "-pthread",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/host"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 654212,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/source-freeze.json",
+    "sha256": "b59df5c88850a198cd2495452478c75a0428c1280b39f86cca59fb822f9da55c"
+  }
+}

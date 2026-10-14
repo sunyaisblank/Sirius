@@ -1,0 +1,289 @@
+{
+  "schema": "sirius-independent-source-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "component": "portable-divide-fp64-estimate-original-arithmetic",
+  "reviewer": {
+    "agent": "forensic_obligations",
+    "independent_of_packet_author": true,
+    "independent_of_operator": true,
+    "prior_involvement": "Reviewed estimate source math, compiler/reader/property/ordinary-JIT evidence and the unconsumed gate draft; identified missing prior-owner receipt consumption.",
+    "method": "Complete source/delta reads, standard-library metadata/hash/AST inspection and exact declarative future-input comparison. No authored helper, parser, analyzer, compiler, validator, build, test, provider, Vulkan API or GPU action executed."
+  },
+  "admission": {
+    "source_and_prospective_ten_actions_admitted": true,
+    "runtime_result_or_numerical_acceptance": false,
+    "no_existing_context_or_binary_or_owner": true,
+    "root_is_sole_actual_operator": true,
+    "scope": "Fresh candidate host and full numerical GPU against the unchanged original174268-record/14-operation corpus, reusing exact complete original stock acceptance. No stock redispatch/rebuild."
+  },
+  "release": {
+    "static_pins": 1886,
+    "all_static_current_bytes_and_resolved_paths_match": true,
+    "critical_files": {
+      "gate.py": {
+        "bytes": 34565,
+        "sha256": "290fdc1dbc96e564414029b90e0af50fe23c03653101074b1b1fbe7f69d418a6"
+      },
+      "packet.json": {
+        "bytes": 314446,
+        "sha256": "197019e1418d6fc64d8d79eee07357adffa7e29338e4fd35d833547b77fd5451"
+      },
+      "actions.json": {
+        "bytes": 2093426,
+        "sha256": "86819fcf8abfc79f507c9bcfeeb3af25a51764101108957149375714d960d4b7"
+      },
+      "source-freeze.json": {
+        "bytes": 654212,
+        "sha256": "b59df5c88850a198cd2495452478c75a0428c1280b39f86cca59fb822f9da55c"
+      },
+      "preparation.json": {
+        "bytes": 9106,
+        "sha256": "294aed1af369772c725efa1930541a3c2c9fa9aac72bcb8e78c58c80cbac6386"
+      },
+      "estimate_graph.py": {
+        "bytes": 17797,
+        "sha256": "22fc14614c7d61bd9077e6e0f1ec33395c07809d71b4042429b17740d418d7ff"
+      },
+      "run_owned.py": {
+        "bytes": 12933,
+        "sha256": "492c75609a0dc8ff5eaa0299f7206820bb8a42f85c3ecc5b9b0af98f2496ba9f"
+      },
+      "owned_guard.py": {
+        "bytes": 20791,
+        "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+      },
+      "candidate/src/sirius/kernels/portable_binary32.h": {
+        "bytes": 14719,
+        "sha256": "24ea42f825cde5c1378ac57dd194c245ebc2ed396a6cf212d2c642fa2b67d020"
+      },
+      "input.bin": {
+        "bytes": 2788292,
+        "sha256": "5eda64c4af63a0d7507802c4f56a728b3a56d9458328e7f5dabeed300012f605"
+      },
+      "expected.bin": {
+        "bytes": 2788288,
+        "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+      },
+      "portable_binary32_reference.bin": {
+        "bytes": 4182444,
+        "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+      }
+    },
+    "future_action_input_counts": {
+      "compile-host": {
+        "frozen_inputs": 1898,
+        "new_terminal_receipts": 3,
+        "expected_exit": 0,
+        "kind": "build"
+      },
+      "compile-shader-candidate": {
+        "frozen_inputs": 1898,
+        "new_terminal_receipts": 3,
+        "expected_exit": 0,
+        "kind": "build"
+      },
+      "disassemble-shader-candidate": {
+        "frozen_inputs": 1912,
+        "new_terminal_receipts": 12,
+        "expected_exit": 0,
+        "kind": "build"
+      },
+      "execute-gpu-candidate": {
+        "frozen_inputs": 1934,
+        "new_terminal_receipts": 24,
+        "expected_exit": 0,
+        "kind": "diagnostic"
+      },
+      "execute-host": {
+        "frozen_inputs": 1934,
+        "new_terminal_receipts": 24,
+        "expected_exit": 0,
+        "kind": "test"
+      },
+      "link-host": {
+        "frozen_inputs": 1904,
+        "new_terminal_receipts": 6,
+        "expected_exit": 0,
+        "kind": "build"
+      },
+      "optimize-shader-candidate": {
+        "frozen_inputs": 1903,
+        "new_terminal_receipts": 6,
+        "expected_exit": 0,
+        "kind": "build"
+      },
+      "prepare-build": {
+        "frozen_inputs": 1889,
+        "new_terminal_receipts": 0,
+        "expected_exit": 0,
+        "kind": "build"
+      },
+      "validate-shader-candidate": {
+        "frozen_inputs": 1908,
+        "new_terminal_receipts": 9,
+        "expected_exit": 0,
+        "kind": "build"
+      },
+      "verify-build": {
+        "frozen_inputs": 1928,
+        "new_terminal_receipts": 21,
+        "expected_exit": 0,
+        "kind": "build"
+      }
+    },
+    "bounds": {
+      "outer_seconds_per_owner": 300,
+      "max_sampled_rss_kib": 4194304,
+      "min_sampled_available_kib": 2097152,
+      "original_gpu_allocation_admission_bytes": 8388608
+    },
+    "original_owner_guard_byte_identical": true,
+    "candidate_header_graph_recipes_outputs_corpus_and_assertions_unchanged_by_final_correction": true,
+    "old_unconsumed_gate_actions_packet_freeze_preparation_and_patch_preserved": true
+  },
+  "final_correction": {
+    "gate_delta_exact": [
+      "canonical_json",
+      "pin_runtime durable module equality",
+      "review durable module equality"
+    ],
+    "durable_json": "Only two saved module comparisons now compare complete persisted JSON. Integer object keys become strings exactly as saved; all fields, values, number/boolean types and array order remain in the comparison. allow_nan=False rejects unsupported values. No field projection or tolerance.",
+    "actions_delta": "Non-frozen action metadata is byte-equivalent as parsed. Each old frozen set is retained; added inputs are exactly eight correction sources plus owner.json/inputs-before.json/inputs-after.json for every already-selected prior output-seal ancestor.",
+    "old_selected_ancestors_only": true,
+    "own_future_owner_and_output_seal_not_frozen": true,
+    "owner_code_and_numerical_gates_not_changed": true
+  },
+  "provenance": {
+    "archive_pin_coverage": [
+      {
+        "role": "compiler_archive",
+        "manifest_files": 43,
+        "all_members_static_pinned": true,
+        "missing_count": 0,
+        "missing_examples": []
+      },
+      {
+        "role": "jit_archive",
+        "manifest_files": 99,
+        "all_members_static_pinned": true,
+        "missing_count": 0,
+        "missing_examples": []
+      },
+      {
+        "role": "stock_archive",
+        "manifest_files": 181,
+        "all_members_static_pinned": true,
+        "missing_count": 0,
+        "missing_examples": []
+      },
+      {
+        "role": "historical_host_archive",
+        "manifest_files": 237,
+        "all_members_static_pinned": true,
+        "missing_count": 0,
+        "missing_examples": []
+      },
+      {
+        "role": "property_archive",
+        "manifest_files": 43,
+        "all_members_static_pinned": true,
+        "missing_count": 0,
+        "missing_examples": []
+      }
+    ],
+    "all_737_historical_stock_actual_paths_static_pinned": true,
+    "complete_original_stock_receipt": "Original accepted f2 stock arithmetic; all737 static joins and17 original accepted terminal owners, exact original corpus/module/source/build/actual complete output/provider receipt.",
+    "exact_cache_exception": "The sole known60385B/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02 cache identity is recovered under immutable91c from1dd base by one declared literal restoration. Original pin preserved; no current canonical-cache mutation or raw-old-file discovery claimed.",
+    "compiler_source": "Candidate24ea and stock49d3 headers are byte-identical to d547 source; original compiler wrapper remains false/child1, accepted56076 parse-only reader provides structural approval.",
+    "estimate_graph": "Exact accepted22fc parser reused unchanged, including typed unique-store/load, closed CFG/UMulExtended and complete original fallback normalization.",
+    "ordinary_jit": "Exact91c actual called module/code, full55 feature report and three birth/session-bound provider maps; cost verdict is COST_PREMISE_SURVIVES_UNPROVEN, not arithmetic proof.",
+    "properties": "Exact3dcc Float64 support/FloatControls receipt; no native53-bit or RTE64 accuracy premise.",
+    "archive_relocation": "Retired screen/query regular-file references must resolve through exact immutable saved members while retaining historical recorded identities; unrelocated real tool aliases retain original resolved paths.",
+    "old_live_scratch_dependency": false
+  },
+  "math_and_module_contract": {
+    "exact_candidate_macro": "SIRIUS_PB32_DIVIDE_FP64_ESTIMATE=1",
+    "candidate_include_precedence": "Private candidate src is first for host; private candidate kernels include is explicit for Slang. Host depfile must contain candidate header and exclude private stock header.",
+    "theorem": "After original finite/special guards and normalization, d in[2^23,2^24), d<=m<2d, N=m<<26<2^51. Positive estimate-bit guard admits guesses in[2^26,2^27). Existing exact UInt2 product P<=N and full-borrow N-P with high0,low<d uniquely establish floor(N/d); jam exact nonzero remainder then unchanged PB32Round. Every rejected estimate enters original exact32-bit fallback. No floating accuracy assumption.",
+    "preserved_bodies": [
+      "PB32Multiply",
+      "PB32ProductResidual",
+      "PB32Unpack",
+      "PB32Round",
+      "complete original PB32Divide fallback suffix"
+    ],
+    "source_special_rounding_behavior": "Original signed zeros, NaN/Inf precedence, normalization, underflow/ties/subnormals and overflow remain unchanged before/after the inserted optional block.",
+    "candidate_shader_profile": {
+      "capabilities_exact_multiset": [
+        "Shader",
+        "Float64"
+      ],
+      "integer_widths": [
+        32
+      ],
+      "float_widths": [
+        64
+      ],
+      "no_Int64": true,
+      "no_FToI": true,
+      "no_relaxed_or_fast_math": true,
+      "NoContraction_exact": [
+        "FMul",
+        "FDiv"
+      ],
+      "local_size": [
+        64,
+        1,
+        1
+      ],
+      "barriers": 0,
+      "public_interface_equal_stock": true
+    },
+    "primitive_modes": "Original integer public storage/arithmetic has no float32 operations or RTE32 execution mode; no new execution mode is introduced.",
+    "ordinary_fallback_required": "One original32-bit UDiv/one fallback loop remain; strict graph reader refuses unknown forms.",
+    "opcode3_reachability": "Actual ComputeMain op==3 true arm calls PB32Divide on uint input loads, stores its result, has the sole expected predecessor and joins its original merge. Original probe source remains byte-identical.",
+    "absent_wide_product_function": "Neither module may invent a standalone PB32WideProduct comparison; existing intrinsic is inlined and actual graph is checked."
+  },
+  "original_numerical_scope": {
+    "records": 174268,
+    "operations": 14,
+    "full_output_words": 697072,
+    "original_ordered_reference_fixture": true,
+    "op3_divide_records": 13674,
+    "finite_nonzero_optional_block_records": 12263,
+    "normalized_doubling_records": 5700,
+    "normalized_kept_records": 6563,
+    "non_power_of_two_denominator_significand_records": 10594,
+    "runtime_work": {
+      "groups_x": 2723,
+      "threads_per_group": 64,
+      "source_guard_for_four_excess_threads": true
+    },
+    "gpu_comparison": "Original GPU source initializes every output word to sentinel then compares full697072-word actual buffer byte-exactly to original expected, saves full output and requires zero mismatches/provider llvmpipe.",
+    "host_comparison": "Original MatchesIndependentExactCorpus with private candidate header; exact174268 property and zero raw-word mismatches in one completed original XML case.",
+    "stock_evidence_reused": true,
+    "stock_source_module_and_expected_bytes_exact": true,
+    "no_new_records_references_thresholds_or_epsilon": true,
+    "no_ordinary_parity_one_second_deadline_imported": true,
+    "branch_scope_limit": "These source-derived finite inputs enter the optional estimation block. Successful estimate verification/hit rate is not observed."
+  },
+  "producer_consumption": {
+    "eight_build_or_review_owners_then_runtime_pin_then_two_numerical_owners_then_separate_terminal_reader": true,
+    "producing_child_seals_outputs_before_return": true,
+    "output_seals_bind": "Exact recipe, source-freeze, operator-context, actual inputs-before and complete output identities; consumers accept terminal producer/source/input/retirement records before use.",
+    "host_objects": "Fresh .o/.d are predeclared only for later consumers; depfile inputs must all be static pinned. Host ELF is sealed before runtime.",
+    "gpu_reuse": "Exact accepted original full numeric GPU258536B is reused, not253536B short-input canary. Original link map/strong definitions/private device object-before-original archive and no extracted old Vulkan member are checked.",
+    "shader_outputs": "Candidate raw→optimized→validated→disassembled data and terminal receipts are predeclared/frozen in their later consumers; stock module remains exact prior accepted bytes.",
+    "final_numerical_consumed_input_join": "Both numerical owners' actual argv and every frozen input before/current record are checked, joining actual host/module/corpus/resources/runtime context/all output seals and prior raw receipts.",
+    "actual_provider_scope": "Fresh numeric owner maps must join pinned loader/LVP/LLVM dev/inode to owned PID/birth/session. Reused device object and full numeric ELF bind Float64 enablement; fresh numeric-process feature arguments are not GDB-captured. Historical unused host Int64 remains explicit; new shader has none.",
+    "terminal_scope": "All10 owners require expected exit0, no guard/cleanup/remaining births, unchanged source/whole inputs and exact before-after records; final read occurs after owners terminate."
+  },
+  "limits": {
+    "estimate_acceptance_hit_rate_or_accuracy_proved": false,
+    "retained_program_integrated_controls_stage_cost_or_benefit_proved": false,
+    "adoption_or_external_domain_science_release_qualified": false,
+    "product_optional_feature_module_selection_fallback_admitted": false
+  },
+  "blockers": []
+}

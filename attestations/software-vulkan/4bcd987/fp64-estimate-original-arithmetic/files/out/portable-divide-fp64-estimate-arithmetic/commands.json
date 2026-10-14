@@ -1,0 +1,18 @@
+{
+  "commands": [
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/gate.py pin-context",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py prepare-build",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py compile-host",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py link-host",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py compile-shader-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py optimize-shader-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py validate-shader-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py disassemble-shader-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py verify-build",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/gate.py pin-runtime",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py execute-host",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py execute-gpu-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/gate.py review"
+  ],
+  "stop": "Root serially stops first failure. No retries. Final reader only after both numerical owners terminal."
+}

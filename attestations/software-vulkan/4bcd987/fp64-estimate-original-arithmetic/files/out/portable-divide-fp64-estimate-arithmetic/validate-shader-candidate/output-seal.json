@@ -1,0 +1,27 @@
+{
+  "inputs_before": {
+    "bytes": 604897,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/validate-shader-candidate/inputs-before.json",
+    "sha256": "eeb2053e7d3d4be19e60bebf2ec7f893dc2acf105ab8190874ad4b5013e76ef5"
+  },
+  "label": "validate-shader-candidate",
+  "operator_context": {
+    "bytes": 776,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/operator-context.json",
+    "sha256": "82d5d67f3e934d051f3171a3027af97e2c245e6a9015006d0f058fdc51c73b9e"
+  },
+  "outputs": {},
+  "recipe": [
+    [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.2",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic/candidate.spv"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 654212,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/source-freeze.json",
+    "sha256": "b59df5c88850a198cd2495452478c75a0428c1280b39f86cca59fb822f9da55c"
+  }
+}
