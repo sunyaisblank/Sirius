@@ -212,7 +212,9 @@ def source_state():
     changes = set(command("diff", "--name-only", SOURCE, revision, "--").splitlines())
     require(changes <= {".github/workflows/ci.yml", "scripts/diagnose-macos-retained.py",
                         "scripts/governance/build_policy.py", "scripts/macos_metal_probe.py",
-                        "scripts/macos_moltenvk_integration.py", "scripts/macos_vulkan_identity.py"},
+                        "scripts/macos_moltenvk_integration.py", "scripts/macos_vulkan_identity.py",
+                        "scripts/validate-native-runtime.py", "scripts/macos_moltenvk_provider.py",
+                        "README.md"},
             "reused executable's product/scientific source differs from the runner checkout")
     return {"runner_revision": revision, "candidate_revision": SOURCE, "status": status}
 
@@ -360,7 +362,7 @@ def child_limits():
     resource.setrlimit(resource.RLIMIT_FSIZE, (64 * 1024**2, 64 * 1024**2))
 
 
-def run_owned(argv, environment, folder, inputs, *, seconds=300):
+def run_owned(argv, environment, folder, inputs, *, seconds=300, source_snapshot=None):
     """Keep an unreaped child as the killpg anchor; never signal saved bare PIDs.
 
     ps lstart is a conservative observation token, not a unique kernel birth
@@ -372,7 +374,8 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
     folder.mkdir()
     before = {str(path): identity(path) for path in inputs}
     write(folder / "inputs-before.json", before)
-    source = source_state()
+    observe_source = source_state if source_snapshot is None else source_snapshot
+    source = observe_source()
     owner = {"status": "running", "argv": argv, "source": source,
              "limits": {**LIMITS, "seconds": seconds}, "qualification_claimed": False,
              "reserve_scope": "Darwin sampled available estimate: printed free + inactive; kernel pressure must be normal (1). This is not a proven no-swap bound. RSS includes controller and observed group/tree, not global Metal compiler services.",
@@ -519,7 +522,7 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
     try:
         after = {str(path): identity(path) for path in inputs}
         write(folder / "inputs-after.json", after)
-        unchanged = before == after and source_state() == source
+        unchanged = before == after and observe_source() == source
     except Exception as error:
         unchanged = False
         reason = reason or f"final input/source seal incomplete: {error}"
@@ -612,12 +615,12 @@ def dump_join(folder, modules):
             "scope": "Byte-exact dumped SPIR-V aliases; raw pipeline-list/MSL associations retained. Loaded modules alone do not prove execution or successful compilation."}
 
 
-def owner_self_test(output, environment, inputs):
+def owner_self_test(output, environment, inputs, *, source_snapshot=None):
     commands = [("exit-zero", "pass", 5, 0, None),
                 ("exit-seven", "raise SystemExit(7)", 5, 7, None),
                 ("timeout-tree", "import subprocess,sys,time; subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)']); time.sleep(30)", 1, None, "deadline")]
     for label, code, seconds, expected_exit, reason in commands:
-        result = run_owned([sys.executable, "-c", code], environment, output / label, inputs, seconds=seconds)
+        result = run_owned([sys.executable, "-c", code], environment, output / label, inputs, seconds=seconds, source_snapshot=source_snapshot)
         require(result["containment_complete"] and result["whole_inputs_unchanged"], "owner cleanup self-test failed")
         require(result["stop_reason"] == reason and (expected_exit is None or result["child_exit"] == expected_exit), "owner outcome self-test failed")
         if label == "timeout-tree":

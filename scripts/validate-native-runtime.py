@@ -208,6 +208,12 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
         require(shutil.which(command) is not None,
                 f"required native-attestation command is unavailable: {command}")
     revision = clean_source_revision(args.expected_revision)
+    provider = None
+    if profile.platform == "macos":
+        import macos_moltenvk_provider as native_provider
+
+        provider = native_provider.load(revision)
+        native_provider.activate(provider)
 
     run_id = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
     output = args.output_root.resolve() / run_id
@@ -250,12 +256,21 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
     print(json.dumps({"preflight": preflight}), flush=True)
     environment = os.environ.copy()
     environment["SIRIUS_VULKAN_DEVICE"] = str(preflight["device"]["index"])
+    provider_binding = None
+    if provider is not None:
+        provider_binding = native_provider.bind_candidate(
+            provider, revision, binary,
+            ROOT / "bin/macos/tests/backend/sirius_backend_tests",
+            preflight, environment, output,
+        )
     # Preserve the original complete Mandatory build after exact-candidate
     # preflight, with the same selected device as the later runtime estate.
     run(["cmake", "--build", "--preset", profile.preset], environment=environment)
     require({"path": str(binary.resolve()), **inspect_candidate_authority(binary, revision)}
             == preflight["candidate"],
             "qualification candidate authority changed after exact-candidate preflight")
+    if provider is not None:
+        native_provider.verify_binding(provider, provider_binding, revision)
     shutil.copy2(binary, qualification_executable_path)
     qualification_products = copy_qualification_products(binary.parent / "resources", output)
     configured_receipt = (
@@ -352,6 +367,9 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
     require(report["skipped"] == 0,
             "native runtime evidence requires a non-skipping test estate")
 
+    render_environment = dict(environment)
+    if provider is not None:
+        render_environment["DYLD_PRINT_LIBRARIES"] = "1"
     render_output = run(
         [
             str(binary),
@@ -376,10 +394,13 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
             "-o",
             str(frame_path),
         ],
-        environment=environment,
+        environment=render_environment,
     )
     require(frame_path.is_file() and frame_path.stat().st_size > 0,
             "native Vulkan probe emitted no PNG")
+
+    if provider is not None:
+        native_provider.bind_frame(provider, provider_binding, revision, render_output, output)
 
     transcript = (
         f"== source revision: {revision}\n"
@@ -397,6 +418,9 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
     require(clean_source_revision(args.expected_revision) == revision,
             "source revision changed during native runtime validation")
 
+    provider_artifacts = []
+    if provider is not None:
+        provider_artifacts = [native_provider.bundle_proofs(provider, provider_binding, revision, output)]
     artifacts = {
         path.name: artifact_record(path)
         for path in (
@@ -413,6 +437,7 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
             qualification_gate_log_path,
             *qualification_products,
             *qualification_test_inputs,
+            *provider_artifacts,
         )
     }
     document = {
@@ -440,6 +465,8 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
         "artifacts": artifacts,
     }
     attestation_path.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
+    if provider is not None:
+        native_provider.verify_binding(provider, provider_binding, revision)
     verifier.verify_document(document, attestation_path)
     require(clean_source_revision(args.expected_revision) == revision,
             "source identity changed while issuing native runtime evidence")
@@ -447,9 +474,17 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
 
 
 def self_test() -> None:
-    from governance.build_policy import verify_native_runtime_preflight_policy
+    from governance.build_policy import verify_native_provider_policy, verify_native_runtime_preflight_policy
 
     verify_native_runtime_preflight_policy(Path(__file__).read_text(encoding="utf-8"))
+    verify_native_provider_policy(
+        Path(__file__).read_text(encoding="utf-8"),
+        ROOT.joinpath("scripts/macos_moltenvk_provider.py").read_text(encoding="utf-8"),
+        ROOT.joinpath("scripts/diagnose-macos-retained.py").read_text(encoding="utf-8"),
+    )
+    from macos_moltenvk_provider import self_test as native_provider_self_test
+
+    native_provider_self_test()
     runtime_identity_self_test()
     preflight_self_test()
     qualification_reuse_self_test()

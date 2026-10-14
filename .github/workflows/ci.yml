@@ -511,6 +511,13 @@ jobs:
           echo "VK_DRIVER_FILES=$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json" >> "$GITHUB_ENV"
           export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
           vulkaninfo --summary
+      - name: Provision pinned custom MoltenVK for current-source qualification
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin 21f87e4806c36cd1ae9e45f912a5817d6878b774
+          python3 -B scripts/macos_moltenvk_provider.py --expected-revision "${{ github.sha }}"
       - name: Record macOS graphics route
         if: success()
         shell: bash
@@ -574,6 +581,8 @@ jobs:
             ${{ runner.temp }}/sirius-macos-runtime/os-version.txt
             ${{ runner.temp }}/sirius-macos-runtime/metal-displays.json
             ${{ runner.temp }}/sirius-macos-runtime/provider-route.txt
+            out/macos-moltenvk-integration/observation
+            bin/macos/macos-moltenvk-integration
           if-no-files-found: ignore
 
   macos-retained-diagnostic:

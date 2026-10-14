@@ -75,6 +75,26 @@ cmake --preset windows-msvc && cmake --build --preset windows-msvc
 
 Presets exist for GCC and Clang (Release and Debug), MSVC, macOS, required Linux Vulkan CI, and GCC ASan/UBSan/LSan. Every supported preset pins warnings as errors, enforce-mode contracts, Mandatory tests, and source governance; `linux-ci` additionally runs the non-skipping Vulkan/P1 operational profile. Source governance also enforces one CMake owner per first-party translation unit, downward-only layer dependencies, boundary naming, and the closed live-vendor set. `cmake --install` creates a relocatable volume containing the binary, starfield, installed operating model, every compiled backend resource, and viewer shaders when the viewer is compiled, then verifies that exact capability-specific structure before succeeding. A release install additionally requires the deterministic Mandatory-gate receipt emitted only after live CTest registration exactly equals a zero-skip JUnit estate; the receipt binds the revision, model, alignment authority, all test executables, and every installed product hash.
 
+For native macOS runtime attestation, first activate Vulkan SDK **1.4.357.0**
+(including `VULKAN_SDK`, its loader, Slang and SPIR-V tools) on native arm64
+macOS. From a clean committed checkout, fetch the pinned provider sources and
+provision the custom MoltenVK before running the existing full runtime producer:
+
+```sh
+git fetch --no-tags origin 21f87e4806c36cd1ae9e45f912a5817d6878b774
+revision="$(git rev-parse HEAD)"
+python3 -B scripts/macos_moltenvk_provider.py --expected-revision "$revision"
+python3 scripts/validate-native-runtime.py --expected-revision "$revision" --output-root attestations/native-macos-runtime
+```
+
+Provisioning requires fresh `out/macos-moltenvk-integration/observation` and
+`bin/macos/macos-moltenvk-integration` directories; preserve an earlier run's
+evidence before retiring those owned directories. The producer verifies the
+same clean revision and selects that private ICD with the unchanged SDK loader.
+Its receipts identify the custom provider explicitly; provisioning alone grants
+no qualification. Ordinary `cmake --preset macos` builds and relocated installs
+do not bundle or select this provider or its ICD.
+
 The application test executable is structurally non-rendering: it owns parsing, validation, projection, and input-state checks only. Render-session entry, CLI dispatch, CPU/Vulkan output, and progressive-frame cases live in the rendering test executable and carry an explicit `Rendering` label. Both executables remain beside the candidate so strict modes inspect that same product volume without a development resource override; source governance rejects relocation, an unclassified app-side command execution, or restoration of the override.
 
 Remote CI Actions and fetched source dependencies are pinned to immutable commits. Direct qualification-tool downloads use versioned URLs and checked-in SHA-256 values; source governance rejects movable tags, latest-release selection, or unchecked direct downloads.

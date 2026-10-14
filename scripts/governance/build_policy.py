@@ -258,7 +258,17 @@ MACOS_RUNTIME_DIAGNOSTIC_PATHS = (
     '${{ runner.temp }}/sirius-macos-runtime/os-version.txt',
     '${{ runner.temp }}/sirius-macos-runtime/metal-displays.json',
     '${{ runner.temp }}/sirius-macos-runtime/provider-route.txt',
+    'out/macos-moltenvk-integration/observation',
+    'bin/macos/macos-moltenvk-integration',
 )
+MACOS_PROVIDER_PROVISION_STEP = r"""      - name: Provision pinned custom MoltenVK for current-source qualification
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin 21f87e4806c36cd1ae9e45f912a5817d6878b774
+          python3 -B scripts/macos_moltenvk_provider.py --expected-revision "${{ github.sha }}"
+"""
 MACOS_RUNTIME_PRODUCER_STEP = r"""      - name: Exact native MoltenVK runtime evidence
         if: success()
         shell: bash
@@ -502,14 +512,18 @@ def integration_boundary_errors(workflow: str) -> list[str]:
         if name == "macos-build":
             steps = workflow_steps(job)
             producers = [step for step in steps if "validate-native-runtime.py" in step]
+            provision = [step for step in steps if "macos_moltenvk_provider.py" in step]
             provenance = [step for step in steps
                           if workflow_step_field(step, "name") == ["Record macOS graphics route"]]
-            if (len(producers) != 1
+            if (len(provision) != 1
+                    or provision[0].rstrip() != MACOS_PROVIDER_PROVISION_STEP.rstrip()
+                    or len(producers) != 1
                     or producers[0].rstrip() != MACOS_RUNTIME_PRODUCER_STEP.rstrip()
                     or len(provenance) != 1
                     or provenance[0].rstrip() != MACOS_RUNTIME_PROVENANCE_STEP.rstrip()
-                    or steps.index(provenance[0]) >= steps.index(producers[0])):
-                errors.append("macOS full qualification must run the exact runtime producer after route capture")
+                    or steps.index(provenance[0]) >= steps.index(producers[0])
+                    or steps.index(provision[0]) >= steps.index(producers[0])):
+                errors.append("macOS full qualification must provision the pinned custom provider and capture its route before the exact current-source runtime producer")
             if (len(producers) == 1 and len(runtime_uploads) == 1
                     and steps.index(runtime_uploads[0]) <= steps.index(producers[0])):
                 errors.append("macOS runtime upload precedes its verified producer")
@@ -614,7 +628,7 @@ def verify_integration_boundary_policy() -> None:
         )
         + "".join(
             f"  {name}:\n    if: {FULL_QUALIFICATION_CONDITION}\n    steps:\n"
-            + (MACOS_RUNTIME_PROVENANCE_STEP + MACOS_RUNTIME_PRODUCER_STEP
+            + (MACOS_PROVIDER_PROVISION_STEP + MACOS_RUNTIME_PROVENANCE_STEP + MACOS_RUNTIME_PRODUCER_STEP
                + macos_runtime_upload if name == "macos-build" else "")
             + (
                 "      - uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
@@ -749,14 +763,28 @@ def verify_integration_boundary_policy() -> None:
             f"name: sirius-{platform}-full-native-attestation",
             f"name: sirius-{platform}-native-attestation", 1)
     runtime_mutations = {
+        "missing custom provider provision": (MACOS_PROVIDER_PROVISION_STEP, ""),
+        "wrong custom provider source": (MACOS_PROVIDER_PROVISION_STEP,
+            MACOS_PROVIDER_PROVISION_STEP.replace("21f87e4806c36cd1ae9e45f912a5817d6878b774", "0" * 40)),
+        "export reuse as current-source provider": (MACOS_PROVIDER_PROVISION_STEP,
+            MACOS_PROVIDER_PROVISION_STEP.replace("macos_moltenvk_provider.py", "macos_moltenvk_integration.py")),
+        "provider SDK mutation": (MACOS_PROVIDER_PROVISION_STEP,
+            MACOS_PROVIDER_PROVISION_STEP + '          cp custom.dylib "$VULKAN_SDK/lib/libMoltenVK.dylib"\n'),
+        "missing custom provider evidence": ("            out/macos-moltenvk-integration/observation\n", ""),
         "missing explicit producer pipefail": (
             MACOS_RUNTIME_PRODUCER_STEP,
             MACOS_RUNTIME_PRODUCER_STEP.replace("          set -euo pipefail\n", "", 1)),
         "producer disabled guard": ("      - name: Exact native MoltenVK runtime evidence\n        if: success()", "      - name: Exact native MoltenVK runtime evidence\n        if: false"),
         "missing producer": (MACOS_RUNTIME_PRODUCER_STEP, ""),
         "producer self-test": ("validate-native-runtime.py --expected-revision", "validate-native-runtime.py --self-test --expected-revision"),
-        "wrong expected revision": ('--expected-revision "${{ github.sha }}"', '--expected-revision "stale"'),
-        "missing expected revision": (' --expected-revision "${{ github.sha }}"', ""),
+        "wrong expected revision": (MACOS_RUNTIME_PRODUCER_STEP,
+            MACOS_RUNTIME_PRODUCER_STEP.replace('--expected-revision "${{ github.sha }}"', '--expected-revision "stale"', 1)),
+        "missing expected revision": (MACOS_RUNTIME_PRODUCER_STEP,
+            MACOS_RUNTIME_PRODUCER_STEP.replace(' --expected-revision "${{ github.sha }}"', "", 1)),
+        "provision wrong expected revision": (MACOS_PROVIDER_PROVISION_STEP,
+            MACOS_PROVIDER_PROVISION_STEP.replace('--expected-revision "${{ github.sha }}"', '--expected-revision "stale"', 1)),
+        "provision missing expected revision": (MACOS_PROVIDER_PROVISION_STEP,
+            MACOS_PROVIDER_PROVISION_STEP.replace(' --expected-revision "${{ github.sha }}"', "", 1)),
         "wrong output root": ('--output-root "$RUNNER_TEMP/sirius-macos-runtime"', '--output-root "$RUNNER_TEMP"'),
         "unbounded parallel build": ("CMAKE_BUILD_PARALLEL_LEVEL: 3", "CMAKE_BUILD_PARALLEL_LEVEL: 8"),
         "suppressed producer failure": ('2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log"', '2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log" || true'),
@@ -779,6 +807,9 @@ def verify_integration_boundary_policy() -> None:
         "            bin/windows-msvc/generated/sirius/**\n", 1)
     mutations["preflight diagnostics in integration job"] = valid.replace(
         diagnostics, windows_diagnostics, 1)
+    mutations["macOS provision after current-source runtime"] = valid.replace(
+        MACOS_PROVIDER_PROVISION_STEP, "", 1).replace(
+        MACOS_RUNTIME_PRODUCER_STEP, MACOS_RUNTIME_PRODUCER_STEP + MACOS_PROVIDER_PROVISION_STEP, 1)
     mutations["macOS upload before producer"] = valid.replace(
         MACOS_RUNTIME_PRODUCER_STEP + macos_runtime_upload,
         macos_runtime_upload + MACOS_RUNTIME_PRODUCER_STEP, 1)
@@ -999,6 +1030,146 @@ def verify_native_runtime_preflight_policy(source: str) -> None:
             raise RuntimeError("native runtime preflight policy accepted " + label)
 
 
+def native_provider_binding_errors(source: str) -> list[str]:
+    """Require actual current-source/provider binding around the original gates."""
+    try:
+        tree = ast.parse(source)
+        function = next(node for node in tree.body if isinstance(node, ast.FunctionDef)
+                        and node.name == "write_runtime_attestation")
+    except (SyntaxError, StopIteration):
+        return ["native provider binding producer is malformed"]
+    same = lambda node, expression: ast.dump(node) == ast.dump(ast.parse(expression, mode="eval").body)
+    statements = function.body
+    guards = [node for node in statements if isinstance(node, ast.If)]
+    def guarded(condition: str, marker: str) -> list[ast.If]:
+        return [node for node in guards if same(node.test, condition)
+                and marker in ast.unparse(node)]
+    setup = guarded('profile.platform == "macos"', "native_provider.load(revision)")
+    binding = guarded("provider is not None", "native_provider.bind_candidate(")
+    authority = guarded("provider is not None", "native_provider.verify_binding(provider, provider_binding, revision)")
+    frame = guarded("provider is not None", "native_provider.bind_frame(provider, provider_binding, revision, render_output, output)")
+    runs = [node for node in statements if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call)
+            and isinstance(node.value.func, ast.Name) and node.value.func.id == "run"]
+    errors = []
+    if (len(setup) != 1 or len(binding) != 1 or len(authority) != 2 or len(frame) != 1
+            or len(runs) < 3 or not setup[0].lineno < runs[0].lineno < runs[1].lineno
+            < binding[0].lineno < runs[2].lineno < authority[0].lineno < frame[0].lineno < authority[1].lineno):
+        errors.append("native current-source provider setup/binding/continuity must surround all original runtime gates")
+    if len(setup) == 1:
+        expected = ast.parse('''if profile.platform == "macos":
+    import macos_moltenvk_provider as native_provider
+    provider = native_provider.load(revision)
+    native_provider.activate(provider)
+''').body[0]
+        if ast.dump(setup[0]) != ast.dump(expected):
+            errors.append("native provider must activate its verified current-revision receipt on macOS only")
+    if len(binding) == 1:
+        expected = ast.parse('''if provider is not None:
+    provider_binding = native_provider.bind_candidate(provider, revision, binary,
+        ROOT / "bin/macos/tests/backend/sirius_backend_tests", preflight, environment, output)
+''').body[0]
+        if ast.dump(binding[0]) != ast.dump(expected):
+            errors.append("native provider must bind the current app/backend and original exact preflight")
+    calls = [node for node in ast.walk(function) if isinstance(node, ast.Call)]
+    frame_runs = [node for node in calls if isinstance(node.func, ast.Name) and node.func.id == "run"
+                  and node.args and isinstance(node.args[0], ast.List)
+                  and any(isinstance(item, ast.Constant) and item.value == "render" for item in node.args[0].elts)]
+    frame_env = guarded("provider is not None", "render_environment['DYLD_PRINT_LIBRARIES'] = '1'")
+    if (len(frame_runs) != 1 or not any(keyword.arg == "environment" and same(keyword.value, "render_environment")
+                                       for keyword in frame_runs[0].keywords)
+            or len(frame_env) != 1):
+        errors.append("original native frame must retain actual provider loaded-image observation")
+    if ('native_provider.bundle_proofs(provider, provider_binding, revision, output)' not in source
+            or '*provider_artifacts,' not in source):
+        errors.append("native provider auxiliary proof bundle must be bound by the existing artifacts hash map")
+    if "native_provider_self_test()" not in source or "verify_native_provider_policy(" not in source:
+        errors.append("native producer omits portable provider/source controls")
+    return errors
+
+
+def native_provider_source_errors(provider: str, owner: str) -> list[str]:
+    """Small source contracts for shared owner reuse and exported-product separation."""
+    errors = []
+    try:
+        tree, owner_tree = ast.parse(provider), ast.parse(owner)
+        functions = {node.name: node for node in tree.body if isinstance(node, ast.FunctionDef)}
+        owner_functions = {node.name: node for node in owner_tree.body if isinstance(node, ast.FunctionDef)}
+        owner_call = owner_functions["run_owned"]
+        owner_test = owner_functions["owner_self_test"]
+        source_state = owner_functions["source_state"]
+        strict = functions["strict_source_snapshot"]
+        imports = [node for node in tree.body if isinstance(node, (ast.Import, ast.ImportFrom))]
+        require_lazy = functions["diagnostic"]
+    except (SyntaxError, KeyError):
+        return ["native provider or mature owner source authority is missing/malformed"]
+    for function in (owner_call, owner_test):
+        keywords = dict(zip((node.arg for node in function.args.kwonlyargs), function.args.kw_defaults))
+        default = keywords.get("source_snapshot")
+        if not isinstance(default, ast.Constant) or default.value is not None:
+            errors.append("shared owner source callback must default to the original diagnostic predicate")
+    if ('observe_source = source_state if source_snapshot is None else source_snapshot' not in owner
+            or 'source = observe_source()' not in owner
+            or 'unchanged = before == after and observe_source() == source' not in owner
+            or 'source_snapshot=source_snapshot' not in ast.unparse(owner_test)):
+        errors.append("shared owner does not retain before/after default and explicit source checks")
+    whitelist = {".github/workflows/ci.yml", "scripts/diagnose-macos-retained.py",
+                 "scripts/governance/build_policy.py", "scripts/macos_metal_probe.py",
+                 "scripts/macos_moltenvk_integration.py", "scripts/macos_vulkan_identity.py",
+                 "scripts/validate-native-runtime.py", "scripts/macos_moltenvk_provider.py", "README.md"}
+    sets = [node for node in ast.walk(source_state) if isinstance(node, ast.Set)]
+    if (len(sets) != 1 or ast.literal_eval(sets[0]) != whitelist
+            or 'changes <= ' not in ast.unparse(source_state)
+            or 'candidate_revision' not in ast.unparse(source_state)
+            or 'SOURCE' not in ast.unparse(source_state)):
+        errors.append("exported-product diagnostic source scope exceeds the explicit nine runner/documentation paths")
+    if any("macos_moltenvk_integration" in ast.unparse(node) or "resource" in ast.unparse(node) for node in imports):
+        errors.append("native provider imports the Darwin owner outside its lazy macOS path")
+    if ('importlib.import_module(\'macos_moltenvk_integration\')' not in ast.unparse(require_lazy)
+            or 'sys.platform' not in ast.unparse(require_lazy)):
+        errors.append("native provider lacks its bounded lazy native import")
+    if ('revision == expected_revision and status == \'\'' not in ast.unparse(strict)
+            or '--untracked-files=normal' not in ast.unparse(strict)):
+        errors.append("production owner source predicate does not bind exact clean current HEAD")
+    for marker in ('source_snapshot=lambda: strict_source_snapshot(revision)',
+                   'payload, payload_inputs = d.stage_payload(OUTPUT)',
+                   'd.verify_payload(payload)', 'd.tool_inputs(tools)',
+                   'verify_pins(receipt["sealed_inputs"])', 'd.loaded_join(inventory_folder, driver, loader)',
+                   'd.common.macho_modules(backend)', 'custom["device"]["pipeline_cache_uuid"].startswith(d.CONTENT_ID[:8])',
+                   'stock_sdk_modified=False', 'content_id_is_git_provenance=False'):
+        if marker not in provider:
+            errors.append("native provider omits existing source/tool/load/cache boundary: " + marker)
+    if provider.count("source_snapshot=lambda: strict_source_snapshot(revision)") != 2:
+        errors.append("both production owner routes must use the exact clean current-source callback")
+    if any(marker in provider for marker in ('common.prepare(', 'common.source_state(', 'd.main(', 'common.CASES')):
+        errors.append("current-source provisioner reuses the diagnostic executable/source predicate or control loop")
+    return errors
+
+
+def verify_native_provider_policy(producer: str, provider: str, owner: str) -> None:
+    if native_provider_binding_errors(producer) or native_provider_source_errors(provider, owner):
+        raise RuntimeError("native provider source policy rejected its valid current-source route")
+    mutations = (
+        (producer.replace("*provider_artifacts,", "", 1), provider, owner),
+        (producer.replace('native_provider.load(revision)', 'native_provider.load(None)', 1), provider, owner),
+        (producer.replace('native_provider.activate(provider)', 'pass', 1), provider, owner),
+        (producer.replace('preflight, environment, output,', 'None, environment, output,', 1), provider, owner),
+        (producer.replace('native_provider.verify_binding(provider, provider_binding, revision)', 'pass', 1), provider, owner),
+        (producer.replace('native_provider.bind_frame(provider, provider_binding, revision, render_output, output)', 'pass', 1), provider, owner),
+        (producer, provider.replace('revision == expected_revision and status == ""', 'True', 1), owner),
+        (producer, provider.replace('payload, payload_inputs = d.stage_payload(OUTPUT)', 'payload, payload_inputs = d.common.prepare(OUTPUT)', 1), owner),
+        (producer, provider.replace('source_snapshot=lambda: strict_source_snapshot(revision)', 'source_snapshot=None', 1), owner),
+        (producer, provider, owner.replace('seconds=300, source_snapshot=None', 'seconds=300, source_snapshot=source_state', 1)),
+        (producer, provider, owner.replace('observe_source = source_state if source_snapshot is None else source_snapshot',
+                                            'observe_source = source_snapshot', 1)),
+        (producer, provider, owner.replace('"README.md"},', '"README.md", "src/sirius/core/camera.h"},', 1)),
+    )
+    for changed_producer, changed_provider, changed_owner in mutations:
+        if ((changed_producer, changed_provider, changed_owner) == (producer, provider, owner)
+                or not (native_provider_binding_errors(changed_producer)
+                        or native_provider_source_errors(changed_provider, changed_owner))):
+            raise RuntimeError("native provider policy accepted an invalid source/provider/owner boundary")
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -1057,6 +1228,7 @@ def attestation_preflight_errors(
     if "preflight_self_test()" not in native_producer:
         errors.append("native producer does not run the imported preflight controls")
     errors.extend(native_runtime_preflight_errors(native_producer))
+    errors.extend(native_provider_binding_errors(native_producer))
     if "verify_native_runtime_preflight_policy(Path(__file__).read_text(" not in native_producer:
         errors.append("native producer self-test omits source-only preflight ordering controls")
     if "subprocess.run(" in reuse:
