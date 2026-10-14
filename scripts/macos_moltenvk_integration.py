@@ -304,12 +304,12 @@ def main():
         payload, source_inputs = stage_payload(output)
         header_path = payload / "sources/Vulkan-Headers/include/vulkan/vulkan_core.h"
         source_header_patches = re.findall(r"^#define\s+VK_HEADER_VERSION\s+(\d+)\s*$", header_path.read_text(), re.MULTILINE)
-        require(source_header_patches == ["341"], "pinned source Vulkan header patch differs")
+        require(source_header_patches == ["334"], "pinned source Vulkan header patch differs")
         stock_api = (1 << 22) | (3 << 12) | 334
         diagnostic_api = (1 << 22) | (3 << 12) | int(source_header_patches[0])
-        result["expected_api_patch_change"] = {"stock": "1.3.334", "diagnostic": "1.3.341",
+        result["expected_api_versions"] = {"stock": "1.3.334", "diagnostic": "1.3.334",
             "source_header": {"path": str(header_path), **identity(header_path)},
-            "scope": "Original app and public query both request Vulkan1.3; source-derived header patch difference only"}
+            "scope": "Original app and public query both request Vulkan1.3; pinned source and stock header patch are both334"}
         if args.prepare_only:
             result["status"] = "prepared_without_execution"
             return 0
@@ -409,7 +409,7 @@ def main():
                    build_folder / "inputs-before.json", build_folder / "inputs-after.json",
                    cpm / "CPM_0.40.8.cmake", diagnostic_driver, icd, build / "MoltenVK/mvkGitRevDerived.h"]
         selected, diagnostic_loaded = inventory("diagnostic-inventory", environment, diagnostic_driver, DIAGNOSTIC_INFO)
-        require(selected["api_version"] == diagnostic_api, "rebuilt reported API does not match source-derived1.3.341")
+        require(selected["api_version"] == diagnostic_api, "rebuilt reported API does not match source-derived1.3.334")
         require({k: v for k, v in selected.items() if k not in ("driver_info", "api_version")}
                 == {k: v for k, v in stock_selected.items() if k not in ("driver_info", "api_version")},
                 "rebuilt provider changed selected device/capability inventory")
@@ -418,7 +418,7 @@ def main():
                 and diagnostic_uuid["device"]["pipeline_cache_uuid"].startswith(CONTENT_ID[:8]), "diagnostic cache UUID aliases stock or lacks declared prefix")
         write(output / "provider-identities.json", {"stock": stock_uuid, "diagnostic": diagnostic_uuid,
               "app_loaded_images": {"stock": stock_loaded, "diagnostic": diagnostic_loaded},
-              "expected_api_patch_change": result["expected_api_patch_change"],
+              "expected_api_versions": result["expected_api_versions"],
               "provider_inputs": common.provider_inputs(app, environment, selected, True),
               "qualification_claimed": False, "stock_provider_qualified": False})
         inputs += [output / "provider-identities.json"]
