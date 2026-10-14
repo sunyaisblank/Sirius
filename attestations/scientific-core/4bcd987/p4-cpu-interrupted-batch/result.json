@@ -1,0 +1,228 @@
+{
+  "batch_passed": false,
+  "completed_component": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+  "component_milliseconds": 296730,
+  "component_verdict": "Completed GTest and CTest pass observed in raw stdout of incomplete batch; no passing standalone owner or final XML exists.",
+  "original_batch_result": {
+    "declared_output_environment": {
+      "GTEST_OUTPUT": "",
+      "TMPDIR": "/home/astra/.project/Sirius/out/science-p4-cpu-remainder/temporary"
+    },
+    "error": "AssertionError({'source': {'revision': 'f5d649bf5067d1d68dc9215462f37830122f0540', 'status': ''}, 'case': 'original-four-non-frame-cpu-controls', 'argv': ['/usr/bin/ctest', '--test-dir', 'bin/linux-gcc', '-V', '--output-on-failure', '--no-tests=error', '--output-junit', '/home/astra/.project/Sirius/out/science-p4-cpu-remainder/original-four-non-frame-cpu-controls/ctest.xml', '--output-log', '/home/astra/.project/Sirius/out/science-p4-cpu-remainder/original-four-non-frame-cpu-controls/ctest.log', '-R', '^(CpuTraceBoundary\\\\.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge|GeodesicTracerTest\\\\.LiveDiskTemperatureUsesFullPageThorneProfile|GeodesicTracerTest\\\\.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile|GeodesicTracerRedshift\\\\.NearExtremalInnerDiskEmissionRemainsFinite)$'], 'scope': 'Four unchanged original finite P4 CPU live-temperature/inner-disk controls only; original central-ray search loops and thresholds, no frame publication/device execution, full P4/science/Mandatory or release qualification.', 'limits': {'seconds': 300, 'rss_kib': 4194304, 'reserve_kib': 2097152}, 'declared_output_environment': {'GTEST_OUTPUT': ''}, 'provider_mappings': [], 'controller': {'pid': 197845, 'state': 'R', 'ppid': 197844, 'pgrp': 197844, 'session': 197844, 'start_ticks': '2927957', 'rss_kib': 32780}, 'boot_id': 'ad8dc954-f13d-4920-9e97-797932f20548', 'passed': False, 'cleanup_errors': [], 'observed_births': [{'pid': 197856, 'saved_start_ticks': '2928108', 'current_start_ticks': None, 'absent': True}, {'pid': 197858, 'saved_start_ticks': '2928138', 'current_start_ticks': None, 'absent': True}, {'pid': 200098, 'saved_start_ticks': '2957812', 'current_start_ticks': None, 'absent': True}], 'stop_reason': 'diagnostic_timeout', 'child_pid': 197856, 'child_start_ticks': '2928108', 'status': 'terminal', 'child_exit': -15, 'wall_seconds': 300.21115653000015, 'peak_sampled_rss_kib': 62052, 'minimum_sampled_available_kib': 17830072, 'adopted_children_reaped': [{'pid': 200098, 'wait_status': 15}], 'remaining_owned_processes': [], 'source_unchanged': True, 'whole_inputs_unchanged': True})",
+    "expected_names": [
+      "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+      "GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite",
+      "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
+      "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile"
+    ],
+    "finite_acceptance_scope": {
+      "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge": {
+        "assertions": "Original reference temperature positive; each valid crossing temperature agrees within2e-3 with scale*AccretionDiskD.Temperature(r)/Temperature(1.5*InnerRadius), and compared>=6.",
+        "fixture": {
+          "camera_radius": 50,
+          "camera_size": [
+            64,
+            64
+          ],
+          "camera_theta": "pi/2",
+          "disk_outer": 20,
+          "mass": 1,
+          "max_steps_per_trace": 5000,
+          "new_inner_edge": 10,
+          "old_inner_edge": 6,
+          "pixel_range": "x,y=8,10,...,54",
+          "sample": [
+            0.5,
+            0.5
+          ],
+          "spin": 0,
+          "temperature_scale": 10000
+        },
+        "original_source": "tests/backend/cpu_trace_boundary_test.cpp:601",
+        "reference_limit": "Live consumer/cache invalidation check against the production AccretionDiskD authority at a declared truncated edge, not an independent Page-Thorne quadrature.",
+        "search": "One original cache-populating ray(32,32), SetConfig changes the declared inner edge to10, then original raster search until compared>=12 or exhausted; at most577 Trace calls."
+      },
+      "GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite": {
+        "assertions": "For each valid crossing with r<2M, original redshift finite and positive; inner_crossings>=1. No extra termination or numerical_failure assertion added.",
+        "fixture": {
+          "camera_radius": 30,
+          "camera_size": [
+            96,
+            54
+          ],
+          "camera_theta": "80*pi/180",
+          "disk_inner": "AccretionDiskD.ComputeIsco(0.998)",
+          "disk_outer": 20,
+          "fov_degrees": 55,
+          "initial_step": 0.1,
+          "mass": 1,
+          "max_step": 1,
+          "max_steps_per_trace": 20000,
+          "pixel_range": "x=4,6,...,90;y=4,6,...,48",
+          "sample": [
+            0.5,
+            0.5
+          ],
+          "spin": 0.998
+        },
+        "original_source": "tests/render/geodesic_tracer_test.cpp:727",
+        "reference_limit": "Finite inner-disk emission witness; no independent absolute transfer value or all-ray proof.",
+        "search": "Original raster search until inner_crossings>=3 or exhausted; at most1012 Trace calls."
+      },
+      "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile": {
+        "assertions": "Original positive reference temperature; each valid crossing temperature agrees within2e-5 with AccretionDiskD.Temperature(r)/Temperature(1.5*IscoRadius), and compared>=6.",
+        "fixture": {
+          "camera_radius": 50,
+          "camera_size": [
+            64,
+            64
+          ],
+          "camera_theta": "pi/2",
+          "disk_inner": 6,
+          "disk_outer": 20,
+          "mass": 1,
+          "max_steps_per_trace": 5000,
+          "pixel_range": "x,y=8,10,...,54",
+          "sample": [
+            0.5,
+            0.5
+          ],
+          "spin": 0
+        },
+        "original_source": "tests/render/geodesic_tracer_test.cpp:364",
+        "reference_limit": "Live default-profile consumer against shared production AccretionDiskD authority; independent flux quadrature is covered separately by the completed Page-Thorne controls.",
+        "search": "Unchanged fixture raster search until compared>=12 or exhausted; at most576 Trace calls."
+      },
+      "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile": {
+        "assertions": "Original each valid crossing temperature agrees within2e-3 with shared ShakuraSunyaevTemperature(scale,r,inner), and compared>=6.",
+        "fixture": {
+          "camera_radius": 50,
+          "camera_size": [
+            64,
+            64
+          ],
+          "camera_theta": "pi/2",
+          "disk_inner": 6,
+          "disk_outer": 20,
+          "mass": 1,
+          "max_steps_per_trace": 5000,
+          "pixel_range": "x,y=8,10,...,54",
+          "sample": [
+            0.5,
+            0.5
+          ],
+          "spin": 0,
+          "temperature_scale": 10000
+        },
+        "original_source": "tests/render/geodesic_tracer_test.cpp:338",
+        "reference_limit": "Live selected-profile consumer consistency against the production radial helper; no independent radiation or vertical-structure oracle.",
+        "search": "Unchanged fixture raster search until compared>=12 or exhausted; at most576 Trace calls."
+      }
+    },
+    "mandatory_receipt_created": false,
+    "original_assertions_changed": false,
+    "outer_diagnostic_limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "p4_complete": false,
+    "passed": false,
+    "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "qualification_claimed": false,
+    "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "scope": "Four unchanged original finite P4 CPU live-temperature/inner-disk controls only; original central-ray search loops and thresholds, no frame publication/device execution, full P4/science/Mandatory or release qualification.",
+    "temporary_output": {
+      "mode": "0o700",
+      "path": "/home/astra/.project/Sirius/out/science-p4-cpu-remainder/temporary",
+      "residual_files": {},
+      "uid": 1000
+    }
+  },
+  "owner": {
+    "adopted_children_reaped": [
+      {
+        "pid": 200098,
+        "wait_status": 15
+      }
+    ],
+    "argv": [
+      "/usr/bin/ctest",
+      "--test-dir",
+      "bin/linux-gcc",
+      "-V",
+      "--output-on-failure",
+      "--no-tests=error",
+      "--output-junit",
+      "/home/astra/.project/Sirius/out/science-p4-cpu-remainder/original-four-non-frame-cpu-controls/ctest.xml",
+      "--output-log",
+      "/home/astra/.project/Sirius/out/science-p4-cpu-remainder/original-four-non-frame-cpu-controls/ctest.log",
+      "-R",
+      "^(CpuTraceBoundary\\.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge|GeodesicTracerTest\\.LiveDiskTemperatureUsesFullPageThorneProfile|GeodesicTracerTest\\.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile|GeodesicTracerRedshift\\.NearExtremalInnerDiskEmissionRemainsFinite)$"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "original-four-non-frame-cpu-controls",
+    "child_exit": -15,
+    "child_pid": 197856,
+    "child_start_ticks": "2928108",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 197844,
+      "pid": 197845,
+      "ppid": 197844,
+      "rss_kib": 32780,
+      "session": 197844,
+      "start_ticks": "2927957",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "minimum_sampled_available_kib": 17830072,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 197856,
+        "saved_start_ticks": "2928108"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 197858,
+        "saved_start_ticks": "2928138"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 200098,
+        "saved_start_ticks": "2957812"
+      }
+    ],
+    "passed": false,
+    "peak_sampled_rss_kib": 62052,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "Four unchanged original finite P4 CPU live-temperature/inner-disk controls only; original central-ray search loops and thresholds, no frame publication/device execution, full P4/science/Mandatory or release qualification.",
+    "source": {
+      "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": "diagnostic_timeout",
+    "wall_seconds": 300.21115653000015,
+    "whole_inputs_unchanged": true
+  },
+  "p4_complete": false,
+  "qualification_claimed": false,
+  "reference_scope": "Original edge-change/cache-consumption fixture: prime at6, change to10, shared production temperature authority within2e-3, at least6 comparisons. Actual count not logged; no independent quadrature claim.",
+  "remaining_cases": "Full Page-Thorne and near-extremal did not start",
+  "schema": "sirius-completed-component-in-incomplete-batch-v1",
+  "second_case": "Shakura-Sunyaev started without verdict"
+}
