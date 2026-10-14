@@ -1,0 +1,86 @@
+{
+  "arithmetic_performance_adoption_or_qualification_claimed": false,
+  "lowering_cost": {
+    "PB32Divide_clones": {
+      "SIMD8": 4,
+      "scalar": 2
+    },
+    "actual_call_scope": "Original one-word short-input refusal only. Retained arithmetic and generated tables were not exercised.",
+    "agent": "/root/divide_contract_review",
+    "first_SIMD_candidate_DIV_RCX_offsets": [
+      "0x42749",
+      "0x4280e"
+    ],
+    "full_descriptor_workgroup_uint32_stride_binding_mode_barrier_closure_equal": true,
+    "other_SIMD_candidate_clusters": [
+      "0x60210",
+      "0xb8f93",
+      "0xd6a8f"
+    ],
+    "per_clone_unsigned_divisions": {
+      "candidate": {
+        "divisions": 1,
+        "width": 64
+      },
+      "stock": {
+        "dependent_divisions": 4,
+        "width": 32
+      }
+    },
+    "premise_survives_for_original_arithmetic_checks": true,
+    "remaining_cost_uncertainty": [
+      "wider division latency",
+      "lane extraction",
+      "register pressure"
+    ],
+    "scalar_guarded_64_32_DIV_offsets": [
+      "0x8b7cc",
+      "0xaabf6"
+    ],
+    "static_costs": {
+      "JIT_object_bytes": {
+        "candidate": 1055536,
+        "stock": 1049832
+      },
+      "coroutine_frame_bytes": {
+        "candidate": 89696,
+        "stock": 89696
+      },
+      "executable_section_bytes": {
+        "candidate": 925189,
+        "stock": 922597
+      },
+      "resume_function_bytes": {
+        "candidate": 900860,
+        "stock": 898262
+      },
+      "resume_stack_reservation_bytes": {
+        "candidate": 43072,
+        "stock": 42976
+      }
+    },
+    "sticky": "Exact quotient times denominator inequality retained.",
+    "undefined_symbols": [
+      "coro_malloc",
+      "coro_free"
+    ]
+  },
+  "pair_reader": {
+    "accepted": true,
+    "agent": "/root/forensic_obligations",
+    "all_55_feature_fields_and_36_file_capture_trees_bound": true,
+    "all_five_owners_passed_sealed_and_retired": true,
+    "complete_durable_json_comparison": true,
+    "reader": {
+      "bytes": 4406,
+      "sha256": "d692096c9de31443e1511e936d0874acd19905a7267342438f3343b19d71d44d"
+    },
+    "receipt": {
+      "bytes": 25314,
+      "sha256": "42faa6ac8b93d4a8f93c4ff5859da4dfd96c7c0fc0e2662488c748ffb781404d"
+    },
+    "six_integrity_negatives_reject": true
+  },
+  "review_execution": "Read-only source/LLVM/ELF/hex and receipt review; no helper, compiler, disassembler, GDB, device or numeric runtime executed by reviewers.",
+  "schema": "sirius-independent-optional64-screen-reviews-v1"
+}

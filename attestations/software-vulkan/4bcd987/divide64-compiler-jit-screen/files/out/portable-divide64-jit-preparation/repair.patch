@@ -1,0 +1,245 @@
+--- a/host.py
++++ b/host.py
+@@ -49,6 +49,25 @@
+     assert result["source_unchanged"] and result["whole_inputs_unchanged"]
+     assert (folder / "inputs-before.json").read_bytes() == (folder / "inputs-after.json").read_bytes()
+     return result
++
++
++def compile_output_paths(phase):
++    assert phase in ("compile-device", "compile-probe")
++    stem = "int64-vulkan_device" if phase == "compile-device" else "short_input_jit_probe"
++    return [BUILD / (stem + suffix) for suffix in (".o", ".d")]
++
++
++def verify_compile_outputs(phase):
++    accepted(phase)
++    seal = json.loads((WORK / phase / "output-seal.json").read_text())
++    assert seal["phase"] == phase
++    assert seal["argv"] == json.loads((WORK / "host-recipes.json").read_text())[phase]
++    assert seal["source_freeze"] == record(WORK / "source-freeze.json")
++    assert seal["operator_context"] == record(WORK / "operator-context.json")
++    assert seal["inputs_before"] == record(WORK / phase / "inputs-before.json")
++    expected = {str(path): record(path) for path in compile_output_paths(phase)}
++    assert seal["outputs"] == expected
++    return record(WORK / phase / "output-seal.json")
+ 
+ 
+ def pin_context():
+@@ -79,14 +98,28 @@
+     else:
+         accepted("compile-device")
+         if phase == "link":
+-            accepted("compile-probe")
++            for producer in ("compile-device", "compile-probe"):
++                verify_compile_outputs(producer)
++    if phase != "link":
++        assert not (WORK / phase / "output-seal.json").exists()
++        assert all(not path.exists() for path in compile_output_paths(phase))
+     subprocess.run(recipe[phase], cwd=ROOT, check=True)
++    if phase != "link":
++        # The producing child seals its complete outputs before returning to
++        # the still-running owner. No terminal-owner verdict is needed here.
++        write(phase + "/output-seal.json", {"phase": phase, "argv": recipe[phase],
++              "source_freeze": record(WORK / "source-freeze.json"),
++              "operator_context": record(WORK / "operator-context.json"),
++              "inputs_before": record(WORK / phase / "inputs-before.json"),
++              "outputs": {str(path): record(path) for path in compile_output_paths(phase)}})
+ 
+ 
+ def check_build():
+     verify_static()
+     for phase in ("compile-device", "compile-probe", "link"):
+         accepted(phase)
++    output_seals = {phase: verify_compile_outputs(phase)
++                    for phase in ("compile-device", "compile-probe")}
+     known = json.loads((WORK / "source-freeze.json").read_text())["pins"]
+     for name in ("int64-vulkan_device.d", "short_input_jit_probe.d"):
+         text = (BUILD / name).read_text().replace("\\\n", "")
+@@ -110,6 +143,7 @@
+           "all_required_definitions_in_private_object_and_executable": True,
+           "original_vulkan_archive_member_extracted": False,
+           "private_object_before_original_archive": True, "nm_outputs": symbols,
++          "compile_output_seals": output_seals,
+           "link_map": record(BUILD / "short_input_jit_probe.map"),
+           "executable": record(BUILD / "short_input_jit_probe")})
+     print("Host compile/link/closure review passed; no provider was executed.", flush=True)
+@@ -124,6 +158,9 @@
+     assert link_review["link_map"] == record(BUILD / "short_input_jit_probe.map")
+     for phase in ("compile-device", "compile-probe", "link"):
+         accepted(phase)
++    output_seals = {phase: verify_compile_outputs(phase)
++                    for phase in ("compile-device", "compile-probe")}
++    assert link_review["compile_output_seals"] == output_seals
+     compiler_owner = json.loads((SCREEN / "compile-endpoint-normal/owner.json").read_text())
+     assert compiler_owner["status"] == "terminal" and compiler_owner["passed"]
+     assert compiler_owner["child_exit"] == 0 and compiler_owner["stop_reason"] is None
+@@ -157,6 +194,7 @@
+                  "compile-endpoint-normal/inputs-after.json")]
+     complete += [Path(row["resolved_path"]) for row in modules.values()]
+     complete += [WORK / "runtime-context.json"]
++    complete += [Path(row["resolved_path"]) for row in output_seals.values()]
+     for action in mutable.values():
+         assert action["revision"] == "PENDING_OPERATOR_CLEAN_CONTEXT"
+         action["revision"] = context["revision"]
+@@ -165,6 +203,7 @@
+     write("runtime-context.json", {"revision": context["revision"], "modules": modules,
+           "host": record(BUILD / "short_input_jit_probe"), "link_review": record(WORK / "link-review.json"),
+           "compiler_acceptance": record(SCREEN / "compiler-acceptance.json"),
++          "compile_output_seals": output_seals,
+           "capture_actions": record(WORK / "capture-actions.json"),
+           "scope": "Frozen runtime inputs only; no Vulkan or GDB process was launched by pin-runtime."})
+     print("Pinned separately owned stock/candidate capture inputs; no device launched.", flush=True)
+@@ -186,6 +225,39 @@
+     print("Terminal original IR/JIT/relocation and actual feature/device/module joins accepted.", flush=True)
+ 
+ 
++def review_pair():
++    verify_static()
++    assert not (WORK / "pair-review.json").exists()
++    layout = json.loads((WORK / "feature-layout.json").read_text())
++    assert len(layout["features_fields"]) == 55 and len(set(layout["features_fields"])) == 55
++    original = module("original_pair_jit_analysis", WORK / "analyze_capture.py")
++    reader = module("paired_device_features", WORK / "read_features.py")
++    normalized, captures = {}, {}
++    for label in ("capture-stock-endpoint-normal", "capture-candidate-endpoint-normal"):
++        accepted(label)
++        folder = WORK / label
++        code = json.loads((folder / "actual-code-review.json").read_text())
++        features = json.loads((folder / "feature-review.json").read_text())
++        # Both separately completed readers must still reproduce exactly from
++        # the original raw captures and terminal owners.
++        assert original.inspect(folder) == code
++        assert reader.inspect(folder) == features
++        assert set(features["features"]) == set(layout["features_fields"])
++        features["features"] = {name: features["features"][name] for name in layout["features_fields"]}
++        assert features["enabled_extension_count"] == len(features["enabled_extensions"])
++        normalized[label] = features
++        files = sorted(path for path in folder.rglob("*") if path.is_file())
++        assert files and all(not path.is_symlink() for path in files)
++        captures[label] = {str(path.relative_to(folder)): record(path) for path in files}
++    stock = normalized["capture-stock-endpoint-normal"]
++    assert stock == normalized["capture-candidate-endpoint-normal"]
++    write("pair-review.json", {"passed": True, "normalized_feature_report": stock,
++          "complete_55_enabled_fields_queue_extensions_order_and_feature_chain_equal": True,
++          "captures": captures,
++          "scope": "Two accepted original short-input owners/readers and identical observed feature policy; raw handles/addresses remain separately bound. No retained arithmetic, timing benefit or qualification verdict."})
++    print("Both terminal owners/readers and complete normalized feature reports agree.", flush=True)
++
++
+ if __name__ == "__main__":
+     command = sys.argv[1]
+     if command == "build":
+@@ -193,4 +265,5 @@
+     elif command == "review-capture":
+         review_capture(sys.argv[2])
+     else:
+-        {"pin-context": pin_context, "check-build": check_build, "pin-runtime": pin_runtime}[command]()
++        {"pin-context": pin_context, "check-build": check_build,
++         "pin-runtime": pin_runtime, "review-pair": review_pair}[command]()
+--- a/build-actions.unpinned.json
++++ b/build-actions.unpinned.json
+@@ -596,7 +596,16 @@
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/build-actions.unpinned.json",
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-actions.unpinned.json",
+       "/home/astra/.project/Sirius/src/sirius/kernels/retained_endpoint.slang",
+-      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang"
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/capture-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/relocation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/host.py",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/source-freeze.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/preparation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.patch",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.json"
+     ],
+     "kind": "build",
+     "limits": {
+@@ -1205,7 +1214,16 @@
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/build-actions.unpinned.json",
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-actions.unpinned.json",
+       "/home/astra/.project/Sirius/src/sirius/kernels/retained_endpoint.slang",
+-      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang"
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/capture-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/relocation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/host.py",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/source-freeze.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/preparation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.patch",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.json"
+     ],
+     "kind": "build",
+     "limits": {
+@@ -1814,7 +1832,28 @@
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/build-actions.unpinned.json",
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-actions.unpinned.json",
+       "/home/astra/.project/Sirius/src/sirius/kernels/retained_endpoint.slang",
+-      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang"
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/capture-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/relocation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/host.py",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/source-freeze.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/preparation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.patch",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.json",
++      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
++      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.d",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/compile-device/output-seal.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/compile-device/owner.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/compile-device/inputs-before.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/compile-device/inputs-after.json",
++      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/short_input_jit_probe.o",
++      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/short_input_jit_probe.d",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/compile-probe/output-seal.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/compile-probe/owner.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/compile-probe/inputs-before.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/compile-probe/inputs-after.json"
+     ],
+     "kind": "build",
+     "limits": {
+--- a/capture-actions.unpinned.json
++++ b/capture-actions.unpinned.json
+@@ -596,7 +596,16 @@
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/build-actions.unpinned.json",
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-actions.unpinned.json",
+       "/home/astra/.project/Sirius/src/sirius/kernels/retained_endpoint.slang",
+-      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang"
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/capture-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/relocation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/host.py",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/source-freeze.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/preparation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.patch",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.json"
+     ],
+     "kind": "diagnostic",
+     "limits": {
+@@ -1205,7 +1214,16 @@
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/build-actions.unpinned.json",
+       "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-actions.unpinned.json",
+       "/home/astra/.project/Sirius/src/sirius/kernels/retained_endpoint.slang",
+-      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang"
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/capture-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.unpinned.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/relocation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/host.py",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/source-freeze.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/preparation.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/historical-preconsumption-374d/build-actions.json",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.patch",
++      "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.json"
+     ],
+     "kind": "diagnostic",
+     "limits": {

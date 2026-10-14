@@ -1,0 +1,40 @@
+--- a/run_owned.py
++++ b/run_build_owned.py
+@@ -3,7 +3,7 @@
+ sys.dont_write_bytecode = True
+ root = Path.cwd()
+ work = Path(__file__).resolve().parent
+-settings = json.loads((work / 'actions.json').read_text())
++settings = json.loads((work / 'build-actions.json').read_text())
+ action = settings[sys.argv[1]]
+ plan = {'case': sys.argv[1], 'scope': action['scope'], 'outer_limits': action['limits']}
+ spec = importlib.util.spec_from_file_location('preserved_owned_guard', work / 'owned_guard.py')
+@@ -78,7 +78,7 @@
+     env['GTEST_OUTPUT'] = ''
+ argv = [arg.replace('{folder}', str(folder)) for arg in action['argv']]
+ tracked = [root / os.fsdecode(p) for p in guard.query(['git', 'ls-files', '-z']).split(b'\0') if p]
+-files = [*tracked, Path(__file__).resolve(), work / 'owned_guard.py', work / 'actions.json']
++files = [*tracked, Path(__file__).resolve(), work / 'owned_guard.py', work / 'build-actions.json']
+ files += [root / p for p in action.get('frozen_inputs', [])]
+ key = lambda p: str(p.relative_to(root)) if p.is_relative_to(root) else str(p)
+ before = {key(p): guard.identity(p) for p in files}
+--- a/run_owned.py
++++ b/run_capture_owned.py
+@@ -3,7 +3,7 @@
+ sys.dont_write_bytecode = True
+ root = Path.cwd()
+ work = Path(__file__).resolve().parent
+-settings = json.loads((work / 'actions.json').read_text())
++settings = json.loads((work / 'capture-actions.json').read_text())
+ action = settings[sys.argv[1]]
+ plan = {'case': sys.argv[1], 'scope': action['scope'], 'outer_limits': action['limits']}
+ spec = importlib.util.spec_from_file_location('preserved_owned_guard', work / 'owned_guard.py')
+@@ -78,7 +78,7 @@
+     env['GTEST_OUTPUT'] = ''
+ argv = [arg.replace('{folder}', str(folder)) for arg in action['argv']]
+ tracked = [root / os.fsdecode(p) for p in guard.query(['git', 'ls-files', '-z']).split(b'\0') if p]
+-files = [*tracked, Path(__file__).resolve(), work / 'owned_guard.py', work / 'actions.json']
++files = [*tracked, Path(__file__).resolve(), work / 'owned_guard.py', work / 'capture-actions.json']
+ files += [root / p for p in action.get('frozen_inputs', [])]
+ key = lambda p: str(p.relative_to(root)) if p.is_relative_to(root) else str(p)
+ before = {key(p): guard.identity(p) for p in files}

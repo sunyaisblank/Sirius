@@ -1,0 +1,28 @@
+--- a/candidate/scripts/build-retained-kernels.py
++++ b/candidate/scripts/build-retained-kernels.py
+@@ -51,9 +51,10 @@
+ 
+ def portable_normal_sum_controls(text, diagnostic_divide64=False):
+     """Admit guarded binary32 FastTwoSum and positive upward-bound sums."""
+-    expected_capabilities = ["Shader", "Int64"] if diagnostic_divide64 else ["Shader"]
++    expected_capabilities = ["Int64", "Shader"] if diagnostic_divide64 else ["Shader"]
+     expected_widths = {"32", "64"} if diagnostic_divide64 else {"32"}
+-    if (re.findall(r"OpCapability (\S+)", text) != expected_capabilities or
++    if ((sorted(re.findall(r"OpCapability (\S+)", text)) if diagnostic_divide64 else
++         re.findall(r"OpCapability (\S+)", text)) != expected_capabilities or
+             set(re.findall(r"OpTypeInt (\d+) [01]", text)) != expected_widths or
+             re.findall(r"OpTypeFloat (\d+)", text) != ["32"]):
+         raise ValueError("portable normal sum introduced an optional type or capability")
+@@ -389,9 +390,10 @@
+         # The separate normal-sum variant admits only guarded normal arithmetic.
+         capabilities = re.findall(r"OpCapability (\S+)", text)
+         integer_widths = re.findall(r"OpTypeInt (\d+) [01]", text)
+-        expected_capabilities = ["Shader", "Int64"] if diagnostic_divide64 else ["Shader"]
++        expected_capabilities = ["Int64", "Shader"] if diagnostic_divide64 else ["Shader"]
+         expected_widths = {"32", "64"} if diagnostic_divide64 else {"32"}
+-        if capabilities != expected_capabilities or not integer_widths or set(integer_widths) != expected_widths:
++        if ((sorted(capabilities) if diagnostic_divide64 else capabilities) != expected_capabilities or
++                not integer_widths or set(integer_widths) != expected_widths):
+             raise ValueError("portable retained stage introduced an optional capability or non-32-bit integer")
+         if normal_sum32:
+             text = portable_normal_sum_controls(text, diagnostic_divide64=diagnostic_divide64)

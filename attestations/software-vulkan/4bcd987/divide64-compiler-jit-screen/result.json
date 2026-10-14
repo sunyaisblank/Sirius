@@ -1,0 +1,1325 @@
+{
+  "candidate_builder_policy_controls": {
+    "builder_sha256": "8489586592cd93c2e427254e4154a3fa7ed81efc1962e5eaef8d2b40823e4e2c",
+    "compiler_or_device_executed": false,
+    "controls": [
+      {
+        "actual_acceptance": true,
+        "complete_fixture_sha256": "2f7c83a973259e5becbacf572209e2160c7b3f7a13bc265ff765cdfbca59d753",
+        "error": null,
+        "expected_acceptance": true,
+        "name": "candidate-Int64-Shader"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "2f7c83a973259e5becbacf572209e2160c7b3f7a13bc265ff765cdfbca59d753",
+        "error": "portable normal sum introduced an optional type or capability",
+        "expected_acceptance": false,
+        "name": "stock-rejects-Int64-Shader"
+      },
+      {
+        "actual_acceptance": true,
+        "complete_fixture_sha256": "b79fd361b630966e5cc452e1f7c271fd91ca2e1ebf25981dfbe17cc529ae02af",
+        "error": null,
+        "expected_acceptance": true,
+        "name": "candidate-Shader-Int64"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "b79fd361b630966e5cc452e1f7c271fd91ca2e1ebf25981dfbe17cc529ae02af",
+        "error": "portable normal sum introduced an optional type or capability",
+        "expected_acceptance": false,
+        "name": "stock-rejects-Shader-Int64"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "29e64e69d057a2d341d15a1bfd5ab553774586abd38524f84100a85ce99befbf",
+        "error": "portable normal sum introduced an optional type or capability",
+        "expected_acceptance": false,
+        "name": "extra-Int64"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "620e930305a78311980ae1d19828f686a8351484c5bbbe3a2efed9399deac59b",
+        "error": "portable normal sum introduced an optional type or capability",
+        "expected_acceptance": false,
+        "name": "extra-Int16"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "245831e590234e1cc35eec56aa169b20d06038fb693d46892aeac25935286fea",
+        "error": "portable normal sum introduced an optional type or capability",
+        "expected_acceptance": false,
+        "name": "unsupported-integer-width"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "21af79d6e45e354f586afd43e86e466cb7b0468d9cc6c82fec3352f52caa4895",
+        "error": "portable normal sum introduced an optional type or capability",
+        "expected_acceptance": false,
+        "name": "unsupported-float-width"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "0060d0af0f057bb20670d978ce1677c71f86d8ce7f28004f18f1e1c90ac4984e",
+        "error": "portable normal sum introduced relaxed or fused arithmetic",
+        "expected_acceptance": false,
+        "name": "relaxed-arithmetic"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "24a33fd57d2875d7caafadd8d1b76710af9614c8fa37d72290f309b74b326cc6",
+        "error": "portable normal sum lost binary32 operation ordering or NoContraction",
+        "expected_acceptance": false,
+        "name": "missing-no-contraction"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "17b2b06fa98d0d46f3a959205a0b332e540ddca6f19160ff5cc708090edb1af1",
+        "error": "portable normal sum changed its ordered three-operation body",
+        "expected_acceptance": false,
+        "name": "changed-normal-sum-order"
+      },
+      {
+        "actual_acceptance": false,
+        "complete_fixture_sha256": "693d6928912b0536c21d16384c6bc6870c0ae7e9515828d0e9c0b11b457b0619",
+        "error": "portable normal sum introduced an unqualified float mode",
+        "expected_acceptance": false,
+        "name": "unqualified-float-mode"
+      }
+    ],
+    "full_original_module_retained": true,
+    "immutable_fixture_commit": "da2338b6f2a803c9aa06801a3699163b25f80d6f",
+    "immutable_fixture_path": "attestations/software-vulkan/4bcd987/divide64-compiler-capability-order/files/bin/linux-gcc/portable-divide64-screen/modules/candidate-endpoint-normal.spvasm",
+    "immutable_fixture_sha256": "2f7c83a973259e5becbacf572209e2160c7b3f7a13bc265ff765cdfbca59d753",
+    "numerical_performance_or_qualification_claimed": false,
+    "passed": true
+  },
+  "compiler_acceptance": {
+    "compiler_owner": {
+      "bytes": 2145,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/compile-endpoint-normal/owner.json",
+      "sha256": "b41e34048b64afab27cdfcbb7d149a05c30139fd8695bf3635a93c9f4b48c1f2",
+      "symlink_target": null
+    },
+    "compiler_result": {
+      "bytes": 3280,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/compiler-result.json",
+      "sha256": "1a0a111225edcafbe394c19334957ec740cc52971869015f28a612c1cb4799c9",
+      "symlink_target": null
+    },
+    "passed": true,
+    "scope": "Terminal compiler ownership and structural screen only; no Vulkan execution or numerical/performance verdict."
+  },
+  "compiler_owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/screen.py",
+      "compile"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "compile-endpoint-normal",
+    "child_exit": 0,
+    "child_pid": 319979,
+    "child_start_ticks": "4459302",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 319974,
+      "pid": 319975,
+      "ppid": 319974,
+      "rss_kib": 20456,
+      "session": 319974,
+      "start_ticks": "4459267",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "meaning": "Compiler-only one complete portable normal Endpoint stock/candidate pair; optional candidate Int64 capability only, no Vulkan execution/numerical/benefit qualification.",
+    "minimum_sampled_available_kib": 18282892,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 319979,
+        "saved_start_ticks": "4459302"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 319980,
+        "saved_start_ticks": "4459324"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 319986,
+        "saved_start_ticks": "4459404"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 319987,
+        "saved_start_ticks": "4459407"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 319991,
+        "saved_start_ticks": "4459480"
+      }
+    ],
+    "passed": true,
+    "peak_sampled_rss_kib": 260844,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "Compiler-only one complete portable normal Endpoint stock/candidate pair; optional candidate Int64 capability only, no Vulkan execution/numerical/benefit qualification.",
+    "source": {
+      "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 2.072050542003126,
+    "whole_inputs_unchanged": true
+  },
+  "corrected_pair_review": {
+    "capture_reexecution_performed": false,
+    "captures": {
+      "capture-candidate-endpoint-normal": {
+        "actual-code-review.json": {
+          "bytes": 4352,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/actual-code-review.json",
+          "sha256": "738ddf2529556f951feaa99441c48ef6471559662dd960bbddee646b54baf473"
+        },
+        "actual-loaded-module.json": {
+          "bytes": 154,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/actual-loaded-module.json",
+          "sha256": "c8b2f6c91aaebce8382d76594d586d01853196255d60a420f6131d555f31ac6f"
+        },
+        "bindings.json": {
+          "bytes": 59714,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/bindings.json",
+          "sha256": "40995c5cb7ed689e7ecf402b33edc8e6c9d0fb90fa3143c344929ab6ce7f1a5d"
+        },
+        "capture-inputs.json": {
+          "bytes": 871,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/capture-inputs.json",
+          "sha256": "bed5ceef67b82953f42bfc5f9cc62de3b61c64f771070aced4662105e3513d70"
+        },
+        "capture-verification.json": {
+          "bytes": 1300,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/capture-verification.json",
+          "sha256": "98d78a244058fe7f8a2dab74d5f05997312471d0b5709e4818932bff33d3e174"
+        },
+        "capture.gdb": {
+          "bytes": 614,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/capture.gdb",
+          "sha256": "c7918c8ba3cbe4b96ff8bfe789636028111926fe3b8a4f81cbc0945d4a4b706f"
+        },
+        "device-features.json": {
+          "bytes": 133572,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/device-features.json",
+          "sha256": "ca239fdabe286dda196fb497d9c1aebd8ec1a70351454ff190108f0354d3594a"
+        },
+        "feature-review.json": {
+          "bytes": 2160,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/feature-review.json",
+          "sha256": "48c66565a2e6394ff25f1f598fbf4984aa93d408c1e1e01fa5a3d56f6e5e29c4"
+        },
+        "feature-verification.json": {
+          "bytes": 2160,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/feature-verification.json",
+          "sha256": "0c0789a7e7372857bcaca2a3608b77de6d9844dbc9b04b3129b139a9d89a5719"
+        },
+        "inferior-exit.json": {
+          "bytes": 17,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/inferior-exit.json",
+          "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+        },
+        "inferior.json": {
+          "bytes": 16,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/inferior.json",
+          "sha256": "4357c330172e5983913b72c4e4b18e2802c733f9f1d895e1e7b95645afa95f74"
+        },
+        "inputs-after.json": {
+          "bytes": 273424,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/inputs-after.json",
+          "sha256": "b165a1415e5b44a89c6054edff3355f7fc47830b704908e43fa1e47fa1c56d09"
+        },
+        "inputs-before.json": {
+          "bytes": 273424,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/inputs-before.json",
+          "sha256": "b165a1415e5b44a89c6054edff3355f7fc47830b704908e43fa1e47fa1c56d09"
+        },
+        "jit-00.elf": {
+          "bytes": 904,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-00.elf",
+          "sha256": "1fdd70fe85b8b40ff96f57471ff4d5b05869138c94c5d612d80cf464d4428b45"
+        },
+        "jit-02.elf": {
+          "bytes": 888,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-02.elf",
+          "sha256": "293be6602f94a45050b2c05b47f302c9fae38c4acd815497653cd1fb17f313a9"
+        },
+        "jit-04.elf": {
+          "bytes": 1064,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-04.elf",
+          "sha256": "6927ff9f17333878ea334af7d891aec41df2f12677f4b912893d0604fd75f49d"
+        },
+        "jit-06.elf": {
+          "bytes": 1064,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-06.elf",
+          "sha256": "72f82b58a5b91fde968b9f1940a67103cbeb6782e22bf5514bff2d70afbf15c7"
+        },
+        "jit-08.elf": {
+          "bytes": 1064,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-08.elf",
+          "sha256": "5ffd908d01602a47508caee447e42c9e4ef8541d23f45f7c49476f68be47011d"
+        },
+        "jit-10.elf": {
+          "bytes": 1055536,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-10.elf",
+          "sha256": "35681fecea096dfff0058a4f4395d8368269c78826d0676fc9b1b961408e98c0"
+        },
+        "jit-10.elf.live-11.bin": {
+          "bytes": 256,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-10.elf.live-11.bin",
+          "sha256": "feb3585e4544b1700bd3b180db63d43f5457dd9d355136f9254ed9d11bf19dcf"
+        },
+        "jit-10.elf.live-3.bin": {
+          "bytes": 925189,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin",
+          "sha256": "ee650456fc14ad42c0dbecb8b94a225271a39c3b41c0997af72a930f656df697"
+        },
+        "jit-10.elf.live-5.bin": {
+          "bytes": 96,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin",
+          "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf"
+        },
+        "jit-10.elf.live-6.bin": {
+          "bytes": 48,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin",
+          "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+        },
+        "jit-10.elf.live-7.bin": {
+          "bytes": 448,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin",
+          "sha256": "53e77ba7939e09d6e8282d1f2c5e57e279190b868b9386384ad07c72481bca4e"
+        },
+        "jit-10.elf.live-8.bin": {
+          "bytes": 80,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/jit-10.elf.live-8.bin",
+          "sha256": "6dbc6bca4cd2d70c5c19ea117ea189431900f60240f9b004f482caedad84e6f6"
+        },
+        "optimized-00.ll": {
+          "bytes": 808,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/optimized-00.ll",
+          "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+        },
+        "optimized-01.ll": {
+          "bytes": 778,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/optimized-01.ll",
+          "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+        },
+        "optimized-02.ll": {
+          "bytes": 1038,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/optimized-02.ll",
+          "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+        },
+        "optimized-03.ll": {
+          "bytes": 1008,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/optimized-03.ll",
+          "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+        },
+        "optimized-04.ll": {
+          "bytes": 1010,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/optimized-04.ll",
+          "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+        },
+        "optimized-05.ll": {
+          "bytes": 13232913,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/optimized-05.ll",
+          "sha256": "74b3e074d1b512fab57fbb7b8fb0a561e828dc9328eac1cc9338e5c0dcce31a3"
+        },
+        "optimizer-exports.tsv": {
+          "bytes": 218,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/optimizer-exports.tsv",
+          "sha256": "c4ab2e63eba5698eed0e4068e6f1c00e45fbb30a818b7d492160c6957c5bb960"
+        },
+        "owner.json": {
+          "bytes": 7802,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/owner.json",
+          "sha256": "fac48bc2f757a17647b85dc8bd5511fe230068099ce45b60d6367e4cecf8ddd1"
+        },
+        "samples.jsonl": {
+          "bytes": 497256,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/samples.jsonl",
+          "sha256": "452fc7208e33a76302dcaf66d757247c9994779d7396cfbec9d094a7b3e1611a"
+        },
+        "stderr.log": {
+          "bytes": 194,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/stderr.log",
+          "sha256": "d93fea6ada55cbd704a710df15eb8e6f00d0895183d9a7a1d527cc8ab71f3b5e"
+        },
+        "stdout.log": {
+          "bytes": 792,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal/stdout.log",
+          "sha256": "21ebd5ae0ac14c09f426f76bf6ce807dfdb314fae372d1c989deae3c077a00ae"
+        }
+      },
+      "capture-stock-endpoint-normal": {
+        "actual-code-review.json": {
+          "bytes": 4344,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/actual-code-review.json",
+          "sha256": "157d036ccc58a5e455e9380d432ade5fd632320b2c653af81c53e74459ee4f48"
+        },
+        "actual-loaded-module.json": {
+          "bytes": 154,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/actual-loaded-module.json",
+          "sha256": "c7b40b07ab72a48cdd9e1da2356f36c601d20de0a2325149e2a9f2b762e76d61"
+        },
+        "bindings.json": {
+          "bytes": 59364,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/bindings.json",
+          "sha256": "9bfa95ff6cf490d0ccdb10a19a6f192215a8462650746c1b6b441bef21511e29"
+        },
+        "capture-inputs.json": {
+          "bytes": 867,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/capture-inputs.json",
+          "sha256": "c4561440ba92398ec446ebb9c1f18d2ac29b267c680be208573dbd05d588b2be"
+        },
+        "capture-verification.json": {
+          "bytes": 1300,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/capture-verification.json",
+          "sha256": "01ff7ab835a742f0f22a47b919d3be420cb3c97b6aff77cc25188d59553d9fca"
+        },
+        "capture.gdb": {
+          "bytes": 610,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/capture.gdb",
+          "sha256": "68d32ba09d045f79ec2cd77cb732cab1907e25b5334d0de30c33b957eac27d3c"
+        },
+        "device-features.json": {
+          "bytes": 133579,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/device-features.json",
+          "sha256": "8eef723911e412944de8b838ab949682df0279462d3de13ec3fc9247ee01c014"
+        },
+        "feature-review.json": {
+          "bytes": 2160,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/feature-review.json",
+          "sha256": "48c66565a2e6394ff25f1f598fbf4984aa93d408c1e1e01fa5a3d56f6e5e29c4"
+        },
+        "feature-verification.json": {
+          "bytes": 2160,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/feature-verification.json",
+          "sha256": "0c0789a7e7372857bcaca2a3608b77de6d9844dbc9b04b3129b139a9d89a5719"
+        },
+        "inferior-exit.json": {
+          "bytes": 17,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/inferior-exit.json",
+          "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+        },
+        "inferior.json": {
+          "bytes": 16,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/inferior.json",
+          "sha256": "0120387fa8059804e2324bd92e535cbc9ebe4df90759f254fcefe9afc9e8b86f"
+        },
+        "inputs-after.json": {
+          "bytes": 273424,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/inputs-after.json",
+          "sha256": "b165a1415e5b44a89c6054edff3355f7fc47830b704908e43fa1e47fa1c56d09"
+        },
+        "inputs-before.json": {
+          "bytes": 273424,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/inputs-before.json",
+          "sha256": "b165a1415e5b44a89c6054edff3355f7fc47830b704908e43fa1e47fa1c56d09"
+        },
+        "jit-00.elf": {
+          "bytes": 904,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-00.elf",
+          "sha256": "7dfa850a1617be02f069d70db5db5a82c2bd6a7d03bde1c298d0daef9a93e2fa"
+        },
+        "jit-02.elf": {
+          "bytes": 888,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-02.elf",
+          "sha256": "d79865d94c054a4e8a3bcb785e91a5b85ac002e790268a270c7420cfcfcc1981"
+        },
+        "jit-04.elf": {
+          "bytes": 1064,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-04.elf",
+          "sha256": "31818b05a58e782e7466e312cbf3b5613d6559d160c8fd1fbfaeb3391916693d"
+        },
+        "jit-06.elf": {
+          "bytes": 1064,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-06.elf",
+          "sha256": "3f08c7e5847f8da71650c0cf94cb49c20395bcd90cb7223e8a76293fc7d3898e"
+        },
+        "jit-08.elf": {
+          "bytes": 1064,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-08.elf",
+          "sha256": "04cf2b964924b0c5ccec436cafa83f27b0346d521611610cf317c33d7aa3e2da"
+        },
+        "jit-10.elf": {
+          "bytes": 1049832,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf",
+          "sha256": "fb2cc33824dafab6bc16f4596c4c230aa641e549782a1eaf670b8184d6438e97"
+        },
+        "jit-10.elf.live-11.bin": {
+          "bytes": 256,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf.live-11.bin",
+          "sha256": "9f75b0f58ddac38965580ab4b47b6541a10fa42dce9d42abc43206d9c0801d06"
+        },
+        "jit-10.elf.live-3.bin": {
+          "bytes": 922597,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf.live-3.bin",
+          "sha256": "fe1b8230590f5358dbccea7e45e0ff36fd73e241ae7159f55526a7fa6e83a47b"
+        },
+        "jit-10.elf.live-5.bin": {
+          "bytes": 96,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf.live-5.bin",
+          "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf"
+        },
+        "jit-10.elf.live-6.bin": {
+          "bytes": 48,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf.live-6.bin",
+          "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+        },
+        "jit-10.elf.live-7.bin": {
+          "bytes": 452,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf.live-7.bin",
+          "sha256": "f92c3d7cb3ec41ede57d3661f360f4bc0bcf16b62bcac1295fadd6d2b91d8be2"
+        },
+        "jit-10.elf.live-8.bin": {
+          "bytes": 80,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf.live-8.bin",
+          "sha256": "98da6979743338074b7beec978106f56dcc86d8cd7dd81a3a636b1bc17c6b996"
+        },
+        "optimized-00.ll": {
+          "bytes": 808,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/optimized-00.ll",
+          "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+        },
+        "optimized-01.ll": {
+          "bytes": 778,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/optimized-01.ll",
+          "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+        },
+        "optimized-02.ll": {
+          "bytes": 1038,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/optimized-02.ll",
+          "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+        },
+        "optimized-03.ll": {
+          "bytes": 1008,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/optimized-03.ll",
+          "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+        },
+        "optimized-04.ll": {
+          "bytes": 1010,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/optimized-04.ll",
+          "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+        },
+        "optimized-05.ll": {
+          "bytes": 13237373,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/optimized-05.ll",
+          "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7"
+        },
+        "optimizer-exports.tsv": {
+          "bytes": 218,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/optimizer-exports.tsv",
+          "sha256": "8fb5cd793991d5988266f7f672def63b48ae1c6f9bb49eee847dd3dfd3b9da61"
+        },
+        "owner.json": {
+          "bytes": 8057,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/owner.json",
+          "sha256": "ef7ee939eb2fe6d284896f4ffa2474dab7ec9d62e95932378bd666605e64c0cc"
+        },
+        "samples.jsonl": {
+          "bytes": 480856,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/samples.jsonl",
+          "sha256": "d639164292eefbfca423a995530d26bb2da8e2ae108c3722cccbee87a7b97624"
+        },
+        "stderr.log": {
+          "bytes": 194,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/stderr.log",
+          "sha256": "d93fea6ada55cbd704a710df15eb8e6f00d0895183d9a7a1d527cc8ab71f3b5e"
+        },
+        "stdout.log": {
+          "bytes": 792,
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/stdout.log",
+          "sha256": "7c20d3c84f18b0c9910ee65eecc11311813af1e2c503242c6d7f35d4e339218c"
+        }
+      }
+    },
+    "complete_55_enabled_fields_queue_extensions_order_and_feature_chain_equal": true,
+    "consumed_host": {
+      "bytes": 14506,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/host.py",
+      "sha256": "5a466ab94b0ca7479d77bf9409408f7a6480e792751e0473fe25875e4752dbf4"
+    },
+    "negative_controls": [
+      {
+        "capture": "capture-stock-endpoint-normal",
+        "mutation": "changed-count",
+        "rejected": true
+      },
+      {
+        "capture": "capture-stock-endpoint-normal",
+        "mutation": "missing-count",
+        "rejected": true
+      },
+      {
+        "capture": "capture-stock-endpoint-normal",
+        "mutation": "string-count",
+        "rejected": true
+      },
+      {
+        "capture": "capture-candidate-endpoint-normal",
+        "mutation": "changed-count",
+        "rejected": true
+      },
+      {
+        "capture": "capture-candidate-endpoint-normal",
+        "mutation": "missing-count",
+        "rejected": true
+      },
+      {
+        "capture": "capture-candidate-endpoint-normal",
+        "mutation": "string-count",
+        "rejected": true
+      }
+    ],
+    "normalized_feature_report": {
+      "actual_public_create_arguments_enable_shaderInt64": true,
+      "enabled_extension_count": 0,
+      "enabled_extensions": [],
+      "feature_chain_values": [],
+      "features": {
+        "alphaToOne": 0,
+        "depthBiasClamp": 0,
+        "depthBounds": 0,
+        "depthClamp": 0,
+        "drawIndirectFirstInstance": 0,
+        "dualSrcBlend": 0,
+        "fillModeNonSolid": 0,
+        "fragmentStoresAndAtomics": 0,
+        "fullDrawIndexUint32": 0,
+        "geometryShader": 0,
+        "imageCubeArray": 0,
+        "independentBlend": 0,
+        "inheritedQueries": 0,
+        "largePoints": 0,
+        "logicOp": 0,
+        "multiDrawIndirect": 0,
+        "multiViewport": 0,
+        "occlusionQueryPrecise": 0,
+        "pipelineStatisticsQuery": 0,
+        "robustBufferAccess": 0,
+        "sampleRateShading": 0,
+        "samplerAnisotropy": 0,
+        "shaderClipDistance": 0,
+        "shaderCullDistance": 0,
+        "shaderFloat64": 1,
+        "shaderImageGatherExtended": 0,
+        "shaderInt16": 0,
+        "shaderInt64": 1,
+        "shaderResourceMinLod": 0,
+        "shaderResourceResidency": 0,
+        "shaderSampledImageArrayDynamicIndexing": 0,
+        "shaderStorageBufferArrayDynamicIndexing": 0,
+        "shaderStorageImageArrayDynamicIndexing": 0,
+        "shaderStorageImageExtendedFormats": 0,
+        "shaderStorageImageMultisample": 0,
+        "shaderStorageImageReadWithoutFormat": 0,
+        "shaderStorageImageWriteWithoutFormat": 0,
+        "shaderTessellationAndGeometryPointSize": 0,
+        "shaderUniformBufferArrayDynamicIndexing": 0,
+        "sparseBinding": 0,
+        "sparseResidency16Samples": 0,
+        "sparseResidency2Samples": 0,
+        "sparseResidency4Samples": 0,
+        "sparseResidency8Samples": 0,
+        "sparseResidencyAliased": 0,
+        "sparseResidencyBuffer": 0,
+        "sparseResidencyImage2D": 0,
+        "sparseResidencyImage3D": 0,
+        "tessellationShader": 0,
+        "textureCompressionASTC_LDR": 0,
+        "textureCompressionBC": 0,
+        "textureCompressionETC2": 0,
+        "variableMultisampleRate": 0,
+        "vertexPipelineStoresAndAtomics": 0,
+        "wideLines": 0
+      },
+      "queue_family": 0,
+      "scope": "Observed public loader arguments and successful device/shader creation only; no active retained arithmetic or benefit verdict.",
+      "successful_logical_device_used_for_actual_complete_shader": true
+    },
+    "passed": true,
+    "reader": {
+      "bytes": 4406,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-pair-review/review_pair.py",
+      "sha256": "d692096c9de31443e1511e936d0874acd19905a7267342438f3343b19d71d44d"
+    },
+    "scope": "Two original terminal short-input owners/readers with identical admitted features and complete durable JSON identity. No retained arithmetic, performance benefit, adoption or qualification verdict.",
+    "serialization_correction": {
+      "capture-candidate-endpoint-normal": {
+        "complete_durable_json_equal": true,
+        "json_relocation_key_types": [
+          "str"
+        ],
+        "native_python_equal": false,
+        "native_relocation_key_types": [
+          "int"
+        ]
+      },
+      "capture-stock-endpoint-normal": {
+        "complete_durable_json_equal": true,
+        "json_relocation_key_types": [
+          "str"
+        ],
+        "native_python_equal": false,
+        "native_relocation_key_types": [
+          "int"
+        ]
+      }
+    }
+  },
+  "device_execution_scope": "Both same-feature-host original one-word short-input refusal captures; complete Endpoint normal modules loaded and actual callable native code joined, but retained arithmetic and generated tables did not execute.",
+  "five_terminal_host_and_capture_owners": {
+    "capture-candidate-endpoint-normal": {
+      "adopted_children_reaped": [],
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/run_capture.py",
+        "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-candidate-endpoint-normal",
+        "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/module-inputs/candidate-endpoint-normal.spv"
+      ],
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "case": "capture-candidate-endpoint-normal",
+      "child_exit": 0,
+      "child_pid": 321408,
+      "child_start_ticks": "4492222",
+      "cleanup_errors": [],
+      "controller": {
+        "pgrp": 321224,
+        "pid": 321404,
+        "ppid": 321225,
+        "rss_kib": 21556,
+        "session": 321224,
+        "start_ticks": "4492168",
+        "state": "R"
+      },
+      "declared_output_environment": {
+        "GTEST_OUTPUT": "",
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "SIRIUS_VULKAN_DEVICE": "0",
+        "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+      },
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "meaning": "One complete original normal Endpoint module under unchanged short-input ni<329 canary and passive ordinary LLVM/JIT observation. Public loader feature/create/module arguments observed; no active retained arithmetic/performance qualification. candidate",
+      "minimum_sampled_available_kib": 17112112,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 321408,
+          "saved_start_ticks": "4492222"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 321409,
+          "saved_start_ticks": "4492225"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 321410,
+          "saved_start_ticks": "4492230"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 321420,
+          "saved_start_ticks": "4492238"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 1716948,
+      "provider_mappings": [
+        {
+          "maps": [
+            "736a3fae7000-736a3faed000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3faed000-736a3fb39000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb39000-736a3fb63000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb63000-736a3fb64000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb64000-736a3fb65000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321408,
+          "pid": 321420,
+          "start_ticks": "4492238"
+        },
+        {
+          "maps": [
+            "736a3fae7000-736a3faed000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3faed000-736a3fb39000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb39000-736a3fb63000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb63000-736a3fb64000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb64000-736a3fb65000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321408,
+          "pid": 321420,
+          "start_ticks": "4492238"
+        },
+        {
+          "maps": [
+            "736a3fae7000-736a3faed000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3faed000-736a3fb39000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb39000-736a3fb63000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb63000-736a3fb64000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb64000-736a3fb65000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321408,
+          "pid": 321420,
+          "start_ticks": "4492238"
+        },
+        {
+          "maps": [
+            "736a3fae7000-736a3faed000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3faed000-736a3fb39000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb39000-736a3fb63000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb63000-736a3fb64000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb64000-736a3fb65000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321408,
+          "pid": 321420,
+          "start_ticks": "4492238"
+        },
+        {
+          "maps": [
+            "7f2528023000-7f252802c000 r--p 00005000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+          ],
+          "owned_session": 321408,
+          "pid": 321410,
+          "start_ticks": "4492230"
+        },
+        {
+          "maps": [
+            "736a35e00000-736a3e008000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+            "736a3e008000-736a3e009000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+            "736a3e009000-736a3e69e000 r--p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+            "736a3e69e000-736a3e6e6000 rw-p 0889d000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+            "736a3e800000-736a3e85b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "736a3e85b000-736a3ec6b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "736a3ec6b000-736a3f2c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "736a3f2c6000-736a3f35c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "736a3f35c000-736a3f361000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "736a3fae7000-736a3faed000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3faed000-736a3fb39000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb39000-736a3fb63000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb63000-736a3fb64000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "736a3fb64000-736a3fb65000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321408,
+          "pid": 321420,
+          "start_ticks": "4492238"
+        }
+      ],
+      "remaining_owned_processes": [],
+      "scope": "One complete original normal Endpoint module under unchanged short-input ni<329 canary and passive ordinary LLVM/JIT observation. Public loader feature/create/module arguments observed; no active retained arithmetic/performance qualification. candidate",
+      "source": {
+        "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "status": "terminal",
+      "stop_reason": null,
+      "wall_seconds": 27.98849594499916,
+      "whole_inputs_unchanged": true
+    },
+    "capture-stock-endpoint-normal": {
+      "adopted_children_reaped": [],
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/run_capture.py",
+        "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal",
+        "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/module-inputs/stock-endpoint-normal.spv"
+      ],
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "case": "capture-stock-endpoint-normal",
+      "child_exit": 0,
+      "child_pid": 321232,
+      "child_start_ticks": "4489347",
+      "cleanup_errors": [],
+      "controller": {
+        "pgrp": 321224,
+        "pid": 321226,
+        "ppid": 321225,
+        "rss_kib": 21564,
+        "session": 321224,
+        "start_ticks": "4489298",
+        "state": "R"
+      },
+      "declared_output_environment": {
+        "GTEST_OUTPUT": "",
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "SIRIUS_VULKAN_DEVICE": "0",
+        "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+      },
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "meaning": "One complete original normal Endpoint module under unchanged short-input ni<329 canary and passive ordinary LLVM/JIT observation. Public loader feature/create/module arguments observed; no active retained arithmetic/performance qualification. stock",
+      "minimum_sampled_available_kib": 17104816,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 321232,
+          "saved_start_ticks": "4489347"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 321233,
+          "saved_start_ticks": "4489351"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 321234,
+          "saved_start_ticks": "4489355"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 321248,
+          "saved_start_ticks": "4489372"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 1718468,
+      "provider_mappings": [
+        {
+          "maps": [
+            "73ea37471000-73ea37477000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea37477000-73ea374c3000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374c3000-73ea374ed000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ed000-73ea374ee000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ee000-73ea374ef000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321232,
+          "pid": 321248,
+          "start_ticks": "4489372"
+        },
+        {
+          "maps": [
+            "73ea37471000-73ea37477000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea37477000-73ea374c3000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374c3000-73ea374ed000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ed000-73ea374ee000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ee000-73ea374ef000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321232,
+          "pid": 321248,
+          "start_ticks": "4489372"
+        },
+        {
+          "maps": [
+            "73ea37471000-73ea37477000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea37477000-73ea374c3000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374c3000-73ea374ed000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ed000-73ea374ee000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ee000-73ea374ef000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321232,
+          "pid": 321248,
+          "start_ticks": "4489372"
+        },
+        {
+          "maps": [
+            "73ea37471000-73ea37477000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea37477000-73ea374c3000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374c3000-73ea374ed000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ed000-73ea374ee000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ee000-73ea374ef000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321232,
+          "pid": 321248,
+          "start_ticks": "4489372"
+        },
+        {
+          "maps": [
+            "73ea37471000-73ea37477000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea37477000-73ea374c3000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374c3000-73ea374ed000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ed000-73ea374ee000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ee000-73ea374ef000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321232,
+          "pid": 321248,
+          "start_ticks": "4489372"
+        },
+        {
+          "maps": [
+            "73ea2d600000-73ea35808000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+            "73ea35808000-73ea35809000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+            "73ea35809000-73ea35ee6000 rw-p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+            "73ea36000000-73ea3605b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "73ea3605b000-73ea3646b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "73ea3646b000-73ea36ac6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "73ea36ac6000-73ea36b61000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "73ea37471000-73ea37477000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea37477000-73ea374c3000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374c3000-73ea374ed000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ed000-73ea374ee000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "73ea374ee000-73ea374ef000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+          ],
+          "owned_session": 321232,
+          "pid": 321248,
+          "start_ticks": "4489372"
+        }
+      ],
+      "remaining_owned_processes": [],
+      "scope": "One complete original normal Endpoint module under unchanged short-input ni<329 canary and passive ordinary LLVM/JIT observation. Public loader feature/create/module arguments observed; no active retained arithmetic/performance qualification. stock",
+      "source": {
+        "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "status": "terminal",
+      "stop_reason": null,
+      "wall_seconds": 27.15992969200306,
+      "whole_inputs_unchanged": true
+    },
+    "compile-device": {
+      "adopted_children_reaped": [],
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/host.py",
+        "build",
+        "compile-device"
+      ],
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "case": "compile-device",
+      "child_exit": 0,
+      "child_pid": 320922,
+      "child_start_ticks": "4482599",
+      "cleanup_errors": [],
+      "controller": {
+        "pgrp": 320916,
+        "pid": 320918,
+        "ppid": 320917,
+        "rss_kib": 21348,
+        "session": 320916,
+        "start_ticks": "4482552",
+        "state": "R"
+      },
+      "declared_output_environment": {
+        "GTEST_OUTPUT": ""
+      },
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "meaning": "Private strong-linked complete original Endpoint canary host. Only selected shaderInt64 admission/enablement added; no provider execution. Phase:compile-device",
+      "minimum_sampled_available_kib": 18660036,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320922,
+          "saved_start_ticks": "4482599"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320927,
+          "saved_start_ticks": "4482629"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320928,
+          "saved_start_ticks": "4482629"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 387140,
+      "provider_mappings": [],
+      "remaining_owned_processes": [],
+      "scope": "Private strong-linked complete original Endpoint canary host. Only selected shaderInt64 admission/enablement added; no provider execution. Phase:compile-device",
+      "source": {
+        "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "status": "terminal",
+      "stop_reason": null,
+      "wall_seconds": 5.927535267001076,
+      "whole_inputs_unchanged": true
+    },
+    "compile-probe": {
+      "adopted_children_reaped": [],
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/host.py",
+        "build",
+        "compile-probe"
+      ],
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "case": "compile-probe",
+      "child_exit": 0,
+      "child_pid": 320943,
+      "child_start_ticks": "4483285",
+      "cleanup_errors": [],
+      "controller": {
+        "pgrp": 320916,
+        "pid": 320939,
+        "ppid": 320917,
+        "rss_kib": 21476,
+        "session": 320916,
+        "start_ticks": "4483237",
+        "state": "R"
+      },
+      "declared_output_environment": {
+        "GTEST_OUTPUT": ""
+      },
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "meaning": "Private strong-linked complete original Endpoint canary host. Only selected shaderInt64 admission/enablement added; no provider execution. Phase:compile-probe",
+      "minimum_sampled_available_kib": 18956100,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320943,
+          "saved_start_ticks": "4483285"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320944,
+          "saved_start_ticks": "4483312"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320945,
+          "saved_start_ticks": "4483312"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 287404,
+      "provider_mappings": [],
+      "remaining_owned_processes": [],
+      "scope": "Private strong-linked complete original Endpoint canary host. Only selected shaderInt64 admission/enablement added; no provider execution. Phase:compile-probe",
+      "source": {
+        "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "status": "terminal",
+      "stop_reason": null,
+      "wall_seconds": 3.6231204489959055,
+      "whole_inputs_unchanged": true
+    },
+    "link": {
+      "adopted_children_reaped": [],
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/host.py",
+        "build",
+        "link"
+      ],
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "case": "link",
+      "child_exit": 0,
+      "child_pid": 320957,
+      "child_start_ticks": "4483740",
+      "cleanup_errors": [],
+      "controller": {
+        "pgrp": 320916,
+        "pid": 320953,
+        "ppid": 320917,
+        "rss_kib": 21616,
+        "session": 320916,
+        "start_ticks": "4483692",
+        "state": "R"
+      },
+      "declared_output_environment": {
+        "GTEST_OUTPUT": ""
+      },
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "meaning": "Private strong-linked complete original Endpoint canary host. Only selected shaderInt64 admission/enablement added; no provider execution. Phase:link",
+      "minimum_sampled_available_kib": 19146488,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320957,
+          "saved_start_ticks": "4483740"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320958,
+          "saved_start_ticks": "4483770"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320959,
+          "saved_start_ticks": "4483771"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 320961,
+          "saved_start_ticks": "4483782"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 68580,
+      "provider_mappings": [],
+      "remaining_owned_processes": [],
+      "scope": "Private strong-linked complete original Endpoint canary host. Only selected shaderInt64 admission/enablement added; no provider execution. Phase:link",
+      "source": {
+        "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "status": "terminal",
+      "stop_reason": null,
+      "wall_seconds": 0.7919543629977852,
+      "whole_inputs_unchanged": true
+    }
+  },
+  "independent_reviews": {
+    "arithmetic_performance_adoption_or_qualification_claimed": false,
+    "lowering_cost": {
+      "PB32Divide_clones": {
+        "SIMD8": 4,
+        "scalar": 2
+      },
+      "actual_call_scope": "Original one-word short-input refusal only. Retained arithmetic and generated tables were not exercised.",
+      "agent": "/root/divide_contract_review",
+      "first_SIMD_candidate_DIV_RCX_offsets": [
+        "0x42749",
+        "0x4280e"
+      ],
+      "full_descriptor_workgroup_uint32_stride_binding_mode_barrier_closure_equal": true,
+      "other_SIMD_candidate_clusters": [
+        "0x60210",
+        "0xb8f93",
+        "0xd6a8f"
+      ],
+      "per_clone_unsigned_divisions": {
+        "candidate": {
+          "divisions": 1,
+          "width": 64
+        },
+        "stock": {
+          "dependent_divisions": 4,
+          "width": 32
+        }
+      },
+      "premise_survives_for_original_arithmetic_checks": true,
+      "remaining_cost_uncertainty": [
+        "wider division latency",
+        "lane extraction",
+        "register pressure"
+      ],
+      "scalar_guarded_64_32_DIV_offsets": [
+        "0x8b7cc",
+        "0xaabf6"
+      ],
+      "static_costs": {
+        "JIT_object_bytes": {
+          "candidate": 1055536,
+          "stock": 1049832
+        },
+        "coroutine_frame_bytes": {
+          "candidate": 89696,
+          "stock": 89696
+        },
+        "executable_section_bytes": {
+          "candidate": 925189,
+          "stock": 922597
+        },
+        "resume_function_bytes": {
+          "candidate": 900860,
+          "stock": 898262
+        },
+        "resume_stack_reservation_bytes": {
+          "candidate": 43072,
+          "stock": 42976
+        }
+      },
+      "sticky": "Exact quotient times denominator inequality retained.",
+      "undefined_symbols": [
+        "coro_malloc",
+        "coro_free"
+      ]
+    },
+    "pair_reader": {
+      "accepted": true,
+      "agent": "/root/forensic_obligations",
+      "all_55_feature_fields_and_36_file_capture_trees_bound": true,
+      "all_five_owners_passed_sealed_and_retired": true,
+      "complete_durable_json_comparison": true,
+      "reader": {
+        "bytes": 4406,
+        "sha256": "d692096c9de31443e1511e936d0874acd19905a7267342438f3343b19d71d44d"
+      },
+      "receipt": {
+        "bytes": 25314,
+        "sha256": "42faa6ac8b93d4a8f93c4ff5859da4dfd96c7c0fc0e2662488c748ffb781404d"
+      },
+      "six_integrity_negatives_reject": true
+    },
+    "review_execution": "Read-only source/LLVM/ELF/hex and receipt review; no helper, compiler, disassembler, GDB, device or numeric runtime executed by reviewers.",
+    "schema": "sirius-independent-optional64-screen-reviews-v1"
+  },
+  "next_dependency": "Original unchanged 174268-record arithmetic provider gate, then eight original integrated controls and original unchanged 20+2 benefit/adoption gates.",
+  "original_stopped_compiler_attempt": {
+    "commit": "da2338b6f2a803c9aa06801a3699163b25f80d6f",
+    "tag": "evidence/issue-44-divide64-compiler-capability-order"
+  },
+  "pair_reader_correction": "Original consumed host compares integer-keyed Python relocation counts to string-keyed durable JSON. Separate reviewed pure reader compares complete durable JSON, retaining all fields, value types, sequences and six integrity negatives; neither capture was rerun.",
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false,
+  "retained_arithmetic_or_performance_benefit_or_adoption_claimed": false,
+  "schema": "sirius-optional64-compiler-native-jit-screen-v1",
+  "stock_builder_and_original_32bit_fallback_preserved": true
+}

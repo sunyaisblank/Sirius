@@ -1,0 +1,53 @@
+--- a/run_capture.py
++++ b/run_capture.py
+@@ -18,11 +18,15 @@
+ work = Path(__file__).resolve().parent
+ folder = Path(sys.argv[1]).resolve()
+ module = Path(sys.argv[2]).resolve()
+-stage = root / "bin/linux-gcc/power-two-divide-screen"
++stage = root / "bin/linux-gcc/portable-divide64-jit"
+ executable = stage / "short_input_jit_probe"
+ observer = root / "attestations/software-vulkan/b5d2abf/optimized-ir-stage-code-binding/optimizer_observer.so"
+ assert folder.is_relative_to(work) and folder.exists()
+-assert module.is_relative_to(stage / "modules")
++assert module.is_relative_to(work / "module-inputs")
++context = json.loads((work / "runtime-context.json").read_text())
++assert context["host"]["sha256"] == hashlib.sha256(executable.read_bytes()).hexdigest()
++matched = [row for row in context["modules"].values() if Path(row["resolved_path"]) == module]
++assert len(matched) == 1 and matched[0]["sha256"] == hashlib.sha256(module.read_bytes()).hexdigest()
+ assert hashlib.sha256(observer.read_bytes()).hexdigest() == "a1f8808cd8a3a793c59eeed10d78515a08d5aa09b1080ac47281c1a78c04fd68"
+ symbols = subprocess.check_output(["nm", "--defined-only", str(executable)], text=True).splitlines()
+ def symbol(part):
+@@ -33,14 +37,17 @@
+ load = symbol("VulkanDevice10LoadKernelE")
+ env = os.environ.copy()
+ env.update(SIRIUS_GEOMETRY_CAPTURE=str(folder), SIRIUS_DISPATCH_SYMBOL=dispatch,
+-           SIRIUS_LOAD_SYMBOL=load, SIRIUS_MODULE_INPUT=str(module))
++           SIRIUS_LOAD_SYMBOL=load, SIRIUS_MODULE_INPUT=str(module),
++           SIRIUS_FEATURE_LAYOUT=str(work / "feature-layout.json"),
++           SIRIUS_FEATURE_LOADER="/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275")
+ script = folder / "capture.gdb"
+ assert not script.exists()
+ script.write_text("set pagination off\nset confirm off\nset breakpoint pending on\n"
+     "set debuginfod enabled off\nset print thread-events off\nset disable-randomization off\n"
+     "set environment LD_PRELOAD " + str(observer) + "\n"
+     "set environment SIRIUS_OPT_IR_FOLDER " + str(folder) + "\n"
+-    "source " + str(work / "capture_jit.py") + "\nrun\n")
++    "source " + str(work / "capture_jit.py") + "\n"
++    "source " + str(work / "capture_features.py") + "\nrun\n")
+ inputs = {"module": str(module), "module_sha256": hashlib.sha256(module.read_bytes()).hexdigest(),
+           "probe_sha256": hashlib.sha256(executable.read_bytes()).hexdigest(),
+           "observer_sha256": hashlib.sha256(observer.read_bytes()).hexdigest(),
+@@ -83,3 +90,12 @@
+     "actual_loaded_module": loaded, "actual_entry": calls[0], "module_generation": generation,
+     "ordinary_ir_export": export, "ordinary_pipelines": [item["pipeline"] for item in passes],
+     "scope": inputs["scope"], "complete_linked_section_and_relocation_review_pending": True}, indent=2) + "\n")
++
++# This local reader does not require the enclosing owner to be terminal.
++# Original IR/JIT relocation analysis runs separately after root sees terminal success.
++import importlib.util
++spec = importlib.util.spec_from_file_location("raw_feature_arguments", work / "read_features.py")
++feature_reader = importlib.util.module_from_spec(spec)
++spec.loader.exec_module(feature_reader)
++feature_report = feature_reader.inspect(folder)
++(folder / "feature-verification.json").write_text(json.dumps(feature_report, indent=2) + "\n")

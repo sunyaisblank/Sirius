@@ -1,0 +1,53 @@
+{
+  "argv": [
+    "/usr/bin/g++-14",
+    "-DSIRIUS_CONTRACT_MODE=2",
+    "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+    "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+    "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+    "-I/home/astra/.project/Sirius/src/sirius/..",
+    "-O3",
+    "-DNDEBUG",
+    "-std=c++2c",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wno-missing-field-initializers",
+    "-Werror",
+    "-MD",
+    "-MF",
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/short_input_jit_probe.d",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/short_input_jit_probe.o",
+    "-c",
+    "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/short_input_jit_probe.cpp"
+  ],
+  "inputs_before": {
+    "bytes": 265620,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/compile-probe/inputs-before.json",
+    "sha256": "d0fa348ee870cd79f3e75d514626aa2291bd13ffc4ab30938eeeec48bf1224fc"
+  },
+  "operator_context": {
+    "bytes": 767,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/operator-context.json",
+    "sha256": "8596805de1d2e8153dd86b8bb866f61bbc247977676a08f00b0dfd341ea7c835"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/short_input_jit_probe.d": {
+      "bytes": 13212,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/short_input_jit_probe.d",
+      "sha256": "0133a21b4f567d642c558bc8ff0f4ee4cc425bda712f5baf2bdaa83ee1d86d05"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/short_input_jit_probe.o": {
+      "bytes": 210344,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-jit/short_input_jit_probe.o",
+      "sha256": "056315299aa96626cae63b4f048012a60cef8b3a65856e2efaae5c330af9745f"
+    }
+  },
+  "phase": "compile-probe",
+  "source_freeze": {
+    "bytes": 146199,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/source-freeze.json",
+    "sha256": "345b9f7c6c71a534d01bfe1b4bb5350eea26df01bc253ddd0e4d361c6211331a"
+  }
+}

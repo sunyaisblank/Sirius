@@ -1,0 +1,11 @@
+{
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "changes": [
+    {
+      "before": "    VkPhysicalDeviceFeatures enabled{};\n    enabled.shaderFloat64 = device->info_.supports_fp64 ? VK_TRUE : VK_FALSE;\n",
+      "after": "    // Diagnostic host only: the same admitted Int64 feature is enabled for\n    // both complete stock and candidate modules, without changing DeviceInfo.\n    VkPhysicalDeviceFeatures supported{};\n    vkGetPhysicalDeviceFeatures(device->physical_, &supported);\n    if (supported.shaderInt64 != VK_TRUE) {\n        return Fail(ErrorDomain::kDevice, \"open diagnostic Int64 device\",\n                    \"selected physical device does not support shaderInt64\");\n    }\n    VkPhysicalDeviceFeatures enabled{};\n    enabled.shaderFloat64 = device->info_.supports_fp64 ? VK_TRUE : VK_FALSE;\n    enabled.shaderInt64 = VK_TRUE;\n"
+    }
+  ],
+  "reverse_transform_recovers_original_exactly": true,
+  "DeviceInfo_changed": false
+}

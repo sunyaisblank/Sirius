@@ -1,0 +1,227 @@
+{
+  "candidate_only_source_changes": [
+    "C++ uint64_t alias enabled only with SIRIUS_PB32_DIVIDE64",
+    "PB32Divide after unchanged normalization: exact widened numerator, one quotient, multiply/subtract remainder and sticky; original loop retained byte-exact under else",
+    "Private builder adds explicit diagnostic_divide64=False argument and exact Int64/32+64 type allowance only for portable normal Endpoint; original float/order/NoContraction/layout/shared-memory/barrier logic remains"
+  ],
+  "candidate_patch": {
+    "bytes": 1903,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/candidate.patch",
+    "sha256": "7802d511095ab9b71c577edfbd90587d48515b96ade40127a9764fd9e73508c9",
+    "symlink_target": null
+  },
+  "capability_order_only_patch": {
+    "bytes": 2021,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/capability-order-only.patch",
+    "sha256": "59df938bbfc32962d425e427d52fe0e1ceb18a08198e968a2c31cd50b0de015c",
+    "symlink_target": null
+  },
+  "capture_deferred": "No capture action provided. Prior probe has no shaderInt64 logical-device enablement; root must bind actual enabled device/module before using ordinary JIT capture. Historical capture evidence is a source/recipe reference, not current runtime admission.",
+  "commands": [
+    "python3 -B out/portable-divide64-screen-capability-order/screen.py pin-context",
+    "python3 -B out/portable-divide64-screen-capability-order/run_owned.py compile-endpoint-normal",
+    "python3 -B out/portable-divide64-screen-capability-order/screen.py review"
+  ],
+  "compiler_executed": false,
+  "compiler_recipes": {
+    "bytes": 10024,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/compiler-recipes.json",
+    "sha256": "e05e8aa6bebc8a3cc60ca9eb76eadd9ade08de527a27219547cad7baff2caa0e",
+    "symlink_target": null
+  },
+  "diagnostic_builder_patch": {
+    "bytes": 3705,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/diagnostic-builder.patch",
+    "sha256": "0f0eb1db878bc520c0d6a6f4a292e8621da322eed38f3a257933322d9dd49acd",
+    "symlink_target": null
+  },
+  "feature_scope": "Root reports selected llvmpipe shaderInt64 support from a separate direct physical-feature query; current application does not enable it. This compiler packet does not query, enable, load or execute an Int64 module.",
+  "finite_finish_line": [
+    "Stock complete module byte-identical to canonical",
+    "Candidate complete module validates with only Int64 added to original final capabilities; PB32Divide has one unsigned64 OpUDiv, exact multiply/subtract remainder, no digit loop",
+    "Original normal-sum floating guards, complete descriptor/shared type/decorations, execution modes and barrier counts retained",
+    "Terminal owner, equal input seals and observed-birth absence",
+    "Stop at compiler structural evidence; ordinary provider lowering, arithmetic, integrated controls and unchanged20+2 benefit gates remain unexecuted"
+  ],
+  "historical_stopped_attempt": {
+    "commit": "da2338b6f2a803c9aa06801a3699163b25f80d6f",
+    "manifest_sha256": "811bd39b48c98bd92052d42fec48bd40d51d4c8c98e16e6016299f0411fe77af",
+    "tag": "evidence/issue-44-divide64-compiler-capability-order"
+  },
+  "initial_actions": {
+    "bytes": 5176,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/actions.unpinned.json",
+    "sha256": "d0a89dd08927380b2774109eb13ab2a0207d411f1f31e1fd78e2eceb253a9d50",
+    "symlink_target": null
+  },
+  "no_claims": [
+    "No actual64 hardware instruction, driver lowering, speed, numerical acceptance, production adoption or qualification is established."
+  ],
+  "normal_mode": "Complete portable normal Endpoint; LocalSize16x1x1, all64-wide source-layer work, two uint32 buffer bindings, five-word values, General and Schwarzschild tables; no stage-seven-owner variant in this screen",
+  "only_policy_correction": "In explicit diagnostic_divide64 mode, sort the complete capability list and compare to [Int64,Shader] in both guards. This accepts either order while rejecting duplicates/extras. Default stock remains strict [Shader]; every other width/float/order/layout/barrier check is unchanged.",
+  "operator_context_pending": true,
+  "ownership": {
+    "compile_once_label": "compile-endpoint-normal",
+    "compiler_helpers_byte_exact": {
+      "owned_guard.py": {
+        "bytes": 20791,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/owned_guard.py",
+        "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+        "symlink_target": null
+      },
+      "run_owned.py": {
+        "bytes": 12451,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/run_owned.py",
+        "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+        "symlink_target": null
+      }
+    },
+    "compiler_owner_origin": "attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen",
+    "future_compile_limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "future_output_roots": [
+      "out/portable-divide64-screen-capability-order",
+      "bin/linux-gcc/portable-divide64-screen-capability-order"
+    ],
+    "post_owner_order": "screen.py review is a separate root call only after run_owned.py has returned terminal success; it is never called by the owned compile child",
+    "preparation": "Only deterministic source copying/patching/word generation and byte hashing; no compiler or provider child"
+  },
+  "prepared_only": true,
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "program_arguments": {
+    "canonical_program_and_module_join": {
+      "all_encoded_words_equal": true,
+      "canonical_module_words_equal": true,
+      "generated_header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "normal_module_array": "kEndpointPortableNormalSumShader",
+      "program_array": "kEndpointProgram"
+    },
+    "endpoint_specialized": [
+      11240,
+      9903,
+      84,
+      202
+    ],
+    "layers": 111,
+    "prefix": 250,
+    "program": {
+      "bytes": 84572,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/generated/endpoint-program.bin",
+      "sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+      "symlink_target": null
+    },
+    "registers": 612,
+    "terms": 5,
+    "tools": {
+      "assembler": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "compiler": "/opt/slang/bin/slangc",
+      "disassembler": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "optimizer": "/usr/bin/spirv-opt",
+      "validator": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+    }
+  },
+  "reused_capture_references_only": {
+    "attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/analyze_capture.py": {
+      "bytes": 11150,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/analyze_capture.py",
+      "sha256": "58d484832210971e160c836a98f33e22bb9767d1e2c7a6883a1332c6acecf708",
+      "symlink_target": null
+    },
+    "attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/capture_jit.py": {
+      "bytes": 15844,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/capture_jit.py",
+      "sha256": "eca9d075648629256e2b78242676cd2506e0e9180a441aab6efaae00d37ded5d",
+      "symlink_target": null
+    },
+    "attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/owned_guard.py": {
+      "bytes": 20791,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/owned_guard.py",
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "symlink_target": null
+    },
+    "attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/post_owner_analysis.py": {
+      "bytes": 7369,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/post_owner_analysis.py",
+      "sha256": "4d3536906d7a787f9b6a95fc4cda7db9d2df7eb3baf8f8d059a385dc7d423916",
+      "symlink_target": null
+    },
+    "attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/run_capture.py": {
+      "bytes": 5292,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/run_capture.py",
+      "sha256": "1221bfb6bc7c4ee7f9aea0de59b10fe3a1576b194382c9bdb6e154831ed0f591",
+      "symlink_target": null
+    },
+    "attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/run_owned.py": {
+      "bytes": 12451,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/run_owned.py",
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+      "symlink_target": null
+    },
+    "attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/screen.py": {
+      "bytes": 8258,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-screen/files/out/computed-carry-exit-screen/screen.py",
+      "sha256": "ba3cb29cc5261cade87052fd32196fe0c1de218dd083c83f72bc477765178482",
+      "symlink_target": null
+    },
+    "attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json": {
+      "bytes": 4344,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json",
+      "sha256": "3e940e57eda3be646422b9e6ae632dc56ef283b3f48d8c32e140a6107a74dbaa",
+      "symlink_target": null
+    },
+    "attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll": {
+      "bytes": 13237373,
+      "mode": 384,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll",
+      "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7",
+      "symlink_target": null
+    }
+  },
+  "schema": "sirius-portable-divide64-compiler-capability-order-preparation/v1",
+  "semantics_argument": "After unchanged guards/normalization d<=m<2d and 2^23<=d<2^24. N=(uint64 m)<<26<2^51, q=floor(N/d) fits27bits; r=N-q*d in[0,d). Narrow q then jam r!=0 and use unchanged Round. Source reasoning only, not an executed arithmetic proof.",
+  "source_freeze": {
+    "bytes": 19411,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/source-freeze.json",
+    "sha256": "08289ef625b6a8d5d5615f0e48c3e61e26fc63890a2a58529dc4c92a3e9d3317",
+    "symlink_target": null
+  },
+  "source_only_joins": {
+    "candidate_arithmetic_patch_and_header_byte_exact_to_stopped_attempt": true,
+    "canonical_module_equal_current_header_array": true,
+    "fallback_slice": {
+      "bytes": 550,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-screen-capability-order/original-fallback.txt",
+      "sha256": "a5a5fb7d469e2af07f588f0bb8260cd41750c50cec07c925ade5ac2d3defc937",
+      "symlink_target": null
+    },
+    "generated_endpoint_words_equal_current_header": true,
+    "original_fallback_retained_exact": true,
+    "stock_builder_byte_exact_to_stopped_attempt": true,
+    "stock_builder_equals_4bcd_and_current": true,
+    "stock_kernel_closure_equals_4bcd_and_current": true
+  },
+  "stock_kernel_files": 7,
+  "tool_executed": false,
+  "vulkan_executed": false
+}

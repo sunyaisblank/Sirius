@@ -1,0 +1,84 @@
+{
+  "barrier_counts_exact": true,
+  "benefit_established": false,
+  "candidate_only_allowance": "Int64 and unsigned internal 64-bit integers; original float/order/layout/barrier checks retained",
+  "complete_descriptor_and_workgroup_type_decorations_exact": true,
+  "execution_modes_exact": true,
+  "modules": {
+    "candidate": {
+      "assembly": {
+        "bytes": 421499,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-screen-capability-order/modules/candidate-endpoint-normal.final.spvasm",
+        "sha256": "437cae7b2f2689a6bfa32e045fb3e718a3f6aeb5bdfa345a7e8b39f014b7b3f3",
+        "symlink_target": null
+      },
+      "capabilities": [
+        "Int64",
+        "Shader",
+        "RoundingModeRTE"
+      ],
+      "divide_body": {
+        "bytes": 4998,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-screen-capability-order/modules/candidate-endpoint-normal.PB32Divide.spvasm",
+        "sha256": "8866fb2ff86a6b0d3fa8f2b513ed80dbdd952ea67012665457d426e158fa0542",
+        "symlink_target": null
+      },
+      "divide_loop_count": 0,
+      "divide_udiv_widths": [
+        64
+      ],
+      "integer_widths": [
+        "32",
+        "64"
+      ],
+      "module": {
+        "bytes": 151012,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-screen-capability-order/modules/candidate-endpoint-normal.spv",
+        "sha256": "6459db9b5d1159ed5ebf90f4af0b32b58c84733e3b824fc1c48eb78e80b06dc8",
+        "symlink_target": null
+      }
+    },
+    "stock": {
+      "assembly": {
+        "bytes": 422552,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.final.spvasm",
+        "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+        "symlink_target": null
+      },
+      "capabilities": [
+        "Shader",
+        "RoundingModeRTE"
+      ],
+      "divide_body": {
+        "bytes": 6186,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.PB32Divide.spvasm",
+        "sha256": "eeebc7bfdcd5aee8293ea5ae9ab4ea6fcfb1837ce5f63f5f2dc4fa27276733fb",
+        "symlink_target": null
+      },
+      "divide_loop_count": 1,
+      "divide_udiv_widths": [
+        32
+      ],
+      "integer_widths": [
+        "32"
+      ],
+      "module": {
+        "bytes": 151400,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.spv",
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+        "symlink_target": null
+      }
+    }
+  },
+  "next_review": "Inspect complete wide division/remainder lowering and code/frame costs on the actual explicitly enabled provider; compiler output alone does not establish a native divide instruction or benefit.",
+  "runtime_or_numerical_admission": false,
+  "schema": "sirius-divide64-compiler-screen/v1",
+  "stock_builder_policy_unchanged": true,
+  "stock_equals_current_canonical": true
+}

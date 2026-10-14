@@ -1,0 +1,20 @@
+--- a/src/sirius/backend/vulkan/vulkan_device.cpp
++++ b/src/sirius/backend/vulkan/vulkan_device.cpp
+@@ -462,8 +462,17 @@
+     };
+     // fp64 is enabled whenever the hardware offers it so the precision
+     // ladder can select double kernels at run time.
++    // Diagnostic host only: the same admitted Int64 feature is enabled for
++    // both complete stock and candidate modules, without changing DeviceInfo.
++    VkPhysicalDeviceFeatures supported{};
++    vkGetPhysicalDeviceFeatures(device->physical_, &supported);
++    if (supported.shaderInt64 != VK_TRUE) {
++        return Fail(ErrorDomain::kDevice, "open diagnostic Int64 device",
++                    "selected physical device does not support shaderInt64");
++    }
+     VkPhysicalDeviceFeatures enabled{};
+     enabled.shaderFloat64 = device->info_.supports_fp64 ? VK_TRUE : VK_FALSE;
++    enabled.shaderInt64 = VK_TRUE;
+     const VkDeviceCreateInfo device_info{
+         .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+         .queueCreateInfoCount = 1,

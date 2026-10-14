@@ -1,0 +1,164 @@
+{
+  "case": "capture-candidate-endpoint-normal",
+  "producer": "candidate",
+  "variant": "endpoint-normal",
+  "actual_loaded_module": {
+    "words": 37753,
+    "bytes": 151012,
+    "sha256": "6459db9b5d1159ed5ebf90f4af0b32b58c84733e3b824fc1c48eb78e80b06dc8",
+    "actual_span_matches_frozen_input": true
+  },
+  "single_completed_dispatch": {
+    "id": 0,
+    "kernel": 0,
+    "buffers": [
+      0,
+      1
+    ],
+    "groups_x": 1,
+    "completed": true,
+    "captured_ns": 1791995518205008081,
+    "host_thread": 1
+  },
+  "actual_entry": {
+    "file": "jit-10.elf",
+    "function": {
+      "name": "cs_variant",
+      "section": 3,
+      "offset": 0,
+      "bytes": 314,
+      "address": 126900003852288
+    },
+    "dispatch_id": 0,
+    "buffers": [
+      0,
+      1
+    ],
+    "kernel": 0,
+    "worker_thread": 34,
+    "actual_entry_pc": 126900003852288
+  },
+  "ordinary_ir_export": {
+    "module": 126899841928912,
+    "module_generation": 5,
+    "function": 126899841932408,
+    "successful_optimizer_pass_ids": [
+      10,
+      11
+    ],
+    "path": "optimized-05.ll",
+    "bytes": 13232913,
+    "sha256": "74b3e074d1b512fab57fbb7b8fb0a561e828dc9328eac1cc9338e5c0dcce31a3",
+    "optimized_module_observed": true
+  },
+  "ordinary_pipelines": [
+    "default<O0>",
+    "sroa,early-cse,simplifycfg,reassociate,mem2reg,instsimplify,instcombine<no-verify-fixpoint>"
+  ],
+  "linked_section_review": {
+    "file": "jit-10.elf",
+    "variant": "endpoint-normal",
+    "live_sections": [
+      {
+        "name": ".ltext",
+        "bytes": 925189,
+        "changed_bytes": 31611,
+        "relocation_field_bytes": 42520,
+        "all_defined_relocations_and_uncovered_bytes_exact": true
+      },
+      {
+        "name": ".rodata.cst32",
+        "bytes": 96,
+        "changed_bytes": 0,
+        "relocation_field_bytes": 0,
+        "all_defined_relocations_and_uncovered_bytes_exact": true
+      },
+      {
+        "name": ".rodata.cst16",
+        "bytes": 48,
+        "changed_bytes": 0,
+        "relocation_field_bytes": 0,
+        "all_defined_relocations_and_uncovered_bytes_exact": true
+      },
+      {
+        "name": ".rodata.cst4",
+        "bytes": 448,
+        "changed_bytes": 0,
+        "relocation_field_bytes": 0,
+        "all_defined_relocations_and_uncovered_bytes_exact": true
+      },
+      {
+        "name": ".rodata",
+        "bytes": 80,
+        "changed_bytes": 60,
+        "relocation_field_bytes": 80,
+        "all_defined_relocations_and_uncovered_bytes_exact": true
+      },
+      {
+        "name": ".eh_frame",
+        "bytes": 256,
+        "changed_bytes": 32,
+        "relocation_field_bytes": 32,
+        "all_defined_relocations_and_uncovered_bytes_exact": true
+      }
+    ],
+    "relocation_counts": {
+      "1": 5325,
+      "24": 4
+    },
+    "undefined_callback_targets_consistent": {
+      "coro_free": 126900154559584,
+      "coro_malloc": 126900154559600
+    },
+    "undefined_callback_targets_independently_resolved": false
+  },
+  "jit_object_bytes": 1055536,
+  "jit_defined_functions": [
+    {
+      "name": "cs_co_variant.resume",
+      "section": 3,
+      "offset": 24320,
+      "bytes": 900860,
+      "address": 126900003876608
+    },
+    {
+      "name": "cs_co_variant.destroy",
+      "section": 3,
+      "offset": 925184,
+      "bytes": 5,
+      "address": 126900004777472
+    },
+    {
+      "name": "cs_variant",
+      "section": 3,
+      "offset": 0,
+      "bytes": 314,
+      "address": 126900003852288
+    },
+    {
+      "name": "cs_co_variant",
+      "section": 3,
+      "offset": 320,
+      "bytes": 23997,
+      "address": 126900003852608
+    }
+  ],
+  "jit_executable_section_bytes": 925189,
+  "llvm_defined_functions": [
+    "cs_variant",
+    "cs_co_variant",
+    "cs_co_variant.resume",
+    "cs_co_variant.destroy"
+  ],
+  "llvm_float_multiply_instruction_count": 0,
+  "llvm_alloca_instruction_count": 2,
+  "llvm_allocator_call_text": [
+    "@coro_malloc(i32)",
+    "@coro_malloc(i32 %23)"
+  ],
+  "llvm_coroutine_allocator_constant_bytes": [],
+  "llvm_resume_frame_dereferenceable_bytes": [
+    89696
+  ],
+  "scope": "Actual loaded complete module -> ordinary successful LLVM passes -> lookup generation -> called JIT entry and allocated-section byte/defined-relocation joins. Short-input canary only; no retained arithmetic or runtime benefit verdict. Undefined callbacks are consistency checked only."
+}

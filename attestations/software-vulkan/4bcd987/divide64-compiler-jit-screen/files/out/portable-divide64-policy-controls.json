@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "controls": [
+    {
+      "name": "candidate-Int64-Shader",
+      "expected_acceptance": true,
+      "actual_acceptance": true,
+      "error": null,
+      "complete_fixture_sha256": "2f7c83a973259e5becbacf572209e2160c7b3f7a13bc265ff765cdfbca59d753"
+    },
+    {
+      "name": "stock-rejects-Int64-Shader",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum introduced an optional type or capability",
+      "complete_fixture_sha256": "2f7c83a973259e5becbacf572209e2160c7b3f7a13bc265ff765cdfbca59d753"
+    },
+    {
+      "name": "candidate-Shader-Int64",
+      "expected_acceptance": true,
+      "actual_acceptance": true,
+      "error": null,
+      "complete_fixture_sha256": "b79fd361b630966e5cc452e1f7c271fd91ca2e1ebf25981dfbe17cc529ae02af"
+    },
+    {
+      "name": "stock-rejects-Shader-Int64",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum introduced an optional type or capability",
+      "complete_fixture_sha256": "b79fd361b630966e5cc452e1f7c271fd91ca2e1ebf25981dfbe17cc529ae02af"
+    },
+    {
+      "name": "extra-Int64",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum introduced an optional type or capability",
+      "complete_fixture_sha256": "29e64e69d057a2d341d15a1bfd5ab553774586abd38524f84100a85ce99befbf"
+    },
+    {
+      "name": "extra-Int16",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum introduced an optional type or capability",
+      "complete_fixture_sha256": "620e930305a78311980ae1d19828f686a8351484c5bbbe3a2efed9399deac59b"
+    },
+    {
+      "name": "unsupported-integer-width",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum introduced an optional type or capability",
+      "complete_fixture_sha256": "245831e590234e1cc35eec56aa169b20d06038fb693d46892aeac25935286fea"
+    },
+    {
+      "name": "unsupported-float-width",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum introduced an optional type or capability",
+      "complete_fixture_sha256": "21af79d6e45e354f586afd43e86e466cb7b0468d9cc6c82fec3352f52caa4895"
+    },
+    {
+      "name": "relaxed-arithmetic",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum introduced relaxed or fused arithmetic",
+      "complete_fixture_sha256": "0060d0af0f057bb20670d978ce1677c71f86d8ce7f28004f18f1e1c90ac4984e"
+    },
+    {
+      "name": "missing-no-contraction",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum lost binary32 operation ordering or NoContraction",
+      "complete_fixture_sha256": "24a33fd57d2875d7caafadd8d1b76710af9614c8fa37d72290f309b74b326cc6"
+    },
+    {
+      "name": "changed-normal-sum-order",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum changed its ordered three-operation body",
+      "complete_fixture_sha256": "17b2b06fa98d0d46f3a959205a0b332e540ddca6f19160ff5cc708090edb1af1"
+    },
+    {
+      "name": "unqualified-float-mode",
+      "expected_acceptance": false,
+      "actual_acceptance": false,
+      "error": "portable normal sum introduced an unqualified float mode",
+      "complete_fixture_sha256": "693d6928912b0536c21d16384c6bc6870c0ae7e9515828d0e9c0b11b457b0619"
+    }
+  ],
+  "builder_sha256": "8489586592cd93c2e427254e4154a3fa7ed81efc1962e5eaef8d2b40823e4e2c",
+  "immutable_fixture_commit": "da2338b6f2a803c9aa06801a3699163b25f80d6f",
+  "immutable_fixture_path": "attestations/software-vulkan/4bcd987/divide64-compiler-capability-order/files/bin/linux-gcc/portable-divide64-screen/modules/candidate-endpoint-normal.spvasm",
+  "immutable_fixture_sha256": "2f7c83a973259e5becbacf572209e2160c7b3f7a13bc265ff765cdfbca59d753",
+  "full_original_module_retained": true,
+  "compiler_or_device_executed": false,
+  "numerical_performance_or_qualification_claimed": false
+}

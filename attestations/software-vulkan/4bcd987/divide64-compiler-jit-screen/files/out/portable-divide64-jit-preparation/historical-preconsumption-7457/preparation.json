@@ -1,0 +1,122 @@
+{
+  "canary": "Exact published full-Endpoint short_input_jit_probe.cpp,1word input header1 and1word output dadbaaba; actual ni<329 guard returns before retained arithmetic/output writes; one Dispatch and exact full canary ReadBuffer guard retained,8MiB admission unchanged.",
+  "canary_source_guard": {
+    "current_source": "src/sirius/kernels/retained_endpoint.slang",
+    "normal_entry_guard_line": 708,
+    "probe_input_words": 1,
+    "probe_rows": 1,
+    "required_minimum_input_words": 329,
+    "scope": "Every invocation follows the unchanged short-input refusal before retained arithmetic/output writes; full module still compiles and its callable entry executes.",
+    "source": {
+      "bytes": 38824,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/recovery/original-endpoint.slang",
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d"
+    },
+    "unchanged_expression": "rows==0 || rows>65536 || row>=rows || ni<1+225*rows+103 || no%rows!=0"
+  },
+  "candidate_only_host_footprint": "One original Vulkan TU edit: query selected physical core features, decline unsupported shaderInt64, enable only that additional core Bool32 next to unchanged Float64. No DeviceInfo/layout/provider/selection/portability/FMA/cache/binding/barrier/table/science changes. Both modules use this same host binary.",
+  "canonical_runner_revision_at_preparation": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "capture": "capture_jit.py and analyze_capture.py byte-exact mature originals; run_capture.py changes only private host/module paths, exact runtime input join, feature-addon sourcing and local raw feature validation. Ordinary LLVM pass, callable entry, native section/live-byte/relocation/frame joins retained.",
+  "commands": [
+    "python3 -B out/portable-divide64-jit-preparation/host.py pin-context",
+    "python3 -B out/portable-divide64-jit-preparation/run_build_owned.py compile-device",
+    "python3 -B out/portable-divide64-jit-preparation/run_build_owned.py compile-probe",
+    "python3 -B out/portable-divide64-jit-preparation/run_build_owned.py link",
+    "python3 -B out/portable-divide64-jit-preparation/host.py check-build",
+    "python3 -B out/portable-divide64-jit-preparation/host.py pin-runtime",
+    "python3 -B out/portable-divide64-jit-preparation/run_capture_owned.py capture-stock-endpoint-normal",
+    "python3 -B out/portable-divide64-jit-preparation/host.py review-capture capture-stock-endpoint-normal",
+    "python3 -B out/portable-divide64-jit-preparation/run_capture_owned.py capture-candidate-endpoint-normal",
+    "python3 -B out/portable-divide64-jit-preparation/host.py review-capture capture-candidate-endpoint-normal",
+    "python3 -B out/portable-divide64-jit-preparation/host.py review-pair"
+  ],
+  "compile_output_continuity": {
+    "future_objects_dependencies_and_output_receipts_predeclared_only_in_link_action": true,
+    "producer_seals": [
+      "compile-device/output-seal.json",
+      "compile-probe/output-seal.json"
+    ],
+    "runtime_pins_include_seals_and_products": true,
+    "validated_before_link_and_in_check_build_and_runtime_pin": true,
+    "written_inside_successful_compile_child": true
+  },
+  "compiler_executed": false,
+  "external_pin_count": 551,
+  "feature_witness": "GDB records raw header-derived55Bool32 args at actual loaded public loader PCs for vkGetPhysicalDeviceFeatures and vkCreateDevice; successful returned logical handle is joined to vkCreateShaderModule device and complete SPV hash. This is API argument/handle evidence, not arithmetic execution or hardwaredivide proof.",
+  "gdb_or_provider_executed": false,
+  "historical_joins": {
+    "original_TU_dependency_record": "out/portable-divide64-jit-preparation/recovery/original-dependencies.json",
+    "original_membership_reused_only_after_full_object_and_archive_hash_match": true,
+    "original_object_and_archive_membership": "out/portable-divide64-jit-preparation/recovery/original-symbols.json",
+    "original_producer_root": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation",
+    "source_4bcd_matches_current_TU_and_required_project_headers": true
+  },
+  "historical_preconsumption_proposal": "out/portable-divide64-jit-preparation/historical-preconsumption-374d",
+  "host_recipes": {
+    "bytes": 2307,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/host-recipes.json",
+    "sha256": "c3a2e730be0a73d70bcd336c6dfdbc290f3c7147959cd8b0450bdba1e88f0c1f"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "ordering": "Original analyze_capture.inspect runs only via separate host.py review-capture after terminal passing capture owner. No post-owner analyzer is invoked by a still-running owned child.",
+  "original_compile_command": {
+    "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/src/sirius/.. -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o -c /home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp",
+    "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+    "file": "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp",
+    "output": "src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o"
+  },
+  "owned_roots": [
+    "out/portable-divide64-jit-preparation",
+    "bin/linux-gcc/portable-divide64-jit"
+  ],
+  "owner_adaptation": "Existing loader/LVP/LLVM-mapping owner body preserved; only two action-file references change to separate build/capture files. Build consumed inputs are not changed by later runtime pin.",
+  "post_capture_pair_check": "Required separate host.py review-pair after both terminal accepted owners/readers; complete normalized reports equal including55enabled fields,queuefamily,extensioncount/names/order,featurechainvalues. Raw handles/addresses excluded from equality but both complete raw capture/review trees bound by byte hashes.",
+  "prelaunch_pending": [
+    "Root module compiler screen acceptance",
+    "Root source/host compile/link/dependency/28-strong-definition/no-old-archive-member review",
+    "Root runtime-context pin from exact compiler outputs and same host",
+    "Root-only two serial stock/candidate ordinary JIT captures and separate terminal readers"
+  ],
+  "prepared_only": true,
+  "private_pin_count": 43,
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "repair": {
+    "bytes": 2405,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.json",
+    "sha256": "b37fcb1ba3a27323d170ecfc9ffc5cac612419896852c60ed08922e430a23818"
+  },
+  "repair_patch": {
+    "bytes": 17313,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/repair.patch",
+    "sha256": "4ca52dae4689144a3973d92fb395133c39ac48877d0ca39552e498c25a42ca95"
+  },
+  "schema": "sirius-divide64-jit-source-preparation/v1",
+  "scope_limits": [
+    "Old canary executes only the original short-input return guard. No PB32Divide arithmetic result is witnessed.",
+    "Undefined JIT callbacks retain original consistency-only validation; no new independent callback resolution claim.",
+    "No product source, SDK or pinned portable-divide64-screen input changed.",
+    "Future runtime inputs refer to the still-present compiler screen only for root pin-runtime; exact module copies and receipt pins are then frozen separately."
+  ],
+  "source_bindings": [
+    "src/sirius/backend/vulkan/vulkan_device.cpp",
+    "src/sirius/backend/vulkan/vulkan_device.h",
+    "src/sirius/backend/device.h",
+    "src/sirius/base/error.h",
+    "src/sirius/backend/vulkan/vulkan_portability.h",
+    "src/sirius/base/contracts.h"
+  ],
+  "source_freeze": {
+    "bytes": 142242,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-jit-preparation/source-freeze.json",
+    "sha256": "eede5d2234778309176f69cfed450fb7ff521845ce7a38f837e7cfab7139d106"
+  },
+  "stop_criteria": [
+    "Any source/input/feature/owner/module/loader/callable/relocation join failure stops; preserve original failed raw without retry or promotion",
+    "Stock and candidate raw enabled feature/extension/queue semantic fields must agree; actual physical handle/source joins reviewed independently",
+    "Only complete module compilation/lowering/linked-code/frame premise; no primitive arithmetic,8original controls,20+2 benefit,cold frame or qualification verdict"
+  ]
+}

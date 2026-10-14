@@ -1,0 +1,11 @@
+--- a/host.py
++++ b/host.py
+@@ -12,7 +12,7 @@
+ WORK = Path(__file__).resolve().parent
+ ROOT = WORK.parents[1]
+ BUILD = ROOT / "bin/linux-gcc/portable-divide64-jit"
+-SCREEN = ROOT / "out/portable-divide64-screen"
++SCREEN = ROOT / "out/portable-divide64-screen-capability-order"
+ 
+ 
+ def record(path):
