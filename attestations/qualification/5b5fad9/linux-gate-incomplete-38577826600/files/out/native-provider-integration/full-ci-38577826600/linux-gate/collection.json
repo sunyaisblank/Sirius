@@ -1,0 +1,147 @@
+{
+  "source": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "job_id": 115899499679,
+  "job": "linux-gate",
+  "status": "completed",
+  "conclusion": "cancelled",
+  "started": "2026-10-14T14:08:17Z",
+  "completed": "2026-10-14T20:08:51Z",
+  "annotations": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/sunyaisblank/Sirius/blob/5b5fad91c08c0533e29c4f5c7ae249725162e405/.github",
+      "start_line": 1,
+      "start_column": null,
+      "end_line": 1,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "The job has exceeded the maximum execution time of 6h0m0s",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/sunyaisblank/Sirius/blob/5b5fad91c08c0533e29c4f5c7ae249725162e405/.github",
+      "start_line": 381,
+      "start_column": null,
+      "end_line": 381,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "The operation was canceled.",
+      "raw_details": ""
+    }
+  ],
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Toolchain",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Select required Lavapipe provider",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Slang",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "First-party format",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Configure",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Build (strict, mandatory gate on)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "Test estate",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Label file freshness",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Preserve gate diagnostics",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "complete_job_log_obtained": true,
+  "job_log_response": {
+    "bytes": 124815,
+    "sha256": "47d28bd65cc5a38e015a01c6dea10c1cea900202476156c32ddd8acfc1053a48"
+  },
+  "artifact_count": 6,
+  "artifacts": [
+    {
+      "id": 11925267107,
+      "name": "sirius-gate-diagnostics-linux-gate",
+      "bytes": 42282,
+      "digest": "sha256:5545fa4a05902a266eb2d60e485772a011d44bcdf2d552a88de3ddd8589dd734"
+    },
+    {
+      "id": 11915007461,
+      "name": "sirius-gate-diagnostics-linux-sanitizers",
+      "bytes": 46116,
+      "digest": "sha256:38cb874752bb03f23f2ae876756b899cb7478cb0e83fc136aaa0cb21e90bd9a2"
+    },
+    {
+      "id": 11902593089,
+      "name": "sirius-gate-diagnostics-integration-windows-no-render",
+      "bytes": 5849,
+      "digest": "sha256:b1d0be2a851b686cc78e5a0996970eea67a344adc3bd0c10ae2fa4d5bda96ce2"
+    },
+    {
+      "id": 11901712901,
+      "name": "sirius-macos-native-attestation",
+      "bytes": 57718944,
+      "digest": "sha256:fab6f99bd9a11b2e042b5d5f32d52e6cc25937e2aadcfe2077f35a4e4d9bb32a"
+    },
+    {
+      "id": 11901703386,
+      "name": "sirius-windows-native-attestation",
+      "bytes": 56546068,
+      "digest": "sha256:24b09db18d6989856e438c6c3dcfce941b5d87463dca7812ed2be199f7f093db"
+    },
+    {
+      "id": 11901667961,
+      "name": "sirius-gate-diagnostics-integration-macos-no-render",
+      "bytes": 5691,
+      "digest": "sha256:0e7d3b8ed2f6e4d8107b9c1b3a2da41d6ce09c53ac858b63ff927de6f3ae3690"
+    }
+  ],
+  "qualification_claimed": false
+}

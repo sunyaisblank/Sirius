@@ -1,0 +1,367 @@
+{
+  "archive_join": {
+    "API_zip_digest_matches": true,
+    "all_3_members_match_extraction_and_manifest": true,
+    "artifact_run_source_match": true
+  },
+  "artifact_id": 11925267107,
+  "at_cancellation": {
+    "case_id": 825,
+    "name": "KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32",
+    "observed": "Start line only; no captured verdict or exact reached phase.",
+    "reference": "tests/backend/kernel_trace_test.cpp:310",
+    "source_order": "r32 trace then compensated trace then optionalfp64 reference; source order is not observed progress.",
+    "whole_case_timeout": "No explicit whole-case timeout in backend discovery/source or source5b5 test preset. Remote generated CTest properties/cache absent. Real phase dispatch<=1000ms and bounded attempts remain distinct."
+  },
+  "cancellation": {
+    "annotations": [
+      "The job has exceeded the maximum execution time of 6h0m0s",
+      "The operation was canceled."
+    ],
+    "build_step": "Build(strict,mandatory gate on) cancelled; Mandatory tests run as ALL build target dependency.",
+    "cause_boundary": "Six-hour job maximum directly reported. No preserved OOM/resource-kill/deadlock or exactcase825 failure cause. Four earlier nonpasses are separate observed results.",
+    "cleanup": "Job log records orphan termination: cmake4012,ninja4013,sh5563,python3.12/5571,ctest5575,backend11977; runner cleanup is not complete same-birth retirement proof.",
+    "completed_utc": "2026-10-14T20:08:51Z",
+    "conclusion": "cancelled",
+    "later_workflow_steps_skipped": [
+      "Test estate",
+      "Label file freshness"
+    ],
+    "started_utc": "2026-10-14T14:08:17Z"
+  },
+  "completed_results": {
+    "basis": "824 unique sequential CTest results and825 Start lines. No reconstructed XML; no global GoogleTest disabled/error/skip total.",
+    "complete_estate_F_E_S_D_claimed": false,
+    "completed": 824,
+    "failed": 3,
+    "junit_present": false,
+    "not_started": 322,
+    "observed_ctest_skip_or_not_run_results": 0,
+    "other_completed_statuses": 0,
+    "passed": 820,
+    "selected": 1147,
+    "started": 825,
+    "started_without_verdict": 1,
+    "timeout": 1,
+    "without_completed_verdict": 323
+  },
+  "current_preset_difference": "Current46a9599 includes later sanitizerO1 preset changes; original5b5 preset was read from immutableGit, not substituted. Other16 reviewed source files equal current bytes.",
+  "disposition": "INCOMPLETE_FULL_CI_WITH_4_OBSERVED_NONPASS_RESULTS. Preserve raw; no rerun, assertion/deadline change, Mandatory/domain/scientific/release qualification claim.",
+  "elapsed_work": {
+    "largest_completed_case": {
+      "ctest_id": 26,
+      "name": "OperationalP1.NearExtremalBurnIn",
+      "ordinal": 26,
+      "seconds": 15949.58,
+      "status": "Passed"
+    },
+    "largest_original_timeout_seconds": 28800,
+    "largest_scope": "Two original CPU/retained near-extremal shadow classifiers repeated3 times; no physical/fullP1 qualification claim.",
+    "limit": "Rounded completed durations, not exact current-case start/duration.",
+    "references": [
+      "tests/CMakeLists.txt:231",
+      "tests/operational/p1_burn_in.cmake:9"
+    ],
+    "sum_completed_ctest_seconds": 21284.7
+  },
+  "identity": {
+    "candidate_app": {
+      "bytes": 9540560,
+      "path": "/home/runner/work/Sirius/Sirius/bin/linux-ci/src/sirius/app/sirius",
+      "sha256": "ad851c9fd04a0d312e13493d88c1b0cba4e13e2178481bfca51c73641a25d502"
+    },
+    "captured_utc": "2026-10-14T14:13:56.271767+00:00",
+    "ci": {
+      "arch": "X64",
+      "hosted": true,
+      "job": "linux-gate",
+      "os": "Linux",
+      "repository": "sunyaisblank/Sirius",
+      "run_attempt": "1",
+      "run_id": "38577826600",
+      "runner": "GitHub Actions 1000004296"
+    },
+    "classification": "vulkan_selected",
+    "eligibility_limit": "Software Lavapipe is not physical/native hardware. FP32denorm=false alone does not disqualify portable retained products: RetainedUsesPortableArithmetic selects integer fallback, RTE32 admits normal sums. Directtrace.spv is a distinct route; no claim this property caused a failure.",
+    "environment": {
+      "MESA_SHADER_CACHE_DISABLE": "",
+      "SIRIUS_PRECISION": "",
+      "SIRIUS_VULKAN_DEVICE": "",
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+    },
+    "host": {
+      "machine": "x86_64",
+      "platform": "linux"
+    },
+    "identity_limit": "App query/hash plus hashed provider/loader input candidates, not actual loaded-module/inode or per-backend-test executable/SPV/mode proof. No backendELF/SPV bytes/final gate stamp/JUnit/full resource or ownership seals in3-file artifact.",
+    "phase": "before_mandatory_numerics",
+    "provider_inputs": {
+      "loader_candidates": [
+        {
+          "bytes": 510592,
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+        }
+      ],
+      "manifests": [
+        {
+          "contents_base64": "ewogICAgIklDRCI6IHsKICAgICAgICAiYXBpX3ZlcnNpb24iOiAiMS40LjMxOCIsCiAgICAgICAgImxpYnJhcnlfcGF0aCI6ICJsaWJ2dWxrYW5fbHZwLnNvIgogICAgfSwKICAgICJmaWxlX2Zvcm1hdF92ZXJzaW9uIjogIjEuMC4xIgp9",
+          "driver_candidates": [
+            {
+              "bytes": 11929384,
+              "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+              "sha256": "5a218118760fee2398cc783820a1cc052de162d8c937dafcd6045576dfd9576c"
+            }
+          ],
+          "library_path": "libvulkan_lvp.so",
+          "manifest": {
+            "bytes": 135,
+            "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+            "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+          },
+          "selector_path": "/usr/share/vulkan/icd.d/lvp_icd.json"
+        }
+      ],
+      "scope": "hashed input candidates; not actual loaded-module or per-ICD execution proof",
+      "selector": {
+        "kind": "explicit_manifest_list",
+        "name": "VK_DRIVER_FILES",
+        "value": "/usr/share/vulkan/icd.d/lvp_icd.json"
+      },
+      "unresolved_optional_manifests": []
+    },
+    "query_argv": [
+      "--json",
+      "info",
+      "system"
+    ],
+    "query_matches_inventory": true,
+    "query_stdout_sha256": "4b4002371745a849b2720234d6edc5f9055f1721d8819526fad12413c5f95380",
+    "references": [
+      "src/sirius/backend/device.h:76",
+      "src/sirius/backend/retained_compute.cpp:155",
+      "scripts/runtime_identity.py:1"
+    ],
+    "reported": {
+      "api_version": 4211006,
+      "device_id": 0,
+      "device_local_bytes": 16766414848,
+      "driver_id": 13,
+      "driver_info": "Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)",
+      "driver_name": "llvmpipe",
+      "index": 0,
+      "kind": "software",
+      "name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+      "preserves_fp32_denormals": false,
+      "render_memory_bytes": 16766414848,
+      "rounds_fp32_to_nearest": true,
+      "rounds_fp64_to_nearest": true,
+      "supports_fp64": true,
+      "vendor_id": 65541
+    }
+  },
+  "job_id": 115899499679,
+  "job_url": "https://github.com/sunyaisblank/Sirius/actions/runs/38577826600/job/115899499679",
+  "kind": "independent-preserved-linux-full-ci-review",
+  "nonpasses": [
+    {
+      "case_environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true"
+      },
+      "ctest_id": 25,
+      "last_printed_tile": 403,
+      "name": "OperationalVulkan.RequiredRuntimeDispatch",
+      "observation": "Software zero-active initialization completed;128x128/1SPP Kerr Vulkan render started. No successful completion/output verdict.",
+      "ordinal": 25,
+      "original_filter": "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+      "references": [
+        "tests/CMakeLists.txt:218",
+        "tests/operational/vulkan_runtime_profile.cmake:6"
+      ],
+      "seconds": 300.01,
+      "source_timeout_kind": "Original acceptance: cold translation plus complete governed128x128 render",
+      "source_timeout_seconds": 300,
+      "status": "***Timeout",
+      "work_tiles": 16384
+    },
+    {
+      "ctest_id": 702,
+      "failure": "result.numerical_failure=true; event termination=5",
+      "meaning": "CPU CoupledStepFailure::Event with integrator_termination5 records refused event/source admission or volumetric accumulation. It is a distinct namespace from direct-trace MinimumStep. Exact rejecting subcondition not logged.",
+      "mode": "retained_binary32_products; failure precedes binary64-products iteration",
+      "name": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+      "ordinal": 702,
+      "references": [
+        "tests/backend/full_path_acceptance_test.cpp:913",
+        "tests/backend/full_path_acceptance_test.cpp:929",
+        "src/sirius/backend/cpu/geodesic_tracer.cpp:1323",
+        "src/sirius/backend/cpu/geodesic_tracer.cpp:1572"
+      ],
+      "seconds": 18.59,
+      "status": "***Failed"
+    },
+    {
+      "ctest_id": 823,
+      "failure": "output.has_value()==false; trace termination5 cannot publish radiance",
+      "meaning": "Direct trace continuation termination5=MinimumStep. Validator refuses nonphysical terminal radiance before finiteness/nonconstancy/shadow assertions.",
+      "name": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "ordinal": 823,
+      "references": [
+        "tests/backend/kernel_trace_test.cpp:119",
+        "src/sirius/render/trace_continuation.h:24",
+        "src/sirius/render/trace_continuation.h:103",
+        "src/sirius/kernels/trace.slang:756"
+      ],
+      "seconds": 176.39,
+      "status": "***Failed"
+    },
+    {
+      "ctest_id": 824,
+      "failure": "RunKerrScene<float> reports trace termination5; r32.empty()==true",
+      "meaning": "Initial r32 fails before r64 invocation/comparison; no failed fp64-versus-fp32 comparison is established.",
+      "name": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+      "ordinal": 824,
+      "references": [
+        "tests/backend/kernel_trace_test.cpp:209",
+        "tests/backend/kernel_trace_test.cpp:242"
+      ],
+      "seconds": 87.19,
+      "status": "***Failed"
+    }
+  ],
+  "passed": true,
+  "passed_meaning": "Raw/source audit consistent; CI and Mandatory estate did not pass.",
+  "raw_inputs": {
+    "artifact-members.json": {
+      "bytes": 1578,
+      "sha256": "7f287ca0fc96f937450c3815b4a6eab5a23d18f1cf399c261f132e01ee1cc531"
+    },
+    "artifact/bin/linux-ci/Testing/Temporary/LastTest.log": {
+      "bytes": 121,
+      "sha256": "387e495d3bd20c0d741606a2ed98523aa06b55ee1bf95b4ad129b653ba2acff0"
+    },
+    "artifact/bin/linux-ci/generated/sirius/mandatory_gate_ctest.log": {
+      "bytes": 315351,
+      "sha256": "2ef5acd4f53bec06c822ac3659c1e9dc219361b0310da08cff5dbd92ea9ef522"
+    },
+    "artifact/bin/linux-ci/generated/sirius/mandatory_runtime_identity_gate.json": {
+      "bytes": 6772,
+      "sha256": "72c4ac2e74eb2dafaec20a96a7b813bcefb6de1b43d43c61ba5942791bb1216a"
+    },
+    "check-run-annotations-api.json": {
+      "bytes": 747,
+      "sha256": "afd5f9f38d95d6d793cd0dfc2add56db6e4da1246eb9f94bd0410d3093573d0d"
+    },
+    "check-run-api.json": {
+      "bytes": 3808,
+      "sha256": "df564467e098ea65421ad3b5479af6afe9cafdfe3559afd7226cf393b380dbb8"
+    },
+    "collection.json": {
+      "bytes": 4054,
+      "sha256": "8f7bb956a5a39978b767ebc9d06b0829be9740ba65a32a320c82199ffbe7e22e"
+    },
+    "gate-diagnostics.zip": {
+      "bytes": 42282,
+      "sha256": "5545fa4a05902a266eb2d60e485772a011d44bcdf2d552a88de3ddd8589dd734"
+    },
+    "job-api.json": {
+      "bytes": 3935,
+      "sha256": "6ab5983ccae13790227e538de575f5d0ce94b6e0903e8404305882581d681124"
+    },
+    "job-log.stdout": {
+      "bytes": 124815,
+      "sha256": "47d28bd65cc5a38e015a01c6dea10c1cea900202476156c32ddd8acfc1053a48"
+    }
+  },
+  "review_scope": "Read-only preserved metadata/log/ZIP/source; standard-library parsing and read-only Git only. No authored-helper/product/provider/compiler/validator/test/device/CI/API execution.",
+  "run_id": 38577826600,
+  "schema_version": 1,
+  "source_bindings": {
+    ".github/workflows/ci.yml": {
+      "current_bytes_equal": true,
+      "git_blob": "1c9029f55a90daa9a1486bc780e3ff10ba5d3c53",
+      "sha256": "8c629e05c0f166bc8b3795478abd808c587f28cfb8dfd09f6d431a7e7eb19146"
+    },
+    "CMakePresets.json": {
+      "current_bytes_equal": false,
+      "git_blob": "2b5cdbc32533a4054d23822c77151935596235e5",
+      "sha256": "adaa4a858117532f60821a9d7052ccc8cc4983cecf142510b45c4bc7827f8b8a"
+    },
+    "cmake/sirius_testing.cmake": {
+      "current_bytes_equal": true,
+      "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74",
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    "scripts/runtime_identity.py": {
+      "current_bytes_equal": true,
+      "git_blob": "be6721db23e1ee32e789f06073a5e08783cb568f",
+      "sha256": "00aa1aa63250599db1cc33692b51dcf73e236be7596f19fc1b603807bbccc8f2"
+    },
+    "scripts/verify-build-gate.py": {
+      "current_bytes_equal": true,
+      "git_blob": "2d53b4ad1079fd1e5fd121a9f2320ce0f3c12df6",
+      "sha256": "70e2decb19266fe7317f28dc5c3e2ee861af4bce7d86dbb7d0ac249b92d6f1c8"
+    },
+    "src/sirius/backend/cpu/geodesic_tracer.cpp": {
+      "current_bytes_equal": true,
+      "git_blob": "57aadfc9d287662cafae4dd29851050955bb141c",
+      "sha256": "3c8527e32f72e191acf86fb62d842c34383002761faf7650c3cff7eece2c43d2"
+    },
+    "src/sirius/backend/device.h": {
+      "current_bytes_equal": true,
+      "git_blob": "328d743ef3b9f03786341f8ae4750257885ab097",
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    "src/sirius/backend/retained_compute.cpp": {
+      "current_bytes_equal": true,
+      "git_blob": "62b12e96d11323176d29210afa112c0f651c6009",
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "current_bytes_equal": true,
+      "git_blob": "0dff395c71bedabe9e77fdd1290942e4db388e87",
+      "sha256": "a66222aa9d6bb3e16b0e2df4b2d903669347badb0118e838091c6e569c590c77"
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "current_bytes_equal": true,
+      "git_blob": "4e61faf3471d19d16a73c8ea080c26b76d472969",
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005"
+    },
+    "tests/CMakeLists.txt": {
+      "current_bytes_equal": true,
+      "git_blob": "b7700acf10bf853738cfcf8a24918fb899a36b24",
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    "tests/backend/CMakeLists.txt": {
+      "current_bytes_equal": true,
+      "git_blob": "68735044e5a46054e4449ddc60f6132d2d75e8b7",
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357"
+    },
+    "tests/backend/full_path_acceptance_test.cpp": {
+      "current_bytes_equal": true,
+      "git_blob": "458c558fb085733a2048cb73d7f234bd4842d966",
+      "sha256": "e00b40a01916fa8dc7f667c80bbc5beb3094e444f88d02260c2c1d2c0bce9d72"
+    },
+    "tests/backend/kernel_trace_test.cpp": {
+      "current_bytes_equal": true,
+      "git_blob": "5f1bc3ce761f254284df2520c68e84d0b70d700e",
+      "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a"
+    },
+    "tests/operational/p1_burn_in.cmake": {
+      "current_bytes_equal": true,
+      "git_blob": "66ec290e4cc8a25c63fd4a809878d7e7f62cabe0",
+      "sha256": "a76ea8ea059ede93a7be103d6b066cecaa60c5af2069ee39a9a0939036158d0f"
+    },
+    "tests/operational/vulkan_runtime_profile.cmake": {
+      "current_bytes_equal": true,
+      "git_blob": "1eb04258d82bd741603a3166ecbe06afa02db9d0",
+      "sha256": "e39e8aee8f82b4f1934a42542cd5b743822bed02f6ed15e1a3eaa6185bc0f8ea"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "current_bytes_equal": true,
+      "git_blob": "33a5a516b66857ddb7551dd848a3737b1101ff52",
+      "sha256": "86e28bf045a8cdb780979ebdd1866f48e841355ddbf4927d1d4d2b886df22ee1"
+    }
+  },
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405"
+}

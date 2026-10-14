@@ -1,0 +1,38 @@
+{
+  "schema": "sirius-linux-ci-minimum-step-source-review-v1",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "scope": "Bounded read-only source diagnosis of three original CI failures; no reproduced physical-ray counterexample, numerical repair or qualification verdict.",
+  "ci_source": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "runner_head": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "relevant_product_and_test_sources_identical_to4bcd_and_ci_source": true,
+  "mandatory_log_sha256": "2ef5acd4f53bec06c822ac3659c1e9dc219361b0310da08cff5dbd92ea9ef522",
+  "actual_ci_numerical_root_cause_proven": false,
+  "full_physical_ray_counterexample_proven": false,
+  "observed_paths": {
+    "702": {
+      "case": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+      "witness": "kerr_0998_inner_turn: M1,a.998,origin(r12,theta1.1,phi.31),direction Unit(-.6,.25,sqrt(.5775)),escape40; retained_binary32_products",
+      "controls": "Control(c,0): min_step1e-6,initial.1,max2,abs=rel5e-6,max_steps20000,all four bundle columns and source maps retained",
+      "logged": "numerical_failure=true,coupled_failure=event,integrator_termination=5",
+      "source": "src/sirius/backend/cpu/geodesic_tracer.cpp:1252-1327",
+      "interpretation": "Event samples/trials and source-map admission rejected. The same termination5 is emitted for non-retryable infinity-source failure OR rejection at minimum step; the log alone does not distinguish them. Later binary64 mode is not established by this fatal binary32 assertion."
+    },
+    "823_824": {
+      "cases": ["KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow", "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene"],
+      "inputs": "Original64x64 Kerr M1,a.9,camera(0,0,-40),forward+z,FOV.6,stepScale.06,min.02,max2,escape100,captureFactor1.12,attempts2000,disk/starfield off,sample(.5,.5)",
+      "source": "src/sirius/kernels/trace.slang:747-758;src/sirius/kernels/gr_integrator.slang:432-495",
+      "interpretation": "Shader adaptive candidate rejected and dt<=minStep*1.0001. Missing raw state prevents distinguishing represented-stage, truncation, projection, unprojected-null or projected-null rejection. Host refusal to publish radiance is required. Case824 fails its initial RunKerrScene<float> prerequisite before its fp64 comparison."
+    }
+  },
+  "proven_source_controller_counterexample": {
+    "source": "src/sirius/kernels/trace.slang:756",
+    "condition": "!attempted.accepted && dt<=Real(minStep)*Real(1.0001f)",
+    "witness": "minStep=.02f; dt is the next representable Real above Real(minStep); candidate rejection is the controller precondition. This dt is above the floor but inside the early-terminal window.",
+    "consequence": "The controller terminates without selecting and evaluating the exact minimum retry. This does not establish a reachable failing physical ray or causality for these CI failures.",
+    "existing_contract": "tests/operating_model.json P1;tests/core/rk45_integrator_test.cpp:520-540;src/sirius/core/geodesic_integrator.cpp:1261-1269: only a candidate already evaluated at min_step may terminate.",
+    "all_acceptance_tolerances_and_refusals_must_remain_unchanged": true
+  },
+  "decisive_evidence_missing": ["failing pixel/ray phase and attempted dt", "shader represented/projection flags,errorRatio,nullResidual,projectedNullResidual", "retained event trial/sample errors and infinity-source failure/retryable discriminator"],
+  "no_helpers_build_tests_devices_APIs_or_tracked_source_mutations": true,
+  "tracked_checkout_clean_upstream_zero_zero_sole_worktree": true
+}

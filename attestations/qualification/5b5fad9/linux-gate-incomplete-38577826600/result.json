@@ -1,0 +1,116 @@
+{
+  "cause_boundary": "Six-hour job maximum directly reported. No preserved OOM/resource-kill/deadlock or exactcase825 failure cause. Four earlier nonpasses are separate observed results.",
+  "completed_utc": "2026-10-14T20:08:51Z",
+  "conclusion": "cancelled",
+  "elapsed_work": {
+    "largest_completed_case": {
+      "ctest_id": 26,
+      "name": "OperationalP1.NearExtremalBurnIn",
+      "ordinal": 26,
+      "seconds": 15949.58,
+      "status": "Passed"
+    },
+    "largest_original_timeout_seconds": 28800,
+    "largest_scope": "Two original CPU/retained near-extremal shadow classifiers repeated3 times; no physical/fullP1 qualification claim.",
+    "limit": "Rounded completed durations, not exact current-case start/duration.",
+    "references": [
+      "tests/CMakeLists.txt:231",
+      "tests/operational/p1_burn_in.cmake:9"
+    ],
+    "sum_completed_ctest_seconds": 21284.7
+  },
+  "full_scientific_or_release_claimed": false,
+  "identity_limits": "App query/hash plus hashed provider/loader input candidates, not actual loaded-module/inode or per-backend-test executable/SPV/mode proof. No backendELF/SPV bytes/final gate stamp/JUnit/full resource or ownership seals in3-file artifact.",
+  "independent_audit": {
+    "bytes": 16023,
+    "sha256": "f7bd87f7da0315d13a5a22a937e06c389579c0ff5a22d83ac6e3833d7389680b"
+  },
+  "job_id": 115899499679,
+  "nonpasses": [
+    {
+      "case_environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true"
+      },
+      "ctest_id": 25,
+      "last_printed_tile": 403,
+      "name": "OperationalVulkan.RequiredRuntimeDispatch",
+      "observation": "Software zero-active initialization completed;128x128/1SPP Kerr Vulkan render started. No successful completion/output verdict.",
+      "ordinal": 25,
+      "original_filter": "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+      "references": [
+        "tests/CMakeLists.txt:218",
+        "tests/operational/vulkan_runtime_profile.cmake:6"
+      ],
+      "seconds": 300.01,
+      "source_timeout_kind": "Original acceptance: cold translation plus complete governed128x128 render",
+      "source_timeout_seconds": 300,
+      "status": "***Timeout",
+      "work_tiles": 16384
+    },
+    {
+      "ctest_id": 702,
+      "failure": "result.numerical_failure=true; event termination=5",
+      "meaning": "CPU CoupledStepFailure::Event with integrator_termination5 records refused event/source admission or volumetric accumulation. It is a distinct namespace from direct-trace MinimumStep. Exact rejecting subcondition not logged.",
+      "mode": "retained_binary32_products; failure precedes binary64-products iteration",
+      "name": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+      "ordinal": 702,
+      "references": [
+        "tests/backend/full_path_acceptance_test.cpp:913",
+        "tests/backend/full_path_acceptance_test.cpp:929",
+        "src/sirius/backend/cpu/geodesic_tracer.cpp:1323",
+        "src/sirius/backend/cpu/geodesic_tracer.cpp:1572"
+      ],
+      "seconds": 18.59,
+      "status": "***Failed"
+    },
+    {
+      "ctest_id": 823,
+      "failure": "output.has_value()==false; trace termination5 cannot publish radiance",
+      "meaning": "Direct trace continuation termination5=MinimumStep. Validator refuses nonphysical terminal radiance before finiteness/nonconstancy/shadow assertions.",
+      "name": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "ordinal": 823,
+      "references": [
+        "tests/backend/kernel_trace_test.cpp:119",
+        "src/sirius/render/trace_continuation.h:24",
+        "src/sirius/render/trace_continuation.h:103",
+        "src/sirius/kernels/trace.slang:756"
+      ],
+      "seconds": 176.39,
+      "status": "***Failed"
+    },
+    {
+      "ctest_id": 824,
+      "failure": "RunKerrScene<float> reports trace termination5; r32.empty()==true",
+      "meaning": "Initial r32 fails before r64 invocation/comparison; no failed fp64-versus-fp32 comparison is established.",
+      "name": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+      "ordinal": 824,
+      "references": [
+        "tests/backend/kernel_trace_test.cpp:209",
+        "tests/backend/kernel_trace_test.cpp:242"
+      ],
+      "seconds": 87.19,
+      "status": "***Failed"
+    }
+  ],
+  "observed_completed_results": {
+    "basis": "824 unique sequential CTest results and825 Start lines. No reconstructed XML; no global GoogleTest disabled/error/skip total.",
+    "complete_estate_F_E_S_D_claimed": false,
+    "completed": 824,
+    "failed": 3,
+    "junit_present": false,
+    "not_started": 322,
+    "observed_ctest_skip_or_not_run_results": 0,
+    "other_completed_statuses": 0,
+    "passed": 820,
+    "selected": 1147,
+    "started": 825,
+    "started_without_verdict": 1,
+    "timeout": 1,
+    "without_completed_verdict": 323
+  },
+  "qualification_claimed": false,
+  "run_id": 38577826600,
+  "schema": "sirius-linux-full-ci-incomplete-v1",
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "unchanged_retry_performed": false
+}
