@@ -1,0 +1,175 @@
+--- src/sirius/backend/vulkan/vulkan_device.cpp
++++ out/p4-parity-setup-diagnostic/instrumented-vulkan_device.cpp
+@@ -8,6 +8,7 @@
+ #include <chrono>
+ #include <cmath>
+ #include <cstdlib>
++#include <cstdio>
+ #include <cstring>
+ #include <format>
+ #include <mutex>
+@@ -22,6 +23,30 @@
+ namespace sirius::backend {
+ 
+ namespace {
++
++// Diagnostic markers only; no Vulkan call or error handling is reordered.
++struct SetupPhaseScope {
++    const char* phase;
++    bool has_result = false;
++    int result = 0;
++    static void Print(const char* event, const char* label, bool has_result, int result) {
++        const auto ticks = std::chrono::duration_cast<std::chrono::nanoseconds>(
++            std::chrono::steady_clock::now().time_since_epoch()).count();
++        std::fprintf(stderr, "[SetupPhase] {\"event\":\"%s\",\"phase\":\"%s\",\"monotonic_ns\":%lld,\"has_result\":%s,\"result\":%d}\n",
++                     event, label, static_cast<long long>(ticks), has_result ? "true" : "false", result);
++        std::fflush(stderr);
++    }
++    explicit SetupPhaseScope(const char* value) : phase(value) { Print("begin", phase, false, 0); }
++    ~SetupPhaseScope() { Print("end", phase, has_result, result); }
++};
++template <typename Function>
++auto SetupMeasuredCall(const char* phase, Function&& function) {
++    SetupPhaseScope observation(phase);
++    const auto result = function();
++    observation.has_result = true;
++    observation.result = static_cast<int>(result);
++    return result;
++}
+ 
+ using base::ErrorDomain;
+ using base::Expected;
+@@ -369,6 +394,7 @@
+ }
+ 
+ Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {
++    SetupPhaseScope setup_phase_scope("EnumerateVulkanDevices");
+     auto instance = CreateInstance();
+     if (!instance) {
+         // No loader or no ICD is a decline: the caller falls back to the
+@@ -390,6 +416,7 @@
+ }
+ 
+ Expected<std::size_t> ResolveVulkanDeviceIndex(std::span<const DeviceInfo> devices) {
++    SetupPhaseScope setup_phase_scope("ResolveVulkanDeviceIndex");
+     const char* raw = std::getenv("SIRIUS_VULKAN_DEVICE");
+     if (raw == nullptr || *raw == '\0') {
+         if (devices.empty()) {
+@@ -414,6 +441,7 @@
+ }
+ 
+ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
++    SetupPhaseScope setup_phase_scope("CreateVulkanDevice");
+     auto instance = CreateInstance();
+     if (!instance) {
+         return std::unexpected(instance.error());
+@@ -517,8 +545,9 @@
+ }
+ 
+ VulkanDevice::~VulkanDevice() {
++    SetupPhaseScope setup_phase_scope("VulkanDevice.destructor");
+     if (device_ != VK_NULL_HANDLE) {
+-        const auto completion = vkDeviceWaitIdle(device_);
++        const auto completion = SetupMeasuredCall("vkDeviceWaitIdle", [&] { return vkDeviceWaitIdle(device_); });
+         // Device loss establishes the same pending/in-use lifetime boundary as
+         // success, but another error leaves completion unproven. Retain the
+         // entire device/instance chain until process termination in that case.
+@@ -562,6 +591,7 @@
+ }
+ 
+ void VulkanDevice::InitialisePipelineCache() {
++    SetupPhaseScope setup_phase_scope("InitialisePipelineCache");
+     vkGetPhysicalDeviceProperties(physical_, &pipeline_cache_properties_);
+     std::vector<std::byte> seed;
+     try {
+@@ -751,6 +781,7 @@
+ }
+ 
+ Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> spirv) {
++    SetupPhaseScope setup_phase_scope("LoadKernel");
+     if (auto precision =
+             ValidateVulkanKernelPrecision(spirv, info_.supports_fp64, info_.fma_fp32_enabled);
+         !precision) {
+@@ -776,7 +807,7 @@
+         .codeSize = kernel.words.size() * sizeof(std::uint32_t),
+         .pCode = kernel.words.data(),
+     };
+-    if (const VkResult r = vkCreateShaderModule(device_, &create_info, nullptr, &kernel.module);
++    if (const VkResult r = SetupMeasuredCall("vkCreateShaderModule", [&] { return vkCreateShaderModule(device_, &create_info, nullptr, &kernel.module); });
+         r != VK_SUCCESS) {
+         return Fail(ErrorDomain::kKernel, "create shader module", VkResultText(r));
+     }
+@@ -785,6 +816,7 @@
+ }
+ 
+ Expected<void> VulkanDevice::SetBufferAllocationLimit(std::uint64_t bytes) {
++    SetupPhaseScope setup_phase_scope("SetBufferAllocationLimit");
+     if (bytes < buffer_allocation_bytes_) {
+         return Fail(ErrorDomain::kDevice, "set buffer allocation limit",
+                     "limit is below the actual resident buffer allocations");
+@@ -794,6 +826,7 @@
+ }
+ 
+ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, BufferUsage usage) {
++    SetupPhaseScope setup_phase_scope("CreateBuffer");
+     SIRIUS_PRE(size_bytes > 0);
+     if (size_bytes > buffer_allocation_limit_ - buffer_allocation_bytes_) {
+         return Fail(ErrorDomain::kDevice, "allocate buffer memory",
+@@ -876,6 +909,7 @@
+ }
+ 
+ Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const std::byte> data) {
++    SetupPhaseScope setup_phase_scope("WriteBuffer");
+     if (pending_dispatch_)
+         return Fail(ErrorDomain::kDevice, "write buffer",
+                     "earlier submitted work has no confirmed completion");
+@@ -894,6 +928,7 @@
+ }
+ 
+ Expected<void> VulkanDevice::ReadBuffer(BufferHandle handle, std::span<std::byte> out) {
++    SetupPhaseScope setup_phase_scope("ReadBuffer");
+     if (pending_dispatch_)
+         return Fail(ErrorDomain::kDevice, "read buffer",
+                     "earlier submitted work has no confirmed completion");
+@@ -912,6 +947,7 @@
+ 
+ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
+     KernelHandle kernel, std::span<const BufferHandle> buffers, bool* created) {
++    SetupPhaseScope setup_phase_scope("GetOrCreatePipeline");
+     if (created != nullptr) *created = false;
+     PipelineKey key{.kernel = kernel.value, .bindings = {}};
+     key.bindings.reserve(buffers.size());
+@@ -969,8 +1005,8 @@
+             },
+         .layout = pipeline.layout,
+     };
+-    if (const VkResult r = vkCreateComputePipelines(device_, pipeline_cache_, 1, &pipeline_info,
+-                                                    nullptr, &pipeline.pipeline);
++    if (const VkResult r = SetupMeasuredCall("vkCreateComputePipelines", [&] { return vkCreateComputePipelines(device_, pipeline_cache_, 1, &pipeline_info,
++                                                    nullptr, &pipeline.pipeline); });
+         r != VK_SUCCESS) {
+         vkDestroyPipelineLayout(device_, pipeline.layout, nullptr);
+         vkDestroyDescriptorSetLayout(device_, pipeline.set_layout, nullptr);
+@@ -1007,6 +1043,7 @@
+ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> commands,
+                                               DispatchTiming* timing,
+                                               std::uint32_t* pipeline_creations) {
++    SetupPhaseScope setup_phase_scope("DispatchCommands");
+     SIRIUS_PRE(!commands.empty() && commands.size() <= 2);
+     for (const auto& item : commands) {
+         SIRIUS_PRE(item.kernel.value < kernels_.size());
+@@ -1155,12 +1192,12 @@
+         .pCommandBuffers = &command,
+     };
+     const auto submit_start = std::chrono::steady_clock::now();
+-    VkResult submit_result = vkQueueSubmit(queue_, 1, &submit_info, VK_NULL_HANDLE);
++    VkResult submit_result = SetupMeasuredCall("vkQueueSubmit", [&] { return vkQueueSubmit(queue_, 1, &submit_info, VK_NULL_HANDLE); });
+     const VkResult submitted = submit_result;
+     const auto queue_submit_end =
+         timestamp_pool_ != VK_NULL_HANDLE ? std::chrono::steady_clock::now() : submit_start;
+     if (submit_result == VK_SUCCESS) {
+-        submit_result = vkQueueWaitIdle(queue_);
++        submit_result = SetupMeasuredCall("vkQueueWaitIdle", [&] { return vkQueueWaitIdle(queue_); });
+     }
+ 
+     const auto submit_end = std::chrono::steady_clock::now();

@@ -1,0 +1,91 @@
+{
+  "changes": [
+    {
+      "after": "#include <cstdlib>\n#include <cstdio>",
+      "before": "#include <cstdlib>"
+    },
+    {
+      "after": "namespace {\n\n// Diagnostic markers only; no Vulkan call or error handling is reordered.\nstruct SetupPhaseScope {\n    const char* phase;\n    bool has_result = false;\n    int result = 0;\n    static void Print(const char* event, const char* label, bool has_result, int result) {\n        const auto ticks = std::chrono::duration_cast<std::chrono::nanoseconds>(\n            std::chrono::steady_clock::now().time_since_epoch()).count();\n        std::fprintf(stderr, \"[SetupPhase] {\\\"event\\\":\\\"%s\\\",\\\"phase\\\":\\\"%s\\\",\\\"monotonic_ns\\\":%lld,\\\"has_result\\\":%s,\\\"result\\\":%d}\\n\",\n                     event, label, static_cast<long long>(ticks), has_result ? \"true\" : \"false\", result);\n        std::fflush(stderr);\n    }\n    explicit SetupPhaseScope(const char* value) : phase(value) { Print(\"begin\", phase, false, 0); }\n    ~SetupPhaseScope() { Print(\"end\", phase, has_result, result); }\n};\ntemplate <typename Function>\nauto SetupMeasuredCall(const char* phase, Function&& function) {\n    SetupPhaseScope observation(phase);\n    const auto result = function();\n    observation.has_result = true;\n    observation.result = static_cast<int>(result);\n    return result;\n}\n\nusing base::ErrorDomain;",
+      "before": "namespace {\n\nusing base::ErrorDomain;"
+    },
+    {
+      "after": "Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {\n    SetupPhaseScope setup_phase_scope(\"EnumerateVulkanDevices\");",
+      "before": "Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {"
+    },
+    {
+      "after": "Expected<std::size_t> ResolveVulkanDeviceIndex(std::span<const DeviceInfo> devices) {\n    SetupPhaseScope setup_phase_scope(\"ResolveVulkanDeviceIndex\");",
+      "before": "Expected<std::size_t> ResolveVulkanDeviceIndex(std::span<const DeviceInfo> devices) {"
+    },
+    {
+      "after": "Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {\n    SetupPhaseScope setup_phase_scope(\"CreateVulkanDevice\");",
+      "before": "Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {"
+    },
+    {
+      "after": "VulkanDevice::~VulkanDevice() {\n    SetupPhaseScope setup_phase_scope(\"VulkanDevice.destructor\");",
+      "before": "VulkanDevice::~VulkanDevice() {"
+    },
+    {
+      "after": "void VulkanDevice::InitialisePipelineCache() {\n    SetupPhaseScope setup_phase_scope(\"InitialisePipelineCache\");",
+      "before": "void VulkanDevice::InitialisePipelineCache() {"
+    },
+    {
+      "after": "Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> spirv) {\n    SetupPhaseScope setup_phase_scope(\"LoadKernel\");",
+      "before": "Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> spirv) {"
+    },
+    {
+      "after": "Expected<void> VulkanDevice::SetBufferAllocationLimit(std::uint64_t bytes) {\n    SetupPhaseScope setup_phase_scope(\"SetBufferAllocationLimit\");",
+      "before": "Expected<void> VulkanDevice::SetBufferAllocationLimit(std::uint64_t bytes) {"
+    },
+    {
+      "after": "Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, BufferUsage usage) {\n    SetupPhaseScope setup_phase_scope(\"CreateBuffer\");",
+      "before": "Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, BufferUsage usage) {"
+    },
+    {
+      "after": "Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const std::byte> data) {\n    SetupPhaseScope setup_phase_scope(\"WriteBuffer\");",
+      "before": "Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const std::byte> data) {"
+    },
+    {
+      "after": "Expected<void> VulkanDevice::ReadBuffer(BufferHandle handle, std::span<std::byte> out) {\n    SetupPhaseScope setup_phase_scope(\"ReadBuffer\");",
+      "before": "Expected<void> VulkanDevice::ReadBuffer(BufferHandle handle, std::span<std::byte> out) {"
+    },
+    {
+      "after": "    KernelHandle kernel, std::span<const BufferHandle> buffers, bool* created) {\n    SetupPhaseScope setup_phase_scope(\"GetOrCreatePipeline\");",
+      "before": "    KernelHandle kernel, std::span<const BufferHandle> buffers, bool* created) {"
+    },
+    {
+      "after": "                                              std::uint32_t* pipeline_creations) {\n    SetupPhaseScope setup_phase_scope(\"DispatchCommands\");",
+      "before": "                                              std::uint32_t* pipeline_creations) {"
+    },
+    {
+      "after": "SetupMeasuredCall(\"vkCreateShaderModule\", [&] { return vkCreateShaderModule(device_, &create_info, nullptr, &kernel.module); })",
+      "before": "vkCreateShaderModule(device_, &create_info, nullptr, &kernel.module)"
+    },
+    {
+      "after": "SetupMeasuredCall(\"vkCreateComputePipelines\", [&] { return vkCreateComputePipelines(device_, pipeline_cache_, 1, &pipeline_info,\n                                                    nullptr, &pipeline.pipeline); })",
+      "before": "vkCreateComputePipelines(device_, pipeline_cache_, 1, &pipeline_info,\n                                                    nullptr, &pipeline.pipeline)"
+    },
+    {
+      "after": "SetupMeasuredCall(\"vkQueueSubmit\", [&] { return vkQueueSubmit(queue_, 1, &submit_info, VK_NULL_HANDLE); })",
+      "before": "vkQueueSubmit(queue_, 1, &submit_info, VK_NULL_HANDLE)"
+    },
+    {
+      "after": "SetupMeasuredCall(\"vkQueueWaitIdle\", [&] { return vkQueueWaitIdle(queue_); })",
+      "before": "vkQueueWaitIdle(queue_)"
+    },
+    {
+      "after": "SetupMeasuredCall(\"vkDeviceWaitIdle\", [&] { return vkDeviceWaitIdle(device_); })",
+      "before": "vkDeviceWaitIdle(device_)"
+    }
+  ],
+  "instrumented": {
+    "bytes": 58674,
+    "resolved_path": "/home/astra/.project/Sirius/out/p4-parity-setup-diagnostic/instrumented-vulkan_device.cpp",
+    "sha256": "1054e8a5032c3f56a3f85e71d7410eb0f57d886194f7f5e278745c4724f30475"
+  },
+  "original": {
+    "bytes": 56500,
+    "resolved_path": "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp",
+    "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+  },
+  "reverse_transform_recovers_original_exactly": true
+}
