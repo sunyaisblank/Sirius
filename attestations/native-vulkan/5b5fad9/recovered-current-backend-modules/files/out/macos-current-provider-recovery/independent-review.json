@@ -1,0 +1,385 @@
+{
+  "backend": {
+    "bytes": 11560584,
+    "sha256": "682b2ef3c91fe2ea46ab97a18096e509cab5d5eb3805a5b886e63acbe00577ad"
+  },
+  "binding_sidecar": {
+    "bounded_search": {
+      "all_three_owner_snapshots_exclude_later_binding": true,
+      "literal_occurrences": [],
+      "metadata_and_job_log_files": 6,
+      "selected_raw_members": 48
+    },
+    "disposition": "Preserve unrecovered. Existing observations can support a separately labelled reconstruction, but absent originaldigest no constructed bytes can be claimed exactoriginal binding recovery.",
+    "original_digest_found": false,
+    "recovered": false,
+    "source_scope": "macos_moltenvk_provider.py creates binding only afterthree inventory/UUID owners; Mandatory build follows. No subsequent preserved owner freezes it."
+  },
+  "failed_current_input": {
+    "bytes": 3435560,
+    "path": "attestations/qualification/5b5fad9/macos-full-ci-incomplete-38577826600/selected-artifact/Sirius/Sirius/out/macos-moltenvk-integration/observation/current-candidate/inventory/inputs-before.json",
+    "sha256": "da13b286546cbb3fa103b55befad7ffd62f504af79398289841590a94054f769"
+  },
+  "kind": "independent-exact-current-macos-module-recovery-review",
+  "method": "Independent inline standard-library binary/metadata inspection. Original parser/helper never imported/evaluated; no tool/provider/device/test/API execution.",
+  "module_checks": {
+    "all_actual_symbol_section_virtual_address_file_offset_joins": true,
+    "all_allocated_readonly_TEXT_const_sections": true,
+    "all_header_instruction_bounds_counts_and_final_OpFunctionEnd": true,
+    "all_next_symbol_bounds_and_zero_padding": true,
+    "all_original_sidecar_sizes_and_SHA256": true,
+    "disjoint_payload_ranges": true,
+    "distinct_payload_hashes": 28,
+    "exact_file_set_and_backend_slices": true,
+    "modules": [
+      {
+        "bytes": 161620,
+        "file": "retained_owner--kEndpointShader.spv",
+        "file_offset": 8382244,
+        "instructions": 10981,
+        "name": "retained_owner::kEndpointShader",
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+      },
+      {
+        "bytes": 113452,
+        "file": "retained_owner--kTransportShader.spv",
+        "file_offset": 8268792,
+        "instructions": 7820,
+        "name": "retained_owner::kTransportShader",
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+      },
+      {
+        "bytes": 61048,
+        "file": "retained_program--kCameraFp64Shader.spv",
+        "file_offset": 3387936,
+        "instructions": 4315,
+        "name": "retained_program::kCameraFp64Shader",
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+      },
+      {
+        "bytes": 512324,
+        "file": "retained_program--kCameraPortableFp64Shader.spv",
+        "file_offset": 3961308,
+        "instructions": 35484,
+        "name": "retained_program::kCameraPortableFp64Shader",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      },
+      {
+        "bytes": 512324,
+        "file": "retained_program--kCameraPortableShader.spv",
+        "file_offset": 3448984,
+        "instructions": 35484,
+        "name": "retained_program::kCameraPortableShader",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      },
+      {
+        "bytes": 47720,
+        "file": "retained_program--kCameraShader.spv",
+        "file_offset": 3340216,
+        "instructions": 3362,
+        "name": "retained_program::kCameraShader",
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+      },
+      {
+        "bytes": 90628,
+        "file": "retained_program--kDenseFp64Shader.spv",
+        "file_offset": 5436384,
+        "instructions": 6403,
+        "name": "retained_program::kDenseFp64Shader",
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+      },
+      {
+        "bytes": 116204,
+        "file": "retained_program--kDensePortableFp64Shader.spv",
+        "file_offset": 5643216,
+        "instructions": 7907,
+        "name": "retained_program::kDensePortableFp64Shader",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      },
+      {
+        "bytes": 116204,
+        "file": "retained_program--kDensePortableShader.spv",
+        "file_offset": 5527012,
+        "instructions": 7907,
+        "name": "retained_program::kDensePortableShader",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      },
+      {
+        "bytes": 77952,
+        "file": "retained_program--kDenseShader.spv",
+        "file_offset": 5358432,
+        "instructions": 5491,
+        "name": "retained_program::kDenseShader",
+        "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab"
+      },
+      {
+        "bytes": 72100,
+        "file": "retained_program--kDopriPhaseFp64Shader.spv",
+        "file_offset": 7155232,
+        "instructions": 5091,
+        "name": "retained_program::kDopriPhaseFp64Shader",
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+      },
+      {
+        "bytes": 92844,
+        "file": "retained_program--kDopriPhasePortableFp64Shader.spv",
+        "file_offset": 7320176,
+        "instructions": 6473,
+        "name": "retained_program::kDopriPhasePortableFp64Shader",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      },
+      {
+        "bytes": 96752,
+        "file": "retained_program--kDopriPhasePortableNormalSumShader.spv",
+        "file_offset": 7668460,
+        "instructions": 6756,
+        "name": "retained_program::kDopriPhasePortableNormalSumShader",
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+      },
+      {
+        "bytes": 92844,
+        "file": "retained_program--kDopriPhasePortableShader.spv",
+        "file_offset": 7227332,
+        "instructions": 6473,
+        "name": "retained_program::kDopriPhasePortableShader",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      },
+      {
+        "bytes": 58740,
+        "file": "retained_program--kDopriPhaseShader.spv",
+        "file_offset": 7096492,
+        "instructions": 4136,
+        "name": "retained_program::kDopriPhaseShader",
+        "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895"
+      },
+      {
+        "bytes": 97468,
+        "file": "retained_program--kEndpointFmaShader.spv",
+        "file_offset": 8171324,
+        "instructions": 6911,
+        "name": "retained_program::kEndpointFmaShader",
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c"
+      },
+      {
+        "bytes": 111960,
+        "file": "retained_program--kEndpointFp64Shader.spv",
+        "file_offset": 4955784,
+        "instructions": 7947,
+        "name": "retained_program::kEndpointFp64Shader",
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      },
+      {
+        "bytes": 145344,
+        "file": "retained_program--kEndpointPortableFp64Shader.spv",
+        "file_offset": 5213088,
+        "instructions": 9808,
+        "name": "retained_program::kEndpointPortableFp64Shader",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      },
+      {
+        "bytes": 151400,
+        "file": "retained_program--kEndpointPortableNormalSumShader.spv",
+        "file_offset": 7517060,
+        "instructions": 10248,
+        "name": "retained_program::kEndpointPortableNormalSumShader",
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      },
+      {
+        "bytes": 145344,
+        "file": "retained_program--kEndpointPortableShader.spv",
+        "file_offset": 5067744,
+        "instructions": 9808,
+        "name": "retained_program::kEndpointPortableShader",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      },
+      {
+        "bytes": 99300,
+        "file": "retained_program--kEndpointShader.spv",
+        "file_offset": 4856484,
+        "instructions": 7036,
+        "name": "retained_program::kEndpointShader",
+        "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+      },
+      {
+        "bytes": 70468,
+        "file": "retained_program--kInitializeFp64Shader.spv",
+        "file_offset": 5816528,
+        "instructions": 4968,
+        "name": "retained_program::kInitializeFp64Shader",
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+      },
+      {
+        "bytes": 77444,
+        "file": "retained_program--kInitializePortableFp64Shader.spv",
+        "file_offset": 5964440,
+        "instructions": 5376,
+        "name": "retained_program::kInitializePortableFp64Shader",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      },
+      {
+        "bytes": 77444,
+        "file": "retained_program--kInitializePortableShader.spv",
+        "file_offset": 5886996,
+        "instructions": 5376,
+        "name": "retained_program::kInitializePortableShader",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      },
+      {
+        "bytes": 57108,
+        "file": "retained_program--kInitializeShader.spv",
+        "file_offset": 5759420,
+        "instructions": 4013,
+        "name": "retained_program::kInitializeShader",
+        "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a"
+      },
+      {
+        "bytes": 58728,
+        "file": "retained_program--kRayCameraFp64Shader.spv",
+        "file_offset": 6087252,
+        "instructions": 4137,
+        "name": "retained_program::kRayCameraFp64Shader",
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+      },
+      {
+        "bytes": 475256,
+        "file": "retained_program--kRayCameraPortableFp64Shader.spv",
+        "file_offset": 6621236,
+        "instructions": 32844,
+        "name": "retained_program::kRayCameraPortableFp64Shader",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      },
+      {
+        "bytes": 475256,
+        "file": "retained_program--kRayCameraPortableShader.spv",
+        "file_offset": 6145980,
+        "instructions": 32844,
+        "name": "retained_program::kRayCameraPortableShader",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      },
+      {
+        "bytes": 45368,
+        "file": "retained_program--kRayCameraShader.spv",
+        "file_offset": 6041884,
+        "instructions": 3182,
+        "name": "retained_program::kRayCameraShader",
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+      },
+      {
+        "bytes": 83532,
+        "file": "retained_program--kTransportFmaShader.spv",
+        "file_offset": 8087792,
+        "instructions": 5859,
+        "name": "retained_program::kTransportFmaShader",
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8"
+      },
+      {
+        "bytes": 98008,
+        "file": "retained_program--kTransportFp64Shader.spv",
+        "file_offset": 4558996,
+        "instructions": 6894,
+        "name": "retained_program::kTransportFp64Shader",
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      },
+      {
+        "bytes": 99740,
+        "file": "retained_program--kTransportPortableFp64Shader.spv",
+        "file_offset": 4756744,
+        "instructions": 6846,
+        "name": "retained_program::kTransportPortableFp64Shader",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      },
+      {
+        "bytes": 104040,
+        "file": "retained_program--kTransportPortableNormalSumShader.spv",
+        "file_offset": 7413020,
+        "instructions": 7163,
+        "name": "retained_program::kTransportPortableNormalSumShader",
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+      },
+      {
+        "bytes": 99740,
+        "file": "retained_program--kTransportPortableShader.spv",
+        "file_offset": 4657004,
+        "instructions": 6846,
+        "name": "retained_program::kTransportPortableShader",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      },
+      {
+        "bytes": 85364,
+        "file": "retained_program--kTransportShader.spv",
+        "file_offset": 4473632,
+        "instructions": 5984,
+        "name": "retained_program::kTransportShader",
+        "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+      }
+    ],
+    "named_modules": 35,
+    "semantic_validation_claimed": false,
+    "total_named_payload_bytes": 4881068
+  },
+  "original_build_archive": {
+    "api": {
+      "bytes": 746,
+      "path": "attestations/native-vulkan/build-domains-5b5fad9/verification/macos-artifact-api.json",
+      "sha256": "991869525fcca84ef60d3c1de2a1c73110a9bb60001464e134e6038644328239"
+    },
+    "archive": {
+      "bytes": 57718944,
+      "sha256": "fab6f99bd9a11b2e042b5d5f32d52e6cc25937e2aadcfe2077f35a4e4d9bb32a"
+    },
+    "artifact_id": 11901712901,
+    "bundle": "attestations/native-vulkan/build-domains-5b5fad9",
+    "evidence_commit": "939916066066dfc16ff21171f791c48ae1792f72",
+    "manifest": {
+      "bytes": 3733,
+      "path": "attestations/native-vulkan/build-domains-5b5fad9/manifest.json",
+      "sha256": "4e7a0c6d2cab6981679300951a0e7d90d5ae10349aca62950dd9f52e18bc47d0"
+    },
+    "member_count": 40,
+    "parts": [
+      {
+        "bytes": 33554432,
+        "path": "attestations/native-vulkan/build-domains-5b5fad9/macos.zip.parts/part-000",
+        "sha256": "eb9192064fa653d4ff009cc48daaa689ef984c06018c39cbc57b705d3343d9a0"
+      },
+      {
+        "bytes": 24164512,
+        "path": "attestations/native-vulkan/build-domains-5b5fad9/macos.zip.parts/part-001",
+        "sha256": "b23cbebf74bca2f177da1ccb52bc3f00a4e9ac505cc9cb21af7df7ef283d7c6a"
+      }
+    ],
+    "run_id": 38577826600,
+    "tag": "evidence/issue-48-native-build-domains-5b5fad9",
+    "whole_archive_matches_preserved_API_digest": true,
+    "whole_archive_parts_and_small_source_records_match_immutable_Git": true
+  },
+  "passed": true,
+  "passed_meaning": "Recovery identity and bounded framing audit pass, not runtime/scientific qualification.",
+  "review_provenance": "Reviewer prepared backend archive extraction; root separately produced module recovery. Independent of module-parser execution, not independent of backend-recovery packet authorship.",
+  "root_recovery_receipts": {
+    "module-sidecar-recovery.json": {
+      "bytes": 17770,
+      "sha256": "2c523b292cd56af9636413f2555673aa49eb392c9cb8e2b45715b073bb8d0a86"
+    },
+    "recovery.json": {
+      "bytes": 4340,
+      "sha256": "42ea494384c0451847be9013c9b8334082ba4feed2b24989f642f67c836e2a1a"
+    }
+  },
+  "runner_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "schema_version": 1,
+  "scope": "Exact current5b5 producer and35originalmodulebytes plus original module-sidecar identity recovered. No new pipeline/shader/numerical/render execution or fullMandatory/native/domain/release qualification; original timeout/incompleteCI unchanged.",
+  "sidecar": {
+    "all_three_identity_owner_snapshots": true,
+    "bytes": 16451,
+    "exact_original_before_after_digest_matches": true,
+    "original_parser_AST_segment": {
+      "bytes": 8050,
+      "sha256": "2d2a19fcb67aa9ea614bc368354a8a265fff025481316cdc5b61cf198cf021dc"
+    },
+    "original_parser_source_equal_5b5_Git": true,
+    "path": "native-provider-modules.json",
+    "sha256": "c020b4c7b2e74979a2a094a9eaa7e0bd3afbaa839ffbf0bb125bf52d36acfef0"
+  },
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405"
+}

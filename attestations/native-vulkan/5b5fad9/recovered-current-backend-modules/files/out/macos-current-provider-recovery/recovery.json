@@ -1,0 +1,87 @@
+{
+  "export": {
+    "api": {
+      "bytes": 746,
+      "path": "attestations/native-vulkan/build-domains-5b5fad9/verification/macos-artifact-api.json",
+      "sha256": "991869525fcca84ef60d3c1de2a1c73110a9bb60001464e134e6038644328239"
+    },
+    "archive": {
+      "bytes": 57718944,
+      "sha256": "fab6f99bd9a11b2e042b5d5f32d52e6cc25937e2aadcfe2077f35a4e4d9bb32a"
+    },
+    "artifact_id": 11901712901,
+    "bundle": "attestations/native-vulkan/build-domains-5b5fad9",
+    "evidence_commit": "939916066066dfc16ff21171f791c48ae1792f72",
+    "manifest": {
+      "bytes": 3733,
+      "path": "attestations/native-vulkan/build-domains-5b5fad9/manifest.json",
+      "sha256": "4e7a0c6d2cab6981679300951a0e7d90d5ae10349aca62950dd9f52e18bc47d0"
+    },
+    "member_count": 40,
+    "parts": [
+      {
+        "bytes": 33554432,
+        "path": "attestations/native-vulkan/build-domains-5b5fad9/macos.zip.parts/part-000",
+        "sha256": "eb9192064fa653d4ff009cc48daaa689ef984c06018c39cbc57b705d3343d9a0"
+      },
+      {
+        "bytes": 24164512,
+        "path": "attestations/native-vulkan/build-domains-5b5fad9/macos.zip.parts/part-001",
+        "sha256": "b23cbebf74bca2f177da1ccb52bc3f00a4e9ac505cc9cb21af7df7ef283d7c6a"
+      }
+    ],
+    "run_id": 38577826600,
+    "tag": "evidence/issue-48-native-build-domains-5b5fad9",
+    "whole_archive_matches_preserved_API_digest": true,
+    "whole_archive_parts_and_small_source_records_match_immutable_Git": true
+  },
+  "failed_run_join": {
+    "artifact_id": 11924968602,
+    "evidence_commit": "9413c9f9c24a8ca22c280f105a98d73deb8e62f3",
+    "job_id": 115899499765,
+    "matching_scope": "Exact full backend bytes match failed-current-candidate inventory owner seal; this is legitimate byte reuse across two jobs of identical source, not new execution.",
+    "owner_input_snapshot": {
+      "bytes": 3435560,
+      "path": "attestations/qualification/5b5fad9/macos-full-ci-incomplete-38577826600/selected-artifact/Sirius/Sirius/out/macos-moltenvk-integration/observation/current-candidate/inventory/inputs-before.json",
+      "sha256": "da13b286546cbb3fa103b55befad7ffd62f504af79398289841590a94054f769"
+    },
+    "owner_recorded_identity": {
+      "bytes": 11560584,
+      "sha256": "682b2ef3c91fe2ea46ab97a18096e509cab5d5eb3805a5b886e63acbe00577ad"
+    },
+    "owner_recorded_path": "/Users/runner/work/Sirius/Sirius/bin/macos/tests/backend/sirius_backend_tests",
+    "run_id": 38577826600,
+    "snapshot_matches_immutable_Git": true,
+    "tag": "evidence/issue-48-macos-full-ci-incomplete-38577826600"
+  },
+  "limits": "Build-only export admission is unchanged. Original300s macOS render timeout and incompleteMandatory burn-in remain. No runtime/native-window/full-domain or scientific qualification claim; oldCI raw and proposal left unchanged.",
+  "modules": {
+    "binding_sidecar_recovered": false,
+    "expected_missing_module_sidecar": {
+      "bytes": 16451,
+      "sha256": "c020b4c7b2e74979a2a094a9eaa7e0bd3afbaa839ffbf0bb125bf52d36acfef0"
+    },
+    "module_sidecar_recovered": false,
+    "raw_35_module_bytes": "Preserved within byte-identical backend MachO; existing strictmacho_modules parser has not been executed by this recovery. Root may later recover35 payloads with file-offset/SHA metadata.",
+    "reason": "Neither sidecar is an export member; no deterministic reconstruction claimed without full expected hash match."
+  },
+  "qualification_claimed": false,
+  "recovered": {
+    "archive_member": {
+      "CRC32": 2731728723,
+      "bytes": 11560584,
+      "compressed_bytes": 4068705,
+      "external_attr": 2179792928,
+      "name": "native-build-tested-sirius_backend_tests",
+      "sha256": "682b2ef3c91fe2ea46ab97a18096e509cab5d5eb3805a5b886e63acbe00577ad"
+    },
+    "bytes": 11560584,
+    "path": "sirius_backend_tests",
+    "sha256": "682b2ef3c91fe2ea46ab97a18096e509cab5d5eb3805a5b886e63acbe00577ad"
+  },
+  "runner_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "schema_version": 1,
+  "scope": "Archive extraction and byte/hash comparison only; no helper/parser/product/device/compiler/validator/test/API execution. Backend is data-only mode0600 under private ignoredout root.",
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "status": "EXACT_FAILED_CURRENT_BACKEND_BYTES_RECOVERED_FROM_IMMUTABLE_MATCHING_NATIVE_BUILD_EXPORT"
+}
