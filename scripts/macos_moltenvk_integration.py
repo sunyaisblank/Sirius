@@ -527,7 +527,8 @@ def main():
         require(len(header) == 32 and struct.unpack("<8I", header)[:2] == (0xFEEDFACF, 0x0100000C)
                 and struct.unpack("<8I", header)[3] == 6, "expected thin arm64 Mach-O dylib")
         generated = (build / "MoltenVK/mvkGitRevDerived.h").read_bytes()
-        expected_header = (payload / "sources/moltenvk-patched/Templates/cmake/mvkGitRevDerived.h.in").read_bytes().replace(b"@MVK_GIT_REV@", CONTENT_ID.encode())
+        # CMake text configuration emits a final LF even when the template has none.
+        expected_header = (payload / "sources/moltenvk-patched/Templates/cmake/mvkGitRevDerived.h.in").read_bytes().replace(b"@MVK_GIT_REV@", CONTENT_ID.encode()) + b"\n"
         require(generated == expected_header,
                 "generated legacy revision field does not contain the declared diagnostic discriminator")
         icd = output / "MoltenVK-diagnostic_icd.json"
