@@ -1,0 +1,63 @@
+{
+  "schema": "sirius-read-only-native-loader-metadata/v1",
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "method": "Read-only Python struct parsing of actual Mach-O bytes; no native executable, compiler, provider, test or CI was launched.",
+  "application": {
+    "input": "out/native-provider-integration/build-domains/macos/qualification-sirius.bin",
+    "recovery_commit": "939916066066dfc16ff21171f791c48ae1792f72",
+    "recovery_bundle": "attestations/native-vulkan/build-domains-5b5fad9",
+    "bytes": 8356520,
+    "sha256": "26c44aa9fe218031ae2552e32f0e31d2ed7bfe4353816e649c9aba95aa74cc44",
+    "source_receipt_joins": ["macos-build.json: source_revision and claims.qualification_executable", "native_build_gate.json: clean source revision and product_artifacts.sirius", "alignment_receipt.json: source_revision"],
+    "format": "thin little-endian Mach-O 64",
+    "architecture": "arm64",
+    "cpu_subtype": 0,
+    "filetype": 2,
+    "build_version": {"platform": "macOS", "minimum": "15.0.0", "sdk": "15.5.0"},
+    "vulkan_load_dylib": {"name": "@rpath/libvulkan.1.dylib", "current_version": "1.4.0", "compatibility_version": "1.0.0"},
+    "rpaths": ["/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib"],
+    "other_load_dylibs_scope": "Absolute OS frameworks and system dylibs only",
+    "code_signature_command": {"offset": 8291600, "bytes": 64920, "blob_sha256": "6a2cc80e1eca2b68c90c438ae06d9ae03f3b29a3f24b03e1be90690764846cad"}
+  },
+  "corrected_moltenvk": {
+    "input_archive": "out/macos-moltenvk-integration/native-38567408322.zip",
+    "member": "bin/macos/macos-moltenvk-integration/MoltenVK/libMoltenVK.1.4.1.dylib",
+    "recovery_commit_prefix": "b4c6c37",
+    "recovery_bundle": "attestations/native-vulkan/4bcd987/macos-custom-provider-four-controls",
+    "bytes": 5038480,
+    "sha256": "cb81f199aead4872d04fedd80ffc8cb9b6c6cd26b75b058fde66ec8b29fcd26a",
+    "format": "thin little-endian Mach-O 64",
+    "architecture": "arm64",
+    "cpu_subtype": 0,
+    "filetype": 6,
+    "build_version": {"platform": "macOS", "minimum": "11.0.0", "sdk": "15.5.0"},
+    "id_dylib": {"name": "@rpath/libMoltenVK.1.dylib", "current_version": "1.4.1", "compatibility_version": "1.0.0"},
+    "rpaths": [],
+    "load_dylibs_scope": "Absolute OS frameworks and system dylibs only",
+    "code_signature_command": {"offset": 4999280, "bytes": 39200, "blob_sha256": "9cfb06a86065c4920764e7da4c4250c6620a906666f10e888ec7417891ed9f63"},
+    "archive_sdk_loader_members": [],
+    "archive_moltenvk_dylib_members": ["libMoltenVK.1.4.1.dylib", "libMoltenVK.1.dylib", "libMoltenVK.dylib"]
+  },
+  "scope_decision": {
+    "kind": "Source-grounded reviewer conclusion, not an executed installed-runtime verdict",
+    "sdk_free_self_contained_install_required_by_reviewed_contract": false,
+    "external_configured_vulkan_dependency_permitted": true,
+    "contract_sources": ["README.md:65", "README.md:76", "README.md:78-96", "docs/ATTESTATION.md: native runtime and install/readiness contracts", "cmake/sirius_install.cmake", "cmake/verify_sirius_install.cmake.in"],
+    "correction": "Bundling a loader, ICD and corrected provider is an optional distribution design, not an established extra admission gate. The earlier required-bundling suggestion is withdrawn.",
+    "actual_linkage_limit": "The executable has an absolute SDK RPATH and no executable-relative RPATH. Merely placing a loader beside a relocated executable does not establish its selection.",
+    "minimal_adequate_route": "Documented reusable explicit external loader/provider activation, followed by real strict relocated installed readiness/render/view evidence with unchanged product bytes and all original gates. DYLD_LIBRARY_PATH and VK_DRIVER_FILES are the existing activation mechanism; this is not default standalone behavior.",
+    "closed_product_sets_need_expansion_for_this_route": false,
+    "post_gate_binary_rewriting_needed_for_this_route": false,
+    "existing_install_witness_limit": "The existing relocated OperationalVolume witness preserves parent environment and exercises readiness/capabilities plus the original CPU Minkowski image; it is not an installed GPU witness.",
+    "native_installed_gpu_readiness_render_view_witness_executed_by_this_review": false
+  },
+  "limitations": [
+    "No actual SDK libvulkan loader bytes were present in the inspected four-control ZIP; its Mach-O commands, architecture and signature were not inferred.",
+    "LC_CODE_SIGNATURE command/blob presence is not signature trust or validity verification.",
+    "Actual selection and loaded-path continuity for a relocated installed run remain to be witnessed under the declared external dependencies.",
+    "The current native CI remains a separate running operation; this review grants no qualification or packaging promotion."
+  ],
+  "input_release": "Read-only inspection complete. No future dependency from this subtask on build-domains/macos or the live four-control ZIP.",
+  "tracked_changes": false,
+  "jobs_launched": false
+}
