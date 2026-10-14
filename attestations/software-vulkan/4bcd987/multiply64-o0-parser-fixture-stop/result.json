@@ -1,0 +1,67 @@
+{
+  "cause": "Fixture mutation once() uses substring counting: uint_21 also prefixes uint_2143289344; complete native O0 PB32Multiply contains both. Parser shapes were not invoked.",
+  "complete_profile_admitted": false,
+  "correction_required": "Bound substitutions to complete exact instruction lines including newline; preserve this failed attempt first. No shader/producer/numerical rerun authorized by this receipt.",
+  "exact_instruction_line_count": 1,
+  "fixture_pin": {
+    "bytes": 171658,
+    "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/bin/linux-gcc/portable-multiply64-controls/analysis/candidate/retained_camera_fp64.spvasm",
+    "sha256": "3252f74eb8bff7c5284d43cb5e03606b0d9ba790a3a0b6307e33a0d799a1b7bc"
+  },
+  "literal_substring_count": 2,
+  "literal_substring_matching_lines": [
+    "               OpStore %shift %uint_2143289344",
+    "               OpStore %shift %uint_21"
+  ],
+  "owners": {
+    "check-o0-reader": {
+      "child_exit": 1,
+      "cleanup_errors": [],
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 365437,
+          "saved_start_ticks": "5729593"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 365438,
+          "saved_start_ticks": "5729667"
+        }
+      ],
+      "passed": false,
+      "peak_sampled_rss_kib": 74804,
+      "remaining_owned_processes": [],
+      "source_unchanged": true,
+      "stop_reason": null,
+      "wall_seconds": 1.0483298339968314,
+      "whole_inputs_unchanged": true
+    },
+    "reuse-completed-products": {
+      "child_exit": 0,
+      "cleanup_errors": [],
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 365398,
+          "saved_start_ticks": "5728880"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 61400,
+      "remaining_owned_processes": [],
+      "source_unchanged": true,
+      "stop_reason": null,
+      "wall_seconds": 5.165452320994518,
+      "whole_inputs_unchanged": true
+    }
+  },
+  "passed": false,
+  "producer_or_numerical_controls_executed": false,
+  "qualification_claimed": false,
+  "schema": "sirius-multiply64-o0-parser-fixture-stop-v1",
+  "stopped_phase": "check-o0-reader"
+}

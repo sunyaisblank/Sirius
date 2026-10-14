@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0/parser_controls.py", line 26, in <module>
+    swapped = once(body, 'OpStore %shift %uint_21', 'OpStore %shift %uint_20')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0/parser_controls.py", line 19, in once
+    assert text.count(old) == 1, old
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: OpStore %shift %uint_21
+Traceback (most recent call last):
+  File "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0/gate.py", line 427, in <module>
+    if sys.argv[1] == 'phase': phase(sys.argv[2])
+                               ^^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0/gate.py", line 373, in phase
+    for argv in P['recipes'][label]: subprocess.run(argv, cwd=R, check=True)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/usr/bin/python3', '-B', '/home/astra/.project/Sirius/out/portable-multiply64-controls-o0/parser_controls.py']' returned non-zero exit status 1.

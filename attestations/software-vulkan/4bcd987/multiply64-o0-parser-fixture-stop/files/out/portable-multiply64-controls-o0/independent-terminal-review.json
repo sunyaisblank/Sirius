@@ -1,0 +1,65 @@
+{
+  "schema": "sirius-multiply64-o0-parser-stop-independent-terminal-review-v1",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "passed": true,
+  "meaning": "Audit of an actual stopped packet, not candidate or numerical acceptance.",
+  "source_admission_failed_in_execution": true,
+  "earlier_source_pass_preserved_without_edit": true,
+  "reviewer_missed_token_prefix_collision_in_source_admission": true,
+  "cause": {
+    "stage": "check-o0-reader",
+    "source": "parser_controls.py:26",
+    "assertion": "once() requires text.count(old) == 1",
+    "needle": "OpStore %shift %uint_21",
+    "actual_substring_count": 2,
+    "exact_instruction_count": 1,
+    "matching_instructions": [
+      "OpStore %shift %uint_2143289344",
+      "OpStore %shift %uint_21"
+    ],
+    "explanation": "The raw substring matches both the earlier special-case NaN return constant and the intended 21-bit distance store. Fixture construction aborts before the control loop or any multiply_shape call. The same unbounded needle at line 37 would require correction in a fresh packet too.",
+    "immutable_fixture_sha256": "3252f74eb8bff7c5284d43cb5e03606b0d9ba790a3a0b6307e33a0d799a1b7bc"
+  },
+  "terminal_owners": 2,
+  "observed_births_retired": 3,
+  "owners": {
+    "reuse-completed-products": {
+      "passed": true,
+      "child_exit": 0,
+      "retired_births": 1,
+      "source_unchanged": true,
+      "whole_inputs_unchanged": true,
+      "copied_products": 78,
+      "sealed_outputs": 79,
+      "current_output_seal_mismatches": 0,
+      "owner_sha256": "23b4cda1c924293e456fa44d47fe47f099cbcf7c98069fbb9393043920782f4b",
+      "output_seal_sha256": "9fbe7db718cbd2d6ab0a2848594386b26e6964e26581cd76a222689c23b6894b"
+    },
+    "check-o0-reader": {
+      "passed": false,
+      "child_exit": 1,
+      "retired_births": 2,
+      "source_unchanged": true,
+      "whole_inputs_unchanged": true,
+      "owner_sha256": "86961a9ba72375a34c9749e20b4468f8cc47ca3faa7f6a3ccf130018fc167b10",
+      "stderr_sha256": "eaf7f75253415de8d80b486effc1eaef3ebc3e1cc7390d2ff2675912e24690dd"
+    }
+  },
+  "both_input_before_after_records_equal": true,
+  "both_stop_reasons_null": true,
+  "both_cleanup_errors_empty": true,
+  "both_remaining_owned_processes_empty": true,
+  "parser_controls_result_absent": true,
+  "multiply_shape_controls_executed": false,
+  "complete_profile_owner_absent": true,
+  "producer_owner_absent": true,
+  "runtime_context_absent": true,
+  "numerical_controls_executed": false,
+  "no_shader_product_or_numerical_defect_established": true,
+  "earlier_source_review": {
+    "bytes": 3055,
+    "sha256": "7bd0dd5f597e2b1a9b947437d4cbec536aa5ae33edca67b2e0ef83732668d4ac"
+  },
+  "consumed_packet_unchanged_by_reviewer": true,
+  "no_helper_compiler_validator_build_test_or_device_execution_by_reviewer": true
+}
