@@ -1,0 +1,786 @@
+{
+  "prepared_utc": "2026-10-14T11:32:56.463521+00:00",
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "diagnostic_only_difference": [
+    ".github/workflows/ci.yml",
+    "scripts/diagnose-macos-retained.py",
+    "scripts/governance/build_policy.py",
+    "scripts/macos_metal_probe.py",
+    "scripts/macos_moltenvk_integration.py",
+    "scripts/macos_vulkan_identity.py"
+  ],
+  "executed": false,
+  "expected_names": [
+    "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+    "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+    "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge"
+  ],
+  "scope": "Three original finite CPU Page-Thorne oracle controls only; no device/frame, independent ISCO claim, full P4/science/Mandatory or release qualification.",
+  "finite_acceptance_scope": {
+    "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature": {
+      "spins": [
+        -0.7,
+        0.0,
+        0.9
+      ],
+      "radius_over_isco": [
+        1.05,
+        1.2,
+        2.0,
+        4.0
+      ],
+      "reference_radius_over_isco": 1.5,
+      "sample_pairs": 12,
+      "assertions": "Positive reference temperature; original EXPECT_NEAR(production/oracle,1,2e-5) for normalized temperatures.",
+      "independence_limit": "Reference inner edge uses production ComputeIsco(spin); independence concerns flux integration conditional on that edge, not an independent ISCO oracle."
+    },
+    "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge": {
+      "spin": 0.0,
+      "inner_radius": 10.0,
+      "outer_radius": 100.0,
+      "reference_radius": 15.0,
+      "radius_over_inner": [
+        1.05,
+        1.2,
+        2.0,
+        4.0
+      ],
+      "assertions": "Original exact InnerRadius=10 and zero Flux at10 and10*1.001; positive reference temperature; normalized-temperature ratio within2e-5 against independently integrated flux with literal inner edge10."
+    },
+    "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff": {
+      "outer_radius": 100000.0,
+      "flux_radii": [
+        10000.0,
+        20000.0
+      ],
+      "assertions": "Both fluxes positive; original EXPECT_NEAR(inner_flux/outer_flux,8,0.2); finite two-radius tail check only."
+    }
+  },
+  "ledger_scope": {
+    "criterion": "P4",
+    "selected_original_names": [
+      "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+      "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+      "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge"
+    ],
+    "selected_count": 3,
+    "other_completed_controls_repeated": false
+  },
+  "reference": {
+    "original_source_snapshots": {
+      "tests/oracle/analytic_benchmarks_test.cpp": {
+        "bytes": 13189,
+        "sha256": "b3824e58c34cdce54973f958e1cdb6fb7647102fbc61d2eb8942ef9a3dd46af4",
+        "git_blob": "6fde5643a550a466007a49ac5ffe0f51460f19ee"
+      },
+      "src/sirius/core/disk/novikov_thorne_disk.h": {
+        "bytes": 16284,
+        "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f",
+        "git_blob": "75941e077426512c0bf86f33e644937eeaedb45b"
+      },
+      "src/sirius/core/disk/disk_model.h": {
+        "bytes": 2876,
+        "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6",
+        "git_blob": "0340ef7434d0434618966f646b6e536d04d18bb1"
+      },
+      "src/sirius/core/constants.h": {
+        "bytes": 8558,
+        "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37",
+        "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469"
+      },
+      "src/sirius/core/coordinates.h": {
+        "bytes": 19636,
+        "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5",
+        "git_blob": "5a0143f40cee45c22cff55814e72efb42c4081f2"
+      },
+      "src/sirius/core/kerr_orbits.h": {
+        "bytes": 3107,
+        "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe",
+        "git_blob": "ce4e906fd865922642e6fa8bb6108be169ddd7a5"
+      },
+      "src/sirius/core/spectral/spectral_radiance.h": {
+        "bytes": 5757,
+        "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664",
+        "git_blob": "5a9626f468489a55febfb9a078f3fe5718e0e0f5"
+      },
+      "src/sirius/oracle/beam_integrator.h": {
+        "bytes": 13981,
+        "sha256": "6115e6923d6f760d021bacb4b108bd45238f85de8d748733a7003c2fc81c2d68",
+        "git_blob": "3e0a2426ce363f44a9e450cc889141b01d1c4931"
+      },
+      "src/sirius/oracle/kerr_boyer_lindquist.h": {
+        "bytes": 30350,
+        "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe",
+        "git_blob": "af37af15f0210ce8c3e7ce2374135cabfd388287"
+      },
+      "tests/oracle/CMakeLists.txt": {
+        "bytes": 867,
+        "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6",
+        "git_blob": "14b0dfd43cfcf8271c4eee0f66206c58ba88aa1f"
+      },
+      "tests/operating_model.json": {
+        "bytes": 130331,
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b",
+        "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95"
+      },
+      "tests/labels/CTestLabels.cmake": {
+        "bytes": 78306,
+        "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14",
+        "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7"
+      },
+      "tests/support/fail_on_skip.h": {
+        "bytes": 427,
+        "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e",
+        "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf"
+      }
+    },
+    "independent_flux_reference": "Original checked-in Page & Thorne1974 Eqs11b/15n flux shape q(r)/r,32768-panel midpoint quadrature with independent circular E,L,Omega and five-point finite differences at h=1e-4*r; production uses16-point Gauss-Legendre and analytic derivatives.",
+    "scope_boundary": "Finite normalized-temperature comparisons; shared production ISCO in the default-edge helper, literal inner edge10 in the truncated helper. No new reference implementation, threshold, all-spin/radius proof or absolute physical luminosity claim.",
+    "historical_execution": {
+      "xml": "attestations/scientific-core/5e70607/final-integrated-cpu.xml",
+      "identity": "attestations/scientific-core/5e70607/final-build-identity-5e70607.json",
+      "revision": "5e706073a3fd2f9afcf8efbcde2f094122050f6a",
+      "oracle_producer_sha256": "a0c82a309ae6f3005a60fd820c86bdb0e03924869cb5f330e54ed978fb171f4d",
+      "selected_old_passes": [
+        {
+          "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+          "classname": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+          "time": "0.0252064",
+          "status": "run"
+        },
+        {
+          "name": "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+          "classname": "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+          "time": "0.00324539",
+          "status": "run"
+        }
+      ],
+      "reuse_boundary": "Two selected names pass historically on a different oracle ELF; the truncated-edge name is absent from this historical XML. No matching-current selected execution found in the bounded reviewed bundles; no historical result relabelled."
+    }
+  },
+  "source_and_registration_join": {
+    "test_sources": [
+      "tests/oracle/analytic_benchmarks_test.cpp"
+    ],
+    "production_headers": [
+      "src/sirius/core/disk/novikov_thorne_disk.h",
+      "src/sirius/core/disk/disk_model.h",
+      "src/sirius/core/constants.h",
+      "src/sirius/core/coordinates.h",
+      "src/sirius/core/kerr_orbits.h",
+      "src/sirius/core/spectral/spectral_radiance.h",
+      "src/sirius/oracle/beam_integrator.h",
+      "src/sirius/oracle/kerr_boyer_lindquist.h"
+    ],
+    "oracle_producer": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    "oracle_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4",
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_WERROR": "ON",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "CMAKE_CXX_COMPILER": "g++-14"
+    },
+    "original_compile_commands": [
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/src/sirius/oracle/../.. -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o -c /home/astra/.project/Sirius/tests/oracle/analytic_benchmarks_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/oracle/analytic_benchmarks_test.cpp",
+        "output": "tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o"
+      }
+    ],
+    "original_link_ninja_lines": [
+      "build tests/oracle/sirius_oracle_tests tests/oracle/sirius_oracle_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/oracle/sirius_oracle_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_oracle_tests_Release tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+    ],
+    "registrations": [
+      {
+        "name": "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+        "source": "tests/oracle/analytic_benchmarks_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "add_test": "add_test([=[AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests"
+      },
+      {
+        "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+        "source": "tests/oracle/analytic_benchmarks_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "add_test": "add_test([=[AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests"
+      },
+      {
+        "name": "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+        "source": "tests/oracle/analytic_benchmarks_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "add_test": "add_test([=[AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests"
+      }
+    ],
+    "selected_oracle_cases": 3,
+    "original_test_TIMEOUT_added": false
+  },
+  "owner_reuse": {
+    "archive": "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source",
+    "manifest_sha256": "982dbd299ab2ae9ef6ff5f9fd88d7c93efd0aef26e90c009b4392026479ea872",
+    "run_owned.py": {
+      "source": "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/run_owned.py",
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "owned_guard.py": {
+      "source": "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    }
+  },
+  "private_tmpdir": {
+    "path": "/home/astra/.project/Sirius/out/science-p4-page-thorne/temporary",
+    "created_only_at_execution": true,
+    "mode": "0700",
+    "owner_uid": 1000,
+    "preserve_natural_residuals": true
+  },
+  "pins": {
+    "bin/linux-gcc/src/sirius/app/sirius_render_tests": {
+      "bytes": 12208240,
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "bin/linux-gcc/src/sirius/app/sirius": {
+      "bytes": 9725048,
+      "sha256": "eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4": {
+      "bytes": 12208240,
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76": {
+      "bytes": 9725048,
+      "sha256": "eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.cu": {
+      "bytes": 316063,
+      "sha256": "e8460dbe10346d5cf457a533c7126707b87cbd108f43c7a8f2fb6e92f5e8fd8d"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.metal": {
+      "bytes": 338766,
+      "sha256": "879d15908e66449f789652f40a329b731bebc65dca396659b636cf834943df06"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/model/alignment_receipt.json": {
+      "bytes": 1808,
+      "sha256": "cbeb56fdcb0223f8d5d9c5696870d7a014b216e1aa68fc5ef394e733933bd077"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/model/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.frag": {
+      "bytes": 2386,
+      "sha256": "58f4438f27fcb647f86ce9fbb8e875e6bee0fbea20768ee6e289e952da0b51ec"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.frag": {
+      "bytes": 3799,
+      "sha256": "bee2ff8435f1d25ce111d6da0623975acf74205511ebce81df011d61d1ab0536"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.vert": {
+      "bytes": 577,
+      "sha256": "08467d1bc78904fe7512245db7e2912caf132d5de250955b0719f4f51c94a039"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+    },
+    "bin/linux-gcc/CMakeCache.txt": {
+      "bytes": 60385,
+      "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02"
+    },
+    "bin/linux-gcc/build.ninja": {
+      "bytes": 488537,
+      "sha256": "f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f"
+    },
+    "bin/linux-gcc/compile_commands.json": {
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake": {
+      "bytes": 134265,
+      "sha256": "157b9df6c3b6bced6f5d42a67806a4e93e0526c45f493e1008175fb8d0c76ebe"
+    },
+    "attestations/fresh-session-review/4bcd987/2026-10-14/review.json": {
+      "bytes": 512329,
+      "sha256": "04831bdcef151ffd0a9c53947f4e25b4633af103c4dac8704608723715eaf01f"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json": {
+      "bytes": 28646,
+      "sha256": "ace3fa3984d49fcabadd2d9ece5b0a40933b696d380ae09a023cb0f95f7765d2"
+    },
+    "/usr/bin/ctest": {
+      "bytes": 13276728,
+      "sha256": "45c60ab2448411a4f49a0bdb6cf5800fedbf0293048e3c82710a34190c7d1ef4"
+    },
+    "/usr/bin/python3.12": {
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "bin/linux-gcc/CTestTestfile.cmake": {
+      "bytes": 411,
+      "sha256": "3afbe7a27fed80e401348743ad8b0a979beca9d23152704bd498ec8273c67c8d"
+    },
+    "bin/linux-gcc/tests/CTestTestfile.cmake": {
+      "bytes": 7167,
+      "sha256": "030c9e1128bb179c6ee1e46c910eeb5873b6e3f9fbe082aa4ef29dfbfa70133f"
+    },
+    "bin/linux-gcc/src/sirius/CTestTestfile.cmake": {
+      "bytes": 389,
+      "sha256": "b149af5bdc0a12120a46632cd43a376193a27e83fbd78d715706892a447c8104"
+    },
+    "bin/linux-gcc/src/sirius/render/CTestTestfile.cmake": {
+      "bytes": 317,
+      "sha256": "740e83e7fb5b44013aec48d89fdadd3a33e6f1e4aadfadc8b0d59f60a155def0"
+    },
+    "bin/linux-gcc/src/sirius/app/CTestTestfile.cmake": {
+      "bytes": 340,
+      "sha256": "d08fbf2024fef0171e96de33b8abec6e0c860d0be4f6848407b6ecdfdf746714"
+    },
+    "bin/linux-gcc/src/sirius/backend/CTestTestfile.cmake": {
+      "bytes": 319,
+      "sha256": "f7ff23433f08a5d5c10a72713551c41f5778d65e753fbf6d50e3f1759d350afd"
+    },
+    "bin/linux-gcc/src/sirius/core/CTestTestfile.cmake": {
+      "bytes": 313,
+      "sha256": "e1cd689dfd50887059c92afbbb76f5f027db230455ec13dc26a80b516bcc434f"
+    },
+    "bin/linux-gcc/src/sirius/oracle/CTestTestfile.cmake": {
+      "bytes": 317,
+      "sha256": "083db7e6ecf611dbe410fa593e3ebbe302e3b29425ddc74b78443a2be48c5d29"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/CTestTestfile.cmake": {
+      "bytes": 479,
+      "sha256": "857b786ef4bbcf70de18b064281334cdc1b2400d49e9ba41e0cadfe91bd2c6eb"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/test/CTestTestfile.cmake": {
+      "bytes": 398,
+      "sha256": "cfdf7a649a9f8e904833a9c90effb5f9c296ec637622e2fe63d98a7931233564"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/CTestTestfile.cmake": {
+      "bytes": 431,
+      "sha256": "7298c33e7c27e203adac56acd29190d66d06c3cfc2e76f0da86a906d731ce561"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/CTestTestfile.cmake": {
+      "bytes": 499,
+      "sha256": "90938cddd38ce4c3333bc409970c4f9e27e41cd99586e50b4da31aaeefa71044"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/CTestTestfile.cmake": {
+      "bytes": 406,
+      "sha256": "80c49d1e9a3f8425382003a37cec9894a5222dd59ec265c21e7c87c92b1d29e4"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/CTestTestfile.cmake": {
+      "bytes": 437,
+      "sha256": "7d8dfe9c0a2383d7f04a82f7a0d12b54d4ec1adecf2c7699b491feb61fcac7a3"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/cpp-interface/CTestTestfile.cmake": {
+      "bytes": 434,
+      "sha256": "248abbc764d696619e7bd5c029c18dbf026e76458b4adaadb7a9381c1a75a90b"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/lint/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "90d23161c75e2f0fbbd6f16cc21db24656df24c6ab208cfd456c3cb31e66c1ad"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/fuzz/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "6bfac4dbbfd63a0d3498fa51c063732124d7b543a61404b764cb227199ff5308"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/opt/CTestTestfile.cmake": {
+      "bytes": 410,
+      "sha256": "8e0abf6fa22ac5e534b80107a6ec602c155723f0decf69dcf472330f6a7bb84d"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/reduce/CTestTestfile.cmake": {
+      "bytes": 416,
+      "sha256": "e7077a5e70315070e52e204673cc6b852c9b835ae0de8aa35a07af670be29005"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/link/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "2e511cb34dfd66b080b4a501bcbc5a66a6ea53dec1d0208bf4110c469579afe5"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/diff/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "2af564538ecdebc48273a8051ec964bd1f021c431921af6f185271d0f69dba3d"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/spirv-headers/CTestTestfile.cmake": {
+      "bytes": 434,
+      "sha256": "c94220c22c5e49f1e389d1b3dec99a15758be1e6595d339359dc9e7ad7869ca3"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/lesspipe/CTestTestfile.cmake": {
+      "bytes": 418,
+      "sha256": "5ba0ab0e17c12c48b73b36a2cc4d3049b71bedfd3baa29750b13d967f32e709b"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/emacs/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "d63c1b22814ceb04bc144528cce073c9e2e8634a64d62f8aa8adb4fb829ff924"
+    },
+    "bin/linux-gcc/tests/render/CTestTestfile.cmake": {
+      "bytes": 480,
+      "sha256": "c8d33a228495d4cc6cb661c2025caf4b187c56a93604a55142fa563e62816e8f"
+    },
+    "bin/linux-gcc/tests/app/CTestTestfile.cmake": {
+      "bytes": 468,
+      "sha256": "bb47bc1b68b5327eaaf6d706af1072b95ff266a8a51fc94a4a26d04d140ad513"
+    },
+    "bin/linux-gcc/tests/backend/CTestTestfile.cmake": {
+      "bytes": 484,
+      "sha256": "0b251d08427240a6349f5b5f4a117401bd21e3b3c823ad7ea607b4934d6ed660"
+    },
+    "bin/linux-gcc/tests/core/CTestTestfile.cmake": {
+      "bytes": 472,
+      "sha256": "5a36b3cc4b3333559b2b0a8761d9cdfa860f153219ced5865b92c8920b92cb0e"
+    },
+    "bin/linux-gcc/tests/oracle/CTestTestfile.cmake": {
+      "bytes": 480,
+      "sha256": "cb08de5aa4034f2f673299d063baee844eb7c4b03316e46f3fe69426eb3e879f"
+    },
+    "bin/linux-gcc/lib/glfw/CTestTestfile.cmake": {
+      "bytes": 314,
+      "sha256": "196b609acec92389592c7d8d146f27e6556987c469b96f00d4ec2abbfdc0151b"
+    },
+    "bin/linux-gcc/lib/glfw/src/CTestTestfile.cmake": {
+      "bytes": 307,
+      "sha256": "5f0c66e3ac11467e633f73b0b78ec7ff59cd7f21f602930b209084f70c23fd1b"
+    },
+    "bin/linux-gcc/_deps/googletest-build/CTestTestfile.cmake": {
+      "bytes": 361,
+      "sha256": "3ad5364e3c1693c57cec30aa8dc5dedef136678d9a59afed973301cc491fd1f9"
+    },
+    "bin/linux-gcc/_deps/googletest-build/googletest/CTestTestfile.cmake": {
+      "bytes": 361,
+      "sha256": "097194259208bf09b1a0ad8df230a1f8a494c2fef517b4f210753c9410d62c7f"
+    },
+    "bin/linux-gcc/_deps/googletest-build/googlemock/CTestTestfile.cmake": {
+      "bytes": 386,
+      "sha256": "620a64e36b9e18fc316940ddbc87957c24dc6b44163768cb924836714a88fecc"
+    },
+    "bin/linux-gcc/tests/sirius_base_tests[1]_tests.cmake": {
+      "bytes": 6585,
+      "sha256": "1b085fdd013ef0e50ee3d0caa616068f33e3c80490d6bed3bb6629315018b0f6"
+    },
+    "bin/linux-gcc/tests/app/sirius_app_tests[1]_tests.cmake": {
+      "bytes": 52924,
+      "sha256": "1fc2d1a80fa6e56de2afe0c81a74eb97462d40910a430404701f8bc41b39e6ad"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake": {
+      "bytes": 110274,
+      "sha256": "455bb6ec639a416fdc7fa0b047c49fca59e226639d72347d022685f3e300b2c3"
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake": {
+      "bytes": 269027,
+      "sha256": "0d7b90a6282ac447ba05acd6c1fe74742648cb312d5c910a4779af471ea704d7"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake": {
+      "bytes": 67359,
+      "sha256": "f9ebe51d95fc0a7a88a8c4edd1af07267e3824f876e028100c15e311a22cfae1"
+    },
+    "bin/linux-gcc/tests/sirius_base_tests[1]_include.cmake": {
+      "bytes": 271,
+      "sha256": "d912527f48f9f1de276ce0c3909868f132ccb0ea3caa66c84367a06b25aae282"
+    },
+    "bin/linux-gcc/tests/render/sirius_render_tests[1]_include.cmake": {
+      "bytes": 293,
+      "sha256": "a04de98220507b9c28110536d639c281d1b9aae85dd3d066967c10f074222104"
+    },
+    "bin/linux-gcc/tests/app/sirius_app_tests[1]_include.cmake": {
+      "bytes": 275,
+      "sha256": "04868c27c459689be327479139b43c8f46bcd3ab560afee247a7adea85d58b35"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_include.cmake": {
+      "bytes": 299,
+      "sha256": "749ff39be5b56c22fd091e272f2e1630ab78e37a7a3b694364786161a1c90de3"
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests[1]_include.cmake": {
+      "bytes": 281,
+      "sha256": "be3980d63214735ae160d7ba73f9c73d99b464b5b35ec45be318522d6f0ab00d"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_include.cmake": {
+      "bytes": 293,
+      "sha256": "e800698e0353ee7dfd4ff98e527bf43a3b1d4c25f8b1d4486fb03bb2e5e8f363"
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "tests/oracle/analytic_benchmarks_test.cpp": {
+      "bytes": 13189,
+      "sha256": "b3824e58c34cdce54973f958e1cdb6fb7647102fbc61d2eb8942ef9a3dd46af4"
+    },
+    "out/science-p4-page-thorne/reference/tests/oracle/analytic_benchmarks_test.cpp": {
+      "bytes": 13189,
+      "sha256": "b3824e58c34cdce54973f958e1cdb6fb7647102fbc61d2eb8942ef9a3dd46af4"
+    },
+    "src/sirius/core/disk/novikov_thorne_disk.h": {
+      "bytes": 16284,
+      "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+    },
+    "out/science-p4-page-thorne/reference/src/sirius/core/disk/novikov_thorne_disk.h": {
+      "bytes": 16284,
+      "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+    },
+    "src/sirius/core/disk/disk_model.h": {
+      "bytes": 2876,
+      "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+    },
+    "out/science-p4-page-thorne/reference/src/sirius/core/disk/disk_model.h": {
+      "bytes": 2876,
+      "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+    },
+    "src/sirius/core/constants.h": {
+      "bytes": 8558,
+      "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+    },
+    "out/science-p4-page-thorne/reference/src/sirius/core/constants.h": {
+      "bytes": 8558,
+      "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+    },
+    "src/sirius/core/coordinates.h": {
+      "bytes": 19636,
+      "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+    },
+    "out/science-p4-page-thorne/reference/src/sirius/core/coordinates.h": {
+      "bytes": 19636,
+      "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+    },
+    "src/sirius/core/kerr_orbits.h": {
+      "bytes": 3107,
+      "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+    },
+    "out/science-p4-page-thorne/reference/src/sirius/core/kerr_orbits.h": {
+      "bytes": 3107,
+      "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+    },
+    "src/sirius/core/spectral/spectral_radiance.h": {
+      "bytes": 5757,
+      "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+    },
+    "out/science-p4-page-thorne/reference/src/sirius/core/spectral/spectral_radiance.h": {
+      "bytes": 5757,
+      "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+    },
+    "src/sirius/oracle/beam_integrator.h": {
+      "bytes": 13981,
+      "sha256": "6115e6923d6f760d021bacb4b108bd45238f85de8d748733a7003c2fc81c2d68"
+    },
+    "out/science-p4-page-thorne/reference/src/sirius/oracle/beam_integrator.h": {
+      "bytes": 13981,
+      "sha256": "6115e6923d6f760d021bacb4b108bd45238f85de8d748733a7003c2fc81c2d68"
+    },
+    "src/sirius/oracle/kerr_boyer_lindquist.h": {
+      "bytes": 30350,
+      "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+    },
+    "out/science-p4-page-thorne/reference/src/sirius/oracle/kerr_boyer_lindquist.h": {
+      "bytes": 30350,
+      "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+    },
+    "tests/oracle/CMakeLists.txt": {
+      "bytes": 867,
+      "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6"
+    },
+    "out/science-p4-page-thorne/reference/tests/oracle/CMakeLists.txt": {
+      "bytes": 867,
+      "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6"
+    },
+    "tests/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "out/science-p4-page-thorne/reference/tests/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "tests/labels/CTestLabels.cmake": {
+      "bytes": 78306,
+      "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14"
+    },
+    "out/science-p4-page-thorne/reference/tests/labels/CTestLabels.cmake": {
+      "bytes": 78306,
+      "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14"
+    },
+    "tests/support/fail_on_skip.h": {
+      "bytes": 427,
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    },
+    "out/science-p4-page-thorne/reference/tests/support/fail_on_skip.h": {
+      "bytes": 427,
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/manifest.json": {
+      "bytes": 9756,
+      "sha256": "982dbd299ab2ae9ef6ff5f9fd88d7c93efd0aef26e90c009b4392026479ea872"
+    },
+    "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/disposition.json": {
+      "bytes": 20906,
+      "sha256": "4a05cc56e4ccfebf819e8d7709e504caf477cf3f0f4c399e46a77302dff13bb7"
+    },
+    "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/preparation.json": {
+      "bytes": 67593,
+      "sha256": "254ce00f836707a66fb5fb666c9e232d0caf57a07fcc35c342312c435727f19c"
+    },
+    "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/run_radiation.py": {
+      "bytes": 7078,
+      "sha256": "0fc9e58d02b0423086fa617d6d36f3b8fdd5aa846bc116aec67ff1b7c1035dea"
+    },
+    "attestations/scientific-core/5e70607/final-build-identity-5e70607.json": {
+      "bytes": 660,
+      "sha256": "6bf2bae2282b7a1d1249c262116cc8280ec839021052cd406598c72e3723ae25"
+    },
+    "attestations/scientific-core/5e70607/final-integrated-cpu.xml": {
+      "bytes": 141244,
+      "sha256": "fc620f96218aad3c542e79a27dc84efa63ce2e60d1ce8309ab33b26cc460febd"
+    },
+    "out/science-p4-page-thorne/prepare.py": {
+      "bytes": 13576,
+      "sha256": "888dcb9ee04cbdf000e724a287960f4aec5014aaa41837637db914fb12e356b2"
+    },
+    "out/science-p4-page-thorne/run_page_thorne.py": {
+      "bytes": 6544,
+      "sha256": "fabeaf420286153f6ea5744de84f1aef7504a2414c064cc11783e965690b4f03"
+    },
+    "out/science-p4-page-thorne/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "out/science-p4-page-thorne/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "out/science-p4-page-thorne/actions.json": {
+      "bytes": 10964,
+      "sha256": "03ce670822ed260c4842b948cbd3d5d44aca6e70d41c9cc2496125306464c3e9"
+    }
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "ctest_output_log": {
+    "bytes": 5278,
+    "sha256": "e6b87c2e8b6e38f533364cb9052b2fe5b1a8649e4e534a33591c9865301127aa"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "",
+    "TMPDIR": "/home/astra/.project/Sirius/out/science-p4-page-thorne/temporary"
+  },
+  "disabled": 0,
+  "errors": 0,
+  "executed_names": [
+    "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+    "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+    "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge"
+  ],
+  "expected_names": [
+    "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+    "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+    "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge"
+  ],
+  "failures": 0,
+  "finite_acceptance_scope": {
+    "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff": {
+      "assertions": "Both fluxes positive; original EXPECT_NEAR(inner_flux/outer_flux,8,0.2); finite two-radius tail check only.",
+      "flux_radii": [
+        10000.0,
+        20000.0
+      ],
+      "outer_radius": 100000.0
+    },
+    "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature": {
+      "assertions": "Positive reference temperature; original EXPECT_NEAR(production/oracle,1,2e-5) for normalized temperatures.",
+      "independence_limit": "Reference inner edge uses production ComputeIsco(spin); independence concerns flux integration conditional on that edge, not an independent ISCO oracle.",
+      "radius_over_isco": [
+        1.05,
+        1.2,
+        2.0,
+        4.0
+      ],
+      "reference_radius_over_isco": 1.5,
+      "sample_pairs": 12,
+      "spins": [
+        -0.7,
+        0.0,
+        0.9
+      ]
+    },
+    "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge": {
+      "assertions": "Original exact InnerRadius=10 and zero Flux at10 and10*1.001; positive reference temperature; normalized-temperature ratio within2e-5 against independently integrated flux with literal inner edge10.",
+      "inner_radius": 10.0,
+      "outer_radius": 100.0,
+      "radius_over_inner": [
+        1.05,
+        1.2,
+        2.0,
+        4.0
+      ],
+      "reference_radius": 15.0,
+      "spin": 0.0
+    }
+  },
+  "junit": {
+    "bytes": 3323,
+    "sha256": "e977bc6c3358990b3a34c5e5e8568e3a65ee6e6f0124900c628aec41f382a054"
+  },
+  "mandatory_receipt_created": false,
+  "original_assertions_changed": false,
+  "outer_diagnostic_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "owner": {
+    "bytes": 2087,
+    "sha256": "7d7d99dabe55f6977f2f44fb17abc2560f28c95b68ddefcb5e728bb970a6c2fa"
+  },
+  "p4_complete": false,
+  "passed": true,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false,
+  "reference": {
+    "historical_execution": {
+      "identity": "attestations/scientific-core/5e70607/final-build-identity-5e70607.json",
+      "oracle_producer_sha256": "a0c82a309ae6f3005a60fd820c86bdb0e03924869cb5f330e54ed978fb171f4d",
+      "reuse_boundary": "Two selected names pass historically on a different oracle ELF; the truncated-edge name is absent from this historical XML. No matching-current selected execution found in the bounded reviewed bundles; no historical result relabelled.",
+      "revision": "5e706073a3fd2f9afcf8efbcde2f094122050f6a",
+      "selected_old_passes": [
+        {
+          "classname": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+          "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+          "status": "run",
+          "time": "0.0252064"
+        },
+        {
+          "classname": "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+          "name": "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+          "status": "run",
+          "time": "0.00324539"
+        }
+      ],
+      "xml": "attestations/scientific-core/5e70607/final-integrated-cpu.xml"
+    },
+    "independent_flux_reference": "Original checked-in Page & Thorne1974 Eqs11b/15n flux shape q(r)/r,32768-panel midpoint quadrature with independent circular E,L,Omega and five-point finite differences at h=1e-4*r; production uses16-point Gauss-Legendre and analytic derivatives.",
+    "original_source_snapshots": {
+      "src/sirius/core/constants.h": {
+        "bytes": 8558,
+        "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469",
+        "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+      },
+      "src/sirius/core/coordinates.h": {
+        "bytes": 19636,
+        "git_blob": "5a0143f40cee45c22cff55814e72efb42c4081f2",
+        "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+      },
+      "src/sirius/core/disk/disk_model.h": {
+        "bytes": 2876,
+        "git_blob": "0340ef7434d0434618966f646b6e536d04d18bb1",
+        "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+      },
+      "src/sirius/core/disk/novikov_thorne_disk.h": {
+        "bytes": 16284,
+        "git_blob": "75941e077426512c0bf86f33e644937eeaedb45b",
+        "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+      },
+      "src/sirius/core/kerr_orbits.h": {
+        "bytes": 3107,
+        "git_blob": "ce4e906fd865922642e6fa8bb6108be169ddd7a5",
+        "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+      },
+      "src/sirius/core/spectral/spectral_radiance.h": {
+        "bytes": 5757,
+        "git_blob": "5a9626f468489a55febfb9a078f3fe5718e0e0f5",
+        "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+      },
+      "src/sirius/oracle/beam_integrator.h": {
+        "bytes": 13981,
+        "git_blob": "3e0a2426ce363f44a9e450cc889141b01d1c4931",
+        "sha256": "6115e6923d6f760d021bacb4b108bd45238f85de8d748733a7003c2fc81c2d68"
+      },
+      "src/sirius/oracle/kerr_boyer_lindquist.h": {
+        "bytes": 30350,
+        "git_blob": "af37af15f0210ce8c3e7ce2374135cabfd388287",
+        "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+      },
+      "tests/labels/CTestLabels.cmake": {
+        "bytes": 78306,
+        "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7",
+        "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14"
+      },
+      "tests/operating_model.json": {
+        "bytes": 130331,
+        "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+      },
+      "tests/oracle/CMakeLists.txt": {
+        "bytes": 867,
+        "git_blob": "14b0dfd43cfcf8271c4eee0f66206c58ba88aa1f",
+        "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6"
+      },
+      "tests/oracle/analytic_benchmarks_test.cpp": {
+        "bytes": 13189,
+        "git_blob": "6fde5643a550a466007a49ac5ffe0f51460f19ee",
+        "sha256": "b3824e58c34cdce54973f958e1cdb6fb7647102fbc61d2eb8942ef9a3dd46af4"
+      },
+      "tests/support/fail_on_skip.h": {
+        "bytes": 427,
+        "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+        "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+      }
+    },
+    "scope_boundary": "Finite normalized-temperature comparisons; shared production ISCO in the default-edge helper, literal inner edge10 in the truncated helper. No new reference implementation, threshold, all-spin/radius proof or absolute physical luminosity claim."
+  },
+  "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "scope": "Three original finite CPU Page-Thorne oracle controls only; no device/frame, independent ISCO claim, full P4/science/Mandatory or release qualification.",
+  "skips": 0,
+  "source_and_registration_join": {
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CXX_COMPILER": "g++-14",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "SIRIUS_WERROR": "ON"
+    },
+    "oracle_producer": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    "oracle_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4",
+    "original_compile_commands": [
+      {
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/src/sirius/oracle/../.. -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o -c /home/astra/.project/Sirius/tests/oracle/analytic_benchmarks_test.cpp",
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "file": "/home/astra/.project/Sirius/tests/oracle/analytic_benchmarks_test.cpp",
+        "output": "tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o"
+      }
+    ],
+    "original_link_ninja_lines": [
+      "build tests/oracle/sirius_oracle_tests tests/oracle/sirius_oracle_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/oracle/sirius_oracle_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_oracle_tests_Release tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+    ],
+    "original_test_TIMEOUT_added": false,
+    "production_headers": [
+      "src/sirius/core/disk/novikov_thorne_disk.h",
+      "src/sirius/core/disk/disk_model.h",
+      "src/sirius/core/constants.h",
+      "src/sirius/core/coordinates.h",
+      "src/sirius/core/kerr_orbits.h",
+      "src/sirius/core/spectral/spectral_radiance.h",
+      "src/sirius/oracle/beam_integrator.h",
+      "src/sirius/oracle/kerr_boyer_lindquist.h"
+    ],
+    "registrations": [
+      {
+        "add_test": "add_test([=[AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff]==] --gtest_also_run_disabled_tests)",
+        "name": "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "properties": "set_tests_properties([=[AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "source": "tests/oracle/analytic_benchmarks_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature]==] --gtest_also_run_disabled_tests)",
+        "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "properties": "set_tests_properties([=[AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "source": "tests/oracle/analytic_benchmarks_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge]==] --gtest_also_run_disabled_tests)",
+        "name": "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "properties": "set_tests_properties([=[AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "source": "tests/oracle/analytic_benchmarks_test.cpp"
+      }
+    ],
+    "selected_oracle_cases": 3,
+    "test_sources": [
+      "tests/oracle/analytic_benchmarks_test.cpp"
+    ]
+  },
+  "temporary_output": {
+    "mode": "0o700",
+    "path": "/home/astra/.project/Sirius/out/science-p4-page-thorne/temporary",
+    "residual_files": {},
+    "uid": 1000
+  }
+}
