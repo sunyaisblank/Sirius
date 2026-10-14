@@ -1,0 +1,86 @@
+{
+  "issue": 101,
+  "decision": "FOCUSED_ACCUMULATOR_ORACLE_AND_FOUR_PROVIDERS_PASS; ORIGINAL_PREREQUISITES_PENDING",
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "operator_revision": "a11ad575fe7a839a35683f60958c38be8181b905",
+  "raw_bundle": "attestations/software-vulkan/4bcd987/computed-carry-exit-focused",
+  "raw_manifest_sha256": "ccadd9af9a99f37b997d43b7c7b7490d6e9cda851589977ffd1bc1364f16f7c9",
+  "records": 10226,
+  "complete_words_per_provider": 51130,
+  "valid_records": 5585,
+  "canonical_refusal_records": 4641,
+  "requested_buffer_bytes": 449948,
+  "providers": {
+    "provider-stock-integer": {
+      "actual": {
+        "bytes": 204520,
+        "sha256": "af77d4df535d741702766f0f3b8273ff1103563fd13bc1b6001bba65b49c1ce6"
+      },
+      "summary": {
+        "completed_dispatches": 1,
+        "records": 10226,
+        "complete_words": 51130,
+        "mismatches": 0,
+        "untouched_complement_words": 0,
+        "malformed_words": 0,
+        "requested_bytes": 449948,
+        "resident_buffer_bytes": 449948
+      }
+    },
+    "provider-stock-normal-transport": {
+      "actual": {
+        "bytes": 204520,
+        "sha256": "af77d4df535d741702766f0f3b8273ff1103563fd13bc1b6001bba65b49c1ce6"
+      },
+      "summary": {
+        "completed_dispatches": 1,
+        "records": 10226,
+        "complete_words": 51130,
+        "mismatches": 0,
+        "untouched_complement_words": 0,
+        "malformed_words": 0,
+        "requested_bytes": 449948,
+        "resident_buffer_bytes": 449948
+      }
+    },
+    "provider-candidate-integer": {
+      "actual": {
+        "bytes": 204520,
+        "sha256": "af77d4df535d741702766f0f3b8273ff1103563fd13bc1b6001bba65b49c1ce6"
+      },
+      "summary": {
+        "completed_dispatches": 1,
+        "records": 10226,
+        "complete_words": 51130,
+        "mismatches": 0,
+        "untouched_complement_words": 0,
+        "malformed_words": 0,
+        "requested_bytes": 449948,
+        "resident_buffer_bytes": 449948
+      }
+    },
+    "provider-candidate-normal-transport": {
+      "actual": {
+        "bytes": 204520,
+        "sha256": "af77d4df535d741702766f0f3b8273ff1103563fd13bc1b6001bba65b49c1ce6"
+      },
+      "summary": {
+        "completed_dispatches": 1,
+        "records": 10226,
+        "complete_words": 51130,
+        "mismatches": 0,
+        "untouched_complement_words": 0,
+        "malformed_words": 0,
+        "requested_bytes": 449948,
+        "resident_buffer_bytes": 449948
+      }
+    }
+  },
+  "failed_first_compile_preserved": "files/out/computed-carry-exit-prerequisites/failed-attempts/01-missing-scalar-import",
+  "original_corpus_run": false,
+  "integrated_controls_run": false,
+  "benefit_run": false,
+  "optimization_adopted": false,
+  "qualification_claimed": false,
+  "finding": "All four complete stock/candidate integer/normal-Transport outputs equal the fixed independent Fraction expectations exactly. Zero mismatches, untouched complement words or malformed words. Includes first/second computed-zero carry paths, both zero signs, unchanged initial-zero and nonzero paths, private/radius bounds and canonical refusals. The first compile failed solely because the focused probe omitted explicit retained_scalar import; its immutable owner/source/context were preserved and the changed compile passed. No product source changed. Original174268-record corpus, all generated-product/program/native/consumer checks, eight controls and original20+2 benefit gates remain required."
+}

@@ -1,0 +1,38 @@
+{
+  "records": 10226,
+  "input_words_per_record": 6,
+  "output_words_per_record": 5,
+  "input_header_words": 1,
+  "complete_output_words": 51130,
+  "requested_device_bytes": 449948,
+  "partitions": {
+    "mixed_adjacent_records": 128,
+    "first_computed_zero": 4096,
+    "second_computed_zero": 800,
+    "nonzero_carry_through_three": 50,
+    "initial_zero_unchanged": 96,
+    "private_and_radius_boundaries": 2520,
+    "initial_validity_scalar_refusal": 150,
+    "subnormal_tie_cancellation": 338,
+    "fixed_seed_finite_overlap": 2048
+  },
+  "original_computed_carry_paths": {
+    "after_first_sum": 5425,
+    "no_early_zero": 2335,
+    "after_second_sum": 1200
+  },
+  "first_computed_zero_signs": {
+    "first_positive_zero": 3337,
+    "first_negative_zero": 2088
+  },
+  "finite_exact_splits_crosschecked": 25894,
+  "reference_sha256": "6b6474bf66c86713980cba81f0cee1b290f54c8f42700ca9353aa108cf0c185e",
+  "generator_sha256": "9165fea7d80967489a619fadbf274f3afb88ebeda2d3df18c24a5868da01ad4d",
+  "input_sha256": "216abdf3b320675aa6541ce493aabb67660e819f534b8b78f51bae95c0ff4ebc",
+  "expected_sha256": "af77d4df535d741702766f0f3b8273ff1103563fd13bc1b6001bba65b49c1ce6",
+  "expected_modes": [
+    "integer",
+    "normal-transport"
+  ],
+  "scope": "Finite independent Fraction oracle for the original accumulator, shared by both frozen producers/modes. No candidate execution, compiler, provider, integrated-control or benefit verdict."
+}
