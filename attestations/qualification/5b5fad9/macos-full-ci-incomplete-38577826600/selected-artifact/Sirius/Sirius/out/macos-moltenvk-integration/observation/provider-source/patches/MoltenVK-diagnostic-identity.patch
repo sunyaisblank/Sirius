@@ -1,0 +1,92 @@
+--- a/MoltenVK/CMakeLists.txt
++++ b/MoltenVK/CMakeLists.txt
+@@ -23,22 +23,30 @@
+ 		"${CMAKE_CURRENT_BINARY_DIR}" # for mvkGitRevDerived.h
+ )
+ 
+-# Record the MoltenVK GIT revision as a derived header file suitable for including in a build
+-find_package(Git)
+-if(GIT_FOUND)
+-	execute_process(
+-		COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+-		OUTPUT_VARIABLE MVK_GIT_REV
+-		ERROR_QUIET
+-		OUTPUT_STRIP_TRAILING_WHITESPACE
+-	)
+-	configure_file(
+-		"${CMAKE_CURRENT_SOURCE_DIR}/../Templates/cmake/mvkGitRevDerived.h.in"
+-		"${CMAKE_CURRENT_BINARY_DIR}/mvkGitRevDerived.h"
+-	)
+-else()
+-	message(FATAL_ERROR "GIT not found")
++# Sirius issue-48 diagnostic: this is a source/configuration content discriminator.
++# It is NOT an upstream or local Git revision, despite the legacy template name.
++if(NOT DEFINED MVK_DIAGNOSTIC_CONTENT_ID)
++    message(FATAL_ERROR "The diagnostic provider requires its declared content discriminator")
+ endif()
++string(LENGTH "${MVK_DIAGNOSTIC_CONTENT_ID}" MVK_DIAGNOSTIC_CONTENT_ID_LENGTH)
++if(NOT MVK_DIAGNOSTIC_CONTENT_ID_LENGTH EQUAL 64 OR
++   NOT MVK_DIAGNOSTIC_CONTENT_ID MATCHES "^[0-9a-f]+$")
++    message(FATAL_ERROR "The diagnostic content discriminator must be 64 lowercase hex digits")
++endif()
++string(SUBSTRING "${MVK_DIAGNOSTIC_CONTENT_ID}" 0 8 MVK_DIAGNOSTIC_CACHE_PREFIX)
++if(MVK_DIAGNOSTIC_CACHE_PREFIX STREQUAL "00000000" OR
++   MVK_DIAGNOSTIC_CACHE_PREFIX STREQUAL "db445ff2")
++    message(FATAL_ERROR "The diagnostic cache prefix is zero or aliases the upstream base")
++endif()
++set(MVK_GIT_REV "${MVK_DIAGNOSTIC_CONTENT_ID}")
++configure_file(
++    "${CMAKE_CURRENT_SOURCE_DIR}/../Templates/cmake/mvkGitRevDerived.h.in"
++    "${CMAKE_CURRENT_BINARY_DIR}/mvkGitRevDerived.h"
++)
++target_compile_definitions(MoltenVK PRIVATE
++    "MVK_DIAGNOSTIC_CONTENT_ID=\"${MVK_DIAGNOSTIC_CONTENT_ID}\""
++)
++
+ 
+ target_compile_definitions(MoltenVK PUBLIC
+ 	"MVK_FRAMEWORK_VERSION=${PROJECT_VERSION}"
+--- a/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm
++++ b/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm
+@@ -38,6 +38,7 @@
+ 
+ #include <sys/stat.h>
+ #include <cmath>
++#include <cstdio>
+ 
+ using namespace std;
+ 
+@@ -826,7 +827,8 @@
+ 	supportedProps12.pNext = nullptr;
+ 	supportedProps12.driverID = VK_DRIVER_ID_MOLTENVK;
+ 	strcpy(supportedProps12.driverName, kMVKMoltenVKDriverLayerName);
+-	strcpy(supportedProps12.driverInfo, MVK_VERSION_STRING);
++	std::snprintf(supportedProps12.driverInfo, sizeof(supportedProps12.driverInfo),
++				  "%s+sirius-issue48-unforced.%s", MVK_VERSION_STRING, MVK_DIAGNOSTIC_CONTENT_ID);
+ 	supportedProps12.conformanceVersion = testedCTSVer;
+ 	supportedProps12.denormBehaviorIndependence = VK_SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE;
+ 	supportedProps12.roundingModeIndependence = VK_SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE;
+@@ -3235,8 +3237,8 @@
+ 
+ 	size_t uuidComponentOffset = 0;
+ 
+-	// First 4 bytes contains MoltenVK revision.
+-	// This is captured either as the MoltenVK Git revision, or if that's not available, as the MoltenVK version.
++	// Diagnostic: first four bytes contain the declared source/config content token.
++	// This discriminator is not a Git revision; full provenance is sealed separately.
+ 	uint32_t mvkRev = getMoltenVKGitRevision();
+ 	if ( !mvkRev ) { mvkRev = MVK_VERSION; }
+ 	*(uint32_t*)&_properties.pipelineCacheUUID[uuidComponentOffset] = NSSwapHostIntToBig(mvkRev);
+@@ -3267,10 +3269,8 @@
+ 	return (osMaj << 24) + (osMin << 16) + (gpuM << 8) + gpuA;
+ }
+ 
+-// Retrieve the SPIRV-Cross Git revision hash from a derived header file,
+-// which is generated in advance, either statically, or more typically in
+-// an early build phase script, and contains a line similar to the following:
+-// static const char* mvkRevString = "fc0750d67cfe825b887dd2cf25a42e9d9a013eb2";
++// Read the diagnostic content token from the legacy generated-header field.
++// The legacy function name does not confer Git provenance.
+ uint32_t MVKPhysicalDevice::getMoltenVKGitRevision() {
+ 
+ #include "mvkGitRevDerived.h"

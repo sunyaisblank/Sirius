@@ -1,0 +1,98 @@
+{
+  "candidate_msl": {
+    "bytes": 82487,
+    "path": "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/observations/candidate.metal",
+    "sha256": "80b33059934cc77a685c5738b9413c94379e45f1b18d0e6635a6432ff0407921"
+  },
+  "compiler_launched_for_new_payload": false,
+  "decision": "REUSE_EXACT_ORIGINAL_TRANSLATION_ONLY_NATIVE_BUILD_PENDING",
+  "fresh_translation_claimed": false,
+  "metadata_only_input_differences": {
+    "build-profile.json": {
+      "current": {
+        "bytes": 1409,
+        "sha256": "8d561c027b7232fbb9b4a71bf3df1ef4e54c090507c6eb050300b444082a65fa"
+      },
+      "original": {
+        "bytes": 678,
+        "sha256": "36dd33783dff2a813b61d2aa55199f8792c578890b9ce6b29a615b3a26e6e041"
+      }
+    },
+    "content-id.json": {
+      "current": {
+        "bytes": 4508,
+        "sha256": "3c6522953c6b82f44613be7625cc3b0113f029b2e75725fd43383ef771a0aefb"
+      },
+      "original": {
+        "bytes": 3705,
+        "sha256": "3c4da909d5917acf97c96915d6453b60ccd400c56a8514eb8e5cfb646fbb5d5f"
+      }
+    },
+    "patches/MoltenVK-diagnostic-identity.patch": {
+      "current": {
+        "bytes": 3978,
+        "sha256": "4e5150ecebeda5584e42ea98f3b168d45752781726dc9114c6bac2e63009097c"
+      },
+      "original": {
+        "bytes": 3815,
+        "sha256": "2425416a04ebf64ebdf609205ac2338197efa0d0256c0f7990b9579bc7272fa1"
+      }
+    },
+    "sources/moltenvk-patched/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm": {
+      "current": {
+        "bytes": 259934,
+        "sha256": "e0ec942b114184de050b57ede2d4151dde7fde25512a76d752e961dda4ba5812"
+      },
+      "original": {
+        "bytes": 259860,
+        "sha256": "bdcb1925e06d9b6d9043abcd74d9b11a24636bf5537df867c4b884e1a778cc57"
+      }
+    }
+  },
+  "original_evidence_commit": "e2422dd92017879a452377a1122f1838e6610b3c",
+  "original_input_freeze": {
+    "bytes": 2531127,
+    "path": "historical/original/input-freeze.json",
+    "sha256": "71ca1547b3fb616ac99b9e8871a7e2410f25443131a6652b8b1f1c3464f526c9"
+  },
+  "original_payload_tree": "8b7d54847738c427954c7c3b070708d60fe4c8a8",
+  "original_translation_owners": {
+    "candidate-translation": {
+      "bytes": 2629,
+      "path": "candidate-translation/owner.json",
+      "sha256": "8cf73b24ee7fcd64a9b9da72bc4eaa1aebd23d973a33ad15250257c0343129ba"
+    },
+    "stock-translation": {
+      "bytes": 5766,
+      "path": "stock-translation/owner.json",
+      "sha256": "4bb301bbea85b21058c7d30f49a5fb360a2513421d35fb97e64e48f7b9699641"
+    }
+  },
+  "original_translation_receipt": {
+    "bytes": 730,
+    "path": "observations/translation-byte-acceptance.json",
+    "sha256": "c4ec57c4bd1280a0442e3e68c1e6a80fb4c240e8a3db4c30d609eaa20d596abb"
+  },
+  "provider_launched_for_new_payload": false,
+  "qualification_claimed": false,
+  "relocated_legacy_files": {
+    "actions.json": "historical/original/actions.json",
+    "check_translation.py": "historical/original/check_translation.py",
+    "owned_guard.py": "historical/original/owned_guard.py",
+    "preparation.json": "historical/original/preparation.json",
+    "prepare.py": "historical/original/prepare.py",
+    "root_candidate_phase.py": "historical/original/root_candidate_phase.py",
+    "root_translation_phase.py": "historical/original/root_translation_phase.py",
+    "run_owned.py": "historical/original/run_owned.py",
+    "run_root_translation.py": "historical/original/run_root_translation.py"
+  },
+  "schema": 1,
+  "scope": "The four whitelisted source/patch/profile identity files changed; original preparation metadata is archived and new preparation metadata is derived separately. The shared non-entry emitter, complete Cross sources/dependencies, translation API driver/options, captured SPV and both original MSL outputs remain exact. Original translation owners/receipt belong to their original freeze, not the new payload.",
+  "stock_msl": {
+    "bytes": 85091,
+    "path": "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/observations/stock.metal",
+    "sha256": "b2d7daec9928356de4ca24a724d135adc59685a330b043e4fa55f2fe2f9b5550"
+  },
+  "unchanged_translation_input_files": 11475,
+  "unchanged_translation_input_map_sha256": "830673e3cff6ea43d2d2ec6f7e093543cbdbd1399617f53208f0f7762e8c5f24"
+}

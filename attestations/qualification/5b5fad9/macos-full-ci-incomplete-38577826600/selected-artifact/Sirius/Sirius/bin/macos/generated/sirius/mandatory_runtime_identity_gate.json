@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "kind": "sirius-runtime-identity",
+  "status": "captured",
+  "qualification_claimed": false,
+  "numerics_executed": false,
+  "phase": "before_mandatory_numerics",
+  "captured_utc": "2026-10-14T14:22:20.518394+00:00",
+  "source": {
+    "revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+    "clean": true
+  },
+  "executable": {
+    "path": "/Users/runner/work/Sirius/Sirius/bin/macos/src/sirius/app/sirius",
+    "bytes": 8356520,
+    "sha256": "26c44aa9fe218031ae2552e32f0e31d2ed7bfe4353816e649c9aba95aa74cc44"
+  },
+  "ci": {
+    "hosted": true,
+    "repository": "sunyaisblank/Sirius",
+    "run_id": "38577826600",
+    "run_attempt": "1",
+    "job": "macos-build",
+    "runner": "GitHub Actions 1000004298",
+    "os": "macOS",
+    "arch": "ARM64"
+  },
+  "host": {
+    "platform": "darwin",
+    "machine": "arm64"
+  },
+  "environment": {
+    "VK_DRIVER_FILES": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/MoltenVK-diagnostic_icd.json",
+    "VK_ICD_FILENAMES": "",
+    "VK_ADD_DRIVER_FILES": "",
+    "VK_LOADER_DRIVERS_SELECT": "",
+    "VK_LOADER_DRIVERS_DISABLE": "",
+    "VULKAN_SDK": "/Users/runner/vulkan-sdk/1.4.357.0/macOS",
+    "LD_LIBRARY_PATH": "",
+    "DYLD_LIBRARY_PATH": "/Users/runner/work/Sirius/Sirius/bin/macos/macos-moltenvk-integration/MoltenVK:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib",
+    "PATH": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/bin:/opt/homebrew/lib/ruby/gems/3.3.0/bin:/opt/homebrew/opt/ruby@3.3/bin:/Users/runner/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/runner/.cargo/bin:/usr/local/opt/curl/bin:/usr/local/bin:/usr/local/sbin:/Users/runner/bin:/Users/runner/.yarn/bin:/Users/runner/Library/Android/sdk/tools:/Users/runner/Library/Android/sdk/platform-tools:/Library/Frameworks/Python.framework/Versions/Current/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/bin:/bin:/usr/sbin:/sbin:/Users/runner/.dotnet/tools",
+    "SystemRoot": "",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "SIRIUS_PRECISION": "",
+    "LP_PERF": "",
+    "LP_NATIVE_VECTOR_WIDTH": "",
+    "GALLIVM_PERF": "",
+    "MESA_SHADER_CACHE_DISABLE": ""
+  },
+  "query": {
+    "argv": [
+      "--json",
+      "info",
+      "system"
+    ],
+    "exit_code": 0,
+    "stdout_base64": "ewogICJiYWNrZW5kcyI6IHsKICAgICJjcHUiOiB7CiAgICAgICJhdmFpbGFibGUiOiB0cnVlCiAgICB9LAogICAgInZ1bGthbiI6IHsKICAgICAgImF2YWlsYWJsZSI6IHRydWUsCiAgICAgICJjb21waWxlZCI6IHRydWUsCiAgICAgICJkZXZpY2VfY291bnQiOiAxLAogICAgICAiZGV2aWNlcyI6IFsKICAgICAgICB7CiAgICAgICAgICAiYXBpX3ZlcnNpb24iOiA0MjA2OTI2LAogICAgICAgICAgImRldmljZV9pZCI6IDI1MjExNzUwOSwKICAgICAgICAgICJkZXZpY2VfbG9jYWxfYnl0ZXMiOiA3NTE2MTkyNzY4LAogICAgICAgICAgImRyaXZlcl9pZCI6IDE0LAogICAgICAgICAgImRyaXZlcl9pbmZvIjogIjEuNC4xK3Npcml1cy1pc3N1ZTQ4LXVuZm9yY2VkLjc2Y2I4YjIxMmJjMDQ5MjYxMTQ2YjUyNmQ3NWViZGRhZmUwMTdiMThmZTFmNGMyYzcwNjVjMzAyNGM0ZmZlOWUiLAogICAgICAgICAgImRyaXZlcl9uYW1lIjogIk1vbHRlblZLIiwKICAgICAgICAgICJpbmRleCI6IDAsCiAgICAgICAgICAia2luZCI6ICJpbnRlZ3JhdGVkIiwKICAgICAgICAgICJuYW1lIjogIkFwcGxlIFBhcmF2aXJ0dWFsIGRldmljZSIsCiAgICAgICAgICAicHJlc2VydmVzX2ZwMzJfZGVub3JtYWxzIjogZmFsc2UsCiAgICAgICAgICAicmVuZGVyX21lbW9yeV9ieXRlcyI6IDc1MTYxOTI3NjgsCiAgICAgICAgICAicm91bmRzX2ZwMzJfdG9fbmVhcmVzdCI6IHRydWUsCiAgICAgICAgICAicm91bmRzX2ZwNjRfdG9fbmVhcmVzdCI6IHRydWUsCiAgICAgICAgICAic3VwcG9ydHNfZnA2NCI6IGZhbHNlLAogICAgICAgICAgInZlbmRvcl9pZCI6IDQyMDMKICAgICAgICB9CiAgICAgIF0sCiAgICAgICJzZWxlY3RlZF9kZXZpY2VfaW5kZXgiOiAwLAogICAgICAic2VsZWN0ZWRfZGV2aWNlX25hbWUiOiAiQXBwbGUgUGFyYXZpcnR1YWwgZGV2aWNlIgogICAgfQogIH0sCiAgImludGVyYWN0aXZlX3ZpZXdlciI6IHsKICAgICJjb21waWxlZCI6IHRydWUKICB9LAogICJsYW5ndWFnZSI6IHsKICAgICJwMjkwMF9jb250cmFjdHMiOiB7CiAgICAgICJpbXBsZW1lbnRhdGlvbiI6ICJjaGVja2VkLW1hY3JvIiwKICAgICAgIm5hdGl2ZSI6IGZhbHNlCiAgICB9LAogICAgInAyOTk2X3JlZmxlY3Rpb24iOiB7CiAgICAgICJpbXBsZW1lbnRhdGlvbiI6ICJleHBsaWNpdC1zY2hlbWEiLAogICAgICAibmF0aXZlIjogZmFsc2UKICAgIH0KICB9LAogICJwbGF0Zm9ybSI6ICJtYWNPUyIsCiAgIndzbDIiOiBmYWxzZQp9Cg==",
+    "stdout_sha256": "6cac9f7e58bf671d32c0d7cdd2715c4324323b433ee24cea7152e3a8711e67a3",
+    "stderr_base64": "",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "inventory": {
+    "backends": {
+      "cpu": {
+        "available": true
+      },
+      "vulkan": {
+        "available": true,
+        "compiled": true,
+        "device_count": 1,
+        "devices": [
+          {
+            "api_version": 4206926,
+            "device_id": 252117509,
+            "device_local_bytes": 7516192768,
+            "driver_id": 14,
+            "driver_info": "1.4.1+sirius-issue48-unforced.76cb8b212bc049261146b526d75ebddafe017b18fe1f4c2c7065c3024c4ffe9e",
+            "driver_name": "MoltenVK",
+            "index": 0,
+            "kind": "integrated",
+            "name": "Apple Paravirtual device",
+            "preserves_fp32_denormals": false,
+            "render_memory_bytes": 7516192768,
+            "rounds_fp32_to_nearest": true,
+            "rounds_fp64_to_nearest": true,
+            "supports_fp64": false,
+            "vendor_id": 4203
+          }
+        ],
+        "selected_device_index": 0,
+        "selected_device_name": "Apple Paravirtual device"
+      }
+    },
+    "interactive_viewer": {
+      "compiled": true
+    },
+    "language": {
+      "p2900_contracts": {
+        "implementation": "checked-macro",
+        "native": false
+      },
+      "p2996_reflection": {
+        "implementation": "explicit-schema",
+        "native": false
+      }
+    },
+    "platform": "macOS",
+    "wsl2": false
+  },
+  "classification": "vulkan_selected",
+  "selected_device": {
+    "api_version": 4206926,
+    "device_id": 252117509,
+    "device_local_bytes": 7516192768,
+    "driver_id": 14,
+    "driver_info": "1.4.1+sirius-issue48-unforced.76cb8b212bc049261146b526d75ebddafe017b18fe1f4c2c7065c3024c4ffe9e",
+    "driver_name": "MoltenVK",
+    "index": 0,
+    "kind": "integrated",
+    "name": "Apple Paravirtual device",
+    "preserves_fp32_denormals": false,
+    "render_memory_bytes": 7516192768,
+    "rounds_fp32_to_nearest": true,
+    "rounds_fp64_to_nearest": true,
+    "supports_fp64": false,
+    "vendor_id": 4203
+  },
+  "provider_inputs": {
+    "scope": "hashed input candidates; not actual loaded-module or per-ICD execution proof",
+    "selector": {
+      "name": "VK_DRIVER_FILES",
+      "value": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/MoltenVK-diagnostic_icd.json",
+      "kind": "explicit_manifest_list"
+    },
+    "manifests": [
+      {
+        "selector_path": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/MoltenVK-diagnostic_icd.json",
+        "manifest": {
+          "path": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/MoltenVK-diagnostic_icd.json",
+          "bytes": 241,
+          "sha256": "9aa0f88ad5134bbdaf1566fe54185c339cfe1b39bd2559d49a8455f33aea4874"
+        },
+        "contents_base64": "ewogICJJQ0QiOiB7CiAgICAiYXBpX3ZlcnNpb24iOiAiMS40LjAiLAogICAgImlzX3BvcnRhYmlsaXR5X2RyaXZlciI6IHRydWUsCiAgICAibGlicmFyeV9wYXRoIjogIi9Vc2Vycy9ydW5uZXIvd29yay9TaXJpdXMvU2lyaXVzL2Jpbi9tYWNvcy9tYWNvcy1tb2x0ZW52ay1pbnRlZ3JhdGlvbi9Nb2x0ZW5WSy9saWJNb2x0ZW5WSy4xLjQuMS5keWxpYiIKICB9LAogICJmaWxlX2Zvcm1hdF92ZXJzaW9uIjogIjEuMC4wIgp9Cg==",
+        "library_path": "/Users/runner/work/Sirius/Sirius/bin/macos/macos-moltenvk-integration/MoltenVK/libMoltenVK.1.4.1.dylib",
+        "driver_candidates": [
+          {
+            "path": "/Users/runner/work/Sirius/Sirius/bin/macos/macos-moltenvk-integration/MoltenVK/libMoltenVK.1.4.1.dylib",
+            "bytes": 5038480,
+            "sha256": "cb81f199aead4872d04fedd80ffc8cb9b6c6cd26b75b058fde66ec8b29fcd26a"
+          }
+        ]
+      }
+    ],
+    "loader_candidates": [
+      {
+        "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/libvulkan.1.4.357.dylib",
+        "bytes": 1488704,
+        "sha256": "0ed7750a2ee514df7a0daae66e7f2a98bfedca48b98c8f475b2ca8cc5f142094"
+      },
+      {
+        "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/Lib/libvulkan.1.4.357.dylib",
+        "bytes": 1488704,
+        "sha256": "0ed7750a2ee514df7a0daae66e7f2a98bfedca48b98c8f475b2ca8cc5f142094"
+      }
+    ],
+    "unresolved_optional_manifests": []
+  }
+}

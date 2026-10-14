@@ -1,0 +1,231 @@
+{
+  "actual_provider_observations": {
+    "OS": "ProductName:\t\tmacOS\nProductVersion:\t\t15.7.9\nBuildVersion:\t\t24G830",
+    "actual_loaded_paths": "Three identity children dyld lines match their PID and selected SDKloader/custom-or-stockdriver; both property query loaded_images sets also exactly match expected loader/driver. Byte snapshots and all three owner input-before/after identities agree.",
+    "candidate_inventory_matches_Mandatory_inventory": true,
+    "custom_UUID": "76cb8b210f0702050000000100000000",
+    "device": {
+      "api_version": 4206926,
+      "device_id": 252117509,
+      "device_local_bytes": 7516192768,
+      "driver_id": 14,
+      "driver_info": "1.4.1+sirius-issue48-unforced.76cb8b212bc049261146b526d75ebddafe017b18fe1f4c2c7065c3024c4ffe9e",
+      "driver_name": "MoltenVK",
+      "index": 0,
+      "kind": "integrated",
+      "name": "Apple Paravirtual device",
+      "preserves_fp32_denormals": false,
+      "render_memory_bytes": 7516192768,
+      "rounds_fp32_to_nearest": true,
+      "rounds_fp64_to_nearest": true,
+      "supports_fp64": false,
+      "vendor_id": 4203
+    },
+    "eligibility": "Native macOS/arm64 and MoltenVK, unique index0 reportedintegrated satisfies existing source selection. Actual name is Apple Paravirtual device: no physicalM1/namedchip/nativewindow/display qualification. FP64unsupported; FP32denormfalse withRTE32 allows portable retained fallback.",
+    "graphics": {
+      "SPDisplaysDataType": []
+    },
+    "host": {
+      "machine": "arm64",
+      "platform": "darwin"
+    },
+    "property_scope": "Public physical-device properties and image loading only: noVkDevice/pipeline/dispatch inUUIDqueries. Separate RequiredRuntimeDispatch log is actual partialrender evidence.",
+    "scope_limit": "Actual image observations are for completed identity children, not loaded-module traces for allMandatory numerical children.",
+    "stock_UUID": "db445ff20f0702050000000100000000"
+  },
+  "all_original_zip_members_recoverable": 12496,
+  "archive": {
+    "bytes": 93920417,
+    "sha256": "0b67da9f14faed909b6051029e79ed6bf7b6ae6395c30523813a3bdf0ea4d6ad"
+  },
+  "archive_member_manifest": {
+    "bytes": 3345685,
+    "sha256": "6a02a9027f4158c2e0d5e107dba1e31d6751331498b5320b780673032fe88278"
+  },
+  "archive_parts": [
+    {
+      "bytes": 33554432,
+      "path": "artifact.zip.parts/part-000",
+      "sha256": "67fc9501de9417f098b4774eef8a8f32c6d80c282268ae0154c5afdbf03898fe"
+    },
+    {
+      "bytes": 33554432,
+      "path": "artifact.zip.parts/part-001",
+      "sha256": "c1e4bfdc46ffe2ac774301bcf7bd22e4a5a73580f5428270da56ab6b384d54db"
+    },
+    {
+      "bytes": 26811553,
+      "path": "artifact.zip.parts/part-002",
+      "sha256": "97524cf3d736acdfeb902c4eac3dc0d208817a4ce6b2d41d33dc70f90b3c1dbb"
+    }
+  ],
+  "completed_utc": "2026-10-14T20:10:18Z",
+  "conclusion": "cancelled",
+  "full_scientific_or_release_claimed": false,
+  "independent_audit": {
+    "bytes": 35443,
+    "sha256": "e766db58d19e41930545202bf9c8a277eedbfe40698b0672c77eacd63b174a8d"
+  },
+  "job_id": 115899499765,
+  "mandatory": {
+    "at_cancellation": {
+      "id": 26,
+      "name": "OperationalP1.NearExtremalBurnIn",
+      "observed": "Only Start line; no classifier/repeat/progress/verdict. Cannot classify numerical failure, deadlock or work completion.",
+      "references": [
+        "tests/CMakeLists.txt:231",
+        "tests/operational/p1_burn_in.cmake:9"
+      ],
+      "source_scope": "Two original near-extremal CPU/retained shadow classifiers repeated3 times, unchanged.",
+      "source_timeout_seconds": 28800
+    },
+    "complete_estate_F_E_S_D_claimed": false,
+    "completed": 25,
+    "failed": 0,
+    "junit_present": false,
+    "not_started": 1121,
+    "observed_ctest_skip_or_notrun_results": 0,
+    "other_completed_statuses": 0,
+    "passed": 24,
+    "selected": 1147,
+    "started": 26,
+    "started_without_verdict": 1,
+    "sum_completed_seconds": 355.86,
+    "timeout": 1,
+    "timeout_case": {
+      "ctest_id": 25,
+      "environment": "Case explicitly sets MESA_SHADER_CACHE_DISABLE=true; does not establish a MoltenVK cache policy.",
+      "last_printed_tile": 253,
+      "name": "OperationalVulkan.RequiredRuntimeDispatch",
+      "observed": "Custom retained renderer on Apple Paravirtual, actual starfield load6000x3000RGBA, successful partial interval/readback progress; no completed render or numerical acceptance.",
+      "ordinal": 25,
+      "references": [
+        "tests/CMakeLists.txt:218",
+        "tests/operational/vulkan_runtime_profile.cmake:6"
+      ],
+      "seconds": 300.18,
+      "source_scope": "Unchanged acceptance: cold translation plus complete128x128/1SPP Kerr Vulkan render; real original inner filter RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent.",
+      "source_timeout_seconds": 300,
+      "status": "***Timeout",
+      "work_tiles": 16384
+    },
+    "without_completed_verdict": 1122
+  },
+  "module_source_boundary": {
+    "frozen_records": {
+      "/Users/runner/work/Sirius/Sirius/bin/macos/src/sirius/app/sirius": {
+        "bytes": 8356520,
+        "sha256": "26c44aa9fe218031ae2552e32f0e31d2ed7bfe4353816e649c9aba95aa74cc44"
+      },
+      "/Users/runner/work/Sirius/Sirius/bin/macos/tests/backend/sirius_backend_tests": {
+        "bytes": 11560584,
+        "sha256": "682b2ef3c91fe2ea46ab97a18096e509cab5d5eb3805a5b886e63acbe00577ad"
+      },
+      "/Users/runner/work/_temp/sirius-macos-runtime/20261014-141636-308123/native-provider-modules.json": {
+        "bytes": 16451,
+        "sha256": "c020b4c7b2e74979a2a094a9eaa7e0bd3afbaa839ffbf0bb125bf52d36acfef0"
+      }
+    },
+    "missing_payloads": [
+      "native-provider-modules.json",
+      "native-provider-bindings.json",
+      "native-provider-frame-images.json",
+      "native-provider-proof.zip",
+      "native-runtime-tests.xml",
+      "native-runtime-transcript.log",
+      "mandatory_gate_junit.xml"
+    ],
+    "reference": "scripts/macos_moltenvk_provider.py:240; .github/workflows/ci.yml:564",
+    "source_flow": "bind_candidate calls strict35-module MachO parser and writes module-sidecar before the3 observed identity owners; reachingMandatory is source-flow evidence of successful binding.",
+    "unavailable": "The actual current backendELF and35-module JSON payload are not in this ZIP. Their byte identities survive in12480-input snapshots, but current35module bytes/name/hash list cannot be independently re-examined. Binding-sidecar also omitted by partialdiagnostic upload. No freshMSL capture claimed."
+  },
+  "qualification_claimed": false,
+  "run_id": 38577826600,
+  "schema": "sirius-macos-full-ci-incomplete-v1",
+  "selected_raw_members_preserved": 48,
+  "source_provider": {
+    "binary_snapshots_match_receipt": true,
+    "content_id": "76cb8b212bc049261146b526d75ebddafe017b18fe1f4c2c7065c3024c4ffe9e",
+    "content_id_is_git_provenance": false,
+    "limits": "Completed provider-build/input before-after and selected source/profile joins checked; complete remote SDK/tool/source51883-input closure not independently re-evaluated. Historical11475-input translation reuse retains original receipts; no fresh translation claimed.",
+    "native_provider_status": "built-pinned-custom-provider",
+    "provider_binary": {
+      "bytes": 5038480,
+      "path": "/Users/runner/work/Sirius/Sirius/bin/macos/macos-moltenvk-integration/MoltenVK/libMoltenVK.1.4.1.dylib",
+      "sha256": "cb81f199aead4872d04fedd80ffc8cb9b6c6cd26b75b058fde66ec8b29fcd26a"
+    },
+    "receipt_sha256": "73a571f98d63d1a294695697a40f45e3506744e60de81d18ccd9317b12357f0a",
+    "source": {
+      "candidate_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+      "runner_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+      "status": ""
+    },
+    "source_join": {
+      "content_id_meaning": "Diagnostic source/configuration cache discriminator, not Git or native-build provenance",
+      "evidence_commit": "21f87e4806c36cd1ae9e45f912a5817d6878b774",
+      "export": {
+        "bytes": 144168960,
+        "sha256": "a60832c9f2abac41ba2cdf489a2da358ada7dc3315f8e0625cc65c432c1c0f1f"
+      },
+      "input_freeze": {
+        "bytes": 2540081,
+        "sha256": "a0b5986daccff1453e11361feb8b8a5a020a6e83c1943deec4da943f3e4ca8d4"
+      },
+      "mode_restoration": "Original frozen file modes restored from the pinned map after Git blob export",
+      "payload_path": "attestations/native-vulkan/4bcd987/macos-provider-identity-fixed/payload",
+      "payload_tree": "c2c8004cd36b91b34d4259f335b3bc6cc2adf941",
+      "scope": "New full payload freeze; old translation receipts retain their original freeze and no fresh translation is claimed",
+      "translation_reuse": {
+        "fresh_translation_claimed": false,
+        "original_freeze": {
+          "bytes": 2531127,
+          "sha256": "71ca1547b3fb616ac99b9e8871a7e2410f25443131a6652b8b1f1c3464f526c9"
+        },
+        "statement": {
+          "bytes": 4208,
+          "sha256": "18b318c2793c2c688fd6405cddb863a6f3d67c7fbc4d0f6148180637bd07c62c"
+        },
+        "unchanged_translation_inputs": 11475
+      }
+    },
+    "source_payload_six_selected_files_match_exact_Git": {
+      "build-profile.json": {
+        "bytes": 1409,
+        "sha256": "8d561c027b7232fbb9b4a71bf3df1ef4e54c090507c6eb050300b444082a65fa"
+      },
+      "content-id.json": {
+        "bytes": 4508,
+        "sha256": "3c6522953c6b82f44613be7625cc3b0113f029b2e75725fd43383ef771a0aefb"
+      },
+      "input-freeze.json": {
+        "bytes": 2540081,
+        "sha256": "a0b5986daccff1453e11361feb8b8a5a020a6e83c1943deec4da943f3e4ca8d4"
+      },
+      "patches/MoltenVK-diagnostic-identity.patch": {
+        "bytes": 3978,
+        "sha256": "4e5150ecebeda5584e42ea98f3b168d45752781726dc9114c6bac2e63009097c"
+      },
+      "patches/SPIRV-Cross-unforced.patch": {
+        "bytes": 342,
+        "sha256": "5cbec8718879d3892600d833e7f9fe9a1b205321c81bf5085d04274ca0c24f07"
+      },
+      "translation-reuse.json": {
+        "bytes": 4208,
+        "sha256": "18b318c2793c2c688fd6405cddb863a6f3d67c7fbc4d0f6148180637bd07c62c"
+      }
+    },
+    "stock_provider": {
+      "bytes": 10553504,
+      "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/libMoltenVK.dylib",
+      "sha256": "3e2ba682b6006d20f6fd7233cffb826951fef17b98c22e7dedc0fff93f3fba9e"
+    },
+    "stock_sdk_modified_claimed": false,
+    "unchanged_sdk_loader": {
+      "bytes": 1488704,
+      "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/libvulkan.1.4.357.dylib",
+      "sha256": "0ed7750a2ee514df7a0daae66e7f2a98bfedca48b98c8f475b2ca8cc5f142094"
+    }
+  },
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "unchanged_CI_retry_performed": false
+}

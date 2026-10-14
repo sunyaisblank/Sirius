@@ -1,0 +1,48 @@
+{
+  "build": "/Users/runner/work/Sirius/Sirius/bin/macos/macos-moltenvk-integration",
+  "build_environment_difference": {
+    "removed": [
+      "DYLD_PRINT_LIBRARIES"
+    ],
+    "scope": "Build tools retain complete input seals; runtime property observations retain loaded-image logging"
+  },
+  "content_id": "76cb8b212bc049261146b526d75ebddafe017b18fe1f4c2c7065c3024c4ffe9e",
+  "content_id_is_git_provenance": false,
+  "output": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation",
+  "payload": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/provider-source",
+  "toolchain": {
+    "cmake_root_query": {
+      "script": {
+        "bytes": 50,
+        "path": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/discover-cmake-root.cmake",
+        "sha256": "7c3c1c8df6b13a138dae658917de7305ee16572d2362c41840e8ee88cc53e6a3"
+      },
+      "stdout": "-- SIRIUS_CMAKE_ROOT=/opt/homebrew/Cellar/cmake/4.4.3/share/cmake"
+    },
+    "input_roots": [
+      "/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+      "/Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17",
+      "/Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+      "/Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib",
+      "/opt/homebrew/Cellar/cmake/4.4.3/share/cmake"
+    ],
+    "paths": {
+      "clang": "/Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "clang++": "/Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+      "cmake": "/opt/homebrew/Cellar/cmake/4.4.3/bin/cmake",
+      "ld": "/Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld",
+      "make": "/Applications/Xcode_16.4.app/Contents/Developer/usr/bin/make",
+      "python": "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+      "xcodebuild": "/usr/bin/xcodebuild",
+      "xcrun": "/usr/bin/xcrun"
+    },
+    "sdk": "/Applications/Xcode_16.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+    "versions": {
+      "clang": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+      "cmake": "cmake version 4.4.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).",
+      "macos_sdk": "15.5",
+      "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0",
+      "xcode": "Xcode 16.4\nBuild version 16F6"
+    }
+  }
+}

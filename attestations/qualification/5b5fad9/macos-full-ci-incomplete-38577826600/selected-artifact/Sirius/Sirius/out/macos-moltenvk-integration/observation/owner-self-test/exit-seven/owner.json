@@ -1,0 +1,95 @@
+{
+  "status": "terminal",
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-c",
+    "raise SystemExit(7)"
+  ],
+  "source": {
+    "runner_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+    "candidate_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+    "status": ""
+  },
+  "limits": {
+    "seconds": 5,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "qualification_claimed": false,
+  "reserve_scope": "Darwin sampled available estimate: printed free + inactive; kernel pressure must be normal (1). This is not a proven no-swap bound. RSS includes controller and observed group/tree, not global Metal compiler services.",
+  "birth_scope": "Observed ps PID/lstart tokens; second-resolution ambiguity remains incomplete.",
+  "sampling_interval_seconds": 0.1,
+  "observed_births": [
+    {
+      "pid": 2768,
+      "ppid": 2638,
+      "pgid": 2768,
+      "rss_kib": 0,
+      "state": "Z<",
+      "lstart": "Wed Oct 14 14:10:03 2026    ",
+      "absent": true
+    }
+  ],
+  "remaining_observed": [],
+  "signal_observations": [],
+  "environment": {
+    "VK_DRIVER_FILES": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json",
+    "DYLD_LIBRARY_PATH": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib",
+    "SIRIUS_VULKAN_DEVICE": null,
+    "MVK_CONFIG_SHADER_DUMP_DIR": null,
+    "MVK_CONFIG_DEBUG": "0",
+    "MVK_CONFIG_TRACE_VULKAN_CALLS": "3"
+  },
+  "prelaunch_memory": {
+    "available_kib": 3067792,
+    "free_kib": 68544,
+    "inactive_kib": 2999248,
+    "pressure_level": 1,
+    "physical_bytes": 7516192768,
+    "page_size": 16384,
+    "counters": {
+      "Pages free": 4284,
+      "Pages active": 185605,
+      "Pages inactive": 187453,
+      "Pages speculative": 2230,
+      "Pages throttled": 0,
+      "Pages wired down": 52978,
+      "Pages purgeable": 204,
+      "\"Translation faults\"": 2995209,
+      "Pages copy-on-write": 415280,
+      "Pages zero filled": 1030216,
+      "Pages reactivated": 112637,
+      "Pages purged": 5533,
+      "File-backed pages": 263342,
+      "Anonymous pages": 111946,
+      "Pages stored in compressor": 82919,
+      "Pages occupied by compressor": 25242,
+      "Decompressions": 12232,
+      "Compressions": 97277,
+      "Pageins": 471847,
+      "Pageouts": 1567,
+      "Swapins": 0,
+      "Swapouts": 0
+    },
+    "raw_vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                4284.\nPages active:                            185605.\nPages inactive:                          187453.\nPages speculative:                         2230.\nPages throttled:                              0.\nPages wired down:                         52978.\nPages purgeable:                            204.\n\"Translation faults\":                   2995209.\nPages copy-on-write:                     415280.\nPages zero filled:                      1030216.\nPages reactivated:                       112637.\nPages purged:                              5533.\nFile-backed pages:                       263342.\nAnonymous pages:                         111946.\nPages stored in compressor:               82919.\nPages occupied by compressor:             25242.\nDecompressions:                           12232.\nCompressions:                             97277.\nPageins:                                 471847.\nPageouts:                                  1567.\nSwapins:                                      0.\nSwapouts:                                     0.\n"
+  },
+  "controller": {
+    "pid": 2638,
+    "ppid": 2626,
+    "pgid": 952,
+    "rss_kib": 98304,
+    "state": "S<",
+    "lstart": "Wed Oct 14 14:09:51 2026    "
+  },
+  "pid": 2768,
+  "child_exit": 7,
+  "stop_reason": null,
+  "wall_seconds": 1.0584756249999998,
+  "peak_sampled_rss_kib": 98480,
+  "retirement_census_complete": true,
+  "cleanup_errors": [],
+  "whole_inputs_unchanged": true,
+  "max_observed_sample_interval_seconds": 0.19469612500000721,
+  "containment_complete": true,
+  "observation_complete": true
+}
