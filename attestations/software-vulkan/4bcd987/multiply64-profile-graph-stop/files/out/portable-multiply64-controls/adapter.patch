@@ -1,0 +1,320 @@
+--- divide64-original-controls/gate.py
++++ multiply64-controls/gate.py
+@@ -4,7 +4,7 @@
+ sys.dont_write_bytecode = True
+ W = Path(__file__).resolve().parent
+ R = W.parents[1]
+-T = R / 'bin/linux-gcc/portable-divide64-original-controls'
++T = R / 'bin/linux-gcc/portable-multiply64-controls'
+ P = json.loads((W / 'packet.json').read_text())
+ 
+ def record(path):
+@@ -90,31 +90,83 @@
+         key = str(path.relative_to(R)) if path.is_relative_to(R) else str(path)
+         assert before[key] == record(path), ('numerical consumed input differs from current sealed input', label, name)
+ 
++def verify_source_and_compiler():
++    archive = Path(P['compiler_archive'])
++    assert content(archive / 'manifest.json')['sha256'] == P['compiler_manifest_sha256']
++    manifest = json.loads((archive / 'manifest.json').read_text())
++    for name, pin in manifest['files'].items(): assert content(archive / name) == pin, name
++    original = archive / 'files/out/portable-multiply64-compiler'
++    accepted_folder(original / 'compile-endpoint-normal')
++    result = json.loads((original / 'compiler-result.json').read_text())
++    approval = json.loads((original / 'compiler-acceptance.json').read_text())
++    assert approval['passed'] and approval['compiler_owner']['sha256'] == content(original / 'compile-endpoint-normal/owner.json')['sha256']
++    assert approval['compiler_result']['sha256'] == content(original / 'compiler-result.json')['sha256']
++    assert result['candidate_multiply_graph']['complete_discarded_bit_jam']
++    assert result['original_divide_unpack_round_normalized_bodies_equal']
++    prototype = archive / 'files/out/portable-multiply64-screen'
++    assert (prototype / 'candidate/src/sirius/kernels/portable_binary32.h').read_bytes() == (W / 'candidate-header.h').read_bytes()
++    assert (W / 'canonical-header.h').read_bytes() == (R / 'src/sirius/kernels/portable_binary32.h').read_bytes()
++    for path in (W / 'stock/src/sirius/kernels').iterdir():
++        assert path.read_bytes() == (R / 'src/sirius/kernels' / path.name).read_bytes()
++        expected = W / 'candidate-header.h' if path.name == 'portable_binary32.h' else path
++        assert (W / 'candidate/src/sirius/kernels' / path.name).read_bytes() == expected.read_bytes()
++    return record(original / 'compiler-acceptance.json')
++
+ def verify_arithmetic():
++    # No owner/context/compiler admission until the actual immutable numeric archive exists and is pinned.
++    assert re.fullmatch(r'[0-9a-f]{64}', P['arithmetic_manifest_sha256']), 'original multiply64 arithmetic is still pending'
++    assert re.fullmatch(r'[0-9a-f]{40}', P['arithmetic_evidence_commit'])
+     archive = Path(P['arithmetic_archive'])
+     assert content(archive / 'manifest.json')['sha256'] == P['arithmetic_manifest_sha256']
+     manifest = json.loads((archive / 'manifest.json').read_text())
+-    for name, pin in manifest['files'].items():
+-        assert content(archive / name) == pin, name
+-    work = archive / 'files/out/portable-divide64-arithmetic'
++    for name, pin in manifest['files'].items(): assert content(archive / name) == pin, name
++    work = archive / 'files/out' / P['arithmetic_work_name']
+     result = json.loads((work / 'arithmetic-result.json').read_text())
++    assert content(work / 'arithmetic-result.json') == P['arithmetic_result_pin']
++    assert content(work / 'independent-terminal-review.json') == P['arithmetic_terminal_review_pin']
++    assert content(archive / 'result.json') == P['arithmetic_aggregate_result_pin']
++    terminal = json.loads((work / 'independent-terminal-review.json').read_text())
++    assert terminal['passed'] and terminal['terminal_owners'] == 10 and terminal['output_seals'] == 8
++    assert terminal['root_rechecked_pins']['arithmetic-result.json'] == P['arithmetic_result_pin']
++    assert terminal['complete_candidate_output_words'] == 697072 and terminal['exact_raw_word_mismatches'] == 0
++    assert terminal['full_candidate_original_expected_and_historical_stock_equal']
++    assert terminal['host_total_original_records'] == 174268 and terminal['host_original_residual_records'] == 53524
++    assert result['schema'] == 'sirius-multiply64-original-arithmetic-result-v1'
+     assert result['passed'] and result['original_records'] == 174268
+-    assert result['complete_output_words_per_provider'] == 697072
++    assert result['original_operation_count'] == 14 and result['complete_output_words_per_provider'] == 697072
+     assert result['host_explicit64_and_both_full_gpu_outputs_equal_original_expected']
+-    assert result['original_corpus']['division_branch_coverage']['optional_finite_nonzero_branch_records'] == 12263
+-    assert (work / 'candidate/src/sirius/kernels/portable_binary32.h').read_bytes() == (W / 'candidate/src/sirius/kernels/portable_binary32.h').read_bytes()
++    assert result['stock_result_reused'] and result['candidate_macro'] == 'SIRIUS_PB32_MULTIPLY64=1'
++    assert result['original_corpus']['operation_cardinalities'] == P['arithmetic_expected_operation_cardinalities']
++    candidate = result['modules']['candidate']; stock = result['modules']['stock']
++    assert candidate['capabilities'] == ['Int64', 'Shader'] and candidate['integer_widths'] == ['32', '64']
++    assert stock['capabilities'] == ['Shader'] and stock['integer_widths'] == ['32']
++    assert candidate['divide_widths'] == stock['divide_widths'] == [32]
++    assert candidate['divide_loops'] == stock['divide_loops'] == 1
++    assert candidate['original_divide_unpack_round_normalized_bodies_equal']
++    shape = candidate['multiply_graph']
++    assert shape['upper_bit'] == 47 and shape['shift_values'] == [20, 21]
++    assert shape['normalized_unsigned_operands'] and shape['complete_discarded_bit_jam'] and shape['same_common_round_call']
++    assert result['stock_arithmetic_receipt']['all737_static_inputs_and17_terminal_owners_joined']
++    assert result['candidate_shader'] == candidate['module']
++    actual_module = archive / 'files' / Path(result['candidate_shader']['resolved_path']).relative_to(R)
++    assert content(actual_module) == {k: result['candidate_shader'][k] for k in ('bytes', 'sha256')}
++    assert (work / 'candidate/src/sirius/kernels/portable_binary32.h').read_bytes() == (W / 'candidate-header.h').read_bytes()
+     for label, pin in result['owners'].items():
+         accepted_folder(work / label)
+         assert content(work / label / 'owner.json') == {k: pin[k] for k in ('bytes', 'sha256')}
+-    for mode in ('stock', 'candidate'):
+-        assert (work / ('execute-gpu-' + mode) / 'actual.bin').read_bytes() == (work / 'expected.bin').read_bytes()
++    original_stock = Path(P['stock_arithmetic_archive']) / 'files/out/portable-divide64-arithmetic'
++    assert content(Path(P['stock_arithmetic_archive']) / 'manifest.json')['sha256'] == P['stock_arithmetic_manifest_sha256']
++    expected = (work / 'expected.bin').read_bytes()
++    assert expected == (original_stock / 'expected.bin').read_bytes() == (original_stock / 'execute-gpu-stock/actual.bin').read_bytes()
++    assert (work / 'execute-gpu-candidate/actual.bin').read_bytes() == expected
+     return record(work / 'arithmetic-result.json')
+ 
+ def pin_context():
+-    verify_static(); verify_host_reuse(); verify_arithmetic()
++    verify_static(); verify_source_and_compiler(); verify_host_reuse(); verify_arithmetic()
+     assert not T.exists() and not (W / 'operator-context.json').exists()
+     assert not subprocess.check_output(['git', 'status', '--porcelain=v1'], cwd=R)
+     revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=R, text=True).strip()
++    assert revision == P['execution_revision']
+     assert (W / 'actions.json').read_bytes() == (W / 'actions.unpinned.json').read_bytes()
+     actions = json.loads((W / 'actions.unpinned.json').read_text())
+     for action in actions.values():
+@@ -125,55 +177,14 @@
+           'source_freeze': record(W / 'source-freeze.json'), 'preparation': record(W / 'preparation.json')})
+     print('Pinned original optional64 profile; no compiler/provider launched.', flush=True)
+ 
+-def widened_divide_sites(text, camera):
+-    definitions = dict(re.findall(r'^\s*(%\S+) = (.+)$', text, re.M))
+-    widths = dict(re.findall(r'(%\S+) = OpTypeInt (\d+) [01]', text))
+-    assert set(widths.values()) == {'32', '64'}
+-    wide = [name for name, bits in widths.items() if bits == '64']
+-    assert len(wide) == 1 and definitions[wide[0]] == 'OpTypeInt 64 0'
+-    wide = wide[0]
+-    sites = re.findall(r'(%\S+) = OpUDiv ' + re.escape(wide) + r' (%\S+) (%\S+)', text)
+-    assert len(sites) == (2 if camera else 1), sites
+-    values = {name: int(value) for name, value in re.findall(r'(%\S+) = OpConstant %\S+ (\d+)', text)}
+-    for quotient, numerator, denominator in sites:
+-        shift = definitions[numerator].split()
+-        assert shift[:2] == ['OpShiftLeftLogical', wide] and values[shift[3]] == 26
+-        assert definitions[shift[2]].startswith('OpUConvert ' + wide + ' ')
+-        assert definitions[denominator].startswith('OpUConvert ' + wide + ' ')
+-        products = [name for name, expression in definitions.items() if
+-                    expression.split()[:2] == ['OpIMul', wide] and
+-                    set(expression.split()[2:]) == {quotient, denominator}]
+-        assert len(products) == 1
+-        product = products[0]
+-        remainders = [name for name, expression in definitions.items() if
+-                      expression == 'OpISub ' + wide + ' ' + numerator + ' ' + product]
+-        comparisons = [expression.split()[2:] for expression in definitions.values()
+-                       if expression.startswith('OpINotEqual ')]
+-        assert any((args == [numerator, product] or args == [product, numerator] or
+-                   (len(args) == 2 and ((args[0] in remainders and values.get(args[1]) == 0) or
+-                                       (args[1] in remainders and values.get(args[0]) == 0)))) for args in comparisons)
+-        assert any(expression.startswith('OpUConvert ') and expression.split()[1] != wide and
+-                   expression.split()[2:] == [quotient] for expression in definitions.values())
+-    if camera:
+-        entry = re.search(r'OpEntryPoint GLCompute (%\S+)', text)[1]
+-        body = re.search(r'^\s*' + re.escape(entry) + r' = OpFunction\b.*?OpFunctionEnd', text, re.M | re.S)[0]
+-        assert all(re.search(re.escape(q) + r' = OpUDiv ', body) for q, _, _ in sites)
+-    else:
+-        name = re.search(r'OpName (%\S+) "PB32Divide"', text)[1]
+-        body = re.search(r'^\s*' + re.escape(name) + r' = OpFunction\b.*?OpFunctionEnd', text, re.M | re.S)[0]
+-        assert body.count('OpLoopMerge') == 0
+-        assert all(re.search(re.escape(q) + r' = OpUDiv ', body) for q, _, _ in sites)
+-    return {'unsigned64_quotient_sites': len(sites), 'inlined_camera': camera,
+-            'shift26_quotient_product_remainder_test_and_narrowing_joined': True}
+-
+ def reuse_stock():
+     archive = Path(P['original_stock_archive'])
+     manifest_path = archive / 'manifest.json'
+     assert content(manifest_path)['sha256'] == P['original_stock_manifest_sha256']
+     manifest = json.loads(manifest_path.read_text())
+     old_work = Path(P['original_stock_work'])
+-    accepted_folder(old_work / 'compile-products-stock')
+-    before = json.loads((old_work / 'compile-products-stock/inputs-before.json').read_text())
++    accepted_folder(old_work / 'reuse-products-stock')
++    before = json.loads((old_work / 'reuse-products-stock/inputs-before.json').read_text())
+     tools = {}
+     for name in P['stock_reuse_tools']:
+         path = Path(name)
+@@ -187,9 +198,13 @@
+     for name in names:
+         paths = [original / name, W / 'stock/src/sirius/kernels' / name, R / 'src/sirius/kernels' / name]
+         assert len({content(path)['sha256'] for path in paths}) == 1
++        consumed = before[str(Path(P['original_stock_input_root']) / 'stock/src/sirius/kernels' / name)]
++        assert content(original / name) == {k: consumed[k] for k in ('bytes', 'sha256')}
+         kernel_sources[name] = record(original / name)
+     builders = [old_work / 'stock/scripts/build-retained-kernels.py', W / 'stock/scripts/build-retained-kernels.py', R / 'scripts/build-retained-kernels.py']
+     assert len({content(path)['sha256'] for path in builders}) == 1
++    consumed_builder = before[str(Path(P['original_stock_input_root']) / 'stock/scripts/build-retained-kernels.py')]
++    assert content(builders[0]) == {k: consumed_builder[k] for k in ('bytes', 'sha256')}
+     source = Path(P['stock_reuse_directory'])
+     target = T / 'stock'; assert not target.exists()
+     products = [Path(name).name for name in P['outputs']['reuse-products-stock'] if Path(name).parent == target]
+@@ -204,9 +219,9 @@
+         shutil.copyfile(origin, target / name)
+         assert (target / name).read_bytes() == origin.read_bytes()
+         joined[name] = {'source': record(origin), 'copy': record(target / name)}
+-    return {'passed': True, 'reused_files': 39, 'original_stock_owner': record(old_work / 'compile-products-stock/owner.json'),
+-            'original_stock_before': record(old_work / 'compile-products-stock/inputs-before.json'),
+-            'original_stock_after': record(old_work / 'compile-products-stock/inputs-after.json'),
++    return {'passed': True, 'reused_files': 39, 'original_stock_owner': record(old_work / 'reuse-products-stock/owner.json'),
++            'original_stock_before': record(old_work / 'reuse-products-stock/inputs-before.json'),
++            'original_stock_after': record(old_work / 'reuse-products-stock/inputs-after.json'),
+             'original_manifest': record(manifest_path), 'kernel_sources': kernel_sources,
+             'builder': record(builders[0]), 'five_tools': tools, 'products': joined,
+             'preparation_cost_evidence_seconds': {'historical_stock35': 35.46063927599971, 'historical_candidate35': 34.996513119000156},
+@@ -215,6 +230,7 @@
+ def products_review():
+     from elf_arrays import arrays
+     from interface_signature import interface_signature
++    from multiply_profile import multiply_shape, normalized_function
+     canonical = R / 'bin/linux-gcc/src/sirius/backend/retained'
+     names = sorted(path.name for path in canonical.glob('*.spv'))
+     assert len(names) == 35 and set(P['changed_modules']) <= set(names)
+@@ -245,15 +261,24 @@
+         assert modes(stock) == modes(candidate) and barriers(stock) == barriers(candidate), name
+         footprint = None
+         if changed:
+-            normal = name.endswith('_normal_sum.spv')
++            caps_stock = re.findall(r'OpCapability (\S+)', stock)
+             caps = re.findall(r'OpCapability (\S+)', candidate)
+-            assert sorted(caps) == sorted(['Shader', 'Int64'] + (['RoundingModeRTE'] if normal else [])), name
+-            assert len(caps) == (3 if normal else 2)
+-            assert re.findall(r'OpTypeFloat (\d+)', candidate) == (['32'] if normal else []), name
++            assert 'Int64' not in caps_stock and sorted(caps) == sorted(caps_stock + ['Int64']), name
++            assert re.findall(r'OpTypeInt 64 ([01])', candidate) == ['0'], name
++            assert re.findall(r'OpTypeFloat (\d+)', candidate) == re.findall(r'OpTypeFloat (\d+)', stock), name
+             assert not re.search(r'\b(?:RelaxedPrecision|FPFastMathMode|FPFastMathDefault|OpFmaKHR)\b', candidate)
+-            footprint = widened_divide_sites(candidate, name.startswith(('retained_camera_', 'retained_ray_camera_')))
++            camera = name.startswith(('retained_camera_portable', 'retained_ray_camera_portable'))
++            footprint = multiply_shape(candidate, camera=camera)
++            for function in ('PB32Unpack', 'PB32Round', 'PB32Divide', 'PB32WideProduct', 'PB32ProductResidual',
++                             'OrderedAdd32', 'OrderedSubtract32', 'OrderedMultiply32', 'OrderedDivide32'):
++                present = [bool(re.search(r'OpName %\S+ "' + function + '"', text)) for text in (stock, candidate)]
++                assert present[0] == present[1], (name, function)
++                if present[0]: assert normalized_function(stock, function) == normalized_function(candidate, function), (name, function)
++            assert re.findall(r'= (OpF(?!unction)\S+) ', stock) == re.findall(r'= (OpF(?!unction)\S+) ', candidate), name
++            wide = re.search(r'(%\S+) = OpTypeInt 64 0', candidate)[1]
++            assert not re.search(r'Op(?:U|S)(?:Div|Mod|Rem) ' + re.escape(wide) + r' ', candidate)
+         rows.append({'module': name, 'changed': changed, 'stock': record(paths['stock']), 'candidate': record(paths['candidate']),
+-                     'complete_public_shared_type_layout_modes_and_ordered_barriers_equal': True, 'divide_footprint': footprint})
++                     'complete_public_shared_type_layout_modes_and_ordered_barriers_equal': True, 'multiply_footprint': footprint})
+     headers = {}
+     for name, count in [('retained_kernels.h', 40), ('retained_owner_kernels.h', 2)]:
+         expected = arrays(canonical / name)
+@@ -267,13 +292,14 @@
+         headers[name] = {'changed_arrays': changed, 'stock': record(T / 'stock' / name), 'candidate': record(T / 'candidate' / name)}
+     for name in ('retained_owner_layout.h', 'retained_owner_layout.slang'):
+         assert (canonical / name).read_bytes() == (T / 'stock' / name).read_bytes() == (T / 'candidate' / name).read_bytes()
+-    return {'passed': True, 'stock_reuse': record(W / 'stock-reuse-acceptance.json'), 'modules': rows, 'headers': headers, 'changed_modules': 17, 'unchanged_modules': 18,
+-            'main_arrays_changed': 17, 'main_arrays_unchanged': 23, 'owner_arrays_unchanged': 2,
++    return {'passed': True, 'stock_reuse': record(W / 'stock-reuse-acceptance.json'), 'modules': rows, 'headers': headers, 'changed_modules': 24, 'unchanged_modules': 11,
++            'main_arrays_changed': 24, 'main_arrays_unchanged': 16, 'owner_arrays_unchanged': 2,
+             'all_seven_tables_and_nonarray_ABI_constants_equal': True,
+             'scope': 'Complete compiler/profile/ABI evidence only; no integrated numeric or benefit verdict.'}
+ 
+ def prepare_producer():
+     assert json.loads((W / 'products-acceptance.json').read_text())['passed']
++    verify_source_and_compiler()
+     verify_arithmetic(); verify_host_reuse()
+     directory = T / 'controls'; assert not directory.exists()
+     (directory / 'headers').mkdir(parents=True)
+@@ -304,7 +330,7 @@
+     assert not any('--whole-archive' in arg for arg in argv)
+     producer = json.loads((W / 'producer-acceptance.json').read_text())
+     assert producer['passed'] and set(producer['changed_arrays']) == set(P['changed_arrays'])
+-    assert producer['unchanged_array_count'] == 23
++    assert producer['unchanged_array_count'] == 16
+     for name in ('kTransportShader', 'kEndpointShader'):
+         assert producer['actual_ELF_owner_arrays']['baseline'][name]['sha256'] == producer['actual_ELF_owner_arrays']['candidate'][name]['sha256']
+     return {'passed': True, 'all28device_definitions_in_object_and_actual_candidate': True,
+@@ -383,7 +409,7 @@
+           'profile': record(W / 'profile.json'), 'arithmetic': verify_arithmetic(),
+           'control_acceptance': record(W / 'control-acceptance.json'), 'endpoint_route_acceptance': record(W / 'endpoint-route-acceptance.json'),
+           'production_adopted': False, 'benefit_executed': False,
+-          'scope': 'Original primitive arithmetic and eight integrated prerequisites for explicit17-module diagnostic profile. Original20+2 adoption gates remain unexecuted; no full-science/frame/release qualification.'})
++          'scope': 'Original primitive arithmetic and eight integrated prerequisites for explicit24-module diagnostic profile. Original20+2 adoption gates remain unexecuted; no full-science/frame/release qualification.'})
+     print('Original eight controls and complete route/readback joins accepted; no benefit verdict.', flush=True)
+ 
+ if __name__ == '__main__':
+--- divide64-original-controls/verify_producer.py
++++ multiply64-controls/verify_producer.py
+@@ -5,7 +5,7 @@
+ R = Path.cwd().resolve()
+ W = Path(__file__).resolve().parent
+ B = R / 'bin/linux-gcc'
+-T = B / 'portable-divide64-original-controls/controls'
++T = B / 'portable-multiply64-controls/controls'
+ def identity(path):
+     data = path.read_bytes()
+     return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+@@ -73,10 +73,10 @@
+         pin = {key: normalized[str(path)][key] for key in ['bytes', 'sha256']}
+         assert identity(path) == pin, dependency
+         records[str(path.relative_to(R))] = pin
+-    assert 'bin/linux-gcc/portable-divide64-original-controls/controls/headers/retained_kernels.h' in records
++    assert 'bin/linux-gcc/portable-multiply64-controls/controls/headers/retained_kernels.h' in records
+     if label == 'compile-compute-sealed':
+         for header in ['retained_owner_kernels.h', 'retained_owner_layout.h']:
+-            assert 'bin/linux-gcc/portable-divide64-original-controls/controls/headers/' + header in records
++            assert 'bin/linux-gcc/portable-multiply64-controls/controls/headers/' + header in records
+     assert 'src/sirius/backend/vulkan/vulkan_device.h' not in records or records['src/sirius/backend/vulkan/vulkan_device.h']['sha256'] == '604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de'
+     compile_records[label] = {'owner': identity(W / label / 'owner.json'), 'object': identity(T / (name + '.o')),
+                               'actual_dependencies': records}
+@@ -113,7 +113,7 @@
+     assert array_records['candidate'][name]['sha256'] == hashlib.sha256(candidate[name]).hexdigest()
+ changed = [name for name in stock if stock[name] != candidate[name]]
+ assert changed == [name for name in stock if name in json.loads((W / 'packet.json').read_text())['changed_arrays']]
+-assert len(changed) == 17
++assert len(changed) == 24
+ owner_array_records = {}
+ for mode, directory in [('baseline', B / 'src/sirius/backend/retained'), ('candidate', T / 'headers')]:
+     owner_arrays = {}
+@@ -133,10 +133,10 @@
+ result = {'passed': True, 'compile_provenance': compile_records, 'link_owner': identity(W / 'link-candidate/owner.json'),
+           'link_map': identity(T / 'candidate.map'), 'old_archive_compute_member_excluded': True,
+           'actual_ELF_owner_arrays': owner_array_records, 'actual_ELF_arrays': array_records, 'actual_create_selectors': selector_records,
+-          'changed_arrays': changed, 'unchanged_array_count': 23,
++          'changed_arrays': changed, 'unchanged_array_count': 16,
+           'baseline_executable': identity(T / 'original_baseline_controls'),
+           'candidate_executable': identity(T / 'original_candidate_controls'),
+           'original_reader': identity(contract / 'software_contracts.py'),
+-          'scope': 'Matched original private control producer and actual linked array/selector evidence. All seventeen affected main arrays and both unchanged optional owner arrays are bound to actual ELF bytes; execution remains for root-owned original controls. No integrated execution or benefit verdict yet.'}
++          'scope': 'Matched original private control producer and actual linked array/selector evidence. All twenty-four affected main arrays and both unchanged optional owner arrays are bound to actual ELF bytes; execution remains for root-owned original controls. No integrated execution or benefit verdict yet.'}
+ (W / 'producer-acceptance.json').write_text(json.dumps(result, indent=2) + '\n')
+ print(json.dumps({'passed': True, 'actual_arrays_per_ELF': 40, 'changed': changed, 'old_compute_excluded': True, 'candidate_executable': result['candidate_executable']}))
+--- divide64-original-controls/verify_control_routes.py
++++ multiply64-controls/verify_control_routes.py
+@@ -72,7 +72,7 @@
+ keys = {key for record in records for key in record['complete_readbacks']}
+ assert len(keys) == 56
+ assert {k:v for k,v in props.items() if k.startswith('factored_endpoint_readback_')} == {k:oldprops[k] for k in keys}
+-shutil.copyfile(original, W / 'original-factored-readbacks.xml')
++assert original.read_bytes() == (W / 'original-factored-readbacks.xml').read_bytes()
+ result = {'passed': True, 'routes': records, 'complete_readbacks': 56,
+           'complete_readbacks_exact_to_prior_original_control': True,
+           'scope': 'Original finite Factored Endpoint control exercises candidate normal and default core routes, plus candidate masked-wide core route. Original reference/admission/refusal/recovery assertions passed. This does not alter actual RTE32 provider behavior or replace optional owner/native execution qualification.'}

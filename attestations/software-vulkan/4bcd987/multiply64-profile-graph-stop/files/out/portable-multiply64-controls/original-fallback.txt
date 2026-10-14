@@ -1,0 +1,3 @@
+    PB32Wide product = PB32WideProduct(aa.significand, bb.significand);
+    bool upper = (product.hi & 0x00008000u) != 0u;
+    uint extended = PB32WideShiftJam(product, upper ? 21u : 20u);

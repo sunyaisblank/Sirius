@@ -1,0 +1,981 @@
+{
+  "files": {
+    "files/bin/linux-gcc/portable-multiply64-controls/analysis/candidate/retained_camera.spvasm": {
+      "bytes": 136754,
+      "sha256": "5fa15860300adf9b890b7998e6b5c1e921bec6fc2659069e3aa31080e709afe5"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/analysis/candidate/retained_camera_fp64.spvasm": {
+      "bytes": 171658,
+      "sha256": "3252f74eb8bff7c5284d43cb5e03606b0d9ba790a3a0b6307e33a0d799a1b7bc"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/analysis/stock/retained_camera.spvasm": {
+      "bytes": 136754,
+      "sha256": "5fa15860300adf9b890b7998e6b5c1e921bec6fc2659069e3aa31080e709afe5"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/analysis/stock/retained_camera_fp64.spvasm": {
+      "bytes": 175089,
+      "sha256": "5af142635f9b69caeec977dd40d3093ae9fbc8ec089a1759840347d2681bc2b6"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_camera_fp64.spv": {
+      "bytes": 59880,
+      "sha256": "d9ecca786ee1ad4f61f7af5ec97287f7598e78ddd57407a827744826648a40fb"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_camera_portable.spv": {
+      "bytes": 504968,
+      "sha256": "5de98f6bbe002d70e4725f880ac6323c76093154993fe6c50803228c09ddb6db"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_camera_portable_fp64.spv": {
+      "bytes": 504968,
+      "sha256": "5de98f6bbe002d70e4725f880ac6323c76093154993fe6c50803228c09ddb6db"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dense.spv": {
+      "bytes": 77952,
+      "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dense_fp64.spv": {
+      "bytes": 89460,
+      "sha256": "0a403f99cb8f5eb012eb2b6a3abb28cc2e80f2edd33a7282505ac6e41312b575"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dense_portable.spv": {
+      "bytes": 115040,
+      "sha256": "b6899f7edde3d806b66db3f393f97ce9cc9cee1abdad65c7d3cf62e7148a29d4"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dense_portable_fp64.spv": {
+      "bytes": 115040,
+      "sha256": "b6899f7edde3d806b66db3f393f97ce9cc9cee1abdad65c7d3cf62e7148a29d4"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dopri_phase.spv": {
+      "bytes": 58740,
+      "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dopri_phase_fp64.spv": {
+      "bytes": 70932,
+      "sha256": "cc7e33bda87e4051d58135d50c64749c3eefd09f33b76542d1d86317dbb2f3f9"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dopri_phase_portable.spv": {
+      "bytes": 91680,
+      "sha256": "443dc74391f8bf2feac8d491edd3fcef4e00ff89d4bddcc189314e0946e83524"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 91680,
+      "sha256": "443dc74391f8bf2feac8d491edd3fcef4e00ff89d4bddcc189314e0946e83524"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 95588,
+      "sha256": "b3513bc287016e226a468e52cc51f9cdd50b1718031d82ba1a10678ed9d23296"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_endpoint.spv": {
+      "bytes": 99300,
+      "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_endpoint_fma.spv": {
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_endpoint_fp64.spv": {
+      "bytes": 110792,
+      "sha256": "ec7d244231e7fba31a92cf06d9ce6e27b73a8a0f0f2ffee86dfce5836efc6ca9"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_endpoint_portable.spv": {
+      "bytes": 144180,
+      "sha256": "9834bd076b6e8cc3c6eb27103f72b4eef8b737ec617f8b4512698b22d8743505"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_endpoint_portable_fp64.spv": {
+      "bytes": 144180,
+      "sha256": "9834bd076b6e8cc3c6eb27103f72b4eef8b737ec617f8b4512698b22d8743505"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 150236,
+      "sha256": "a2cd60d52011e81fb75125046f613e9ab67ce7ed1c970a39f056284e88678c32"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_initialize.spv": {
+      "bytes": 57108,
+      "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_initialize_fp64.spv": {
+      "bytes": 69300,
+      "sha256": "bc99a330a6cab9671e35c32df1e486b39da90c23c9ef9f06411d7f5ea2451297"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_initialize_portable.spv": {
+      "bytes": 76280,
+      "sha256": "be061904a7b8c863ed026fd615ca1843fc1289d6a653ce71f6b0e559e13dbc6e"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_initialize_portable_fp64.spv": {
+      "bytes": 76280,
+      "sha256": "be061904a7b8c863ed026fd615ca1843fc1289d6a653ce71f6b0e559e13dbc6e"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_kernels.h": {
+      "bytes": 7866886,
+      "sha256": "5e682b0da13cc0e93441ffa44c29ae4204e6a70cf52a4f1cf2f0f648d900d5ab"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_owner_layout.slang": {
+      "bytes": 1679,
+      "sha256": "b5c0941d5bbbade6a6ab2893b7f26fbf9eb274c2ab8afa730f1c4f7f054ab997"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_ray_camera_fp64.spv": {
+      "bytes": 57560,
+      "sha256": "af3f5ce45bbcc2f1bbb57f966ecc6bf67a588b9bd219f87dab54252595e8b661"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_ray_camera_portable.spv": {
+      "bytes": 467900,
+      "sha256": "279e013738d68137a0b319ccd67b28936debc9338e05a4539d306cfa0778a8d6"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 467900,
+      "sha256": "279e013738d68137a0b319ccd67b28936debc9338e05a4539d306cfa0778a8d6"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_transport.spv": {
+      "bytes": 85364,
+      "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_transport_fma.spv": {
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_transport_fp64.spv": {
+      "bytes": 96840,
+      "sha256": "c4cdd2e41f0e2bb98be24fec413a2e006a8459e9fea44012132ae72478b058f2"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_transport_portable.spv": {
+      "bytes": 98576,
+      "sha256": "b0d0eae82a2b72faa429613c182dda930952e32b804b39e923f649ac0c349ecb"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_transport_portable_fp64.spv": {
+      "bytes": 98576,
+      "sha256": "b0d0eae82a2b72faa429613c182dda930952e32b804b39e923f649ac0c349ecb"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_transport_portable_normal_sum.spv": {
+      "bytes": 102876,
+      "sha256": "fbb3001df778e69aaf291aa88da78c61bcbecb72b5d1d602aac4a301eb344521"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_dense.spv": {
+      "bytes": 77952,
+      "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_dense_fp64.spv": {
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_dense_portable.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_dense_portable_fp64.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_dopri_phase.spv": {
+      "bytes": 58740,
+      "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_dopri_phase_fp64.spv": {
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_dopri_phase_portable.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_endpoint.spv": {
+      "bytes": 99300,
+      "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_endpoint_fma.spv": {
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_endpoint_fp64.spv": {
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_endpoint_portable.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_endpoint_portable_fp64.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_initialize.spv": {
+      "bytes": 57108,
+      "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_initialize_fp64.spv": {
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_initialize_portable.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_initialize_portable_fp64.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_kernels.h": {
+      "bytes": 7952166,
+      "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_owner_layout.slang": {
+      "bytes": 1679,
+      "sha256": "b5c0941d5bbbade6a6ab2893b7f26fbf9eb274c2ab8afa730f1c4f7f054ab997"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_transport.spv": {
+      "bytes": 85364,
+      "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_transport_fma.spv": {
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_transport_fp64.spv": {
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_transport_portable.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_transport_portable_fp64.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+    },
+    "files/bin/linux-gcc/portable-multiply64-controls/stock/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+    },
+    "files/out/portable-multiply64-controls/actions.json": {
+      "bytes": 3412525,
+      "sha256": "421fa75eecd25238006256ebbdc7e78a1eb4386a6cbb5c2bd74bf1d343519fda"
+    },
+    "files/out/portable-multiply64-controls/actions.unpinned.json": {
+      "bytes": 3412335,
+      "sha256": "1dda2b4282622cff92ce8c328e36d62a36d283051270500bd2e937bb1bbe8c37"
+    },
+    "files/out/portable-multiply64-controls/adapted-from/actions.unpinned.json": {
+      "bytes": 3016260,
+      "sha256": "4aafb04b902067fe1db3d7448d05cd78a06f5c8d3acf92ba5f172c8a9d707581"
+    },
+    "files/out/portable-multiply64-controls/adapted-from/gate.py": {
+      "bytes": 26175,
+      "sha256": "9a5abb6f6555a0e9dbd2a83d912121f883a48e43daad57aa02be78629696126c"
+    },
+    "files/out/portable-multiply64-controls/adapted-from/packet.json": {
+      "bytes": 44616,
+      "sha256": "383e491e906644179bd46acedd30ba731701b3fdd6cc9405507f1a6c69f67cea"
+    },
+    "files/out/portable-multiply64-controls/adapted-from/preparation.json": {
+      "bytes": 4597,
+      "sha256": "2e3567474d6c4dcb8da757e537f955a1e01c27400cb9884ce17ab82571328420"
+    },
+    "files/out/portable-multiply64-controls/adapted-from/profile.json": {
+      "bytes": 2472,
+      "sha256": "2326d9614c95c94b2779d7be36a2ed531514fbdaf9c93b8c829ff9eb461931f6"
+    },
+    "files/out/portable-multiply64-controls/adapted-from/provenance.json": {
+      "bytes": 3319,
+      "sha256": "a78ca67370fabfd163955942b0fbc2f2f7d68bbe241166dc17d0e58d560dac88"
+    },
+    "files/out/portable-multiply64-controls/adapted-from/verify_producer.py": {
+      "bytes": 9855,
+      "sha256": "c5b5062caf575f0106b9662224fd71cb0d37f02f4f3827a636c4672650943368"
+    },
+    "files/out/portable-multiply64-controls/adapter.patch": {
+      "bytes": 24664,
+      "sha256": "2383f76ce60969db3f394b71b3345a67b6735311c3edd46631f7f5a7867e93b9"
+    },
+    "files/out/portable-multiply64-controls/audited-observer.cpp": {
+      "bytes": 335033,
+      "sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3"
+    },
+    "files/out/portable-multiply64-controls/candidate-header.h": {
+      "bytes": 13438,
+      "sha256": "77b1144c6c177b3c9ad8907ce654c8bd0e9f647fc18a355d105e48cec41578c9"
+    },
+    "files/out/portable-multiply64-controls/candidate.patch": {
+      "bytes": 2043,
+      "sha256": "7d74c768408fa6f007191e4f2aa9311390b870b95e1025cd9871f338a43ce24e"
+    },
+    "files/out/portable-multiply64-controls/candidate/scripts/build-retained-kernels.py": {
+      "bytes": 36953,
+      "sha256": "e3929d5f80653932d85ea031e51f56fe793894c5dde7ef2fa061bdeee9aeea42"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/camera_frame_probe.slang": {
+      "bytes": 2470,
+      "sha256": "00120f5858efb20ba53ffa9cb3942860ed5474c012f5db75a2b79c3e9448105c"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/coupled_probe.slang": {
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_camera.slang": {
+      "bytes": 7542,
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_coupled.slang": {
+      "bytes": 12632,
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_deviation.slang": {
+      "bytes": 17259,
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_disk.slang": {
+      "bytes": 16688,
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_ellis_topology.slang": {
+      "bytes": 9374,
+      "sha256": "de0f2120591ecebbc00325eb6877cf4c6e8ebd0259637e300d4289ef82ab6e0b"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 23338,
+      "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_kerr_infinity.slang": {
+      "bytes": 23616,
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_metrics.slang": {
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_point_star.slang": {
+      "bytes": 1773,
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_trace_continuation.slang": {
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_trace_event.slang": {
+      "bytes": 15656,
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/infinity_probe.slang": {
+      "bytes": 3057,
+      "sha256": "dcddb120fe9cf4306df9e18ded240e629fea31012352e540f275f77955700888"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/metric_consistency_probe.slang": {
+      "bytes": 2352,
+      "sha256": "d21dd5305080cbee5c13aa0e435bb47e45117e35de4aafece4cd94224f64739e"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/parity_probe.slang": {
+      "bytes": 36380,
+      "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 13438,
+      "sha256": "77b1144c6c177b3c9ad8907ce654c8bd0e9f647fc18a355d105e48cec41578c9"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_camera.slang": {
+      "bytes": 9716,
+      "sha256": "a2ec29ccb7d7dc5aba98319d0ac902f2550ece2837f8d6366620bb5b54ed5929"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_dense.slang": {
+      "bytes": 20082,
+      "sha256": "9230821aa20883ab0994e06f7d17165fb9ada0fc8054e5eceaae4fd421e0193c"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_dopri_phase.slang": {
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_endpoint.slang": {
+      "bytes": 38824,
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_initialize.slang": {
+      "bytes": 8778,
+      "sha256": "79bf6e37634991d94e85f7bd032576b5cc5ae2c9bf3a6a172d20557ffd9c59a6"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_owner.slang": {
+      "bytes": 8042,
+      "sha256": "7d70e581acedccd688dadff476629de52c304d25657389179923b6fb32f8db62"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_pair.slang": {
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_program.py": {
+      "bytes": 38341,
+      "sha256": "71a242ed70e984352da250c71bbadf269d3e55af9decb33d3a453e2684dda1d0"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_ray_camera.slang": {
+      "bytes": 9201,
+      "sha256": "e3bfbfedd91096af1374ccd32119c6e1556b2b588f0106e7df1f488055acaf00"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_scalar.slang": {
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_scratch.slang": {
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_transport.slang": {
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/retained_triple.slang": {
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/smoke.slang": {
+      "bytes": 1002,
+      "sha256": "674183f4aef31db29e7a78985ba616c7e5cd401fd21161c798b3028b2142c27e"
+    },
+    "files/out/portable-multiply64-controls/candidate/src/sirius/kernels/trace.slang": {
+      "bytes": 63419,
+      "sha256": "a66222aa9d6bb3e16b0e2df4b2d903669347badb0118e838091c6e569c590c77"
+    },
+    "files/out/portable-multiply64-controls/canonical-header.h": {
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    },
+    "files/out/portable-multiply64-controls/check_controls.py": {
+      "bytes": 4168,
+      "sha256": "53b055d8f8d24aef8c4e2592e4f51300b5254c96324690ac7efe5f4837866659"
+    },
+    "files/out/portable-multiply64-controls/compile-products-candidate/inputs-after.json": {
+      "bytes": 566608,
+      "sha256": "433304eff038fd70a0ce71b207256472044778755c647dd3edb314dc087b212a"
+    },
+    "files/out/portable-multiply64-controls/compile-products-candidate/inputs-before.json": {
+      "bytes": 566608,
+      "sha256": "433304eff038fd70a0ce71b207256472044778755c647dd3edb314dc087b212a"
+    },
+    "files/out/portable-multiply64-controls/compile-products-candidate/output-seal.json": {
+      "bytes": 16085,
+      "sha256": "f093cc9022173357de1519d2c839a4f397b39be7b4626e7023299a9b95d1c235"
+    },
+    "files/out/portable-multiply64-controls/compile-products-candidate/owner.json": {
+      "bytes": 7812,
+      "sha256": "66c2dd6ffb13afe1fee43d70f8673d6f0fc38a2426da40a223bcc3e48ac388fa"
+    },
+    "files/out/portable-multiply64-controls/compile-products-candidate/samples.jsonl": {
+      "bytes": 45820,
+      "sha256": "9b212e89be0ce47f0f2e779acb164cf2f76ea0381ba237f2557adedc9acc26ac"
+    },
+    "files/out/portable-multiply64-controls/compile-products-candidate/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-controls/compile-products-candidate/stdout.log": {
+      "bytes": 970,
+      "sha256": "dcffe5c93d8eadb5c1fad5bc6318a30141a62edc5bcacad6f8223da300f0d0e6"
+    },
+    "files/out/portable-multiply64-controls/compiler-screen-stop.json": {
+      "bytes": 2494,
+      "sha256": "c5af406a98572a391d92bb63dc9f5a3c9a11b6b5f24848878260e95364c92ae3"
+    },
+    "files/out/portable-multiply64-controls/contract/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+    },
+    "files/out/portable-multiply64-controls/contract/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    },
+    "files/out/portable-multiply64-controls/diagnostic-builder.patch": {
+      "bytes": 7544,
+      "sha256": "50b7d9a9694e6e0e37628de3837154eae31ade0dcd29373e809960bef0d1bb8f"
+    },
+    "files/out/portable-multiply64-controls/elf_arrays.py": {
+      "bytes": 2598,
+      "sha256": "93f8fb190501db8bfb990e96d336a2f68dfa44ee613fae7d75fd2276e10489b6"
+    },
+    "files/out/portable-multiply64-controls/gate.py": {
+      "bytes": 29344,
+      "sha256": "dd0558bddd4f83de2c8a2f1664870ad41a53b8e2cd242ca2873b78f31cb431cf"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/actions.json": {
+      "bytes": 3387765,
+      "sha256": "0333d530c5e15967af4eccd34b20f489ef592af6d90be8ca7787201e50491f00"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/actions.unpinned.json": {
+      "bytes": 3387765,
+      "sha256": "0333d530c5e15967af4eccd34b20f489ef592af6d90be8ca7787201e50491f00"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/adapter.patch": {
+      "bytes": 23697,
+      "sha256": "1284d818b2168909fa6bb760063b82e6ace80ef519e144dab67bc485a5b02ca3"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/gate.py": {
+      "bytes": 29344,
+      "sha256": "dd0558bddd4f83de2c8a2f1664870ad41a53b8e2cd242ca2873b78f31cb431cf"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/packet.json": {
+      "bytes": 45001,
+      "sha256": "417c0c46d0627263b27bacb961532004cb062788dd7f967f19f9d4dcd8e0a2ca"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/preimage.json": {
+      "bytes": 4192,
+      "sha256": "88e063af6a67c97eebff27aa641adba32e9d9f2afd201a909d4f9dd928e0799b"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/preparation.json": {
+      "bytes": 4791,
+      "sha256": "77034ebc7e8ceb580d0933eeb9ff02b13ca1070a99a38d6f52e170a4689a7a7a"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/provenance.json": {
+      "bytes": 8667,
+      "sha256": "c62cf86e2c852689a87c8593821a5fd60f7529093c27e2268ee111665bdb489f"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/source-freeze.json": {
+      "bytes": 487577,
+      "sha256": "5065255a71f130466b7755e4ec7a62e3e3a9ac3881cdfdca967eb76214dac51b"
+    },
+    "files/out/portable-multiply64-controls/historical-preexecution-reference-output/verify_control_routes.py": {
+      "bytes": 5218,
+      "sha256": "9b5670c1a8565d269c525cf68565f3f30d6fc0c7450f3bc66c43de9acc335ac0"
+    },
+    "files/out/portable-multiply64-controls/independent-source-review.json": {
+      "bytes": 1443,
+      "sha256": "d2aae2fb9b25259885bb2dc38ce995913154be6510bb3d197380d04b865aa1ca"
+    },
+    "files/out/portable-multiply64-controls/interface_signature.py": {
+      "bytes": 1311,
+      "sha256": "94671eed4a3ae60d4310d1ba228fe02c3857749fd3cdc05518fbbe6a4be8cabf"
+    },
+    "files/out/portable-multiply64-controls/multiply_profile.py": {
+      "bytes": 8126,
+      "sha256": "492bbe61b54e9de14a4d5322be119978b2bb2b851050313f522c27780e53616d"
+    },
+    "files/out/portable-multiply64-controls/native-policy-selfcheck/inputs-after.json": {
+      "bytes": 595013,
+      "sha256": "06d9906ea011ab9bc9a2c3381f1b624ba9be4f42593002bfbf6c21161873d268"
+    },
+    "files/out/portable-multiply64-controls/native-policy-selfcheck/inputs-before.json": {
+      "bytes": 595013,
+      "sha256": "06d9906ea011ab9bc9a2c3381f1b624ba9be4f42593002bfbf6c21161873d268"
+    },
+    "files/out/portable-multiply64-controls/native-policy-selfcheck/output-seal.json": {
+      "bytes": 937,
+      "sha256": "98f6a663d89241e2792bf4c6032594c72d5406940963181a8159bd6db1bbcef6"
+    },
+    "files/out/portable-multiply64-controls/native-policy-selfcheck/owner.json": {
+      "bytes": 1661,
+      "sha256": "71dbb718bb1418a289894d13f8918dc64dc950278e346f5aaf94e63f7d33b144"
+    },
+    "files/out/portable-multiply64-controls/native-policy-selfcheck/samples.jsonl": {
+      "bytes": 672,
+      "sha256": "bf21f77f070ec657fc0c5dd64c2a8208aa9e259a266866121d756911e791bc13"
+    },
+    "files/out/portable-multiply64-controls/native-policy-selfcheck/stderr.log": {
+      "bytes": 100,
+      "sha256": "fe008aab760eb03ccac7578e2b84665b1b50b0d7f855b17a0c7a8d039435b658"
+    },
+    "files/out/portable-multiply64-controls/native-policy-selfcheck/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-controls/operator-build.log": {
+      "bytes": 1728,
+      "sha256": "cfa4075cfca34dd42a626029cc3f68386748a7299ca06e551b40939f61bb5380"
+    },
+    "files/out/portable-multiply64-controls/operator-context.json": {
+      "bytes": 740,
+      "sha256": "917d0b11fa3f59fc79e202ac6c17b321f18ab15ddb2f905e8f8554c05570d260"
+    },
+    "files/out/portable-multiply64-controls/original-baseline-timestamps.xml": {
+      "bytes": 40867,
+      "sha256": "fb6ab12fb9abec4b134fb8e795138feec999464e55e81c7f433063e3cec7e2eb"
+    },
+    "files/out/portable-multiply64-controls/original-factored-readbacks.xml": {
+      "bytes": 10004,
+      "sha256": "d57c88e545e89d882b668dbdf3e6c0e6d8e3bfb3d26531ae7808f97e9dabf329"
+    },
+    "files/out/portable-multiply64-controls/original-fallback.txt": {
+      "bytes": 189,
+      "sha256": "9ea94c330a1cce73495dbe9e05d2f50410cd4ba711c1c9d760463ebdd229ffc1"
+    },
+    "files/out/portable-multiply64-controls/originals/check_controls.py": {
+      "bytes": 4168,
+      "sha256": "53b055d8f8d24aef8c4e2592e4f51300b5254c96324690ac7efe5f4837866659"
+    },
+    "files/out/portable-multiply64-controls/originals/prepare_controls.py": {
+      "bytes": 10044,
+      "sha256": "22fd5ab036b3f7c40eeee70bedefee6180fee1e6003a20fbd1f2af81818cc57c"
+    },
+    "files/out/portable-multiply64-controls/originals/prepare_runtime.py": {
+      "bytes": 3691,
+      "sha256": "fe88dcd418e55fca03e6c90b368b7dffb5a728d0d1c28d888d8614a96d37d024"
+    },
+    "files/out/portable-multiply64-controls/originals/verify_control_routes.py": {
+      "bytes": 5218,
+      "sha256": "9b5670c1a8565d269c525cf68565f3f30d6fc0c7450f3bc66c43de9acc335ac0"
+    },
+    "files/out/portable-multiply64-controls/originals/verify_producer.py": {
+      "bytes": 9857,
+      "sha256": "37d0e9dd6c349ba31d42648f495aee3d5e55f703d11ede697416518d4697f370"
+    },
+    "files/out/portable-multiply64-controls/originals/verify_products.py": {
+      "bytes": 5541,
+      "sha256": "61a24578a4fe464216210c3bb0a2a98ea392c45885cf152f383b2a45d49484b5"
+    },
+    "files/out/portable-multiply64-controls/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/portable-multiply64-controls/packet.json": {
+      "bytes": 44899,
+      "sha256": "c3a2854b61ca5446b7588f53e95284b7d9108cc1d0b41434c3b407088e860823"
+    },
+    "files/out/portable-multiply64-controls/preparation.json": {
+      "bytes": 5324,
+      "sha256": "0c22b354ee37727a6772fde1cae188c29fb8775fc7b8a94620016c5f06ef6e54"
+    },
+    "files/out/portable-multiply64-controls/profile.json": {
+      "bytes": 4752,
+      "sha256": "871de8842683514e730857cdaa62a91e73e561c80154b8c97fc69dee1d46bc2e"
+    },
+    "files/out/portable-multiply64-controls/protected-before.json": {
+      "bytes": 21913,
+      "sha256": "3a5cdc2757ea8797747c131838debd0a5c49e0e50eda1b5ee015848d4b842c8f"
+    },
+    "files/out/portable-multiply64-controls/provenance.json": {
+      "bytes": 9610,
+      "sha256": "ff3a60a0d428ee22b889eeb7c612205b18175c552871ca5da72f510ed70eb3f5"
+    },
+    "files/out/portable-multiply64-controls/reuse-products-stock/inputs-after.json": {
+      "bytes": 566608,
+      "sha256": "433304eff038fd70a0ce71b207256472044778755c647dd3edb314dc087b212a"
+    },
+    "files/out/portable-multiply64-controls/reuse-products-stock/inputs-before.json": {
+      "bytes": 566608,
+      "sha256": "433304eff038fd70a0ce71b207256472044778755c647dd3edb314dc087b212a"
+    },
+    "files/out/portable-multiply64-controls/reuse-products-stock/output-seal.json": {
+      "bytes": 15256,
+      "sha256": "57c2fe1ec30017539ade12f2efb7cc5b3eb2c5533aa1fbcce6c17828153febc0"
+    },
+    "files/out/portable-multiply64-controls/reuse-products-stock/owner.json": {
+      "bytes": 1655,
+      "sha256": "7f151817b83fea97ae58901cf4d17f05c8db8256d368c3ad57c41f96b73d0bad"
+    },
+    "files/out/portable-multiply64-controls/reuse-products-stock/samples.jsonl": {
+      "bytes": 897,
+      "sha256": "aac554d716edefe2202d661ac6b81a675442d5838aaade417d60ed9b6e26f7ef"
+    },
+    "files/out/portable-multiply64-controls/reuse-products-stock/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-controls/reuse-products-stock/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-controls/run_owned.py": {
+      "bytes": 12933,
+      "sha256": "492c75609a0dc8ff5eaa0299f7206820bb8a42f85c3ecc5b9b0af98f2496ba9f"
+    },
+    "files/out/portable-multiply64-controls/source-contracts.json": {
+      "bytes": 11951,
+      "sha256": "6724849141fe71ba8ec99267794834c3cc5f376ef3d6bb369c717156c415a846"
+    },
+    "files/out/portable-multiply64-controls/source-freeze.json": {
+      "bytes": 491408,
+      "sha256": "15821218877cd33f6ca1481026f2046606ab417a543f0c761543dd1d63e489ec"
+    },
+    "files/out/portable-multiply64-controls/source-review.json": {
+      "bytes": 1519,
+      "sha256": "3155534a2689e6ce86c4f1331241069d19e8aacd54f404d3344026779a48c633"
+    },
+    "files/out/portable-multiply64-controls/stock-reuse-acceptance.json": {
+      "bytes": 41033,
+      "sha256": "0258b69ff7ee6f16a68e22e58ccee7ae34f4519289cdff8a9ac23c0cf11c3ce0"
+    },
+    "files/out/portable-multiply64-controls/stock/scripts/build-retained-kernels.py": {
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/camera_frame_probe.slang": {
+      "bytes": 2470,
+      "sha256": "00120f5858efb20ba53ffa9cb3942860ed5474c012f5db75a2b79c3e9448105c"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/coupled_probe.slang": {
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_camera.slang": {
+      "bytes": 7542,
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_coupled.slang": {
+      "bytes": 12632,
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_deviation.slang": {
+      "bytes": 17259,
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_disk.slang": {
+      "bytes": 16688,
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_ellis_topology.slang": {
+      "bytes": 9374,
+      "sha256": "de0f2120591ecebbc00325eb6877cf4c6e8ebd0259637e300d4289ef82ab6e0b"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 23338,
+      "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_kerr_infinity.slang": {
+      "bytes": 23616,
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_metrics.slang": {
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_point_star.slang": {
+      "bytes": 1773,
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_trace_continuation.slang": {
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_trace_event.slang": {
+      "bytes": 15656,
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/infinity_probe.slang": {
+      "bytes": 3057,
+      "sha256": "dcddb120fe9cf4306df9e18ded240e629fea31012352e540f275f77955700888"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/metric_consistency_probe.slang": {
+      "bytes": 2352,
+      "sha256": "d21dd5305080cbee5c13aa0e435bb47e45117e35de4aafece4cd94224f64739e"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/parity_probe.slang": {
+      "bytes": 36380,
+      "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_camera.slang": {
+      "bytes": 9716,
+      "sha256": "a2ec29ccb7d7dc5aba98319d0ac902f2550ece2837f8d6366620bb5b54ed5929"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_dense.slang": {
+      "bytes": 20082,
+      "sha256": "9230821aa20883ab0994e06f7d17165fb9ada0fc8054e5eceaae4fd421e0193c"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_dopri_phase.slang": {
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_endpoint.slang": {
+      "bytes": 38824,
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_initialize.slang": {
+      "bytes": 8778,
+      "sha256": "79bf6e37634991d94e85f7bd032576b5cc5ae2c9bf3a6a172d20557ffd9c59a6"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_owner.slang": {
+      "bytes": 8042,
+      "sha256": "7d70e581acedccd688dadff476629de52c304d25657389179923b6fb32f8db62"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_pair.slang": {
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_program.py": {
+      "bytes": 38341,
+      "sha256": "71a242ed70e984352da250c71bbadf269d3e55af9decb33d3a453e2684dda1d0"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_ray_camera.slang": {
+      "bytes": 9201,
+      "sha256": "e3bfbfedd91096af1374ccd32119c6e1556b2b588f0106e7df1f488055acaf00"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_scalar.slang": {
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_scratch.slang": {
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_transport.slang": {
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/retained_triple.slang": {
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/smoke.slang": {
+      "bytes": 1002,
+      "sha256": "674183f4aef31db29e7a78985ba616c7e5cd401fd21161c798b3028b2142c27e"
+    },
+    "files/out/portable-multiply64-controls/stock/src/sirius/kernels/trace.slang": {
+      "bytes": 63419,
+      "sha256": "a66222aa9d6bb3e16b0e2df4b2d903669347badb0118e838091c6e569c590c77"
+    },
+    "files/out/portable-multiply64-controls/verify-products/inputs-after.json": {
+      "bytes": 596258,
+      "sha256": "e07b7a6b5fa7f597279a99fea72c535953ba7edacea11837808d4fa8f5eab67e"
+    },
+    "files/out/portable-multiply64-controls/verify-products/inputs-before.json": {
+      "bytes": 596258,
+      "sha256": "e07b7a6b5fa7f597279a99fea72c535953ba7edacea11837808d4fa8f5eab67e"
+    },
+    "files/out/portable-multiply64-controls/verify-products/owner.json": {
+      "bytes": 1454,
+      "sha256": "a27199a69437693cc3396ee2dbce2da860e4d8541990ad53e9d73c72ad785dba"
+    },
+    "files/out/portable-multiply64-controls/verify-products/samples.jsonl": {
+      "bytes": 673,
+      "sha256": "1da93347d80df6321bafe10369b50dd91e72a05e3d61b492d99c4efd35bb8144"
+    },
+    "files/out/portable-multiply64-controls/verify-products/stderr.log": {
+      "bytes": 962,
+      "sha256": "278d6aa4907b2a7549195fb3e71cc71a8cdd9fad177ff7727d2458b812502e20"
+    },
+    "files/out/portable-multiply64-controls/verify-products/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-controls/verify_control_routes.py": {
+      "bytes": 5238,
+      "sha256": "7b736438643902d724882d5e9d8fc1ee69105fcadc0e6bf03d3da054114ea760"
+    },
+    "files/out/portable-multiply64-controls/verify_producer.py": {
+      "bytes": 9836,
+      "sha256": "362de95b53cd972399f184c9594e33dc74e192adca930ebfc265f4d931afe7d3"
+    },
+    "preserve-finite-result.py": {
+      "bytes": 118272,
+      "sha256": "5044aeca97fbefde3b1a234426455fdcc86d9f572dcc874ae71fd112c5e555bc"
+    },
+    "result.json": {
+      "bytes": 2494,
+      "sha256": "c5af406a98572a391d92bb63dc9f5a3c9a11b6b5f24848878260e95364c92ae3"
+    },
+    "runner-source/.github/workflows/ci.yml": {
+      "bytes": 33642,
+      "sha256": "8c629e05c0f166bc8b3795478abd808c587f28cfb8dfd09f6d431a7e7eb19146"
+    },
+    "runner-source/scripts/diagnose-macos-retained.py": {
+      "bytes": 46569,
+      "sha256": "8998d73985e3c330f4d7b55d5a421c33c06ceff5cfa160cda6ea54bb97cd9034"
+    },
+    "runner-source/scripts/governance/build_policy.py": {
+      "bytes": 71323,
+      "sha256": "841560051d11252e75aa1c0e3e2973e401edb1456eb53437af7df1bdf500bc67"
+    },
+    "runner-source/scripts/macos_metal_probe.py": {
+      "bytes": 16087,
+      "sha256": "e61c75e6b6769150b4e18632418cbffc1382db1730ca2dbd9b5fb5b813789804"
+    },
+    "runner-source/scripts/macos_moltenvk_integration.py": {
+      "bytes": 41404,
+      "sha256": "c6e20d512bd49cb197ffc79761ea47858b1a27f40949dca07829540417cf27b6"
+    },
+    "runner-source/scripts/macos_vulkan_identity.py": {
+      "bytes": 8915,
+      "sha256": "7f70c1a2a341ea071624dfb01993289a89d54f3377afb48035437469c7d81025"
+    },
+    "runner-source/scripts/runtime_identity.py": {
+      "bytes": 27490,
+      "sha256": "00aa1aa63250599db1cc33692b51dcf73e236be7596f19fc1b603807bbccc8f2"
+    }
+  },
+  "qualification_claimed": false
+}

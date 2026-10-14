@@ -1,0 +1,63 @@
+{
+  "executed": false,
+  "files": {
+    "actions.json": {
+      "bytes": 3387765,
+      "original_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/actions.json",
+      "preserved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/historical-preexecution-reference-output/actions.json",
+      "sha256": "0333d530c5e15967af4eccd34b20f489ef592af6d90be8ca7787201e50491f00"
+    },
+    "actions.unpinned.json": {
+      "bytes": 3387765,
+      "original_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/actions.unpinned.json",
+      "preserved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/historical-preexecution-reference-output/actions.unpinned.json",
+      "sha256": "0333d530c5e15967af4eccd34b20f489ef592af6d90be8ca7787201e50491f00"
+    },
+    "adapter.patch": {
+      "bytes": 23697,
+      "original_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/adapter.patch",
+      "preserved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/historical-preexecution-reference-output/adapter.patch",
+      "sha256": "1284d818b2168909fa6bb760063b82e6ace80ef519e144dab67bc485a5b02ca3"
+    },
+    "gate.py": {
+      "bytes": 29344,
+      "original_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/gate.py",
+      "preserved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/historical-preexecution-reference-output/gate.py",
+      "sha256": "dd0558bddd4f83de2c8a2f1664870ad41a53b8e2cd242ca2873b78f31cb431cf"
+    },
+    "packet.json": {
+      "bytes": 45001,
+      "original_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/packet.json",
+      "preserved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/historical-preexecution-reference-output/packet.json",
+      "sha256": "417c0c46d0627263b27bacb961532004cb062788dd7f967f19f9d4dcd8e0a2ca"
+    },
+    "preparation.json": {
+      "bytes": 4791,
+      "original_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/preparation.json",
+      "preserved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/historical-preexecution-reference-output/preparation.json",
+      "sha256": "77034ebc7e8ceb580d0933eeb9ff02b13ca1070a99a38d6f52e170a4689a7a7a"
+    },
+    "provenance.json": {
+      "bytes": 8667,
+      "original_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/provenance.json",
+      "preserved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/historical-preexecution-reference-output/provenance.json",
+      "sha256": "c62cf86e2c852689a87c8593821a5fd60f7529093c27e2268ee111665bdb489f"
+    },
+    "source-freeze.json": {
+      "bytes": 487577,
+      "original_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/source-freeze.json",
+      "preserved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/historical-preexecution-reference-output/source-freeze.json",
+      "sha256": "5065255a71f130466b7755e4ec7a62e3e3a9ac3881cdfdca967eb76214dac51b"
+    },
+    "verify_control_routes.py": {
+      "bytes": 5218,
+      "original_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/verify_control_routes.py",
+      "preserved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls/historical-preexecution-reference-output/verify_control_routes.py",
+      "sha256": "9b5670c1a8565d269c525cf68565f3f30d6fc0c7450f3bc66c43de9acc335ac0"
+    }
+  },
+  "finding": "Already-existing immutable original-factored-readbacks.xml incorrectly declared output and redundantly overwritten by reader, conflicting with original outputs-absent/source-input guards.",
+  "fix": "Keep reference frozen, assert exact bytes to original instead of copy, remove generated-output declaration. Correct stale17\u219224scope metadata only. No numerical/route/reference/tolerance/assertion or runtime setting changed.",
+  "schema": "sirius-unconsumed-reference-output-preimage/v1",
+  "scope": "Exact pre-execution source/actions/preparation/freeze recovered to previously released hashes, no failed owner or trial and no old consumed record mutation."
+}

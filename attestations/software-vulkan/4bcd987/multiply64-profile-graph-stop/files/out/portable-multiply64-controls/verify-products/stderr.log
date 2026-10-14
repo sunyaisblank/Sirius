@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/astra/.project/Sirius/out/portable-multiply64-controls/gate.py", line 416, in <module>
+    if sys.argv[1] == 'phase': phase(sys.argv[2])
+                               ^^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-multiply64-controls/gate.py", line 359, in phase
+    elif label == 'verify-products': write(W / 'products-acceptance.json', products_review())
+                                                                           ^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-multiply64-controls/gate.py", line 271, in products_review
+    footprint = multiply_shape(candidate, camera=camera)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-multiply64-controls/multiply_profile.py", line 99, in multiply_shape
+    assert choice(distance, upper, 21, 20)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

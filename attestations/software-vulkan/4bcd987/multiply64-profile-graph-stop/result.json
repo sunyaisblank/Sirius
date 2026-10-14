@@ -1,0 +1,55 @@
+{
+  "candidate_assembly_sha256": "3252f74eb8bff7c5284d43cb5e03606b0d9ba790a3a0b6307e33a0d799a1b7bc",
+  "candidate_module_sha256": "d9ecca786ee1ad4f61f7af5ec97287f7598e78ddd57407a827744826648a40fb",
+  "canonical_default_policy_selfcheck_passed": true,
+  "classification": "PRODUCT_READER_REJECTED_NATIVE_O0_LOCAL_LOAD_FORM",
+  "complete_candidate_35module_builder_passed": true,
+  "complete_profile_admitted": false,
+  "correction_required": "Per-load exact CFG/reaching-store/alias/intervening-write proof; no global slot substitution or weakened selector association.",
+  "executed_phases": {
+    "compile-products-candidate": {
+      "exit": 0,
+      "observed_births": 49,
+      "owner_sha256": "66c2dd6ffb13afe1fee43d70f8673d6f0fc38a2426da40a223bcc3e48ac388fa",
+      "passed": true,
+      "rss_kib": 340364,
+      "seconds": 25.334928518997913
+    },
+    "native-policy-selfcheck": {
+      "exit": 0,
+      "observed_births": 1,
+      "owner_sha256": "71dbb718bb1418a289894d13f8918dc64dc950278e346f5aaf94e63f7d33b144",
+      "passed": true,
+      "rss_kib": 48988,
+      "seconds": 0.7901161990012042
+    },
+    "reuse-products-stock": {
+      "exit": 0,
+      "observed_births": 1,
+      "owner_sha256": "7f151817b83fea97ae58901cf4d17f05c8db8256d368c3ad57c41f96b73d0bad",
+      "passed": true,
+      "rss_kib": 60280,
+      "seconds": 1.0406315509972046
+    },
+    "verify-products": {
+      "exit": 1,
+      "observed_births": 1,
+      "owner_sha256": "a27199a69437693cc3396ee2dbce2da860e4d8541990ad53e9d73c72ad785dba",
+      "passed": false,
+      "rss_kib": 49240,
+      "seconds": 0.7842590840009507
+    }
+  },
+  "first_failing_module": "retained_camera_fp64.spv",
+  "first_module_graph_diagnosis": "Unsigned normalized product, bit47, branch stores21/20 to Function-local shift; separate loads feed mask and rightshift, sticky branch stores1/0 and load feeds OR then common Round. Reader supports Select/Phi only. Later profile predicates remain uncompleted.",
+  "independent_read_only_reviewers": [
+    "/root/divide_contract_review",
+    "/root/sanitizer_gate_contract"
+  ],
+  "producer_or_numerical_controls_executed": false,
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "profile_arithmetic_performance_adoption_or_qualification_claimed": false,
+  "schema": "sirius-stopped-multiply64-profile-graph-screen-v1",
+  "source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "verifier_assertion": "multiply_profile.py:99 choice(distance, upper,21,20)"
+}
