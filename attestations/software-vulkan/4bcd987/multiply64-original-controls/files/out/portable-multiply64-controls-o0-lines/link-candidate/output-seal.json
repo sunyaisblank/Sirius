@@ -1,0 +1,56 @@
+{
+  "inputs_before": {
+    "bytes": 756021,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/link-candidate/inputs-before.json",
+    "sha256": "a70947462d7fd5398e1e30e75767fcec0640a0d3d4d06c8a72dca345f443d3d6"
+  },
+  "label": "link-candidate",
+  "operator_context": {
+    "bytes": 767,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/operator-context.json",
+    "sha256": "b9e8541cf3915f442b91c4cdd3e802ddd17163cba264ce0cc6cbdcd4a68d2326"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/controls/candidate.map": {
+      "bytes": 1175112,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/controls/candidate.map",
+      "sha256": "d5f38af45a10c8cbfcb8095042c86f237d8d4deaf28972fc6371d13597df7281"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/controls/original_candidate_controls": {
+      "bytes": 10701040,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/controls/original_candidate_controls",
+      "sha256": "9d783a29d125d80da5deddcf7698d9e167ed118b2304278bc1c887d9e3c29f8e"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-DNDEBUG",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/controls/observer.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/controls/compute-sealed.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "-ldl",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/controls/candidate.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/controls/original_candidate_controls"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 746680,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/source-freeze.json",
+    "sha256": "5ed44cb13864c98a24beadf669089c2b460a94e16b42212a8bb155173dc21740"
+  }
+}

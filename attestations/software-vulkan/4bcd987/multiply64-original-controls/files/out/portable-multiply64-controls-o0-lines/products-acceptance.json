@@ -1,0 +1,1651 @@
+{
+  "all_seven_tables_and_nonarray_ABI_constants_equal": true,
+  "changed_modules": 24,
+  "completed_products_reuse": {
+    "bytes": 3074,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/completed-products-reuse.json",
+    "sha256": "3438fb41c9e3678c8192685b6e119cc5f1897a86db4970da45ce665717cb7cf6"
+  },
+  "headers": {
+    "retained_kernels.h": {
+      "candidate": {
+        "bytes": 7866886,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_kernels.h",
+        "sha256": "5e682b0da13cc0e93441ffa44c29ae4204e6a70cf52a4f1cf2f0f648d900d5ab"
+      },
+      "changed_arrays": [
+        "kCameraFp64Shader",
+        "kCameraPortableShader",
+        "kCameraPortableFp64Shader",
+        "kTransportFp64Shader",
+        "kTransportPortableShader",
+        "kTransportPortableFp64Shader",
+        "kTransportPortableNormalSumShader",
+        "kEndpointFp64Shader",
+        "kEndpointPortableShader",
+        "kEndpointPortableFp64Shader",
+        "kEndpointPortableNormalSumShader",
+        "kDenseFp64Shader",
+        "kDensePortableShader",
+        "kDensePortableFp64Shader",
+        "kInitializeFp64Shader",
+        "kInitializePortableShader",
+        "kInitializePortableFp64Shader",
+        "kRayCameraFp64Shader",
+        "kRayCameraPortableShader",
+        "kRayCameraPortableFp64Shader",
+        "kDopriPhaseFp64Shader",
+        "kDopriPhasePortableShader",
+        "kDopriPhasePortableFp64Shader",
+        "kDopriPhasePortableNormalSumShader"
+      ],
+      "stock": {
+        "bytes": 7952166,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_kernels.h",
+        "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc"
+      }
+    },
+    "retained_owner_kernels.h": {
+      "candidate": {
+        "bytes": 432942,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_owner_kernels.h",
+        "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+      },
+      "changed_arrays": [],
+      "stock": {
+        "bytes": 432942,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_owner_kernels.h",
+        "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+      }
+    }
+  },
+  "main_arrays_changed": 24,
+  "main_arrays_unchanged": 16,
+  "modules": [
+    {
+      "candidate": {
+        "bytes": 47720,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_camera.spv",
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_camera.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 47720,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_camera.spv",
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 59880,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_camera_fp64.spv",
+        "sha256": "d9ecca786ee1ad4f61f7af5ec97287f7598e78ddd57407a827744826648a40fb"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_camera_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%1806",
+            "header": "%1796",
+            "load": "%1810",
+            "merge": "%1804",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1805",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%1806",
+            "header": "%1796",
+            "load": "%1807",
+            "merge": "%1804",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1805",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%1813",
+            "direct_private_slot_only": true,
+            "false_block": "%1816",
+            "header": "%1804",
+            "load": "%1817",
+            "merge": "%1814",
+            "no": "%uint_0",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1815",
+            "yes": "%uint_1"
+          }
+        ],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 61048,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_camera_fp64.spv",
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 504968,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_camera_portable.spv",
+        "sha256": "5de98f6bbe002d70e4725f880ac6323c76093154993fe6c50803228c09ddb6db"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_camera_portable.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%23283",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%23265"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%23642",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%23624"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%26213",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%26195"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%26841",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%26823"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%27997",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%27979"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%32191",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%32173"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%34375",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%34357"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%34734",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%34716"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": true,
+        "normalized_unsigned_operands": false,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 8
+      },
+      "stock": {
+        "bytes": 512324,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_camera_portable.spv",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 504968,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_camera_portable_fp64.spv",
+        "sha256": "5de98f6bbe002d70e4725f880ac6323c76093154993fe6c50803228c09ddb6db"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_camera_portable_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%23283",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%23265"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%23642",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%23624"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%26213",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%26195"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%26841",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%26823"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%27997",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%27979"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%32191",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%32173"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%34375",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%34357"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%34734",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%34716"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": true,
+        "normalized_unsigned_operands": false,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 8
+      },
+      "stock": {
+        "bytes": 512324,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_camera_portable_fp64.spv",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 77952,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_dense.spv",
+        "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_dense.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 77952,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_dense.spv",
+        "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 89460,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_dense_fp64.spv",
+        "sha256": "0a403f99cb8f5eb012eb2b6a3abb28cc2e80f2edd33a7282505ac6e41312b575"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_dense_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%2133",
+            "header": "%2123",
+            "load": "%2137",
+            "merge": "%2131",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%2132",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%2133",
+            "header": "%2123",
+            "load": "%2134",
+            "merge": "%2131",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%2132",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%2140",
+            "direct_private_slot_only": true,
+            "false_block": "%2143",
+            "header": "%2131",
+            "load": "%2144",
+            "merge": "%2141",
+            "no": "%uint_0",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%2142",
+            "yes": "%uint_1"
+          }
+        ],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 90628,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_dense_fp64.spv",
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 115040,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_dense_portable.spv",
+        "sha256": "b6899f7edde3d806b66db3f393f97ce9cc9cee1abdad65c7d3cf62e7148a29d4"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_dense_portable.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 116204,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_dense_portable.spv",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 115040,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_dense_portable_fp64.spv",
+        "sha256": "b6899f7edde3d806b66db3f393f97ce9cc9cee1abdad65c7d3cf62e7148a29d4"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_dense_portable_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 116204,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_dense_portable_fp64.spv",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 58740,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_dopri_phase.spv",
+        "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_dopri_phase.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 58740,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_dopri_phase.spv",
+        "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 70932,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_dopri_phase_fp64.spv",
+        "sha256": "cc7e33bda87e4051d58135d50c64749c3eefd09f33b76542d1d86317dbb2f3f9"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_dopri_phase_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%2028",
+            "header": "%2018",
+            "load": "%2032",
+            "merge": "%2026",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%2027",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%2028",
+            "header": "%2018",
+            "load": "%2029",
+            "merge": "%2026",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%2027",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%2035",
+            "direct_private_slot_only": true,
+            "false_block": "%2038",
+            "header": "%2026",
+            "load": "%2039",
+            "merge": "%2036",
+            "no": "%uint_0",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%2037",
+            "yes": "%uint_1"
+          }
+        ],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 72100,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_dopri_phase_fp64.spv",
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 91680,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_dopri_phase_portable.spv",
+        "sha256": "443dc74391f8bf2feac8d491edd3fcef4e00ff89d4bddcc189314e0946e83524"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_dopri_phase_portable.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 92844,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_dopri_phase_portable.spv",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 91680,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_dopri_phase_portable_fp64.spv",
+        "sha256": "443dc74391f8bf2feac8d491edd3fcef4e00ff89d4bddcc189314e0946e83524"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_dopri_phase_portable_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 92844,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_dopri_phase_portable_fp64.spv",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 95588,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_dopri_phase_portable_normal_sum.spv",
+        "sha256": "b3513bc287016e226a468e52cc51f9cdd50b1718031d82ba1a10678ed9d23296"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_dopri_phase_portable_normal_sum.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 96752,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_dopri_phase_portable_normal_sum.spv",
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 99300,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_endpoint.spv",
+        "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_endpoint.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 99300,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_endpoint.spv",
+        "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 97468,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_endpoint_fma.spv",
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_endpoint_fma.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 97468,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_endpoint_fma.spv",
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 110792,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_endpoint_fp64.spv",
+        "sha256": "ec7d244231e7fba31a92cf06d9ce6e27b73a8a0f0f2ffee86dfce5836efc6ca9"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_endpoint_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%2239",
+            "header": "%2229",
+            "load": "%2243",
+            "merge": "%2237",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%2238",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%2239",
+            "header": "%2229",
+            "load": "%2240",
+            "merge": "%2237",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%2238",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%2246",
+            "direct_private_slot_only": true,
+            "false_block": "%2249",
+            "header": "%2237",
+            "load": "%2250",
+            "merge": "%2247",
+            "no": "%uint_0",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%2248",
+            "yes": "%uint_1"
+          }
+        ],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 111960,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_endpoint_fp64.spv",
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 144180,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_endpoint_portable.spv",
+        "sha256": "9834bd076b6e8cc3c6eb27103f72b4eef8b737ec617f8b4512698b22d8743505"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_endpoint_portable.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 145344,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_endpoint_portable.spv",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 144180,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_endpoint_portable_fp64.spv",
+        "sha256": "9834bd076b6e8cc3c6eb27103f72b4eef8b737ec617f8b4512698b22d8743505"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_endpoint_portable_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 145344,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_endpoint_portable_fp64.spv",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 150236,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_endpoint_portable_normal_sum.spv",
+        "sha256": "a2cd60d52011e81fb75125046f613e9ab67ce7ed1c970a39f056284e88678c32"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_endpoint_portable_normal_sum.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 151400,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_endpoint_portable_normal_sum.spv",
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 161620,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_endpoint_portable_stage7_owner.spv",
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_endpoint_portable_stage7_owner.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 161620,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_endpoint_portable_stage7_owner.spv",
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 57108,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_initialize.spv",
+        "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_initialize.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 57108,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_initialize.spv",
+        "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 69300,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_initialize_fp64.spv",
+        "sha256": "bc99a330a6cab9671e35c32df1e486b39da90c23c9ef9f06411d7f5ea2451297"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_initialize_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%1974",
+            "header": "%1964",
+            "load": "%1978",
+            "merge": "%1972",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1973",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%1974",
+            "header": "%1964",
+            "load": "%1975",
+            "merge": "%1972",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1973",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%1981",
+            "direct_private_slot_only": true,
+            "false_block": "%1984",
+            "header": "%1972",
+            "load": "%1985",
+            "merge": "%1982",
+            "no": "%uint_0",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1983",
+            "yes": "%uint_1"
+          }
+        ],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 70468,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_initialize_fp64.spv",
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 76280,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_initialize_portable.spv",
+        "sha256": "be061904a7b8c863ed026fd615ca1843fc1289d6a653ce71f6b0e559e13dbc6e"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_initialize_portable.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 77444,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_initialize_portable.spv",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 76280,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_initialize_portable_fp64.spv",
+        "sha256": "be061904a7b8c863ed026fd615ca1843fc1289d6a653ce71f6b0e559e13dbc6e"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_initialize_portable_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 77444,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_initialize_portable_fp64.spv",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 45368,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_ray_camera.spv",
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_ray_camera.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 45368,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_ray_camera.spv",
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 57560,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_ray_camera_fp64.spv",
+        "sha256": "af3f5ce45bbcc2f1bbb57f966ecc6bf67a588b9bd219f87dab54252595e8b661"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_ray_camera_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%1708",
+            "header": "%1698",
+            "load": "%1712",
+            "merge": "%1706",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1707",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%1708",
+            "header": "%1698",
+            "load": "%1709",
+            "merge": "%1706",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1707",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%1715",
+            "direct_private_slot_only": true,
+            "false_block": "%1718",
+            "header": "%1706",
+            "load": "%1719",
+            "merge": "%1716",
+            "no": "%uint_0",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1717",
+            "yes": "%uint_1"
+          }
+        ],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 58728,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_ray_camera_fp64.spv",
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 467900,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_ray_camera_portable.spv",
+        "sha256": "279e013738d68137a0b319ccd67b28936debc9338e05a4539d306cfa0778a8d6"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_ray_camera_portable.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%20069",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%20051"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%20428",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%20410"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%22999",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%22981"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%23627",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%23609"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%24783",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%24765"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%28977",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%28959"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%31161",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%31143"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%31520",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%31502"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": true,
+        "normalized_unsigned_operands": false,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 8
+      },
+      "stock": {
+        "bytes": 475256,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_ray_camera_portable.spv",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 467900,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_ray_camera_portable_fp64.spv",
+        "sha256": "279e013738d68137a0b319ccd67b28936debc9338e05a4539d306cfa0778a8d6"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_ray_camera_portable_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%20069",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%20051"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%20428",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%20410"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%22999",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%22981"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%23627",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%23609"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%24783",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%24765"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%28977",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%28959"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%31161",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%31143"
+          },
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%31520",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%31502"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": true,
+        "normalized_unsigned_operands": false,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 8
+      },
+      "stock": {
+        "bytes": 475256,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_ray_camera_portable_fp64.spv",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 85364,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_transport.spv",
+        "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_transport.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 85364,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_transport.spv",
+        "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 83532,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_transport_fma.spv",
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_transport_fma.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 83532,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_transport_fma.spv",
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 96840,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_transport_fp64.spv",
+        "sha256": "c4cdd2e41f0e2bb98be24fec413a2e006a8459e9fea44012132ae72478b058f2"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_transport_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%1982",
+            "header": "%1972",
+            "load": "%1986",
+            "merge": "%1980",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1981",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%upper",
+            "direct_private_slot_only": true,
+            "false_block": "%1982",
+            "header": "%1972",
+            "load": "%1983",
+            "merge": "%1980",
+            "no": "%uint_20",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1981",
+            "yes": "%uint_21"
+          },
+          {
+            "condition": "%1989",
+            "direct_private_slot_only": true,
+            "false_block": "%1992",
+            "header": "%1980",
+            "load": "%1993",
+            "merge": "%1990",
+            "no": "%uint_0",
+            "no_side_entrances_or_intervening_store": true,
+            "slot": "%shift",
+            "true_block": "%1991",
+            "yes": "%uint_1"
+          }
+        ],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 98008,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_transport_fp64.spv",
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 98576,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_transport_portable.spv",
+        "sha256": "b0d0eae82a2b72faa429613c182dda930952e32b804b39e923f649ac0c349ecb"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_transport_portable.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 99740,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_transport_portable.spv",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 98576,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_transport_portable_fp64.spv",
+        "sha256": "b0d0eae82a2b72faa429613c182dda930952e32b804b39e923f649ac0c349ecb"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_transport_portable_fp64.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 99740,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_transport_portable_fp64.spv",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 102876,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_transport_portable_normal_sum.spv",
+        "sha256": "fbb3001df778e69aaf291aa88da78c61bcbecb72b5d1d602aac4a301eb344521"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_transport_portable_normal_sum.spv",
+      "multiply_footprint": {
+        "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined.",
+        "complete_product_shift_jam_graphs": [
+          {
+            "complete_discarded_bit_jam": true,
+            "narrow32_sticky_or": "%extended_0",
+            "shift_values": [
+              20,
+              21
+            ],
+            "upper_bit": 47,
+            "wide_product": "%product"
+          }
+        ],
+        "function_slot_load_choices": [],
+        "inlined_camera": false,
+        "normalized_unsigned_operands": true,
+        "uint32_operands_widened": true,
+        "unsigned64_product_sites": 1
+      },
+      "stock": {
+        "bytes": 104040,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_transport_portable_normal_sum.spv",
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 113452,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/candidate/retained_transport_portable_stage7_owner.spv",
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "module": "retained_transport_portable_stage7_owner.spv",
+      "multiply_footprint": null,
+      "stock": {
+        "bytes": 113452,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-controls-o0-lines/stock/retained_transport_portable_stage7_owner.spv",
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+      }
+    }
+  ],
+  "owner_arrays_unchanged": 2,
+  "passed": true,
+  "reader_controls": {
+    "bytes": 4125,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/parser-controls-result.json",
+    "sha256": "c8b5d9c6cb610bb469fb3d6fe1d5ae02253499a1864037b8387896ff4888edac"
+  },
+  "scope": "Complete compiler/profile/ABI evidence only; no integrated numeric or benefit verdict.",
+  "unchanged_modules": 11
+}

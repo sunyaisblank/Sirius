@@ -1,0 +1,20 @@
+--- a/parser_controls.py
++++ b/parser_controls.py
+@@ -23,7 +23,7 @@
+     updated = once(body, old, new)
+     return once(native, body, updated)
+ 
+-swapped = once(body, 'OpStore %shift %uint_21', 'OpStore %shift %uint_20')
++swapped = once(body, '               OpStore %shift %uint_21\n', '               OpStore %shift %uint_20\n')
+ # Disambiguate by the exact false arm; the true arm was already changed.
+ swapped = once(swapped, '%1806 = OpLabel\n               OpStore %shift %uint_20',
+                '%1806 = OpLabel\n               OpStore %shift %uint_21')
+@@ -34,7 +34,7 @@
+     ('reversed_21_20_arms', once(native, body, swapped), True, False),
+     ('wrong_selector_predicate', changed('OpBranchConditional %upper %1805 %1806',
+                                        'OpBranchConditional %1795 %1805 %1806'), True, False),
+-    ('wrong_true_constant', changed('OpStore %shift %uint_21', 'OpStore %shift %uint_1'), True, False),
++    ('wrong_true_constant', changed('               OpStore %shift %uint_21\n', '               OpStore %shift %uint_1\n'), True, False),
+     ('intervening_distance_store', changed('%1810 = OpLoad %uint %shift',
+         '%o0_store_marker = OpCopyObject %uint %uint_20\n               OpStore %shift %o0_store_marker\n       %1810 = OpLoad %uint %shift'), True, False),
+     ('pointer_copy_alias', changed('%1760 = OpVariable %_ptr_Function_int Function',

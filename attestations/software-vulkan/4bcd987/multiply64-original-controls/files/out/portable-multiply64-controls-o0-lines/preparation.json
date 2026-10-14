@@ -1,0 +1,81 @@
+{
+  "admission": "PENDING_INDEPENDENT_SOURCE_REVIEW_AND_ROOT_OPERATOR",
+  "commands": [
+    "python3 -B out/portable-multiply64-controls-o0-lines/gate.py pin-context",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py reuse-completed-products",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py check-o0-reader",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py verify-products",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py prepare-producer",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py compile-compute-sealed",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py compile-observer",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py link-candidate",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py verify-producer",
+    "python3 -B out/portable-multiply64-controls-o0-lines/gate.py pin-runtime",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py control-1",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py control-2",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py control-3",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py control-4",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py control-5",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py control-6",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py control-7",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py control-8",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py verify-controls",
+    "python3 -B out/portable-multiply64-controls-o0-lines/run_owned.py verify-endpoint-routes",
+    "python3 -B out/portable-multiply64-controls-o0-lines/gate.py review"
+  ],
+  "correction_patch": {
+    "bytes": 20266,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/correction.patch",
+    "sha256": "5e562bc81cf62f36010a068f91bb48106bf0a0d290d5e0878ac60a9d45e568bc"
+  },
+  "executed": false,
+  "future_bin_root": "bin/linux-gcc/portable-multiply64-controls-o0-lines",
+  "limits": "All inherited original owners/controls300s/4GiB sampledprocess-treeRSS/2GiB reserve andLVP/cacheoff remain unchanged.",
+  "line_anchor_correction": {
+    "bytes": 11707,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/line-anchor-correction.json",
+    "sha256": "5afa8c5b08f026dcd79a47e5927ee6e6ce099c97962707fe5c3dc7a502847434"
+  },
+  "line_anchor_patch": {
+    "bytes": 1398,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/line-anchor-correction.patch",
+    "sha256": "7f296a8ba10e2df8e03109b01ce65acf58276693b9072904ad10a4ca59c1402a"
+  },
+  "native_o0_evidence": {
+    "bytes": 5030,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/native-o0-evidence.json",
+    "sha256": "693805efb8174eea29bd71c1b2993a9e5730493e87a28a02a430c6c9cab29f5e"
+  },
+  "owned_out_root": "out/portable-multiply64-controls-o0-lines",
+  "parent_stop_archive": {
+    "evidence_commit": "f903a8e2a986e6ea900da242cd71a702f8977535",
+    "manifest": {
+      "bytes": 42068,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/manifest.json",
+      "sha256": "f6ef7e677bdda055500a7a1a779e332302f736bf7bbb199bad38d05e6b18ea03"
+    }
+  },
+  "prepared_only": true,
+  "producer_reuse": "78files and3successful compiler/policy owners; no rebuilt/validated/retested completed producer. Old verifier remains terminalfalse; new complete35module reader is separately owned.",
+  "profile": {
+    "bytes": 5395,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/profile.json",
+    "sha256": "d5f3cb56b2a656d889c8f23aa94c5393d8d88f80cf3044a21cb82883bb1f22f4"
+  },
+  "prospective_owners": 18,
+  "provenance": {
+    "bytes": 8734,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/provenance.json",
+    "sha256": "e454beee824626775a3a4f234a556790e29787829a8485c2e3de5dcce66549b7"
+  },
+  "reader_controls": "15controls:2positive fullimmutable native/SSA dumps,13negative includingexplicitopt-in/selector/constants/writes/alias/escape/sideentrance/maskepoch/sticky. Rootaloneoperates.",
+  "schema": "sirius-multiply64-o0-continuation-preparation/v1",
+  "source_freeze": {
+    "bytes": 746680,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/source-freeze.json",
+    "sha256": "5ed44cb13864c98a24beadf669089c2b460a94e16b42212a8bb155173dc21740"
+  },
+  "source_pin_count": 2102,
+  "stop": "First incomplete owner or source/tool/provider/module/type/selector/profile/producer/numerical/readback/route mismatch: stop and preserve. No benefit/production/fullscience qualification admitted.",
+  "unchanged_original_gates": "24/11modules;24/16mainarrays+2unchanged ownerarrays;7tables;40fields/4columns/7RHS/independenttrials/quartics/orderedjoins;allsourceABI/layout/modes/floatguards;original8cases/32+56readbacks/51markers/4routes/strictfeatureobjectlink. No7handlesclaim."
+}

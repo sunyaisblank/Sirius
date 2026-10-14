@@ -1,0 +1,142 @@
+{
+  "cause": "The unrestricted uint_21 substring also matches special-case uint_2143289344. Negative-fixture construction stopped before any multiply_shape call.",
+  "complete_instruction_line_count": 1,
+  "corrected_parser_source": {
+    "bytes": 4749,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/parser_controls.py",
+    "sha256": "ab1873ff2737213ef6c5f4e3491ed629f67f5cd62f192f9e0a2b2a2ec8772804"
+  },
+  "correction_is_pre_execution_setup_change_not_numeric_or_benefit_retry": true,
+  "exact_source_patch": {
+    "bytes": 1398,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/line-anchor-correction.patch",
+    "sha256": "7f296a8ba10e2df8e03109b01ce65acf58276693b9072904ad10a4ca59c1402a"
+  },
+  "executed": false,
+  "failed_parent_remains_failed": true,
+  "lineage_files": {
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/actions.json": {
+      "bytes": 4647468,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/actions.json",
+      "sha256": "cfbeccddee60b4620c88283ee5dff4337a1e6cc849f8257cdf1b53b75b07e9a3"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/inputs-after.json": {
+      "bytes": 672957,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/inputs-after.json",
+      "sha256": "95d992c6d6bf0410fbf5ee60435977cddfbb1169a75ef614884f5f639cc65abf"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/inputs-before.json": {
+      "bytes": 672957,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/inputs-before.json",
+      "sha256": "95d992c6d6bf0410fbf5ee60435977cddfbb1169a75ef614884f5f639cc65abf"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/owner.json": {
+      "bytes": 1537,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/owner.json",
+      "sha256": "86961a9ba72375a34c9749e20b4468f8cc47ca3faa7f6a3ccf130018fc167b10"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/stderr.log": {
+      "bytes": 1320,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/stderr.log",
+      "sha256": "eaf7f75253415de8d80b486effc1eaef3ebc3e1cc7390d2ff2675912e24690dd"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/stdout.log": {
+      "bytes": 0,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/check-o0-reader/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/independent-source-review.json": {
+      "bytes": 3055,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/independent-source-review.json",
+      "sha256": "7bd0dd5f597e2b1a9b947437d4cbec536aa5ae33edca67b2e0ef83732668d4ac"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/independent-terminal-review.json": {
+      "bytes": 2802,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/independent-terminal-review.json",
+      "sha256": "a3f86bb56bce1adb3eef4ec4273549247604f620ca804b987349938c5fd6e07e"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/multiply_profile.py": {
+      "bytes": 12994,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/multiply_profile.py",
+      "sha256": "5d6e379455b13fa8c6c3c9bac880b54fc69d70efad1a83754dec67d2d9d14803"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/operator-context.json": {
+      "bytes": 749,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/operator-context.json",
+      "sha256": "d5e461b1f3e6ea24425881ce7c1e614eba73a419a65d0f18ffe3284c79c51f3d"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/packet.json": {
+      "bytes": 984031,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/packet.json",
+      "sha256": "60cbb478962ed4963385264ee71681d40bbdcb448e0e72c9646c762cfced4680"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/parser-control-stop.json": {
+      "bytes": 2362,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/parser-control-stop.json",
+      "sha256": "d202aa43af16ae2de7bff66389c366f251f399e0e8a94a4c81d14c89ae511b64"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/parser_controls.py": {
+      "bytes": 4681,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/parser_controls.py",
+      "sha256": "55e4ea38b175ee05504ec883046c00445251b95e8fd2a3b8373e00befe380b7b"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/preparation.json": {
+      "bytes": 4268,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/preparation.json",
+      "sha256": "21ce4b0b1e5fb724678864b5fcd566106316eb13646642b5fc8e87e21985db2c"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/reuse-completed-products/output-seal.json": {
+      "bytes": 30200,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/reuse-completed-products/output-seal.json",
+      "sha256": "9fbe7db718cbd2d6ab0a2848594386b26e6964e26581cd76a222689c23b6894b"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/reuse-completed-products/owner.json": {
+      "bytes": 1625,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/reuse-completed-products/owner.json",
+      "sha256": "23b4cda1c924293e456fa44d47fe47f099cbcf7c98069fbb9393043920782f4b"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/source-freeze.json": {
+      "bytes": 735925,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/source-freeze.json",
+      "sha256": "d2b9e6524e8b3787af739fa428f3b46b34bf497a398570a3df9bbab4601f5a63"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/manifest.json": {
+      "bytes": 42068,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/manifest.json",
+      "sha256": "f6ef7e677bdda055500a7a1a779e332302f736bf7bbb199bad38d05e6b18ea03"
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/result.json": {
+      "bytes": 2362,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/result.json",
+      "sha256": "3e4d36455831871789b985440d1add0d281f0debcdc99ef6825316855a100834"
+    }
+  },
+  "new_attempt_reuses": "Same immutable c4203ae three compiler/policy owners and78products; repeats only pure owned bytecopy. No rebuild, validation or policy rerun.",
+  "only_semantic_source_changes": "Two negative-fixture construction anchors include the complete indented instruction and newline. Reader, acceptance predicates, all15 controls and original numerical contracts unchanged.",
+  "original_substring_count": 2,
+  "parent_evidence_commit": "f903a8e2a986e6ea900da242cd71a702f8977535",
+  "parent_manifest": {
+    "bytes": 42068,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/manifest.json",
+    "sha256": "f6ef7e677bdda055500a7a1a779e332302f736bf7bbb199bad38d05e6b18ea03"
+  },
+  "parent_parser_source": {
+    "bytes": 4681,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/parser_controls.py",
+    "sha256": "55e4ea38b175ee05504ec883046c00445251b95e8fd2a3b8373e00befe380b7b"
+  },
+  "parent_profile_producer_runtime_numerical_not_executed": true,
+  "parent_shape_reader": {
+    "bytes": 12994,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop/files/out/portable-multiply64-controls-o0/multiply_profile.py",
+    "sha256": "5d6e379455b13fa8c6c3c9bac880b54fc69d70efad1a83754dec67d2d9d14803"
+  },
+  "parent_stop_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-o0-parser-fixture-stop",
+  "prepared_only": true,
+  "schema": "sirius-multiply64-o0-line-anchor-correction-v1",
+  "unchanged_shape_reader": {
+    "bytes": 12994,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-controls-o0-lines/multiply_profile.py",
+    "sha256": "5d6e379455b13fa8c6c3c9bac880b54fc69d70efad1a83754dec67d2d9d14803"
+  }
+}

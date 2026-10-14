@@ -1,0 +1,111 @@
+{
+  "controls": [
+    {
+      "actual_acceptance": true,
+      "expected_acceptance": true,
+      "failure_type": null,
+      "full_fixture_sha256": "3252f74eb8bff7c5284d43cb5e03606b0d9ba790a3a0b6307e33a0d799a1b7bc",
+      "name": "actual_complete_native_o0"
+    },
+    {
+      "actual_acceptance": true,
+      "expected_acceptance": true,
+      "failure_type": null,
+      "full_fixture_sha256": "47cef6018951b4faa4052e1daa5c72e99609703bab636614f726def2eb899588",
+      "name": "accepted_complete_portable_ssa"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "3252f74eb8bff7c5284d43cb5e03606b0d9ba790a3a0b6307e33a0d799a1b7bc",
+      "name": "o0_requires_explicit_admission"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "e55fdc06ed4b09bfb065f0deeda2ee7805bcda88d8c6c1f31f98fe80a18ef310",
+      "name": "reversed_21_20_arms"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "22c4a1c7d66cfb9d26d44dcea50354cafc7b0b6f332e2d395f23ee184a4321cf",
+      "name": "wrong_selector_predicate"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "014c1140646fa75db1703b7f7f7cc1a22b74ad69b527117b5ed4cf202e6f5dee",
+      "name": "wrong_true_constant"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "b36c28046217c0d32dba8ce63b72b59deaeddbbb8293f45729c9115b9a7cd876",
+      "name": "intervening_distance_store"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "97f28d61f5cef8aae333615a2515fbd366641eed0b9126d9d427e74c01a1dd33",
+      "name": "pointer_copy_alias"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "20c2ce338d3e59d7ecf573b5b43108d557410edb8b904addb4efe8f15fd2053f",
+      "name": "pointer_call_escape"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "868d786f25ec439e7724f5e8d8c7ae303bae2fe70d582b72c1b9e85965233227",
+      "name": "true_arm_side_entrance"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "99bffbea020b74736b16f1cd80d2c32dfa77efe2ff6e613fcaa953f9bb6fb1a9",
+      "name": "mask_distance_mismatch"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "38d7ad800685d982d32179c66ced6de5b026088a65f676a6e785b155ff3da611",
+      "name": "mask_load_from_sticky_epoch"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "59d5c30f228b5ca8bf1901942ad8662805b06d666c74838b6aef0c6bc5f568dd",
+      "name": "sticky_uses_distance"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "3f8fc7885619084e860e4b316f4983c170fe8ae07b6dca39897c9e83a4ffe6ae",
+      "name": "sticky_wrong_predicate"
+    },
+    {
+      "actual_acceptance": false,
+      "expected_acceptance": false,
+      "failure_type": "AssertionError",
+      "full_fixture_sha256": "fb4f1dc8fa2d849f0bdc18870999070b8bc262b37dba9545128cdb2cb8b0f601",
+      "name": "missing_true_store"
+    }
+  ],
+  "passed": true,
+  "scope": "Full immutable dump source-reader controls only. Some negative textual perturbations intentionally violate SPIR-V SSA/type/CFG validity; none is compiled, validated, dispatched, or a numerical fixture."
+}

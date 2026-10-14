@@ -1,0 +1,88 @@
+{
+  "actual_modules": {
+    "camera": {
+      "bytes": 59880,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_camera_fp64.spv",
+      "sha256": "d9ecca786ee1ad4f61f7af5ec97287f7598e78ddd57407a827744826648a40fb"
+    },
+    "dense": {
+      "bytes": 89460,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dense_fp64.spv",
+      "sha256": "0a403f99cb8f5eb012eb2b6a3abb28cc2e80f2edd33a7282505ac6e41312b575"
+    },
+    "dopri_phase": {
+      "bytes": 70932,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_dopri_phase_fp64.spv",
+      "sha256": "cc7e33bda87e4051d58135d50c64749c3eefd09f33b76542d1d86317dbb2f3f9"
+    },
+    "endpoint": {
+      "bytes": 110792,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_endpoint_fp64.spv",
+      "sha256": "ec7d244231e7fba31a92cf06d9ce6e27b73a8a0f0f2ffee86dfce5836efc6ca9"
+    },
+    "initialize": {
+      "bytes": 69300,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_initialize_fp64.spv",
+      "sha256": "bc99a330a6cab9671e35c32df1e486b39da90c23c9ef9f06411d7f5ea2451297"
+    },
+    "ray_camera": {
+      "bytes": 57560,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_ray_camera_fp64.spv",
+      "sha256": "af3f5ce45bbcc2f1bbb57f966ecc6bf67a588b9bd219f87dab54252595e8b661"
+    },
+    "transport": {
+      "bytes": 96840,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/bin/linux-gcc/portable-multiply64-controls/candidate/retained_transport_fp64.spv",
+      "sha256": "c4cdd2e41f0e2bb98be24fec413a2e006a8459e9fea44012132ae72478b058f2"
+    }
+  },
+  "camera_graph": {
+    "common_round": "%1826=PB32Round(%sign,%1825,%extended); return%1826",
+    "distance_epoch": {
+      "false": "%1806",
+      "false_value": 20,
+      "header": "%1796",
+      "mask_load": "%1807",
+      "merge": "%1804",
+      "rightshift_load": "%1810",
+      "slot": "%shift",
+      "true": "%1805",
+      "true_value": 21
+    },
+    "early_slot_uses": "Infinity special-case merge%1784 loads and immediately returns; finite distance stores dominate later loads. No pointer escape/alias; Function uint slot references onlyLoad/Store.",
+    "sticky_epoch": {
+      "false": "%1816",
+      "false_value": 0,
+      "header": "%1804",
+      "load": "%1817",
+      "merge": "%1814",
+      "predicate": "%1813=(%discarded!=0)",
+      "true": "%1815",
+      "true_value": 1
+    },
+    "unpacked_unsigned32_operands_to_unsigned64_product": "%aa/%bb\u2192%1800/%1802\u2192%product",
+    "upper": "%upper=(%product &2^47)!=0"
+  },
+  "failing_module": "retained_camera_fp64.spv",
+  "failing_reader_owner_preserved_false": {
+    "child_exit": 1,
+    "owner": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/out/portable-multiply64-controls/verify-products/owner.json",
+    "passed": false,
+    "status": "terminal",
+    "stderr": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-profile-graph-stop/files/out/portable-multiply64-controls/verify-products/stderr.log",
+    "stderr_pin": {
+      "bytes": 962,
+      "sha256": "278d6aa4907b2a7549195fb3e71cc71a8cdd9fad177ff7727d2458b812502e20"
+    }
+  },
+  "limits": "Only seven native O0 function representations. Portable SSA/camera and complete35module/profile acceptance remain future checks. No native/provider or retained numerical/performance/adoption witness here.",
+  "normalization_scope": "Independent read-only raw-SPV analysis: instruction opcodes, result-definition-order local IDs, global types/constants/callee names, literal operands and CFG references retained; seven bodies equal under ID renaming. Opcode map aligned to4230instructions of the existing complete Camera disassembly. This is bounded evidence, not a machine-checked mathematical proof.",
+  "normalized_body_json_sha256": "1ac9010ea123e2c118ed24abc1bae3b63863b7cc7656f25d6b53206cc7178ded",
+  "normalized_native_PB32Multiply_instruction_count": 139,
+  "origin_evidence_commit": "c4203ae54dfa64b64edd39c30ffff76b6d344a0a",
+  "origin_manifest": {
+    "bytes": 48961,
+    "sha256": "fbd84f8ee719c49b581e94963794c60cd72a3d61fd2736df0708b8700d5d34e2"
+  },
+  "schema": "sirius-multiply64-native-o0-source-evidence/v1"
+}

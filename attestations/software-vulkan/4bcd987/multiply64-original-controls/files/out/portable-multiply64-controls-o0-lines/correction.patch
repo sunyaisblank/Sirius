@@ -1,0 +1,316 @@
+--- stopped/gate.py
++++ o0-continuation/gate.py
+@@ -4,7 +4,7 @@
+ sys.dont_write_bytecode = True
+ W = Path(__file__).resolve().parent
+ R = W.parents[1]
+-T = R / 'bin/linux-gcc/portable-multiply64-controls'
++T = R / 'bin/linux-gcc/portable-multiply64-controls-o0'
+ P = json.loads((W / 'packet.json').read_text())
+ 
+ def record(path):
+@@ -163,6 +163,7 @@
+ 
+ def pin_context():
+     verify_static(); verify_source_and_compiler(); verify_host_reuse(); verify_arithmetic()
++    verify_completed_producers()
+     assert not T.exists() and not (W / 'operator-context.json').exists()
+     assert not subprocess.check_output(['git', 'status', '--porcelain=v1'], cwd=R)
+     revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=R, text=True).strip()
+@@ -177,55 +178,64 @@
+           'source_freeze': record(W / 'source-freeze.json'), 'preparation': record(W / 'preparation.json')})
+     print('Pinned original optional64 profile; no compiler/provider launched.', flush=True)
+ 
+-def reuse_stock():
+-    archive = Path(P['original_stock_archive'])
+-    manifest_path = archive / 'manifest.json'
+-    assert content(manifest_path)['sha256'] == P['original_stock_manifest_sha256']
+-    manifest = json.loads(manifest_path.read_text())
+-    old_work = Path(P['original_stock_work'])
+-    accepted_folder(old_work / 'reuse-products-stock')
+-    before = json.loads((old_work / 'reuse-products-stock/inputs-before.json').read_text())
+-    tools = {}
+-    for name in P['stock_reuse_tools']:
+-        path = Path(name)
+-        old = next(value for value in before.values() if value['resolved_path'] == str(path.resolve(strict=True)))
+-        assert content(path) == {key: old[key] for key in ('bytes', 'sha256')}
+-        tools[name] = record(path)
+-    kernel_sources = {}
+-    original = old_work / 'stock/src/sirius/kernels'
+-    names = sorted(path.name for path in original.iterdir())
+-    assert len(names) == 33 and names == sorted(path.name for path in (W / 'stock/src/sirius/kernels').iterdir())
+-    for name in names:
+-        paths = [original / name, W / 'stock/src/sirius/kernels' / name, R / 'src/sirius/kernels' / name]
+-        assert len({content(path)['sha256'] for path in paths}) == 1
+-        consumed = before[str(Path(P['original_stock_input_root']) / 'stock/src/sirius/kernels' / name)]
+-        assert content(original / name) == {k: consumed[k] for k in ('bytes', 'sha256')}
+-        kernel_sources[name] = record(original / name)
+-    builders = [old_work / 'stock/scripts/build-retained-kernels.py', W / 'stock/scripts/build-retained-kernels.py', R / 'scripts/build-retained-kernels.py']
+-    assert len({content(path)['sha256'] for path in builders}) == 1
+-    consumed_builder = before[str(Path(P['original_stock_input_root']) / 'stock/scripts/build-retained-kernels.py')]
+-    assert content(builders[0]) == {k: consumed_builder[k] for k in ('bytes', 'sha256')}
+-    source = Path(P['stock_reuse_directory'])
+-    target = T / 'stock'; assert not target.exists()
+-    products = [Path(name).name for name in P['outputs']['reuse-products-stock'] if Path(name).parent == target]
+-    assert len(products) == 39 and set(products) == {path.name for path in source.iterdir()}
+-    target.mkdir(parents=True)
+-    joined = {}
+-    for name in products:
+-        origin = source / name
+-        key = str(origin.relative_to(archive))
+-        assert content(origin) == manifest['files'][key]
+-        assert origin.read_bytes() == (R / 'bin/linux-gcc/src/sirius/backend/retained' / name).read_bytes()
+-        shutil.copyfile(origin, target / name)
+-        assert (target / name).read_bytes() == origin.read_bytes()
+-        joined[name] = {'source': record(origin), 'copy': record(target / name)}
+-    return {'passed': True, 'reused_files': 39, 'original_stock_owner': record(old_work / 'reuse-products-stock/owner.json'),
+-            'original_stock_before': record(old_work / 'reuse-products-stock/inputs-before.json'),
+-            'original_stock_after': record(old_work / 'reuse-products-stock/inputs-after.json'),
+-            'original_manifest': record(manifest_path), 'kernel_sources': kernel_sources,
+-            'builder': record(builders[0]), 'five_tools': tools, 'products': joined,
+-            'preparation_cost_evidence_seconds': {'historical_stock35': 35.46063927599971, 'historical_candidate35': 34.996513119000156},
+-            'scope': 'Exact accepted original stock35modules+4headers/maps reused; no fresh stock compiler or runtime result. Full candidate35 builder retained to avoid a selective compiler/cache adapter; no future timing promise or benefit claim.'}
++def verify_completed_producers():
++    archive = Path(P['completed_archive']); history = Path(P['completed_work'])
++    assert content(archive / 'manifest.json') == P['completed_manifest_pin']
++    manifest = json.loads((archive / 'manifest.json').read_text())
++    for name, pin in manifest['files'].items(): assert content(archive / name) == pin, name
++    old_packet = json.loads(Path(P['completed_original_packet']).read_text())
++    old_actions = json.loads(Path(P['completed_original_actions']).read_text())
++    frozen = json.loads((history / 'source-freeze.json').read_text())['pins']
++    assert set(frozen) <= set(P['completed_input_joins'])
++    for original, pin in frozen.items(): assert P['completed_input_joins'][original]['pin'] == pin
++    receipts = {}
++    for label in P['completed_labels']:
++        owner = accepted_folder(history / label)
++        before = json.loads((history / label / 'inputs-before.json').read_text())
++        assert owner['argv'] == old_actions[label]['argv'] and owner['limits'] == old_actions[label]['limits']
++        for key, pin in before.items():
++            row = P['completed_input_joins'][str(R / key)]
++            assert row['pin'] == pin
++            actual = Path(row['actual'])
++            assert content(actual) == {k: pin[k] for k in ('bytes', 'sha256')}
++            if not actual.is_relative_to(archive): assert record(actual) == pin
++        seal = json.loads((history / label / 'output-seal.json').read_text())
++        assert seal['label'] == label and seal['recipe'] == old_packet['recipes'][label]
++        for field, path in [('source_freeze', history / 'source-freeze.json'),
++                            ('operator_context', history / 'operator-context.json'),
++                            ('inputs_before', history / label / 'inputs-before.json')]:
++            assert content(path) == {k: seal[field][k] for k in ('bytes', 'sha256')}
++        assert set(seal['outputs']) == set(old_packet['outputs'][label])
++        for original, pin in seal['outputs'].items():
++            source = archive / 'files' / Path(original).relative_to(R)
++            assert content(source) == {k: pin[k] for k in ('bytes', 'sha256')}
++        receipts[label] = {'owner': record(history / label / 'owner.json'), 'output_seal': record(history / label / 'output-seal.json')}
++    failure = P['original_product_reader_failure']
++    stopped = json.loads(Path(failure['owner']).read_text())
++    assert stopped['status'] == 'terminal' and stopped['passed'] is False and stopped['child_exit'] == 1
++    assert stopped['stop_reason'] is None and stopped['cleanup_errors'] == [] and stopped['remaining_owned_processes'] == []
++    assert stopped['source_unchanged'] and stopped['whole_inputs_unchanged'] and all(row['absent'] for row in stopped['observed_births'])
++    assert content(failure['stderr']) == failure['stderr_pin']
++    for directory in ('stock', 'candidate'):
++        for original in (history / directory).rglob('*'):
++            if original.is_file(): assert original.read_bytes() == (W / directory / original.relative_to(history / directory)).read_bytes()
++    return {'passed': True, 'archive_manifest': record(archive / 'manifest.json'), 'completed_three_owners': receipts,
++            'old_product_reader_owner_preserved_false': record(failure['owner']), 'source_input_joins': len(P['completed_input_joins']),
++            'scope': 'Completed stock39/candidate39 compiler products and canonical selfcheck reused exactly. No compiler, validator or policy test rerun. Stopped product reader remains failed; new full product reader is independent.'}
++
++def reuse_completed_products():
++    proof = verify_completed_producers(); archive = Path(P['completed_archive'])
++    for mode in ('stock', 'candidate'):
++        source = archive / 'files/bin/linux-gcc/portable-multiply64-controls' / mode
++        target = T / mode
++        assert not target.exists(); target.mkdir(parents=True)
++        names = sorted(path.name for path in source.iterdir()); assert len(names) == 39
++        for name in names:
++            shutil.copyfile(source / name, target / name)
++            assert (source / name).read_bytes() == (target / name).read_bytes()
++    proof['copied_files'] = 78
++    write(W / 'completed-products-reuse.json', proof)
++
+ 
+ def products_review():
+     from elf_arrays import arrays
+@@ -268,7 +278,8 @@
+             assert re.findall(r'OpTypeFloat (\d+)', candidate) == re.findall(r'OpTypeFloat (\d+)', stock), name
+             assert not re.search(r'\b(?:RelaxedPrecision|FPFastMathMode|FPFastMathDefault|OpFmaKHR)\b', candidate)
+             camera = name.startswith(('retained_camera_portable', 'retained_ray_camera_portable'))
+-            footprint = multiply_shape(candidate, camera=camera)
++            native_o0 = name.endswith('_fp64.spv') and '_portable' not in name
++            footprint = multiply_shape(candidate, camera=camera, allow_o0=native_o0)
+             for function in ('PB32Unpack', 'PB32Round', 'PB32Divide', 'PB32WideProduct', 'PB32ProductResidual',
+                              'OrderedAdd32', 'OrderedSubtract32', 'OrderedMultiply32', 'OrderedDivide32'):
+                 present = [bool(re.search(r'OpName %\S+ "' + function + '"', text)) for text in (stock, candidate)]
+@@ -292,7 +303,7 @@
+         headers[name] = {'changed_arrays': changed, 'stock': record(T / 'stock' / name), 'candidate': record(T / 'candidate' / name)}
+     for name in ('retained_owner_layout.h', 'retained_owner_layout.slang'):
+         assert (canonical / name).read_bytes() == (T / 'stock' / name).read_bytes() == (T / 'candidate' / name).read_bytes()
+-    return {'passed': True, 'stock_reuse': record(W / 'stock-reuse-acceptance.json'), 'modules': rows, 'headers': headers, 'changed_modules': 24, 'unchanged_modules': 11,
++    return {'passed': True, 'completed_products_reuse': record(W / 'completed-products-reuse.json'), 'reader_controls': record(W / 'parser-controls-result.json'), 'modules': rows, 'headers': headers, 'changed_modules': 24, 'unchanged_modules': 11,
+             'main_arrays_changed': 24, 'main_arrays_unchanged': 16, 'owner_arrays_unchanged': 2,
+             'all_seven_tables_and_nonarray_ABI_constants_equal': True,
+             'scope': 'Complete compiler/profile/ABI evidence only; no integrated numeric or benefit verdict.'}
+@@ -355,7 +366,7 @@
+     assert context['source_freeze'] == record(W / 'source-freeze.json')
+     for prior in ancestor_labels(label): verify_output_seal(prior)
+     assert all(not Path(path).exists() for path in P['outputs'][label])
+-    if label == 'reuse-products-stock': write(W / 'stock-reuse-acceptance.json', reuse_stock())
++    if label == 'reuse-completed-products': reuse_completed_products()
+     elif label == 'verify-products': write(W / 'products-acceptance.json', products_review())
+     elif label == 'prepare-producer': prepare_producer()
+     else:
+--- stopped/multiply_profile.py
++++ o0-continuation/multiply_profile.py
+@@ -27,7 +27,82 @@
+             for line in body.splitlines() if line.strip()]
+ 
+ 
+-def multiply_shape(text, camera=False):
++def function_slot_choice(body, definitions, value):
++    """Recognize only a private uint load after one exact two-store diamond."""
++    load = definitions[value].split()
++    assert len(load) == 3 and load[0] == "OpLoad"
++    kind, slot = load[1:]
++    assert definitions[kind] == "OpTypeInt 32 0"
++    variable = definitions[slot].split()
++    assert len(variable) == 3 and variable[0] == "OpVariable" and variable[2] == "Function"
++    assert definitions[variable[1]].split() == ["OpTypePointer", "Function", kind]
++    blocks, rows, current = {}, [], None
++    for line in body.splitlines():
++        words = line.split()
++        if not words:
++            continue
++        result, op, args = ((words[0], words[2], words[3:]) if len(words) > 1 and words[1] == "="
++                            else (None, words[0], words[1:]))
++        row = {"result": result, "op": op, "args": args}
++        rows.append(row)
++        if op == "OpLabel":
++            current = result
++            assert current not in blocks
++            blocks[current] = []
++        if current is not None and op != "OpFunctionEnd":
++            blocks[current].append(row)
++    # The slot has no aliases, address arithmetic, pointer copies, calls or stores as data.
++    for row in rows:
++        if slot in row["args"]:
++            assert ((row["op"] == "OpStore" and len(row["args"]) == 2 and row["args"][0] == slot and row["args"][1] != slot) or
++                    (row["op"] == "OpLoad" and row["result"] is not None and row["args"] == [kind, slot]))
++    predecessors = {name: set() for name in blocks}
++    for name, block in blocks.items():
++        tail = block[-1]
++        if tail["op"] == "OpBranch":
++            assert len(tail["args"]) == 1
++            targets = tail["args"]
++        elif tail["op"] == "OpBranchConditional":
++            assert len(tail["args"]) == 3
++            targets = tail["args"][1:]
++        else:
++            assert tail["op"] in ("OpReturnValue", "OpReturn", "OpUnreachable")
++            targets = []
++        for target in targets:
++            predecessors[target].add(name)
++    positions = [(name, index) for name, block in blocks.items()
++                 for index, row in enumerate(block) if row["result"] == value]
++    assert len(positions) == 1
++    merge, index = positions[0]
++    # Each arm ends immediately after its store. Nothing in the merge may rewrite the slot before this load.
++    assert all(not (row["op"] == "OpStore" and row["args"][0] == slot)
++               for row in blocks[merge][:index])
++    candidates = []
++    for header, block in blocks.items():
++        if len(block) < 3 or block[-2]["op"] != "OpSelectionMerge" or block[-2]["args"] != [merge, "None"]:
++            continue
++        branch = block[-1]
++        assert branch["op"] == "OpBranchConditional" and len(branch["args"]) == 3
++        condition, true_block, false_block = branch["args"]
++        assert true_block != false_block
++        assert predecessors[true_block] == predecessors[false_block] == {header}
++        assert predecessors[merge] == {true_block, false_block}
++        values = []
++        for arm in (true_block, false_block):
++            exact = blocks[arm]
++            assert len(exact) == 3 and exact[0]["op"] == "OpLabel"
++            assert exact[1]["op"] == "OpStore" and len(exact[1]["args"]) == 2 and exact[1]["args"][0] == slot
++            assert exact[2]["op"] == "OpBranch" and exact[2]["args"] == [merge]
++            values.append(exact[1]["args"][1])
++        candidates.append({"slot": slot, "header": header, "merge": merge, "condition": condition,
++                           "true_block": true_block, "false_block": false_block,
++                           "yes": values[0], "no": values[1], "load": value,
++                           "direct_private_slot_only": True, "no_side_entrances_or_intervening_store": True})
++    assert len(candidates) == 1
++    return candidates[0]
++
++
++def multiply_shape(text, camera=False, allow_o0=False):
+     """Require exact full product/shift/jam graph; Camera O1 has8inlined generic sites."""
+     body = (re.search(r"^\s*" + re.escape(re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]) + r" = OpFunction\b.*?OpFunctionEnd", text, re.M | re.S)[0] if camera else function_body(text, "PB32Multiply"))
+     definitions = dict(re.findall(r"^\s*(%\S+) = (.+)$", text, re.M))
+@@ -54,10 +129,29 @@
+     def constant(identifier, expected):
+         try: return number(identifier) == expected
+         except ValueError: return False
++    loads = {}
++    def load_choice(identifier):
++        identifier = origin(identifier)
++        assert allow_o0 and not camera
++        if identifier not in loads:
++            loads[identifier] = function_slot_choice(body, definitions, identifier)
++        return loads[identifier]
++    def same_value(left, right):
++        left, right = origin(left), origin(right)
++        if left == right:
++            return True
++        if not allow_o0 or words(left)[0] != "OpLoad" or words(right)[0] != "OpLoad":
++            return False
++        epoch = lambda item: {key: value for key, value in item.items() if key != "load"}
++        return epoch(load_choice(left)) == epoch(load_choice(right))
+     def choice(identifier, condition, yes, no):
+         expression = words(origin(identifier))
+         if expression[0] == "OpSelect":
+             return origin(expression[2]) == condition and constant(expression[3], yes) and constant(expression[4], no)
++        if expression[0] == "OpLoad" and allow_o0:
++            proof = load_choice(identifier)
++            return (origin(proof["condition"]) == condition and
++                    constant(proof["yes"], yes) and constant(proof["no"], no))
+         if expression[0] != "OpPhi" or len(expression) != 6:
+             return False
+         incoming = {expression[i + 1]: expression[i] for i in (2, 4)}
+@@ -102,7 +196,7 @@
+             parts = expression.split()
+             if parts[:2] != ["OpISub", wide] or not constant(parts[3], 1): continue
+             shift = words(origin(parts[2]))
+-            if shift[:2] == ["OpShiftLeftLogical", wide] and constant(shift[2], 1) and origin(shift[3]) == origin(distance): masks.append(identifier)
++            if shift[:2] == ["OpShiftLeftLogical", wide] and constant(shift[2], 1) and same_value(shift[3], distance): masks.append(identifier)
+         assert len(masks) == 1
+         discarded = [identifier for identifier, expression in definitions.items() if
+                      expression.startswith("OpBitwiseAnd " + wide + " ") and
+@@ -129,4 +223,5 @@
+     return {"unsigned64_product_sites": expected, "inlined_camera": camera,
+             "normalized_unsigned_operands": not camera, "uint32_operands_widened": True,
+             "complete_product_shift_jam_graphs": results,
++            "function_slot_load_choices": list(loads.values()),
+             "common_round_scope": "Original source unchanged; out-of-line call joined except O1 camera where Round remains inlined."}
+--- stopped/verify_producer.py
++++ o0-continuation/verify_producer.py
+@@ -5,7 +5,7 @@
+ R = Path.cwd().resolve()
+ W = Path(__file__).resolve().parent
+ B = R / 'bin/linux-gcc'
+-T = B / 'portable-multiply64-controls/controls'
++T = B / 'portable-multiply64-controls-o0/controls'
+ def identity(path):
+     data = path.read_bytes()
+     return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+@@ -73,10 +73,10 @@
+         pin = {key: normalized[str(path)][key] for key in ['bytes', 'sha256']}
+         assert identity(path) == pin, dependency
+         records[str(path.relative_to(R))] = pin
+-    assert 'bin/linux-gcc/portable-multiply64-controls/controls/headers/retained_kernels.h' in records
++    assert 'bin/linux-gcc/portable-multiply64-controls-o0/controls/headers/retained_kernels.h' in records
+     if label == 'compile-compute-sealed':
+         for header in ['retained_owner_kernels.h', 'retained_owner_layout.h']:
+-            assert 'bin/linux-gcc/portable-multiply64-controls/controls/headers/' + header in records
++            assert 'bin/linux-gcc/portable-multiply64-controls-o0/controls/headers/' + header in records
+     assert 'src/sirius/backend/vulkan/vulkan_device.h' not in records or records['src/sirius/backend/vulkan/vulkan_device.h']['sha256'] == '604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de'
+     compile_records[label] = {'owner': identity(W / label / 'owner.json'), 'object': identity(T / (name + '.o')),
+                               'actual_dependencies': records}
