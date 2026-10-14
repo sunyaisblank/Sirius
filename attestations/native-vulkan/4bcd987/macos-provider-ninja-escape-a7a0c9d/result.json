@@ -1,0 +1,294 @@
+{
+  "archive": {
+    "bytes": 85241436,
+    "sha256": "7cd11604400b28bbe3c39e55cf1f4d86ec8f1cd64dc2aa67bcb79c0f6ca74c6d"
+  },
+  "archive_parts": [
+    {
+      "bytes": 33554432,
+      "path": "artifact.zip.parts/part-000",
+      "sha256": "a48ccb8b9335ded68bc50733946740fef801e7281d23b882c870a96308635626"
+    },
+    {
+      "bytes": 33554432,
+      "path": "artifact.zip.parts/part-001",
+      "sha256": "6da3da76e9ec950debee74c39d0cbe78c7f994b8aeab2bdf29cf3e6705500820"
+    },
+    {
+      "bytes": 18132572,
+      "path": "artifact.zip.parts/part-002",
+      "sha256": "d94715cced7ca28cdce0672bc34ad576cbafb265d2242b2e9c64f30927be9c82"
+    }
+  ],
+  "artifact": 11890771513,
+  "failure": "Ninja compiler ABI command creates its own process group; original strict owner rejects it.",
+  "job": 115831201718,
+  "observation": {
+    "candidate_source": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "cases": [],
+    "error": "ValueError: owned action failed/incomplete; sequence stopped",
+    "expected_api_versions": {
+      "diagnostic": "1.3.334",
+      "scope": "Original app and public query both request Vulkan1.3; pinned source and stock header patch are both334",
+      "source_header": {
+        "bytes": 1230712,
+        "path": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/provider-source/sources/Vulkan-Headers/include/vulkan/vulkan_core.h",
+        "sha256": "c0f0fe98afae95de1377e13649542912d71ca8817ef21dd0a44778f6fe7a1615"
+      },
+      "stock": "1.3.334"
+    },
+    "production_adopted": false,
+    "provider_content_discriminator": "be16bb0d2d553356491796fc92a112eeb5f2907b4b2d4ff42e4f8842e8309163",
+    "provider_payload_tree": "8b7d54847738c427954c7c3b070708d60fe4c8a8",
+    "provider_scope": "Custom diagnostic MoltenVK; unchanged SDK is not qualified",
+    "provider_source_evidence_commit": "e2422dd92017879a452377a1122f1838e6610b3c",
+    "provider_source_inputs_unchanged": true,
+    "qualification_claimed": false,
+    "runner_source": {
+      "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "runner_revision": "a7a0c9df594da6a7944ba97c00823643a7de7075",
+      "status": ""
+    },
+    "status": "incomplete"
+  },
+  "original_controls_started": false,
+  "provider_build_owner": {
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/runner/work/Sirius/Sirius/scripts/macos_moltenvk_integration.py",
+      "--build-child",
+      "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/build-context.json",
+      "2d07f5cf1f08975dad5b277e1a2d36969dcfaec5a503f5ddd1b70c31249aab52"
+    ],
+    "birth_scope": "Observed ps PID/lstart tokens; second-resolution ambiguity remains incomplete.",
+    "child_exit": -15,
+    "cleanup_errors": [],
+    "containment_complete": false,
+    "controller": {
+      "lstart": "Wed Oct 14 11:38:56 2026    ",
+      "pgid": 912,
+      "pid": 3662,
+      "ppid": 3661,
+      "rss_kib": 262368,
+      "state": "S<"
+    },
+    "environment": {
+      "DYLD_LIBRARY_PATH": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib",
+      "MVK_CONFIG_DEBUG": "0",
+      "MVK_CONFIG_SHADER_DUMP_DIR": null,
+      "MVK_CONFIG_TRACE_VULKAN_CALLS": "3",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "VK_DRIVER_FILES": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json"
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 900
+    },
+    "max_observed_sample_interval_seconds": 0.2943121249999763,
+    "observation_complete": false,
+    "observed_births": [
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:24 2026    ",
+        "pgid": 5424,
+        "pid": 5424,
+        "ppid": 3662,
+        "rss_kib": 0,
+        "state": "Z<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:24 2026    ",
+        "pgid": 5424,
+        "pid": 5429,
+        "ppid": 5424,
+        "rss_kib": 35104,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:25 2026    ",
+        "pgid": 5424,
+        "pid": 5489,
+        "ppid": 5429,
+        "rss_kib": 15968,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:25 2026    ",
+        "pgid": 5424,
+        "pid": 5490,
+        "ppid": 5489,
+        "rss_kib": 2080,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:25 2026    ",
+        "pgid": 5424,
+        "pid": 5494,
+        "ppid": 5489,
+        "rss_kib": 10288,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:25 2026    ",
+        "pgid": 5424,
+        "pid": 5512,
+        "ppid": 5429,
+        "rss_kib": 15552,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:25 2026    ",
+        "pgid": 5424,
+        "pid": 5513,
+        "ppid": 5512,
+        "rss_kib": 192,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:26 2026    ",
+        "pgid": 5424,
+        "pid": 5520,
+        "ppid": 5429,
+        "rss_kib": 15872,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:26 2026    ",
+        "pgid": 5424,
+        "pid": 5522,
+        "ppid": 5520,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:26 2026    ",
+        "pgid": 5424,
+        "pid": 5530,
+        "ppid": 5429,
+        "rss_kib": 15632,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:26 2026    ",
+        "pgid": 5424,
+        "pid": 5532,
+        "ppid": 5530,
+        "rss_kib": 176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:26 2026    ",
+        "pgid": 5424,
+        "pid": 5603,
+        "ppid": 5429,
+        "rss_kib": 0,
+        "state": "?<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:26 2026    ",
+        "pgid": 5424,
+        "pid": 5612,
+        "ppid": 5429,
+        "rss_kib": 3952,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:26 2026    ",
+        "pgid": 5617,
+        "pid": 5617,
+        "ppid": 5612,
+        "rss_kib": 1648,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:26 2026    ",
+        "pgid": 5617,
+        "pid": 5618,
+        "ppid": 5617,
+        "rss_kib": 15568,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:40:26 2026    ",
+        "pgid": 5617,
+        "pid": 5619,
+        "ppid": 5618,
+        "rss_kib": 20976,
+        "state": "R<"
+      }
+    ],
+    "peak_sampled_rss_kib": 363712,
+    "pid": 5424,
+    "prelaunch_memory": {
+      "available_kib": 3368144,
+      "counters": {
+        "\"Translation faults\"": 4493437,
+        "Anonymous pages": 142767,
+        "Compressions": 95777,
+        "Decompressions": 16816,
+        "File-backed pages": 234544,
+        "Pageins": 551895,
+        "Pageouts": 2147,
+        "Pages active": 153811,
+        "Pages copy-on-write": 788003,
+        "Pages free": 3940,
+        "Pages inactive": 206569,
+        "Pages occupied by compressor": 22081,
+        "Pages purgeable": 905,
+        "Pages purged": 7404,
+        "Pages reactivated": 104006,
+        "Pages speculative": 16931,
+        "Pages stored in compressor": 75754,
+        "Pages throttled": 0,
+        "Pages wired down": 54138,
+        "Pages zero filled": 1288197,
+        "Swapins": 0,
+        "Swapouts": 0
+      },
+      "free_kib": 63040,
+      "inactive_kib": 3305104,
+      "page_size": 16384,
+      "physical_bytes": 7516192768,
+      "pressure_level": 1,
+      "raw_vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                3940.\nPages active:                            153811.\nPages inactive:                          206569.\nPages speculative:                        16931.\nPages throttled:                              0.\nPages wired down:                         54138.\nPages purgeable:                            905.\n\"Translation faults\":                   4493437.\nPages copy-on-write:                     788003.\nPages zero filled:                      1288197.\nPages reactivated:                       104006.\nPages purged:                              7404.\nFile-backed pages:                       234544.\nAnonymous pages:                         142767.\nPages stored in compressor:               75754.\nPages occupied by compressor:             22081.\nDecompressions:                           16816.\nCompressions:                             95777.\nPageins:                                 551895.\nPageouts:                                  2147.\nSwapins:                                      0.\nSwapouts:                                     0.\n"
+    },
+    "qualification_claimed": false,
+    "remaining_observed": [],
+    "reserve_scope": "Darwin sampled available estimate: printed free + inactive; kernel pressure must be normal (1). This is not a proven no-swap bound. RSS includes controller and observed group/tree, not global Metal compiler services.",
+    "retirement_census_complete": true,
+    "sampling_interval_seconds": 0.1,
+    "signal_observations": [],
+    "source": {
+      "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "runner_revision": "a7a0c9df594da6a7944ba97c00823643a7de7075",
+      "status": ""
+    },
+    "status": "terminal",
+    "stop_reason": "observed descendant escaped launch group",
+    "wall_seconds": 31.917998458,
+    "whole_inputs_unchanged": true
+  },
+  "provider_source_commit": "e2422dd92017879a452377a1122f1838e6610b3c",
+  "qualification_claimed": false,
+  "raw_scope": "Complete native artifact ZIP split into consecutive 32MiB chunks; concatenation has the recorded archive bytes/hash. Contains complete provider source tar and all remote observations.",
+  "run": 38557811215,
+  "runner_revision": "a7a0c9df594da6a7944ba97c00823643a7de7075",
+  "schema": "sirius-rejected-native-build-containment-v1"
+}
