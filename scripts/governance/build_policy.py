@@ -224,6 +224,7 @@ MACOS_RETAINED_DIAGNOSTIC_JOB = r"""    if: github.event_name == 'workflow_dispa
           python3 -B scripts/diagnose-macos-retained.py \
             --archive out/macos-retained-diagnostic/export.zip \
             --metal-source-archive out/macos-retained-diagnostic/metal-source.zip \
+            --metal-optimization-size \
             --output out/macos-retained-diagnostic/observation
       - name: Preserve diagnostic inputs and observations
         if: always()

@@ -3,7 +3,8 @@
 
 Run only under the existing Darwin owner (300 s / 4 GiB RSS / 2 GiB reserve).
 Uses synchronous error-returning Metal methods instead of MoltenVK's asynchronous
-callbacks, with the same source-derived compile options and compute descriptor.
+callbacks, with source-derived compile options and compute descriptor. Optional
+Size changes only the library optimization setting as a diagnostic experiment.
 No product qualification or equivalence of the two compilation routes is claimed.
 """
 
@@ -130,6 +131,7 @@ def main():
     parser.add_argument("--msl", type=Path, required=True)
     parser.add_argument("--expected-device-name", default="Apple Paravirtual device")
     parser.add_argument("--expected-registry-id", type=lambda value: int(value, 0))
+    parser.add_argument("--optimization-level", choices=["default", "size"], default="default")
     args = parser.parse_args()
     require(sys.platform == "darwin" and platform.machine() == "arm64", "native arm64 Darwin required")
     payload = args.msl.read_bytes()
@@ -137,6 +139,7 @@ def main():
             "MSL differs from exact captured Initialize source")
     emit("input", path=str(args.msl.resolve()), bytes=len(payload), sha256=MSL_SHA,
          candidate_source=SOURCE, qualification_claimed=False,
+         requested_optimization_level=args.optimization_level,
          route="synchronous native Metal error-returning methods; no command queue or dispatch")
     api = ObjC()
     pool = api.send(api.cls("NSAutoreleasePool"), "new")
@@ -168,9 +171,13 @@ def main():
                                       ("setPreserveInvariance:", C.c_bool, False)]:
             api.send(options, selector, None, (kind,), (value,))
         optimization = None
+        requested_optimization = 1 if args.optimization_level == "size" else 0
+        require(requested_optimization == 0 or api.supports(options, "setOptimizationLevel:"),
+                "Metal library size optimization is unavailable")
         if api.supports(options, "setOptimizationLevel:"):
-            api.send(options, "setOptimizationLevel:", None, (C.c_size_t,), (0,))
+            api.send(options, "setOptimizationLevel:", None, (C.c_size_t,), (requested_optimization,))
             optimization = api.integer(options, "optimizationLevel")
+            require(optimization == requested_optimization, "library optimization readback differs")
         require(api.integer(options, "languageVersion") == (3 << 16) | 2
                 and api.boolean(options, "fastMathEnabled")
                 and not api.boolean(options, "preserveInvariance"), "compile option readback differs")
@@ -181,7 +188,9 @@ def main():
              math_mode=api.integer(options, "mathMode") if api.supports(options, "mathMode") else None,
              math_fp_functions=api.integer(options, "mathFloatingPointFunctions") if api.supports(options, "mathFloatingPointFunctions") else None,
              preserve_invariance=False, optimization_level=optimization,
-             provenance="source-derived MoltenVK v1.4.1 plus pinned SPIRV-Cross adec7ac and exact SPV; original debug=0 did not record option getters")
+             changed_parameter={"optimization_level": {"baseline": 0, "diagnostic": 1}}
+                 if requested_optimization == 1 else None,
+             provenance="Source-derived original options; Size is an explicit single-parameter native diagnostic variant when requested. MoltenVK v1.4.1 has no public setting for that variant.")
         error = C.c_void_p()
         emit("phase_start", phase="library")
         library = api.send(device, "newLibraryWithSource:options:error:", C.c_void_p,

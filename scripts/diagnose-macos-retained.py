@@ -624,7 +624,11 @@ def main():
     parser.add_argument("--prepare-only", action="store_true", help="verify/stage the immutable export without native execution")
     parser.add_argument("--metal-source-archive", type=Path,
                         help="diagnose exact captured Initialize MSL through native Metal instead of rerunning controls")
+    parser.add_argument("--metal-optimization-size", action="store_true",
+                        help="change only native Metal library optimization from Default to Size")
     args = parser.parse_args()
+    require(not args.metal_optimization_size or args.metal_source_archive,
+            "Metal Size diagnostic requires the pinned Metal source archive")
     memory_self_test()
     output = args.output.resolve()
     require(output.is_relative_to(ROOT / "out") and not output.exists(), "output must be a fresh directory under out/")
@@ -686,9 +690,11 @@ def main():
         if metal_source:
             result["diagnostic_mode"] = "native_metal_pipeline_error"
             folder = output / "metal-pipeline"
-            receipt = run_owned([sys.executable, "-B", str(ROOT / "scripts/macos_metal_probe.py"),
-                                 "--msl", str(metal_source), "--expected-device-name", selected["name"]],
-                                environment, folder, inputs)
+            command = [sys.executable, "-B", str(ROOT / "scripts/macos_metal_probe.py"),
+                       "--msl", str(metal_source), "--expected-device-name", selected["name"]]
+            if args.metal_optimization_size:
+                command += ["--optimization-level", "size"]
+            receipt = run_owned(command, environment, folder, inputs)
             require(receipt["containment_complete"] and receipt["observation_complete"],
                     "native Metal observation/containment incomplete")
             events = [json.loads(line) for line in (folder / "stdout.log").read_text().splitlines()]
