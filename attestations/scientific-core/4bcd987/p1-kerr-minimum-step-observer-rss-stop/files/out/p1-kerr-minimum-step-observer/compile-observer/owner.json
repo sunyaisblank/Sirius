@@ -1,0 +1,90 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/g++-14",
+    "-DSIRIUS_CONTRACT_MODE=2",
+    "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+    "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+    "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+    "-DSIRIUS_TEST_HAS_KERNELS=1",
+    "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+    "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+    "-I/home/astra/.project/Sirius/tests",
+    "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+    "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+    "-I/home/astra/.project/Sirius/src/sirius/..",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+    "-O3",
+    "-DNDEBUG",
+    "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+    "-std=c++2c",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wno-missing-field-initializers",
+    "-Werror",
+    "-MMD",
+    "-MF",
+    "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/compile-observer/observer.d",
+    "-o",
+    "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/compile-observer/observer.o",
+    "-c",
+    "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/observer.cpp"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "compile-observer",
+  "child_exit": 0,
+  "child_pid": 379494,
+  "child_start_ticks": "5937151",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 379479,
+    "pid": 379490,
+    "ppid": 379479,
+    "rss_kib": 21676,
+    "session": 379479,
+    "start_ticks": "5937103",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "One original Kerr64x64 fixture diagnostic only. Child exit1 preserves MinimumStep rejection and no failed-region Finalize/radiance; owner success means bounded collection, not numerical/scientific/image/performance acceptance.",
+  "minimum_sampled_available_kib": 17835704,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 379494,
+      "saved_start_ticks": "5937151"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 379495,
+      "saved_start_ticks": "5937152"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 385580,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "One original Kerr64x64 fixture diagnostic only. Child exit1 preserves MinimumStep rejection and no failed-region Finalize/radiance; owner success means bounded collection, not numerical/scientific/image/performance acceptance.",
+  "source": {
+    "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 5.149525832006475,
+  "whole_inputs_unchanged": true
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "sirius-linux-ci-minimum-step-source-review-v1",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "scope": "Bounded read-only source diagnosis of three original CI failures; no reproduced physical-ray counterexample, numerical repair or qualification verdict.",
+  "ci_source": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "runner_head": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "relevant_product_and_test_sources_identical_to4bcd_and_ci_source": true,
+  "mandatory_log_sha256": "2ef5acd4f53bec06c822ac3659c1e9dc219361b0310da08cff5dbd92ea9ef522",
+  "actual_ci_numerical_root_cause_proven": false,
+  "full_physical_ray_counterexample_proven": false,
+  "observed_paths": {
+    "702": {
+      "case": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+      "witness": "kerr_0998_inner_turn: M1,a.998,origin(r12,theta1.1,phi.31),direction Unit(-.6,.25,sqrt(.5775)),escape40; retained_binary32_products",
+      "controls": "Control(c,0): min_step1e-6,initial.1,max2,abs=rel5e-6,max_steps20000,all four bundle columns and source maps retained",
+      "logged": "numerical_failure=true,coupled_failure=event,integrator_termination=5",
+      "source": "src/sirius/backend/cpu/geodesic_tracer.cpp:1252-1327",
+      "interpretation": "Event samples/trials and source-map admission rejected. The same termination5 is emitted for non-retryable infinity-source failure OR rejection at minimum step; the log alone does not distinguish them. Later binary64 mode is not established by this fatal binary32 assertion."
+    },
+    "823_824": {
+      "cases": ["KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow", "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene"],
+      "inputs": "Original64x64 Kerr M1,a.9,camera(0,0,-40),forward+z,FOV.6,stepScale.06,min.02,max2,escape100,captureFactor1.12,attempts2000,disk/starfield off,sample(.5,.5)",
+      "source": "src/sirius/kernels/trace.slang:747-758;src/sirius/kernels/gr_integrator.slang:432-495",
+      "interpretation": "Shader adaptive candidate rejected and dt<=minStep*1.0001. Missing raw state prevents distinguishing represented-stage, truncation, projection, unprojected-null or projected-null rejection. Host refusal to publish radiance is required. Case824 fails its initial RunKerrScene<float> prerequisite before its fp64 comparison."
+    }
+  },
+  "proven_source_controller_counterexample": {
+    "source": "src/sirius/kernels/trace.slang:756",
+    "condition": "!attempted.accepted && dt<=Real(minStep)*Real(1.0001f)",
+    "witness": "minStep=.02f; dt is the next representable Real above Real(minStep); candidate rejection is the controller precondition. This dt is above the floor but inside the early-terminal window.",
+    "consequence": "The controller terminates without selecting and evaluating the exact minimum retry. This does not establish a reachable failing physical ray or causality for these CI failures.",
+    "existing_contract": "tests/operating_model.json P1;tests/core/rk45_integrator_test.cpp:520-540;src/sirius/core/geodesic_integrator.cpp:1261-1269: only a candidate already evaluated at min_step may terminate.",
+    "existing_cpu_control": "RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating: original Schwarzschild r5 equatorial ray, abs=rel1e-14,min.05,initial=max.1; actual rejection must leave terminated0 and choose min.05. CI326 passed at mandatory log898-899. It does not exercise the shader representable-neighbor boundary.",
+    "same_shader_window_in_p1_probe": "src/sirius/kernels/parity_probe.slang:491; future correction must keep production trace and this controller consistent.",
+    "all_acceptance_tolerances_and_refusals_must_remain_unchanged": true
+  },
+  "future_nonvacuous_shader_boundary_control_expectation": {
+    "status": "Source-only proposed negative/positive control, not implemented or executed; deliberately off-null control is not a physical CI-ray counterexample or a replacement original fixture.",
+    "real_candidate_precondition": "Using the actual production candidate/controller, finite flat M=a=Q=Lambda0 state x=(0,3,0,0),u=(-.8f,1,0,0), minStep=.02f, geometric step above nextafter(Real(minStep),+infinity), adaptive step exactly that representable neighbor, matching running identity and sufficient remaining attempt budget. All stages are represented; the unprojected flat null residual is approximately .2195, so the unchanged original null tolerance rejects the real candidate even though temporal projection can repair it. Assert actual rejection rather than supplying accepted=false.",
+    "above_floor_rejection": "First Advance: attempts increments once, accepts unchanged, phase Running/reason0, adaptive step exactly minStep; committed trajectory/Jacobi/compensation/source/volume and accepted affine/last interval unchanged. The exact-floor attempt must not already have been counted.",
+    "floor_rejection": "Second Advance evaluates the same real candidate at exact minStep: attempts increments again, accepts unchanged, Terminal/MinimumStep; validation still refuses publication and Finalize cannot publish radiance. A separate initial exact-floor negative must decline on its first attempted evaluation.",
+    "positive_companion": "Same finite flat state with exactly null u=(-1,1,0,0): real candidate accepted at the neighbor and at the floor, with accepted counter and affine progress, preventing a vacuous always-reject control. Exercise each supported original precision rung without tolerance relaxation.",
+    "authorities": "src/sirius/kernels/gr_integrator.slang:287-299,432-495;src/sirius/kernels/trace.slang:747-760,1066,1103-1118;src/sirius/render/trace_continuation.h:101-103,132-145"
+  },
+  "minimal_future_failed_record_observer": {
+    "existing_path": "tests/support/trace_continuation_probe.h:143-174 reads the whole active binding6 record array before validating and retains records on failure; public Records() at133-135 exposes them. Catch the existing RunRegion failure in the exact TraceContinuationImage row loop at213-220 before the local probe is destroyed; save private raw record bytes/context and return the original error. No extra dispatch, altered input, ABI or acceptance bypass is required.",
+    "available_context": "Record.identity=(absolute pixel x,y,original sample,epoch); control=(phase,termination,attempts,accepts); physical[0..11]=x,u,four X,four V,compX,compU; physical[12]=(adaptive step,accepted affine length,last accepted dt,beam seed); source and volume. Save original parameter bytes, selected module/provider pins, host action/phase and PhysicalSubmissions. All active records are already read even if validation rejects the first offending record.",
+    "limits": "Record integration.z is the last accepted interval, not the rejected attempted dt. Actual attempted errorRatio/nullResidual/projectedNullResidual and projection/domain flags are not stored. Raw state plus original parameters permit diagnosis/reconstruction but do not alone prove which acceptance predicate failed. Keep exact original #823 fixture, algorithms, layout, tolerances, deadlines and publication refusal."
+  },
+  "decisive_evidence_missing": ["failing pixel/ray phase and attempted dt", "shader represented/projection flags,errorRatio,nullResidual,projectedNullResidual", "retained event trial/sample errors and infinity-source failure/retryable discriminator"],
+  "no_helpers_build_tests_devices_APIs_or_tracked_source_mutations": true,
+  "tracked_checkout_clean_upstream_zero_zero_sole_worktree": true
+}

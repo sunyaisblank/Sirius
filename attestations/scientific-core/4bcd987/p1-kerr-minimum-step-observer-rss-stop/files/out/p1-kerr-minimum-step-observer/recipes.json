@@ -1,0 +1,86 @@
+{
+  "compile-observer": {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-MMD",
+      "-MF",
+      "{folder}/observer.d",
+      "-o",
+      "{folder}/observer.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/observer.cpp"
+    ],
+    "expected_exit": 0,
+    "software_provider": false
+  },
+  "link-observer": {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-DNDEBUG",
+      "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/compile-observer/observer.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "-ldl",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/link-observer/observer.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/p1-kerr-minimum-step-observer/observer"
+    ],
+    "expected_exit": 0,
+    "software_provider": false
+  },
+  "observe-original-kerr": {
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/p1-kerr-minimum-step-observer/observer",
+      "{folder}"
+    ],
+    "disable_software_shader_cache": false,
+    "expected_exit": 1,
+    "software_provider": true
+  },
+  "stage-trace-resource": {
+    "argv": [
+      "/usr/bin/install",
+      "-D",
+      "-m",
+      "644",
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/trace.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/p1-kerr-minimum-step-observer/resources/kernels/trace.spv"
+    ],
+    "expected_exit": 0,
+    "software_provider": false
+  }
+}

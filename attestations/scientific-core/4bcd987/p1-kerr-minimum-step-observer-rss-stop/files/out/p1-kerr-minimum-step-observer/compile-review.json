@@ -1,0 +1,130 @@
+{
+  "schema": "sirius-original-kerr-observer-actual-compile-review-v1",
+  "passed": true,
+  "reviewer": "/root",
+  "owners": {
+    "stage-trace-resource": {
+      "bytes": 1859,
+      "sha256": "184eabc798aa4ae8dbf97ad9ab17797b02750e8b51ad20342330415047d03eb2"
+    },
+    "compile-observer": {
+      "bytes": 3028,
+      "sha256": "b905e9f00f7611062ad936281d2f24bcd52efe8200dcfc76232e9082a8c0d9ff"
+    }
+  },
+  "compiler_argv": [
+    "/usr/bin/g++-14",
+    "-DSIRIUS_CONTRACT_MODE=2",
+    "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+    "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+    "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+    "-DSIRIUS_TEST_HAS_KERNELS=1",
+    "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+    "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+    "-I/home/astra/.project/Sirius/tests",
+    "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+    "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+    "-I/home/astra/.project/Sirius/src/sirius/..",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+    "-O3",
+    "-DNDEBUG",
+    "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+    "-std=c++2c",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wno-missing-field-initializers",
+    "-Werror",
+    "-MMD",
+    "-MF",
+    "{folder}/observer.d",
+    "-o",
+    "{folder}/observer.o",
+    "-c",
+    "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/observer.cpp"
+  ],
+  "object": {
+    "bytes": 249672,
+    "sha256": "938b7dde5d48ab01d5da6b41245c1ee0ad71ce432351498c082bea5b6395b321"
+  },
+  "dependency_file": {
+    "bytes": 951,
+    "sha256": "365ea4e5b1313740f1c3814b5f6b018d11e3fc36d7c49945a598f8f1193b175a"
+  },
+  "all_actual_non_system_dependencies_join_consumed_inputs": {
+    "out/p1-kerr-minimum-step-observer/observer.cpp": {
+      "bytes": 12342,
+      "sha256": "55d7995a91942541b6f157d7eac66f22be8c9f21ae244f6396765960dbca8c66",
+      "resolved_path": "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/observer.cpp"
+    },
+    "tests/support/fail_on_skip.h": {
+      "bytes": 427,
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e",
+      "resolved_path": "/home/astra/.project/Sirius/tests/support/fail_on_skip.h"
+    },
+    "tests/support/test_resource.h": {
+      "bytes": 796,
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3",
+      "resolved_path": "/home/astra/.project/Sirius/tests/support/test_resource.h"
+    },
+    "src/sirius/base/resource_locator.h": {
+      "bytes": 1665,
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/base/resource_locator.h"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "bytes": 11185,
+      "sha256": "86e28bf045a8cdb780979ebdd1866f48e841355ddbf4927d1d4d2b886df22ee1",
+      "resolved_path": "/home/astra/.project/Sirius/tests/support/trace_continuation_probe.h"
+    },
+    "src/sirius/backend/device.h": {
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/backend/device.h"
+    },
+    "src/sirius/base/error.h": {
+      "bytes": 2283,
+      "sha256": "6e66cba357b556ecbb0a112227bdfc64ce1fdecf3f6268c614dc8f7dee45ce4a",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/base/error.h"
+    },
+    "src/sirius/render/dispatch_governor.h": {
+      "bytes": 7908,
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/render/dispatch_governor.h"
+    },
+    "src/sirius/render/pixel_sampling.h": {
+      "bytes": 207,
+      "sha256": "2cbb598c156886799eba95b0cb84f8c98bfe8ad435f5c79f8ecd1bfe732fadc3",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/render/pixel_sampling.h"
+    },
+    "src/sirius/core/camera_sampling.h": {
+      "bytes": 3255,
+      "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/core/camera_sampling.h"
+    },
+    "src/sirius/base/contracts.h": {
+      "bytes": 3989,
+      "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/base/contracts.h"
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "bytes": 7192,
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/render/trace_continuation.h"
+    }
+  },
+  "staged_original_shader": {
+    "bytes": 4038204,
+    "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+  },
+  "observer_source": {
+    "bytes": 12342,
+    "sha256": "55d7995a91942541b6f157d7eac66f22be8c9f21ae244f6396765960dbca8c66"
+  },
+  "root_precheck_correction": "Guard input identities include resolved_path. Initial pure review compared narrower byte/hash dictionary and stopped before writing review/link; comparison now joins all three identity fields. No producer repeated.",
+  "no_numerical_execution": true,
+  "qualification_claimed": false
+}

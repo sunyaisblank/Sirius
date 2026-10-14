@@ -1,0 +1,38 @@
+{
+  "archive": "attestations/qualification/5b5fad9/linux-gate-incomplete-38577826600",
+  "captured_phase": "before_mandatory_numerics",
+  "environment": {
+    "DYLD_LIBRARY_PATH": "",
+    "GALLIVM_PERF": "",
+    "LD_LIBRARY_PATH": "",
+    "LP_NATIVE_VECTOR_WIDTH": "",
+    "LP_PERF": "",
+    "MESA_SHADER_CACHE_DISABLE": "",
+    "PATH": "/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "SIRIUS_PRECISION": "",
+    "SIRIUS_VULKAN_DEVICE": "",
+    "SystemRoot": "",
+    "VK_ADD_DRIVER_FILES": "",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "VK_ICD_FILENAMES": "",
+    "VK_LOADER_DRIVERS_DISABLE": "",
+    "VK_LOADER_DRIVERS_SELECT": "",
+    "VULKAN_SDK": ""
+  },
+  "evidence_commit": "d240b82c677b1652c704cc9cf60ea4f2c02b5dc3",
+  "identity_member": "bin/linux-ci/generated/sirius/mandatory_runtime_identity_gate.json",
+  "identity_member_bytes": 6772,
+  "identity_member_sha256": "72c4ac2e74eb2dafaec20a96a7b813bcefb6de1b43d43c61ba5942791bb1216a",
+  "meaning": "Existing archived identity captured before original Mandatory numerics; not a new query or run. #823 retains default empty/unset Mesa shader-cache policy, no LP/MESA tuning. Local observer explicitly selects pinned LVP/device0 (original empty selector also resolved0). No cache cleanup or cache-directory override.",
+  "schema": "sirius-original-kerr-ci-environment-source-v1",
+  "selected_device_index": 0,
+  "source": {
+    "clean": true,
+    "revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405"
+  },
+  "zip": {
+    "bytes": 42282,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/qualification/5b5fad9/linux-gate-incomplete-38577826600/files/out/native-provider-integration/full-ci-38577826600/linux-gate/gate-diagnostics.zip",
+    "sha256": "5545fa4a05902a266eb2d60e485772a011d44bcdf2d552a88de3ddd8589dd734"
+  }
+}

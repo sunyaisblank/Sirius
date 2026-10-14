@@ -1,0 +1,54 @@
+{
+  "assignment_count": 40,
+  "exact_parameter_assignment_sequence_matches_original_source": true,
+  "explicit_nonclaims": [
+    "no physical-ray root-cause proof",
+    "no algorithm repair",
+    "no scientific acceptance or full image qualification",
+    "no frame performance claim",
+    "no prior or attempted error metrics inferred from last accepted dt"
+  ],
+  "failure_return": "Exact captured validation MinimumStep remains child exit1; unexpected failure/incomplete setup/observer IO returns2; unexpected full image completion returns0. Owner expects1 only for diagnostic collection, never numerical acceptance.",
+  "fixture": "Kerr M1,a.9,Q=Lambda0;camera(0,0,-40),forward+z/right+x/up+y;FOV.6/aspect1;sample andpupil.5;Doppler1;maxattempts2000/stepScale.06/min.02/max2;escape100/captureFactor1.12;disk/starfield off",
+  "future_minimum_step_capture_required": true,
+  "image_extent": [
+    64,
+    64
+  ],
+  "observer_methods": "Only public Prepare(), RunRegion(), Records(), PhysicalSubmissions(); no private access, wrapper, extra read, dispatch, Finalize or radiance read on failure.",
+  "original_case": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+  "original_ci_environment": {
+    "bytes": 2037,
+    "resolved_path": "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/original-ci-environment.json",
+    "sha256": "0a1c04648625bca3b13a179ddcdd2b7c78176fbc7242aef092de0a4ff02399de"
+  },
+  "original_parameter_bytes": {
+    "bytes": 280,
+    "resolved_path": "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/original-request-parameters.expected.bin",
+    "sha256": "7522163a61561be64e158c85f7056a207bed1b9ae8be2f589610a11249632c8b"
+  },
+  "original_row_order": "y ascending0..63; x ascending in64-pixel strips; original Probe active cap64 and original timings/attempt bound unchanged",
+  "original_runtime_resource": "Only exact existing staged trace.spv; starfield is off and original Probe constructs all seven empty/zero buffers.",
+  "owner_helper_adaptation": {
+    "bytes": 960,
+    "resolved_path": "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/owner-cache-policy-adaptation.patch",
+    "sha256": "18182aa355f2b2b1263c1942d8a2ee418931efa2ac7599590eb5819a23a52a71"
+  },
+  "prepared_only": true,
+  "production_probe_include_unmodified": true,
+  "raw_snapshot": "All existing active Records bytes; each decoded current record carries identity/control/13physical float4/source/volume and uint32 bitwords; previous record and attempted metrics unavailable. Last interval is last accepted dt.",
+  "schema": "sirius-kerr-minimum-step-observer-source-contracts-v1",
+  "unchanged_gates": [
+    "real canonical shader and backend",
+    "all acceptance/error/null tolerances",
+    "original minimum step and all70requestedparameters",
+    "all64x64pixels and row order",
+    "software zero-active initialization",
+    "one-attempt continuations",
+    "1000ms physical submission refusal",
+    "attempt bound2000",
+    "MinimumStep publication refusal",
+    "fail-closed release resource lookup",
+    "Pinned LVP selection/device0; original #823 default/unset Mesa shader cache, no LP/MESA tuning"
+  ]
+}

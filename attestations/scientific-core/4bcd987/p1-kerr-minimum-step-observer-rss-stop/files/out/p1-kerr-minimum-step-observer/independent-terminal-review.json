@@ -1,0 +1,176 @@
+{
+  "absent_payloads": [
+    "failed-row-request-parameters.bin",
+    "current-records.bin",
+    "observation.json"
+  ],
+  "actual_producer": {
+    "compile_review": {
+      "bytes": 5394,
+      "sha256": "55d3db0511cc027b7d044390b91ba1025365aa25a0185f58bc27a1a858fac2bb"
+    },
+    "elf": {
+      "bytes": 312784,
+      "sha256": "fa90beb767209289df6589a4f3419e54ff7a40dd6d2518d80e335f9bfc54a9e4"
+    },
+    "link_review": {
+      "bytes": 4673,
+      "sha256": "693589c633a7af5353cd3e98c1687b004c3ac9f447045d6b8d4c5320731aa09d"
+    },
+    "staged_original_trace_spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    }
+  },
+  "all_runtime_input_rows_exact_before_after_and_current": 1171,
+  "all_stage_owners": {
+    "compile-observer": {
+      "all_births_retired": true,
+      "birth_count": 2,
+      "child_exit": 0,
+      "cleanup_errors": [],
+      "owner": {
+        "bytes": 3028,
+        "sha256": "b905e9f00f7611062ad936281d2f24bcd52efe8200dcfc76232e9082a8c0d9ff"
+      },
+      "passed": true,
+      "remaining_owned_processes": [],
+      "source_unchanged": true,
+      "status": "terminal",
+      "whole_inputs_unchanged": true
+    },
+    "link-observer": {
+      "all_births_retired": true,
+      "birth_count": 2,
+      "child_exit": 0,
+      "cleanup_errors": [],
+      "owner": {
+        "bytes": 2890,
+        "sha256": "67a9a37aac069769191f6cd36a24ef8ba49eb89f9e2b86107c8696e050d77b92"
+      },
+      "passed": true,
+      "remaining_owned_processes": [],
+      "source_unchanged": true,
+      "status": "terminal",
+      "whole_inputs_unchanged": true
+    },
+    "observe-original-kerr": {
+      "all_births_retired": true,
+      "birth_count": 1,
+      "child_exit": -15,
+      "cleanup_errors": [],
+      "owner": {
+        "bytes": 2300,
+        "sha256": "d36667efbc7166718e1b2b609a9010d38b09d3097bbe06e0f9c94f2de3e918ad"
+      },
+      "passed": false,
+      "remaining_owned_processes": [],
+      "source_unchanged": true,
+      "status": "terminal",
+      "whole_inputs_unchanged": true
+    },
+    "stage-trace-resource": {
+      "all_births_retired": true,
+      "birth_count": 1,
+      "child_exit": 0,
+      "cleanup_errors": [],
+      "owner": {
+        "bytes": 1859,
+        "sha256": "184eabc798aa4ae8dbf97ad9ab17797b02750e8b51ad20342330415047d03eb2"
+      },
+      "passed": true,
+      "remaining_owned_processes": [],
+      "source_unchanged": true,
+      "status": "terminal",
+      "whole_inputs_unchanged": true
+    }
+  },
+  "diagnostic_complete": false,
+  "last_sample": {
+    "available_kib": 14243072,
+    "elapsed_seconds": 221.39475860699895,
+    "members": [
+      {
+        "pgrp": 380654,
+        "pid": 380654,
+        "ppid": 380650,
+        "rss_kib": 4178916,
+        "session": 380654,
+        "start_ticks": "5952694",
+        "state": "S"
+      }
+    ],
+    "rss_kib": 4200640
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "limits_of_conclusion": [
+    "Original MinimumStep failure was not captured; no failed pixel, phase, attempted dt or numerical predicate is established.",
+    "Empty stdout/stderr and only initial request bytes do not establish shader compilation/initialization/advance progress or a completed numerical row.",
+    "Source-only near-floor counterexample remains separate and does not explain this RSS stop or original CI failure.",
+    "No retry, raised limit, algorithm/tolerance/fixture/source mutation or scientific/frame-performance claim is authorized by this terminal receipt."
+  ],
+  "minimum_sampled_available_kib": 14243072,
+  "numerical_acceptance": false,
+  "only_observer_payload": "Original request280bytes, exact expected7522163a61561be64e158c85f7056a207bed1b9ae8be2f589610a11249632c8b. No row/record/observation payload was produced.",
+  "provider_mapping": "Four LVP mapping rows belong to child380654/birth5952694/owned_session380654, inode143595; current mapped library hash9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139 remains frozen. Mapping proves presence, not current integration/JIT/dispatch phase.",
+  "review_operations": "Raw file/JSON/hash reads only; no helper/compiler/validator/test/device/API execution by reviewer.",
+  "review_passed": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewer_role": "Packet author performing passive independent check of root-executed terminal evidence; not an independent source-author review.",
+  "root_cause_proven": false,
+  "rss_excess_kib": 6336,
+  "rss_guard_scope": "Existing sampled owned-session RSS plus runner/controller RSS, not a claim that the child alone exceeded4GiB.",
+  "runtime_evidence_pins": {
+    "inputs-after.json": {
+      "bytes": 275614,
+      "sha256": "2b54256306927ccdbe9f696639eb73b10c4188165139a65eac80466399091d6c"
+    },
+    "inputs-before.json": {
+      "bytes": 275614,
+      "sha256": "2b54256306927ccdbe9f696639eb73b10c4188165139a65eac80466399091d6c"
+    },
+    "original-request-parameters.bin": {
+      "bytes": 280,
+      "sha256": "7522163a61561be64e158c85f7056a207bed1b9ae8be2f589610a11249632c8b"
+    },
+    "owner.json": {
+      "bytes": 2300,
+      "sha256": "d36667efbc7166718e1b2b609a9010d38b09d3097bbe06e0f9c94f2de3e918ad"
+    },
+    "samples.jsonl": {
+      "bytes": 1923065,
+      "sha256": "a21647a00fe0c26be9fd2a6f8f0fb8306951be4a3f0c62df1e6b8dab504346d3"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "runtime_owner": {
+    "all_births_retired": true,
+    "birth_count": 1,
+    "child_exit": -15,
+    "cleanup_errors": [],
+    "owner": {
+      "bytes": 2300,
+      "sha256": "d36667efbc7166718e1b2b609a9010d38b09d3097bbe06e0f9c94f2de3e918ad"
+    },
+    "passed": false,
+    "remaining_owned_processes": [],
+    "source_unchanged": true,
+    "status": "terminal",
+    "whole_inputs_unchanged": true
+  },
+  "sample_count": 8495,
+  "schema": "sirius-original-kerr-observer-passive-terminal-review-v1",
+  "stop_reason": "diagnostic_sampled_rss_guard",
+  "wall_seconds": 222.22330182600126
+}

@@ -1,0 +1,11 @@
+--- attestations/scientific-core/4bcd987/p2-cpu-boundary-current-source/files/out/science-p2-cpu-boundary-current-source/run_owned.py
++++ out/p1-kerr-minimum-step-observer/run_owned.py
+@@ -66,7 +66,7 @@
+ folder = work / sys.argv[1]
+ folder.mkdir()
+ env = os.environ.copy()
+-allowed = ({'VK_DRIVER_FILES':'/usr/share/vulkan/icd.d/lvp_icd.json', 'SIRIUS_VULKAN_DEVICE':'0', 'MESA_SHADER_CACHE_DISABLE':'true'} if action.get('software_provider') else {})
++allowed = ({'VK_DRIVER_FILES':'/usr/share/vulkan/icd.d/lvp_icd.json', 'SIRIUS_VULKAN_DEVICE':'0', **({'MESA_SHADER_CACHE_DISABLE':'true'} if action.get('disable_software_shader_cache', True) else {})} if action.get('software_provider') else {})
+ overrides = [key for key, value in env.items() if value and allowed.get(key) != value and
+              (key.startswith(('SIRIUS_', 'VK_', 'LP_', 'MESA_', 'GALLIVM_', 'GTEST_', 'CTEST_'))
+               or key in {'LD_PRELOAD', 'LD_AUDIT', 'LD_LIBRARY_PATH'})]

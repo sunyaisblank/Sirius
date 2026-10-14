@@ -1,0 +1,133 @@
+{
+  "schema": "sirius-original-kerr-observer-actual-link-review-v1",
+  "passed": true,
+  "reviewer": "/root",
+  "link_owner": {
+    "bytes": 2890,
+    "sha256": "67a9a37aac069769191f6cd36a24ef8ba49eb89f9e2b86107c8696e050d77b92"
+  },
+  "compile_review": {
+    "bytes": 5394,
+    "sha256": "55d3db0511cc027b7d044390b91ba1025365aa25a0185f58bc27a1a858fac2bb"
+  },
+  "object": {
+    "bytes": 249672,
+    "sha256": "938b7dde5d48ab01d5da6b41245c1ee0ad71ce432351498c082bea5b6395b321"
+  },
+  "executable": {
+    "bytes": 312784,
+    "sha256": "fa90beb767209289df6589a4f3419e54ff7a40dd6d2518d80e335f9bfc54a9e4"
+  },
+  "link_map": {
+    "bytes": 221706,
+    "sha256": "d85fd69ad66c67b3d32759028a45e483619f22afdc9f49f3485a1be7e033aca3"
+  },
+  "actual_linked_archive_and_object_inputs": {
+    "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/compile-observer/observer.o": {
+      "bytes": 249672,
+      "sha256": "938b7dde5d48ab01d5da6b41245c1ee0ad71ce432351498c082bea5b6395b321"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a": {
+      "bytes": 667240,
+      "sha256": "917adc1d6ce6abb01048cbb80ced16e52eb85cdb1856352ec1dc029ecb7a91ca"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a": {
+      "bytes": 2326,
+      "sha256": "66ca767ee35e6fbfa8f6ce232d198bb536aca8b2edcc7da458c798df4adc3a5f"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a": {
+      "bytes": 6624974,
+      "sha256": "eafa4e86a43c465f389fbe0ee026785e64e54a453653f16b8704d286dba352c1"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a": {
+      "bytes": 3865894,
+      "sha256": "795e24879b2c6a5fb1efe97fcef8679760ac124efd580c1c930d16aea57116e3"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a": {
+      "bytes": 984792,
+      "sha256": "885201c4fd2b55268bb9147039d01ab252912bbb0a3d982efe9b9cde65536748"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a": {
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a": {
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    }
+  },
+  "dynamic_needed": [
+    "libvulkan.so.1",
+    "libstdc++.so.6",
+    "libm.so.6",
+    "libgcc_s.so.1",
+    "libc.so.6"
+  ],
+  "resolved_shared_libraries": {
+    "libvulkan.so.1": {
+      "path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "libstdc++.so.6": {
+      "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "libm.so.6": {
+      "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "libgcc_s.so.1": {
+      "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "libc.so.6": {
+      "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    }
+  },
+  "inspection_outputs": {
+    "elf-header": {
+      "argv": [
+        "/usr/bin/readelf",
+        "-h",
+        "/home/astra/.project/Sirius/bin/linux-gcc/p1-kerr-minimum-step-observer/observer"
+      ],
+      "output": {
+        "bytes": 975,
+        "sha256": "733a052acc334f731a59377bd255b0cb1ab8f9917f3691766a6edbb75f051cbc"
+      }
+    },
+    "elf-dynamic": {
+      "argv": [
+        "/usr/bin/readelf",
+        "-d",
+        "/home/astra/.project/Sirius/bin/linux-gcc/p1-kerr-minimum-step-observer/observer"
+      ],
+      "output": {
+        "bytes": 1743,
+        "sha256": "bf7dd31893a9893a8d7aa7d0b641312928945bc34fb8fcbc9c94f983858c1aee"
+      }
+    },
+    "dynamic-resolution": {
+      "argv": [
+        "/usr/bin/ldd",
+        "/home/astra/.project/Sirius/bin/linux-gcc/p1-kerr-minimum-step-observer/observer"
+      ],
+      "output": {
+        "bytes": 451,
+        "sha256": "5a87f5d282c343ffe06294a93fc0c93c7e744656768d28a907c59fe4d3a7045f"
+      }
+    }
+  },
+  "staged_trace_spv": {
+    "bytes": 4038204,
+    "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+  },
+  "no_test_shader_numeric_execution_yet": true,
+  "qualification_claimed": false
+}

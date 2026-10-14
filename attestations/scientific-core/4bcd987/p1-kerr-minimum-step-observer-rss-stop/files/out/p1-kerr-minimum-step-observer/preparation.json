@@ -1,0 +1,74 @@
+{
+  "actions": {
+    "bytes": 146133,
+    "resolved_path": "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/actions.json",
+    "sha256": "32b67832a882067331462bc682e281df1a484511980f265b4f90a9a71f6ace7c"
+  },
+  "admission": "PENDING_INDEPENDENT_SOURCE_REVIEW_AND_ROOT_OPERATOR",
+  "exact_commands": [
+    "python3 -B out/p1-kerr-minimum-step-observer/run_owned.py stage-trace-resource",
+    "python3 -B out/p1-kerr-minimum-step-observer/run_owned.py compile-observer",
+    "python3 -B out/p1-kerr-minimum-step-observer/run_owned.py link-observer",
+    "python3 -B out/p1-kerr-minimum-step-observer/run_owned.py observe-original-kerr"
+  ],
+  "executed": false,
+  "future_bin_root": "bin/linux-gcc/p1-kerr-minimum-step-observer",
+  "future_required_files": {
+    "compile-review.json": "Root creates only after actual successful terminal compile, stable source/inputs and exact dependency/product checks.",
+    "link-review.json": "Root creates only after actual successful terminal link, stable source/inputs, exact ELF/map/provider/dependency checks; runtime joins freeze it."
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "observer": {
+    "bytes": 12342,
+    "resolved_path": "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/observer.cpp",
+    "sha256": "55d7995a91942541b6f157d7eac66f22be8c9f21ae244f6396765960dbca8c66"
+  },
+  "original_ci_environment": {
+    "bytes": 2037,
+    "resolved_path": "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/original-ci-environment.json",
+    "sha256": "0a1c04648625bca3b13a179ddcdd2b7c78176fbc7242aef092de0a4ff02399de"
+  },
+  "owned_out_root": "out/p1-kerr-minimum-step-observer",
+  "owner_cache_policy_adaptation": {
+    "bytes": 960,
+    "resolved_path": "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/owner-cache-policy-adaptation.patch",
+    "sha256": "18182aa355f2b2b1263c1942d8a2ee418931efa2ac7599590eb5819a23a52a71"
+  },
+  "prepared_only": true,
+  "prospective_owners": 4,
+  "required_order": [
+    "Root independently admits final source and all static pins; require all4owner folders/output binary/resource absent and no competing local workload.",
+    "stage-trace-resource; root confirms output equals original accepted module.",
+    "compile-observer; root saves compile-review.json with actual owner/input/output/dependency closure acceptance.",
+    "link-observer; root saves link-review.json with actual owner/input/ELF/map/DT_NEEDED/shared-library/provider closure acceptance.",
+    "observe-original-kerr; stop and preserve immediately on first incomplete/error/mismatch. No unchanged repeat or numerical acceptance."
+  ],
+  "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "runtime_expected_outputs": [
+    "observe-original-kerr/original-request-parameters.bin",
+    "observe-original-kerr/failed-row-request-parameters.bin",
+    "observe-original-kerr/current-records.bin",
+    "observe-original-kerr/observation.json"
+  ],
+  "runtime_required_predicates": [
+    "Original request280bytes byte-equal expected source parameters; failed-row request differs only original row31..34.",
+    "Exact original validate trace continuation / trace termination5 cannot publish radiance error; terminal MinimumStep record(s) present with original identity/sample/epoch/counters.",
+    "Raw272byte records match decoded thirteen physical float4/source/volume bitwords and identity/control exactly; all active records saved.",
+    "No previous/attempted metric invented, lastdt remains last accepted dt; no extra reads/dispatches and no failed-region Finalize/radiance read.",
+    "Runtime owner terminal expected child1, no stop/cleanup/remainers, every recorded birth retired, source/whole inputs stable, actual LVP provider mapping observed.",
+    "Original default/unset Mesa shader cache retained; nonempty LP/MESA tuning refused. Only pinned LVP/device0 are explicit provider selections. No cache cleanup or directory override.",
+    "Owner passed means diagnostic captured only; physical root cause and numerical qualification remain unresolved."
+  ],
+  "schema": "sirius-kerr-minimum-step-observer-preparation-v1",
+  "source_freeze": {
+    "bytes": 154365,
+    "resolved_path": "/home/astra/.project/Sirius/out/p1-kerr-minimum-step-observer/source-freeze.json",
+    "sha256": "a3cce9eb4da19ad8b1cb7540ab9538e0e865ddb97e2158f6d7f1e10378634a57"
+  },
+  "source_pin_count": 641,
+  "stop": "Any incomplete stage or unexpected error/completion is terminal for review. Preserve the failed original observation; no tolerance/deadline/settings changes and no immediate unchanged retry."
+}

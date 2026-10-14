@@ -1,0 +1,65 @@
+{
+  "accepted_current_product_authority": {
+    "bytes": 48059,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/current-product-authority.json",
+    "sha256": "e1ed4b29e0cf1551750d04b2c37fa0a8d0f25c6594eb59f87c59853d331f113c"
+  },
+  "canonical_backend_elf": {
+    "bytes": 13440952,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "sha256": "e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149"
+  },
+  "canonical_link_archive_pins_equal_accepted_prior": {
+    "bin/linux-gcc/src/sirius/backend/libsirius_backend.a": {
+      "bytes": 6624974,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "sha256": "eafa4e86a43c465f389fbe0ee026785e64e54a453653f16b8704d286dba352c1"
+    },
+    "bin/linux-gcc/src/sirius/libsirius_base.a": {
+      "bytes": 35862,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    },
+    "bin/linux-gcc/src/sirius/render/libsirius_render.a": {
+      "bytes": 3865894,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+      "sha256": "795e24879b2c6a5fb1efe97fcef8679760ac124efd580c1c930d16aea57116e3"
+    }
+  },
+  "compile_changes": "Only isolated source/object/dependency outputs; original strict Release flags unchanged. No compiler, linker, shader builder or validator executed during preparation.",
+  "execution_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "future_required_actual_joins": [
+    "stage resource bytes equal exact original trace.spv",
+    "new dependency file joins all actual direct include bytes; no hidden source mutation",
+    "new link map selects only declared canonical archives/objects and no replacement Vulkan device",
+    "new executable and actual dynamic dependencies/provider pins captured by root link-review.json before runtime",
+    "provider mapping observed in owned runtime session and original 300s/4GiB/2GiB bounds retained"
+  ],
+  "link_changes": "One custom TU object and original accepted library order, isolated binary/map, explicit pthread as mature isolated producer recipe. No private Int64 or candidate objects.",
+  "original_compile_entry": {
+    "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1 -DSIRIUS_TEST_HAS_RETAINED_CAMERA=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o -c /home/astra/.project/Sirius/tests/backend/kernel_trace_test.cpp",
+    "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+    "file": "/home/astra/.project/Sirius/tests/backend/kernel_trace_test.cpp",
+    "output": "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o"
+  },
+  "original_link_library_order": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+    "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+    "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+    "-ldl",
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a"
+  ],
+  "product_scientific_source": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "schema": "sirius-kerr-minimum-step-observer-producer-bindings-v1",
+  "trace_spv": {
+    "bytes": 4038204,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/trace.spv",
+    "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+  }
+}
