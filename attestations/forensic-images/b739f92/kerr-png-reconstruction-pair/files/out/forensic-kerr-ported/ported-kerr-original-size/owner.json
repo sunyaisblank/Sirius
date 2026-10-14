@@ -1,0 +1,82 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/env",
+    "-C",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "PATH=/usr/bin:/bin",
+    "GIT_CEILING_DIRECTORIES=/home/astra/.project/Sirius/out",
+    "GIT_CONFIG_NOSYSTEM=1",
+    "/usr/bin/strace",
+    "-f",
+    "-qq",
+    "-yy",
+    "-e",
+    "trace=execve,openat,newfstatat,mmap",
+    "-o",
+    "/home/astra/.project/Sirius/out/forensic-kerr-ported/ported-kerr-original-size/runtime.trace",
+    "--",
+    "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/sirius",
+    "--config",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-png.json",
+    "--no-color",
+    "--verbose",
+    "render",
+    "--cpu"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "ported-kerr-original-size",
+  "child_exit": 0,
+  "child_pid": 156751,
+  "child_start_ticks": "2444432",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 156744,
+    "pid": 156744,
+    "ppid": 1313,
+    "rss_kib": 36000,
+    "session": 156744,
+    "start_ticks": "2444299",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "One full-size ported Kerr PNG, unchanged original scene/sampling and300s diagnostic cap; no scaled substitute, original tape identity or performance qualification.",
+  "minimum_sampled_available_kib": 17146860,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 156751,
+      "saved_start_ticks": "2444432"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 156754,
+      "saved_start_ticks": "2444433"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 152336,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "One full-size ported Kerr PNG, unchanged original scene/sampling and300s diagnostic cap; no scaled substitute, original tape identity or performance qualification.",
+  "source": {
+    "revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 117.84935397400113,
+  "whole_inputs_unchanged": true
+}

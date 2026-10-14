@@ -1,0 +1,64 @@
+{
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+    "compare",
+    "png",
+    "512",
+    "512",
+    "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-png.png",
+    "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-png.png"
+  ],
+  "case": "kerr-png",
+  "comparison": {
+    "channels": 4,
+    "compared_pixels": 262144,
+    "compared_samples": 1048576,
+    "encoded_files_equal": true,
+    "equal": true,
+    "format": "png",
+    "height": 512,
+    "mismatched_pixels": 0,
+    "mismatched_samples": 0,
+    "sample_domain": "RGBA8",
+    "width": 512
+  },
+  "comparison_wall_seconds": 0.03032200200323132,
+  "current_physics_or_scientific_or_release_qualification_claimed": false,
+  "effective_spp": 25,
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "historical_tape_identity_claimed": false,
+  "inputs": [
+    {
+      "bytes": 457156,
+      "path": "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-png.png",
+      "sha256": "1913cc94dd20f89dd807a2181afc3eec7e0ae116365504e47f9a60ec4bbfd8c0"
+    },
+    {
+      "bytes": 457156,
+      "path": "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-png.png",
+      "sha256": "1913cc94dd20f89dd807a2181afc3eec7e0ae116365504e47f9a60ec4bbfd8c0"
+    },
+    {
+      "bytes": 397736,
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+      "sha256": "3a224d55f8f74fb4fec0e2f377e0cea003983f2a53f01f15ce0579b2424373d6"
+    }
+  ],
+  "legacy_result": {
+    "bytes": 6561,
+    "path": "/home/astra/.project/Sirius/out/forensic-kerr-calibration/legacy-kerr-original-size/result.json",
+    "sha256": "a552bd9d20a1aa8072f89a4340f518caa3f6cd01671eb0aa51b8976e6e5048a5"
+  },
+  "legacy_runtime_origin": "ec2d8e506dfd0477e3c9eb4b2b4aa1bee9831fe2",
+  "ported_result": {
+    "bytes": 6445,
+    "path": "/home/astra/.project/Sirius/out/forensic-kerr-ported/ported-kerr-original-size/result.json",
+    "sha256": "9b00bfba5c916a8f78fa8aa632af722b76acd9e3581f7db270343fecc0f0bda6"
+  },
+  "rays_per_renderer": 6553600,
+  "reconstruction_pair_complete": true,
+  "requested_spp": 32,
+  "runner_revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+  "source_export_revision": "b739f920c2ae67847ed7961e011d2350a839e410",
+  "source_scaffold_overlay": "one115-byte GLFW CMake config template; runtime/asset bytes unchanged"
+}

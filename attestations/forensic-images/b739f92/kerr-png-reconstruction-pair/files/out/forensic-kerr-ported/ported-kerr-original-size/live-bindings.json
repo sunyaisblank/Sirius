@@ -1,0 +1,129 @@
+[
+  {
+    "before": {
+      "pid": 156754,
+      "state": "S",
+      "ppid": 156751,
+      "pgrp": 156751,
+      "session": 156751,
+      "start_ticks": "2444433",
+      "rss_kib": 81480
+    },
+    "after": {
+      "pid": 156754,
+      "state": "S",
+      "ppid": 156751,
+      "pgrp": 156751,
+      "session": 156751,
+      "start_ticks": "2444433",
+      "rss_kib": 81480
+    },
+    "utc_ns": 1791975121926281848,
+    "exe": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/sirius",
+    "exe_bytes": 1936312,
+    "exe_sha256": "3501dbf0d69e5ca1fd5ec6ed7059358e0f31a8ca7f95f737ebccdca088c0ae35",
+    "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/sirius",
+      "--config",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-png.json",
+      "--no-color",
+      "--verbose",
+      "render",
+      "--cpu"
+    ],
+    "libraries": {
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+        "file": {
+          "bytes": 236616,
+          "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+        },
+        "mappings": [
+          "7a1633a9b000-7a1633a9c000 r--p 00000000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "7a1633a9c000-7a1633ac7000 r-xp 00001000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "7a1633ac7000-7a1633ad1000 r--p 0002c000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "7a1633ad1000-7a1633ad3000 r--p 00036000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "7a1633ad3000-7a1633ad5000 rw-p 00038000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+        ],
+        "stat_inode": 62148,
+        "stat_dev": 2128
+      },
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+        "file": {
+          "bytes": 2129424,
+          "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+        },
+        "mappings": [
+          "7a1633400000-7a1633428000 r--p 00000000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+          "7a1633428000-7a16335b1000 r-xp 00028000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+          "7a16335b1000-7a1633600000 r--p 001b1000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+          "7a1633600000-7a1633604000 r--p 001ff000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+          "7a1633604000-7a1633606000 rw-p 00203000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6"
+        ],
+        "stat_inode": 62152,
+        "stat_dev": 2128
+      },
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+        "file": {
+          "bytes": 183024,
+          "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+        },
+        "mappings": [
+          "7a16336e9000-7a16336ed000 r--p 00000000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "7a16336ed000-7a1633711000 r-xp 00004000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "7a1633711000-7a1633715000 r--p 00028000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "7a1633715000-7a1633716000 r--p 0002b000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "7a1633716000-7a1633717000 rw-p 0002c000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+        ],
+        "stat_inode": 55603,
+        "stat_dev": 2128
+      },
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+        "file": {
+          "bytes": 952616,
+          "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+        },
+        "mappings": [
+          "7a1633717000-7a1633727000 r--p 00000000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+          "7a1633727000-7a16337a6000 r-xp 00010000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+          "7a16337a6000-7a16337fe000 r--p 0008f000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+          "7a16337fe000-7a16337ff000 r--p 000e7000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+          "7a16337ff000-7a1633800000 rw-p 000e8000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6"
+        ],
+        "stat_inode": 62156,
+        "stat_dev": 2128
+      },
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+        "file": {
+          "bytes": 2592224,
+          "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+        },
+        "mappings": [
+          "7a1633800000-7a163389d000 r--p 00000000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "7a163389d000-7a16339e5000 r-xp 0009d000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "7a16339e5000-7a1633a6c000 r--p 001e5000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "7a1633a6c000-7a1633a77000 r--p 0026b000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "7a1633a77000-7a1633a7a000 rw-p 00276000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33"
+        ],
+        "stat_inode": 55475,
+        "stat_dev": 2128
+      }
+    },
+    "declared_role_library_count": 5,
+    "other_role_input_libraries_not_required_to_be_mapped": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/lib/libSiriusCore.so"
+    ],
+    "observed_relevant_environment": {
+      "GIT_PAGER": "cat",
+      "LC_CTYPE": "C.UTF-8",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "GTEST_OUTPUT": "",
+      "TZ": "UTC",
+      "GIT_CEILING_DIRECTORIES": "/home/astra/.project/Sirius/out",
+      "GIT_CONFIG_NOSYSTEM": "1"
+    },
+    "environment_scope": "Only documented renderer/config/provider/loader/test/locale/thread/Git selectors; unrelated environment and credentials deliberately excluded",
+    "scope": "One stable-birth live process snapshot; map paths/whole backing-file hashes observed, no general provider admission claim"
+  }
+]

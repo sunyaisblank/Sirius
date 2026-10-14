@@ -1,0 +1,65 @@
+{
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "phase": "build-renderers-scaffold",
+  "passed": true,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers",
+        "--target",
+        "Sirius",
+        "sirius",
+        "--parallel",
+        "2"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 92.84983964500134
+    }
+  ],
+  "child_environment": {
+    "reject": "Nonempty SIRIUS_*, provider/GTest/CTest/loader overrides rejected by preserved owner; build flags/toolchain/include-path overrides rejected by phase.py. No HOME override.",
+    "set": {
+      "GIT_CEILING_DIRECTORIES": "/home/astra/.project/Sirius/out",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_TERMINAL_PROMPT": "0",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TZ": "UTC"
+    },
+    "unset": [
+      "GIT_DIR",
+      "GIT_WORK_TREE",
+      "GIT_INDEX_FILE",
+      "GIT_OBJECT_DIRECTORY",
+      "GIT_ALTERNATE_OBJECT_DIRECTORIES"
+    ]
+  },
+  "products": [
+    {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/Sirius",
+      "bytes": 2018432,
+      "sha256": "9780eb2e7a226124e5eeee9d95ca991f65ccbfa2d143dcb2ffd8c715065a5595"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/sirius",
+      "bytes": 1936312,
+      "sha256": "3501dbf0d69e5ca1fd5ec6ed7059358e0f31a8ca7f95f737ebccdca088c0ae35"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/compile_commands.json",
+      "bytes": 552843,
+      "sha256": "6bf70a9e50372df3fef616c8366ba4b475c158c003ca05e095ab818aa0611f92"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/build.ninja",
+      "bytes": 788590,
+      "sha256": "c1e6e2369483bc528138f1f527b65f0ec9968551d77e79ad8dff212c6dd73412"
+    }
+  ],
+  "historical_tape_identity_claim": false
+}

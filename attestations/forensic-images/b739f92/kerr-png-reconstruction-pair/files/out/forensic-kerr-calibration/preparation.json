@@ -1,0 +1,169 @@
+{
+  "budget_scope": "First full-size original-config Kerr PNG under a one-shot300s diagnostic cap to observe actual progress/cost; incomplete at deadline cannot satisfy the reconstructed comparison or original tape identity. No scaled substitute.",
+  "case": {
+    "configs": {
+      "legacy": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-png.json",
+      "ported": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-png.json"
+    },
+    "effective_spp": 25,
+    "format": "png",
+    "format_scope": "Kerr public PNG scene; EXR/PPM explicitly selected writer variants",
+    "future_compare_argv_after_owned_render_receipts": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+      "compare",
+      "png",
+      "512",
+      "512",
+      "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-png.png",
+      "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-png.png"
+    ],
+    "future_render_argv_review_only": {
+      "legacy": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/Sirius",
+        "--config",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-png.json",
+        "--no-color",
+        "--verbose",
+        "render",
+        "--cpu"
+      ],
+      "ported": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/sirius",
+        "--config",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-png.json",
+        "--no-color",
+        "--verbose",
+        "render",
+        "--cpu"
+      ]
+    },
+    "height": 512,
+    "name": "kerr-png",
+    "rays_per_renderer": 6553600,
+    "requested_spp": 32,
+    "required": true,
+    "sample_rule": "int(sqrt(float(requested_spp))) squared, deterministic subpixel grid",
+    "source_scene": "1cc9e2a4e44de5276ae6ed5403beca7550490e85:render_test.sh Kerr block",
+    "width": 512
+  },
+  "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+  "dynamic_libraries": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/lib/libSiriusCore.so": {
+      "bytes": 46736,
+      "sha256": "5293e66c23967c8fe5b61c1de841a4bbe74257f15367821f801952ca118fe67d"
+    },
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    }
+  },
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "historical_tape_identity_claimed": false,
+  "interpretation_limits": [
+    "No pair comparison until both complete original-size outputs are decoded",
+    "Historical temperature fields do not reach CPU tracer; normalized original radial law retained",
+    "Historical observer azimuth is ignored but selected0 matches",
+    "Auto worker count must be observed",
+    "Asset open and successful6000x3000 load must be verified; grey fallback is failure",
+    "strace is diagnostic instrumentation, not a performance benchmark"
+  ],
+  "legacy_runtime_origin": "ec2d8e506dfd0477e3c9eb4b2b4aa1bee9831fe2",
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "output": "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-png.png",
+  "producers": {
+    "legacy": {
+      "bytes": 2018432,
+      "ldd": "/home/astra/.project/Sirius/out/forensic-kerr-calibration/legacy-ldd.txt",
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/Sirius",
+      "sha256": "9780eb2e7a226124e5eeee9d95ca991f65ccbfa2d143dcb2ffd8c715065a5595"
+    },
+    "ported": {
+      "bytes": 1936312,
+      "ldd": "/home/astra/.project/Sirius/out/forensic-kerr-calibration/ported-ldd.txt",
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/sirius",
+      "sha256": "3501dbf0d69e5ca1fd5ec6ed7059358e0f31a8ca7f95f737ebccdca088c0ae35"
+    }
+  },
+  "role": "legacy",
+  "runner_revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+  "scientific_or_release_qualification_claimed": false,
+  "source_export_revision": "b739f920c2ae67847ed7961e011d2350a839e410",
+  "source_packet": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92",
+  "source_scaffold_overlay": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/scaffold-overlay.json",
+  "tools": {
+    "/usr/bin/cmake": {
+      "bytes": 11796472,
+      "resolved_path": "/usr/bin/cmake",
+      "sha256": "1c5227af4edd22d8d689def545e18ee458260c0fd579eba2187967f38817e638"
+    },
+    "/usr/bin/env": {
+      "bytes": 48072,
+      "resolved_path": "/usr/bin/env",
+      "sha256": "886e5fa8be716b03eeda48856e0f04493f2969fc148fb7812594ffac647fa050"
+    },
+    "/usr/bin/g++-14": {
+      "bytes": 1186944,
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-g++-14",
+      "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+    },
+    "/usr/bin/gcc-14": {
+      "bytes": 1186944,
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-14",
+      "sha256": "ce298ce0c8fbdaa4b43f6e0596e37d25a35a07b5c743cb26f11815b76fccf90d"
+    },
+    "/usr/bin/git": {
+      "bytes": 4066232,
+      "resolved_path": "/usr/bin/git",
+      "sha256": "2a8c18fbf43da9f692d75474c72bea9dfd796c260b0f3dfe456376abc3bbd668"
+    },
+    "/usr/bin/ldd": {
+      "bytes": 5382,
+      "resolved_path": "/usr/bin/ldd",
+      "sha256": "752803b8baa217b821bd4566c4fbdaec50c01cb32d2796ec056d22d190d4290f"
+    },
+    "/usr/bin/ninja": {
+      "bytes": 248040,
+      "resolved_path": "/usr/bin/ninja",
+      "sha256": "5965527e09fe2b3787772aa4f711d6a36b393e7f2fcaa744a7a96c5a4ddf59cb"
+    },
+    "/usr/bin/python3.12": {
+      "bytes": 8020928,
+      "resolved_path": "/usr/bin/python3.12",
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "/usr/bin/readelf": {
+      "bytes": 789280,
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-readelf",
+      "sha256": "871be389739ecf9924b052c2fde4d2a2068a54e882201b9c34897337a5a0a130"
+    },
+    "/usr/bin/strace": {
+      "bytes": 2087432,
+      "resolved_path": "/usr/bin/strace",
+      "sha256": "28f957c227012de0b18d1bd7fff2d396cb693ea60ed8013be68de071e84b5001"
+    }
+  },
+  "trace_tool": {
+    "bytes": 2087432,
+    "sha256": "28f957c227012de0b18d1bd7fff2d396cb693ea60ed8013be68de071e84b5001"
+  }
+}
