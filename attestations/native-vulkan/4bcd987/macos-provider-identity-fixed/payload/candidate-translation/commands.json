@@ -1,0 +1,69 @@
+[
+  {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/out/macos-moltenvk-unforced/sources/cross-patched",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++11",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wno-deprecated-declarations",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate/spirv_msl.cpp.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/sources/cross-patched/spirv_msl.cpp"
+    ],
+    "cwd": "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate",
+    "exit": 0,
+    "wall_seconds": 28.65427767499932
+  },
+  {
+    "argv": [
+      "/usr/bin/ar",
+      "qc",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate/libspirv-cross-msl.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate/spirv_msl.cpp.o"
+    ],
+    "cwd": "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate",
+    "exit": 0,
+    "wall_seconds": 0.06216909800059511
+  },
+  {
+    "argv": [
+      "/usr/bin/ranlib",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate/libspirv-cross-msl.a"
+    ],
+    "cwd": "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate",
+    "exit": 0,
+    "wall_seconds": 0.061947907001012936
+  },
+  {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++17",
+      "-O2",
+      "-I/home/astra/.project/Sirius/out/macos-moltenvk-unforced/sources/cross-patched",
+      "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/translate_initialize.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate/libspirv-cross-msl.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/stock/libspirv-cross-glsl.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/stock/libspirv-cross-core.a",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate/translate_initialize"
+    ],
+    "cwd": "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate",
+    "exit": 0,
+    "wall_seconds": 1.926985281999805
+  },
+  {
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate/translate_initialize",
+      "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/captured/initialize.spv",
+      "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/observations/candidate.metal"
+    ],
+    "cwd": "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/candidate",
+    "exit": 0,
+    "wall_seconds": 0.024121512000419898
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "build_only_environment_removed": [
+    "DYLD_PRINT_LIBRARIES"
+  ],
+  "build_parallelism": 1,
+  "cache_scope": {
+    "CLANG_MODULE_CACHE_PATH": "fresh owned observation/module-cache",
+    "CPM_SOURCE_CACHE": "fresh owned observation/cpm-cache with pinned CPM0.40.8",
+    "TMPDIR": "fresh owned observation/tmp",
+    "XDG_CACHE_HOME": "fresh owned observation/cache",
+    "claim": "Declared diagnostic output placement; no cache-hit, warmness or performance claim"
+  },
+  "ccache_enabled": false,
+  "cereal_enabled": true,
+  "cmake_generator": "Unix Makefiles",
+  "configuration": "Release",
+  "deployment_target": "11.0",
+  "diagnostic_provider": true,
+  "inherited_python_environment": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "library_optimization": "unchanged MoltenVK Default",
+  "metadata_format": "Bounded std::snprintf; parenthesized MVK_VERSION_STRING is a %s argument",
+  "native_arch": "arm64",
+  "native_target": "MoltenVK",
+  "native_toolchain": "Root must separately seal selected Xcode, macOS SDK, clang, CMake and xcrun-selected make before build",
+  "public_metal_api_only": true,
+  "runtime_environment": {
+    "DYLD_PRINT_LIBRARIES": "1"
+  },
+  "schema": 2,
+  "shader_converter_tool": false,
+  "source_overrides": [
+    "SPIRV-Cross",
+    "Vulkan-Headers",
+    "SPIRV-Headers",
+    "SPIRV-Tools",
+    "cereal"
+  ],
+  "spirv_tools_enabled": true,
+  "upstream_git_attestation": false
+}

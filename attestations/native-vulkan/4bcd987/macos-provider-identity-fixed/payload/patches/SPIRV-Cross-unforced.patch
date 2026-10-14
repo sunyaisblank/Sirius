@@ -1,0 +1,11 @@
+--- a/spirv_msl.cpp
++++ b/spirv_msl.cpp
+@@ -11761,7 +11761,7 @@
+ 
+ 	// Metal helper functions must be static force-inline otherwise they will cause problems when linked together in a single Metallib.
+ 	if (!processing_entry_point)
+-		statement(force_inline);
++		statement("static inline");
+ 
+ 	auto &type = get<SPIRType>(func.return_type);
+ 

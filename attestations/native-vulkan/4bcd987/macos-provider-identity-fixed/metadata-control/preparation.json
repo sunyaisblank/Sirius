@@ -1,0 +1,238 @@
+{
+  "runner_source": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "content_id": "76cb8b212bc049261146b526d75ebddafe017b18fe1f4c2c7065c3024c4ffe9e",
+  "expected_stdout": "1.4.1+sirius-issue48-unforced.76cb8b212bc049261146b526d75ebddafe017b18fe1f4c2c7065c3024c4ffe9e\n",
+  "no_native_acceptance_claimed": true,
+  "original_statement": "\tstrcpy(supportedProps12.driverInfo, MVK_VERSION_STRING \"+sirius-issue48-unforced.\" MVK_DIAGNOSTIC_CONTENT_ID);",
+  "corrected_statement": "\tstd::snprintf(supportedProps12.driverInfo, sizeof(supportedProps12.driverInfo),\n\t\t\t\t  \"%s+sirius-issue48-unforced.%s\", MVK_VERSION_STRING, MVK_DIAGNOSTIC_CONTENT_ID);",
+  "inputs": {
+    "out/macos-moltenvk-identity-fixed/payload/sources/moltenvk-patched/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm": {
+      "bytes": 259934,
+      "sha256": "e0ec942b114184de050b57ede2d4151dde7fde25512a76d752e961dda4ba5812"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/historical/original/sources/moltenvk-patched/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm": {
+      "bytes": 259860,
+      "sha256": "bdcb1925e06d9b6d9043abcd74d9b11a24636bf5537df867c4b884e1a778cc57"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/content-id.json": {
+      "bytes": 4508,
+      "sha256": "3c6522953c6b82f44613be7625cc3b0113f029b2e75725fd43383ef771a0aefb"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/input-freeze.json": {
+      "bytes": 2540081,
+      "sha256": "a0b5986daccff1453e11361feb8b8a5a020a6e83c1943deec4da943f3e4ca8d4"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/moltenvk-patched/MoltenVK/MoltenVK/API/mvk_private_api.h": {
+      "bytes": 32404,
+      "sha256": "f05c3b9a0cb51cff7c69fdabac4f106f79d70a4f76e4967f1c0cd66824caf2cb"
+    },
+    "out/macos-provider-metadata-control/original.cpp": {
+      "bytes": 608,
+      "sha256": "5ee2662917f4df8e8aa438b271c8478edf8aff472f8280f291a294c4edb5eabb"
+    },
+    "out/macos-provider-metadata-control/corrected.cpp": {
+      "bytes": 664,
+      "sha256": "e91479059070b047980adf4be9134a2bdc84236b02e8b017bf83139444add874"
+    },
+    "out/prepare-macos-metadata-control.py": {
+      "bytes": 3646,
+      "sha256": "90b968dbc8ec016faa1588f9acb7aa6416929fdcb41a53af058599e37479ce09"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_xlib_xrandr.h": {
+      "bytes": 1497,
+      "sha256": "a5d6e3fe02443dd249623f99bb66d2c03105e9180ce2cb94a051137020b17d4b"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_shared.hpp": {
+      "bytes": 36696,
+      "sha256": "2358aecf6e46eff2e269df1f7bf61e66d535f14e4e0645d9200599978cb0f877"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_screen.h": {
+      "bytes": 4193,
+      "sha256": "3d5fa364a3456412be415547715b03de0a24b218017af724d4cc2622de487495"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_ios.h": {
+      "bytes": 1352,
+      "sha256": "7969c250ac9bba67739fcfcdb6ec7cdf544acde4d0c9671c89cc53fa9c77c76f"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan.hpp": {
+      "bytes": 1033550,
+      "sha256": "a0342711de3b4ef2bde627b466c81e33832edbc2e2b822453904ed22a0617bdb"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_fuchsia.h": {
+      "bytes": 12900,
+      "sha256": "57004582575a54b37810052fbb0baeec1718205b4145af1a5bbebf2c2bdb445a"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_static_assertions.hpp": {
+      "bytes": 849366,
+      "sha256": "e7a455d3e9c69ed710cfdfb81f1132ef11cdc41d8c622abf10bf3bab0f30ba3f"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_vi.h": {
+      "bytes": 1325,
+      "sha256": "b0f1c42511ed8261e58b946fbd1abbb8e7112d1358d5822b3d17d3d2dffeb160"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vk_layer.h": {
+      "bytes": 7073,
+      "sha256": "861cd0ea24c7d81b935e5726520d184dbbc00e571f9089e17a723ccbbc1944e2"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_macos.h": {
+      "bytes": 1384,
+      "sha256": "45b7c4d4b4cd414fc39e41280e30904b9c5fbd2144a2a03ff7067f8d38f3b365"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_video.cppm": {
+      "bytes": 19090,
+      "sha256": "eaba6d7aa70070cd592adfc9824c4ce4e7ca6cafe40af8bc47d46ad24144c72c"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_ggp.h": {
+      "bytes": 1939,
+      "sha256": "b2623cef3f52da5cee783abb89506332ba67bb4841919dfc3a52c47d22947ead"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vk_platform.h": {
+      "bytes": 2828,
+      "sha256": "2fa47dd60cd94eb6fd8d7615953878f5664eb57fdff3b1b9b856c1d8f1496737"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_raii.hpp": {
+      "bytes": 1734877,
+      "sha256": "8260127696b9ea316edad0fa00e37796d89a6d1181080de7f656bb9a07f631d1"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_xlib.h": {
+      "bytes": 1947,
+      "sha256": "64c2aa82db9c3786dd6fccc47b3bf13593fb818d70e21c45cd87bcb754391555"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_to_string.hpp": {
+      "bytes": 605627,
+      "sha256": "fbba9456ee41e10fac2f676c89aa18965473e95c3d8302338f660ac2e3c677a8"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_core.h": {
+      "bytes": 1230712,
+      "sha256": "c0f0fe98afae95de1377e13649542912d71ca8817ef21dd0a44778f6fe7a1615"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_enums.hpp": {
+      "bytes": 648293,
+      "sha256": "ce306b195e5bbbd104f213d4c2e8b9ee2b7d4c9479f678994500cf21dfb37b46"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan.h": {
+      "bytes": 1616,
+      "sha256": "20c7e1ac42fe62b3ed526612c52ddfc21e2265f5c69ca9a5e9dd182cc4c8625b"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_structs.hpp": {
+      "bytes": 7183030,
+      "sha256": "06c09f4567bda3b00d6565ebdad0c02f2a8f07b1094d44355c3a416de06db544"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_directfb.h": {
+      "bytes": 1952,
+      "sha256": "acff0a733105be109396347c0e9030f745fbfcb616b9d4863625663412dbb1ba"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_funcs.hpp": {
+      "bytes": 2256043,
+      "sha256": "263fefacb15a4e11d233477f43fc25d8b797bd3b77de40082e625185cbfba726"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_ohos.h": {
+      "bytes": 6866,
+      "sha256": "abf6d409dfabbc97ac3afa1bc77fd065058b2ccb6069061cb33993a3d4e9e047"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_handles.hpp": {
+      "bytes": 1588077,
+      "sha256": "d37c40cf8f40bb49ffc03c991b40851f365434d39f9248b4ed4b0174f39f60a1"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_beta.h": {
+      "bytes": 17412,
+      "sha256": "13e578c8829257c37f8b40625d7e5db8a732eef742d2c9e90d3891464173542c"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_video.hpp": {
+      "bytes": 271554,
+      "sha256": "18f89a7d270872ae67bbe0658a584cb4095c0bf73f598154c0d0a79346a55387"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_wayland.h": {
+      "bytes": 1952,
+      "sha256": "31778a15a99e3b311d172d8e34f77be9d468aa252d81515dd7bda6eed8ec3f0a"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_hpp_macros.hpp": {
+      "bytes": 10825,
+      "sha256": "c1ebb3843634744ea01b5b3eccd975cc02e5677434f307d02b633136ebf5e9c4"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_win32.h": {
+      "bytes": 15757,
+      "sha256": "256a5fb80fe43611f7218a63d8a1fc4d84e51d9e6b250f7254cae235d7c8d4a5"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_xcb.h": {
+      "bytes": 1966,
+      "sha256": "ef1649726548e795adec965fc48123be7362efcab10ac78bc8fe146ac5cadfd0"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_metal.h": {
+      "bytes": 8066,
+      "sha256": "afa55b54122a392523867f1816894af6a631de3ea88dca4b3d1cbb1042519575"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vk_icd.h": {
+      "bytes": 8164,
+      "sha256": "6c80200a7fcc4c7da3170ef9dc674eab142c92767bfc9733c98649bce78aecb9"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_extension_inspection.hpp": {
+      "bytes": 191749,
+      "sha256": "068f5002b363e945d377dea991bb97eeeba861861afee16936d4b5603e73796b"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan.cppm": {
+      "bytes": 451849,
+      "sha256": "de704998a94202c3236b6913926674f3f94a5fca8093ae4b236d15272891689c"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_android.h": {
+      "bytes": 6330,
+      "sha256": "78fab3e0a766fd6eba180fa2796b349fb0a99cb0a9299449bb30d8f65f92a0dc"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_hash.hpp": {
+      "bytes": 999714,
+      "sha256": "2abef15f555a7d8a8f0acdafad0344712c8214c3268d02172f3bb3aca9c3f7b2"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vulkan/vulkan_format_traits.hpp": {
+      "bytes": 383137,
+      "sha256": "a2bdb6a7909536d8f9c550c0782b16e29ac84940919985fb4d42d3ba0eded962"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_vp9std_decode.h": {
+      "bytes": 2371,
+      "sha256": "318a21532405f31a7b977c340effbf5bff30790734153c29ed6ad9a8230efbaf"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_h265std_decode.h": {
+      "bytes": 2429,
+      "sha256": "38a7c0d6688280795efe00f9ce8506795afbbe558300c9f7eacd764daa42f7e2"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_h264std.h": {
+      "bytes": 13861,
+      "sha256": "0b715c26af3eecc950ebedcf6831fd8b8a7d6c662780fd8b8a37d9082ac07fae"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_h265std.h": {
+      "bytes": 23439,
+      "sha256": "42a2daf1b396f1071f1855262bcadedd544b90da67e2c90d24885720177adf83"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_h264std_decode.h": {
+      "bytes": 2723,
+      "sha256": "9667ecc76eaba22e311e5d2d48b38af47ca307865ae35477897790343ba3ad14"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_vp9std.h": {
+      "bytes": 5384,
+      "sha256": "80df697fad03a9acddadb8ae4944bb25b5df4b1a427157ad7fbdeb77112a3c89"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_av1std.h": {
+      "bytes": 16687,
+      "sha256": "3443226503a8bcd6b828dabacb8ebe40ece32d6d37274ffd2d855a504629c968"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_h264std_encode.h": {
+      "bytes": 6878,
+      "sha256": "c68a1fa4ebadd1b50992a61fb93310a6686d5ea932b91b850d3ad9bc8dec488e"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_av1std_decode.h": {
+      "bytes": 4250,
+      "sha256": "2b912389d39d6627ee8af01e052e9557d213b27c0b79a0e25f5366cfe1942f1a"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_av1std_encode.h": {
+      "bytes": 5979,
+      "sha256": "93ad363de123988cd7b27acc7930f7f93497bc2e5d74f8420ee8ba18e8746e0a"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codec_h265std_encode.h": {
+      "bytes": 7462,
+      "sha256": "aa8c75beac0962abf752a5ec741a42b1a108ee28fb6b3abcdc995e57e20c6c14"
+    },
+    "out/macos-moltenvk-identity-fixed/payload/sources/Vulkan-Headers/include/vk_video/vulkan_video_codecs_common.h": {
+      "bytes": 660,
+      "sha256": "7afc98e84d3bea72e40a65161463abbd4be2ff1e1853eca3f8c331afb7329a8b"
+    }
+  }
+}

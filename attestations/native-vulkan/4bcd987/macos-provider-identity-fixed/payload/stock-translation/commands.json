@@ -1,0 +1,72 @@
+[
+  {
+    "argv": [
+      "/usr/bin/cmake",
+      "-S",
+      "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/sources/cross-stock",
+      "-B",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/stock",
+      "-G",
+      "Ninja",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+      "-DCMAKE_C_COMPILER=/usr/bin/gcc-14",
+      "-DCMAKE_CXX_COMPILER=/usr/bin/g++-14",
+      "-DSPIRV_CROSS_STATIC=ON",
+      "-DSPIRV_CROSS_SHARED=OFF",
+      "-DSPIRV_CROSS_CLI=OFF",
+      "-DSPIRV_CROSS_ENABLE_TESTS=OFF",
+      "-DSPIRV_CROSS_ENABLE_GLSL=ON",
+      "-DSPIRV_CROSS_ENABLE_MSL=ON",
+      "-DSPIRV_CROSS_ENABLE_HLSL=OFF",
+      "-DSPIRV_CROSS_ENABLE_CPP=OFF",
+      "-DSPIRV_CROSS_ENABLE_REFLECT=OFF",
+      "-DSPIRV_CROSS_ENABLE_C_API=OFF",
+      "-DSPIRV_CROSS_ENABLE_UTIL=OFF"
+    ],
+    "cwd": "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/sources/cross-stock",
+    "exit": 0,
+    "wall_seconds": 0.4545763979986077
+  },
+  {
+    "argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/stock",
+      "--target",
+      "spirv-cross-msl",
+      "--parallel",
+      "1"
+    ],
+    "cwd": "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/sources/cross-stock",
+    "exit": 0,
+    "wall_seconds": 82.19669599799818
+  },
+  {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++17",
+      "-O2",
+      "-I/home/astra/.project/Sirius/out/macos-moltenvk-unforced/sources/cross-stock",
+      "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/translate_initialize.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/stock/libspirv-cross-msl.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/stock/libspirv-cross-glsl.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/stock/libspirv-cross-core.a",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/stock/translate_initialize"
+    ],
+    "cwd": "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/sources/cross-stock",
+    "exit": 0,
+    "wall_seconds": 3.5579183739973814
+  },
+  {
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/macos-moltenvk-unforced/stock/translate_initialize",
+      "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/captured/initialize.spv",
+      "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/observations/stock.metal"
+    ],
+    "cwd": "/home/astra/.project/Sirius/out/macos-moltenvk-unforced/sources/cross-stock",
+    "exit": 0,
+    "wall_seconds": 0.05611911799860536
+  }
+]
