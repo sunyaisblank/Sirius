@@ -1,0 +1,359 @@
+{
+  "prepared_utc": "2026-10-14T08:33:39.743816+00:00",
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "diagnostic_only_difference": [
+    ".github/workflows/ci.yml",
+    "scripts/diagnose-macos-retained.py",
+    "scripts/governance/build_policy.py",
+    "scripts/macos_metal_probe.py"
+  ],
+  "executed": false,
+  "scope": "Ready three-case original CPU host CIE action only; no product defect or complete P6/Mandatory claim.",
+  "preparation_attempts": [
+    {
+      "url": "https://files.cie.co.at/CIE_xyz_1931_2deg.csv",
+      "error": "HTTP 404; no child launched; official page now links Publications-datasets/"
+    }
+  ],
+  "reference": {
+    "primary_page": "https://cie.co.at/datatable/cie-1931-colour-matching-functions-2-degree-observer",
+    "csv_url": "https://files.cie.co.at/Publications-datasets/CIE_xyz_1931_2deg.csv",
+    "metadata_url": "https://files.cie.co.at/Publications-datasets/CIE_xyz_1931_2deg.csv_metadata.json",
+    "doi": "10.25039/CIE.DS.xvudnb9b",
+    "original_publication": "CIE 018:2019, Table 6",
+    "csv_md5": "17cca777db64b17170f06f67ce9d3ab7",
+    "csv_sha256": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+    "embedded_original_samples_exactly_joined": 22,
+    "original_absolute_per_channel_assertion": 0.014,
+    "source_test_introduction": "831e89b5a63fdcc03e5e3502dcce24c6ac323930"
+  },
+  "source_and_registration_join": {
+    "test_source": "tests/core/cie1931_observer_authority_test.cpp",
+    "test_source_git_blob": "e00e6aa89bf017e253eec90e8ae80dd7ac216a17",
+    "core_producer": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "core_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "fresh_session_review": "attestations/fresh-session-review/4bcd987/2026-10-14/review.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_WERROR": "ON",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "CMAKE_CXX_COMPILER": "g++-14"
+    },
+    "original_compile_command": {
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+      "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o -c /home/astra/.project/Sirius/tests/core/cie1931_observer_authority_test.cpp",
+      "file": "/home/astra/.project/Sirius/tests/core/cie1931_observer_authority_test.cpp",
+      "output": "tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o"
+    },
+    "original_registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+    "original_three_registration_lines": [
+      "add_test([=[Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed]==] --gtest_also_run_disabled_tests)"
+    ],
+    "expected_names": [
+      "Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand",
+      "Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths",
+      "Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed"
+    ]
+  },
+  "owner_reuse": {
+    "run_owned.py": {
+      "source": "attestations/scientific-core/4bcd987/polarised-scientific-witnesses/files/out/cpu-polarised-scientific-witnesses/run_owned.py",
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "owned_guard.py": {
+      "source": "attestations/scientific-core/4bcd987/polarised-scientific-witnesses/files/out/cpu-polarised-scientific-witnesses/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    }
+  },
+  "pins": {
+    "bin/linux-gcc/tests/core/sirius_core_tests": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "bin/linux-gcc/CMakeCache.txt": {
+      "bytes": 60385,
+      "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02"
+    },
+    "bin/linux-gcc/build.ninja": {
+      "bytes": 488537,
+      "sha256": "f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f"
+    },
+    "bin/linux-gcc/compile_commands.json": {
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake": {
+      "bytes": 269027,
+      "sha256": "0d7b90a6282ac447ba05acd6c1fe74742648cb312d5c910a4779af471ea704d7"
+    },
+    "attestations/fresh-session-review/4bcd987/2026-10-14/review.json": {
+      "bytes": 512329,
+      "sha256": "04831bdcef151ffd0a9c53947f4e25b4633af103c4dac8704608723715eaf01f"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json": {
+      "bytes": 28646,
+      "sha256": "ace3fa3984d49fcabadd2d9ece5b0a40933b696d380ae09a023cb0f95f7765d2"
+    },
+    "/usr/bin/ctest": {
+      "bytes": 13276728,
+      "sha256": "45c60ab2448411a4f49a0bdb6cf5800fedbf0293048e3c82710a34190c7d1ef4"
+    },
+    "/usr/bin/python3.12": {
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "tests/core/cie1931_observer_authority_test.cpp": {
+      "bytes": 4485,
+      "sha256": "8115f3f264d5cbeeb6c6b6d4842afd52b2627d2cf690c9f0f7001a5cadef4b6e"
+    },
+    "src/sirius/core/cie1931_observer.h": {
+      "bytes": 1858,
+      "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949"
+    },
+    "src/sirius/core/spectral/blackbody.h": {
+      "bytes": 6171,
+      "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f"
+    },
+    "src/sirius/core/spectral/spectral_radiance.h": {
+      "bytes": 5757,
+      "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+    },
+    "tests/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "bin/linux-gcc/CTestTestfile.cmake": {
+      "bytes": 411,
+      "sha256": "3afbe7a27fed80e401348743ad8b0a979beca9d23152704bd498ec8273c67c8d"
+    },
+    "bin/linux-gcc/tests/CTestTestfile.cmake": {
+      "bytes": 7167,
+      "sha256": "030c9e1128bb179c6ee1e46c910eeb5873b6e3f9fbe082aa4ef29dfbfa70133f"
+    },
+    "bin/linux-gcc/src/sirius/CTestTestfile.cmake": {
+      "bytes": 389,
+      "sha256": "b149af5bdc0a12120a46632cd43a376193a27e83fbd78d715706892a447c8104"
+    },
+    "bin/linux-gcc/src/sirius/render/CTestTestfile.cmake": {
+      "bytes": 317,
+      "sha256": "740e83e7fb5b44013aec48d89fdadd3a33e6f1e4aadfadc8b0d59f60a155def0"
+    },
+    "bin/linux-gcc/src/sirius/app/CTestTestfile.cmake": {
+      "bytes": 340,
+      "sha256": "d08fbf2024fef0171e96de33b8abec6e0c860d0be4f6848407b6ecdfdf746714"
+    },
+    "bin/linux-gcc/src/sirius/backend/CTestTestfile.cmake": {
+      "bytes": 319,
+      "sha256": "f7ff23433f08a5d5c10a72713551c41f5778d65e753fbf6d50e3f1759d350afd"
+    },
+    "bin/linux-gcc/src/sirius/core/CTestTestfile.cmake": {
+      "bytes": 313,
+      "sha256": "e1cd689dfd50887059c92afbbb76f5f027db230455ec13dc26a80b516bcc434f"
+    },
+    "bin/linux-gcc/src/sirius/oracle/CTestTestfile.cmake": {
+      "bytes": 317,
+      "sha256": "083db7e6ecf611dbe410fa593e3ebbe302e3b29425ddc74b78443a2be48c5d29"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/CTestTestfile.cmake": {
+      "bytes": 479,
+      "sha256": "857b786ef4bbcf70de18b064281334cdc1b2400d49e9ba41e0cadfe91bd2c6eb"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/test/CTestTestfile.cmake": {
+      "bytes": 398,
+      "sha256": "cfdf7a649a9f8e904833a9c90effb5f9c296ec637622e2fe63d98a7931233564"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/CTestTestfile.cmake": {
+      "bytes": 431,
+      "sha256": "7298c33e7c27e203adac56acd29190d66d06c3cfc2e76f0da86a906d731ce561"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/CTestTestfile.cmake": {
+      "bytes": 499,
+      "sha256": "90938cddd38ce4c3333bc409970c4f9e27e41cd99586e50b4da31aaeefa71044"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/CTestTestfile.cmake": {
+      "bytes": 406,
+      "sha256": "80c49d1e9a3f8425382003a37cec9894a5222dd59ec265c21e7c87c92b1d29e4"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/CTestTestfile.cmake": {
+      "bytes": 437,
+      "sha256": "7d8dfe9c0a2383d7f04a82f7a0d12b54d4ec1adecf2c7699b491feb61fcac7a3"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/cpp-interface/CTestTestfile.cmake": {
+      "bytes": 434,
+      "sha256": "248abbc764d696619e7bd5c029c18dbf026e76458b4adaadb7a9381c1a75a90b"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/lint/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "90d23161c75e2f0fbbd6f16cc21db24656df24c6ab208cfd456c3cb31e66c1ad"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/fuzz/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "6bfac4dbbfd63a0d3498fa51c063732124d7b543a61404b764cb227199ff5308"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/opt/CTestTestfile.cmake": {
+      "bytes": 410,
+      "sha256": "8e0abf6fa22ac5e534b80107a6ec602c155723f0decf69dcf472330f6a7bb84d"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/reduce/CTestTestfile.cmake": {
+      "bytes": 416,
+      "sha256": "e7077a5e70315070e52e204673cc6b852c9b835ae0de8aa35a07af670be29005"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/link/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "2e511cb34dfd66b080b4a501bcbc5a66a6ea53dec1d0208bf4110c469579afe5"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/diff/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "2af564538ecdebc48273a8051ec964bd1f021c431921af6f185271d0f69dba3d"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/spirv-headers/CTestTestfile.cmake": {
+      "bytes": 434,
+      "sha256": "c94220c22c5e49f1e389d1b3dec99a15758be1e6595d339359dc9e7ad7869ca3"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/lesspipe/CTestTestfile.cmake": {
+      "bytes": 418,
+      "sha256": "5ba0ab0e17c12c48b73b36a2cc4d3049b71bedfd3baa29750b13d967f32e709b"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/emacs/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "d63c1b22814ceb04bc144528cce073c9e2e8634a64d62f8aa8adb4fb829ff924"
+    },
+    "bin/linux-gcc/tests/render/CTestTestfile.cmake": {
+      "bytes": 480,
+      "sha256": "c8d33a228495d4cc6cb661c2025caf4b187c56a93604a55142fa563e62816e8f"
+    },
+    "bin/linux-gcc/tests/app/CTestTestfile.cmake": {
+      "bytes": 468,
+      "sha256": "bb47bc1b68b5327eaaf6d706af1072b95ff266a8a51fc94a4a26d04d140ad513"
+    },
+    "bin/linux-gcc/tests/backend/CTestTestfile.cmake": {
+      "bytes": 484,
+      "sha256": "0b251d08427240a6349f5b5f4a117401bd21e3b3c823ad7ea607b4934d6ed660"
+    },
+    "bin/linux-gcc/tests/core/CTestTestfile.cmake": {
+      "bytes": 472,
+      "sha256": "5a36b3cc4b3333559b2b0a8761d9cdfa860f153219ced5865b92c8920b92cb0e"
+    },
+    "bin/linux-gcc/tests/oracle/CTestTestfile.cmake": {
+      "bytes": 480,
+      "sha256": "cb08de5aa4034f2f673299d063baee844eb7c4b03316e46f3fe69426eb3e879f"
+    },
+    "bin/linux-gcc/lib/glfw/CTestTestfile.cmake": {
+      "bytes": 314,
+      "sha256": "196b609acec92389592c7d8d146f27e6556987c469b96f00d4ec2abbfdc0151b"
+    },
+    "bin/linux-gcc/lib/glfw/src/CTestTestfile.cmake": {
+      "bytes": 307,
+      "sha256": "5f0c66e3ac11467e633f73b0b78ec7ff59cd7f21f602930b209084f70c23fd1b"
+    },
+    "bin/linux-gcc/_deps/googletest-build/CTestTestfile.cmake": {
+      "bytes": 361,
+      "sha256": "3ad5364e3c1693c57cec30aa8dc5dedef136678d9a59afed973301cc491fd1f9"
+    },
+    "bin/linux-gcc/_deps/googletest-build/googletest/CTestTestfile.cmake": {
+      "bytes": 361,
+      "sha256": "097194259208bf09b1a0ad8df230a1f8a494c2fef517b4f210753c9410d62c7f"
+    },
+    "bin/linux-gcc/_deps/googletest-build/googlemock/CTestTestfile.cmake": {
+      "bytes": 386,
+      "sha256": "620a64e36b9e18fc316940ddbc87957c24dc6b44163768cb924836714a88fecc"
+    },
+    "bin/linux-gcc/tests/sirius_base_tests[1]_tests.cmake": {
+      "bytes": 6585,
+      "sha256": "1b085fdd013ef0e50ee3d0caa616068f33e3c80490d6bed3bb6629315018b0f6"
+    },
+    "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake": {
+      "bytes": 134265,
+      "sha256": "157b9df6c3b6bced6f5d42a67806a4e93e0526c45f493e1008175fb8d0c76ebe"
+    },
+    "bin/linux-gcc/tests/app/sirius_app_tests[1]_tests.cmake": {
+      "bytes": 52924,
+      "sha256": "1fc2d1a80fa6e56de2afe0c81a74eb97462d40910a430404701f8bc41b39e6ad"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake": {
+      "bytes": 110274,
+      "sha256": "455bb6ec639a416fdc7fa0b047c49fca59e226639d72347d022685f3e300b2c3"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake": {
+      "bytes": 67359,
+      "sha256": "f9ebe51d95fc0a7a88a8c4edd1af07267e3824f876e028100c15e311a22cfae1"
+    },
+    "bin/linux-gcc/tests/sirius_base_tests[1]_include.cmake": {
+      "bytes": 271,
+      "sha256": "d912527f48f9f1de276ce0c3909868f132ccb0ea3caa66c84367a06b25aae282"
+    },
+    "bin/linux-gcc/tests/render/sirius_render_tests[1]_include.cmake": {
+      "bytes": 293,
+      "sha256": "a04de98220507b9c28110536d639c281d1b9aae85dd3d066967c10f074222104"
+    },
+    "bin/linux-gcc/tests/app/sirius_app_tests[1]_include.cmake": {
+      "bytes": 275,
+      "sha256": "04868c27c459689be327479139b43c8f46bcd3ab560afee247a7adea85d58b35"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_include.cmake": {
+      "bytes": 299,
+      "sha256": "749ff39be5b56c22fd091e272f2e1630ab78e37a7a3b694364786161a1c90de3"
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests[1]_include.cmake": {
+      "bytes": 281,
+      "sha256": "be3980d63214735ae160d7ba73f9c73d99b464b5b35ec45be318522d6f0ab00d"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_include.cmake": {
+      "bytes": 293,
+      "sha256": "e800698e0353ee7dfd4ff98e527bf43a3b1d4c25f8b1d4486fb03bb2e5e8f363"
+    },
+    "out/cie1931-authority-current-source/prepare.py": {
+      "bytes": 9826,
+      "sha256": "6c9a24402b02c8e47489571ce2276b96c49f0b7de4763cab86a1eda934689e46"
+    },
+    "out/cie1931-authority-current-source/run_cie.py": {
+      "bytes": 5464,
+      "sha256": "5a86fd65514ae9f18dbc768b000687186160b3a993a73b1d42240a3a36515f8a"
+    },
+    "out/cie1931-authority-current-source/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "out/cie1931-authority-current-source/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "out/cie1931-authority-current-source/CIE_xyz_1931_2deg.csv": {
+      "bytes": 24021,
+      "sha256": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1"
+    },
+    "out/cie1931-authority-current-source/CIE_xyz_1931_2deg.csv_metadata.json": {
+      "bytes": 3787,
+      "sha256": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8"
+    },
+    "out/cie1931-authority-current-source/actions.json": {
+      "bytes": 5747,
+      "sha256": "6d9369d7b93937213aa3e47c576dd2a74ee85d95e2aae7b6cf08a89d9037754a"
+    }
+  },
+  "finite_acceptance_scope": {
+    "official_reference": "Exactly the original 22 embedded official samples, each with x/y/z absolute tolerance 0.014; no bound at every wavelength is established.",
+    "facades": "The existing spectral-bin loop verifies actual bin wavelengths and both host facade consumers.",
+    "domain": "The original five outside-domain/nonfinite values decline to zero; 380 nm z-bar and 780 nm x-bar remain positive."
+  }
+}

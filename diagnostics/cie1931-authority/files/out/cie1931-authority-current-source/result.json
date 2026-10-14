@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "expected_names": [
+    "Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand",
+    "Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths",
+    "Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed"
+  ],
+  "qualification_claimed": false,
+  "p6_complete": false,
+  "mandatory_receipt_created": false,
+  "scope": "Three original CPU CIE authority witnesses only; no GPU, renderer, full P6 or final integration claim.",
+  "finite_acceptance_scope": {
+    "official_reference": "Exactly the original 22 embedded official samples, each with x/y/z absolute tolerance 0.014; no bound at every wavelength is established.",
+    "facades": "The existing spectral-bin loop verifies actual bin wavelengths and both host facade consumers.",
+    "domain": "The original five outside-domain/nonfinite values decline to zero; 380 nm z-bar and 780 nm x-bar remain positive."
+  },
+  "executed_names": [
+    "Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand",
+    "Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths",
+    "Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed"
+  ],
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "disabled": 0,
+  "junit": {
+    "bytes": 3387,
+    "sha256": "9d78ab01e98ad47eefbf93a975a3bacc45cfd4194d2661a63ca7410f9d597609"
+  },
+  "owner": {
+    "bytes": 2174,
+    "sha256": "cf40720fca23a39f9f5093bf67fa2487e374decb41de1956fb73b2f41721d630"
+  },
+  "reference": {
+    "primary_page": "https://cie.co.at/datatable/cie-1931-colour-matching-functions-2-degree-observer",
+    "csv_url": "https://files.cie.co.at/Publications-datasets/CIE_xyz_1931_2deg.csv",
+    "metadata_url": "https://files.cie.co.at/Publications-datasets/CIE_xyz_1931_2deg.csv_metadata.json",
+    "doi": "10.25039/CIE.DS.xvudnb9b",
+    "original_publication": "CIE 018:2019, Table 6",
+    "csv_md5": "17cca777db64b17170f06f67ce9d3ab7",
+    "csv_sha256": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+    "embedded_original_samples_exactly_joined": 22,
+    "original_absolute_per_channel_assertion": 0.014,
+    "source_test_introduction": "831e89b5a63fdcc03e5e3502dcce24c6ac323930"
+  },
+  "source_and_registration_join": {
+    "test_source": "tests/core/cie1931_observer_authority_test.cpp",
+    "test_source_git_blob": "e00e6aa89bf017e253eec90e8ae80dd7ac216a17",
+    "core_producer": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "core_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "fresh_session_review": "attestations/fresh-session-review/4bcd987/2026-10-14/review.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_WERROR": "ON",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "CMAKE_CXX_COMPILER": "g++-14"
+    },
+    "original_compile_command": {
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+      "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o -c /home/astra/.project/Sirius/tests/core/cie1931_observer_authority_test.cpp",
+      "file": "/home/astra/.project/Sirius/tests/core/cie1931_observer_authority_test.cpp",
+      "output": "tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o"
+    },
+    "original_registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+    "original_three_registration_lines": [
+      "add_test([=[Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed]==] --gtest_also_run_disabled_tests)"
+    ],
+    "expected_names": [
+      "Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand",
+      "Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths",
+      "Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed"
+    ]
+  }
+}
