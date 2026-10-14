@@ -1,0 +1,40 @@
+{
+  "issue": 101,
+  "decision": "COMPILER_PREMISE_SURVIVES; ARITHMETIC_AND_BENEFIT_PENDING",
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "operator_revision": "6e13108d5e77b053ff2b0b391e42984e243733c7",
+  "raw_bundle": "attestations/software-vulkan/4bcd987/computed-carry-exit-screen",
+  "raw_manifest_sha256": "f46b8049e8098f3a98f9095999ca4dbfead397055870a5d20ae2294c28541af5",
+  "candidate_source_sha256": "c9df98c1e05c129cd31b03c7ed354e7bac01d2568f4a9fc518e12433c95fda12",
+  "candidate_module_sha256": "0d8e5784035d2870c66420dd91607d4f5c35ed4e1360c402501ea1792a0708fb",
+  "independent_zero_join_finite_pairs": 5100,
+  "nonfinite_refusal_examples": 10,
+  "production_complete_normal_transport_compiler_policy_passed": true,
+  "stock_module_equals_canonical": true,
+  "ordinary_ir_carry_dependent_exit_reviewed": true,
+  "llvm_sha256": "411d80baa17983f01509bc23d908d99c0b6cc07dfb429e87d7e419614fea59df",
+  "ordinary_ir_loci": [
+    186608,
+    186669,
+    186722
+  ],
+  "called_jit_code_bytes": {
+    "stock": 879837,
+    "candidate": 886093,
+    "delta": 6256
+  },
+  "coroutine_frame_bytes": {
+    "stock": 89024,
+    "candidate": 89184,
+    "delta": 160
+  },
+  "defined_relocations_reviewed": 6053,
+  "allocated_sections_reviewed": 6,
+  "capture_wrapper_passed": false,
+  "capture_wrapper_exit": 1,
+  "post_owner_analysis_passed": true,
+  "raw_capture_reused_without_device_rerun": true,
+  "finding": "Capture and canary completed and were byte-bound; wrapper incorrectly invoked the analyzer before its enclosing owner was terminal. Preserve the failed owner. A separate incident-specific adapter rehashed631 inputs, preserved32 original raw files and ran all remaining original binding/relocation checks. Actual LLVM retains computed-zero carry eligibility, signed-zero copies, lane-mask removal and remaining-active reduction. Mixed lanes can retain iterations; added code/frame and dynamic benefit remain unproven. This is a compiler-first finite diagnostic, not arithmetic acceptance, integrated control, performance or qualification.",
+  "next_required": "Independent exact five-word RTAccumulateTerm focused oracle/provider checks, unchanged174268-record arithmetic and generated-product/native/program checks, eight original integrated controls, then all original20+2 benefit gates before any adoption. No source optimization adopted.",
+  "qualification_claimed": false
+}

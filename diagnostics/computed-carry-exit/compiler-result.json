@@ -1,0 +1,38 @@
+{
+  "production_policy_passed": true,
+  "stock_equals_current_canonical": true,
+  "modules": {
+    "stock": {
+      "module": {
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+      },
+      "assembly": {
+        "bytes": 296907,
+        "sha256": "30cc0aa0e85bb0d943e332637b0073059bf77f33d29f1290f9514e3b760eaddb"
+      },
+      "accumulator_loop_count": 1,
+      "accumulator_sum_call_count": 1,
+      "accumulator_radius_update_count": 1,
+      "accumulator_bound_call_count": 5
+    },
+    "candidate": {
+      "module": {
+        "bytes": 105088,
+        "sha256": "0d8e5784035d2870c66420dd91607d4f5c35ed4e1360c402501ea1792a0708fb"
+      },
+      "assembly": {
+        "bytes": 299788,
+        "sha256": "c38767ac2593dbf935bba2ca943a85ad600c2c32fa701be5fd155603217cf32b"
+      },
+      "accumulator_loop_count": 1,
+      "accumulator_sum_call_count": 1,
+      "accumulator_radius_update_count": 1,
+      "accumulator_bound_call_count": 5
+    }
+  },
+  "mode_binding_stride_member_offset_inventory_exact": true,
+  "barrier_counts_exact": true,
+  "manual_accumulator_control_flow_review_required": true,
+  "scope": "Compiler-only complete normal Transport modules. Inventory checks support ABI review; they do not establish semantics, ordinary JIT behavior or benefit."
+}

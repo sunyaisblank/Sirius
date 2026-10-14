@@ -1,0 +1,90 @@
+{
+  "issue": 101,
+  "decision": "COMPILER_AND_ORDINARY_CODE_PREMISE_SURVIVES; NO_ARITHMETIC_OR_BENEFIT_ACCEPTANCE",
+  "reviewer": "/root/divide_contract_review",
+  "candidate_ir_sha256": "411d80baa17983f01509bc23d908d99c0b6cc07dfb429e87d7e419614fea59df",
+  "stock_ir_sha256": "4097dba5bfa2fd7b7ad442a979b8468146b8b5f211f61b1789e8aec32cdc7ac8",
+  "candidate_source_sha256": "c9df98c1e05c129cd31b03c7ed354e7bac01d2568f4a9fc518e12433c95fda12",
+  "candidate_accumulator_spirv_sha256": "e6f9e15d1df446ae3967bddbfbdbe6a1da8490de5c0960773903e4ab42b4cbe7",
+  "ordinary_ir_locations": {
+    "original_scalar_magnitude": {
+      "line": 185853,
+      "instruction": "%ssa_65918 = and <8 x i32> %ssa_65917, %80365"
+    },
+    "iteration_lt_two": {
+      "line": 186608,
+      "instruction": "%ssa_66228 = icmp ult i32 %80681, 2"
+    },
+    "initial_scalar_nonzero": {
+      "line": 186611,
+      "instruction": "%ssa_66229 = icmp ne <8 x i32> %ssa_65918, zeroinitializer"
+    },
+    "carry_magnitude": {
+      "line": 186615,
+      "instruction": "%ssa_66233 = and <8 x i32> %ssa_66232, %ssa_66231"
+    },
+    "zero_class_of_sign_cleared_carry": {
+      "line": 186620,
+      "instruction": "%ssa_66235 = call <8 x i1> @llvm.is.fpclass.v8f32(<8 x float> %80686, i32 64)"
+    },
+    "eligibility_conjunction": {
+      "line": 186630,
+      "instruction": "%ssa_66237 = and <8 x i1> %ssa_66236, %ssa_66230"
+    },
+    "any_eligible_lane_branch": {
+      "line": 186638,
+      "instruction": "br i1 %any_active55523.not, label %endif-block55524, label %if-true-block55525"
+    },
+    "remaining_low_sign_intersection": {
+      "line": 186647,
+      "instruction": "%ssa_66246 = and <8 x i32> %ssa_66238, %ssa_66244"
+    },
+    "remaining_tail_sign_intersection": {
+      "line": 186660,
+      "instruction": "%ssa_66256 = and <8 x i32> %ssa_66248, %ssa_66254"
+    },
+    "remove_eligible_lanes": {
+      "line": 186665,
+      "instruction": "%break_full55527 = xor <8 x i32> %maskfull55522, %.011099"
+    },
+    "merge_exit_mask": {
+      "line": 186669,
+      "instruction": "%.011100 = phi <8 x i32> [ %break_full55527, %if-true-block55525 ], [ %.011099, %endif-block55347 ]"
+    },
+    "retained_trip_count": {
+      "line": 186700,
+      "instruction": "%ssa_66260 = icmp ugt i32 %80722, 2"
+    },
+    "remaining_active_loop_branch": {
+      "line": 186722,
+      "instruction": "br i1 %i1cond55554.not, label %endloop55555, label %bgnloop55331"
+    },
+    "shared_postloop_radius_bounds_entry": {
+      "line": 186730,
+      "instruction": "%ssa_66268 = icmp ugt <8 x i32> %ssa_66267, splat (i32 2105540608)"
+    }
+  },
+  "source_and_spirv_join": "Candidate SPIR-V retains the initial validity/scalar bound, one DontUnroll three-limb loop and one RetainedSum32 body. New i<2, original-x-nonzero and computed-carry-zero guards feed a direct branch to the original loop merge. Remaining zero limbs intersect their sign words with carry; nonzero limbs copy unchanged. The original radius update and four final private bounds follow that merge. Original zero x retains the old path.",
+  "llvm_logic": "reg2492 is initialized with the magnitude mask 2147483647 at lines 10235/10297. Original x magnitude is hoisted outside bgnloop55331. Eligibility combines i<2, original x nonzero and the zero class of sign-cleared carry. Eligible lanes copy future limbs, clear their bits from the loop mask, and join the common radius/bounds epilogue. Noneligible lanes preserve the trip-count loop.",
+  "mixed_group_limit": "Any remaining active noneligible lane keeps the SIMD loop running. Exited lanes are masked; a group may execute both zero-copy handling and further iterations. Static code does not establish unchanged mixed-lane cost or a speed gain.",
+  "code_and_frame": {
+    "stock_executable_bytes": 879837,
+    "candidate_executable_bytes": 886093,
+    "difference_executable_bytes": 6256,
+    "stock_coroutine_frame_bytes": [
+      89024
+    ],
+    "candidate_coroutine_frame_bytes": [
+      89184
+    ],
+    "difference_frame_bytes": 160
+  },
+  "original_owner_passed": false,
+  "original_child_exit": 1,
+  "original_owner_unchanged": true,
+  "post_owner_binding_and_relocation_review_passed": true,
+  "symbolic_relocations_reviewed": 6053,
+  "allocated_sections_reviewed": 6,
+  "undefined_callbacks_independently_resolved": false,
+  "scope": "Independent source/SPIR-V/ordinary-LLVM/code-binding review of one normal Transport variant. The canary did not validate retained arithmetic or runtime benefit. Original capture wrapper remains failed due postprocessing phase ordering. No new compiler, device, integrated or benefit run occurred."
+}

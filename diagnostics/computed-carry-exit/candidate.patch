@@ -1,0 +1,19 @@
+--- a/src/sirius/kernels/retained_triple.slang
++++ b/src/sirius/kernels/retained_triple.slang
+@@ -91,6 +91,16 @@
+         else if(i==1) r.lo=upper;
+         else r.tail=upper;
+         carry=lower;
++        // Initial zero scalars retain the original path. Once a nonzero
++        // scalar leaves zero carry, finish only the remaining zero-addend sums.
++        if(i<2u&&(RPBits(x)&0x7fffffffu)!=0u&&(RPBits(carry)&0x7fffffffu)==0u) {
++            if(i==0u)
++                r.lo=(RPBits(a.lo)&0x7fffffffu)==0u?
++                    RPFromBits(RPBits(a.lo)&RPBits(carry)):a.lo;
++            r.tail=(RPBits(a.tail)&0x7fffffffu)==0u?
++                RPFromBits(RPBits(a.tail)&RPBits(carry)):a.tail;
++            break;
++        }
+     }
+     r.error=RPUpAdd(a.error,RPAbs(carry));
+     if(!RPBounded(r.hi,0x7d800000u)||!RPBounded(r.lo,0x7d800000u)||
