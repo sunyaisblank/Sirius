@@ -1,0 +1,193 @@
+{
+  "case": "legacy-kerr-exr-original-size",
+  "classification": "COMPLETE_ORIGINAL_SIZE_SINGLE_RENDER",
+  "complete_original_size_render": true,
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "historical_tape_identity_claimed": false,
+  "interpretation": "One declared-role reconstruction EXR completed and decoded as exact binary32 words without epsilon; this reader establishes no result for another render or any cross-producer comparison",
+  "output": {
+    "bytes": 760396,
+    "path": "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-exr.exr",
+    "sha256": "335d6ba7d0720e27daf63213aaa0408f4cd51a9ef8832e59da272fb6492df28b"
+  },
+  "ownership": {
+    "absence_scope": "Recorded process births only; no global consumer-absence claim",
+    "child_exit": 0,
+    "clean_retirement": true,
+    "input_seals_verified": 3382,
+    "minimum_sampled_available_kib": 17212940,
+    "observed_births_absent": 2,
+    "peak_sampled_rss_kib": 170692,
+    "pins_verified": 2846,
+    "raw_sample_count": 415,
+    "stop_reason": null,
+    "terminal": true,
+    "wall_seconds": 113.11166148600023
+  },
+  "pair_pixel_identity_claimed": false,
+  "proof_gaps": [],
+  "reader_sha256": "d889855120f581eb2445e22c6d9575bbf0334f4435d2e2c64aa68ba29a06427a",
+  "role": "legacy",
+  "runtime_join": {
+    "asset": {
+      "bytes": 29984397,
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/src/Sirius.Render/Texture/Starfield.png",
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "binding_scope": "Stable-birth live ELF/backing-library snapshot, sealed inputs, successful config/asset opens and source-derived CPU/sampler join; modern source has no separate CPU-selection log",
+    "completed_tile_ray_count": 6553600,
+    "config": {
+      "bytes": 1248,
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-exr.json",
+      "sha256": "802f9aa41fcd5b4c4df110770901e2a01e47fd61544bd94a655696e07559d513"
+    },
+    "effective_spp_from_sealed_source": 25,
+    "environment": {
+      "config_provider_loader_test_overrides": "Nonempty relevant overrides rejected by sealed preserved parent before constructing the child environment; GTEST_OUTPUT then set empty",
+      "live_scoped_snapshot_present": true,
+      "relevant_assignments": {
+        "GIT_CEILING_DIRECTORIES": "/home/astra/.project/Sirius/out",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "LC_ALL": "C",
+        "PATH": "/usr/bin:/bin",
+        "TZ": "UTC"
+      },
+      "scope": "Renderer/config/provider/loader/test and declared locale/path/Git selectors; unrelated variables and credentials are outside this claim"
+    },
+    "expected_failed_asset_lookups_allowed": [
+      "Sirius.Render/Texture/Starfield.png",
+      "../Sirius.Render/Texture/Starfield.png"
+    ],
+    "mapped_libraries": {
+      "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/lib/libSiriusCore.so": {
+        "bytes": 46736,
+        "sha256": "5293e66c23967c8fe5b61c1de841a4bbe74257f15367821f801952ca118fe67d"
+      },
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+        "bytes": 236616,
+        "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+      },
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+        "bytes": 2129424,
+        "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+      },
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+        "bytes": 183024,
+        "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+      },
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+        "bytes": 952616,
+        "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+      },
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+        "bytes": 2592224,
+        "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+      }
+    },
+    "other_role_frozen_libraries_not_required_to_be_mapped": [],
+    "producer": {
+      "bytes": 2018432,
+      "ldd": "/home/astra/.project/Sirius/out/forensic-kerr-calibration/legacy-ldd.txt",
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/Sirius",
+      "sha256": "9780eb2e7a226124e5eeee9d95ca991f65ccbfa2d143dcb2ffd8c715065a5595"
+    },
+    "renderer_birth": "2517365",
+    "renderer_pid": 172702,
+    "requested_spp": 32,
+    "role_ldd_record": {
+      "bytes": 536,
+      "path": "/home/astra/.project/Sirius/out/forensic-kerr-calibration/legacy-ldd.txt",
+      "sha256": "cb0103a81c736570094f8bcc8cda12181ef71a909ab703f2f92096cbac7c5417"
+    },
+    "source_scope": "Declared original CPU semantics; temperature options remain unwired and selected azimuth0 remains fixed",
+    "tiles_reported": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64
+    ],
+    "workers": 15
+  },
+  "scientific_or_release_qualification_claimed": false,
+  "self_decode": {
+    "argv": [
+      "/home/astra/.project/Sirius/out/forensic-kerr-exr/image_compare",
+      "compare",
+      "exr",
+      "512",
+      "512",
+      "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-exr.exr",
+      "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-exr.exr"
+    ],
+    "binary": {
+      "bytes": 397736,
+      "sha256": "3a224d55f8f74fb4fec0e2f377e0cea003983f2a53f01f15ce0579b2424373d6"
+    },
+    "exit": 0,
+    "meaning": "Full-file decode/domain validation only; self-comparison is not legacy/ported or historical tape identity",
+    "passed": true,
+    "stderr": "",
+    "stdout": "{\"equal\":true,\"format\":\"exr\",\"sample_domain\":\"decoded-RGBA-IEEE754-binary32-words-from-HALF\",\"width\":512,\"height\":512,\"channels\":4,\"compared_pixels\":262144,\"compared_samples\":1048576,\"mismatched_pixels\":0,\"mismatched_samples\":0,\"encoded_files_equal\":true}\n",
+    "wall_seconds": 0.038460039999336004
+  }
+}

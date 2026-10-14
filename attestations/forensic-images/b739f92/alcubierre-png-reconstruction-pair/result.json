@@ -1,0 +1,66 @@
+{
+  "argv": [
+    "/home/astra/.project/Sirius/out/forensic-alcubierre-completion/image_compare",
+    "compare",
+    "png",
+    "1920",
+    "1080",
+    "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/alcubierre-png.png",
+    "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/alcubierre-png.png"
+  ],
+  "case": "alcubierre-png",
+  "comparison": {
+    "channels": 4,
+    "compared_pixels": 2073600,
+    "compared_samples": 8294400,
+    "encoded_files_equal": true,
+    "equal": true,
+    "format": "png",
+    "height": 1080,
+    "mismatched_pixels": 0,
+    "mismatched_samples": 0,
+    "sample_domain": "RGBA8",
+    "width": 1920
+  },
+  "comparison_wall_seconds": 0.4295605239967699,
+  "current_physics_or_scientific_or_release_qualification_claimed": false,
+  "effective_spp": 64,
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "historical_tape_identity_claimed": false,
+  "inputs": [
+    {
+      "bytes": 5805724,
+      "path": "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/alcubierre-png.png",
+      "sha256": "015134ea4181688189d890b35a635f6bde95cda69aa12624420334d488cd99b9"
+    },
+    {
+      "bytes": 5805724,
+      "path": "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/alcubierre-png.png",
+      "sha256": "015134ea4181688189d890b35a635f6bde95cda69aa12624420334d488cd99b9"
+    },
+    {
+      "bytes": 397736,
+      "path": "/home/astra/.project/Sirius/out/forensic-alcubierre-completion/image_compare",
+      "sha256": "3a224d55f8f74fb4fec0e2f377e0cea003983f2a53f01f15ce0579b2424373d6"
+    }
+  ],
+  "legacy_runtime_origin": "ec2d8e506dfd0477e3c9eb4b2b4aa1bee9831fe2",
+  "rays_per_renderer": 132710400,
+  "reconstruction_pair_complete": true,
+  "render_results": {
+    "legacy": {
+      "owner_peak_sampled_rss_kib": 184456,
+      "owner_wall_seconds": 1911.6065964949994,
+      "workers": 15
+    },
+    "ported": {
+      "owner_peak_sampled_rss_kib": 221712,
+      "owner_wall_seconds": 1887.739483809004,
+      "workers": 15
+    }
+  },
+  "requested_spp": 64,
+  "runner_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "source_export_revision": "b739f920c2ae67847ed7961e011d2350a839e410",
+  "source_scaffold_overlay": "one115-byte GLFW CMake config template; runtime/asset bytes unchanged"
+}

@@ -1,0 +1,82 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/env",
+    "-C",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "PATH=/usr/bin:/bin",
+    "GIT_CEILING_DIRECTORIES=/home/astra/.project/Sirius/out",
+    "GIT_CONFIG_NOSYSTEM=1",
+    "/usr/bin/strace",
+    "-f",
+    "-qq",
+    "-yy",
+    "-e",
+    "trace=execve,openat,newfstatat,mmap",
+    "-o",
+    "/home/astra/.project/Sirius/out/forensic-kerr-calibration/legacy-kerr-original-size/runtime.trace",
+    "--",
+    "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/Sirius",
+    "--config",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-png.json",
+    "--no-color",
+    "--verbose",
+    "render",
+    "--cpu"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "legacy-kerr-original-size",
+  "child_exit": 0,
+  "child_pid": 154296,
+  "child_start_ticks": "2411844",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 154266,
+    "pid": 154266,
+    "ppid": 1313,
+    "rss_kib": 35744,
+    "session": 154266,
+    "start_ticks": "2411723",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "First full-size original-config Kerr PNG under a one-shot300s diagnostic cap to observe actual progress/cost; incomplete at deadline cannot satisfy the reconstructed comparison or original tape identity. No scaled substitute.",
+  "minimum_sampled_available_kib": 18743220,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 154296,
+      "saved_start_ticks": "2411844"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 154299,
+      "saved_start_ticks": "2411845"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 161756,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "First full-size original-config Kerr PNG under a one-shot300s diagnostic cap to observe actual progress/cost; incomplete at deadline cannot satisfy the reconstructed comparison or original tape identity. No scaled substitute.",
+  "source": {
+    "revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 101.25633438799923,
+  "whole_inputs_unchanged": true
+}

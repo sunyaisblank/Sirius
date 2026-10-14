@@ -1,0 +1,82 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/env",
+    "-C",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "PATH=/usr/bin:/bin",
+    "GIT_CEILING_DIRECTORIES=/home/astra/.project/Sirius/out",
+    "GIT_CONFIG_NOSYSTEM=1",
+    "/usr/bin/strace",
+    "-f",
+    "-qq",
+    "-yy",
+    "-e",
+    "trace=execve,openat,newfstatat,mmap",
+    "-o",
+    "/home/astra/.project/Sirius/out/forensic-kerr-exr/legacy-kerr-exr-original-size/runtime.trace",
+    "--",
+    "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/Sirius",
+    "--config",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-exr.json",
+    "--no-color",
+    "--verbose",
+    "render",
+    "--cpu"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "legacy-kerr-exr-original-size",
+  "child_exit": 0,
+  "child_pid": 172699,
+  "child_start_ticks": "2517364",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 172693,
+    "pid": 172693,
+    "ppid": 1313,
+    "rss_kib": 36176,
+    "session": 172693,
+    "start_ticks": "2517278",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "legacy original-size512x512 Kerr EXR requested32/effective25 only; NEW_RECONSTRUCTION, no original tape/pair/performance/scientific/release claim",
+  "minimum_sampled_available_kib": 17212940,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 172699,
+      "saved_start_ticks": "2517364"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 172702,
+      "saved_start_ticks": "2517365"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 170692,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "legacy original-size512x512 Kerr EXR requested32/effective25 only; NEW_RECONSTRUCTION, no original tape/pair/performance/scientific/release claim",
+  "source": {
+    "revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 113.11166148600023,
+  "whole_inputs_unchanged": true
+}

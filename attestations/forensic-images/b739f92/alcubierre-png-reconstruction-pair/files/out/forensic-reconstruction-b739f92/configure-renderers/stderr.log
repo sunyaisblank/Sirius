@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/phase.py", line 60, in <module>
+    run(argv)
+  File "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/phase.py", line 42, in run
+    assert result.returncode == expected, item
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'argv': ['/usr/bin/cmake', '--preset', 'linux-gcc', '-S', '/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source', '-B', '/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers', '-DSIRIUS_BUILD_LEGACY=ON', '-DCMAKE_CUDA_COMPILER=NOTFOUND', '-DCMAKE_DISABLE_FIND_PACKAGE_Vulkan=TRUE', '-DFETCHCONTENT_FULLY_DISCONNECTED=ON', '-DFETCHCONTENT_SOURCE_DIR_FTXUI=/home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src', '-DFETCHCONTENT_SOURCE_DIR_JSON=/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src', '-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src'], 'cwd': '/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source', 'exit': 1, 'expected_exit': 0, 'wall_seconds': 1.5825945510005113}

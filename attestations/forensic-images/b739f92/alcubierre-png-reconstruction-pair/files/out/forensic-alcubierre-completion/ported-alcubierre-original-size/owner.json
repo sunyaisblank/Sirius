@@ -1,0 +1,82 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/env",
+    "-C",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "PATH=/usr/bin:/bin",
+    "GIT_CEILING_DIRECTORIES=/home/astra/.project/Sirius/out",
+    "GIT_CONFIG_NOSYSTEM=1",
+    "/usr/bin/strace",
+    "-f",
+    "-qq",
+    "-yy",
+    "-e",
+    "trace=execve,openat,newfstatat,mmap",
+    "-o",
+    "/home/astra/.project/Sirius/out/forensic-alcubierre-completion/ported-alcubierre-original-size/runtime.trace",
+    "--",
+    "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/sirius",
+    "--config",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/alcubierre-png.json",
+    "--no-color",
+    "--verbose",
+    "render",
+    "--cpu"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "ported-alcubierre-original-size",
+  "child_exit": 0,
+  "child_pid": 236656,
+  "child_start_ticks": "3203582",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 236613,
+    "pid": 236613,
+    "ppid": 1313,
+    "rss_kib": 35800,
+    "session": 236613,
+    "start_ticks": "3203407",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 2400
+  },
+  "meaning": "ported original-size1920x1080/64SPP Alcubierre PNG only; NEW_RECONSTRUCTION,2400s operational diagnostic cap, no completion/performance/original-tape/scientific/release claim",
+  "minimum_sampled_available_kib": 14412144,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 236656,
+      "saved_start_ticks": "3203582"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 236659,
+      "saved_start_ticks": "3203583"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 221712,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "ported original-size1920x1080/64SPP Alcubierre PNG only; NEW_RECONSTRUCTION,2400s operational diagnostic cap, no completion/performance/original-tape/scientific/release claim",
+  "source": {
+    "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 1887.739483809004,
+  "whole_inputs_unchanged": true
+}

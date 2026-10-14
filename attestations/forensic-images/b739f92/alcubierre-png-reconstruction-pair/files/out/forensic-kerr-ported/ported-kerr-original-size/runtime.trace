@@ -1,0 +1,83 @@
+156754 execve("/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/sirius", ["/home/astra/.project/Sirius/bin/"..., "--config", "/home/astra/.project/Sirius/out/"..., "--no-color", "--verbose", "render", "--cpu"], 0x7fffd65e80e0 /* 46 vars */) = 0
+156754 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1633a99000
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache>
+156754 mmap(NULL, 38899, PROT_READ, MAP_PRIVATE, 3</etc/ld.so.cache>, 0) = 0x7a1633a8f000
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/lib/x86_64-linux-gnu/libstdc++.so.6", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33>
+156754 mmap(NULL, 2609472, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33>, 0) = 0x7a1633800000
+156754 mmap(0x7a163389d000, 1343488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33>, 0x9d000) = 0x7a163389d000
+156754 mmap(0x7a16339e5000, 552960, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33>, 0x1e5000) = 0x7a16339e5000
+156754 mmap(0x7a1633a6c000, 57344, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33>, 0x26b000) = 0x7a1633a6c000
+156754 mmap(0x7a1633a7a000, 12608, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7a1633a7a000
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/lib/x86_64-linux-gnu/libm.so.6", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libm.so.6>
+156754 mmap(NULL, 950296, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libm.so.6>, 0) = 0x7a1633717000
+156754 mmap(0x7a1633727000, 520192, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libm.so.6>, 0x10000) = 0x7a1633727000
+156754 mmap(0x7a16337a6000, 360448, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libm.so.6>, 0x8f000) = 0x7a16337a6000
+156754 mmap(0x7a16337fe000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libm.so.6>, 0xe7000) = 0x7a16337fe000
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/lib/x86_64-linux-gnu/libgcc_s.so.1", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libgcc_s.so.1>
+156754 mmap(NULL, 185256, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libgcc_s.so.1>, 0) = 0x7a16336e9000
+156754 mmap(0x7a16336ed000, 147456, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libgcc_s.so.1>, 0x4000) = 0x7a16336ed000
+156754 mmap(0x7a1633711000, 16384, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libgcc_s.so.1>, 0x28000) = 0x7a1633711000
+156754 mmap(0x7a1633715000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libgcc_s.so.1>, 0x2b000) = 0x7a1633715000
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libc.so.6>
+156754 mmap(NULL, 2174352, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0) = 0x7a1633400000
+156754 mmap(0x7a1633428000, 1609728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x28000) = 0x7a1633428000
+156754 mmap(0x7a16335b1000, 323584, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1b1000) = 0x7a16335b1000
+156754 mmap(0x7a1633600000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1ff000) = 0x7a1633600000
+156754 mmap(0x7a1633606000, 52624, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7a1633606000
+156754 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1633a8d000
+156754 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1633a8a000
+156754 newfstatat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-png.json", {st_mode=S_IFREG|0644, st_size=1248, ...}, 0) = 0
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-png.json", O_RDONLY) = 3</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/ported/kerr-png.json>
+156754 mmap(NULL, 4198400, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1632fff000
+156754 mmap(NULL, 1052672, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1632efe000
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/sys/devices/system/cpu/online", O_RDONLY|O_CLOEXEC) = 3</sys/devices/system/cpu/online>
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "Sirius.Render/Texture/Starfield.png", O_RDONLY) = -1 ENOENT (No such file or directory)
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "../Sirius.Render/Texture/Starfield.png", O_RDONLY) = -1 ENOENT (No such file or directory)
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "src/Sirius.Render/Texture/Starfield.png", O_RDONLY) = 3</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/src/Sirius.Render/Texture/Starfield.png>
+156754 mmap(NULL, 237568, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a16336af000
+156754 mmap(NULL, 72003584, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a162b1df000
+156754 mmap(NULL, 72003584, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1626d34000
+156754 mmap(NULL, 72003584, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a162ea53000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a162e252000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a162da51000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a162d250000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a162ca4f000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a162c24e000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a162ba4d000
+156765 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1623a4d000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a162b24c000
+156769 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a161c000000
+156767 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+156766 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1614000000
+156764 mmap(0x7a1620000000, 67108864, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1610000000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a162aa4b000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a162a24a000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a1629a49000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a1629248000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a1628a47000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a1628246000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a161b7ff000
+156754 mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7a161affe000
+156767 <... mmap resumed>)              = 0x7a1608000000
+156768 mmap(0x7a160c000000, 67108864, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a160c000000
+156778 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+156777 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+156775 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/sys/devices/system/cpu/online", O_RDONLY|O_CLOEXEC <unfinished ...>
+156774 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/sys/devices/system/cpu/online", O_RDONLY|O_CLOEXEC <unfinished ...>
+156771 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/sys/devices/system/cpu/online", O_RDONLY|O_CLOEXEC <unfinished ...>
+156778 <... mmap resumed>)              = 0x7a1600000000
+156777 <... mmap resumed>)              = 0x7a15f8000000
+156775 <... openat resumed>)            = 3</sys/devices/system/cpu/online>
+156774 <... openat resumed>)            = 4</sys/devices/system/cpu/online>
+156771 <... openat resumed>)            = 5</sys/devices/system/cpu/online>
+156775 mmap(0x7a15fc000000, 67108864, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a15fc000000
+156771 mmap(0x7a15fc000000, 67108864, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a1620000000
+156770 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+156776 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+156770 <... mmap resumed>)              = 0x7a15f0000000
+156776 <... mmap resumed>)              = 0x7a15e8000000
+156774 mmap(0x7a15ec000000, 67108864, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+156773 mmap(0x7a15ec000000, 67108864, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a15ec000000
+156774 <... mmap resumed>)              = 0x7a1604000000
+156772 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7a15e0000000
+156754 openat(AT_FDCWD</home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source>, "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-png.png", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3</home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-png.png>

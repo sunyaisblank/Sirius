@@ -1,0 +1,81 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/env",
+    "-C",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "PATH=/usr/bin:/bin",
+    "GIT_CEILING_DIRECTORIES=/home/astra/.project/Sirius/out",
+    "GIT_CONFIG_NOSYSTEM=1",
+    "/usr/bin/strace",
+    "-f",
+    "-qq",
+    "-yy",
+    "-e",
+    "trace=execve,openat,newfstatat,mmap",
+    "-o",
+    "/home/astra/.project/Sirius/out/forensic-alcubierre-png/legacy-alcubierre-original-size/runtime.trace",
+    "--",
+    "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/Sirius",
+    "--config",
+    "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/alcubierre-png.json",
+    "--no-color",
+    "--verbose",
+    "render",
+    "--cpu"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "legacy-alcubierre-original-size",
+  "child_exit": -15,
+  "child_pid": 183317,
+  "child_start_ticks": "2669928",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 183313,
+    "pid": 183313,
+    "ppid": 1313,
+    "rss_kib": 36120,
+    "session": 183313,
+    "start_ticks": "2669817",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 1800
+  },
+  "minimum_sampled_available_kib": 16429968,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 183317,
+      "saved_start_ticks": "2669928"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 183320,
+      "saved_start_ticks": "2669929"
+    }
+  ],
+  "passed": false,
+  "peak_sampled_rss_kib": 201700,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "legacy original-size1920x1080/64SPP Alcubierre PNG only; NEW_RECONSTRUCTION,1800s operational diagnostic cap, no completion/performance/original-tape/scientific/release claim",
+  "source": {
+    "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": "diagnostic_timeout",
+  "wall_seconds": 1800.3527335279978,
+  "whole_inputs_unchanged": true
+}
