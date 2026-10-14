@@ -1,0 +1,55 @@
+{
+  "runner_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "decision": "REJECTED_SIZE_OPTIMIZATION_DOES_NOT_REMEDY_NATIVE_PIPELINE_FAILURE",
+  "run": 38532682778,
+  "job": 115748036348,
+  "artifact": 11879160246,
+  "raw_bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-a1d6e75",
+  "raw_manifest_sha256": "8aae3447087bd6d2d323ae7b003518d976738ddcaa89140a6734c4eaf615ec67",
+  "artifact_pin": {
+    "bytes": 9082831,
+    "sha256": "d7fef4f766d23f6b5cd0f96b72dc74db42dc7648a549c513fdb1c21fd97e4570"
+  },
+  "phase_seconds": {
+    "library": 1.990297958000042,
+    "function": 0.0004448749999710344,
+    "pipeline": 179.75642125000002
+  },
+  "error": {
+    "reference": "0x600002efcb10",
+    "domain": "CompilerError",
+    "code": 2,
+    "localized_description": "Compilation failed",
+    "localized_failure_reason": null,
+    "description": "Error Domain=CompilerError Code=2 \"Compilation failed\" UserInfo={NSLocalizedDescription=Compilation failed}",
+    "user_info_description": "{\n    NSLocalizedDescription = \"Compilation failed\";\n}",
+    "user_info": {
+      "NSLocalizedDescription": "Compilation failed"
+    },
+    "underlying_errors": []
+  },
+  "compile_options": {
+    "event": "compile_options",
+    "monotonic_seconds": 664.663311791,
+    "utc_ns": 1791965203424778000,
+    "language_version": 196610,
+    "fast_math_enabled": true,
+    "math_mode": 2,
+    "math_fp_functions": 0,
+    "preserve_invariance": false,
+    "optimization_level": 1,
+    "changed_parameter": {
+      "optimization_level": {
+        "baseline": 0,
+        "diagnostic": 1
+      }
+    },
+    "provenance": "Source-derived original options; Size is an explicit single-parameter native diagnostic variant when requested. MoltenVK v1.4.1 has no public setting for that variant."
+  },
+  "unchanged_other_compile_options_verified": true,
+  "child_containment_complete": true,
+  "numerics_executed": false,
+  "qualification_claimed": false,
+  "finding": "The one changed native Size trial read back optimizationLevel1, preserved exact captured source and other options/descriptor/limits, then failed at device pipeline compilation with the same CompilerError/code2 and no underlying error. Library and function creation succeeded. This option is not a demonstrated repair and will not be retried unchanged. Separate hosted runners were used, so timing differences are not a performance claim. No provider fork, product change or native numerical qualification is justified by this result. Original current Initialize failure and Endpoint deadline remain unresolved."
+}
