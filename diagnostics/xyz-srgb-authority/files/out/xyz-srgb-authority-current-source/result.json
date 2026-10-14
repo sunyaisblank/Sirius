@@ -1,0 +1,182 @@
+{
+  "passed": true,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "expected_names": [
+    "SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches",
+    "SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs",
+    "SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics",
+    "XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform",
+    "XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation",
+    "XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs"
+  ],
+  "qualification_claimed": false,
+  "p6_complete": false,
+  "mandatory_receipt_created": false,
+  "scope": "Six original CPU XYZ/sRGB authority witnesses only; no GPU, renderer, full P6 or final integration claim.",
+  "finite_acceptance_scope": {
+    "xyz_matrix": "Exactly six original XYZ vectors against independent primary/white reconstruction, with the existing 64*epsilon_double*max(1,abs(expected channels)) tolerance; no all-input bound.",
+    "xyz_domain": "Original green-axis extended-gamut inequalities, NaN-channel propagation, and nonfinite results for one infinite-X input.",
+    "xyz_facade": "One original float XYZ vector (0.25f,0.4f,0.1f), judged by original EXPECT_FLOAT_EQ for each blackbody facade channel.",
+    "srgb_curve": "Ten original linear inputs, including the breakpoint and nextafter neighbours, with existing 16*epsilon_double*max(1,abs(expected)) tolerance.",
+    "srgb_quantisation": "Seven original exact eight-bit expectations and NaN/positive-infinity/negative-infinity refusals.",
+    "srgb_facade": "Seven original scalar float inputs, one three-channel clipping vector, and the existing NaN scalar check; original EXPECT_FLOAT_EQ semantics."
+  },
+  "executed_names": [
+    "SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches",
+    "SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs",
+    "SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics",
+    "XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform",
+    "XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation",
+    "XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs"
+  ],
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "disabled": 0,
+  "junit": {
+    "bytes": 6416,
+    "sha256": "05de4c0916957b5f70e2f7b7808e46b329db8c0676079c3d52d78eb1c6ef25e2"
+  },
+  "owner": {
+    "bytes": 2246,
+    "sha256": "bf66094923caca2d567acca67c21e1d56043a27f3f97d100d759e6f7e2ccf0bf"
+  },
+  "reference": {
+    "kind": "Reuse the original independently reconstructed IEC sRGB primaries/CIE D65 transform and independent IEC piecewise transfer oracle; no new reference or numerical predicate.",
+    "xyz_source_function": "IndependentlyDerivedXyzD65ToLinearSrgb",
+    "primary_xy": {
+      "red": [
+        "0.640",
+        "0.330"
+      ],
+      "green": [
+        "0.300",
+        "0.600"
+      ],
+      "blue": [
+        "0.150",
+        "0.060"
+      ],
+      "D65": [
+        "0.3127",
+        "0.3290"
+      ]
+    },
+    "xyz_derivation": "Construct unit-luminance primary columns, solve their scales against D65, scale the RGB-to-XYZ columns, then independently invert. It does not copy the production rational matrix.",
+    "xyz_six_vectors": [
+      [
+        "1",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "1",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "1"
+      ],
+      [
+        "0.9504559270516716",
+        "1",
+        "1.0890577507598784"
+      ],
+      [
+        "0.25",
+        "0.4",
+        "0.1"
+      ],
+      [
+        "-0.1",
+        "0.2",
+        "1.5"
+      ]
+    ],
+    "srgb_source_function": "IndependentIecSrgbEncode",
+    "srgb_definition": "linear<=0.0031308 ? 12.92*linear : 1.055*pow(linear,1/2.4)-0.055",
+    "original_test_sources": {
+      "tests/core/xyz_srgb_authority_test.cpp": {
+        "git_blob": "d6865aa9270e7f8b78ba4556831edfff2eb3ff30",
+        "bytes": 4943,
+        "sha256": "1fdc8bd5fa9ca56e1e51357f98f33e0f448b44ff2e483f53c1e2a34d72ac66ac"
+      },
+      "tests/core/srgb_transfer_authority_test.cpp": {
+        "git_blob": "a3f412725e3a06c2e55c370ed2ad728a481a384c",
+        "bytes": 2757,
+        "sha256": "51e9a90b31e48dbae9fb4767c946d4a55e25423a8a03cfa45791c54d373caee0"
+      }
+    },
+    "source_snapshots": {
+      "out/xyz-srgb-authority-current-source/reference/xyz_srgb_authority_test.cpp": {
+        "bytes": 4943,
+        "sha256": "1fdc8bd5fa9ca56e1e51357f98f33e0f448b44ff2e483f53c1e2a34d72ac66ac"
+      },
+      "out/xyz-srgb-authority-current-source/reference/srgb_transfer_authority_test.cpp": {
+        "bytes": 2757,
+        "sha256": "51e9a90b31e48dbae9fb4767c946d4a55e25423a8a03cfa45791c54d373caee0"
+      }
+    }
+  },
+  "source_and_registration_join": {
+    "test_sources": [
+      "tests/core/xyz_srgb_authority_test.cpp",
+      "tests/core/srgb_transfer_authority_test.cpp"
+    ],
+    "core_producer": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "core_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "completed_cie_core_join_reused": "attestations/scientific-core/4bcd987/cie1931-authority-current-source/disposition.json",
+    "fresh_session_review": "attestations/fresh-session-review/4bcd987/2026-10-14/review.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_WERROR": "ON",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "CMAKE_CXX_COMPILER": "g++-14"
+    },
+    "original_compile_commands": [
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o -c /home/astra/.project/Sirius/tests/core/xyz_srgb_authority_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/core/xyz_srgb_authority_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o -c /home/astra/.project/Sirius/tests/core/srgb_transfer_authority_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/core/srgb_transfer_authority_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o"
+      }
+    ],
+    "original_registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+    "original_six_registration_lines": [
+      "add_test([=[XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics]==] --gtest_also_run_disabled_tests)"
+    ],
+    "expected_names": [
+      "XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation",
+      "XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs",
+      "XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform",
+      "SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches",
+      "SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs",
+      "SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics"
+    ]
+  }
+}

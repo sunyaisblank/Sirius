@@ -1,0 +1,61 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/ctest",
+    "--test-dir",
+    "bin/linux-gcc",
+    "--output-on-failure",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/xyz-srgb-authority-current-source/original-six-host-colour-controls/ctest.xml",
+    "-R",
+    "^(XyzSrgbAuthority\\.MatchesIndependentPrimaryWhiteDerivation|XyzSrgbAuthority\\.PreservesExtendedGamutAndPropagatesNonfiniteInputs|XyzSrgbAuthority\\.BlackbodyColourFacadeDelegatesToTheExactTransform|SrgbTransferAuthority\\.CurveMatchesIndependentIecOracleAcrossBothBranches|SrgbTransferAuthority\\.EightBitQuantisationClipsAndDeclinesNonfiniteInputs|SrgbTransferAuthority\\.SpectralFacadeDelegatesWithoutChangingClippingSemantics)$"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "original-six-host-colour-controls",
+  "child_exit": 0,
+  "child_pid": 106257,
+  "child_start_ticks": "1759320",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 106250,
+    "pid": 106250,
+    "ppid": 1313,
+    "rss_kib": 27376,
+    "session": 106250,
+    "start_ticks": "1759297",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Exactly six original CPU XYZ/sRGB authority witnesses on unchanged GCC core bytes; no CIE repeat, changed assertion, renderer, GPU dispatch, full P6, Mandatory, performance or release claim.",
+  "minimum_sampled_available_kib": 20212088,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 106257,
+      "saved_start_ticks": "1759320"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 44912,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Exactly six original CPU XYZ/sRGB authority witnesses on unchanged GCC core bytes; no CIE repeat, changed assertion, renderer, GPU dispatch, full P6, Mandatory, performance or release claim.",
+  "source": {
+    "revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.270977200998459,
+  "whole_inputs_unchanged": true
+}
