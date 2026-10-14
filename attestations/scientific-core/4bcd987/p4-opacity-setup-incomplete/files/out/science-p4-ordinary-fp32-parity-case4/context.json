@@ -1,0 +1,587 @@
+{
+  "allocation_contract": {
+    "historical_exact_equality_reader_unchanged_in_recovery": true,
+    "reader": "requested minimum <= actual allocation <= 1MiB; original allocation padding is permitted",
+    "source": "tests/backend/kernel_parity_test.cpp:201-224"
+  },
+  "backend": {
+    "bytes": 13440952,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "sha256": "e5f3b0f120ec6a12490e3e9b6e491d19eb12bfad62c1cdce11722c091a152149"
+  },
+  "cases": [
+    {
+      "label": "parity-4",
+      "maximum_allocated_bytes": 1048576,
+      "minimum_allocated_bytes": 976,
+      "name": "KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure",
+      "opcode": 9,
+      "original_registration": "add_test([=[KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests [==[--gtest_filter=KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure]==] --gtest_also_run_disabled_tests)",
+      "records": 3,
+      "reference": "Core TruncatedGaussianOpacityDensity at midplane, finite height and outside3H; positive inner samples/exact zero exterior.",
+      "source_line": 1321
+    }
+  ],
+  "compile_command": {
+    "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1 -DSIRIUS_TEST_HAS_RETAINED_CAMERA=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o -c /home/astra/.project/Sirius/tests/backend/kernel_parity_test.cpp",
+    "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+    "file": "/home/astra/.project/Sirius/tests/backend/kernel_parity_test.cpp",
+    "output": "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o"
+  },
+  "diagnostic_only_difference": [
+    ".github/workflows/ci.yml",
+    "scripts/diagnose-macos-retained.py",
+    "scripts/governance/build_policy.py",
+    "scripts/macos_metal_probe.py",
+    "scripts/macos_moltenvk_integration.py",
+    "scripts/macos_vulkan_identity.py"
+  ],
+  "finite_reference": {
+    "actual_dispatch_ms_maximum": 1000,
+    "actual_submissions": 1,
+    "allocation_maximum_bytes": 1048576,
+    "comparison": "abs(actual-expected) <= 3e-6*abs(expected)+1e-7; first2 positive, third EXPECT_FLOAT_EQ zero",
+    "kind": "Original three-point comparison with host production finite-column closure; not an independent external physical oracle",
+    "requested_minimum_bytes": 976,
+    "sample_order": [
+      "radius",
+      "height",
+      "reference_radius",
+      "scale_height",
+      "tau_ref"
+    ],
+    "samples": [
+      [
+        6.0,
+        0.0,
+        6.0,
+        0.6,
+        2.0
+      ],
+      [
+        12.0,
+        1.2,
+        6.0,
+        1.2,
+        2.0
+      ],
+      [
+        12.0,
+        "3.01f*1.2f",
+        6.0,
+        1.2,
+        2.0
+      ]
+    ]
+  },
+  "finite_scope": "One previously unlaunched original ordinary-FP32 P4 opacity case; no complete P4/science/Mandatory/platform/release claim.",
+  "historical_evidence": {
+    "bundle": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial",
+    "commit": "0d8beec5fdb1406d35add385cfa6f2d9f62848d2",
+    "fresh_build_claimed": false,
+    "historical_inputs_byte_joined": 418,
+    "manifest": {
+      "bytes": 66054,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/manifest.json",
+      "sha256": "e5dac01afef4b81465f9d5e552de70cacb8e168d34d486e9537dad14d664ac78"
+    },
+    "source_recovery_count": 60,
+    "tag": "evidence/issue-53-p4-ordinary-fp32-isolated-partial",
+    "whole_manifest_files": 291,
+    "whole_raw_files_Git_joined": 292
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "original_assertions_changed": false,
+  "original_case_ordinal": 4,
+  "original_registration_properties": "set_tests_properties([=[KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/backend SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+  "prepared_only": true,
+  "producer": {
+    "accepted": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "build_owner": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/owner.json",
+    "scope": "Previously accepted current backend/source/resource producer; current compiler/tool bytes pinned now, not retroactive historical compiler-byte attestation."
+  },
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "provider_policy": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "cache_policy": "Original mature software-provider policy disables Mesa shader cache; no new cache output or cold-performance gate.",
+    "scope": "Explicit existing Mesa llvmpipe/Lavapipe route only; actual loader/LVP/LLVM mappings required. No Dozen, native platform, performance or cache warmness claim."
+  },
+  "qualification_claimed": false,
+  "required_provider_mappings": [
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+  ],
+  "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "scheduling": {
+    "case3_remains_incomplete": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/parity-3/owner.json",
+    "case3_stop_reason": "diagnostic_timeout",
+    "case4_previously_unlaunched": true,
+    "change": "Only the copied private batch sequencing requirement is removed; standalone CTest registration and all numerical/provider/owner assertions remain original.",
+    "no_completion_or_performance_forecast": true,
+    "no_rejected_loop_policy_selected": true,
+    "preceding_acceptance_fabricated": false
+  },
+  "schema_version": 1,
+  "shader_compile_rule": "build kernels/parity_probe.spv | ${cmake_ninja_workdir}kernels/parity_probe.spv: CUSTOM_COMMAND /home/astra/.project/Sirius/src/sirius/kernels/parity_probe.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_camera.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_coupled.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_disk.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_kerr_infinity.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_point_star.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_trace_event.slang /home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang\n  COMMAND = cd /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend && /opt/slang/bin/slangc /home/astra/.project/Sirius/src/sirius/backend/../kernels/parity_probe.slang -target spirv -profile spirv_1_5 -entry ComputeMain -stage compute -I /home/astra/.project/Sirius/src/sirius/backend/../kernels -o /home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe.spv && /home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val /home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe.spv\n  DESC = Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)\n  restat = 1",
+  "source_recovery": [
+    {
+      "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74",
+      "path": "cmake/sirius_testing.cmake",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/cmake/sirius_testing.cmake",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    {
+      "git_blob": "19615c7ddaa0297dae24d0629d594d597fd9e984",
+      "path": "src/sirius/app/cli/info_command.cpp",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/app/cli/info_command.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d5f57a4bba499ed2c262508dbf6cdadab8a3c9348615f6e92c0b43d92622606e"
+    },
+    {
+      "git_blob": "328d743ef3b9f03786341f8ae4750257885ab097",
+      "path": "src/sirius/backend/device.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/backend/device.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    {
+      "git_blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94",
+      "path": "src/sirius/backend/vulkan/vulkan_device.cpp",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    {
+      "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1",
+      "path": "src/sirius/base/contracts.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/base/contracts.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+    },
+    {
+      "git_blob": "3413b6f013061ca844ca9ef794e488c18022c15f",
+      "path": "src/sirius/base/error.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/base/error.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6e66cba357b556ecbb0a112227bdfc64ce1fdecf3f6268c614dc8f7dee45ce4a"
+    },
+    {
+      "git_blob": "8086dcede856c7350bc41838ea5452ee907ddade",
+      "path": "src/sirius/base/resource_locator.cpp",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/base/resource_locator.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6c8c5f9302baa48f46dd1cad9118fd85c0ce5df747b38db90712694a1d5a304e"
+    },
+    {
+      "git_blob": "4bf298db06231bcffd5d24b5b3152d1b02a8e8e7",
+      "path": "src/sirius/base/resource_locator.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/base/resource_locator.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa"
+    },
+    {
+      "git_blob": "e1f31aa3d23794b3a1cf5e2261c88a1584ef2f0d",
+      "path": "src/sirius/core/camera.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/camera.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630"
+    },
+    {
+      "git_blob": "a59fecece36a2193eac60801c306317d55d09141",
+      "path": "src/sirius/core/camera_sampling.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/camera_sampling.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803"
+    },
+    {
+      "git_blob": "73d7e8ae19ff9288395c0a8b766d7585705c9b73",
+      "path": "src/sirius/core/celestial_tangent_basis.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/celestial_tangent_basis.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e02003f3d27f4411efd5ab7a551eb95a55fccadc91d1c7a378626cfba8039248"
+    },
+    {
+      "git_blob": "2ef1c98782c8fc37e2a55349e5d3cb321d26305f",
+      "path": "src/sirius/core/cie1931_observer.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/cie1931_observer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949"
+    },
+    {
+      "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469",
+      "path": "src/sirius/core/constants.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/constants.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+    },
+    {
+      "git_blob": "5a0143f40cee45c22cff55814e72efb42c4081f2",
+      "path": "src/sirius/core/coordinates.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/coordinates.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+    },
+    {
+      "git_blob": "0340ef7434d0434618966f646b6e536d04d18bb1",
+      "path": "src/sirius/core/disk/disk_model.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/disk/disk_model.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+    },
+    {
+      "git_blob": "75941e077426512c0bf86f33e644937eeaedb45b",
+      "path": "src/sirius/core/disk/novikov_thorne_disk.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/disk/novikov_thorne_disk.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+    },
+    {
+      "git_blob": "b0efd142d83bdc76a52f1a2a72b5741a01caf594",
+      "path": "src/sirius/core/disk/volumetric_disk.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/disk/volumetric_disk.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5643b4664bca7f2382ae1a9856c86ef1c506818c6b891bbfd04afcb744a43aaf"
+    },
+    {
+      "git_blob": "1938f64eadbd59467cfcc13737999eb0e491d531",
+      "path": "src/sirius/core/dual_number.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/dual_number.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9"
+    },
+    {
+      "git_blob": "3fc1670bcc5113e4d1e68d07e9defe2d3339a932",
+      "path": "src/sirius/core/first_order_number.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/first_order_number.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "9ed51f93e11c2528546729c2ff190f66131c011ebab0c26cf51e38643c5b1ec7"
+    },
+    {
+      "git_blob": "ce4e906fd865922642e6fa8bb6108be169ddd7a5",
+      "path": "src/sirius/core/kerr_orbits.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/kerr_orbits.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+    },
+    {
+      "git_blob": "074a71d54304b04bae7d1f4002f2d97914b0ae62",
+      "path": "src/sirius/core/metrics/kerr_schild_family.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/metrics/kerr_schild_family.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a"
+    },
+    {
+      "git_blob": "f1cf026aa31e41efa1a4701d9d35502dd5bcfb87",
+      "path": "src/sirius/core/metrics/metric.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/metrics/metric.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "563a7543e118a813c4a26a40763578bb9b930385abecbf6ae5c6bce1c29e742c"
+    },
+    {
+      "git_blob": "993f8bf1b8f7fe91551045a3c75403c7620acfbd",
+      "path": "src/sirius/core/metrics/morris_thorne_family.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/metrics/morris_thorne_family.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5d7a2e6f0c64d8df55cc1c91cafc6e78a856b4809adfa338c15a6145f1d37552"
+    },
+    {
+      "git_blob": "45dab60601637bcd78d10f9dbf455a89c28511e3",
+      "path": "src/sirius/core/metrics/registry.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/metrics/registry.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072"
+    },
+    {
+      "git_blob": "8c3b9e495c8a0947800640b32ca230e7b38e4c68",
+      "path": "src/sirius/core/polarisation/stokes.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/polarisation/stokes.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "220c618bee8754a5455bd4f2f8c2154bd5ae4c0c2547825395a2473de1a22e2f"
+    },
+    {
+      "git_blob": "fcd65ad400729de2105752b710bdde70423565d4",
+      "path": "src/sirius/core/relativistic_transfer.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/relativistic_transfer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f"
+    },
+    {
+      "git_blob": "25109f8c724dbbf697968c72b7b59309516f9c25",
+      "path": "src/sirius/core/second_order_number.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/second_order_number.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "12f241e7068971ef4e6ec9cabf76010c71b72cf7ac6749be0b31f0f9dc99c6e5"
+    },
+    {
+      "git_blob": "154a07cbe3a919cc0e97f5f2edc80cb89e1b7a9a",
+      "path": "src/sirius/core/spectral/blackbody.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/spectral/blackbody.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f"
+    },
+    {
+      "git_blob": "824f780ca67787214af3084e507043d6c61feb78",
+      "path": "src/sirius/core/spectral/blackbody_laws.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/spectral/blackbody_laws.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3846d9cdf8db6e034585ac3e4dcb14f2edb1c4e57a649a1c2ff8964d408bd0c0"
+    },
+    {
+      "git_blob": "80edd807006b2c19b8d3c87fad4b4e297b3f82e5",
+      "path": "src/sirius/core/spectral/colour_modes.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/spectral/colour_modes.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "97d1f488c79830682012b6ee073f45428ca83eb6bf32a16b6e377af73c70dd50"
+    },
+    {
+      "git_blob": "5a9626f468489a55febfb9a078f3fe5718e0e0f5",
+      "path": "src/sirius/core/spectral/spectral_radiance.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/spectral/spectral_radiance.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+    },
+    {
+      "git_blob": "12f371df31556d728413d54cd93075c4509286c5",
+      "path": "src/sirius/core/srgb_transfer.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/srgb_transfer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d8bf1764d4dcd55ba079d11bb0fde7cb0a89619e2d1f3a46f144fc46dfa02ba3"
+    },
+    {
+      "git_blob": "4671e6533194a255c978b072f1bf585243bedbea",
+      "path": "src/sirius/core/tensor.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/tensor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7"
+    },
+    {
+      "git_blob": "f2721152700164a2cc7cae68912404350468deb8",
+      "path": "src/sirius/core/twofold.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/twofold.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "2ace9a10d430dbf4dab870602dbc8ca0545ada2c2e350ca6cd263dd8c92e93f1"
+    },
+    {
+      "git_blob": "e5806afa0029b2c2c7f6f3c13cff88ff820c7d6e",
+      "path": "src/sirius/core/xyz_srgb.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/core/xyz_srgb.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48"
+    },
+    {
+      "git_blob": "3eebdc2becb1ad0bc07f10b605465fef443aa48a",
+      "path": "src/sirius/kernels/gr_camera.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_camera.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+    },
+    {
+      "git_blob": "d6198b51de1c4cfea025024de8331418098ca8f7",
+      "path": "src/sirius/kernels/gr_coupled.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_coupled.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    {
+      "git_blob": "fbceb351e906967ac44fe8d1aa5a0d53eb2fbc8a",
+      "path": "src/sirius/kernels/gr_deviation.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_deviation.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+    },
+    {
+      "git_blob": "1b0f997e779954c133fd03849e4d3f4128b1f136",
+      "path": "src/sirius/kernels/gr_disk.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_disk.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+    },
+    {
+      "git_blob": "d5bd69f2ee71b5363bb357a7aeacc1d8a2ee6923",
+      "path": "src/sirius/kernels/gr_ellis_topology.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_ellis_topology.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "de0f2120591ecebbc00325eb6877cf4c6e8ebd0259637e300d4289ef82ab6e0b"
+    },
+    {
+      "git_blob": "9a672b9beb8b94d8f60c2b748e436facab8909b8",
+      "path": "src/sirius/kernels/gr_integrator.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_integrator.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+    },
+    {
+      "git_blob": "5b773bcf60be603b713b2f386ea26cc43ddd7cb2",
+      "path": "src/sirius/kernels/gr_kerr_infinity.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_kerr_infinity.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c"
+    },
+    {
+      "git_blob": "efd5d207555b4e05dbc7c03745ca0debd14aea13",
+      "path": "src/sirius/kernels/gr_metrics.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_metrics.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    {
+      "git_blob": "1f75de2cf5b032e036c6aeb44d25094303932dbd",
+      "path": "src/sirius/kernels/gr_point_star.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_point_star.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+    },
+    {
+      "git_blob": "c1d67fc0ffecd8181d159384f5ee957c150c8107",
+      "path": "src/sirius/kernels/gr_trace_continuation.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_trace_continuation.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+    },
+    {
+      "git_blob": "dc33ee085f16736de179749a15e6f540a2dc3ca8",
+      "path": "src/sirius/kernels/gr_trace_event.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_trace_event.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+    },
+    {
+      "git_blob": "0d239802eb92efc07c2dba107dbbede4cb03b804",
+      "path": "src/sirius/kernels/gr_types.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/gr_types.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    {
+      "git_blob": "4e15441dccc63f06e652cb5a88bdf2bad8e88ab3",
+      "path": "src/sirius/kernels/parity_probe.slang",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/kernels/parity_probe.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+    },
+    {
+      "git_blob": "af37af15f0210ce8c3e7ce2374135cabfd388287",
+      "path": "src/sirius/oracle/kerr_boyer_lindquist.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/oracle/kerr_boyer_lindquist.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+    },
+    {
+      "git_blob": "5d19057f86d59b9b6001762bc7abb4f45804f304",
+      "path": "src/sirius/oracle/metric_interface.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/oracle/metric_interface.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af"
+    },
+    {
+      "git_blob": "ed9d7a97d8e06e4508ee494453da5d8485abadba",
+      "path": "src/sirius/oracle/transport_types.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/oracle/transport_types.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9"
+    },
+    {
+      "git_blob": "a690f5c665f771aa1b5e9cc8f153e4b1292f8a99",
+      "path": "src/sirius/render/dispatch_governor.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/render/dispatch_governor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a"
+    },
+    {
+      "git_blob": "6c39485b0b3f6adb2d6a431bc1c2b3228eac15f3",
+      "path": "src/sirius/render/pixel_sampling.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/src/sirius/render/pixel_sampling.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "2cbb598c156886799eba95b0cb84f8c98bfe8ad435f5c79f8ecd1bfe732fadc3"
+    },
+    {
+      "git_blob": "b7700acf10bf853738cfcf8a24918fb899a36b24",
+      "path": "tests/CMakeLists.txt",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/tests/CMakeLists.txt",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    {
+      "git_blob": "68735044e5a46054e4449ddc60f6132d2d75e8b7",
+      "path": "tests/backend/CMakeLists.txt",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/tests/backend/CMakeLists.txt",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357"
+    },
+    {
+      "git_blob": "f02e6510afc32bf447f110d74164f450710a893f",
+      "path": "tests/backend/kernel_parity_test.cpp",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/tests/backend/kernel_parity_test.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "8d2e747d4d375e4a8849c32a33d66cce148de7b5dea28977da212138fa97f986"
+    },
+    {
+      "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+      "path": "tests/operating_model.json",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/tests/operating_model.json",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    {
+      "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+      "path": "tests/support/fail_on_skip.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/tests/support/fail_on_skip.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    },
+    {
+      "git_blob": "39e8eee80f76b94181954eb3b56b803eb4132e7a",
+      "path": "tests/support/point_star_angular_oracle.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/tests/support/point_star_angular_oracle.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d8d3d0e2a59453aac84dda55673e82a7ddf7fc579b90dcc649bbbc5399eae4ac"
+    },
+    {
+      "git_blob": "98087810848d204144c13a24c8782f58ffb4a87b",
+      "path": "tests/support/test_resource.h",
+      "recovery": "attestations/scientific-core/4bcd987/p4-ordinary-fp32-isolated-partial/files/out/science-p4-ordinary-fp32-parity-isolated/recovery/source/tests/support/test_resource.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3"
+    }
+  ],
+  "spirv_modes": {
+    "parity_probe.spv": {
+      "bytes": 5562236,
+      "capabilities": [
+        1
+      ],
+      "selected": true,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "capabilities": [
+        1
+      ],
+      "selected": false,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "capabilities": [
+        10,
+        1
+      ],
+      "selected": false,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    }
+  },
+  "stock_runtime_shader": {
+    "bytes": 5562236,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv",
+    "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+  }
+}
