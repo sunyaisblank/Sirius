@@ -1,0 +1,568 @@
+{
+  "diagnostic_only_difference": [
+    ".github/workflows/ci.yml",
+    "scripts/diagnose-macos-retained.py",
+    "scripts/governance/build_policy.py",
+    "scripts/macos_metal_probe.py",
+    "scripts/macos_moltenvk_integration.py",
+    "scripts/macos_vulkan_identity.py"
+  ],
+  "executed": false,
+  "expected_names": [
+    "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+    "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion"
+  ],
+  "finite_acceptance_scope": {
+    "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion": {
+      "assertions": "r=3M within1e-10; radialaxis/(axis0*cosh(kappa lambda)) andpolaraxis/(axis0*abs(cos(kappa lambda))) each1 within1e-6; metriccross term0 within1e-12.",
+      "derivation": "Eq17b,f reducexi_r_second=kappa^2*xi_r and17c,g givexi_theta_second=-kappa^2*xi_theta,kappa=E/(sqrt(3)M). With unchangedinitialdata solutionscosh/cos follow. Inducedt/phi contributionscancel inSchwarzschild metricnorm; physicalradialaxis=sqrt(3)*abs(xi_r),polaraxis=3M*abs(xi_theta).",
+      "initial_variations": "Originalphysicalaxis1e-3 givesxi_r=axis/sqrt(3),xi_theta=axis/(3M); originalt/phi coordinate derivatives implyeta_t=eta_phi=0 and initialradial/polar derivative0, then SetJacobiColumn performsconnection conversion.",
+      "metric": "Schwarzschild M=1,E=1,r=3M,theta=pi/2; originalcovariantp=(-1,0,0,3sqrt(3)ME).",
+      "work": "Exactly2000 originalRK4steps of5e-4 tolambda1; everyStep mustsucceed."
+    },
+    "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion": {
+      "assertions": "r=12 within1e-10; each metric physicalaxis/lambda=1 within1e-6; metric cross term0 within1e-12.",
+      "derivation": "Outgoingr=r0+E lambda. Eq23c,d,g,h keep angularcovector variationseta_theta=eta_phi=r0 constant, integrate xi_theta=xi_phi=lambda/r at equator. Thus physicalaxesr*xi_theta andr*sin(theta)*xi_phi=lambda and cross0.",
+      "initial_variations": "Both columns startxi=0; coordinate theta/phi derivative1/r0 is converted by original SetJacobiColumn to covariantDxi/dlambda.",
+      "metric": "Schwarzschild M=1,E=1,r0=10,theta=pi/2; original covariantp=(-1,1.25,0,0).",
+      "work": "Exactly2000 originalRK4steps of1e-3 to lambda2; everyStep mustsucceed."
+    }
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "original_assertions_changed": false,
+  "owner_reuse": {
+    "archive": "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source",
+    "immutable_prior_files": {
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/actions.json": {
+        "bytes": 8516,
+        "git_blob": "c8eaf0c0f6de11af5aaeba750ecb82fdc9973c2c",
+        "sha256": "8a3bf9cc437edc445a07d6e731d62cb912dfec6cee55b6c7f2cda7cb8546b10d"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/original-three-p1-e4-oracle-controls/ctest.log": {
+        "bytes": 5458,
+        "git_blob": "377371a2f7cbb906e992d4ef9d46c8ad0d2661ea",
+        "sha256": "4b9eeb3cdcd2da5ee4b6ab27389d3b13a419c36078b1aa51e7f217cc1aa2f09b"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/original-three-p1-e4-oracle-controls/ctest.xml": {
+        "bytes": 3459,
+        "git_blob": "fbbd5fdee727e60bc9cfe334b6e0c70b550d4956",
+        "sha256": "1151d6f853bf2729a66d4575a244270fe8223f490d5c76a691838daba4f65673"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/original-three-p1-e4-oracle-controls/owner.json": {
+        "bytes": 2305,
+        "git_blob": "725f2df2f95a73559113972aa31d1c25c18cc512",
+        "sha256": "ef05dfc6a722304bfe0c0d58a1d5b8b81b703c4f0f3ed0df051530770fbdb8a8"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/owned_guard.py": {
+        "bytes": 20791,
+        "git_blob": "96e12b077cd9af2d5d1de3b2acf1ef6ef63dd546",
+        "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/preparation.json": {
+        "bytes": 36189,
+        "git_blob": "9402721703c73ae7ecc3b623798da28fb53131e2",
+        "sha256": "1986a60b5944672ec31edb67d6b2f9b89d308b8c2ef8b65b204c8f8472eb5374"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/result.json": {
+        "bytes": 17360,
+        "git_blob": "377513138c51e8ac484e8155f3f8ec847de1495a",
+        "sha256": "3e6a867f95ef7de01d0ba052ae13ead23798d0d4ad74e6a23bef7c578fc5f98f"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/run_oracle.py": {
+        "bytes": 6587,
+        "git_blob": "dc3305ab8b0904d8086b1e421233bd2733dcc360",
+        "sha256": "3420692a6e1c7697f4a934369281108b42cb9fe219a7637a8ccf42701a48b291"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/run_owned.py": {
+        "bytes": 12451,
+        "git_blob": "09244a8f826d948567b0ecc0560fae25ce7bf892",
+        "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/manifest.json": {
+        "bytes": 8368,
+        "git_blob": "6ab9017741d4dc753e0daf861a33ab225264d29d",
+        "sha256": "aac5e5f77ba6e91b574034aef497a02b10d5545769efa6570df0d30f667622ba"
+      },
+      "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/result.json": {
+        "bytes": 20515,
+        "git_blob": "c2cb511a93833133c211df01370fa52c1a6aabef",
+        "sha256": "21c9f6c0c484fadd26991078b46f9f2d5eb62077113994191addeb59d0335fe7"
+      }
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "copied_byte_exact": true,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "source": "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/owned_guard.py"
+    },
+    "reader_baseline": "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/run_oracle.py",
+    "reader_change": "Only docstring/component/name selection/cardinality2 and nonqualification metadataP2; all source/pin/owner/XML/TMPDIR checks and300s/4GiB/2GiB bounds preserved.",
+    "revision": "0e7ac4b9667a61619e8d10cc4e3d5ce8c89c74fd",
+    "run_owned.py": {
+      "bytes": 12451,
+      "copied_byte_exact": true,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+      "source": "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/run_owned.py"
+    },
+    "tag": "evidence/issue-53-p1-e4-oracle-current-source"
+  },
+  "pins": {
+    "/usr/bin/ctest": {
+      "bytes": 13276728,
+      "sha256": "45c60ab2448411a4f49a0bdb6cf5800fedbf0293048e3c82710a34190c7d1ef4"
+    },
+    "/usr/bin/python3.12": {
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json": {
+      "bytes": 28646,
+      "sha256": "ace3fa3984d49fcabadd2d9ece5b0a40933b696d380ae09a023cb0f95f7765d2"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-after.json": {
+      "bytes": 213162,
+      "sha256": "aec239467fbd63adfb67621f2fd21341209466131382a252bd94507f4fb8f5a8"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-before.json": {
+      "bytes": 213162,
+      "sha256": "aec239467fbd63adfb67621f2fd21341209466131382a252bd94507f4fb8f5a8"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/owner.json": {
+      "bytes": 28169,
+      "sha256": "1ad37cab4a363eeb546d8d798c4049af49a18ae541cdd57e6389dfe6729cdc01"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/current-product-authority.json": {
+      "bytes": 48059,
+      "sha256": "e1ed4b29e0cf1551750d04b2c37fa0a8d0f25c6594eb59f87c59853d331f113c"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/source-bindings.json": {
+      "bytes": 1113,
+      "sha256": "161e000309cd483a2432c983bddf53283e28d824e527afccf7713eef3d243da8"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/manifest.json": {
+      "bytes": 24274,
+      "sha256": "19b73f8105df750fc6739445357cd25bcfe182f23f837227e6409d3714b55681"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/actions.json": {
+      "bytes": 8516,
+      "sha256": "8a3bf9cc437edc445a07d6e731d62cb912dfec6cee55b6c7f2cda7cb8546b10d"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/original-three-p1-e4-oracle-controls/ctest.log": {
+      "bytes": 5458,
+      "sha256": "4b9eeb3cdcd2da5ee4b6ab27389d3b13a419c36078b1aa51e7f217cc1aa2f09b"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/original-three-p1-e4-oracle-controls/ctest.xml": {
+      "bytes": 3459,
+      "sha256": "1151d6f853bf2729a66d4575a244270fe8223f490d5c76a691838daba4f65673"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/original-three-p1-e4-oracle-controls/owner.json": {
+      "bytes": 2305,
+      "sha256": "ef05dfc6a722304bfe0c0d58a1d5b8b81b703c4f0f3ed0df051530770fbdb8a8"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/preparation.json": {
+      "bytes": 36189,
+      "sha256": "1986a60b5944672ec31edb67d6b2f9b89d308b8c2ef8b65b204c8f8472eb5374"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/result.json": {
+      "bytes": 17360,
+      "sha256": "3e6a867f95ef7de01d0ba052ae13ead23798d0d4ad74e6a23bef7c578fc5f98f"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/run_oracle.py": {
+      "bytes": 6587,
+      "sha256": "3420692a6e1c7697f4a934369281108b42cb9fe219a7637a8ccf42701a48b291"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/files/out/science-p1-e4-oracle-current-source/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/manifest.json": {
+      "bytes": 8368,
+      "sha256": "aac5e5f77ba6e91b574034aef497a02b10d5545769efa6570df0d30f667622ba"
+    },
+    "attestations/scientific-core/4bcd987/p1-e4-oracle-current-source/result.json": {
+      "bytes": 20515,
+      "sha256": "21c9f6c0c484fadd26991078b46f9f2d5eb62077113994191addeb59d0335fe7"
+    },
+    "bin/linux-gcc/CMakeCache.txt": {
+      "bytes": 60385,
+      "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02"
+    },
+    "bin/linux-gcc/CTestTestfile.cmake": {
+      "bytes": 411,
+      "sha256": "3afbe7a27fed80e401348743ad8b0a979beca9d23152704bd498ec8273c67c8d"
+    },
+    "bin/linux-gcc/build.ninja": {
+      "bytes": 488537,
+      "sha256": "f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f"
+    },
+    "bin/linux-gcc/compile_commands.json": {
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "bin/linux-gcc/tests/oracle/CTestTestfile.cmake": {
+      "bytes": 480,
+      "sha256": "cb08de5aa4034f2f673299d063baee844eb7c4b03316e46f3fe69426eb3e879f"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_include.cmake": {
+      "bytes": 293,
+      "sha256": "e800698e0353ee7dfd4ff98e527bf43a3b1d4c25f8b1d4486fb03bb2e5e8f363"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake": {
+      "bytes": 67359,
+      "sha256": "f9ebe51d95fc0a7a88a8c4edd1af07267e3824f876e028100c15e311a22cfae1"
+    },
+    "cmake/sirius_testing.cmake": {
+      "bytes": 12349,
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/actions.json": {
+      "bytes": 6310,
+      "sha256": "5d8ba32aaae050cbc42b53dddca3bed74133d9987055b71675a45a14b366d18f"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/context.json": {
+      "bytes": 21610,
+      "sha256": "ee8f134eccbbe5bfb5a50c0984175aa6d7d9185759f435b61afcdc5789811bc0"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reader-selection.patch": {
+      "bytes": 3228,
+      "sha256": "7f5176168ee57b4ca18e3e035ce1ffe58091fb804ce75f8f1c123d22666027be"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/arxiv-2308.07098v1-equations-17-23.html": {
+      "bytes": 23389,
+      "sha256": "57785152a227f45329d8c4e2343d73ddedfc6e3268f47e1d0d00208dc7290f58"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/cmake/sirius_testing.cmake": {
+      "bytes": 12349,
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/primary-reference.json": {
+      "bytes": 1245,
+      "sha256": "0636c13eed87a4fd12b1e87358746001b280e220291020a83d10de63f964ccff"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/base/contracts.h": {
+      "bytes": 3989,
+      "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/beam_integrator.h": {
+      "bytes": 13981,
+      "sha256": "6115e6923d6f760d021bacb4b108bd45238f85de8d748733a7003c2fc81c2d68"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/kerr_boyer_lindquist.h": {
+      "bytes": 30350,
+      "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/metric_interface.h": {
+      "bytes": 6297,
+      "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/transport_types.h": {
+      "bytes": 8470,
+      "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/tests/CMakeLists.txt": {
+      "bytes": 10200,
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/tests/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/tests/oracle/CMakeLists.txt": {
+      "bytes": 867,
+      "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/tests/oracle/beam_propagation_test.cpp": {
+      "bytes": 19050,
+      "sha256": "dc32281a8f6cf14780ad5e183e6f0f1a6180811ee06ad84800779d2add1b77d4"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/reference/tests/support/fail_on_skip.h": {
+      "bytes": 427,
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/run_congruences.py": {
+      "bytes": 6559,
+      "sha256": "2cf40532a84ce06f355b94d5faf2df3e4e8dced979028d6efaa95b00fdb1b0f6"
+    },
+    "out/science-p2-schwarzschild-congruences-current-source/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "src/sirius/base/contracts.h": {
+      "bytes": 3989,
+      "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+    },
+    "src/sirius/oracle/beam_integrator.h": {
+      "bytes": 13981,
+      "sha256": "6115e6923d6f760d021bacb4b108bd45238f85de8d748733a7003c2fc81c2d68"
+    },
+    "src/sirius/oracle/kerr_boyer_lindquist.h": {
+      "bytes": 30350,
+      "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+    },
+    "src/sirius/oracle/metric_interface.h": {
+      "bytes": 6297,
+      "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af"
+    },
+    "src/sirius/oracle/transport_types.h": {
+      "bytes": 8470,
+      "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9"
+    },
+    "tests/CMakeLists.txt": {
+      "bytes": 10200,
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    "tests/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "tests/oracle/CMakeLists.txt": {
+      "bytes": 867,
+      "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6"
+    },
+    "tests/oracle/beam_propagation_test.cpp": {
+      "bytes": 19050,
+      "sha256": "dc32281a8f6cf14780ad5e183e6f0f1a6180811ee06ad84800779d2add1b77d4"
+    },
+    "tests/support/fail_on_skip.h": {
+      "bytes": 427,
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    }
+  },
+  "prepared_only": true,
+  "prepared_utc": "2026-10-14T17:11:09.838352+00:00",
+  "private_tmpdir": {
+    "created_only_at_execution": true,
+    "images_expected": false,
+    "mode": "0700",
+    "natural_residuals_preserved": true,
+    "path": "out/science-p2-schwarzschild-congruences-current-source/temporary"
+  },
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "reference": {
+    "independence_limit": "Numerical trajectory/Jacobi transport and final metricnorm use productionoracle KerrMetricD at spin0; the referenceclosedforms are independent. Finite2geodesics/initialcolumns only, no all-event metric/Riemann or live-renderer proof.",
+    "independent_reference": "Independently reduce primaryequations17/23 using the unchanged original initialcovector variations, then derive physicalmetric axes; no printed general solution, productiontrajectory or productionJacobi output supplies expected values.",
+    "original_source_snapshots": {
+      "cmake/sirius_testing.cmake": {
+        "build_before_after_equal": true,
+        "bytes": 12349,
+        "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/cmake/sirius_testing.cmake"
+      },
+      "src/sirius/base/contracts.h": {
+        "build_before_after_equal": true,
+        "bytes": 3989,
+        "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/base/contracts.h"
+      },
+      "src/sirius/oracle/beam_integrator.h": {
+        "build_before_after_equal": true,
+        "bytes": 13981,
+        "git_blob": "3e0a2426ce363f44a9e450cc889141b01d1c4931",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "6115e6923d6f760d021bacb4b108bd45238f85de8d748733a7003c2fc81c2d68",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/beam_integrator.h"
+      },
+      "src/sirius/oracle/kerr_boyer_lindquist.h": {
+        "build_before_after_equal": true,
+        "bytes": 30350,
+        "git_blob": "af37af15f0210ce8c3e7ce2374135cabfd388287",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/kerr_boyer_lindquist.h"
+      },
+      "src/sirius/oracle/metric_interface.h": {
+        "build_before_after_equal": true,
+        "bytes": 6297,
+        "git_blob": "5d19057f86d59b9b6001762bc7abb4f45804f304",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/metric_interface.h"
+      },
+      "src/sirius/oracle/transport_types.h": {
+        "build_before_after_equal": true,
+        "bytes": 8470,
+        "git_blob": "ed9d7a97d8e06e4508ee494453da5d8485abadba",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/transport_types.h"
+      },
+      "tests/CMakeLists.txt": {
+        "build_before_after_equal": true,
+        "bytes": 10200,
+        "git_blob": "b7700acf10bf853738cfcf8a24918fb899a36b24",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/CMakeLists.txt"
+      },
+      "tests/operating_model.json": {
+        "build_before_after_equal": true,
+        "bytes": 130331,
+        "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/operating_model.json"
+      },
+      "tests/oracle/CMakeLists.txt": {
+        "build_before_after_equal": true,
+        "bytes": 867,
+        "git_blob": "14b0dfd43cfcf8271c4eee0f66206c58ba88aa1f",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/oracle/CMakeLists.txt"
+      },
+      "tests/oracle/beam_propagation_test.cpp": {
+        "build_before_after_equal": true,
+        "bytes": 19050,
+        "git_blob": "4b3eb9a0831ff1f53cfc568a923662e11d02e342",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "dc32281a8f6cf14780ad5e183e6f0f1a6180811ee06ad84800779d2add1b77d4",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/oracle/beam_propagation_test.cpp"
+      },
+      "tests/support/fail_on_skip.h": {
+        "build_before_after_equal": true,
+        "bytes": 427,
+        "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+        "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e",
+        "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/support/fail_on_skip.h"
+      }
+    },
+    "primary_reference": {
+      "excerpt": {
+        "bytes": 23389,
+        "path": "out/science-p2-schwarzschild-congruences-current-source/reference/arxiv-2308.07098v1-equations-17-23.html",
+        "sha256": "57785152a227f45329d8c4e2343d73ddedfc6e3268f47e1d0d00208dc7290f58"
+      },
+      "resolved_url": "https://arxiv.org/html/2308.07098v1",
+      "retrieved_utc": "2026-10-14T17:11:09.834130+00:00",
+      "selection": "Exact two table byte slices S3.E17 andS3.E23 joined with one LF and terminal LF; full response not retained.",
+      "table_slices": [
+        {
+          "bytes": 11005,
+          "id": "S3.E17",
+          "original_byte_end_exclusive": 146768,
+          "original_byte_start": 135763,
+          "sha256": "373fe46f0051d8e9f6c3e803addd60288d97db9a6f78939fbcadc55eada4f160"
+        },
+        {
+          "bytes": 12382,
+          "id": "S3.E23",
+          "original_byte_end_exclusive": 192015,
+          "original_byte_start": 179633,
+          "sha256": "40d3d1abc0333f897ad90c40485051564f3456d31d97bbd5e0bfc1bbc2fa087d"
+        }
+      ],
+      "url": "https://arxiv.org/html/2308.07098v1",
+      "use": "Reduced equation systems only; printed general solutions18/24 are not adopted as reference authorities.",
+      "whole_response_bytes": 230559,
+      "whole_response_sha256": "e015ee0908582f961b2ede42b3b3d0fe7a33c6e746336965a1d2d7d6a43041fd"
+    }
+  },
+  "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "scheduling": "Root-only one-shot coherentCPU action; no removed/live out roots or compiler/provider/runtime work during preparation.",
+  "schema_version": 1,
+  "scope": "Two original finite P2 Schwarzschild CPU oracle congruences only; no live Cartesian/Vulkan beam, fullP2/science/Mandatory/domain/release or performance claim.",
+  "source_and_registration_join": {
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CXX_COMPILER": "g++-14",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "SIRIUS_WERROR": "ON"
+    },
+    "compiler_provenance_limit": "Reuse accepted exact current oracle/source authority and original strict recipe/build before-after seals; no new build or retroactive compiler-byte attestation.",
+    "existing_build_owner": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/owner.json",
+    "external_image_or_device_resources_required": false,
+    "independent_reference_sources": [
+      "tests/oracle/beam_propagation_test.cpp",
+      "out/science-p2-schwarzschild-congruences-current-source/reference/arxiv-2308.07098v1-equations-17-23.html"
+    ],
+    "original_compile_commands": [
+      {
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/src/sirius/oracle/../.. -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o -c /home/astra/.project/Sirius/tests/oracle/beam_propagation_test.cpp",
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "file": "/home/astra/.project/Sirius/tests/oracle/beam_propagation_test.cpp",
+        "output": "tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o"
+      }
+    ],
+    "original_link_ninja_lines": [
+      "build tests/oracle/sirius_oracle_tests tests/oracle/sirius_oracle_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/oracle/sirius_oracle_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_oracle_tests_Release tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+    ],
+    "original_test_TIMEOUT_added": false,
+    "producers": {
+      "oracle": {
+        "bytes": 1678696,
+        "path": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4",
+        "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+      }
+    },
+    "production_headers": [
+      "src/sirius/base/contracts.h",
+      "src/sirius/oracle/beam_integrator.h",
+      "src/sirius/oracle/kerr_boyer_lindquist.h",
+      "src/sirius/oracle/metric_interface.h",
+      "src/sirius/oracle/transport_types.h"
+    ],
+    "registrations": [
+      {
+        "add_test": "add_test([=[BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion]==] --gtest_also_run_disabled_tests)",
+        "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "properties": "set_tests_properties([=[BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "source": "tests/oracle/beam_propagation_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion]==] --gtest_also_run_disabled_tests)",
+        "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "properties": "set_tests_properties([=[BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "source": "tests/oracle/beam_propagation_test.cpp"
+      }
+    ],
+    "selected_core_cases": 0,
+    "selected_oracle_cases": 2,
+    "source_before_after": [
+      "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-before.json",
+      "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-after.json"
+    ],
+    "source_snapshot_count": 11,
+    "test_sources": [
+      "tests/oracle/beam_propagation_test.cpp"
+    ]
+  },
+  "xml_scope": "Exactly2originalregisteredcases in standardCTestJUnit,zeroF/E/skipped/disabled; originalverboseGTestlogs, no syntheticXML."
+}

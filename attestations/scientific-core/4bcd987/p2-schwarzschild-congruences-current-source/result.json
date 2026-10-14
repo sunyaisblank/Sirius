@@ -1,0 +1,336 @@
+{
+  "full_criterion_complete": false,
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/ctest",
+      "--test-dir",
+      "bin/linux-gcc",
+      "-V",
+      "--output-on-failure",
+      "--no-tests=error",
+      "--output-junit",
+      "/home/astra/.project/Sirius/out/science-p2-schwarzschild-congruences-current-source/original-two-p2-schwarzschild-congruence-controls/ctest.xml",
+      "--output-log",
+      "/home/astra/.project/Sirius/out/science-p2-schwarzschild-congruences-current-source/original-two-p2-schwarzschild-congruence-controls/ctest.log",
+      "-R",
+      "^(BeamPropagationTest\\.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion|BeamPropagationTest\\.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion)$"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "original-two-p2-schwarzschild-congruence-controls",
+    "child_exit": 0,
+    "child_pid": 334502,
+    "child_start_ticks": "4762971",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 334492,
+      "pid": 334493,
+      "ppid": 334492,
+      "rss_kib": 27264,
+      "session": 334492,
+      "start_ticks": "4762944",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "meaning": "Two original finite P2 Schwarzschild CPU oracle congruences only; no live Cartesian/Vulkan beam, fullP2/science/Mandatory/domain/release or performance claim.",
+    "minimum_sampled_available_kib": 18591160,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 334502,
+        "saved_start_ticks": "4762971"
+      }
+    ],
+    "passed": true,
+    "peak_sampled_rss_kib": 44416,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "Two original finite P2 Schwarzschild CPU oracle congruences only; no live Cartesian/Vulkan beam, fullP2/science/Mandatory/domain/release or performance claim.",
+    "source": {
+      "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 0.28100392399937846,
+    "whole_inputs_unchanged": true
+  },
+  "qualification_claimed": false,
+  "result": {
+    "ctest_output_log": {
+      "bytes": 4084,
+      "sha256": "55cd0d28899b0220ac892912a90298100c049b260945b6492db48cb298147bc8"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": "",
+      "TMPDIR": "/home/astra/.project/Sirius/out/science-p2-schwarzschild-congruences-current-source/temporary"
+    },
+    "disabled": 0,
+    "errors": 0,
+    "executed_names": [
+      "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+      "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"
+    ],
+    "expected_names": [
+      "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+      "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"
+    ],
+    "failures": 0,
+    "finite_acceptance_scope": {
+      "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion": {
+        "assertions": "r=3M within1e-10; radialaxis/(axis0*cosh(kappa lambda)) andpolaraxis/(axis0*abs(cos(kappa lambda))) each1 within1e-6; metriccross term0 within1e-12.",
+        "derivation": "Eq17b,f reducexi_r_second=kappa^2*xi_r and17c,g givexi_theta_second=-kappa^2*xi_theta,kappa=E/(sqrt(3)M). With unchangedinitialdata solutionscosh/cos follow. Inducedt/phi contributionscancel inSchwarzschild metricnorm; physicalradialaxis=sqrt(3)*abs(xi_r),polaraxis=3M*abs(xi_theta).",
+        "initial_variations": "Originalphysicalaxis1e-3 givesxi_r=axis/sqrt(3),xi_theta=axis/(3M); originalt/phi coordinate derivatives implyeta_t=eta_phi=0 and initialradial/polar derivative0, then SetJacobiColumn performsconnection conversion.",
+        "metric": "Schwarzschild M=1,E=1,r=3M,theta=pi/2; originalcovariantp=(-1,0,0,3sqrt(3)ME).",
+        "work": "Exactly2000 originalRK4steps of5e-4 tolambda1; everyStep mustsucceed."
+      },
+      "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion": {
+        "assertions": "r=12 within1e-10; each metric physicalaxis/lambda=1 within1e-6; metric cross term0 within1e-12.",
+        "derivation": "Outgoingr=r0+E lambda. Eq23c,d,g,h keep angularcovector variationseta_theta=eta_phi=r0 constant, integrate xi_theta=xi_phi=lambda/r at equator. Thus physicalaxesr*xi_theta andr*sin(theta)*xi_phi=lambda and cross0.",
+        "initial_variations": "Both columns startxi=0; coordinate theta/phi derivative1/r0 is converted by original SetJacobiColumn to covariantDxi/dlambda.",
+        "metric": "Schwarzschild M=1,E=1,r0=10,theta=pi/2; original covariantp=(-1,1.25,0,0).",
+        "work": "Exactly2000 originalRK4steps of1e-3 to lambda2; everyStep mustsucceed."
+      }
+    },
+    "junit": {
+      "bytes": 2475,
+      "sha256": "a1276e5651ae4c7ae055b3c2daf4d2380fb37e1e283b831a8a7678b5e39635e3"
+    },
+    "mandatory_receipt_created": false,
+    "original_assertions_changed": false,
+    "outer_diagnostic_limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "owner": {
+      "bytes": 2171,
+      "sha256": "8cacc571339794cf5380d79e9bf19cf259b3f53518b9dd2b7d60e1e533cd929b"
+    },
+    "p2_complete": false,
+    "passed": true,
+    "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "qualification_claimed": false,
+    "reference": {
+      "independence_limit": "Numerical trajectory/Jacobi transport and final metricnorm use productionoracle KerrMetricD at spin0; the referenceclosedforms are independent. Finite2geodesics/initialcolumns only, no all-event metric/Riemann or live-renderer proof.",
+      "independent_reference": "Independently reduce primaryequations17/23 using the unchanged original initialcovector variations, then derive physicalmetric axes; no printed general solution, productiontrajectory or productionJacobi output supplies expected values.",
+      "original_source_snapshots": {
+        "cmake/sirius_testing.cmake": {
+          "build_before_after_equal": true,
+          "bytes": 12349,
+          "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/cmake/sirius_testing.cmake"
+        },
+        "src/sirius/base/contracts.h": {
+          "build_before_after_equal": true,
+          "bytes": 3989,
+          "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/base/contracts.h"
+        },
+        "src/sirius/oracle/beam_integrator.h": {
+          "build_before_after_equal": true,
+          "bytes": 13981,
+          "git_blob": "3e0a2426ce363f44a9e450cc889141b01d1c4931",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "6115e6923d6f760d021bacb4b108bd45238f85de8d748733a7003c2fc81c2d68",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/beam_integrator.h"
+        },
+        "src/sirius/oracle/kerr_boyer_lindquist.h": {
+          "build_before_after_equal": true,
+          "bytes": 30350,
+          "git_blob": "af37af15f0210ce8c3e7ce2374135cabfd388287",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/kerr_boyer_lindquist.h"
+        },
+        "src/sirius/oracle/metric_interface.h": {
+          "build_before_after_equal": true,
+          "bytes": 6297,
+          "git_blob": "5d19057f86d59b9b6001762bc7abb4f45804f304",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/metric_interface.h"
+        },
+        "src/sirius/oracle/transport_types.h": {
+          "build_before_after_equal": true,
+          "bytes": 8470,
+          "git_blob": "ed9d7a97d8e06e4508ee494453da5d8485abadba",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/src/sirius/oracle/transport_types.h"
+        },
+        "tests/CMakeLists.txt": {
+          "build_before_after_equal": true,
+          "bytes": 10200,
+          "git_blob": "b7700acf10bf853738cfcf8a24918fb899a36b24",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/CMakeLists.txt"
+        },
+        "tests/operating_model.json": {
+          "build_before_after_equal": true,
+          "bytes": 130331,
+          "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/operating_model.json"
+        },
+        "tests/oracle/CMakeLists.txt": {
+          "build_before_after_equal": true,
+          "bytes": 867,
+          "git_blob": "14b0dfd43cfcf8271c4eee0f66206c58ba88aa1f",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/oracle/CMakeLists.txt"
+        },
+        "tests/oracle/beam_propagation_test.cpp": {
+          "build_before_after_equal": true,
+          "bytes": 19050,
+          "git_blob": "4b3eb9a0831ff1f53cfc568a923662e11d02e342",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "dc32281a8f6cf14780ad5e183e6f0f1a6180811ee06ad84800779d2add1b77d4",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/oracle/beam_propagation_test.cpp"
+        },
+        "tests/support/fail_on_skip.h": {
+          "build_before_after_equal": true,
+          "bytes": 427,
+          "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+          "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+          "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e",
+          "snapshot": "out/science-p2-schwarzschild-congruences-current-source/reference/tests/support/fail_on_skip.h"
+        }
+      },
+      "primary_reference": {
+        "excerpt": {
+          "bytes": 23389,
+          "path": "out/science-p2-schwarzschild-congruences-current-source/reference/arxiv-2308.07098v1-equations-17-23.html",
+          "sha256": "57785152a227f45329d8c4e2343d73ddedfc6e3268f47e1d0d00208dc7290f58"
+        },
+        "resolved_url": "https://arxiv.org/html/2308.07098v1",
+        "retrieved_utc": "2026-10-14T17:11:09.834130+00:00",
+        "selection": "Exact two table byte slices S3.E17 andS3.E23 joined with one LF and terminal LF; full response not retained.",
+        "table_slices": [
+          {
+            "bytes": 11005,
+            "id": "S3.E17",
+            "original_byte_end_exclusive": 146768,
+            "original_byte_start": 135763,
+            "sha256": "373fe46f0051d8e9f6c3e803addd60288d97db9a6f78939fbcadc55eada4f160"
+          },
+          {
+            "bytes": 12382,
+            "id": "S3.E23",
+            "original_byte_end_exclusive": 192015,
+            "original_byte_start": 179633,
+            "sha256": "40d3d1abc0333f897ad90c40485051564f3456d31d97bbd5e0bfc1bbc2fa087d"
+          }
+        ],
+        "url": "https://arxiv.org/html/2308.07098v1",
+        "use": "Reduced equation systems only; printed general solutions18/24 are not adopted as reference authorities.",
+        "whole_response_bytes": 230559,
+        "whole_response_sha256": "e015ee0908582f961b2ede42b3b3d0fe7a33c6e746336965a1d2d7d6a43041fd"
+      }
+    },
+    "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "scope": "Two original finite P2 Schwarzschild CPU oracle congruences only; no live Cartesian/Vulkan beam, fullP2/science/Mandatory/domain/release or performance claim.",
+    "skips": 0,
+    "source_and_registration_join": {
+      "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+      "cache_required": {
+        "BUILD_TESTS": "ON",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_COMPILER": "g++-14",
+        "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+        "SIRIUS_ALIGNMENT_MODE": "qualification",
+        "SIRIUS_BUILD_VIEWER": "ON",
+        "SIRIUS_CONTRACT_MODE": "2",
+        "SIRIUS_MANDATORY_TESTS": "ON",
+        "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+        "SIRIUS_SANITIZERS": "none",
+        "SIRIUS_WERROR": "ON"
+      },
+      "compiler_provenance_limit": "Reuse accepted exact current oracle/source authority and original strict recipe/build before-after seals; no new build or retroactive compiler-byte attestation.",
+      "existing_build_owner": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/owner.json",
+      "external_image_or_device_resources_required": false,
+      "independent_reference_sources": [
+        "tests/oracle/beam_propagation_test.cpp",
+        "out/science-p2-schwarzschild-congruences-current-source/reference/arxiv-2308.07098v1-equations-17-23.html"
+      ],
+      "original_compile_commands": [
+        {
+          "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/src/sirius/oracle/../.. -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o -c /home/astra/.project/Sirius/tests/oracle/beam_propagation_test.cpp",
+          "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+          "file": "/home/astra/.project/Sirius/tests/oracle/beam_propagation_test.cpp",
+          "output": "tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o"
+        }
+      ],
+      "original_link_ninja_lines": [
+        "build tests/oracle/sirius_oracle_tests tests/oracle/sirius_oracle_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/oracle/sirius_oracle_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_oracle_tests_Release tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+      ],
+      "original_test_TIMEOUT_added": false,
+      "producers": {
+        "oracle": {
+          "bytes": 1678696,
+          "path": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4",
+          "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+        }
+      },
+      "production_headers": [
+        "src/sirius/base/contracts.h",
+        "src/sirius/oracle/beam_integrator.h",
+        "src/sirius/oracle/kerr_boyer_lindquist.h",
+        "src/sirius/oracle/metric_interface.h",
+        "src/sirius/oracle/transport_types.h"
+      ],
+      "registrations": [
+        {
+          "add_test": "add_test([=[BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion]==] --gtest_also_run_disabled_tests)",
+          "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+          "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "properties": "set_tests_properties([=[BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+          "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+          "source": "tests/oracle/beam_propagation_test.cpp"
+        },
+        {
+          "add_test": "add_test([=[BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion]==] --gtest_also_run_disabled_tests)",
+          "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+          "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "properties": "set_tests_properties([=[BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+          "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+          "source": "tests/oracle/beam_propagation_test.cpp"
+        }
+      ],
+      "selected_core_cases": 0,
+      "selected_oracle_cases": 2,
+      "source_before_after": [
+        "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-before.json",
+        "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/inputs-after.json"
+      ],
+      "source_snapshot_count": 11,
+      "test_sources": [
+        "tests/oracle/beam_propagation_test.cpp"
+      ]
+    },
+    "temporary_output": {
+      "mode": "0o700",
+      "path": "/home/astra/.project/Sirius/out/science-p2-schwarzschild-congruences-current-source/temporary",
+      "residual_files": {},
+      "uid": 1000
+    }
+  },
+  "schema": "sirius-original-finite-science-controls-v1"
+}

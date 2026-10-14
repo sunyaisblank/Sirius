@@ -1,0 +1,50 @@
+--- accepted/run_oracle.py
++++ p2-congruences/run_congruences.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""One frozen three-case original P1/E4 CPU oracle action; no build/device/frame work."""
++"""One frozen two-case original P2 Schwarzschild congruence oracle action; no build/device/frame work."""
+ from pathlib import Path
+ import hashlib
+ import json
+@@ -12,8 +12,11 @@
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+ ROOT = WORK.parents[1]
+-CASE = "original-three-p1-e4-oracle-controls"
+-NAMES = {'AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct', 'OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives', 'AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter'}
++CASE = "original-two-p2-schwarzschild-congruence-controls"
++NAMES = {
++    'BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion',
++    'BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion',
++}
+ LIMITS = {"seconds": 300, "rss_kib": 4194304, "reserve_kib": 2097152}
+ 
+ 
+@@ -58,7 +61,7 @@
+     result = {"passed": False, "product_source_revision": prepared["product_source_revision"],
+               "runner_source_revision": prepared["runner_source_revision"], "expected_names": sorted(NAMES),
+               "scope": prepared["scope"], "finite_acceptance_scope": prepared["finite_acceptance_scope"],
+-              "qualification_claimed": False, "p1_complete": False, "e4_complete": False, "mandatory_receipt_created": False,
++              "qualification_claimed": False, "p2_complete": False, "mandatory_receipt_created": False,
+               "original_assertions_changed": False, "outer_diagnostic_limits": LIMITS,
+               "declared_output_environment": {"TMPDIR": str(temporary), "GTEST_OUTPUT": ""}}
+     write_result(result)
+@@ -67,7 +70,7 @@
+                 "runner source is not the pinned clean revision")
+         require(set(git("diff", "--name-only", prepared["product_source_revision"], "HEAD").splitlines())
+                 == set(prepared["diagnostic_only_difference"]), "product/science source difference changed")
+-        require(set(prepared["expected_names"]) == NAMES and len(NAMES) == 3, "original model selection differs")
++        require(set(prepared["expected_names"]) == NAMES and len(NAMES) == 2, "original model selection differs")
+         for name, pin in prepared["pins"].items():
+             require(identity(ROOT / name) == pin, "prepared input changed: " + name)
+         actions = json.loads((WORK / "actions.json").read_text())
+@@ -93,7 +96,7 @@
+         xml = WORK / CASE / "ctest.xml"
+         document = ET.parse(xml).getroot()
+         cases = document.findall(".//testcase")
+-        require(len(cases) == 3 and {row.attrib["name"] for row in cases} == NAMES, "JUnit case set differs")
++        require(len(cases) == 2 and {row.attrib["name"] for row in cases} == NAMES, "JUnit case set differs")
+         for row in cases:
+             require(row.get("status", "run") == "run" and not any(row.findall(tag) for tag in ("failure", "error", "skipped")),
+                     "an original case failed, errored, skipped, or was disabled")
