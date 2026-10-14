@@ -1,0 +1,94 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/ctest",
+    "--test-dir",
+    "/home/astra/.project/Sirius/bin/linux-gcc",
+    "-R",
+    "^KernelParity\\.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco$",
+    "--output-on-failure",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity-isolated/parity-2/ctest.xml",
+    "-V",
+    "--output-log",
+    "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity-isolated/parity-2/ctest.log"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "parity-2",
+  "child_exit": 0,
+  "child_pid": 270287,
+  "child_start_ticks": "3547872",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 270278,
+    "pid": 270280,
+    "ppid": 270279,
+    "rss_kib": 23456,
+    "session": 270278,
+    "start_ticks": "3547767",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity-isolated/parity-2/gtest.xml",
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Only nine named original P4 ordinary-FP32 numerical witnesses; no full P4/scientific/integrated/platform/Mandatory/release qualification. Case:KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco",
+  "minimum_sampled_available_kib": 16004312,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 270287,
+      "saved_start_ticks": "3547872"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 270289,
+      "saved_start_ticks": "3547879"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 3329204,
+  "provider_mappings": [
+    {
+      "maps": [
+        "7669dbc00000-7669e3e08000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7669e3e08000-7669e3e09000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7669e3e09000-7669e449e000 r--p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7669e449e000-7669e44e6000 rw-p 0889d000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7669e4600000-7669e465b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7669e465b000-7669e4a6b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7669e4a6b000-7669e50c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7669e50c6000-7669e515c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7669e515c000-7669e5161000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7669e5968000-7669e596e000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7669e596e000-7669e59ba000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7669e59ba000-7669e59e4000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7669e59e4000-7669e59e5000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7669e59e5000-7669e59e6000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+      ],
+      "owned_session": 270287,
+      "pid": 270289,
+      "start_ticks": "3547879"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "Only nine named original P4 ordinary-FP32 numerical witnesses; no full P4/scientific/integrated/platform/Mandatory/release qualification. Case:KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco",
+  "source": {
+    "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 247.4071175210047,
+  "whole_inputs_unchanged": true
+}

@@ -1,0 +1,388 @@
+{
+  "passed": true,
+  "phase": "run",
+  "scope": "One hint-only full-module setup diagnosis using the unchanged archived instrumented ELF and original zero-record public call order. No numerical, performance, adoption or qualification verdict.",
+  "numerical_acceptance": false,
+  "performance_or_adoption_claimed": false,
+  "qualification_claimed": false,
+  "setup_observation": {
+    "summary": {
+      "schema": "sirius-parity-setup-only-v1",
+      "setup_completed": true,
+      "active_records": 0,
+      "fixture_records": 4,
+      "flat_words": 64,
+      "completed_words": 256,
+      "result_words": 256,
+      "module_words": 1390559,
+      "allocated_bytes": 1296,
+      "device_index": 0,
+      "device_name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+      "driver_name": "llvmpipe",
+      "driver_info": "Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+      "whole_setup_seconds_including_teardown": 224.546265718,
+      "pipeline_setup_ms": 132261.997942,
+      "submit_wait_ms": 91967.348482,
+      "dispatch_total_ms": 224229.448609,
+      "numerical_acceptance": false,
+      "qualification_claimed": false
+    },
+    "phase_observation": {
+      "markers": [
+        {
+          "event": "begin",
+          "phase": "driver.whole_setup",
+          "monotonic_ns": 36854601589792
+        },
+        {
+          "event": "begin",
+          "phase": "EnumerateVulkanDevices",
+          "monotonic_ns": 36854601724046,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "EnumerateVulkanDevices",
+          "monotonic_ns": 36854638623941,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "ResolveVulkanDeviceIndex",
+          "monotonic_ns": 36854638678829,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "ResolveVulkanDeviceIndex",
+          "monotonic_ns": 36854638686156,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "CreateVulkanDevice",
+          "monotonic_ns": 36854638689534,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "InitialisePipelineCache",
+          "monotonic_ns": 36854670255567,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "InitialisePipelineCache",
+          "monotonic_ns": 36854670309463,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "CreateVulkanDevice",
+          "monotonic_ns": 36854670316881,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "driver.read_original_spirv",
+          "monotonic_ns": 36854670320850
+        },
+        {
+          "event": "end",
+          "phase": "driver.read_original_spirv",
+          "monotonic_ns": 36854675202605
+        },
+        {
+          "event": "begin",
+          "phase": "LoadKernel",
+          "monotonic_ns": 36854675268319,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "vkCreateShaderModule",
+          "monotonic_ns": 36854679811323,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "vkCreateShaderModule",
+          "monotonic_ns": 36854684981831,
+          "has_result": true,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "LoadKernel",
+          "monotonic_ns": 36854685048246,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "SetBufferAllocationLimit",
+          "monotonic_ns": 36854685057759,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "SetBufferAllocationLimit",
+          "monotonic_ns": 36854685060615,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "CreateBuffer",
+          "monotonic_ns": 36854685063201,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "CreateBuffer",
+          "monotonic_ns": 36854685116305,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "CreateBuffer",
+          "monotonic_ns": 36854685119984,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "CreateBuffer",
+          "monotonic_ns": 36854685134097,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "CreateBuffer",
+          "monotonic_ns": 36854685137325,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "CreateBuffer",
+          "monotonic_ns": 36854685145544,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "WriteBuffer",
+          "monotonic_ns": 36854685148912,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "WriteBuffer",
+          "monotonic_ns": 36854685163917,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "WriteBuffer",
+          "monotonic_ns": 36854685169450,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "WriteBuffer",
+          "monotonic_ns": 36854685176125,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "driver.zero_record_dispatch",
+          "monotonic_ns": 36854685178571
+        },
+        {
+          "event": "begin",
+          "phase": "DispatchCommands",
+          "monotonic_ns": 36854685181317,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "GetOrCreatePipeline",
+          "monotonic_ns": 36854685183964,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "vkCreateComputePipelines",
+          "monotonic_ns": 36854685189968,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "vkCreateComputePipelines",
+          "monotonic_ns": 36986947085024,
+          "has_result": true,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "GetOrCreatePipeline",
+          "monotonic_ns": 36986947173314,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "vkQueueSubmit",
+          "monotonic_ns": 36986947255035,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "vkQueueSubmit",
+          "monotonic_ns": 36986947293157,
+          "has_result": true,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "vkQueueWaitIdle",
+          "monotonic_ns": 36986947315057,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "vkQueueWaitIdle",
+          "monotonic_ns": 37078914528440,
+          "has_result": true,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "DispatchCommands",
+          "monotonic_ns": 37078914632342,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "driver.zero_record_dispatch",
+          "monotonic_ns": 37078914694409
+        },
+        {
+          "event": "begin",
+          "phase": "ReadBuffer",
+          "monotonic_ns": 37078914706808,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "ReadBuffer",
+          "monotonic_ns": 37078914716253,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "driver.destroy_device",
+          "monotonic_ns": 37078914747461
+        },
+        {
+          "event": "begin",
+          "phase": "VulkanDevice.destructor",
+          "monotonic_ns": 37078914759400,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "begin",
+          "phase": "vkDeviceWaitIdle",
+          "monotonic_ns": 37078914769556,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "vkDeviceWaitIdle",
+          "monotonic_ns": 37078914889237,
+          "has_result": true,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "VulkanDevice.destructor",
+          "monotonic_ns": 37079147076465,
+          "has_result": false,
+          "result": 0
+        },
+        {
+          "event": "end",
+          "phase": "driver.destroy_device",
+          "monotonic_ns": 37079147808797
+        },
+        {
+          "event": "end",
+          "phase": "driver.whole_setup",
+          "monotonic_ns": 37079147847968
+        }
+      ],
+      "unclosed_phases": [],
+      "last_marker": {
+        "event": "end",
+        "phase": "driver.whole_setup",
+        "monotonic_ns": 37079147847968
+      }
+    },
+    "actual_provider_mappings": {
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+        "bytes": 143545784,
+        "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a",
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1"
+      },
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+        "bytes": 11929384,
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      },
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+        "bytes": 510592,
+        "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e",
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+      }
+    }
+  },
+  "owner": {
+    "bytes": 3413,
+    "sha256": "41913a0c6f10f17135057ad3f428aa6bb71726bc662e25cbf185bde32ead09ee",
+    "resolved_path": "/home/astra/.project/Sirius/out/p4-parity-unroll-hint-setup/run/owner.json"
+  },
+  "runtime_shader": {
+    "bytes": 5562236,
+    "sha256": "2fe2dc5d2bae1a3b8c015278a7338a02f229a9490856286640938d942f1c8bac",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/p4-parity-unroll-hint-setup/resources/kernels/parity_probe.spv"
+  }
+}
