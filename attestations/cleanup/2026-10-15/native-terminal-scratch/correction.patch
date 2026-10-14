@@ -1,0 +1,45 @@
+--- rejection/retire.py
++++ retire.py
+@@ -186,6 +186,28 @@
+             "original_birth_absent": True}
+ 
+ 
++def exact_negative_timeout(path, row):
++    member = "Sirius/Sirius/out/macos-moltenvk-integration/observation/owner-self-test/timeout-tree/owner.json"
++    expected_path = TARGETS[4] / "artifact" / member
++    pin = {"bytes": 4311, "sha256": "a8ee7a0ce145a0e46697be9d57d6e784d316d5b01240073ce8570003cdd498ef"}
++    bundle = ROOT / CONFIG["evidence"]["macos"][2]
++    archived = bundle / "selected-artifact" / member
++    require(path == expected_path and identity(path) == pin and identity(archived) == pin
++            and load(bundle / "manifest.json")["files"]["selected-artifact/" + member] == pin,
++            "unrecognized Darwin observation-incomplete owner")
++    require(row["observation_complete"] is False and row["qualification_claimed"] is False
++            and row["child_exit"] == -15 and row["stop_reason"] == "deadline"
++            and row["limits"] == {"seconds": 1, "rss_kib": 4194304, "reserve_kib": 2097152}
++            and row["source"] == {"runner_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
++                                  "candidate_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405", "status": ""}
++            and len(row["observed_births"]) == 2,
++            "exact negative timeout self-test fields changed")
++    return {"member": member, "identity": pin, "intentional_negative_control": True,
++            "observation_complete": False, "qualification_claimed": False,
++            "observation_gap": "Preserved one-second timeout self-test reports incomplete observation; "
++                               "its two recorded births are absent, without a current remote-host or global census."}
++
++
+ def terminal_records():
+     result = []
+     boot = Path("/proc/sys/kernel/random/boot_id").read_text().strip()
+@@ -203,10 +225,12 @@
+                 item["scope"] = "Preserved native Windows PID+UTC owner retirement; no fresh/global NT census from WSL."
+             elif "retirement_census_complete" in row:
+                 require(row["status"] == "terminal" and row["whole_inputs_unchanged"]
+-                        and row["containment_complete"] and row["observation_complete"]
++                        and row["containment_complete"]
+                         and row["retirement_census_complete"] and row["remaining_observed"] == []
+                         and row["observed_births"] and all(b["absent"] is True for b in row["observed_births"]),
+                         "Darwin recorded owner is not sealed/retired")
++                if row["observation_complete"] is not True:
++                    item["negative_control"] = exact_negative_timeout(path, row)
+                 item["scope"] = "Preserved Darwin terminal lstart/PGID census; no current remote-host process census."
+             else:
+                 require(row["status"] == "terminal" and row["source_unchanged"]

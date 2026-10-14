@@ -1,0 +1,36 @@
+{
+  "audit_written_or_deletion_by_this_correction": false,
+  "authored_helper_or_cleanup_execution": false,
+  "correction_scope": "One exact immutable member and expected negative-control fields only; production owner predicates remain mandatory.",
+  "exact_owner": {
+    "bytes": 4311,
+    "sha256": "a8ee7a0ce145a0e46697be9d57d6e784d316d5b01240073ce8570003cdd498ef"
+  },
+  "failing_member": "Sirius/Sirius/out/macos-moltenvk-integration/observation/owner-self-test/timeout-tree/owner.json",
+  "finding": "Intentional one-second negative Darwin timeout self-test has observation_complete=false; the original driver required true for every Darwin owner.",
+  "observation_limit": "Historical observed births are recorded absent; no current remote-host or global NT/Darwin process absence is claimed.",
+  "preimages": {
+    "retire.py": {
+      "bytes": 18672,
+      "sha256": "00f9c30b3d775d867e33eafc2d552255711ce58ead4a0507a67bb0ec03aa2af1"
+    },
+    "source-freeze.json": {
+      "bytes": 814,
+      "sha256": "ed80ecd3af276d928d4a161d7fa8201973df0f070e368c93fe6ad8ffc33aa6bb"
+    }
+  },
+  "preserved_verdict": {
+    "CI_conclusion": "cancelled",
+    "child_exit": -15,
+    "observation_complete": false,
+    "qualification_claimed": false,
+    "stop_reason": "deadline"
+  },
+  "provenance": "Root report delivered to preparation author; no raw operator log was written or reconstructed.",
+  "reported_action": "READ-ONLY retirement audit",
+  "reported_operator_session": 20813,
+  "reported_prior_checks": "Full preservation/ZIP/member proofs passed in that action; not repeated by this correction author.",
+  "reported_result": "Stopped in terminal_records before audit.json write or deletion.",
+  "schema": "sirius-native-terminal-retirement-preexecution-finding-v1",
+  "source_freeze_update": "Pending root review of the corrective diff."
+}

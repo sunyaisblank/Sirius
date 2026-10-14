@@ -1,0 +1,73 @@
+{
+  "canonical_CI_commit": "6ed416731ff1ef95af7531f5c457e62aa0575aba",
+  "canonical_future_paths": [
+    ".github/workflows/ci.yml"
+  ],
+  "evidence": {
+    "export": [
+      "evidence/issue-48-native-build-domains-5b5fad9",
+      "939916066066dfc16ff21171f791c48ae1792f72",
+      "attestations/native-vulkan/build-domains-5b5fad9",
+      "4e7a0c6d2cab6981679300951a0e7d90d5ae10349aca62950dd9f52e18bc47d0",
+      []
+    ],
+    "linux": [
+      "evidence/issue-48-linux-gate-incomplete-38577826600",
+      "d240b82c677b1652c704cc9cf60ea4f2c02b5dc3",
+      "attestations/qualification/5b5fad9/linux-gate-incomplete-38577826600",
+      "ea0ed4f19d6494bfcf2a043988868ab88c172d66110d21fdfff8fba21a4aa3d5",
+      [
+        "out/native-provider-integration/full-ci-38577826600/linux-gate"
+      ]
+    ],
+    "macos": [
+      "evidence/issue-48-macos-full-ci-incomplete-38577826600",
+      "9413c9f9c24a8ca22c280f105a98d73deb8e62f3",
+      "attestations/qualification/5b5fad9/macos-full-ci-incomplete-38577826600",
+      "18835bd4bec55e9697680e543c66ecb2402f2adcd90dbf9408c269580d8f44e6",
+      []
+    ],
+    "recovery": [
+      "evidence/issue-48-macos-current-backend-modules-recovery",
+      "ef70ffed4f345b1d18cefcb8f2d7abe60a73be14",
+      "attestations/native-vulkan/5b5fad9/recovered-current-backend-modules",
+      "ea0a6d35849b01a4745337856d80aab5ad8cc01565a5e4cb9c763009a73ba9fb",
+      [
+        "out/macos-current-provider-recovery"
+      ]
+    ],
+    "windows": [
+      "evidence/issue-48-native-windows-system-5b5fad9",
+      "8caa498bfe71b7a86ff99b1fa54c6a67c5e98e48",
+      "attestations/native-vulkan/5b5fad9/fresh-windows-system-inventory",
+      "1d4e21fb8f72f65e3103af57a4f8caca7e814db70f558e0797ac3415db2f1ac0",
+      []
+    ]
+  },
+  "macos_members": 12496,
+  "macos_special_entry_bound": 25000,
+  "macos_zip": {
+    "bytes": 93920417,
+    "sha256": "0b67da9f14faed909b6051029e79ed6bf7b6ae6395c30523813a3bdf0ea4d6ad"
+  },
+  "mature_source": {
+    "path": "attestations/cleanup/2026-10-15/terminal-isolated-parity-preflight-hints/cleanup-terminal-parity-preflight-hints.py",
+    "sha256": "b5124e2a63b6621206dd3889040f6e9a67a42740655b050ffe18f958dc548aa2"
+  },
+  "schema": "sirius-fixed-native-terminal-retirement-source-v1",
+  "scope": "Preparation only. Root supplies the actual clean final source commit and operates after focused runtime retires. No qualification or global NT/Darwin process absence; terminal records and local accessible census retain gaps.",
+  "targets": [
+    "out/native-windows-system-5b5fad9",
+    "bin/windows-msvc/native-system-5b5fad9",
+    "out/macos-current-provider-recovery",
+    "out/native-provider-integration/full-ci-38577826600/linux-gate",
+    "out/native-provider-integration/full-ci-38577826600/macos-build"
+  ],
+  "windows_bin_files": 86,
+  "windows_members": 40,
+  "windows_unique_staged_paths": 46,
+  "windows_zip": {
+    "bytes": 56546068,
+    "sha256": "24b09db18d6989856e438c6c3dcfce941b5d87463dca7812ed2be199f7f093db"
+  }
+}

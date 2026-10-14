@@ -1,0 +1,13 @@
+{
+  "commands": [
+    "python3 -B out/retire-native-terminal-scratch/retire.py --expected-source FULL_FINAL_SOURCE_COMMIT",
+    "python3 -B out/retire-native-terminal-scratch/retire.py --expected-source FULL_FINAL_SOURCE_COMMIT --remove --accepted-audit-sha256 EXACT_REVIEWED_AUDIT_SHA256"
+  ],
+  "executed": false,
+  "fixed_root_count": 5,
+  "future_audit": "out/retire-native-terminal-scratch/audit.json",
+  "future_cleanup_receipt": "attestations/cleanup/2026-10-15/native-terminal-scratch",
+  "requires": "Root supplies full clean final source commit and waits until focused runtime ends. Audit is reviewed before --remove. No tracked edits, Git writes/tags/pushes or provider/test/build invocation.",
+  "schema": "sirius-fixed-native-terminal-retirement-commands-v1",
+  "scope": "Only fixed owned subroots; no whole native-provider-integration/full-ci/build-domain parent removal. Recorded NT/Darwin retirement plus fresh accessible Linux census have explicit visibility gaps. Original ZIP parts and all members must verify to immutable Git/remote tags before deletion."
+}
