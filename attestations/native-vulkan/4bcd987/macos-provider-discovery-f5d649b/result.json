@@ -1,0 +1,320 @@
+{
+  "archive": {
+    "bytes": 75835745,
+    "sha256": "2b0dbcd768b646a9d258c1942c797e3a642a96ece71a4f2c2d51e2da00acf030"
+  },
+  "artifact": 11890208325,
+  "failure": "CMake module-directory layout guessed incorrectly; query its authoritative CMAKE_ROOT instead.",
+  "job": 115827784818,
+  "observation": {
+    "candidate_source": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "cases": [],
+    "error": "ValueError: owned action failed/incomplete; sequence stopped",
+    "expected_api_versions": {
+      "diagnostic": "1.3.334",
+      "scope": "Original app and public query both request Vulkan1.3; pinned source and stock header patch are both334",
+      "source_header": {
+        "bytes": 1230712,
+        "path": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/provider-source/sources/Vulkan-Headers/include/vulkan/vulkan_core.h",
+        "sha256": "c0f0fe98afae95de1377e13649542912d71ca8817ef21dd0a44778f6fe7a1615"
+      },
+      "stock": "1.3.334"
+    },
+    "production_adopted": false,
+    "provider_content_discriminator": "be16bb0d2d553356491796fc92a112eeb5f2907b4b2d4ff42e4f8842e8309163",
+    "provider_payload_tree": "8b7d54847738c427954c7c3b070708d60fe4c8a8",
+    "provider_scope": "Custom diagnostic MoltenVK; unchanged SDK is not qualified",
+    "provider_source_evidence_commit": "e2422dd92017879a452377a1122f1838e6610b3c",
+    "provider_source_inputs_unchanged": true,
+    "qualification_claimed": false,
+    "runner_source": {
+      "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "runner_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "status": ""
+    },
+    "status": "incomplete"
+  },
+  "provider_build_started": false,
+  "provider_source_commit": "e2422dd92017879a452377a1122f1838e6610b3c",
+  "qualification_claimed": false,
+  "raw_scope": "Complete immutable native artifact ZIP plus source snapshots and workflow failure log. Remote-only system input pins are observations.",
+  "run": 38556777741,
+  "runner_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "schema": "sirius-failed-native-provider-discovery-v1",
+  "toolchain_owner": {
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/runner/work/Sirius/Sirius/scripts/macos_moltenvk_integration.py",
+      "--toolchain-child"
+    ],
+    "birth_scope": "Observed ps PID/lstart tokens; second-resolution ambiguity remains incomplete.",
+    "child_exit": 1,
+    "cleanup_errors": [],
+    "containment_complete": true,
+    "controller": {
+      "lstart": "Wed Oct 14 11:29:37 2026    ",
+      "pgid": 920,
+      "pid": 3247,
+      "ppid": 3246,
+      "rss_kib": 111792,
+      "state": "S<"
+    },
+    "environment": {
+      "DYLD_LIBRARY_PATH": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib",
+      "MVK_CONFIG_DEBUG": "0",
+      "MVK_CONFIG_SHADER_DUMP_DIR": null,
+      "MVK_CONFIG_TRACE_VULKAN_CALLS": "3",
+      "SIRIUS_VULKAN_DEVICE": null,
+      "VK_DRIVER_FILES": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json"
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 60
+    },
+    "max_observed_sample_interval_seconds": 0.26910820900002363,
+    "observation_complete": true,
+    "observed_births": [
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:01 2026    ",
+        "pgid": 3746,
+        "pid": 3746,
+        "ppid": 3247,
+        "rss_kib": 0,
+        "state": "Z<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:01 2026    ",
+        "pgid": 3746,
+        "pid": 3753,
+        "ppid": 3746,
+        "rss_kib": 6208,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:01 2026    ",
+        "pgid": 3746,
+        "pid": 3754,
+        "ppid": 3753,
+        "rss_kib": 6464,
+        "state": "U<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:01 2026    ",
+        "pgid": 3746,
+        "pid": 3766,
+        "ppid": 3753,
+        "rss_kib": 86112,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:03 2026    ",
+        "pgid": 3746,
+        "pid": 3876,
+        "ppid": 3753,
+        "rss_kib": 78368,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:04 2026    ",
+        "pgid": 3746,
+        "pid": 3972,
+        "ppid": 3753,
+        "rss_kib": 1664,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:04 2026    ",
+        "pgid": 3746,
+        "pid": 3973,
+        "ppid": 3972,
+        "rss_kib": 79984,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:04 2026    ",
+        "pgid": 3746,
+        "pid": 3985,
+        "ppid": 3983,
+        "rss_kib": 69440,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:04 2026    ",
+        "pgid": 3746,
+        "pid": 3983,
+        "ppid": 3746,
+        "rss_kib": 6352,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:05 2026    ",
+        "pgid": 3746,
+        "pid": 3999,
+        "ppid": 3983,
+        "rss_kib": 68272,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:06 2026    ",
+        "pgid": 3746,
+        "pid": 4018,
+        "ppid": 4015,
+        "rss_kib": 80608,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:05 2026    ",
+        "pgid": 3746,
+        "pid": 4015,
+        "ppid": 3983,
+        "rss_kib": 1664,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:06 2026    ",
+        "pgid": 3746,
+        "pid": 4028,
+        "ppid": 3746,
+        "rss_kib": 6320,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:06 2026    ",
+        "pgid": 3746,
+        "pid": 4030,
+        "ppid": 4028,
+        "rss_kib": 70544,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:07 2026    ",
+        "pgid": 3746,
+        "pid": 4044,
+        "ppid": 4028,
+        "rss_kib": 69792,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:07 2026    ",
+        "pgid": 3746,
+        "pid": 4054,
+        "ppid": 4028,
+        "rss_kib": 1664,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:07 2026    ",
+        "pgid": 3746,
+        "pid": 4055,
+        "ppid": 4054,
+        "rss_kib": 79776,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:08 2026    ",
+        "pgid": 3746,
+        "pid": 4072,
+        "ppid": 3746,
+        "rss_kib": 5456,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:08 2026    ",
+        "pgid": 3746,
+        "pid": 4076,
+        "ppid": 4072,
+        "rss_kib": 71056,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:09 2026    ",
+        "pgid": 3746,
+        "pid": 4094,
+        "ppid": 4072,
+        "rss_kib": 70512,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:30:09 2026    ",
+        "pgid": 3746,
+        "pid": 4104,
+        "ppid": 3746,
+        "rss_kib": 4336,
+        "state": "U<"
+      }
+    ],
+    "peak_sampled_rss_kib": 232992,
+    "pid": 3746,
+    "prelaunch_memory": {
+      "available_kib": 3061856,
+      "counters": {
+        "\"Translation faults\"": 3436229,
+        "Anonymous pages": 126849,
+        "Compressions": 99716,
+        "Decompressions": 18893,
+        "File-backed pages": 252610,
+        "Pageins": 469625,
+        "Pageouts": 2827,
+        "Pages active": 189809,
+        "Pages copy-on-write": 532992,
+        "Pages free": 4092,
+        "Pages inactive": 187274,
+        "Pages occupied by compressor": 21692,
+        "Pages purgeable": 574,
+        "Pages purged": 5706,
+        "Pages reactivated": 90747,
+        "Pages speculative": 2376,
+        "Pages stored in compressor": 75713,
+        "Pages throttled": 0,
+        "Pages wired down": 52436,
+        "Pages zero filled": 1106332,
+        "Swapins": 0,
+        "Swapouts": 0
+      },
+      "free_kib": 65472,
+      "inactive_kib": 2996384,
+      "page_size": 16384,
+      "physical_bytes": 7516192768,
+      "pressure_level": 1,
+      "raw_vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                4092.\nPages active:                            189809.\nPages inactive:                          187274.\nPages speculative:                         2376.\nPages throttled:                              0.\nPages wired down:                         52436.\nPages purgeable:                            574.\n\"Translation faults\":                   3436229.\nPages copy-on-write:                     532992.\nPages zero filled:                      1106332.\nPages reactivated:                        90747.\nPages purged:                              5706.\nFile-backed pages:                       252610.\nAnonymous pages:                         126849.\nPages stored in compressor:               75713.\nPages occupied by compressor:             21692.\nDecompressions:                           18893.\nCompressions:                             99716.\nPageins:                                 469625.\nPageouts:                                  2827.\nSwapins:                                      0.\nSwapouts:                                     0.\n"
+    },
+    "qualification_claimed": false,
+    "remaining_observed": [],
+    "reserve_scope": "Darwin sampled available estimate: printed free + inactive; kernel pressure must be normal (1). This is not a proven no-swap bound. RSS includes controller and observed group/tree, not global Metal compiler services.",
+    "retirement_census_complete": true,
+    "sampling_interval_seconds": 0.1,
+    "signal_observations": [],
+    "source": {
+      "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "runner_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "status": ""
+    },
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 10.150244874999999,
+    "whole_inputs_unchanged": true
+  }
+}
