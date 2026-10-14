@@ -1,0 +1,42 @@
+{
+  "arithmetic_evidence_commit": "f2f5055988df7f4f6335e27c9c326365c76487ff",
+  "arithmetic_manifest": {
+    "bytes": 34116,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/manifest.json",
+    "sha256": "b0c5baa9dc01accb442a9d5b58172fe96d2a20c3d5db31ad251062d731e9e9a3"
+  },
+  "baseline_unchanged": {
+    "bytes": 10753968,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/original_baseline_controls",
+    "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856"
+  },
+  "builder_patch": {
+    "bytes": 5874,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/diagnostic-builder.patch",
+    "sha256": "9bb47b347814defbc0a85472b55361847e7634b5379fb874f05b3afe52a35ac9"
+  },
+  "header_patch": {
+    "bytes": 1903,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/candidate.patch",
+    "sha256": "7802d511095ab9b71c577edfbd90587d48515b96ade40127a9764fd9e73508c9"
+  },
+  "host_screen_evidence_commit": "34f22437f8d9ae863d36bdcee01ab64edc71b572",
+  "link_only_device_object_replacement": {
+    "new": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+    "old": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o"
+  },
+  "no_live_scratch_dependency": true,
+  "observer": {
+    "bytes": 335033,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/audited-observer.cpp",
+    "sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3"
+  },
+  "observer_origin": {
+    "bytes": 335033,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/out/computed-carry-exit-original-prerequisites/audited-observer.cpp",
+    "sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3"
+  },
+  "original_link_has_whole_archive_flags": false,
+  "prepared_only": true,
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+}

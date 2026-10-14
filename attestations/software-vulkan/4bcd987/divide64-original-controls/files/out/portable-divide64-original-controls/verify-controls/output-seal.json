@@ -1,0 +1,32 @@
+{
+  "inputs_before": {
+    "bytes": 603080,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/verify-controls/inputs-before.json",
+    "sha256": "5563428c817287e0de262c5f3721093ad0b548529de47d5aa43b66c64f532ad4"
+  },
+  "label": "verify-controls",
+  "operator_context": {
+    "bytes": 761,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/operator-context.json",
+    "sha256": "8acc4dbf18b4f73f453adbd1563ca3316c4b1f29d825607b77f87f5cebf747de"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/out/portable-divide64-original-controls/control-acceptance.json": {
+      "bytes": 6379,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/control-acceptance.json",
+      "sha256": "9caad87351de388634d9d9991e82119801d9d858c5ae405a5855f736b974a61a"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/check_controls.py"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 430808,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/source-freeze.json",
+    "sha256": "70ce50afd24fece5b8123d3cb067c05039caec4bec2156facbfbd3cf3c3c37a8"
+  }
+}

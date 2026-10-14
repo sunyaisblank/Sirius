@@ -1,0 +1,77 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/original_candidate_controls",
+    "--gtest_filter=RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "control-5",
+  "child_exit": 0,
+  "child_pid": 338152,
+  "child_start_ticks": "4861817",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 335697,
+    "pid": 338148,
+    "ppid": 335698,
+    "rss_kib": 28504,
+    "session": 335697,
+    "start_ticks": "4861726",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/portable-divide64-original-controls/control-5/gtest.xml",
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Unchanged original integrated control; original assertions/routes/governors and actual LVP/cache-off path. No benefit or qualification.",
+  "minimum_sampled_available_kib": 15147272,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 338152,
+      "saved_start_ticks": "4861817"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 2971596,
+  "provider_mappings": [
+    {
+      "maps": [
+        "742dc0000000-742dc8208000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "742dc8208000-742dc8209000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "742dc8209000-742dc88e6000 rw-p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "742dc8a00000-742dc8a5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "742dc8a5b000-742dc8e6b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "742dc8e6b000-742dc94c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "742dc94c6000-742dc9561000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "742dc9d7a000-742dc9d80000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "742dc9d80000-742dc9dcc000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "742dc9dcc000-742dc9df6000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "742dc9df6000-742dc9df7000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "742dc9df7000-742dc9df8000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+      ],
+      "owned_session": 338152,
+      "pid": 338152,
+      "start_ticks": "4861817"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "Unchanged original integrated control; original assertions/routes/governors and actual LVP/cache-off path. No benefit or qualification.",
+  "source": {
+    "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 129.36385531799897,
+  "whole_inputs_unchanged": true
+}

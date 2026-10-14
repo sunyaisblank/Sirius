@@ -1,0 +1,37 @@
+{
+  "inputs_before": {
+    "bytes": 603080,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/verify-endpoint-routes/inputs-before.json",
+    "sha256": "5563428c817287e0de262c5f3721093ad0b548529de47d5aa43b66c64f532ad4"
+  },
+  "label": "verify-endpoint-routes",
+  "operator_context": {
+    "bytes": 761,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/operator-context.json",
+    "sha256": "8acc4dbf18b4f73f453adbd1563ca3316c4b1f29d825607b77f87f5cebf747de"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/out/portable-divide64-original-controls/endpoint-route-acceptance.json": {
+      "bytes": 16396,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/endpoint-route-acceptance.json",
+      "sha256": "c7ffe00461d490f21e1907fddb3700d3f72e97b3bd36ead0f01c623f932e6ea1"
+    },
+    "/home/astra/.project/Sirius/out/portable-divide64-original-controls/original-factored-readbacks.xml": {
+      "bytes": 10004,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/original-factored-readbacks.xml",
+      "sha256": "d57c88e545e89d882b668dbdf3e6c0e6d8e3bfb3d26531ae7808f97e9dabf329"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/verify_control_routes.py"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 430808,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/source-freeze.json",
+    "sha256": "70ce50afd24fece5b8123d3cb067c05039caec4bec2156facbfbd3cf3c3c37a8"
+  }
+}

@@ -1,0 +1,691 @@
+{
+  "all_seven_tables_and_nonarray_ABI_constants_equal": true,
+  "changed_modules": 17,
+  "headers": {
+    "retained_kernels.h": {
+      "candidate": {
+        "bytes": 7938559,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_kernels.h",
+        "sha256": "28dc05bd954a267f907fc64847a815734c971e198e3b8d04dddce0caf4cdd808"
+      },
+      "changed_arrays": [
+        "kCameraPortableShader",
+        "kCameraPortableFp64Shader",
+        "kTransportPortableShader",
+        "kTransportPortableFp64Shader",
+        "kTransportPortableNormalSumShader",
+        "kEndpointPortableShader",
+        "kEndpointPortableFp64Shader",
+        "kEndpointPortableNormalSumShader",
+        "kDensePortableShader",
+        "kDensePortableFp64Shader",
+        "kInitializePortableShader",
+        "kInitializePortableFp64Shader",
+        "kRayCameraPortableShader",
+        "kRayCameraPortableFp64Shader",
+        "kDopriPhasePortableShader",
+        "kDopriPhasePortableFp64Shader",
+        "kDopriPhasePortableNormalSumShader"
+      ],
+      "stock": {
+        "bytes": 7952166,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_kernels.h",
+        "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc"
+      }
+    },
+    "retained_owner_kernels.h": {
+      "candidate": {
+        "bytes": 432942,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_owner_kernels.h",
+        "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+      },
+      "changed_arrays": [],
+      "stock": {
+        "bytes": 432942,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_owner_kernels.h",
+        "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+      }
+    }
+  },
+  "main_arrays_changed": 17,
+  "main_arrays_unchanged": 23,
+  "modules": [
+    {
+      "candidate": {
+        "bytes": 47720,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_camera.spv",
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_camera.spv",
+      "stock": {
+        "bytes": 47720,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_camera.spv",
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 61048,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_camera_fp64.spv",
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_camera_fp64.spv",
+      "stock": {
+        "bytes": 61048,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_camera_fp64.spv",
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 511504,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_camera_portable.spv",
+        "sha256": "66fe4a0433025f3c79ed2a15d52b554a4b739693493232cbf1738d10bcc417e6"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": true,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 2
+      },
+      "module": "retained_camera_portable.spv",
+      "stock": {
+        "bytes": 512324,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_camera_portable.spv",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 511504,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_camera_portable_fp64.spv",
+        "sha256": "66fe4a0433025f3c79ed2a15d52b554a4b739693493232cbf1738d10bcc417e6"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": true,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 2
+      },
+      "module": "retained_camera_portable_fp64.spv",
+      "stock": {
+        "bytes": 512324,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_camera_portable_fp64.spv",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 77952,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dense.spv",
+        "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_dense.spv",
+      "stock": {
+        "bytes": 77952,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dense.spv",
+        "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 90628,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dense_fp64.spv",
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_dense_fp64.spv",
+      "stock": {
+        "bytes": 90628,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dense_fp64.spv",
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 115816,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dense_portable.spv",
+        "sha256": "b65b19818f121179d0fa924132bc693cd06229aa0a5fed5dc8ba7307252a1cd9"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_dense_portable.spv",
+      "stock": {
+        "bytes": 116204,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dense_portable.spv",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 115816,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dense_portable_fp64.spv",
+        "sha256": "b65b19818f121179d0fa924132bc693cd06229aa0a5fed5dc8ba7307252a1cd9"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_dense_portable_fp64.spv",
+      "stock": {
+        "bytes": 116204,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dense_portable_fp64.spv",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 58740,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase.spv",
+        "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_dopri_phase.spv",
+      "stock": {
+        "bytes": 58740,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase.spv",
+        "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 72100,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase_fp64.spv",
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_dopri_phase_fp64.spv",
+      "stock": {
+        "bytes": 72100,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase_fp64.spv",
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 92456,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase_portable.spv",
+        "sha256": "0208dbde4a426ffcb5a0575b79dcb0fcde57160c9eaaf99baac94b69793e6a6b"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_dopri_phase_portable.spv",
+      "stock": {
+        "bytes": 92844,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase_portable.spv",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 92456,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase_portable_fp64.spv",
+        "sha256": "0208dbde4a426ffcb5a0575b79dcb0fcde57160c9eaaf99baac94b69793e6a6b"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_dopri_phase_portable_fp64.spv",
+      "stock": {
+        "bytes": 92844,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase_portable_fp64.spv",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 96364,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase_portable_normal_sum.spv",
+        "sha256": "7d524945bda49a3657255511a03570eb3d92273911c5d863bd900381596889e2"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_dopri_phase_portable_normal_sum.spv",
+      "stock": {
+        "bytes": 96752,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase_portable_normal_sum.spv",
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 99300,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint.spv",
+        "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_endpoint.spv",
+      "stock": {
+        "bytes": 99300,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint.spv",
+        "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 97468,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_fma.spv",
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_endpoint_fma.spv",
+      "stock": {
+        "bytes": 97468,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_fma.spv",
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 111960,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_fp64.spv",
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_endpoint_fp64.spv",
+      "stock": {
+        "bytes": 111960,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_fp64.spv",
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 144956,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_portable.spv",
+        "sha256": "03becfd673eca09fe21acf7c3ccacfb3d90c5ce187f78d5a67c5f18255395bcd"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_endpoint_portable.spv",
+      "stock": {
+        "bytes": 145344,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_portable.spv",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 144956,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_portable_fp64.spv",
+        "sha256": "03becfd673eca09fe21acf7c3ccacfb3d90c5ce187f78d5a67c5f18255395bcd"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_endpoint_portable_fp64.spv",
+      "stock": {
+        "bytes": 145344,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_portable_fp64.spv",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 151012,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_portable_normal_sum.spv",
+        "sha256": "6459db9b5d1159ed5ebf90f4af0b32b58c84733e3b824fc1c48eb78e80b06dc8"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_endpoint_portable_normal_sum.spv",
+      "stock": {
+        "bytes": 151400,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_portable_normal_sum.spv",
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 161620,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_portable_stage7_owner.spv",
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_endpoint_portable_stage7_owner.spv",
+      "stock": {
+        "bytes": 161620,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_portable_stage7_owner.spv",
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 57108,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_initialize.spv",
+        "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_initialize.spv",
+      "stock": {
+        "bytes": 57108,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_initialize.spv",
+        "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 70468,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_initialize_fp64.spv",
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_initialize_fp64.spv",
+      "stock": {
+        "bytes": 70468,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_initialize_fp64.spv",
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 77056,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_initialize_portable.spv",
+        "sha256": "64305462de59080198e04a67c331c27e54a487c3cc475a73d39b70d853e5e443"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_initialize_portable.spv",
+      "stock": {
+        "bytes": 77444,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_initialize_portable.spv",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 77056,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_initialize_portable_fp64.spv",
+        "sha256": "64305462de59080198e04a67c331c27e54a487c3cc475a73d39b70d853e5e443"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_initialize_portable_fp64.spv",
+      "stock": {
+        "bytes": 77444,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_initialize_portable_fp64.spv",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 45368,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_ray_camera.spv",
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_ray_camera.spv",
+      "stock": {
+        "bytes": 45368,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_ray_camera.spv",
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 58728,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_ray_camera_fp64.spv",
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_ray_camera_fp64.spv",
+      "stock": {
+        "bytes": 58728,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_ray_camera_fp64.spv",
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 474436,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_ray_camera_portable.spv",
+        "sha256": "bf7909a265ada93de86fbe64f273a92fa9437f14bc7828a692b99a72ded262a3"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": true,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 2
+      },
+      "module": "retained_ray_camera_portable.spv",
+      "stock": {
+        "bytes": 475256,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_ray_camera_portable.spv",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 474436,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_ray_camera_portable_fp64.spv",
+        "sha256": "bf7909a265ada93de86fbe64f273a92fa9437f14bc7828a692b99a72ded262a3"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": true,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 2
+      },
+      "module": "retained_ray_camera_portable_fp64.spv",
+      "stock": {
+        "bytes": 475256,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_ray_camera_portable_fp64.spv",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 85364,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport.spv",
+        "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_transport.spv",
+      "stock": {
+        "bytes": 85364,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport.spv",
+        "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 83532,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_fma.spv",
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_transport_fma.spv",
+      "stock": {
+        "bytes": 83532,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_fma.spv",
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 98008,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_fp64.spv",
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_transport_fp64.spv",
+      "stock": {
+        "bytes": 98008,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_fp64.spv",
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 99352,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_portable.spv",
+        "sha256": "684032600e25c9fb71f3a6aa380e0811cd064b22a5cdef748f839f2a380dde9b"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_transport_portable.spv",
+      "stock": {
+        "bytes": 99740,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_portable.spv",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 99352,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_portable_fp64.spv",
+        "sha256": "684032600e25c9fb71f3a6aa380e0811cd064b22a5cdef748f839f2a380dde9b"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_transport_portable_fp64.spv",
+      "stock": {
+        "bytes": 99740,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_portable_fp64.spv",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 103652,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_portable_normal_sum.spv",
+        "sha256": "ccb99e0f0fd25a920933368e893dbaba3697a975d61a36dac8e56b4e6d09ef69"
+      },
+      "changed": true,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": {
+        "inlined_camera": false,
+        "shift26_quotient_product_remainder_test_and_narrowing_joined": true,
+        "unsigned64_quotient_sites": 1
+      },
+      "module": "retained_transport_portable_normal_sum.spv",
+      "stock": {
+        "bytes": 104040,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_portable_normal_sum.spv",
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+      }
+    },
+    {
+      "candidate": {
+        "bytes": 113452,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_portable_stage7_owner.spv",
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+      },
+      "changed": false,
+      "complete_public_shared_type_layout_modes_and_ordered_barriers_equal": true,
+      "divide_footprint": null,
+      "module": "retained_transport_portable_stage7_owner.spv",
+      "stock": {
+        "bytes": 113452,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_portable_stage7_owner.spv",
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+      }
+    }
+  ],
+  "owner_arrays_unchanged": 2,
+  "passed": true,
+  "scope": "Complete compiler/profile/ABI evidence only; no integrated numeric or benefit verdict.",
+  "stock_reuse": {
+    "bytes": 43077,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/stock-reuse-acceptance.json",
+    "sha256": "6fa61db75303276aa50b431273fc2ba8aa318652d5fca6b02da0f2e9e80761d5"
+  },
+  "unchanged_modules": 18
+}

@@ -1,0 +1,56 @@
+{
+  "inputs_before": {
+    "bytes": 580123,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/compile-compute-sealed/inputs-before.json",
+    "sha256": "56fc4b4aa1863f4dbc1484bc4434b4af2108d9a87ba02b3248d61438242a9a27"
+  },
+  "label": "compile-compute-sealed",
+  "operator_context": {
+    "bytes": 761,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/operator-context.json",
+    "sha256": "8acc4dbf18b4f73f453adbd1563ca3316c4b1f29d825607b77f87f5cebf747de"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.d": {
+      "bytes": 751,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.d",
+      "sha256": "fc5b541dece155ac0909301ff74598ea76dae34dc30239e4f3b0be33515a552b"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.o": {
+      "bytes": 5672344,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.o",
+      "sha256": "11f815a71a65ab92f58ae90beb9a281b3bcf8154e0639a9da60c17b992a9dfe4"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/headers",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.d"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 430808,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide64-original-controls/source-freeze.json",
+    "sha256": "70ce50afd24fece5b8123d3cb067c05039caec4bec2156facbfbd3cf3c3c37a8"
+  }
+}

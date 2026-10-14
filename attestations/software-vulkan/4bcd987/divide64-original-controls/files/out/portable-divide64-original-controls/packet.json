@@ -1,0 +1,563 @@
+{
+  "arithmetic_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic",
+  "arithmetic_manifest_sha256": "b0c5baa9dc01accb442a9d5b58172fe96d2a20c3d5db31ad251062d731e9e9a3",
+  "baseline_origin": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/original_baseline_controls",
+  "changed_arrays": [
+    "kCameraPortableFp64Shader",
+    "kCameraPortableShader",
+    "kDensePortableFp64Shader",
+    "kDensePortableShader",
+    "kDopriPhasePortableFp64Shader",
+    "kDopriPhasePortableNormalSumShader",
+    "kDopriPhasePortableShader",
+    "kEndpointPortableFp64Shader",
+    "kEndpointPortableNormalSumShader",
+    "kEndpointPortableShader",
+    "kInitializePortableFp64Shader",
+    "kInitializePortableShader",
+    "kRayCameraPortableFp64Shader",
+    "kRayCameraPortableShader",
+    "kTransportPortableFp64Shader",
+    "kTransportPortableNormalSumShader",
+    "kTransportPortableShader"
+  ],
+  "changed_modules": [
+    "retained_camera_portable.spv",
+    "retained_camera_portable_fp64.spv",
+    "retained_dense_portable.spv",
+    "retained_dense_portable_fp64.spv",
+    "retained_dopri_phase_portable.spv",
+    "retained_dopri_phase_portable_fp64.spv",
+    "retained_dopri_phase_portable_normal_sum.spv",
+    "retained_endpoint_portable.spv",
+    "retained_endpoint_portable_fp64.spv",
+    "retained_endpoint_portable_normal_sum.spv",
+    "retained_initialize_portable.spv",
+    "retained_initialize_portable_fp64.spv",
+    "retained_ray_camera_portable.spv",
+    "retained_ray_camera_portable_fp64.spv",
+    "retained_transport_portable.spv",
+    "retained_transport_portable_fp64.spv",
+    "retained_transport_portable_normal_sum.spv"
+  ],
+  "control_limits": {
+    "control-1": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "control-2": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "control-3": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "control-4": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "control-5": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "control-6": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "control-7": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "control-8": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    }
+  },
+  "dependencies": {
+    "compile-compute-sealed": [
+      "prepare-producer"
+    ],
+    "compile-observer": [
+      "prepare-producer"
+    ],
+    "compile-products-candidate": [],
+    "link-candidate": [
+      "compile-compute-sealed",
+      "compile-observer"
+    ],
+    "native-policy-selfcheck": [
+      "reuse-products-stock",
+      "compile-products-candidate"
+    ],
+    "prepare-producer": [
+      "verify-products"
+    ],
+    "reuse-products-stock": [],
+    "verify-controls": [
+      "verify-producer"
+    ],
+    "verify-endpoint-routes": [
+      "verify-producer"
+    ],
+    "verify-producer": [
+      "link-candidate"
+    ],
+    "verify-products": [
+      "reuse-products-stock",
+      "compile-products-candidate",
+      "native-policy-selfcheck"
+    ]
+  },
+  "device_object": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+  "disassembler": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+  "historical_host_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen",
+  "historical_host_root": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation",
+  "historical_pair_review": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-pair-review/pair-review.json",
+  "original_stock_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites",
+  "original_stock_manifest_sha256": "49a9f631abd228b60bd487a78e543fd2c121b3b55d4fe5f8d15c64c71742f7c2",
+  "original_stock_work": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/out/computed-carry-exit-original-prerequisites",
+  "original_symbols": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/recovery/original-symbols.json",
+  "outputs": {
+    "compile-compute-sealed": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.d"
+    ],
+    "compile-observer": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/observer.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/observer.d"
+    ],
+    "compile-products-candidate": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_camera.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_camera_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_camera_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_camera_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dense.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dense_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dense_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dense_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_dopri_phase_portable_normal_sum.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_fma.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_portable_normal_sum.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_endpoint_portable_stage7_owner.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_initialize.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_initialize_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_initialize_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_initialize_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_ray_camera.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_ray_camera_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_ray_camera_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_ray_camera_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_fma.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_portable_normal_sum.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_transport_portable_stage7_owner.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_kernels.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_owner_kernels.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_owner_layout.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_owner_layout.slang"
+    ],
+    "link-candidate": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/original_candidate_controls",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/candidate.map"
+    ],
+    "native-policy-selfcheck": [],
+    "prepare-producer": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/headers/retained_kernels.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/headers/retained_owner_kernels.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/headers/retained_owner_layout.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/original_baseline_controls",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/coupled_probe_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/infinity_probe_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/camera_frame_probe_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/parity_probe.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/infinity_probe.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/camera_frame_probe.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/parity_probe_fp32comp.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/camera_frame_probe_fp32comp.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/infinity_probe_fp32comp.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/parity_probe_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/metric_consistency_probe_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/metric_consistency_probe_fp32comp.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/trace_fp32comp.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/metric_consistency_probe.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/trace.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/trace_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/smoke.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/portability/trace.metal",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/kernels/portability/trace.cu",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/tests/backend/portable_binary32_reference.bin",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/tests/backend/retained_camera/program_fixture.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv"
+    ],
+    "reuse-products-stock": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_camera.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_camera_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_camera_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_camera_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dense.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dense_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dense_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dense_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_dopri_phase_portable_normal_sum.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_fma.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_portable_normal_sum.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_endpoint_portable_stage7_owner.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_initialize.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_initialize_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_initialize_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_initialize_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_ray_camera.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_ray_camera_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_ray_camera_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_ray_camera_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_fma.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_portable.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_portable_fp64.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_portable_normal_sum.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_transport_portable_stage7_owner.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_kernels.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_owner_kernels.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_owner_layout.h",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/stock/retained_owner_layout.slang",
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/stock-reuse-acceptance.json"
+    ],
+    "verify-controls": [
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/control-acceptance.json"
+    ],
+    "verify-endpoint-routes": [
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/endpoint-route-acceptance.json",
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/original-factored-readbacks.xml"
+    ],
+    "verify-producer": [
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/producer-acceptance.json",
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/producer-feature-acceptance.json",
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/baseline-create.disassembly",
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/candidate-create.disassembly",
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/contract/baseline.json",
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/contract/build-and-arrays.json"
+    ],
+    "verify-products": [
+      "/home/astra/.project/Sirius/out/portable-divide64-original-controls/products-acceptance.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_camera.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_camera_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_camera_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_camera_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_dense.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_dense_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_dense_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_dense_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_dopri_phase.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_dopri_phase_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_dopri_phase_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_dopri_phase_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_dopri_phase_portable_normal_sum.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_endpoint.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_endpoint_fma.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_endpoint_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_endpoint_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_endpoint_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_endpoint_portable_normal_sum.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_endpoint_portable_stage7_owner.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_initialize.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_initialize_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_initialize_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_initialize_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_ray_camera.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_ray_camera_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_ray_camera_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_ray_camera_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_transport.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_transport_fma.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_transport_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_transport_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_transport_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_transport_portable_normal_sum.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/stock/retained_transport_portable_stage7_owner.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_camera.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_camera_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_camera_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_camera_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_dense.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_dense_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_dense_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_dense_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_dopri_phase.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_dopri_phase_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_dopri_phase_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_dopri_phase_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_dopri_phase_portable_normal_sum.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_endpoint.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_endpoint_fma.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_endpoint_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_endpoint_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_endpoint_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_endpoint_portable_normal_sum.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_endpoint_portable_stage7_owner.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_initialize.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_initialize_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_initialize_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_initialize_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_ray_camera.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_ray_camera_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_ray_camera_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_ray_camera_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_transport.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_transport_fma.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_transport_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_transport_portable.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_transport_portable_fp64.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_transport_portable_normal_sum.spvasm",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/analysis/candidate/retained_transport_portable_stage7_owner.spvasm"
+    ]
+  },
+  "producer_labels": [
+    "reuse-products-stock",
+    "compile-products-candidate",
+    "native-policy-selfcheck",
+    "verify-products",
+    "prepare-producer",
+    "compile-compute-sealed",
+    "compile-observer",
+    "link-candidate",
+    "verify-producer"
+  ],
+  "provider_identities": {
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+      "bytes": 143545784,
+      "device": [
+        8,
+        80
+      ],
+      "inode": 47452,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "bytes": 510592,
+      "device": [
+        8,
+        80
+      ],
+      "inode": 13100,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+      "bytes": 11929384,
+      "device": [
+        8,
+        80
+      ],
+      "inode": 143595,
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    }
+  },
+  "recipes": {
+    "compile-compute-sealed": [
+      [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/headers",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.o",
+        "-c",
+        "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.d"
+      ]
+    ],
+    "compile-observer": [
+      [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/headers",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-DSIRIUS_TEST_HAS_KERNELS=1",
+        "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+        "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+        "-I/home/astra/.project/Sirius/tests",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+        "-O3",
+        "-DNDEBUG",
+        "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/observer.o",
+        "-c",
+        "/home/astra/.project/Sirius/out/portable-divide64-original-controls/audited-observer.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/observer.d"
+      ]
+    ],
+    "compile-products-candidate": [
+      [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-original-controls/candidate/scripts/build-retained-kernels.py",
+        "--output",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/candidate/retained_kernels.h",
+        "--compiler",
+        "/opt/slang/bin/slangc",
+        "--assembler",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+        "--disassembler",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "--validator",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "--optimizer",
+        "/usr/bin/spirv-opt",
+        "--diagnostic-divide64"
+      ]
+    ],
+    "link-candidate": [
+      [
+        "/usr/bin/g++-14",
+        "-O3",
+        "-DNDEBUG",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/observer.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/compute-sealed.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o",
+        "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+        "-ldl",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+        "-pthread",
+        "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/candidate.map",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide64-original-controls/controls/original_candidate_controls"
+      ]
+    ],
+    "native-policy-selfcheck": [
+      [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/tests/operational/retained_shader_controls_test.py"
+      ]
+    ],
+    "prepare-producer": [],
+    "reuse-products-stock": [],
+    "verify-controls": [
+      [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-original-controls/check_controls.py"
+      ]
+    ],
+    "verify-endpoint-routes": [
+      [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-original-controls/verify_control_routes.py"
+      ]
+    ],
+    "verify-producer": [
+      [
+        "/usr/bin/python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-original-controls/verify_producer.py"
+      ]
+    ],
+    "verify-products": []
+  },
+  "resource_sources": {
+    "kernels/camera_frame_probe.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/camera_frame_probe.spv",
+    "kernels/camera_frame_probe_fp32comp.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/camera_frame_probe_fp32comp.spv",
+    "kernels/camera_frame_probe_fp64.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/camera_frame_probe_fp64.spv",
+    "kernels/coupled_probe_fp64.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/coupled_probe_fp64.spv",
+    "kernels/infinity_probe.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/infinity_probe.spv",
+    "kernels/infinity_probe_fp32comp.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/infinity_probe_fp32comp.spv",
+    "kernels/infinity_probe_fp64.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/infinity_probe_fp64.spv",
+    "kernels/metric_consistency_probe.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/metric_consistency_probe.spv",
+    "kernels/metric_consistency_probe_fp32comp.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/metric_consistency_probe_fp32comp.spv",
+    "kernels/metric_consistency_probe_fp64.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/metric_consistency_probe_fp64.spv",
+    "kernels/parity_probe.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/parity_probe.spv",
+    "kernels/parity_probe_fp32comp.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/parity_probe_fp32comp.spv",
+    "kernels/parity_probe_fp64.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/parity_probe_fp64.spv",
+    "kernels/portability/trace.cu": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/portability/trace.cu",
+    "kernels/portability/trace.metal": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/portability/trace.metal",
+    "kernels/smoke.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/smoke.spv",
+    "kernels/trace.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/trace.spv",
+    "kernels/trace_fp32comp.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/trace_fp32comp.spv",
+    "kernels/trace_fp64.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/kernels/trace_fp64.spv",
+    "tests/backend/portable_binary32_reference.bin": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/tests/backend/portable_binary32_reference.bin",
+    "tests/backend/retained_camera/program_camera_probe-fp32.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv",
+    "tests/backend/retained_camera/program_camera_probe-fp32comp.spv": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
+    "tests/backend/retained_camera/program_fixture.h": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/controls/resources/tests/backend/retained_camera/program_fixture.h"
+  },
+  "schema": "sirius-optional64-original-default-profile-controls/v1",
+  "stock_reuse_directory": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/computed-carry-exit-original-prerequisites/files/bin/linux-gcc/computed-carry-exit-original-prerequisites/stock",
+  "stock_reuse_tools": [
+    "/opt/slang/bin/slangc",
+    "/usr/bin/spirv-opt",
+    "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+    "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+    "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+  ]
+}
