@@ -1,0 +1,64 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/ctest",
+    "--test-dir",
+    "bin/linux-gcc",
+    "-V",
+    "--output-on-failure",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/ctest.xml",
+    "--output-log",
+    "/home/astra/.project/Sirius/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/ctest.log",
+    "-R",
+    "^(CameraContinuousProjection\\.AngularProjectionPreservesGeometricZerosForDetectorOffsets|CameraContinuousProjection\\.CropTranslationDoesNotRenormalizeOrMaskProjection|CameraContinuousProjection\\.FisheyeCropMaskCentreAndAntipodalRim|CameraContinuousProjection\\.FixedPupilAndObserverArePreserved|CameraContinuousProjection\\.GeometryAndDifferentialAcrossOutputCrop|CameraContinuousProjection\\.InvalidAndUnsupportedProjectionPublishesNoRay|CameraContinuousProjection\\.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff|CameraContinuousProjection\\.RefinementDeclinesLostCoordinatesAndDirections|CameraFilmDifferential\\.CustomCameraDeclinesUnavailableDifferential|CameraFilmDifferential\\.EquidistantCentreLimitAndAntipodalMask|CameraFilmDifferential\\.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns|CameraFilmDifferential\\.FullLaunchDifferentiatesDisplacedMovingKerrObserver|CameraFilmDifferential\\.GovernedFourSampleLaunchAndSingleObserverBoost|CameraFilmDifferential\\.IndependentGeometryAndActualRayStencils|CameraFilmDifferential\\.PerspectiveAndFixedPupilSolidAngleLaws|CameraFilmDifferential\\.PixelUnitsAndIntegratedRectangleSolidAngle|CameraFilmDifferential\\.PreservesNominalRaysAndExistingOrientationSemantics|CameraSampling\\.SequenceDoesNotCollapseFilmAndPupilDimensions|CameraWorldlineTest\\.RestScreenRayAndWorldlineComposeOverLensModels|ObserverFrameTests\\.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne|ObserverFrameTests\\.MovingCameraLaunchMatchesIndependentLorentzTransform|ThinLensCameraTest\\.CentreApertureSharesPinholeProjectionAndFieldOfView|ThinLensCameraTest\\.OversizedPupilDeclinesTheLocalTangentPlane|ThinLensCameraTest\\.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus)$"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "original-24-cpu-camera-controls",
+  "child_exit": 0,
+  "child_pid": 120741,
+  "child_start_ticks": "2074723",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 120717,
+    "pid": 120718,
+    "ppid": 120717,
+    "rss_kib": 32632,
+    "session": 120717,
+    "start_ticks": "2074677",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Twenty-four unchanged original finite CPU camera controls only; no device dispatch, frame, full P5/P2/P3, Mandatory or release qualification.",
+  "minimum_sampled_available_kib": 18758324,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 120741,
+      "saved_start_ticks": "2074723"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 50168,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Twenty-four unchanged original finite CPU camera controls only; no device dispatch, frame, full P5/P2/P3, Mandatory or release qualification.",
+  "source": {
+    "revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.28923841799769434,
+  "whole_inputs_unchanged": true
+}

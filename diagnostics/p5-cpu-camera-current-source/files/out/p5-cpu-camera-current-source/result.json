@@ -1,0 +1,645 @@
+{
+  "passed": true,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "expected_names": [
+    "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+    "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+    "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+    "CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+    "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+    "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+    "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+    "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+    "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+    "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+    "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+    "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+    "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+    "CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+    "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+    "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+    "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+    "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+    "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+    "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+    "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+    "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+    "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+    "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus"
+  ],
+  "scope": "Twenty-four unchanged original finite CPU camera controls only; no device dispatch, frame, full P5/P2/P3, Mandatory or release qualification.",
+  "finite_acceptance_scope": {
+    "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop": "1280x640; yaw .13/pitch -.21/roll .09; all three lenses; four film points (-12.25,-8.75),(1291.3,649.1),(437.375,255.125),(640,320); pupil(.2,.7), thin focus30. Independent normalized plane-rotation/fixed-focus/spherical geometry 5e-15; central FD h=.002 at 3e-12; cross-product density 2e-20.",
+    "CameraContinuousProjection.FixedPupilAndObserverArePreserved": "ThinLens1280x640 focus30 beta(.2,-.1,.3), four original samples, film(-3.25,650.75). Exact pupil/origin/beta preservation; fixed-focus plane intersections 2e-13.",
+    "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim": "100x100/FOV60 at (150,50),(350,50),(350.1,50), then FOV360 rim(100,50)/centre(50,50). Original active/represented/differential-mask checks; centre direction exact -1 and density pi_float^2*.02^2 at 2e-18.",
+    "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections": "Default Pinhole offsets(1e-8,-1e-8) at(960,540) remain distinct; (1e-20,0),(1e-20,.25) and denorm_min at(0,540) decline as Unrepresentable.",
+    "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection": "Three lenses,1280x640 versus1600x640; x=-16,.25,1279.75,1296 translated+160 at y170.25,pupil(.2,.7). Direction5e-16 and density2e-20.",
+    "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff": "1920x1080; yaw .17/pitch-.11/roll.07,beta_x.2; all three lenses/four original samples/three pixels(0,0),(1919,1079),(713,431), thin focus30. Legacy before/after ray exact, pupil exact; maximum legacy/smooth direction difference >1e-10 and <1e-6 (compatibility budget only).",
+    "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay": "Default Pinhole: NaN/+Inf film, pupil u=-1/1/NaN ->InvalidInput; max_double film->Arithmetic; original custom camera->Unsupported, no ray.",
+    "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets": "ThinLens4x2/FOV2/focus50, film(.5,.5),pupil(.2,.7). Exact angular Jacobian p[1][1]=0 and nonzero determinant; invert original sigma=(2*pi/180)/2*.3 offsets for z=(4,0),(0,4), both projections represented.",
+    "CameraFilmDifferential.IndependentGeometryAndActualRayStencils": "Three lenses1200x800 yaw.31/pitch-.27/roll.19; pixels(121,231),(731,437),(990,681),sample(.37,.63,.21,.82). Independent double normalized geometry FD h=.01:2e-9+2e-6*abs(derivative); actual public float-ray stencil offsets[-4,-2,2,4]/24:8e-8. Celestial reconstruction/longitudinal orthogonality2e-17; pupil exact; positive absolute/signed density.",
+    "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver": "Kerr mass1/spins[-.9,0,.9]; observer r12/theta1.1/phi.7,beta(.31,-.17,.21),ThinLens1920x1080/focus20,film(704.25,367.75),pupil(.73,.29). Four independent columns film x/y and Cartesian pupil right/up; complete launches at offsets[-2h,-h,h,2h],h=.002, with analytic phase_space reset and fixed focus recovered for pupil offsets. Five-point displacement/coordinate tangent derivatives2e-10; central null/frequency2e-14; differentiated null2e-13; non-frozen frame contribution>1e-4. Reference still uses original LaunchCameraRay for varied rays, not an independent launch implementation.",
+    "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns": "Kerr mass1/spin.6; default Pinhole with beta(.2,-.1,.3),yaw.3/pitch.2/roll-.4,film(437.25,720.125). Angular columns match observer screen2e-14; angular displacements and both pupil columns exact zero. NaN pupil derivative declines launch; singular film_to_angle declines angular inversion.",
+    "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws": "Default Pinhole/ThinLens; pixel(283,729),film sample(.29,.71),pupils(.5,0),(.19,.93). Independent plane-area law dOmega=normal_distance*dA/distance^3 at relative3e-6, positive sign; centre-pupil equivalence at(127,349) relative3e-6.",
+    "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask": "Fisheye1000x1000/FOV360,pixels(500,500),(501,500),(672,793),zero sample. Independent equidistant a*sin(a*r)/r density (centre a^2) relative3e-6; centre derivatives1e-15 and radial exact zeros. Original antipodal active/no differential and outside-optics inactive/no differential checks.",
+    "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle": "Pinhole320x240 composite midpoint sum over every original pixel versus rectangle 4*atan(a*b/sqrt(1+a^2+b^2)) at2e-5. Separate binary-exact512x256->1024x512 samples(123,77,.25,.25)->(246,154,.5,.5): EXPECT_DOUBLE_EQ density*4 and derivatives*2.",
+    "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics": "Default three lenses at(297,381),four original samples; rotated yaw.31/pitch-.27/roll.19. Before/after rays exact; Pinhole direction changes/density relative3e-6; original ThinLens/Fisheye orientation semantics preserve rays/Jacobians exactly.",
+    "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost": "ThinLens r30/theta80deg/focus30,beta(.1,.02,-.01),three pixels(169,229),(1167,586),(874,555),four original samples =>12 launches. Same CheckDifferential bounds as geometry/stencil case; stationary and moving rest-camera maps exact. Observer-screen/rest derivative reconstruction2e-17 and independently differenced boosted geometric null launches h=.01 at2e-9+2e-6*abs(expected).",
+    "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential": "Original custom Pinhole-delegating camera at(50,60): nominal observer ray active, differential unavailable; no fabricated Jacobian required.",
+    "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform": "Minkowski Cartesian unit seeds, beta(.25,-.4,.1),screen n=(-.8,.3,sqrt(.27)). Independent Lorentz q'=(1,-n), gamma and beta-dot-n equations compare all four photon components2e-14.",
+    "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne": "Kerr mass1/spin.9,event Cartesian(30,2,4),beta(.7,-.2,.1),screen(-.9,.3,sqrt(.1)). Past-directed time<0; null,unit launch frequency,tetrad signature,screen orthonormality/observer/null orthogonality all3e-13.",
+    "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels": "64x64,beta(.3,-.2,.1),all three lenses,pixel(20,24),sample(.5,.5). Bound/rest direction components exact and beta fields EXPECT_DOUBLE_EQ. Camera construction/projection only; no RenderSession or frame rendering.",
+    "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView": "200x100/FOV60/focal50/aperture2.8/focus30 versus Pinhole default focus,GenerateRay(150,50,.25,0). Centred-pupil directions1e-6; FOV30 must narrow azimuth magnitude.",
+    "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus": "320x180/FOV52/focal50/aperture2/focus30,pixel(237,71),film(.35,.65),pupils(.25,.64),(.70,.36). Pupil radius>0 and<=original aperture radius; forward direction>0; independent focus-plane intersections5e-6.",
+    "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane": "r1/focus1/focal100/aperture1 violates original r_pupil<=.1*min(r_observer,d_focus). Configuration issue and original precondition death assertion; no new boundary sample.",
+    "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions": "Exactly4096 emitted/observed original deterministic samples; every film/pupil coordinate strictly(0,1). Mean[(film_u-pupil_u)^2+(film_v-pupil_v)^2] within.01 of1/3; no random-uniform/all-sequence claim."
+  },
+  "qualification_claimed": false,
+  "p5_complete": false,
+  "mandatory_receipt_created": false,
+  "original_assertions_changed": false,
+  "outer_diagnostic_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "declared_output_environment": {
+    "TMPDIR": "/home/astra/.project/Sirius/out/p5-cpu-camera-current-source/temporary",
+    "GTEST_OUTPUT": ""
+  },
+  "executed_names": [
+    "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+    "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+    "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+    "CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+    "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+    "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+    "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+    "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+    "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+    "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+    "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+    "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+    "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+    "CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+    "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+    "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+    "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+    "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+    "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+    "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+    "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+    "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+    "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+    "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus"
+  ],
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "disabled": 0,
+  "junit": {
+    "bytes": 25292,
+    "sha256": "fc0394224e460b86276c941a089374b61e4743c61454f55a369eadacfe64f17e"
+  },
+  "ctest_output_log": {
+    "bytes": 36627,
+    "sha256": "fe333e90a91c6c4aa234a8abe7699b16ec54bc82d0c02ccfc0ea51ec874ed5e9"
+  },
+  "owner": {
+    "bytes": 3575,
+    "sha256": "c1029bd36a4bbc780abf6c7cb249e30c30678bfe47e69bed57fc1faae19556cf"
+  },
+  "source_and_registration_join": {
+    "test_sources": [
+      "tests/core/camera_continuous_projection_test.cpp",
+      "tests/core/camera_film_differential_test.cpp",
+      "tests/core/camera_sampling_test.cpp",
+      "tests/core/camera_test.cpp",
+      "tests/core/geodesic_live_path_test.cpp",
+      "tests/render/camera_aberration_test.cpp"
+    ],
+    "production_headers": [
+      "src/sirius/core/camera.h",
+      "src/sirius/core/camera_launch.h",
+      "src/sirius/core/camera_sampling.h",
+      "src/sirius/core/observer_frame.h",
+      "src/sirius/core/celestial_tangent_basis.h",
+      "src/sirius/core/metrics/kerr_schild_family.h"
+    ],
+    "core_producer": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "core_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+    "render_producer": {
+      "bytes": 12208240,
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "render_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4",
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "runtime_resources_bound": {
+      "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png": {
+        "bytes": 29984397,
+        "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe.spv": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv": {
+        "bytes": 37728,
+        "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/coupled_probe_fp64.spv": {
+        "bytes": 2288152,
+        "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe.spv": {
+        "bytes": 99692,
+        "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv": {
+        "bytes": 100040,
+        "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp64.spv": {
+        "bytes": 100568,
+        "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe.spv": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv": {
+        "bytes": 66064,
+        "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe.spv": {
+        "bytes": 5562236,
+        "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv": {
+        "bytes": 5566460,
+        "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp64.spv": {
+        "bytes": 5533624,
+        "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.cu": {
+        "bytes": 316063,
+        "sha256": "e8460dbe10346d5cf457a533c7126707b87cbd108f43c7a8f2fb6e92f5e8fd8d"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.metal": {
+        "bytes": 338766,
+        "sha256": "879d15908e66449f789652f40a329b731bebc65dca396659b636cf834943df06"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/smoke.spv": {
+        "bytes": 1404,
+        "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/trace.spv": {
+        "bytes": 4038204,
+        "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp32comp.spv": {
+        "bytes": 4041528,
+        "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp64.spv": {
+        "bytes": 3916680,
+        "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/model/alignment_receipt.json": {
+        "bytes": 1808,
+        "sha256": "cbeb56fdcb0223f8d5d9c5696870d7a014b216e1aa68fc5ef394e733933bd077"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/model/operating_model.json": {
+        "bytes": 130331,
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.frag": {
+        "bytes": 1167,
+        "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.vert": {
+        "bytes": 198,
+        "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.frag": {
+        "bytes": 2386,
+        "sha256": "58f4438f27fcb647f86ce9fbb8e875e6bee0fbea20768ee6e289e952da0b51ec"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.vert": {
+        "bytes": 198,
+        "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.frag": {
+        "bytes": 3799,
+        "sha256": "bee2ff8435f1d25ce111d6da0623975acf74205511ebce81df011d61d1ab0536"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.vert": {
+        "bytes": 577,
+        "sha256": "08467d1bc78904fe7512245db7e2912caf132d5de250955b0719f4f51c94a039"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/portable_binary32_reference.bin": {
+        "bytes": 4182444,
+        "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+        "bytes": 35160,
+        "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+        "bytes": 35196,
+        "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_fixture.h": {
+        "bytes": 416303,
+        "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+      }
+    },
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_WERROR": "ON",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "CMAKE_CXX_COMPILER": "g++-14"
+    },
+    "original_compile_commands": [
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o -c /home/astra/.project/Sirius/tests/core/camera_continuous_projection_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/core/camera_continuous_projection_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o -c /home/astra/.project/Sirius/tests/core/camera_film_differential_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/core/camera_film_differential_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o -c /home/astra/.project/Sirius/tests/core/camera_sampling_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/core/camera_sampling_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o -c /home/astra/.project/Sirius/tests/core/camera_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/core/camera_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o -c /home/astra/.project/Sirius/tests/core/geodesic_live_path_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/core/geodesic_live_path_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_INTERACTIVE_VIEWER=1 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1 -DSIRIUS_VERSION=\\\"2.0.0\\\" -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/lib/glad/include -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -I/home/astra/.project/Sirius/lib/glfw/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o -c /home/astra/.project/Sirius/tests/render/camera_aberration_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/render/camera_aberration_test.cpp",
+        "output": "tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o"
+      }
+    ],
+    "original_link_ninja_lines": [
+      "build tests/core/sirius_core_tests tests/core/sirius_core_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/core/sirius_core_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_core_tests_Release tests/core/CMakeFiles/sirius_core_tests.dir/autodiff_dual_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/retained_arithmetic_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/coordinates_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_naninf_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_stability_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/christoffel_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/horizon_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_derivative_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_loader_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_registry_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/reissner_nordstrom_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/schwarzschild_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/walker_penrose_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/warp_drive_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/stokes_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_inverse_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/novikov_thorne_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/turbulence_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/volumetric_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/postprocess_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/starfield_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_transfer_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_map_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a",
+      "build src/sirius/app/sirius_render_tests tests/render/sirius_render_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/render/sirius_render_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_render_tests_Release tests/render/CMakeFiles/sirius_render_tests.dir/alcubierre_acceptance_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/film_pipeline_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/tile_scheduler_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/progress_tracker_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/render_evidence_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/memory_governor_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/ray_bundle_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/starfield_point_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_physics_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/ray_work_queue_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/doppler_toggle_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/pixel_sampling_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/shadow_boundary_test.cpp.o | src/sirius/render/libsirius_render.a src/sirius/app/libsirius_app_lib.a lib/libgtest_main.a src/sirius/render/libsirius_render.a src/sirius/backend/libsirius_backend_cpu.a src/sirius/backend/libsirius_backend.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a /usr/lib/x86_64-linux-gnu/libvulkan.so _deps/ftxui-build/libftxui-component.a _deps/ftxui-build/libftxui-dom.a _deps/ftxui-build/libftxui-screen.a lib/glfw/src/libglfw3.a /usr/lib/x86_64-linux-gnu/librt.a /usr/lib/x86_64-linux-gnu/libm.so /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so lib/libgtest.a || _deps/ftxui-build/libftxui-component.a _deps/ftxui-build/libftxui-dom.a _deps/ftxui-build/libftxui-screen.a lib/glfw/src/libglfw3.a lib/libgtest.a lib/libgtest_main.a sirius_render_tests_input_volume src/sirius/app/libsirius_app_lib.a src/sirius/app/sirius src/sirius/backend/libsirius_backend.a src/sirius/backend/libsirius_backend_cpu.a src/sirius/backend/sirius_kernels src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a src/sirius/render/libsirius_render.a"
+    ],
+    "registrations": [
+      {
+        "name": "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+        "source": "tests/core/camera_continuous_projection_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+        "source": "tests/core/camera_continuous_projection_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+        "source": "tests/core/camera_continuous_projection_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+        "source": "tests/core/camera_continuous_projection_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraContinuousProjection.FixedPupilAndObserverArePreserved]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraContinuousProjection.FixedPupilAndObserverArePreserved]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraContinuousProjection.FixedPupilAndObserverArePreserved]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+        "source": "tests/core/camera_continuous_projection_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+        "source": "tests/core/camera_continuous_projection_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+        "source": "tests/core/camera_continuous_projection_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+        "source": "tests/core/camera_continuous_projection_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+        "source": "tests/core/camera_film_differential_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+        "source": "tests/core/camera_film_differential_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+        "source": "tests/core/camera_film_differential_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+        "source": "tests/core/camera_film_differential_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+        "source": "tests/core/camera_film_differential_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+        "source": "tests/core/camera_film_differential_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraFilmDifferential.IndependentGeometryAndActualRayStencils]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraFilmDifferential.IndependentGeometryAndActualRayStencils]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraFilmDifferential.IndependentGeometryAndActualRayStencils]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+        "source": "tests/core/camera_film_differential_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+        "source": "tests/core/camera_film_differential_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+        "source": "tests/core/camera_film_differential_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+        "source": "tests/core/camera_sampling_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+        "source": "tests/core/geodesic_live_path_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+        "source": "tests/core/geodesic_live_path_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+        "source": "tests/core/camera_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+        "source": "tests/core/camera_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+        "source": "tests/core/camera_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+        "source": "tests/render/camera_aberration_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "add_test": "add_test([=[CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests"
+      }
+    ],
+    "selected_core_cases": 23,
+    "selected_render_cases": 1,
+    "original_test_TIMEOUT_added": false
+  },
+  "reference": {
+    "kind": "Existing original geometric, finite-difference, plane-solid-angle, rectangle, Lorentz and sequence assertions; no new oracle or stronger threshold.",
+    "equations": {
+      "normalized_direction": "n=q/|q|; its tangent is (I-n*n^T)*dq/|q|; existing independent test geometry is normalized in double then finite-differenced, not a copied production derivative.",
+      "fixed_pupil": "Intersect the original fixed pupil ray with its requested focus plane.",
+      "solid_angle": "dOmega=normal_distance*dA/distance^3; rectangle=4*atan(a*b/sqrt(1+a^2+b^2)).",
+      "moving_frame": "Original independent Lorentz transform of physical photon q'=(1,-n).",
+      "four_columns": "Original five-point complete-launch variations in film x/y pixels and physical Cartesian pupil right/up; stochastic disk-map differentiation is outside this test."
+    },
+    "original_source_snapshots": {
+      "tests/core/camera_continuous_projection_test.cpp": {
+        "bytes": 14950,
+        "sha256": "fcedf1603983339a7aee6190359c2a1b2e589541263c8126fb756388e37e7b57",
+        "git_blob": "926d925417811d7471a976c9ad37a62def44b6f6"
+      },
+      "tests/core/camera_film_differential_test.cpp": {
+        "bytes": 26246,
+        "sha256": "34ecb39880aa0847517bd75ec6f7ee948f294e78340bfdd54d1922d9d93dc74c",
+        "git_blob": "91211a5332b3b97f0f8dc46896082af283fc1c08"
+      },
+      "tests/core/camera_sampling_test.cpp": {
+        "bytes": 1276,
+        "sha256": "43c18389215198d7d264f7a11383484b88704b64a1743664987a2af119f4204d",
+        "git_blob": "474c7a952663697091f846692777730a45ebb7bc"
+      },
+      "tests/core/camera_test.cpp": {
+        "bytes": 15307,
+        "sha256": "b30c8293b114ee41c600b0142e36203638c01042b83e40e812ab74dd3d4c854e",
+        "git_blob": "147f8bd9af0f448b3a7372881f39b47211fcacc3"
+      },
+      "tests/core/geodesic_live_path_test.cpp": {
+        "bytes": 19638,
+        "sha256": "153bdf22c3010a1c6209eaf02123896e2df770150bec1495ef5fb87a5eeffd73",
+        "git_blob": "81672a08824522069425954a2b253a3481291d3d"
+      },
+      "tests/render/camera_aberration_test.cpp": {
+        "bytes": 2505,
+        "sha256": "b04257a9fb4e94bc92c671165c777ef2144c0919cd35d9aa7bcda9209dbeaae4",
+        "git_blob": "a07777200621e3fce7d3a327f74d9def5316d158"
+      },
+      "src/sirius/core/camera.h": {
+        "bytes": 43067,
+        "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630",
+        "git_blob": "e1f31aa3d23794b3a1cf5e2261c88a1584ef2f0d"
+      },
+      "src/sirius/core/camera_launch.h": {
+        "bytes": 8514,
+        "sha256": "1fd4d6167b35da64246a09fa03649490c4ec0d21f4a29862911a4f37006155df",
+        "git_blob": "f8fb979c89bf8badba9937d891becf94bce7975a"
+      },
+      "src/sirius/core/camera_sampling.h": {
+        "bytes": 3255,
+        "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803",
+        "git_blob": "a59fecece36a2193eac60801c306317d55d09141"
+      },
+      "src/sirius/core/observer_frame.h": {
+        "bytes": 13423,
+        "sha256": "c09d89c0a2a1ea07fc6dae36cd566bf73670e6a3c3802e7f41f88a5eb236a566",
+        "git_blob": "ac56903c77fa55287309fa800cf888031df6446c"
+      },
+      "src/sirius/core/celestial_tangent_basis.h": {
+        "bytes": 5440,
+        "sha256": "e02003f3d27f4411efd5ab7a551eb95a55fccadc91d1c7a378626cfba8039248",
+        "git_blob": "73d7e8ae19ff9288395c0a8b766d7585705c9b73"
+      },
+      "src/sirius/core/metrics/kerr_schild_family.h": {
+        "bytes": 33851,
+        "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a",
+        "git_blob": "074a71d54304b04bae7d1f4002f2d97914b0ae62"
+      },
+      "tests/operating_model.json": {
+        "bytes": 130331,
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b",
+        "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95"
+      },
+      "tests/core/CMakeLists.txt": {
+        "bytes": 1974,
+        "sha256": "bf9c352a0db90b86836ccdd63fb3163f5bd394563fb6eade0f22e1df4640f773",
+        "git_blob": "3ebec86b19bc796ff619b839097de35ea858c8ed"
+      },
+      "tests/render/CMakeLists.txt": {
+        "bytes": 2826,
+        "sha256": "23f2ba5b952360171edaf379cf2536730623a8fc4275b14958278b7853e3aa9f",
+        "git_blob": "7a68808e58e7f673002f696871603848e04a2a69"
+      },
+      "tests/labels/CTestLabels.cmake": {
+        "bytes": 78306,
+        "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14",
+        "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7"
+      }
+    },
+    "default_camera_config": {
+      "t": 0,
+      "r": 50,
+      "theta": "pi/2",
+      "phi": 0,
+      "yaw_pitch_roll": [
+        0,
+        0,
+        0
+      ],
+      "beta_xyz": [
+        0,
+        0,
+        0
+      ],
+      "fov": 60,
+      "focal_length": 50,
+      "aperture": 2.8,
+      "focus_distance": 50,
+      "width": 1920,
+      "height": 1080
+    },
+    "representation_boundary": "Original float lens coefficients and legacy-ray roundoff budgets are retained; these finite checks do not establish all-configuration bounds."
+  },
+  "temporary_output": {
+    "path": "/home/astra/.project/Sirius/out/p5-cpu-camera-current-source/temporary",
+    "uid": 1000,
+    "mode": "0o700",
+    "residual_files": {}
+  }
+}

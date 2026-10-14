@@ -1,0 +1,436 @@
+{
+  "archive": {
+    "archived_prefix": "files/out/p5-cpu-camera-current-source",
+    "copy_is_byte_exact": true,
+    "directory_modes_uids_gids": {
+      ".": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "original-24-cpu-camera-controls": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/src": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/src/sirius": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/src/sirius/core": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/src/sirius/core/metrics": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/tests": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/tests/core": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/tests/labels": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/tests/render": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "temporary": {
+        "gid": 1000,
+        "mode": "0o700",
+        "uid": 1000
+      }
+    },
+    "original_scratch_root": "out/p5-cpu-camera-current-source",
+    "scratch_deleted": false,
+    "source_payload_bytes": 1111003,
+    "source_payload_count": 32
+  },
+  "claims": {
+    "complete_Mandatory": false,
+    "full_P2": false,
+    "full_P3": false,
+    "full_P5": false,
+    "full_frame": false,
+    "independent_Slang_projection": false,
+    "release_qualification": false,
+    "retained_GPU_parity": false
+  },
+  "diagnostic_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "finite_acceptance_scope": {
+    "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets": "ThinLens4x2/FOV2/focus50, film(.5,.5),pupil(.2,.7). Exact angular Jacobian p[1][1]=0 and nonzero determinant; invert original sigma=(2*pi/180)/2*.3 offsets for z=(4,0),(0,4), both projections represented.",
+    "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection": "Three lenses,1280x640 versus1600x640; x=-16,.25,1279.75,1296 translated+160 at y170.25,pupil(.2,.7). Direction5e-16 and density2e-20.",
+    "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim": "100x100/FOV60 at (150,50),(350,50),(350.1,50), then FOV360 rim(100,50)/centre(50,50). Original active/represented/differential-mask checks; centre direction exact -1 and density pi_float^2*.02^2 at 2e-18.",
+    "CameraContinuousProjection.FixedPupilAndObserverArePreserved": "ThinLens1280x640 focus30 beta(.2,-.1,.3), four original samples, film(-3.25,650.75). Exact pupil/origin/beta preservation; fixed-focus plane intersections 2e-13.",
+    "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop": "1280x640; yaw .13/pitch -.21/roll .09; all three lenses; four film points (-12.25,-8.75),(1291.3,649.1),(437.375,255.125),(640,320); pupil(.2,.7), thin focus30. Independent normalized plane-rotation/fixed-focus/spherical geometry 5e-15; central FD h=.002 at 3e-12; cross-product density 2e-20.",
+    "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay": "Default Pinhole: NaN/+Inf film, pupil u=-1/1/NaN ->InvalidInput; max_double film->Arithmetic; original custom camera->Unsupported, no ray.",
+    "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff": "1920x1080; yaw .17/pitch-.11/roll.07,beta_x.2; all three lenses/four original samples/three pixels(0,0),(1919,1079),(713,431), thin focus30. Legacy before/after ray exact, pupil exact; maximum legacy/smooth direction difference >1e-10 and <1e-6 (compatibility budget only).",
+    "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections": "Default Pinhole offsets(1e-8,-1e-8) at(960,540) remain distinct; (1e-20,0),(1e-20,.25) and denorm_min at(0,540) decline as Unrepresentable.",
+    "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential": "Original custom Pinhole-delegating camera at(50,60): nominal observer ray active, differential unavailable; no fabricated Jacobian required.",
+    "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask": "Fisheye1000x1000/FOV360,pixels(500,500),(501,500),(672,793),zero sample. Independent equidistant a*sin(a*r)/r density (centre a^2) relative3e-6; centre derivatives1e-15 and radial exact zeros. Original antipodal active/no differential and outside-optics inactive/no differential checks.",
+    "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns": "Kerr mass1/spin.6; default Pinhole with beta(.2,-.1,.3),yaw.3/pitch.2/roll-.4,film(437.25,720.125). Angular columns match observer screen2e-14; angular displacements and both pupil columns exact zero. NaN pupil derivative declines launch; singular film_to_angle declines angular inversion.",
+    "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver": "Kerr mass1/spins[-.9,0,.9]; observer r12/theta1.1/phi.7,beta(.31,-.17,.21),ThinLens1920x1080/focus20,film(704.25,367.75),pupil(.73,.29). Four independent columns film x/y and Cartesian pupil right/up; complete launches at offsets[-2h,-h,h,2h],h=.002, with analytic phase_space reset and fixed focus recovered for pupil offsets. Five-point displacement/coordinate tangent derivatives2e-10; central null/frequency2e-14; differentiated null2e-13; non-frozen frame contribution>1e-4. Reference still uses original LaunchCameraRay for varied rays, not an independent launch implementation.",
+    "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost": "ThinLens r30/theta80deg/focus30,beta(.1,.02,-.01),three pixels(169,229),(1167,586),(874,555),four original samples =>12 launches. Same CheckDifferential bounds as geometry/stencil case; stationary and moving rest-camera maps exact. Observer-screen/rest derivative reconstruction2e-17 and independently differenced boosted geometric null launches h=.01 at2e-9+2e-6*abs(expected).",
+    "CameraFilmDifferential.IndependentGeometryAndActualRayStencils": "Three lenses1200x800 yaw.31/pitch-.27/roll.19; pixels(121,231),(731,437),(990,681),sample(.37,.63,.21,.82). Independent double normalized geometry FD h=.01:2e-9+2e-6*abs(derivative); actual public float-ray stencil offsets[-4,-2,2,4]/24:8e-8. Celestial reconstruction/longitudinal orthogonality2e-17; pupil exact; positive absolute/signed density.",
+    "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws": "Default Pinhole/ThinLens; pixel(283,729),film sample(.29,.71),pupils(.5,0),(.19,.93). Independent plane-area law dOmega=normal_distance*dA/distance^3 at relative3e-6, positive sign; centre-pupil equivalence at(127,349) relative3e-6.",
+    "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle": "Pinhole320x240 composite midpoint sum over every original pixel versus rectangle 4*atan(a*b/sqrt(1+a^2+b^2)) at2e-5. Separate binary-exact512x256->1024x512 samples(123,77,.25,.25)->(246,154,.5,.5): EXPECT_DOUBLE_EQ density*4 and derivatives*2.",
+    "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics": "Default three lenses at(297,381),four original samples; rotated yaw.31/pitch-.27/roll.19. Before/after rays exact; Pinhole direction changes/density relative3e-6; original ThinLens/Fisheye orientation semantics preserve rays/Jacobians exactly.",
+    "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions": "Exactly4096 emitted/observed original deterministic samples; every film/pupil coordinate strictly(0,1). Mean[(film_u-pupil_u)^2+(film_v-pupil_v)^2] within.01 of1/3; no random-uniform/all-sequence claim.",
+    "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels": "64x64,beta(.3,-.2,.1),all three lenses,pixel(20,24),sample(.5,.5). Bound/rest direction components exact and beta fields EXPECT_DOUBLE_EQ. Camera construction/projection only; no RenderSession or frame rendering.",
+    "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne": "Kerr mass1/spin.9,event Cartesian(30,2,4),beta(.7,-.2,.1),screen(-.9,.3,sqrt(.1)). Past-directed time<0; null,unit launch frequency,tetrad signature,screen orthonormality/observer/null orthogonality all3e-13.",
+    "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform": "Minkowski Cartesian unit seeds, beta(.25,-.4,.1),screen n=(-.8,.3,sqrt(.27)). Independent Lorentz q'=(1,-n), gamma and beta-dot-n equations compare all four photon components2e-14.",
+    "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView": "200x100/FOV60/focal50/aperture2.8/focus30 versus Pinhole default focus,GenerateRay(150,50,.25,0). Centred-pupil directions1e-6; FOV30 must narrow azimuth magnitude.",
+    "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane": "r1/focus1/focal100/aperture1 violates original r_pupil<=.1*min(r_observer,d_focus). Configuration issue and original precondition death assertion; no new boundary sample.",
+    "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus": "320x180/FOV52/focal50/aperture2/focus30,pixel(237,71),film(.35,.65),pupils(.25,.64),(.70,.36). Pupil radius>0 and<=original aperture radius; forward direction>0; independent focus-plane intersections5e-6."
+  },
+  "git_preservation": {
+    "artifact_prefix": "diagnostics/p5-cpu-camera-current-source",
+    "commit_tree_parent": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "files": [
+      "cleanup_check.py",
+      "disposition.json",
+      "files/out/p5-cpu-camera-current-source/actions.json",
+      "files/out/p5-cpu-camera-current-source/controller.log",
+      "files/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/ctest.log",
+      "files/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/ctest.xml",
+      "files/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/inputs-after.json",
+      "files/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/inputs-before.json",
+      "files/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/owner.json",
+      "files/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/samples.jsonl",
+      "files/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/stderr.log",
+      "files/out/p5-cpu-camera-current-source/original-24-cpu-camera-controls/stdout.log",
+      "files/out/p5-cpu-camera-current-source/owned_guard.py",
+      "files/out/p5-cpu-camera-current-source/preparation.json",
+      "files/out/p5-cpu-camera-current-source/prepare.py",
+      "files/out/p5-cpu-camera-current-source/reference/src/sirius/core/camera.h",
+      "files/out/p5-cpu-camera-current-source/reference/src/sirius/core/camera_launch.h",
+      "files/out/p5-cpu-camera-current-source/reference/src/sirius/core/camera_sampling.h",
+      "files/out/p5-cpu-camera-current-source/reference/src/sirius/core/celestial_tangent_basis.h",
+      "files/out/p5-cpu-camera-current-source/reference/src/sirius/core/metrics/kerr_schild_family.h",
+      "files/out/p5-cpu-camera-current-source/reference/src/sirius/core/observer_frame.h",
+      "files/out/p5-cpu-camera-current-source/reference/tests/core/CMakeLists.txt",
+      "files/out/p5-cpu-camera-current-source/reference/tests/core/camera_continuous_projection_test.cpp",
+      "files/out/p5-cpu-camera-current-source/reference/tests/core/camera_film_differential_test.cpp",
+      "files/out/p5-cpu-camera-current-source/reference/tests/core/camera_sampling_test.cpp",
+      "files/out/p5-cpu-camera-current-source/reference/tests/core/camera_test.cpp",
+      "files/out/p5-cpu-camera-current-source/reference/tests/core/geodesic_live_path_test.cpp",
+      "files/out/p5-cpu-camera-current-source/reference/tests/labels/CTestLabels.cmake",
+      "files/out/p5-cpu-camera-current-source/reference/tests/operating_model.json",
+      "files/out/p5-cpu-camera-current-source/reference/tests/render/CMakeLists.txt",
+      "files/out/p5-cpu-camera-current-source/reference/tests/render/camera_aberration_test.cpp",
+      "files/out/p5-cpu-camera-current-source/result.json",
+      "files/out/p5-cpu-camera-current-source/run_camera.py",
+      "files/out/p5-cpu-camera-current-source/run_owned.py",
+      "manifest.json"
+    ],
+    "never_merge": true,
+    "selection": "Every original raw payload, this finite disposition, read-only permission-aware cleanup helper and whole-byte manifest; no duplicate producer ELF."
+  },
+  "original_assertions_domains_tolerances_changed": false,
+  "outcome": {
+    "case_count": 24,
+    "cases": [
+      {
+        "classname": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+        "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+        "status": "run",
+        "time": "0.0050879"
+      },
+      {
+        "classname": "CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+        "name": "CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+        "status": "run",
+        "time": "0.00572547"
+      },
+      {
+        "classname": "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+        "name": "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+        "status": "run",
+        "time": "0.0045788"
+      },
+      {
+        "classname": "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+        "name": "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+        "status": "run",
+        "time": "0.0053903"
+      },
+      {
+        "classname": "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+        "name": "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+        "status": "run",
+        "time": "0.0119786"
+      },
+      {
+        "classname": "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+        "name": "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+        "status": "run",
+        "time": "0.00650421"
+      },
+      {
+        "classname": "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+        "name": "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+        "status": "run",
+        "time": "0.00580411"
+      },
+      {
+        "classname": "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+        "name": "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+        "status": "run",
+        "time": "0.00516792"
+      },
+      {
+        "classname": "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+        "name": "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+        "status": "run",
+        "time": "0.00602474"
+      },
+      {
+        "classname": "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+        "name": "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+        "status": "run",
+        "time": "0.00558441"
+      },
+      {
+        "classname": "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+        "name": "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+        "status": "run",
+        "time": "0.00450046"
+      },
+      {
+        "classname": "CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+        "name": "CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+        "status": "run",
+        "time": "0.00510992"
+      },
+      {
+        "classname": "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+        "name": "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+        "status": "run",
+        "time": "0.00458401"
+      },
+      {
+        "classname": "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+        "name": "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+        "status": "run",
+        "time": "0.0044743"
+      },
+      {
+        "classname": "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+        "name": "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+        "status": "run",
+        "time": "0.00486392"
+      },
+      {
+        "classname": "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+        "name": "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+        "status": "run",
+        "time": "0.00530195"
+      },
+      {
+        "classname": "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+        "name": "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+        "status": "run",
+        "time": "0.005428"
+      },
+      {
+        "classname": "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+        "name": "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+        "status": "run",
+        "time": "0.00477049"
+      },
+      {
+        "classname": "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+        "name": "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+        "status": "run",
+        "time": "0.00537895"
+      },
+      {
+        "classname": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+        "name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+        "status": "run",
+        "time": "0.00531812"
+      },
+      {
+        "classname": "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+        "name": "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+        "status": "run",
+        "time": "0.0117704"
+      },
+      {
+        "classname": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+        "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+        "status": "run",
+        "time": "0.00500331"
+      },
+      {
+        "classname": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+        "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+        "status": "run",
+        "time": "0.00431812"
+      },
+      {
+        "classname": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+        "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+        "status": "run",
+        "time": "0.00501308"
+      }
+    ],
+    "child_exit": 0,
+    "cleanup_errors": [],
+    "controller_birth_now_absent": true,
+    "disabled": 0,
+    "errors": 0,
+    "failures": 0,
+    "minimum_sampled_available_kib": 18758324,
+    "observed_births_all_absent": true,
+    "passed": true,
+    "peak_sampled_rss_kib": 50168,
+    "remaining_owned_processes": [],
+    "skips": 0,
+    "source_unchanged": true,
+    "stop_reason": null,
+    "wall_seconds": 0.28923841799769434,
+    "whole_inputs_unchanged": true
+  },
+  "output_preservation": {
+    "natural_residuals_preserved": true,
+    "private_tmpdir": {
+      "mode": "0o700",
+      "path": "/home/astra/.project/Sirius/out/p5-cpu-camera-current-source/temporary",
+      "residual_files": {},
+      "uid": 1000
+    },
+    "standard_ctest_verbose_and_output_log": true
+  },
+  "passed": true,
+  "provenance": {
+    "core_producer": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "ctest_output_log": {
+      "bytes": 36627,
+      "sha256": "fe333e90a91c6c4aa234a8abe7699b16ec54bc82d0c02ccfc0ea51ec874ed5e9"
+    },
+    "input_seals_rechecked": 652,
+    "junit": {
+      "bytes": 25292,
+      "sha256": "fc0394224e460b86276c941a089374b61e4743c61454f55a369eadacfe64f17e"
+    },
+    "preparation": {
+      "bytes": 86464,
+      "sha256": "8fdfc7a050b4bde028ec2e5baa6053a1f9b633f039dbd7ac03219b9fd04ec364"
+    },
+    "preparation_pins_rechecked": 132,
+    "raw_owner": {
+      "bytes": 3575,
+      "sha256": "c1029bd36a4bbc780abf6c7cb249e30c30678bfe47e69bed57fc1faae19556cf"
+    },
+    "render_producer": {
+      "bytes": 12208240,
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "result": {
+      "bytes": 61241,
+      "sha256": "c4eaf87d18b2b382a60281075083572dd323bc2bc7e39a5c81eab4e62566823c"
+    },
+    "source_registration_compile_resource_reference_joins": "files/out/p5-cpu-camera-current-source/preparation.json"
+  },
+  "runner_source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "schema_version": 1,
+  "scope": "Twenty-four unchanged original finite CPU camera cases passed: 23 of 35 named P5 evidence entries plus the P2/P3 geometric-zero witness. No full P5/P2/P3, GPU/Slang, full frame, Mandatory or release qualification.",
+  "selection": {
+    "P2_P3_extra": "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+    "P5_named_total": 35,
+    "P5_original_selected_names": [
+      "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+      "CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+      "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+      "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+      "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+      "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+      "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+      "CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+      "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+      "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+      "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+      "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+      "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+      "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+      "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+      "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+      "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+      "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+      "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+      "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+      "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+      "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+      "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions"
+    ],
+    "executed_names": [
+      "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+      "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+      "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+      "CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+      "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+      "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+      "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+      "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+      "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+      "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+      "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+      "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+      "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+      "CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+      "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+      "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+      "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+      "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+      "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+      "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+      "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+      "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+      "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+      "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus"
+    ],
+    "not_claimed": [
+      "all finite timelike velocities",
+      "all lens/film/pupil domains",
+      "independent Slang projection",
+      "retained GPU parity",
+      "5616x4096 frame",
+      "full P5/P2/P3",
+      "Mandatory",
+      "release"
+    ],
+    "unique_count": 24
+  },
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+}
