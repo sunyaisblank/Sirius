@@ -1,0 +1,83 @@
+{
+  "all_debug_optimized_once": true,
+  "commands_checked": 249,
+  "configure_owner": {
+    "bytes": 3422,
+    "sha256": "e190e0af1af57f51820fdba16ddd83b495cbd45819aacd272f929e3bae6cdc3c"
+  },
+  "expected_cache": {
+    "BUILD_TESTS": "ON",
+    "CMAKE_BUILD_TYPE": "Debug",
+    "CMAKE_CXX_FLAGS_DEBUG": "-g -O1",
+    "CMAKE_C_FLAGS_DEBUG": "-g -O1",
+    "SIRIUS_ALIGNMENT_MODE": "development",
+    "SIRIUS_CONTRACT_MODE": "2",
+    "SIRIUS_MANDATORY_TESTS": "ON",
+    "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+    "SIRIUS_SANITIZERS": "address-undefined",
+    "SIRIUS_WERROR": "ON"
+  },
+  "forbidden_contract_sanitizer_or_float_overrides": false,
+  "generated_inputs": {
+    "bin/linux-gcc-sanitize/CMakeCache.txt": {
+      "bytes": 57743,
+      "sha256": "f73a43a0957c891d82b777019016553c1f232ea7217dc0d7285fe88553fb3741"
+    },
+    "bin/linux-gcc-sanitize/build.ninja": {
+      "bytes": 487715,
+      "sha256": "1ebb35818da130c6f8233233d3630b292e87a004d40a3e637a509c721cae1bec"
+    },
+    "bin/linux-gcc-sanitize/compile_commands.json": {
+      "bytes": 231262,
+      "sha256": "4f9e0fdb29534bba8cdff7f50be47aed49d18e77ae603b49903709fba601ddfa"
+    }
+  },
+  "passed": true,
+  "preexisting_products": {
+    "bin/linux-gcc-sanitize/src/sirius/app/sirius": {
+      "bytes": 138200544,
+      "sha256": "df78df08867ddd4bd77ba722b5cb7fb3639f2d7303a7ae7963483ac7ec7daf70"
+    },
+    "bin/linux-gcc-sanitize/tests/backend/sirius_backend_tests": {
+      "bytes": 119797424,
+      "sha256": "d5081235ce0a0827b57a6cf7caac43cded500b388e200ce00e41d55729ae0198"
+    }
+  },
+  "product_sanitizer_commands": [
+    "src/sirius/base/contracts.cpp",
+    "src/sirius/base/resource_locator.cpp",
+    "src/sirius/core/tensor.cpp",
+    "src/sirius/core/geodesic_integrator.cpp",
+    "src/sirius/backend/cpu/geodesic_tracer.cpp",
+    "src/sirius/backend/vulkan/vulkan_device.cpp",
+    "src/sirius/backend/retained_compute.cpp",
+    "src/sirius/backend/retained_integrator.cpp",
+    "src/sirius/backend/retained_trace_executor.cpp",
+    "src/sirius/render/exr_writer.cpp",
+    "src/sirius/render/png_writer.cpp",
+    "src/sirius/render/render_evidence.cpp",
+    "src/sirius/render/stb_impl.cpp",
+    "src/sirius/render/stb_write_impl.cpp",
+    "src/sirius/render/memory_governor.cpp",
+    "src/sirius/render/dispatch_governor.cpp",
+    "src/sirius/render/session/render_session.cpp",
+    "src/sirius/render/session/pixel_shading.cpp",
+    "src/sirius/render/session/point_source_detector.cpp",
+    "src/sirius/render/session/ray_work_queue.cpp",
+    "src/sirius/render/vulkan_renderer.cpp",
+    "src/sirius/app/alignment_authority.cpp",
+    "src/sirius/app/cli/command_router.cpp",
+    "src/sirius/app/cli/render_command.cpp",
+    "src/sirius/app/cli/info_command.cpp",
+    "src/sirius/app/cli/config_command.cpp",
+    "src/sirius/app/cli/cli_output.cpp",
+    "src/sirius/app/config/config_loader.cpp",
+    "src/sirius/app/config/session_config_adapter.cpp",
+    "src/sirius/app/platform_paths.cpp",
+    "src/sirius/app/cli/view_command.cpp",
+    "src/sirius/app/viewer/interactive_viewer.cpp",
+    "src/sirius/app/main.cpp"
+  ],
+  "qualification_claimed": false,
+  "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4"
+}

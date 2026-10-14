@@ -1,0 +1,86 @@
+{
+  "actual_volume_ctest_deadline_seconds": 600,
+  "build_review": {
+    "bytes": 15646,
+    "sha256": "e9115a530dee79ea0847ec1f2ff92d56aee108e06ddfb426ff4e3147b88971fe"
+  },
+  "configure_review": {
+    "bytes": 3194,
+    "sha256": "12cf0ea8653c097d980d028c9e2bec2ff46cfa37562a636b27fc8b098f1a39cb"
+  },
+  "full_sanitizer_or_Mandatory_estate_qualified": false,
+  "installed_release_qualified": false,
+  "owners": {
+    "build-focused": {
+      "owner": {
+        "bytes": 76089,
+        "sha256": "472e689c64d778125a8cd690b4a5f5948fe68fe35f3c173b3602c9ec5c0835bb"
+      },
+      "peak_sampled_rss_kib": 2770408,
+      "wall_seconds": 371.07729548800125
+    },
+    "configure": {
+      "owner": {
+        "bytes": 3422,
+        "sha256": "e190e0af1af57f51820fdba16ddd83b495cbd45819aacd272f929e3bae6cdc3c"
+      },
+      "peak_sampled_rss_kib": 84396,
+      "wall_seconds": 5.643969198004925
+    },
+    "contract-deaths": {
+      "owner": {
+        "bytes": 1978,
+        "sha256": "feedecdc8eb7ef3287388ce66524db4ee2fd852a697e94d8797b6b9c010dc333"
+      },
+      "peak_sampled_rss_kib": 59972,
+      "wall_seconds": 0.5322704179998254
+    },
+    "relocated-cpu-volume": {
+      "owner": {
+        "bytes": 3070,
+        "sha256": "3b6384d4b248b1f819303160e18c00879a8a9ad21a185353a39f506636066423"
+      },
+      "peak_sampled_rss_kib": 595196,
+      "wall_seconds": 270.9686555529988
+    }
+  },
+  "passed": true,
+  "rendered_frame_preserved_or_decoded": false,
+  "schema": "sirius-sanitizer-debug-o1-focused-result-v1",
+  "scientific_or_external_runtime_domain_qualified": false,
+  "scope": "Fresh local WSL2 GCC14 Debug O1 ASan/UBSan/LSan contract and original relocated CPU installation checks. Different machine/source than prior remote O0 failure; no remote timing-fix causal claim.",
+  "source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "tests": {
+    "contract-deaths": {
+      "cases": [
+        "Contracts.AxiomIsNeverEvaluated",
+        "Contracts.LanguageCapabilitiesDistinguishNativeFeaturesFromSubstitutes",
+        "Contracts.SatisfiedContractsPassSilently",
+        "ContractsDeathTest.EnforcedAssertionViolationTerminates",
+        "ContractsDeathTest.EnforcedPreconditionViolationTerminates"
+      ],
+      "disabled": 0,
+      "errors": 0,
+      "failures": 0,
+      "skips": 0,
+      "xml": {
+        "bytes": 4925,
+        "sha256": "a6cbc5cb6a7fabd41f97058fdf5cba1314c0b7eca1277c6858acc9f4602123f0"
+      }
+    },
+    "relocated-cpu-volume": {
+      "cases": [
+        "OperationalVolume.InstallRelocateInitialiseAndFailClosed"
+      ],
+      "disabled": 0,
+      "errors": 0,
+      "failures": 0,
+      "skips": 0,
+      "xml": {
+        "bytes": 1618,
+        "sha256": "d05542ae34d0e9edf2e040d235b7fc0670b132b3bb20622f32c7fb6e7f220e0c"
+      }
+    }
+  },
+  "volume_automatically_cleaned_by_original_test": true
+}

@@ -1,0 +1,72 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/ctest",
+    "--preset",
+    "linux-gcc-sanitize",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/sanitizer-debug-o1-verification/contract-deaths/ctest.xml",
+    "-R",
+    "^(ContractsDeathTest|Contracts)\\."
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "contract-deaths",
+  "child_exit": 0,
+  "child_pid": 347316,
+  "child_start_ticks": "5128570",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 347259,
+    "pid": 347259,
+    "ppid": 1313,
+    "rss_kib": 20692,
+    "session": 347259,
+    "start_ticks": "5128474",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 120
+  },
+  "meaning": "Run the existing two contract death tests and three contract semantics checks through the unchanged sanitizer test preset; no full-estate qualification claim.",
+  "minimum_sampled_available_kib": 19339196,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 347316,
+      "saved_start_ticks": "5128570"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 347325,
+      "saved_start_ticks": "5128592"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 347328,
+      "saved_start_ticks": "5128594"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 59972,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Run the existing two contract death tests and three contract semantics checks through the unchanged sanitizer test preset; no full-estate qualification claim.",
+  "source": {
+    "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.5322704179998254,
+  "whole_inputs_unchanged": true
+}
