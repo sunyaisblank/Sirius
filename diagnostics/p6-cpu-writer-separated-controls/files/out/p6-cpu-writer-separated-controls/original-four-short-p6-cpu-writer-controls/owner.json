@@ -1,0 +1,70 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/ctest",
+    "--test-dir",
+    "bin/linux-gcc",
+    "-V",
+    "--output-on-failure",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/p6-cpu-writer-separated-controls/original-four-short-p6-cpu-writer-controls/ctest.xml",
+    "--output-log",
+    "/home/astra/.project/Sirius/out/p6-cpu-writer-separated-controls/original-four-short-p6-cpu-writer-controls/ctest.log",
+    "-R",
+    "^(PNGWriterTest\\.DecodeRoundTripMatchesSRGBEncoding|EXRRoundTripTests\\.HDRGradientSurvivesWriteAndRead|EXRRoundTripTests\\.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode|RenderSessionProbe\\.FilmAffectsDisplayOutputButNeverLinearExr)$"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "original-four-short-p6-cpu-writer-controls",
+  "child_exit": 0,
+  "child_pid": 115705,
+  "child_start_ticks": "1945031",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 115698,
+    "pid": 115698,
+    "ppid": 1313,
+    "rss_kib": 33040,
+    "session": 115698,
+    "start_ticks": "1944991",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Original CPU short writer/film selection with unchanged assertions, fixtures, producer, resources and cleanup; the outer budget is diagnostic, not a scientific threshold or the 300s Vulkan frame criterion.",
+  "minimum_sampled_available_kib": 18880464,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 115705,
+      "saved_start_ticks": "1945031"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 115707,
+      "saved_start_ticks": "1945035"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 229568,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Original CPU short writer/film selection with unchanged assertions, fixtures, producer, resources and cleanup; the outer budget is diagnostic, not a scientific threshold or the 300s Vulkan frame criterion.",
+  "source": {
+    "revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 7.939203781999822,
+  "whole_inputs_unchanged": true
+}

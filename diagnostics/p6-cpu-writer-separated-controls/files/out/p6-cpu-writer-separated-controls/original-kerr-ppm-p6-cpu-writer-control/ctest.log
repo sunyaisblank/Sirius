@@ -1,0 +1,85 @@
+[OUTPUT] 
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+
+[HANDLER_VERBOSE_OUTPUT] 
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+[HANDLER_OUTPUT] 
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+
+[HANDLER_VERBOSE_OUTPUT] 
+Constructing a list of tests
+
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 840
+[HANDLER_OUTPUT] 
+    Start 840: RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
+
+[HANDLER_VERBOSE_OUTPUT] 
+
+840: Test command: /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests "--gtest_filter=RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter" "--gtest_also_run_disabled_tests"
+
+840: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/render
+840: Test timeout computed to be: 10000000
+840: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+840: Note: Google Test filter = RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
+840: [==========] Running 1 test from 1 test suite.
+840: [----------] Global test environment set-up.
+840: [----------] 1 test from RenderSessionProbe
+840: [ RUN      ] RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
+840: [Session] Idle --Start--> Initialising
+840: [Session] Initialising render...
+840:   Resolution: 64 x 64
+840:   Tile size:  8
+840:   Samples:    4
+840:   Metric:     Kerr
+840:   Observer:   r=50 coordinate units (r/M=50), theta=90.0002 deg
+840:   Disk:       r_in=2.32088M, r_out=20M
+840: [Session] Physics engine initialized (geodesic integration enabled)
+840: [Session] Color mode: TrueColor (Physical)
+840: [Session] Multi-threaded rendering enabled: 15 threads
+840: [Session] Loaded starfield texture: 6000x3000 RGBA (68 MB)
+840: [Session] Scene evidence: {"schema":"sirius-render-scene-v1","backend":"Cpu","metric":"Kerr","spin":0.90000000000000002,"width":64,"height":64,"samples_per_pixel":4,"field_of_view":60,"disk_enabled":true,"ray_bundles":false,"point_starfield":false,"point_star_count":0,"point_brightness_scale":100,"point_seed":42,"point_min_distance_pc":1,"point_max_distance_pc":10000,"camera_beta":[0,0,0],"lens":"Pinhole","focal_length":50,"aperture":2.7999999523162842,"focus_distance":50}
+840:   Tiles:      64 (spiral work groups)
+840: [Session] Initialising --Ready--> Scheduling
+840: [Session] Starting 15 worker threads...
+840: 
+840: [Session] All worker threads completed
+840: [Session] Scheduling --AllTilesComplete--> Completing
+840: 
+840: [Session] Writing output...
+840: [Session] Wrote: /home/astra/.project/Sirius/out/p6-cpu-writer-separated-controls/temporary-kerr/sirius-ppm-probe-375745630672071959/probe_kerr.ppm
+840: [Session] Completing --OutputWritten--> Complete
+840: 
+840: [Session] Finished with state: Complete
+840: [       OK ] RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter (253418 ms)
+840: [----------] 1 test from RenderSessionProbe (253418 ms total)
+840: 
+840: [----------] Global test environment tear-down
+840: [==========] 1 test from 1 test suite ran. (253418 ms total)
+840: [  PASSED  ] 1 test.
+[HANDLER_OUTPUT] 
+1/1 Test #840: RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter ...
+   Passed  253.42 sec
+[HANDLER_VERBOSE_OUTPUT] 
+
+The following tests passed:
+
+	RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
+[HANDLER_OUTPUT] 
+
+100% tests passed, 0 tests failed out of 1
+
+
+Label Time Summary:
+Correctness    = 253.42 sec*proc (1 test)
+Mandatory      = 253.42 sec*proc (1 test)
+Operational    = 253.42 sec*proc (1 test)
+Rendering      = 253.42 sec*proc (1 test)
+
+Total Test time (real) = 253.46 sec

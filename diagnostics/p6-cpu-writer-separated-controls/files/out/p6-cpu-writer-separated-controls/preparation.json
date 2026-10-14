@@ -1,0 +1,791 @@
+{
+  "prepared_utc": "2026-10-14T09:23:36.725155+00:00",
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "diagnostic_only_difference": [
+    ".github/workflows/ci.yml",
+    "scripts/diagnose-macos-retained.py",
+    "scripts/governance/build_policy.py",
+    "scripts/macos_metal_probe.py"
+  ],
+  "executed": false,
+  "scope": "Two separate one-shot original CPU selections; preserve prior incomplete attempt, no full P6, forensic identity, retained release-image or Mandatory qualification.",
+  "variants": {
+    "short": {
+      "case": "original-four-short-p6-cpu-writer-controls",
+      "names": [
+        "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding",
+        "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+        "EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode",
+        "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr"
+      ],
+      "seconds": 300
+    },
+    "kerr": {
+      "case": "original-kerr-ppm-p6-cpu-writer-control",
+      "names": [
+        "RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter"
+      ],
+      "seconds": 900
+    }
+  },
+  "diagnostic_changes_only": {
+    "prior_shared_budget_seconds": 300,
+    "short_outer_seconds": 300,
+    "kerr_outer_seconds": 900,
+    "original_cpu_test_TIMEOUT_added": false,
+    "original_assertions_or_scene_changed": false,
+    "vulkan_frame_acceptance_seconds": 300,
+    "vulkan_frame_acceptance_changed": false,
+    "logging": "standard CTest -V plus --output-log",
+    "image_capture_hooks": false
+  },
+  "prior_incomplete_attempt": {
+    "archive": "attestations/scientific-core/4bcd987/p6-cpu-writer-diagnostic-limit",
+    "manifest_sha256": "8b5b860301a6b697ce2505ab1ac141353840abe2589a75e9403ca3db041cab97",
+    "raw_owner": "attestations/scientific-core/4bcd987/p6-cpu-writer-diagnostic-limit/files/out/p6-cpu-writer-current-source/original-five-p6-cpu-writer-controls/owner.json",
+    "raw_owner_identity": {
+      "bytes": 2187,
+      "sha256": "282c4ed7348be2561f47e7d2917f76322c4ec8212d29984ffc3b2e0be2283ad3"
+    },
+    "stop_reason": "diagnostic_timeout",
+    "wall_seconds": 300.148816582001,
+    "child_exit": -15,
+    "scientific_assertion_verdict": "unavailable"
+  },
+  "finite_acceptance_scope": {
+    "short": {
+      "png_roundtrip": "Original 8x4 RGB gradient, stbi decode, dimensions, and maximum per-channel error <=1 byte value against the separate existing IEC encoding formula.",
+      "hdr_roundtrip": "Original 16x8 gradient (RGB maxima 3.75/14/0.5), Kerr and Sirius linear RGB metadata, TinyEXR decode/dimensions, and max normalized RGB error <1e-6. Writer and decoder use TinyEXR; no independent-format oracle is inferred.",
+      "ppm_boundary": "Original 2x1 RGBA input, exact P6 header and six RGB payload bytes [0,188,255,0,137,255]; original clipping and alpha omission assertions.",
+      "film_branch_scene": "Four original 16x12/one-SPP serial Minkowski renders with disk/bloom off and Interstellar film toggled: GetDisplayBuffer snapshots selected by PNG output must differ by >1e-4 in total, and snapshots selected by EXR output must compare exactly equal. This test does not decode its EXR files; the separate HDR roundtrip decodes a file."
+    },
+    "kerr": {
+      "kerr_ppm_scene": "Original RenderTo/ProbeConfig: 64x64, four SPP, Kerr mass1/spin0.9, tile8, parallel worker pool; all other SessionConfig defaults unchanged. Require Complete, exact P6 64x64/255 header, full RGB payload, EOF and nonconstant bytes."
+    }
+  },
+  "reference": {
+    "kind": "Unchanged original writer expectations and live-session completion/branch comparisons; no new numerical oracle or stronger gate.",
+    "original_test_sources": {
+      "tests/render/png_writer_test.cpp": {
+        "git_blob": "34f6a77647c94869c7ac1e965e32c570ba0cf358",
+        "bytes": 7187,
+        "sha256": "9b9c0be51d22ea83086adc79e5f59b00ecf7f044cb6ffc4aadee049cba254803"
+      },
+      "tests/render/exr_writer_test.cpp": {
+        "git_blob": "ab12c76a7276cf8f92f45162f172034a57e9effc",
+        "bytes": 5947,
+        "sha256": "f1e61656c69c904ef8a86fb1a5c5873f10bc633953c59d27bec370e7649b049f"
+      },
+      "tests/render/render_session_probe_test.cpp": {
+        "git_blob": "bc0c5b7b4fc363e7dc470526cbc20e93f72934de",
+        "bytes": 62654,
+        "sha256": "35ab83d1ddb556abd9d7e3fcd38f0925864f2ba47afc32f702a263eb7ea2101e"
+      },
+      "tests/support/scoped_temporary_directory.h": {
+        "git_blob": "30105596811cd044d701731edfe747355dfb588e",
+        "bytes": 2243,
+        "sha256": "00fa9dea58e9836081aa71a1e24ebad910c6f444497e312ad46ca02c8fbb16ab"
+      }
+    },
+    "source_snapshots": {
+      "out/p6-cpu-writer-separated-controls/reference/exr_writer_test.cpp": {
+        "bytes": 5947,
+        "sha256": "f1e61656c69c904ef8a86fb1a5c5873f10bc633953c59d27bec370e7649b049f"
+      },
+      "out/p6-cpu-writer-separated-controls/reference/png_writer_test.cpp": {
+        "bytes": 7187,
+        "sha256": "9b9c0be51d22ea83086adc79e5f59b00ecf7f044cb6ffc4aadee049cba254803"
+      },
+      "out/p6-cpu-writer-separated-controls/reference/render_session_probe_test.cpp": {
+        "bytes": 62654,
+        "sha256": "35ab83d1ddb556abd9d7e3fcd38f0925864f2ba47afc32f702a263eb7ea2101e"
+      },
+      "out/p6-cpu-writer-separated-controls/reference/scoped_temporary_directory.h": {
+        "bytes": 2243,
+        "sha256": "00fa9dea58e9836081aa71a1e24ebad910c6f444497e312ad46ca02c8fbb16ab"
+      }
+    },
+    "cleanup_boundary": "The original tests delete their successful image files and scoped directories. Do not intercept unlink or alter cleanup; successful image payload preservation is not claimed. Keep stdout/XML and any natural residuals."
+  },
+  "private_tmpdirs": {
+    "short": {
+      "path": "/home/astra/.project/Sirius/out/p6-cpu-writer-separated-controls/temporary-short",
+      "created_only_at_execution": true,
+      "mode": "0700",
+      "owner_uid": 1000,
+      "cleanup_interception": false
+    },
+    "kerr": {
+      "path": "/home/astra/.project/Sirius/out/p6-cpu-writer-separated-controls/temporary-kerr",
+      "created_only_at_execution": true,
+      "mode": "0700",
+      "owner_uid": 1000,
+      "cleanup_interception": false
+    }
+  },
+  "source_and_registration_join": {
+    "test_sources": [
+      "tests/render/png_writer_test.cpp",
+      "tests/render/exr_writer_test.cpp",
+      "tests/render/render_session_probe_test.cpp",
+      "tests/support/scoped_temporary_directory.h"
+    ],
+    "render_producer": {
+      "bytes": 12208240,
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "application_producer": {
+      "bytes": 9725048,
+      "sha256": "eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76"
+    },
+    "producer_recovery_archives": [
+      "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4",
+      "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76"
+    ],
+    "runtime_resource_volume": "bin/linux-gcc/src/sirius/app/resources",
+    "runtime_resource_files": {
+      "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png": {
+        "bytes": 29984397,
+        "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe.spv": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv": {
+        "bytes": 37728,
+        "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/coupled_probe_fp64.spv": {
+        "bytes": 2288152,
+        "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe.spv": {
+        "bytes": 99692,
+        "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv": {
+        "bytes": 100040,
+        "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp64.spv": {
+        "bytes": 100568,
+        "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe.spv": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv": {
+        "bytes": 66064,
+        "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe.spv": {
+        "bytes": 5562236,
+        "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv": {
+        "bytes": 5566460,
+        "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp64.spv": {
+        "bytes": 5533624,
+        "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.cu": {
+        "bytes": 316063,
+        "sha256": "e8460dbe10346d5cf457a533c7126707b87cbd108f43c7a8f2fb6e92f5e8fd8d"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.metal": {
+        "bytes": 338766,
+        "sha256": "879d15908e66449f789652f40a329b731bebc65dca396659b636cf834943df06"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/smoke.spv": {
+        "bytes": 1404,
+        "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/trace.spv": {
+        "bytes": 4038204,
+        "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp32comp.spv": {
+        "bytes": 4041528,
+        "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp64.spv": {
+        "bytes": 3916680,
+        "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/model/alignment_receipt.json": {
+        "bytes": 1808,
+        "sha256": "cbeb56fdcb0223f8d5d9c5696870d7a014b216e1aa68fc5ef394e733933bd077"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/model/operating_model.json": {
+        "bytes": 130331,
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.frag": {
+        "bytes": 1167,
+        "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.vert": {
+        "bytes": 198,
+        "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.frag": {
+        "bytes": 2386,
+        "sha256": "58f4438f27fcb647f86ce9fbb8e875e6bee0fbea20768ee6e289e952da0b51ec"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.vert": {
+        "bytes": 198,
+        "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.frag": {
+        "bytes": 3799,
+        "sha256": "bee2ff8435f1d25ce111d6da0623975acf74205511ebce81df011d61d1ab0536"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.vert": {
+        "bytes": 577,
+        "sha256": "08467d1bc78904fe7512245db7e2912caf132d5de250955b0719f4f51c94a039"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/portable_binary32_reference.bin": {
+        "bytes": 4182444,
+        "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+        "bytes": 35160,
+        "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+        "bytes": 35196,
+        "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_fixture.h": {
+        "bytes": 416303,
+        "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+      }
+    },
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "fresh_session_review": "attestations/fresh-session-review/4bcd987/2026-10-14/review.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_WERROR": "ON",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "CMAKE_CXX_COMPILER": "g++-14"
+    },
+    "original_compile_commands": [
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_INTERACTIVE_VIEWER=1 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1 -DSIRIUS_VERSION=\\\"2.0.0\\\" -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/lib/glad/include -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -I/home/astra/.project/Sirius/lib/glfw/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o -c /home/astra/.project/Sirius/tests/render/png_writer_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/render/png_writer_test.cpp",
+        "output": "tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_INTERACTIVE_VIEWER=1 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1 -DSIRIUS_VERSION=\\\"2.0.0\\\" -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/lib/glad/include -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -I/home/astra/.project/Sirius/lib/glfw/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o -c /home/astra/.project/Sirius/tests/render/exr_writer_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/render/exr_writer_test.cpp",
+        "output": "tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_INTERACTIVE_VIEWER=1 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1 -DSIRIUS_VERSION=\\\"2.0.0\\\" -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/lib/glad/include -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -I/home/astra/.project/Sirius/lib/glfw/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o -c /home/astra/.project/Sirius/tests/render/render_session_probe_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/render/render_session_probe_test.cpp",
+        "output": "tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o"
+      }
+    ],
+    "original_registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+    "original_five_registration_lines": [
+      "add_test([=[PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[EXRRoundTripTests.HDRGradientSurvivesWriteAndRead]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=EXRRoundTripTests.HDRGradientSurvivesWriteAndRead]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter]==] --gtest_also_run_disabled_tests)",
+      "add_test([=[RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr]==] --gtest_also_run_disabled_tests)"
+    ],
+    "expected_names": [
+      "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding",
+      "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+      "EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode",
+      "RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter",
+      "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr"
+    ],
+    "cpu_backend_default_source": "src/sirius/render/session/render_session.h"
+  },
+  "owner_reuse": {
+    "run_owned.py": {
+      "source": "attestations/scientific-core/4bcd987/p6-cpu-writer-diagnostic-limit/files/out/p6-cpu-writer-current-source/run_owned.py",
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "owned_guard.py": {
+      "source": "attestations/scientific-core/4bcd987/p6-cpu-writer-diagnostic-limit/files/out/p6-cpu-writer-current-source/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    }
+  },
+  "pins": {
+    "bin/linux-gcc/src/sirius/app/sirius_render_tests": {
+      "bytes": 12208240,
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "bin/linux-gcc/src/sirius/app/sirius": {
+      "bytes": 9725048,
+      "sha256": "eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4": {
+      "bytes": 12208240,
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76": {
+      "bytes": 9725048,
+      "sha256": "eb326132deacf90e12b1480a138e16feedef99b65ed29b25a2915431c6479a76"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.cu": {
+      "bytes": 316063,
+      "sha256": "e8460dbe10346d5cf457a533c7126707b87cbd108f43c7a8f2fb6e92f5e8fd8d"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.metal": {
+      "bytes": 338766,
+      "sha256": "879d15908e66449f789652f40a329b731bebc65dca396659b636cf834943df06"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/model/alignment_receipt.json": {
+      "bytes": 1808,
+      "sha256": "cbeb56fdcb0223f8d5d9c5696870d7a014b216e1aa68fc5ef394e733933bd077"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/model/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.frag": {
+      "bytes": 2386,
+      "sha256": "58f4438f27fcb647f86ce9fbb8e875e6bee0fbea20768ee6e289e952da0b51ec"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.frag": {
+      "bytes": 3799,
+      "sha256": "bee2ff8435f1d25ce111d6da0623975acf74205511ebce81df011d61d1ab0536"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.vert": {
+      "bytes": 577,
+      "sha256": "08467d1bc78904fe7512245db7e2912caf132d5de250955b0719f4f51c94a039"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+    },
+    "bin/linux-gcc/CMakeCache.txt": {
+      "bytes": 60385,
+      "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02"
+    },
+    "bin/linux-gcc/build.ninja": {
+      "bytes": 488537,
+      "sha256": "f862a5a2475595435267a4e2b3ec4605c414cf6cdd6b811be184243b7ee7997f"
+    },
+    "bin/linux-gcc/compile_commands.json": {
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake": {
+      "bytes": 134265,
+      "sha256": "157b9df6c3b6bced6f5d42a67806a4e93e0526c45f493e1008175fb8d0c76ebe"
+    },
+    "attestations/fresh-session-review/4bcd987/2026-10-14/review.json": {
+      "bytes": 512329,
+      "sha256": "04831bdcef151ffd0a9c53947f4e25b4633af103c4dac8704608723715eaf01f"
+    },
+    "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json": {
+      "bytes": 28646,
+      "sha256": "ace3fa3984d49fcabadd2d9ece5b0a40933b696d380ae09a023cb0f95f7765d2"
+    },
+    "/usr/bin/ctest": {
+      "bytes": 13276728,
+      "sha256": "45c60ab2448411a4f49a0bdb6cf5800fedbf0293048e3c82710a34190c7d1ef4"
+    },
+    "/usr/bin/python3.12": {
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "tests/render/png_writer_test.cpp": {
+      "bytes": 7187,
+      "sha256": "9b9c0be51d22ea83086adc79e5f59b00ecf7f044cb6ffc4aadee049cba254803"
+    },
+    "tests/render/exr_writer_test.cpp": {
+      "bytes": 5947,
+      "sha256": "f1e61656c69c904ef8a86fb1a5c5873f10bc633953c59d27bec370e7649b049f"
+    },
+    "tests/render/render_session_probe_test.cpp": {
+      "bytes": 62654,
+      "sha256": "35ab83d1ddb556abd9d7e3fcd38f0925864f2ba47afc32f702a263eb7ea2101e"
+    },
+    "tests/support/scoped_temporary_directory.h": {
+      "bytes": 2243,
+      "sha256": "00fa9dea58e9836081aa71a1e24ebad910c6f444497e312ad46ca02c8fbb16ab"
+    },
+    "src/sirius/render/exr_writer.cpp": {
+      "bytes": 7880,
+      "sha256": "577c9934ce4d2584a789e189c6fbc8a7728404a7a9efab3afe3e24a0912266e1"
+    },
+    "src/sirius/render/png_writer.cpp": {
+      "bytes": 2575,
+      "sha256": "9fbdd9874ee27364b22fc78bd860ac0376d1788673c286061be983e5e80987e7"
+    },
+    "src/sirius/render/session/render_session.cpp": {
+      "bytes": 53666,
+      "sha256": "75fb4ac58f2e0ddb89a5f4053ed5372af2753f8592f0fa7eb76e15522530af1e"
+    },
+    "src/sirius/render/session/render_session.h": {
+      "bytes": 18459,
+      "sha256": "7fa8ee2b0dabbbc8a80f6ccfb92c46ed6b4f27e7a9df72b569bd697f56edd169"
+    },
+    "tests/render/CMakeLists.txt": {
+      "bytes": 2826,
+      "sha256": "23f2ba5b952360171edaf379cf2536730623a8fc4275b14958278b7853e3aa9f"
+    },
+    "tests/operating_model.json": {
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "bin/linux-gcc/CTestTestfile.cmake": {
+      "bytes": 411,
+      "sha256": "3afbe7a27fed80e401348743ad8b0a979beca9d23152704bd498ec8273c67c8d"
+    },
+    "bin/linux-gcc/tests/CTestTestfile.cmake": {
+      "bytes": 7167,
+      "sha256": "030c9e1128bb179c6ee1e46c910eeb5873b6e3f9fbe082aa4ef29dfbfa70133f"
+    },
+    "bin/linux-gcc/src/sirius/CTestTestfile.cmake": {
+      "bytes": 389,
+      "sha256": "b149af5bdc0a12120a46632cd43a376193a27e83fbd78d715706892a447c8104"
+    },
+    "bin/linux-gcc/src/sirius/render/CTestTestfile.cmake": {
+      "bytes": 317,
+      "sha256": "740e83e7fb5b44013aec48d89fdadd3a33e6f1e4aadfadc8b0d59f60a155def0"
+    },
+    "bin/linux-gcc/src/sirius/app/CTestTestfile.cmake": {
+      "bytes": 340,
+      "sha256": "d08fbf2024fef0171e96de33b8abec6e0c860d0be4f6848407b6ecdfdf746714"
+    },
+    "bin/linux-gcc/src/sirius/backend/CTestTestfile.cmake": {
+      "bytes": 319,
+      "sha256": "f7ff23433f08a5d5c10a72713551c41f5778d65e753fbf6d50e3f1759d350afd"
+    },
+    "bin/linux-gcc/src/sirius/core/CTestTestfile.cmake": {
+      "bytes": 313,
+      "sha256": "e1cd689dfd50887059c92afbbb76f5f027db230455ec13dc26a80b516bcc434f"
+    },
+    "bin/linux-gcc/src/sirius/oracle/CTestTestfile.cmake": {
+      "bytes": 317,
+      "sha256": "083db7e6ecf611dbe410fa593e3ebbe302e3b29425ddc74b78443a2be48c5d29"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/CTestTestfile.cmake": {
+      "bytes": 479,
+      "sha256": "857b786ef4bbcf70de18b064281334cdc1b2400d49e9ba41e0cadfe91bd2c6eb"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/test/CTestTestfile.cmake": {
+      "bytes": 398,
+      "sha256": "cfdf7a649a9f8e904833a9c90effb5f9c296ec637622e2fe63d98a7931233564"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/CTestTestfile.cmake": {
+      "bytes": 431,
+      "sha256": "7298c33e7c27e203adac56acd29190d66d06c3cfc2e76f0da86a906d731ce561"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/CTestTestfile.cmake": {
+      "bytes": 499,
+      "sha256": "90938cddd38ce4c3333bc409970c4f9e27e41cd99586e50b4da31aaeefa71044"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/CTestTestfile.cmake": {
+      "bytes": 406,
+      "sha256": "80c49d1e9a3f8425382003a37cec9894a5222dd59ec265c21e7c87c92b1d29e4"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/CTestTestfile.cmake": {
+      "bytes": 437,
+      "sha256": "7d8dfe9c0a2383d7f04a82f7a0d12b54d4ec1adecf2c7699b491feb61fcac7a3"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/cpp-interface/CTestTestfile.cmake": {
+      "bytes": 434,
+      "sha256": "248abbc764d696619e7bd5c029c18dbf026e76458b4adaadb7a9381c1a75a90b"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/lint/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "90d23161c75e2f0fbbd6f16cc21db24656df24c6ab208cfd456c3cb31e66c1ad"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/fuzz/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "6bfac4dbbfd63a0d3498fa51c063732124d7b543a61404b764cb227199ff5308"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/opt/CTestTestfile.cmake": {
+      "bytes": 410,
+      "sha256": "8e0abf6fa22ac5e534b80107a6ec602c155723f0decf69dcf472330f6a7bb84d"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/reduce/CTestTestfile.cmake": {
+      "bytes": 416,
+      "sha256": "e7077a5e70315070e52e204673cc6b852c9b835ae0de8aa35a07af670be29005"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/link/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "2e511cb34dfd66b080b4a501bcbc5a66a6ea53dec1d0208bf4110c469579afe5"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/diff/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "2af564538ecdebc48273a8051ec964bd1f021c431921af6f185271d0f69dba3d"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/spirv-headers/CTestTestfile.cmake": {
+      "bytes": 434,
+      "sha256": "c94220c22c5e49f1e389d1b3dec99a15758be1e6595d339359dc9e7ad7869ca3"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/lesspipe/CTestTestfile.cmake": {
+      "bytes": 418,
+      "sha256": "5ba0ab0e17c12c48b73b36a2cc4d3049b71bedfd3baa29750b13d967f32e709b"
+    },
+    "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/emacs/CTestTestfile.cmake": {
+      "bytes": 412,
+      "sha256": "d63c1b22814ceb04bc144528cce073c9e2e8634a64d62f8aa8adb4fb829ff924"
+    },
+    "bin/linux-gcc/tests/render/CTestTestfile.cmake": {
+      "bytes": 480,
+      "sha256": "c8d33a228495d4cc6cb661c2025caf4b187c56a93604a55142fa563e62816e8f"
+    },
+    "bin/linux-gcc/tests/app/CTestTestfile.cmake": {
+      "bytes": 468,
+      "sha256": "bb47bc1b68b5327eaaf6d706af1072b95ff266a8a51fc94a4a26d04d140ad513"
+    },
+    "bin/linux-gcc/tests/backend/CTestTestfile.cmake": {
+      "bytes": 484,
+      "sha256": "0b251d08427240a6349f5b5f4a117401bd21e3b3c823ad7ea607b4934d6ed660"
+    },
+    "bin/linux-gcc/tests/core/CTestTestfile.cmake": {
+      "bytes": 472,
+      "sha256": "5a36b3cc4b3333559b2b0a8761d9cdfa860f153219ced5865b92c8920b92cb0e"
+    },
+    "bin/linux-gcc/tests/oracle/CTestTestfile.cmake": {
+      "bytes": 480,
+      "sha256": "cb08de5aa4034f2f673299d063baee844eb7c4b03316e46f3fe69426eb3e879f"
+    },
+    "bin/linux-gcc/lib/glfw/CTestTestfile.cmake": {
+      "bytes": 314,
+      "sha256": "196b609acec92389592c7d8d146f27e6556987c469b96f00d4ec2abbfdc0151b"
+    },
+    "bin/linux-gcc/lib/glfw/src/CTestTestfile.cmake": {
+      "bytes": 307,
+      "sha256": "5f0c66e3ac11467e633f73b0b78ec7ff59cd7f21f602930b209084f70c23fd1b"
+    },
+    "bin/linux-gcc/_deps/googletest-build/CTestTestfile.cmake": {
+      "bytes": 361,
+      "sha256": "3ad5364e3c1693c57cec30aa8dc5dedef136678d9a59afed973301cc491fd1f9"
+    },
+    "bin/linux-gcc/_deps/googletest-build/googletest/CTestTestfile.cmake": {
+      "bytes": 361,
+      "sha256": "097194259208bf09b1a0ad8df230a1f8a494c2fef517b4f210753c9410d62c7f"
+    },
+    "bin/linux-gcc/_deps/googletest-build/googlemock/CTestTestfile.cmake": {
+      "bytes": 386,
+      "sha256": "620a64e36b9e18fc316940ddbc87957c24dc6b44163768cb924836714a88fecc"
+    },
+    "bin/linux-gcc/tests/sirius_base_tests[1]_tests.cmake": {
+      "bytes": 6585,
+      "sha256": "1b085fdd013ef0e50ee3d0caa616068f33e3c80490d6bed3bb6629315018b0f6"
+    },
+    "bin/linux-gcc/tests/app/sirius_app_tests[1]_tests.cmake": {
+      "bytes": 52924,
+      "sha256": "1fc2d1a80fa6e56de2afe0c81a74eb97462d40910a430404701f8bc41b39e6ad"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake": {
+      "bytes": 110274,
+      "sha256": "455bb6ec639a416fdc7fa0b047c49fca59e226639d72347d022685f3e300b2c3"
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake": {
+      "bytes": 269027,
+      "sha256": "0d7b90a6282ac447ba05acd6c1fe74742648cb312d5c910a4779af471ea704d7"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake": {
+      "bytes": 67359,
+      "sha256": "f9ebe51d95fc0a7a88a8c4edd1af07267e3824f876e028100c15e311a22cfae1"
+    },
+    "bin/linux-gcc/tests/sirius_base_tests[1]_include.cmake": {
+      "bytes": 271,
+      "sha256": "d912527f48f9f1de276ce0c3909868f132ccb0ea3caa66c84367a06b25aae282"
+    },
+    "bin/linux-gcc/tests/render/sirius_render_tests[1]_include.cmake": {
+      "bytes": 293,
+      "sha256": "a04de98220507b9c28110536d639c281d1b9aae85dd3d066967c10f074222104"
+    },
+    "bin/linux-gcc/tests/app/sirius_app_tests[1]_include.cmake": {
+      "bytes": 275,
+      "sha256": "04868c27c459689be327479139b43c8f46bcd3ab560afee247a7adea85d58b35"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_include.cmake": {
+      "bytes": 299,
+      "sha256": "749ff39be5b56c22fd091e272f2e1630ab78e37a7a3b694364786161a1c90de3"
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests[1]_include.cmake": {
+      "bytes": 281,
+      "sha256": "be3980d63214735ae160d7ba73f9c73d99b464b5b35ec45be318522d6f0ab00d"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_include.cmake": {
+      "bytes": 293,
+      "sha256": "e800698e0353ee7dfd4ff98e527bf43a3b1d4c25f8b1d4486fb03bb2e5e8f363"
+    },
+    "attestations/scientific-core/4bcd987/p6-cpu-writer-diagnostic-limit/manifest.json": {
+      "bytes": 4122,
+      "sha256": "8b5b860301a6b697ce2505ab1ac141353840abe2589a75e9403ca3db041cab97"
+    },
+    "attestations/scientific-core/4bcd987/p6-cpu-writer-diagnostic-limit/disposition.json": {
+      "bytes": 21215,
+      "sha256": "2143e7d685d217501661c35bc0248902197a5648a23ef9487042f32fb75b3d7a"
+    },
+    "attestations/scientific-core/4bcd987/p6-cpu-writer-diagnostic-limit/files/out/p6-cpu-writer-current-source/preparation.json": {
+      "bytes": 39432,
+      "sha256": "5670874ee300e66bdaf934ad2e5815391137b641f9ca8d21418b818378ccc554"
+    },
+    "attestations/scientific-core/4bcd987/p6-cpu-writer-diagnostic-limit/files/out/p6-cpu-writer-current-source/original-five-p6-cpu-writer-controls/owner.json": {
+      "bytes": 2187,
+      "sha256": "282c4ed7348be2561f47e7d2917f76322c4ec8212d29984ffc3b2e0be2283ad3"
+    },
+    "out/p6-cpu-writer-separated-controls/prepare.py": {
+      "bytes": 7972,
+      "sha256": "29ed9f42dd59905c1cd833ed2a8dd2a379d8cbd1c26a170557853d45e487f8e3"
+    },
+    "out/p6-cpu-writer-separated-controls/run_control.py": {
+      "bytes": 8247,
+      "sha256": "48874eab58e0cda067b5c17d11768176638c9792ad360bff804c7b059064220d"
+    },
+    "out/p6-cpu-writer-separated-controls/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "out/p6-cpu-writer-separated-controls/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "out/p6-cpu-writer-separated-controls/reference/exr_writer_test.cpp": {
+      "bytes": 5947,
+      "sha256": "f1e61656c69c904ef8a86fb1a5c5873f10bc633953c59d27bec370e7649b049f"
+    },
+    "out/p6-cpu-writer-separated-controls/reference/png_writer_test.cpp": {
+      "bytes": 7187,
+      "sha256": "9b9c0be51d22ea83086adc79e5f59b00ecf7f044cb6ffc4aadee049cba254803"
+    },
+    "out/p6-cpu-writer-separated-controls/reference/render_session_probe_test.cpp": {
+      "bytes": 62654,
+      "sha256": "35ab83d1ddb556abd9d7e3fcd38f0925864f2ba47afc32f702a263eb7ea2101e"
+    },
+    "out/p6-cpu-writer-separated-controls/reference/scoped_temporary_directory.h": {
+      "bytes": 2243,
+      "sha256": "00fa9dea58e9836081aa71a1e24ebad910c6f444497e312ad46ca02c8fbb16ab"
+    },
+    "out/p6-cpu-writer-separated-controls/actions.json": {
+      "bytes": 18760,
+      "sha256": "c0c0067bcd7d4275ed4a13ebcfd3468152531e0115c3502ecb068116a35d7ea2"
+    }
+  }
+}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="4"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="7"
+	timestamp="2026-10-14T20:27:29"
+	>
+	<testcase name="RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr" classname="RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr" time="7.64791" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory;Operational;Rendering"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from RenderSessionProbe
+[ RUN      ] RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
+[Session] Idle --Start--&gt; Initialising
+[Session] Initialising render...
+  Resolution: 16 x 12
+  Tile size:  16
+  Samples:    1
+  Metric:     Minkowski
+  Observer:   r=50 coordinate units, theta=90.0002 deg
+[Session] Physics engine initialized (geodesic integration enabled)
+[Session] Color mode: TrueColor (Physical)
+[Session] Single-threaded rendering
+[Session] Loaded starfield texture: 6000x3000 RGBA (68 MB)
+[Session] Scene evidence: {"schema":"sirius-render-scene-v1","backend":"Cpu","metric":"Minkowski","spin":0,"width":16,"height":12,"samples_per_pixel":1,"field_of_view":60,"disk_enabled":false,"ray_bundl...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="EXRRoundTripTests.HDRGradientSurvivesWriteAndRead" classname="EXRRoundTripTests.HDRGradientSurvivesWriteAndRead" time="0.00459902" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory;Operational;Rendering"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = EXRRoundTripTests.HDRGradientSurvivesWriteAndRead
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from EXRRoundTripTests
+[ RUN      ] EXRRoundTripTests.HDRGradientSurvivesWriteAndRead
+[       OK ] EXRRoundTripTests.HDRGradientSurvivesWriteAndRead (0 ms)
+[----------] 1 test from EXRRoundTripTests (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+	<testcase name="EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode" classname="EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode" time="0.00449108" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory;Operational;Rendering"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from EXRRoundTripTests
+[ RUN      ] EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode
+[       OK ] EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode (0 ms)
+[----------] 1 test from EXRRoundTripTests (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+	<testcase name="PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding" classname="PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding" time="0.00382997" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory;Operational;Rendering"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PNGWriterTest
+[ RUN      ] PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding
+[       OK ] PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding (0 ms)
+[----------] 1 test from PNGWriterTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+</testsuite>
