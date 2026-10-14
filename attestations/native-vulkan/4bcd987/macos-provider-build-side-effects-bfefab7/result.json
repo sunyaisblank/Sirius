@@ -1,0 +1,2999 @@
+{
+  "archive": {
+    "bytes": 108476597,
+    "sha256": "56d46acefdbffb7e84fdcf6835eb48608d286e04d1038f99c10a47d92d5fcb6d"
+  },
+  "archive_parts": [
+    {
+      "bytes": 33554432,
+      "path": "artifact.zip.parts/part-000",
+      "sha256": "fd93becfd34bb9079ecae38129b39764a93ad5cb360eac0735ef895b1d352817"
+    },
+    {
+      "bytes": 33554432,
+      "path": "artifact.zip.parts/part-001",
+      "sha256": "fd43420becdea7886b91db3059b795a81970b3532c53b2da864580a2be6b7f7f"
+    },
+    {
+      "bytes": 33554432,
+      "path": "artifact.zip.parts/part-002",
+      "sha256": "8e7d3ad9add605084994e3fb4dd88cde3d1a8d9cbacd17def9cc1d792cc935a1"
+    },
+    {
+      "bytes": 7813301,
+      "path": "artifact.zip.parts/part-003",
+      "sha256": "f616d811a5335e7b7ce3863aba46ab6002f251147e2c671d5de08032465b3a7b"
+    }
+  ],
+  "artifact": 11891043528,
+  "failure": "Five child-Python bytecode additions violate frozen tree; stderr exactly64MiB ends mid-dyld-line and child exits120. Truncated output does not establish a compiler semantic failure.",
+  "job": 115835910513,
+  "observation": {
+    "candidate_source": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "cases": [],
+    "error": "provider input tree gained/lost entries: sources",
+    "expected_api_versions": {
+      "diagnostic": "1.3.334",
+      "scope": "Original app and public query both request Vulkan1.3; pinned source and stock header patch are both334",
+      "source_header": {
+        "bytes": 1230712,
+        "path": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/provider-source/sources/Vulkan-Headers/include/vulkan/vulkan_core.h",
+        "sha256": "c0f0fe98afae95de1377e13649542912d71ca8817ef21dd0a44778f6fe7a1615"
+      },
+      "stock": "1.3.334"
+    },
+    "production_adopted": false,
+    "provider_content_discriminator": "be16bb0d2d553356491796fc92a112eeb5f2907b4b2d4ff42e4f8842e8309163",
+    "provider_payload_tree": "8b7d54847738c427954c7c3b070708d60fe4c8a8",
+    "provider_scope": "Custom diagnostic MoltenVK; unchanged SDK is not qualified",
+    "provider_source_evidence_commit": "e2422dd92017879a452377a1122f1838e6610b3c",
+    "provider_source_inputs_unchanged": false,
+    "qualification_claimed": false,
+    "runner_source": {
+      "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "runner_revision": "bfefab73d571b3cbeafb9f0f657924169f067239",
+      "status": ""
+    },
+    "status": "incomplete"
+  },
+  "original_controls_started": false,
+  "provider_build_owner": {
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/runner/work/Sirius/Sirius/scripts/macos_moltenvk_integration.py",
+      "--build-child",
+      "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/build-context.json",
+      "71d02b915276d33af8e0ab6da2911ec16889d93c8f5fb8a1f74b54e313ca74ca"
+    ],
+    "birth_scope": "Observed ps PID/lstart tokens; second-resolution ambiguity remains incomplete.",
+    "child_exit": 120,
+    "cleanup_errors": [],
+    "containment_complete": true,
+    "controller": {
+      "lstart": "Wed Oct 14 11:50:21 2026    ",
+      "pgid": 961,
+      "pid": 4457,
+      "ppid": 4456,
+      "rss_kib": 264928,
+      "state": "S<"
+    },
+    "environment": {
+      "DYLD_LIBRARY_PATH": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib",
+      "MVK_CONFIG_DEBUG": "0",
+      "MVK_CONFIG_SHADER_DUMP_DIR": null,
+      "MVK_CONFIG_TRACE_VULKAN_CALLS": "3",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "VK_DRIVER_FILES": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json"
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 900
+    },
+    "max_observed_sample_interval_seconds": 0.3545670000000314,
+    "observation_complete": true,
+    "observed_births": [
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:35 2026    ",
+        "pgid": 6201,
+        "pid": 6201,
+        "ppid": 4457,
+        "rss_kib": 0,
+        "state": "Z<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:36 2026    ",
+        "pgid": 6201,
+        "pid": 6205,
+        "ppid": 6201,
+        "rss_kib": 88784,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:36 2026    ",
+        "pgid": 6201,
+        "pid": 6206,
+        "ppid": 6205,
+        "rss_kib": 192,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:36 2026    ",
+        "pgid": 6201,
+        "pid": 6265,
+        "ppid": 6205,
+        "rss_kib": 16096,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:36 2026    ",
+        "pgid": 6201,
+        "pid": 6268,
+        "ppid": 6265,
+        "rss_kib": 224,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:36 2026    ",
+        "pgid": 6201,
+        "pid": 6285,
+        "ppid": 6205,
+        "rss_kib": 15856,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:36 2026    ",
+        "pgid": 6201,
+        "pid": 6287,
+        "ppid": 6285,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:40 2026    ",
+        "pgid": 6201,
+        "pid": 6456,
+        "ppid": 6205,
+        "rss_kib": 0,
+        "state": "Z<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:40 2026    ",
+        "pgid": 6201,
+        "pid": 6523,
+        "ppid": 6205,
+        "rss_kib": 8928,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:40 2026    ",
+        "pgid": 6201,
+        "pid": 6524,
+        "ppid": 6523,
+        "rss_kib": 1472,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:40 2026    ",
+        "pgid": 6201,
+        "pid": 6527,
+        "ppid": 6524,
+        "rss_kib": 624,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:43 2026    ",
+        "pgid": 6201,
+        "pid": 6656,
+        "ppid": 6655,
+        "rss_kib": 1504,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:43 2026    ",
+        "pgid": 6201,
+        "pid": 6657,
+        "ppid": 6656,
+        "rss_kib": 1488,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:43 2026    ",
+        "pgid": 6201,
+        "pid": 6658,
+        "ppid": 6657,
+        "rss_kib": 240,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:43 2026    ",
+        "pgid": 6201,
+        "pid": 6655,
+        "ppid": 6205,
+        "rss_kib": 8928,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:46 2026    ",
+        "pgid": 6201,
+        "pid": 6905,
+        "ppid": 6205,
+        "rss_kib": 0,
+        "state": "?<E"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:46 2026    ",
+        "pgid": 6201,
+        "pid": 6941,
+        "ppid": 6936,
+        "rss_kib": 8944,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:46 2026    ",
+        "pgid": 6201,
+        "pid": 6934,
+        "ppid": 6205,
+        "rss_kib": 8928,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:46 2026    ",
+        "pgid": 6201,
+        "pid": 6935,
+        "ppid": 6934,
+        "rss_kib": 1632,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:46 2026    ",
+        "pgid": 6201,
+        "pid": 6936,
+        "ppid": 6935,
+        "rss_kib": 1840,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:46 2026    ",
+        "pgid": 6201,
+        "pid": 6942,
+        "ppid": 6941,
+        "rss_kib": 15584,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:46 2026    ",
+        "pgid": 6201,
+        "pid": 6943,
+        "ppid": 6942,
+        "rss_kib": 35760,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:49 2026    ",
+        "pgid": 6201,
+        "pid": 7079,
+        "ppid": 6205,
+        "rss_kib": 8928,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:49 2026    ",
+        "pgid": 6201,
+        "pid": 7080,
+        "ppid": 7079,
+        "rss_kib": 1472,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:49 2026    ",
+        "pgid": 6201,
+        "pid": 7081,
+        "ppid": 7080,
+        "rss_kib": 1824,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:49 2026    ",
+        "pgid": 6201,
+        "pid": 7086,
+        "ppid": 7081,
+        "rss_kib": 8944,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:49 2026    ",
+        "pgid": 6201,
+        "pid": 7087,
+        "ppid": 7086,
+        "rss_kib": 6512,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:50 2026    ",
+        "pgid": 6201,
+        "pid": 7237,
+        "ppid": 6205,
+        "rss_kib": 8928,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:50 2026    ",
+        "pgid": 6201,
+        "pid": 7238,
+        "ppid": 7237,
+        "rss_kib": 1472,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:50 2026    ",
+        "pgid": 6201,
+        "pid": 7239,
+        "ppid": 7238,
+        "rss_kib": 1472,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:50 2026    ",
+        "pgid": 6201,
+        "pid": 7241,
+        "ppid": 7239,
+        "rss_kib": 15936,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:50 2026    ",
+        "pgid": 6201,
+        "pid": 7242,
+        "ppid": 7241,
+        "rss_kib": 24128,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:50 2026    ",
+        "pgid": 6201,
+        "pid": 7314,
+        "ppid": 6205,
+        "rss_kib": 8928,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:50 2026    ",
+        "pgid": 6201,
+        "pid": 7315,
+        "ppid": 7314,
+        "rss_kib": 1472,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:50 2026    ",
+        "pgid": 6201,
+        "pid": 7316,
+        "ppid": 7315,
+        "rss_kib": 1824,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:50 2026    ",
+        "pgid": 6201,
+        "pid": 7325,
+        "ppid": 7316,
+        "rss_kib": 176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:51 2026    ",
+        "pgid": 6201,
+        "pid": 7340,
+        "ppid": 6205,
+        "rss_kib": 320,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:51 2026    ",
+        "pgid": 6201,
+        "pid": 7421,
+        "ppid": 7419,
+        "rss_kib": 192,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:51 2026    ",
+        "pgid": 6201,
+        "pid": 7411,
+        "ppid": 6205,
+        "rss_kib": 8928,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:51 2026    ",
+        "pgid": 6201,
+        "pid": 7412,
+        "ppid": 7411,
+        "rss_kib": 1472,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:51 2026    ",
+        "pgid": 6201,
+        "pid": 7413,
+        "ppid": 7412,
+        "rss_kib": 1600,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:51 2026    ",
+        "pgid": 6201,
+        "pid": 7419,
+        "ppid": 7413,
+        "rss_kib": 15952,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7434,
+        "ppid": 6201,
+        "rss_kib": 7408,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7435,
+        "ppid": 7434,
+        "rss_kib": 592,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7437,
+        "ppid": 7435,
+        "rss_kib": 592,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7443,
+        "ppid": 7437,
+        "rss_kib": 1568,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7447,
+        "ppid": 7443,
+        "rss_kib": 1472,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7448,
+        "ppid": 7447,
+        "rss_kib": 1184,
+        "state": "U<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7455,
+        "ppid": 7443,
+        "rss_kib": 176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7465,
+        "ppid": 7443,
+        "rss_kib": 1616,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7467,
+        "ppid": 7465,
+        "rss_kib": 1792,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:52 2026    ",
+        "pgid": 6201,
+        "pid": 7468,
+        "ppid": 7467,
+        "rss_kib": 14000,
+        "state": "U<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:53 2026    ",
+        "pgid": 6201,
+        "pid": 7476,
+        "ppid": 7443,
+        "rss_kib": 1504,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:53 2026    ",
+        "pgid": 6201,
+        "pid": 7477,
+        "ppid": 7476,
+        "rss_kib": 176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:53 2026    ",
+        "pgid": 6201,
+        "pid": 7483,
+        "ppid": 7443,
+        "rss_kib": 240,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:53 2026    ",
+        "pgid": 6201,
+        "pid": 7490,
+        "ppid": 7443,
+        "rss_kib": 1600,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:53 2026    ",
+        "pgid": 6201,
+        "pid": 7492,
+        "ppid": 7490,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:53 2026    ",
+        "pgid": 6201,
+        "pid": 7499,
+        "ppid": 7443,
+        "rss_kib": 1488,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:53 2026    ",
+        "pgid": 6201,
+        "pid": 7500,
+        "ppid": 7499,
+        "rss_kib": 240,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:54 2026    ",
+        "pgid": 6201,
+        "pid": 7518,
+        "ppid": 7443,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:54 2026    ",
+        "pgid": 6201,
+        "pid": 7525,
+        "ppid": 7443,
+        "rss_kib": 1584,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:54 2026    ",
+        "pgid": 6201,
+        "pid": 7537,
+        "ppid": 7443,
+        "rss_kib": 384,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:54 2026    ",
+        "pgid": 6201,
+        "pid": 7549,
+        "ppid": 7443,
+        "rss_kib": 2224,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:54 2026    ",
+        "pgid": 6201,
+        "pid": 7550,
+        "ppid": 7549,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:54 2026    ",
+        "pgid": 6201,
+        "pid": 7552,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:54 2026    ",
+        "pgid": 6201,
+        "pid": 7555,
+        "ppid": 7552,
+        "rss_kib": 16320,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:54 2026    ",
+        "pgid": 6201,
+        "pid": 7556,
+        "ppid": 7555,
+        "rss_kib": 114000,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:55 2026    ",
+        "pgid": 6201,
+        "pid": 7721,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:55 2026    ",
+        "pgid": 6201,
+        "pid": 7727,
+        "ppid": 7721,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:55 2026    ",
+        "pgid": 6201,
+        "pid": 7729,
+        "ppid": 7727,
+        "rss_kib": 127312,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:56 2026    ",
+        "pgid": 6201,
+        "pid": 7754,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:56 2026    ",
+        "pgid": 6201,
+        "pid": 7755,
+        "ppid": 7754,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:56 2026    ",
+        "pgid": 6201,
+        "pid": 7756,
+        "ppid": 7755,
+        "rss_kib": 102192,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:57 2026    ",
+        "pgid": 6201,
+        "pid": 7783,
+        "ppid": 7549,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:57 2026    ",
+        "pgid": 6201,
+        "pid": 7787,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:57 2026    ",
+        "pgid": 6201,
+        "pid": 7788,
+        "ppid": 7787,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:57 2026    ",
+        "pgid": 6201,
+        "pid": 7789,
+        "ppid": 7788,
+        "rss_kib": 98448,
+        "state": "U<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:58 2026    ",
+        "pgid": 6201,
+        "pid": 7806,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:58 2026    ",
+        "pgid": 6201,
+        "pid": 7810,
+        "ppid": 7806,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:58 2026    ",
+        "pgid": 6201,
+        "pid": 7811,
+        "ppid": 7810,
+        "rss_kib": 144240,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:59 2026    ",
+        "pgid": 6201,
+        "pid": 7841,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:59 2026    ",
+        "pgid": 6201,
+        "pid": 7842,
+        "ppid": 7841,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:51:59 2026    ",
+        "pgid": 6201,
+        "pid": 7843,
+        "ppid": 7842,
+        "rss_kib": 109680,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:00 2026    ",
+        "pgid": 6201,
+        "pid": 7859,
+        "ppid": 7549,
+        "rss_kib": 176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:00 2026    ",
+        "pgid": 6201,
+        "pid": 7865,
+        "ppid": 7864,
+        "rss_kib": 159968,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:00 2026    ",
+        "pgid": 6201,
+        "pid": 7861,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:00 2026    ",
+        "pgid": 6201,
+        "pid": 7864,
+        "ppid": 7861,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:02 2026    ",
+        "pgid": 6201,
+        "pid": 7901,
+        "ppid": 7900,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:02 2026    ",
+        "pgid": 6201,
+        "pid": 7900,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:02 2026    ",
+        "pgid": 6201,
+        "pid": 7903,
+        "ppid": 7901,
+        "rss_kib": 97136,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:03 2026    ",
+        "pgid": 6201,
+        "pid": 7921,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:03 2026    ",
+        "pgid": 6201,
+        "pid": 7922,
+        "ppid": 7921,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:03 2026    ",
+        "pgid": 6201,
+        "pid": 7923,
+        "ppid": 7922,
+        "rss_kib": 89888,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:03 2026    ",
+        "pgid": 6201,
+        "pid": 7933,
+        "ppid": 7549,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:04 2026    ",
+        "pgid": 6201,
+        "pid": 7937,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:04 2026    ",
+        "pgid": 6201,
+        "pid": 7941,
+        "ppid": 7937,
+        "rss_kib": 16320,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:04 2026    ",
+        "pgid": 6201,
+        "pid": 7942,
+        "ppid": 7941,
+        "rss_kib": 99008,
+        "state": "U<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:04 2026    ",
+        "pgid": 6201,
+        "pid": 7953,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:04 2026    ",
+        "pgid": 6201,
+        "pid": 7956,
+        "ppid": 7953,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:05 2026    ",
+        "pgid": 6201,
+        "pid": 7958,
+        "ppid": 7956,
+        "rss_kib": 134512,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:05 2026    ",
+        "pgid": 6201,
+        "pid": 8028,
+        "ppid": 7549,
+        "rss_kib": 672,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:05 2026    ",
+        "pgid": 6201,
+        "pid": 8040,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:06 2026    ",
+        "pgid": 6201,
+        "pid": 8048,
+        "ppid": 8040,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:06 2026    ",
+        "pgid": 6201,
+        "pid": 8055,
+        "ppid": 8048,
+        "rss_kib": 103776,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:06 2026    ",
+        "pgid": 6201,
+        "pid": 8163,
+        "ppid": 7549,
+        "rss_kib": 8864,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:06 2026    ",
+        "pgid": 6201,
+        "pid": 8176,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:06 2026    ",
+        "pgid": 6201,
+        "pid": 8186,
+        "ppid": 8176,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:06 2026    ",
+        "pgid": 6201,
+        "pid": 8191,
+        "ppid": 8186,
+        "rss_kib": 203440,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:08 2026    ",
+        "pgid": 6201,
+        "pid": 8224,
+        "ppid": 7549,
+        "rss_kib": 240,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:08 2026    ",
+        "pgid": 6201,
+        "pid": 8228,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:08 2026    ",
+        "pgid": 6201,
+        "pid": 8229,
+        "ppid": 8228,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:08 2026    ",
+        "pgid": 6201,
+        "pid": 8230,
+        "ppid": 8229,
+        "rss_kib": 101328,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:09 2026    ",
+        "pgid": 6201,
+        "pid": 8240,
+        "ppid": 7549,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:09 2026    ",
+        "pgid": 6201,
+        "pid": 8245,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:09 2026    ",
+        "pgid": 6201,
+        "pid": 8248,
+        "ppid": 8245,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:09 2026    ",
+        "pgid": 6201,
+        "pid": 8249,
+        "ppid": 8248,
+        "rss_kib": 93984,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:09 2026    ",
+        "pgid": 6201,
+        "pid": 8260,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:09 2026    ",
+        "pgid": 6201,
+        "pid": 8261,
+        "ppid": 8260,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:10 2026    ",
+        "pgid": 6201,
+        "pid": 8271,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:10 2026    ",
+        "pgid": 6201,
+        "pid": 8273,
+        "ppid": 8271,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:10 2026    ",
+        "pgid": 6201,
+        "pid": 8276,
+        "ppid": 8273,
+        "rss_kib": 82176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:10 2026    ",
+        "pgid": 6201,
+        "pid": 8290,
+        "ppid": 7549,
+        "rss_kib": 4224,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:10 2026    ",
+        "pgid": 6201,
+        "pid": 8292,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:10 2026    ",
+        "pgid": 6201,
+        "pid": 8295,
+        "ppid": 8292,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:10 2026    ",
+        "pgid": 6201,
+        "pid": 8296,
+        "ppid": 8295,
+        "rss_kib": 72208,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:11 2026    ",
+        "pgid": 6201,
+        "pid": 8301,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:11 2026    ",
+        "pgid": 6201,
+        "pid": 8302,
+        "ppid": 8301,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:11 2026    ",
+        "pgid": 6201,
+        "pid": 8303,
+        "ppid": 8302,
+        "rss_kib": 91456,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:11 2026    ",
+        "pgid": 6201,
+        "pid": 8317,
+        "ppid": 7549,
+        "rss_kib": 192,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:11 2026    ",
+        "pgid": 6201,
+        "pid": 8324,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:11 2026    ",
+        "pgid": 6201,
+        "pid": 8325,
+        "ppid": 8324,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:11 2026    ",
+        "pgid": 6201,
+        "pid": 8326,
+        "ppid": 8325,
+        "rss_kib": 103376,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:12 2026    ",
+        "pgid": 6201,
+        "pid": 8340,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:12 2026    ",
+        "pgid": 6201,
+        "pid": 8341,
+        "ppid": 8340,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:12 2026    ",
+        "pgid": 6201,
+        "pid": 8342,
+        "ppid": 8341,
+        "rss_kib": 131872,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:13 2026    ",
+        "pgid": 6201,
+        "pid": 8352,
+        "ppid": 7549,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:13 2026    ",
+        "pgid": 6201,
+        "pid": 8359,
+        "ppid": 7549,
+        "rss_kib": 1664,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:13 2026    ",
+        "pgid": 6201,
+        "pid": 8360,
+        "ppid": 8359,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:13 2026    ",
+        "pgid": 6201,
+        "pid": 8361,
+        "ppid": 8360,
+        "rss_kib": 139520,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:14 2026    ",
+        "pgid": 6201,
+        "pid": 8378,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:14 2026    ",
+        "pgid": 6201,
+        "pid": 8382,
+        "ppid": 8378,
+        "rss_kib": 16304,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:14 2026    ",
+        "pgid": 6201,
+        "pid": 8383,
+        "ppid": 8382,
+        "rss_kib": 152400,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:15 2026    ",
+        "pgid": 6201,
+        "pid": 8409,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:15 2026    ",
+        "pgid": 6201,
+        "pid": 8412,
+        "ppid": 8409,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:15 2026    ",
+        "pgid": 6201,
+        "pid": 8414,
+        "ppid": 8412,
+        "rss_kib": 63504,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:16 2026    ",
+        "pgid": 6201,
+        "pid": 8419,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:16 2026    ",
+        "pgid": 6201,
+        "pid": 8420,
+        "ppid": 8419,
+        "rss_kib": 16256,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:16 2026    ",
+        "pgid": 6201,
+        "pid": 8422,
+        "ppid": 8420,
+        "rss_kib": 202096,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:18 2026    ",
+        "pgid": 6201,
+        "pid": 8688,
+        "ppid": 7549,
+        "rss_kib": 1840,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:18 2026    ",
+        "pgid": 6201,
+        "pid": 8701,
+        "ppid": 8698,
+        "rss_kib": 167216,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:18 2026    ",
+        "pgid": 6201,
+        "pid": 8698,
+        "ppid": 8688,
+        "rss_kib": 11040,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:20 2026    ",
+        "pgid": 6201,
+        "pid": 8790,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:20 2026    ",
+        "pgid": 6201,
+        "pid": 8793,
+        "ppid": 8790,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:20 2026    ",
+        "pgid": 6201,
+        "pid": 8795,
+        "ppid": 8793,
+        "rss_kib": 184448,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:22 2026    ",
+        "pgid": 6201,
+        "pid": 8837,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:22 2026    ",
+        "pgid": 6201,
+        "pid": 8842,
+        "ppid": 8837,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:22 2026    ",
+        "pgid": 6201,
+        "pid": 8843,
+        "ppid": 8842,
+        "rss_kib": 188736,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:23 2026    ",
+        "pgid": 6201,
+        "pid": 8872,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:23 2026    ",
+        "pgid": 6201,
+        "pid": 8875,
+        "ppid": 8872,
+        "rss_kib": 16288,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:23 2026    ",
+        "pgid": 6201,
+        "pid": 8876,
+        "ppid": 8875,
+        "rss_kib": 170224,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:25 2026    ",
+        "pgid": 6201,
+        "pid": 8911,
+        "ppid": 7549,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:25 2026    ",
+        "pgid": 6201,
+        "pid": 8913,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:25 2026    ",
+        "pgid": 6201,
+        "pid": 8916,
+        "ppid": 8913,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:25 2026    ",
+        "pgid": 6201,
+        "pid": 8917,
+        "ppid": 8916,
+        "rss_kib": 167920,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:26 2026    ",
+        "pgid": 6201,
+        "pid": 8940,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:26 2026    ",
+        "pgid": 6201,
+        "pid": 8943,
+        "ppid": 8940,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:26 2026    ",
+        "pgid": 6201,
+        "pid": 8945,
+        "ppid": 8943,
+        "rss_kib": 167072,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:27 2026    ",
+        "pgid": 6201,
+        "pid": 8964,
+        "ppid": 7549,
+        "rss_kib": 8960,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:27 2026    ",
+        "pgid": 6201,
+        "pid": 8967,
+        "ppid": 7549,
+        "rss_kib": 1008,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:27 2026    ",
+        "pgid": 6201,
+        "pid": 8970,
+        "ppid": 8967,
+        "rss_kib": 14720,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:27 2026    ",
+        "pgid": 6201,
+        "pid": 8971,
+        "ppid": 8970,
+        "rss_kib": 537184,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:36 2026    ",
+        "pgid": 6201,
+        "pid": 9164,
+        "ppid": 7549,
+        "rss_kib": 1664,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:37 2026    ",
+        "pgid": 6201,
+        "pid": 9171,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:37 2026    ",
+        "pgid": 6201,
+        "pid": 9172,
+        "ppid": 9171,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:37 2026    ",
+        "pgid": 6201,
+        "pid": 9173,
+        "ppid": 9172,
+        "rss_kib": 171264,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:38 2026    ",
+        "pgid": 6201,
+        "pid": 9322,
+        "ppid": 7549,
+        "rss_kib": 2032,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:38 2026    ",
+        "pgid": 6201,
+        "pid": 9327,
+        "ppid": 9322,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:38 2026    ",
+        "pgid": 6201,
+        "pid": 9333,
+        "ppid": 9327,
+        "rss_kib": 247472,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:41 2026    ",
+        "pgid": 6201,
+        "pid": 9444,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:41 2026    ",
+        "pgid": 6201,
+        "pid": 9445,
+        "ppid": 9444,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:41 2026    ",
+        "pgid": 6201,
+        "pid": 9446,
+        "ppid": 9445,
+        "rss_kib": 185856,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:43 2026    ",
+        "pgid": 6201,
+        "pid": 9469,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:43 2026    ",
+        "pgid": 6201,
+        "pid": 9470,
+        "ppid": 9469,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:43 2026    ",
+        "pgid": 6201,
+        "pid": 9472,
+        "ppid": 9470,
+        "rss_kib": 182064,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:44 2026    ",
+        "pgid": 6201,
+        "pid": 9496,
+        "ppid": 7549,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:44 2026    ",
+        "pgid": 6201,
+        "pid": 9501,
+        "ppid": 9498,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:44 2026    ",
+        "pgid": 6201,
+        "pid": 9498,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:44 2026    ",
+        "pgid": 6201,
+        "pid": 9502,
+        "ppid": 9501,
+        "rss_kib": 179824,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:45 2026    ",
+        "pgid": 6201,
+        "pid": 9525,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:45 2026    ",
+        "pgid": 6201,
+        "pid": 9526,
+        "ppid": 9525,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:45 2026    ",
+        "pgid": 6201,
+        "pid": 9527,
+        "ppid": 9526,
+        "rss_kib": 165600,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:47 2026    ",
+        "pgid": 6201,
+        "pid": 9550,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:47 2026    ",
+        "pgid": 6201,
+        "pid": 9551,
+        "ppid": 9550,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:47 2026    ",
+        "pgid": 6201,
+        "pid": 9553,
+        "ppid": 9551,
+        "rss_kib": 248336,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:50 2026    ",
+        "pgid": 6201,
+        "pid": 9789,
+        "ppid": 7549,
+        "rss_kib": 1808,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:50 2026    ",
+        "pgid": 6201,
+        "pid": 9793,
+        "ppid": 9789,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:50 2026    ",
+        "pgid": 6201,
+        "pid": 9795,
+        "ppid": 9793,
+        "rss_kib": 180080,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:52 2026    ",
+        "pgid": 6201,
+        "pid": 9825,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:52 2026    ",
+        "pgid": 6201,
+        "pid": 9827,
+        "ppid": 9825,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:52 2026    ",
+        "pgid": 6201,
+        "pid": 9830,
+        "ppid": 9827,
+        "rss_kib": 248448,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:54 2026    ",
+        "pgid": 6201,
+        "pid": 9881,
+        "ppid": 9880,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:54 2026    ",
+        "pgid": 6201,
+        "pid": 9880,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:54 2026    ",
+        "pgid": 6201,
+        "pid": 9882,
+        "ppid": 9881,
+        "rss_kib": 185472,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:55 2026    ",
+        "pgid": 6201,
+        "pid": 9902,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:55 2026    ",
+        "pgid": 6201,
+        "pid": 9903,
+        "ppid": 9902,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:56 2026    ",
+        "pgid": 6201,
+        "pid": 9904,
+        "ppid": 9903,
+        "rss_kib": 182928,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:57 2026    ",
+        "pgid": 6201,
+        "pid": 9927,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:57 2026    ",
+        "pgid": 6201,
+        "pid": 9928,
+        "ppid": 9927,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:57 2026    ",
+        "pgid": 6201,
+        "pid": 9929,
+        "ppid": 9928,
+        "rss_kib": 179632,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:58 2026    ",
+        "pgid": 6201,
+        "pid": 9955,
+        "ppid": 7549,
+        "rss_kib": 224,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:58 2026    ",
+        "pgid": 6201,
+        "pid": 9958,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:58 2026    ",
+        "pgid": 6201,
+        "pid": 9960,
+        "ppid": 9958,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:52:58 2026    ",
+        "pgid": 6201,
+        "pid": 9961,
+        "ppid": 9960,
+        "rss_kib": 185056,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:00 2026    ",
+        "pgid": 6201,
+        "pid": 10022,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:00 2026    ",
+        "pgid": 6201,
+        "pid": 10030,
+        "ppid": 10022,
+        "rss_kib": 16496,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:00 2026    ",
+        "pgid": 6201,
+        "pid": 10037,
+        "ppid": 10030,
+        "rss_kib": 206416,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:02 2026    ",
+        "pgid": 6201,
+        "pid": 10176,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:02 2026    ",
+        "pgid": 6201,
+        "pid": 10177,
+        "ppid": 10176,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:02 2026    ",
+        "pgid": 6201,
+        "pid": 10178,
+        "ppid": 10177,
+        "rss_kib": 204944,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:04 2026    ",
+        "pgid": 6201,
+        "pid": 10210,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:04 2026    ",
+        "pgid": 6201,
+        "pid": 10211,
+        "ppid": 10210,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:04 2026    ",
+        "pgid": 6201,
+        "pid": 10212,
+        "ppid": 10211,
+        "rss_kib": 197376,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:06 2026    ",
+        "pgid": 6201,
+        "pid": 10241,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:06 2026    ",
+        "pgid": 6201,
+        "pid": 10242,
+        "ppid": 10241,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:06 2026    ",
+        "pgid": 6201,
+        "pid": 10243,
+        "ppid": 10242,
+        "rss_kib": 184144,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:07 2026    ",
+        "pgid": 6201,
+        "pid": 10266,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:07 2026    ",
+        "pgid": 6201,
+        "pid": 10267,
+        "ppid": 10266,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:07 2026    ",
+        "pgid": 6201,
+        "pid": 10268,
+        "ppid": 10267,
+        "rss_kib": 170432,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:08 2026    ",
+        "pgid": 6201,
+        "pid": 10288,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:08 2026    ",
+        "pgid": 6201,
+        "pid": 10289,
+        "ppid": 10288,
+        "rss_kib": 16304,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:08 2026    ",
+        "pgid": 6201,
+        "pid": 10290,
+        "ppid": 10289,
+        "rss_kib": 173856,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:09 2026    ",
+        "pgid": 6201,
+        "pid": 10316,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:10 2026    ",
+        "pgid": 6201,
+        "pid": 10317,
+        "ppid": 10316,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:10 2026    ",
+        "pgid": 6201,
+        "pid": 10318,
+        "ppid": 10317,
+        "rss_kib": 211792,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:11 2026    ",
+        "pgid": 6201,
+        "pid": 10507,
+        "ppid": 7549,
+        "rss_kib": 3776,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:11 2026    ",
+        "pgid": 6201,
+        "pid": 10513,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:11 2026    ",
+        "pgid": 6201,
+        "pid": 10516,
+        "ppid": 10513,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:11 2026    ",
+        "pgid": 6201,
+        "pid": 10517,
+        "ppid": 10516,
+        "rss_kib": 220400,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:14 2026    ",
+        "pgid": 6201,
+        "pid": 10557,
+        "ppid": 10556,
+        "rss_kib": 169616,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:14 2026    ",
+        "pgid": 6201,
+        "pid": 10555,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:14 2026    ",
+        "pgid": 6201,
+        "pid": 10556,
+        "ppid": 10555,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:15 2026    ",
+        "pgid": 6201,
+        "pid": 10576,
+        "ppid": 7549,
+        "rss_kib": 656,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:15 2026    ",
+        "pgid": 6201,
+        "pid": 10580,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:15 2026    ",
+        "pgid": 6201,
+        "pid": 10581,
+        "ppid": 10580,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:15 2026    ",
+        "pgid": 6201,
+        "pid": 10582,
+        "ppid": 10581,
+        "rss_kib": 171536,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:16 2026    ",
+        "pgid": 6201,
+        "pid": 10602,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:16 2026    ",
+        "pgid": 6201,
+        "pid": 10606,
+        "ppid": 10602,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:16 2026    ",
+        "pgid": 6201,
+        "pid": 10610,
+        "ppid": 10606,
+        "rss_kib": 187568,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:18 2026    ",
+        "pgid": 6201,
+        "pid": 10630,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:18 2026    ",
+        "pgid": 6201,
+        "pid": 10632,
+        "ppid": 10630,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:18 2026    ",
+        "pgid": 6201,
+        "pid": 10635,
+        "ppid": 10632,
+        "rss_kib": 198992,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:20 2026    ",
+        "pgid": 6201,
+        "pid": 10663,
+        "ppid": 7549,
+        "rss_kib": 176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:20 2026    ",
+        "pgid": 6201,
+        "pid": 10666,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:20 2026    ",
+        "pgid": 6201,
+        "pid": 10668,
+        "ppid": 10666,
+        "rss_kib": 16304,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:20 2026    ",
+        "pgid": 6201,
+        "pid": 10669,
+        "ppid": 10668,
+        "rss_kib": 169712,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:21 2026    ",
+        "pgid": 6201,
+        "pid": 10690,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:21 2026    ",
+        "pgid": 6201,
+        "pid": 10691,
+        "ppid": 10690,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:21 2026    ",
+        "pgid": 6201,
+        "pid": 10694,
+        "ppid": 10691,
+        "rss_kib": 178400,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:22 2026    ",
+        "pgid": 6201,
+        "pid": 10833,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:22 2026    ",
+        "pgid": 6201,
+        "pid": 10840,
+        "ppid": 10833,
+        "rss_kib": 16064,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:22 2026    ",
+        "pgid": 6201,
+        "pid": 10847,
+        "ppid": 10840,
+        "rss_kib": 169200,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:24 2026    ",
+        "pgid": 6201,
+        "pid": 10905,
+        "ppid": 10901,
+        "rss_kib": 176240,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:24 2026    ",
+        "pgid": 6201,
+        "pid": 10900,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:24 2026    ",
+        "pgid": 6201,
+        "pid": 10901,
+        "ppid": 10900,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:25 2026    ",
+        "pgid": 6201,
+        "pid": 10930,
+        "ppid": 7549,
+        "rss_kib": 496,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:25 2026    ",
+        "pgid": 6201,
+        "pid": 10932,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:25 2026    ",
+        "pgid": 6201,
+        "pid": 10935,
+        "ppid": 10932,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:25 2026    ",
+        "pgid": 6201,
+        "pid": 10936,
+        "ppid": 10935,
+        "rss_kib": 219232,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:27 2026    ",
+        "pgid": 6201,
+        "pid": 10967,
+        "ppid": 7549,
+        "rss_kib": 176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:27 2026    ",
+        "pgid": 6201,
+        "pid": 10973,
+        "ppid": 10972,
+        "rss_kib": 204144,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:27 2026    ",
+        "pgid": 6201,
+        "pid": 10970,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:27 2026    ",
+        "pgid": 6201,
+        "pid": 10972,
+        "ppid": 10970,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:28 2026    ",
+        "pgid": 6201,
+        "pid": 11013,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:28 2026    ",
+        "pgid": 6201,
+        "pid": 11015,
+        "ppid": 11013,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:28 2026    ",
+        "pgid": 6201,
+        "pid": 11018,
+        "ppid": 11015,
+        "rss_kib": 154464,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:29 2026    ",
+        "pgid": 6201,
+        "pid": 11108,
+        "ppid": 7549,
+        "rss_kib": 512,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:29 2026    ",
+        "pgid": 6201,
+        "pid": 11110,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:30 2026    ",
+        "pgid": 6201,
+        "pid": 11117,
+        "ppid": 11110,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:30 2026    ",
+        "pgid": 6201,
+        "pid": 11119,
+        "ppid": 11117,
+        "rss_kib": 163024,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:31 2026    ",
+        "pgid": 6201,
+        "pid": 11135,
+        "ppid": 7549,
+        "rss_kib": 160,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:31 2026    ",
+        "pgid": 6201,
+        "pid": 11142,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:31 2026    ",
+        "pgid": 6201,
+        "pid": 11143,
+        "ppid": 11142,
+        "rss_kib": 16608,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:31 2026    ",
+        "pgid": 6201,
+        "pid": 11145,
+        "ppid": 11143,
+        "rss_kib": 162992,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:32 2026    ",
+        "pgid": 6201,
+        "pid": 11164,
+        "ppid": 7549,
+        "rss_kib": 224,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:32 2026    ",
+        "pgid": 6201,
+        "pid": 11168,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:32 2026    ",
+        "pgid": 6201,
+        "pid": 11169,
+        "ppid": 11168,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:32 2026    ",
+        "pgid": 6201,
+        "pid": 11170,
+        "ppid": 11169,
+        "rss_kib": 204928,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:34 2026    ",
+        "pgid": 6201,
+        "pid": 11370,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:34 2026    ",
+        "pgid": 6201,
+        "pid": 11371,
+        "ppid": 11370,
+        "rss_kib": 16064,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:34 2026    ",
+        "pgid": 6201,
+        "pid": 11372,
+        "ppid": 11371,
+        "rss_kib": 171104,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:35 2026    ",
+        "pgid": 6201,
+        "pid": 11408,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:35 2026    ",
+        "pgid": 6201,
+        "pid": 11409,
+        "ppid": 11408,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:35 2026    ",
+        "pgid": 6201,
+        "pid": 11410,
+        "ppid": 11409,
+        "rss_kib": 144576,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:36 2026    ",
+        "pgid": 6201,
+        "pid": 11428,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:36 2026    ",
+        "pgid": 6201,
+        "pid": 11429,
+        "ppid": 11428,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:36 2026    ",
+        "pgid": 6201,
+        "pid": 11430,
+        "ppid": 11429,
+        "rss_kib": 168320,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:37 2026    ",
+        "pgid": 6201,
+        "pid": 11449,
+        "ppid": 7549,
+        "rss_kib": 176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:37 2026    ",
+        "pgid": 6201,
+        "pid": 11453,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:37 2026    ",
+        "pgid": 6201,
+        "pid": 11454,
+        "ppid": 11453,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:38 2026    ",
+        "pgid": 6201,
+        "pid": 11455,
+        "ppid": 11454,
+        "rss_kib": 219152,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:39 2026    ",
+        "pgid": 6201,
+        "pid": 11498,
+        "ppid": 7549,
+        "rss_kib": 1728,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:39 2026    ",
+        "pgid": 6201,
+        "pid": 11500,
+        "ppid": 11498,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:39 2026    ",
+        "pgid": 6201,
+        "pid": 11502,
+        "ppid": 11500,
+        "rss_kib": 109296,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:40 2026    ",
+        "pgid": 6201,
+        "pid": 11516,
+        "ppid": 7549,
+        "rss_kib": 1680,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:40 2026    ",
+        "pgid": 6201,
+        "pid": 11518,
+        "ppid": 11516,
+        "rss_kib": 16016,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:40 2026    ",
+        "pgid": 6201,
+        "pid": 11520,
+        "ppid": 11518,
+        "rss_kib": 295232,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:44 2026    ",
+        "pgid": 6201,
+        "pid": 11667,
+        "ppid": 7549,
+        "rss_kib": 224,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:44 2026    ",
+        "pgid": 6201,
+        "pid": 11697,
+        "ppid": 7549,
+        "rss_kib": 1648,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:44 2026    ",
+        "pgid": 6201,
+        "pid": 11706,
+        "ppid": 11697,
+        "rss_kib": 8960,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:44 2026    ",
+        "pgid": 6201,
+        "pid": 11739,
+        "ppid": 11706,
+        "rss_kib": 1408,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:44 2026    ",
+        "pgid": 6201,
+        "pid": 11756,
+        "ppid": 7443,
+        "rss_kib": 1840,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:44 2026    ",
+        "pgid": 6201,
+        "pid": 11758,
+        "ppid": 11756,
+        "rss_kib": 176,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:44 2026    ",
+        "pgid": 6201,
+        "pid": 11761,
+        "ppid": 11756,
+        "rss_kib": 1664,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:44 2026    ",
+        "pgid": 6201,
+        "pid": 11762,
+        "ppid": 11761,
+        "rss_kib": 16064,
+        "state": "S<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:44 2026    ",
+        "pgid": 6201,
+        "pid": 11763,
+        "ppid": 11762,
+        "rss_kib": 100688,
+        "state": "R<"
+      },
+      {
+        "absent": true,
+        "lstart": "Wed Oct 14 11:53:45 2026    ",
+        "pgid": 6201,
+        "pid": 11778,
+        "ppid": 11756,
+        "rss_kib": 176,
+        "state": "R<"
+      }
+    ],
+    "peak_sampled_rss_kib": 792384,
+    "pid": 6201,
+    "prelaunch_memory": {
+      "available_kib": 2999888,
+      "counters": {
+        "\"Translation faults\"": 5967120,
+        "Anonymous pages": 166305,
+        "Compressions": 109381,
+        "Decompressions": 26385,
+        "File-backed pages": 209880,
+        "Pageins": 575065,
+        "Pageouts": 3777,
+        "Pages active": 177553,
+        "Pages copy-on-write": 914763,
+        "Pages free": 4389,
+        "Pages inactive": 183104,
+        "Pages occupied by compressor": 22787,
+        "Pages purgeable": 1243,
+        "Pages purged": 7993,
+        "Pages reactivated": 125720,
+        "Pages speculative": 15528,
+        "Pages stored in compressor": 76900,
+        "Pages throttled": 0,
+        "Pages wired down": 54164,
+        "Pages zero filled": 1896203,
+        "Swapins": 0,
+        "Swapouts": 0
+      },
+      "free_kib": 70224,
+      "inactive_kib": 2929664,
+      "page_size": 16384,
+      "physical_bytes": 7516192768,
+      "pressure_level": 1,
+      "raw_vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                4389.\nPages active:                            177553.\nPages inactive:                          183104.\nPages speculative:                        15528.\nPages throttled:                              0.\nPages wired down:                         54164.\nPages purgeable:                           1243.\n\"Translation faults\":                   5967120.\nPages copy-on-write:                     914763.\nPages zero filled:                      1896203.\nPages reactivated:                       125720.\nPages purged:                              7993.\nFile-backed pages:                       209880.\nAnonymous pages:                         166305.\nPages stored in compressor:               76900.\nPages occupied by compressor:             22787.\nDecompressions:                           26385.\nCompressions:                            109381.\nPageins:                                 575065.\nPageouts:                                  3777.\nSwapins:                                      0.\nSwapouts:                                     0.\n"
+    },
+    "qualification_claimed": false,
+    "remaining_observed": [],
+    "reserve_scope": "Darwin sampled available estimate: printed free + inactive; kernel pressure must be normal (1). This is not a proven no-swap bound. RSS includes controller and observed group/tree, not global Metal compiler services.",
+    "retirement_census_complete": true,
+    "sampling_interval_seconds": 0.1,
+    "signal_observations": [],
+    "source": {
+      "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "runner_revision": "bfefab73d571b3cbeafb9f0f657924169f067239",
+      "status": ""
+    },
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 152.61768499999994,
+    "whole_inputs_unchanged": true
+  },
+  "provider_source_commit": "e2422dd92017879a452377a1122f1838e6610b3c",
+  "qualification_claimed": false,
+  "raw_scope": "Complete native artifact ZIP split into consecutive 32MiB chunks; concatenation has the recorded archive bytes/hash. Contains complete provider source tar and all remote observations.",
+  "run": 38559236199,
+  "runner_revision": "bfefab73d571b3cbeafb9f0f657924169f067239",
+  "schema": "sirius-rejected-native-build-v1"
+}
