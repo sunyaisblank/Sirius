@@ -23,7 +23,7 @@ from contextlib import ExitStack
 import platform
 
 from runtime_identity import provider_inputs, selected_inventory
-from macos_metal_probe import MSL_BYTES, MSL_SHA
+from macos_metal_probe import FORCED_INLINE_COUNT, MSL_BYTES, MSL_SHA, unforced_msl
 
 
 def macho_modules(path):
@@ -544,8 +544,8 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
     return owner
 
 
-def prepare_metal_source(archive, output, modules):
-    """Recover only the exact Initialize pair from the preceding native capture."""
+def prepare_metal_source(archive, output, modules, remove_forced_inline=False):
+    """Recover the exact pair and, when requested, its annotation-only control."""
     require(identity(archive) == {"bytes": 9362078,
             "sha256": "12060f52a9cadba5dabedb5a99b5f4293893bd066d544f2ba4e58c612d2357db"},
             "Metal source archive differs from pinned artifact 11876607522")
@@ -563,11 +563,17 @@ def prepare_metal_source(archive, output, modules):
             "captured Initialize SPIR-V differs from the original embedded module")
     require(identity(folder / "initialize.metal") == {"bytes": MSL_BYTES, "sha256": MSL_SHA},
             "captured Initialize Metal source differs")
+    derived = folder / "initialize-without-forced-inline.metal"
+    if remove_forced_inline:
+        derived.write_bytes(unforced_msl((folder / "initialize.metal").read_bytes()))
     write(folder / "provenance.json", {"artifact": 11876607522, "archive": identity(archive),
           "source_run": 38526893803, "source_job": 115729265254,
           "prior_bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-6e13108",
           "prior_evidence_commit": "95ddf4aa1dba0dcec0ef8ca96ea8694d12c82935",
           "spirv": identity(folder / "initialize.spv"), "metal": identity(folder / "initialize.metal"),
+          "annotation_only_source_control": {"path": str(derived), **identity(derived),
+              "removed_forced_inline_declarations": FORCED_INLINE_COUNT,
+              "comparison_control": "Exact captured MSL with the same Size options"} if remove_forced_inline else None,
           "scope": "Exact prior dumped pair; synchronous native Metal diagnostic only, without dispatch or numerical qualification."})
     return folder / "initialize.metal"
 
@@ -626,9 +632,14 @@ def main():
                         help="diagnose exact captured Initialize MSL through native Metal instead of rerunning controls")
     parser.add_argument("--metal-optimization-size", action="store_true",
                         help="change only native Metal library optimization from Default to Size")
+    parser.add_argument("--metal-remove-forced-inline", action="store_true",
+                        help="remove only captured forced-inline annotations, retaining the prior Size options")
     args = parser.parse_args()
     require(not args.metal_optimization_size or args.metal_source_archive,
             "Metal Size diagnostic requires the pinned Metal source archive")
+    require(not args.metal_remove_forced_inline or
+            (args.metal_source_archive and args.metal_optimization_size),
+            "annotation-only source control requires the pinned archive and prior Size options")
     memory_self_test()
     output = args.output.resolve()
     require(output.is_relative_to(ROOT / "out") and not output.exists(), "output must be a fresh directory under out/")
@@ -641,7 +652,8 @@ def main():
     write(output / "diagnostic.json", result)
     try:
         stage, app, backend, modules = prepare(args.archive.resolve(), output)
-        metal_source = prepare_metal_source(args.metal_source_archive.resolve(), output, modules) if args.metal_source_archive else None
+        metal_source = prepare_metal_source(args.metal_source_archive.resolve(), output, modules,
+                                           args.metal_remove_forced_inline) if args.metal_source_archive else None
         if args.prepare_only:
             result["status"] = "prepared_without_execution"
             return 0
@@ -694,10 +706,29 @@ def main():
                        "--msl", str(metal_source), "--expected-device-name", selected["name"]]
             if args.metal_optimization_size:
                 command += ["--optimization-level", "size"]
+            if args.metal_remove_forced_inline:
+                command += ["--without-forced-inline", str(metal_source.with_name("initialize-without-forced-inline.metal"))]
             receipt = run_owned(command, environment, folder, inputs)
             require(receipt["containment_complete"] and receipt["observation_complete"],
                     "native Metal observation/containment incomplete")
             events = [json.loads(line) for line in (folder / "stdout.log").read_text().splitlines()]
+            if args.metal_remove_forced_inline:
+                source_events = [event for event in events if event.get("event") == "input"]
+                option_events = [event for event in events if event.get("event") == "compile_options"]
+                derived = metal_source.with_name("initialize-without-forced-inline.metal")
+                require(len(source_events) == 1 and len(option_events) == 1,
+                        "annotation control lacks source/options observations")
+                observed, options = source_events[0], option_events[0]
+                require(observed["sha256"] == MSL_SHA and observed["bytes"] == MSL_BYTES
+                        and observed["compiled_path"] == str(derived)
+                        and {"bytes": observed["compiled_bytes"], "sha256": observed["compiled_sha256"]} == identity(derived)
+                        and observed["captured_source_modified"] is True
+                        and observed["removed_forced_inline_declarations"] == FORCED_INLINE_COUNT,
+                        "native compiler did not consume the sealed annotation-only source")
+                require(options["optimization_level"] == 1
+                        and options["changed_parameter"] == {
+                            "forced_inline_declarations": {"baseline": FORCED_INLINE_COUNT, "diagnostic": 0}},
+                        "native annotation control changed its comparison options")
             require(events and events[-1].get("event") == "terminal"
                     and events[-1].get("qualification_claimed") is False
                     and events[-1].get("execution_claimed") is False,

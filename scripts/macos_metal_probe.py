@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""One exact Initialize MSL library/function/PSO diagnostic; no dispatch.
+"""One bounded Initialize MSL library/function/PSO diagnostic; no dispatch.
 
 Run only under the existing Darwin owner (300 s / 4 GiB RSS / 2 GiB reserve).
 Uses synchronous error-returning Metal methods instead of MoltenVK's asynchronous
 callbacks, with source-derived compile options and compute descriptor. Optional
 Size changes only the library optimization setting as a diagnostic experiment.
+An explicit source control removes only the captured forced-inline annotations
+while retaining Size and every function body; both source files stay sealed.
 No product qualification or equivalence of the two compilation routes is claimed.
 """
 
@@ -21,11 +23,23 @@ import time
 MSL_SHA = "b2d7daec9928356de4ca24a724d135adc59685a330b043e4fa55f2fe2f9b5550"
 MSL_BYTES = 85091
 SOURCE = "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+FORCED_INLINE = b"static inline __attribute__((always_inline))"
+FORCED_INLINE_COUNT = 84
 
 
 def require(ok, message):
     if not ok:
         raise ValueError(message)
+
+
+def unforced_msl(original):
+    """Derive only this frozen source control, never accept arbitrary MSL."""
+    require(len(original) == MSL_BYTES and hashlib.sha256(original).hexdigest() == MSL_SHA,
+            "MSL differs from exact captured Initialize source")
+    require(original.count(FORCED_INLINE) == FORCED_INLINE_COUNT
+            and original.count(b"__attribute__((always_inline))") == FORCED_INLINE_COUNT,
+            "captured forced-inline declaration inventory differs")
+    return original.replace(FORCED_INLINE, b"static inline")
 
 
 def emit(event, **values):
@@ -132,14 +146,25 @@ def main():
     parser.add_argument("--expected-device-name", default="Apple Paravirtual device")
     parser.add_argument("--expected-registry-id", type=lambda value: int(value, 0))
     parser.add_argument("--optimization-level", choices=["default", "size"], default="default")
+    parser.add_argument("--without-forced-inline", type=Path,
+                        help="sealed annotation-only source control; requires Size")
     args = parser.parse_args()
     require(sys.platform == "darwin" and platform.machine() == "arm64", "native arm64 Darwin required")
     payload = args.msl.read_bytes()
     require(len(payload) == MSL_BYTES and hashlib.sha256(payload).hexdigest() == MSL_SHA,
             "MSL differs from exact captured Initialize source")
+    compiled = payload
+    if args.without_forced_inline:
+        require(args.optimization_level == "size", "unforced-inline control requires Size")
+        compiled = args.without_forced_inline.read_bytes()
+        require(compiled == unforced_msl(payload), "derived MSL changes more than forced-inline annotations")
     emit("input", path=str(args.msl.resolve()), bytes=len(payload), sha256=MSL_SHA,
          candidate_source=SOURCE, qualification_claimed=False,
          requested_optimization_level=args.optimization_level,
+         compiled_path=str((args.without_forced_inline or args.msl).resolve()),
+         compiled_bytes=len(compiled), compiled_sha256=hashlib.sha256(compiled).hexdigest(),
+         removed_forced_inline_declarations=FORCED_INLINE_COUNT if args.without_forced_inline else 0,
+         captured_source_modified=bool(args.without_forced_inline),
          route="synchronous native Metal error-returning methods; no command queue or dispatch")
     api = ObjC()
     pool = api.send(api.cls("NSAutoreleasePool"), "new")
@@ -188,14 +213,16 @@ def main():
              math_mode=api.integer(options, "mathMode") if api.supports(options, "mathMode") else None,
              math_fp_functions=api.integer(options, "mathFloatingPointFunctions") if api.supports(options, "mathFloatingPointFunctions") else None,
              preserve_invariance=False, optimization_level=optimization,
-             changed_parameter={"optimization_level": {"baseline": 0, "diagnostic": 1}}
-                 if requested_optimization == 1 else None,
-             provenance="Source-derived original options; Size is an explicit single-parameter native diagnostic variant when requested. MoltenVK v1.4.1 has no public setting for that variant.")
+             changed_parameter={"forced_inline_declarations": {"baseline": FORCED_INLINE_COUNT, "diagnostic": 0}}
+                 if args.without_forced_inline else
+                 ({"optimization_level": {"baseline": 0, "diagnostic": 1}} if requested_optimization == 1 else None),
+             comparison_control="Exact captured MSL with the same Size options" if args.without_forced_inline else "Exact captured MSL with Default options",
+             provenance="Original options with explicit diagnostic controls. Unforced source changes only annotations relative to the prior Size control; no provider or numerical equivalence is claimed.")
         error = C.c_void_p()
         emit("phase_start", phase="library")
         library = api.send(device, "newLibraryWithSource:options:error:", C.c_void_p,
                            (C.c_void_p, C.c_void_p, C.POINTER(C.c_void_p)),
-                           (api.string(payload.decode("utf-8")), options, C.byref(error)))
+                           (api.string(compiled.decode("utf-8")), options, C.byref(error)))
         emit("phase_end", phase="library", success=bool(library), error=api.error(error.value))
         if not library:
             emit("terminal", pipeline_created=False, failed_stage="library",
