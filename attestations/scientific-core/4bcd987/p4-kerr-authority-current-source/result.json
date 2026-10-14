@@ -1,0 +1,393 @@
+{
+  "ctest_output_log": {
+    "bytes": 6779,
+    "sha256": "24fb6ab3a7703acb303fa1d30486602dc58bec4e098ec40de1d342b6a71a46b1"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "",
+    "TMPDIR": "/home/astra/.project/Sirius/out/science-p4-kerr-authority/temporary"
+  },
+  "disabled": 0,
+  "errors": 0,
+  "executed_names": [
+    "KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw",
+    "KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit",
+    "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction",
+    "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo"
+  ],
+  "expected_names": [
+    "KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw",
+    "KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit",
+    "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction",
+    "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo"
+  ],
+  "failures": 0,
+  "finite_acceptance_scope": {
+    "KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw": {
+      "assertions": "Original optionals present and EXPECT_DOUBLE_EQ between shared authority, KerrSchildFamily ISCO, mass-scaled disk ISCO, disk angular velocity and transfer emitter angular velocity; three original extremal/zero-spin ISCO endpoint checks at mass2:12,2,18.",
+      "independence_limit": "Cross-consumer consistency against one shared CPU authority; not an independent general ISCO/orbit oracle or a check of every CPU consumer at every input.",
+      "mass_dimensionless_spin_radius_over_mass": [
+        [
+          0.5,
+          -0.998,
+          12
+        ],
+        [
+          2,
+          -0.5,
+          12
+        ],
+        [
+          3,
+          -0.0009,
+          12
+        ],
+        [
+          0.5,
+          0,
+          12
+        ],
+        [
+          2,
+          0.0009,
+          12
+        ],
+        [
+          3,
+          0.5,
+          12
+        ],
+        [
+          2,
+          0.998,
+          12
+        ]
+      ]
+    },
+    "KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit": {
+      "assertions": "Five original invalid ISCO calls and five invalid angular-velocity calls decline; original two AccretionDiskD precondition death assertions. Inputs include nonpositive mass/radius, NaN, infinity, spin>mass and undefined retrograde denominator; no added refusal/domain boundary."
+    },
+    "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction": {
+      "assertions": "Independent Boyer-Lindquist metric gives omega=-g_tphi/g_phiphi, timelike norm, u^t and u^t(E-omega*L); original four EXPECT_NEAR comparisons at2e-15. Equatorial special-case consistency against disk ZAMO uses original EXPECT_DOUBLE_EQ.",
+      "fixture": {
+        "angular_momentum": 1.4,
+        "cos_theta": 0.35,
+        "energy": 1,
+        "mass": 1,
+        "observer_frequency": 0.93,
+        "phi": 0.4,
+        "radius": 6,
+        "spin": 0.7
+      },
+      "independence_limit": "One original off-equatorial physical fixture; equatorial consistency is shared-production comparison, not another independent physical oracle."
+    },
+    "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo": {
+      "assertions": "Original live inverse-metric Kerr-Schild slicing normal transformed to BL has abs(radial)>1e-3 and angular rate unequal to ZAMO; transfer exists. Finite witness distinguishing radial slicing motion from a stationary azimuthal ZAMO.",
+      "fixture": {
+        "cos_theta": 0.35,
+        "mass": 1,
+        "phi": 0.4,
+        "radius": 6,
+        "spin": 0.7
+      }
+    }
+  },
+  "junit": {
+    "bytes": 4377,
+    "sha256": "09c491c9383a53c24cb7f2f3a976ac0a0a3c6dd4fe73066a91cc78ef585af6de"
+  },
+  "mandatory_receipt_created": false,
+  "original_assertions_changed": false,
+  "outer_diagnostic_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "owner": {
+    "bytes": 2197,
+    "sha256": "8fcf625cc41192517c4cdea17ee96959ce5df8da2923f9a9d5a187db6481b0f4"
+  },
+  "p4_complete": false,
+  "passed": true,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false,
+  "reference": {
+    "historical_execution": {
+      "identity": "attestations/scientific-core/5e70607/final-build-identity-5e70607.json",
+      "producer_sha256": {
+        "core": "913aa8cd549f5b2fe8f451363c2c26d0b9ccf9455d3bd448e0a7878759e0dc8c",
+        "oracle": "a0c82a309ae6f3005a60fd820c86bdb0e03924869cb5f330e54ed978fb171f4d"
+      },
+      "reuse_boundary": "Two ZAMO names pass on a different historical oracle ELF; the two orbit names are absent. Bounded review of1460 preserved XML files found no selected current-producer execution. Historical results retained as historical, not relabelled; completed radiation/Page-Thorne controls excluded.",
+      "revision": "5e706073a3fd2f9afcf8efbcde2f094122050f6a",
+      "selected_old_passes": [
+        {
+          "classname": "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction",
+          "name": "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction",
+          "status": "run",
+          "time": "0.00354475"
+        },
+        {
+          "classname": "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo",
+          "name": "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo",
+          "status": "run",
+          "time": "0.00293606"
+        }
+      ],
+      "xml": "attestations/scientific-core/5e70607/final-integrated-cpu.xml"
+    },
+    "independent_reference": "Original KerrMetricD Boyer-Lindquist metric, u_phi=0 and u.u=-1, then invariant photon contraction. No new reference implementation or threshold.",
+    "original_source_snapshots": {
+      "src/sirius/base/contracts.h": {
+        "bytes": 3989,
+        "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1",
+        "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+      },
+      "src/sirius/core/constants.h": {
+        "bytes": 8558,
+        "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469",
+        "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+      },
+      "src/sirius/core/coordinates.h": {
+        "bytes": 19636,
+        "git_blob": "5a0143f40cee45c22cff55814e72efb42c4081f2",
+        "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+      },
+      "src/sirius/core/disk/disk_model.h": {
+        "bytes": 2876,
+        "git_blob": "0340ef7434d0434618966f646b6e536d04d18bb1",
+        "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+      },
+      "src/sirius/core/disk/novikov_thorne_disk.h": {
+        "bytes": 16284,
+        "git_blob": "75941e077426512c0bf86f33e644937eeaedb45b",
+        "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+      },
+      "src/sirius/core/dual_number.h": {
+        "bytes": 9490,
+        "git_blob": "1938f64eadbd59467cfcc13737999eb0e491d531",
+        "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9"
+      },
+      "src/sirius/core/first_order_number.h": {
+        "bytes": 1854,
+        "git_blob": "3fc1670bcc5113e4d1e68d07e9defe2d3339a932",
+        "sha256": "9ed51f93e11c2528546729c2ff190f66131c011ebab0c26cf51e38643c5b1ec7"
+      },
+      "src/sirius/core/kerr_orbits.h": {
+        "bytes": 3107,
+        "git_blob": "ce4e906fd865922642e6fa8bb6108be169ddd7a5",
+        "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+      },
+      "src/sirius/core/metrics/kerr_schild_family.h": {
+        "bytes": 33851,
+        "git_blob": "074a71d54304b04bae7d1f4002f2d97914b0ae62",
+        "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a"
+      },
+      "src/sirius/core/metrics/metric.h": {
+        "bytes": 10205,
+        "git_blob": "f1cf026aa31e41efa1a4701d9d35502dd5bcfb87",
+        "sha256": "563a7543e118a813c4a26a40763578bb9b930385abecbf6ae5c6bce1c29e742c"
+      },
+      "src/sirius/core/metrics/registry.h": {
+        "bytes": 22072,
+        "git_blob": "45dab60601637bcd78d10f9dbf455a89c28511e3",
+        "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072"
+      },
+      "src/sirius/core/relativistic_transfer.h": {
+        "bytes": 11498,
+        "git_blob": "fcd65ad400729de2105752b710bdde70423565d4",
+        "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f"
+      },
+      "src/sirius/core/second_order_number.h": {
+        "bytes": 2404,
+        "git_blob": "25109f8c724dbbf697968c72b7b59309516f9c25",
+        "sha256": "12f241e7068971ef4e6ec9cabf76010c71b72cf7ac6749be0b31f0f9dc99c6e5"
+      },
+      "src/sirius/core/spectral/spectral_radiance.h": {
+        "bytes": 5757,
+        "git_blob": "5a9626f468489a55febfb9a078f3fe5718e0e0f5",
+        "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+      },
+      "src/sirius/core/tensor.h": {
+        "bytes": 6421,
+        "git_blob": "4671e6533194a255c978b072f1bf585243bedbea",
+        "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7"
+      },
+      "src/sirius/core/twofold.h": {
+        "bytes": 5685,
+        "git_blob": "f2721152700164a2cc7cae68912404350468deb8",
+        "sha256": "2ace9a10d430dbf4dab870602dbc8ca0545ada2c2e350ca6cd263dd8c92e93f1"
+      },
+      "src/sirius/oracle/kerr_boyer_lindquist.h": {
+        "bytes": 30350,
+        "git_blob": "af37af15f0210ce8c3e7ce2374135cabfd388287",
+        "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+      },
+      "src/sirius/oracle/metric_interface.h": {
+        "bytes": 6297,
+        "git_blob": "5d19057f86d59b9b6001762bc7abb4f45804f304",
+        "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af"
+      },
+      "src/sirius/oracle/transport_types.h": {
+        "bytes": 8470,
+        "git_blob": "ed9d7a97d8e06e4508ee494453da5d8485abadba",
+        "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9"
+      },
+      "tests/core/CMakeLists.txt": {
+        "bytes": 1974,
+        "git_blob": "3ebec86b19bc796ff619b839097de35ea858c8ed",
+        "sha256": "bf9c352a0db90b86836ccdd63fb3163f5bd394563fb6eade0f22e1df4640f773"
+      },
+      "tests/core/kerr_orbit_authority_test.cpp": {
+        "bytes": 3642,
+        "git_blob": "52aa71dfc7a018cace318b05ef3128c2a429a1bb",
+        "sha256": "df955a5026b8e21b1742106abb195f315b94156738ad5c0a80c855922a7d91fe"
+      },
+      "tests/labels/CTestLabels.cmake": {
+        "bytes": 78306,
+        "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7",
+        "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14"
+      },
+      "tests/operating_model.json": {
+        "bytes": 130331,
+        "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+      },
+      "tests/oracle/CMakeLists.txt": {
+        "bytes": 867,
+        "git_blob": "14b0dfd43cfcf8271c4eee0f66206c58ba88aa1f",
+        "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6"
+      },
+      "tests/oracle/kerr_metric_test.cpp": {
+        "bytes": 20355,
+        "git_blob": "2a85738fdd67e56cfb710cd92b23107c69e25e72",
+        "sha256": "786a4e1f63f7c0cc7f89164d0b7d05e741876a07aaed3f357bd9e0120d39175a"
+      },
+      "tests/support/fail_on_skip.h": {
+        "bytes": 427,
+        "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+        "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+      }
+    },
+    "scope_boundary": "Shared CPU orbit authority consistency and explicit refusal samples plus one original arbitrary-latitude ZAMO and slicing-normal fixture; no continuous-domain mathematical proof or final integrated qualification."
+  },
+  "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "scope": "Four original finite P4 CPU Kerr orbit/ZAMO controls only; no device/frame, all-spin/latitude/domain proof, full P4/science/Mandatory or release qualification.",
+  "skips": 0,
+  "source_and_registration_join": {
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CXX_COMPILER": "g++-14",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "SIRIUS_WERROR": "ON"
+    },
+    "original_compile_commands": [
+      {
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o -c /home/astra/.project/Sirius/tests/core/kerr_orbit_authority_test.cpp",
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "file": "/home/astra/.project/Sirius/tests/core/kerr_orbit_authority_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o"
+      },
+      {
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/src/sirius/oracle/../.. -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o -c /home/astra/.project/Sirius/tests/oracle/kerr_metric_test.cpp",
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "file": "/home/astra/.project/Sirius/tests/oracle/kerr_metric_test.cpp",
+        "output": "tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o"
+      }
+    ],
+    "original_link_ninja_lines": [
+      "build tests/core/sirius_core_tests tests/core/sirius_core_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/core/sirius_core_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_core_tests_Release tests/core/CMakeFiles/sirius_core_tests.dir/autodiff_dual_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/retained_arithmetic_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/coordinates_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_naninf_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_stability_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/christoffel_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/horizon_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_derivative_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_loader_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_registry_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/reissner_nordstrom_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/schwarzschild_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/walker_penrose_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/warp_drive_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/stokes_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_inverse_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/novikov_thorne_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/turbulence_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/volumetric_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/postprocess_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/starfield_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_transfer_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_map_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a",
+      "build tests/oracle/sirius_oracle_tests tests/oracle/sirius_oracle_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/oracle/sirius_oracle_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_oracle_tests_Release tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+    ],
+    "original_test_TIMEOUT_added": false,
+    "producers": {
+      "core": {
+        "bytes": 5199120,
+        "path": "bin/linux-gcc/tests/core/sirius_core_tests",
+        "recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+        "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+      },
+      "oracle": {
+        "bytes": 1678696,
+        "path": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4",
+        "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+      }
+    },
+    "production_headers": [
+      "src/sirius/core/kerr_orbits.h",
+      "src/sirius/core/relativistic_transfer.h",
+      "src/sirius/core/metrics/kerr_schild_family.h",
+      "src/sirius/core/disk/novikov_thorne_disk.h",
+      "src/sirius/core/disk/disk_model.h",
+      "src/sirius/core/coordinates.h",
+      "src/sirius/core/constants.h",
+      "src/sirius/core/tensor.h",
+      "src/sirius/core/dual_number.h",
+      "src/sirius/core/first_order_number.h",
+      "src/sirius/core/second_order_number.h",
+      "src/sirius/core/twofold.h",
+      "src/sirius/core/metrics/metric.h",
+      "src/sirius/core/metrics/registry.h",
+      "src/sirius/core/spectral/spectral_radiance.h",
+      "src/sirius/oracle/kerr_boyer_lindquist.h",
+      "src/sirius/oracle/metric_interface.h",
+      "src/sirius/oracle/transport_types.h",
+      "src/sirius/base/contracts.h"
+    ],
+    "registrations": [
+      {
+        "add_test": "add_test([=[KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw]==] --gtest_also_run_disabled_tests)",
+        "name": "KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests",
+        "properties": "set_tests_properties([=[KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "source": "tests/core/kerr_orbit_authority_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit]==] --gtest_also_run_disabled_tests)",
+        "name": "KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests",
+        "properties": "set_tests_properties([=[KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "source": "tests/core/kerr_orbit_authority_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction]==] --gtest_also_run_disabled_tests)",
+        "name": "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "properties": "set_tests_properties([=[KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "source": "tests/oracle/kerr_metric_test.cpp"
+      },
+      {
+        "add_test": "add_test([=[KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo]==] --gtest_also_run_disabled_tests)",
+        "name": "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo",
+        "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "properties": "set_tests_properties([=[KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+        "source": "tests/oracle/kerr_metric_test.cpp"
+      }
+    ],
+    "selected_core_cases": 2,
+    "selected_oracle_cases": 2,
+    "test_sources": [
+      "tests/core/kerr_orbit_authority_test.cpp",
+      "tests/oracle/kerr_metric_test.cpp"
+    ]
+  },
+  "temporary_output": {
+    "mode": "0o700",
+    "path": "/home/astra/.project/Sirius/out/science-p4-kerr-authority/temporary",
+    "residual_files": {},
+    "uid": 1000
+  }
+}
