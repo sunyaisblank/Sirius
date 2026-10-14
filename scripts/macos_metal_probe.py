@@ -6,7 +6,7 @@ Uses synchronous error-returning Metal methods instead of MoltenVK's asynchronou
 callbacks, with source-derived compile options and compute descriptor. Optional
 Size changes only the library optimization setting as a diagnostic experiment.
 An explicit source control removes only the captured forced-inline annotations
-while retaining Size and every function body; both source files stay sealed.
+while retaining the selected options and every function body; both files stay sealed.
 No product qualification or equivalence of the two compilation routes is claimed.
 """
 
@@ -147,7 +147,7 @@ def main():
     parser.add_argument("--expected-registry-id", type=lambda value: int(value, 0))
     parser.add_argument("--optimization-level", choices=["default", "size"], default="default")
     parser.add_argument("--without-forced-inline", type=Path,
-                        help="sealed annotation-only source control; requires Size")
+                        help="sealed annotation-only source control")
     args = parser.parse_args()
     require(sys.platform == "darwin" and platform.machine() == "arm64", "native arm64 Darwin required")
     payload = args.msl.read_bytes()
@@ -155,7 +155,6 @@ def main():
             "MSL differs from exact captured Initialize source")
     compiled = payload
     if args.without_forced_inline:
-        require(args.optimization_level == "size", "unforced-inline control requires Size")
         compiled = args.without_forced_inline.read_bytes()
         require(compiled == unforced_msl(payload), "derived MSL changes more than forced-inline annotations")
     emit("input", path=str(args.msl.resolve()), bytes=len(payload), sha256=MSL_SHA,
@@ -216,8 +215,9 @@ def main():
              changed_parameter={"forced_inline_declarations": {"baseline": FORCED_INLINE_COUNT, "diagnostic": 0}}
                  if args.without_forced_inline else
                  ({"optimization_level": {"baseline": 0, "diagnostic": 1}} if requested_optimization == 1 else None),
-             comparison_control="Exact captured MSL with the same Size options" if args.without_forced_inline else "Exact captured MSL with Default options",
-             provenance="Original options with explicit diagnostic controls. Unforced source changes only annotations relative to the prior Size control; no provider or numerical equivalence is claimed.")
+             comparison_control=("Exact captured MSL with the same " + args.optimization_level + " options")
+                 if args.without_forced_inline else "Exact captured MSL with Default options",
+             provenance="Original options with explicit diagnostic controls. Unforced source changes only annotations relative to the captured source with the same optimization level; no provider or numerical equivalence is claimed.")
         error = C.c_void_p()
         emit("phase_start", phase="library")
         library = api.send(device, "newLibraryWithSource:options:error:", C.c_void_p,

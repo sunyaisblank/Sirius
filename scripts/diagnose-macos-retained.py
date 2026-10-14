@@ -573,7 +573,7 @@ def prepare_metal_source(archive, output, modules, remove_forced_inline=False):
           "spirv": identity(folder / "initialize.spv"), "metal": identity(folder / "initialize.metal"),
           "annotation_only_source_control": {"path": str(derived), **identity(derived),
               "removed_forced_inline_declarations": FORCED_INLINE_COUNT,
-              "comparison_control": "Exact captured MSL with the same Size options"} if remove_forced_inline else None,
+              "comparison_control": "Exact captured MSL with the same selected compiler options"} if remove_forced_inline else None,
           "scope": "Exact prior dumped pair; synchronous native Metal diagnostic only, without dispatch or numerical qualification."})
     return folder / "initialize.metal"
 
@@ -633,13 +633,12 @@ def main():
     parser.add_argument("--metal-optimization-size", action="store_true",
                         help="change only native Metal library optimization from Default to Size")
     parser.add_argument("--metal-remove-forced-inline", action="store_true",
-                        help="remove only captured forced-inline annotations, retaining the prior Size options")
+                        help="remove only captured forced-inline annotations, retaining the selected compiler options")
     args = parser.parse_args()
     require(not args.metal_optimization_size or args.metal_source_archive,
             "Metal Size diagnostic requires the pinned Metal source archive")
-    require(not args.metal_remove_forced_inline or
-            (args.metal_source_archive and args.metal_optimization_size),
-            "annotation-only source control requires the pinned archive and prior Size options")
+    require(not args.metal_remove_forced_inline or args.metal_source_archive,
+            "annotation-only source control requires the pinned archive")
     memory_self_test()
     output = args.output.resolve()
     require(output.is_relative_to(ROOT / "out") and not output.exists(), "output must be a fresh directory under out/")
@@ -725,7 +724,7 @@ def main():
                         and observed["captured_source_modified"] is True
                         and observed["removed_forced_inline_declarations"] == FORCED_INLINE_COUNT,
                         "native compiler did not consume the sealed annotation-only source")
-                require(options["optimization_level"] == 1
+                require(options["optimization_level"] == (1 if args.metal_optimization_size else 0)
                         and options["changed_parameter"] == {
                             "forced_inline_declarations": {"baseline": FORCED_INLINE_COUNT, "diagnostic": 0}},
                         "native annotation control changed its comparison options")

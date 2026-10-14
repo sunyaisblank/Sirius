@@ -224,7 +224,6 @@ MACOS_RETAINED_DIAGNOSTIC_JOB = r"""    if: github.event_name == 'workflow_dispa
           python3 -B scripts/diagnose-macos-retained.py \
             --archive out/macos-retained-diagnostic/export.zip \
             --metal-source-archive out/macos-retained-diagnostic/metal-source.zip \
-            --metal-optimization-size \
             --metal-remove-forced-inline \
             --output out/macos-retained-diagnostic/observation
       - name: Preserve diagnostic inputs and observations
@@ -729,8 +728,8 @@ def verify_integration_boundary_policy() -> None:
         "wrong source": ("origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc", "origin main"),
         "wrong export": ("artifacts/11778215779/zip", "artifacts/1/zip"),
         "wrong captured Metal source": ("artifacts/11876607522/zip", "artifacts/1/zip"),
-        "unchanged Size retry": ("            --metal-remove-forced-inline \\\n", ""),
-        "different optimization control": ("            --metal-optimization-size \\\n", ""),
+        "unchanged Default retry": ("            --metal-remove-forced-inline \\\n", ""),
+        "different optimization control": ("            --metal-remove-forced-inline \\\n", "            --metal-optimization-size \\\n            --metal-remove-forced-inline \\\n"),
         "wrong SDK": ("vulkan_version: 1.4.357.0", "vulkan_version: latest"),
         "preparation only": ("python3 -B scripts/diagnose-macos-retained.py", "python3 -B scripts/diagnose-macos-retained.py --prepare-only"),
         "rebuild": ("    steps:\n", "    steps:\n      - run: cmake --build --preset macos\n"),
