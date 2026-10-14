@@ -228,7 +228,7 @@ MACOS_RETAINED_DIAGNOSTIC_JOB = r"""    if: github.event_name == 'workflow_dispa
         with:
           name: sirius-macos-retained-diagnostic
           path: |
-            out/macos-retained-diagnostic
+            out/macos-retained-diagnostic/observation
             bin/macos/retained-diagnostic
           if-no-files-found: error
 """

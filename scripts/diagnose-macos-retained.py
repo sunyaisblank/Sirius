@@ -376,6 +376,7 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
              "reserve_scope": "Darwin sampled available estimate: printed free + inactive; kernel pressure must be normal (1). This is not a proven no-swap bound. RSS includes controller and observed group/tree, not global Metal compiler services.",
              "birth_scope": "Observed ps PID/lstart tokens; second-resolution ambiguity remains incomplete.",
              "sampling_interval_seconds": 0.1, "observed_births": [], "remaining_observed": [],
+             "signal_observations": [],
              "environment": {key: environment.get(key) for key in ["VK_DRIVER_FILES", "DYLD_LIBRARY_PATH", "SIRIUS_VULKAN_DEVICE", "MVK_CONFIG_SHADER_DUMP_DIR", "MVK_CONFIG_DEBUG", "MVK_CONFIG_TRACE_VULKAN_CALLS"]}}
     child, reaped, reason, code, seen, escaped = None, False, None, None, {}, False
     group_drained = False
@@ -400,12 +401,24 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
             seen[(row["pid"], row["lstart"])] = row
             escaped |= row["pgid"] != child.pid
         return selected
+    def drained(rows, members):
+        return (child.pid in rows and rows[child.pid]["pgid"] == child.pid
+                and rows[child.pid]["state"].startswith("Z")
+                and not any(not row["state"].startswith("Z") for row in members))
     def group_signal(number):
         require(child is not None and not reaped, "cannot signal a reaped or absent group anchor")
         try:
             os.killpg(child.pid, number)
         except ProcessLookupError:
             pass
+        except PermissionError:
+            # Darwin can return EPERM when the last live member exits before
+            # killpg. Accept that race only after observing the unreaped zombie
+            # anchor and no live group/tree members. Unknown or live targets
+            # still fail containment; never retry against a saved bare PID.
+            rows = process_census()
+            require(drained(rows, observe(rows)), "group signal denied with live or unresolved targets")
+            owner["signal_observations"].append({"signal": number, "result": "EPERM; anchored group observed drained"})
     with ExitStack() as files:
         try:
             for number in [signal.SIGINT, signal.SIGTERM, signal.SIGHUP]:
@@ -450,25 +463,27 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
                 # Popen.poll/send_signal/terminate/kill/communicate would reap the
                 # anchor. Only killpg is used until all group signaling is over.
                 try:
-                    group_signal(signal.SIGTERM)
+                    rows = process_census()
+                    members = observe(rows)
+                    if not drained(rows, members):
+                        group_signal(signal.SIGTERM)
                     deadline = time.monotonic() + 1
                     while True:
                         rows = process_census()
                         members = observe(rows)
-                        alive = [row for row in members if not row["state"].startswith("Z")]
-                        if not alive or time.monotonic() >= deadline:
+                        group_drained = drained(rows, members)
+                        if group_drained or time.monotonic() >= deadline:
                             break
                         time.sleep(0.1)
-                    if alive:
+                    if not group_drained:
                         group_signal(signal.SIGKILL)
-                    # Final anchored sweep also covers a fork racing the census.
-                    group_signal(signal.SIGKILL)
+                    # A zombie-only group cannot fork. Retain the anchor until
+                    # the final census; do not signal it merely for being present.
                     deadline = time.monotonic() + 5
                     while True:
                         rows = process_census()
                         members = observe(rows)
-                        group_drained = (child.pid in rows and rows[child.pid]["state"].startswith("Z")
-                                         and not any(not row["state"].startswith("Z") for row in members))
+                        group_drained = drained(rows, members)
                         if group_drained or time.monotonic() >= deadline:
                             break
                         time.sleep(0.1)
