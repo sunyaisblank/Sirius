@@ -1,0 +1,1513 @@
+{
+  "arithmetic_admission": "Original RetainedArithmeticIssue and RetainedUsesPortableArithmetic on actual device; denorm/RTE32 select native versus integer portable, normal-sum requiresRTE32, no forced capability or mode override. FP32 request remains unset; no weaker precision substitution.",
+  "cases": [
+    {
+      "assertions": "Original baseline nonempty, represented same length, every represented channel finite, sum absolute linear-radiance difference>1e-5.",
+      "label": "scene-1",
+      "name": "VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel",
+      "original_frames": [
+        {
+          "doppler": true,
+          "turbulence": false,
+          "volumetric": true
+        },
+        {
+          "doppler": true,
+          "turbulence": true,
+          "volumetric": true
+        }
+      ],
+      "original_registration": "add_test([=[VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel]==] --gtest_also_run_disabled_tests)",
+      "outputs": [
+        "sirius_vk_volume_baseline.exr",
+        "sirius_vk_volume_turbulence.exr"
+      ],
+      "source_line": 369
+    },
+    {
+      "assertions": "Original thin/volume pairs nonempty and same size, both members finite, separate sum absolute linear-radiance difference>1e-5 for each pair.",
+      "label": "scene-2",
+      "name": "VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission",
+      "original_frames": [
+        {
+          "doppler": true,
+          "volumetric": false
+        },
+        {
+          "doppler": false,
+          "volumetric": false
+        },
+        {
+          "doppler": true,
+          "volumetric": true
+        },
+        {
+          "doppler": false,
+          "volumetric": true
+        }
+      ],
+      "original_registration": "add_test([=[VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission]==] --gtest_also_run_disabled_tests)",
+      "outputs": [
+        "sirius_vk_doppler_thin_on.exr",
+        "sirius_vk_doppler_thin_off.exr",
+        "sirius_vk_doppler_volume_on.exr",
+        "sirius_vk_doppler_volume_off.exr"
+      ],
+      "source_line": 396
+    }
+  ],
+  "compile_command": {
+    "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_INTERACTIVE_VIEWER=1 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1 -DSIRIUS_VERSION=\\\"2.0.0\\\" -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/lib/glad/include -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -I/home/astra/.project/Sirius/lib/glfw/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o -c /home/astra/.project/Sirius/tests/render/vulkan_render_test.cpp",
+    "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+    "file": "/home/astra/.project/Sirius/tests/render/vulkan_render_test.cpp",
+    "output": "tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o"
+  },
+  "diagnostic_only_difference": [
+    ".github/workflows/ci.yml",
+    "scripts/diagnose-macos-retained.py",
+    "scripts/governance/build_policy.py",
+    "scripts/macos_metal_probe.py",
+    "scripts/macos_moltenvk_integration.py",
+    "scripts/macos_vulkan_identity.py"
+  ],
+  "finite_scope": "Only two named original P4 full Vulkan-session witnesses with original2/4 complete40x24 frames and four volumetric samples where enabled; no fullP4/science/integrated/platform/Mandatory/release qualification.",
+  "original_internal_controls": {
+    "driver": "vkQueueSubmit followed by vkQueueWaitIdle; no host timeout parameter. Outer owner supplies diagnostic containment.",
+    "outer": "300s/4GiB sampled process-tree RSS/2GiB MemAvailable reserve per separate case; diagnostic admission only, no completion forecast.",
+    "physical_dispatch": "Unchanged kDispatchStopMs=1000 supplied to RetainedTraceExecutor; feedback may subdivide reducible work and refuses irreducible single-row submissions above1000ms. This is observed post-submit safety, not preemption.",
+    "renderer": "Six zero-active software preparation stages restore capacity headers; these phase times are excluded from governed physical-work feedback and included in frame wall. Film Camera is not prepared.",
+    "scheduling": "Original1ms coalescing wait,10ms completion polling and30s progress reporting; original adaptive dispatch target and arithmetic admission unchanged.",
+    "session": "Execute calls Start and WaitForCompletion; original thread join/condition waits have no wall deadline."
+  },
+  "owner_reuse": {
+    "guard": "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/owned_guard.py",
+    "original": "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/run_owned.py",
+    "private_change": "Only exact actual loader/LVP/LLVM path collection; same process/source/input/limit/cleanup rules."
+  },
+  "prepared_only": true,
+  "prior_setup_review": {
+    "cache_policy": "Historical Mesa cache enabled; no cache-hit/warmness attribution. Not current cache-off cost evidence.",
+    "cold_incomplete_comparison": "attestations/software-vulkan/997fe85/cold-operational-timeout/classification.json",
+    "comparison": "997fe85 completed five preparations218.3s then reached2666 accepted physical intervals before original300s timeout; current main shader header/modes and six-phase preparation differ. No unchanged current six-phase setup-failure record established by bounded cold-owner inventory. Both scenes still share unresolved retained whole-frame costs; no completion forecast or launch recommendation follows from this source-only comparison.",
+    "finite_prior_control": "attestations/software-vulkan/8d5b89d/retained-preparation-count/controls/renderer/owner.json",
+    "parity_distinction": "These scenes load retained embedded stage modules/programs, not the ordinary monolithic5.56MB parity_probe.spv whose first P4 case hit outer300s before any phase record.",
+    "prior_control_peak_sampled_rss_kib": 1115076,
+    "prior_control_wall_seconds": 106.57189170499623,
+    "prior_setup_wall_seconds_as_logged": 20.2377,
+    "same_current_embedded_header": "attestations/software-vulkan/8d5b89d/retained-preparation-count/executed-inputs/bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+  },
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "provider_policy": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "precision_request": "SIRIUS_PRECISION absent, unchanged defaultFP32",
+    "scope": "Existing explicit llvmpipe/Lavapipe software route only; cache disabled by mature owner. No Dozen/native/performance/cache-warmness/qualification claim."
+  },
+  "required_provider_mappings": [
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+  ],
+  "retained_payload": {
+    "all_embedded_arrays": [
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kCameraProgram",
+        "sha256": "4e7ac6f05ee316d019ba9137ebcea0f5883e6dd66031e0839a4d72e6e5e39d49",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 26841
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kCameraShader",
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 11930
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kCameraFp64Shader",
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 15262
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kCameraPortableShader",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 128081
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kCameraPortableFp64Shader",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 128081
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kTransportProgram",
+        "sha256": "8717c2b5cec0664aa7a2c8aeed122cb54b2092ffe8e3d3dd0901d19af7d47436",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 15967
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kTransportShader",
+        "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 21341
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kTransportFp64Shader",
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 24502
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kTransportPortableShader",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 24935
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kTransportPortableFp64Shader",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 24935
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kTransportPortableNormalSumShader",
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 26010
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kTransportFmaShader",
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 20883
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kEndpointProgram",
+        "sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 21143
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kEndpointShader",
+        "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 24825
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kEndpointFp64Shader",
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 27990
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kEndpointPortableShader",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 36336
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kEndpointPortableFp64Shader",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 36336
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kEndpointPortableNormalSumShader",
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 37850
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kEndpointFmaShader",
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 24367
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDenseProgram",
+        "sha256": "ae332f9d2ef8756b381c7dc641fefae5972b69acc338329c60d13997dfc5c146",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 31932
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDenseShader",
+        "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 19488
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDenseFp64Shader",
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 22657
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDensePortableShader",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 29051
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDensePortableFp64Shader",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 29051
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kInitializeProgram",
+        "sha256": "a92cf01a58662e08e7d608143c757f58ae6f6b7df8913772c3ad9a4838f8f51e",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 9922
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kInitializeShader",
+        "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 14277
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kInitializeFp64Shader",
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 17617
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kInitializePortableShader",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 19361
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kInitializePortableFp64Shader",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 19361
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kRayCameraProgram",
+        "sha256": "0c0ce908c9956c51c222e2554de9bc9871a4eb868dad03d118ee64572236df17",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 30962
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kRayCameraShader",
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 11342
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kRayCameraFp64Shader",
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 14682
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kRayCameraPortableShader",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 118814
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kRayCameraPortableFp64Shader",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 118814
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDopriPhaseProgram",
+        "sha256": "1b299191be54909e432bafee906992ea15783a3bffe908d4ddd9a34619218b05",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 10689
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDopriPhaseShader",
+        "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 14685
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDopriPhaseFp64Shader",
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 18025
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDopriPhasePortableShader",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 23211
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDopriPhasePortableFp64Shader",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 23211
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "name": "kDopriPhasePortableNormalSumShader",
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 24188
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_owner_kernels.h",
+        "name": "kTransportShader",
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 28363
+      },
+      {
+        "header": "bin/linux-gcc/src/sirius/backend/retained/retained_owner_kernels.h",
+        "name": "kEndpointShader",
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+        "whole_bytes_present_in_current_render_elf": true,
+        "words": 40405
+      }
+    ],
+    "producer_before_after_protected": [
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv"
+    ],
+    "scope": "All42 full shader/program arrays occur byte-exactly in current accepted renderELF;7 complete programs, unchanged layouts/ABI/mode-selection source. No regenerated or reduced program.",
+    "whole_generated_tree": [
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_program_identity.slang",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_owner_kernels.h",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_owner_layout.h",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_owner_layout.slang",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv"
+    ]
+  },
+  "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "runtime_resource_volume": {
+    "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png",
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe.spv",
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv",
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv",
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/coupled_probe_fp64.spv",
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe.spv",
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv",
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp64.spv",
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe.spv",
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv",
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv",
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe.spv",
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv",
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp64.spv",
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.cu": {
+      "bytes": 316063,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.cu",
+      "sha256": "e8460dbe10346d5cf457a533c7126707b87cbd108f43c7a8f2fb6e92f5e8fd8d"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.metal": {
+      "bytes": 338766,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.metal",
+      "sha256": "879d15908e66449f789652f40a329b731bebc65dca396659b636cf834943df06"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/smoke.spv",
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/trace.spv",
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp32comp.spv",
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp64.spv",
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/model/alignment_receipt.json": {
+      "bytes": 1808,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/model/alignment_receipt.json",
+      "sha256": "cbeb56fdcb0223f8d5d9c5696870d7a014b216e1aa68fc5ef394e733933bd077"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/model/operating_model.json": {
+      "bytes": 130331,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/model/operating_model.json",
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.frag",
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.vert",
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.frag": {
+      "bytes": 2386,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.frag",
+      "sha256": "58f4438f27fcb647f86ce9fbb8e875e6bee0fbea20768ee6e289e952da0b51ec"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.vert": {
+      "bytes": 198,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.vert",
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.frag": {
+      "bytes": 3799,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.frag",
+      "sha256": "bee2ff8435f1d25ce111d6da0623975acf74205511ebce81df011d61d1ab0536"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.vert": {
+      "bytes": 577,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.vert",
+      "sha256": "08467d1bc78904fe7512245db7e2912caf132d5de250955b0719f4f51c94a039"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/tests/backend/portable_binary32_reference.bin",
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv",
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_fixture.h",
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+    }
+  },
+  "schema_version": 1,
+  "software_preparation_stages": [
+    "ray_camera",
+    "initialize",
+    "transport",
+    "endpoint",
+    "dense",
+    "dopri_phase"
+  ],
+  "source_and_producer_join": {
+    "accepted_result": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "owner": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/build/owner.json",
+    "render": {
+      "bytes": 12208240,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "scope": "Current source/ELF/resource producer reuse; current compiler/tool bytes pinned now, not retroactive historical compiler-byte attestation."
+  },
+  "source_recovery": [
+    {
+      "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74",
+      "path": "cmake/sirius_testing.cmake",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/cmake/sirius_testing.cmake",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    {
+      "git_blob": "9eedabedc45b3e6fd88fae6f14a160b4d53272ec",
+      "path": "lib/stb/stb_image.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/lib/stb/stb_image.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "594c2fe35d49488b4382dbfaec8f98366defca819d916ac95becf3e75f4200b3"
+    },
+    {
+      "git_blob": "fb674701e4ca3721fce332641a81950656844ef8",
+      "path": "lib/tinyexr/miniz.c",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/lib/tinyexr/miniz.c",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "8756860e8ab4d8c6942e12496b8081cfd291442cdbc6d13dba4b993905128872"
+    },
+    {
+      "git_blob": "9fcfffcc8cd7ac9e9d9af271cffdbc8d0a58a9ea",
+      "path": "lib/tinyexr/miniz.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/lib/tinyexr/miniz.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "295d1a0041aea09609598c0f1f35c1977ca05ad662acbadcfdaac44c140af37b"
+    },
+    {
+      "git_blob": "d4001575370a9a0d45fbf878f52480bc9e887d99",
+      "path": "lib/tinyexr/tinyexr.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/lib/tinyexr/tinyexr.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "1238e469657b5780a2f69d62dafe8d4896c7ac3ea640f49ef3604fa4c7327a87"
+    },
+    {
+      "git_blob": "6768c166aabefa3fdb8ab450be9e0b877a93eaae",
+      "path": "scripts/build-retained-kernels.py",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/scripts/build-retained-kernels.py",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+    },
+    {
+      "git_blob": "c629f17fc0611874533f2dbe0b986b685f0f74fc",
+      "path": "src/sirius/backend/CMakeLists.txt",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/CMakeLists.txt",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2"
+    },
+    {
+      "git_blob": "57aadfc9d287662cafae4dd29851050955bb141c",
+      "path": "src/sirius/backend/cpu/geodesic_tracer.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/cpu/geodesic_tracer.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3c8527e32f72e191acf86fb62d842c34383002761faf7650c3cff7eece2c43d2"
+    },
+    {
+      "git_blob": "8d1b6c68b5f93d32c322f38d999a9cfbd77b9083",
+      "path": "src/sirius/backend/cpu/geodesic_tracer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/cpu/geodesic_tracer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "9277719799f1af802459f451c060e5e04f3a5b811d3fa10a273bc71c3e4fbb85"
+    },
+    {
+      "git_blob": "328d743ef3b9f03786341f8ae4750257885ab097",
+      "path": "src/sirius/backend/device.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/device.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    {
+      "git_blob": "62b12e96d11323176d29210afa112c0f651c6009",
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/retained_compute.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    },
+    {
+      "git_blob": "b0d487f6192f4037213fafcd54115df5982261a9",
+      "path": "src/sirius/backend/retained_compute.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/retained_compute.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "be59f256c881e47eed888e40fdc32dfd164bdb3eca83f09ffdab44d401b37ee1"
+    },
+    {
+      "git_blob": "bf89a98b5fb79ab301578a08ec1d939e47542d97",
+      "path": "src/sirius/backend/retained_integrator.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/retained_integrator.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "1e650958d952afab60cebe9a871d8a85b819f15bd87632cde73731313dfdb4da"
+    },
+    {
+      "git_blob": "6f8d7521a71b8f98c6d9d301dbb3d53da4452b70",
+      "path": "src/sirius/backend/retained_integrator.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/retained_integrator.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "798a3d35ec1b267adddcc146bd43181c6dc72a2bebd8e96ca13c71ef08386f04"
+    },
+    {
+      "git_blob": "5c68592bcb15e268880e961381f581bff868e2c3",
+      "path": "src/sirius/backend/retained_trace_executor.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/retained_trace_executor.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "0a8026051c7273c47e695b0b7e4e9e6830e0105dea5ce2ef0b588cfa2570c9a7"
+    },
+    {
+      "git_blob": "e139c5642e892da538b290dbc67a20b64b5eb08e",
+      "path": "src/sirius/backend/retained_trace_executor.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/retained_trace_executor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "ddb502e05c8f53cce27727bcbf7b986044ca1ad8430bdcad6c349d78590d3574"
+    },
+    {
+      "git_blob": "138674b91f8c6b76b1a5421aba313809492e23f9",
+      "path": "src/sirius/backend/trace_step_executor.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/trace_step_executor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "55c9e688cbb12b8ac1e72a98bdf3d95976cb8c9accefdb9a8a3f0d72adf1e4fe"
+    },
+    {
+      "git_blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94",
+      "path": "src/sirius/backend/vulkan/vulkan_device.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    {
+      "git_blob": "7a75c46474845e11effad2e12ff28b3451ebd614",
+      "path": "src/sirius/backend/vulkan/vulkan_device.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/vulkan/vulkan_device.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de"
+    },
+    {
+      "git_blob": "2bbe1c6bfbf7686a86386eebabc965e1151b0e09",
+      "path": "src/sirius/backend/vulkan/vulkan_portability.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/backend/vulkan/vulkan_portability.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e3ff78fff5f8c3388be773b324db936fce0bca242b5d58318717c719428d5bff"
+    },
+    {
+      "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1",
+      "path": "src/sirius/base/contracts.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/base/contracts.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+    },
+    {
+      "git_blob": "3413b6f013061ca844ca9ef794e488c18022c15f",
+      "path": "src/sirius/base/error.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/base/error.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6e66cba357b556ecbb0a112227bdfc64ce1fdecf3f6268c614dc8f7dee45ce4a"
+    },
+    {
+      "git_blob": "8086dcede856c7350bc41838ea5452ee907ddade",
+      "path": "src/sirius/base/resource_locator.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/base/resource_locator.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6c8c5f9302baa48f46dd1cad9118fd85c0ce5df747b38db90712694a1d5a304e"
+    },
+    {
+      "git_blob": "4bf298db06231bcffd5d24b5b3152d1b02a8e8e7",
+      "path": "src/sirius/base/resource_locator.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/base/resource_locator.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa"
+    },
+    {
+      "git_blob": "e1f31aa3d23794b3a1cf5e2261c88a1584ef2f0d",
+      "path": "src/sirius/core/camera.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/camera.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630"
+    },
+    {
+      "git_blob": "f8fb979c89bf8badba9937d891becf94bce7975a",
+      "path": "src/sirius/core/camera_launch.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/camera_launch.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "1fd4d6167b35da64246a09fa03649490c4ec0d21f4a29862911a4f37006155df"
+    },
+    {
+      "git_blob": "a59fecece36a2193eac60801c306317d55d09141",
+      "path": "src/sirius/core/camera_sampling.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/camera_sampling.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803"
+    },
+    {
+      "git_blob": "73d7e8ae19ff9288395c0a8b766d7585705c9b73",
+      "path": "src/sirius/core/celestial_tangent_basis.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/celestial_tangent_basis.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e02003f3d27f4411efd5ab7a551eb95a55fccadc91d1c7a378626cfba8039248"
+    },
+    {
+      "git_blob": "2ef1c98782c8fc37e2a55349e5d3cb321d26305f",
+      "path": "src/sirius/core/cie1931_observer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/cie1931_observer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949"
+    },
+    {
+      "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469",
+      "path": "src/sirius/core/constants.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/constants.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+    },
+    {
+      "git_blob": "5a0143f40cee45c22cff55814e72efb42c4081f2",
+      "path": "src/sirius/core/coordinates.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/coordinates.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+    },
+    {
+      "git_blob": "e07c42afa6917822d2f076e3fc76a493255b1995",
+      "path": "src/sirius/core/disk/disk_defaults.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/disk/disk_defaults.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "435a8d5ad97de28243cf357b7832e5fa8eada9e6abb096d34df34b3e764c2e0d"
+    },
+    {
+      "git_blob": "0340ef7434d0434618966f646b6e536d04d18bb1",
+      "path": "src/sirius/core/disk/disk_model.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/disk/disk_model.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+    },
+    {
+      "git_blob": "75941e077426512c0bf86f33e644937eeaedb45b",
+      "path": "src/sirius/core/disk/novikov_thorne_disk.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/disk/novikov_thorne_disk.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+    },
+    {
+      "git_blob": "1a21dee2a72afeb68a8095627188c78c86fcfcde",
+      "path": "src/sirius/core/disk/turbulence.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/disk/turbulence.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c1eae7f91110b07bf64a866ce0bc1658bd68a7249b01e2ebb0d1a0f803c20531"
+    },
+    {
+      "git_blob": "b0efd142d83bdc76a52f1a2a72b5741a01caf594",
+      "path": "src/sirius/core/disk/volumetric_disk.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/disk/volumetric_disk.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5643b4664bca7f2382ae1a9856c86ef1c506818c6b891bbfd04afcb744a43aaf"
+    },
+    {
+      "git_blob": "e6527b9e0cbb78c5c174e9a669d12338427db06a",
+      "path": "src/sirius/core/dopri_segment.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/dopri_segment.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5159fdcf041909ec275f4c515b690c82dd0d3570324a8c0b0fa98bfa19c7e7e9"
+    },
+    {
+      "git_blob": "1938f64eadbd59467cfcc13737999eb0e491d531",
+      "path": "src/sirius/core/dual_number.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/dual_number.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9"
+    },
+    {
+      "git_blob": "746b65a7dd509d6c40a6c9f059cb5495149a7d35",
+      "path": "src/sirius/core/feature_defaults.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/feature_defaults.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "7d6dc9c1f7046150af5d06ad535786e00e1a1e13077490d5db1a8bdece902e52"
+    },
+    {
+      "git_blob": "3fc1670bcc5113e4d1e68d07e9defe2d3339a932",
+      "path": "src/sirius/core/first_order_number.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/first_order_number.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "9ed51f93e11c2528546729c2ff190f66131c011ebab0c26cf51e38643c5b1ec7"
+    },
+    {
+      "git_blob": "3c42183568e5af48bb873b090fd46e287f74aab7",
+      "path": "src/sirius/core/geodesic_integrator.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/geodesic_integrator.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f2cc9d749a65e99d2d3a7d912b2067ab35738799415d88c6bc16a05bec3e4f2c"
+    },
+    {
+      "git_blob": "ac851a0773937a2bd98c002354393d9c3500bb06",
+      "path": "src/sirius/core/kerr_infinity.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/kerr_infinity.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "7d1789bc66a8cacac64a694cf4fa25f593b5cc2b659d8f6a98e67b5f9a28ec4c"
+    },
+    {
+      "git_blob": "ce4e906fd865922642e6fa8bb6108be169ddd7a5",
+      "path": "src/sirius/core/kerr_orbits.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/kerr_orbits.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+    },
+    {
+      "git_blob": "b6248ed600377df671bd1788144da41f5948134c",
+      "path": "src/sirius/core/metrics/cpu_metric_factory.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/metrics/cpu_metric_factory.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c04223d052f6b9985c17ed9f522e625651cc4f6518edd88776be4ecfabec330d"
+    },
+    {
+      "git_blob": "074a71d54304b04bae7d1f4002f2d97914b0ae62",
+      "path": "src/sirius/core/metrics/kerr_schild_family.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/metrics/kerr_schild_family.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a"
+    },
+    {
+      "git_blob": "f1cf026aa31e41efa1a4701d9d35502dd5bcfb87",
+      "path": "src/sirius/core/metrics/metric.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/metrics/metric.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "563a7543e118a813c4a26a40763578bb9b930385abecbf6ae5c6bce1c29e742c"
+    },
+    {
+      "git_blob": "993f8bf1b8f7fe91551045a3c75403c7620acfbd",
+      "path": "src/sirius/core/metrics/morris_thorne_family.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/metrics/morris_thorne_family.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5d7a2e6f0c64d8df55cc1c91cafc6e78a856b4809adfa338c15a6145f1d37552"
+    },
+    {
+      "git_blob": "fbea77e6e29e136184633959cff64e6bea1fd1ca",
+      "path": "src/sirius/core/metrics/outgoing_kerr_schild.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/metrics/outgoing_kerr_schild.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e5244ad78be2aec7580c049ca39059e0879da699d3e4691296df7a0f5c51d34a"
+    },
+    {
+      "git_blob": "45dab60601637bcd78d10f9dbf455a89c28511e3",
+      "path": "src/sirius/core/metrics/registry.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/metrics/registry.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072"
+    },
+    {
+      "git_blob": "0c74cc1a7287846a3ad0fe24134fbc736e29de60",
+      "path": "src/sirius/core/metrics/warp_drive_family.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/metrics/warp_drive_family.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "46d787f8e8a4859cab89f36058627b64e5dcd42db98b9978b3cf94cc6d48dceb"
+    },
+    {
+      "git_blob": "ac56903c77fa55287309fa800cf888031df6446c",
+      "path": "src/sirius/core/observer_frame.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/observer_frame.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c09d89c0a2a1ea07fc6dae36cd566bf73670e6a3c3802e7f41f88a5eb236a566"
+    },
+    {
+      "git_blob": "1aa132db8016b95cfb61fd8463856090c38638a2",
+      "path": "src/sirius/core/point_source_response.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/point_source_response.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "7c5b2fa2e4e593aaf0404d7cade5b31101b6be7a7eed2dad9b0fb465ba8816d3"
+    },
+    {
+      "git_blob": "58233064fbf841caba5f93563e159d06531d0ffa",
+      "path": "src/sirius/core/point_starfield_config.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/point_starfield_config.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "20e859cd7773d1ae2f4c30998b7408a99902ddac15b20eae9bdc4a8c2b332117"
+    },
+    {
+      "git_blob": "8c3b9e495c8a0947800640b32ca230e7b38e4c68",
+      "path": "src/sirius/core/polarisation/stokes.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/polarisation/stokes.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "220c618bee8754a5455bd4f2f8c2154bd5ae4c0c2547825395a2473de1a22e2f"
+    },
+    {
+      "git_blob": "083f3d71085883d09a6af842c186bb70f8544e62",
+      "path": "src/sirius/core/polarisation/walker_penrose.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/polarisation/walker_penrose.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c0f4d0eee391b5ac55b341a5534cd0f402b190608892b44babca5bef90527b3f"
+    },
+    {
+      "git_blob": "b65f2d106708bf8bf7b8a4d6ad889bfb83c66c71",
+      "path": "src/sirius/core/postprocess.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/postprocess.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d15c44b7847127220215f8292d1afd1288cecebaea98aa7e5eb030483b59bcb3"
+    },
+    {
+      "git_blob": "fcd65ad400729de2105752b710bdde70423565d4",
+      "path": "src/sirius/core/relativistic_transfer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/relativistic_transfer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f"
+    },
+    {
+      "git_blob": "25109f8c724dbbf697968c72b7b59309516f9c25",
+      "path": "src/sirius/core/second_order_number.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/second_order_number.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "12f241e7068971ef4e6ec9cabf76010c71b72cf7ac6749be0b31f0f9dc99c6e5"
+    },
+    {
+      "git_blob": "2cac8f774793e9b67490e11f1373f3f1f322d913",
+      "path": "src/sirius/core/source_sky_map.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/source_sky_map.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "95210f38a40b3d46a213e2a4c696c126d56e177cc72d10336d050ddb0e221e44"
+    },
+    {
+      "git_blob": "154a07cbe3a919cc0e97f5f2edc80cb89e1b7a9a",
+      "path": "src/sirius/core/spectral/blackbody.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/spectral/blackbody.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f"
+    },
+    {
+      "git_blob": "824f780ca67787214af3084e507043d6c61feb78",
+      "path": "src/sirius/core/spectral/blackbody_laws.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/spectral/blackbody_laws.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3846d9cdf8db6e034585ac3e4dcb14f2edb1c4e57a649a1c2ff8964d408bd0c0"
+    },
+    {
+      "git_blob": "80edd807006b2c19b8d3c87fad4b4e297b3f82e5",
+      "path": "src/sirius/core/spectral/colour_modes.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/spectral/colour_modes.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "97d1f488c79830682012b6ee073f45428ca83eb6bf32a16b6e377af73c70dd50"
+    },
+    {
+      "git_blob": "0b803cbe8383cbb3e67b4714f65eb69784f75f44",
+      "path": "src/sirius/core/spectral/point_source_transfer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/spectral/point_source_transfer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "2e52055cfb3ae379d9a2d85f687277c010355649e8a6e90f803f32ca3b2f6696"
+    },
+    {
+      "git_blob": "5a9626f468489a55febfb9a078f3fe5718e0e0f5",
+      "path": "src/sirius/core/spectral/spectral_radiance.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/spectral/spectral_radiance.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+    },
+    {
+      "git_blob": "12f371df31556d728413d54cd93075c4509286c5",
+      "path": "src/sirius/core/srgb_transfer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/srgb_transfer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d8bf1764d4dcd55ba079d11bb0fde7cb0a89619e2d1f3a46f144fc46dfa02ba3"
+    },
+    {
+      "git_blob": "ecb9476067c6ac542645d07c4bacfb16a49f18c6",
+      "path": "src/sirius/core/starfield.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/starfield.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "caae54c6b509eb7dcaa797bec81bf516820413b4a7eecd880592e867b3fb5cd0"
+    },
+    {
+      "git_blob": "4671e6533194a255c978b072f1bf585243bedbea",
+      "path": "src/sirius/core/tensor.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/tensor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7"
+    },
+    {
+      "git_blob": "7fa20adc1e7ceb5b844a93c6a6ba95e93717759b",
+      "path": "src/sirius/core/trace_boundary.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/trace_boundary.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d9f8d4e4f1827125bbda98fce3c4101608b93664743964155990103ae42ae78e"
+    },
+    {
+      "git_blob": "f2721152700164a2cc7cae68912404350468deb8",
+      "path": "src/sirius/core/twofold.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/twofold.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "2ace9a10d430dbf4dab870602dbc8ca0545ada2c2e350ca6cd263dd8c92e93f1"
+    },
+    {
+      "git_blob": "e5806afa0029b2c2c7f6f3c13cff88ff820c7d6e",
+      "path": "src/sirius/core/xyz_srgb.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/core/xyz_srgb.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48"
+    },
+    {
+      "git_blob": "40fee72b36c0946d5943cbcd9bcf0c77e473a54a",
+      "path": "src/sirius/kernels/portable_binary32.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/portable_binary32.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    },
+    {
+      "git_blob": "77ae876a7485b469c12163cf9d0782399cf2d5f8",
+      "path": "src/sirius/kernels/retained_camera.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_camera.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "a2ec29ccb7d7dc5aba98319d0ac902f2550ece2837f8d6366620bb5b54ed5929"
+    },
+    {
+      "git_blob": "fd1a756a2e98d9f4c1b6c5f279b5fe2aced0e70a",
+      "path": "src/sirius/kernels/retained_dense.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_dense.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "9230821aa20883ab0994e06f7d17165fb9ada0fc8054e5eceaae4fd421e0193c"
+    },
+    {
+      "git_blob": "14037fa2b7b3cd5e1be7b543398d1f8407407952",
+      "path": "src/sirius/kernels/retained_dopri_phase.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_dopri_phase.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f"
+    },
+    {
+      "git_blob": "a2db2016e02a3317d573ec9941d363c850a3aef5",
+      "path": "src/sirius/kernels/retained_endpoint.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_endpoint.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d"
+    },
+    {
+      "git_blob": "7527ff232d9319ac35e4a743f1b628ce9b742506",
+      "path": "src/sirius/kernels/retained_initialize.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_initialize.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "79bf6e37634991d94e85f7bd032576b5cc5ae2c9bf3a6a172d20557ffd9c59a6"
+    },
+    {
+      "git_blob": "816d344f614f37f074884bc80fd9e8517ec615b6",
+      "path": "src/sirius/kernels/retained_owner.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_owner.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "7d70e581acedccd688dadff476629de52c304d25657389179923b6fb32f8db62"
+    },
+    {
+      "git_blob": "b58757383966ef11d229b9caa0cfaab0a5f19225",
+      "path": "src/sirius/kernels/retained_pair.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_pair.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    {
+      "git_blob": "598b62f9c5d49a8b97f18219cd4de7c0cf67800f",
+      "path": "src/sirius/kernels/retained_program.py",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_program.py",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "71a242ed70e984352da250c71bbadf269d3e55af9decb33d3a453e2684dda1d0"
+    },
+    {
+      "git_blob": "e4094b9daba24ba8d5331e7d9cba95cb30aa6e11",
+      "path": "src/sirius/kernels/retained_ray_camera.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_ray_camera.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e3bfbfedd91096af1374ccd32119c6e1556b2b588f0106e7df1f488055acaf00"
+    },
+    {
+      "git_blob": "40ed498f4a077393c47b02883975784ea0312f78",
+      "path": "src/sirius/kernels/retained_scalar.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_scalar.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    {
+      "git_blob": "9cf3602cddfbda489e2399ef5c6bd6d3af462b2a",
+      "path": "src/sirius/kernels/retained_scratch.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_scratch.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    {
+      "git_blob": "51fa47edfdd937cbeb9a3604d8efd9bcd0785260",
+      "path": "src/sirius/kernels/retained_transport.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_transport.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+    },
+    {
+      "git_blob": "655ff7001694fbd3682790217af4b807aef9d091",
+      "path": "src/sirius/kernels/retained_triple.slang",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/kernels/retained_triple.slang",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    {
+      "git_blob": "a690f5c665f771aa1b5e9cc8f153e4b1292f8a99",
+      "path": "src/sirius/render/dispatch_governor.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/dispatch_governor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a"
+    },
+    {
+      "git_blob": "5136b64533baa038e0f26bc12c2f0eea3622abc9",
+      "path": "src/sirius/render/exr_writer.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/exr_writer.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "577c9934ce4d2584a789e189c6fbc8a7728404a7a9efab3afe3e24a0912266e1"
+    },
+    {
+      "git_blob": "3dde8bac13b8ba68cb7a7681c7dd44ac08f90a37",
+      "path": "src/sirius/render/exr_writer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/exr_writer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "62ceeba355a60a4b0231103d9dae0b38f286e9ae920a1f27e9a6a4df11f2b20d"
+    },
+    {
+      "git_blob": "006a60aa91cb832c551b65fe0b4fe120d6a26c70",
+      "path": "src/sirius/render/film_config.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/film_config.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "39a70317e3dc43e7b8189d0da983e41f585407297e5265beb9cbc1716050d6c2"
+    },
+    {
+      "git_blob": "8f666c4107bb3b56639a28f57895c543a91aef95",
+      "path": "src/sirius/render/film_pipeline.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/film_pipeline.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "1d87ec66f7ad07cdf413391d4d762aa6b0aa55c3e6a6a05282dec5b340968b2f"
+    },
+    {
+      "git_blob": "053569374f2fcba87a97007cf5973701b18d189e",
+      "path": "src/sirius/render/image_buffer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/image_buffer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "a1bfe8935cd90ea43daf2a1f89e3304a196b2710fecf161a15c9e70ee9bf5668"
+    },
+    {
+      "git_blob": "3ff9cd61f6d2765ded448841590a298a6df56f51",
+      "path": "src/sirius/render/memory_governor.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/memory_governor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "9642ae2ebeda66d3fe68f75e9ad3ca2d824b9de6767c7a3f2af762155584a516"
+    },
+    {
+      "git_blob": "6c39485b0b3f6adb2d6a431bc1c2b3228eac15f3",
+      "path": "src/sirius/render/pixel_sampling.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/pixel_sampling.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "2cbb598c156886799eba95b0cb84f8c98bfe8ad435f5c79f8ecd1bfe732fadc3"
+    },
+    {
+      "git_blob": "0796e7b1920f389e2dd0a89234216c75f63b25d5",
+      "path": "src/sirius/render/png_writer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/png_writer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6d7ed55f0c63b393ae9b938651343303df2f4b7a9c898f5df81e14e4d03f4a70"
+    },
+    {
+      "git_blob": "6d0cb614cba200b88f1840b410342a6ea896af86",
+      "path": "src/sirius/render/render_evidence.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/render_evidence.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "50f8dfaffc28ad8d70bf1c84cb282e65f25f8a4e11700c18d4ed7271fca6806c"
+    },
+    {
+      "git_blob": "cc2052a4e89222f3e4076b4ab15816e4ff01b982",
+      "path": "src/sirius/render/render_evidence.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/render_evidence.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c141930a2239c4fff0f238d527fdef88d9e9c7409d672db51449c0b0ed84d613"
+    },
+    {
+      "git_blob": "0379a108d2a692dcfcd99db09a2e742422b8e9af",
+      "path": "src/sirius/render/session/display_buffer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/display_buffer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "974daabf14d0e6345fbbdd865578c29fa50a884e3b5a73e1582acdcfff7d1c36"
+    },
+    {
+      "git_blob": "2255e8ed24d98840e09cbdb3bc6b69295d73298e",
+      "path": "src/sirius/render/session/pixel_shading.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/pixel_shading.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c45315f30a7cb6eecba8129a0d5f3d37d3dc9ae24f44f5b7d142342eff77c26d"
+    },
+    {
+      "git_blob": "227c7d067d8c2f24afb48a48916f65a953f54b93",
+      "path": "src/sirius/render/session/point_source_detector.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/point_source_detector.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "243690005cec26cab32a7a76169b08fc6c60af6b017a53d0d1fbd79c6c6e152e"
+    },
+    {
+      "git_blob": "5e8ef4762f7d7439cfa090097c1a93978aa56461",
+      "path": "src/sirius/render/session/progress_tracker.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/progress_tracker.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "ea1ccddc40d1e5231e706000d74baa42acd926abed5505312881342d6bfc5c5d"
+    },
+    {
+      "git_blob": "04b8ecff0a36e37b717963a87563a1b73140d376",
+      "path": "src/sirius/render/session/ray_work_queue.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/ray_work_queue.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "4267aba47cb69735258273388de6ac731a4fe1fe3b421f922d240b8fbe995a96"
+    },
+    {
+      "git_blob": "e235d929a1d447d771636b736cea1e7dce20f07f",
+      "path": "src/sirius/render/session/render_session.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/render_session.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "75fb4ac58f2e0ddb89a5f4053ed5372af2753f8592f0fa7eb76e15522530af1e"
+    },
+    {
+      "git_blob": "4bb21f5d95393dd518cce149bd157710399e5ce4",
+      "path": "src/sirius/render/session/render_session.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/render_session.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "7fa8ee2b0dabbbc8a80f6ccfb92c46ed6b4f27e7a9df72b569bd697f56edd169"
+    },
+    {
+      "git_blob": "a039b43825128c1efa9cd27106457b0c8d325a30",
+      "path": "src/sirius/render/session/session_events.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/session_events.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "a9b23e7c947c346375c8d2ed2000696a5365bced6a3d4f434c31fdebf4cde463"
+    },
+    {
+      "git_blob": "eb9adcbd65cdf9581e11d0c81f6b483c6a11f38d",
+      "path": "src/sirius/render/session/session_states.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/session_states.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "feaaf0757025d43ea96408f708a6b0a4dca97296964e7713545f8da2e43635d7"
+    },
+    {
+      "git_blob": "1d7a16240dd33365949d31abc3ec84cea3c20905",
+      "path": "src/sirius/render/session/state_machine.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/state_machine.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "86267301f305530a37f22b4ffd7ac6f9a4f34fb96173008d72dba9120dbfd498"
+    },
+    {
+      "git_blob": "a33543756f6945f9ecab1b9b354479d3841dd228",
+      "path": "src/sirius/render/session/tile_scheduler.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/session/tile_scheduler.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "120990a0d023930d43f3ca6688435a51fa63e32d08c1daeab4ec16e6ededbb57"
+    },
+    {
+      "git_blob": "1f2e0a9d38199c496a30537b9658b106cca9ee55",
+      "path": "src/sirius/render/stb_impl.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/stb_impl.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "ee7b3a00adf6a3588caabf2437fd60c3c84acf19e7ed32b4835ffae85d4a51a5"
+    },
+    {
+      "git_blob": "4e61faf3471d19d16a73c8ea080c26b76d472969",
+      "path": "src/sirius/render/trace_continuation.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/trace_continuation.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005"
+    },
+    {
+      "git_blob": "6a02eb6c2c2e15a6d4d5136497ad35ca59247a48",
+      "path": "src/sirius/render/trace_domain.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/trace_domain.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "225053e0b194c84f81d7d743ae3df4a36b101417fb2adefcad0ac99e7551d84b"
+    },
+    {
+      "git_blob": "2dfe1c4a620a19e84e575f2a5922c23b454cd037",
+      "path": "src/sirius/render/vulkan_renderer.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/vulkan_renderer.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f4a7b2e9e702369e1f740957485f1e5bc6ba8cf18ae4fa068dccb7876bf669e5"
+    },
+    {
+      "git_blob": "bb742471ca815aeaa0918b8fbdebe87a92dbae72",
+      "path": "src/sirius/render/vulkan_renderer.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/src/sirius/render/vulkan_renderer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5e4174b76d88a0520bff8f941b0ce01b3aed1021a4b142b97d0858cdc6f690fd"
+    },
+    {
+      "git_blob": "b7700acf10bf853738cfcf8a24918fb899a36b24",
+      "path": "tests/CMakeLists.txt",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/tests/CMakeLists.txt",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    {
+      "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+      "path": "tests/operating_model.json",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/tests/operating_model.json",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    {
+      "git_blob": "7a68808e58e7f673002f696871603848e04a2a69",
+      "path": "tests/render/CMakeLists.txt",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/tests/render/CMakeLists.txt",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "23f2ba5b952360171edaf379cf2536730623a8fc4275b14958278b7853e3aa9f"
+    },
+    {
+      "git_blob": "c9595fe09259d3a8d5ed65c3e9351d8b3029da38",
+      "path": "tests/render/kerr_shadow_oracle.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/tests/render/kerr_shadow_oracle.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "691af2a749ec7a3f11d40163443420df02bf4e76da647c63188fcee3e9395df0"
+    },
+    {
+      "git_blob": "0af35d8ee4ee377bac5ec0f8b405842880da9bc0",
+      "path": "tests/render/vulkan_render_test.cpp",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/tests/render/vulkan_render_test.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "0a27b7ff7219d7904b18541c25fb94b563a22ce6a739b7667c03128d18a4efcc"
+    },
+    {
+      "git_blob": "fdff5a8b91a5d4631876669dd046a08dbd6a5d08",
+      "path": "tests/support/moving_kerr_detector_scene.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/tests/support/moving_kerr_detector_scene.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "937485fe93a6e9d3d709482fbf217ea0a3de4a2f9d3c92ed2ca6f8a0d21349d5"
+    },
+    {
+      "git_blob": "32eb8470380a9b6658968a163c4bca49ee356407",
+      "path": "tests/support/scoped_environment.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/tests/support/scoped_environment.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "399fb90582c7972f9e05384fbf6b71ead5440e4badb7c0e3d7b290289aa17bd9"
+    },
+    {
+      "git_blob": "98087810848d204144c13a24c8782f58ffb4a87b",
+      "path": "tests/support/test_resource.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/tests/support/test_resource.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3"
+    },
+    {
+      "git_blob": "33a5a516b66857ddb7551dd848a3737b1101ff52",
+      "path": "tests/support/trace_continuation_probe.h",
+      "recovery": "out/science-p4-vulkan-session-scenes/recovery/source/tests/support/trace_continuation_probe.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "86e28bf045a8cdb780979ebdd1866f48e841355ddbf4927d1d4d2b886df22ee1"
+    }
+  ]
+}
