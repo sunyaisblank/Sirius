@@ -1,0 +1,43 @@
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1039
+    Start 1039: DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
+
+1039: Test command: /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests "--gtest_filter=DopplerToggleTest.SuppressionCollapsesDiskAsymmetry" "--gtest_also_run_disabled_tests"
+1039: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/render
+1039: Test timeout computed to be: 10000000
+1039: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+1039: Note: Google Test filter = DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
+1039: [==========] Running 1 test from 1 test suite.
+1039: [----------] Global test environment set-up.
+1039: [----------] 1 test from DopplerToggleTest
+1039: [ RUN      ] DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
+1039: [doppler] observed_on=0.775236 observed_off=0.0930556 factor_on=0.630296 factor_off=0 hits=2566
+1039: [       OK ] DopplerToggleTest.SuppressionCollapsesDiskAsymmetry (306772 ms)
+1039: [----------] 1 test from DopplerToggleTest (306773 ms total)
+1039: 
+1039: [----------] Global test environment tear-down
+1039: [==========] 1 test from 1 test suite ran. (306773 ms total)
+1039: [  PASSED  ] 1 test.
+1/1 Test #1039: DopplerToggleTest.SuppressionCollapsesDiskAsymmetry ...   Passed  306.78 sec
+
+The following tests passed:
+	DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
+
+100% tests passed, 0 tests failed out of 1
+
+Label Time Summary:
+Correctness    = 306.78 sec*proc (1 test)
+Mandatory      = 306.78 sec*proc (1 test)
+Operational    = 306.78 sec*proc (1 test)
+Rendering      = 306.78 sec*proc (1 test)
+
+Total Test time (real) = 306.87 sec
