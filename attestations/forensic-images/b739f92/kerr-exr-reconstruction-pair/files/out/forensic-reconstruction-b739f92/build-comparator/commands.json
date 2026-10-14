@@ -1,0 +1,41 @@
+[
+  {
+    "argv": [
+      "/usr/bin/gcc-14",
+      "-O2",
+      "-DNDEBUG",
+      "-I/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/tinyexr",
+      "-c",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/tinyexr/miniz.c",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/miniz.o"
+    ],
+    "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+    "exit": 0,
+    "expected_exit": 0,
+    "wall_seconds": 1.7293578970020462
+  },
+  {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-std=c++17",
+      "-O2",
+      "-DNDEBUG",
+      "-fno-fast-math",
+      "-ffp-contract=off",
+      "-pthread",
+      "-isystem",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/stb",
+      "-isystem",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/tinyexr",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/image_compare.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/miniz.o",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare"
+    ],
+    "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+    "exit": 0,
+    "expected_exit": 0,
+    "wall_seconds": 5.960982815999159
+  }
+]

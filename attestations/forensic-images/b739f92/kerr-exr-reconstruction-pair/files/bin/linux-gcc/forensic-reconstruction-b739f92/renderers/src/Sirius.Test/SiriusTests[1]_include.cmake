@@ -1,0 +1,5 @@
+if(EXISTS "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/src/Sirius.Test/SiriusTests[1]_tests.cmake")
+  include("/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/renderers/src/Sirius.Test/SiriusTests[1]_tests.cmake")
+else()
+  add_test(SiriusTests_NOT_BUILT SiriusTests_NOT_BUILT)
+endif()

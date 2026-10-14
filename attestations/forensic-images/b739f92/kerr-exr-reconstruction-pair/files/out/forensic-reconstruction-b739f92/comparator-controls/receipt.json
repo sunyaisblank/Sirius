@@ -1,0 +1,345 @@
+{
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "phase": "comparator-controls",
+  "passed": true,
+  "commands": [
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "fixtures",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.004917534999549389
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "png",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.png",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.png"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.0027550589984457474
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "png",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.png",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/metadata.png"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.0025633059995016083
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "png",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.png",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/perturbed.png"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 1,
+      "expected_exit": 1,
+      "wall_seconds": 0.0026664409997465555
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "png",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.png",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/missing"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 2,
+      "expected_exit": 2,
+      "wall_seconds": 0.0023591150020365603
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "png",
+        "4",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.png",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.png"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 2,
+      "expected_exit": 2,
+      "wall_seconds": 0.0025846969983831514
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "exr",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.002294002002599882
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "exr",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/metadata.exr"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.00313697900128318
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "exr",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/perturbed.exr"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 1,
+      "expected_exit": 1,
+      "wall_seconds": 0.0026111570005014073
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "exr",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/missing"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 2,
+      "expected_exit": 2,
+      "wall_seconds": 0.002586073002021294
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "exr",
+        "4",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 2,
+      "expected_exit": 2,
+      "wall_seconds": 0.002239328001451213
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "ppm",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.ppm",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.ppm"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.0032779350003693253
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "ppm",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.ppm",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/metadata.ppm"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.0025103260013565887
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "ppm",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.ppm",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/perturbed.ppm"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 1,
+      "expected_exit": 1,
+      "wall_seconds": 0.0025907950002874713
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "ppm",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.ppm",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/missing"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 2,
+      "expected_exit": 2,
+      "wall_seconds": 0.002378196000790922
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "ppm",
+        "4",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.ppm",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.ppm"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 2,
+      "expected_exit": 2,
+      "wall_seconds": 0.0026807780013768934
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "png",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 2,
+      "expected_exit": 2,
+      "wall_seconds": 0.00201303299763822
+    },
+    {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+        "compare",
+        "png",
+        "3",
+        "2",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/truncated.png",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/truncated.png"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 2,
+      "expected_exit": 2,
+      "wall_seconds": 0.002610258001368493
+    }
+  ],
+  "child_environment": {
+    "reject": "Nonempty SIRIUS_*, provider/GTest/CTest/loader overrides rejected by preserved owner; build flags/toolchain/include-path overrides rejected by phase.py. No HOME override.",
+    "set": {
+      "GIT_CEILING_DIRECTORIES": "/home/astra/.project/Sirius/out",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_TERMINAL_PROMPT": "0",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TZ": "UTC"
+    },
+    "unset": [
+      "GIT_DIR",
+      "GIT_WORK_TREE",
+      "GIT_INDEX_FILE",
+      "GIT_OBJECT_DIRECTORY",
+      "GIT_ALTERNATE_OBJECT_DIRECTORIES"
+    ]
+  },
+  "products": [
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/metadata.exr",
+      "bytes": 443,
+      "sha256": "212ad04a8117b74bdf67acf2df4324f6712f7bb2d23419d6b9c1e7a018e356eb"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/metadata.png",
+      "bytes": 124,
+      "sha256": "ca9dd2c2ddfa7ddefb2afad77e88c93a989ddadedd8a445d476bec0f4bf3a353"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/metadata.ppm",
+      "bytes": 59,
+      "sha256": "12c1f86c4e376837e480fc39100dfd184a965179ccec981bdfe4e8e20b73244c"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/perturbed.exr",
+      "bytes": 388,
+      "sha256": "aa6191cbf3dfc96f94228c4f07187b26ab578c702d974b957f0d02a2ee82c04d"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/perturbed.png",
+      "bytes": 92,
+      "sha256": "05953c30766d74e139c97f4cc90987c93186066e6f804a9bb392d9ddb2facf5d"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/perturbed.ppm",
+      "bytes": 29,
+      "sha256": "8a9522552c7c57c33ee05766b762c6a22997dfb367c0ad23864b77c53f44f664"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.exr",
+      "bytes": 383,
+      "sha256": "0fa876366a1ffa003063b4c011932ee4a0cd2394b8faa24045502dfdc077623a"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.png",
+      "bytes": 92,
+      "sha256": "9b4ecea2f7ba08b32af10be8d8e0a307949a9696e9b1b53003cb2c5a1e390641"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/fixtures/reference.ppm",
+      "bytes": 29,
+      "sha256": "730eea084e167e64adc3ca9b5040a7a21171f8530bc1447bd929f1f82790e98f"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/comparator-controls/truncated.png",
+      "bytes": 91,
+      "sha256": "324dd8a301c6c77150aef6424588560b82d62648166b7ad6cbe8c0121fca3065"
+    }
+  ],
+  "historical_tape_identity_claim": false
+}

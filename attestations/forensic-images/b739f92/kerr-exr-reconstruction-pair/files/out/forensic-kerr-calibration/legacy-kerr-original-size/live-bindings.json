@@ -1,0 +1,128 @@
+[
+  {
+    "before": {
+      "pid": 154299,
+      "state": "S",
+      "ppid": 154296,
+      "pgrp": 154296,
+      "session": 154296,
+      "start_ticks": "2411845",
+      "rss_kib": 82364
+    },
+    "after": {
+      "pid": 154299,
+      "state": "S",
+      "ppid": 154296,
+      "pgrp": 154296,
+      "session": 154296,
+      "start_ticks": "2411845",
+      "rss_kib": 82364
+    },
+    "exe": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/Sirius",
+    "exe_bytes": 2018432,
+    "exe_sha256": "9780eb2e7a226124e5eeee9d95ca991f65ccbfa2d143dcb2ffd8c715065a5595",
+    "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+    "argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/bin/Sirius",
+      "--config",
+      "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/configs/legacy/kerr-png.json",
+      "--no-color",
+      "--verbose",
+      "render",
+      "--cpu"
+    ],
+    "libraries": {
+      "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/lib/libSiriusCore.so": {
+        "file": {
+          "bytes": 46736,
+          "sha256": "5293e66c23967c8fe5b61c1de841a4bbe74257f15367821f801952ca118fe67d"
+        },
+        "mappings": [
+          "72794989e000-7279498a0000 r--p 00000000 08:50 1774001                    /home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/lib/libSiriusCore.so",
+          "7279498a0000-7279498a7000 r-xp 00002000 08:50 1774001                    /home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/lib/libSiriusCore.so",
+          "7279498a7000-7279498a8000 r--p 00009000 08:50 1774001                    /home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/lib/libSiriusCore.so",
+          "7279498a8000-7279498a9000 r--p 00009000 08:50 1774001                    /home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/lib/libSiriusCore.so",
+          "7279498a9000-7279498aa000 rw-p 0000a000 08:50 1774001                    /home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/lib/libSiriusCore.so"
+        ],
+        "stat_inode": 1774001,
+        "stat_dev": 2128
+      },
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+        "file": {
+          "bytes": 236616,
+          "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+        },
+        "mappings": [
+          "7279498ac000-7279498ad000 r--p 00000000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "7279498ad000-7279498d8000 r-xp 00001000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "7279498d8000-7279498e2000 r--p 0002c000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "7279498e2000-7279498e4000 r--p 00036000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "7279498e4000-7279498e6000 rw-p 00038000 08:50 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+        ],
+        "stat_inode": 62148,
+        "stat_dev": 2128
+      },
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+        "file": {
+          "bytes": 2129424,
+          "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+        },
+        "mappings": [
+          "727949200000-727949228000 r--p 00000000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+          "727949228000-7279493b1000 r-xp 00028000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+          "7279493b1000-727949400000 r--p 001b1000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+          "727949400000-727949404000 r--p 001ff000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+          "727949404000-727949406000 rw-p 00203000 08:50 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6"
+        ],
+        "stat_inode": 62152,
+        "stat_dev": 2128
+      },
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+        "file": {
+          "bytes": 183024,
+          "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+        },
+        "mappings": [
+          "7279494e9000-7279494ed000 r--p 00000000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "7279494ed000-727949511000 r-xp 00004000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "727949511000-727949515000 r--p 00028000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "727949515000-727949516000 r--p 0002b000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "727949516000-727949517000 rw-p 0002c000 08:50 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+        ],
+        "stat_inode": 55603,
+        "stat_dev": 2128
+      },
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+        "file": {
+          "bytes": 952616,
+          "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+        },
+        "mappings": [
+          "727949517000-727949527000 r--p 00000000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+          "727949527000-7279495a6000 r-xp 00010000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+          "7279495a6000-7279495fe000 r--p 0008f000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+          "7279495fe000-7279495ff000 r--p 000e7000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+          "7279495ff000-727949600000 rw-p 000e8000 08:50 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6"
+        ],
+        "stat_inode": 62156,
+        "stat_dev": 2128
+      },
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+        "file": {
+          "bytes": 2592224,
+          "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+        },
+        "mappings": [
+          "727949600000-72794969d000 r--p 00000000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "72794969d000-7279497e5000 r-xp 0009d000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "7279497e5000-72794986c000 r--p 001e5000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "72794986c000-727949877000 r--p 0026b000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "727949877000-72794987a000 rw-p 00276000 08:50 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33"
+        ],
+        "stat_inode": 55475,
+        "stat_dev": 2128
+      }
+    },
+    "scope": "One stable-birth live process snapshot; map paths/whole backing-file hashes observed, no general provider admission claim"
+  }
+]

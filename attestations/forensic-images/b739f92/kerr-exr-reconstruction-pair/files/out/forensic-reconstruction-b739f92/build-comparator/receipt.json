@@ -1,0 +1,78 @@
+{
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "phase": "build-comparator",
+  "passed": true,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gcc-14",
+        "-O2",
+        "-DNDEBUG",
+        "-I/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/tinyexr",
+        "-c",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/tinyexr/miniz.c",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/miniz.o"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 1.7293578970020462
+    },
+    {
+      "argv": [
+        "/usr/bin/g++-14",
+        "-std=c++17",
+        "-O2",
+        "-DNDEBUG",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-isystem",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/stb",
+        "-isystem",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source/lib/tinyexr",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/image_compare.cpp",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/miniz.o",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 5.960982815999159
+    }
+  ],
+  "child_environment": {
+    "reject": "Nonempty SIRIUS_*, provider/GTest/CTest/loader overrides rejected by preserved owner; build flags/toolchain/include-path overrides rejected by phase.py. No HOME override.",
+    "set": {
+      "GIT_CEILING_DIRECTORIES": "/home/astra/.project/Sirius/out",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_TERMINAL_PROMPT": "0",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TZ": "UTC"
+    },
+    "unset": [
+      "GIT_DIR",
+      "GIT_WORK_TREE",
+      "GIT_INDEX_FILE",
+      "GIT_OBJECT_DIRECTORY",
+      "GIT_ALTERNATE_OBJECT_DIRECTORIES"
+    ]
+  },
+  "products": [
+    {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+      "bytes": 397736,
+      "sha256": "3a224d55f8f74fb4fec0e2f377e0cea003983f2a53f01f15ce0579b2424373d6"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/miniz.o",
+      "bytes": 104976,
+      "sha256": "8d8d725211fd90f4bb5b92e7839dfb3f3e73933028f9b9a08667517ca53b3e35"
+    }
+  ],
+  "historical_tape_identity_claim": false
+}

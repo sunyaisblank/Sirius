@@ -1,0 +1,66 @@
+{
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "phase": "configure-renderers-scaffold",
+  "passed": true,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "--preset",
+        "linux-gcc",
+        "-S",
+        "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+        "-B",
+        "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers",
+        "-DSIRIUS_BUILD_LEGACY=ON",
+        "-DCMAKE_CUDA_COMPILER=NOTFOUND",
+        "-DCMAKE_DISABLE_FIND_PACKAGE_Vulkan=TRUE",
+        "-DFETCHCONTENT_FULLY_DISCONNECTED=ON",
+        "-DFETCHCONTENT_SOURCE_DIR_FTXUI=/home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src",
+        "-DFETCHCONTENT_SOURCE_DIR_JSON=/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src",
+        "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src"
+      ],
+      "cwd": "/home/astra/.project/Sirius/out/forensic-reconstruction-b739f92/source",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 2.892747286998201
+    }
+  ],
+  "child_environment": {
+    "reject": "Nonempty SIRIUS_*, provider/GTest/CTest/loader overrides rejected by preserved owner; build flags/toolchain/include-path overrides rejected by phase.py. No HOME override.",
+    "set": {
+      "GIT_CEILING_DIRECTORIES": "/home/astra/.project/Sirius/out",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_TERMINAL_PROMPT": "0",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TZ": "UTC"
+    },
+    "unset": [
+      "GIT_DIR",
+      "GIT_WORK_TREE",
+      "GIT_INDEX_FILE",
+      "GIT_OBJECT_DIRECTORY",
+      "GIT_ALTERNATE_OBJECT_DIRECTORIES"
+    ]
+  },
+  "products": [
+    {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/CMakeCache.txt",
+      "bytes": 59315,
+      "sha256": "3beace5464aca3de4230f45079d55f6cc7319f86602b6ced8dc14686a3f207f2"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/build.ninja",
+      "bytes": 788590,
+      "sha256": "c1e6e2369483bc528138f1f527b65f0ec9968551d77e79ad8dff212c6dd73412"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/forensic-reconstruction-b739f92/scaffold-retry/renderers/compile_commands.json",
+      "bytes": 552843,
+      "sha256": "6bf70a9e50372df3fef616c8366ba4b475c158c003ca05e095ab818aa0611f92"
+    }
+  ],
+  "historical_tape_identity_claim": false
+}

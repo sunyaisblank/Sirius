@@ -1,0 +1,66 @@
+{
+  "argv": [
+    "/home/astra/.project/Sirius/out/forensic-kerr-exr/image_compare",
+    "compare",
+    "exr",
+    "512",
+    "512",
+    "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-exr.exr",
+    "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-exr.exr"
+  ],
+  "case": "kerr-exr",
+  "comparison": {
+    "channels": 4,
+    "compared_pixels": 262144,
+    "compared_samples": 1048576,
+    "encoded_files_equal": true,
+    "equal": true,
+    "format": "exr",
+    "height": 512,
+    "mismatched_pixels": 0,
+    "mismatched_samples": 0,
+    "sample_domain": "decoded-RGBA-IEEE754-binary32-words-from-HALF",
+    "width": 512
+  },
+  "comparison_wall_seconds": 0.04355940700042993,
+  "current_physics_or_scientific_or_release_qualification_claimed": false,
+  "effective_spp": 25,
+  "evidence_kind": "NEW_RECONSTRUCTION",
+  "historical_tape_identity_claimed": false,
+  "inputs": [
+    {
+      "bytes": 760396,
+      "path": "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/kerr-exr.exr",
+      "sha256": "335d6ba7d0720e27daf63213aaa0408f4cd51a9ef8832e59da272fb6492df28b"
+    },
+    {
+      "bytes": 760396,
+      "path": "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/ported/kerr-exr.exr",
+      "sha256": "335d6ba7d0720e27daf63213aaa0408f4cd51a9ef8832e59da272fb6492df28b"
+    },
+    {
+      "bytes": 397736,
+      "path": "/home/astra/.project/Sirius/out/forensic-kerr-exr/image_compare",
+      "sha256": "3a224d55f8f74fb4fec0e2f377e0cea003983f2a53f01f15ce0579b2424373d6"
+    }
+  ],
+  "legacy_runtime_origin": "ec2d8e506dfd0477e3c9eb4b2b4aa1bee9831fe2",
+  "rays_per_renderer": 6553600,
+  "reconstruction_pair_complete": true,
+  "render_results": {
+    "legacy": {
+      "owner_peak_sampled_rss_kib": 170692,
+      "owner_wall_seconds": 113.11166148600023,
+      "workers": 15
+    },
+    "ported": {
+      "owner_peak_sampled_rss_kib": 151732,
+      "owner_wall_seconds": 124.31964808200064,
+      "workers": 15
+    }
+  },
+  "requested_spp": 32,
+  "runner_revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+  "source_export_revision": "b739f920c2ae67847ed7961e011d2350a839e410",
+  "source_scaffold_overlay": "one115-byte GLFW CMake config template; runtime/asset bytes unchanged"
+}

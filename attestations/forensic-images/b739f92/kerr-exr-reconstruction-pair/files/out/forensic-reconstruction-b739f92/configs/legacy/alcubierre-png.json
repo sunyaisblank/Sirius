@@ -1,0 +1,59 @@
+{
+  "backend": {
+    "cudaDevice": 0,
+    "enableDenoiser": false,
+    "preferred": "cpu"
+  },
+  "film": {
+    "enabled": false,
+    "grainIntensity": 0.15,
+    "halationStrength": 0.15,
+    "preset": "Interstellar",
+    "vignetteStrength": 0.3
+  },
+  "metric": {
+    "bubbleRadius": 1.0,
+    "bubbleSigma": 0.5,
+    "charge": 0.0,
+    "diskTemperature": 50000.0,
+    "lambda": 0.0,
+    "mass": 1.0,
+    "name": "Alcubierre",
+    "spin": 0.0,
+    "temperatureModel": "NovikovThorne",
+    "throatRadius": 1.0,
+    "warpVelocity": 0.5
+  },
+  "observer": {
+    "azimuth": 0.0,
+    "distance": 20.0,
+    "fov": 90.0,
+    "inclination": 80.0
+  },
+  "postprocess": {
+    "bloomIntensity": 0.3,
+    "bloomThreshold": 0.3,
+    "contrast": 1.0,
+    "enableBloom": true,
+    "exposure": 1.0,
+    "saturation": 1.0,
+    "tonemapper": "ACES"
+  },
+  "render": {
+    "height": 1080,
+    "outputPath": "/home/astra/.project/Sirius/renders/forensic-reconstruction-b739f92/legacy/alcubierre-png.png",
+    "samplesPerPixel": 64,
+    "threadCount": 0,
+    "tileSize": 64,
+    "width": 1920
+  },
+  "volumetric": {
+    "enableCorona": false,
+    "enableTurbulence": false,
+    "enabled": false,
+    "hOverR": 0.1,
+    "hPower": 0.25,
+    "samples": 64,
+    "tauMidplane": 10.0
+  }
+}
