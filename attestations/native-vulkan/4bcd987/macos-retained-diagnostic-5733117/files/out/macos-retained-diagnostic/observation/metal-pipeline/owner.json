@@ -1,0 +1,101 @@
+{
+  "status": "terminal",
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Users/runner/work/Sirius/Sirius/scripts/macos_metal_probe.py",
+    "--msl",
+    "/Users/runner/work/Sirius/Sirius/out/macos-retained-diagnostic/observation/metal-source/initialize.metal",
+    "--expected-device-name",
+    "Apple Paravirtual device",
+    "--without-forced-inline",
+    "/Users/runner/work/Sirius/Sirius/out/macos-retained-diagnostic/observation/metal-source/initialize-without-forced-inline.metal"
+  ],
+  "source": {
+    "runner_revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+    "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "status": ""
+  },
+  "limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "qualification_claimed": false,
+  "reserve_scope": "Darwin sampled available estimate: printed free + inactive; kernel pressure must be normal (1). This is not a proven no-swap bound. RSS includes controller and observed group/tree, not global Metal compiler services.",
+  "birth_scope": "Observed ps PID/lstart tokens; second-resolution ambiguity remains incomplete.",
+  "sampling_interval_seconds": 0.1,
+  "observed_births": [
+    {
+      "pid": 2972,
+      "ppid": 2735,
+      "pgid": 2972,
+      "rss_kib": 0,
+      "state": "Z<",
+      "lstart": "Wed Oct 14 10:29:17 2026    ",
+      "absent": true
+    }
+  ],
+  "remaining_observed": [],
+  "signal_observations": [],
+  "environment": {
+    "VK_DRIVER_FILES": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json",
+    "DYLD_LIBRARY_PATH": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "MVK_CONFIG_SHADER_DUMP_DIR": null,
+    "MVK_CONFIG_DEBUG": "0",
+    "MVK_CONFIG_TRACE_VULKAN_CALLS": "3"
+  },
+  "prelaunch_memory": {
+    "available_kib": 2976464,
+    "free_kib": 70352,
+    "inactive_kib": 2906112,
+    "pressure_level": 1,
+    "physical_bytes": 7516192768,
+    "page_size": 16384,
+    "counters": {
+      "Pages free": 4397,
+      "Pages active": 187330,
+      "Pages inactive": 181632,
+      "Pages speculative": 8236,
+      "Pages throttled": 0,
+      "Pages wired down": 52317,
+      "Pages purgeable": 164,
+      "\"Translation faults\"": 3072806,
+      "Pages copy-on-write": 442420,
+      "Pages zero filled": 1032431,
+      "Pages reactivated": 96423,
+      "Pages purged": 5390,
+      "File-backed pages": 275943,
+      "Anonymous pages": 101255,
+      "Pages stored in compressor": 83138,
+      "Pages occupied by compressor": 23851,
+      "Decompressions": 15302,
+      "Compressions": 102430,
+      "Pageins": 462838,
+      "Pageouts": 1319,
+      "Swapins": 0,
+      "Swapouts": 0
+    },
+    "raw_vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                4397.\nPages active:                            187330.\nPages inactive:                          181632.\nPages speculative:                         8236.\nPages throttled:                              0.\nPages wired down:                         52317.\nPages purgeable:                            164.\n\"Translation faults\":                   3072806.\nPages copy-on-write:                     442420.\nPages zero filled:                      1032431.\nPages reactivated:                        96423.\nPages purged:                              5390.\nFile-backed pages:                       275943.\nAnonymous pages:                         101255.\nPages stored in compressor:               83138.\nPages occupied by compressor:             23851.\nDecompressions:                           15302.\nCompressions:                            102430.\nPageins:                                 462838.\nPageouts:                                  1319.\nSwapins:                                      0.\nSwapouts:                                     0.\n"
+  },
+  "controller": {
+    "pid": 2735,
+    "ppid": 2734,
+    "pgid": 915,
+    "rss_kib": 68944,
+    "state": "S<",
+    "lstart": "Wed Oct 14 10:29:12 2026    "
+  },
+  "pid": 2972,
+  "child_exit": 0,
+  "stop_reason": null,
+  "wall_seconds": 1.336815625000014,
+  "peak_sampled_rss_kib": 98576,
+  "retirement_census_complete": true,
+  "cleanup_errors": [],
+  "whole_inputs_unchanged": true,
+  "max_observed_sample_interval_seconds": 0.21612020899999607,
+  "containment_complete": true,
+  "observation_complete": true
+}

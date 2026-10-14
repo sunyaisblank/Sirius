@@ -1,0 +1,54 @@
+{
+  "schema": "sirius-macos-annotation-control-result-v1",
+  "source": "5733117ba8ba4430d723d62294f991db423fbf4c",
+  "product_source": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "run": 38549726175,
+  "job": 115804461427,
+  "artifact": 11885144913,
+  "pipeline_created": true,
+  "qualification_claimed": false,
+  "numerics_executed": false,
+  "native_route": "synchronous; no queue or dispatch",
+  "optimization_level": 0,
+  "removed_forced_inline_declarations": 84,
+  "phases_seconds": {
+    "library": 0.7456135410000115,
+    "function": 0.00015912499998194107,
+    "pipeline": 0.27590183399999546
+  },
+  "owner_wall_seconds": 1.336815625000014,
+  "owner_peak_sampled_rss_kib": 98576,
+  "owner_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "local_rechecked_bindings": 54,
+  "remote_external_bindings_not_locally_reverified": [
+    {
+      "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json",
+      "bytes": 186,
+      "sha256": "718a4e34cd7de8c6d5d0ee01ae52dc5950776fe6607db834537dbb030588b2c9"
+    },
+    {
+      "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/libMoltenVK.dylib",
+      "bytes": 10553504,
+      "sha256": "3e2ba682b6006d20f6fd7233cffb826951fef17b98c22e7dedc0fff93f3fba9e"
+    },
+    {
+      "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/libvulkan.1.4.357.dylib",
+      "bytes": 1488704,
+      "sha256": "0ed7750a2ee514df7a0daae66e7f2a98bfedca48b98c8f475b2ca8cc5f142094"
+    }
+  ],
+  "input_manifest_equal": true,
+  "source_bytes": {
+    "bytes": 85091,
+    "sha256": "b2d7daec9928356de4ca24a724d135adc59685a330b043e4fa55f2fe2f9b5550"
+  },
+  "compiled_bytes": {
+    "bytes": 82487,
+    "sha256": "80b33059934cc77a685c5738b9413c94379e45f1b18d0e6635a6432ff0407921"
+  },
+  "interpretation": "Annotation-only derivative succeeds with Default on the observed Apple Paravirtual device. It supports a separately identified patched translator/provider experiment; actual outlining, causation on other devices, MoltenVK compatibility, numerical equivalence and final release qualification remain unestablished."
+}

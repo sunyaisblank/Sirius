@@ -1,0 +1,151 @@
+{
+  "status": "metal_pipeline_observation_complete",
+  "qualification_claimed": false,
+  "candidate_source": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source": {
+    "runner_revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+    "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "status": ""
+  },
+  "host": {
+    "platform": "darwin",
+    "machine": "arm64"
+  },
+  "ci": {
+    "GITHUB_RUN_ID": "38549726175",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_JOB": "macos-retained-diagnostic",
+    "RUNNER_NAME": "GitHub Actions 1000004264",
+    "RUNNER_OS": "macOS",
+    "RUNNER_ARCH": "ARM64"
+  },
+  "cases": [],
+  "diagnostic_mode": "native_metal_pipeline_error",
+  "numerics_executed": false,
+  "metal_probe": {
+    "pipeline_created": true,
+    "events": [
+      {
+        "event": "input",
+        "monotonic_seconds": 204.944655958,
+        "utc_ns": 1791973757527644000,
+        "path": "/Users/runner/work/Sirius/Sirius/out/macos-retained-diagnostic/observation/metal-source/initialize.metal",
+        "bytes": 85091,
+        "sha256": "b2d7daec9928356de4ca24a724d135adc59685a330b043e4fa55f2fe2f9b5550",
+        "candidate_source": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+        "qualification_claimed": false,
+        "requested_optimization_level": "default",
+        "compiled_path": "/Users/runner/work/Sirius/Sirius/out/macos-retained-diagnostic/observation/metal-source/initialize-without-forced-inline.metal",
+        "compiled_bytes": 82487,
+        "compiled_sha256": "80b33059934cc77a685c5738b9413c94379e45f1b18d0e6635a6432ff0407921",
+        "removed_forced_inline_declarations": 84,
+        "captured_source_modified": true,
+        "route": "synchronous native Metal error-returning methods; no command queue or dispatch"
+      },
+      {
+        "event": "device",
+        "monotonic_seconds": 204.962285416,
+        "utc_ns": 1791973757545282000,
+        "count": 1,
+        "name": "Apple Paravirtual device",
+        "registry_id": 4294967706,
+        "expected_registry_id": null,
+        "registry_scope": "observed and re-enumerated this run; prior Vulkan bundle contains no Metal registryID",
+        "low_power": false,
+        "unified_memory": true
+      },
+      {
+        "event": "compile_options",
+        "monotonic_seconds": 204.962475875,
+        "utc_ns": 1791973757545472000,
+        "language_version": 196610,
+        "fast_math_enabled": true,
+        "math_mode": 2,
+        "math_fp_functions": 0,
+        "preserve_invariance": false,
+        "optimization_level": 0,
+        "changed_parameter": {
+          "forced_inline_declarations": {
+            "baseline": 84,
+            "diagnostic": 0
+          }
+        },
+        "comparison_control": "Exact captured MSL with the same default options",
+        "provenance": "Original options with explicit diagnostic controls. Unforced source changes only annotations relative to the captured source with the same optimization level; no provider or numerical equivalence is claimed."
+      },
+      {
+        "event": "phase_start",
+        "monotonic_seconds": 204.962502,
+        "utc_ns": 1791973757545498000,
+        "phase": "library"
+      },
+      {
+        "event": "phase_end",
+        "monotonic_seconds": 205.708115541,
+        "utc_ns": 1791973758291487000,
+        "phase": "library",
+        "success": true,
+        "error": null
+      },
+      {
+        "event": "phase_start",
+        "monotonic_seconds": 205.708213375,
+        "utc_ns": 1791973758291582000,
+        "phase": "function"
+      },
+      {
+        "event": "phase_end",
+        "monotonic_seconds": 205.7083725,
+        "utc_ns": 1791973758291741000,
+        "phase": "function",
+        "success": true
+      },
+      {
+        "event": "pipeline_descriptor",
+        "monotonic_seconds": 205.708681791,
+        "utc_ns": 1791973758292051000,
+        "entry_point": "main0",
+        "local_size": [
+          1,
+          1,
+          1
+        ],
+        "observed": {
+          "max_total_threads": 1,
+          "full_subgroups": false,
+          "selected_function_matches": true,
+          "linked_functions": "<MTLLinkedFunctionsInternal: 0x600003968990>\n    functions = <null> \n    privateFunctions = <null> \n    binaryFunctions = <null> \n    groups = <null>",
+          "stage_input": "<MTLStageInputOutputDescriptorInternal: 0x600003968e70>\n    IndexType: MTLIndexTypeUInt16 \n    IndexBufferIndex: 0",
+          "binary_archives": null
+        },
+        "default_properties": "untouched newly constructed framework defaults, as in MoltenVK",
+        "pipeline_options": 0,
+        "description": "<MTLComputePipelineDescriptorInternal: 0x600000e68000>\n    label = <none> \n    computeFunction = <_MTLFunctionInternal: 0x14b7097e0>\n            name = main0 \n            device = <AppleParavirtDevice: 0x15b843a00>\n                name = Apple Paravirtual device \n            functionType = MTLFunctionTypeKernel \n            attributes: <none> \n    threadGroupSizeIsMultipleOfThreadExecutionWidth = 0 \n    maxTotalThreadsPerThreadgroup = 1 \n    supportIndirectCommandBuffers = 0 \n    textureWriteRoundingMode = MTLRoundingModeDefault \n    stageInputDescriptor = <MTLStageInputOutputDescriptorInternal: 0x600003968e70>\n            IndexType: MTLIndexTypeUInt16 \n            IndexBufferIndex: 0 \n    linkedFunctions = <MTLLinkedFunctionsInternal: 0x600003968990>\n            functions = <null> \n            privateFunctions = <null> \n            binaryFunctions = <null> \n            groups = <null> \n    supportAddingBinaryFunctions = NO \n    maxCallStackDepth = 1 \n    pipelineLibrary = <null> \n    preloadedLibraries = (\n) \n    binaryArchives = <null> \n    Needs custom border color samplers =  0 \n    buffers =  (\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    }\n) \n    forceResourceIndex = 0 \n    resourceIndex = 0 \n    maxAccelerationStructureTraversalDepth = 0 \n    shaderValidation = 0 \n    shaderValidationState = 0"
+      },
+      {
+        "event": "phase_start",
+        "monotonic_seconds": 205.708733166,
+        "utc_ns": 1791973758292102000,
+        "phase": "pipeline"
+      },
+      {
+        "event": "phase_end",
+        "monotonic_seconds": 205.984635,
+        "utc_ns": 1791973758568143000,
+        "phase": "pipeline",
+        "success": true,
+        "error": null
+      },
+      {
+        "event": "terminal",
+        "monotonic_seconds": 205.984705,
+        "utc_ns": 1791973758568212000,
+        "pipeline_created": true,
+        "qualification_claimed": false,
+        "execution_claimed": false
+      }
+    ],
+    "route": "synchronous native Metal, distinct from MoltenVK's asynchronous route"
+  },
+  "shader_capture_complete": false
+}

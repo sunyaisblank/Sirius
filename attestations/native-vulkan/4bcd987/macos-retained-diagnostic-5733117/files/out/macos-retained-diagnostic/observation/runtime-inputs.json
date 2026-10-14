@@ -1,0 +1,97 @@
+{
+  "inventory": {
+    "backends": {
+      "cpu": {
+        "available": true
+      },
+      "vulkan": {
+        "available": true,
+        "compiled": true,
+        "device_count": 1,
+        "devices": [
+          {
+            "api_version": 4206926,
+            "device_id": 252117509,
+            "device_local_bytes": 7516192768,
+            "driver_id": 14,
+            "driver_info": "1.4.1",
+            "driver_name": "MoltenVK",
+            "index": 0,
+            "kind": "integrated",
+            "name": "Apple Paravirtual device",
+            "preserves_fp32_denormals": false,
+            "render_memory_bytes": 7516192768,
+            "rounds_fp32_to_nearest": true,
+            "rounds_fp64_to_nearest": true,
+            "supports_fp64": false,
+            "vendor_id": 4203
+          }
+        ],
+        "selected_device_index": 0,
+        "selected_device_name": "Apple Paravirtual device"
+      }
+    },
+    "interactive_viewer": {
+      "compiled": true
+    },
+    "language": {
+      "p2900_contracts": {
+        "implementation": "checked-macro",
+        "native": false
+      },
+      "p2996_reflection": {
+        "implementation": "explicit-schema",
+        "native": false
+      }
+    },
+    "platform": "macOS",
+    "wsl2": false
+  },
+  "provider_inputs": {
+    "scope": "hashed input candidates; not actual loaded-module or per-ICD execution proof",
+    "selector": {
+      "name": "VK_DRIVER_FILES",
+      "value": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json",
+      "kind": "explicit_manifest_list"
+    },
+    "manifests": [
+      {
+        "selector_path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json",
+        "manifest": {
+          "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json",
+          "bytes": 186,
+          "sha256": "718a4e34cd7de8c6d5d0ee01ae52dc5950776fe6607db834537dbb030588b2c9"
+        },
+        "contents_base64": "ewogICAgImZpbGVfZm9ybWF0X3ZlcnNpb24iOiAiMS4wLjAiLAogICAgIklDRCI6IHsKICAgICAgICAibGlicmFyeV9wYXRoIjogIi4uLy4uLy4uL2xpYi9saWJNb2x0ZW5WSy5keWxpYiIsCiAgICAgICAgImFwaV92ZXJzaW9uIjogIjEuNC4wIiwKICAgICAgICAiaXNfcG9ydGFiaWxpdHlfZHJpdmVyIjogdHJ1ZQogICAgfQp9",
+        "library_path": "../../../lib/libMoltenVK.dylib",
+        "driver_candidates": [
+          {
+            "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/libMoltenVK.dylib",
+            "bytes": 10553504,
+            "sha256": "3e2ba682b6006d20f6fd7233cffb826951fef17b98c22e7dedc0fff93f3fba9e"
+          }
+        ]
+      }
+    ],
+    "loader_candidates": [
+      {
+        "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/libvulkan.1.4.357.dylib",
+        "bytes": 1488704,
+        "sha256": "0ed7750a2ee514df7a0daae66e7f2a98bfedca48b98c8f475b2ca8cc5f142094"
+      },
+      {
+        "path": "/Users/runner/vulkan-sdk/1.4.357.0/macOS/Lib/libvulkan.1.4.357.dylib",
+        "bytes": 1488704,
+        "sha256": "0ed7750a2ee514df7a0daae66e7f2a98bfedca48b98c8f475b2ca8cc5f142094"
+      }
+    ],
+    "unresolved_optional_manifests": []
+  },
+  "source": {
+    "runner_revision": "5733117ba8ba4430d723d62294f991db423fbf4c",
+    "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "status": ""
+  },
+  "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false
+}
