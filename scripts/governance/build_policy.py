@@ -216,7 +216,7 @@ MACOS_RETAINED_DIAGNOSTIC_JOB = r"""    if: github.event_name == 'workflow_dispa
           mkdir -p out/macos-moltenvk-integration
           gh api repos/sunyaisblank/Sirius/actions/artifacts/11778215779/zip \
             > out/macos-moltenvk-integration/export.zip
-          git fetch --no-tags origin e2422dd92017879a452377a1122f1838e6610b3c
+          git fetch --no-tags origin 21f87e4806c36cd1ae9e45f912a5817d6878b774
       - name: Build diagnostic MoltenVK and exercise original retained controls
         run: |
           export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
@@ -725,7 +725,7 @@ def verify_integration_boundary_policy() -> None:
         "write permission": ("      actions: read", "      actions: write"),
         "wrong source": ("origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc", "origin main"),
         "wrong export": ("artifacts/11778215779/zip", "artifacts/1/zip"),
-        "wrong provider source": ("origin e2422dd92017879a452377a1122f1838e6610b3c", "origin main"),
+        "wrong provider source": ("origin 21f87e4806c36cd1ae9e45f912a5817d6878b774", "origin main"),
         "native compiler proxy": ("scripts/macos_moltenvk_integration.py", "scripts/diagnose-macos-retained.py"),
         "different provider entry point": ("scripts/macos_moltenvk_integration.py", "scripts/macos_metal_probe.py"),
         "wrong SDK": ("vulkan_version: 1.4.357.0", "vulkan_version: latest"),

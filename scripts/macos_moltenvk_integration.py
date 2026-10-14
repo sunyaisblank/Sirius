@@ -28,11 +28,16 @@ spec = importlib.util.spec_from_file_location("sirius_existing_darwin_owner", RE
 common = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(common)
 
-EVIDENCE_COMMIT = "e2422dd92017879a452377a1122f1838e6610b3c"
-PAYLOAD_TREE = "8b7d54847738c427954c7c3b070708d60fe4c8a8"
-PAYLOAD_PATH = "attestations/native-vulkan/4bcd987/macos-unforced-translator-match/files/out/macos-moltenvk-unforced"
-FREEZE_SHA = "71ca1547b3fb616ac99b9e8871a7e2410f25443131a6652b8b1f1c3464f526c9"
-CONTENT_ID = "be16bb0d2d553356491796fc92a112eeb5f2907b4b2d4ff42e4f8842e8309163"
+EVIDENCE_COMMIT = "21f87e4806c36cd1ae9e45f912a5817d6878b774"
+PAYLOAD_TREE = "c2c8004cd36b91b34d4259f335b3bc6cc2adf941"
+PAYLOAD_PATH = "attestations/native-vulkan/4bcd987/macos-provider-identity-fixed/payload"
+FREEZE_SHA = "a0b5986daccff1453e11361feb8b8a5a020a6e83c1943deec4da943f3e4ca8d4"
+CONTENT_ID = "76cb8b212bc049261146b526d75ebddafe017b18fe1f4c2c7065c3024c4ffe9e"
+ORIGINAL_EVIDENCE_COMMIT = "e2422dd92017879a452377a1122f1838e6610b3c"
+ORIGINAL_PAYLOAD_TREE = "8b7d54847738c427954c7c3b070708d60fe4c8a8"
+ORIGINAL_FREEZE_SHA = "71ca1547b3fb616ac99b9e8871a7e2410f25443131a6652b8b1f1c3464f526c9"
+REUSE_SHA = "18b318c2793c2c688fd6405cddb863a6f3d67c7fbc4d0f6148180637bd07c62c"
+IDENTITY_PATCH_SHA = "4e5150ecebeda5584e42ea98f3b168d45752781726dc9114c6bac2e63009097c"
 DIAGNOSTIC_INFO = "1.4.1+sirius-issue48-unforced." + CONTENT_ID
 CMAKE_ROOT_PROBE = 'message(STATUS "SIRIUS_CMAKE_ROOT=${CMAKE_ROOT}")\n'
 STOCK_DRIVER = {"bytes": 10553504, "sha256": "3e2ba682b6006d20f6fd7233cffb826951fef17b98c22e7dedc0fff93f3fba9e"}
@@ -52,6 +57,9 @@ def git(*arguments):
 
 
 def stage_payload(output):
+    require(re.fullmatch(r"[0-9a-f]{40}", EVIDENCE_COMMIT)
+            and re.fullmatch(r"[0-9a-f]{40}", PAYLOAD_TREE)
+            and not PAYLOAD_PATH.startswith("PENDING_"), "new provider evidence pins remain unresolved")
     require(git("cat-file", "-t", EVIDENCE_COMMIT) == "commit", "pinned evidence commit is unavailable")
     require(git("rev-parse", EVIDENCE_COMMIT + ":" + PAYLOAD_PATH) == PAYLOAD_TREE,
             "provider tree is not joined to the pinned evidence commit")
@@ -104,23 +112,12 @@ def stage_payload(output):
         # exact modes in the immutable original input map, then verify them.
         path.chmod(pin["mode"])
     source_files = verify_payload(target)
-    result = json.loads((target / "observations/translation-byte-acceptance.json").read_text())
-    require(result["passed"] is True and result["input_freeze"]["sha256"] == FREEZE_SHA
-            and result["candidate"]["sha256"] == INITIALIZE_MSL["sha256"], "original translation acceptance missing")
-    for phase in ("stock-translation", "candidate-translation"):
-        owner = json.loads((target / phase / "owner.json").read_text())
-        require(owner["status"] == "terminal" and owner["passed"] is True and owner["child_exit"] == 0
-                and owner["whole_inputs_unchanged"] and owner["source_unchanged"]
-                and owner["stop_reason"] is None and not owner["remaining_owned_processes"]
-                and not owner["cleanup_errors"] and all(row["absent"] is True for row in owner["observed_births"]),
-                "original translation owner did not pass")
-    content = json.loads((target / "content-id.json").read_text())
-    require(content["content_id"] == CONTENT_ID and content["driver_info_expected"] == DIAGNOSTIC_INFO,
-            "provider content discriminator differs")
+    reuse = verify_translation_reuse(target)
     write(output / "provider-source-join.json", {"evidence_commit": EVIDENCE_COMMIT, "payload_tree": PAYLOAD_TREE,
           "payload_path": PAYLOAD_PATH, "export": identity(archive), "input_freeze": identity(target / "input-freeze.json"),
           "mode_restoration": "Original frozen file modes restored from the pinned map after Git blob export",
-          "additional_payload_entries": "Archived owners/observations are evidence, not original provider source inputs",
+          "translation_reuse": reuse,
+          "scope": "New full payload freeze; old translation receipts retain their original freeze and no fresh translation is claimed",
           "content_id_meaning": "Diagnostic source/configuration cache discriminator, not Git or native-build provenance"})
     return target, source_files
 
@@ -139,12 +136,125 @@ def verify_payload(target):
         path = target / name
         require(path.is_symlink() and os.readlink(path) == value and path.resolve().is_relative_to(target),
                 "provider source link changed")
-    for name in ("sources", "captured", "patches", "cpm-cache"):
-        actual = {str(path.relative_to(target)) for path in (target / name).rglob("*")
-                  if path.is_symlink() or path.is_file()}
-        expected = {key for key in {*freeze["files"], *freeze["symlinks"]} if key.startswith(name + "/")}
-        require(actual == expected, "provider input tree gained/lost entries: " + name)
+    files, links, directories = set(), set(), set()
+    for base, child_dirs, names in os.walk(target, followlinks=False):
+        for name in [*child_dirs, *names]:
+            path = Path(base) / name
+            relative = str(path.relative_to(target))
+            if path.is_symlink():
+                links.add(relative)
+            elif path.is_file():
+                files.add(relative)
+            else:
+                require(path.is_dir(), "special provider input entry: " + relative)
+                directories.add(relative)
+    expected_files = set(freeze["files"]) | {"input-freeze.json"}
+    expected_links = set(freeze["symlinks"])
+    expected_dirs = {str(parent) for name in expected_files | expected_links
+                     for parent in PurePosixPath(name).parents if str(parent) != "."}
+    require(files == expected_files and links == expected_links and directories == expected_dirs,
+            "complete provider payload gained/lost files, links or directories")
     return paths
+
+
+def verify_translation_reuse(target):
+    canonical = lambda value: (json.dumps(value, sort_keys=True, indent=2) + "\n").encode()
+    historical = target / "historical/original"
+    old_map_path = historical / "input-freeze.json"
+    require(identity(old_map_path)["sha256"] == ORIGINAL_FREEZE_SHA, "original translation freeze differs")
+    old_map = json.loads(old_map_path.read_text())
+    reuse_path = target / "translation-reuse.json"
+    require(identity(reuse_path)["sha256"] == REUSE_SHA, "translation reuse statement differs")
+    reuse = json.loads(reuse_path.read_text())
+    require(reuse["original_evidence_commit"] == ORIGINAL_EVIDENCE_COMMIT
+            and reuse["original_payload_tree"] == ORIGINAL_PAYLOAD_TREE
+            and reuse["original_input_freeze"] == {"path": "historical/original/input-freeze.json", **identity(old_map_path)}
+            and reuse["compiler_launched_for_new_payload"] is False
+            and reuse["provider_launched_for_new_payload"] is False
+            and reuse["fresh_translation_claimed"] is False and reuse["qualification_claimed"] is False,
+            "historical translation scope/origin differs")
+    moved = ("preparation.json", "prepare.py", "check_translation.py", "run_root_translation.py",
+             "root_translation_phase.py", "root_candidate_phase.py", "run_owned.py", "owned_guard.py", "actions.json")
+    require(reuse["relocated_legacy_files"] == {name: "historical/original/" + name for name in moved},
+            "legacy preparation/runner relocation differs")
+    device = "sources/moltenvk-patched/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm"
+    patch = "patches/MoltenVK-diagnostic-identity.patch"
+    allowed = {device, patch, "build-profile.json", "content-id.json"}
+    require(set(reuse["metadata_only_input_differences"]) == allowed, "metadata-only difference whitelist differs")
+    unchanged = {}
+    prefixes = ("sources/cross-stock/", "sources/cross-patched/", "sources/Vulkan-Headers/",
+                "sources/SPIRV-Headers/", "sources/SPIRV-Tools/", "sources/cereal/", "captured/")
+    for name, pin in old_map["files"].items():
+        expected = {key: pin[key] for key in ("bytes", "sha256")}
+        path = (historical if name in moved else target) / name
+        if name in allowed:
+            require(identity(historical / name) == expected
+                    and reuse["metadata_only_input_differences"][name]
+                    == {"original": expected, "current": identity(path)}, "metadata preimage/difference differs: " + name)
+        else:
+            require(identity(path) == expected and stat.S_IMODE(path.stat().st_mode) == pin["mode"],
+                    "original non-metadata input changed: " + name)
+        if name.startswith(prefixes) or name == "translate_initialize.cpp":
+            unchanged[name] = expected
+    for name, link in old_map["symlinks"].items():
+        path = target / name
+        require(path.is_symlink() and os.readlink(path) == link and path.resolve().is_relative_to(target),
+                "original source link differs")
+    require(len(unchanged) == 11475 and reuse["unchanged_translation_input_files"] == len(unchanged)
+            and hashlib.sha256(canonical(unchanged)).hexdigest() == reuse["unchanged_translation_input_map_sha256"],
+            "complete unchanged translation input join differs")
+    before = (historical / device).read_text()
+    old_line = '\tstrcpy(supportedProps12.driverInfo, MVK_VERSION_STRING "+sirius-issue48-unforced." MVK_DIAGNOSTIC_CONTENT_ID);'
+    new_line = ('\tstd::snprintf(supportedProps12.driverInfo, sizeof(supportedProps12.driverInfo),\n'
+                '\t\t\t\t  "%s+sirius-issue48-unforced.%s", MVK_VERSION_STRING, MVK_DIAGNOSTIC_CONTENT_ID);')
+    require(before.count(old_line) == 1 and before.count("#include <cmath>\n") == 1,
+            "original device source guards differ")
+    expected_source = before.replace("#include <cmath>\n", "#include <cmath>\n#include <cstdio>\n").replace(old_line, new_line)
+    require((target / device).read_text() == expected_source
+            and identity(target / patch)["sha256"] == IDENTITY_PATCH_SHA,
+            "metadata source change exceeds explicit include/snprintf replacement")
+    content = json.loads((target / "content-id.json").read_text())
+    profile = json.loads((target / "build-profile.json").read_text())
+    old_content = json.loads((historical / "content-id.json").read_text())
+    require(content["content_id"] == CONTENT_ID and content["driver_info_expected"] == DIAGNOSTIC_INFO
+            and content["cache_uuid_expected_first_four_bytes_hex"] == CONTENT_ID[:8]
+            and hashlib.sha256(canonical(content["preimage"])).hexdigest() == CONTENT_ID
+            and content["preimage"]["archives"] == old_content["preimage"]["archives"]
+            and content["preimage"]["build_profile"] == profile
+            and content["preimage"]["patches"] == {path.name: identity(path) for path in sorted((target / "patches").iterdir())}
+            and len(DIAGNOSTIC_INFO.encode()) + 1 <= 256,
+            "canonical diagnostic content/patch/archive/profile identity differs")
+    require(profile["cmake_generator"] == "Unix Makefiles" and profile["build_parallelism"] == 1
+            and profile["inherited_python_environment"] == {"PYTHONDONTWRITEBYTECODE": "1"}
+            and profile["build_only_environment_removed"] == ["DYLD_PRINT_LIBRARIES"]
+            and profile["runtime_environment"] == {"DYLD_PRINT_LIBRARIES": "1"}
+            and profile["public_metal_api_only"] is True and profile["upstream_git_attestation"] is False,
+            "declared diagnostic build/runtime boundary differs")
+    receipt_path = target / "observations/translation-byte-acceptance.json"
+    receipt = json.loads(receipt_path.read_text())
+    require(reuse["original_translation_receipt"] == {"path": str(receipt_path.relative_to(target)), **identity(receipt_path)}
+            and receipt["passed"] is True and receipt["input_freeze"] == identity(old_map_path)
+            and receipt["candidate"]["sha256"] == INITIALIZE_MSL["sha256"], "original translation receipt differs")
+    for phase, key in (("stock-translation", "stock"), ("candidate-translation", "candidate")):
+        folder = target / phase
+        owner = json.loads((folder / "owner.json").read_text())
+        require(owner["status"] == "terminal" and owner["passed"] is True and owner["child_exit"] == 0
+                and owner["whole_inputs_unchanged"] and owner["source_unchanged"]
+                and owner["stop_reason"] is None and not owner["remaining_owned_processes"]
+                and not owner["cleanup_errors"] and owner["observed_births"]
+                and all(row["absent"] is True for row in owner["observed_births"]), "historical translation owner incomplete")
+        require(reuse["original_translation_owners"][phase]
+                == {"path": phase + "/owner.json", **identity(folder / "owner.json")}, "historical owner pin differs")
+        inputs = json.loads((folder / "inputs-before.json").read_text())
+        require(inputs == json.loads((folder / "inputs-after.json").read_text()), "historical translation inputs changed")
+        sealed_map = inputs["out/macos-moltenvk-unforced/input-freeze.json"]
+        require({field: sealed_map[field] for field in ("bytes", "sha256")} == identity(old_map_path),
+                "historical owner is not joined to original freeze")
+        expected_output = {field: receipt[key][field] for field in ("bytes", "sha256")}
+        require(identity(target / ("observations/" + key + ".metal")) == expected_output
+                and reuse[key + "_msl"] == receipt[key], "original translation output differs")
+    return {"statement": identity(reuse_path), "original_freeze": identity(old_map_path),
+            "unchanged_translation_inputs": len(unchanged), "fresh_translation_claimed": False}
 
 
 def complete_owner(owner, require_zero=True):
