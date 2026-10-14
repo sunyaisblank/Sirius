@@ -1,0 +1,48 @@
+{
+  "backends": {
+    "cpu": {
+      "available": true
+    },
+    "vulkan": {
+      "available": true,
+      "compiled": true,
+      "device_count": 1,
+      "devices": [
+        {
+          "api_version": 4206926,
+          "device_id": 252117509,
+          "device_local_bytes": 7516192768,
+          "driver_id": 14,
+          "driver_info": "1.4.1",
+          "driver_name": "MoltenVK",
+          "index": 0,
+          "kind": "integrated",
+          "name": "Apple Paravirtual device",
+          "preserves_fp32_denormals": false,
+          "render_memory_bytes": 7516192768,
+          "rounds_fp32_to_nearest": true,
+          "rounds_fp64_to_nearest": true,
+          "supports_fp64": false,
+          "vendor_id": 4203
+        }
+      ],
+      "selected_device_index": 0,
+      "selected_device_name": "Apple Paravirtual device"
+    }
+  },
+  "interactive_viewer": {
+    "compiled": true
+  },
+  "language": {
+    "p2900_contracts": {
+      "implementation": "checked-macro",
+      "native": false
+    },
+    "p2996_reflection": {
+      "implementation": "explicit-schema",
+      "native": false
+    }
+  },
+  "platform": "macOS",
+  "wsl2": false
+}
