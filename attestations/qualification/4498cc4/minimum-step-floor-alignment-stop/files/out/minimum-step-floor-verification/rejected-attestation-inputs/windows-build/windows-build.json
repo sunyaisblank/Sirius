@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "domains": [
+    "windows-native-build"
+  ],
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "completed_utc": "2026-10-12T23:06:54.000452+00:00",
+  "platform": {
+    "os": "windows",
+    "wsl2": false
+  },
+  "device": {},
+  "claims": {
+    "test_estate_passed": true,
+    "test_estate_kind": "native-build-non-render-authority",
+    "compiled_topology_complete": true,
+    "runtime_ready": false,
+    "test_report": {
+      "cases": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "qualification_executable": {
+      "artifact": "qualification-sirius.bin",
+      "bytes": 7889920,
+      "sha256": "a0aaca2334ae9c1a9a7b08bb730b248debf19876fea3d10bc473689bdee0453a"
+    }
+  },
+  "artifacts": {
+    "native_build_gate_junit.xml": {
+      "path": "native_build_gate_junit.xml",
+      "bytes": 5242,
+      "sha256": "d51a72596b7071cb9e918742244205f6551097bb135c47396da94285e0c29e33"
+    },
+    "alignment_receipt.json": {
+      "path": "alignment_receipt.json",
+      "bytes": 1240,
+      "sha256": "83da3ee6d299c9a70bbff489a38c5eb6d5bd26127ad54e146dbd56f0ad7f7cc9"
+    },
+    "ctest-inventory.json": {
+      "path": "ctest-inventory.json",
+      "bytes": 1054425,
+      "sha256": "c5de40daf2bf42a8f86aedf0484a6ceffcebe77511206e063608c87caa0621d3"
+    },
+    "native_build_gate.json": {
+      "path": "native_build_gate.json",
+      "bytes": 10013,
+      "sha256": "457441313dd6601e15f82772184ca2ec8bc41da86bb0f761d17d4a3907436569"
+    },
+    "qualification-sirius.bin": {
+      "path": "qualification-sirius.bin",
+      "bytes": 7889920,
+      "sha256": "a0aaca2334ae9c1a9a7b08bb730b248debf19876fea3d10bc473689bdee0453a"
+    },
+    "native-build-gate-log": {
+      "path": "native-build-gate-log",
+      "bytes": 2931,
+      "sha256": "dd3e083dfc7b23606aa340ede7f9d003fc537b66b567eddb65589986c1be6724"
+    },
+    "qualification-product-operating_model": {
+      "path": "qualification-product-operating_model",
+      "bytes": 130331,
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    "qualification-product-starfield": {
+      "path": "qualification-product-starfield",
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "qualification-product-trace_fp32comp_spv": {
+      "path": "qualification-product-trace_fp32comp_spv",
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "qualification-product-trace_fp64_spv": {
+      "path": "qualification-product-trace_fp64_spv",
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "qualification-product-trace_spv": {
+      "path": "qualification-product-trace_spv",
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "qualification-product-viewer_rdsd003a_fragment": {
+      "path": "qualification-product-viewer_rdsd003a_fragment",
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "qualification-product-viewer_rdsd003a_vertex": {
+      "path": "qualification-product-viewer_rdsd003a_vertex",
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "test-input-portable_binary32_reference": {
+      "path": "test-input-portable_binary32_reference",
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "test-input-retained_camera_fixture": {
+      "path": "test-input-retained_camera_fixture",
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "test-input-retained_camera_fp32_spv": {
+      "path": "test-input-retained_camera_fp32_spv",
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "test-input-retained_camera_fp32comp_spv": {
+      "path": "test-input-retained_camera_fp32comp_spv",
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "test-input-smoke_spv": {
+      "path": "test-input-smoke_spv",
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "test-input-parity_probe_spv": {
+      "path": "test-input-parity_probe_spv",
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "test-input-parity_probe_fp32comp_spv": {
+      "path": "test-input-parity_probe_fp32comp_spv",
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "test-input-parity_probe_fp64_spv": {
+      "path": "test-input-parity_probe_fp64_spv",
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "test-input-infinity_probe_spv": {
+      "path": "test-input-infinity_probe_spv",
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "test-input-infinity_probe_fp32comp_spv": {
+      "path": "test-input-infinity_probe_fp32comp_spv",
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "test-input-infinity_probe_fp64_spv": {
+      "path": "test-input-infinity_probe_fp64_spv",
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "test-input-metric_consistency_probe_spv": {
+      "path": "test-input-metric_consistency_probe_spv",
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "test-input-metric_consistency_probe_fp32comp_spv": {
+      "path": "test-input-metric_consistency_probe_fp32comp_spv",
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "test-input-metric_consistency_probe_fp64_spv": {
+      "path": "test-input-metric_consistency_probe_fp64_spv",
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "test-input-camera_frame_probe_spv": {
+      "path": "test-input-camera_frame_probe_spv",
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "test-input-camera_frame_probe_fp32comp_spv": {
+      "path": "test-input-camera_frame_probe_fp32comp_spv",
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "test-input-camera_frame_probe_fp64_spv": {
+      "path": "test-input-camera_frame_probe_fp64_spv",
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "test-input-coupled_probe_fp64_spv": {
+      "path": "test-input-coupled_probe_fp64_spv",
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "test-input-trace_cuda": {
+      "path": "test-input-trace_cuda",
+      "bytes": 649633,
+      "sha256": "e1fa755f007585cbe4258d86ca9279a63fa8c88f9be55d4bb17e2e3d88447cb4"
+    },
+    "test-input-trace_metal": {
+      "path": "test-input-trace_metal",
+      "bytes": 358272,
+      "sha256": "5888cface9be8c28ef1a49c4db8d780052d7230059eb1048bc6511c86134dbd6"
+    },
+    "native-build-tested-sirius_app_tests": {
+      "path": "native-build-tested-sirius_app_tests",
+      "bytes": 8707584,
+      "sha256": "c657c1839b267185559e7408eac4be3bea16fbb175dc7c45d6a0ef372d11323a"
+    },
+    "native-build-tested-sirius_backend_tests": {
+      "path": "native-build-tested-sirius_backend_tests",
+      "bytes": 11063808,
+      "sha256": "cd9c51d8e5575257bdf6ffff4ba40d84d058ffcd03d9ca22dfa86ed900d5d7de"
+    },
+    "native-build-tested-sirius_base_tests": {
+      "path": "native-build-tested-sirius_base_tests",
+      "bytes": 583680,
+      "sha256": "789cc88db31dfe43203c78978d215ac4b27dd1a9a1d669b3242a982bb38b63ff"
+    },
+    "native-build-tested-sirius_core_tests": {
+      "path": "native-build-tested-sirius_core_tests",
+      "bytes": 2473472,
+      "sha256": "0636a55b5bf359f5fa05eb94b95320489fcd7c4bfce339718908783aeff99cde"
+    },
+    "native-build-tested-sirius_oracle_tests": {
+      "path": "native-build-tested-sirius_oracle_tests",
+      "bytes": 838656,
+      "sha256": "7f7c60f14460ca09bd4a4f574933178e110819f3ee77fb2d20bbb74fb81d90fb"
+    },
+    "native-build-tested-sirius_render_tests": {
+      "path": "native-build-tested-sirius_render_tests",
+      "bytes": 9192448,
+      "sha256": "df11fd38c7bcf74b20bcc7114e3132183d1921ccec6f81b3ca82b3c2f77af929"
+    }
+  }
+}

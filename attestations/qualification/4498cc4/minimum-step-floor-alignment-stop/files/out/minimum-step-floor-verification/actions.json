@@ -1,0 +1,92 @@
+{
+  "configure": {
+    "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc"
+    ],
+    "kind": "build",
+    "expected_exit": 0,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/cmake",
+      "/usr/bin/ninja",
+      "/usr/bin/g++-14",
+      "/usr/bin/gcc-14",
+      "/usr/bin/ld",
+      "/usr/bin/as",
+      "/usr/bin/python3.12",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "out/minimum-step-floor-registration/source-freeze.json",
+      "out/minimum-step-floor-registration/independent-review.json",
+      "out/minimum-step-floor-registration/source-contracts.json",
+      "out/minimum-step-floor-registration/registration.patch",
+      "out/minimum-step-ellis-floor/ellis-floor.patch",
+      "out/minimum-step-ellis-floor/gr_ellis_topology.slang",
+      "out/minimum-step-ellis-floor/root-source-review.json",
+      "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop/files/out/minimum-step-floor-repair/source-freeze.json",
+      "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop/files/out/minimum-step-floor-repair/independent-review.json",
+      "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop/files/out/minimum-step-floor-repair/source-contracts.json"
+    ],
+    "scope": "Original strict linux-gcc preset configure; prospective owned build boundary, not a rendering/scientific acceptance deadline.",
+    "software_provider": false
+  },
+  "build-backend": {
+    "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--parallel",
+      "2",
+      "--target",
+      "SiriusSourceGovernance",
+      "sirius_backend_tests"
+    ],
+    "kind": "build",
+    "expected_exit": 0,
+    "limits": {
+      "seconds": 900,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_inputs": [
+      "/usr/bin/cmake",
+      "/usr/bin/ninja",
+      "/usr/bin/g++-14",
+      "/usr/bin/gcc-14",
+      "/usr/bin/ld",
+      "/usr/bin/as",
+      "/usr/bin/python3.12",
+      "/opt/slang/bin/slangc",
+      "/opt/slang/lib/libslang.so",
+      "/usr/bin/spirv-opt",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "out/minimum-step-floor-registration/source-freeze.json",
+      "out/minimum-step-floor-registration/independent-review.json",
+      "out/minimum-step-floor-registration/source-contracts.json",
+      "out/minimum-step-floor-registration/registration.patch",
+      "out/minimum-step-ellis-floor/ellis-floor.patch",
+      "out/minimum-step-ellis-floor/gr_ellis_topology.slang",
+      "out/minimum-step-ellis-floor/root-source-review.json",
+      "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop/files/out/minimum-step-floor-repair/source-freeze.json",
+      "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop/files/out/minimum-step-floor-repair/independent-review.json",
+      "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop/files/out/minimum-step-floor-repair/source-contracts.json"
+    ],
+    "scope": "Existing strict linux-gcc source-governance target plus actual backend/tests and their complete dependencies. Prospective900s/4GiB aggregateRSS/2GiB host reserve build boundary; no rendering/scientific acceptance deadline changed.",
+    "software_provider": false
+  }
+}

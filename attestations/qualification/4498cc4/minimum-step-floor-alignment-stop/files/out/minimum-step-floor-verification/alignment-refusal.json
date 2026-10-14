@@ -1,0 +1,30 @@
+{
+  "configuration_accepted": false,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "selected_cached_attestation_root": "attestations/native-build/4bcd987",
+  "selected_attestation_documents_captured_after_refusal": [
+    {
+      "path": "attestations/native-build/4bcd987/macos-build/macos-build.json",
+      "bytes": 8900,
+      "sha256": "bfd85eb9e5e97be92261aee19c3893b81fe42473f5ad3ed2457a9bea35d8c586",
+      "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "domains": [
+        "macos-native-build"
+      ],
+      "operating_model": null
+    },
+    {
+      "path": "attestations/native-build/4bcd987/windows-build/windows-build.json",
+      "bytes": 9131,
+      "sha256": "e8b9a8a0b8fece088a45d8e969dd13c1114e3052164616914c57e00afdc4b4ea",
+      "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "domains": [
+        "windows-native-build"
+      ],
+      "operating_model": null
+    }
+  ],
+  "capture_scope": "Raw post-refusal cache and selected JSON records. These ignored inputs were not in the original owner frozen-input set; no pre-execution hash stability or full selected-artifact closure claimed. The model mismatch was the observed fail-closed error, before compilation.",
+  "unchanged_evidence_will_not_be_admitted": true,
+  "next_input_selection": "Existing qualification configure with explicit -DSIRIUS_ATTESTATION_ROOT=; empty admitted set and all8 pending remain required. No attestation source files are deleted, edited, requalified or reidentified."
+}
