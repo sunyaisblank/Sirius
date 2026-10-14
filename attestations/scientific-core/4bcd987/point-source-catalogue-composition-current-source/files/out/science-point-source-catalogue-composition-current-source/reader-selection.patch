@@ -1,0 +1,25 @@
+--- accepted/run_restricted_cells.py
++++ catalogue-composition/run_catalogue_composition.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""One frozen three-case original CPU restricted-cell response action."""
++"""One frozen three-case original CPU catalogue-composition action."""
+ from pathlib import Path
+ import hashlib
+ import json
+@@ -12,11 +12,11 @@
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+ ROOT = WORK.parents[1]
+-CASE = "original-three-cpu-restricted-cell-controls"
++CASE = "original-three-cpu-catalogue-composition-controls"
+ NAMES = {
+-    'PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization',
+-    'PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff',
+-    'PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry',
++    'PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency',
++    'PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear',
++    'PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure',
+ }
+ LIMITS = {"seconds": 300, "rss_kib": 4194304, "reserve_kib": 2097152}
+ 

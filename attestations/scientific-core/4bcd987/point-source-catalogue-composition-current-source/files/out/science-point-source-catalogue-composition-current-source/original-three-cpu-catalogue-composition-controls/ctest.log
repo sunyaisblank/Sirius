@@ -1,0 +1,114 @@
+[OUTPUT] 
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+
+[HANDLER_VERBOSE_OUTPUT] 
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+[HANDLER_OUTPUT] 
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+
+[HANDLER_VERBOSE_OUTPUT] 
+Constructing a list of tests
+
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 477
+[HANDLER_OUTPUT] 
+    Start 477: PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency
+
+[HANDLER_VERBOSE_OUTPUT] 
+
+477: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests "--gtest_filter=PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency" "--gtest_also_run_disabled_tests"
+
+477: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/core
+477: Test timeout computed to be: 10000000
+477: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+477: Note: Google Test filter = PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency
+477: [==========] Running 1 test from 1 test suite.
+477: [----------] Global test environment set-up.
+477: [----------] 1 test from PointSourceResponseTest
+477: [ RUN      ] PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency
+477: [       OK ] PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency (1 ms)
+477: [----------] 1 test from PointSourceResponseTest (1 ms total)
+477: 
+477: [----------] Global test environment tear-down
+477: [==========] 1 test from 1 test suite ran. (1 ms total)
+477: [  PASSED  ] 1 test.
+[HANDLER_OUTPUT] 
+1/3 Test #477: PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency ...........
+   Passed    0.01 sec
+[HANDLER_VERBOSE_OUTPUT] 
+test 478
+
+[HANDLER_OUTPUT] 
+    Start 478: PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear
+
+[HANDLER_VERBOSE_OUTPUT] 
+
+478: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests "--gtest_filter=PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear" "--gtest_also_run_disabled_tests"
+
+478: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/core
+478: Test timeout computed to be: 10000000
+478: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+478: Note: Google Test filter = PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear
+478: [==========] Running 1 test from 1 test suite.
+478: [----------] Global test environment set-up.
+478: [----------] 1 test from PointSourceResponseTest
+478: [ RUN      ] PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear
+478: [       OK ] PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear (1 ms)
+478: [----------] 1 test from PointSourceResponseTest (1 ms total)
+478: 
+478: [----------] Global test environment tear-down
+478: [==========] 1 test from 1 test suite ran. (2 ms total)
+478: [  PASSED  ] 1 test.
+[HANDLER_OUTPUT] 
+2/3 Test #478: PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear ...................
+   Passed    0.01 sec
+[HANDLER_VERBOSE_OUTPUT] 
+test 479
+
+[HANDLER_OUTPUT] 
+    Start 479: PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure
+
+[HANDLER_VERBOSE_OUTPUT] 
+
+479: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests "--gtest_filter=PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure" "--gtest_also_run_disabled_tests"
+
+479: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/core
+479: Test timeout computed to be: 10000000
+479: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+479: Note: Google Test filter = PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure
+479: [==========] Running 1 test from 1 test suite.
+479: [----------] Global test environment set-up.
+479: [----------] 1 test from PointSourceResponseTest
+479: [ RUN      ] PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure
+479: [       OK ] PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure (2 ms)
+479: [----------] 1 test from PointSourceResponseTest (2 ms total)
+479: 
+479: [----------] Global test environment tear-down
+479: [==========] 1 test from 1 test suite ran. (2 ms total)
+479: [  PASSED  ] 1 test.
+[HANDLER_OUTPUT] 
+3/3 Test #479: PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure ...
+   Passed    0.01 sec
+[HANDLER_VERBOSE_OUTPUT] 
+
+The following tests passed:
+
+	PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency
+	PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear
+	PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure
+[HANDLER_OUTPUT] 
+
+100% tests passed, 0 tests failed out of 3
+
+
+Label Time Summary:
+Correctness    =   0.02 sec*proc (3 tests)
+Mandatory      =   0.02 sec*proc (3 tests)
+
+Total Test time (real) =   0.06 sec
