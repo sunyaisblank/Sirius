@@ -753,7 +753,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     warpVs, warpSigma, warpR, throatB0, wormShape,
                     AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
                 if (!attempted.accepted) {
-                    if (dt <= Real(minStep) * Real(1.0001f)) { reason = kTraceMinimumStep; break; }
+                    if (AdaptiveAttemptAlreadyAtMinimumStep(dt, Real(minStep))) { reason = kTraceMinimumStep; break; }
                     adaptiveStep = max(Real(minStep), dt * attempted.stepFactor);
                     continue;
                 }

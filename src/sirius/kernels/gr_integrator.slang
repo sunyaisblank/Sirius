@@ -426,6 +426,12 @@ public Real AdaptiveNullTolerance() {
 #endif
 }
 
+// Call only after rejecting a candidate evaluated at attemptedStep. Selecting
+// the floor for the next attempt must not terminate the current interval.
+public bool AdaptiveAttemptAlreadyAtMinimumStep(Real attemptedStep, Real minimumStep) {
+    return attemptedStep <= minimumStep;
+}
+
 // Shared adaptive candidate authority for trace.slang and the P1 parity probe.
 // The accepted state is the two-half-step solution; the caller owns retry and
 // precision-rung commit so a rejected attempt cannot mutate downstream state.
