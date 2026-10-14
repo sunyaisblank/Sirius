@@ -1,0 +1,60 @@
+--- attestations/scientific-core/4bcd987/e3-dispatch-continuations-current-source/files/out/science-e3-dispatch-continuations-current-source/run_continuations.py
++++ out/science-p2-source-sky-differential-current-source/run_source_sky.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""One frozen eight-case original host continuation action; no build/device/frame work."""
++"""One frozen six-case original source-sky differential action; no build/device/frame work."""
+ from pathlib import Path
+ import hashlib
+ import json
+@@ -12,16 +12,14 @@
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+ ROOT = WORK.parents[1]
+-CASE = "original-eight-dispatch-continuation-controls"
++CASE = 'original-six-source-sky-differential-controls'
+ NAMES = {
+-    'DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState',
+-    'DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory',
+-    'DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce',
+-    'DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals',
+-    'DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary',
+-    'DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication',
+-    'DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback',
+-    'DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample',
++    'SourceSkyDifferential.DeclinesUnrepresentedFrequencyGeometryAndVariation',
++    'SourceSkyDifferential.DirectionIsInvariantUnderFrequencyAndLongitudinalVariation',
++    'SourceSkyDifferential.KerrPositionAndTangentVariationsMatchIndependentDifferences',
++    'SourceSkyDifferential.MovingFlatCameraMatchesAnalyticLorentzDirectionDerivative',
++    'SourceSkyDifferential.NormalizesNonNullSpatialDirectionAndItsDerivative',
++    'SourceSkyDifferential.ReseedsMetricVariationWithoutInheritedDualMetadata',
+ }
+ LIMITS = {"seconds": 300, "rss_kib": 4194304, "reserve_kib": 2097152}
+ 
+@@ -67,7 +65,7 @@
+     result = {"passed": False, "product_source_revision": prepared["product_source_revision"],
+               "runner_source_revision": prepared["runner_source_revision"], "expected_names": sorted(NAMES),
+               "scope": prepared["scope"], "finite_acceptance_scope": prepared["finite_acceptance_scope"],
+-              "qualification_claimed": False, "e3_complete": False, "mandatory_receipt_created": False,
++              "qualification_claimed": False, "p2_complete": False, "mandatory_receipt_created": False,
+               "original_assertions_changed": False, "outer_diagnostic_limits": LIMITS,
+               "declared_output_environment": {"TMPDIR": str(temporary), "GTEST_OUTPUT": ""}}
+     write_result(result)
+@@ -76,7 +74,7 @@
+                 "runner source is not the pinned clean revision")
+         require(set(git("diff", "--name-only", prepared["product_source_revision"], "HEAD").splitlines())
+                 == set(prepared["diagnostic_only_difference"]), "product/science source difference changed")
+-        require(set(prepared["expected_names"]) == NAMES and len(NAMES) == 8, "original model selection differs")
++        require(set(prepared["expected_names"]) == NAMES and len(NAMES) == 6, "original model selection differs")
+         for name, pin in prepared["pins"].items():
+             require(identity(ROOT / name) == pin, "prepared input changed: " + name)
+         actions = json.loads((WORK / "actions.json").read_text())
+@@ -102,7 +100,7 @@
+         xml = WORK / CASE / "ctest.xml"
+         document = ET.parse(xml).getroot()
+         cases = document.findall(".//testcase")
+-        require(len(cases) == 8 and {row.attrib["name"] for row in cases} == NAMES, "JUnit case set differs")
++        require(len(cases) == 6 and {row.attrib["name"] for row in cases} == NAMES, "JUnit case set differs")
+         for row in cases:
+             require(row.get("status", "run") == "run" and not any(row.findall(tag) for tag in ("failure", "error", "skipped")),
+                     "an original case failed, errored, skipped, or was disabled")
