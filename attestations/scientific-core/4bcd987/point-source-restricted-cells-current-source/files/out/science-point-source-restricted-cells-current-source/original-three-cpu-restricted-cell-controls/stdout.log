@@ -1,0 +1,80 @@
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 482
+    Start 482: PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization
+
+482: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests "--gtest_filter=PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization" "--gtest_also_run_disabled_tests"
+482: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/core
+482: Test timeout computed to be: 10000000
+482: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+482: Note: Google Test filter = PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization
+482: [==========] Running 1 test from 1 test suite.
+482: [----------] Global test environment set-up.
+482: [----------] 1 test from PointSourceResponseTest
+482: [ RUN      ] PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization
+482: [       OK ] PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization (0 ms)
+482: [----------] 1 test from PointSourceResponseTest (0 ms total)
+482: 
+482: [----------] Global test environment tear-down
+482: [==========] 1 test from 1 test suite ran. (0 ms total)
+482: [  PASSED  ] 1 test.
+1/3 Test #482: PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization ...   Passed    0.01 sec
+test 483
+    Start 483: PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff
+
+483: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests "--gtest_filter=PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff" "--gtest_also_run_disabled_tests"
+483: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/core
+483: Test timeout computed to be: 10000000
+483: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+483: Note: Google Test filter = PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff
+483: [==========] Running 1 test from 1 test suite.
+483: [----------] Global test environment set-up.
+483: [----------] 1 test from PointSourceResponseTest
+483: [ RUN      ] PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff
+483: [       OK ] PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff (0 ms)
+483: [----------] 1 test from PointSourceResponseTest (0 ms total)
+483: 
+483: [----------] Global test environment tear-down
+483: [==========] 1 test from 1 test suite ran. (0 ms total)
+483: [  PASSED  ] 1 test.
+2/3 Test #483: PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff ..........   Passed    0.01 sec
+test 484
+    Start 484: PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry
+
+484: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests "--gtest_filter=PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry" "--gtest_also_run_disabled_tests"
+484: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/core
+484: Test timeout computed to be: 10000000
+484: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+484: Note: Google Test filter = PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry
+484: [==========] Running 1 test from 1 test suite.
+484: [----------] Global test environment set-up.
+484: [----------] 1 test from PointSourceResponseTest
+484: [ RUN      ] PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry
+484: [       OK ] PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry (0 ms)
+484: [----------] 1 test from PointSourceResponseTest (0 ms total)
+484: 
+484: [----------] Global test environment tear-down
+484: [==========] 1 test from 1 test suite ran. (0 ms total)
+484: [  PASSED  ] 1 test.
+3/3 Test #484: PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry ......   Passed    0.01 sec
+
+The following tests passed:
+	PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization
+	PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff
+	PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry
+
+100% tests passed, 0 tests failed out of 3
+
+Label Time Summary:
+Correctness    =   0.02 sec*proc (3 tests)
+Mandatory      =   0.02 sec*proc (3 tests)
+
+Total Test time (real) =   0.07 sec
