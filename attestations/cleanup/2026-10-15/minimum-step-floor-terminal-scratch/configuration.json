@@ -1,0 +1,115 @@
+{
+  "current_product_source": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "expected_owners": {
+    "out/minimum-step-floor-current/build-backend/owner.json": {
+      "child_exit": 0,
+      "passed": true,
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    },
+    "out/minimum-step-floor-current/configure/owner.json": {
+      "child_exit": 0,
+      "passed": true,
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    },
+    "out/minimum-step-floor-current/controls/ellis-physical-ray/owner.json": {
+      "child_exit": 0,
+      "passed": true,
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    },
+    "out/minimum-step-floor-current/controls/fp32/owner.json": {
+      "child_exit": 0,
+      "passed": true,
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    },
+    "out/minimum-step-floor-current/controls/fp32comp/owner.json": {
+      "child_exit": 0,
+      "passed": true,
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    },
+    "out/minimum-step-floor-current/controls/fp64/owner.json": {
+      "child_exit": 0,
+      "passed": true,
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    },
+    "out/minimum-step-floor-current/controls/module-capabilities/owner.json": {
+      "child_exit": 0,
+      "passed": true,
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    },
+    "out/minimum-step-floor-current/controls/source-governance/owner.json": {
+      "child_exit": 0,
+      "passed": true,
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    },
+    "out/minimum-step-floor-repair/configure/owner.json": {
+      "child_exit": 1,
+      "passed": false,
+      "source_revision": "27f5d9cdc6f9268b598a2b954febca8ec3468394"
+    },
+    "out/minimum-step-floor-verification/configure/owner.json": {
+      "child_exit": 1,
+      "passed": false,
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    }
+  },
+  "focused": {
+    "bundle": "attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls",
+    "commit": "ROOT_SUPPLIES_ACTUAL_FULL_ARCHIVE_COMMIT",
+    "manifest_sha256": "ROOT_SUPPLIES_ACTUAL_MANIFEST_SHA256",
+    "tag": "evidence/issue-53-minimum-step-floor-focused-controls",
+    "targets": [
+      "out/minimum-step-floor-current",
+      "out/minimum-step-floor-registration",
+      "out/minimum-step-ellis-floor",
+      "out/macos-failure-diagnostics"
+    ]
+  },
+  "mature_source": {
+    "bytes": 19606,
+    "path": "attestations/cleanup/2026-10-15/terminal-isolated-parity-preflight-hints/cleanup-terminal-parity-preflight-hints.py",
+    "sha256": "b5124e2a63b6621206dd3889040f6e9a67a42740655b050ffe18f958dc548aa2"
+  },
+  "metadata_name_patterns": [
+    "actions*.json",
+    "source-freeze.json",
+    "preparation.json",
+    "pins.json",
+    "prerequisite-pin.json",
+    "pin-context.json",
+    "commands.json"
+  ],
+  "prior_evidence": [
+    [
+      "evidence/issue-53-minimum-step-floor-configure-stop",
+      "43ed3034d92a7b94a2d9a6711d8b2cda7a2e46cf",
+      "attestations/qualification/27f5d9c/minimum-step-floor-configure-stop",
+      "1781d88fdb35cf261a34778a97b13405ef0d1f3001d76df637bd96c6a675083b",
+      [
+        "out/minimum-step-floor-repair"
+      ]
+    ],
+    [
+      "evidence/issue-53-minimum-step-floor-alignment-stop",
+      "b220fa539ea6e3efd9161c6f04914d01b301e031",
+      "attestations/qualification/4498cc4/minimum-step-floor-alignment-stop",
+      "18d6ccb28c7dc3b28c1ebf011251be36ddc3b9faa6e3d7e523ae5c19a4a9a259",
+      [
+        "out/minimum-step-floor-verification"
+      ]
+    ]
+  ],
+  "retained_build_roots": [
+    "bin/linux-gcc",
+    "all other bin/* paths"
+  ],
+  "schema": "sirius-minimum-step-fixed-terminal-retirement-preparation-v1",
+  "scope": "Preparation only. Root operates after real focused archive/tag is preserved and pushed, audits then independently reviews before removal. A future screen must consume canonical/build inputs and immutable archive paths; any live frozen path into these six roots blocks removal. No build root or generic cleanup, Git writes, tests, provider dispatch or global consumer absence claim.",
+  "targets": [
+    "out/minimum-step-floor-current",
+    "out/minimum-step-floor-registration",
+    "out/minimum-step-ellis-floor",
+    "out/macos-failure-diagnostics",
+    "out/minimum-step-floor-repair",
+    "out/minimum-step-floor-verification"
+  ]
+}
