@@ -1,0 +1,277 @@
+{
+  "artifact": {
+    "bytes": 46116,
+    "complete_raw_ZIP_members": {
+      "bin/linux-gcc-sanitize/Testing/Temporary/LastTest.log": {
+        "bytes": 121,
+        "sha256": "c43b6e1104a8a13de8da993247f372fee53722435335311201ea7175e1b11d13"
+      },
+      "bin/linux-gcc-sanitize/generated/sirius/mandatory_gate_ctest.log": {
+        "bytes": 252427,
+        "sha256": "ce26b07dddf777c31ce962c5f7325dd31ddeb65d2466c1a84eb9ac13cc6c48dc"
+      },
+      "bin/linux-gcc-sanitize/generated/sirius/mandatory_runtime_identity_gate.json": {
+        "bytes": 6790,
+        "sha256": "72f908c4d7c5589b4c52c43a9f49cad4f2866fe3c709026ff9edd62f99f6d8db"
+      }
+    },
+    "id": 11915007461,
+    "sha256": "38cb874752bb03f23f2ae876756b899cb7478cb0e83fc136aaa0cb21e90bd9a2"
+  },
+  "completed_at": "2026-10-14T17:09:41Z",
+  "conclusion": "cancelled",
+  "final_JUnit_or_Mandatory_pass_present": false,
+  "gate_change_retry_or_timeout_increase_performed": false,
+  "job": 115899499206,
+  "last_started_without_complete_result": "OperationalP1.NearExtremalBurnIn",
+  "observed_completed_cases": [
+    {
+      "case_number": 1,
+      "name": "ContractsDeathTest.EnforcedPreconditionViolationTerminates",
+      "ordinal": 1,
+      "seconds": 0.2,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 2,
+      "name": "ContractsDeathTest.EnforcedAssertionViolationTerminates",
+      "ordinal": 2,
+      "seconds": 0.21,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 3,
+      "name": "Contracts.SatisfiedContractsPassSilently",
+      "ordinal": 3,
+      "seconds": 0.02,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 4,
+      "name": "Contracts.AxiomIsNeverEvaluated",
+      "ordinal": 4,
+      "seconds": 0.02,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 5,
+      "name": "Contracts.LanguageCapabilitiesDistinguishNativeFeaturesFromSubstitutes",
+      "ordinal": 5,
+      "seconds": 0.02,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 6,
+      "name": "Error.ExpectedPropagatesValue",
+      "ordinal": 6,
+      "seconds": 0.02,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 7,
+      "name": "Error.FailCarriesDomainOperationAndDetail",
+      "ordinal": 7,
+      "seconds": 0.02,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 8,
+      "name": "Error.DescriptionNamesDomainOperationAndDetail",
+      "ordinal": 8,
+      "seconds": 0.02,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 9,
+      "name": "Sha256Tests.EmptyStringMatchesNistKnownAnswer",
+      "ordinal": 9,
+      "seconds": 0.02,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 10,
+      "name": "Sha256Tests.AbcMatchesNistKnownAnswer",
+      "ordinal": 10,
+      "seconds": 0.02,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 11,
+      "name": "Sha256Tests.MultiBlockPaddingMatchesNistKnownAnswer",
+      "ordinal": 11,
+      "seconds": 0.01,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 12,
+      "name": "Sha256Tests.FileStreamingMatchesTheSameKnownAnswer",
+      "ordinal": 12,
+      "seconds": 0.01,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 13,
+      "name": "Sha256Tests.MillionByteFileMatchesNistKnownAnswerAcrossReadChunks",
+      "ordinal": 13,
+      "seconds": 0.25,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 14,
+      "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+      "ordinal": 14,
+      "seconds": 4.63,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 15,
+      "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+      "ordinal": 15,
+      "seconds": 0.03,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 16,
+      "name": "OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls",
+      "ordinal": 16,
+      "seconds": 0.06,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 17,
+      "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+      "ordinal": 17,
+      "seconds": 3.32,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 18,
+      "name": "OperationalAttestation.FalseExternalEvidenceIsRejected",
+      "ordinal": 18,
+      "seconds": 25.7,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 19,
+      "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+      "ordinal": 19,
+      "seconds": 0.44,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 20,
+      "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+      "ordinal": 20,
+      "seconds": 0.05,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 21,
+      "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+      "ordinal": 21,
+      "seconds": 0.96,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 22,
+      "name": "OperationalVolume.InstallRelocateInitialiseAndFailClosed",
+      "ordinal": 22,
+      "seconds": 600.02,
+      "status": "***Timeout",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 23,
+      "name": "OperationalScripts.RenderFailuresAndMissingOutputsPropagate",
+      "ordinal": 23,
+      "seconds": 0.23,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 24,
+      "name": "OperationalEvidence.RequiredProfileRejectsGoogleTestSkip",
+      "ordinal": 24,
+      "seconds": 0.09,
+      "status": "Passed",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 25,
+      "name": "OperationalVulkan.RequiredRuntimeDispatch",
+      "ordinal": 25,
+      "seconds": 300.01,
+      "status": "***Timeout",
+      "total_registration": 1147
+    }
+  ],
+  "original_cold_Kerr_observation": {
+    "cache_disable_wrapper_present": true,
+    "complete_frame_or_numerical_verdict": false,
+    "height": 128,
+    "last_reported_tiles": 164,
+    "samples_per_pixel": 1,
+    "target_tiles": 16384,
+    "width": 128
+  },
+  "other_full_CI_jobs_still_active": true,
+  "passed_cases": 23,
+  "pre_numerics_identity_is_not_actual_numerical_map_or_full_pass": true,
+  "pre_numerics_runtime_identity_executable": {
+    "bytes": 147687256,
+    "path": "/home/runner/work/Sirius/Sirius/bin/linux-gcc-sanitize/src/sirius/app/sirius",
+    "sha256": "3dabbcf6579f750a2d5e05488f708877756c3de0e0554e4de96df5409e5f6423"
+  },
+  "pre_numerics_runtime_identity_source": {
+    "clean": true,
+    "revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405"
+  },
+  "reported_estate_registration": 1147,
+  "run": 38577826600,
+  "sanitizer_or_runtime_or_release_qualification_claimed": false,
+  "schema": "sirius-incomplete-remote-sanitizer-estate-v1",
+  "scope": "Complete terminal job API/log/annotations and API-digest-verified diagnostic ZIP. Remote producer ELF/source/input closure is not included in the failure artifact, so this does not admit a runtime domain.",
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "started_at": "2026-10-14T14:08:17Z",
+  "status": "completed",
+  "terminal_reason": "GitHub annotation: maximum execution time3h0m0s; operation canceled.",
+  "timed_out_cases": [
+    {
+      "case_number": 22,
+      "name": "OperationalVolume.InstallRelocateInitialiseAndFailClosed",
+      "ordinal": 22,
+      "seconds": 600.02,
+      "status": "***Timeout",
+      "total_registration": 1147
+    },
+    {
+      "case_number": 25,
+      "name": "OperationalVulkan.RequiredRuntimeDispatch",
+      "ordinal": 25,
+      "seconds": 300.01,
+      "status": "***Timeout",
+      "total_registration": 1147
+    }
+  ]
+}
