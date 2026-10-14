@@ -1,0 +1,119 @@
+--- a/prepare.py
++++ b/prepare.py
+@@ -6,7 +6,7 @@
+ R = Path.cwd().resolve()
+ Q = Path(__file__).resolve().parent
+ W = Q / 'benefit'
+-T = R / 'bin/linux-gcc/portable-divide64-benefit'
++T = R / 'bin/linux-gcc/portable-multiply64-benefit'
+ for name, pin in json.loads((Q / 'source-freeze.json').read_text())['pins'].items():
+     path = Path(name)
+     data = path.read_bytes()
+@@ -34,8 +34,8 @@
+ manifest_path = archive / 'manifest.json'
+ assert identity(manifest_path)['sha256'] == P['manifest_sha256']
+ manifest = json.loads(manifest_path.read_text())
+-old_work = 'out/portable-divide64-original-controls/'
+-old_bin = 'bin/linux-gcc/portable-divide64-original-controls/'
++old_work = 'out/portable-multiply64-controls-o0-lines/'
++old_bin = 'bin/linux-gcc/portable-multiply64-controls-o0-lines/'
+ old_stage = old_bin + 'controls/'
+ old_roots = [(R / name).resolve() for name in (old_work, old_bin)]
+ archive_inputs = {str(manifest_path): identity(manifest_path)}
+@@ -72,7 +72,7 @@
+ assert identity(preserved(old_work + 'gate.py'))['sha256'] == P['gate_sha256']
+ for name, pin in json.loads(preserved(old_work + 'source-freeze.json').read_text())['pins'].items():
+     joined(name, pin)
+-assert packet['changed_arrays'] == P['changed_arrays'] and len(P['changed_arrays']) == 17
++assert packet['changed_arrays'] == P['changed_arrays'] and len(P['changed_arrays']) == 24
+ 
+ owners = {}
+ def accepted(label):
+@@ -96,7 +96,7 @@
+ 
+ producer_labels = packet['producer_labels']
+ labels = producer_labels + ['control-' + str(i) for i in range(1, 9)] + ['verify-controls', 'verify-endpoint-routes']
+-assert len(labels) == len(set(labels)) == 19
++assert len(labels) == len(set(labels)) == 18
+ for label in labels:
+     accepted(label)
+ for label in producer_labels + ['verify-controls', 'verify-endpoint-routes']:
+@@ -147,11 +147,11 @@
+     joined(name, pin)
+ products = json.loads(preserved(old_work + 'products-acceptance.json').read_text())
+ assert products['passed'] and len(products['modules']) == 35
+-assert (products['changed_modules'], products['unchanged_modules']) == (17, 18)
+-assert (products['main_arrays_changed'], products['main_arrays_unchanged'], products['owner_arrays_unchanged']) == (17, 23, 2)
++assert (products['changed_modules'], products['unchanged_modules']) == (24, 11)
++assert (products['main_arrays_changed'], products['main_arrays_unchanged'], products['owner_arrays_unchanged']) == (24, 16, 2)
+ assert products['all_seven_tables_and_nonarray_ABI_constants_equal']
+ producer = json.loads(preserved(old_work + 'producer-acceptance.json').read_text())
+-assert producer['passed'] and sorted(producer['changed_arrays']) == P['changed_arrays'] and producer['unchanged_array_count'] == 23
++assert producer['passed'] and sorted(producer['changed_arrays']) == P['changed_arrays'] and producer['unchanged_array_count'] == 16
+ feature = json.loads(preserved(old_work + 'producer-feature-acceptance.json').read_text())
+ assert feature['passed'] and feature['all28device_definitions_in_object_and_actual_candidate']
+ assert feature['link_uses_default_archive_extraction'] and feature['old_vulkan_and_compute_archive_members_absent']
+@@ -166,7 +166,7 @@
+ arithmetic = R / P['arithmetic_archive']
+ assert identity(arithmetic / 'manifest.json')['sha256'] == P['arithmetic_manifest_sha256']
+ current_inputs[str(arithmetic / 'manifest.json')] = identity(arithmetic / 'manifest.json')
+-arith_result = arithmetic / 'files/out/portable-divide64-arithmetic/arithmetic-result.json'
++arith_result = arithmetic / 'files/out/portable-multiply64-arithmetic/arithmetic-result.json'
+ assert identity(arith_result) == {k: result['arithmetic'][k] for k in ('bytes', 'sha256')}
+ ar = json.loads(arith_result.read_text())
+ assert ar['passed'] and ar['original_records'] == 174268 and ar['complete_output_words_per_provider'] == 697072
+@@ -233,7 +233,7 @@
+ wrapper = (apparatus / 'run_limb_benefit_slot.py').read_text()
+ old_allowlist = 'bin/linux-gcc/computed-carry-exit-benefit/original_'
+ assert wrapper.count(old_allowlist) == 1
+-(W / 'run_limb_benefit_slot.py').write_text(wrapper.replace(old_allowlist, 'bin/linux-gcc/portable-divide64-benefit/original_'))
++(W / 'run_limb_benefit_slot.py').write_text(wrapper.replace(old_allowlist, 'bin/linux-gcc/portable-multiply64-benefit/original_'))
+ for mode, name in (('baseline', 'baseline.json'), ('candidate', 'build-and-arrays.json')):
+     write(W / name, {'arrays': producer['actual_ELF_arrays'][mode]})
+ shared = [*archive_inputs, *current_inputs, *resources]
+@@ -257,7 +257,7 @@
+ freeze = json.loads((apparatus / 'retention-gate-frozen.json').read_text())
+ freeze.update(candidate_revision=P['execution_revision'], baseline_revision=P['execution_revision'],
+               executables=executables, actions_sha256=identity(W / 'actions.json')['sha256'],
+-              scope='One original fixed optional64 divide A1/B1/B2/A2 trial. Original stock host; candidate alone admits Int64. Accepted17/23/0 producer footprint. Original measured windows and20+2 gates unchanged.')
++              scope='One original fixed optional64 multiply A1/B1/B2/A2 trial. Original stock host; candidate alone admits Int64. Accepted24/16/0 main/unchanged/owner-changes footprint. Original measured windows and20+2 gates unchanged.')
+ assert freeze['sequence'] == ['a1', 'b1', 'b2', 'a2'] and freeze['within_slot_repeats'] == 3
+ assert (freeze['complete_call_minimum_improvement_percent'], freeze['every_inclusive_stage_minimum_improvement_percent'], freeze['observed_instance_api_minimum_improvement_percent']) == (5, -5, 0)
+ assert freeze['all20_gates_required']
+@@ -266,7 +266,7 @@
+ write(Q / 'preparation.json', {'source_revision': P['execution_revision'],
+     'prior_manifest_sha256': P['manifest_sha256'], 'prerequisite_evidence_commit': P['evidence_commit'],
+     'producer_prerequisites': {'actual40array_ELF_proof': True, 'actual2owner_array_ELF_proof': True,
+-        'same_observer_CPP': True, 'original8controls_passed': True, 'nineteen_terminal_owners': owners,
++        'same_observer_CPP': True, 'original8controls_passed': True, 'eighteen_terminal_owners': owners,
+         'candidate_only_Int64_host': True, 'original_stock_host_unchanged': True},
+     'executables': executables, 'changed_arrays': P['changed_arrays'],
+     'current_byte_exact_dependency_joins': current_inputs, 'preserved_archive_joins': archive_inputs,
+--- a/prove_reuse.py
++++ b/prove_reuse.py
+@@ -42,7 +42,7 @@
+ for name,pin in p['current_byte_exact_dependency_joins'].items():
+     assert identity(R/name)=={key:pin[key] for key in ['bytes','sha256']},name
+ assert sorted(name for name in proof['actual_ELF_arrays']['baseline'] if records['baseline'][name]!=records['candidate'][name])==p['changed_arrays']
+-assert len(p['changed_arrays'])==17
++assert len(p['changed_arrays'])==24
+ assert owner_records['baseline']==owner_records['candidate']
+ for name,pin in p['preserved_archive_joins'].items():
+     assert identity(Path(name))==pin,name
+@@ -53,4 +53,4 @@
+         'same_accepted_pair_as_original_controls':True,'changed_arrays':p['changed_arrays'],'owner_arrays_unchanged':True,'prerequisite_manifest_sha256':p['prior_manifest_sha256'],'current_dependency_joins':len(p['current_byte_exact_dependency_joins']),
+         'scope':'Exact restored producer and array/data/current declared dependency evidence. Existing compiler/source/ABI proof reused; no recompile or new performance observation.'}
+ (Q/'producer-reuse.json').write_text(json.dumps(result,indent=2)+'\n')
+-print(json.dumps({'passed':True,'ELF_arrays_per_producer':40,'changed':17,'dependency_joins':result['current_dependency_joins']}))
++print(json.dumps({'passed':True,'ELF_arrays_per_producer':40,'changed':24,'dependency_joins':result['current_dependency_joins']}))
+--- a/finish_trial.py
++++ b/finish_trial.py
+@@ -77,7 +77,7 @@
+               'protected_payloads_unchanged': len(protected), **counts,
+               'performance_acceptance': comparison['pass'],
+               'scope': 'Original comparator and complete owner/XML/input/source closure. A rejected fixed benefit verdict is a valid experiment outcome, not full qualification.'}
+-disposition = {'decision': 'PROCEED_TO_PRODUCTION_IMPLEMENTATION' if comparison['pass'] else 'REJECT_OPTIONAL64_DIVIDE_COST',
++disposition = {'decision': 'PROCEED_TO_PRODUCTION_IMPLEMENTATION' if comparison['pass'] else 'REJECT_OPTIONAL64_MULTIPLY_COST',
+                'issue': 44, 'source_revision': freeze['candidate_revision'],
+                'original_benefit_trial_completed': True, 'original_correctness_prerequisites_passed': True,
+                'production_adopted': False, **counts,

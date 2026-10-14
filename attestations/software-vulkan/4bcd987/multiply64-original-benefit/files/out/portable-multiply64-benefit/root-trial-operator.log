@@ -1,0 +1,141 @@
+{
+  "case": "a1",
+  "source": {
+    "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "status": ""
+  },
+  "passed": true,
+  "child_exit": 0,
+  "wall_seconds": 71.82023281700094,
+  "peak_sampled_rss_kib": 2333160,
+  "stop_reason": null,
+  "meaning": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification."
+}
+{
+  "case": "b1",
+  "source": {
+    "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "status": ""
+  },
+  "passed": true,
+  "child_exit": 0,
+  "wall_seconds": 71.41946790300426,
+  "peak_sampled_rss_kib": 2324416,
+  "stop_reason": null,
+  "meaning": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification."
+}
+{
+  "case": "b2",
+  "source": {
+    "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "status": ""
+  },
+  "passed": true,
+  "child_exit": 0,
+  "wall_seconds": 74.15110517299763,
+  "peak_sampled_rss_kib": 2324764,
+  "stop_reason": null,
+  "meaning": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification."
+}
+{
+  "case": "a2",
+  "source": {
+    "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "status": ""
+  },
+  "passed": true,
+  "child_exit": 0,
+  "wall_seconds": 71.72098587200162,
+  "peak_sampled_rss_kib": 2332824,
+  "stop_reason": null,
+  "meaning": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification."
+}
+{"completed": true, "sequence": ["a1", "b1", "b2", "a2"], "results": 4}
+{
+  "pass": false,
+  "checks": 20,
+  "failed": 9,
+  "complete_calls": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        37.22534,
+        36.935127,
+        35.290633
+      ],
+      "candidate_samples_ms": [
+        37.894183,
+        37.22913,
+        37.053609
+      ],
+      "baseline_median_ms": 36.935127,
+      "candidate_median_ms": 37.22913,
+      "improvement_percent": -0.7959983459647951,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        50.271519000000005,
+        48.431753,
+        48.437090999999995
+      ],
+      "candidate_samples_ms": [
+        47.074554,
+        48.172485,
+        46.923164
+      ],
+      "baseline_median_ms": 48.437090999999995,
+      "candidate_median_ms": 47.074554,
+      "improvement_percent": 2.8130033655406685,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        39.704658,
+        34.017736,
+        36.26156
+      ],
+      "candidate_samples_ms": [
+        37.127673,
+        38.742778,
+        37.046045
+      ],
+      "baseline_median_ms": 36.26156,
+      "candidate_median_ms": 37.127673,
+      "improvement_percent": -2.388515552006032,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        48.05962,
+        46.630233000000004,
+        46.789433
+      ],
+      "candidate_samples_ms": [
+        51.44195,
+        48.669984,
+        48.707028
+      ],
+      "baseline_median_ms": 46.789433,
+      "candidate_median_ms": 48.707028,
+      "improvement_percent": -4.098350582705284,
+      "minimum_percent": 5,
+      "pass": false
+    }
+  ]
+}
+{"decision": "REJECT_OPTIONAL64_MULTIPLY_COST", "interval_stage_passed": 11, "interval_stage_required": 20, "inclusive_API_passed": 1, "inclusive_API_required": 2, "verified_inputs": 2438, "wall_seconds": 289.11179176500445}

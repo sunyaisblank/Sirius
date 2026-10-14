@@ -1,0 +1,72 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "python3",
+    "-B",
+    "/home/astra/.project/Sirius/out/portable-multiply64-benefit/benefit/run_limb_benefit_slot.py",
+    "bin/linux-gcc/portable-multiply64-benefit/original_candidate_controls",
+    "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "b2",
+  "child_exit": 0,
+  "child_pid": 383274,
+  "child_start_ticks": "6035901",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 382952,
+    "pid": 383270,
+    "ppid": 382955,
+    "rss_kib": 26772,
+    "session": 382952,
+    "start_ticks": "6035777",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/portable-multiply64-benefit/benefit/b2/gtest.xml",
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+  "minimum_sampled_available_kib": 15891188,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 383274,
+      "saved_start_ticks": "6035901"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 2324764,
+  "provider_mappings": [
+    {
+      "maps": [
+        "721654c00000-721654c5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "721654c5b000-72165506b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "72165506b000-7216556c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7216556c6000-721655761000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 383274,
+      "pid": 383274,
+      "start_ticks": "6035901"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+  "source": {
+    "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 74.15110517299763,
+  "whole_inputs_unchanged": true
+}

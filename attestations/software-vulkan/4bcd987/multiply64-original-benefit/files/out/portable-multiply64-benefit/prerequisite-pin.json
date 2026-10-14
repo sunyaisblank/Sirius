@@ -1,0 +1,119 @@
+{
+  "apparatus": {
+    "actions.json": {
+      "bytes": 171951,
+      "sha256": "f215eb8720879a4786d7b01155423b9ae7c6073115a8363b70458cd123f5b52b"
+    },
+    "compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+    },
+    "expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "retention-gate-frozen.json": {
+      "bytes": 1879,
+      "sha256": "b2cb915d29db806d2d856f0143a1c4d80bcc3ed247d414a6cc0839156e436af5"
+    },
+    "run_limb_benefit_slot.py": {
+      "bytes": 664,
+      "sha256": "92ba25fa864aaa307207978f8846735a3728e26acb5938d5e15015d5423150cc"
+    },
+    "run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+    },
+    "software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    }
+  },
+  "archive": "attestations/software-vulkan/4bcd987/multiply64-original-controls",
+  "arithmetic_archive": "attestations/software-vulkan/4bcd987/multiply64-original-arithmetic",
+  "arithmetic_candidate_macro": "SIRIUS_PB32_MULTIPLY64=1",
+  "arithmetic_evidence_commit": "cbebd3e470fa5c0e72b289461a45a81338f16bbb",
+  "arithmetic_manifest_sha256": "2105800f18079aefd8e78a53e411191083a7a7468c30098efc66bbd3196df00a",
+  "baseline_sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856",
+  "candidate_sha256": "9d783a29d125d80da5deddcf7698d9e167ed118b2304278bc1c887d9e3c29f8e",
+  "changed_arrays": [
+    "kCameraFp64Shader",
+    "kCameraPortableFp64Shader",
+    "kCameraPortableShader",
+    "kDenseFp64Shader",
+    "kDensePortableFp64Shader",
+    "kDensePortableShader",
+    "kDopriPhaseFp64Shader",
+    "kDopriPhasePortableFp64Shader",
+    "kDopriPhasePortableNormalSumShader",
+    "kDopriPhasePortableShader",
+    "kEndpointFp64Shader",
+    "kEndpointPortableFp64Shader",
+    "kEndpointPortableNormalSumShader",
+    "kEndpointPortableShader",
+    "kInitializeFp64Shader",
+    "kInitializePortableFp64Shader",
+    "kInitializePortableShader",
+    "kRayCameraFp64Shader",
+    "kRayCameraPortableFp64Shader",
+    "kRayCameraPortableShader",
+    "kTransportFp64Shader",
+    "kTransportPortableFp64Shader",
+    "kTransportPortableNormalSumShader",
+    "kTransportPortableShader"
+  ],
+  "evidence_commit": "bf23b994d658e2a70e9931d6f9a4c1e239044973",
+  "execution_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "gate_sha256": "684a2693362940f4c3a2e7a3651d5eac42214189dacd4b8a05e04aef05bd321a",
+  "historical_execution_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "manifest_sha256": "fc2f642794b6d17be5b614d25d0d5387fd4e5946eaa67b5b715c998bf4544bba",
+  "original_harness_source": {
+    "archive": "attestations/software-vulkan/4bcd987/divide64-original-benefit",
+    "evidence_commit": "7bc252563e1c5f5bc90437f522da555aaca69695",
+    "manifest": {
+      "bytes": 20974,
+      "sha256": "0b3fedb99cc93c236f016b0e9746e606896c774e832d31acb9b809c2fb008783"
+    },
+    "originals": {
+      "finish_trial.py": {
+        "bytes": 5861,
+        "sha256": "142150823fbb4fefe9c810ce8d578746bb1abc6eb1895411dc0d5f879a829e41"
+      },
+      "prepare.py": {
+        "bytes": 17873,
+        "sha256": "02c5673dd58395b6fb20aee124d587fabb2137c4fe878159ba6f70e7db35762d"
+      },
+      "prove_reuse.py": {
+        "bytes": 4229,
+        "sha256": "a12b3c68bfb22dc05d1a4a0803a8148ced67b5f2aaad94de7ccc44af83d4d3a1"
+      }
+    }
+  },
+  "profile_scope": {
+    "canonical_publicCreate_feature_fallback_compatibility_still_unmet_before_production": true,
+    "default_stage7owner": false,
+    "four_timed_roles_seven_stage_families_not7handles": true,
+    "main_arrays_changed": 24,
+    "main_arrays_unchanged": 16,
+    "modules_changed": 24,
+    "modules_unchanged": 11,
+    "original_PB32Divide_and_fallback_unchanged": true,
+    "owner_arrays_unchanged": 2,
+    "program_tables_unchanged": 7,
+    "seven_native_fp64_nonFMA_residual_modules_intentionally_changed": true
+  },
+  "schema": "sirius-multiply64-benefit-prerequisite-pin/v1",
+  "source_freeze_sha256": "5ed44cb13864c98a24beadf669089c2b460a94e16b42212a8bb155173dc21740",
+  "terminal_prerequisite_review": {
+    "bytes": 36432,
+    "sha256": "c150ebd1a8891f1287ff3e763eaf8fa10ea7626a429ca4cd86264b9c615b4831"
+  }
+}

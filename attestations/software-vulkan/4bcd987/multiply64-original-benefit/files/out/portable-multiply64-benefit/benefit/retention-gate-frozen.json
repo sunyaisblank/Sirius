@@ -1,0 +1,36 @@
+{
+  "actions_sha256": "4ae73b18f944bc416782239e31c961cf0a91790216f897cf4adbf219a9697e5e",
+  "all20_gates_required": true,
+  "baseline_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "candidate_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "comparator_sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3",
+  "complete_call_minimum_improvement_percent": 5,
+  "every_inclusive_stage_minimum_improvement_percent": -5,
+  "executables": {
+    "baseline": {
+      "bytes": 10753968,
+      "observer_source_sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3",
+      "path": "bin/linux-gcc/portable-multiply64-benefit/original_baseline_controls",
+      "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856",
+      "source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4"
+    },
+    "candidate": {
+      "bytes": 10701040,
+      "observer_source_sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3",
+      "path": "bin/linux-gcc/portable-multiply64-benefit/original_candidate_controls",
+      "sha256": "9d783a29d125d80da5deddcf7698d9e167ed118b2304278bc1c887d9e3c29f8e",
+      "source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4"
+    }
+  },
+  "launcher_sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342",
+  "observed_instance_api_minimum_improvement_percent": 0,
+  "reader_sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9",
+  "scope": "One original fixed optional64 multiply A1/B1/B2/A2 trial. Original stock host; candidate alone admits Int64. Accepted24/16/0 main/unchanged/owner-changes footprint. Original measured windows and20+2 gates unchanged.",
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "within_slot_repeats": 3
+}

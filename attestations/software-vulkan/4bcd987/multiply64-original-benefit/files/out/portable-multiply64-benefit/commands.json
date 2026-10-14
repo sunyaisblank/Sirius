@@ -1,0 +1,36 @@
+{
+  "admitted": false,
+  "commands": [
+    "python3 -B out/portable-multiply64-benefit/prepare.py",
+    "python3 -B out/portable-multiply64-benefit/prove_reuse.py",
+    "python3 -B out/portable-multiply64-benefit/benefit/run_sequence.py",
+    "python3 -B out/portable-multiply64-benefit/benefit/compare_software.py",
+    "python3 -B out/portable-multiply64-benefit/finish_trial.py"
+  ],
+  "future_bin_root": "bin/linux-gcc/portable-multiply64-benefit",
+  "limits_per_owner": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "original_gate_counts": [
+    20,
+    2
+  ],
+  "pending": [
+    "root confirmation of remote immutable controls evidence tag",
+    "root review of exact source adaptation and final source freeze",
+    "independent source admission before any helper or owner execution",
+    "root scheduling after other controlled workload has retired"
+  ],
+  "repeats_per_family_per_slot": 3,
+  "schema": "sirius-multiply64-benefit-prospective-commands/v1",
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "stop": "First incomplete or failed prerequisite/owner/readback/input join; preserve, no retry. Comparator rejection is the sole fixed-trial outcome.",
+  "timing_scope": "Original windows unchanged; Create and all11 numerical API windows include original measured costs; fixture device negotiation excluded only as original. Full owned process wall retained. No performance samples reused."
+}
