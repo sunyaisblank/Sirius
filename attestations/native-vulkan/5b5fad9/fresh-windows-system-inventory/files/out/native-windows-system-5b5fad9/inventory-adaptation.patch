@@ -1,0 +1,351 @@
+--- attestations/native-vulkan/0fc9eb6/original-fp64-science-and-frame/diagnostic/run_current.py
++++ out/native-windows-system-5b5fad9/run_system.py
+@@ -1,4 +1,4 @@
+-"""Own one original current native invocation; fail closed on uncertainty."""
++"""Own one archived-export native Windows inventory; no test/render/qualification."""
+ from pathlib import Path
+ import hashlib
+ import json
+@@ -10,14 +10,17 @@
+ import xml.etree.ElementTree as ET
+ 
+ sys.dont_write_bytecode = True
++if sys.flags.optimize or os.environ.get('PYTHONOPTIMIZE'): raise RuntimeError('Python assertions must be enabled')
+ ROOT = Path.cwd()
+ WORK = Path(__file__).resolve().parent
++if ROOT != WORK.parents[1]: raise RuntimeError('Run from the canonical checkout')
+ kind, = sys.argv[1:]
+-assert kind in ('inventory', 'science', 'render')
++assert kind == 'inventory'
+ plan = json.loads((WORK / 'plan.json').read_text())
+ binding_path = WORK / 'execution-bindings.json'
+ binding = json.loads(binding_path.read_text())
+-HEAD = plan['source_revision']
++HEAD = plan['runner_source_revision']
++SOURCE = plan['source_revision']
+ signals = []
+ predecessors = {}
+ for number in (signal.SIGINT, signal.SIGTERM):
+@@ -47,7 +50,17 @@
+     assert digest(binding_path) == binding_hash
+ 
+ def win(p):
+-    return subprocess.check_output(['wslpath', '-w', str(p.resolve())], text=True).strip()
++    p = p.resolve()
++    assert p.is_relative_to(ROOT)
++    return plan['windows_checkout_unc'] + '\\' + str(p.relative_to(ROOT)).replace('/', '\\')
++
++def available_kib():
++    rows = dict(line.split(':', 1) for line in Path('/proc/meminfo').read_text().splitlines())
++    return int(rows['MemAvailable'].split()[0])
++
++def input_records():
++    paths = [ROOT / rel for rel in binding['files']] + [binding_path, WORK / 'preparation.json']
++    return {str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p): {'bytes': p.stat().st_size, 'sha256': digest(p)} for p in paths}
+ 
+ def birth(pid):
+     try:
+@@ -56,82 +69,46 @@
+         return None
+ 
+ binding_hash = digest(binding_path)
+-assert binding['source_revision'] == HEAD and binding['whole_array_joins'] == 120
+-owner_review = json.loads((WORK / 'independent-owner-review.json').read_text())
+-assert owner_review['pass'] and owner_review['source_revision'] == HEAD
+-for name in ('run_current.py', 'run_native_control.ps1', 'emergency_native_cleanup.ps1', 'bind_current.py',
+-             'run_terminal_current.py', 'terminal-audit.ps1', 'plan.json'):
+-    p = WORK / name
+-    assert owner_review['reviewed_files'][name] == {'bytes': p.stat().st_size, 'sha256': digest(p)}
+-assert json.loads((WORK / 'native-preregister-readback.json').read_text())['body'] == (WORK / 'native-preregister-comment.md').read_text()
++assert binding['source_revision'] == SOURCE and binding['runner_source_revision'] == HEAD
++assert plan['inventory_owner_seconds'] == 60 and plan['owner_rss_bytes'] == 4294967296
++assert plan['minimum_wsl_available_kib'] == 2097152
++
+ verify()
+ stage = ROOT / binding['stage']
+ output = WORK / 'native' / kind
+ temporary = WORK / 'temp' / kind
+ record_path = WORK / (kind + '-bridge.json')
+ assert not output.exists() and not temporary.exists() and not record_path.exists()
+-if kind != 'inventory':
+-    inventory = json.loads((WORK / 'native/inventory/stdout.log').read_text(encoding='utf-8-sig'))
+-    inventory_bridge = json.loads((WORK / 'inventory-bridge.json').read_text())
+-    assert inventory_bridge['accepted_owner_execution'] and inventory_bridge['completed'] and inventory_bridge['returncode'] == 0
+-    assert inventory_bridge['source_revision'] == HEAD and inventory_bridge['kind'] == 'inventory' and inventory_bridge['binding_sha256'] == binding_hash
+-    inventory_owner = json.loads((WORK / 'native/inventory/owner.json').read_text(encoding='utf-8-sig'))
+-    assert inventory_owner['source_revision'] == inventory_owner['live_source_revision'] == HEAD
+-    assert inventory_owner['source_build_gate_sha256'] == binding['gate_sha256'] and inventory_owner['system_inventory_passed']
+-    device = inventory['backends']['vulkan']['devices'][0]
+-    assert device['name'] == 'AMD Radeon 780M Graphics' and device['supports_fp64'] and device['rounds_fp64_to_nearest']
+-    assert device['preserves_fp32_denormals'] and device['rounds_fp32_to_nearest']
+-if kind == 'render':
+-    science_bridge = json.loads((WORK / 'science-bridge.json').read_text())
+-    assert science_bridge['accepted_owner_execution'] and science_bridge['completed'] and science_bridge['returncode'] == 0
+-    assert science_bridge['source_revision'] == HEAD and science_bridge['kind'] == 'science' and science_bridge['binding_sha256'] == binding_hash
+-    terminal = json.loads((WORK / 'terminal-science-accepted.json').read_text())
+-    assert terminal['pass'] and terminal['record']['bridge'] == science_bridge
+-    assert terminal['record']['owner']['source_revision'] == HEAD
+-    assert terminal['record']['gtest_sha256'] == digest(WORK / 'native/science/gtest.xml')
+-    review = json.loads((WORK / 'independent-science-review.json').read_text())
+-    assert review['pass'] and review['source_revision'] == HEAD and review['binding_sha256'] == binding_hash
+-    for rel in ('science-bridge.json', 'native/science/owner.json', 'native/science/gtest.xml',
+-                'native/science/driver-modules.json', 'terminal-science-accepted.json'):
+-        p = WORK / rel
+-        assert review['reviewed_files'][rel] == {'bytes': p.stat().st_size, 'sha256': digest(p)}
+-if kind != 'inventory':
+-    paths = [WORK / 'inventory-bridge.json', WORK / 'inventory-bridge.stdout', WORK / 'inventory-bridge.stderr',
+-             *[p for p in (WORK / 'native/inventory').rglob('*') if p.is_file()]]
+-    if kind == 'render':
+-        paths += [WORK / 'science-bridge.json', WORK / 'science-bridge.stdout', WORK / 'science-bridge.stderr',
+-                  WORK / 'independent-science-review.json', WORK / 'terminal-science-accepted.json',
+-                  WORK / 'terminal-science.json', WORK / 'terminal-science-bridge.json',
+-                  *[p for p in (WORK / 'native/science').rglob('*') if p.is_file()]]
+-    for p in paths:
+-        predecessors[str(p.relative_to(ROOT))] = {'bytes': p.stat().st_size, 'sha256': digest(p)}
+-    verify()
+-executable = 'sirius' if kind == 'inventory' else ('sirius_backend_tests' if kind == 'science' else 'sirius_render_tests')
++assert not (WORK / 'inputs-before.json').exists() and not (WORK / 'inputs-after.json').exists()
++executable = 'sirius'
+ exe = stage / json.loads((stage / 'generated/sirius/native_build_gate.json').read_text())['tested_artifacts'][executable]['path']
+-case = 'SystemInventory' if kind == 'inventory' else plan[kind + '_case']
+-seconds = plan['inventory_owner_seconds'] if kind == 'inventory' else plan[kind + '_owner_seconds']
++case = 'SystemInventory'
++seconds = plan['inventory_owner_seconds']
+ ps = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
+ argv = [ps, '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', win(WORK / 'run_native_control.ps1'),
+         '-Stage', win(exe.parent), '-Output', win(output), '-Filter', case, '-Seconds', str(seconds),
+         '-RssBytes', str(plan['owner_rss_bytes']), '-TemporaryDirectory', win(temporary), '-BuildRoot', win(stage),
+         '-ExpectedGateSha256', binding['gate_sha256'], '-LiveRevision', HEAD, '-ExecutableName', exe.name,
+         '-InvocationKind', 'SystemInventory' if kind == 'inventory' else 'Control']
+-if kind == 'render':
+-    renders = ROOT / plan['render_output_root']
+-    assert not renders.exists()
+-    argv += ['-RenderDirectory', win(renders)]
+ cleanup_argv = [ps, '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', win(WORK / 'emergency_native_cleanup.ps1'),
+                 '-TemporaryDirectory', win(temporary), '-Output', win(output), '-Receipt', win(WORK / (kind + '-emergency-cleanup.json'))]
+-record = {'source_revision': HEAD, 'kind': kind, 'argv': argv, 'binding_sha256': binding_hash,
++assert argv == binding['inventory_argv'] and cleanup_argv == binding['inventory_cleanup_argv']
++before = input_records()
++write(WORK / 'inputs-before.json', before)
++record = {'source_revision': SOURCE, 'runner_source_revision': HEAD, 'kind': kind, 'argv': argv, 'binding_sha256': binding_hash,
+           'linux_controller_pid': os.getpid(), 'linux_controller_birth': birth(os.getpid()),
+           'predecessor_inputs': predecessors,
+-          'bridge_outer_seconds': plan['linux_bridge_outer_seconds'], 'windows_owner_seconds': seconds,
++          'bridge_outer_seconds': plan['linux_bridge_outer_seconds'], 'windows_owner_seconds': seconds, 'minimum_wsl_available_kib': plan['minimum_wsl_available_kib'],
++          'resource_scope': plan['resource_semantics'],
+           'accepted_owner_execution': False, 'completed': False, 'cleanup_errors': [], 'full_qualification_claimed': False}
+ write(record_path, record)
+ started = time.monotonic()
+ child = None
+ try:
+     assert not signals
++    initial_available = available_kib()
++    record['minimum_sampled_wsl_available_kib'] = initial_available
++    assert initial_available >= plan['minimum_wsl_available_kib'], 'WSL sampled available-memory reserve below 2GiB'
+     with (WORK / (kind + '-bridge.stdout')).open('wb') as out, (WORK / (kind + '-bridge.stderr')).open('wb') as err:
+         child = subprocess.Popen(argv, stdout=out, stderr=err, start_new_session=True)
+         record['linux_child_pid'] = child.pid
+@@ -140,6 +117,9 @@
+         write(record_path, record)
+         while child.poll() is None:
+             assert not signals
++            available = available_kib()
++            record['minimum_sampled_wsl_available_kib'] = min(record.get('minimum_sampled_wsl_available_kib', available), available)
++            assert available >= plan['minimum_wsl_available_kib'], 'WSL sampled available-memory reserve below 2GiB'
+             assert time.monotonic() - started < plan['linux_bridge_outer_seconds'], 'bridge outer diagnostic stop'
+             try:
+                 child.wait(timeout=0.25)
+@@ -180,30 +160,32 @@
+     owner = json.loads((output / 'owner.json').read_text(encoding='utf-8-sig'))
+     assert owner['status'] == 'completed' and owner['returncode'] == 0 and not owner['outer_stop'] and not owner['cleanup_errors']
+     assert owner['owned_process_absent'] and owner['source_build_gate_unchanged'] and owner['test_executable_unchanged']
+-    assert owner['source_revision'] == owner['live_source_revision'] == HEAD and owner['source_build_gate_sha256'] == binding['gate_sha256']
+-    if kind == 'inventory':
+-        assert owner['system_inventory_passed']
+-    else:
+-        assert owner['numerical_control_passed'] and owner['loaded_driver_modules_recorded']
+-        modules = json.loads((output / 'driver-modules.json').read_text(encoding='utf-8-sig'))
+-        assert {m['name'].lower() for m in modules} == {'amdvlk64.dll', 'vulkan-1.dll'}
+-        for m in modules:
+-            p = '/mnt/' + m['path'][0].lower() + m['path'][2:].replace('\\', '/')
+-            expected = next(value for path, value in binding['providers'].items() if path.lower() == p.lower())
+-            assert {'bytes': m['bytes'], 'sha256': m['sha256']} == expected
+-        xml = ET.parse(output / 'gtest.xml')
+-        assert len(xml.findall('.//testcase')) == 1
+-        for node in [xml.getroot(), *xml.findall('.//testsuite')]:
+-            for key in ('failures', 'errors', 'skipped', 'disabled'):
+-                assert int(node.get(key, '0')) == 0
+-        node, = xml.findall('.//testcase')
+-        assert node.get('classname') + '.' + node.get('name') == case and node.get('status') == 'run' and node.get('result') == 'completed'
+-        assert not any(xml.findall('.//' + tag) for tag in ('failure', 'error', 'skipped'))
++    assert owner['source_revision'] == SOURCE and owner['live_source_revision'] == HEAD and owner['source_build_gate_sha256'] == binding['gate_sha256']
++    assert owner['system_inventory_passed'] and not owner['numerical_control_passed']
++    inventory = json.loads((output / 'stdout.log').read_text(encoding='utf-8-sig'))
++    assert inventory['platform'] == 'Windows' and inventory['wsl2'] is False
++    assert inventory['backends']['vulkan']['device_count'] == 1
++    device = inventory['backends']['vulkan']['devices'][0]
++    assert device['name'] == 'AMD Radeon 780M Graphics' and device['kind'] in ('integrated', 'discrete')
++    assert not any(word in (device['driver_name'] + ' ' + device['driver_info']).lower() for word in ('dozen', 'dzn', 'llvmpipe', 'lavapipe'))
+     verify()
+     assert not signals
++    after = input_records()
++    write(WORK / 'inputs-after.json', after)
++    assert before == after
++    record['whole_inputs_unchanged'] = True
+     record['accepted_owner_execution'] = True
+ except BaseException as error:
+     record['postcondition_error'] = repr(error)
++try:
++    after = input_records()
++    write(WORK / 'inputs-after.json', after)
++    record['whole_inputs_unchanged'] = before == after
++    if not record['whole_inputs_unchanged']:
++        record['accepted_owner_execution'] = False
++except BaseException as error:
++    record['accepted_owner_execution'] = False
++    record['input_postcondition_error'] = repr(error)
+ record.update(completed=True, elapsed_seconds=time.monotonic() - started, signals=list(signals))
+ if signals:
+     record['accepted_owner_execution'] = False
+--- attestations/native-vulkan/0fc9eb6/original-fp64-science-and-frame/diagnostic/terminal-audit.ps1
++++ out/native-windows-system-5b5fad9/terminal-audit.ps1
+@@ -1,4 +1,4 @@
+-param([Parameter(Mandatory=$true)][string]$Workspace,[string]$RunName='native-run',[string]$Receipt='native-terminal-audit.json')
++param([Parameter(Mandatory=$true)][string]$Workspace,[string]$RunName='native-run',[string]$Receipt='native-terminal-audit.json',[Parameter(Mandatory=$true)][string]$BuildRoot)
+ $ErrorActionPreference='Stop'
+ $owner=Get-Content -Raw -LiteralPath (Join-Path $Workspace ($RunName+'\owner.json')) | ConvertFrom-Json
+ $births=New-Object 'System.Collections.Generic.List[object]'
+@@ -12,15 +12,21 @@
+  if ($sameBirth) { throw 'Owned execution birth still live' }
+ }
+ $seals=New-Object 'System.Collections.Generic.List[object]'
+-$modules=Get-Content -Raw -LiteralPath (Join-Path $Workspace ($RunName+'\driver-modules.json')) | ConvertFrom-Json
+-foreach ($m in $modules) {
+- $actual=(Get-FileHash -Algorithm SHA256 -LiteralPath $m.path).Hash.ToLowerInvariant()
+- $actualBytes=(Get-Item -LiteralPath $m.path).Length
+- $same=($actual -eq $m.sha256 -and $actualBytes -eq $m.bytes)
+- $seals.Add([ordered]@{path=$m.path;expected_sha256=$m.sha256;post_sha256=$actual;expected_bytes=$m.bytes;post_bytes=$actualBytes;unchanged=$same})
+- if (!$same) { throw 'Loaded provider module post-seal differs' }
++$modulePath=Join-Path $Workspace ($RunName+'\driver-modules.json')
++$actualModulesObserved=Test-Path -LiteralPath $modulePath
++if ($actualModulesObserved) {
++ $modules=Get-Content -Raw -LiteralPath $modulePath | ConvertFrom-Json
++ foreach ($m in $modules) {
++  $actual=(Get-FileHash -Algorithm SHA256 -LiteralPath $m.path).Hash.ToLowerInvariant()
++  $actualBytes=(Get-Item -LiteralPath $m.path).Length
++  $same=($actual -eq $m.sha256 -and $actualBytes -eq $m.bytes)
++  $seals.Add([ordered]@{path=$m.path;expected_sha256=$m.sha256;post_sha256=$actual;expected_bytes=$m.bytes;post_bytes=$actualBytes;unchanged=$same})
++  if (!$same) { throw 'Loaded provider module post-seal differs' }
++ }
++ if ($seals.Count -ne 2) { throw 'Observed module receipt must contain both loader and AMD provider' }
+ }
+-if ($seals.Count -ne 2) { throw 'Expected exactly two actual loaded module seals' }
++$loader=Join-Path $env:WINDIR 'System32\vulkan-1.dll'
++$installedLoader=[ordered]@{path=$loader;bytes=(Get-Item -LiteralPath $loader).Length;sha256=(Get-FileHash -Algorithm SHA256 -LiteralPath $loader).Hash.ToLowerInvariant();version=(Get-Item -LiteralPath $loader).VersionInfo.FileVersion;scope='Installed file input only; does not establish it was mapped by the inventory process.'}
+ $exeHash=(Get-FileHash -Algorithm SHA256 -LiteralPath $owner.test_executable).Hash.ToLowerInvariant()
+ if ($exeHash -ne $owner.test_executable_sha256) { throw 'Owned test executable post-seal differs' }
+ $processes=@(Get-CimInstance Win32_Process -OperationTimeoutSec 20)
+@@ -29,12 +35,12 @@
+  if ([int]$p.ProcessId -eq $PID) { continue }
+  if (!$p.CommandLine -or !$p.ExecutablePath) { $hidden++ }
+  if ($p.Name -ieq 'csc.exe') { $compilers.Add([ordered]@{pid=$p.ProcessId;parent_pid=$p.ParentProcessId;creation_date=$p.CreationDate.ToUniversalTime().ToString('o');executable=$p.ExecutablePath;command_line=$p.CommandLine}) }
+- if (($p.CommandLine -and $p.CommandLine.Contains($Workspace)) -or ($p.ExecutablePath -and $p.ExecutablePath.Contains($Workspace))) {
++ if (($p.CommandLine -and $p.CommandLine.Contains($Workspace)) -or ($p.ExecutablePath -and $p.ExecutablePath.Contains($Workspace)) -or ($p.CommandLine -and $p.CommandLine.Contains($BuildRoot)) -or ($p.ExecutablePath -and $p.ExecutablePath.Contains($BuildRoot))) {
+   $matches.Add([ordered]@{pid=$p.ProcessId;creation_date=$p.CreationDate.ToUniversalTime().ToString('o');executable=$p.ExecutablePath;command_line=$p.CommandLine})
+  }
+ }
+ if ($compilers.Count) { throw 'Accessible CSharp compiler remains live' }
+ if ($matches.Count) { throw 'Accessible native consumer still references scratch workspace' }
+-$v=[ordered]@{schema_version=1;kind='terminal ownership/provider seal audit';run=$RunName;births=$births.ToArray();loaded_module_post_seals=$seals.ToArray();owned_executable_post_seal=[ordered]@{path=$owner.test_executable;sha256=$exeHash;unchanged=$true};owned_births_absent=$true;all_two_module_seals_match=$true;consumer_scan=[ordered]@{processes=$processes.Count;hidden_field_records=$hidden;matches=$matches.ToArray();accessible_compilers=$compilers.ToArray()};scope='Normal completion required. Accessible command/executable scan only; no handle enumeration, unconditional compiler-descendant guard ownership or all-consumer absence claim.'}
++$v=[ordered]@{schema_version=1;kind='terminal ownership/provider seal audit';run=$RunName;births=$births.ToArray();loaded_module_post_seals=$seals.ToArray();owned_executable_post_seal=[ordered]@{path=$owner.test_executable;sha256=$exeHash;unchanged=$true};owned_births_absent=$true;all_observed_module_seals_match=$true;actual_loaded_modules_observed=$actualModulesObserved;installed_loader_input=$installedLoader;consumer_scan=[ordered]@{processes=$processes.Count;hidden_field_records=$hidden;matches=$matches.ToArray();accessible_compilers=$compilers.ToArray()};scope='Inventory only; absent short-lived module capture is explicitly incomplete loaded-provider evidence. Installed loader bytes do not replace it. Normal completion required. Accessible command/executable scan only; no handle enumeration, unconditional compiler-descendant guard ownership or all-consumer absence claim.'}
+ $v | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $Workspace $Receipt) -Encoding UTF8
+ [pscustomobject]@{run=$RunName;owned_births_absent=$true;module_seals=$seals.Count;accessible_processes=$processes.Count;hidden_field_records=$hidden;consumer_matches=$matches.Count;accessible_compilers=$compilers.Count} | ConvertTo-Json -Compress
+--- attestations/native-vulkan/0fc9eb6/original-fp64-science-and-frame/diagnostic/run_terminal_current.py
++++ out/native-windows-system-5b5fad9/run_terminal.py
+@@ -3,41 +3,52 @@
+ import json,os,signal,subprocess,sys,time
+ import hashlib
+ sys.dont_write_bytecode=True
++if sys.flags.optimize or os.environ.get('PYTHONOPTIMIZE'): raise RuntimeError('Python assertions must be enabled')
+ ROOT=Path.cwd();WORK=Path(__file__).resolve().parent
++if ROOT != WORK.parents[1]: raise RuntimeError('Run from the canonical checkout')
+ def document(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+ def read_case(mode,label,case,bindings):
+- assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==bindings['source_revision']
++ assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==bindings['runner_source_revision']
+  assert not subprocess.check_output(['git','status','--porcelain'])
+  bridge=document(WORK/(case+'-bridge.json'));owner=document(WORK/'native'/case/'owner.json')
+  assert bridge['accepted_owner_execution'] and bridge['completed'] and bridge['returncode']==0
+  assert bridge['binding_sha256']==sha(WORK/'execution-bindings.json')
+  assert owner['status']=='completed' and owner['returncode']==0 and not owner['outer_stop'] and not owner['cleanup_errors']
+- assert owner['owned_process_absent'] and owner['numerical_control_passed'] and owner['loaded_driver_modules_recorded']
+- assert owner['source_revision']==owner['live_source_revision']==bindings['source_revision']
++ assert owner['owned_process_absent'] and owner['system_inventory_passed'] and not owner['numerical_control_passed']
++ assert owner['source_revision']==bindings['source_revision'] and owner['live_source_revision']==bindings['runner_source_revision']
+  for rel,item in bindings['files'].items():
+   p=Path(rel) if rel.startswith('/') else ROOT/rel
+   assert {'bytes':p.stat().st_size,'sha256':sha(p)}==item,rel
+- receipts=[WORK/(case+'-bridge.json'),WORK/'native'/case/'owner.json',WORK/'native'/case/'gtest.xml',WORK/'native'/case/'driver-modules.json']
++ assert bridge['whole_inputs_unchanged']
++ assert (WORK/'inputs-before.json').read_bytes()==(WORK/'inputs-after.json').read_bytes()
++ for rel,item in document(WORK/'inputs-before.json').items():
++  p=Path(rel) if rel.startswith('/') else ROOT/rel
++  assert {'bytes':p.stat().st_size,'sha256':sha(p)}==item,rel
++ receipts=[WORK/(case+'-bridge.json'),WORK/'native'/case/'owner.json',WORK/'native'/case/'stdout.log',WORK/'inputs-before.json',WORK/'inputs-after.json']
++ if (WORK/'native'/case/'driver-modules.json').exists(): receipts.append(WORK/'native'/case/'driver-modules.json')
+  whole_inputs={str(p.relative_to(WORK)):{'bytes':p.stat().st_size,'sha256':sha(p)} for p in receipts}
+- return {'owner':owner,'bridge':bridge,'gtest_sha256':sha(WORK/'native'/case/'gtest.xml'),'whole_inputs':whole_inputs}
++ return {'owner':owner,'bridge':bridge,'inventory_sha256':sha(WORK/'native'/case/'stdout.log'),'whole_inputs':whole_inputs}
+ controller_signals=[]
+ def interrupted(signum,frame):controller_signals.append(signum)
+ signal.signal(signal.SIGTERM,interrupted);signal.signal(signal.SIGINT,interrupted)
+-case,=sys.argv[1:];assert case in ('science','render');mode='current';label=case
++case,=sys.argv[1:];assert case=='inventory';mode='current';label=case
+ binding_path=WORK/'execution-bindings.json'
+ bindings=document(binding_path);binding_sha256=sha(binding_path)
+ observed=read_case(mode,label,case,bindings)
+ prefix='terminal-'+case
+ receipt=WORK/(prefix+'.json');bridge=WORK/(prefix+'-bridge.json')
+ temp=WORK/'temp'/prefix;assert not temp.exists() and not receipt.exists() and not bridge.exists();temp.mkdir(parents=True)
+-def win(path):return subprocess.check_output(['wslpath','-w',str(path.resolve())],text=True).strip()
++def win(path):
++ path=path.resolve();assert path.is_relative_to(ROOT)
++ return bindings['windows_checkout_unc']+'\\'+str(path.relative_to(ROOT)).replace('/','\\')
+ def quote(word):return "'"+word.replace("'","''")+"'"
+ audit=win(WORK/'terminal-audit.ps1');workspace=win(WORK);bootstrap=win(temp/'bootstrap.json');run=case
+-command="$ErrorActionPreference='Stop';$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only terminal auditor bootstrap, no Add-Type or scientific launch'}|ConvertTo-Json|Set-Content -LiteralPath "+quote(bootstrap)+" -Encoding UTF8;& "+quote(audit)+" -Workspace "+quote(workspace)+" -RunName "+quote('native/'+run)+" -Receipt "+quote(receipt.name)
++command="$ErrorActionPreference='Stop';$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only terminal auditor bootstrap, no Add-Type or scientific launch'}|ConvertTo-Json|Set-Content -LiteralPath "+quote(bootstrap)+" -Encoding UTF8;& "+quote(audit)+" -Workspace "+quote(workspace)+" -RunName "+quote('native/'+run)+" -Receipt "+quote(receipt.name)+' -BuildRoot '+quote(win(ROOT/bindings['stage']))
+ arguments=['/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-Command',command]
+ cleanup_args=[arguments[0],'-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',win(WORK/'emergency_native_cleanup.ps1'),'-TemporaryDirectory',win(temp),'-Output',win(temp),'-Receipt',win(WORK/(prefix+'-emergency-cleanup.json'))]
+-record={'mode':mode,'label':label,'case':case,'read_case_pass':True,'observer_sha256':sha(Path(__file__)),'audit_script_sha256':sha(WORK/'terminal-audit.ps1'),'arguments':arguments,'deadline_seconds':60,'outer_stop':False,'errors':[],'started_epoch':time.time(),'qualification_claimed':False,'scope':'Actual normal owner completion and exact scientific XML checked before bounded read-only Windows birth/provider/accessible-consumer audit. Hidden fields/handles/global or unconditional descendant absence not asserted.'}
++assert arguments==bindings['terminal_argv'] and cleanup_args==bindings['terminal_cleanup_argv']
++record={'mode':mode,'label':label,'case':case,'read_case_pass':True,'observer_sha256':sha(Path(__file__)),'audit_script_sha256':sha(WORK/'terminal-audit.ps1'),'arguments':arguments,'deadline_seconds':60,'outer_stop':False,'errors':[],'started_epoch':time.time(),'qualification_claimed':False,'scope':'Actual normal inventory owner completion and exact source/input identities checked before bounded read-only Windows birth/provider/accessible-consumer audit. Hidden fields/handles/global or unconditional descendant absence not asserted.'}
+ started=time.monotonic()
+ with (WORK/(prefix+'.stdout')).open('wb') as out,(WORK/(prefix+'.stderr')).open('wb') as err:
+  assert not controller_signals,('interrupted before spawn',controller_signals)
+@@ -84,14 +95,14 @@
+ record['accepted']=code==0 and not record['outer_stop'] and not record['errors'] and record['linux_child_birth_absent']
+ if record['accepted']:
+  try:
+-  terminal=document(receipt);assert terminal['owned_births_absent'] and terminal['all_two_module_seals_match']
++  terminal=document(receipt);assert terminal['owned_births_absent'] and terminal['all_observed_module_seals_match']
+   assert not terminal['consumer_scan']['matches'] and not terminal['consumer_scan']['accessible_compilers']
+   record['terminal_receipt_sha256']=sha(receipt)
+   record['bootstrap']=document(temp/'bootstrap.json')
+   assert sha(binding_path)==binding_sha256
+   assert read_case(mode,label,case,bindings)==observed
+   assert not controller_signals
+-  record['source_binding_owner_bridge_xml_post_sealed']=True
++  record['source_binding_owner_bridge_inventory_post_sealed']=True
+  except BaseException as error:
+   record['accepted']=False;record['errors'].append('post-audit: '+repr(error))
+ if controller_signals:
+@@ -101,6 +112,6 @@
+ bridge.write_text(json.dumps(record,indent=2)+'\n')
+ print(json.dumps({k:record[k] for k in ('mode','label','case','returncode','elapsed_seconds','accepted')}),flush=True)
+ assert record['accepted']
+-result={'pass':True,'case':case,'mode':mode,'label':label,'record':observed,'terminal_receipt':str(receipt.relative_to(ROOT)),'terminal_receipt_sha256':sha(receipt),'terminal_bridge_sha256':sha(bridge),'scope':'One finite numerical/native owner/provider acceptance with limited accessible terminal census, no performance/full-frame/full qualification claim.'}
++result={'pass':True,'case':case,'mode':mode,'label':label,'record':observed,'terminal_receipt':str(receipt.relative_to(ROOT)),'terminal_receipt_sha256':sha(receipt),'terminal_bridge_sha256':sha(bridge),'scope':'One finite native inventory owner/observed-provider acceptance with limited accessible terminal census, no performance/full-frame/full qualification claim.'}
+ assert not controller_signals,('controller signals before acceptance publication',controller_signals)
+ output=WORK/(prefix+'-accepted.json');assert not output.exists();output.write_text(json.dumps(result,indent=2)+'\n')

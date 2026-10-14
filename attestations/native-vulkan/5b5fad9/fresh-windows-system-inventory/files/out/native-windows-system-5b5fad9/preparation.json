@@ -1,0 +1,86 @@
+{
+  "archive": {
+    "all_member_pins_verified": true,
+    "artifact_id": 11901703386,
+    "member_count": 40,
+    "path": "attestations/native-vulkan/build-domains-5b5fad9",
+    "run_id": 38577826600,
+    "zip": {
+      "bytes": 56546068,
+      "sha256": "24b09db18d6989856e438c6c3dcfce941b5d87463dca7812ed2be199f7f093db"
+    }
+  },
+  "candidate": {
+    "bytes": 7889920,
+    "path": "bin/windows-msvc/native-system-5b5fad9/src/sirius/app/Release/sirius.exe",
+    "sha256": "d5ff43745bf2b10da3cd34d3d22aa7bb865c05d56f4827a0a8104ca850248107"
+  },
+  "commands": [
+    "python3 -B out/native-windows-system-5b5fad9/run_system.py inventory",
+    "python3 -B out/native-windows-system-5b5fad9/run_terminal.py inventory"
+  ],
+  "executed": false,
+  "fresh_outputs": [
+    "native/inventory",
+    "temp/inventory",
+    "inventory-bridge.json",
+    "inputs-before.json",
+    "inputs-after.json",
+    "terminal-inventory.json",
+    "terminal-inventory-bridge.json",
+    "terminal-inventory-accepted.json"
+  ],
+  "frozen_static_inputs": 115,
+  "module_provenance_limit": "Actual module receipt is optional for this short inventory. If observed, recheck its exact bytes. Otherwise record incomplete actual-loaded-provider evidence; installed-loader file identity is a distinct input observation.",
+  "native_source_build_performed": false,
+  "prepared_only": true,
+  "product_difference_is_only_nonproduct_files": {
+    "export": [
+      ".github/workflows/ci.yml",
+      "README.md",
+      "scripts/diagnose-macos-retained.py",
+      "scripts/governance/build_policy.py",
+      "scripts/macos_metal_probe.py",
+      "scripts/macos_moltenvk_integration.py",
+      "scripts/macos_moltenvk_provider.py",
+      "scripts/macos_vulkan_identity.py",
+      "scripts/validate-native-runtime.py"
+    ],
+    "runner": [
+      ".github/workflows/ci.yml",
+      "CMakePresets.json",
+      "README.md",
+      "scripts/diagnose-macos-retained.py",
+      "scripts/governance/build_policy.py",
+      "scripts/macos_metal_probe.py",
+      "scripts/macos_moltenvk_integration.py",
+      "scripts/macos_moltenvk_provider.py",
+      "scripts/macos_vulkan_identity.py",
+      "scripts/validate-native-runtime.py"
+    ]
+  },
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false,
+  "resource_semantics": "Windows native Sirius WorkingSet64 sampled by the original PowerShell owner,4GiB; native-child elapsed guard60s with original bounded WaitForExit/cleanup overhead. Linux bridge480s includes PowerShell/Add-Type/bootstrap/owner overhead, plus sampled WSL MemAvailable2GiB reserve. WSL reserve is not Windows-global available memory, and Linux shim RSS is not the native process RSS. PowerShell/compiler aggregate RSS is not claimed. Terminal read-only observer has separate60s plus bounded cleanup.",
+  "reused_source": {
+    "array_correction": "Explicit foreach over decoded module records retained; no outer array-valued record wrapper.",
+    "emergency_cleanup_byte_identical": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "historical_source": "attestations/native-vulkan/0fc9eb6/original-fp64-science-and-frame/diagnostic",
+    "native_owner_byte_identical": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    }
+  },
+  "runner_source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "runtime_domain_admitted": false,
+  "schema": "sirius-native-windows-system-preparation-v1",
+  "scope": "One fresh archived5b5 native --json info system only; no test, ray dispatch, render, UI, readiness, domain, performance or qualification claim. Historical producer5b5 and current clean runner46 remain separate.",
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "whole_input_bindings": {
+    "bytes": 27954,
+    "sha256": "5cbdbca811f54a2b654e359b3667c7cbdda1f3c65f55935e5b17b413c7710f1e"
+  }
+}

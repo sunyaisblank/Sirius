@@ -1,0 +1,20 @@
+{
+  "inventory_owner_seconds": 60,
+  "linux_bridge_outer_seconds": 480,
+  "loaded_module_limit": "Actual module receipt is optional for this short inventory. If observed, recheck its exact bytes. Otherwise record incomplete actual-loaded-provider evidence; installed-loader file identity is a distinct input observation.",
+  "minimum_wsl_available_kib": 2097152,
+  "owner_rss_bytes": 4294967296,
+  "prospective_commands": [
+    "python3 -B out/native-windows-system-5b5fad9/run_system.py inventory",
+    "python3 -B out/native-windows-system-5b5fad9/run_terminal.py inventory"
+  ],
+  "resource_semantics": "Windows native Sirius WorkingSet64 sampled by the original PowerShell owner,4GiB; native-child elapsed guard60s with original bounded WaitForExit/cleanup overhead. Linux bridge480s includes PowerShell/Add-Type/bootstrap/owner overhead, plus sampled WSL MemAvailable2GiB reserve. WSL reserve is not Windows-global available memory, and Linux shim RSS is not the native process RSS. PowerShell/compiler aggregate RSS is not claimed. Terminal read-only observer has separate60s plus bounded cleanup.",
+  "runner_source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "runtime_claimed": false,
+  "schema": "sirius-native-windows-system-plan-v1",
+  "scope": "One fresh archived5b5 native --json info system only; no test, ray dispatch, render, UI, readiness, domain, performance or qualification claim. Historical producer5b5 and current clean runner46 remain separate.",
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "terminal_observer_seconds": 60,
+  "unchanged_failed_frame_retry": false,
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius"
+}

@@ -1,0 +1,166 @@
+{
+  "accessible_terminal_census": {
+    "accessible_compilers": [],
+    "hidden_field_records": 174,
+    "matches": [],
+    "processes": 275
+  },
+  "actual_loaded_module_evidence": {
+    "captured": false,
+    "complete": false,
+    "installed_loader_is_not_loaded_module_evidence": true,
+    "module_post_seals": []
+  },
+  "bridge": {
+    "limit_seconds": 480,
+    "minimum_sampled_wsl_available_kib": 18620596,
+    "native_process_rss_is_not_linux_shim_rss": true,
+    "seconds": 6.3043651309999404,
+    "wsl_reserve_kib": 2097152
+  },
+  "census_limit": "Visible command/executable fields only;174 records have hidden fields. No global consumer, hidden-handle or unconditional compiler-descendant absence claim.",
+  "claims": {
+    "fresh_native_access_and_reported_inventory": true,
+    "full_qualification": false,
+    "numerical_control": false,
+    "performance_benefit": false,
+    "render_or_ui": false,
+    "runtime_domain_admitted": false
+  },
+  "exact_candidate": {
+    "bytes": 7889920,
+    "path": "bin/windows-msvc/native-system-5b5fad9/src/sirius/app/Release/sirius.exe",
+    "sha256": "d5ff43745bf2b10da3cd34d3d22aa7bb865c05d56f4827a0a8104ca850248107"
+  },
+  "execution_by_reviewer": false,
+  "hashes": {
+    "execution-bindings.json": {
+      "bytes": 27954,
+      "sha256": "5cbdbca811f54a2b654e359b3667c7cbdda1f3c65f55935e5b17b413c7710f1e"
+    },
+    "independent-source-review.json": {
+      "bytes": 3711,
+      "sha256": "77ab205106a55a44c80041513f534fff1aa56713a840212bde281d0f47121201"
+    },
+    "inputs-after.json": {
+      "bytes": 21947,
+      "sha256": "689c4d04a0a3830535e80850a84c22ac1f634398fd52b9d64b8e98bec7b9194f"
+    },
+    "inputs-before.json": {
+      "bytes": 21947,
+      "sha256": "689c4d04a0a3830535e80850a84c22ac1f634398fd52b9d64b8e98bec7b9194f"
+    },
+    "inventory-bridge.json": {
+      "bytes": 2557,
+      "sha256": "7b47635851c68886cf635b9e4342e35c598a75741b570e0747e938ffa00eff7b"
+    },
+    "native/inventory/memory.json": {
+      "bytes": 407,
+      "sha256": "245ddcb79f7c9160934980272cd87de94aca952f40d9c299c134f2af83299438"
+    },
+    "native/inventory/owner.json": {
+      "bytes": 2953,
+      "sha256": "6e3bf0a5ce7080a989edcd6dc789fd4d064b31068d693fea8113522d27a94395"
+    },
+    "native/inventory/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "native/inventory/stdout.log": {
+      "bytes": 1220,
+      "sha256": "2fa1c434bc565f76dd4a35af48bd0c15c9f79cabfbff43c2c7961fa0afce922f"
+    },
+    "preparation.json": {
+      "bytes": 3969,
+      "sha256": "f3e3d1bb99dfd3135315f572ffa17405f4aaa1a2a144bc5a51d0c8c2ee06e2a5"
+    },
+    "terminal-inventory-accepted.json": {
+      "bytes": 6868,
+      "sha256": "c1a499f92cb77cde9134747a843d6d539389f8a45531bd1026b8eff5ac72bae9"
+    },
+    "terminal-inventory-bridge.json": {
+      "bytes": 2300,
+      "sha256": "166d3b52f514a1a25a94acac6c9551b915fe92c9ccc4c81fed231df8b7ed14e1"
+    },
+    "terminal-inventory.json": {
+      "bytes": 2630,
+      "sha256": "df405a873b9db30703367c3f8ad375850150339aa8d7d3de1c3a5461fd98d348"
+    }
+  },
+  "independent_of_execution_operator": true,
+  "independent_of_packet_author": false,
+  "input_before_after_current_comparisons": 117,
+  "installed_loader_input": {
+    "bytes": 1719408,
+    "path": "C:\\WINDOWS\\System32\\vulkan-1.dll",
+    "scope": "Installed file input only; does not establish it was mapped by the inventory process.",
+    "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a",
+    "version": "1.4.341.0"
+  },
+  "native_owner": {
+    "births_retired": [
+      {
+        "kind": "owner",
+        "owned_birth_absent": true,
+        "pid": 4628,
+        "pid_currently_live": false,
+        "recorded_start_utc": "2026-10-14T20:06:17.8895572Z"
+      },
+      {
+        "kind": "test",
+        "owned_birth_absent": true,
+        "pid": 16872,
+        "pid_currently_live": false,
+        "recorded_start_utc": "2026-10-14T20:06:22.0684651Z"
+      }
+    ],
+    "exit": 0,
+    "held_handle_exit_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "memory_samples": 3,
+    "native_guard_seconds": 60,
+    "native_rss_guard_bytes": 4294967296,
+    "peak_sampled_rss_bytes": 11042816,
+    "seconds": 2.2356388,
+    "status": "completed"
+  },
+  "original_query": [
+    "--json",
+    "info",
+    "system"
+  ],
+  "passed": true,
+  "reported_device": {
+    "api_version": 4211037,
+    "device_id": 6400,
+    "device_local_bytes": 34027667456,
+    "driver_id": 1,
+    "driver_info": "26.8.1 (LLPC)",
+    "driver_name": "AMD proprietary driver",
+    "index": 0,
+    "kind": "integrated",
+    "name": "AMD Radeon 780M Graphics",
+    "preserves_fp32_denormals": true,
+    "render_memory_bytes": 17013800960,
+    "rounds_fp32_to_nearest": true,
+    "rounds_fp64_to_nearest": true,
+    "supports_fp64": true,
+    "vendor_id": 4098
+  },
+  "resource_scope": "Windows native Sirius WorkingSet64 sampled by the original PowerShell owner,4GiB; native-child elapsed guard60s with original bounded WaitForExit/cleanup overhead. Linux bridge480s includes PowerShell/Add-Type/bootstrap/owner overhead, plus sampled WSL MemAvailable2GiB reserve. WSL reserve is not Windows-global available memory, and Linux shim RSS is not the native process RSS. PowerShell/compiler aggregate RSS is not claimed. Terminal read-only observer has separate60s plus bounded cleanup.",
+  "review_role": "Packet author performing passive terminal consistency audit of root's actual run: independent of execution operator, not independent of packet author. Source admission was independently reviewed by sanitizer_gate_contract.",
+  "reviewed_utc": "2026-10-14T20:08:24.121061+00:00",
+  "reviewer": "/root/forensic_obligations",
+  "reviewer_prepared_packet": true,
+  "runner_source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "schema": "sirius-native-windows-system-passive-terminal-review-v1",
+  "scope": "One successful native Windows inventory of the exact archived5b5 candidate on the current46 diagnostic runner. Reported physical-device features are inventory, not numerical precision validation or runtime/domain/render/viewer qualification.",
+  "source_admission_independently_reviewed_by": "/root/sanitizer_gate_contract",
+  "source_admission_review": "independent-source-review.json",
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "static_pins": 115,
+  "terminal_observer": {
+    "limit_seconds": 60,
+    "linux_birth_absent": true,
+    "seconds": 2.255235566997726
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "mode": "current",
+  "label": "inventory",
+  "case": "inventory",
+  "read_case_pass": true,
+  "observer_sha256": "d0c06987678b77bea87cc7f5ceb7bde508374427c463c9bde7cc9c3c3360e503",
+  "audit_script_sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+  "arguments": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only terminal auditor bootstrap, no Add-Type or scientific launch'}|ConvertTo-Json|Set-Content -LiteralPath '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-system-5b5fad9\\temp\\terminal-inventory\\bootstrap.json' -Encoding UTF8;& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-system-5b5fad9\\terminal-audit.ps1' -Workspace '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-system-5b5fad9' -RunName 'native/inventory' -Receipt 'terminal-inventory.json' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-system-5b5fad9'"
+  ],
+  "deadline_seconds": 60,
+  "outer_stop": false,
+  "errors": [],
+  "started_epoch": 1792008384.9215367,
+  "qualification_claimed": false,
+  "scope": "Actual normal inventory owner completion and exact source/input identities checked before bounded read-only Windows birth/provider/accessible-consumer audit. Hidden fields/handles/global or unconditional descendant absence not asserted.",
+  "linux_child_pid": 371632,
+  "linux_child_birth": "5778773",
+  "controller_signals": [],
+  "returncode": 0,
+  "elapsed_seconds": 2.255235566997726,
+  "linux_child_birth_absent": true,
+  "accepted": true,
+  "terminal_receipt_sha256": "df405a873b9db30703367c3f8ad375850150339aa8d7d3de1c3a5461fd98d348",
+  "bootstrap": {
+    "owner_start_time_utc": "2026-10-14T20:06:24.9477494Z",
+    "scope": "Read-only terminal auditor bootstrap, no Add-Type or scientific launch",
+    "owner_pid": 17672,
+    "expected_test_executable": ""
+  },
+  "source_binding_owner_bridge_inventory_post_sealed": true
+}

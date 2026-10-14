@@ -1,0 +1,145 @@
+{
+  "pass": true,
+  "case": "inventory",
+  "mode": "current",
+  "label": "inventory",
+  "record": {
+    "owner": {
+      "schema_version": 1,
+      "kind": "bounded-native-Windows-control",
+      "start_utc": "2026-10-14T20:06:20.1607279Z",
+      "owner_pid": 4628,
+      "owner_start_time_utc": "2026-10-14T20:06:17.8895572Z",
+      "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-system-5b5fad9\\src\\sirius\\app\\Release\\sirius.exe",
+      "test_executable_sha256": "d5ff43745bf2b10da3cd34d3d22aa7bb865c05d56f4827a0a8104ca850248107",
+      "arguments": [
+        "--json",
+        "info",
+        "system"
+      ],
+      "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-system-5b5fad9\\src\\sirius\\app\\Release",
+      "outer_guard_seconds": 60,
+      "rss_guard_bytes": 4294967296,
+      "outer_stop": false,
+      "status": "completed",
+      "numerical_control_passed": false,
+      "expected_cases": [
+        "SystemInventory"
+      ],
+      "qualification_claimed": false,
+      "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+      "invocation_kind": "SystemInventory",
+      "system_inventory_passed": true,
+      "environment": {
+        "VK_DRIVER_FILES": null,
+        "VK_ICD_FILENAMES": null,
+        "VK_ADD_DRIVER_FILES": null,
+        "SIRIUS_VULKAN_DEVICE": null,
+        "SIRIUS_PRECISION": null,
+        "SIRIUS_MEMORY_BUDGET_MB": null,
+        "SIRIUS_DISPATCH_TARGET_MS": null,
+        "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-system-5b5fad9\\temp\\inventory",
+        "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-system-5b5fad9\\temp\\inventory",
+        "TMPDIR": null
+      },
+      "test_pid": 16872,
+      "test_start_time_utc": "2026-10-14T20:06:22.0684651Z",
+      "returncode": 0,
+      "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+      "owned_process_absent": true,
+      "end_utc": "2026-10-14T20:06:22.4250760Z",
+      "elapsed_seconds": 2.2356388,
+      "peak_sampled_rss_bytes": 11042816,
+      "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+      "live_source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+      "source_build_gate_sha256": "691415235c954d19c7419733600a6582597cef81fe0d8d786648a840495bb048",
+      "source_build_gate_unchanged": true,
+      "loaded_driver_modules_recorded": false,
+      "test_executable_unchanged": true,
+      "cleanup_errors": []
+    },
+    "bridge": {
+      "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+      "runner_source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+      "kind": "inventory",
+      "argv": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-system-5b5fad9\\run_native_control.ps1",
+        "-Stage",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-system-5b5fad9\\src\\sirius\\app\\Release",
+        "-Output",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-system-5b5fad9\\native\\inventory",
+        "-Filter",
+        "SystemInventory",
+        "-Seconds",
+        "60",
+        "-RssBytes",
+        "4294967296",
+        "-TemporaryDirectory",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-system-5b5fad9\\temp\\inventory",
+        "-BuildRoot",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-system-5b5fad9",
+        "-ExpectedGateSha256",
+        "691415235c954d19c7419733600a6582597cef81fe0d8d786648a840495bb048",
+        "-LiveRevision",
+        "46a9599a0cb30b0667e09838eac7a87690e982e4",
+        "-ExecutableName",
+        "sirius.exe",
+        "-InvocationKind",
+        "SystemInventory"
+      ],
+      "binding_sha256": "5cbdbca811f54a2b654e359b3667c7cbdda1f3c65f55935e5b17b413c7710f1e",
+      "linux_controller_pid": 366998,
+      "linux_controller_birth": "5777992",
+      "predecessor_inputs": {},
+      "bridge_outer_seconds": 480,
+      "windows_owner_seconds": 60,
+      "minimum_wsl_available_kib": 2097152,
+      "resource_scope": "Windows native Sirius WorkingSet64 sampled by the original PowerShell owner,4GiB; native-child elapsed guard60s with original bounded WaitForExit/cleanup overhead. Linux bridge480s includes PowerShell/Add-Type/bootstrap/owner overhead, plus sampled WSL MemAvailable2GiB reserve. WSL reserve is not Windows-global available memory, and Linux shim RSS is not the native process RSS. PowerShell/compiler aggregate RSS is not claimed. Terminal read-only observer has separate60s plus bounded cleanup.",
+      "accepted_owner_execution": true,
+      "completed": true,
+      "cleanup_errors": [],
+      "full_qualification_claimed": false,
+      "minimum_sampled_wsl_available_kib": 18620596,
+      "linux_child_pid": 367001,
+      "linux_child_birth": "5778065",
+      "returncode": 0,
+      "linux_child_birth_absent": true,
+      "whole_inputs_unchanged": true,
+      "elapsed_seconds": 6.3043651309999404,
+      "signals": []
+    },
+    "inventory_sha256": "2fa1c434bc565f76dd4a35af48bd0c15c9f79cabfbff43c2c7961fa0afce922f",
+    "whole_inputs": {
+      "inventory-bridge.json": {
+        "bytes": 2557,
+        "sha256": "7b47635851c68886cf635b9e4342e35c598a75741b570e0747e938ffa00eff7b"
+      },
+      "native/inventory/owner.json": {
+        "bytes": 2953,
+        "sha256": "6e3bf0a5ce7080a989edcd6dc789fd4d064b31068d693fea8113522d27a94395"
+      },
+      "native/inventory/stdout.log": {
+        "bytes": 1220,
+        "sha256": "2fa1c434bc565f76dd4a35af48bd0c15c9f79cabfbff43c2c7961fa0afce922f"
+      },
+      "inputs-before.json": {
+        "bytes": 21947,
+        "sha256": "689c4d04a0a3830535e80850a84c22ac1f634398fd52b9d64b8e98bec7b9194f"
+      },
+      "inputs-after.json": {
+        "bytes": 21947,
+        "sha256": "689c4d04a0a3830535e80850a84c22ac1f634398fd52b9d64b8e98bec7b9194f"
+      }
+    }
+  },
+  "terminal_receipt": "out/native-windows-system-5b5fad9/terminal-inventory.json",
+  "terminal_receipt_sha256": "df405a873b9db30703367c3f8ad375850150339aa8d7d3de1c3a5461fd98d348",
+  "terminal_bridge_sha256": "166d3b52f514a1a25a94acac6c9551b915fe92c9ccc4c81fed231df8b7ed14e1",
+  "scope": "One finite native inventory owner/observed-provider acceptance with limited accessible terminal census, no performance/full-frame/full qualification claim."
+}

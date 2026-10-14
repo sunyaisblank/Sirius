@@ -1,0 +1,56 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "bounded-native-Windows-control",
+    "start_utc":  "2026-10-10T19:17:49.4367432Z",
+    "owner_pid":  3460,
+    "owner_start_time_utc":  "2026-10-10T19:17:48.1734181Z",
+    "test_executable":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-0fc9eb6\\src\\sirius\\app\\Release\\sirius.exe",
+    "test_executable_sha256":  "0c907a8faa99b1f248c3072497bba69ffb2a8f62d2b505c37cdc28499f10f4f1",
+    "arguments":  [
+                      "--json",
+                      "info",
+                      "system"
+                  ],
+    "working_directory":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-0fc9eb6\\src\\sirius\\app\\Release",
+    "outer_guard_seconds":  60,
+    "rss_guard_bytes":  4294967296,
+    "outer_stop":  false,
+    "status":  "completed",
+    "numerical_control_passed":  false,
+    "expected_cases":  [
+                           "SystemInventory"
+                       ],
+    "qualification_claimed":  false,
+    "scope":  "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind":  "SystemInventory",
+    "system_inventory_passed":  true,
+    "environment":  {
+                        "VK_DRIVER_FILES":  null,
+                        "VK_ICD_FILENAMES":  null,
+                        "VK_ADD_DRIVER_FILES":  null,
+                        "SIRIUS_VULKAN_DEVICE":  null,
+                        "SIRIUS_PRECISION":  null,
+                        "SIRIUS_MEMORY_BUDGET_MB":  null,
+                        "SIRIUS_DISPATCH_TARGET_MS":  null,
+                        "TEMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-fp64-render-review-0fc9eb6\\temp\\inventory",
+                        "TMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-fp64-render-review-0fc9eb6\\temp\\inventory",
+                        "TMPDIR":  null
+                    },
+    "test_pid":  9592,
+    "test_start_time_utc":  "2026-10-10T19:17:50.8258169Z",
+    "returncode":  0,
+    "exit_code_source":  "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent":  true,
+    "end_utc":  "2026-10-10T19:17:50.9782198Z",
+    "elapsed_seconds":  1.5291158,
+    "peak_sampled_rss_bytes":  16211968,
+    "source_revision":  "0fc9eb66579e749c56c0d3d2e1f1501f53f0cb68",
+    "live_source_revision":  "0fc9eb66579e749c56c0d3d2e1f1501f53f0cb68",
+    "source_build_gate_sha256":  "689e7743004a24206cda1c564e8394df72724c599e1efca3f3fc0cb944fbe005",
+    "source_build_gate_unchanged":  true,
+    "loaded_driver_modules_recorded":  false,
+    "test_executable_unchanged":  true,
+    "cleanup_errors":  [
+
+                       ]
+}

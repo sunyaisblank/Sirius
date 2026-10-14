@@ -1,0 +1,114 @@
+{
+  "schema": "sirius-native-windows-system-finite-result-v1",
+  "passed": true,
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "runner_source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "source_build_gate_sha256": "691415235c954d19c7419733600a6582597cef81fe0d8d786648a840495bb048",
+  "candidate_sha256": "d5ff43745bf2b10da3cd34d3d22aa7bb865c05d56f4827a0a8104ca850248107",
+  "archive_reuse": {
+    "evidence_commit": "939916066066dfc16ff21171f791c48ae1792f72",
+    "tag": "evidence/issue-48-native-build-domains-5b5fad9",
+    "bundle": "attestations/native-vulkan/build-domains-5b5fad9",
+    "manifest_sha256": "4e7a0c6d2cab6981679300951a0e7d90d5ae10349aca62950dd9f52e18bc47d0",
+    "artifact_id": 11901703386,
+    "zip": {
+      "bytes": 56546068,
+      "sha256": "24b09db18d6989856e438c6c3dcfce941b5d87463dca7812ed2be199f7f093db"
+    },
+    "member_count": 40,
+    "staged_mappings": 47,
+    "duplicate_zip_and_staged_payload_not_represerved": true
+  },
+  "native_seconds": 2.2356388,
+  "native_peak_sampled_working_set_bytes": 11042816,
+  "native_limits": {
+    "seconds": 60,
+    "rss_bytes": 4294967296
+  },
+  "bridge_seconds": 6.3043651309999404,
+  "whole_inputs_unchanged": true,
+  "before_after_input_rows": 117,
+  "actual_system_inventory": {
+    "backends": {
+      "cpu": {
+        "available": true
+      },
+      "vulkan": {
+        "available": true,
+        "compiled": true,
+        "device_count": 1,
+        "devices": [
+          {
+            "api_version": 4211037,
+            "device_id": 6400,
+            "device_local_bytes": 34027667456,
+            "driver_id": 1,
+            "driver_info": "26.8.1 (LLPC)",
+            "driver_name": "AMD proprietary driver",
+            "index": 0,
+            "kind": "integrated",
+            "name": "AMD Radeon 780M Graphics",
+            "preserves_fp32_denormals": true,
+            "render_memory_bytes": 17013800960,
+            "rounds_fp32_to_nearest": true,
+            "rounds_fp64_to_nearest": true,
+            "supports_fp64": true,
+            "vendor_id": 4098
+          }
+        ],
+        "selected_device_index": 0,
+        "selected_device_name": "AMD Radeon 780M Graphics"
+      }
+    },
+    "interactive_viewer": {
+      "compiled": true
+    },
+    "language": {
+      "p2900_contracts": {
+        "implementation": "checked-macro",
+        "native": false
+      },
+      "p2996_reflection": {
+        "implementation": "explicit-schema",
+        "native": false
+      }
+    },
+    "platform": "Windows",
+    "wsl2": false
+  },
+  "actual_loaded_module_capture": false,
+  "loaded_module_post_seals": [],
+  "installed_loader_input_only": {
+    "path": "C:\\WINDOWS\\System32\\vulkan-1.dll",
+    "bytes": 1719408,
+    "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a",
+    "version": "1.4.341.0",
+    "scope": "Installed file input only; does not establish it was mapped by the inventory process."
+  },
+  "native_owner_and_child_retired": [
+    {
+      "kind": "owner",
+      "pid": 4628,
+      "recorded_start_utc": "2026-10-14T20:06:17.8895572Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "kind": "test",
+      "pid": 16872,
+      "recorded_start_utc": "2026-10-14T20:06:22.0684651Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    }
+  ],
+  "accessible_terminal_census": {
+    "processes": 275,
+    "hidden_field_records": 174,
+    "matches": [],
+    "accessible_compilers": []
+  },
+  "scope": "One fresh Windows --json info system on archived exact5b5 producer; clean46 runner distinct. No scientific shader/kernel/ray dispatch, rendering, UI, readiness, external runtime domain, performance benefit or full qualification claim. Missing actual DLL observation remains unproved; installed loader identity is not loaded-module proof. Limited terminal census preserves174hidden fields.",
+  "runtime_domain_admitted": false,
+  "render_or_ui_qualified": false,
+  "qualification_claimed": false
+}

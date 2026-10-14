@@ -1,0 +1,121 @@
+{
+  "accessible_terminal_census": {
+    "accessible_compilers": [],
+    "hidden_field_records": 174,
+    "matches": [],
+    "processes": 275
+  },
+  "actual_loaded_module_capture": false,
+  "actual_system_inventory": {
+    "backends": {
+      "cpu": {
+        "available": true
+      },
+      "vulkan": {
+        "available": true,
+        "compiled": true,
+        "device_count": 1,
+        "devices": [
+          {
+            "api_version": 4211037,
+            "device_id": 6400,
+            "device_local_bytes": 34027667456,
+            "driver_id": 1,
+            "driver_info": "26.8.1 (LLPC)",
+            "driver_name": "AMD proprietary driver",
+            "index": 0,
+            "kind": "integrated",
+            "name": "AMD Radeon 780M Graphics",
+            "preserves_fp32_denormals": true,
+            "render_memory_bytes": 17013800960,
+            "rounds_fp32_to_nearest": true,
+            "rounds_fp64_to_nearest": true,
+            "supports_fp64": true,
+            "vendor_id": 4098
+          }
+        ],
+        "selected_device_index": 0,
+        "selected_device_name": "AMD Radeon 780M Graphics"
+      }
+    },
+    "interactive_viewer": {
+      "compiled": true
+    },
+    "language": {
+      "p2900_contracts": {
+        "implementation": "checked-macro",
+        "native": false
+      },
+      "p2996_reflection": {
+        "implementation": "explicit-schema",
+        "native": false
+      }
+    },
+    "platform": "Windows",
+    "wsl2": false
+  },
+  "archive_reuse": {
+    "artifact_id": 11901703386,
+    "bundle": "attestations/native-vulkan/build-domains-5b5fad9",
+    "duplicate_zip_and_staged_payload_not_represerved": true,
+    "evidence_commit": "939916066066dfc16ff21171f791c48ae1792f72",
+    "manifest_sha256": "4e7a0c6d2cab6981679300951a0e7d90d5ae10349aca62950dd9f52e18bc47d0",
+    "member_count": 40,
+    "staged_mappings": 47,
+    "tag": "evidence/issue-48-native-build-domains-5b5fad9",
+    "zip": {
+      "bytes": 56546068,
+      "sha256": "24b09db18d6989856e438c6c3dcfce941b5d87463dca7812ed2be199f7f093db"
+    }
+  },
+  "before_after_input_rows": 117,
+  "bridge_seconds": 6.3043651309999404,
+  "candidate_sha256": "d5ff43745bf2b10da3cd34d3d22aa7bb865c05d56f4827a0a8104ca850248107",
+  "installed_loader_input_only": {
+    "bytes": 1719408,
+    "path": "C:\\WINDOWS\\System32\\vulkan-1.dll",
+    "scope": "Installed file input only; does not establish it was mapped by the inventory process.",
+    "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a",
+    "version": "1.4.341.0"
+  },
+  "loaded_module_post_seals": [],
+  "native_limits": {
+    "rss_bytes": 4294967296,
+    "seconds": 60
+  },
+  "native_owner_and_child_retired": [
+    {
+      "kind": "owner",
+      "owned_birth_absent": true,
+      "pid": 4628,
+      "pid_currently_live": false,
+      "recorded_start_utc": "2026-10-14T20:06:17.8895572Z"
+    },
+    {
+      "kind": "test",
+      "owned_birth_absent": true,
+      "pid": 16872,
+      "pid_currently_live": false,
+      "recorded_start_utc": "2026-10-14T20:06:22.0684651Z"
+    }
+  ],
+  "native_peak_sampled_working_set_bytes": 11042816,
+  "native_seconds": 2.2356388,
+  "passed": true,
+  "producer_recovery": {
+    "recovery_receipt": {
+      "bytes": 23836,
+      "sha256": "ebd7a09086e38d7e19e1341b361de42c4a2bcdb4f9f8988336ab8a0689f98700"
+    },
+    "reused_bundle_all_Git_bytes_checked": true
+  },
+  "qualification_claimed": false,
+  "render_or_ui_qualified": false,
+  "runner_source_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "runtime_domain_admitted": false,
+  "schema": "sirius-native-windows-system-finite-result-v1",
+  "scope": "One fresh Windows --json info system on archived exact5b5 producer; clean46 runner distinct. No scientific shader/kernel/ray dispatch, rendering, UI, readiness, external runtime domain, performance benefit or full qualification claim. Missing actual DLL observation remains unproved; installed loader identity is not loaded-module proof. Limited terminal census preserves174hidden fields.",
+  "source_build_gate_sha256": "691415235c954d19c7419733600a6582597cef81fe0d8d786648a840495bb048",
+  "source_revision": "5b5fad91c08c0533e29c4f5c7ae249725162e405",
+  "whole_inputs_unchanged": true
+}
