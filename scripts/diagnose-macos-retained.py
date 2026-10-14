@@ -1,4 +1,4 @@
-"""Diagnose four original retained controls using the frozen 4bcd987 macOS export.
+"""Diagnose original retained controls or their exact captured Metal source.
 
 This deliberately bounded producer never writes a qualification receipt. The
 runner revision and the reused executable's source revision remain distinct.
@@ -23,6 +23,7 @@ from contextlib import ExitStack
 import platform
 
 from runtime_identity import provider_inputs, selected_inventory
+from macos_metal_probe import MSL_BYTES, MSL_SHA
 
 
 def macho_modules(path):
@@ -210,7 +211,7 @@ def source_state():
     require(not status, "diagnostic requires a clean committed runner checkout")
     changes = set(command("diff", "--name-only", SOURCE, revision, "--").splitlines())
     require(changes <= {".github/workflows/ci.yml", "scripts/diagnose-macos-retained.py",
-                        "scripts/governance/build_policy.py"},
+                        "scripts/governance/build_policy.py", "scripts/macos_metal_probe.py"},
             "reused executable's product/scientific source differs from the runner checkout")
     return {"runner_revision": revision, "candidate_revision": SOURCE, "status": status}
 
@@ -543,6 +544,34 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
     return owner
 
 
+def prepare_metal_source(archive, output, modules):
+    """Recover only the exact Initialize pair from the preceding native capture."""
+    require(identity(archive) == {"bytes": 9362078,
+            "sha256": "12060f52a9cadba5dabedb5a99b5f4293893bd066d544f2ba4e58c612d2357db"},
+            "Metal source archive differs from pinned artifact 11876607522")
+    prefix = ("out/macos-retained-diagnostic/observation/"
+              "1-PhysicalInitializationRetainsTheHamiltonianResidual/shaders/")
+    folder = output / "metal-source"
+    folder.mkdir()
+    with zipfile.ZipFile(archive) as bundle:
+        require(len(bundle.namelist()) == len(set(bundle.namelist())), "duplicate Metal archive member")
+        for suffix in ["spv", "metal"]:
+            (folder / ("initialize." + suffix)).write_bytes(
+                bundle.read(prefix + "shader-cs-94cd92f131b7e6d1." + suffix))
+    require(identity(folder / "initialize.spv")["sha256"] ==
+            modules["retained_program::kInitializePortableShader"]["sha256"],
+            "captured Initialize SPIR-V differs from the original embedded module")
+    require(identity(folder / "initialize.metal") == {"bytes": MSL_BYTES, "sha256": MSL_SHA},
+            "captured Initialize Metal source differs")
+    write(folder / "provenance.json", {"artifact": 11876607522, "archive": identity(archive),
+          "source_run": 38526893803, "source_job": 115729265254,
+          "prior_bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-6e13108",
+          "prior_evidence_commit": "95ddf4aa1dba0dcec0ef8ca96ea8694d12c82935",
+          "spirv": identity(folder / "initialize.spv"), "metal": identity(folder / "initialize.metal"),
+          "scope": "Exact prior dumped pair; synchronous native Metal diagnostic only, without dispatch or numerical qualification."})
+    return folder / "initialize.metal"
+
+
 def case_result(path, case):
     try:
         tree = ET.parse(path).getroot()
@@ -593,6 +622,8 @@ def main():
     parser.add_argument("--archive", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--prepare-only", action="store_true", help="verify/stage the immutable export without native execution")
+    parser.add_argument("--metal-source-archive", type=Path,
+                        help="diagnose exact captured Initialize MSL through native Metal instead of rerunning controls")
     args = parser.parse_args()
     memory_self_test()
     output = args.output.resolve()
@@ -606,6 +637,7 @@ def main():
     write(output / "diagnostic.json", result)
     try:
         stage, app, backend, modules = prepare(args.archive.resolve(), output)
+        metal_source = prepare_metal_source(args.metal_source_archive.resolve(), output, modules) if args.metal_source_archive else None
         if args.prepare_only:
             result["status"] = "prepared_without_execution"
             return 0
@@ -622,7 +654,10 @@ def main():
         require(not any(environment.get(key) for key in ["VK_ICD_FILENAMES", "VK_ADD_DRIVER_FILES"]), "ambiguous provider selector")
         inputs = [args.archive.resolve(), Path(__file__).resolve(), ROOT / ".github/workflows/ci.yml",
                   ROOT / "scripts/runtime_identity.py", ROOT / "scripts/governance/build_policy.py",
+                  ROOT / "scripts/macos_metal_probe.py",
                   output / "preparation.json", output / "embedded-modules.json"]
+        if metal_source:
+            inputs += [args.metal_source_archive.resolve(), *metal_source.parent.iterdir()]
         inputs += [path for path in stage.rglob("*") if path.is_file()]
         library = json.loads(icd.read_text())["ICD"]["library_path"]
         driver = (icd.parent / library).resolve()
@@ -648,6 +683,26 @@ def main():
                                                "source": result["runner_source"], "candidate_revision": SOURCE,
                                                "qualification_claimed": False})
         inputs += [output / "runtime-inputs.json"]
+        if metal_source:
+            result["diagnostic_mode"] = "native_metal_pipeline_error"
+            folder = output / "metal-pipeline"
+            receipt = run_owned([sys.executable, "-B", str(ROOT / "scripts/macos_metal_probe.py"),
+                                 "--msl", str(metal_source), "--expected-device-name", selected["name"]],
+                                environment, folder, inputs)
+            require(receipt["containment_complete"] and receipt["observation_complete"],
+                    "native Metal observation/containment incomplete")
+            events = [json.loads(line) for line in (folder / "stdout.log").read_text().splitlines()]
+            require(events and events[-1].get("event") == "terminal"
+                    and events[-1].get("qualification_claimed") is False
+                    and events[-1].get("execution_claimed") is False,
+                    "native Metal probe did not produce a terminal diagnostic")
+            created = events[-1].get("pipeline_created")
+            require(type(created) is bool and receipt["child_exit"] == (0 if created else 1),
+                    "native Metal terminal verdict/exit differs")
+            result.update(status="metal_pipeline_observation_complete", numerics_executed=False,
+                          metal_probe={"pipeline_created": created, "events": events,
+                                       "route": "synchronous native Metal, distinct from MoltenVK's asynchronous route"})
+            return receipt["child_exit"]
         for number, case in enumerate(CASES, 1):
             folder = output / (str(number) + "-" + case)
             local = dict(environment, GTEST_OUTPUT="xml:" + str(folder / "gtest.xml"),

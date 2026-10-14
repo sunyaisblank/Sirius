@@ -209,18 +209,21 @@ MACOS_RETAINED_DIAGNOSTIC_JOB = r"""    if: github.event_name == 'workflow_dispa
           vulkan_version: 1.4.357.0
           cache: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Fetch pinned native build export
+      - name: Fetch pinned native build export and captured Metal source
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p out/macos-retained-diagnostic
           gh api repos/sunyaisblank/Sirius/actions/artifacts/11778215779/zip \
             > out/macos-retained-diagnostic/export.zip
+          gh api repos/sunyaisblank/Sirius/actions/artifacts/11876607522/zip \
+            > out/macos-retained-diagnostic/metal-source.zip
       - name: Diagnose retained pipeline compilation without qualification
         run: |
           export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
           python3 -B scripts/diagnose-macos-retained.py \
             --archive out/macos-retained-diagnostic/export.zip \
+            --metal-source-archive out/macos-retained-diagnostic/metal-source.zip \
             --output out/macos-retained-diagnostic/observation
       - name: Preserve diagnostic inputs and observations
         if: always()
@@ -723,6 +726,7 @@ def verify_integration_boundary_policy() -> None:
         "write permission": ("      actions: read", "      actions: write"),
         "wrong source": ("origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc", "origin main"),
         "wrong export": ("artifacts/11778215779/zip", "artifacts/1/zip"),
+        "wrong captured Metal source": ("artifacts/11876607522/zip", "artifacts/1/zip"),
         "wrong SDK": ("vulkan_version: 1.4.357.0", "vulkan_version: latest"),
         "preparation only": ("python3 -B scripts/diagnose-macos-retained.py", "python3 -B scripts/diagnose-macos-retained.py --prepare-only"),
         "rebuild": ("    steps:\n", "    steps:\n      - run: cmake --build --preset macos\n"),

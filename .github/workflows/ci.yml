@@ -14,7 +14,7 @@ on:
         type: boolean
         default: false
       macos_retained_diagnostic:
-        description: Diagnose four retained controls using the pinned macOS export
+        description: Diagnose retained pipeline compilation without qualification
         type: boolean
         default: false
 
@@ -593,18 +593,21 @@ jobs:
           vulkan_version: 1.4.357.0
           cache: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Fetch pinned native build export
+      - name: Fetch pinned native build export and captured Metal source
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p out/macos-retained-diagnostic
           gh api repos/sunyaisblank/Sirius/actions/artifacts/11778215779/zip \
             > out/macos-retained-diagnostic/export.zip
+          gh api repos/sunyaisblank/Sirius/actions/artifacts/11876607522/zip \
+            > out/macos-retained-diagnostic/metal-source.zip
       - name: Diagnose retained pipeline compilation without qualification
         run: |
           export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
           python3 -B scripts/diagnose-macos-retained.py \
             --archive out/macos-retained-diagnostic/export.zip \
+            --metal-source-archive out/macos-retained-diagnostic/metal-source.zip \
             --output out/macos-retained-diagnostic/observation
       - name: Preserve diagnostic inputs and observations
         if: always()
