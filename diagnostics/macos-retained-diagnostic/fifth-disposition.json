@@ -1,0 +1,89 @@
+{
+  "runner_revision": "a11ad575fe7a839a35683f60958c38be8181b905",
+  "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "decision": "NATIVE_DEFAULT_PIPELINE_BACKEND_FAILURE_WITH_COMPLETE_ERROR_DETAILS",
+  "run": 38531125917,
+  "job": 115743006368,
+  "artifact": 11878271916,
+  "raw_bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-a11ad57",
+  "raw_manifest_sha256": "c6d6fc195daf268038e0aa16cb14afbd181c5c7cab68e9e41e60f6382913dcf8",
+  "artifact_pin": {
+    "bytes": 9092550,
+    "sha256": "c62c939f9deb799e4a85b0c8884af283bffbacaf26c2ea0c92c99564a885a3fd"
+  },
+  "reused_inputs": [
+    {
+      "bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-db8f439",
+      "path": "files/out/macos-retained-diagnostic/export.zip",
+      "sha256": "973d6ada66511b80d2dcf76e0c95a3b38367c32e08a0f16a62c20e0c0a90974d"
+    },
+    {
+      "bundle": "attestations/native-vulkan/4bcd987/macos-retained-diagnostic-6e13108",
+      "path": "artifact.zip",
+      "sha256": "12060f52a9cadba5dabedb5a99b5f4293893bd066d544f2ba4e58c612d2357db"
+    }
+  ],
+  "phase_seconds": {
+    "library": 1.527711791999991,
+    "function": 0.0003540409999800431,
+    "pipeline": 195.119230083
+  },
+  "error": {
+    "reference": "0x6000004c8360",
+    "domain": "CompilerError",
+    "code": 2,
+    "localized_description": "Compilation failed",
+    "localized_failure_reason": null,
+    "description": "Error Domain=CompilerError Code=2 \"Compilation failed\" UserInfo={NSLocalizedDescription=Compilation failed}",
+    "user_info_description": "{\n    NSLocalizedDescription = \"Compilation failed\";\n}",
+    "user_info": {
+      "NSLocalizedDescription": "Compilation failed"
+    },
+    "underlying_errors": []
+  },
+  "descriptor": {
+    "event": "pipeline_descriptor",
+    "monotonic_seconds": 276.249913166,
+    "utc_ns": 1791964394929912000,
+    "entry_point": "main0",
+    "local_size": [
+      1,
+      1,
+      1
+    ],
+    "observed": {
+      "max_total_threads": 1,
+      "full_subgroups": false,
+      "selected_function_matches": true,
+      "linked_functions": "<MTLLinkedFunctionsInternal: 0x6000004c45a0>\n    functions = <null> \n    privateFunctions = <null> \n    binaryFunctions = <null> \n    groups = <null>",
+      "stage_input": "<MTLStageInputOutputDescriptorInternal: 0x6000004c4990>\n    IndexType: MTLIndexTypeUInt16 \n    IndexBufferIndex: 0",
+      "binary_archives": null
+    },
+    "default_properties": "untouched newly constructed framework defaults, as in MoltenVK",
+    "pipeline_options": 0,
+    "description": "<MTLComputePipelineDescriptorInternal: 0x6000033c80e0>\n    label = <none> \n    computeFunction = <_MTLFunctionInternal: 0x12b61af30>\n            name = main0 \n            device = <AppleParavirtDevice: 0x13c020a00>\n                name = Apple Paravirtual device \n            functionType = MTLFunctionTypeKernel \n            attributes: <none> \n    threadGroupSizeIsMultipleOfThreadExecutionWidth = 0 \n    maxTotalThreadsPerThreadgroup = 1 \n    supportIndirectCommandBuffers = 0 \n    textureWriteRoundingMode = MTLRoundingModeDefault \n    stageInputDescriptor = <MTLStageInputOutputDescriptorInternal: 0x6000004c4990>\n            IndexType: MTLIndexTypeUInt16 \n            IndexBufferIndex: 0 \n    linkedFunctions = <MTLLinkedFunctionsInternal: 0x6000004c45a0>\n            functions = <null> \n            privateFunctions = <null> \n            binaryFunctions = <null> \n            groups = <null> \n    supportAddingBinaryFunctions = NO \n    maxCallStackDepth = 1 \n    pipelineLibrary = <null> \n    preloadedLibraries = (\n) \n    binaryArchives = <null> \n    Needs custom border color samplers =  0 \n    buffers =  (\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    },\n        {\n        Mutability = MTLMutabilityDefault;\n    }\n) \n    forceResourceIndex = 0 \n    resourceIndex = 0 \n    maxAccelerationStructureTraversalDepth = 0 \n    shaderValidation = 0 \n    shaderValidationState = 0"
+  },
+  "compile_options": {
+    "event": "compile_options",
+    "monotonic_seconds": 274.720907208,
+    "utc_ns": 1791964393400141000,
+    "language_version": 196610,
+    "fast_math_enabled": true,
+    "math_mode": 2,
+    "math_fp_functions": 0,
+    "preserve_invariance": false,
+    "optimization_level": 0,
+    "provenance": "source-derived MoltenVK v1.4.1 plus pinned SPIRV-Cross adec7ac and exact SPV; original debug=0 did not record option getters"
+  },
+  "child_containment_complete": true,
+  "numerics_executed": false,
+  "qualification_claimed": false,
+  "finding": "The exact MSL compiles as a library and main0 exists. Correctly constructed synchronous native Metal PSO fails independently of Vulkan wrapper setup after195.119s. Full NSError contains only CompilerError/code2 and localized Compilation failed, no failure reason or underlying chain. No extra causal detail exists in those error fields. Default linkedFunctions and stageInputDescriptor getters return empty objects, explaining the previous overly strict nil check. No unchanged rerun is justified. Lost DontUnroll hints and forced helper inlining are source observations, not established failure causes. A single changed library optimization Default0-to-Size1 experiment is justified by Apple documentation; pinned MoltenVK hardcodes Default and has no public switch, so success would require a provider change and full original qualification, not admission of unchanged Vulkan.",
+  "reference_source_lost_hints": {
+    "spirv_cross_pin": "adec7acbf41a988713cdb85f93f26c8ca5ea863e",
+    "msl_emit_block_hints": "https://github.com/KhronosGroup/SPIRV-Cross/blob/adec7acbf41a988713cdb85f93f26c8ca5ea863e/spirv_msl.cpp#L20085",
+    "captured_initialize_dont_unroll": 9,
+    "captured_endpoint_dont_unroll": 20,
+    "scope": "Reference translator source and exact captured SPV/MSL observations; no proof of native unrolling or causation."
+  }
+}
