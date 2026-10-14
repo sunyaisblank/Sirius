@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import re
 
 from .common import ROOT
@@ -858,6 +859,146 @@ def verify_strict_test_volume_policy() -> None:
         raise RuntimeError("strict test-volume policy accepted a substituted volume")
 
 
+def native_runtime_preflight_errors(source: str) -> list[str]:
+    """Keep complete compilation, exact-candidate preflight and Mandatory in order."""
+    errors: list[str] = []
+    try:
+        tree = ast.parse(source)
+        function = next(node for node in tree.body if isinstance(node, ast.FunctionDef)
+                        and node.name == "write_runtime_attestation")
+        target_values = [ast.literal_eval(node.value) for node in tree.body
+                         if isinstance(node, ast.Assign) and any(
+                             isinstance(target, ast.Name) and target.id == "NATIVE_COMPILE_TARGETS"
+                             for target in node.targets)]
+    except (SyntaxError, StopIteration, ValueError, TypeError):
+        return ["native runtime compile/preflight authority is missing or malformed"]
+    if target_values != [INTEGRATION_TARGETS]:
+        errors.append("native runtime preflight compile must retain the complete integration topology")
+
+    def same(node: ast.AST, expression: str) -> bool:
+        return ast.dump(node) == ast.dump(ast.parse(expression, mode="eval").body)
+
+    run_calls = sorted((node for node in ast.walk(function)
+                        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                        and node.func.id == "run"), key=lambda node: (node.lineno, node.col_offset))
+    expected = (
+        "run(configure_command)",
+        'run(["cmake", "--build", "--preset", profile.preset, "--target", *NATIVE_COMPILE_TARGETS])',
+        'run(["cmake", "--build", "--preset", profile.preset], environment=environment)',
+    )
+    direct_calls = [node.value for node in function.body if isinstance(node, ast.Expr)]
+    if (len(run_calls) < 3 or any(not same(node, expression) or node not in direct_calls
+                                 for node, expression in zip(run_calls, expected))):
+        errors.append("native runtime must compile explicit targets before preflight and retain its full Mandatory build")
+
+    assignments = [node for node in function.body if isinstance(node, ast.Assign)]
+
+    def assigned(name: str) -> list[ast.Assign]:
+        return [node for node in assignments if len(node.targets) == 1
+                and isinstance(node.targets[0], ast.Name) and node.targets[0].id == name]
+
+    binary, preflight, environment = (assigned(name) for name in ("binary", "preflight", "environment"))
+    selection = [node for node in assignments if len(node.targets) == 1
+                 and isinstance(node.targets[0], ast.Subscript)
+                 and same(node.targets[0].value, "environment")
+                 and same(node.targets[0].slice, '"SIRIUS_VULKAN_DEVICE"')
+                 and same(node.value, 'str(preflight["device"]["index"])')]
+    if (len(binary) != 1 or not same(binary[0].value, "executable_for(profile)")
+            or len(preflight) != 1 or not same(preflight[0].value,
+                "run_preflight(argparse.Namespace(profile=profile.domain, candidate=binary, "
+                "expected_revision=revision, device_pattern=args.device_pattern))")
+            or len(environment) != 1 or not same(environment[0].value, "os.environ.copy()")
+            or len(selection) != 1 or len(run_calls) < 3
+            or not (run_calls[1].lineno < binary[0].lineno < preflight[0].lineno
+                    < environment[0].lineno < selection[0].lineno < run_calls[2].lineno)):
+        errors.append("native runtime must directly preflight its exact candidate/profile/revision and bind the selection before Mandatory")
+    for name in ("inspect_candidate_authority", "run_preflight"):
+        if not any(isinstance(node, ast.ImportFrom) and node.module == "attestation_preflight"
+                   and any(alias.name == name and alias.asname is None for alias in node.names)
+                   for node in tree.body):
+            errors.append("native runtime does not use the existing preflight authority: " + name)
+
+    def checks(expression: str) -> list[ast.Call]:
+        return [node for node in direct_calls if isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Name) and node.func.id == "require"
+                and node.args and same(node.args[0], expression)]
+
+    authority = checks('{"path": str(binary.resolve()), **inspect_candidate_authority(binary, revision)} == preflight["candidate"]')
+    copies = [node for node in direct_calls if same(node, "shutil.copy2(binary, qualification_executable_path)")]
+    final_selection = [node for node in assigned("selected") if same(node.value,
+        "select_physical_device(inventory, profile, args.device_pattern)")]
+    recordings = [node for node in direct_calls if isinstance(node, ast.Call)
+                  and same(node.func, "inventory_path.write_text")]
+    devices = checks('selected == preflight["device"]')
+    if (len(authority) != 1 or len(copies) != 1 or len(run_calls) < 3
+            or not run_calls[2].lineno < authority[0].lineno < copies[0].lineno):
+        errors.append("native runtime must recheck the full existing candidate authority after Mandatory before copying it")
+    if (len(final_selection) != 1 or len(recordings) != 1 or len(devices) != 2
+            or not any(final_selection[0].lineno < node.lineno < recordings[0].lineno
+                       for node in devices)):
+        errors.append("native runtime must bind its final inventory to the preflight device before recording it")
+    return errors
+
+
+def verify_native_runtime_preflight_policy(source: str) -> None:
+    """Source-only ordering controls; no compiler, candidate or provider execution."""
+    if native_runtime_preflight_errors(source):
+        raise RuntimeError("native runtime preflight policy rejected its valid producer")
+    function = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)
+                    and node.name == "write_runtime_attestation")
+    lines = source.splitlines(keepends=True)
+
+    def block(node: ast.AST) -> str:
+        return "".join(lines[node.lineno - 1:node.end_lineno])
+
+    runs = [node for node in function.body if isinstance(node, ast.Expr)
+            and isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name)
+            and node.value.func.id == "run"]
+    compile_block, mandatory_block = block(runs[1]), block(runs[2])
+    preflight_block = block(next(node for node in function.body if isinstance(node, ast.Assign)
+                                and any(isinstance(target, ast.Name) and target.id == "preflight"
+                                        for target in node.targets)))
+    authority_block = block(next(node for node in function.body if isinstance(node, ast.Expr)
+                                 and isinstance(node.value, ast.Call)
+                                 and any(isinstance(child, ast.Name) and child.id == "inspect_candidate_authority"
+                                         for child in ast.walk(node))))
+    final_device_block = block(next(node for node in reversed(function.body)
+                                    if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call)
+                                    and node.value.args and ast.dump(node.value.args[0])
+                                    == ast.dump(ast.parse('selected == preflight["device"]', mode="eval").body)))
+    mutations = {
+        "early default build": source.replace(compile_block,
+            '    run(["cmake", "--build", "--preset", profile.preset])\n', 1),
+        "early Mandatory build": source.replace(compile_block, mandatory_block + compile_block, 1),
+        "missing Mandatory build": source.replace(mandatory_block, "", 1),
+        "missing preflight": source.replace(preflight_block, "", 1),
+        "late preflight": source.replace(preflight_block, "", 1).replace(
+            mandatory_block, mandatory_block + preflight_block, 1),
+        "conditional preflight": source.replace(preflight_block,
+            "    if False:\n" + "".join("    " + line for line in preflight_block.splitlines(keepends=True)), 1),
+        "missing test executable": source.replace('    "sirius_backend_tests",\n', "", 1),
+        "Mandatory target in compile stage": source.replace('    "SiriusAlignmentGate",\n',
+            '    "RunMandatoryTests",\n', 1),
+        "wrong profile": source.replace("profile=profile.domain", 'profile="macos-moltenvk"', 1),
+        "wrong candidate": source.replace("candidate=binary", 'candidate=Path("other")', 1),
+        "unbound revision": source.replace("expected_revision=revision", "expected_revision=None", 1),
+        "ignored requested device": source.replace("device_pattern=args.device_pattern", "device_pattern=None", 1),
+        "unbound Mandatory device": source.replace(
+            'str(preflight["device"]["index"])', '"0"', 1),
+        "unbound Mandatory environment": source.replace(mandatory_block,
+            '    run(["cmake", "--build", "--preset", profile.preset])\n', 1),
+        "missing post-Mandatory authority": source.replace(authority_block, "", 1),
+        "early post-Mandatory authority": source.replace(authority_block, "", 1).replace(
+            mandatory_block, authority_block + mandatory_block, 1),
+        "unbound post-Mandatory authority": source.replace(
+            "inspect_candidate_authority(binary, revision)", "inspect_candidate_authority(binary, None)", 1),
+        "missing final device continuity": source.replace(final_device_block, "", 1),
+    }
+    for label, invalid in mutations.items():
+        if invalid == source or not native_runtime_preflight_errors(invalid):
+            raise RuntimeError("native runtime preflight policy accepted " + label)
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -915,6 +1056,9 @@ def attestation_preflight_errors(
         errors.append("native producer self-test does not exercise attestation preflight")
     if "preflight_self_test()" not in native_producer:
         errors.append("native producer does not run the imported preflight controls")
+    errors.extend(native_runtime_preflight_errors(native_producer))
+    if "verify_native_runtime_preflight_policy(Path(__file__).read_text(" not in native_producer:
+        errors.append("native producer self-test omits source-only preflight ordering controls")
     if "subprocess.run(" in reuse:
         errors.append("qualification reuse introduced an execution subprocess")
     for marker in (

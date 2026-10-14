@@ -20,6 +20,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from attestation_preflight import inspect_candidate_authority, run_preflight
 from attestation_preflight import self_test as preflight_self_test
 from reuse_qualification_evidence import self_test as qualification_reuse_self_test
 from runtime_identity import capture as capture_runtime_identity
@@ -37,6 +38,17 @@ QUALIFICATION_RUNTIME_PRODUCTS = {
     "viewer_rdsd003a_fragment": Path("shaders/RDSD003A.frag"),
     "viewer_rdsd003a_vertex": Path("shaders/RDSD003A.vert"),
 }
+NATIVE_COMPILE_TARGETS = (
+    "SiriusAlignmentGate",
+    "SiriusSourceGovernance",
+    "sirius",
+    "sirius_base_tests",
+    "sirius_core_tests",
+    "sirius_oracle_tests",
+    "sirius_backend_tests",
+    "sirius_app_tests",
+    "sirius_render_tests",
+)
 
 
 @dataclass(frozen=True)
@@ -223,9 +235,27 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
     if profile.platform == "windows":
         configure_command.append("-DCMAKE_CONFIGURATION_TYPES=Release")
     run(configure_command)
-    run(["cmake", "--build", "--preset", profile.preset])
+    # Compile the complete strict topology without invoking the ALL Mandatory
+    # target. Existing generators, governance and GTest discovery still run.
+    run(["cmake", "--build", "--preset", profile.preset,
+         "--target", *NATIVE_COMPILE_TARGETS])
     binary = executable_for(profile)
     require(binary.is_file(), f"native Sirius executable is missing: {binary}")
+    preflight = run_preflight(argparse.Namespace(
+        profile=profile.domain,
+        candidate=binary,
+        expected_revision=revision,
+        device_pattern=args.device_pattern,
+    ))
+    print(json.dumps({"preflight": preflight}), flush=True)
+    environment = os.environ.copy()
+    environment["SIRIUS_VULKAN_DEVICE"] = str(preflight["device"]["index"])
+    # Preserve the original complete Mandatory build after exact-candidate
+    # preflight, with the same selected device as the later runtime estate.
+    run(["cmake", "--build", "--preset", profile.preset], environment=environment)
+    require({"path": str(binary.resolve()), **inspect_candidate_authority(binary, revision)}
+            == preflight["candidate"],
+            "qualification candidate authority changed after exact-candidate preflight")
     shutil.copy2(binary, qualification_executable_path)
     qualification_products = copy_qualification_products(binary.parent / "resources", output)
     configured_receipt = (
@@ -251,17 +281,20 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
     shutil.copy2(configured_gate_junit, qualification_gate_junit_path)
     shutil.copy2(configured_gate_log, qualification_gate_log_path)
 
-    environment = os.environ.copy()
     initial_inventory = json.loads(
         run([str(binary), "--json", "info", "system"], environment=environment)
     )
     selected = select_physical_device(initial_inventory, profile, args.device_pattern)
+    require(selected == preflight["device"],
+            "native runtime device differs from the exact-candidate preflight")
     environment["SIRIUS_VULKAN_DEVICE"] = str(selected["index"])
 
     inventory = json.loads(
         run([str(binary), "--json", "info", "system"], environment=environment)
     )
     selected = select_physical_device(inventory, profile, args.device_pattern)
+    require(selected == preflight["device"],
+            "bound native runtime device differs from the exact-candidate preflight")
     require(
         inventory["backends"]["vulkan"].get("selected_device_index")
         == selected["index"],
@@ -414,6 +447,9 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
 
 
 def self_test() -> None:
+    from governance.build_policy import verify_native_runtime_preflight_policy
+
+    verify_native_runtime_preflight_policy(Path(__file__).read_text(encoding="utf-8"))
     runtime_identity_self_test()
     preflight_self_test()
     qualification_reuse_self_test()
