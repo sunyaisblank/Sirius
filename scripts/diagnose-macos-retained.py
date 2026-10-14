@@ -272,20 +272,85 @@ def parse_ps(text):
     return rows
 
 
-def free_kib(text):
-    page = re.search(r"page size of (\d+) bytes", text)
-    free = re.search(r"^Pages free:\s+(\d+)\.", text, re.M)
-    require(page is not None and free is not None, "unreadable vm_stat reserve")
-    return int(page[1]) * int(free[1]) // 1024
+def memory_sample(text, sysctl_text):
+    """A sampled Darwin estimate, not a proven Linux MemAvailable equivalent.
+
+    vm_stat's printed free excludes speculative pages. Add only the disjoint
+    inactive queue; do not add active, wired, compressed or overlapping pools.
+    Inactive anonymous pages may need compression, so retain raw counters and
+    require normal kernel pressure as well as the unchanged 2-GiB reserve.
+    References: apple-oss-distributions/xnu, xnu-11417.140.69/vm_page.h;
+    giampaolo/psutil, 01bb959/psutil/arch/osx/mem.c (raw free + inactive).
+    """
+    pages = re.findall(r"page size of (\d+) bytes", text)
+    require(len(pages) == 1, "unreadable vm_stat page size")
+    page_size = int(pages[0])
+    require(page_size >= 1024 and page_size & (page_size - 1) == 0, "invalid VM page size")
+    counters = {}
+    for line in text.splitlines()[1:]:
+        match = re.fullmatch(r"([^:]+):\s+(\d+)\.", line.strip())
+        require(match is not None and match[1] not in counters, "malformed or duplicate vm_stat counter")
+        counters[match[1]] = int(match[2])
+    required = ["Pages free", "Pages inactive", "Swapins", "Swapouts", "Compressions",
+                "Decompressions", "Pages occupied by compressor", "Pages stored in compressor"]
+    require(all(name in counters for name in required), "required VM counters missing")
+    values = sysctl_text.splitlines()
+    require(len(values) == 2 and all(re.fullmatch(r"\d+", value) for value in values), "unreadable pressure/physical-memory query")
+    pressure, physical_bytes = map(int, values)
+    available = (counters["Pages free"] + counters["Pages inactive"]) * page_size
+    require(physical_bytes > 0 and available <= physical_bytes, "VM estimate exceeds physical memory")
+    return {"available_kib": available // 1024, "free_kib": counters["Pages free"] * page_size // 1024,
+            "inactive_kib": counters["Pages inactive"] * page_size // 1024,
+            "pressure_level": pressure, "physical_bytes": physical_bytes,
+            "page_size": page_size, "counters": counters, "raw_vm_stat": text}
 
 
-def snapshot():
+def process_census():
     environment = dict(os.environ, LC_ALL="C")
     processes = subprocess.check_output(
         ["/bin/ps", "-axo", "pid=,ppid=,pgid=,rss=,state=,lstart="],
         text=True, env=environment, timeout=5)
+    return parse_ps(processes)
+
+
+def memory_self_test():
+    # Regression for the observed 129-MiB-free prelaunch refusal. Only inactive
+    # pages supplement free; enormous other counters must not inflate admission.
+    fields = {"Pages free": 8256, "Pages inactive": 122816, "Swapins": 0,
+              "Swapouts": 0, "Compressions": 900000, "Decompressions": 700000,
+              "Pages occupied by compressor": 200000, "Pages stored in compressor": 400000,
+              "Pages active": 900000, "Pages speculative": 200000}
+    def fixture(values):
+        return ("Mach Virtual Memory Statistics: (page size of 16384 bytes)\n"
+                + "".join(f"{name}: {value}.\n" for name, value in values.items()))
+    text = fixture(fields)
+    sample = memory_sample(text, "1\n17179869184\n")
+    require(sample["free_kib"] == 132096 and sample["available_kib"] == 2097152,
+            "available-memory boundary self-test failed")
+    require(memory_sample(fixture({**fields, "Pages inactive": 122815}), "1\n17179869184\n")["available_kib"] < LIMITS["reserve_kib"],
+            "below-reserve sample admitted")
+    for pressure in [0, 2, 4, 99]:
+        require(memory_sample(text, f"{pressure}\n17179869184\n")["pressure_level"] != 1,
+                "non-normal pressure normalized")
+    for raw, query in [(text + "Pages inactive: 1.\n", "1\n17179869184\n"),
+                       (text.replace("Pages free: 8256.", "Pages free: -1."), "1\n17179869184\n"),
+                       (text.replace("Swapouts: 0.\n", ""), "1\n17179869184\n"),
+                       (text, "1\n"), (text, "1\n1024\n")]:
+        try:
+            memory_sample(raw, query)
+        except ValueError:
+            continue
+        raise ValueError("malformed memory observation accepted")
+
+
+def snapshot():
+    environment = dict(os.environ, LC_ALL="C")
+    processes = process_census()
     memory = subprocess.check_output(["/usr/bin/vm_stat"], text=True, env=environment, timeout=5)
-    return parse_ps(processes), free_kib(memory)
+    pressure = subprocess.check_output(
+        ["/usr/sbin/sysctl", "-n", "kern.memorystatus_vm_pressure_level", "hw.memsize"],
+        text=True, env=environment, timeout=5)
+    return processes, memory_sample(memory, pressure)
 
 
 def child_limits():
@@ -308,7 +373,7 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
     source = source_state()
     owner = {"status": "running", "argv": argv, "source": source,
              "limits": {**LIMITS, "seconds": seconds}, "qualification_claimed": False,
-             "reserve_scope": "Conservative vm_stat Pages free only; sampled process RSS includes controller and observed group/tree, not global Metal compiler services.",
+             "reserve_scope": "Darwin sampled available estimate: printed free + inactive; kernel pressure must be normal (1). This is not a proven no-swap bound. RSS includes controller and observed group/tree, not global Metal compiler services.",
              "birth_scope": "Observed ps PID/lstart tokens; second-resolution ambiguity remains incomplete.",
              "sampling_interval_seconds": 0.1, "observed_births": [], "remaining_observed": [],
              "environment": {key: environment.get(key) for key in ["VK_DRIVER_FILES", "DYLD_LIBRARY_PATH", "SIRIUS_VULKAN_DEVICE", "MVK_CONFIG_SHADER_DUMP_DIR", "MVK_CONFIG_DEBUG", "MVK_CONFIG_TRACE_VULKAN_CALLS"]}}
@@ -349,28 +414,30 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
             stderr = files.enter_context((folder / "stderr.log").open("wb"))
             samples = files.enter_context((folder / "samples.jsonl").open("w"))
             write(folder / "owner.json", owner)
-            rows, available = snapshot()
-            owner["prelaunch_free_kib"] = available
+            rows, memory = snapshot()
+            owner["prelaunch_memory"] = memory
             owner["controller"] = rows[os.getpid()]
-            require(available >= LIMITS["reserve_kib"], "prelaunch free-page reserve below 2 GiB")
+            require(memory["available_kib"] >= LIMITS["reserve_kib"], "prelaunch available-memory reserve below 2 GiB")
+            require(memory["pressure_level"] == 1, "prelaunch kernel memory pressure is not normal")
             child = subprocess.Popen(argv, cwd=folder, env=environment, stdout=stdout, stderr=stderr,
                                      start_new_session=True, preexec_fn=child_limits)
             owner["pid"] = child.pid
             write(folder / "owner.json", owner)
             while True:
-                rows, available = snapshot()
+                rows, memory = snapshot()
                 members = observe(rows)
                 elapsed = time.monotonic() - started
                 rss = sum(row["rss_kib"] for row in members) + rows[os.getpid()]["rss_kib"]
                 peak = max(peak, rss)
                 times.append(elapsed)
                 samples.write(json.dumps({"elapsed_seconds": elapsed, "rss_kib": rss,
-                                          "free_kib": available, "members": members}) + "\n")
+                                          "memory": memory, "members": members}) + "\n")
                 samples.flush()
                 if STOP is not None: reason = f"signal {STOP}"
                 elif elapsed >= seconds: reason = "deadline"
                 elif rss > LIMITS["rss_kib"]: reason = "RSS limit"
-                elif available < LIMITS["reserve_kib"]: reason = "free-page reserve"
+                elif memory["available_kib"] < LIMITS["reserve_kib"]: reason = "available-memory reserve"
+                elif memory["pressure_level"] != 1: reason = "kernel memory pressure is not normal"
                 elif escaped: reason = "observed descendant escaped launch group"
                 elif child.pid not in rows: reason = "unreaped leader missing from observation"
                 if reason is not None or rows[child.pid]["state"].startswith("Z"):
@@ -386,7 +453,7 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
                     group_signal(signal.SIGTERM)
                     deadline = time.monotonic() + 1
                     while True:
-                        rows, _ = snapshot()
+                        rows = process_census()
                         members = observe(rows)
                         alive = [row for row in members if not row["state"].startswith("Z")]
                         if not alive or time.monotonic() >= deadline:
@@ -398,7 +465,7 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
                     group_signal(signal.SIGKILL)
                     deadline = time.monotonic() + 5
                     while True:
-                        rows, _ = snapshot()
+                        rows = process_census()
                         members = observe(rows)
                         group_drained = (child.pid in rows and rows[child.pid]["state"].startswith("Z")
                                          and not any(not row["state"].startswith("Z") for row in members))
@@ -421,7 +488,7 @@ def run_owned(argv, environment, folder, inputs, *, seconds=300):
                 try:
                     deadline = time.monotonic() + 2
                     while True:
-                        rows, _ = snapshot()
+                        rows = process_census()
                         remaining = {pid: row for (pid, birth), row in seen.items()
                                      if pid in rows and rows[pid]["lstart"] == birth}
                         remaining.update({pid: row for pid, row in rows.items() if row["pgid"] == child.pid})
@@ -512,6 +579,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--prepare-only", action="store_true", help="verify/stage the immutable export without native execution")
     args = parser.parse_args()
+    memory_self_test()
     output = args.output.resolve()
     require(output.is_relative_to(ROOT / "out") and not output.exists(), "output must be a fresh directory under out/")
     source_state()
