@@ -192,10 +192,10 @@ MACOS_RETAINED_DIAGNOSTIC_CONDITION = (
     "github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic == true"
 )
 # This one-off diagnostic reuses an immutable native export. Keep its entire
-# job bounded: no build, qualification producer, attestation upload or extra run.
+# job bounded: one provider build, four original controls and diagnostic upload.
 MACOS_RETAINED_DIAGNOSTIC_JOB = r"""    if: github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic == true
     runs-on: macos-15
-    timeout-minutes: 30
+    timeout-minutes: 50
     permissions:
       contents: read
       actions: read
@@ -209,31 +209,29 @@ MACOS_RETAINED_DIAGNOSTIC_JOB = r"""    if: github.event_name == 'workflow_dispa
           vulkan_version: 1.4.357.0
           cache: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Fetch pinned native build export and captured Metal source
+      - name: Fetch pinned native export and diagnostic provider sources
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p out/macos-retained-diagnostic
+          mkdir -p out/macos-moltenvk-integration
           gh api repos/sunyaisblank/Sirius/actions/artifacts/11778215779/zip \
-            > out/macos-retained-diagnostic/export.zip
-          gh api repos/sunyaisblank/Sirius/actions/artifacts/11876607522/zip \
-            > out/macos-retained-diagnostic/metal-source.zip
-      - name: Diagnose retained pipeline compilation without qualification
+            > out/macos-moltenvk-integration/export.zip
+          git fetch --no-tags origin e2422dd92017879a452377a1122f1838e6610b3c
+      - name: Build diagnostic MoltenVK and exercise original retained controls
         run: |
           export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
-          python3 -B scripts/diagnose-macos-retained.py \
-            --archive out/macos-retained-diagnostic/export.zip \
-            --metal-source-archive out/macos-retained-diagnostic/metal-source.zip \
-            --metal-remove-forced-inline \
-            --output out/macos-retained-diagnostic/observation
+          python3 -B scripts/macos_moltenvk_integration.py \
+            --archive out/macos-moltenvk-integration/export.zip \
+            --output out/macos-moltenvk-integration/observation
       - name: Preserve diagnostic inputs and observations
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: sirius-macos-retained-diagnostic
           path: |
-            out/macos-retained-diagnostic/observation
+            out/macos-moltenvk-integration/observation
             bin/macos/retained-diagnostic
+            bin/macos/macos-moltenvk-integration
           if-no-files-found: error
 """
 GATE_DIAGNOSTIC_PATHS = (
@@ -723,15 +721,15 @@ def verify_integration_boundary_policy() -> None:
         "non-manual escape": (MACOS_RETAINED_DIAGNOSTIC_CONDITION, "inputs.macos_retained_diagnostic == true"),
         "PR execution": (MACOS_RETAINED_DIAGNOSTIC_CONDITION, "github.event_name == 'pull_request' || inputs.macos_retained_diagnostic == true"),
         "wrong runner": ("    runs-on: macos-15", "    runs-on: macos-15-large"),
-        "unbounded timeout": ("    timeout-minutes: 30", "    timeout-minutes: 180"),
+        "unbounded timeout": ("    timeout-minutes: 50", "    timeout-minutes: 180"),
         "write permission": ("      actions: read", "      actions: write"),
         "wrong source": ("origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc", "origin main"),
         "wrong export": ("artifacts/11778215779/zip", "artifacts/1/zip"),
-        "wrong captured Metal source": ("artifacts/11876607522/zip", "artifacts/1/zip"),
-        "unchanged Default retry": ("            --metal-remove-forced-inline \\\n", ""),
-        "different optimization control": ("            --metal-remove-forced-inline \\\n", "            --metal-optimization-size \\\n            --metal-remove-forced-inline \\\n"),
+        "wrong provider source": ("origin e2422dd92017879a452377a1122f1838e6610b3c", "origin main"),
+        "native compiler proxy": ("scripts/macos_moltenvk_integration.py", "scripts/diagnose-macos-retained.py"),
+        "different provider entry point": ("scripts/macos_moltenvk_integration.py", "scripts/macos_metal_probe.py"),
         "wrong SDK": ("vulkan_version: 1.4.357.0", "vulkan_version: latest"),
-        "preparation only": ("python3 -B scripts/diagnose-macos-retained.py", "python3 -B scripts/diagnose-macos-retained.py --prepare-only"),
+        "preparation only": ("python3 -B scripts/macos_moltenvk_integration.py", "python3 -B scripts/macos_moltenvk_integration.py --prepare-only"),
         "rebuild": ("    steps:\n", "    steps:\n      - run: cmake --build --preset macos\n"),
         "full estate": ("    steps:\n", "    steps:\n      - run: ctest --preset macos\n"),
         "promotion": ("    steps:\n", "    steps:\n      - run: python3 scripts/verify-attestation.py --record-build\n"),

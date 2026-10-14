@@ -211,7 +211,8 @@ def source_state():
     require(not status, "diagnostic requires a clean committed runner checkout")
     changes = set(command("diff", "--name-only", SOURCE, revision, "--").splitlines())
     require(changes <= {".github/workflows/ci.yml", "scripts/diagnose-macos-retained.py",
-                        "scripts/governance/build_policy.py", "scripts/macos_metal_probe.py"},
+                        "scripts/governance/build_policy.py", "scripts/macos_metal_probe.py",
+                        "scripts/macos_moltenvk_integration.py", "scripts/macos_vulkan_identity.py"},
             "reused executable's product/scientific source differs from the runner checkout")
     return {"runner_revision": revision, "candidate_revision": SOURCE, "status": status}
 
