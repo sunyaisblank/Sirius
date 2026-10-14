@@ -1,0 +1,261 @@
+macos-retained-diagnostic	Set up job	﻿2026-10-14T12:54:28.1190690Z Current runner version: '2.337.0'
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1239670Z ##[group]Runner Image Provisioner
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1241550Z Hosted Compute Agent
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1242570Z Version: 20260828.587
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1243930Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1245210Z Build Date: 2026-08-28T16:44:25Z
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1246410Z Worker ID: {7dfedcac-d7f8-4525-a7bd-addfdd1c0bda}
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1247740Z Azure Region: westus
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1248810Z ##[endgroup]
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1252730Z ##[group]Operating System
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1253840Z macOS
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1254690Z 15.7.9
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1255610Z 24G830
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1256490Z ##[endgroup]
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1257430Z ##[group]Runner Image
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1258530Z Image: macos-15-arm64
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1259650Z Version: 20260907.0337.1
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1262150Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20260907.0337/images/macos/macos-15-arm64-Readme.md
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1265880Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20260907.0337
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1267850Z ##[endgroup]
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1270220Z ##[group]GITHUB_TOKEN Permissions
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1277640Z Actions: read
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1278780Z Contents: read
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1280000Z Metadata: read
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1280670Z ##[endgroup]
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1283670Z Secret source: Actions
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1285770Z Cache mode: write
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1287110Z Prepare workflow directory
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1709540Z Prepare all required actions
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.1749190Z Getting action download info
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.6153290Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:28.9928770Z Download action repository 'jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa' (SHA:37effcfa045411f8bfbbda26df2fd1b3bf3436fa)
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:29.4861900Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+macos-retained-diagnostic	Set up job	2026-10-14T12:54:29.6927390Z Complete job name: macos-retained-diagnostic
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	﻿2026-10-14T12:54:29.7391260Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7391980Z with:
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7392310Z   repository: sunyaisblank/Sirius
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7395150Z   token: ***
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7395470Z   ssh-strict: true
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7395790Z   ssh-user: git
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7396120Z   persist-credentials: true
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7396470Z   clean: true
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7396810Z   sparse-checkout-cone-mode: true
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7397190Z   fetch-depth: 1
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7397510Z   fetch-tags: false
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7397840Z   show-progress: true
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7398170Z   lfs: false
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7398470Z   submodules: false
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7398800Z   set-safe-directory: true
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7399330Z   allow-unsafe-pr-checkout: false
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:29.7401120Z ##[endgroup]
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2066110Z Syncing repository: sunyaisblank/Sirius
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2068380Z ##[group]Getting Git version info
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2070020Z Working directory is '/Users/runner/work/Sirius/Sirius'
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2072650Z [command]/opt/homebrew/bin/git version
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2588410Z git version 2.55.0
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2602110Z ##[endgroup]
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2607790Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/031fcd89-5986-4f8f-a500-0708bfc24c0b/.gitconfig'
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2613690Z Temporarily overriding HOME='/Users/runner/work/_temp/031fcd89-5986-4f8f-a500-0708bfc24c0b' before making global git config changes
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2615350Z Adding repository directory to the temporary git global config as a safe directory
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2617580Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Sirius/Sirius
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2757240Z Deleting the contents of '/Users/runner/work/Sirius/Sirius'
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2761000Z ##[group]Determining repository object format
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2762120Z ##[endgroup]
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2762820Z ##[group]Initializing the repository
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.2764920Z [command]/opt/homebrew/bin/git init /Users/runner/work/Sirius/Sirius
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3034980Z hint: Using 'master' as the name for the initial branch. This default branch name
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3036410Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3037410Z hint: to use in all of your new repositories, which will suppress this warning,
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3038080Z hint: call:
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3038500Z hint:
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3039420Z hint: 	git config --global init.defaultBranch <name>
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3040140Z hint:
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3040820Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3041740Z hint: 'development'. The just-created branch can be renamed via this command:
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3042420Z hint:
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3042790Z hint: 	git branch -m <name>
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3043890Z hint:
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3046060Z hint: Disable this message with "git config set advice.defaultBranchName false"
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3048820Z Initialized empty Git repository in /Users/runner/work/Sirius/Sirius/.git/
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3058340Z [command]/opt/homebrew/bin/git remote add origin https://github.com/sunyaisblank/Sirius
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3187710Z ##[endgroup]
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3189150Z ##[group]Disabling automatic garbage collection
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3191720Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3265390Z ##[endgroup]
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3267770Z ##[group]Setting up auth
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3269220Z Removing SSH command configuration
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3271250Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.3357290Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.5200440Z Removing HTTP extra header
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.5203280Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.5207760Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.6351870Z Removing includeIf entries pointing to credentials config files
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.6454570Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.6809440Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.7968430Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.8081780Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Sirius/Sirius/.git.path /Users/runner/work/_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.8346060Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.8352750Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.8424080Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.8500910Z ##[endgroup]
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.8502040Z ##[group]Fetching the repository
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:30.8510120Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5b22bee3f15d628998624aceb9ede6e9088a6401:refs/remotes/origin/development/macos-provider-module-root-2026-10-14
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9265380Z From https://github.com/sunyaisblank/Sirius
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9268770Z  * [new ref]         5b22bee3f15d628998624aceb9ede6e9088a6401 -> origin/development/macos-provider-module-root-2026-10-14
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9408320Z [command]/opt/homebrew/bin/git branch --list --remote origin/development/macos-provider-module-root-2026-10-14
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9553500Z   origin/development/macos-provider-module-root-2026-10-14
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9563290Z [command]/opt/homebrew/bin/git rev-parse refs/remotes/origin/development/macos-provider-module-root-2026-10-14
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9631630Z 5b22bee3f15d628998624aceb9ede6e9088a6401
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9636740Z ##[endgroup]
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9638440Z ##[group]Determining the checkout info
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9640460Z ##[endgroup]
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9643960Z [command]/opt/homebrew/bin/git sparse-checkout disable
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9793280Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9920170Z ##[group]Checking out the ref
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:32.9922860Z [command]/opt/homebrew/bin/git checkout --progress --force -B development/macos-provider-module-root-2026-10-14 refs/remotes/origin/development/macos-provider-module-root-2026-10-14
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:33.2905970Z Switched to a new branch 'development/macos-provider-module-root-2026-10-14'
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:33.2922190Z branch 'development/macos-provider-module-root-2026-10-14' set up to track 'origin/development/macos-provider-module-root-2026-10-14'.
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:33.2995950Z ##[endgroup]
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:33.3384370Z [command]/opt/homebrew/bin/git log -1 --format=%H
+macos-retained-diagnostic	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T12:54:33.3489420Z 5b22bee3f15d628998624aceb9ede6e9088a6401
+macos-retained-diagnostic	Fetch the exported executable's source identity	﻿2026-10-14T12:54:33.3994050Z ##[group]Run git fetch --no-tags --depth=1 origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc
+macos-retained-diagnostic	Fetch the exported executable's source identity	2026-10-14T12:54:33.3995000Z ^[[36;1mgit fetch --no-tags --depth=1 origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc^[[0m
+macos-retained-diagnostic	Fetch the exported executable's source identity	2026-10-14T12:54:33.4131130Z shell: /bin/bash -e {0}
+macos-retained-diagnostic	Fetch the exported executable's source identity	2026-10-14T12:54:33.4131960Z ##[endgroup]
+macos-retained-diagnostic	Fetch the exported executable's source identity	2026-10-14T12:54:34.1844420Z From https://github.com/sunyaisblank/Sirius
+macos-retained-diagnostic	Fetch the exported executable's source identity	2026-10-14T12:54:34.1845140Z  * branch            4bcd9875cd9308deabed06a5fa2f17d2321b0cbc -> FETCH_HEAD
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	﻿2026-10-14T12:54:34.1967300Z ##[group]Run jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.1967770Z with:
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.1968030Z   vulkan_version: 1.4.357.0
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.1968280Z   cache: true
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.1971520Z   github_token: ***
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.1972640Z ##[endgroup]
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.4296270Z Using github_token to authenticate GitHub API requests.
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.7668620Z 🎯 [Cache] Cache for 'Vulkan SDK' not found.
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.7669160Z 🔽 Downloading Vulkan SDK 1.4.357.0
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.8355200Z ✔️ Http(200): The requested VULKAN_SDK 1.4.357.0 is downloadable.
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:34.8358380Z     URL: https://sdk.lunarg.com/sdk/download/1.4.357.0/mac/vulkansdk-macos-1.4.357.0.zip
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:37.9597020Z ✔️ Download completed successfully!
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:37.9620960Z    File: /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:37.9657510Z    SHA HASH URL: https://sdk.lunarg.com/sdk/sha/1.4.357.0/mac/vulkansdk-macos-1.4.357.0.zip.json
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:39.4595510Z    SHA verified: /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:39.4696600Z 📦 Extracting Vulkan SDK...
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:54:39.4797910Z [command]/usr/bin/unzip -o -q /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:55:30.8520810Z    Installed into folder: /Users/runner/vulkan-sdk/1.4.357.0
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:55:30.8866340Z [command]/opt/homebrew/bin/gtar --posix -cf cache.tzst --exclude cache.tzst -P -C /Users/runner/work/Sirius/Sirius --files-from manifest.txt --delay-directory-restore --use-compress-program zstdmt
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:55:38.7247040Z ##[warning]Failed to save: Unable to reserve cache with key cache-mac-arm64-vulkan-sdk-1.4.357.0, another job may be creating this cache.
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:55:38.7297080Z ✔️ [PATH] Added path to Vulkan SDK to environment variable PATH.
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:55:38.7298940Z ✔️ [ENV] Set env variable VULKAN_SDK -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS".
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:55:38.7299840Z ✔️ [ENV] Set env variable VULKAN_VERSION -> "1.4.357.0".
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:55:38.7300670Z ✔️ [ENV] Set env variable VK_LAYER_PATH -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d".
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:55:38.7301670Z ✔️ [ENV] Set env variable DYLD_LIBRARY_PATH -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:".
+macos-retained-diagnostic	Vulkan SDK + MoltenVK diagnostic runtime	2026-10-14T12:55:38.7302590Z ✅ Done.
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	﻿2026-10-14T12:55:38.7671790Z ##[group]Run mkdir -p out/macos-moltenvk-integration
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.7672220Z ^[[36;1mmkdir -p out/macos-moltenvk-integration^[[0m
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.7672760Z ^[[36;1mgh api repos/sunyaisblank/Sirius/actions/artifacts/11778215779/zip \^[[0m
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.7673140Z ^[[36;1m  > out/macos-moltenvk-integration/export.zip^[[0m
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.7673490Z ^[[36;1mgit fetch --no-tags origin 21f87e4806c36cd1ae9e45f912a5817d6878b774^[[0m
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.8352050Z shell: /bin/bash -e {0}
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.8352390Z env:
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.8353620Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.8354320Z   VULKAN_VERSION: 1.4.357.0
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.8405670Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.8406580Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.8410320Z   GH_TOKEN: ***
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:38.8410560Z ##[endgroup]
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:47.0719710Z From https://github.com/sunyaisblank/Sirius
+macos-retained-diagnostic	Fetch pinned native export and diagnostic provider sources	2026-10-14T12:55:47.0721860Z  * branch            21f87e4806c36cd1ae9e45f912a5817d6878b774 -> FETCH_HEAD
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	﻿2026-10-14T12:55:47.0815040Z ##[group]Run export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0815760Z ^[[36;1mexport VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"^[[0m
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0816270Z ^[[36;1mpython3 -B scripts/macos_moltenvk_integration.py \^[[0m
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0816740Z ^[[36;1m  --archive out/macos-moltenvk-integration/export.zip \^[[0m
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0817160Z ^[[36;1m  --output out/macos-moltenvk-integration/observation^[[0m
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0864620Z shell: /bin/bash -e {0}
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0864880Z env:
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0865190Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0865640Z   VULKAN_VERSION: 1.4.357.0
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0866060Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0866680Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.0867220Z ##[endgroup]
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.3876220Z /Users/runner/work/Sirius/Sirius/scripts/macos_moltenvk_integration.py:601: SyntaxWarning: 'return' in a 'finally' block
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T12:55:47.3879120Z   return 1
+macos-retained-diagnostic	Build diagnostic MoltenVK and exercise original retained controls	2026-10-14T13:03:21.8443000Z {"status": "four_original_controls_passed_custom_provider", "candidate_source": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc", "runner_source": {"runner_revision": "5b22bee3f15d628998624aceb9ede6e9088a6401", "candidate_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc", "status": ""}, "provider_source_evidence_commit": "21f87e4806c36cd1ae9e45f912a5817d6878b774", "provider_payload_tree": "c2c8004cd36b91b34d4259f335b3bc6cc2adf941", "provider_content_discriminator": "76cb8b212bc049261146b526d75ebddafe017b18fe1f4c2c7065c3024c4ffe9e", "provider_scope": "Custom diagnostic MoltenVK; unchanged SDK is not qualified", "qualification_claimed": false, "production_adopted": false, "cases": [{"case": "RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual", "owner_complete": true, "test": {"passed": true}, "exit": 0, "shader_capture_bound": true}, {"case": "RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation", "owner_complete": true, "test": {"passed": true}, "exit": 0, "shader_capture_bound": true}, {"case": "RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError", "owner_complete": true, "test": {"passed": true}, "exit": 0, "shader_capture_bound": true}, {"case": "RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives", "owner_complete": true, "test": {"passed": true}, "exit": 0, "shader_capture_bound": true}], "expected_api_versions": {"stock": "1.3.334", "diagnostic": "1.3.334", "source_header": {"path": "/Users/runner/work/Sirius/Sirius/out/macos-moltenvk-integration/observation/provider-source/sources/Vulkan-Headers/include/vulkan/vulkan_core.h", "bytes": 1230712, "sha256": "c0f0fe98afae95de1377e13649542912d71ca8817ef21dd0a44778f6fe7a1615"}, "scope": "Original app and public query both request Vulkan1.3; pinned source and stock header patch are both334"}, "provider_identity_accepted": true, "all_four_controls_passed": true, "numerics_executed": true, "provider_source_inputs_unchanged": true}
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	﻿2026-10-14T13:03:22.3133690Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3134110Z with:
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3134500Z   name: sirius-macos-retained-diagnostic
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3135100Z   path: out/macos-moltenvk-integration/observation
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	bin/macos/retained-diagnostic
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	bin/macos/macos-moltenvk-integration
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3135610Z   if-no-files-found: error
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3135900Z   compression-level: 6
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3136160Z   overwrite: false
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3136430Z   include-hidden-files: false
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3136650Z   archive: true
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3136900Z env:
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3137260Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3137630Z   VULKAN_VERSION: 1.4.357.0
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3138070Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3138720Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:22.3139330Z ##[endgroup]
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:24.0751090Z Multiple search paths detected. Calculating the least common ancestor of all paths
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:24.0752080Z The least common ancestor is /Users/runner/work/Sirius/Sirius. This will be the root directory of the artifact
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:24.0752550Z With the provided path, there will be 12578 files uploaded
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:24.0752900Z Artifact name is valid!
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:24.0753130Z Root directory input is valid!
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:24.4334540Z Uploading artifact: sirius-macos-retained-diagnostic.zip
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:24.4539670Z Beginning upload of artifact content to blob storage
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:26.2090450Z Uploaded bytes 8388608
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:26.5834320Z Uploaded bytes 16777216
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:26.9017420Z Uploaded bytes 25165824
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:28.6844300Z Uploaded bytes 33554432
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:30.9145000Z Uploaded bytes 41943040
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:33.5716980Z Uploaded bytes 50331648
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:33.8181160Z Uploaded bytes 58720256
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:34.4920820Z Uploaded bytes 67108864
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:35.6638730Z Uploaded bytes 75497472
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:36.4113850Z Uploaded bytes 83886080
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:37.3299820Z Uploaded bytes 92274688
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:38.4350260Z Uploaded bytes 100663296
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:39.0666860Z Uploaded bytes 105870928
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:39.1406690Z Finished uploading artifact content to blob storage!
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:39.1452240Z SHA256 digest of uploaded artifact is 3e235b95061eb4e534401b66d24865b3b8799b87003faa2a3075be0d3d5ceb68
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:39.1454110Z Finalizing artifact upload
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:39.5995200Z Artifact sirius-macos-retained-diagnostic successfully finalized. Artifact ID 11895738765
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:39.5998790Z Artifact sirius-macos-retained-diagnostic has been successfully uploaded! Final size is 105870928 bytes. Artifact ID is 11895738765
+macos-retained-diagnostic	Preserve diagnostic inputs and observations	2026-10-14T13:03:39.6001760Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38567408322/artifacts/11895738765
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	﻿2026-10-14T13:03:39.6398340Z Post job cleanup.
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:39.8167110Z [command]/opt/homebrew/bin/git version
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:39.8382540Z git version 2.55.0
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:39.8399270Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/4c9c313c-4ec6-4e22-8819-f530973cb693/.gitconfig'
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:39.8411030Z Temporarily overriding HOME='/Users/runner/work/_temp/4c9c313c-4ec6-4e22-8819-f530973cb693' before making global git config changes
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:39.8411900Z Adding repository directory to the temporary git global config as a safe directory
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:39.8414500Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Sirius/Sirius
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:39.8559170Z Removing SSH command configuration
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:39.8564610Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:39.8663680Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.0746350Z Removing HTTP extra header
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.0750770Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.0844760Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2532700Z Removing includeIf entries pointing to credentials config files
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2633910Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2737400Z includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git.path
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2779130Z includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2864380Z includeif.gitdir:/github/workspace/.git.path
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2865510Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2867560Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git.path
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2868570Z /Users/runner/work/_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2870280Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git.path \/Users\/runner\/work\/_temp\/git\-credentials\-7d02c967\-6072\-4081\-a0b8\-25113e5dd06d\.config
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2872110Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2872970Z /Users/runner/work/_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2874600Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path \/Users\/runner\/work\/_temp\/git\-credentials\-7d02c967\-6072\-4081\-a0b8\-25113e5dd06d\.config
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.2937720Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.3028020Z /github/runner_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.3034210Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-7d02c967\-6072\-4081\-a0b8\-25113e5dd06d\.config
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.3128670Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.3217580Z /github/runner_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.3223310Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-7d02c967\-6072\-4081\-a0b8\-25113e5dd06d\.config
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.3309880Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+macos-retained-diagnostic	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-14T13:03:40.5140450Z Removing credentials config '/Users/runner/work/_temp/git-credentials-7d02c967-6072-4081-a0b8-25113e5dd06d.config'
+macos-retained-diagnostic	Complete job	﻿2026-10-14T13:03:40.5203970Z Cleaning up orphan processes
