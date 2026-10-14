@@ -1,0 +1,569 @@
+{
+  "case": "original-nine-cpu-radiation-controls",
+  "source": {
+    "revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "status": ""
+  },
+  "passed": true,
+  "child_exit": 0,
+  "wall_seconds": 0.2734589209976548,
+  "peak_sampled_rss_kib": 46168,
+  "stop_reason": null,
+  "meaning": "Nine unchanged original finite CPU radiation/transfer controls only; no device/frame, full P4/science, Mandatory or release qualification."
+}
+{
+  "passed": true,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "runner_source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "expected_names": [
+    "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+    "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+    "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+    "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+    "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+    "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+    "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+    "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+    "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"
+  ],
+  "scope": "Nine unchanged original finite CPU radiation/transfer controls only; no device/frame, full P4/science, Mandatory or release qualification.",
+  "finite_acceptance_scope": {
+    "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation": {
+      "reference": "Independent 2*h*c^2/[lambda^5*expm1(h*c/(lambda*k*T))] with original literal SI h,c,k, not production Planck coefficients.",
+      "temperatures_K": [
+        1200,
+        3000,
+        5778,
+        10000,
+        10000000.0
+      ],
+      "wavelengths_m": [
+        1e-07,
+        3.8e-07,
+        5.5e-07,
+        7.8e-07,
+        1e-05
+      ],
+      "sample_pairs": 25,
+      "assertion": "Original relative error <2e-14 (denominator max(abs(expected),1e-300)); no all-wavelength/all-temperature bound."
+    },
+    "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum": {
+      "temperatures_K": [
+        1200,
+        3000,
+        5778,
+        10000
+      ],
+      "reference": "Original 120-iteration golden-section maximization of independent Planck on [50e-9,20e-6] m.",
+      "assertion": "Original relative error <2e-8; no new root solver or executable reference."
+    },
+    "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral": {
+      "temperatures_K": [
+        1200,
+        3000,
+        5778,
+        10000
+      ],
+      "reference": "Original 32768-panel midpoint integral in log(lambda), log limits -20.72326583694641 to -6.907755278982137 (1 nm to 1 mm), independent Planck times lambda and hemisphere factor pi.",
+      "assertion": "Original relative error <2e-7 against production sigma*T^4; finite integration bounds retained."
+    },
+    "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains": {
+      "invalid_values": [
+        0,
+        -1,
+        "+infinity",
+        "NaN"
+      ],
+      "reference": "Original invalid wavelength/temperature refusals; deep Wien lambda1e-20 m/T1 K exact zero; finite extreme Rayleigh-Jeans lambda1e100 m/T1e300 K compares original c1/c2*1e-100 at relative<2e-13. This extreme-limit expected coefficient ratio is production-derived.",
+      "assertion": "Original overflow refusal at lambda1e-300 m,T=c2/1e-297 and Stefan(max_double); no new domain points."
+    },
+    "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction": {
+      "domain": {
+        "mass": 1,
+        "signed_spin": 0.7,
+        "equatorial_radius": 6,
+        "E": 1,
+        "Lz": 2,
+        "observer_frequency": 0.93
+      },
+      "reference": "Original separately written equatorial BL g_tt/g_tphi/g_phiphi, circular Omega, normalized u^t and nu=u^t*(E-Omega*Lz); same independent contraction for ZAMO Omega=-g_tphi/g_phiphi.",
+      "assertion": "Original absolute 2e-15 emitter/zamo frequencies and full_g/zamo_g; one fixed tuple, no arbitrary-latitude claim."
+    },
+    "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere": {
+      "domain": {
+        "mass": 1,
+        "signed_spin": 0.998,
+        "equatorial_radius": 1.5,
+        "E": 1,
+        "Lz": 1.5,
+        "observer_frequency": 1
+      },
+      "assertion": "Original static ratio(gtt_emit=1/3,gtt_observer=-1) declines; Kerr transfer exists, zamo_frequency>0 and zamo_g finite. No additional numeric oracle inferred."
+    },
+    "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission": {
+      "domain": {
+        "delta_tau": 1e-14,
+        "observed_source": [
+          1,
+          0.5,
+          0.25
+        ],
+        "max_tau": 10
+      },
+      "reference": "Original first-order 1-exp(-tau)=tau+O(tau^2) ratios at the one thin layer; no E2/polarised-transport rerun.",
+      "assertion": "Original positive absorbed fraction/emission, absorbed/tau near1 at1e-14, negative tau declines; accumulated RGB/tau near[1,.5,.25] at1e-14."
+    },
+    "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature": {
+      "domain": {
+        "temperature_K": 5778,
+        "bins": 32,
+        "bin_centres_nm": "380+(bin+.5)*12.5 for bin0..31"
+      },
+      "reference": "Facade/delegation and unit conversion against production TryPlanckSpectralRadiancePerMetre, not an independent 32-bin physical oracle.",
+      "assertion": "Original EXPECT_DOUBLE_EQ L[bin]=production_per_metre*1e-9 (per nm); temperatures0,-1,+Inf,NaN yield exact total energy0."
+    },
+    "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor": {
+      "domain": {
+        "emitted_float": 0.37,
+        "g_float": 1.25
+      },
+      "reference": "Original algebraic bolometric authority check: invariant I_nu/nu^3 contributes g^3 and dnu_observer=g*dnu_emitter contributes one g, hence g^4.",
+      "assertion": "Original EXPECT_FLOAT_EQ ObservedBolometricIntensity(emitted,g)=emitted*g*g*g*g at one tuple; no integrated disk/frame or pixel accuracy claim."
+    }
+  },
+  "qualification_claimed": false,
+  "p4_complete": false,
+  "mandatory_receipt_created": false,
+  "original_assertions_changed": false,
+  "outer_diagnostic_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "declared_output_environment": {
+    "TMPDIR": "/home/astra/.project/Sirius/out/p4-cpu-radiation-current-source/temporary",
+    "GTEST_OUTPUT": ""
+  },
+  "executed_names": [
+    "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+    "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+    "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+    "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+    "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+    "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+    "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+    "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+    "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"
+  ],
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "disabled": 0,
+  "junit": {
+    "bytes": 9893,
+    "sha256": "0c7ba6c4f5a7f23db0e5eb4f576e3a8947b0a6a7ea5a9d3ddfcaba8f2648613d"
+  },
+  "ctest_output_log": {
+    "bytes": 14510,
+    "sha256": "34a29ee342c09a97aaca4de75599d3e02b41b9f8c8082a10acb3d4559fd16701"
+  },
+  "owner": {
+    "bytes": 2568,
+    "sha256": "9126314891974070376011cfd33cc27cb867fad7575267281d2b2847812004b7"
+  },
+  "source_and_registration_join": {
+    "test_sources": [
+      "tests/core/blackbody_planck_test.cpp",
+      "tests/core/spectral_radiance_test.cpp",
+      "tests/render/spectral_emission_test.cpp"
+    ],
+    "production_headers": [
+      "src/sirius/core/constants.h",
+      "src/sirius/core/spectral/blackbody_laws.h",
+      "src/sirius/core/spectral/blackbody.h",
+      "src/sirius/core/spectral/spectral_radiance.h",
+      "src/sirius/core/spectral/colour_modes.h",
+      "src/sirius/core/relativistic_transfer.h",
+      "src/sirius/core/kerr_orbits.h"
+    ],
+    "core_producer": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "core_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+    "render_producer": {
+      "bytes": 12208240,
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "render_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4",
+    "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+    "cache_required": {
+      "BUILD_TESTS": "ON",
+      "SIRIUS_MANDATORY_TESTS": "ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+      "SIRIUS_ALIGNMENT_MODE": "qualification",
+      "SIRIUS_CONTRACT_MODE": "2",
+      "SIRIUS_WERROR": "ON",
+      "SIRIUS_BUILD_VIEWER": "ON",
+      "SIRIUS_SANITIZERS": "none",
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+      "CMAKE_CXX_COMPILER": "g++-14"
+    },
+    "runtime_resources_bound": {
+      "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png": {
+        "bytes": 29984397,
+        "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe.spv": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv": {
+        "bytes": 37728,
+        "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/coupled_probe_fp64.spv": {
+        "bytes": 2288152,
+        "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe.spv": {
+        "bytes": 99692,
+        "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv": {
+        "bytes": 100040,
+        "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/infinity_probe_fp64.spv": {
+        "bytes": 100568,
+        "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe.spv": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv": {
+        "bytes": 66064,
+        "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe.spv": {
+        "bytes": 5562236,
+        "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv": {
+        "bytes": 5566460,
+        "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/parity_probe_fp64.spv": {
+        "bytes": 5533624,
+        "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.cu": {
+        "bytes": 316063,
+        "sha256": "e8460dbe10346d5cf457a533c7126707b87cbd108f43c7a8f2fb6e92f5e8fd8d"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/portability/trace.metal": {
+        "bytes": 338766,
+        "sha256": "879d15908e66449f789652f40a329b731bebc65dca396659b636cf834943df06"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/smoke.spv": {
+        "bytes": 1404,
+        "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/trace.spv": {
+        "bytes": 4038204,
+        "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp32comp.spv": {
+        "bytes": 4041528,
+        "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/kernels/trace_fp64.spv": {
+        "bytes": 3916680,
+        "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/model/alignment_receipt.json": {
+        "bytes": 1808,
+        "sha256": "cbeb56fdcb0223f8d5d9c5696870d7a014b216e1aa68fc5ef394e733933bd077"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/model/operating_model.json": {
+        "bytes": 130331,
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.frag": {
+        "bytes": 1167,
+        "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD003A.vert": {
+        "bytes": 198,
+        "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.frag": {
+        "bytes": 2386,
+        "sha256": "58f4438f27fcb647f86ce9fbb8e875e6bee0fbea20768ee6e289e952da0b51ec"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD004A.vert": {
+        "bytes": 198,
+        "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.frag": {
+        "bytes": 3799,
+        "sha256": "bee2ff8435f1d25ce111d6da0623975acf74205511ebce81df011d61d1ab0536"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/shaders/RDSD005A.vert": {
+        "bytes": 577,
+        "sha256": "08467d1bc78904fe7512245db7e2912caf132d5de250955b0719f4f51c94a039"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/portable_binary32_reference.bin": {
+        "bytes": 4182444,
+        "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+        "bytes": 35160,
+        "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+        "bytes": 35196,
+        "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+      },
+      "bin/linux-gcc/src/sirius/app/resources/tests/backend/retained_camera/program_fixture.h": {
+        "bytes": 416303,
+        "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+      }
+    },
+    "original_compile_commands": [
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o -c /home/astra/.project/Sirius/tests/core/blackbody_planck_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/core/blackbody_planck_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o -c /home/astra/.project/Sirius/tests/core/spectral_radiance_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/core/spectral_radiance_test.cpp",
+        "output": "tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o"
+      },
+      {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_INTERACTIVE_VIEWER=1 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1 -DSIRIUS_VERSION=\\\"2.0.0\\\" -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/lib/glad/include -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -I/home/astra/.project/Sirius/lib/glfw/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o -c /home/astra/.project/Sirius/tests/render/spectral_emission_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/render/spectral_emission_test.cpp",
+        "output": "tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o"
+      }
+    ],
+    "original_link_ninja_lines": [
+      "build tests/core/sirius_core_tests tests/core/sirius_core_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/core/sirius_core_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_core_tests_Release tests/core/CMakeFiles/sirius_core_tests.dir/autodiff_dual_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/retained_arithmetic_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/coordinates_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_naninf_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_stability_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/christoffel_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/horizon_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_derivative_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_loader_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/metric_registry_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/reissner_nordstrom_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/schwarzschild_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/walker_penrose_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/warp_drive_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/stokes_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_inverse_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/novikov_thorne_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/turbulence_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/volumetric_disk_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/postprocess_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/starfield_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/point_source_transfer_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_differential_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_map_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o tests/core/CMakeFiles/sirius_core_tests.dir/tensor_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a",
+      "build src/sirius/app/sirius_render_tests tests/render/sirius_render_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/render/sirius_render_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_render_tests_Release tests/render/CMakeFiles/sirius_render_tests.dir/alcubierre_acceptance_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/film_pipeline_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/tile_scheduler_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/progress_tracker_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/render_evidence_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/memory_governor_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/ray_bundle_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/starfield_point_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_physics_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/ray_work_queue_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/doppler_toggle_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/pixel_sampling_test.cpp.o tests/render/CMakeFiles/sirius_render_tests.dir/shadow_boundary_test.cpp.o | src/sirius/render/libsirius_render.a src/sirius/app/libsirius_app_lib.a lib/libgtest_main.a src/sirius/render/libsirius_render.a src/sirius/backend/libsirius_backend_cpu.a src/sirius/backend/libsirius_backend.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a /usr/lib/x86_64-linux-gnu/libvulkan.so _deps/ftxui-build/libftxui-component.a _deps/ftxui-build/libftxui-dom.a _deps/ftxui-build/libftxui-screen.a lib/glfw/src/libglfw3.a /usr/lib/x86_64-linux-gnu/librt.a /usr/lib/x86_64-linux-gnu/libm.so /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so lib/libgtest.a || _deps/ftxui-build/libftxui-component.a _deps/ftxui-build/libftxui-dom.a _deps/ftxui-build/libftxui-screen.a lib/glfw/src/libglfw3.a lib/libgtest.a lib/libgtest_main.a sirius_render_tests_input_volume src/sirius/app/libsirius_app_lib.a src/sirius/app/sirius src/sirius/backend/libsirius_backend.a src/sirius/backend/libsirius_backend_cpu.a src/sirius/backend/sirius_kernels src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a src/sirius/render/libsirius_render.a"
+    ],
+    "registrations": [
+      {
+        "name": "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+        "source": "tests/core/spectral_radiance_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+        "source": "tests/core/blackbody_planck_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+        "source": "tests/core/blackbody_planck_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+        "source": "tests/core/blackbody_planck_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+        "source": "tests/core/blackbody_planck_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+        "source": "tests/core/blackbody_planck_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+        "source": "tests/core/blackbody_planck_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere",
+        "source": "tests/core/blackbody_planck_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+        "add_test": "add_test([=[SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests [==[--gtest_filter=SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/core SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+        "producer": "bin/linux-gcc/tests/core/sirius_core_tests"
+      },
+      {
+        "name": "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+        "source": "tests/render/spectral_emission_test.cpp",
+        "registration_file": "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+        "add_test": "add_test([=[SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor]=]  /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests [==[--gtest_filter=SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor]==] --gtest_also_run_disabled_tests)",
+        "properties": "set_tests_properties([=[SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/render SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+        "producer": "bin/linux-gcc/src/sirius/app/sirius_render_tests"
+      }
+    ],
+    "selected_core_cases": 8,
+    "selected_render_cases": 1,
+    "original_test_TIMEOUT_added": false
+  },
+  "reference": {
+    "original_source_snapshots": {
+      "tests/core/blackbody_planck_test.cpp": {
+        "bytes": 13899,
+        "sha256": "c6f0a0b36355a5ca7c47267d7e38678b6fcfd254ff95b3325455f886367ff548",
+        "git_blob": "f4eef6f4aee0ee6ebf82b6244264abb585ba5230"
+      },
+      "tests/core/spectral_radiance_test.cpp": {
+        "bytes": 5093,
+        "sha256": "f14b56c4f0548e11d64f390465096ccb061b32139fc8f4d45aceda3b12518a16",
+        "git_blob": "60dbddc0097a23c60083767978a7aca5398895a9"
+      },
+      "tests/render/spectral_emission_test.cpp": {
+        "bytes": 5864,
+        "sha256": "bc49f588c89e34d980c72abc5eb7989fe053b3c1c6523b13032c61aae3f0af67",
+        "git_blob": "578538085e4d1b7bc491f4d8741155c3903e6a41"
+      },
+      "src/sirius/core/constants.h": {
+        "bytes": 8558,
+        "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37",
+        "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469"
+      },
+      "src/sirius/core/spectral/blackbody_laws.h": {
+        "bytes": 4322,
+        "sha256": "3846d9cdf8db6e034585ac3e4dcb14f2edb1c4e57a649a1c2ff8964d408bd0c0",
+        "git_blob": "824f780ca67787214af3084e507043d6c61feb78"
+      },
+      "src/sirius/core/spectral/blackbody.h": {
+        "bytes": 6171,
+        "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f",
+        "git_blob": "154a07cbe3a919cc0e97f5f2edc80cb89e1b7a9a"
+      },
+      "src/sirius/core/spectral/spectral_radiance.h": {
+        "bytes": 5757,
+        "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664",
+        "git_blob": "5a9626f468489a55febfb9a078f3fe5718e0e0f5"
+      },
+      "src/sirius/core/spectral/colour_modes.h": {
+        "bytes": 9441,
+        "sha256": "97d1f488c79830682012b6ee073f45428ca83eb6bf32a16b6e377af73c70dd50",
+        "git_blob": "80edd807006b2c19b8d3c87fad4b4e297b3f82e5"
+      },
+      "src/sirius/core/relativistic_transfer.h": {
+        "bytes": 11498,
+        "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f",
+        "git_blob": "fcd65ad400729de2105752b710bdde70423565d4"
+      },
+      "src/sirius/core/kerr_orbits.h": {
+        "bytes": 3107,
+        "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe",
+        "git_blob": "ce4e906fd865922642e6fa8bb6108be169ddd7a5"
+      },
+      "tests/operating_model.json": {
+        "bytes": 130331,
+        "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b",
+        "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95"
+      },
+      "tests/core/CMakeLists.txt": {
+        "bytes": 1974,
+        "sha256": "bf9c352a0db90b86836ccdd63fb3163f5bd394563fb6eade0f22e1df4640f773",
+        "git_blob": "3ebec86b19bc796ff619b839097de35ea858c8ed"
+      },
+      "tests/render/CMakeLists.txt": {
+        "bytes": 2826,
+        "sha256": "23f2ba5b952360171edaf379cf2536730623a8fc4275b14958278b7853e3aa9f",
+        "git_blob": "7a68808e58e7f673002f696871603848e04a2a69"
+      },
+      "tests/labels/CTestLabels.cmake": {
+        "bytes": 78306,
+        "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14",
+        "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7"
+      }
+    },
+    "nist_2022": {
+      "url": "https://physics.nist.gov/cuu/Constants/Table/allascii.txt",
+      "retrieved_utc": "2026-10-14T09:55:57.053887+00:00",
+      "edition": "2022 CODATA adjustment",
+      "bytes": 40801,
+      "sha256": "77fb90e66c40db3e6eb16630bc9c88e4c7c8beddbe5e71be406f2f26e3f67e67",
+      "http_headers": {
+        "Content-Type": "text/plain",
+        "Last-Modified": "Tue, 07 May 2024 18:54:55 GMT",
+        "ETag": "\"9f61-617e1b8c9228e\""
+      },
+      "primary_rows": {
+        "Planck constant": "Planck constant                                             6.626 070 15 e-34        (exact)                  J Hz^-1",
+        "speed of light in vacuum": "speed of light in vacuum                                    299 792 458              (exact)                  m s^-1",
+        "Boltzmann constant": "Boltzmann constant                                          1.380 649 e-23           (exact)                  J K^-1",
+        "first radiation constant for spectral radiance": "first radiation constant for spectral radiance              1.191 042 972... e-16    (exact)                  W m^2 sr^-1",
+        "second radiation constant": "second radiation constant                                   1.438 776 877... e-2     (exact)                  m K",
+        "Stefan-Boltzmann constant": "Stefan-Boltzmann constant                                   5.670 374 419... e-8     (exact)                  W m^-2 K^-4",
+        "Wien wavelength displacement law constant": "Wien wavelength displacement law constant                   2.897 771 955... e-3     (exact)                  m K"
+      },
+      "scope": "Small unchanged official plaintext table; provenance and source-constant audit only. Original executable test references/assertions remain unchanged.",
+      "precision_note": "h, c and k are exact SI defining constants. Listed sigma and wavelength Wien b have ellipses: source 5.670374419e-8 and 2.897771955e-3 retain their existing truncated decimal representations of exact-derived quantities, not new exact finite decimals."
+    },
+    "nist_scope": "Official table binds coefficient provenance only; no pixel, all-radiation, or whole-domain accuracy claim.",
+    "derivations_for_review_only": {
+      "Planck": "B_lambda=2*h*c^2/[lambda^5*(exp(h*c/(lambda*k*T))-1)] per metre and per sr.",
+      "Wien": "Positive root x of5*(1-exp(-x))=x; b=(h*c/k)/x. Original executable reference remains golden-section Planck maximum.",
+      "hemisphere_exitance": "pi*integral_0^infinity B_lambda dlambda=[2*pi^5*k^4/(15*h^3*c^2)]*T^4. Original executable reference remains bounded log-lambda quadrature.",
+      "Kerr_frequency": "nu=-u dot p=u^t*(E-Omega*Lz), g=nu_observer/nu_emitter.",
+      "bolometric": "Invariant I_nu/nu^3 plus frequency measure dnu gives g^4; one algebraic float test only."
+    },
+    "source_composition_boundary": "Root reviewed blackbody law, constants, transfer composition and facade units; finite source algebra review is not exhaustive or a machine proof. No new numerical reference implementation or threshold.",
+    "historical_execution": {
+      "xml": "attestations/scientific-core/5e70607/final-integrated-cpu.xml",
+      "identity": "attestations/scientific-core/5e70607/final-build-identity-5e70607.json",
+      "revision": "5e706073a3fd2f9afcf8efbcde2f094122050f6a",
+      "producer_hashes": {
+        "bin/linux-gcc/tests/core/sirius_core_tests": "913aa8cd549f5b2fe8f451363c2c26d0b9ccf9455d3bd448e0a7878759e0dc8c",
+        "bin/linux-gcc/tests/oracle/sirius_oracle_tests": "a0c82a309ae6f3005a60fd820c86bdb0e03924869cb5f330e54ed978fb171f4d",
+        "bin/linux-gcc/tests/backend/sirius_backend_tests": "368057c7a7e403987ac66dc2c1a8657d3d0e5be128fbf5248b88c72b268056e3",
+        "bin/linux-gcc/src/sirius/app/sirius_render_tests": "917976be8188d910d07836cf5542472b1bdc0eb4b760dc2c8f6169e9b2613bf8"
+      },
+      "reuse_boundary": "Seven selected SpectralValidation cases have historical passes at5e70607 with different ELF hashes; no matching current-ELF selected execution found in preserved XML. No relabelling as current."
+    }
+  },
+  "temporary_output": {
+    "path": "/home/astra/.project/Sirius/out/p4-cpu-radiation-current-source/temporary",
+    "uid": 1000,
+    "mode": "0o700",
+    "residual_files": {}
+  }
+}

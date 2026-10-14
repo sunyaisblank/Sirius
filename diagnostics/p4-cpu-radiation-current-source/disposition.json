@@ -1,0 +1,429 @@
+{
+  "archive": {
+    "archived_prefix": "files/out/p4-cpu-radiation-current-source",
+    "copy_is_byte_exact": true,
+    "directory_modes_uids_gids": {
+      ".": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "original-nine-cpu-radiation-controls": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/src": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/src/sirius": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/src/sirius/core": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/src/sirius/core/spectral": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/tests": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/tests/core": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/tests/labels": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "reference/tests/render": {
+        "gid": 1000,
+        "mode": "0o755",
+        "uid": 1000
+      },
+      "temporary": {
+        "gid": 1000,
+        "mode": "0o700",
+        "uid": 1000
+      }
+    },
+    "original_scratch_root": "out/p4-cpu-radiation-current-source",
+    "scratch_deleted": false,
+    "source_payload_bytes": 920768,
+    "source_payload_count": 32
+  },
+  "claims": {
+    "all_radiation_accuracy": false,
+    "complete_Mandatory": false,
+    "device_or_frame": false,
+    "full_P4": false,
+    "full_scientific_estate": false,
+    "pixel_accuracy": false,
+    "release_qualification": false
+  },
+  "diagnostic_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "finite_acceptance_scope": {
+    "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor": {
+      "assertion": "Original EXPECT_FLOAT_EQ ObservedBolometricIntensity(emitted,g)=emitted*g*g*g*g at one tuple; no integrated disk/frame or pixel accuracy claim.",
+      "domain": {
+        "emitted_float": 0.37,
+        "g_float": 1.25
+      },
+      "reference": "Original algebraic bolometric authority check: invariant I_nu/nu^3 contributes g^3 and dnu_observer=g*dnu_emitter contributes one g, hence g^4."
+    },
+    "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature": {
+      "assertion": "Original EXPECT_DOUBLE_EQ L[bin]=production_per_metre*1e-9 (per nm); temperatures0,-1,+Inf,NaN yield exact total energy0.",
+      "domain": {
+        "bin_centres_nm": "380+(bin+.5)*12.5 for bin0..31",
+        "bins": 32,
+        "temperature_K": 5778
+      },
+      "reference": "Facade/delegation and unit conversion against production TryPlanckSpectralRadiancePerMetre, not an independent 32-bin physical oracle."
+    },
+    "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains": {
+      "assertion": "Original overflow refusal at lambda1e-300 m,T=c2/1e-297 and Stefan(max_double); no new domain points.",
+      "invalid_values": [
+        0,
+        -1,
+        "+infinity",
+        "NaN"
+      ],
+      "reference": "Original invalid wavelength/temperature refusals; deep Wien lambda1e-20 m/T1 K exact zero; finite extreme Rayleigh-Jeans lambda1e100 m/T1e300 K compares original c1/c2*1e-100 at relative<2e-13. This extreme-limit expected coefficient ratio is production-derived."
+    },
+    "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction": {
+      "assertion": "Original absolute 2e-15 emitter/zamo frequencies and full_g/zamo_g; one fixed tuple, no arbitrary-latitude claim.",
+      "domain": {
+        "E": 1,
+        "Lz": 2,
+        "equatorial_radius": 6,
+        "mass": 1,
+        "observer_frequency": 0.93,
+        "signed_spin": 0.7
+      },
+      "reference": "Original separately written equatorial BL g_tt/g_tphi/g_phiphi, circular Omega, normalized u^t and nu=u^t*(E-Omega*Lz); same independent contraction for ZAMO Omega=-g_tphi/g_phiphi."
+    },
+    "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission": {
+      "assertion": "Original positive absorbed fraction/emission, absorbed/tau near1 at1e-14, negative tau declines; accumulated RGB/tau near[1,.5,.25] at1e-14.",
+      "domain": {
+        "delta_tau": 1e-14,
+        "max_tau": 10,
+        "observed_source": [
+          1,
+          0.5,
+          0.25
+        ]
+      },
+      "reference": "Original first-order 1-exp(-tau)=tau+O(tau^2) ratios at the one thin layer; no E2/polarised-transport rerun."
+    },
+    "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation": {
+      "assertion": "Original relative error <2e-14 (denominator max(abs(expected),1e-300)); no all-wavelength/all-temperature bound.",
+      "reference": "Independent 2*h*c^2/[lambda^5*expm1(h*c/(lambda*k*T))] with original literal SI h,c,k, not production Planck coefficients.",
+      "sample_pairs": 25,
+      "temperatures_K": [
+        1200,
+        3000,
+        5778,
+        10000,
+        10000000.0
+      ],
+      "wavelengths_m": [
+        1e-07,
+        3.8e-07,
+        5.5e-07,
+        7.8e-07,
+        1e-05
+      ]
+    },
+    "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral": {
+      "assertion": "Original relative error <2e-7 against production sigma*T^4; finite integration bounds retained.",
+      "reference": "Original 32768-panel midpoint integral in log(lambda), log limits -20.72326583694641 to -6.907755278982137 (1 nm to 1 mm), independent Planck times lambda and hemisphere factor pi.",
+      "temperatures_K": [
+        1200,
+        3000,
+        5778,
+        10000
+      ]
+    },
+    "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum": {
+      "assertion": "Original relative error <2e-8; no new root solver or executable reference.",
+      "reference": "Original 120-iteration golden-section maximization of independent Planck on [50e-9,20e-6] m.",
+      "temperatures_K": [
+        1200,
+        3000,
+        5778,
+        10000
+      ]
+    },
+    "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere": {
+      "assertion": "Original static ratio(gtt_emit=1/3,gtt_observer=-1) declines; Kerr transfer exists, zamo_frequency>0 and zamo_g finite. No additional numeric oracle inferred.",
+      "domain": {
+        "E": 1,
+        "Lz": 1.5,
+        "equatorial_radius": 1.5,
+        "mass": 1,
+        "observer_frequency": 1,
+        "signed_spin": 0.998
+      }
+    }
+  },
+  "git_preservation": {
+    "artifact_prefix": "diagnostics/p4-cpu-radiation-current-source",
+    "commit_tree_parent": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "files": [
+      "cleanup_check.py",
+      "disposition.json",
+      "files/out/p4-cpu-radiation-current-source/actions.json",
+      "files/out/p4-cpu-radiation-current-source/controller.log",
+      "files/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/ctest.log",
+      "files/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/ctest.xml",
+      "files/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/inputs-after.json",
+      "files/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/inputs-before.json",
+      "files/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/owner.json",
+      "files/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/samples.jsonl",
+      "files/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/stderr.log",
+      "files/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/stdout.log",
+      "files/out/p4-cpu-radiation-current-source/owned_guard.py",
+      "files/out/p4-cpu-radiation-current-source/preparation.json",
+      "files/out/p4-cpu-radiation-current-source/prepare.py",
+      "files/out/p4-cpu-radiation-current-source/reference/nist-2022-allascii.txt",
+      "files/out/p4-cpu-radiation-current-source/reference/nist-2022-provenance.json",
+      "files/out/p4-cpu-radiation-current-source/reference/src/sirius/core/constants.h",
+      "files/out/p4-cpu-radiation-current-source/reference/src/sirius/core/kerr_orbits.h",
+      "files/out/p4-cpu-radiation-current-source/reference/src/sirius/core/relativistic_transfer.h",
+      "files/out/p4-cpu-radiation-current-source/reference/src/sirius/core/spectral/blackbody.h",
+      "files/out/p4-cpu-radiation-current-source/reference/src/sirius/core/spectral/blackbody_laws.h",
+      "files/out/p4-cpu-radiation-current-source/reference/src/sirius/core/spectral/colour_modes.h",
+      "files/out/p4-cpu-radiation-current-source/reference/src/sirius/core/spectral/spectral_radiance.h",
+      "files/out/p4-cpu-radiation-current-source/reference/tests/core/CMakeLists.txt",
+      "files/out/p4-cpu-radiation-current-source/reference/tests/core/blackbody_planck_test.cpp",
+      "files/out/p4-cpu-radiation-current-source/reference/tests/core/spectral_radiance_test.cpp",
+      "files/out/p4-cpu-radiation-current-source/reference/tests/labels/CTestLabels.cmake",
+      "files/out/p4-cpu-radiation-current-source/reference/tests/operating_model.json",
+      "files/out/p4-cpu-radiation-current-source/reference/tests/render/CMakeLists.txt",
+      "files/out/p4-cpu-radiation-current-source/reference/tests/render/spectral_emission_test.cpp",
+      "files/out/p4-cpu-radiation-current-source/result.json",
+      "files/out/p4-cpu-radiation-current-source/run_owned.py",
+      "files/out/p4-cpu-radiation-current-source/run_radiation.py",
+      "manifest.json"
+    ],
+    "never_merge": true,
+    "selection": "Every original raw payload, official small NIST table/provenance, source snapshots, this finite disposition, permission-aware read-only cleanup helper and whole-byte manifest; no duplicate producer ELF."
+  },
+  "nist_2022_reference": {
+    "bytes": 40801,
+    "edition": "2022 CODATA adjustment",
+    "http_headers": {
+      "Content-Type": "text/plain",
+      "ETag": "\"9f61-617e1b8c9228e\"",
+      "Last-Modified": "Tue, 07 May 2024 18:54:55 GMT"
+    },
+    "precision_note": "h, c and k are exact SI defining constants. Listed sigma and wavelength Wien b have ellipses: source 5.670374419e-8 and 2.897771955e-3 retain their existing truncated decimal representations of exact-derived quantities, not new exact finite decimals.",
+    "primary_rows": {
+      "Boltzmann constant": "Boltzmann constant                                          1.380 649 e-23           (exact)                  J K^-1",
+      "Planck constant": "Planck constant                                             6.626 070 15 e-34        (exact)                  J Hz^-1",
+      "Stefan-Boltzmann constant": "Stefan-Boltzmann constant                                   5.670 374 419... e-8     (exact)                  W m^-2 K^-4",
+      "Wien wavelength displacement law constant": "Wien wavelength displacement law constant                   2.897 771 955... e-3     (exact)                  m K",
+      "first radiation constant for spectral radiance": "first radiation constant for spectral radiance              1.191 042 972... e-16    (exact)                  W m^2 sr^-1",
+      "second radiation constant": "second radiation constant                                   1.438 776 877... e-2     (exact)                  m K",
+      "speed of light in vacuum": "speed of light in vacuum                                    299 792 458              (exact)                  m s^-1"
+    },
+    "retrieved_utc": "2026-10-14T09:55:57.053887+00:00",
+    "scope": "Small unchanged official plaintext table; provenance and source-constant audit only. Original executable test references/assertions remain unchanged.",
+    "sha256": "77fb90e66c40db3e6eb16630bc9c88e4c7c8beddbe5e71be406f2f26e3f67e67",
+    "url": "https://physics.nist.gov/cuu/Constants/Table/allascii.txt"
+  },
+  "original_assertions_domains_tolerances_changed": false,
+  "outcome": {
+    "case_count": 9,
+    "cases": [
+      {
+        "classname": "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+        "name": "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+        "status": "run",
+        "time": "0.00533869"
+      },
+      {
+        "classname": "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+        "name": "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+        "status": "run",
+        "time": "0.00588559"
+      },
+      {
+        "classname": "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+        "name": "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+        "status": "run",
+        "time": "0.00786796"
+      },
+      {
+        "classname": "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+        "name": "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+        "status": "run",
+        "time": "0.00455336"
+      },
+      {
+        "classname": "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+        "name": "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+        "status": "run",
+        "time": "0.00526891"
+      },
+      {
+        "classname": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere",
+        "name": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere",
+        "status": "run",
+        "time": "0.00467997"
+      },
+      {
+        "classname": "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+        "name": "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+        "status": "run",
+        "time": "0.00439946"
+      },
+      {
+        "classname": "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+        "name": "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+        "status": "run",
+        "time": "0.00484344"
+      },
+      {
+        "classname": "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+        "name": "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+        "status": "run",
+        "time": "0.00508836"
+      }
+    ],
+    "child_exit": 0,
+    "cleanup_errors": [],
+    "controller_birth_now_absent": true,
+    "disabled": 0,
+    "errors": 0,
+    "failures": 0,
+    "minimum_sampled_available_kib": 20265408,
+    "observed_births_all_absent": true,
+    "passed": true,
+    "peak_sampled_rss_kib": 46168,
+    "remaining_owned_processes": [],
+    "skips": 0,
+    "source_unchanged": true,
+    "stop_reason": null,
+    "wall_seconds": 0.2734589209976548,
+    "whole_inputs_unchanged": true
+  },
+  "output_preservation": {
+    "natural_residuals_preserved": true,
+    "private_tmpdir": {
+      "mode": "0o700",
+      "path": "/home/astra/.project/Sirius/out/p4-cpu-radiation-current-source/temporary",
+      "residual_files": {},
+      "uid": 1000
+    },
+    "standard_ctest_verbose_and_output_log": true
+  },
+  "passed": true,
+  "provenance": {
+    "core_producer": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "core_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+    "ctest_output_log": {
+      "bytes": 14510,
+      "sha256": "34a29ee342c09a97aaca4de75599d3e02b41b9f8c8082a10acb3d4559fd16701"
+    },
+    "input_seals_rechecked": 655,
+    "junit": {
+      "bytes": 9893,
+      "sha256": "0c7ba6c4f5a7f23db0e5eb4f576e3a8947b0a6a7ea5a9d3ddfcaba8f2648613d"
+    },
+    "preparation": {
+      "bytes": 67593,
+      "sha256": "254ce00f836707a66fb5fb666c9e232d0caf57a07fcc35c342312c435727f19c"
+    },
+    "preparation_pins_rechecked": 133,
+    "raw_owner": {
+      "bytes": 2568,
+      "sha256": "9126314891974070376011cfd33cc27cb867fad7575267281d2b2847812004b7"
+    },
+    "render_producer": {
+      "bytes": 12208240,
+      "sha256": "2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4"
+    },
+    "render_recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/current-versions/2489bc56bd0c1c53ab01da021119d6292d8fdb6f51037b82819d3dcdf6e87ab4",
+    "result": {
+      "bytes": 42235,
+      "sha256": "cfa34ad1f8ed50b6cbbac3b5e8a4faed7273f518a4f55f6c597b6b0eb4ffaec1"
+    },
+    "source_registration_compile_resource_reference_joins": "files/out/p4-cpu-radiation-current-source/preparation.json"
+  },
+  "reference_boundary": {
+    "bolometric": "One original float g^4 algebraic tuple, justified by invariant I_nu/nu^3 and frequency measure; no whole frame/disk/pixel claim.",
+    "facade": "32-bin test delegates to production TryPlanck and checks per-metre to per-nm conversion; it is not an independent 32-bin physical oracle.",
+    "independent_finite_witnesses": "Original 25 Planck pairs, four golden-section maxima and four bounded 32768-panel log-wavelength quadratures retain their original limits.",
+    "nist_supports": "Coefficient provenance only; exact SI defining h/c/k, existing truncated decimal sigma/b for exact-derived values.",
+    "prior_execution": {
+      "identity": "attestations/scientific-core/5e70607/final-build-identity-5e70607.json",
+      "producer_hashes": {
+        "bin/linux-gcc/src/sirius/app/sirius_render_tests": "917976be8188d910d07836cf5542472b1bdc0eb4b760dc2c8f6169e9b2613bf8",
+        "bin/linux-gcc/tests/backend/sirius_backend_tests": "368057c7a7e403987ac66dc2c1a8657d3d0e5be128fbf5248b88c72b268056e3",
+        "bin/linux-gcc/tests/core/sirius_core_tests": "913aa8cd549f5b2fe8f451363c2c26d0b9ccf9455d3bd448e0a7878759e0dc8c",
+        "bin/linux-gcc/tests/oracle/sirius_oracle_tests": "a0c82a309ae6f3005a60fd820c86bdb0e03924869cb5f330e54ed978fb171f4d"
+      },
+      "reuse_boundary": "Seven selected SpectralValidation cases have historical passes at5e70607 with different ELF hashes; no matching current-ELF selected execution found in preserved XML. No relabelling as current.",
+      "revision": "5e706073a3fd2f9afcf8efbcde2f094122050f6a",
+      "xml": "attestations/scientific-core/5e70607/final-integrated-cpu.xml"
+    },
+    "source_algebra_review": "Finite composition review is not exhaustive or a machine proof."
+  },
+  "runner_source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "schema_version": 1,
+  "scope": "Nine unchanged original finite CPU P4 radiation/transfer controls passed: eight core and one render-linked algebraic control. No device/frame, full P4/science, all-radiation/pixel accuracy, Mandatory or release qualification.",
+  "selection": {
+    "P4_named_total": 38,
+    "criterion": "P4",
+    "excluded": "Previously completed E2/polarised witnesses, unselected P4 controls, all device and frame work.",
+    "executed_names": [
+      "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+      "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+      "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+      "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+      "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+      "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+      "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+      "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+      "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"
+    ],
+    "selected_count": 9,
+    "selected_original_names": [
+      "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+      "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+      "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+      "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+      "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+      "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+      "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+      "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+      "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"
+    ]
+  },
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+}

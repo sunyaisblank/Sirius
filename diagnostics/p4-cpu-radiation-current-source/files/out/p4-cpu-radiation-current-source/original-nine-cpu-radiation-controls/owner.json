@@ -1,0 +1,64 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/ctest",
+    "--test-dir",
+    "bin/linux-gcc",
+    "-V",
+    "--output-on-failure",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/ctest.xml",
+    "--output-log",
+    "/home/astra/.project/Sirius/out/p4-cpu-radiation-current-source/original-nine-cpu-radiation-controls/ctest.log",
+    "-R",
+    "^(SpectralEmissionTest\\.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor|SpectralRadianceTest\\.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature|SpectralValidationTests\\.BlackbodyLawsRejectUnrepresentedDomains|SpectralValidationTests\\.KerrDiskTransferMatchesKillingFieldContraction|SpectralValidationTests\\.OpticallyThinGreyLayerPreservesFirstOrderEmission|SpectralValidationTests\\.PlanckSpectralRadianceMatchesIndependentCodataEquation|SpectralValidationTests\\.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral|SpectralValidationTests\\.WienPeakMatchesIndependentNumericalPlanckMaximum|SpectralValidationTests\\.ZamoBranchRemainsTimelikeInsideTheErgosphere)$"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "original-nine-cpu-radiation-controls",
+  "child_exit": 0,
+  "child_pid": 126953,
+  "child_start_ticks": "2138026",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 126945,
+    "pid": 126946,
+    "ppid": 126945,
+    "rss_kib": 32600,
+    "session": 126945,
+    "start_ticks": "2137987",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Nine unchanged original finite CPU radiation/transfer controls only; no device/frame, full P4/science, Mandatory or release qualification.",
+  "minimum_sampled_available_kib": 20265408,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 126953,
+      "saved_start_ticks": "2138026"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 46168,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Nine unchanged original finite CPU radiation/transfer controls only; no device/frame, full P4/science, Mandatory or release qualification.",
+  "source": {
+    "revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.2734589209976548,
+  "whole_inputs_unchanged": true
+}
