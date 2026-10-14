@@ -1,0 +1,291 @@
+{
+  "schema": "sirius-public-float-controls-query-independent-terminal-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "reviewer": "/root/forensic_obligations",
+  "review_role": "Independent source reviewer, independent of author and root actual operator; no authored query/reader/owner/helper/ctypes/provider/compiler/validator/test/device/API/CI reexecution.",
+  "result": {
+    "two_terminal_exit_zero_owners": true,
+    "all53_static_pins_current_exact": true,
+    "all_recorded_before_after_maps_current_exact": true,
+    "query_recorded_inputs": 592,
+    "reader_recorded_inputs": 607,
+    "observed_births_retired": 2,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "global_process_absence_claimed": false,
+    "observed_physical_devices": 1,
+    "selected_index": 0,
+    "physical_profile_eligible": true,
+    "logical_device_created": false,
+    "logical_device_Float64_enablement_observed": false,
+    "shader_pipeline_dispatch_JIT_or_WSI_executed": false,
+    "estimate_accuracy_established": false
+  },
+  "raw_replay": {
+    "seven_struct_identities_checked": true,
+    "five_property_feature_structs_plus_application_and_instance_info": true,
+    "pointer_chain_addresses_and_sTypes_checked": true,
+    "core_features55_redecoded": true,
+    "float_controls17_redecoded": true,
+    "device_driver_identity_and_UUIDs_redecoded": true,
+    "api_request": "Vulkan1.2,0flags,no layers/extensions",
+    "api_order": "CreateInstance→EnumeratePhysicalDevices(count)→EnumeratePhysicalDevices(handles)→GetPhysicalDeviceProperties2→GetPhysicalDeviceFeatures→DestroyInstance",
+    "VkResult_values_success": true,
+    "created_instance_destroyed": true,
+    "reader_receipt_fields_equal_original_query": true,
+    "raw_property_files": {
+      "core-features": {
+        "bytes": 220,
+        "sha256": "0c7f39ab28cb0ca631a3eafcee5ccb24115508f0f074f09fcaeefe48712c56fd",
+        "file": "core-features.bin"
+      },
+      "driver-properties": {
+        "bytes": 536,
+        "sha256": "3c237adf87c58440172e7b302ea26e5c62c275529aad395da2cbfa9da369d905",
+        "file": "driver-properties.bin"
+      },
+      "float-controls": {
+        "bytes": 88,
+        "sha256": "577d643cbaba7c5cef4feb01bf9d2c0034817e9db33b3e0af3af375870f36112",
+        "file": "float-controls.bin"
+      },
+      "id-properties": {
+        "bytes": 64,
+        "sha256": "f6c83363ae8a675f0bb0f8957c18f76cfb785861c8644582fc71a7ec383144f2",
+        "file": "id-properties.bin"
+      },
+      "properties2": {
+        "bytes": 840,
+        "sha256": "4bf1a6e484c8349550169d32dc96fb6ca4b2a52e3c3a137b589e2b4a75a1d365",
+        "file": "properties2.bin"
+      }
+    }
+  },
+  "selected": {
+    "api_version": 4211006,
+    "conformance_version": [
+      1,
+      3,
+      1,
+      1
+    ],
+    "device_id": 0,
+    "device_luid": "0000000000000000",
+    "device_luid_valid": 0,
+    "device_node_mask": 0,
+    "device_type": 4,
+    "device_uuid": "6d65736132352e322e382d3075627500",
+    "driver_id": 13,
+    "driver_info": "Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+    "driver_name": "llvmpipe",
+    "driver_uuid": "6c6c766d706970655555494400000000",
+    "driver_version": 104865800,
+    "enumerated_count": 1,
+    "index": 0,
+    "name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "physical_handle": 1020628992,
+    "pipeline_cache_uuid": "32352e322e382d307562756e7475302e",
+    "vendor_id": 65541
+  },
+  "profile_checks": {
+    "physical_api_at_least_1_2": true,
+    "roundingModeIndependence_ALL_or_32_BIT_ONLY": true,
+    "shaderFloat64_supported": true,
+    "shaderRoundingModeRTEFloat32": true
+  },
+  "float_controls": {
+    "denormBehaviorIndependence": 1,
+    "roundingModeIndependence": 1,
+    "shaderSignedZeroInfNanPreserveFloat16": 1,
+    "shaderSignedZeroInfNanPreserveFloat32": 1,
+    "shaderSignedZeroInfNanPreserveFloat64": 1,
+    "shaderDenormPreserveFloat16": 0,
+    "shaderDenormPreserveFloat32": 0,
+    "shaderDenormPreserveFloat64": 0,
+    "shaderDenormFlushToZeroFloat16": 0,
+    "shaderDenormFlushToZeroFloat32": 0,
+    "shaderDenormFlushToZeroFloat64": 0,
+    "shaderRoundingModeRTEFloat16": 1,
+    "shaderRoundingModeRTEFloat32": 1,
+    "shaderRoundingModeRTEFloat64": 1,
+    "shaderRoundingModeRTZFloat16": 0,
+    "shaderRoundingModeRTZFloat32": 0,
+    "shaderRoundingModeRTZFloat64": 0
+  },
+  "property_interpretation": {
+    "roundingModeIndependence": "ALL(1)",
+    "denormBehaviorIndependence": "ALL(1)",
+    "shaderRoundingModeRTEFloat32": true,
+    "shaderRoundingModeRTEFloat64_observed": true,
+    "shaderFloat64_supported": true,
+    "RTE64_an_acceptance_requirement": false,
+    "denorm_modes_promoted_to_requirements": false,
+    "scope": "Physical support and mixed RTE32/internalFloat64 profile eligibility for this selected provider only; no native53-bit division accuracy premise or successful logical-device enablement."
+  },
+  "actual_provider_join": {
+    "live_query_birth_session": {
+      "pid": 399764,
+      "start_ticks": "6516155",
+      "session": 399764,
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548"
+    },
+    "libraries": {
+      "llvm": {
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "bytes": 143545784,
+        "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a",
+        "inode": 47452,
+        "device_major": 8,
+        "device_minor": 80
+      },
+      "loader": {
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "bytes": 510592,
+        "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e",
+        "inode": 13100,
+        "device_major": 8,
+        "device_minor": 80
+      },
+      "provider": {
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "bytes": 11929384,
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+        "inode": 143595,
+        "device_major": 8,
+        "device_minor": 80
+      }
+    },
+    "while_instance_alive_maps_saved_and_raw_hash_joined": true,
+    "mapped_ranges_permissions_dev_inode_current_file_bytes_verified": true,
+    "query_owner_actual_LVP_mapping_present": true,
+    "source_and_input_seals_stable": true
+  },
+  "owners": [
+    {
+      "case": "query",
+      "wall_seconds": 0.3619883999999729,
+      "peak_sampled_rss_kib": 96224,
+      "minimum_sampled_available_kib": 18446116,
+      "frozen_input_count": 592,
+      "observed_retired_births": 1,
+      "raw": {
+        "owner.json": {
+          "bytes": 2373,
+          "sha256": "25ed6038b06e0fae9fa24b207e650307fc5ee6d77c53d39e8ddc978b57e8976d",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/owner.json"
+        },
+        "inputs-before.json": {
+          "bytes": 141977,
+          "sha256": "36191a977327e5cf433465bceb3a8511bab4c92804f80a88bb9c306da44a2775",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/inputs-before.json"
+        },
+        "inputs-after.json": {
+          "bytes": 141977,
+          "sha256": "36191a977327e5cf433465bceb3a8511bab4c92804f80a88bb9c306da44a2775",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/inputs-after.json"
+        },
+        "samples.jsonl": {
+          "bytes": 2919,
+          "sha256": "c930e12d6c318f154ae7a74b6f97db25d347c21333be21fef5259e5feda14b73",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/samples.jsonl"
+        },
+        "stdout.log": {
+          "bytes": 99,
+          "sha256": "2f38a4c8d8994e890d35eb0404d79f5d63175a9f5d6b8705e74c5e8799b351b3",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/stdout.log"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/stderr.log"
+        }
+      }
+    },
+    {
+      "case": "read-properties",
+      "wall_seconds": 0.27690895599516807,
+      "peak_sampled_rss_kib": 30396,
+      "minimum_sampled_available_kib": 18545788,
+      "frozen_input_count": 607,
+      "observed_retired_births": 1,
+      "raw": {
+        "owner.json": {
+          "bytes": 1675,
+          "sha256": "72680d3c75ecb4adf7c88a03bdb1dfbb6ae48dc2139f0a44868e6811e7e1553d",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/read-properties/owner.json"
+        },
+        "inputs-before.json": {
+          "bytes": 146605,
+          "sha256": "1bd234c1ab41fa9ab5e76c436ea027142d54b81ccc299eb6fa965d49ec86462a",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/read-properties/inputs-before.json"
+        },
+        "inputs-after.json": {
+          "bytes": 146605,
+          "sha256": "1bd234c1ab41fa9ab5e76c436ea027142d54b81ccc299eb6fa965d49ec86462a",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/read-properties/inputs-after.json"
+        },
+        "samples.jsonl": {
+          "bytes": 225,
+          "sha256": "82f55e9fbdda57de7aa0fd46005f5dd337b24b82866a4cc48bec6772571aa750",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/read-properties/samples.jsonl"
+        },
+        "stdout.log": {
+          "bytes": 236,
+          "sha256": "faa941184edd3c4aa7f7ad86618aee835099ac01f69b626c7c204a1fa49536de",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/read-properties/stdout.log"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/read-properties/stderr.log"
+        }
+      }
+    }
+  ],
+  "critical": {
+    "query/property-query.json": {
+      "bytes": 14933,
+      "sha256": "8fc1efec67f75577a00098f7f81efad405c388fd54f5d1f27af5758f03bd9875",
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/property-query.json"
+    },
+    "read-properties/property-accepted.json": {
+      "bytes": 11803,
+      "sha256": "0e9946333e2f5882d93cbfaaa1f08f4a7d602fc5487988b776cda2e713b9f4ea",
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/read-properties/property-accepted.json"
+    },
+    "query/maps-while-alive.txt": {
+      "bytes": 26402,
+      "sha256": "b3c46dea621d2cd977329bf3f01f3059cce565238477d7606b1f0e3fe1f11b56",
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/maps-while-alive.txt"
+    },
+    "source-freeze.json": {
+      "bytes": 14141,
+      "sha256": "92fdb54ffd21d73805985351788be1f7f20075cd2855d3c942020082be88ca71",
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/source-freeze.json"
+    },
+    "independent-source-review.json": {
+      "bytes": 8206,
+      "sha256": "ac8d8fb58fd75c21322831c258e47594f5c961124e6f971fa229b57c28cfa0c0",
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/independent-source-review.json"
+    }
+  },
+  "future_capture": {
+    "requires_immutable_property_result_owner_reader_inputs_raw_and_helper_joins": true,
+    "requires_fresh_selected_provider_and_enabled_Float64_device_arguments": true,
+    "stopped_compiler_reader_acceptance_not_supplied_by_this_query": true,
+    "driver_capture_admitted_by_this_review": false,
+    "numerical174268_and_original8_and_unchanged20plus2_still_future": true
+  },
+  "blockers": [],
+  "limits": "Sampled60s/4GiBRSS/2GiBMemAvailable operational guards retained. No performance/coldness/domain/full-science/release qualification or global process absence claim.",
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "review_ignored_uncommitted": true
+  }
+}

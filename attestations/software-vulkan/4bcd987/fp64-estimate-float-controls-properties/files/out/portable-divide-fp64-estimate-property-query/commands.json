@@ -1,0 +1,24 @@
+{
+  "commands": [
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "out/portable-divide-fp64-estimate-property-query/run_owned.py",
+      "query"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "out/portable-divide-fp64-estimate-property-query/run_owned.py",
+      "read-properties"
+    ]
+  ],
+  "executed": false,
+  "future_capture_admission": "Root independently reviews actual terminal query+reader and property-accepted.json, then binds their exact current/immutable evidence bytes into held driver frozen inputs before any capture. No property\u2192accuracy inference.",
+  "order": [
+    "query",
+    "read-properties"
+  ],
+  "schema": "sirius-fp64-estimate-property-query-commands-v1",
+  "stop_first_failure": true
+}

@@ -1,0 +1,71 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/python3.12",
+    "-B",
+    "out/portable-divide-fp64-estimate-property-query/query_properties.py",
+    "--output",
+    "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "query",
+  "child_exit": 0,
+  "child_pid": 399764,
+  "child_start_ticks": "6516155",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 399760,
+    "pid": 399760,
+    "ppid": 1313,
+    "rss_kib": 21184,
+    "session": 399760,
+    "start_ticks": "6516121",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 60
+  },
+  "meaning": "One public instance-only physical FloatControls/ID/Driver+corefeatures query; no logical device/pipeline/shader/dispatch/WSI or accuracy evidence.",
+  "minimum_sampled_available_kib": 18446116,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 399764,
+      "saved_start_ticks": "6516155"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 96224,
+  "provider_mappings": [
+    {
+      "maps": [
+        "77b85e800000-77b85e85b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "77b85e85b000-77b85ec6b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "77b85ec6b000-77b85f2c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "77b85f2c6000-77b85f361000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 399764,
+      "pid": 399764,
+      "start_ticks": "6516155"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "One public instance-only physical FloatControls/ID/Driver+corefeatures query; no logical device/pipeline/shader/dispatch/WSI or accuracy evidence.",
+  "source": {
+    "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.3619883999999729,
+  "whole_inputs_unchanged": true
+}

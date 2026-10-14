@@ -1,0 +1,306 @@
+{
+  "estimate_accuracy_established": false,
+  "float_controls": {
+    "denormBehaviorIndependence": 1,
+    "roundingModeIndependence": 1,
+    "shaderDenormFlushToZeroFloat16": 0,
+    "shaderDenormFlushToZeroFloat32": 0,
+    "shaderDenormFlushToZeroFloat64": 0,
+    "shaderDenormPreserveFloat16": 0,
+    "shaderDenormPreserveFloat32": 0,
+    "shaderDenormPreserveFloat64": 0,
+    "shaderRoundingModeRTEFloat16": 1,
+    "shaderRoundingModeRTEFloat32": 1,
+    "shaderRoundingModeRTEFloat64": 1,
+    "shaderRoundingModeRTZFloat16": 0,
+    "shaderRoundingModeRTZFloat32": 0,
+    "shaderRoundingModeRTZFloat64": 0,
+    "shaderSignedZeroInfNanPreserveFloat16": 1,
+    "shaderSignedZeroInfNanPreserveFloat32": 1,
+    "shaderSignedZeroInfNanPreserveFloat64": 1
+  },
+  "future_capture_requires_exact_property_receipt_join": true,
+  "inputs_after": {
+    "bytes": 141977,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/inputs-after.json",
+    "sha256": "36191a977327e5cf433465bceb3a8511bab4c92804f80a88bb9c306da44a2775"
+  },
+  "inputs_before": {
+    "bytes": 141977,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/inputs-before.json",
+    "sha256": "36191a977327e5cf433465bceb3a8511bab4c92804f80a88bb9c306da44a2775"
+  },
+  "logical_device_float64_enablement_observed": false,
+  "observed_actual_live_images": {
+    "llvm": {
+      "bytes": 143545784,
+      "device_major": 8,
+      "device_minor": 80,
+      "inode": 47452,
+      "mappings": [
+        {
+          "dev": "08:50",
+          "inode": 47452,
+          "offset": "00000000",
+          "path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "permissions": "r-xp",
+          "range": "77b855e00000-77b85e008000",
+          "raw": "77b855e00000-77b85e008000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1"
+        },
+        {
+          "dev": "08:50",
+          "inode": 47452,
+          "offset": "08208000",
+          "path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "permissions": "---p",
+          "range": "77b85e008000-77b85e009000",
+          "raw": "77b85e008000-77b85e009000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1"
+        },
+        {
+          "dev": "08:50",
+          "inode": 47452,
+          "offset": "08208000",
+          "path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "permissions": "r--p",
+          "range": "77b85e009000-77b85e69e000",
+          "raw": "77b85e009000-77b85e69e000 r--p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1"
+        },
+        {
+          "dev": "08:50",
+          "inode": 47452,
+          "offset": "0889d000",
+          "path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "permissions": "rw-p",
+          "range": "77b85e69e000-77b85e6e6000",
+          "raw": "77b85e69e000-77b85e6e6000 rw-p 0889d000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1"
+        }
+      ],
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+    },
+    "loader": {
+      "bytes": 510592,
+      "device_major": 8,
+      "device_minor": 80,
+      "inode": 13100,
+      "mappings": [
+        {
+          "dev": "08:50",
+          "inode": 13100,
+          "offset": "00000000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "permissions": "r--p",
+          "range": "77b85f532000-77b85f538000",
+          "raw": "77b85f532000-77b85f538000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        },
+        {
+          "dev": "08:50",
+          "inode": 13100,
+          "offset": "00006000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "permissions": "r-xp",
+          "range": "77b85f538000-77b85f584000",
+          "raw": "77b85f538000-77b85f584000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        },
+        {
+          "dev": "08:50",
+          "inode": 13100,
+          "offset": "00052000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "permissions": "r--p",
+          "range": "77b85f584000-77b85f5ae000",
+          "raw": "77b85f584000-77b85f5ae000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        },
+        {
+          "dev": "08:50",
+          "inode": 13100,
+          "offset": "0007b000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "permissions": "r--p",
+          "range": "77b85f5ae000-77b85f5af000",
+          "raw": "77b85f5ae000-77b85f5af000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        },
+        {
+          "dev": "08:50",
+          "inode": 13100,
+          "offset": "0007c000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "permissions": "rw-p",
+          "range": "77b85f5af000-77b85f5b0000",
+          "raw": "77b85f5af000-77b85f5b0000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        }
+      ],
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "provider": {
+      "bytes": 11929384,
+      "device_major": 8,
+      "device_minor": 80,
+      "inode": 143595,
+      "mappings": [
+        {
+          "dev": "08:50",
+          "inode": 143595,
+          "offset": "00000000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "permissions": "r--p",
+          "range": "77b85e800000-77b85e85b000",
+          "raw": "77b85e800000-77b85e85b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+        },
+        {
+          "dev": "08:50",
+          "inode": 143595,
+          "offset": "0005b000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "permissions": "r-xp",
+          "range": "77b85e85b000-77b85ec6b000",
+          "raw": "77b85e85b000-77b85ec6b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+        },
+        {
+          "dev": "08:50",
+          "inode": 143595,
+          "offset": "0046b000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "permissions": "r--p",
+          "range": "77b85ec6b000-77b85f2c6000",
+          "raw": "77b85ec6b000-77b85f2c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+        },
+        {
+          "dev": "08:50",
+          "inode": 143595,
+          "offset": "00ac5000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "permissions": "r--p",
+          "range": "77b85f2c6000-77b85f35c000",
+          "raw": "77b85f2c6000-77b85f35c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+        },
+        {
+          "dev": "08:50",
+          "inode": 143595,
+          "offset": "00b5b000",
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "permissions": "rw-p",
+          "range": "77b85f35c000-77b85f361000",
+          "raw": "77b85f35c000-77b85f361000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+        }
+      ],
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    }
+  },
+  "passed": true,
+  "profile_checks": {
+    "physical_api_at_least_1_2": true,
+    "roundingModeIndependence_ALL_or_32_BIT_ONLY": true,
+    "shaderFloat64_supported": true,
+    "shaderRoundingModeRTEFloat32": true
+  },
+  "qualification_claimed": false,
+  "query_owner": {
+    "bytes": 2373,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/owner.json",
+    "sha256": "25ed6038b06e0fae9fa24b207e650307fc5ee6d77c53d39e8ddc978b57e8976d"
+  },
+  "query_result": {
+    "bytes": 14933,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/property-query.json",
+    "sha256": "8fc1efec67f75577a00098f7f81efad405c388fd54f5d1f27af5758f03bd9875"
+  },
+  "raw_maps": {
+    "bytes": 26402,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/query/maps-while-alive.txt",
+    "sha256": "b3c46dea621d2cd977329bf3f01f3059cce565238477d7606b1f0e3fe1f11b56"
+  },
+  "schema": "sirius-fp64-estimate-property-admission-v1",
+  "scope": "RTE32 plus internal Float64 mixed-width profile eligibility only. No RTE64 premise, logical-device enablement, arithmetic accuracy or timing result.",
+  "selected": {
+    "api_version": 4211006,
+    "conformance_version": [
+      1,
+      3,
+      1,
+      1
+    ],
+    "device_id": 0,
+    "device_luid": "0000000000000000",
+    "device_luid_valid": 0,
+    "device_node_mask": 0,
+    "device_type": 4,
+    "device_uuid": "6d65736132352e322e382d3075627500",
+    "driver_id": 13,
+    "driver_info": "Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+    "driver_name": "llvmpipe",
+    "driver_uuid": "6c6c766d706970655555494400000000",
+    "driver_version": 104865800,
+    "enumerated_count": 1,
+    "index": 0,
+    "name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "physical_handle": 1020628992,
+    "pipeline_cache_uuid": "32352e322e382d307562756e7475302e",
+    "vendor_id": 65541
+  },
+  "source_freeze": {
+    "bytes": 14141,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/source-freeze.json",
+    "sha256": "92fdb54ffd21d73805985351788be1f7f20075cd2855d3c942020082be88ca71"
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "supported_core_features": {
+    "alphaToOne": 1,
+    "depthBiasClamp": 1,
+    "depthBounds": 0,
+    "depthClamp": 1,
+    "drawIndirectFirstInstance": 1,
+    "dualSrcBlend": 1,
+    "fillModeNonSolid": 1,
+    "fragmentStoresAndAtomics": 1,
+    "fullDrawIndexUint32": 1,
+    "geometryShader": 1,
+    "imageCubeArray": 1,
+    "independentBlend": 1,
+    "inheritedQueries": 0,
+    "largePoints": 1,
+    "logicOp": 1,
+    "multiDrawIndirect": 1,
+    "multiViewport": 1,
+    "occlusionQueryPrecise": 1,
+    "pipelineStatisticsQuery": 1,
+    "robustBufferAccess": 1,
+    "sampleRateShading": 1,
+    "samplerAnisotropy": 1,
+    "shaderClipDistance": 1,
+    "shaderCullDistance": 1,
+    "shaderFloat64": 1,
+    "shaderImageGatherExtended": 1,
+    "shaderInt16": 1,
+    "shaderInt64": 1,
+    "shaderResourceMinLod": 1,
+    "shaderResourceResidency": 1,
+    "shaderSampledImageArrayDynamicIndexing": 1,
+    "shaderStorageBufferArrayDynamicIndexing": 1,
+    "shaderStorageImageArrayDynamicIndexing": 1,
+    "shaderStorageImageExtendedFormats": 1,
+    "shaderStorageImageMultisample": 1,
+    "shaderStorageImageReadWithoutFormat": 1,
+    "shaderStorageImageWriteWithoutFormat": 1,
+    "shaderTessellationAndGeometryPointSize": 1,
+    "shaderUniformBufferArrayDynamicIndexing": 1,
+    "sparseBinding": 1,
+    "sparseResidency16Samples": 0,
+    "sparseResidency2Samples": 0,
+    "sparseResidency4Samples": 0,
+    "sparseResidency8Samples": 0,
+    "sparseResidencyAliased": 1,
+    "sparseResidencyBuffer": 1,
+    "sparseResidencyImage2D": 1,
+    "sparseResidencyImage3D": 1,
+    "tessellationShader": 1,
+    "textureCompressionASTC_LDR": 0,
+    "textureCompressionBC": 1,
+    "textureCompressionETC2": 0,
+    "variableMultisampleRate": 0,
+    "vertexPipelineStoresAndAtomics": 1,
+    "wideLines": 1
+  }
+}

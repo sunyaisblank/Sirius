@@ -1,0 +1,183 @@
+{
+  "schema": "sirius-public-float-controls-query-independent-source-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "reviewer": "/root/forensic_obligations",
+  "independent_of_author": true,
+  "operator": "Root alone; reviewer ran no authored query/reader/owner/ctypes/provider/compiler/validator/build/test/device/API/CI.",
+  "admitted_scope": "Two prospective informational query/read owners only. Query may create a public VkInstance and read selected physical-device properties/support; no VkDevice, shader, pipeline, dispatch, JIT, WSI or numerical workload.",
+  "release": {
+    "passed": true,
+    "static_pins": 53,
+    "query_inputs": 53,
+    "reader_inputs": 68,
+    "header_structs": {
+      "VkApplicationInfo": {
+        "bytes": 48,
+        "alignment": 8,
+        "fields": 7
+      },
+      "VkConformanceVersion": {
+        "bytes": 4,
+        "alignment": 1,
+        "fields": 4
+      },
+      "VkInstanceCreateInfo": {
+        "bytes": 64,
+        "alignment": 8,
+        "fields": 8
+      },
+      "VkPhysicalDeviceDriverProperties": {
+        "bytes": 536,
+        "alignment": 8,
+        "fields": 6
+      },
+      "VkPhysicalDeviceFeatures": {
+        "bytes": 220,
+        "alignment": 4,
+        "fields": 55
+      },
+      "VkPhysicalDeviceFloatControlsProperties": {
+        "bytes": 88,
+        "alignment": 8,
+        "fields": 19
+      },
+      "VkPhysicalDeviceIDProperties": {
+        "bytes": 64,
+        "alignment": 8,
+        "fields": 7
+      },
+      "VkPhysicalDeviceLimits": {
+        "bytes": 504,
+        "alignment": 8,
+        "fields": 106
+      },
+      "VkPhysicalDeviceSparseProperties": {
+        "bytes": 20,
+        "alignment": 4,
+        "fields": 5
+      },
+      "VkPhysicalDeviceProperties": {
+        "bytes": 824,
+        "alignment": 8,
+        "fields": 9
+      },
+      "VkPhysicalDeviceProperties2": {
+        "bytes": 840,
+        "alignment": 8,
+        "fields": 3
+      }
+    },
+    "header_fields_verified": 229,
+    "owner_guard_byte_equal_immutable_1dd": true,
+    "critical": {
+      "query_properties.py": {
+        "bytes": 15596,
+        "sha256": "d50243bc7250f62ca0d214c96e19e121314762787ccd8b929ab77da12b3807a6"
+      },
+      "read_properties.py": {
+        "bytes": 8784,
+        "sha256": "357db7ce7c779978bfcede8a91fb596a280d75ffa012b238c25142ce9dea2f42"
+      },
+      "abi-layout.json": {
+        "bytes": 42984,
+        "sha256": "ec26084800647a71a2d910eecc00f5061a97c767be6faf8c5d52ff0a601b2a0b"
+      },
+      "source-contracts.json": {
+        "bytes": 6088,
+        "sha256": "3f06f7023a5b911d729516db398597b89081fdad4bf2c45bc181919187219bd6"
+      },
+      "actions.json": {
+        "bytes": 9277,
+        "sha256": "b8f16f18091419300970d5545e63702886385d0150cf6e645c75b3ae1f4357a6"
+      },
+      "commands.json": {
+        "bytes": 739,
+        "sha256": "efcb2704fb468af9526c75d1c8021e4fee413560884797b7d90d1ac58529cdb1"
+      },
+      "source-freeze.json": {
+        "bytes": 14141,
+        "sha256": "92fdb54ffd21d73805985351788be1f7f20075cd2855d3c942020082be88ca71"
+      },
+      "run_owned.py": {
+        "bytes": 12518,
+        "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+      },
+      "owned_guard.py": {
+        "bytes": 20791,
+        "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+      }
+    },
+    "outputs_absent": true
+  },
+  "ABI": {
+    "method": "Independently parsed all11 exact pinned vulkan_core.h struct declarations and229 fields, checked each type/order/array length, and recomputed natural x86_64 LP64 offsets/sizes/alignments with standard-library arithmetic. No authored layout function or ctypes/provider call executed.",
+    "primitive_profile": "Linux x86_64 little-endian LP64, void*/size_t8, int/enums/VkBool32/float4, VkDeviceSize8; runtime rechecks machine/endianness/primitive sizes and every actual ctypes field/struct before CDLL.",
+    "sTypes_and_enum_values_verified_against_header": true,
+    "calling_convention": "vk_platform.h Linux default C calling convention; CDLL with explicit c_int32 VkResult, void results and typed pointer/handle/count arguments.",
+    "chain": "Properties2→FloatControls→ID→Driver→null; live Python structure objects retain every pNext target for the synchronous call.",
+    "instance_lifetime": "API1.2 application/create-info with no layers/extensions/flags. Successful creation is immediately protected by finally vkDestroyInstance; any query/map failure clears observation/profile flags, writes failure and exits nonzero.",
+    "bounded_enumeration": "Two-call physical device enumeration; result==VK_SUCCESS both times, stable count1..64, select exact device0."
+  },
+  "scope_and_bindings": {
+    "forced_icd": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "selected_index": 0,
+    "cache": "Default/unset; disable_software_shader_cache false, no LP/MESA/GALLIVM tuning. Query enforces no inherited MESA_SHADER_CACHE_DISABLE.",
+    "provider": "Before CDLL, query hashes all53 fixed inputs including three real library paths and dependencies; mature owner independently freezes before/after inputs and clean4498 source.",
+    "actual_maps": "While VkInstance is alive, query saves complete /proc/self/maps; requires executable mappings for exact loader/LVP/LLVM paths, dev/inode equal current file and full bytes/SHA equal frozen pins; rechecks mapping lines after hashing and PID/birth/session/boot stability.",
+    "raw": "Seven raw structures plus raw maps preserved. Separate reader joins all raw file identities and decodes critical properties,55 supported core features,17 float-control fields, device/driver IDs and UUIDs.",
+    "future_enablement": "Supported shaderFloat64 is not requested/enabled VkDevice evidence. Future capture must separately observe successful Float64-enabled logical-device creation and bind exact selected provider/property receipts.",
+    "no_hardware_domain_or_accuracy_inference": true
+  },
+  "profile_gate": {
+    "physical_api_at_least_1_2": true,
+    "shaderFloat64_supported": true,
+    "shaderRoundingModeRTEFloat32": true,
+    "roundingModeIndependence_allowed": [
+      0,
+      1
+    ],
+    "enum_names": {
+      "0": "32_BIT_ONLY",
+      "1": "ALL",
+      "2": "NONE"
+    },
+    "NONE_or_unknown_refused": true,
+    "RTE64_required_or_accuracy_assumed": false,
+    "denorm_fields_preserved_not_promoted_to_new_requirements": true,
+    "observation_versus_admission": "Query can retain an otherwise complete unsupported observation; separate pure reader requires every profile check true before emitting property-accepted. It never loads or calls Vulkan."
+  },
+  "owner_and_order": {
+    "query_then_terminal_reader": true,
+    "two_limits": {
+      "seconds": 60,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "original_mature_owner_and_guard_byte_equal_immutable_1dd": true,
+    "query_declared_inputs": 53,
+    "reader_declared_inputs": 68,
+    "reader_freezes_complete_query_raw_owner_inputs_samples_stdout_stderr": true,
+    "actions_automatically_frozen_by_mature_owner": true,
+    "resource_limits_sampled_operational_guards": true,
+    "stop_first_failure_required": true,
+    "query_and_reader_outputs_absent_at_review": true
+  },
+  "source_review_findings": [],
+  "claim_limits": [
+    "This is source admission, not an actual successful property result.",
+    "Stopped original compiler remains unaccepted; this independent property query does not repair its SSA reader or admit any driver capture.",
+    "No logical-device enablement, native53-bit/RTE64 estimate guarantee, retained division execution,174268-record equivalence, original8controls,20+2 benefit or full qualification.",
+    "Actual owner/query/reader/source/provider/identity records require passive terminal review after root execution before reuse."
+  ],
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "tracked_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "review_ignored_uncommitted": true
+  }
+}

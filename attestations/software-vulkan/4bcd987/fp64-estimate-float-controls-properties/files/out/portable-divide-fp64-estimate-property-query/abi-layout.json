@@ -1,0 +1,1785 @@
+{
+  "array_constants": {
+    "VK_LUID_SIZE": 8,
+    "VK_MAX_DRIVER_INFO_SIZE": 256,
+    "VK_MAX_DRIVER_NAME_SIZE": 256,
+    "VK_MAX_PHYSICAL_DEVICE_NAME_SIZE": 256,
+    "VK_UUID_SIZE": 16
+  },
+  "derivation": "Pinned installed C declarations, in source order. Primitive/enumeration sizes and alignments below; each offset is align_up(previous_end,field_alignment), final size align_up(end,max_alignment). No compiler or ctypes/provider invocation was used to derive this source schema. Runtime ctypes must match every represented field offset, struct size and alignment before loading Vulkan.",
+  "independence_values": {
+    "32_BIT_ONLY": 0,
+    "ALL": 1,
+    "NONE": 2
+  },
+  "platform": "Linux x86_64 little-endian LP64; default C calling convention per vk_platform.h",
+  "primitive_sizes_alignments": {
+    "VkBool32": [
+      4,
+      4
+    ],
+    "VkDeviceSize": [
+      8,
+      8
+    ],
+    "VkDriverId": [
+      4,
+      4
+    ],
+    "VkInstanceCreateFlags": [
+      4,
+      4
+    ],
+    "VkPhysicalDeviceType": [
+      4,
+      4
+    ],
+    "VkSampleCountFlags": [
+      4,
+      4
+    ],
+    "VkShaderFloatControlsIndependence": [
+      4,
+      4
+    ],
+    "VkStructureType": [
+      4,
+      4
+    ],
+    "char": [
+      1,
+      1
+    ],
+    "const VkApplicationInfo*": [
+      8,
+      8
+    ],
+    "const char*": [
+      8,
+      8
+    ],
+    "const char* const*": [
+      8,
+      8
+    ],
+    "const void*": [
+      8,
+      8
+    ],
+    "float": [
+      4,
+      4
+    ],
+    "int32_t": [
+      4,
+      4
+    ],
+    "size_t": [
+      8,
+      8
+    ],
+    "uint32_t": [
+      4,
+      4
+    ],
+    "uint8_t": [
+      1,
+      1
+    ],
+    "void*": [
+      8,
+      8
+    ]
+  },
+  "sTypes": {
+    "VkApplicationInfo": 0,
+    "VkInstanceCreateInfo": 1,
+    "VkPhysicalDeviceDriverProperties": 1000196000,
+    "VkPhysicalDeviceFloatControlsProperties": 1000197000,
+    "VkPhysicalDeviceIDProperties": 1000071004,
+    "VkPhysicalDeviceProperties2": 1000059001
+  },
+  "schema": "sirius-vulkan-x86_64-header-layout-v1",
+  "structs": {
+    "VkApplicationInfo": {
+      "alignment": 8,
+      "bytes": 48,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "VkStructureType",
+          "elements": 1,
+          "name": "sType",
+          "offset": 0
+        },
+        {
+          "bytes": 8,
+          "c_type": "const void*",
+          "elements": 1,
+          "name": "pNext",
+          "offset": 8
+        },
+        {
+          "bytes": 8,
+          "c_type": "const char*",
+          "elements": 1,
+          "name": "pApplicationName",
+          "offset": 16
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "applicationVersion",
+          "offset": 24
+        },
+        {
+          "bytes": 8,
+          "c_type": "const char*",
+          "elements": 1,
+          "name": "pEngineName",
+          "offset": 32
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "engineVersion",
+          "offset": 40
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "apiVersion",
+          "offset": 44
+        }
+      ],
+      "header_declaration_sha256": "ecb284ae807493aef59a8df9bc05ca5e58d5905d61c7cbce7c536da81c483335"
+    },
+    "VkConformanceVersion": {
+      "alignment": 1,
+      "bytes": 4,
+      "fields": [
+        {
+          "bytes": 1,
+          "c_type": "uint8_t",
+          "elements": 1,
+          "name": "major",
+          "offset": 0
+        },
+        {
+          "bytes": 1,
+          "c_type": "uint8_t",
+          "elements": 1,
+          "name": "minor",
+          "offset": 1
+        },
+        {
+          "bytes": 1,
+          "c_type": "uint8_t",
+          "elements": 1,
+          "name": "subminor",
+          "offset": 2
+        },
+        {
+          "bytes": 1,
+          "c_type": "uint8_t",
+          "elements": 1,
+          "name": "patch",
+          "offset": 3
+        }
+      ],
+      "header_declaration_sha256": "f628097cb5feba558a7359e4934593a08912ea0a8aa423221e42da4a7bad22fb"
+    },
+    "VkInstanceCreateInfo": {
+      "alignment": 8,
+      "bytes": 64,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "VkStructureType",
+          "elements": 1,
+          "name": "sType",
+          "offset": 0
+        },
+        {
+          "bytes": 8,
+          "c_type": "const void*",
+          "elements": 1,
+          "name": "pNext",
+          "offset": 8
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkInstanceCreateFlags",
+          "elements": 1,
+          "name": "flags",
+          "offset": 16
+        },
+        {
+          "bytes": 8,
+          "c_type": "const VkApplicationInfo*",
+          "elements": 1,
+          "name": "pApplicationInfo",
+          "offset": 24
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "enabledLayerCount",
+          "offset": 32
+        },
+        {
+          "bytes": 8,
+          "c_type": "const char* const*",
+          "elements": 1,
+          "name": "ppEnabledLayerNames",
+          "offset": 40
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "enabledExtensionCount",
+          "offset": 48
+        },
+        {
+          "bytes": 8,
+          "c_type": "const char* const*",
+          "elements": 1,
+          "name": "ppEnabledExtensionNames",
+          "offset": 56
+        }
+      ],
+      "header_declaration_sha256": "4c45b1a93328062bac83a251c30a0c15f424508cf5eb0a993b5df055e2d4a744"
+    },
+    "VkPhysicalDeviceDriverProperties": {
+      "alignment": 8,
+      "bytes": 536,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "VkStructureType",
+          "elements": 1,
+          "name": "sType",
+          "offset": 0
+        },
+        {
+          "bytes": 8,
+          "c_type": "void*",
+          "elements": 1,
+          "name": "pNext",
+          "offset": 8
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkDriverId",
+          "elements": 1,
+          "name": "driverID",
+          "offset": 16
+        },
+        {
+          "bytes": 256,
+          "c_type": "char",
+          "elements": 256,
+          "name": "driverName",
+          "offset": 20
+        },
+        {
+          "bytes": 256,
+          "c_type": "char",
+          "elements": 256,
+          "name": "driverInfo",
+          "offset": 276
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkConformanceVersion",
+          "elements": 1,
+          "name": "conformanceVersion",
+          "offset": 532
+        }
+      ],
+      "header_declaration_sha256": "a3936a7bd6fbb9c7e5dccb2ef0cfd73cea8211b6b95973c3bb83d5ae287f93bf"
+    },
+    "VkPhysicalDeviceFeatures": {
+      "alignment": 4,
+      "bytes": 220,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "robustBufferAccess",
+          "offset": 0
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "fullDrawIndexUint32",
+          "offset": 4
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "imageCubeArray",
+          "offset": 8
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "independentBlend",
+          "offset": 12
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "geometryShader",
+          "offset": 16
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "tessellationShader",
+          "offset": 20
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sampleRateShading",
+          "offset": 24
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "dualSrcBlend",
+          "offset": 28
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "logicOp",
+          "offset": 32
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "multiDrawIndirect",
+          "offset": 36
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "drawIndirectFirstInstance",
+          "offset": 40
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "depthClamp",
+          "offset": 44
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "depthBiasClamp",
+          "offset": 48
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "fillModeNonSolid",
+          "offset": 52
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "depthBounds",
+          "offset": 56
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "wideLines",
+          "offset": 60
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "largePoints",
+          "offset": 64
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "alphaToOne",
+          "offset": 68
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "multiViewport",
+          "offset": 72
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "samplerAnisotropy",
+          "offset": 76
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "textureCompressionETC2",
+          "offset": 80
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "textureCompressionASTC_LDR",
+          "offset": 84
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "textureCompressionBC",
+          "offset": 88
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "occlusionQueryPrecise",
+          "offset": 92
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "pipelineStatisticsQuery",
+          "offset": 96
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "vertexPipelineStoresAndAtomics",
+          "offset": 100
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "fragmentStoresAndAtomics",
+          "offset": 104
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderTessellationAndGeometryPointSize",
+          "offset": 108
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderImageGatherExtended",
+          "offset": 112
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderStorageImageExtendedFormats",
+          "offset": 116
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderStorageImageMultisample",
+          "offset": 120
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderStorageImageReadWithoutFormat",
+          "offset": 124
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderStorageImageWriteWithoutFormat",
+          "offset": 128
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderUniformBufferArrayDynamicIndexing",
+          "offset": 132
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderSampledImageArrayDynamicIndexing",
+          "offset": 136
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderStorageBufferArrayDynamicIndexing",
+          "offset": 140
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderStorageImageArrayDynamicIndexing",
+          "offset": 144
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderClipDistance",
+          "offset": 148
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderCullDistance",
+          "offset": 152
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderFloat64",
+          "offset": 156
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderInt64",
+          "offset": 160
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderInt16",
+          "offset": 164
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderResourceResidency",
+          "offset": 168
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderResourceMinLod",
+          "offset": 172
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sparseBinding",
+          "offset": 176
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sparseResidencyBuffer",
+          "offset": 180
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sparseResidencyImage2D",
+          "offset": 184
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sparseResidencyImage3D",
+          "offset": 188
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sparseResidency2Samples",
+          "offset": 192
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sparseResidency4Samples",
+          "offset": 196
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sparseResidency8Samples",
+          "offset": 200
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sparseResidency16Samples",
+          "offset": 204
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "sparseResidencyAliased",
+          "offset": 208
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "variableMultisampleRate",
+          "offset": 212
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "inheritedQueries",
+          "offset": 216
+        }
+      ],
+      "header_declaration_sha256": "d7d19ec2e52e9de32690136e16d0e1024d930683f00bbb4d66deba09e1a684c3"
+    },
+    "VkPhysicalDeviceFloatControlsProperties": {
+      "alignment": 8,
+      "bytes": 88,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "VkStructureType",
+          "elements": 1,
+          "name": "sType",
+          "offset": 0
+        },
+        {
+          "bytes": 8,
+          "c_type": "void*",
+          "elements": 1,
+          "name": "pNext",
+          "offset": 8
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkShaderFloatControlsIndependence",
+          "elements": 1,
+          "name": "denormBehaviorIndependence",
+          "offset": 16
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkShaderFloatControlsIndependence",
+          "elements": 1,
+          "name": "roundingModeIndependence",
+          "offset": 20
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderSignedZeroInfNanPreserveFloat16",
+          "offset": 24
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderSignedZeroInfNanPreserveFloat32",
+          "offset": 28
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderSignedZeroInfNanPreserveFloat64",
+          "offset": 32
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderDenormPreserveFloat16",
+          "offset": 36
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderDenormPreserveFloat32",
+          "offset": 40
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderDenormPreserveFloat64",
+          "offset": 44
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderDenormFlushToZeroFloat16",
+          "offset": 48
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderDenormFlushToZeroFloat32",
+          "offset": 52
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderDenormFlushToZeroFloat64",
+          "offset": 56
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderRoundingModeRTEFloat16",
+          "offset": 60
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderRoundingModeRTEFloat32",
+          "offset": 64
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderRoundingModeRTEFloat64",
+          "offset": 68
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderRoundingModeRTZFloat16",
+          "offset": 72
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderRoundingModeRTZFloat32",
+          "offset": 76
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "shaderRoundingModeRTZFloat64",
+          "offset": 80
+        }
+      ],
+      "header_declaration_sha256": "d7ae339c0fc49867d7a8b916007a09f61baa6f3767d233aa15825714e5cf59dd"
+    },
+    "VkPhysicalDeviceIDProperties": {
+      "alignment": 8,
+      "bytes": 64,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "VkStructureType",
+          "elements": 1,
+          "name": "sType",
+          "offset": 0
+        },
+        {
+          "bytes": 8,
+          "c_type": "void*",
+          "elements": 1,
+          "name": "pNext",
+          "offset": 8
+        },
+        {
+          "bytes": 16,
+          "c_type": "uint8_t",
+          "elements": 16,
+          "name": "deviceUUID",
+          "offset": 16
+        },
+        {
+          "bytes": 16,
+          "c_type": "uint8_t",
+          "elements": 16,
+          "name": "driverUUID",
+          "offset": 32
+        },
+        {
+          "bytes": 8,
+          "c_type": "uint8_t",
+          "elements": 8,
+          "name": "deviceLUID",
+          "offset": 48
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "deviceNodeMask",
+          "offset": 56
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "deviceLUIDValid",
+          "offset": 60
+        }
+      ],
+      "header_declaration_sha256": "58b162719372d10569123e643f4e4236adcff1e4563494e15e0b7390958da50c"
+    },
+    "VkPhysicalDeviceLimits": {
+      "alignment": 8,
+      "bytes": 504,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxImageDimension1D",
+          "offset": 0
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxImageDimension2D",
+          "offset": 4
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxImageDimension3D",
+          "offset": 8
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxImageDimensionCube",
+          "offset": 12
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxImageArrayLayers",
+          "offset": 16
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTexelBufferElements",
+          "offset": 20
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxUniformBufferRange",
+          "offset": 24
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxStorageBufferRange",
+          "offset": 28
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxPushConstantsSize",
+          "offset": 32
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxMemoryAllocationCount",
+          "offset": 36
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxSamplerAllocationCount",
+          "offset": 40
+        },
+        {
+          "bytes": 8,
+          "c_type": "VkDeviceSize",
+          "elements": 1,
+          "name": "bufferImageGranularity",
+          "offset": 48
+        },
+        {
+          "bytes": 8,
+          "c_type": "VkDeviceSize",
+          "elements": 1,
+          "name": "sparseAddressSpaceSize",
+          "offset": 56
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxBoundDescriptorSets",
+          "offset": 64
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxPerStageDescriptorSamplers",
+          "offset": 68
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxPerStageDescriptorUniformBuffers",
+          "offset": 72
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxPerStageDescriptorStorageBuffers",
+          "offset": 76
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxPerStageDescriptorSampledImages",
+          "offset": 80
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxPerStageDescriptorStorageImages",
+          "offset": 84
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxPerStageDescriptorInputAttachments",
+          "offset": 88
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxPerStageResources",
+          "offset": 92
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDescriptorSetSamplers",
+          "offset": 96
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDescriptorSetUniformBuffers",
+          "offset": 100
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDescriptorSetUniformBuffersDynamic",
+          "offset": 104
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDescriptorSetStorageBuffers",
+          "offset": 108
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDescriptorSetStorageBuffersDynamic",
+          "offset": 112
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDescriptorSetSampledImages",
+          "offset": 116
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDescriptorSetStorageImages",
+          "offset": 120
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDescriptorSetInputAttachments",
+          "offset": 124
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxVertexInputAttributes",
+          "offset": 128
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxVertexInputBindings",
+          "offset": 132
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxVertexInputAttributeOffset",
+          "offset": 136
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxVertexInputBindingStride",
+          "offset": 140
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxVertexOutputComponents",
+          "offset": 144
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTessellationGenerationLevel",
+          "offset": 148
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTessellationPatchSize",
+          "offset": 152
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTessellationControlPerVertexInputComponents",
+          "offset": 156
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTessellationControlPerVertexOutputComponents",
+          "offset": 160
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTessellationControlPerPatchOutputComponents",
+          "offset": 164
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTessellationControlTotalOutputComponents",
+          "offset": 168
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTessellationEvaluationInputComponents",
+          "offset": 172
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTessellationEvaluationOutputComponents",
+          "offset": 176
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxGeometryShaderInvocations",
+          "offset": 180
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxGeometryInputComponents",
+          "offset": 184
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxGeometryOutputComponents",
+          "offset": 188
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxGeometryOutputVertices",
+          "offset": 192
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxGeometryTotalOutputComponents",
+          "offset": 196
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxFragmentInputComponents",
+          "offset": 200
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxFragmentOutputAttachments",
+          "offset": 204
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxFragmentDualSrcAttachments",
+          "offset": 208
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxFragmentCombinedOutputResources",
+          "offset": 212
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxComputeSharedMemorySize",
+          "offset": 216
+        },
+        {
+          "bytes": 12,
+          "c_type": "uint32_t",
+          "elements": 3,
+          "name": "maxComputeWorkGroupCount",
+          "offset": 220
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxComputeWorkGroupInvocations",
+          "offset": 232
+        },
+        {
+          "bytes": 12,
+          "c_type": "uint32_t",
+          "elements": 3,
+          "name": "maxComputeWorkGroupSize",
+          "offset": 236
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "subPixelPrecisionBits",
+          "offset": 248
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "subTexelPrecisionBits",
+          "offset": 252
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "mipmapPrecisionBits",
+          "offset": 256
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDrawIndexedIndexValue",
+          "offset": 260
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxDrawIndirectCount",
+          "offset": 264
+        },
+        {
+          "bytes": 4,
+          "c_type": "float",
+          "elements": 1,
+          "name": "maxSamplerLodBias",
+          "offset": 268
+        },
+        {
+          "bytes": 4,
+          "c_type": "float",
+          "elements": 1,
+          "name": "maxSamplerAnisotropy",
+          "offset": 272
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxViewports",
+          "offset": 276
+        },
+        {
+          "bytes": 8,
+          "c_type": "uint32_t",
+          "elements": 2,
+          "name": "maxViewportDimensions",
+          "offset": 280
+        },
+        {
+          "bytes": 8,
+          "c_type": "float",
+          "elements": 2,
+          "name": "viewportBoundsRange",
+          "offset": 288
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "viewportSubPixelBits",
+          "offset": 296
+        },
+        {
+          "bytes": 8,
+          "c_type": "size_t",
+          "elements": 1,
+          "name": "minMemoryMapAlignment",
+          "offset": 304
+        },
+        {
+          "bytes": 8,
+          "c_type": "VkDeviceSize",
+          "elements": 1,
+          "name": "minTexelBufferOffsetAlignment",
+          "offset": 312
+        },
+        {
+          "bytes": 8,
+          "c_type": "VkDeviceSize",
+          "elements": 1,
+          "name": "minUniformBufferOffsetAlignment",
+          "offset": 320
+        },
+        {
+          "bytes": 8,
+          "c_type": "VkDeviceSize",
+          "elements": 1,
+          "name": "minStorageBufferOffsetAlignment",
+          "offset": 328
+        },
+        {
+          "bytes": 4,
+          "c_type": "int32_t",
+          "elements": 1,
+          "name": "minTexelOffset",
+          "offset": 336
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTexelOffset",
+          "offset": 340
+        },
+        {
+          "bytes": 4,
+          "c_type": "int32_t",
+          "elements": 1,
+          "name": "minTexelGatherOffset",
+          "offset": 344
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxTexelGatherOffset",
+          "offset": 348
+        },
+        {
+          "bytes": 4,
+          "c_type": "float",
+          "elements": 1,
+          "name": "minInterpolationOffset",
+          "offset": 352
+        },
+        {
+          "bytes": 4,
+          "c_type": "float",
+          "elements": 1,
+          "name": "maxInterpolationOffset",
+          "offset": 356
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "subPixelInterpolationOffsetBits",
+          "offset": 360
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxFramebufferWidth",
+          "offset": 364
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxFramebufferHeight",
+          "offset": 368
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxFramebufferLayers",
+          "offset": 372
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkSampleCountFlags",
+          "elements": 1,
+          "name": "framebufferColorSampleCounts",
+          "offset": 376
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkSampleCountFlags",
+          "elements": 1,
+          "name": "framebufferDepthSampleCounts",
+          "offset": 380
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkSampleCountFlags",
+          "elements": 1,
+          "name": "framebufferStencilSampleCounts",
+          "offset": 384
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkSampleCountFlags",
+          "elements": 1,
+          "name": "framebufferNoAttachmentsSampleCounts",
+          "offset": 388
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxColorAttachments",
+          "offset": 392
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkSampleCountFlags",
+          "elements": 1,
+          "name": "sampledImageColorSampleCounts",
+          "offset": 396
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkSampleCountFlags",
+          "elements": 1,
+          "name": "sampledImageIntegerSampleCounts",
+          "offset": 400
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkSampleCountFlags",
+          "elements": 1,
+          "name": "sampledImageDepthSampleCounts",
+          "offset": 404
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkSampleCountFlags",
+          "elements": 1,
+          "name": "sampledImageStencilSampleCounts",
+          "offset": 408
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkSampleCountFlags",
+          "elements": 1,
+          "name": "storageImageSampleCounts",
+          "offset": 412
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxSampleMaskWords",
+          "offset": 416
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "timestampComputeAndGraphics",
+          "offset": 420
+        },
+        {
+          "bytes": 4,
+          "c_type": "float",
+          "elements": 1,
+          "name": "timestampPeriod",
+          "offset": 424
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxClipDistances",
+          "offset": 428
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxCullDistances",
+          "offset": 432
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "maxCombinedClipAndCullDistances",
+          "offset": 436
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "discreteQueuePriorities",
+          "offset": 440
+        },
+        {
+          "bytes": 8,
+          "c_type": "float",
+          "elements": 2,
+          "name": "pointSizeRange",
+          "offset": 444
+        },
+        {
+          "bytes": 8,
+          "c_type": "float",
+          "elements": 2,
+          "name": "lineWidthRange",
+          "offset": 452
+        },
+        {
+          "bytes": 4,
+          "c_type": "float",
+          "elements": 1,
+          "name": "pointSizeGranularity",
+          "offset": 460
+        },
+        {
+          "bytes": 4,
+          "c_type": "float",
+          "elements": 1,
+          "name": "lineWidthGranularity",
+          "offset": 464
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "strictLines",
+          "offset": 468
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "standardSampleLocations",
+          "offset": 472
+        },
+        {
+          "bytes": 8,
+          "c_type": "VkDeviceSize",
+          "elements": 1,
+          "name": "optimalBufferCopyOffsetAlignment",
+          "offset": 480
+        },
+        {
+          "bytes": 8,
+          "c_type": "VkDeviceSize",
+          "elements": 1,
+          "name": "optimalBufferCopyRowPitchAlignment",
+          "offset": 488
+        },
+        {
+          "bytes": 8,
+          "c_type": "VkDeviceSize",
+          "elements": 1,
+          "name": "nonCoherentAtomSize",
+          "offset": 496
+        }
+      ],
+      "header_declaration_sha256": "1e45be5545e7b9f461465793e71d1f28932dfd3b96cf95b5a0a9d5617d3d44ca"
+    },
+    "VkPhysicalDeviceProperties": {
+      "alignment": 8,
+      "bytes": 824,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "apiVersion",
+          "offset": 0
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "driverVersion",
+          "offset": 4
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "vendorID",
+          "offset": 8
+        },
+        {
+          "bytes": 4,
+          "c_type": "uint32_t",
+          "elements": 1,
+          "name": "deviceID",
+          "offset": 12
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkPhysicalDeviceType",
+          "elements": 1,
+          "name": "deviceType",
+          "offset": 16
+        },
+        {
+          "bytes": 256,
+          "c_type": "char",
+          "elements": 256,
+          "name": "deviceName",
+          "offset": 20
+        },
+        {
+          "bytes": 16,
+          "c_type": "uint8_t",
+          "elements": 16,
+          "name": "pipelineCacheUUID",
+          "offset": 276
+        },
+        {
+          "bytes": 504,
+          "c_type": "VkPhysicalDeviceLimits",
+          "elements": 1,
+          "name": "limits",
+          "offset": 296
+        },
+        {
+          "bytes": 20,
+          "c_type": "VkPhysicalDeviceSparseProperties",
+          "elements": 1,
+          "name": "sparseProperties",
+          "offset": 800
+        }
+      ],
+      "header_declaration_sha256": "94cc56987d5acf2315ef33825ff4ee03fae7ea3d7bedcfb389304ef01e1a199f"
+    },
+    "VkPhysicalDeviceProperties2": {
+      "alignment": 8,
+      "bytes": 840,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "VkStructureType",
+          "elements": 1,
+          "name": "sType",
+          "offset": 0
+        },
+        {
+          "bytes": 8,
+          "c_type": "void*",
+          "elements": 1,
+          "name": "pNext",
+          "offset": 8
+        },
+        {
+          "bytes": 824,
+          "c_type": "VkPhysicalDeviceProperties",
+          "elements": 1,
+          "name": "properties",
+          "offset": 16
+        }
+      ],
+      "header_declaration_sha256": "0d6e4d9dd2ef17f25c0f72c8eeed8d54f85b928ed0acd1b1a79d2ecbb4b0b906"
+    },
+    "VkPhysicalDeviceSparseProperties": {
+      "alignment": 4,
+      "bytes": 20,
+      "fields": [
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "residencyStandard2DBlockShape",
+          "offset": 0
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "residencyStandard2DMultisampleBlockShape",
+          "offset": 4
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "residencyStandard3DBlockShape",
+          "offset": 8
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "residencyAlignedMipSize",
+          "offset": 12
+        },
+        {
+          "bytes": 4,
+          "c_type": "VkBool32",
+          "elements": 1,
+          "name": "residencyNonResidentStrict",
+          "offset": 16
+        }
+      ],
+      "header_declaration_sha256": "396fea2fc42f557c45ae546537629b1b53ffc143188807174224f81611e06488"
+    }
+  }
+}

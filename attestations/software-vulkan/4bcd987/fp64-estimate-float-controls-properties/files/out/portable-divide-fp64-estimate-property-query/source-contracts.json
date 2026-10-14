@@ -1,0 +1,125 @@
+{
+  "ABI_derivation": "abi-layout.json is source-only LP64 natural-C alignment arithmetic over exact installed declarations; all11 ctypes struct sizes/alignments/represented field offsets are checked before loading Vulkan. No compiler/ctypes/provider execution during preparation.",
+  "allowed_public_API_calls": [
+    "vkCreateInstance",
+    "vkEnumeratePhysicalDevices",
+    "vkGetPhysicalDeviceProperties2",
+    "vkGetPhysicalDeviceFeatures",
+    "vkDestroyInstance"
+  ],
+  "authored_query_helper_or_provider_executed": false,
+  "cache_policy": "Default/unset. software_provider:true, disable_software_shader_cache:false; only VK_DRIVER_FILES=LVP and SIRIUS_VULKAN_DEVICE=0; no LP/MESA tuning.",
+  "chain": [
+    "VkPhysicalDeviceProperties2",
+    "VkPhysicalDeviceFloatControlsProperties",
+    "VkPhysicalDeviceIDProperties",
+    "VkPhysicalDeviceDriverProperties"
+  ],
+  "claim_limits": [
+    "Physical property support/profile eligibility only. No logical device or shader created; no numerical, latency, frame, global-property, arithmetic or release qualification.",
+    "RTE32+Float64 mixed-width validity is independent of estimate accuracy. RTE64 is observed only and is not inferred/required.",
+    "Actual query/reader/owner/input/map evidence does not exist at source preparation time."
+  ],
+  "estimate_accuracy_established": false,
+  "float_controls_preserved": "All17 non-header fields, including both independence enums and15 Bool32 flags; all55 supported core features preserved separately from enablement.",
+  "future_capture_join": "Bind actual accepted property result and its retired owners/raw inputs/maps to the same exact loader/provider/LLVM/device0 identity and fresh public Float64-enabled VkDevice args before capture. Property support alone does not establish logical-device enablement or estimate precision.",
+  "future_capture_required_pins": [
+    "read-properties/property-accepted.json",
+    "read-properties/owner.json",
+    "read-properties/inputs-before.json",
+    "read-properties/inputs-after.json",
+    "query/property-query.json",
+    "query/owner.json",
+    "query/inputs-before.json",
+    "query/inputs-after.json",
+    "query/maps-while-alive.txt",
+    "source-freeze.json",
+    "query_properties.py",
+    "read_properties.py",
+    "abi-layout.json"
+  ],
+  "headers": {
+    "/usr/include/vulkan/vk_platform.h": {
+      "bytes": 2828,
+      "resolved_path": "/usr/include/vulkan/vk_platform.h",
+      "sha256": "c4cabbcf699c90cde344095ae54da9435d117951aad114ba3a540c5997d7906f"
+    },
+    "/usr/include/vulkan/vulkan.h": {
+      "bytes": 1555,
+      "resolved_path": "/usr/include/vulkan/vulkan.h",
+      "sha256": "52297513cc6b6cc8db2921aa849f72e3f55d678b3a58a2c3eb297c02ded7a837"
+    },
+    "/usr/include/vulkan/vulkan_core.h": {
+      "bytes": 986840,
+      "resolved_path": "/usr/include/vulkan/vulkan_core.h",
+      "sha256": "3dba3ef8adaff8f24e9080e74d365fc64b5fe53ec8bda607c29c103e15888fcf"
+    }
+  },
+  "instance_api_version": 4202496,
+  "mapped_images": [
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1"
+  ],
+  "maps_context": "While instance alive, retain exact /proc/self/maps plus each image range/perms/offset/path/device/inode/bytes/SHA256 and PID/start_ticks/session/boot. Paths/inodes must match frozen regular files; recheck mappings after hashing.",
+  "no_instance_layers_or_extensions": true,
+  "no_logical_device_pipeline_shader_dispatch_or_WSI": true,
+  "not_admission_requirements": [
+    "shaderRoundingModeRTEFloat64",
+    "denormBehaviorIndependence",
+    "shaderDenormPreserveFloat16/32/64",
+    "shaderDenormFlushToZeroFloat16/32/64"
+  ],
+  "observation_versus_profile": "A complete query writes observed properties even if profile_admissible:false. The separate root-owned pure reader refuses profile admission unless all four original profile checks pass; no unsupported device/property becomes accuracy evidence.",
+  "physical_device_count_bound": 64,
+  "profile_admission_checks": {
+    "physical_api_at_least_1_2": true,
+    "roundingModeIndependence_NONE_2_refused": true,
+    "roundingModeIndependence_values": [
+      0,
+      1
+    ],
+    "shaderFloat64_supported": true,
+    "shaderRoundingModeRTEFloat32": true
+  },
+  "prospective_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 60
+  },
+  "provider_dependency_pin_source": {
+    "bundle": "attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls",
+    "commit": "1dd9bf1f0c7ec8e91adb89cc3563eb705d353709",
+    "manifest_sha256": "fb639f2780d567c9f95507b5c219b15d12bfe3a9db96277da0f87271d384d3ba",
+    "scope": "Exact accepted dependency pin reuse only; no fresh provider library hash/query by preparer. Actual root-owned query must match all frozen current bytes before CDLL; mature owner checks whole-input stability before/after."
+  },
+  "qualification_claimed": false,
+  "runner_guard_reuse": {
+    "owned_guard.py": {
+      "bytes": 20791,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/owned_guard.py",
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "run_owned.py": {
+      "bytes": 12518,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-property-query/run_owned.py",
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    }
+  },
+  "schema": "sirius-fp64-estimate-property-query-source-contract-v1",
+  "selected_index": 0,
+  "sizes": {
+    "VkApplicationInfo": 48,
+    "VkConformanceVersion": 4,
+    "VkInstanceCreateInfo": 64,
+    "VkPhysicalDeviceDriverProperties": 536,
+    "VkPhysicalDeviceFeatures": 220,
+    "VkPhysicalDeviceFloatControlsProperties": 88,
+    "VkPhysicalDeviceIDProperties": 64,
+    "VkPhysicalDeviceLimits": 504,
+    "VkPhysicalDeviceProperties": 824,
+    "VkPhysicalDeviceProperties2": 840,
+    "VkPhysicalDeviceSparseProperties": 20
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+}
