@@ -203,15 +203,21 @@ def main():
         api.send(descriptor, "setComputeFunction:", None, (C.c_void_p,), (function,))
         api.send(descriptor, "setMaxTotalThreadsPerThreadgroup:", None, (C.c_size_t,), (1,))
         api.send(descriptor, "setThreadGroupSizeIsMultipleOfThreadExecutionWidth:", None, (C.c_bool,), (False,))
-        api.send(descriptor, "setLinkedFunctions:", None, (C.c_void_p,), (None,))
-        require(api.integer(descriptor, "maxTotalThreadsPerThreadgroup") == 1
-                and not api.boolean(descriptor, "threadGroupSizeIsMultipleOfThreadExecutionWidth")
-                and not api.send(descriptor, "linkedFunctions")
-                and not api.send(descriptor, "stageInputDescriptor")
-                and api.empty_collection(descriptor, "binaryArchives"), "compute descriptor differs from original route")
+        # MoltenVK leaves these framework defaults untouched. Their getters may
+        # return empty descriptor objects; nil identity is not their contract.
+        observed = {
+            "max_total_threads": api.integer(descriptor, "maxTotalThreadsPerThreadgroup"),
+            "full_subgroups": api.boolean(descriptor, "threadGroupSizeIsMultipleOfThreadExecutionWidth"),
+            "selected_function_matches": api.send(descriptor, "computeFunction") == function,
+            "linked_functions": api.text(api.send(descriptor, "linkedFunctions")),
+            "stage_input": api.text(api.send(descriptor, "stageInputDescriptor")),
+            "binary_archives": api.text(api.send(descriptor, "binaryArchives")),
+        }
         emit("pipeline_descriptor", entry_point="main0", local_size=[1, 1, 1],
-             max_total_threads=1, full_subgroups=False, linked_functions=None,
+             observed=observed, default_properties="untouched newly constructed framework defaults, as in MoltenVK",
              pipeline_options=0, description=api.text(descriptor))
+        require(observed["max_total_threads"] == 1 and not observed["full_subgroups"]
+                and observed["selected_function_matches"], "assigned compute descriptor fields differ")
         error = C.c_void_p()
         emit("phase_start", phase="pipeline")
         pipeline = api.send(device, "newComputePipelineStateWithDescriptor:options:reflection:error:", C.c_void_p,
