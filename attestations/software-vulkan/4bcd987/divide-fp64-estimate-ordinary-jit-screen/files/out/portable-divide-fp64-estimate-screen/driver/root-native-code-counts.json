@@ -1,0 +1,61 @@
+{
+  "cases": {
+    "candidate": {
+      "bytes": 1059120,
+      "instruction_count": 153638,
+      "object": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/capture-candidate-endpoint-normal/jit-10.elf",
+      "selected_function_mnemonics": {
+        "cs_co_variant": {
+          "div": 26,
+          "vpmulld": 1
+        },
+        "cs_co_variant.destroy": {},
+        "cs_co_variant.resume": {
+          "div": 165,
+          "vcvtdq2pd": 8,
+          "vdivpd": 4,
+          "vdivsd": 2,
+          "vpmulld": 72,
+          "vpmuludq": 92
+        },
+        "cs_variant": {}
+      },
+      "selected_mnemonics": {
+        "div": 191,
+        "vcvtdq2pd": 8,
+        "vdivpd": 4,
+        "vdivsd": 2,
+        "vpmulld": 73,
+        "vpmuludq": 92
+      },
+      "sha256": "99ac4feb46b9600a6df270adb73516f9a380f8290ce21a0e5b82ec111a3a5894"
+    },
+    "stock": {
+      "bytes": 1049832,
+      "instruction_count": 152625,
+      "object": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf",
+      "selected_function_mnemonics": {
+        "cs_co_variant": {
+          "div": 26,
+          "vpmulld": 1
+        },
+        "cs_co_variant.destroy": {},
+        "cs_co_variant.resume": {
+          "div": 165,
+          "vpmulld": 68,
+          "vpmuludq": 84
+        },
+        "cs_variant": {}
+      },
+      "selected_mnemonics": {
+        "div": 191,
+        "vpmulld": 69,
+        "vpmuludq": 84
+      },
+      "sha256": "fb2cc33824dafab6bc16f4596c4c230aa641e549782a1eaf670b8184d6438e97"
+    }
+  },
+  "passed": true,
+  "schema": "sirius-root-static-native-cost-counts-v1",
+  "scope": "Static disassembly counts of exact ordinary JIT object inputs; linked-section integrity is accepted separately. Does not establish executed arithmetic, path frequency, cycles, benefit or adoption."
+}

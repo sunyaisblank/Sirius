@@ -1,0 +1,57 @@
+{
+  "bounds": {
+    "N": "m*2^26 < 2^51",
+    "acceptance": "P=exact(g*d); P<=N and exact(N-P)<d",
+    "accepted_guess": "uint2 sign/exponent bits == 0x41900000: positive normal estimate in [2^26,2^27)",
+    "d": "2^23 <= d < 2^24",
+    "normalized_m": "d <= m < 2*d < 2^25",
+    "remainder": "0<=r<d<2^24, hence the verified high remainder word is zero",
+    "shifts": "6 and26 only in new uint32 code; existing normalization/rounding unchanged",
+    "sticky": "g | (r != 0), then original PB32Round",
+    "true_quotient": "2^26 <= floor(N/d) < 2^27"
+  },
+  "candidate_macro": "SIRIUS_PB32_DIVIDE_FP64_ESTIMATE=1",
+  "candidate_profile": "Only complete portable normal Endpoint, portable=true, fp64=false, fma=false, stage_seven_owner=false. No production feature/module selection change.",
+  "capabilities": "Only candidate Float64 allowance; no Int64, no float-to-uint conversion, no64-bit storage/descriptor/Workgroup type.",
+  "fallback": "Any rejected estimate takes original fallback without modifying normalized m/d/exponent; unsupported Float64 requires unchanged original module selection before loading.",
+  "history": {
+    "integer_reciprocal_rejection": "49bfb434b0a31df958572448acebf655eb192296 is distinct: exact integer reciprocal and four chunk corrections",
+    "native_double_rejection": "6f916429c4920ab913c012a6e6fdb2a8dcc0b58b remains authoritative; no53-bit/RTE accuracy assumption",
+    "prior_optional64_divide": "Rejected; no unchanged retry, no UDiv64 in this candidate"
+  },
+  "numerical_assumption_on_native_estimate": "None; every guess is untrusted and must satisfy the exact quotient/remainder inequalities.",
+  "preparation_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "preserved": [
+    "all original PB32Divide special guards and unpack/normalization",
+    "complete original radix8/8/8/2 fallback bytes",
+    "PB32Multiply",
+    "PB32ProductResidual",
+    "PB32Unpack",
+    "PB32Round",
+    "FMA and all remaining arithmetic",
+    "uint32 public/storage ABI and original descriptors/tables/layers/barriers/normal-sum order"
+  ],
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "schema": "sirius-fp64-estimate-exact-quotient-contract-v1",
+  "scope": {
+    "arithmetic_or_performance_or_adoption_claim": false,
+    "compiler_or_provider_executed": false,
+    "global_OpUDiv_elimination_claim": false,
+    "machine_checked_exhaustive_proof": false,
+    "source_math_argument": true
+  },
+  "source_pins": {
+    "candidate_header": {
+      "bytes": 14719,
+      "sha256": "24ea42f825cde5c1378ac57dd194c245ebc2ed396a6cf212d2c642fa2b67d020"
+    },
+    "insertion": {
+      "bytes": 1922,
+      "sha256": "cc8873a9042738cfbfe4a3e22650d6b0c460c1108b7e7bb157c77de380fbbf32"
+    },
+    "original_header": {
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    }
+  }
+}

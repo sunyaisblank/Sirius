@@ -1,0 +1,35 @@
+{
+  "admitted_commands": [
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/host.py pin-runtime",
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/run_capture_owned.py capture-candidate-endpoint-normal",
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/host.py review"
+  ],
+  "independent_source_review": {
+    "bytes": 11790,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/independent-source-review.json",
+    "sha256": "3acdfb126778a431c86bde6504e2b66f39536a00991f0ffca757810f34c4e859"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "passed": true,
+  "root_review": {
+    "all1528_pins_independently_rehashed": true,
+    "all605_historical_join_bytes_and_resolved_paths_independently_verified": true,
+    "archive_regular_file_relocation_and_real_tool_symlink_paths_retained": true,
+    "exact_known_hash_cache_recovery_independently_reproduced": true,
+    "final_full_host_property_capture_owner_analyzer_feature_sources_read": true,
+    "no_live_completed_scratch_dependencies": true,
+    "original_failed_compiler_wrapper_remains_false_child1": true
+  },
+  "schema": "sirius-root-fp64-estimate-driver-source-admission-v1",
+  "scope": "One root-operated original short-input ordinary driver canary followed by separate post-terminal read only. No retained arithmetic, native-estimate accuracy/hit-rate, timing benefit, adoption, cold-frame or qualification admission.",
+  "source_freeze": {
+    "bytes": 487945,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/source-freeze.json",
+    "sha256": "3d692f2f23b8490252067be9f339bb0eb749f92b688100c4a0594faccf354950"
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+}

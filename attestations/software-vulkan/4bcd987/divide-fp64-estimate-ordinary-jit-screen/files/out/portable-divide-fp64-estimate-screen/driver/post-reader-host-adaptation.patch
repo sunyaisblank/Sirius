@@ -1,0 +1,126 @@
+--- cache-corrected-driver/host.py
++++ post-reader-driver/host.py
+@@ -162,21 +162,25 @@
+ 
+ def verify_compiler():
+     work = Path(P['compiler_work'])
+-    screen = module('prepared_estimate_screen', work / 'screen.py')
+-    screen.verify_frozen()
+-    owner = accepted(work / 'compile-endpoint-normal')
++    reader = module('prepared_completed_estimate_reader', work / 'reuse.py')
++    reader.verify_frozen()
++    _, failed_producer = reader.original_completed()
++    owner = accepted(work / 'read-completed-endpoint')
+     result = load(work / 'compiler-result.json')
+     approval = load(work / 'compiler-acceptance.json')
+     context = load(work / 'operator-context.json')
+-    action = load(work / 'actions.json')['compile-endpoint-normal']
+-    assert approval['passed'] and approval['compiler_owner'] == screen.record(work / 'compile-endpoint-normal/owner.json')
+-    assert approval['compiler_result'] == screen.record(work / 'compiler-result.json')
+-    assert context['actions'] == screen.record(work / 'actions.json')
+-    assert context['source_freeze'] == screen.record(work / 'source-freeze.json')
+-    assert context['preparation'] == screen.record(work / 'preparation.json')
++    action = load(work / 'actions.json')['read-completed-endpoint']
++    assert approval['passed'] and approval['reader_owner'] == record(work / 'read-completed-endpoint/owner.json')
++    assert approval['compiler_result'] == record(work / 'compiler-result.json')
++    assert approval['original_wrapper_passed'] is False and approval['original_wrapper_child_exit'] == 1
++    assert approval['original_failed_wrapper'] == failed_producer['original_failed_wrapper']
++    assert result['producer'] == failed_producer
++    assert context['actions'] == record(work / 'actions.json')
++    assert context['source_freeze'] == record(work / 'source-freeze.json')
++    assert context['preparation'] == record(work / 'preparation.json')
+     assert owner['source'] == {'revision': context['revision'], 'status': ''}
+     assert owner['argv'] == action['argv'] and owner['limits'] == action['limits']
+-    before = load(work / 'compile-endpoint-normal/inputs-before.json')
++    before = load(work / 'read-completed-endpoint/inputs-before.json')
+     for name in action['frozen_inputs']:
+         path = Path(name); key = str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
+         assert before[key] == record(path), name
+@@ -187,15 +191,40 @@
+     assert result['original_multiply_residual_unpack_round_normalized_bodies_equal']
+     assert result['complete_descriptor_and_workgroup_type_decorations_exact'] and result['execution_modes_exact']
+     assert result['ordered_barrier_operands_exact'] and not result['runtime_or_numerical_admission']
++    assert record(work / 'parser-control-result.json') == result['parser_controls']
++    controls = load(work / 'parser-control-result.json')
++    assert controls['passed'] and controls['negative_count'] == 23
++    assert all(row['expected_acceptance'] == row['actual_acceptance'] for row in controls['controls'])
+     for values in result['modules'].values():
+         for pin in (values['module'], values['assembly'], *values['bodies'].values()):
+-            assert screen.record(pin['resolved_path']) == pin
++            assert record(pin['resolved_path']) == pin
+     candidate = result['modules']['candidate']['module']
+-    assert Path(candidate['resolved_path']) == ROOT / 'bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.spv'
+-    return {'owner': record(work / 'compile-endpoint-normal/owner.json'),
++    original_inputs = load(work / 'inputs.json')
++    assert Path(candidate['resolved_path']) == Path(original_inputs['products']) / 'candidate-endpoint-normal.spv'
++    assert candidate['sha256'] == '87fc489831e49e8e1bdc7f60e3cf3f778c5a1297f21c4bc5d026968418c9fe7f'
++    return {'reader_owner': record(work / 'read-completed-endpoint/owner.json'),
+             'acceptance': record(work / 'compiler-acceptance.json'), 'result': record(work / 'compiler-result.json'),
+             'source_freeze': record(work / 'source-freeze.json'), 'candidate_module': candidate,
+-            'scope': 'Fresh separate post-terminal compiler acceptance with original fallback/normal32/interface/loop and exact-check graph. No native estimate accuracy assumed.'}
++            'original_failed_wrapper': failed_producer['original_failed_wrapper'],
++            'original_wrapper_passed': False, 'original_wrapper_child_exit': 1,
++            'scope': 'Immutable completed full compiler products plus separate terminal parse-only reader acceptance. Original wrapper remains false; no compiler or validator rerun. No native estimate accuracy assumed.'}
++
++
++def verify_properties():
++    property_reader = module('archived_property_receipt_join', WORK / 'property_receipt.py')
++    result = property_reader.verify()
++    expected = P['property_archive']
++    assert result['immutable_evidence_commit'] == expected['commit']
++    assert result['manifest_sha256'] == expected['manifest_sha256']
++    assert result['receipt_sha256'] == expected['receipt_sha256']
++    receipt = load(result['receipt'])
++    assert receipt['selected']['index'] == 0 and receipt['selected']['enumerated_count'] == 1
++    for image in receipt['observed_actual_live_images'].values():
++        saved = P['providers'][image['resolved_path']]
++        assert content(image['resolved_path']) == {key: image[key] for key in ('bytes', 'sha256')}
++        assert image['device_major'] == saved['device'][0] and image['device_minor'] == saved['device'][1]
++        assert image['inode'] == saved['inode']
++    return result
+ 
+ 
+ def verify_providers():
+@@ -205,7 +234,7 @@
+         assert [os.major(current.st_dev), os.minor(current.st_dev)] == pin['device'] and current.st_ino == pin['inode']
+ 
+ def pin_runtime():
+-    verify_static(); host = verify_host_reuse(); compiler = verify_compiler(); verify_providers()
++    verify_static(); host = verify_host_reuse(); compiler = verify_compiler(); properties = verify_properties(); verify_providers()
+     assert not BUILD.exists() and not (WORK / 'module-inputs').exists()
+     assert not any((WORK / name).exists() for name in ('runtime-context.json', 'capture-actions.json', 'reuse-acceptance.json', 'capture-candidate-endpoint-normal'))
+     assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == execution_revision()
+@@ -224,7 +253,7 @@
+     assert action['revision'] == 'PENDING_OPERATOR_CLEAN_CONTEXT'
+     action['revision'] = execution_revision()
+     write(WORK / 'capture-actions.json', actions)
+-    write(WORK / 'reuse-acceptance.json', {'host': host, 'compiler': compiler,
++    write(WORK / 'reuse-acceptance.json', {'host': host, 'compiler': compiler, 'properties': properties,
+           'stock_recaptured': False, 'host_recompiled': False, 'passed': True})
+     write(WORK / 'runtime-context.json', {'revision': execution_revision(), 'host': record(executable),
+           'modules': {'candidate': record(candidate)}, 'capture_actions': record(WORK / 'capture-actions.json'),
+@@ -255,7 +284,7 @@
+     assert len(events) == 1 and check(events[0]['maps_at_first_call'].splitlines()) == expected
+ 
+ def review():
+-    verify_static(); verify_host_reuse(); verify_compiler()
++    verify_static(); verify_host_reuse(); verify_compiler(); properties = verify_properties()
+     folder = WORK / 'capture-candidate-endpoint-normal'
+     owner = accepted(folder); context = load(WORK / 'runtime-context.json')
+     action = load(WORK / 'capture-actions.json')['capture-candidate-endpoint-normal']
+@@ -266,6 +295,7 @@
+     assert context['source_freeze'] == record(WORK / 'source-freeze.json')
+     assert context['host'] == record(BUILD / 'short_input_jit_probe')
+     assert context['modules']['candidate'] == record(WORK / 'module-inputs/candidate-endpoint-normal.spv')
++    assert load(WORK / 'reuse-acceptance.json')['properties'] == properties
+     before = load(folder / 'inputs-before.json')
+     for name in action['frozen_inputs']:
+         path = Path(name); key = str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
+@@ -296,6 +326,7 @@
+           'historical_stock_feature_review': record(stock_folder / 'feature-review.json'),
+           'complete_durable_stock_report_reproduced': True, 'complete_55_feature_queue_extension_order_and_chain_equal': True,
+           'fresh_inferior_and_called_JIT_maps_join_all_three_provider_files': True,
++          'property_receipt': properties, 'original_failed_compiler_wrapper_preserved': True,
+           'scope': 'One new candidate loaded/called ordinary IR/JIT capture with exact reused host and historical stock. New candidate feature arguments are fresh; stock feature arguments are historical. No retained division, arithmetic equivalence, cost benefit or qualification verdict; lowering review remains separate.'})
+     print('Candidate owner, ordinary code/relocations/features and fresh maps accepted; cost premise unjudged.', flush=True)
+ 

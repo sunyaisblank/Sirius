@@ -1,0 +1,8 @@
+{
+  "commands": [
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/host.py pin-runtime",
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/run_capture_owned.py capture-candidate-endpoint-normal",
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/host.py review"
+  ],
+  "scope": "Root-only one candidate canary capture after immutable compiler-reader/property/host admission; separate passive terminal review."
+}

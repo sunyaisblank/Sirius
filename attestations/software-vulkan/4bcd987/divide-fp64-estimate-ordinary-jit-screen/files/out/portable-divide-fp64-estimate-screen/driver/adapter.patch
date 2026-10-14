@@ -1,0 +1,167 @@
+--- original/host.py
++++ host.py
+@@ -1,10 +1,10 @@
+-"""Reuse accepted stock/Int64 host and admit one candidate-only ordinary capture."""
++"""Reuse historical diagnostic host/stock; admit one exact-checked FP64 estimate capture."""
+ from pathlib import Path
+ import hashlib, importlib.util, json, os, re, shlex, shutil, subprocess, sys
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+-ROOT = WORK.parents[1]
+-BUILD = ROOT / 'bin/linux-gcc/portable-multiply64-jit'
++ROOT = WORK.parents[2]
++BUILD = ROOT / 'bin/linux-gcc/portable-divide-fp64-estimate-screen/driver'
+ P = json.loads((WORK / 'inputs.json').read_text())
+ 
+ def record(path):
+@@ -116,6 +116,7 @@
+     stock_features = load(stock / 'feature-review.json')
+     assert stock_code['actual_loaded_module']['sha256'] == '981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede'
+     assert stock_features['actual_public_create_arguments_enable_shaderInt64']
++    assert stock_features['features']['shaderFloat64'] == 1
+     assert stock_features['successful_logical_device_used_for_actual_complete_shader']
+     assert len(stock_features['features']) == 55 and stock_features['features']['shaderInt64'] == 1
+     return {'historical_manifest': record(archive / 'manifest.json'), 'original_compile_device': record(history / 'compile-device/owner.json'),
+@@ -125,39 +126,47 @@
+             'historical_stock_features': record(stock / 'feature-review.json'),
+             'scope': 'Exact accepted source/object/link/tool/library/host and complete stock capture reuse. Old public feature arguments remain historical; no stock recapture or recompile.'}
+ 
++def execution_revision():
++    return load(Path(P['compiler_work']) / 'operator-context.json')['revision']
++
++
+ def verify_compiler():
+-    archive = Path(P['compiler_archive'])
+-    manifest(archive, P['compiler_manifest_sha256'])
+     work = Path(P['compiler_work'])
+-    accepted(work / 'compile-endpoint-normal')
+-    for name, expected in (('compiler-acceptance.json', 'compiler_acceptance_pin'),
+-                            ('compiler-result.json', 'compiler_result_pin'),
+-                            ('compile-endpoint-normal/owner.json', 'compiler_owner_pin')):
+-        assert content(work / name) == P[expected]
+-    result = load(work / 'compiler-result.json'); approval = load(work / 'compiler-acceptance.json')
+-    assert approval['passed'] and approval['compiler_owner']['sha256'] == P['compiler_owner_pin']['sha256']
+-    assert approval['compiler_result']['sha256'] == P['compiler_result_pin']['sha256']
+-    assert result['candidate_multiply_graph']['complete_discarded_bit_jam']
+-    assert result['original_divide_unpack_round_normalized_bodies_equal']
++    screen = module('prepared_estimate_screen', work / 'screen.py')
++    screen.verify_frozen()
++    owner = accepted(work / 'compile-endpoint-normal')
++    result = load(work / 'compiler-result.json')
++    approval = load(work / 'compiler-acceptance.json')
++    context = load(work / 'operator-context.json')
++    action = load(work / 'actions.json')['compile-endpoint-normal']
++    assert approval['passed'] and approval['compiler_owner'] == screen.record(work / 'compile-endpoint-normal/owner.json')
++    assert approval['compiler_result'] == screen.record(work / 'compiler-result.json')
++    assert context['actions'] == screen.record(work / 'actions.json')
++    assert context['source_freeze'] == screen.record(work / 'source-freeze.json')
++    assert context['preparation'] == screen.record(work / 'preparation.json')
++    assert owner['source'] == {'revision': context['revision'], 'status': ''}
++    assert owner['argv'] == action['argv'] and owner['limits'] == action['limits']
++    before = load(work / 'compile-endpoint-normal/inputs-before.json')
++    for name in action['frozen_inputs']:
++        path = Path(name); key = str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
++        assert before[key] == record(path), name
++    assert result['candidate_estimate_graph']['exact_product_remainder_inequalities']
++    assert result['candidate_estimate_graph']['original_complete_fallback_suffix_normalized_equal']
++    assert result['candidate_estimate_graph']['accepted_path_returns_same_round_sign_exponent']
++    assert result['candidate_has_no_Int64_or_FToU']
++    assert result['original_multiply_residual_unpack_round_normalized_bodies_equal']
+     assert result['complete_descriptor_and_workgroup_type_decorations_exact'] and result['execution_modes_exact']
+     assert result['ordered_barrier_operands_exact'] and not result['runtime_or_numerical_admission']
+     for values in result['modules'].values():
+-        for pin in (values['module'], values['assembly'], *values['bodies'].values()): joined(pin['resolved_path'], pin, archive)
+-    for key in ('private_inputs', 'external_inputs'):
+-        for name, pin in load(work / 'source-freeze.json')[key].items():
+-            original = ROOT / 'out/portable-multiply64-compiler' / name if key == 'private_inputs' else Path(name)
+-            joined(original, pin, archive)
+-    action = load(work / 'actions.json')['compile-endpoint-normal']
+-    before = load(work / 'compile-endpoint-normal/inputs-before.json')
+-    for name in action['frozen_inputs']:
+-        path = Path(name); key = str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
+-        joined(path, before[key], archive)
+-    assert joined(P['candidate_module_original_path'], result['modules']['candidate']['module'], archive) == Path(P['candidate_module'])
+-    assert content(P['candidate_module']) == P['candidate_module_pin']
+-    return {'archive_manifest': record(archive / 'manifest.json'), 'owner': record(work / 'compile-endpoint-normal/owner.json'),
+-            'acceptance': record(work / 'compiler-acceptance.json'), 'result_with_all_module_body_output_pins': record(work / 'compiler-result.json'),
+-            'candidate_module': record(P['candidate_module']),
+-            'scope': 'Immutable complete compiler result output pins, acceptance, terminal owner, source and consumed-input joins. No separate output-seal.json existed or is fabricated.'}
++        for pin in (values['module'], values['assembly'], *values['bodies'].values()):
++            assert screen.record(pin['resolved_path']) == pin
++    candidate = result['modules']['candidate']['module']
++    assert Path(candidate['resolved_path']) == ROOT / 'bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.spv'
++    return {'owner': record(work / 'compile-endpoint-normal/owner.json'),
++            'acceptance': record(work / 'compiler-acceptance.json'), 'result': record(work / 'compiler-result.json'),
++            'source_freeze': record(work / 'source-freeze.json'), 'candidate_module': candidate,
++            'scope': 'Fresh separate post-terminal compiler acceptance with original fallback/normal32/interface/loop and exact-check graph. No native estimate accuracy assumed.'}
++
+ 
+ def verify_providers():
+     for name, pin in P['providers'].items():
+@@ -169,7 +178,7 @@
+     verify_static(); host = verify_host_reuse(); compiler = verify_compiler(); verify_providers()
+     assert not BUILD.exists() and not (WORK / 'module-inputs').exists()
+     assert not any((WORK / name).exists() for name in ('runtime-context.json', 'capture-actions.json', 'reuse-acceptance.json', 'capture-candidate-endpoint-normal'))
+-    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == P['execution_revision']
++    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == execution_revision()
+     assert not subprocess.check_output(['git', 'status', '--porcelain=v1'], cwd=ROOT)
+     BUILD.mkdir()
+     executable = BUILD / 'short_input_jit_probe'
+@@ -177,20 +186,20 @@
+     assert content(executable) == content(P['canary'])
+     (WORK / 'module-inputs').mkdir()
+     candidate = WORK / 'module-inputs/candidate-endpoint-normal.spv'
+-    shutil.copyfile(P['candidate_module'], candidate)
+-    assert content(candidate) == P['candidate_module_pin']
++    shutil.copyfile(compiler['candidate_module']['resolved_path'], candidate)
++    assert content(candidate) == {key: compiler['candidate_module'][key] for key in ('bytes','sha256')}
+     actions = load(WORK / 'capture-actions.unpinned.json')
+     assert list(actions) == ['capture-candidate-endpoint-normal']
+     action = actions['capture-candidate-endpoint-normal']
+     assert action['revision'] == 'PENDING_OPERATOR_CLEAN_CONTEXT'
+-    action['revision'] = P['execution_revision']
++    action['revision'] = execution_revision()
+     write(WORK / 'capture-actions.json', actions)
+     write(WORK / 'reuse-acceptance.json', {'host': host, 'compiler': compiler,
+           'stock_recaptured': False, 'host_recompiled': False, 'passed': True})
+-    write(WORK / 'runtime-context.json', {'revision': P['execution_revision'], 'host': record(executable),
++    write(WORK / 'runtime-context.json', {'revision': execution_revision(), 'host': record(executable),
+           'modules': {'candidate': record(candidate)}, 'capture_actions': record(WORK / 'capture-actions.json'),
+           'source_freeze': record(WORK / 'source-freeze.json'), 'reuse_acceptance': record(WORK / 'reuse-acceptance.json'),
+-          'scope': 'One candidate-only original short-input canary. Complete stock/Int64 host evidence reused; no arithmetic, performance, cold-frame or qualification claim.'})
++          'scope': 'One candidate-only original short-input canary. Complete historical stock/Int64-enabled host evidence reused (Float64 enabled too); no arithmetic, performance, cold-frame or qualification claim.'})
+     print('Candidate-only runtime inputs pinned; no provider process launched.', flush=True)
+ 
+ def verify_new_maps(folder, owner, code):
+@@ -220,7 +229,7 @@
+     folder = WORK / 'capture-candidate-endpoint-normal'
+     owner = accepted(folder); context = load(WORK / 'runtime-context.json')
+     action = load(WORK / 'capture-actions.json')['capture-candidate-endpoint-normal']
+-    assert owner['source'] == {'revision': P['execution_revision'], 'status': ''}
++    assert owner['source'] == {'revision': execution_revision(), 'status': ''}
+     assert owner['argv'] == [arg.replace('{folder}', str(folder)) for arg in action['argv']]
+     assert owner['limits'] == action['limits']
+     assert context['capture_actions'] == record(WORK / 'capture-actions.json')
+@@ -242,8 +251,11 @@
+     layout = load(WORK / 'feature-layout.json')
+     assert len(layout['features_fields']) == len(set(layout['features_fields'])) == 55
+     assert set(features['features']) == set(layout['features_fields']) and features == stock_features
+-    assert code['actual_loaded_module']['sha256'] == P['candidate_module_pin']['sha256']
+-    assert code['actual_loaded_module']['bytes'] == P['candidate_module_pin']['bytes']
++    assert features['features']['shaderFloat64'] == 1
++    assert features['features']['shaderInt64'] == 1  # Historical host's unused extra feature; shader has no Int64.
++    expected_module = load(Path(P['compiler_work']) / 'compiler-result.json')['modules']['candidate']['module']
++    assert code['actual_loaded_module']['sha256'] == expected_module['sha256']
++    assert code['actual_loaded_module']['bytes'] == expected_module['bytes']
+     assert content(BUILD / 'short_input_jit_probe') == content(P['canary'])
+     verify_new_maps(folder, owner, code)
+     write(folder / 'actual-code-review.json', code)
+@@ -254,7 +266,7 @@
+           'historical_stock_feature_review': record(stock_folder / 'feature-review.json'),
+           'complete_durable_stock_report_reproduced': True, 'complete_55_feature_queue_extension_order_and_chain_equal': True,
+           'fresh_inferior_and_called_JIT_maps_join_all_three_provider_files': True,
+-          'scope': 'One new candidate loaded/called ordinary IR/JIT capture with exact reused host and historical stock. New candidate feature arguments are fresh; stock feature arguments are historical. No retained multiplication, arithmetic equivalence, cost benefit or qualification verdict; lowering review remains separate.'})
++          'scope': 'One new candidate loaded/called ordinary IR/JIT capture with exact reused host and historical stock. New candidate feature arguments are fresh; stock feature arguments are historical. No retained division, arithmetic equivalence, cost benefit or qualification verdict; lowering review remains separate.'})
+     print('Candidate owner, ordinary code/relocations/features and fresh maps accepted; cost premise unjudged.', flush=True)
+ 
+ if __name__ == '__main__':

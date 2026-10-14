@@ -1,0 +1,17 @@
+{
+  "commands_in_order": [
+    "python3 -B out/portable-divide-fp64-estimate-screen/compiler/screen.py pin-context FULL_CLEAN_SOURCE_COMMIT",
+    "python3 -B out/portable-divide-fp64-estimate-screen/compiler/run_owned.py compile-endpoint-normal",
+    "python3 -B out/portable-divide-fp64-estimate-screen/compiler/screen.py review",
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/host.py pin-runtime",
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/run_capture_owned.py capture-candidate-endpoint-normal",
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/host.py review"
+  ],
+  "operator": "Root only, after independent source admission. All6commands stop-first-failure; compiler3commands and accepted reader precede capture3commands.",
+  "owned_roots": [
+    "out/portable-divide-fp64-estimate-screen",
+    "bin/linux-gcc/portable-divide-fp64-estimate-screen"
+  ],
+  "public_unsupported_fallback_scope": "Production code/module selection is unchanged; public Float64-assisted admission remains unimplemented. This diagnostic host/provider requires existing Float64 support.",
+  "source_only_prepared": true
+}

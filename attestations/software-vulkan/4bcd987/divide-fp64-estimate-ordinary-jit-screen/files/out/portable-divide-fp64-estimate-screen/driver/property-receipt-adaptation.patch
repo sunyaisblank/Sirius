@@ -1,0 +1,109 @@
+--- immutable-property-reader/read_properties.py
++++ driver/property_receipt.py
+@@ -1,34 +1,54 @@
+ """Admit one completed property observation; never loads or calls Vulkan."""
+ from pathlib import Path
+-import argparse
+ import hashlib
+ import json
+ import struct
+ 
+-HERE = Path(__file__).resolve().parent
+-ROOT = HERE.parents[1]
++ROOT = Path(__file__).resolve().parents[3]
++ARCHIVE = ROOT / 'attestations/software-vulkan/4bcd987/fp64-estimate-float-controls-properties'
++HERE = ARCHIVE / 'files/out/portable-divide-fp64-estimate-property-query'
++ORIGINAL_HERE = ROOT / 'out/portable-divide-fp64-estimate-property-query'
++MANIFEST_SHA256 = '3270fd4418392a9ab1c1d55a8d31fe58c5b0c5b0e931b7a1b823261410eb5258'
++RECEIPT_SHA256 = '0e9946333e2f5882d93cbfaaa1f08f4a7d602fc5487988b776cda2e713b9f4ea'
++
++
++def actual_path(path):
++    path = Path(path)
++    saved = ARCHIVE / 'files' / path.relative_to(ROOT) if path.is_relative_to(ROOT) else None
++    if saved is not None and saved.is_file():
++        return saved
++    assert not path.is_relative_to(ORIGINAL_HERE), path
++    return path
+ REVISION = '4498cc41168ad29fc4c111819a4cb7ccaa54a8bf'
+ 
+ 
+ def load(path):
+-    return json.loads(path.read_text())
++    return json.loads(actual_path(path).read_text())
+ 
+ 
+ def pin(path):
+     path = Path(path)
+-    resolved = path.resolve(strict=True)
++    actual = actual_path(path)
++    resolved = actual.resolve(strict=True)
+     digest = hashlib.sha256()
+     with resolved.open('rb') as stream:
+         for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+             digest.update(chunk)
+-    return {'resolved_path': str(resolved), 'bytes': resolved.stat().st_size, 'sha256': digest.hexdigest()}
++    # Preserve recorded original identities; do not rewrite immutable raw JSON.
++    reported = ROOT / resolved.relative_to(ARCHIVE / 'files') if resolved.is_relative_to(ARCHIVE / 'files') else resolved
++    return {'resolved_path': str(reported), 'bytes': resolved.stat().st_size, 'sha256': digest.hexdigest()}
+ 
+ 
+-def main():
+-    parser = argparse.ArgumentParser(description=__doc__)
+-    parser.add_argument('--output', required=True, type=Path)
+-    args = parser.parse_args()
+-    assert Path.cwd() == ROOT and args.output.resolve(strict=True) == HERE / 'read-properties'
++def verify():
++    assert Path.cwd() == ROOT
++    manifest = load(ARCHIVE / 'manifest.json')
++    assert pin(ARCHIVE / 'manifest.json')['sha256'] == MANIFEST_SHA256
++    for name, expected in manifest['files'].items():
++        path = ARCHIVE / name
++        assert not path.is_symlink()
++        assert {key: pin(path)[key] for key in ('bytes', 'sha256')} == expected
++    receipt_path = HERE / 'read-properties/property-accepted.json'
++    assert pin(receipt_path)['sha256'] == RECEIPT_SHA256
+     folder = HERE / 'query'
+     owner = load(folder / 'owner.json')
+     action = load(HERE / 'actions.json')['query']
+@@ -38,7 +58,7 @@
+     assert owner['source_unchanged'] is True and owner['whole_inputs_unchanged'] is True
+     assert owner['observed_births'] and all(row['absent'] is True for row in owner['observed_births'])
+     assert owner['limits'] == {'seconds': 60, 'rss_kib': 4194304, 'reserve_kib': 2097152}
+-    assert owner['argv'] == [item.replace('{folder}', str(folder)) for item in action['argv']]
++    assert owner['argv'] == [item.replace('{folder}', str(ORIGINAL_HERE / 'query')) for item in action['argv']]
+     assert owner['wall_seconds'] < 60 and owner['peak_sampled_rss_kib'] <= 4194304
+     assert owner['minimum_sampled_available_kib'] >= 2097152 and owner['provider_mappings']
+     assert owner['declared_output_environment'] == {'GTEST_OUTPUT': '',
+@@ -124,11 +144,23 @@
+         'logical_device_float64_enablement_observed': False, 'estimate_accuracy_established': False,
+         'future_capture_requires_exact_property_receipt_join': True,
+         'qualification_claimed': False, 'scope': 'RTE32 plus internal Float64 mixed-width profile eligibility only. No RTE64 premise, logical-device enablement, arithmetic accuracy or timing result.'}
+-    with (args.output / 'property-accepted.json').open('x') as stream:
+-        json.dump(result, stream, indent=2, sort_keys=True)
+-        stream.write('\n')
+-    print(json.dumps({'passed': True, 'profile_checks': checks, 'estimate_accuracy_established': False}, sort_keys=True), flush=True)
+-
+-
+-if __name__ == '__main__':
+-    main()
++    assert result == load(receipt_path)
++    for phase in ('query', 'read-properties'):
++        terminal = load(HERE / phase / 'owner.json')
++        assert terminal['status'] == 'terminal' and terminal['passed'] is True and terminal['child_exit'] == 0
++        assert terminal['stop_reason'] is None and terminal['cleanup_errors'] == []
++        assert terminal['source_unchanged'] and terminal['whole_inputs_unchanged']
++        assert terminal['remaining_owned_processes'] == [] and terminal['observed_births']
++        assert all(row['absent'] is True for row in terminal['observed_births'])
++        assert terminal['source'] == {'revision': REVISION, 'status': ''}
++        before = load(HERE / phase / 'inputs-before.json')
++        assert before == load(HERE / phase / 'inputs-after.json')
++        for name, expected in before.items():
++            assert pin(ROOT / name) == expected, name
++    return {'receipt': str(receipt_path), 'receipt_sha256': RECEIPT_SHA256,
++            'manifest_sha256': MANIFEST_SHA256,
++            'immutable_evidence_commit': '3dccbf65373cd13e1dacca2aa57db195b4712eef',
++            'roundingModeIndependence': values['roundingModeIndependence'],
++            'physical_profile_admissible': True,
++            'all_original_source_owner_raw_struct_map_and_helper_joins_preserved': True,
++            'logical_device_enablement_or_estimate_accuracy_inferred': False}

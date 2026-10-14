@@ -1,0 +1,11 @@
+--- original/run_capture.py
++++ run_capture.py
+@@ -18,7 +18,7 @@
+ work = Path(__file__).resolve().parent
+ folder = Path(sys.argv[1]).resolve()
+ module = Path(sys.argv[2]).resolve()
+-stage = root / "bin/linux-gcc/portable-multiply64-jit"
++stage = root / "bin/linux-gcc/portable-divide-fp64-estimate-screen/driver"
+ executable = stage / "short_input_jit_probe"
+ observer = root / "attestations/software-vulkan/b5d2abf/optimized-ir-stage-code-binding/optimizer_observer.so"
+ assert folder.is_relative_to(work) and folder.exists()

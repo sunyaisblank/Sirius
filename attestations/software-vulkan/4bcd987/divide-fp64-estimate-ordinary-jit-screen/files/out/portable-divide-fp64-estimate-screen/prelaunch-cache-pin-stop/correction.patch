@@ -1,0 +1,49 @@
+--- prelaunch-cache-pin-stop/driver/host.py
++++ driver/host.py
+@@ -49,9 +49,38 @@
+         assert not path.is_symlink() and content(path) == pin, path
+     return result
+ 
++def verify_cache_recovery():
++    proof = load(P['historical_cache_recovery'])
++    base = Path(proof['base']['path']); data = base.read_bytes()
++    expected = {'bytes': 60385, 'sha256': 'c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02'}
++    assert proof['raw_old_cache_found'] is False and proof['canonical_cache_modified'] is False
++    assert proof['original_input'] == str(ROOT / 'bin/linux-gcc/CMakeCache.txt')
++    assert {key: proof['original_605_frozen_pin'][key] for key in ('bytes','sha256')} == expected
++    assert proof['original_605_frozen_pin']['resolved_path'] == proof['original_input']
++    assert content(base) == {key: proof['base'][key] for key in ('bytes','sha256')}
++    assert proof['base']['git_commit'] == '1dd9bf1f0c7ec8e91adb89cc3563eb705d353709'
++    assert proof['base']['git_path'] == str(base.relative_to(ROOT))
++    assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == proof['base']['git_blob']
++    manifest_path = Path(proof['base']['manifest_path'])
++    assert content(manifest_path)['sha256'] == proof['base']['manifest_sha256']
++    assert load(manifest_path)['files'][proof['base']['manifest_member']] == content(base)
++    replacement = proof['literal_replacement']
++    before, after = replacement['before'].encode(), replacement['after'].encode()
++    assert replacement['count'] == data.count(before) == 1
++    restored = data.replace(before, after, 1)
++    recovered = Path(proof['recovered_path'])
++    assert restored == recovered.read_bytes() and content(recovered) == proof['recovered_pin'] == expected
++    return recovered
++
++
+ def joined(original, pin, archive):
+     original = Path(original)
+     if not original.is_absolute(): original = ROOT / original
++    if original == ROOT / 'bin/linux-gcc/CMakeCache.txt':
++        recovered = verify_cache_recovery()
++        assert {key: pin[key] for key in ('bytes','sha256')} == content(recovered)
++        assert pin['resolved_path'] == str(original)
++        return recovered
+     relative = original.relative_to(ROOT) if original.is_relative_to(ROOT) else None
+     saved = Path(archive) / 'files' / relative if relative is not None else None
+     actual = saved if saved is not None and saved.is_file() else original
+@@ -122,6 +151,7 @@
+     return {'historical_manifest': record(archive / 'manifest.json'), 'original_compile_device': record(history / 'compile-device/owner.json'),
+             'original_compile_probe': record(history / 'compile-probe/owner.json'), 'original_link': record(history / 'link/owner.json'),
+             'link_review': record(history / 'link-review.json'), 'canary': record(P['canary']),
++            'historical_cache_known_hash_recovery': record(P['historical_cache_recovery']),
+             'historical_stock_owner': record(stock / 'owner.json'), 'historical_stock_code': record(stock / 'actual-code-review.json'),
+             'historical_stock_features': record(stock / 'feature-review.json'),
+             'scope': 'Exact accepted source/object/link/tool/library/host and complete stock capture reuse. Old public feature arguments remain historical; no stock recapture or recompile.'}

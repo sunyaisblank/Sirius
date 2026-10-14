@@ -1,0 +1,71 @@
+{
+  "arithmetic_cost_or_qualification_claimed": false,
+  "canonical_source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "capture_future_inputs": 1534,
+  "driver_static_pins": 1528,
+  "historical_cache_recovery": "Known complete historical SHA recovery from immutable1dd base + sole exact literal; raw old cache not found; no exemption/canonical mutation.",
+  "new_reader_root_operated_passed": true,
+  "original_compiler_wrapper_child_exit": 1,
+  "original_compiler_wrapper_passed": false,
+  "owned_out": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen",
+  "pins": {
+    "driver/capture-actions.unpinned.json": {
+      "bytes": 147252,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/capture-actions.unpinned.json",
+      "sha256": "adcd776c9a44dc6692a048c5d2adab79807933706d1f21d4089f158352f17f88"
+    },
+    "driver/final-host-adaptation.patch": {
+      "bytes": 15676,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/final-host-adaptation.patch",
+      "sha256": "840ab145320afe226dad2cb537a8453c85a60fa5ca92d00121803615a391a02e"
+    },
+    "driver/host.py": {
+      "bytes": 24475,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/host.py",
+      "sha256": "36ee62ed5c3b36cefe114fc57a3b59c6563e4a45d5e616c4a2e2f13c28cd18ba"
+    },
+    "driver/inputs.json": {
+      "bytes": 221763,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/inputs.json",
+      "sha256": "da43b9a38a9f85d58c989c5e36b27bdc7a2655dc51411056ca9a8bc74796d7cc"
+    },
+    "driver/preparation.json": {
+      "bytes": 3492,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/preparation.json",
+      "sha256": "30455f2a91b5fd26b483d13e879afe4aea27b21a7a541c19a7603809878a657b"
+    },
+    "driver/property-receipt-adaptation.patch": {
+      "bytes": 5799,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/property-receipt-adaptation.patch",
+      "sha256": "2e5476de3e8de33c4e249e23041748e0eb39afa8df225515ce8d6920b3e3d670"
+    },
+    "driver/property_receipt.py": {
+      "bytes": 10993,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/property_receipt.py",
+      "sha256": "04b7f091fa9aa8135d87e08d0d00bcce09f8f850ee1832ad179e37f3dff4e0d5"
+    },
+    "driver/source-freeze.json": {
+      "bytes": 487945,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/driver/source-freeze.json",
+      "sha256": "3d692f2f23b8490252067be9f339bb0eb749f92b688100c4a0594faccf354950"
+    }
+  },
+  "property_archive": {
+    "commit": "3dccbf65373cd13e1dacca2aa57db195b4712eef",
+    "manifest_sha256": "3270fd4418392a9ab1c1d55a8d31fe58c5b0c5b0e931b7a1b823261410eb5258",
+    "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-float-controls-properties",
+    "receipt_sha256": "0e9946333e2f5882d93cbfaaa1f08f4a7d602fc5487988b776cda2e713b9f4ea"
+  },
+  "prospective_commands": [
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/host.py pin-runtime",
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/run_capture_owned.py capture-candidate-endpoint-normal",
+    "python3 -B out/portable-divide-fp64-estimate-screen/driver/host.py review"
+  ],
+  "reader_archive": {
+    "commit": "56076d8dff4b19c0bb40ffecb1f7432ce83bb1e6",
+    "manifest_sha256": "1d7f0eb781418ff0c3fd6cf5026d95dc319f816eb04b5a401cc72e91275a361c"
+  },
+  "schema": "sirius-fp64-estimate-screen-prepared-release-v2",
+  "source_only_preparation_by_author": true,
+  "status": "DRIVER_PREPARED_PENDING_INDEPENDENT_SOURCE_AND_REMOTE_ARCHIVE_ADMISSION"
+}
