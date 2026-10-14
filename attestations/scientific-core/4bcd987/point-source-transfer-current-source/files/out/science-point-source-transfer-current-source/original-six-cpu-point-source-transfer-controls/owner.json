@@ -1,0 +1,64 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/ctest",
+    "--test-dir",
+    "bin/linux-gcc",
+    "-V",
+    "--output-on-failure",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/science-point-source-transfer-current-source/original-six-cpu-point-source-transfer-controls/ctest.xml",
+    "--output-log",
+    "/home/astra/.project/Sirius/out/science-point-source-transfer-current-source/original-six-cpu-point-source-transfer-controls/ctest.log",
+    "-R",
+    "^(PointSourceTransfer\\.InvalidOrOverflowingTransferHasNoPublishedValue|PointSourceTransfer\\.MovingObserverUsesBandGainAndAngularAreaExactlyOnce|PointSourceTransfer\\.ReferenceFrequencyPreservesCatalogueColourAndFlux|PointSourceTransfer\\.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions|PointSourceTransfer\\.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw|PointSourceTransfer\\.ShiftedTemperatureHasNoCatalogueLookupClamp)$"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "original-six-cpu-point-source-transfer-controls",
+  "child_exit": 0,
+  "child_pid": 313532,
+  "child_start_ticks": "4335109",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 313525,
+    "pid": 313525,
+    "ppid": 1313,
+    "rss_kib": 27176,
+    "session": 313525,
+    "start_ticks": "4335085",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Six unchanged original PointSourceTransfer CPU controls only, finite P3 transfer with P2/P5 overlap; no fullP2/P3/P5/science/Mandatory/platform/release or performance qualification.",
+  "minimum_sampled_available_kib": 20482412,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 313532,
+      "saved_start_ticks": "4335109"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 48096,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Six unchanged original PointSourceTransfer CPU controls only, finite P3 transfer with P2/P5 overlap; no fullP2/P3/P5/science/Mandatory/platform/release or performance qualification.",
+  "source": {
+    "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.5275933399971109,
+  "whole_inputs_unchanged": true
+}
