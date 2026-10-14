@@ -1,0 +1,225 @@
+--- original/screen.py
++++ screen.py
+@@ -1,7 +1,7 @@
+-"""Reuse accepted stock, compile one full multiply64 Endpoint, then read its terminal owner.
++"""Reuse accepted stock, compile one full divide-fp64-estimate Endpoint, then read its terminal owner.
+ 
+ No mode creates a Vulkan instance, device, pipeline or dispatch. Root operates
+-the unchanged copied owner; runtime feature enablement and JIT capture are deferred.
++the unchanged copied owner; the companion capture is gated by terminal acceptance.
+ """
+ from pathlib import Path
+ import hashlib
+@@ -17,8 +17,8 @@
+ 
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+-ROOT = WORK.parents[1]
+-PRODUCTS = ROOT / "bin/linux-gcc/portable-multiply64-compiler"
++ROOT = WORK.parents[2]
++PRODUCTS = ROOT / "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler"
+ CANONICAL = ROOT / "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv"
+ PRODUCT_REVISION = "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+ 
+@@ -65,7 +65,7 @@
+     assert not (WORK / "operator-context.json").exists(), "pin once before consumption"
+     assert not subprocess.check_output(["git", "status", "--porcelain=v1"], cwd=ROOT)
+     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+-    assert revision == "46a9599a0cb30b0667e09838eac7a87690e982e4"
++    assert len(sys.argv) == 3 and revision == sys.argv[2] and re.fullmatch(r"[0-9a-f]{40}", revision)
+     assert (WORK / "actions.json").read_bytes() == (WORK / "actions.unpinned.json").read_bytes()
+     actions = json.loads((WORK / "actions.json").read_text())
+     assert list(actions) == ["compile-endpoint-normal"]
+@@ -155,22 +155,19 @@
+     for key, name in (("module", "stock_module"), ("assembly", "stock_assembly")):
+         assert content(reuse[name]) == {field: result["modules"]["stock"][key][field] for field in ("bytes", "sha256")}
+     assert Path(reuse["stock_module"]).read_bytes() == CANONICAL.read_bytes()
+-    original = (history / "candidate/scripts/build-retained-kernels.py").read_text()
+-    candidate = (WORK / "candidate/scripts/build-retained-kernels.py").read_text()
+-    assert candidate.replace("diagnostic_multiply64", "diagnostic_divide64").replace("SIRIUS_PB32_MULTIPLY64", "SIRIUS_PB32_DIVIDE64") == original
+     controls = json.loads(Path(reuse["guard_controls"]).read_text())
+     assert controls["passed"] and len(controls["controls"]) == 12
+     assert all(row["actual_acceptance"] == row["expected_acceptance"] for row in controls["controls"])
+     assert sum(row["expected_acceptance"] for row in controls["controls"]) == 2
+-    source_review = json.loads((WORK / "arithmetic-independent-source-review.json").read_text())
+-    assert source_review["passed"] and not source_review["compiler_or_runtime_or_arithmetic_admitted"]
+-    assert content(WORK / "candidate/src/sirius/kernels/portable_binary32.h") == source_review["pins"]["candidate/src/sirius/kernels/portable_binary32.h"]
+-    assert content(WORK / "arithmetic-contracts.json") == source_review["pins"]["contracts.json"]
+-    assert content(WORK / "arithmetic-source-freeze.json") == source_review["pins"]["source-freeze.json"]
++    header = (WORK / "candidate/src/sirius/kernels/portable_binary32.h").read_text()
++    insertion = (WORK / "candidate-insertion.txt").read_text()
++    assert header.count(insertion) == 1
++    assert header.replace(insertion, "", 1) == (WORK / "stock/src/sirius/kernels/portable_binary32.h").read_text()
++    assert header.replace(insertion, "", 1) == (ROOT / "src/sirius/kernels/portable_binary32.h").read_text()
+     return {"archive_manifest": record(archive / "manifest.json"), "original_owner": record(history / "compile-endpoint-normal/owner.json"),
+             "original_acceptance": record(history / "compiler-acceptance.json"), "guard_controls": record(reuse["guard_controls"]),
+             "source_joins": len(reuse["source_joins"]), "tool_joins": len(reuse["tool_joins"]),
+-            "scope": "Exact accepted full stock/compiler-policy reuse; no stock compiler or policy execution repeated."}
++            "scope": "Exact accepted full stock/compiler-policy reuse; no stock compiler or original Int64-policy execution repeated. New Float64 estimate policy remains separately scoped."}
+ 
+ 
+ def normalized_function(text, name):
+@@ -190,95 +187,9 @@
+             for line in body.splitlines() if line.strip()]
+ 
+ 
+-def multiply_shape(text):
+-    """Check this one out-of-line Endpoint product/shift/jam graph; refuse other shapes."""
+-    body = function_body(text, "PB32Multiply")
+-    definitions = dict(re.findall(r"^\s*(%\S+) = (.+)$", text, re.M))
+-    names = dict(re.findall(r'OpName (%\S+) "([^"]*)"', text))
+-    integers = dict(re.findall(r"(%\S+) = OpTypeInt (\d+) [01]", text))
+-    wide = [identifier for identifier, width in integers.items() if width == "64"]
+-    assert len(wide) == 1 and definitions[wide[0]] == "OpTypeInt 64 0"
+-    wide = wide[0]
+-    words = lambda identifier: definitions[identifier].split()
+-    def origin(identifier):
+-        seen = set()
+-        while words(identifier)[0] == "OpCopyObject":
+-            assert identifier not in seen
+-            seen.add(identifier); identifier = words(identifier)[2]
+-        return identifier
+-    def number(identifier):
+-        identifier = origin(identifier); expression = words(identifier)
+-        if expression[0] == "OpConstant":
+-            return int(expression[2], 0)
+-        if expression[0] in ("OpShiftLeftLogical", "OpISub"):
+-            a, b = number(expression[2]), number(expression[3])
+-            return a << b if expression[0] == "OpShiftLeftLogical" else a - b
+-        raise ValueError("not an accepted integer constant expression: " + identifier)
+-    def constant(identifier, expected):
+-        try: return number(identifier) == expected
+-        except ValueError: return False
+-    def choice(identifier, condition, yes, no):
+-        expression = words(origin(identifier))
+-        if expression[0] == "OpSelect":
+-            return origin(expression[2]) == condition and constant(expression[3], yes) and constant(expression[4], no)
+-        if expression[0] != "OpPhi" or len(expression) != 6:
+-            return False
+-        incoming = {expression[i + 1]: expression[i] for i in (2, 4)}
+-        branches = re.findall(r"OpBranchConditional " + re.escape(condition) + r" (%\S+) (%\S+)", body)
+-        return any(set(incoming) == {a, b} and constant(incoming[a], yes) and constant(incoming[b], no) for a, b in branches)
+-    products = re.findall(r"(%\S+) = OpIMul " + re.escape(wide) + r" (%\S+) (%\S+)", body)
+-    assert len(products) == 1 and "OpUMulExtended" not in body
+-    product, left, right = products[0]
+-    assert sum(bool(re.search(r"= OpIMul " + re.escape(wide) + r" ", line)) for line in text.splitlines()) == 1
+-    for operand in (left, right):
+-        expression = words(origin(operand)); assert expression[:2] == ["OpUConvert", wide]
+-        extraction = words(origin(expression[2])); assert extraction[0] == "OpCompositeExtract" and extraction[-1] == "0"
+-        unpack = words(origin(extraction[2])); assert unpack[0] == "OpFunctionCall" and names[unpack[2]] == "PB32Unpack"
+-    top = [identifier for identifier, expression in definitions.items()
+-           if expression.startswith("OpBitwiseAnd " + wide + " ") and
+-           ((origin(words(identifier)[2]) == product and constant(words(identifier)[3], 1 << 47)) or
+-            (origin(words(identifier)[3]) == product and constant(words(identifier)[2], 1 << 47)))]
+-    assert len(top) == 1
+-    def nonzero_of(value):
+-        results = []
+-        for identifier, expression in definitions.items():
+-            parts = expression.split()
+-            if parts[0] == "OpINotEqual" and len(parts) == 4 and (
+-                    (origin(parts[2]) == value and constant(parts[3], 0)) or
+-                    (origin(parts[3]) == value and constant(parts[2], 0))): results.append(identifier)
+-        assert len(results) == 1
+-        return results[0]
+-    upper = nonzero_of(top[0])
+-    shifts = re.findall(r"(%\S+) = OpShiftRightLogical " + re.escape(wide) + " " + re.escape(product) + r" (%\S+)", body)
+-    assert len(shifts) == 1
+-    shifted, distance = shifts[0]
+-    assert choice(distance, upper, 21, 20)
+-    masks = []
+-    for identifier, expression in definitions.items():
+-        parts = expression.split()
+-        if parts[:2] != ["OpISub", wide] or not constant(parts[3], 1): continue
+-        shift = words(origin(parts[2]))
+-        if shift[:2] == ["OpShiftLeftLogical", wide] and constant(shift[2], 1) and origin(shift[3]) == origin(distance): masks.append(identifier)
+-    assert len(masks) == 1
+-    discarded = [identifier for identifier, expression in definitions.items() if
+-                 expression.startswith("OpBitwiseAnd " + wide + " ") and
+-                 {origin(word) for word in words(identifier)[2:]} == {product, masks[0]}]
+-    assert len(discarded) == 1
+-    sticky_test = nonzero_of(discarded[0])
+-    narrow = [identifier for identifier, expression in definitions.items() if
+-              expression.startswith("OpUConvert ") and origin(words(identifier)[2]) == shifted and integers[words(identifier)[1]] == "32"]
+-    assert len(narrow) == 1
+-    extensions = []
+-    for identifier in re.findall(r"^\s*(%\S+) = OpBitwiseOr .*", body, re.M):
+-        operands = [origin(word) for word in words(identifier)[2:]]
+-        if narrow[0] in operands and choice(operands[1] if operands[0] == narrow[0] else operands[0], sticky_test, 1, 0): extensions.append(identifier)
+-    assert len(extensions) == 1
+-    rounded = [identifier for identifier in re.findall(r"^\s*(%\S+) = OpFunctionCall .*", body, re.M)
+-               if names.get(words(identifier)[2]) == "PB32Round" and origin(words(identifier)[-1]) == extensions[0]]
+-    assert len(rounded) == 1 and re.search(r"OpReturnValue " + re.escape(rounded[0]) + r"\b", body)
+-    return {"wide_product": product, "upper_bit": 47, "shift_values": [20, 21],
+-            "normalized_unsigned_operands": True, "complete_discarded_bit_jam": True,
+-            "same_common_round_call": True, "body": body}
++def estimate_shape(stock, candidate):
++    reader = load_module("estimate_graph", WORK / "estimate_graph.py")
++    return reader.inspect(stock, candidate, function_body)
+ 
+ 
+ def compile_candidate():
+@@ -304,19 +215,18 @@
+     assert content(stock) == content(reuse["stock_module"]) and content(stock_assembly) == content(reuse["stock_assembly"])
+     recipe = json.loads((WORK / "generated/endpoint-arguments.json").read_text())
+     tools = recipe["tools"]
+-    builder = load_module("multiply64_candidate_builder", WORK / "candidate/scripts/build-retained-kernels.py")
++    builder = load_module("divide-fp64-estimate_candidate_builder", WORK / "candidate/scripts/build-retained-kernels.py")
+     candidate = modules_dir / "candidate-endpoint-normal.spv"
+     builder.compile_shader(WORK / "candidate/src/sirius/kernels/retained_endpoint.slang",
+         candidate, tools["compiler"], tools["assembler"], tools["disassembler"], tools["validator"],
+         recipe["registers"], 5, recipe["layers"], recipe["prefix"], portable=True,
+         optimizer=tools["optimizer"], normal_sum32=True,
+-        endpoint_specialized=tuple(recipe["endpoint_specialized"]), diagnostic_multiply64=True)
++        endpoint_specialized=tuple(recipe["endpoint_specialized"]), diagnostic_divide_fp64_estimate=True)
+     candidate_assembly = candidate.with_suffix(".final.spvasm")
+     subprocess.run([tools["disassembler"], str(candidate), "-o", str(candidate_assembly)], check=True)
+     texts = {"stock": stock_assembly.read_text(), "candidate": candidate_assembly.read_text()}
+-    shape = multiply_shape(texts["candidate"])
+-    assert normalized_function(texts["stock"], "PB32Divide") == normalized_function(texts["candidate"], "PB32Divide")
+-    for name in ("PB32Unpack", "PB32Round"):
++    shape = estimate_shape(texts["stock"], texts["candidate"])
++    for name in ("PB32Unpack", "PB32Round", "PB32Multiply", "PB32WideProduct", "PB32ProductResidual"):
+         assert normalized_function(texts["stock"], name) == normalized_function(texts["candidate"], name)
+     assert stock.read_bytes() == CANONICAL.read_bytes() and stock.read_bytes() != candidate.read_bytes()
+     assert interface_signature(texts["stock"]) == interface_signature(texts["candidate"])
+@@ -331,10 +241,10 @@
+     for mode, output in (("stock", stock), ("candidate", candidate)):
+         text = texts[mode]
+         capabilities = re.findall(r"OpCapability (\S+)", text)
+-        assert sorted(capabilities) == sorted(["Shader", "RoundingModeRTE"] + (["Int64"] if mode == "candidate" else []))
++        assert sorted(capabilities) == sorted(["Shader", "RoundingModeRTE"] + (["Float64"] if mode == "candidate" else []))
+         widths = dict(re.findall(r"(%\S+) = OpTypeInt (\d+) [01]", text))
+-        assert set(widths.values()) == ({"32", "64"} if mode == "candidate" else {"32"})
+-        assert re.findall(r"OpTypeFloat (\d+)", text) == ["32"]
++        assert set(widths.values()) == {"32"}
++        assert sorted(re.findall(r"OpTypeFloat (\d+)", text)) == (["32", "64"] if mode == "candidate" else ["32"])
+         divide = function_body(text, "PB32Divide")
+         assert {widths[kind] for kind in re.findall(r"= OpUDiv (%\S+) ", divide)} == {"32"}
+         assert divide.count("OpLoopMerge") == 1
+@@ -345,18 +255,19 @@
+             path.write_text(function_body(text, name)); bodies[name] = record(path)
+         modules[mode] = {"module": record(output), "assembly": record(output.with_suffix(".final.spvasm")),
+                          "bodies": bodies, "capabilities": capabilities, "integer_widths": sorted(set(widths.values()))}
++    assert "OpConvertFToU" not in texts["candidate"] and "OpConvertFToS" not in texts["candidate"]
+     verify_frozen()
+-    shape.pop("body")
+-    write("compiler-result.json", {"schema": "sirius-multiply64-compiler-screen/v1",
++    write("compiler-result.json", {"schema": "sirius-divide-fp64-estimate-compiler-screen/v1",
+           "stock_reuse": reused, "stock_equals_current_canonical": True, "modules": modules,
+-          "candidate_multiply_graph": shape, "original_divide_unpack_round_normalized_bodies_equal": True,
++          "candidate_estimate_graph": shape, "original_multiply_residual_unpack_round_normalized_bodies_equal": True,
++          "original_fallback_complete_suffix_normalized_equal": True,
+           "complete_descriptor_and_workgroup_type_decorations_exact": True,
+           "execution_modes_exact": True, "ordered_barrier_operands_exact": True,
+           "stock_builder_and_control_policy_reused_unchanged": True,
+-          "candidate_only_allowance": "Explicit multiply64 normal Endpoint only; exact Int64 multiset, one unsigned64 type. Original floating/order/layout/barrier policies retained.",
+-          "runtime_or_numerical_admission": False, "benefit_established": False,
+-          "next_review": "Ordinary full-module lowering must show surviving work removal; reject equivalent/worse lowering before numerical controls. No JIT/runtime harness is prepared."})
+-    print("One full multiply64 Endpoint compiled; stock exact reuse. No numerical or cost verdict.", flush=True)
++          "candidate_only_allowance": "Explicit Float64-estimate normal Endpoint only; exact Float64 multiset, no Int64. Original normal32 floating/order/layout/barrier policies retained.",
++          "runtime_or_numerical_admission": False, "candidate_has_no_Int64_or_FToU": True, "benefit_established": False,
++          "next_review": "Inspect complete ordinary LLVM/native guarded estimate/check/fallback lowering and all frame/stack/code countercosts before numerical admission. Companion candidate-only passive capture is gated by this terminal acceptance."})
++    print("One full divide-fp64-estimate Endpoint compiled; stock exact reuse. No numerical or cost verdict.", flush=True)
+ 
+ 
+ def review_terminal():

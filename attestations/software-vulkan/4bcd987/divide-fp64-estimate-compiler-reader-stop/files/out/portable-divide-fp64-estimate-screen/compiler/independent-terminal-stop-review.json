@@ -1,0 +1,178 @@
+{
+  "schema": "sirius-fp64-estimate-compiler-terminal-stop-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "reviewer": "/root/forensic_obligations",
+  "review_role": "Independent of packet author and root actual operator; reviewer supplied source-only compiler admission. This passive audit ran no authored helper/compiler/validator/build/test/device/provider/API/CI.",
+  "compiler_accepted": false,
+  "runtime_admitted": false,
+  "arithmetic_equivalence_or_performance_or_adoption_claimed": false,
+  "disposition": "STOPPED_AT_STRICT_SSA_READER",
+  "failure": {
+    "child_exit": 1,
+    "stop_reason": null,
+    "location": "compiler/estimate_graph.py:70",
+    "predicate": "guess = one(key ... OpBitwiseOr(upper,lower))",
+    "actual": "AssertionError: []",
+    "boundary": "Final candidate SPV and final disassembly were produced. Frozen screen compile_candidate reached estimate_shape after original builder assembly/validation returned. No compiler-result.json or compiler-acceptance.json was emitted; later equality/profile assertions were not reached.",
+    "form_observation": "asuint components are stored through two Function uint access chains and loaded before guess extraction. The strict origin helper follows copies only, so expected extracted-hi/lo operands do not match those exact loads. Actual product is inlined OpUMulExtended, and short-circuit/ternary expressions use branch/Phi diamonds. These are source-reader representation gaps to examine in a separate parse-only repair, not evidence of numerical or provider failure.",
+    "standalone_validator_receipt_available": false,
+    "validator_completion_evidence": "Frozen checked subprocess flow and post-builder final disassembly/reader stack position; validation is not a separately owned action.",
+    "unchanged_compiler_retry_performed": false,
+    "old_source_inputs_or_outputs_mutated": false
+  },
+  "closure": {
+    "static_pins": 83,
+    "declared_owner_inputs": 85,
+    "all_recorded_before_after_current_inputs": 616,
+    "all_input_records_match_current": true,
+    "source_clean_4498_and_whole_inputs_unchanged": true,
+    "owner_status": "terminal",
+    "owner_passed": false,
+    "expected_child_exit": 0,
+    "actual_child_exit": 1,
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "wall_seconds": 1.5632738829954178,
+    "peak_sampled_rss_kib": 253424,
+    "minimum_sampled_available_kib": 18413168,
+    "samples": 6,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 398476,
+        "saved_start_ticks": "6473749"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 398479,
+        "saved_start_ticks": "6473807"
+      }
+    ],
+    "all_observed_births_retired_and_current_birth_rechecked": true,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "global_process_absence_claimed": false
+  },
+  "actual_products": {
+    "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.final.spvasm": {
+      "bytes": 427444,
+      "sha256": "0b8b0bfd18ad71bc11fa30a08dfa9f20a9bbd71b8b2a66e48a5d5f0f9a3cf512"
+    },
+    "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.spv": {
+      "bytes": 153168,
+      "sha256": "87fc489831e49e8e1bdc7f60e3cf3f778c5a1297f21c4bc5d026968418c9fe7f"
+    },
+    "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/stock-endpoint-normal.final.spvasm": {
+      "bytes": 422552,
+      "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994"
+    },
+    "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/stock-endpoint-normal.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    }
+  },
+  "passive_word_observations": [
+    {
+      "path": "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/stock-endpoint-normal.spv",
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "capabilities": [
+        1,
+        4467
+      ],
+      "integer_widths": [
+        32
+      ],
+      "float_widths": [
+        32
+      ]
+    },
+    {
+      "path": "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler/modules/candidate-endpoint-normal.spv",
+      "bytes": 153168,
+      "sha256": "87fc489831e49e8e1bdc7f60e3cf3f778c5a1297f21c4bc5d026968418c9fe7f",
+      "capabilities": [
+        10,
+        1,
+        4467
+      ],
+      "integer_widths": [
+        32
+      ],
+      "float_widths": [
+        32,
+        64
+      ]
+    }
+  ],
+  "word_observation_scope": "Basic framing/capability/type checks only; no complete SSA/profile admission or numerical execution is inferred. Candidate153168B exists with Float64+Shader+RoundingModeRTE and32-bit integer types; stock151400B remains exact981bc85d canonical.",
+  "critical_files": {
+    "compile-endpoint-normal/owner.json": {
+      "bytes": 1625,
+      "sha256": "0e80cf65191ce371955078bddbecf0425018c94468ce47d26bc3dc05af2ce65e"
+    },
+    "compile-endpoint-normal/inputs-before.json": {
+      "bytes": 155686,
+      "sha256": "5912c9b769f17d338cd8bacfe9c55ad3e8d7246577ef456e22b25ffde1ddef68"
+    },
+    "compile-endpoint-normal/inputs-after.json": {
+      "bytes": 155686,
+      "sha256": "5912c9b769f17d338cd8bacfe9c55ad3e8d7246577ef456e22b25ffde1ddef68"
+    },
+    "compile-endpoint-normal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compile-endpoint-normal/stderr.log": {
+      "bytes": 1266,
+      "sha256": "1cf758c6b15a22d40a5ef2486d8069031bb82a64912a3d579df04b23895a8c33"
+    },
+    "compile-endpoint-normal/samples.jsonl": {
+      "bytes": 1601,
+      "sha256": "c9b3e045c090a3bacf578e5aac345dda0c94617d0dee338c4e25aacb5d902a36"
+    },
+    "operator-context.json": {
+      "bytes": 1092,
+      "sha256": "b648ac12ba9868adba1090b2081dab48c72692f7523f15d30f13bd53fdbca1e9"
+    },
+    "actions.json": {
+      "bytes": 11121,
+      "sha256": "9bbf4d2a56fc9bc29fd7f5cbe443132b471a6a0376554f12916925159cdeb445"
+    },
+    "actions.unpinned.json": {
+      "bytes": 11111,
+      "sha256": "2b20dc5032684afe9849bfb91a6bd568ebcdca7b01f40af7fc6ffa2175f48b87"
+    },
+    "source-freeze.json": {
+      "bytes": 33076,
+      "sha256": "b0fd9205d43726f36d00df5d404b4813025e6867e9756b1549a3159d0c2b1bff"
+    },
+    "independent-source-review.json": {
+      "bytes": 9158,
+      "sha256": "1da8ef6b56924ff6202c90dee10637cf359ec036c15e9de48337f15dcc6604a0"
+    }
+  },
+  "driver_scope": {
+    "not_launched": true,
+    "compiler_dependency_not_satisfied": true,
+    "cache_recovery": "A separate exact known-hash historical cache reconstruction was independently derived from immutable1dd9bf base; candidate alias still awaited driver reseal. It did not alter consumed compiler83 inputs or canonical cache.",
+    "float_controls": "Selected-provider mixed-width rounding independence/support remains a separate property dependency before any new capture.",
+    "no_retained_division_or_full_arithmetic_exercised": true
+  },
+  "next_boundary": "Preserve this failed source/owner/products as immutable evidence first. Any justified graph representation correction must be a separately reviewed parse-only component over these exact module/disassembly bytes, with original complete fallback/normal32/interface/mode/barrier predicates retained. No compiler rerun or runtime admission is implied.",
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "source_committed_and_pushed": true,
+    "tracked_clean": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "review_ignored_uncommitted": true
+  }
+}

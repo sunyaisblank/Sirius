@@ -1,0 +1,78 @@
+{
+  "candidate_module": {
+    "bytes": 153168,
+    "sha256": "87fc489831e49e8e1bdc7f60e3cf3f778c5a1297f21c4bc5d026968418c9fe7f"
+  },
+  "compiler_screen_accepted": false,
+  "driver_executed": false,
+  "failure": "Complete Slang/SSA/assembly/validation returned; strict SSA reader rejected its expected guess-expression shape (no matching ID).",
+  "next_action": "Preserve original producer/reader and full emitted outputs. If exact compiled structure supports it, prepare a separate strict representation reader and reuse these outputs; do not recompile an unchanged candidate or proceed to device execution before structural acceptance.",
+  "numerical_execution_started": false,
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/compiler/screen.py",
+      "compile"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "compile-endpoint-normal",
+    "child_exit": 1,
+    "child_pid": 398476,
+    "child_start_ticks": "6473749",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 398472,
+      "pid": 398472,
+      "ppid": 1313,
+      "rss_kib": 20752,
+      "session": 398472,
+      "start_ticks": "6473713",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "minimum_sampled_available_kib": 18413168,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 398476,
+        "saved_start_ticks": "6473749"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 398479,
+        "saved_start_ticks": "6473807"
+      }
+    ],
+    "passed": false,
+    "peak_sampled_rss_kib": 253424,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "One full normal portable Endpoint FP64 quotient-estimate compiler screen. Exact untrusted-guess UInt2 quotient/remainder proof, unchanged original fallback and normal32 policy; no provider or arithmetic execution.",
+    "source": {
+      "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 1.5632738829954178,
+    "whole_inputs_unchanged": true
+  },
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false,
+  "schema": "sirius-divide-fp64-estimate-compiler-reader-stop-v1",
+  "scope": "Source and owner stability passed; structural compiler acceptance did not. No native estimate accuracy, executed retained arithmetic, benefit, cold-frame or full qualification claim.",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "static_inputs_verified": 83
+}

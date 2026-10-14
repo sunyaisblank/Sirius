@@ -1,0 +1,306 @@
+"""Reuse accepted stock, compile one full divide-fp64-estimate Endpoint, then read its terminal owner.
+
+No mode creates a Vulkan instance, device, pipeline or dispatch. Root operates
+the unchanged copied owner; the companion capture is gated by terminal acceptance.
+"""
+from pathlib import Path
+import hashlib
+import importlib.util
+import json
+import os
+import re
+import resource
+import stat
+import struct
+import subprocess
+import sys
+
+sys.dont_write_bytecode = True
+WORK = Path(__file__).resolve().parent
+ROOT = WORK.parents[2]
+PRODUCTS = ROOT / "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler"
+CANONICAL = ROOT / "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv"
+PRODUCT_REVISION = "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+
+
+def record(path):
+    path = Path(path)
+    with path.open("rb") as stream:
+        digest = hashlib.file_digest(stream, "sha256").hexdigest()
+    return {"bytes": path.stat().st_size, "sha256": digest,
+            "mode": stat.S_IMODE(path.stat().st_mode),
+            "resolved_path": str(path.resolve(strict=True)),
+            "symlink_target": os.readlink(path) if path.is_symlink() else None}
+
+
+def write(name, value):
+    (WORK / name).write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
+
+
+def load_module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    result = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(result)
+    return result
+
+
+def verify_frozen():
+    frozen = json.loads((WORK / "source-freeze.json").read_text())
+    for name, expected in frozen["private_inputs"].items():
+        assert record(WORK / name) == expected, name
+    for name, expected in frozen["external_inputs"].items():
+        assert record(name) == expected, name
+    for path in (WORK / "stock/src/sirius/kernels").iterdir():
+        assert path.read_bytes() == (ROOT / "src/sirius/kernels" / path.name).read_bytes(), path
+    assert (WORK / "stock/scripts/build-retained-kernels.py").read_bytes() == (
+        ROOT / "scripts/build-retained-kernels.py").read_bytes()
+
+
+def pin_context():
+    verify_frozen()
+    verify_stock_reuse()
+    assert Path.cwd().resolve() == ROOT
+    assert not PRODUCTS.exists(), PRODUCTS
+    assert not (WORK / "compile-endpoint-normal").exists()
+    assert not (WORK / "operator-context.json").exists(), "pin once before consumption"
+    assert not subprocess.check_output(["git", "status", "--porcelain=v1"], cwd=ROOT)
+    revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    assert len(sys.argv) == 3 and revision == sys.argv[2] and re.fullmatch(r"[0-9a-f]{40}", revision)
+    assert (WORK / "actions.json").read_bytes() == (WORK / "actions.unpinned.json").read_bytes()
+    actions = json.loads((WORK / "actions.json").read_text())
+    assert list(actions) == ["compile-endpoint-normal"]
+    assert actions["compile-endpoint-normal"]["revision"] == "PENDING_OPERATOR_CLEAN_CONTEXT"
+    actions["compile-endpoint-normal"]["revision"] = revision
+    write("actions.json", actions)
+    write("operator-context.json", {"revision": revision, "status": "",
+          "product_revision": PRODUCT_REVISION,
+          "actions": record(WORK / "actions.json"),
+          "source_freeze": record(WORK / "source-freeze.json"),
+          "preparation": record(WORK / "preparation.json"),
+          "scope": "Clean source pin only; no compiler or device was invoked by pin-context."})
+    print("Pinned clean operator context", revision, flush=True)
+
+
+def function_body(text, name):
+    match = re.search(r'OpName (%\S+) "' + re.escape(name) + '"', text)
+    assert match, name
+    found = re.search(r"^\s*" + re.escape(match[1]) + r" = OpFunction\b.*?OpFunctionEnd",
+                      text, re.M | re.S)
+    assert found, name
+    return found.group(0) + "\n"
+
+
+def interface_signature(text):
+    """Normalize IDs only for the complete descriptor/shared type closure."""
+    definitions = dict(re.findall(r"^\s*(%\S+) = (.+)$", text, re.M))
+    names = dict(re.findall(r'OpName (%\S+) "([^"]*)"', text))
+    decorations = {}
+    for owner, suffix in re.findall(r"Op(?:Member)?Decorate (%\S+) (.+)$", text, re.M):
+        decorations.setdefault(owner, []).append(suffix)
+
+    def signature(identifier, active=()):
+        assert identifier not in active, "cyclic interface type"
+        line = definitions[identifier]
+        assert line.startswith(("OpType", "OpConstant ")), line
+        values = [signature(word, active + (identifier,)) if word.startswith("%") else word
+                  for word in line.split()]
+        return [values, sorted(decorations.get(identifier, []))]
+
+    answer = []
+    for identifier, line in definitions.items():
+        words = line.split()
+        if words[0] == "OpVariable" and words[2] in (
+                "StorageBuffer", "Uniform", "Workgroup", "PushConstant"):
+            answer.append([names.get(identifier, ""), words[2], signature(words[1]),
+                           sorted(decorations.get(identifier, []))])
+    assert answer
+    return sorted(answer, key=lambda row: json.dumps(row))
+
+
+def content(path):
+    return {key: record(path)[key] for key in ("bytes", "sha256")}
+
+
+def verify_stock_reuse():
+    reuse = json.loads((WORK / "stock-reuse.json").read_text())
+    archive = Path(reuse["archive"])
+    assert content(archive / "manifest.json")["sha256"] == reuse["manifest_sha256"]
+    manifest = json.loads((archive / "manifest.json").read_text())
+    for name, expected in reuse["archive_pins"].items():
+        assert content(name) == expected, name
+        if Path(name) != archive / "manifest.json":
+            assert expected == manifest["files"][str(Path(name).relative_to(archive))]
+    history = Path(reuse["historical_work"])
+    owner = json.loads((history / "compile-endpoint-normal/owner.json").read_text())
+    assert owner["status"] == "terminal" and owner["passed"] is True and owner["child_exit"] == 0
+    assert owner["stop_reason"] is None and owner["cleanup_errors"] == []
+    assert owner["source_unchanged"] and owner["whole_inputs_unchanged"]
+    assert owner["remaining_owned_processes"] == [] and owner["observed_births"]
+    assert all(row["absent"] for row in owner["observed_births"])
+    before_path = history / "compile-endpoint-normal/inputs-before.json"
+    assert before_path.read_bytes() == (history / "compile-endpoint-normal/inputs-after.json").read_bytes()
+    before = json.loads(before_path.read_text())
+    for row in reuse["source_joins"]:
+        expected = {key: before[row["original_input_key"]][key] for key in ("bytes", "sha256")}
+        assert all(content(row[key]) == expected for key in ("historical", "private", "canonical")), row
+    for row in reuse["tool_joins"]:
+        expected = before[row["original_input_key"]]
+        assert content(row["path"]) == {key: expected[key] for key in ("bytes", "sha256")}
+        assert str(Path(row["path"]).resolve(strict=True)) == expected["resolved_path"]
+    result = json.loads((history / "compiler-result.json").read_text())
+    acceptance = json.loads((history / "compiler-acceptance.json").read_text())
+    assert acceptance["passed"] and acceptance["compiler_owner"]["sha256"] == content(history / "compile-endpoint-normal/owner.json")["sha256"]
+    assert acceptance["compiler_result"]["sha256"] == content(history / "compiler-result.json")["sha256"]
+    assert result["stock_equals_current_canonical"] and result["stock_builder_policy_unchanged"]
+    for key, name in (("module", "stock_module"), ("assembly", "stock_assembly")):
+        assert content(reuse[name]) == {field: result["modules"]["stock"][key][field] for field in ("bytes", "sha256")}
+    assert Path(reuse["stock_module"]).read_bytes() == CANONICAL.read_bytes()
+    controls = json.loads(Path(reuse["guard_controls"]).read_text())
+    assert controls["passed"] and len(controls["controls"]) == 12
+    assert all(row["actual_acceptance"] == row["expected_acceptance"] for row in controls["controls"])
+    assert sum(row["expected_acceptance"] for row in controls["controls"]) == 2
+    header = (WORK / "candidate/src/sirius/kernels/portable_binary32.h").read_text()
+    insertion = (WORK / "candidate-insertion.txt").read_text()
+    assert header.count(insertion) == 1
+    assert header.replace(insertion, "", 1) == (WORK / "stock/src/sirius/kernels/portable_binary32.h").read_text()
+    assert header.replace(insertion, "", 1) == (ROOT / "src/sirius/kernels/portable_binary32.h").read_text()
+    return {"archive_manifest": record(archive / "manifest.json"), "original_owner": record(history / "compile-endpoint-normal/owner.json"),
+            "original_acceptance": record(history / "compiler-acceptance.json"), "guard_controls": record(reuse["guard_controls"]),
+            "source_joins": len(reuse["source_joins"]), "tool_joins": len(reuse["tool_joins"]),
+            "scope": "Exact accepted full stock/compiler-policy reuse; no stock compiler or original Int64-policy execution repeated. New Float64 estimate policy remains separately scoped."}
+
+
+def normalized_function(text, name):
+    body = function_body(text, name)
+    definitions = dict(re.findall(r"^\s*(%\S+) = (.+)$", text, re.M))
+    names = dict(re.findall(r'OpName (%\S+) "([^"]*)"', text))
+    local = {identifier: "local" + str(i) for i, identifier in enumerate(re.findall(r"^\s*(%\S+) =", body, re.M))}
+    def value(identifier):
+        if identifier in local:
+            return local[identifier]
+        expression = definitions[identifier]
+        if expression.startswith("OpFunction "):
+            return ["function", names[identifier]]
+        assert expression.startswith(("OpType", "OpConstant", "OpSpecConstant")), expression
+        return [value(word) if word.startswith("%") else word for word in expression.split()]
+    return [[value(word) if word.startswith("%") else word for word in line.split()]
+            for line in body.splitlines() if line.strip()]
+
+
+def estimate_shape(stock, candidate):
+    reader = load_module("estimate_graph", WORK / "estimate_graph.py")
+    return reader.inspect(stock, candidate, function_body)
+
+
+def compile_candidate():
+    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+    _, prior = resource.getrlimit(resource.RLIMIT_FSIZE)
+    limit = 64 * 1024**2 if prior == resource.RLIM_INFINITY else min(prior, 64 * 1024**2)
+    resource.setrlimit(resource.RLIMIT_FSIZE, (limit, limit))
+    verify_frozen()
+    reused = verify_stock_reuse()
+    context = json.loads((WORK / "operator-context.json").read_text())
+    assert context["actions"] == record(WORK / "actions.json")
+    assert context["source_freeze"] == record(WORK / "source-freeze.json")
+    assert context["preparation"] == record(WORK / "preparation.json")
+    assert not PRODUCTS.exists(), PRODUCTS
+    modules_dir = PRODUCTS / "modules"
+    modules_dir.mkdir(parents=True)
+    reuse = json.loads((WORK / "stock-reuse.json").read_text())
+    import shutil
+    stock = modules_dir / "stock-endpoint-normal.spv"
+    stock_assembly = stock.with_suffix(".final.spvasm")
+    shutil.copyfile(reuse["stock_module"], stock)
+    shutil.copyfile(reuse["stock_assembly"], stock_assembly)
+    assert content(stock) == content(reuse["stock_module"]) and content(stock_assembly) == content(reuse["stock_assembly"])
+    recipe = json.loads((WORK / "generated/endpoint-arguments.json").read_text())
+    tools = recipe["tools"]
+    builder = load_module("divide-fp64-estimate_candidate_builder", WORK / "candidate/scripts/build-retained-kernels.py")
+    candidate = modules_dir / "candidate-endpoint-normal.spv"
+    builder.compile_shader(WORK / "candidate/src/sirius/kernels/retained_endpoint.slang",
+        candidate, tools["compiler"], tools["assembler"], tools["disassembler"], tools["validator"],
+        recipe["registers"], 5, recipe["layers"], recipe["prefix"], portable=True,
+        optimizer=tools["optimizer"], normal_sum32=True,
+        endpoint_specialized=tuple(recipe["endpoint_specialized"]), diagnostic_divide_fp64_estimate=True)
+    candidate_assembly = candidate.with_suffix(".final.spvasm")
+    subprocess.run([tools["disassembler"], str(candidate), "-o", str(candidate_assembly)], check=True)
+    texts = {"stock": stock_assembly.read_text(), "candidate": candidate_assembly.read_text()}
+    shape = estimate_shape(texts["stock"], texts["candidate"])
+    for name in ("PB32Unpack", "PB32Round", "PB32Multiply", "PB32WideProduct", "PB32ProductResidual"):
+        assert normalized_function(texts["stock"], name) == normalized_function(texts["candidate"], name)
+    assert stock.read_bytes() == CANONICAL.read_bytes() and stock.read_bytes() != candidate.read_bytes()
+    assert interface_signature(texts["stock"]) == interface_signature(texts["candidate"])
+    modes = lambda text: sorted(re.findall(r"OpExecutionMode %\S+ (.*)$", text, re.M))
+    assert modes(texts["stock"]) == modes(texts["candidate"])
+    def barriers(text):
+        definitions = dict(re.findall(r"^\s*(%\S+) = (.+)$", text, re.M))
+        return [[opcode, *[definitions[word] for word in operands.split()]]
+                for opcode, operands in re.findall(r"^\s*(OpControlBarrier|OpMemoryBarrier) (.+)$", text, re.M)]
+    assert barriers(texts["stock"]) == barriers(texts["candidate"])
+    modules = {}
+    for mode, output in (("stock", stock), ("candidate", candidate)):
+        text = texts[mode]
+        capabilities = re.findall(r"OpCapability (\S+)", text)
+        assert sorted(capabilities) == sorted(["Shader", "RoundingModeRTE"] + (["Float64"] if mode == "candidate" else []))
+        widths = dict(re.findall(r"(%\S+) = OpTypeInt (\d+) [01]", text))
+        assert set(widths.values()) == {"32"}
+        assert sorted(re.findall(r"OpTypeFloat (\d+)", text)) == (["32", "64"] if mode == "candidate" else ["32"])
+        divide = function_body(text, "PB32Divide")
+        assert {widths[kind] for kind in re.findall(r"= OpUDiv (%\S+) ", divide)} == {"32"}
+        assert divide.count("OpLoopMerge") == 1
+        assert all(widths[kind] == "32" for kind in re.findall(r"= OpUDiv (%\S+) ", text))
+        bodies = {}
+        for name in ("PB32Multiply", "PB32Divide"):
+            path = output.with_suffix("." + name + ".spvasm")
+            path.write_text(function_body(text, name)); bodies[name] = record(path)
+        modules[mode] = {"module": record(output), "assembly": record(output.with_suffix(".final.spvasm")),
+                         "bodies": bodies, "capabilities": capabilities, "integer_widths": sorted(set(widths.values()))}
+    assert "OpConvertFToU" not in texts["candidate"] and "OpConvertFToS" not in texts["candidate"]
+    verify_frozen()
+    write("compiler-result.json", {"schema": "sirius-divide-fp64-estimate-compiler-screen/v1",
+          "stock_reuse": reused, "stock_equals_current_canonical": True, "modules": modules,
+          "candidate_estimate_graph": shape, "original_multiply_residual_unpack_round_normalized_bodies_equal": True,
+          "original_fallback_complete_suffix_normalized_equal": True,
+          "complete_descriptor_and_workgroup_type_decorations_exact": True,
+          "execution_modes_exact": True, "ordered_barrier_operands_exact": True,
+          "stock_builder_and_control_policy_reused_unchanged": True,
+          "candidate_only_allowance": "Explicit Float64-estimate normal Endpoint only; exact Float64 multiset, no Int64. Original normal32 floating/order/layout/barrier policies retained.",
+          "runtime_or_numerical_admission": False, "candidate_has_no_Int64_or_FToU": True, "benefit_established": False,
+          "next_review": "Inspect complete ordinary LLVM/native guarded estimate/check/fallback lowering and all frame/stack/code countercosts before numerical admission. Companion candidate-only passive capture is gated by this terminal acceptance."})
+    print("One full divide-fp64-estimate Endpoint compiled; stock exact reuse. No numerical or cost verdict.", flush=True)
+
+
+def review_terminal():
+    verify_frozen(); verify_stock_reuse()
+    context = json.loads((WORK / "operator-context.json").read_text())
+    folder = WORK / "compile-endpoint-normal"
+    owner = json.loads((folder / "owner.json").read_text())
+    action = json.loads((WORK / "actions.json").read_text())["compile-endpoint-normal"]
+    assert owner["status"] == "terminal" and owner["passed"] is True and owner["child_exit"] == 0
+    assert owner["stop_reason"] is None and owner["cleanup_errors"] == [] and owner["remaining_owned_processes"] == []
+    assert owner["source_unchanged"] and owner["whole_inputs_unchanged"]
+    assert owner["source"] == {"revision": context["revision"], "status": ""}
+    assert owner["argv"] == action["argv"] and owner["limits"] == action["limits"]
+    assert owner["observed_births"] and all(row["absent"] for row in owner["observed_births"])
+    before_path = folder / "inputs-before.json"
+    assert before_path.read_bytes() == (folder / "inputs-after.json").read_bytes()
+    before = json.loads(before_path.read_text())
+    for name in action["frozen_inputs"]:
+        path = Path(name)
+        key = str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
+        current = record(path)
+        assert before[key] == {field: current[field] for field in ("bytes", "sha256", "resolved_path")}, name
+    result = json.loads((WORK / "compiler-result.json").read_text())
+    for row in result["modules"].values():
+        for pin in [row["module"], row["assembly"], *row["bodies"].values()]:
+            assert record(pin["resolved_path"]) == pin
+    write("compiler-acceptance.json", {"compiler_owner": record(folder / "owner.json"),
+          "compiler_result": record(WORK / "compiler-result.json"), "passed": True,
+          "scope": "Terminal compiler ownership, exact stock reuse and complete candidate structure only. No Vulkan/JIT execution, arithmetic, benefit or qualification verdict."})
+    print("Terminal compiler/source/module joins accepted; ordinary lowering remains untested.", flush=True)
+
+
+if __name__ == "__main__":
+    {"pin-context": pin_context, "compile": compile_candidate, "review": review_terminal}[sys.argv[1]]()
+
+

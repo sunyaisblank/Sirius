@@ -1,0 +1,77 @@
+--- a/scripts/build-retained-kernels.py
++++ b/scripts/build-retained-kernels.py
+@@ -106,6 +106,41 @@
+     return text.replace(local_size, local_size + "\n               OpExecutionMode " + entry + " RoundingModeRTE 32", 1)
+ 
+ 
++
++def diagnostic_divide_normal_sum_controls(text):
++    """Admit only the private double estimate; retain original normal32 policy."""
++    if sorted(re.findall(r"OpCapability (\S+)", text)) != ["Float64", "Shader"]:
++        raise ValueError("diagnostic estimate requires exactly Shader+Float64")
++    if (set(re.findall(r"OpTypeInt (\d+) [01]", text)) != {"32"} or
++            sorted(re.findall(r"OpTypeFloat (\d+)", text)) != ["32", "64"]):
++        raise ValueError("diagnostic estimate changed integer/float widths")
++    wide = re.search(r"(%\S+) = OpTypeFloat 64", text)[1]
++    named = re.search(r'OpName (%\S+) "PB32Divide"', text)[1]
++    body = re.search(r"^\s*" + re.escape(named) + r" = OpFunction .*?OpFunctionEnd", text, re.M | re.S)[0]
++    operations = re.findall(r"^\s*(%\S+) = (OpF(?!unction)\S+) " + re.escape(wide) + r" .*?$", text, re.M)
++    if [kind for _, kind in operations] != ["OpFMul", "OpFDiv"]:
++        raise ValueError("diagnostic estimate changed its two wide operations")
++    converted = re.findall(r"^\s*(%\S+) = OpConvertUToF " + re.escape(wide) + r" .*?$", text, re.M)
++    decorated = set(re.findall(r"OpDecorate (%\S+) NoContraction", text))
++    if (len(converted) != 2 or any(value not in decorated for value, _ in operations) or
++            any(not re.search(r"^\s*" + re.escape(value) + r" =", body, re.M)
++                for value in [*[value for value, _ in operations], *converted])):
++        raise ValueError("diagnostic estimate lost its scoped conversion/order graph")
++    if re.search(r"= OpExtInst " + re.escape(wide) + r" ", text):
++        raise ValueError("diagnostic estimate added a wide extended instruction")
++    # Validation-only projection of the complete module. It is never compiled,
++    # assembled or loaded. Every admitted wide instruction is checked above;
++    # original float32 body/order/dependency/mode guards inspect everything else.
++    view = re.sub(r"(?m)^.*OpCapability Float64\n", "", text)
++    view = re.sub(r"(?m)^.*= OpTypeFloat 64\n", "", view)
++    for value in [*[value for value, _ in operations], *converted]:
++        view = re.sub(r"(?m)^\s*" + re.escape(value) + r" = .*\n", "", view)
++    portable_normal_sum_controls(view)
++    entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
++    text = text.replace("OpCapability Shader", "OpCapability Shader\n               OpCapability RoundingModeRTE", 1)
++    local_size = re.search(r"^.*OpExecutionMode " + re.escape(entry) + r" LocalSize.*$", text, re.M)[0]
++    return text.replace(local_size, local_size + "\n               OpExecutionMode " + entry + " RoundingModeRTE 32", 1)
++
+ def supports_fma32(directory, compiler, assembler, disassembler, validator):
+     # Probe only toolset capability. Errors in the real candidate remain fatal.
+     # Ordinary GLSL Fma does not guarantee the fused, correctly rounded residual.
+@@ -288,10 +323,15 @@
+     return references
+ 
+ 
+-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False):
++def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False, diagnostic_divide_fp64_estimate=False):
+     raw = destination.with_suffix(".compiler.spv")
+     assembly = destination.with_suffix(".spvasm")
+     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
++    if diagnostic_divide_fp64_estimate:
++        if (source.stem != "retained_endpoint" or not portable or not normal_sum32 or
++                fp64 or fma or stage_seven_owner):
++            raise ValueError("diagnostic Float64 estimate is restricted to normal portable Endpoint")
++        definitions.append("-DSIRIUS_PB32_DIVIDE_FP64_ESTIMATE=1")
+     if transport_specialized is not None:
+         if source.stem != "retained_transport":
+             raise ValueError("the second transport table belongs only to Transport")
+@@ -382,10 +422,13 @@
+         # The separate normal-sum variant admits only guarded normal arithmetic.
+         capabilities = re.findall(r"OpCapability (\S+)", text)
+         integer_widths = re.findall(r"OpTypeInt (\d+) [01]", text)
+-        if capabilities != ["Shader"] or not integer_widths or set(integer_widths) != {"32"}:
++        expected_capabilities = ["Float64", "Shader"] if diagnostic_divide_fp64_estimate else ["Shader"]
++        if ((sorted(capabilities) if diagnostic_divide_fp64_estimate else capabilities) != expected_capabilities or
++                not integer_widths or set(integer_widths) != {"32"}):
+             raise ValueError("portable retained stage introduced an optional capability or non-32-bit integer")
+         if normal_sum32:
+-            text = portable_normal_sum_controls(text)
++            text = (diagnostic_divide_normal_sum_controls(text) if diagnostic_divide_fp64_estimate
++                    else portable_normal_sum_controls(text))
+         elif "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
+             raise ValueError("portable retained stage depends on native floating arithmetic")
+         entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]

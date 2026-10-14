@@ -1,0 +1,38 @@
+{
+  "expected_operator_context": "Explicit full clean HEAD argument; source/kernel/tool/resource pins remain exact. No operator context exists yet.",
+  "full_module": {
+    "execution_lanes": 16,
+    "fma": false,
+    "fp64": false,
+    "general_words": 11240,
+    "layers": 111,
+    "portable": true,
+    "prefix": 250,
+    "registers": 612,
+    "schwarzschild_layers": 84,
+    "schwarzschild_prefix": 202,
+    "schwarzschild_words": 9903,
+    "shared_storage_lanes": 64,
+    "stage": "normal portable Endpoint",
+    "stage_seven_owner": false,
+    "terms": 5
+  },
+  "independent_source_review_required_before_operation": true,
+  "ordinary_capture_pending": true,
+  "prepared_only": true,
+  "prospective_commands": [
+    "python3 -B out/portable-divide-fp64-estimate-screen/compiler/screen.py pin-context FULL_CLEAN_SOURCE_COMMIT",
+    "python3 -B out/portable-divide-fp64-estimate-screen/compiler/run_owned.py compile-endpoint-normal",
+    "python3 -B out/portable-divide-fp64-estimate-screen/compiler/screen.py review"
+  ],
+  "schema": "sirius-fp64-estimate-full-endpoint-compiler-preparation-v1",
+  "source_freeze": {
+    "bytes": 33076,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-screen/compiler/source-freeze.json",
+    "sha256": "b0fd9205d43726f36d00df5d404b4813025e6867e9756b1549a3159d0c2b1bff"
+  },
+  "source_inputs": 83,
+  "source_math_or_compiler_screen_not_arithmetic": true,
+  "stock_recompiled": false,
+  "stop": "First failed/incomplete owner or source/type/capability/graph/interface/mode/barrier/loop/input join: stop and preserve. No automatic retry."
+}

@@ -1,0 +1,29 @@
+{
+  "capture_pattern": {
+    "archive": "attestations/software-vulkan/4bcd987/multiply64-ordinary-jit-screen",
+    "commit": "099179a367c530eba342738f0ea3353d34f20657",
+    "scope": "Helper source ancestry only; no multiply64 numerical or benefit evidence is reused for this candidate."
+  },
+  "compiler_pattern": {
+    "archive": "attestations/software-vulkan/4bcd987/multiply64-compiler-screen",
+    "commit": "9d75e3bb8cb67ef0e323ed1d0800197b5f64887a",
+    "manifest_sha256": "8efda3f7595b0c1d84dcf38cda3aaa984cc5b998e9118d7c17402ac6a4a19039"
+  },
+  "default_provider_scope": "Existing selected software LVP, loader and LLVM bytes; fresh loaded/called candidate mapping required. No new native-provider/platform qualification.",
+  "no_live_floor_or_completed_scratch_inputs": true,
+  "no_tuning_change_or_causal_interpretation_of_O0": true,
+  "original_pipeline_lineage": [
+    "default<O0>",
+    "sroa,early-cse,simplifycfg,reassociate,mem2reg,instsimplify,instcombine<no-verify-fixpoint>"
+  ],
+  "product": {
+    "commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "header_git_blob": "40fee72b36c0946d5943cbcd9bcf0c77e473a54a"
+  },
+  "schema": "sirius-fp64-estimate-screen-source-origins-v1",
+  "stock_and_host": {
+    "archive": "attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen",
+    "commit": "34f22437f8d9ae863d36bdcee01ab64edc71b572",
+    "manifest_sha256": "229b3a64b30db736b895642a73d0dc5c7630650a4dc3192253cc6a3bdcc3ae9d"
+  }
+}

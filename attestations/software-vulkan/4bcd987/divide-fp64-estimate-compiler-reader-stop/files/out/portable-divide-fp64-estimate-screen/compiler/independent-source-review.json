@@ -1,0 +1,133 @@
+{
+  "schema": "sirius-fp64-estimate-compiler-only-source-review-v1",
+  "passed": true,
+  "admitted_component": "compiler_only",
+  "driver_admitted": false,
+  "entire_packet_admitted": false,
+  "reviewer": "/root/forensic_obligations",
+  "source_only": true,
+  "operator": "Root alone; reviewer executed no authored helper/compiler/validator/build/test/device/provider/API/CI.",
+  "source_revision_at_review": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "compiler_static_closure": {
+    "passed": true,
+    "static_pins": 83,
+    "owner_inputs": 85,
+    "stock_source_joins": 8,
+    "stock_tool_joins": 16,
+    "accepted_policy_controls": 12,
+    "all_original_builder_functions_other_than_compile_shader_AST_equal": true,
+    "stock_module": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.spv",
+      "mode": 420,
+      "symlink_target": null
+    },
+    "critical": {
+      "source-freeze.json": {
+        "bytes": 33076,
+        "sha256": "b0fd9205d43726f36d00df5d404b4813025e6867e9756b1549a3159d0c2b1bff"
+      },
+      "preparation.json": {
+        "bytes": 1613,
+        "sha256": "4659ac5424b50f89b4bf30ab79a3c82618c8cf280ada41fa690b7f47465904d7"
+      },
+      "actions.unpinned.json": {
+        "bytes": 11111,
+        "sha256": "2b20dc5032684afe9849bfb91a6bd568ebcdca7b01f40af7fc6ffa2175f48b87"
+      },
+      "screen.py": {
+        "bytes": 18138,
+        "sha256": "8549ffe9a7d6611beea9a9d4cfb227f04d9438e0a50b5218e78bbf0ad32e6040"
+      },
+      "estimate_graph.py": {
+        "bytes": 10834,
+        "sha256": "149186567d8f04a2c2c62eb323c149fb7a1c92fc82e1046941a971c768242e20"
+      },
+      "candidate.patch": {
+        "bytes": 2293,
+        "sha256": "9f5d434a407f3bd6c6a3b29bc1d8f7725266e86fb522b549dd0f2cdfe794d545"
+      },
+      "diagnostic-builder.patch": {
+        "bytes": 5719,
+        "sha256": "c2afa2d947c1100c6e04daf93aa7b00f3e1c3c28ca1b2a1861f5ef04dd48db1d"
+      },
+      "candidate/src/sirius/kernels/portable_binary32.h": {
+        "bytes": 14719,
+        "sha256": "24ea42f825cde5c1378ac57dd194c245ebc2ed396a6cf212d2c642fa2b67d020"
+      },
+      "candidate/scripts/build-retained-kernels.py": {
+        "bytes": 38298,
+        "sha256": "8bfdd55fb64a42d85be30f0555c29b4e40afd7647ac0e743342fc445d7b0defc"
+      }
+    },
+    "contracts": {
+      "bytes": 2882,
+      "sha256": "b930f833458a51fcb4adbdab05b3d893aeb9c9ab239865b3c8ec26c38fd7c482"
+    },
+    "release": {
+      "bytes": 4607,
+      "sha256": "787b2c373bde02151cb3d1507dc9fb2acc4aba71ef383d06c25cf14e73b34da9"
+    }
+  },
+  "math_argument": {
+    "scope": "Source proof argument, not exhaustive machine proof or executed arithmetic equivalence.",
+    "normalization": "Original finite guards give nonzero normalized d in[2^23,2^24), m in[d,2d), so N=m*2^26<2^51 and true floor quotient in[2^26,2^27). Original signs and exponent remain unchanged.",
+    "untrusted_estimate": "Native Float64 arithmetic only proposes bits. Mask0xfff00000==0x41900000 admits exactly positive normal binary64 values in[2^26,2^27); NaN/Inf/negative/zero/out-of-range results reject. Integer mantissa extraction yields27-bit guess without float-to-integer conversion.",
+    "exact_acceptance": "Existing PB32WideProduct computes exact UInt2 P=guess*d. Lexicographic P<=N precedes full two-word subtraction with borrow. residualHi==0 and residualLo<d prove0<=N-P<d, uniquely implying guess=floor(N/d). Products and N fit51bits; UInt32 shifts6/26 are defined.",
+    "rounding": "Verified guess|(residualLo!=0) is the same26-bit quotient with jammed remainder bit that original PB32Round expects. Underflow/overflow/signed-zero/ties-to-even handling remain in unchanged PB32Round.",
+    "fallback": "Removing the one exact insertion restores the complete canonical4bcd header byte-for-byte. New code never mutates m/d/sign/exponent. Rejected guesses take the original radix8/8/8/2 loop/sticky/round/return.",
+    "accuracy_assumed_from_native_Float64": false,
+    "native_double_direct_replacement_admitted": false
+  },
+  "compiler_policy": {
+    "single_complete_stage": "Normal portable Endpoint only;612 registers,5 terms,111 layers/prefix250, specialized words11240/9903/layers84/prefix202,64 shared lanes/16 execution lanes.",
+    "candidate_macro": "SIRIUS_PB32_DIVIDE_FP64_ESTIMATE=1",
+    "capabilities": "Candidate must contain exact Float64+Shader before original normal32RTE annotation, and Float64+Shader+RoundingModeRTE afterwards. Only Int32; no Int64, FloatToInt or storage/descriptor widening.",
+    "scope_gate": "Default false private builder seam refuses fp64/fma/owner/non-normal/nonportable/non-Endpoint use. All old builder functions except the narrowly changed compile_shader are AST-equal; old normal32 function is byte/AST unchanged.",
+    "projection": "Only the scoped2 double conversions/2 NoContraction FPops and wide type/capability are removed from a validation-only text view to run original complete normal32 policies. That view is never assembled, compiled or loaded.",
+    "required_actual_output_checks": "Strict SSA graph range/product/remainder/branch/round joins; full original normalized fallback suffix; unchanged Multiply/WideProduct/ProductResidual/Unpack/Round bodies; complete descriptor/workgroup type/decorations, execution modes and ordered barrier operands; actual module validation.",
+    "graph_scope": "Unexpected compiler representation must stop rather than be accepted by a looser shape predicate.",
+    "numerical_or_cost_or_hit_rate_admission": false
+  },
+  "stock_reuse_boundary": {
+    "evidence_commit": "34f22437f8d9ae863d36bdcee01ab64edc71b572",
+    "manifest_sha256": "229b3a64b30db736b895642a73d0dc5c7630650a4dc3192253cc6a3bdcc3ae9d",
+    "old_owner_terminal_passed": true,
+    "old_591_input_before_after_receipts_equal": true,
+    "old_all_591_inputs_matching_current_bytes_claimed": false,
+    "actual_byte_producing_current_joins": "8 shader/builder sources,16 tool/library entries, exact complete encoded program84572B/914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5 and all effective recipe fields/tools equal historical. Program resolved path is intentionally relocated. Stock151400B module/current canonical bytes and full final disassembly match archived result/manifest/Git.12 original policy control results are reused.",
+    "historical_cache_scope": "Original old owner also froze CMakeCache60385B/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02. Those bytes do not match current cache and were not recovered here. Compiler component has no live cache pin and neither new explicit shader compiler recipe nor reuse source/tool closure reads that cache. Admission does not claim recovery/current equality of the broad historical591-file inventory."
+  },
+  "permitted_sequence": [
+    "Root pins explicit full clean source context.",
+    "Root operates unchanged compiler owner compile-endpoint-normal with300s/4GiB sampledRSS/2GiB available reserve.",
+    "Root invokes separate post-terminal compiler reader; it rechecks owner, all declared inputs, source and exact output identities."
+  ],
+  "driver_hold": {
+    "reason1": "driver freeze currently pins historical CMakeCache60385B/c7d8... at live canonical path, but current cache60324B/e495eb24cd37e87de7a3ea6346cc967d8884556dfcd90d3a1a3341226e3d0e0f. It also appears in historical605 host joins. Must be resolved truthfully without replacing the historical input with new bytes.",
+    "reason2": "Mixed RoundingModeRTE32 and new Float64 runtime validity requires selected-provider float-controls independence/support evidence; core55 features do not expose those properties. A separate source-reviewed public property query is being prepared; no native53-bit accuracy assumption follows from it.",
+    "all_other_current_static_records": "946 compiler+driver records across863 unique paths were compared; only canonical CMakeCache mismatched.",
+    "capture_future_requirement": "Compiler terminal approval and exact module/source/output identities must precede runtime pinning. Fresh actual loaded full module,55 feature fields/queue/extensions/chain, birth/session and called loader/LVP/LLVM mappings remain required.",
+    "runtime_commands_not_admitted": true
+  },
+  "claims": {
+    "fresh_context_owner_or_output_created": false,
+    "arithmetic174268_required_later": true,
+    "original_eight_controls_required_later": true,
+    "unchanged_twenty_plus_two_benefit_required_later": true,
+    "public_optional_Float64_admission_and_fallback_selection_implemented": false,
+    "production_adopted": false,
+    "qualification_claimed": false
+  },
+  "blockers_to_compiler_component": [],
+  "working_tree": {
+    "tracked_clean": true,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "review_ignored_uncommitted": true
+  }
+}
