@@ -160,7 +160,8 @@ def clean_environment(output, sdk):
         and key not in {"VK_ICD_FILENAMES", "VK_ADD_DRIVER_FILES", "VK_INSTANCE_LAYERS", "VK_LAYER_PATH",
                         "VK_ADD_LAYER_PATH", "DYLD_INSERT_LIBRARIES", "CC", "CXX", "CFLAGS", "CXXFLAGS",
                         "CPPFLAGS", "LDFLAGS", "OBJCFLAGS", "OBJCXXFLAGS", "CPATH", "C_INCLUDE_PATH",
-                        "CPLUS_INCLUDE_PATH", "OBJC_INCLUDE_PATH", "LIBRARY_PATH", "SDKROOT", "MACOSX_DEPLOYMENT_TARGET"}}
+                        "CPLUS_INCLUDE_PATH", "OBJC_INCLUDE_PATH", "LIBRARY_PATH", "SDKROOT", "MACOSX_DEPLOYMENT_TARGET",
+                        "MAKEFLAGS", "MFLAGS", "MAKELEVEL", "MAKEFILES", "GNUMAKEFLAGS"}}
     for name in ("tmp", "cache", "module-cache", "cpm-cache"):
         (output / name).mkdir()
     environment.update(LC_ALL="C", DYLD_PRINT_LIBRARIES="1", MVK_CONFIG_DEBUG="0",
@@ -177,11 +178,11 @@ def toolchain_child():
     def capture(command):
         return subprocess.check_output(command, text=True, timeout=20).strip()
     paths = {"python": str(Path(sys.executable).resolve()), "xcrun": "/usr/bin/xcrun", "xcodebuild": "/usr/bin/xcodebuild"}
-    for name in ("cmake", "ninja"):
+    for name in ("cmake",):
         value = shutil.which(name)
         require(value, "existing build tool missing: " + name)
         paths[name] = str(Path(value).resolve())
-    for name in ("clang", "clang++", "ld"):
+    for name in ("clang", "clang++", "ld", "make"):
         paths[name] = capture(["/usr/bin/xcrun", "--no-cache", "--sdk", "macosx", "--find", name])
     sdk = capture(["/usr/bin/xcrun", "--no-cache", "--sdk", "macosx", "--show-sdk-path"])
     resource = capture([paths["clang"], "-print-resource-dir"])
@@ -204,7 +205,7 @@ def toolchain_child():
                        "macos_sdk": capture(["/usr/bin/xcrun", "--no-cache", "--sdk", "macosx", "--show-sdk-version"]),
                        "clang": capture([paths["clang"], "--version"]),
                        "cmake": capture([paths["cmake"], "--version"]),
-                       "ninja": capture([paths["ninja"], "--version"])}}))
+                       "make": capture([paths["make"], "--version"])}}))
 
 
 def tool_inputs(toolchain):
@@ -237,13 +238,15 @@ def build_child(context_path, expected_sha):
     require(build == REPO / "bin/macos/macos-moltenvk-integration" and not build.exists(), "build directory must be fresh")
     # Both cmake configure and build inherit a source cwd below out/. The outer
     # mature owner intentionally keeps its usual observation-folder cwd.
+    # Single-job noninteractive Makefiles avoid Ninja's per-command groups;
+    # the owner's strict escaped-descendant refusal remains unchanged.
     os.chdir(source)
-    command = [tools["paths"]["cmake"], "-S", str(source), "-B", str(build), "-G", "Ninja",
+    command = [tools["paths"]["cmake"], "-S", str(source), "-B", str(build), "-G", "Unix Makefiles",
         "-DCMAKE_BUILD_TYPE=Release", "-DCMAKE_OSX_ARCHITECTURES=arm64",
         "-DCMAKE_OSX_SYSROOT=" + tools["sdk"], "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0",
         "-DCMAKE_C_COMPILER=" + tools["paths"]["clang"], "-DCMAKE_CXX_COMPILER=" + tools["paths"]["clang++"],
         "-DCMAKE_OBJC_COMPILER=" + tools["paths"]["clang"], "-DCMAKE_OBJCXX_COMPILER=" + tools["paths"]["clang++"],
-        "-DCMAKE_LINKER=" + tools["paths"]["ld"], "-DCMAKE_MAKE_PROGRAM=" + tools["paths"]["ninja"],
+        "-DCMAKE_LINKER=" + tools["paths"]["ld"], "-DCMAKE_MAKE_PROGRAM=" + tools["paths"]["make"],
         "-DMOLTEN_VK_WITH_CCACHE=OFF", "-DMVK_BUILD_SHADER_CONVERTER_TOOL=OFF",
         "-DMVK_EXCLUDE_SPIRV_TOOLS=OFF", "-DMVK_EXCLUDE_CEREAL=OFF", "-DMVK_USE_METAL_PRIVATE_API=OFF",
         "-DMVK_CONFIG_LOG_LEVEL=error", "-DSPIRV_SKIP_EXECUTABLES=ON", "-DSPIRV_SKIP_TESTS=ON",
