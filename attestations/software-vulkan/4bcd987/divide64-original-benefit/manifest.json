@@ -1,0 +1,449 @@
+{
+  "files": {
+    "files/bin/linux-gcc/portable-divide64-benefit/original_baseline_controls": {
+      "bytes": 10753968,
+      "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/original_candidate_controls": {
+      "bytes": 10746096,
+      "sha256": "9799beb00be4dae81de94236e26ab81fc04086268455b5aca951ffb7b5162494"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/portability/trace.cu": {
+      "bytes": 316063,
+      "sha256": "e8460dbe10346d5cf457a533c7126707b87cbd108f43c7a8f2fb6e92f5e8fd8d"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/portability/trace.metal": {
+      "bytes": 338766,
+      "sha256": "879d15908e66449f789652f40a329b731bebc65dca396659b636cf834943df06"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "files/bin/linux-gcc/portable-divide64-benefit/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+    },
+    "files/out/portable-divide64-benefit/adaptation.patch": {
+      "bytes": 41059,
+      "sha256": "4a2f622ed32e6b362331d1676ae3e3f21b6e890e46c1ba99e291d05e19a347c6"
+    },
+    "files/out/portable-divide64-benefit/audited-observer.cpp": {
+      "bytes": 335033,
+      "sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3"
+    },
+    "files/out/portable-divide64-benefit/benefit/a1/gtest.xml": {
+      "bytes": 40797,
+      "sha256": "c587ddaa2531ae9853b26b918d8b2398effbaab945bcb83bbbbe3edf64d0b8fe"
+    },
+    "files/out/portable-divide64-benefit/benefit/a1/inputs-after.json": {
+      "bytes": 677031,
+      "sha256": "a9d6baf2ed22874f9609980b4827acfe9118fd9933393bab18a2405e3c72e37b"
+    },
+    "files/out/portable-divide64-benefit/benefit/a1/inputs-before.json": {
+      "bytes": 677031,
+      "sha256": "a9d6baf2ed22874f9609980b4827acfe9118fd9933393bab18a2405e3c72e37b"
+    },
+    "files/out/portable-divide64-benefit/benefit/a1/owner.json": {
+      "bytes": 2675,
+      "sha256": "f9c4a3de67ddc578d623b7333878ef6eb07fedf2fe01157f16e4bfa328e4d032"
+    },
+    "files/out/portable-divide64-benefit/benefit/a1/samples.jsonl": {
+      "bytes": 474878,
+      "sha256": "b8652516ed9784b8ddf7c282782a76e6ccaeeaa74fc29e8e2ae1ce91a8ab33c2"
+    },
+    "files/out/portable-divide64-benefit/benefit/a1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide64-benefit/benefit/a1/stdout.log": {
+      "bytes": 708,
+      "sha256": "f111e0fcca3cccb0a343d822ca435b54b9804653bdec55600e6d4996d02f3d8a"
+    },
+    "files/out/portable-divide64-benefit/benefit/a2/gtest.xml": {
+      "bytes": 41057,
+      "sha256": "82fc7bc9347398bbf09fea17e1fb3c9cd2991320c82e0606d95a70a29b5a18d9"
+    },
+    "files/out/portable-divide64-benefit/benefit/a2/inputs-after.json": {
+      "bytes": 677031,
+      "sha256": "a9d6baf2ed22874f9609980b4827acfe9118fd9933393bab18a2405e3c72e37b"
+    },
+    "files/out/portable-divide64-benefit/benefit/a2/inputs-before.json": {
+      "bytes": 677031,
+      "sha256": "a9d6baf2ed22874f9609980b4827acfe9118fd9933393bab18a2405e3c72e37b"
+    },
+    "files/out/portable-divide64-benefit/benefit/a2/owner.json": {
+      "bytes": 2676,
+      "sha256": "40a84639c83adf43e0223b64193bc950d5b779dccba3bef22e462fdd06cc1123"
+    },
+    "files/out/portable-divide64-benefit/benefit/a2/samples.jsonl": {
+      "bytes": 514206,
+      "sha256": "0617a58a426cd25789d70c6d9634022f250e5684c2be16dbe4927a5da12903c1"
+    },
+    "files/out/portable-divide64-benefit/benefit/a2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide64-benefit/benefit/a2/stdout.log": {
+      "bytes": 708,
+      "sha256": "4d1e8e882451dacf205e1b89ced142cbae160a61b785dcfaf7aa52c7bac7f0f8"
+    },
+    "files/out/portable-divide64-benefit/benefit/actions.json": {
+      "bytes": 950439,
+      "sha256": "c8aeef60d36b75dfa9c4bddce070548d49883a81a045731baa269164bddda584"
+    },
+    "files/out/portable-divide64-benefit/benefit/b1/gtest.xml": {
+      "bytes": 40719,
+      "sha256": "17ffae8d7c2b0e5e9c319b8eaa58636608bd2bc439adf824508645c2becf9a34"
+    },
+    "files/out/portable-divide64-benefit/benefit/b1/inputs-after.json": {
+      "bytes": 677033,
+      "sha256": "a78e921af81aa44e1d0870c34f21b46d0eb1e9b2e3fa64fd7ee54fa94c75bd2a"
+    },
+    "files/out/portable-divide64-benefit/benefit/b1/inputs-before.json": {
+      "bytes": 677033,
+      "sha256": "a78e921af81aa44e1d0870c34f21b46d0eb1e9b2e3fa64fd7ee54fa94c75bd2a"
+    },
+    "files/out/portable-divide64-benefit/benefit/b1/owner.json": {
+      "bytes": 2677,
+      "sha256": "bf18c425f77ff18bf51985e812ed9b65f871d95a353dd364ff62910e8a1ff8cd"
+    },
+    "files/out/portable-divide64-benefit/benefit/b1/samples.jsonl": {
+      "bytes": 500070,
+      "sha256": "26bb6468b53c853fa7f215e9b64f669ea2eda1c43b49bf5e5f8d3a38149f9588"
+    },
+    "files/out/portable-divide64-benefit/benefit/b1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide64-benefit/benefit/b1/stdout.log": {
+      "bytes": 708,
+      "sha256": "124959c60695340c3a0a29c60d574f3465a5701b8f2dbac1d436d77bf5610190"
+    },
+    "files/out/portable-divide64-benefit/benefit/b2/gtest.xml": {
+      "bytes": 40756,
+      "sha256": "d77f087ceccbde65fec70b6085d34877a44460a542b1233adf73e8a46d4bc9e1"
+    },
+    "files/out/portable-divide64-benefit/benefit/b2/inputs-after.json": {
+      "bytes": 677033,
+      "sha256": "a78e921af81aa44e1d0870c34f21b46d0eb1e9b2e3fa64fd7ee54fa94c75bd2a"
+    },
+    "files/out/portable-divide64-benefit/benefit/b2/inputs-before.json": {
+      "bytes": 677033,
+      "sha256": "a78e921af81aa44e1d0870c34f21b46d0eb1e9b2e3fa64fd7ee54fa94c75bd2a"
+    },
+    "files/out/portable-divide64-benefit/benefit/b2/owner.json": {
+      "bytes": 2803,
+      "sha256": "2388e423354e731b505d49de93e56bc5a2687e69278bf3692263fee1a5d1f070"
+    },
+    "files/out/portable-divide64-benefit/benefit/b2/samples.jsonl": {
+      "bytes": 601337,
+      "sha256": "f6fc6b40dcb9f57fecdc74a95b34d69db6821ca27cb899bc5d08c9644d476e32"
+    },
+    "files/out/portable-divide64-benefit/benefit/b2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide64-benefit/benefit/b2/stdout.log": {
+      "bytes": 708,
+      "sha256": "d77a30eba4d90a36566fd7ec680b48c5fdb9b510275342e060509ec5b0f0bd92"
+    },
+    "files/out/portable-divide64-benefit/benefit/baseline.json": {
+      "bytes": 7636,
+      "sha256": "2ce78e58cfae21b9f6298a2914a4663f16f4afd74b330c8d0fcf9178933497c0"
+    },
+    "files/out/portable-divide64-benefit/benefit/build-and-arrays.json": {
+      "bytes": 7636,
+      "sha256": "738e348884d740676aaf884558cb8d620b34b878b88548cfcae9dcdbf61a3f5a"
+    },
+    "files/out/portable-divide64-benefit/benefit/compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+    },
+    "files/out/portable-divide64-benefit/benefit/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+    },
+    "files/out/portable-divide64-benefit/benefit/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/portable-divide64-benefit/benefit/retention-gate-frozen.json": {
+      "bytes": 1785,
+      "sha256": "e8f848a35ee321a15c7d10fcef752bbd8478a29309b179fef7a53caef5ef228c"
+    },
+    "files/out/portable-divide64-benefit/benefit/run_limb_benefit_slot.py": {
+      "bytes": 662,
+      "sha256": "dae6f360a460dd28504b92fcb5b6a307acdc6be0893cdb2e26609d9145325399"
+    },
+    "files/out/portable-divide64-benefit/benefit/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "files/out/portable-divide64-benefit/benefit/run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+    },
+    "files/out/portable-divide64-benefit/benefit/software-comparison.json": {
+      "bytes": 14381,
+      "sha256": "605d458023ce4fe86cda34db101ee783483795a6df96f9d555dcb1db85e63377"
+    },
+    "files/out/portable-divide64-benefit/benefit/software-sequence.json": {
+      "bytes": 837,
+      "sha256": "babb814a6cd1fcd6dddc69c64d892e404d0576a8c2ba6750d0d8940ed4790a34"
+    },
+    "files/out/portable-divide64-benefit/benefit/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    },
+    "files/out/portable-divide64-benefit/commands.json": {
+      "bytes": 1394,
+      "sha256": "84d44a801348b9928adabe9bcaab27eca315baec929887942af45cce1889941e"
+    },
+    "files/out/portable-divide64-benefit/control-acceptance.json": {
+      "bytes": 6379,
+      "sha256": "9caad87351de388634d9d9991e82119801d9d858c5ae405a5855f736b974a61a"
+    },
+    "files/out/portable-divide64-benefit/disposition.json": {
+      "bytes": 5304,
+      "sha256": "be17653c0e607bc2990292d7e6cc3c8943a403da64b0a0faedcb54bb5cfff4ee"
+    },
+    "files/out/portable-divide64-benefit/endpoint-route-acceptance.json": {
+      "bytes": 16396,
+      "sha256": "c7ffe00461d490f21e1907fddb3700d3f72e97b3bd36ead0f01c623f932e6ea1"
+    },
+    "files/out/portable-divide64-benefit/finish_trial.py": {
+      "bytes": 5861,
+      "sha256": "142150823fbb4fefe9c810ce8d578746bb1abc6eb1895411dc0d5f879a829e41"
+    },
+    "files/out/portable-divide64-benefit/historical-prelaunch-array-order/finding-prepare.json": {
+      "bytes": 844,
+      "sha256": "73cb9ad0957a0615742ea2a1832330285309a1fba986796ac0992579d006e82c"
+    },
+    "files/out/portable-divide64-benefit/historical-prelaunch-array-order/finding.json": {
+      "bytes": 977,
+      "sha256": "42ccb14e91e39ccd872319d89229ee6bf8d124cfef58c68fdfce7c8ceab90bc3"
+    },
+    "files/out/portable-divide64-benefit/historical-prelaunch-array-order/prepare.py": {
+      "bytes": 17865,
+      "sha256": "b08109782f18fcc36969b52a4d40d1930323d26a6dfdaace7511ff6808096f86"
+    },
+    "files/out/portable-divide64-benefit/historical-prelaunch-array-order/prove_reuse.py": {
+      "bytes": 4223,
+      "sha256": "6f800032b6569e8586f32bed0b3f6ffd2f5afa9b03b17c09c695a2df0e957ca5"
+    },
+    "files/out/portable-divide64-benefit/historical-prelaunch-array-order/source-freeze.json": {
+      "bytes": 3749,
+      "sha256": "52bfe1ce117a4dd1c36cad19a8d172abb8f74d5ef83827f7843551ef86437a2f"
+    },
+    "files/out/portable-divide64-benefit/independent-source-review.json": {
+      "bytes": 1806,
+      "sha256": "9a47eeb0fed4ee43e476b48a8a1161b461c412778d01f6e50d0884bd4c0c94d3"
+    },
+    "files/out/portable-divide64-benefit/independent-terminal-review.json": {
+      "bytes": 1620,
+      "sha256": "d7840c3cd450150bc0408cdb33a1786ab299a4b92a2d426c5d64822c263dec6b"
+    },
+    "files/out/portable-divide64-benefit/original-apparatus/actions.json": {
+      "bytes": 171951,
+      "sha256": "f215eb8720879a4786d7b01155423b9ae7c6073115a8363b70458cd123f5b52b"
+    },
+    "files/out/portable-divide64-benefit/original-apparatus/compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+    },
+    "files/out/portable-divide64-benefit/original-apparatus/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+    },
+    "files/out/portable-divide64-benefit/original-apparatus/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/portable-divide64-benefit/original-apparatus/retention-gate-frozen.json": {
+      "bytes": 1879,
+      "sha256": "b2cb915d29db806d2d856f0143a1c4d80bcc3ed247d414a6cc0839156e436af5"
+    },
+    "files/out/portable-divide64-benefit/original-apparatus/run_limb_benefit_slot.py": {
+      "bytes": 664,
+      "sha256": "92ba25fa864aaa307207978f8846735a3728e26acb5938d5e15015d5423150cc"
+    },
+    "files/out/portable-divide64-benefit/original-apparatus/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "files/out/portable-divide64-benefit/original-apparatus/run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+    },
+    "files/out/portable-divide64-benefit/original-apparatus/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    },
+    "files/out/portable-divide64-benefit/originals/finish_trial.py": {
+      "bytes": 5757,
+      "sha256": "e7fdc898800add1b1a295316cbbdbf7ff384a622716f8f864b2c414772916f74"
+    },
+    "files/out/portable-divide64-benefit/originals/prepare.py": {
+      "bytes": 18812,
+      "sha256": "8c331c55594fa8c58f0f59a8d283f73ee5622e6625f734d3e64f26646159149d"
+    },
+    "files/out/portable-divide64-benefit/originals/prove_reuse.py": {
+      "bytes": 3662,
+      "sha256": "02da7698dd96eca8369d9c4d041c058e34272a01f8e86c885eb6dbd77f7757b4"
+    },
+    "files/out/portable-divide64-benefit/preparation.json": {
+      "bytes": 464022,
+      "sha256": "246bc307966e318bba5fbc21a282753813e826ac12f74de1dff59eb2aba724e3"
+    },
+    "files/out/portable-divide64-benefit/prepare.py": {
+      "bytes": 17873,
+      "sha256": "02c5673dd58395b6fb20aee124d587fabb2137c4fe878159ba6f70e7db35762d"
+    },
+    "files/out/portable-divide64-benefit/prerequisite-pin.json": {
+      "bytes": 2893,
+      "sha256": "882782214da8c75f5c69fe22c05ce7b46ca22eaee4caf89e3f44f3ce2ff4aec4"
+    },
+    "files/out/portable-divide64-benefit/producer-acceptance.json": {
+      "bytes": 32436,
+      "sha256": "8b4757c387c83c9f2d3cd299f01b79c37c973c0042f0cad7ee5b02636af642b4"
+    },
+    "files/out/portable-divide64-benefit/producer-feature-acceptance.json": {
+      "bytes": 181863,
+      "sha256": "c5e4db46330ff64a508c3ea41df4b2c466ba13a36a0df9cb40bb8e1b0b6d9a38"
+    },
+    "files/out/portable-divide64-benefit/producer-reuse.json": {
+      "bytes": 14691,
+      "sha256": "4ea6ae9f7cd439d04b3fe44cbf4bdcf9f4e3624a9f193e92ba040484e3c133fc"
+    },
+    "files/out/portable-divide64-benefit/protected-before.json": {
+      "bytes": 21913,
+      "sha256": "3a5cdc2757ea8797747c131838debd0a5c49e0e50eda1b5ee015848d4b842c8f"
+    },
+    "files/out/portable-divide64-benefit/prove_reuse.py": {
+      "bytes": 4229,
+      "sha256": "a12b3c68bfb22dc05d1a4a0803a8148ced67b5f2aaad94de7ccc44af83d4d3a1"
+    },
+    "files/out/portable-divide64-benefit/source-freeze.json": {
+      "bytes": 4882,
+      "sha256": "b83787035c74e15222c83e788df2e1a2990786ee55a30fed9b063b3b4285d4da"
+    },
+    "files/out/portable-divide64-benefit/trial-acceptance.json": {
+      "bytes": 2069,
+      "sha256": "57e724a27e0ad13110db2eff3b9377bb0a1cfb9b78e0c13514129222c4629077"
+    },
+    "preserve-finite-result.py": {
+      "bytes": 95790,
+      "sha256": "a6577f0bf9388278f6598702874dc78c50176505f61aff1b31a3abdaff1624d1"
+    },
+    "result.json": {
+      "bytes": 36325,
+      "sha256": "4f9f2ac5ccf8ea8cc3556861afc772aad9fdfdd942f52bebcf09935afe423f12"
+    },
+    "runner-source/.github/workflows/ci.yml": {
+      "bytes": 33199,
+      "sha256": "da98d980436a09bbb9822479b6d16b0cc411314479e1fc97c4cc41af1fb123da"
+    },
+    "runner-source/scripts/diagnose-macos-retained.py": {
+      "bytes": 46266,
+      "sha256": "92bab3d2ac5683876df03a38e8ae1a814e2e39c844710a3cf200f9581db75a90"
+    },
+    "runner-source/scripts/governance/build_policy.py": {
+      "bytes": 48257,
+      "sha256": "ab70855de40d24c4e036af2b9d29167be00f53bb96077c88d220aa01bf927ecf"
+    },
+    "runner-source/scripts/macos_metal_probe.py": {
+      "bytes": 16087,
+      "sha256": "e61c75e6b6769150b4e18632418cbffc1382db1730ca2dbd9b5fb5b813789804"
+    },
+    "runner-source/scripts/macos_moltenvk_integration.py": {
+      "bytes": 31536,
+      "sha256": "e3ee7f7e41099b0b738b578cb37be04309ee365d4e0b994d15f8e46cd91de01d"
+    },
+    "runner-source/scripts/macos_vulkan_identity.py": {
+      "bytes": 8915,
+      "sha256": "7f70c1a2a341ea071624dfb01993289a89d54f3377afb48035437469c7d81025"
+    },
+    "runner-source/scripts/runtime_identity.py": {
+      "bytes": 27490,
+      "sha256": "00aa1aa63250599db1cc33692b51dcf73e236be7596f19fc1b603807bbccc8f2"
+    }
+  },
+  "qualification_claimed": false
+}

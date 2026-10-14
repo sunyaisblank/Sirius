@@ -1,0 +1,20 @@
+{
+  "corrected_source": {
+    "bytes": 4229,
+    "sha256": "a12b3c68bfb22dc05d1a4a0803a8148ced67b5f2aaad94de7ccc44af83d4d3a1"
+  },
+  "correction": "Sort only the computed changed-array list before exact sealed-list comparison; every42-array identity, exact17names/cardinality and both unchanged owner-array checks retained.",
+  "finding": "Computed changed-array list used producer header insertion order; sealed exact17-name allowlist uses alphabetical order. Sets/cardinality agree; direct list comparison fails.",
+  "phase": "source-only independent review before any helper/owner/trial execution",
+  "rejected_source": {
+    "bytes": 4223,
+    "sha256": "6f800032b6569e8586f32bed0b3f6ffd2f5afa9b03b17c09c695a2df0e957ca5"
+  },
+  "rejected_source_freeze": {
+    "bytes": 3749,
+    "sha256": "52bfe1ce117a4dd1c36cad19a8d172abb8f74d5ef83827f7843551ef86437a2f"
+  },
+  "schema": "sirius-divide64-benefit-prelaunch-finding/v1",
+  "trial_executed": false,
+  "trial_retry": false
+}

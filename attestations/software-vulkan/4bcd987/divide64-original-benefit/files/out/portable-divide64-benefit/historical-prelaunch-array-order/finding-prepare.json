@@ -1,0 +1,16 @@
+{
+  "corrected_source": {
+    "bytes": 17873,
+    "sha256": "02c5673dd58395b6fb20aee124d587fabb2137c4fe878159ba6f70e7db35762d"
+  },
+  "correction": "Sort only producer.changed_arrays for equality with sealed exact17-name allowlist. packet/P equality and explicit17 cardinality,23unchangedmain,2unchangedowner and all35module checks retained.",
+  "finding": "Producer changed_arrays uses historical header order; sealed packet/P allowlist is alphabetical. Direct list comparison fails despite identical exact17names.",
+  "phase": "source-only independent review before any helper/owner/trial execution",
+  "rejected_source": {
+    "bytes": 17865,
+    "sha256": "b08109782f18fcc36969b52a4d40d1930323d26a6dfdaace7511ff6808096f86"
+  },
+  "schema": "sirius-divide64-benefit-prelaunch-finding/v1",
+  "trial_executed": false,
+  "trial_retry": false
+}

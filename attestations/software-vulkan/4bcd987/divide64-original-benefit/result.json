@@ -1,0 +1,1139 @@
+{
+  "acceptance": {
+    "declared_current_inputs_verified": 2069,
+    "inclusive_API_passed": 0,
+    "inclusive_API_required": 2,
+    "interval_stage_passed": 13,
+    "interval_stage_required": 20,
+    "original_trial_complete": true,
+    "passed": true,
+    "performance_acceptance": false,
+    "protected_payloads_unchanged": 114,
+    "scope": "Original comparator and complete owner/XML/input/source closure. A rejected fixed benefit verdict is a valid experiment outcome, not full qualification.",
+    "slots": [
+      {
+        "label": "a1",
+        "owner": {
+          "bytes": 2675,
+          "sha256": "f9c4a3de67ddc578d623b7333878ef6eb07fedf2fe01157f16e4bfa328e4d032"
+        },
+        "peak_sampled_rss_kib": 2330520,
+        "wall_seconds": 53.04293786800554,
+        "xml": {
+          "bytes": 40797,
+          "sha256": "c587ddaa2531ae9853b26b918d8b2398effbaab945bcb83bbbbe3edf64d0b8fe"
+        }
+      },
+      {
+        "label": "b1",
+        "owner": {
+          "bytes": 2677,
+          "sha256": "bf18c425f77ff18bf51985e812ed9b65f871d95a353dd364ff62910e8a1ff8cd"
+        },
+        "peak_sampled_rss_kib": 2329136,
+        "wall_seconds": 56.020944657000655,
+        "xml": {
+          "bytes": 40719,
+          "sha256": "17ffae8d7c2b0e5e9c319b8eaa58636608bd2bc439adf824508645c2becf9a34"
+        }
+      },
+      {
+        "label": "b2",
+        "owner": {
+          "bytes": 2803,
+          "sha256": "2388e423354e731b505d49de93e56bc5a2687e69278bf3692263fee1a5d1f070"
+        },
+        "peak_sampled_rss_kib": 2327892,
+        "wall_seconds": 79.40538458600349,
+        "xml": {
+          "bytes": 40756,
+          "sha256": "d77f087ceccbde65fec70b6085d34877a44460a542b1233adf73e8a46d4bc9e1"
+        }
+      },
+      {
+        "label": "a2",
+        "owner": {
+          "bytes": 2676,
+          "sha256": "40a84639c83adf43e0223b64193bc950d5b779dccba3bef22e462fdd06cc1123"
+        },
+        "peak_sampled_rss_kib": 2330408,
+        "wall_seconds": 57.734785801992984,
+        "xml": {
+          "bytes": 41057,
+          "sha256": "82fc7bc9347398bbf09fea17e1fb3c9cd2991320c82e0606d95a70a29b5a18d9"
+        }
+      }
+    ],
+    "source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540"
+  },
+  "comparison": {
+    "accounting_checks": [
+      {
+        "baseline_ms": 8094.31668,
+        "candidate_ms": 8727.90711,
+        "direction": "forward",
+        "improvement_percent": -7.827596263505719,
+        "minimum_percent": 0,
+        "pass": false,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      },
+      {
+        "baseline_ms": 8135.099837,
+        "candidate_ms": 11090.847819,
+        "direction": "reverse",
+        "improvement_percent": -36.333272378006846,
+        "minimum_percent": 0,
+        "pass": false,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      }
+    ],
+    "baseline_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "candidate_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "checks": [
+      {
+        "baseline_median_ms": 35.037954,
+        "baseline_samples_ms": [
+          35.037954,
+          34.656026,
+          35.141448
+        ],
+        "candidate_median_ms": 33.05203,
+        "candidate_samples_ms": [
+          35.693145,
+          32.971742,
+          33.05203
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": 5.667922276511914,
+        "minimum_percent": 5,
+        "pass": true,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 5.34482,
+        "baseline_samples_ms": [
+          5.34482,
+          5.163026,
+          6.093953
+        ],
+        "candidate_median_ms": 5.399834,
+        "candidate_samples_ms": [
+          5.867876000000001,
+          4.842263,
+          5.399834
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -1.0292956544841527,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 7.890443,
+        "baseline_samples_ms": [
+          7.995921,
+          7.391714,
+          7.890443
+        ],
+        "candidate_median_ms": 7.799648,
+        "candidate_samples_ms": [
+          7.799648,
+          8.231414,
+          7.099959
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": 1.1506958481291856,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint+dense inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 20.462421,
+        "baseline_samples_ms": [
+          20.462421,
+          21.273896999999998,
+          20.358078
+        ],
+        "candidate_median_ms": 19.534564,
+        "candidate_samples_ms": [
+          19.824623,
+          18.948974,
+          19.534564
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": 4.534443895959328,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "transport inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 43.473514,
+        "baseline_samples_ms": [
+          43.724851,
+          43.473514,
+          40.849711
+        ],
+        "candidate_median_ms": 43.755441,
+        "candidate_samples_ms": [
+          43.030373000000004,
+          43.755441,
+          46.294754
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -0.6485029022498527,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 2.819717,
+        "baseline_samples_ms": [
+          2.819717,
+          2.989258,
+          2.579175
+        ],
+        "candidate_median_ms": 2.667422,
+        "candidate_samples_ms": [
+          2.802914,
+          2.667422,
+          2.560749
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": 5.401073937561806,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 5.827336,
+        "baseline_samples_ms": [
+          5.8100950000000005,
+          7.008004,
+          5.827336
+        ],
+        "candidate_median_ms": 6.207703,
+        "candidate_samples_ms": [
+          6.207703,
+          6.051899000000001,
+          6.294058
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -6.527287940836096,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "dopri_phase:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 5.658166,
+        "baseline_samples_ms": [
+          5.658166,
+          5.856819,
+          5.5008680000000005
+        ],
+        "candidate_median_ms": 5.708408,
+        "candidate_samples_ms": [
+          5.708408,
+          5.449864,
+          7.688053
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -0.8879555672279814,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 10.807826,
+        "baseline_samples_ms": [
+          10.807826,
+          10.622335,
+          10.813887000000001
+        ],
+        "candidate_median_ms": 11.066065,
+        "candidate_samples_ms": [
+          10.519415,
+          12.028647,
+          11.066065
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -2.389370443232521,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 12.254925,
+        "baseline_samples_ms": [
+          14.038019,
+          12.254925,
+          11.370027
+        ],
+        "candidate_median_ms": 13.32743,
+        "candidate_samples_ms": [
+          13.32743,
+          12.988378,
+          14.450737
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -8.751624346946224,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 35.840105,
+        "baseline_samples_ms": [
+          36.547166,
+          34.342259,
+          35.840105
+        ],
+        "candidate_median_ms": 35.748706,
+        "candidate_samples_ms": [
+          37.725413,
+          35.748706,
+          34.778502
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 0.25501878412466333,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 5.825796,
+        "baseline_samples_ms": [
+          5.873788,
+          5.16226,
+          5.825796
+        ],
+        "candidate_median_ms": 5.748689000000001,
+        "candidate_samples_ms": [
+          5.367595,
+          5.748689000000001,
+          5.916345
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 1.3235444564141932,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 7.758682,
+        "baseline_samples_ms": [
+          7.591877,
+          7.758682,
+          8.100793
+        ],
+        "candidate_median_ms": 7.628613,
+        "candidate_samples_ms": [
+          7.628613,
+          7.694498,
+          6.701523
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 1.676431641353527,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint+dense inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 20.439435,
+        "baseline_samples_ms": [
+          21.222609,
+          19.933607,
+          20.439435
+        ],
+        "candidate_median_ms": 20.687145,
+        "candidate_samples_ms": [
+          22.696174,
+          20.687145,
+          20.576925000000003
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": -1.2119219538113526,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "transport inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 40.15739,
+        "baseline_samples_ms": [
+          40.839613,
+          39.12857,
+          40.15739
+        ],
+        "candidate_median_ms": 41.385399,
+        "candidate_samples_ms": [
+          40.258568000000004,
+          42.729683,
+          41.385399
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -3.057990073558068,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 2.612405,
+        "baseline_samples_ms": [
+          2.648685,
+          2.485432,
+          2.612405
+        ],
+        "candidate_median_ms": 2.756175,
+        "candidate_samples_ms": [
+          2.306256,
+          3.058534,
+          2.756175
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -5.503358016846544,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "dopri_phase:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 5.395738,
+        "baseline_samples_ms": [
+          5.395738,
+          5.268519,
+          5.662148
+        ],
+        "candidate_median_ms": 5.545928,
+        "candidate_samples_ms": [
+          5.545928,
+          5.452084,
+          6.1465440000000005
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -2.7834931940728085,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 5.812861,
+        "baseline_samples_ms": [
+          5.361103999999999,
+          5.812861,
+          5.990486000000001
+        ],
+        "candidate_median_ms": 5.756546999999999,
+        "candidate_samples_ms": [
+          5.263154,
+          5.756546999999999,
+          5.907916
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": 0.9687828420462905,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 10.041887,
+        "baseline_samples_ms": [
+          10.041887,
+          10.150061,
+          9.522634
+        ],
+        "candidate_median_ms": 10.785003,
+        "candidate_samples_ms": [
+          10.900622,
+          10.759044,
+          10.785003
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -7.400162937503684,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 12.81401,
+        "baseline_samples_ms": [
+          13.793269,
+          12.027676,
+          12.81401
+        ],
+        "candidate_median_ms": 12.974472,
+        "candidate_samples_ms": [
+          12.974472,
+          13.259241,
+          11.702656000000001
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -1.2522387605441292,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      }
+    ],
+    "failed_checks": [
+      {
+        "baseline_median_ms": 43.473514,
+        "baseline_samples_ms": [
+          43.724851,
+          43.473514,
+          40.849711
+        ],
+        "candidate_median_ms": 43.755441,
+        "candidate_samples_ms": [
+          43.030373000000004,
+          43.755441,
+          46.294754
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -0.6485029022498527,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 5.827336,
+        "baseline_samples_ms": [
+          5.8100950000000005,
+          7.008004,
+          5.827336
+        ],
+        "candidate_median_ms": 6.207703,
+        "candidate_samples_ms": [
+          6.207703,
+          6.051899000000001,
+          6.294058
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -6.527287940836096,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "dopri_phase:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 12.254925,
+        "baseline_samples_ms": [
+          14.038019,
+          12.254925,
+          11.370027
+        ],
+        "candidate_median_ms": 13.32743,
+        "candidate_samples_ms": [
+          13.32743,
+          12.988378,
+          14.450737
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -8.751624346946224,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 35.840105,
+        "baseline_samples_ms": [
+          36.547166,
+          34.342259,
+          35.840105
+        ],
+        "candidate_median_ms": 35.748706,
+        "candidate_samples_ms": [
+          37.725413,
+          35.748706,
+          34.778502
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 0.25501878412466333,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 40.15739,
+        "baseline_samples_ms": [
+          40.839613,
+          39.12857,
+          40.15739
+        ],
+        "candidate_median_ms": 41.385399,
+        "candidate_samples_ms": [
+          40.258568000000004,
+          42.729683,
+          41.385399
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -3.057990073558068,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 2.612405,
+        "baseline_samples_ms": [
+          2.648685,
+          2.485432,
+          2.612405
+        ],
+        "candidate_median_ms": 2.756175,
+        "candidate_samples_ms": [
+          2.306256,
+          3.058534,
+          2.756175
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -5.503358016846544,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "dopri_phase:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 10.041887,
+        "baseline_samples_ms": [
+          10.041887,
+          10.150061,
+          9.522634
+        ],
+        "candidate_median_ms": 10.785003,
+        "candidate_samples_ms": [
+          10.900622,
+          10.759044,
+          10.785003
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -7.400162937503684,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      }
+    ],
+    "original20_pass": false,
+    "pass": false,
+    "provisioning_accounting_pass": false,
+    "readback_identity_module_and_completion_prerequisites_pass": true,
+    "scope": "One fixed software default A1/B1/B2/A2 original complete observer. Four complete-call >=5% and sixteen stage >=-5% gates; no pooled orders/retries, frame, science or qualification claim."
+  },
+  "disposition": {
+    "complete_call_checks": [
+      {
+        "baseline_median_ms": 35.037954,
+        "baseline_samples_ms": [
+          35.037954,
+          34.656026,
+          35.141448
+        ],
+        "candidate_median_ms": 33.05203,
+        "candidate_samples_ms": [
+          35.693145,
+          32.971742,
+          33.05203
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": 5.667922276511914,
+        "minimum_percent": 5,
+        "pass": true,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 43.473514,
+        "baseline_samples_ms": [
+          43.724851,
+          43.473514,
+          40.849711
+        ],
+        "candidate_median_ms": 43.755441,
+        "candidate_samples_ms": [
+          43.030373000000004,
+          43.755441,
+          46.294754
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -0.6485029022498527,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 35.840105,
+        "baseline_samples_ms": [
+          36.547166,
+          34.342259,
+          35.840105
+        ],
+        "candidate_median_ms": 35.748706,
+        "candidate_samples_ms": [
+          37.725413,
+          35.748706,
+          34.778502
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 0.25501878412466333,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 40.15739,
+        "baseline_samples_ms": [
+          40.839613,
+          39.12857,
+          40.15739
+        ],
+        "candidate_median_ms": 41.385399,
+        "candidate_samples_ms": [
+          40.258568000000004,
+          42.729683,
+          41.385399
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -3.057990073558068,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      }
+    ],
+    "decision": "REJECT_OPTIONAL64_DIVIDE_COST",
+    "failed_stage_checks": [
+      {
+        "baseline_median_ms": 5.827336,
+        "baseline_samples_ms": [
+          5.8100950000000005,
+          7.008004,
+          5.827336
+        ],
+        "candidate_median_ms": 6.207703,
+        "candidate_samples_ms": [
+          6.207703,
+          6.051899000000001,
+          6.294058
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -6.527287940836096,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "dopri_phase:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 12.254925,
+        "baseline_samples_ms": [
+          14.038019,
+          12.254925,
+          11.370027
+        ],
+        "candidate_median_ms": 13.32743,
+        "candidate_samples_ms": [
+          13.32743,
+          12.988378,
+          14.450737
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -8.751624346946224,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 2.612405,
+        "baseline_samples_ms": [
+          2.648685,
+          2.485432,
+          2.612405
+        ],
+        "candidate_median_ms": 2.756175,
+        "candidate_samples_ms": [
+          2.306256,
+          3.058534,
+          2.756175
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -5.503358016846544,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "dopri_phase:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 10.041887,
+        "baseline_samples_ms": [
+          10.041887,
+          10.150061,
+          9.522634
+        ],
+        "candidate_median_ms": 10.785003,
+        "candidate_samples_ms": [
+          10.900622,
+          10.759044,
+          10.785003
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -7.400162937503684,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      }
+    ],
+    "inclusive_API_checks": [
+      {
+        "baseline_ms": 8094.31668,
+        "candidate_ms": 8727.90711,
+        "direction": "forward",
+        "improvement_percent": -7.827596263505719,
+        "minimum_percent": 0,
+        "pass": false,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      },
+      {
+        "baseline_ms": 8135.099837,
+        "candidate_ms": 11090.847819,
+        "direction": "reverse",
+        "improvement_percent": -36.333272378006846,
+        "minimum_percent": 0,
+        "pass": false,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      }
+    ],
+    "inclusive_API_passed": 0,
+    "inclusive_API_required": 2,
+    "interval_stage_passed": 13,
+    "interval_stage_required": 20,
+    "issue": 44,
+    "original_benefit_trial_completed": true,
+    "original_correctness_prerequisites_passed": true,
+    "policy": "One unchanged original A1/B1/B2/A2; no retries, pooling, cost subtraction or weakened gates. Source/compiler/arithmetic/eight-control prerequisites remain finite evidence. Full owned process wall retained; original device fixture SetUp remains outside original measured windows. Rendering/science/native/platform/release goal remains active.",
+    "production_adopted": false,
+    "source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540"
+  },
+  "owners": {
+    "a1": {
+      "adopted_children_reaped": [],
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-benefit/benefit/run_limb_benefit_slot.py",
+        "bin/linux-gcc/portable-divide64-benefit/original_baseline_controls",
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "case": "a1",
+      "child_exit": 0,
+      "child_pid": 342123,
+      "child_start_ticks": "4993733",
+      "cleanup_errors": [],
+      "controller": {
+        "pgrp": 342092,
+        "pid": 342093,
+        "ppid": 342092,
+        "rss_kib": 24052,
+        "session": 342092,
+        "start_ticks": "4993624",
+        "state": "R"
+      },
+      "declared_output_environment": {
+        "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/portable-divide64-benefit/benefit/a1/gtest.xml",
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "SIRIUS_VULKAN_DEVICE": "0",
+        "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+      },
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "meaning": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+      "minimum_sampled_available_kib": 17958996,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 342123,
+          "saved_start_ticks": "4993733"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 2330520,
+      "provider_mappings": [
+        {
+          "maps": [
+            "7568e9c00000-7568e9c5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7568e9c5b000-7568ea06b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7568ea06b000-7568ea6c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7568ea6c6000-7568ea761000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+          ],
+          "owned_session": 342123,
+          "pid": 342123,
+          "start_ticks": "4993733"
+        }
+      ],
+      "remaining_owned_processes": [],
+      "scope": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+      "source": {
+        "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "status": "terminal",
+      "stop_reason": null,
+      "wall_seconds": 53.04293786800554,
+      "whole_inputs_unchanged": true
+    },
+    "a2": {
+      "adopted_children_reaped": [],
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-benefit/benefit/run_limb_benefit_slot.py",
+        "bin/linux-gcc/portable-divide64-benefit/original_baseline_controls",
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "case": "a2",
+      "child_exit": 0,
+      "child_pid": 342834,
+      "child_start_ticks": "5013283",
+      "cleanup_errors": [],
+      "controller": {
+        "pgrp": 342092,
+        "pid": 342830,
+        "ppid": 342092,
+        "rss_kib": 24092,
+        "session": 342092,
+        "start_ticks": "5013169",
+        "state": "R"
+      },
+      "declared_output_environment": {
+        "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/portable-divide64-benefit/benefit/a2/gtest.xml",
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "SIRIUS_VULKAN_DEVICE": "0",
+        "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+      },
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "meaning": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+      "minimum_sampled_available_kib": 18029428,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 342834,
+          "saved_start_ticks": "5013283"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 2330408,
+      "provider_mappings": [
+        {
+          "maps": [
+            "7008d1c00000-7008d1c5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7008d1c5b000-7008d206b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7008d206b000-7008d26c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7008d26c6000-7008d2761000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+          ],
+          "owned_session": 342834,
+          "pid": 342834,
+          "start_ticks": "5013283"
+        }
+      ],
+      "remaining_owned_processes": [],
+      "scope": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+      "source": {
+        "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "status": "terminal",
+      "stop_reason": null,
+      "wall_seconds": 57.734785801992984,
+      "whole_inputs_unchanged": true
+    },
+    "b1": {
+      "adopted_children_reaped": [],
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-benefit/benefit/run_limb_benefit_slot.py",
+        "bin/linux-gcc/portable-divide64-benefit/original_candidate_controls",
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "case": "b1",
+      "child_exit": 0,
+      "child_pid": 342251,
+      "child_start_ticks": "4999259",
+      "cleanup_errors": [],
+      "controller": {
+        "pgrp": 342092,
+        "pid": 342245,
+        "ppid": 342092,
+        "rss_kib": 24108,
+        "session": 342092,
+        "start_ticks": "4999147",
+        "state": "R"
+      },
+      "declared_output_environment": {
+        "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/portable-divide64-benefit/benefit/b1/gtest.xml",
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "SIRIUS_VULKAN_DEVICE": "0",
+        "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+      },
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "meaning": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+      "minimum_sampled_available_kib": 17828368,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 342251,
+          "saved_start_ticks": "4999259"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 2329136,
+      "provider_mappings": [
+        {
+          "maps": [
+            "7b8593e00000-7b8593e5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7b8593e5b000-7b859426b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7b859426b000-7b85948c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7b85948c6000-7b8594961000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+          ],
+          "owned_session": 342251,
+          "pid": 342251,
+          "start_ticks": "4999259"
+        }
+      ],
+      "remaining_owned_processes": [],
+      "scope": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+      "source": {
+        "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "status": "terminal",
+      "stop_reason": null,
+      "wall_seconds": 56.020944657000655,
+      "whole_inputs_unchanged": true
+    },
+    "b2": {
+      "adopted_children_reaped": [],
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide64-benefit/benefit/run_limb_benefit_slot.py",
+        "bin/linux-gcc/portable-divide64-benefit/original_candidate_controls",
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "case": "b2",
+      "child_exit": 0,
+      "child_pid": 342437,
+      "child_start_ticks": "5005077",
+      "cleanup_errors": [],
+      "controller": {
+        "pgrp": 342092,
+        "pid": 342433,
+        "ppid": 342092,
+        "rss_kib": 24048,
+        "session": 342092,
+        "start_ticks": "5004965",
+        "state": "R"
+      },
+      "declared_output_environment": {
+        "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/portable-divide64-benefit/benefit/b2/gtest.xml",
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "SIRIUS_VULKAN_DEVICE": "0",
+        "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+      },
+      "limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "meaning": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+      "minimum_sampled_available_kib": 14992692,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 342437,
+          "saved_start_ticks": "5005077"
+        }
+      ],
+      "passed": true,
+      "peak_sampled_rss_kib": 2327892,
+      "provider_mappings": [
+        {
+          "maps": [
+            "7f8fbbe00000-7f8fbbe5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7f8fbbe5b000-7f8fbc26b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7f8fbc26b000-7f8fbc8c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7f8fbc8c6000-7f8fbc95c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "7f8fbc95c000-7f8fbc961000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+          ],
+          "owned_session": 342437,
+          "pid": 342437,
+          "start_ticks": "5005077"
+        }
+      ],
+      "remaining_owned_processes": [],
+      "scope": "One original fixed A/B/B/A slot, three repeats/family, unchanged20+2 gates. Full owned wall retained; device fixture SetUp excluded only as original. No pooling/subtraction/retry or full qualification.",
+      "source": {
+        "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "status": "terminal",
+      "stop_reason": null,
+      "wall_seconds": 79.40538458600349,
+      "whole_inputs_unchanged": true
+    }
+  },
+  "prerequisite_evidence_commit": "4b428629bf743f0f7de64bb98089cfc74aa3a0d5",
+  "prerequisite_manifest_sha256": "6fa3b1ee9daacecdc93e9f20b71847461243e544cf77e4c065b4c03f4712c1b4",
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "production_adopted": false,
+  "provider_scope": "Original benefit owner observes birth/session-bound LVP. Loader/LLVM byte inputs frozen; broader mapped provenance belongs to earlier integrated prerequisites.",
+  "qualification_claimed": false,
+  "schema": "sirius-optional64-original-fixed-benefit-v1",
+  "sole_trial_policy": "No retries, pooled orders, cost subtraction, substituted samples or weakened gates.",
+  "timing_scope": "Original Create/all11 numerical API windows; fixture device negotiation excluded as original. Full owned wall separately retained."
+}

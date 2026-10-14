@@ -1,0 +1,36 @@
+{
+  "actions_sha256": "c8aeef60d36b75dfa9c4bddce070548d49883a81a045731baa269164bddda584",
+  "all20_gates_required": true,
+  "baseline_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "candidate_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "comparator_sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3",
+  "complete_call_minimum_improvement_percent": 5,
+  "every_inclusive_stage_minimum_improvement_percent": -5,
+  "executables": {
+    "baseline": {
+      "bytes": 10753968,
+      "observer_source_sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3",
+      "path": "bin/linux-gcc/portable-divide64-benefit/original_baseline_controls",
+      "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856",
+      "source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540"
+    },
+    "candidate": {
+      "bytes": 10746096,
+      "observer_source_sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3",
+      "path": "bin/linux-gcc/portable-divide64-benefit/original_candidate_controls",
+      "sha256": "9799beb00be4dae81de94236e26ab81fc04086268455b5aca951ffb7b5162494",
+      "source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540"
+    }
+  },
+  "launcher_sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342",
+  "observed_instance_api_minimum_improvement_percent": 0,
+  "reader_sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9",
+  "scope": "One original fixed optional64 divide A1/B1/B2/A2 trial. Original stock host; candidate alone admits Int64. Accepted17/23/0 producer footprint. Original measured windows and20+2 gates unchanged.",
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "within_slot_repeats": 3
+}
