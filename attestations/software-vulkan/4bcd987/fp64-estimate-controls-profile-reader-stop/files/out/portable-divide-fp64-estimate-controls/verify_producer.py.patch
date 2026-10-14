@@ -1,0 +1,24 @@
+--- original-divide-controls/verify_producer.py
++++ fp64-estimate-controls/verify_producer.py
+@@ -5,7 +5,7 @@
+ R = Path.cwd().resolve()
+ W = Path(__file__).resolve().parent
+ B = R / 'bin/linux-gcc'
+-T = B / 'portable-divide64-original-controls/controls'
++T = B / 'portable-divide-fp64-estimate-controls/controls'
+ def identity(path):
+     data = path.read_bytes()
+     return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+@@ -73,10 +73,10 @@
+         pin = {key: normalized[str(path)][key] for key in ['bytes', 'sha256']}
+         assert identity(path) == pin, dependency
+         records[str(path.relative_to(R))] = pin
+-    assert 'bin/linux-gcc/portable-divide64-original-controls/controls/headers/retained_kernels.h' in records
++    assert 'bin/linux-gcc/portable-divide-fp64-estimate-controls/controls/headers/retained_kernels.h' in records
+     if label == 'compile-compute-sealed':
+         for header in ['retained_owner_kernels.h', 'retained_owner_layout.h']:
+-            assert 'bin/linux-gcc/portable-divide64-original-controls/controls/headers/' + header in records
++            assert 'bin/linux-gcc/portable-divide-fp64-estimate-controls/controls/headers/' + header in records
+     assert 'src/sirius/backend/vulkan/vulkan_device.h' not in records or records['src/sirius/backend/vulkan/vulkan_device.h']['sha256'] == '604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de'
+     compile_records[label] = {'owner': identity(W / label / 'owner.json'), 'object': identity(T / (name + '.o')),
+                               'actual_dependencies': records}

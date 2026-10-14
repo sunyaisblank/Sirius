@@ -1,0 +1,23 @@
+--- unexecuted-exact-three/gate.py
++++ observed-exact-four/gate.py
+@@ -113,7 +113,7 @@
+             expected = P['known_outside_retained_source_deltas'][name]
+             assert content(stock) == expected['original_private'] and content(current) == expected['canonical4498'], name
+         rows[name] = {'original':record(old/name), 'private':record(stock), 'canonical4498':record(current), 'current_equal':not different}
+-    assert sorted(deltas) == sorted(P['known_outside_retained_source_deltas']) == ['gr_ellis_topology.slang','gr_integrator.slang','trace.slang']
++    assert sorted(deltas) == sorted(P['known_outside_retained_source_deltas']) == ['gr_ellis_topology.slang','gr_integrator.slang','parity_probe.slang','trace.slang']
+     # Literal Slang import/include closure only. Every directive is recognized;
+     # macro/dynamic includes, include_next and alternate search names refuse.
+     seen, pending, generated = set(), list(P['retained_source_roots']), set()
+@@ -167,9 +167,9 @@
+     assert layout(builder) == layout((W / 'candidate/scripts/build-retained-kernels.py').read_text())
+     return {'historical33_original_private_sources':rows, 'complete_retained_import_include_closure':sorted(seen),
+             'generated_owner_layout':sorted(generated),'inactive_cpp_only_standard_headers':['bit','cstdint'],'all14_consumed_source_files_equal_canonical4498':True,
+-            'current_equal_source_count':len(names)-len(deltas), 'exact3_current_deltas_outside_retained_closure':deltas,
++            'current_equal_source_count':len(names)-len(deltas), 'exact4_current_deltas_outside_retained_closure':deltas,
+             'builder':record(W/'stock/scripts/build-retained-kernels.py'),'CMake_dependency_authority':record(R/'src/sirius/backend/CMakeLists.txt'),
+-            'scope':'Historical4bcd complete stock sourcebase preserved, complete retained actual-read14 closure equal current4498. Three unrelated floor-repaired trace files are frozen current deltas outside that closure. No current full trace/science qualification.'}
++            'scope':'Historical4bcd complete stock sourcebase preserved, complete retained actual-read14 closure equal current4498. Four unrelated floor-repaired trace/probe files are frozen current deltas outside that closure. No current full trace/science qualification.'}
+ 
+ def verify_arithmetic():
+     archive = Path(P['arithmetic_archive'])

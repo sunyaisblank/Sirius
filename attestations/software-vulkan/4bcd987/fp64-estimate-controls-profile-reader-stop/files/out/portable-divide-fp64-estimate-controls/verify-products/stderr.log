@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/gate.py", line 469, in <module>
+    if sys.argv[1] == 'phase': phase(sys.argv[2])
+                               ^^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/gate.py", line 412, in phase
+    elif label == 'verify-products': write(W / 'products-acceptance.json', products_review())
+                                                                           ^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/gate.py", line 333, in products_review
+    footprint = estimated_divide_sites(stock, candidate, name.startswith(('retained_camera_', 'retained_ray_camera_')))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/gate.py", line 241, in estimated_divide_sites
+    return camera_profile.inspect(stock, candidate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/camera_profile.py", line 121, in inspect
+    assert all(word(k)[1]==u32 for k in local if word(k)[0] in ['OpUDiv','OpUMod','OpSRem','OpSMod','OpSDiv'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

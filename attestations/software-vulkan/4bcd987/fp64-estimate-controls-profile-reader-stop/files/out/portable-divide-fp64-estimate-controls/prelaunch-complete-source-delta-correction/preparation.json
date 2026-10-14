@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "bytes": 5741158,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/actions.json",
+    "sha256": "85b7a9f76d9cee9b2bf7df31d4ef1e758e62284eb8e1966c5a07dd5572830409"
+  },
+  "admission_sequence": "Terminal stock39reuse/candidate35/canonical policy/full35profile/matched producer acceptance, then runtime pins, original8 separate controls and both original readers, then final separate review. Stop first failure; no retry or benefit launch.",
+  "arithmetic_prerequisite": {
+    "commit": "3514c46de43e0a2bcd8426441264c32f6f76fc62",
+    "manifest_sha256": "6e02f93e774df2f3bef5c84c9f82975488b53ab619bd434d6030f579a14aba08",
+    "result_sha256": "a7e56867c7b4600a7e1bd9d3047190873579d4335ea79289dc9d51f7df5d8a39",
+    "terminal_review_sha256": "aa81ba956f65df3cdf46c1034a5a4b973b6aff8f3d73809bfb143fcd4770f8fc"
+  },
+  "claims": {
+    "benefit_executed": false,
+    "estimate_hit_rate_or_timing": false,
+    "integrated_controls_passed": false,
+    "production_adopted": false,
+    "public_optional_provider_admission": false,
+    "qualification": false
+  },
+  "commands": [
+    "python3 -B out/portable-divide-fp64-estimate-controls/gate.py pin-context",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py reuse-products-stock",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py compile-products-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py native-policy-selfcheck",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py verify-products",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py prepare-producer",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py compile-compute-sealed",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py compile-observer",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py link-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py verify-producer",
+    "python3 -B out/portable-divide-fp64-estimate-controls/gate.py pin-runtime",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-1",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-2",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-3",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-4",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-5",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-6",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-7",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-8",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py verify-controls",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py verify-endpoint-routes",
+    "python3 -B out/portable-divide-fp64-estimate-controls/gate.py review"
+  ],
+  "future_archive": {
+    "inner_result": "files/out/portable-divide-fp64-estimate-controls/prerequisites-result.json",
+    "path": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls",
+    "schema": "sirius-fp64-estimate-original-controls-result-v1",
+    "tag": "evidence/issue-44-fp64-estimate-original-controls"
+  },
+  "future_bin_root": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-controls",
+  "historical_retained_product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "independent_source_review_required": true,
+  "limits_per_owner": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "no_helper_compiler_parser_validator_test_device_or_CI_execution": true,
+  "no_live_completed_scratch_dependency": true,
+  "operator_source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "original_control_filters": [
+    "--gtest_filter=RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+    "--gtest_filter=RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal",
+    "--gtest_filter=RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation",
+    "--gtest_filter=RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection",
+    "--gtest_filter=RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets",
+    "--gtest_filter=RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+    "--gtest_filter=RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement",
+    "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+  ],
+  "original_control_provider_policy": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "out_root": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls",
+  "packet": {
+    "bytes": 47327,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/packet.json",
+    "sha256": "ac2bd14065e7a145c2e3e4f7bee45cb9b76998e6543f7bda337a59344dd409d1"
+  },
+  "prepared_only": true,
+  "profile": {
+    "bytes": 3996,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/profile.json",
+    "sha256": "574e66cf54753fba639bbe5bda1669640e2be6791f396b54d04367860f69f702"
+  },
+  "profile_counts": {
+    "all_modules": 35,
+    "changed_main_arrays": 17,
+    "changed_modules": 17,
+    "main_arrays": 40,
+    "unchanged_main_arrays": 23,
+    "unchanged_modules": 18,
+    "unchanged_owner_arrays": 2,
+    "unchanged_program_tables": 7
+  },
+  "provenance": {
+    "bytes": 3787,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/provenance.json",
+    "sha256": "9a0e46b5ae2af9d60c7951f89ad7ac8d37109e5e4fa26c09de184bf0ef73dcb5"
+  },
+  "root_sole_operator": true,
+  "schema": "sirius-fp64-estimate-original-controls-preparation-v1",
+  "scope_limits": [
+    "Exact same candidate header24ea and accepted graph22fc, original fallback, Multiply/FMA/Residual/seed/normal32 order unchanged.",
+    "Camera/RayCamera canonicalO1: emitted exact estimate/UInt2/remainder/sticky/closedCFG footprint; full normalization/Round/fallback equivalence is frozen-source/inlining reasoning, not a full emitted proof. Unknown shape refuses.",
+    "Four original timed stage roles and seven selected modules; no claim of seven separately logged handles.",
+    "Original8 preserve40fields/4filmcolumns/7RHS/3independentRKtrials/4quartics/orderedjoins/refusal/cancellation/recovery/rollback assertions.",
+    "Original stock ELF/host unchanged. Candidate uses exact diagnostic feature object with historical Float64+unusedInt64 enablement; candidate shaders noInt64; fresh3provider mappings required. Public capability selection/fallback remains unimplemented.",
+    "Canonical native-policy selfcheck is original regression coverage; private new policy is bound by source diff and future full profile checks.",
+    "Original20+2 benefit gates remain necessary and unexecuted; no current4498full trace/science/frame/platform/release qualification."
+  ],
+  "source_base_reuse": {
+    "canonical_equal": 30,
+    "complete_actual_retained_source_closure": 14,
+    "exact3outsideclosure_current_deltas": [
+      "gr_ellis_topology.slang",
+      "gr_integrator.slang",
+      "trace.slang"
+    ],
+    "historical_private_sources": 33,
+    "no_source_rebase_or_changed_consumed_input_exemption": true,
+    "unconsumed_badjoin_preimage_preserved": "prelaunch-source-base-correction/finding.json"
+  },
+  "source_freeze": {
+    "bytes": 851585,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls/source-freeze.json",
+    "sha256": "47a200ff2a25ed1a98e091fec8e54f58b4fcba066c73b81b22bd4016eae6528e"
+  },
+  "source_pin_count": 2313
+}

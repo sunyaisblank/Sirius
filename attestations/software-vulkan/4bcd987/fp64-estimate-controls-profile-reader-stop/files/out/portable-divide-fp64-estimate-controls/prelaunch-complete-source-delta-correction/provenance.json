@@ -1,0 +1,66 @@
+{
+  "executed_helpers_compilers_tests_providers": false,
+  "origins": {
+    "accepted_graph_reader": {
+      "archive": "attestations/software-vulkan/4bcd987/divide-fp64-estimate-reader-recovery",
+      "commit": "56076d8dff4b19c0bb40ffecb1f7432ce83bb1e6",
+      "graph_sha256": "22fc14614c7d61bd9077e6e0f1ec33395c07809d71b4042429b17740d418d7ff",
+      "manifest_sha256": "1d7f0eb781418ff0c3fd6cf5026d95dc319f816eb04b5a401cc72e91275a361c"
+    },
+    "accepted_header": {
+      "archive": "attestations/software-vulkan/4bcd987/divide-fp64-estimate-compiler-reader-stop",
+      "commit": "d547d32330a6f4cabb2a8f4f8345fa1ac3c79a93",
+      "header_sha256": "24ea42f825cde5c1378ac57dd194c245ebc2ed396a6cf212d2c642fa2b67d020",
+      "manifest_sha256": "0b07beda95b536def6ed21bc9c30b96aa512ef3b31eab276afa45909c915a42e",
+      "old_compiler_wrapper_passed": false
+    },
+    "arithmetic": {
+      "archive": "attestations/software-vulkan/4bcd987/fp64-estimate-original-arithmetic",
+      "commit": "3514c46de43e0a2bcd8426441264c32f6f76fc62",
+      "inner_result_sha256": "a7e56867c7b4600a7e1bd9d3047190873579d4335ea79289dc9d51f7df5d8a39",
+      "manifest_sha256": "6e02f93e774df2f3bef5c84c9f82975488b53ab619bd434d6030f579a14aba08",
+      "remote_confirmed_by_root": true,
+      "terminal_review_sha256": "aa81ba956f65df3cdf46c1034a5a4b973b6aff8f3d73809bfb143fcd4770f8fc"
+    },
+    "ordinary_cost": {
+      "archive": "attestations/software-vulkan/4bcd987/divide-fp64-estimate-ordinary-jit-screen",
+      "commit": "91c27164ad67c469cfd98cc897dc1db4623ced66",
+      "decision": "COST_PREMISE_SURVIVES_UNPROVEN",
+      "manifest_sha256": "11bd7d4f61352dcbdbd9719efe3795ed68508fda4a9a2964cfc791aa84a1a68d"
+    },
+    "original_controls": {
+      "archive": "attestations/software-vulkan/4bcd987/divide64-original-controls",
+      "commit": "4b428629bf743f0f7de64bb98089cfc74aa3a0d5",
+      "manifest_sha256": "6fa3b1ee9daacecdc93e9f20b71847461243e544cf77e4c065b4c03f4712c1b4"
+    }
+  },
+  "preparation_only": true,
+  "private_diagnostic_feature_scope": "Candidate uses exact previously accepted diagnostic object, with Float64 enabled and unusedInt64 feature; source/header/actual old public-argument receipts retained. Candidate shaders noInt64. No public portable compatibility/fallback or production adoption claim.",
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "schema": "sirius-fp64-estimate-original-controls-provenance-v1",
+  "source_base_correction": {
+    "complete_retained_source_closure": 14,
+    "current_deltas_outside_retained_closure": [
+      "gr_ellis_topology.slang",
+      "gr_integrator.slang",
+      "trace.slang"
+    ],
+    "current_equal_files": 30,
+    "finding": "prelaunch-source-base-correction/finding.json",
+    "historical_source_files": 33,
+    "operator_source": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "root_authorized_relevant_input_reuse": true,
+    "sourcebase": "original4bcd",
+    "unexecuted_proposal_preserved": true
+  },
+  "source_parser_limits": "Unknown emitted representations stop at post-terminal reader and preserve completed producers. No compiler rerun to fit a parser. Camera exact inlined quotient verification footprint is narrower than full Round/normalization/fallback emitted equivalence.",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "unchanged_original_apparatus": [
+    "335033B observer and original eight filters",
+    "original owner/guard and300s/4GiB/2GiB",
+    "original baseline ELF41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856",
+    "stock39 full products/source/tool reuse",
+    "complete40main+2owner arrays/7tables/ABI/storage/barrier/field joins",
+    "original32readbacks/51orderedmarkers/54module-command joins and4Endpoint routes/56readbacks"
+  ]
+}

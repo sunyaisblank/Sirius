@@ -1,0 +1,22 @@
+{
+  "actual_observation": {
+    "actual_source_inputs_unchanged": true,
+    "compiler_peak_sampled_rss_kib": 347084,
+    "compiler_wall_seconds": 31.377240510992124,
+    "failed_reader_owner_child_exit": 1,
+    "failed_reader_owner_wall_seconds": 13.100165807001758,
+    "failed_reader_peak_sampled_rss_kib": 77556,
+    "stock_candidate_each": {
+      "OpSDiv_int32": 2,
+      "OpUDiv_uint32": 3,
+      "OpUMod_uint32": 1
+    }
+  },
+  "compiler_owner_passed": true,
+  "failure": "camera_profile.py requires every integer division/remainder result type uint32, but stock and candidate both contain two unchanged OpSDiv int32 operations. The preceding exact estimate/guard/product/borrow/remainder/sticky/closedCFG checks completed before this final assertion.",
+  "integrated_controls_executed": false,
+  "next_action": "Preserve failed reader plus all completed products and raw ownership. Correct reader in a separately admitted pure recovery without recompilation or relabeling this failed owner. Require exact original signedness/opcode counts and full unchanged profile gates; then prepare fresh downstream producer/runtime packet using accepted products.",
+  "production_adopted": false,
+  "schema": "sirius-root-fp64-estimate-controls-profile-reader-stop-v1",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+}

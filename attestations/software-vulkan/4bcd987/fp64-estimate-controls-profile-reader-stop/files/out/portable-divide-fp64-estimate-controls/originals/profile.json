@@ -1,0 +1,44 @@
+{
+  "camera_body_policy": "Camera/RayCamera retain original O1; two inlined PB32Divide quotient loops in ComputeMain become two UInt64 quotient sites; do not require named helper.",
+  "changed_main_arrays": 17,
+  "changed_modules": 17,
+  "changed_modules_to_main_arrays": {
+    "retained_camera_portable.spv": "kCameraPortableShader",
+    "retained_camera_portable_fp64.spv": "kCameraPortableFp64Shader",
+    "retained_dense_portable.spv": "kDensePortableShader",
+    "retained_dense_portable_fp64.spv": "kDensePortableFp64Shader",
+    "retained_dopri_phase_portable.spv": "kDopriPhasePortableShader",
+    "retained_dopri_phase_portable_fp64.spv": "kDopriPhasePortableFp64Shader",
+    "retained_dopri_phase_portable_normal_sum.spv": "kDopriPhasePortableNormalSumShader",
+    "retained_endpoint_portable.spv": "kEndpointPortableShader",
+    "retained_endpoint_portable_fp64.spv": "kEndpointPortableFp64Shader",
+    "retained_endpoint_portable_normal_sum.spv": "kEndpointPortableNormalSumShader",
+    "retained_initialize_portable.spv": "kInitializePortableShader",
+    "retained_initialize_portable_fp64.spv": "kInitializePortableFp64Shader",
+    "retained_ray_camera_portable.spv": "kRayCameraPortableShader",
+    "retained_ray_camera_portable_fp64.spv": "kRayCameraPortableFp64Shader",
+    "retained_transport_portable.spv": "kTransportPortableShader",
+    "retained_transport_portable_fp64.spv": "kTransportPortableFp64Shader",
+    "retained_transport_portable_normal_sum.spv": "kTransportPortableNormalSumShader"
+  },
+  "fallback_scope": "Default compiler argument false, original builder and stock35 unchanged; unsupported Int64 declined by the exact diagnostic host. No production dynamic cross-provider selector is claimed.",
+  "main_array_count": 40,
+  "module_count": 35,
+  "owner_policy": "Both stage-seven-owner calls omit diagnostic flag and remain byte-exact default uint32. Original eight/default ABBA do not select stage_seven_owner=true.",
+  "seed_scope": "RPDivideSeed/RPMantissa/scaling and every native/FMA/normal transform are source-unchanged; only delegated PB32Divide quotient construction is opted in.",
+  "unchanged_main_arrays": 23,
+  "unchanged_modules": 18,
+  "unchanged_owner_arrays": [
+    "kTransportShader",
+    "kEndpointShader"
+  ],
+  "unchanged_program_arrays": [
+    "kCameraProgram",
+    "kTransportProgram",
+    "kEndpointProgram",
+    "kDenseProgram",
+    "kInitializeProgram",
+    "kRayCameraProgram",
+    "kDopriPhaseProgram"
+  ]
+}

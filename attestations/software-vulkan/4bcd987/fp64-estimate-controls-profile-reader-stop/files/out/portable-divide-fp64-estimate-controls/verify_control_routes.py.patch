@@ -1,0 +1,11 @@
+--- original-divide-controls/verify_control_routes.py
++++ fp64-estimate-controls/verify_control_routes.py
+@@ -72,7 +72,7 @@
+ keys = {key for record in records for key in record['complete_readbacks']}
+ assert len(keys) == 56
+ assert {k:v for k,v in props.items() if k.startswith('factored_endpoint_readback_')} == {k:oldprops[k] for k in keys}
+-shutil.copyfile(original, W / 'original-factored-readbacks.xml')
++assert original.read_bytes() == (W / 'original-factored-readbacks.xml').read_bytes()
+ result = {'passed': True, 'routes': records, 'complete_readbacks': 56,
+           'complete_readbacks_exact_to_prior_original_control': True,
+           'scope': 'Original finite Factored Endpoint control exercises candidate normal and default core routes, plus candidate masked-wide core route. Original reference/admission/refusal/recovery assertions passed. This does not alter actual RTE32 provider behavior or replace optional owner/native execution qualification.'}

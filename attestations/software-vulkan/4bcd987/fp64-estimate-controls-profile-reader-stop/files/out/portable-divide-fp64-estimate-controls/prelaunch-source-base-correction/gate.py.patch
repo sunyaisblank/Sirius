@@ -1,0 +1,187 @@
+--- original-divide-controls/gate.py
++++ fp64-estimate-controls/gate.py
+@@ -4,8 +4,12 @@
+ sys.dont_write_bytecode = True
+ W = Path(__file__).resolve().parent
+ R = W.parents[1]
+-T = R / 'bin/linux-gcc/portable-divide64-original-controls'
++T = R / 'bin/linux-gcc/portable-divide-fp64-estimate-controls'
+ P = json.loads((W / 'packet.json').read_text())
++
++def canonical_json(value):
++    normalized = json.loads(json.dumps(value, allow_nan=False))
++    return json.dumps(normalized, sort_keys=True, separators=(',', ':'), allow_nan=False)
+ 
+ def record(path):
+     path = Path(path)
+@@ -92,23 +96,55 @@
+ 
+ def verify_arithmetic():
+     archive = Path(P['arithmetic_archive'])
++    assert re.fullmatch('[0-9a-f]{40}', P['arithmetic_commit']), 'immutable arithmetic prerequisite pending'
++    assert re.fullmatch('[0-9a-f]{64}', P['arithmetic_manifest_sha256']), 'immutable arithmetic manifest pending'
+     assert content(archive / 'manifest.json')['sha256'] == P['arithmetic_manifest_sha256']
+     manifest = json.loads((archive / 'manifest.json').read_text())
+     for name, pin in manifest['files'].items():
+-        assert content(archive / name) == pin, name
+-    work = archive / 'files/out/portable-divide64-arithmetic'
+-    result = json.loads((work / 'arithmetic-result.json').read_text())
+-    assert result['passed'] and result['original_records'] == 174268
++        assert not (archive / name).is_symlink() and content(archive / name) == pin, name
++    work = archive / 'files/out/portable-divide-fp64-estimate-arithmetic'
++    historical = R / 'out/portable-divide-fp64-estimate-arithmetic'
++    def join(name, pin):
++        original = Path(name)
++        if not original.is_absolute(): original = R / original
++        saved = archive / 'files' / original.relative_to(R) if original.is_relative_to(R) else None
++        actual = saved if saved is not None and saved.is_file() else original
++        assert content(actual) == {key:pin[key] for key in ('bytes','sha256')}, name
++        if actual == original: assert record(actual) == pin, name
++        else: assert not actual.is_symlink() and pin['resolved_path'] == str(original), name
++        return actual
++    frozen = json.loads((work / 'source-freeze.json').read_text())['pins']
++    assert len(frozen) == 1886
++    for name,pin in frozen.items(): join(name,pin)
++    result_path = work / 'arithmetic-result.json'
++    assert content(result_path)['sha256'] == P['arithmetic_inner_result_sha256']
++    result = json.loads(result_path.read_text())
++    assert result['schema'] == 'sirius-fp64-estimate-original-arithmetic-result-v1'
++    assert result['passed'] and result['original_records'] == 174268 and result['original_operation_count'] == 14
+     assert result['complete_output_words_per_provider'] == 697072
+-    assert result['host_explicit64_and_both_full_gpu_outputs_equal_original_expected']
++    assert result['fresh_candidate_host_and_full_gpu_plus_reused_stock_equal_original_expected']
++    assert result['stock_result_reused'] and result['candidate_macro'] == P['candidate_macro'] == 'SIRIUS_PB32_DIVIDE_FP64_ESTIMATE=1'
+     assert result['original_corpus']['division_branch_coverage']['optional_finite_nonzero_branch_records'] == 12263
+     assert (work / 'candidate/src/sirius/kernels/portable_binary32.h').read_bytes() == (W / 'candidate/src/sirius/kernels/portable_binary32.h').read_bytes()
+-    for label, pin in result['owners'].items():
++    terminal = work / 'independent-terminal-review.json'
++    assert content(terminal)['sha256'] == P['arithmetic_terminal_review_sha256'] and json.loads(terminal.read_text())['passed']
++    assert len(result['owners']) == 10
++    for label,pin in result['owners'].items():
+         accepted_folder(work / label)
+-        assert content(work / label / 'owner.json') == {k: pin[k] for k in ('bytes', 'sha256')}
+-    for mode in ('stock', 'candidate'):
+-        assert (work / ('execute-gpu-' + mode) / 'actual.bin').read_bytes() == (work / 'expected.bin').read_bytes()
+-    return record(work / 'arithmetic-result.json')
++        assert content(work / label / 'owner.json') == {key:pin[key] for key in ('bytes','sha256')}
++        before = json.loads((work / label / 'inputs-before.json').read_text())
++        for name,pin in before.items(): join(name,pin)
++    assert (work / 'execute-gpu-candidate/actual.bin').read_bytes() == (work / 'expected.bin').read_bytes()
++    assert len((work / 'expected.bin').read_bytes()) == 697072 * 4
++    source = (W / 'candidate/src/sirius/kernels/portable_binary32.h').read_bytes()
++    insertion = (W / 'candidate-insertion.txt').read_bytes()
++    assert source.count(insertion) == 1 and source.replace(insertion,b'',1) == (W / 'stock/src/sirius/kernels/portable_binary32.h').read_bytes()
++    for path in (W / 'stock/src/sirius/kernels').iterdir():
++        assert path.read_bytes() == (R / 'src/sirius/kernels' / path.name).read_bytes()
++        if path.name != 'portable_binary32.h': assert path.read_bytes() == (W / 'candidate/src/sirius/kernels' / path.name).read_bytes()
++    return {'result':record(result_path),'terminal_review':record(terminal),'manifest':record(archive/'manifest.json'),
++            'all1886_original_static_and10terminal_owners_input_joins':True,
++            'scope':'Accepted original174268/14-op primitive corpus, exact historical stock reuse and fresh candidate host/provider output. No estimate hit-rate, retained-mode, integrated or benefit acceptance inferred.'}
+ 
+ def pin_context():
+     verify_static(); verify_host_reuse(); verify_arithmetic()
+@@ -116,55 +152,23 @@
+     assert not subprocess.check_output(['git', 'status', '--porcelain=v1'], cwd=R)
+     revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=R, text=True).strip()
+     assert (W / 'actions.json').read_bytes() == (W / 'actions.unpinned.json').read_bytes()
+-    actions = json.loads((W / 'actions.unpinned.json').read_text())
+-    for action in actions.values():
+-        assert action['revision'] == 'PENDING_OPERATOR_CLEAN_CONTEXT'
+-        action['revision'] = revision
+-    (W / 'actions.json').write_text(json.dumps(actions, sort_keys=True, indent=2) + '\n')
++    assert revision == P['runner_preparation_revision']
++    actions = json.loads((W / 'actions.json').read_text())
++    assert all(action['revision'] == revision for action in actions.values())
+     write(W / 'operator-context.json', {'revision': revision, 'actions': record(W / 'actions.json'),
+           'source_freeze': record(W / 'source-freeze.json'), 'preparation': record(W / 'preparation.json')})
+-    print('Pinned original optional64 profile; no compiler/provider launched.', flush=True)
+-
+-def widened_divide_sites(text, camera):
+-    definitions = dict(re.findall(r'^\s*(%\S+) = (.+)$', text, re.M))
+-    widths = dict(re.findall(r'(%\S+) = OpTypeInt (\d+) [01]', text))
+-    assert set(widths.values()) == {'32', '64'}
+-    wide = [name for name, bits in widths.items() if bits == '64']
+-    assert len(wide) == 1 and definitions[wide[0]] == 'OpTypeInt 64 0'
+-    wide = wide[0]
+-    sites = re.findall(r'(%\S+) = OpUDiv ' + re.escape(wide) + r' (%\S+) (%\S+)', text)
+-    assert len(sites) == (2 if camera else 1), sites
+-    values = {name: int(value) for name, value in re.findall(r'(%\S+) = OpConstant %\S+ (\d+)', text)}
+-    for quotient, numerator, denominator in sites:
+-        shift = definitions[numerator].split()
+-        assert shift[:2] == ['OpShiftLeftLogical', wide] and values[shift[3]] == 26
+-        assert definitions[shift[2]].startswith('OpUConvert ' + wide + ' ')
+-        assert definitions[denominator].startswith('OpUConvert ' + wide + ' ')
+-        products = [name for name, expression in definitions.items() if
+-                    expression.split()[:2] == ['OpIMul', wide] and
+-                    set(expression.split()[2:]) == {quotient, denominator}]
+-        assert len(products) == 1
+-        product = products[0]
+-        remainders = [name for name, expression in definitions.items() if
+-                      expression == 'OpISub ' + wide + ' ' + numerator + ' ' + product]
+-        comparisons = [expression.split()[2:] for expression in definitions.values()
+-                       if expression.startswith('OpINotEqual ')]
+-        assert any((args == [numerator, product] or args == [product, numerator] or
+-                   (len(args) == 2 and ((args[0] in remainders and values.get(args[1]) == 0) or
+-                                       (args[1] in remainders and values.get(args[0]) == 0)))) for args in comparisons)
+-        assert any(expression.startswith('OpUConvert ') and expression.split()[1] != wide and
+-                   expression.split()[2:] == [quotient] for expression in definitions.values())
++    print('Pinned original Float64-estimate profile; no compiler/provider launched.', flush=True)
++
++def estimated_divide_sites(stock, candidate, camera):
++    from interface_signature import function_body, normalized_function
+     if camera:
+-        entry = re.search(r'OpEntryPoint GLCompute (%\S+)', text)[1]
+-        body = re.search(r'^\s*' + re.escape(entry) + r' = OpFunction\b.*?OpFunctionEnd', text, re.M | re.S)[0]
+-        assert all(re.search(re.escape(q) + r' = OpUDiv ', body) for q, _, _ in sites)
+-    else:
+-        name = re.search(r'OpName (%\S+) "PB32Divide"', text)[1]
+-        body = re.search(r'^\s*' + re.escape(name) + r' = OpFunction\b.*?OpFunctionEnd', text, re.M | re.S)[0]
+-        assert body.count('OpLoopMerge') == 0
+-        assert all(re.search(re.escape(q) + r' = OpUDiv ', body) for q, _, _ in sites)
+-    return {'unsigned64_quotient_sites': len(sites), 'inlined_camera': camera,
+-            'shift26_quotient_product_remainder_test_and_narrowing_joined': True}
++        import camera_profile
++        return camera_profile.inspect(stock, candidate)
++    import estimate_graph
++    for name in ('PB32Multiply','PB32ProductResidual','PB32Unpack','PB32Round'):
++        assert normalized_function(stock, name) == normalized_function(candidate, name), name
++    return {'inlined_camera':False,'complete_named_Divide_graph':estimate_graph.inspect(stock,candidate,function_body),
++            'original_multiply_residual_unpack_round_normalized_bodies_equal':True}
+ 
+ def reuse_stock():
+     archive = Path(P['original_stock_archive'])
+@@ -247,11 +251,12 @@
+         if changed:
+             normal = name.endswith('_normal_sum.spv')
+             caps = re.findall(r'OpCapability (\S+)', candidate)
+-            assert sorted(caps) == sorted(['Shader', 'Int64'] + (['RoundingModeRTE'] if normal else [])), name
++            assert sorted(caps) == sorted(['Shader', 'Float64'] + (['RoundingModeRTE'] if normal else [])), name
+             assert len(caps) == (3 if normal else 2)
+-            assert re.findall(r'OpTypeFloat (\d+)', candidate) == (['32'] if normal else []), name
+-            assert not re.search(r'\b(?:RelaxedPrecision|FPFastMathMode|FPFastMathDefault|OpFmaKHR)\b', candidate)
+-            footprint = widened_divide_sites(candidate, name.startswith(('retained_camera_', 'retained_ray_camera_')))
++            assert sorted(re.findall(r'OpTypeFloat (\d+)', candidate)) == (['32','64'] if normal else ['64']), name
++            assert set(re.findall(r'OpTypeInt (\d+) [01]',candidate)) == {'32'}, name
++            assert not re.search(r'\b(?:RelaxedPrecision|FPFastMathMode|FPFastMathDefault|OpFmaKHR|OpConvertFTo[SU])\b', candidate)
++            footprint = estimated_divide_sites(stock, candidate, name.startswith(('retained_camera_', 'retained_ray_camera_')))
+         rows.append({'module': name, 'changed': changed, 'stock': record(paths['stock']), 'candidate': record(paths['candidate']),
+                      'complete_public_shared_type_layout_modes_and_ordered_barriers_equal': True, 'divide_footprint': footprint})
+     headers = {}
+@@ -310,7 +315,7 @@
+     return {'passed': True, 'all28device_definitions_in_object_and_actual_candidate': True,
+             'old_vulkan_and_compute_archive_members_absent': True, 'link_uses_default_archive_extraction': True,
+             'feature_host': verify_host_reuse(), 'nm_outputs': symbols,
+-            'scope': 'Candidate linked to identical admitted diagnostic device object. Prior public feature arguments remain historical; original baseline ELF is unchanged and is not claimed to enable Int64.'}
++            'scope': 'Candidate linked to identical admitted diagnostic device object. Prior public Float64 arguments remain historical; the reused diagnostic object also enables unused Int64. Candidate shaders require noInt64. Original baseline ELF remains unchanged; public optional-provider fallback/admission is not established.'}
+ 
+ def ancestor_labels(label):
+     ordered = []
+@@ -383,7 +388,7 @@
+           'profile': record(W / 'profile.json'), 'arithmetic': verify_arithmetic(),
+           'control_acceptance': record(W / 'control-acceptance.json'), 'endpoint_route_acceptance': record(W / 'endpoint-route-acceptance.json'),
+           'production_adopted': False, 'benefit_executed': False,
+-          'scope': 'Original primitive arithmetic and eight integrated prerequisites for explicit17-module diagnostic profile. Original20+2 adoption gates remain unexecuted; no full-science/frame/release qualification.'})
++          'scope': 'Original primitive arithmetic and eight integrated prerequisites for explicit17-module exact-verified Float64 estimate diagnostic profile. Original20+2 adoption gates remain unexecuted; no full-science/frame/release qualification.'})
+     print('Original eight controls and complete route/readback joins accepted; no benefit verdict.', flush=True)
+ 
+ if __name__ == '__main__':

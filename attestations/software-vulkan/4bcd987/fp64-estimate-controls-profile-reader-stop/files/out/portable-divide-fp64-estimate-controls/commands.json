@@ -1,0 +1,27 @@
+{
+  "commands": [
+    "python3 -B out/portable-divide-fp64-estimate-controls/gate.py pin-context",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py reuse-products-stock",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py compile-products-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py native-policy-selfcheck",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py verify-products",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py prepare-producer",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py compile-compute-sealed",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py compile-observer",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py link-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py verify-producer",
+    "python3 -B out/portable-divide-fp64-estimate-controls/gate.py pin-runtime",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-1",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-2",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-3",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-4",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-5",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-6",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-7",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py control-8",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py verify-controls",
+    "python3 -B out/portable-divide-fp64-estimate-controls/run_owned.py verify-endpoint-routes",
+    "python3 -B out/portable-divide-fp64-estimate-controls/gate.py review"
+  ],
+  "stop": "First failed/incomplete owner or reader: stop and preserve. Root sole operator; no compiler/provider/test executed during preparation."
+}

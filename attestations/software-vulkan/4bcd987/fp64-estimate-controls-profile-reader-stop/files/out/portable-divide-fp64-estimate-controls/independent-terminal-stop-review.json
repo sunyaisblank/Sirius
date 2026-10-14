@@ -1,0 +1,255 @@
+{
+  "schema": "sirius-independent-terminal-stop-review-v1",
+  "passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "component_accepted": false,
+  "reviewer": {
+    "agent": "forensic_obligations",
+    "independent_of_actual_operator": true,
+    "prior_involvement": "Authored the independent source admission, not the packet. That review missed the overstrict unsigned-only division predicate.",
+    "method": "Passive standard-library byte/JSON/disassembly-text reads and targeted same-boot PID/start-tick checks. No authored helper/parser/compiler/validator/test/provider/device execution."
+  },
+  "disposition": {
+    "compiler_products_completed": true,
+    "full_profile_reader_passed": false,
+    "failed_owner_remains_false_child1": true,
+    "failure": "camera_profile.py:121 requires unsigned32 result type for every signed/unsigned integer division/remainder. Both original stock and candidate portable Camera contain the same two OpSDiv signed32 operations, so the predicate refuses unchanged legitimate instructions.",
+    "classification": "Diagnostic reader precondition failure; not a compiler, numerical, timeout, resource guard or cleanup failure.",
+    "existing_primitive_arithmetic_acceptance_unchanged": true,
+    "no_downstream_producer_or_integrated_controls_executed": true,
+    "no_product_adoption_benefit_or_qualification": true
+  },
+  "audited_inputs": {
+    "static_pins": 2324,
+    "every_static_current_byte_and_resolved_path_exact": true,
+    "all_four_actual_argv_and_before_after_current_input_maps_exact": true,
+    "source_and_whole_inputs_unchanged": true,
+    "all_original300s4GiB2GiB_sampled_guards_respected": true,
+    "four_terminal_owners": {
+      "reuse-products-stock": {
+        "owner": {
+          "bytes": 1831,
+          "sha256": "09fa9852850e68e5d1fe87cd021a06c51450b63adfc627df775d853317c1ac57"
+        },
+        "passed": true,
+        "child_exit": 0,
+        "wall_seconds": 1.3113107399985893,
+        "rss_kib": 54572,
+        "births": 1,
+        "inputs": 2327,
+        "before_after": {
+          "bytes": 783978,
+          "sha256": "07bb687fea732075e8e30ceeddfcc630c6753f9609ce2b7013e9b627609b18f9"
+        }
+      },
+      "compile-products-candidate": {
+        "owner": {
+          "bytes": 8244,
+          "sha256": "fc26c11bd20d658e8b37e8b6031afb104fe30f9aad229b60f053a8c2f85f779f"
+        },
+        "passed": true,
+        "child_exit": 0,
+        "wall_seconds": 31.377240510992124,
+        "rss_kib": 347084,
+        "births": 51,
+        "inputs": 2327,
+        "before_after": {
+          "bytes": 783978,
+          "sha256": "07bb687fea732075e8e30ceeddfcc630c6753f9609ce2b7013e9b627609b18f9"
+        }
+      },
+      "native-policy-selfcheck": {
+        "owner": {
+          "bytes": 1837,
+          "sha256": "91f4864b044d66b722a44db915c2481bb76ee3b9584b0d57f15654cd23638313"
+        },
+        "passed": true,
+        "child_exit": 0,
+        "wall_seconds": 1.3036392929934664,
+        "rss_kib": 54264,
+        "births": 1,
+        "inputs": 2414,
+        "before_after": {
+          "bytes": 814125,
+          "sha256": "9b7ceb042efd08dcd3513140bad9790b088e25c2be4e9a7a5ab705371add6338"
+        }
+      },
+      "verify-products": {
+        "owner": {
+          "bytes": 1547,
+          "sha256": "93c2f1118c5f81ef21adb02d6ef9bc81a6766dc86dc26b392ca350bafdce21d4"
+        },
+        "passed": false,
+        "child_exit": 1,
+        "wall_seconds": 13.100165807001758,
+        "rss_kib": 77556,
+        "births": 1,
+        "inputs": 2418,
+        "before_after": {
+          "bytes": 815450,
+          "sha256": "12051ee00c0d369fca9b7b76e5d4079455893f9bb85c93099dc191af7620daab"
+        }
+      }
+    },
+    "recorded_births_retired_and_same_boot_rechecked": 54,
+    "global_process_absence_claimed": false,
+    "three_completed_output_seals": {
+      "reuse-products-stock": {
+        "bytes": 16086,
+        "sha256": "face399c34710ec0393bf9bd770662369d572ca4d8d37e96aed38f463cf8e7c7"
+      },
+      "compile-products-candidate": {
+        "bytes": 16927,
+        "sha256": "5c59367fd7522bef00494eb76c519d1f146f6032bddde9992c0197f87ca61db6"
+      },
+      "native-policy-selfcheck": {
+        "bytes": 967,
+        "sha256": "e1e6914a315438c5faca7ebc11b7bdf88ef4a999cfc1c24e1dd17ac444aa5781"
+      }
+    }
+  },
+  "actual_products": {
+    "stock_and_candidate": {
+      "stock": {
+        "files": 39,
+        "modules": 35,
+        "all_files_joined_to_seal": true
+      },
+      "candidate": {
+        "files": 39,
+        "modules": 35,
+        "all_files_joined_to_seal": true
+      }
+    },
+    "total_product_files": 78,
+    "total_spirv_modules": 70,
+    "full_completed_products_match_their_declared_output_seals": true,
+    "stock_reuse_receipt": {
+      "bytes": 77765,
+      "sha256": "18b07f2ed2937c47c52c7b5c2a8342f5c7ddcd67676aaef3ca3682c865d13391"
+    },
+    "partial_analysis_dumps": {
+      "analysis/candidate/retained_camera.spvasm": {
+        "bytes": 136754,
+        "sha256": "5fa15860300adf9b890b7998e6b5c1e921bec6fc2659069e3aa31080e709afe5"
+      },
+      "analysis/candidate/retained_camera_fp64.spvasm": {
+        "bytes": 175089,
+        "sha256": "5af142635f9b69caeec977dd40d3093ae9fbc8ec089a1759840347d2681bc2b6"
+      },
+      "analysis/candidate/retained_camera_portable.spvasm": {
+        "bytes": 1446682,
+        "sha256": "6ebfcdc93db4bca5d04115bb26f60d1f1b204263640736a1f95a0d66baa78c4b"
+      },
+      "analysis/stock/retained_camera.spvasm": {
+        "bytes": 136754,
+        "sha256": "5fa15860300adf9b890b7998e6b5c1e921bec6fc2659069e3aa31080e709afe5"
+      },
+      "analysis/stock/retained_camera_fp64.spvasm": {
+        "bytes": 175089,
+        "sha256": "5af142635f9b69caeec977dd40d3093ae9fbc8ec089a1759840347d2681bc2b6"
+      },
+      "analysis/stock/retained_camera_portable.spvasm": {
+        "bytes": 1427408,
+        "sha256": "274680f14bc5229ca6edf22ec9ebbf9a018c42511c54c25a191fb51a8e16e261"
+      }
+    },
+    "analysis_dump_count": 6,
+    "remaining_module_disassemblies_not_executed": 64,
+    "all35_profile_and40plus2_array_acceptance_complete": false
+  },
+  "precise_reader_evidence": {
+    "failure_trace": {
+      "bytes": 1485,
+      "sha256": "0a83dfb0d7ea9137e013fddb64940a1899b0d7b08d50fff2ce82f18bdb250859"
+    },
+    "raw_camera_integer_signatures": {
+      "stock": {
+        "assembly": {
+          "bytes": 1427408,
+          "sha256": "274680f14bc5229ca6edf22ec9ebbf9a018c42511c54c25a191fb51a8e16e261"
+        },
+        "counts": {
+          "OpUMod:32unsigned": 1,
+          "OpUDiv:32unsigned": 3,
+          "OpSDiv:32signed": 2
+        }
+      },
+      "candidate": {
+        "assembly": {
+          "bytes": 1446682,
+          "sha256": "6ebfcdc93db4bca5d04115bb26f60d1f1b204263640736a1f95a0d66baa78c4b"
+        },
+        "counts": {
+          "OpUMod:32unsigned": 1,
+          "OpUDiv:32unsigned": 3,
+          "OpSDiv:32signed": 2
+        }
+      }
+    },
+    "stock_and_candidate_opcode_width_signedness_counts_identical": true,
+    "preceding_checks": "The actual trace reaches the final assertion after the two estimate sites' range, exact product/remainder, sticky, closed-CFG and existing division/loop-count assertions. No profile result was returned or published.",
+    "scope": "Only the first changed portable Camera pair reached this footprint. Complete remaining module/profile/header checks have not passed.",
+    "required_new_recovery": "Separate pure profile-reader correction with exact stock/candidate opcode+width+signedness signature, immutable completed products and existing six dumps. No compiler/validator/provider retry and no relabeling of this failed owner.",
+    "recovery_admitted_by_this_review": false
+  },
+  "absent_outputs": {
+    "no_failed_verify_products_output_seal": true,
+    "no_products_acceptance": true,
+    "no_private_controls_directory": true,
+    "no_other_action_owners": true,
+    "absent_final_records": [
+      "producer-acceptance.json",
+      "producer-feature-acceptance.json",
+      "runtime-context.json",
+      "control-acceptance.json",
+      "endpoint-route-acceptance.json",
+      "prerequisites-result.json"
+    ]
+  },
+  "critical_files": {
+    "source-freeze.json": {
+      "bytes": 856039,
+      "sha256": "64885bf64b510f0e2488c00295ca6a4a0cd80b866902bd034264d8aa932c2d62"
+    },
+    "actions.json": {
+      "bytes": 5769981,
+      "sha256": "1cb085372d9cf42d2994e6cb687d11b9fb9b393185147139fa7efebc9bdfb171"
+    },
+    "preparation.json": {
+      "bytes": 8120,
+      "sha256": "3786f74a6b3f91e94d79e2f82bc7f8791a4ba0611ac3cb3336451ebf52b138f2"
+    },
+    "gate.py": {
+      "bytes": 32916,
+      "sha256": "7555102aa40acb86ab22ca8f3007a9aa50ea723eea8ea74a8a88ae883971cb91"
+    },
+    "camera_profile.py": {
+      "bytes": 8887,
+      "sha256": "8e57f2f10ff993e98783e76356758529b79d5f486d474e981d43b42bd534f361"
+    },
+    "independent-source-review.json": {
+      "bytes": 15501,
+      "sha256": "da91a33b10b57ed95a5780b0035c24ae7345ec8034a78bbc661ceef2819a28a1"
+    },
+    "root-profile-reader-stop.json": {
+      "bytes": 1332,
+      "sha256": "39b36f4201df9974657411878667e2d1279bc8fa8473b09776ec565aaa70dfbb"
+    },
+    "verify-products/stderr.log": {
+      "bytes": 1485,
+      "sha256": "0a83dfb0d7ea9137e013fddb64940a1899b0d7b08d50fff2ce82f18bdb250859"
+    },
+    "stock-reuse-acceptance.json": {
+      "bytes": 77765,
+      "sha256": "18b07f2ed2937c47c52c7b5c2a8342f5c7ddcd67676aaef3ca3682c865d13391"
+    }
+  },
+  "repository": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "source_committed_and_pushed": true,
+    "clean_upstream_equal_sole_worktree": true,
+    "review_json": "Ignored diagnostic pending root preservation. No Git writes by reviewer."
+  },
+  "preservation_blockers": []
+}
