@@ -1,0 +1,81 @@
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 538
+    Start 538: AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct
+
+538: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests "--gtest_filter=AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct" "--gtest_also_run_disabled_tests"
+538: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle
+538: Test timeout computed to be: 10000000
+538: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+538: Note: Google Test filter = AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct
+538: [==========] Running 1 test from 1 test suite.
+538: [----------] Global test environment set-up.
+538: [----------] 1 test from AnalyticValidationTest
+538: [ RUN      ] AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct
+538: [       OK ] AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct (0 ms)
+538: [----------] 1 test from AnalyticValidationTest (0 ms total)
+538: 
+538: [----------] Global test environment tear-down
+538: [==========] 1 test from 1 test suite ran. (0 ms total)
+538: [  PASSED  ] 1 test.
+1/3 Test #538: AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct ...   Passed    0.01 sec
+test 539
+    Start 539: AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter
+
+539: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests "--gtest_filter=AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter" "--gtest_also_run_disabled_tests"
+539: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle
+539: Test timeout computed to be: 10000000
+539: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+539: Note: Google Test filter = AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter
+539: [==========] Running 1 test from 1 test suite.
+539: [----------] Global test environment set-up.
+539: [----------] 1 test from AnalyticValidationTest
+539: [ RUN      ] AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter
+539: near-extremal oracle drift E=0 Lz=0 Q=6.05971e-14 final_r=200.766 steps=3982
+539: [       OK ] AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter (8 ms)
+539: [----------] 1 test from AnalyticValidationTest (10 ms total)
+539: 
+539: [----------] Global test environment tear-down
+539: [==========] 1 test from 1 test suite ran. (10 ms total)
+539: [  PASSED  ] 1 test.
+2/3 Test #539: AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter .....   Passed    0.02 sec
+test 590
+    Start 590: OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives
+
+590: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests "--gtest_filter=OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives" "--gtest_also_run_disabled_tests"
+590: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle
+590: Test timeout computed to be: 10000000
+590: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+590: Note: Google Test filter = OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives
+590: [==========] Running 1 test from 1 test suite.
+590: [----------] Global test environment set-up.
+590: [----------] 1 test from OracleConnection
+590: [ RUN      ] OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives
+590: [       OK ] OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives (0 ms)
+590: [----------] 1 test from OracleConnection (0 ms total)
+590: 
+590: [----------] Global test environment tear-down
+590: [==========] 1 test from 1 test suite ran. (0 ms total)
+590: [  PASSED  ] 1 test.
+3/3 Test #590: OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives .....................   Passed    0.01 sec
+
+The following tests passed:
+	AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct
+	AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter
+	OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives
+
+100% tests passed, 0 tests failed out of 3
+
+Label Time Summary:
+Correctness    =   0.04 sec*proc (3 tests)
+Mandatory      =   0.04 sec*proc (3 tests)
+
+Total Test time (real) =   0.16 sec

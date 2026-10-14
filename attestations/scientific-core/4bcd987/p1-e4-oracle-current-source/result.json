@@ -1,0 +1,354 @@
+{
+  "full_criterion_complete": false,
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/ctest",
+      "--test-dir",
+      "bin/linux-gcc",
+      "-V",
+      "--output-on-failure",
+      "--no-tests=error",
+      "--output-junit",
+      "/home/astra/.project/Sirius/out/science-p1-e4-oracle-current-source/original-three-p1-e4-oracle-controls/ctest.xml",
+      "--output-log",
+      "/home/astra/.project/Sirius/out/science-p1-e4-oracle-current-source/original-three-p1-e4-oracle-controls/ctest.log",
+      "-R",
+      "^(AnalyticValidationTest\\.NearExtremalKerrConservesEnergyAngularMomentumAndCarter|AnalyticValidationTest\\.SymplecticChartExitAndNullProjectionFailureRemainDistinct|OracleConnection\\.AnalyticConnectionAgreesWithMetricDerivatives)$"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "original-three-p1-e4-oracle-controls",
+    "child_exit": 0,
+    "child_pid": 244437,
+    "child_start_ticks": "3245556",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 244407,
+      "pid": 244408,
+      "ppid": 244407,
+      "rss_kib": 27368,
+      "session": 244407,
+      "start_ticks": "3245486",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "meaning": "Three original finite P1/E4 CPU oracle controls: one near-extremal invariant ray, finite symplectic chart/null/history refusals and3 connection events; no E2 control, all-event proof, full P1/E4/science/Mandatory or release qualification.",
+    "minimum_sampled_available_kib": 17436220,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 244437,
+        "saved_start_ticks": "3245556"
+      }
+    ],
+    "passed": true,
+    "peak_sampled_rss_kib": 45160,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "Three original finite P1/E4 CPU oracle controls: one near-extremal invariant ray, finite symplectic chart/null/history refusals and3 connection events; no E2 control, all-event proof, full P1/E4/science/Mandatory or release qualification.",
+    "source": {
+      "revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 0.34464665499763214,
+    "whole_inputs_unchanged": true
+  },
+  "qualification_claimed": false,
+  "result": {
+    "ctest_output_log": {
+      "bytes": 5458,
+      "sha256": "4b9eeb3cdcd2da5ee4b6ab27389d3b13a419c36078b1aa51e7f217cc1aa2f09b"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": "",
+      "TMPDIR": "/home/astra/.project/Sirius/out/science-p1-e4-oracle-current-source/temporary"
+    },
+    "disabled": 0,
+    "e4_complete": false,
+    "errors": 0,
+    "executed_names": [
+      "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+      "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
+      "OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives"
+    ],
+    "expected_names": [
+      "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+      "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
+      "OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives"
+    ],
+    "failures": 0,
+    "finite_acceptance_scope": {
+      "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter": {
+        "assertions": "Every unit span complete; final radius>=200; maximum absolute E drift<1e-10, relative Lz drift<1e-10 and Q drift/max(abs(initial_Q),1e-30)<1e-10.",
+        "criterion": "P1",
+        "initial_covariant_momentum": {
+          "p_phi": 3,
+          "p_r": "positive sqrt(-non_radial / inverse[1][1]) from original KerrMetricD inverse",
+          "p_t": -1,
+          "p_theta": 0.4
+        },
+        "initial_position_t_r_theta_phi": [
+          0,
+          20,
+          1.1,
+          0
+        ],
+        "integration": "Original adaptive Hamiltonian absolute and relative tolerances1e-13; up to250 complete unit-affine spans, stopping on r>=200. Original default step and maximum-step controls remain unchanged.",
+        "metric": {
+          "mass": 1,
+          "spin": 0.998
+        },
+        "scope_boundary": "One original outgoing near-extremal Boyer-Lindquist ray. Oracle-side invariant witness, not live Cartesian/Vulkan conservation, capture, 1080p shadow or a full P1 claim."
+      },
+      "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct": {
+        "assertions": "Chart exit remains distinct from constraint failure; integrate retains last represented state and zero accepted steps on chart exit; invalid chart state is not capture; identical explicit schedule state produces identical q/p; accepted_steps_before=1 produces original constraint failure.",
+        "criterion": "P1",
+        "fixtures": "Original flat near-axis Yoshida4 step1e-3 with null projection disabled; Schwarzschild impossible-null-root, infinite radial momentum and invalid axis near horizon; explicit periodic-null-projection schedule.",
+        "scope_boundary": "Original finite outcome/refusal/history controls only; no added fixture, domain or numerical threshold."
+      },
+      "OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives": {
+        "assertions": "At each of3 original events, maximum absolute difference over64 Christoffel components from KerrChristoffel <1e-9.",
+        "criterion": "E4",
+        "events_t_r_theta_phi": [
+          [
+            0,
+            8,
+            1.2,
+            0.3
+          ],
+          [
+            0,
+            4,
+            "pi/2 -0.2",
+            1
+          ],
+          [
+            0,
+            15,
+            0.7,
+            0
+          ]
+        ],
+        "independence_limit": "Independent metric differentiation and connection assembly use the same Boyer-Lindquist metric/inverse authority. No independent all-event metric oracle or E2 transport control is selected.",
+        "metric": {
+          "mass": 1,
+          "spin": 0.998
+        },
+        "reference": "Original NumericChristoffel central differences of KerrMetricD.Evaluate with h=1e-6*max(1,abs(x[sigma]))+1e-8, contracted with the same sampled inverse metric."
+      }
+    },
+    "junit": {
+      "bytes": 3459,
+      "sha256": "1151d6f853bf2729a66d4575a244270fe8223f490d5c76a691838daba4f65673"
+    },
+    "mandatory_receipt_created": false,
+    "original_assertions_changed": false,
+    "outer_diagnostic_limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "owner": {
+      "bytes": 2305,
+      "sha256": "ef05dfc6a722304bfe0c0d58a1d5b8b81b703c4f0f3ed0df051530770fbdb8a8"
+    },
+    "p1_complete": false,
+    "passed": true,
+    "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "qualification_claimed": false,
+    "reference": {
+      "historical_execution": {
+        "historical_near_extremal_seconds": 0.002,
+        "identity": "attestations/retained-p1/eb539fc/local-diagnostics/identity.json",
+        "oracle_sha256": "a0c82a309ae6f3005a60fd820c86bdb0e03924869cb5f330e54ed978fb171f4d",
+        "reuse_boundary": "The one preserved historical near-extremal pass uses a different oracle ELF; it is retained as historical. Bounded XML suffix search found no matching current-producer execution of any selected name, and no preserved XML occurrence of the other two names.",
+        "source_revision": "eb539fc4481ef04c0a5bd81ab3a1b1d455109a5d",
+        "xml": "attestations/retained-p1/eb539fc/local-diagnostics/oracle-near-extremal.xml"
+      },
+      "independence_limit": "The connection reference shares KerrMetricD metric/inverse values with its analytic connection; conservation uses the original Hamiltonian-state conserved-quantity formulas. These finite oracle checks do not establish live CPU/device propagation or an all-event mathematical proof.",
+      "independent_reference": "Original NumericChristoffel central metric differences and connection assembly plus original Hamiltonian E/Lz/Carter invariant calculation. The symplectic control independently asserts represented outcome/state/history behavior. No new reference implementation or threshold.",
+      "original_source_snapshots": {
+        "src/sirius/base/contracts.h": {
+          "bytes": 3989,
+          "git_blob": "a45c09e93c48902ea1f0bcf231471daf8095a2a1",
+          "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+        },
+        "src/sirius/core/constants.h": {
+          "bytes": 8558,
+          "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469",
+          "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+        },
+        "src/sirius/oracle/adaptive_hamiltonian_integrator.h": {
+          "bytes": 8742,
+          "git_blob": "c6f658bb2302ef6b1e99a9abb2c02f7f39f5862c",
+          "sha256": "41c7e590a7ef6d8276dcc0142aa17611b813685aad2e35c9133ada2f6ec73874"
+        },
+        "src/sirius/oracle/kerr_boyer_lindquist.h": {
+          "bytes": 30350,
+          "git_blob": "af37af15f0210ce8c3e7ce2374135cabfd388287",
+          "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+        },
+        "src/sirius/oracle/metric_interface.h": {
+          "bytes": 6297,
+          "git_blob": "5d19057f86d59b9b6001762bc7abb4f45804f304",
+          "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af"
+        },
+        "src/sirius/oracle/polarisation_transport.h": {
+          "bytes": 26665,
+          "git_blob": "c5e76e48589d368c3d3ee69cbed581ab54f20c13",
+          "sha256": "c726077c1cdab053dc549f9fbb1961223cfce047627faf1106689caaef39b0e5"
+        },
+        "src/sirius/oracle/symplectic_integrator.h": {
+          "bytes": 22796,
+          "git_blob": "92fd7cfff648900f95308095dee81d0654349d9c",
+          "sha256": "0555701fbfedee24e23cc359657bc800d3bed1922cfc201d6bb33f6549b61445"
+        },
+        "src/sirius/oracle/transport_types.h": {
+          "bytes": 8470,
+          "git_blob": "ed9d7a97d8e06e4508ee494453da5d8485abadba",
+          "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9"
+        },
+        "tests/labels/CTestLabels.cmake": {
+          "bytes": 78306,
+          "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7",
+          "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14"
+        },
+        "tests/operating_model.json": {
+          "bytes": 130331,
+          "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+          "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+        },
+        "tests/oracle/CMakeLists.txt": {
+          "bytes": 867,
+          "git_blob": "14b0dfd43cfcf8271c4eee0f66206c58ba88aa1f",
+          "sha256": "c8f8a84707b756b6a197dc92536145b8f333930649b2d802db5326af3050f5c6"
+        },
+        "tests/oracle/polarisation_transport_test.cpp": {
+          "bytes": 22864,
+          "git_blob": "b827839099a1c721f8d2bd04a62e64d8e279543c",
+          "sha256": "e697d89ae993ce58d8a041b689c3913096ce826732d53ec94a628a1cf1cd4e5a"
+        },
+        "tests/oracle/symplectic_integrator_test.cpp": {
+          "bytes": 22932,
+          "git_blob": "33c19911076f4bf6dbbadd61fa1f7b57def7e3e5",
+          "sha256": "a2d324b9b32a7b2d2b45cbc7dbde4cf28f867bb0a8b2531af05d600b8fbb36ab"
+        },
+        "tests/support/fail_on_skip.h": {
+          "bytes": 427,
+          "git_blob": "59df5b8bbbca92f4bbcfd2db7bcd6b469a3e7cbf",
+          "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+        }
+      },
+      "scope_boundary": "Only the original three named P1/E4 witnesses, fixtures, steps and tolerances. No E2 transport cases, frames or stronger gates."
+    },
+    "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+    "scope": "Three original finite P1/E4 CPU oracle controls: one near-extremal invariant ray, finite symplectic chart/null/history refusals and3 connection events; no E2 control, all-event proof, full P1/E4/science/Mandatory or release qualification.",
+    "skips": 0,
+    "source_and_registration_join": {
+      "accepted_source_build_evidence": "attestations/alignment/4bcd987/gcc-revision-synchronisation/files/out/gcc-revision-synchronisation/accepted-result.json",
+      "cache_required": {
+        "BUILD_TESTS": "ON",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_COMPILER": "g++-14",
+        "CMAKE_HOME_DIRECTORY": "/home/astra/.project/Sirius",
+        "SIRIUS_ALIGNMENT_MODE": "qualification",
+        "SIRIUS_BUILD_VIEWER": "ON",
+        "SIRIUS_CONTRACT_MODE": "2",
+        "SIRIUS_MANDATORY_TESTS": "ON",
+        "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+        "SIRIUS_SANITIZERS": "none",
+        "SIRIUS_WERROR": "ON"
+      },
+      "independent_reference_sources": [
+        "tests/oracle/polarisation_transport_test.cpp",
+        "src/sirius/oracle/transport_types.h"
+      ],
+      "original_compile_commands": [
+        {
+          "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/src/sirius/oracle/../.. -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o -c /home/astra/.project/Sirius/tests/oracle/symplectic_integrator_test.cpp",
+          "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+          "file": "/home/astra/.project/Sirius/tests/oracle/symplectic_integrator_test.cpp",
+          "output": "tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o"
+        },
+        {
+          "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/src/sirius/oracle/../.. -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o -c /home/astra/.project/Sirius/tests/oracle/polarisation_transport_test.cpp",
+          "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+          "file": "/home/astra/.project/Sirius/tests/oracle/polarisation_transport_test.cpp",
+          "output": "tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o"
+        }
+      ],
+      "original_link_ninja_lines": [
+        "build tests/oracle/sirius_oracle_tests tests/oracle/sirius_oracle_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/oracle/sirius_oracle_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__sirius_oracle_tests_Release tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o | src/sirius/core/libsirius_core.a lib/libgtest_main.a src/sirius/libsirius_base.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/sirius/core/libsirius_core.a src/sirius/libsirius_base.a"
+      ],
+      "original_test_TIMEOUT_added": false,
+      "producers": {
+        "oracle": {
+          "bytes": 1678696,
+          "path": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "recovery_archive": "attestations/alignment/4bcd987/gcc-revision-synchronisation/prior-versions/be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4",
+          "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+        }
+      },
+      "production_headers": [
+        "src/sirius/base/contracts.h",
+        "src/sirius/core/constants.h",
+        "src/sirius/oracle/adaptive_hamiltonian_integrator.h",
+        "src/sirius/oracle/kerr_boyer_lindquist.h",
+        "src/sirius/oracle/metric_interface.h",
+        "src/sirius/oracle/polarisation_transport.h",
+        "src/sirius/oracle/symplectic_integrator.h",
+        "src/sirius/oracle/transport_types.h"
+      ],
+      "registrations": [
+        {
+          "add_test": "add_test([=[AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter]==] --gtest_also_run_disabled_tests)",
+          "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+          "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "properties": "set_tests_properties([=[AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+          "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+          "source": "tests/oracle/symplectic_integrator_test.cpp"
+        },
+        {
+          "add_test": "add_test([=[AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct]==] --gtest_also_run_disabled_tests)",
+          "name": "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
+          "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "properties": "set_tests_properties([=[AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+          "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+          "source": "tests/oracle/symplectic_integrator_test.cpp"
+        },
+        {
+          "add_test": "add_test([=[OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests [==[--gtest_filter=OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives]==] --gtest_also_run_disabled_tests)",
+          "name": "OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives",
+          "producer": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "properties": "set_tests_properties([=[OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/oracle SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] LABELS Correctness)",
+          "registration_file": "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+          "source": "tests/oracle/polarisation_transport_test.cpp"
+        }
+      ],
+      "selected_core_cases": 0,
+      "selected_oracle_cases": 3,
+      "test_sources": [
+        "tests/oracle/symplectic_integrator_test.cpp",
+        "tests/oracle/polarisation_transport_test.cpp"
+      ]
+    },
+    "temporary_output": {
+      "mode": "0o700",
+      "path": "/home/astra/.project/Sirius/out/science-p1-e4-oracle-current-source/temporary",
+      "residual_files": {},
+      "uid": 1000
+    }
+  },
+  "schema": "sirius-original-finite-science-controls-v1"
+}
