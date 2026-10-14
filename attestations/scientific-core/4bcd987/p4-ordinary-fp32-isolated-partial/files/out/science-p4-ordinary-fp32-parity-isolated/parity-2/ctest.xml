@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="247"
+	timestamp="2026-10-15T00:54:33"
+	>
+	<testcase name="KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco" classname="KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco" time="247.316" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
+[ParityProbe] phase=initialization opcode=2 offset=0 count=0 submit_wait_ms=100525 pipeline_setup_ms=146202 total_ms=246727 success=1
+[ParityProbe] phase=actual opcode=2 offset=0 count=1 submit_wait_ms=0.658082 pipeline_setup_ms=0.000921 total_ms=0.699889 success=1
+[ParityProbe] completed opcode=2 records=1 submissions=1 allocated_bytes=336
+[       OK ] KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco (247030 ms)
+[----------] 1 test from KernelParity (247030 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (247030 ms total)
+[ ...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+</testsuite>

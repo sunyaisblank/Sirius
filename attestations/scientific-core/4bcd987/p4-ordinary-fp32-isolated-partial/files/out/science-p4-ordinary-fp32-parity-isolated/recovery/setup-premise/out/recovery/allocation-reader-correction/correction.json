@@ -1,0 +1,50 @@
+{
+  "earlier_extra_equality": "Prior private reader expects completed_records*320+16 exactly. This is stronger than the original allocation assertions and is not retained in the new setup reader.",
+  "first_attempt_scope": "First ordinary attempt ended at outer diagnostic_timeout before any returned ParityProbe phase/numerical verdict. No prior acceptance is promoted or rewritten.",
+  "new_diagnostic_relation": "Fresh zero-active four-record setup retains original1296byte requested minimum and1MiB cap, recording actual charged bytes without exact-equality assumption.",
+  "old_inputs_mutated": false,
+  "original_relation": "actual resident bytes >= resident_before+requested and <=1MiB; driver VkMemoryRequirements.size is charged.",
+  "preserved_originals": [
+    {
+      "historical_origin": "out/science-p4-ordinary-fp32-parity/run_parity.py",
+      "origin_identity": {
+        "bytes": 8428,
+        "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity/run_parity.py",
+        "sha256": "3bff9ae5a0b0e070a885f5cc61027f35dcb1b0a3f76ae9acdfc33e2b9a40a638"
+      },
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/allocation-reader-correction/run_parity.py",
+      "scope": "Historical exact copy, not a live dependency or altered prior input."
+    },
+    {
+      "historical_origin": "out/science-p4-ordinary-fp32-parity/preparation.json",
+      "origin_identity": {
+        "bytes": 100695,
+        "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity/preparation.json",
+        "sha256": "653adfac57e4ce08c4533c5cde1ccbda71f3a5a47d77c9f77026130f147ae251"
+      },
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/allocation-reader-correction/preparation.json",
+      "scope": "Historical exact copy, not a live dependency or altered prior input."
+    },
+    {
+      "historical_origin": "out/science-p4-ordinary-fp32-parity/actions.json",
+      "origin_identity": {
+        "bytes": 144926,
+        "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity/actions.json",
+        "sha256": "969442afae43e59509f53a3bc6a2e72e2d2cc3c45e45a2e33941ff61dabee55e"
+      },
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/allocation-reader-correction/actions.json",
+      "scope": "Historical exact copy, not a live dependency or altered prior input."
+    },
+    {
+      "historical_origin": "out/science-p4-ordinary-fp32-parity/parity-1/owner.json",
+      "origin_identity": {
+        "bytes": 3871,
+        "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity/parity-1/owner.json",
+        "sha256": "b2ea36a0752d9af094953f72d98851cb87065b0b15b1b52690ad631bef1358b6"
+      },
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/allocation-reader-correction/parity-1/owner.json",
+      "scope": "Historical exact copy, not a live dependency or altered prior input."
+    }
+  ],
+  "source_authority": "tests/backend/kernel_parity_test.cpp:221-231; src/sirius/backend/vulkan/vulkan_device.cpp:796-845"
+}

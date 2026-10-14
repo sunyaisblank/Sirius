@@ -1,0 +1,43 @@
+Internal ctest changing into directory: /home/astra/.project/Sirius/bin/linux-gcc
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/home/astra/.project/Sirius/bin/linux-gcc/DartConfiguration.tcl
+Test project /home/astra/.project/Sirius/bin/linux-gcc
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 758
+    Start 758: KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
+
+758: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests "--gtest_filter=KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco" "--gtest_also_run_disabled_tests"
+758: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend
+758: Test timeout computed to be: 10000000
+758: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+758: Note: Google Test filter = KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
+758: [==========] Running 1 test from 1 test suite.
+758: [----------] Global test environment set-up.
+758: [----------] 1 test from KernelParity
+758: [ RUN      ] KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
+758: [ParityProbe] phase=initialization opcode=2 offset=0 count=0 submit_wait_ms=100525 pipeline_setup_ms=146202 total_ms=246727 success=1
+758: [ParityProbe] phase=actual opcode=2 offset=0 count=1 submit_wait_ms=0.658082 pipeline_setup_ms=0.000921 total_ms=0.699889 success=1
+758: [ParityProbe] completed opcode=2 records=1 submissions=1 allocated_bytes=336
+758: [       OK ] KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco (247030 ms)
+758: [----------] 1 test from KernelParity (247030 ms total)
+758: 
+758: [----------] Global test environment tear-down
+758: [==========] 1 test from 1 test suite ran. (247030 ms total)
+758: [  PASSED  ] 1 test.
+1/1 Test #758: KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco ...   Passed  247.32 sec
+
+The following tests passed:
+	KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
+
+100% tests passed, 0 tests failed out of 1
+
+Label Time Summary:
+Correctness    = 247.32 sec*proc (1 test)
+Mandatory      = 247.32 sec*proc (1 test)
+
+Total Test time (real) = 247.38 sec

@@ -1,0 +1,1143 @@
+{
+  "allocation_reader_correction": {
+    "alignment_padding_allowed_by_original_assertions": true,
+    "old_attempt_reached_numerical_postcheck": false,
+    "old_reader_exact_allocation_equality_preserved_in_prior_recovery": true,
+    "original_source": "tests/backend/kernel_parity_test.cpp:201-224",
+    "original_vulkan_allocation_source": "src/sirius/backend/vulkan/vulkan_device.cpp:811-845",
+    "requested_minimum_lte_actual_lte_one_mib": true
+  },
+  "baseline": {
+    "active_records": 0,
+    "all_four_compile_link_run_owners_terminal_pass": true,
+    "allocated_bytes": 1296,
+    "api_wall_seconds": {
+      "vkCreateComputePipelines": 140.21663287,
+      "vkQueueWaitIdle": 90.545231679
+    },
+    "complete_out_and_bin_evidence_recovered": true,
+    "numerical_acceptance": false,
+    "original_full_module_sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891",
+    "owner": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run/owner.json",
+    "owner_identity": {
+      "bytes": 3487,
+      "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run/owner.json",
+      "sha256": "a51d2264960d51803fc0b11ca39036355bb8af382638f889105cfc1bd69ff30a"
+    },
+    "owner_wall_seconds": 231.39747835000162,
+    "peak_sampled_rss_kib": 3309044,
+    "result": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run-result.json",
+    "result_identity": {
+      "bytes": 10994,
+      "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run-result.json",
+      "sha256": "89aa7af06ed3c25bace3eb785bee656e83fd864b391dad1f731feb3ce9b2b379"
+    },
+    "whole_setup_seconds_including_teardown": 231.091495764
+  },
+  "historical_relocations": [
+    {
+      "bytes": 144926,
+      "origin": "out/science-p4-ordinary-fp32-parity/actions.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/actions.json",
+      "sha256": "969442afae43e59509f53a3bc6a2e72e2d2cc3c45e45a2e33941ff61dabee55e"
+    },
+    {
+      "bytes": 34979,
+      "origin": "out/science-p4-ordinary-fp32-parity/context.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/context.json",
+      "sha256": "ce9e8b40826554fc96f91cfdf2b48d7f52a1a935107144343438eb30b58670bf"
+    },
+    {
+      "bytes": 20791,
+      "origin": "out/science-p4-ordinary-fp32-parity/owned_guard.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/owned_guard.py",
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    {
+      "bytes": 1602,
+      "origin": "out/science-p4-ordinary-fp32-parity/owner-provider-maps.patch",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/owner-provider-maps.patch",
+      "sha256": "88386352a1d896c2baa1923d900028d6a451519d9fce8fd0e39501c96cdb873c"
+    },
+    {
+      "bytes": 1553,
+      "origin": "out/science-p4-ordinary-fp32-parity/parity-1/ctest.log.tmp5af7e",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1/ctest.log.tmp5af7e",
+      "sha256": "2ac87c2ed316cd22922b800a70577c22a19737676b111a046cfaa3427719a117"
+    },
+    {
+      "bytes": 177553,
+      "origin": "out/science-p4-ordinary-fp32-parity/parity-1/inputs-after.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1/inputs-after.json",
+      "sha256": "d28f9e43750ef6310080c4496bd03d999c122981401bc99400ea673423af9f08"
+    },
+    {
+      "bytes": 177553,
+      "origin": "out/science-p4-ordinary-fp32-parity/parity-1/inputs-before.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1/inputs-before.json",
+      "sha256": "d28f9e43750ef6310080c4496bd03d999c122981401bc99400ea673423af9f08"
+    },
+    {
+      "bytes": 3871,
+      "origin": "out/science-p4-ordinary-fp32-parity/parity-1/owner.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1/owner.json",
+      "sha256": "b2ea36a0752d9af094953f72d98851cb87065b0b15b1b52690ad631bef1358b6"
+    },
+    {
+      "bytes": 3014479,
+      "origin": "out/science-p4-ordinary-fp32-parity/parity-1/samples.jsonl",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1/samples.jsonl",
+      "sha256": "9dccae463fec83edf4a2bfd3175891c84147c273127a601463219f270cda0f93"
+    },
+    {
+      "bytes": 0,
+      "origin": "out/science-p4-ordinary-fp32-parity/parity-1/stderr.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1423,
+      "origin": "out/science-p4-ordinary-fp32-parity/parity-1/stdout.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1/stdout.log",
+      "sha256": "09db538b45882f4b2542dfe2e29cb101e1147e4bf143175b88dc645cf7f508b2"
+    },
+    {
+      "bytes": 4257,
+      "origin": "out/science-p4-ordinary-fp32-parity/parity-1-controller.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1-controller.log",
+      "sha256": "2928777924856df68582065262e20a8805f2204ad0cfa71e68c67a9a1c4d2a01"
+    },
+    {
+      "bytes": 3820,
+      "origin": "out/science-p4-ordinary-fp32-parity/parity-1-result.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1-result.json",
+      "sha256": "8190c7880a9b02005c9d4cec1fcc268eb37ff2f16bdb7a3da77a6853505c2903"
+    },
+    {
+      "bytes": 100695,
+      "origin": "out/science-p4-ordinary-fp32-parity/preparation.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/preparation.json",
+      "sha256": "653adfac57e4ce08c4533c5cde1ccbda71f3a5a47d77c9f77026130f147ae251"
+    },
+    {
+      "bytes": 15662,
+      "origin": "out/science-p4-ordinary-fp32-parity/prepare.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/prepare.py",
+      "sha256": "ba53441ca23e80d1de7caed59fcd51cea480a9bfc69471393f659f75c72d2e80"
+    },
+    {
+      "bytes": 12451,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/original-run_owned.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/original-run_owned.py",
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    {
+      "bytes": 12349,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/cmake/sirius_testing.cmake",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/cmake/sirius_testing.cmake",
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    {
+      "bytes": 41145,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/app/cli/info_command.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/app/cli/info_command.cpp",
+      "sha256": "d5f57a4bba499ed2c262508dbf6cdadab8a3c9348615f6e92c0b43d92622606e"
+    },
+    {
+      "bytes": 9669,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/backend/device.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/backend/device.h",
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    {
+      "bytes": 56500,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    {
+      "bytes": 3989,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/base/contracts.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/base/contracts.h",
+      "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+    },
+    {
+      "bytes": 2283,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/base/error.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/base/error.h",
+      "sha256": "6e66cba357b556ecbb0a112227bdfc64ce1fdecf3f6268c614dc8f7dee45ce4a"
+    },
+    {
+      "bytes": 4788,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/base/resource_locator.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/base/resource_locator.cpp",
+      "sha256": "6c8c5f9302baa48f46dd1cad9118fd85c0ce5df747b38db90712694a1d5a304e"
+    },
+    {
+      "bytes": 1665,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/base/resource_locator.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/base/resource_locator.h",
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa"
+    },
+    {
+      "bytes": 43067,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/camera.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/camera.h",
+      "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630"
+    },
+    {
+      "bytes": 3255,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/camera_sampling.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/camera_sampling.h",
+      "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803"
+    },
+    {
+      "bytes": 5440,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/celestial_tangent_basis.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/celestial_tangent_basis.h",
+      "sha256": "e02003f3d27f4411efd5ab7a551eb95a55fccadc91d1c7a378626cfba8039248"
+    },
+    {
+      "bytes": 1858,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/cie1931_observer.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/cie1931_observer.h",
+      "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949"
+    },
+    {
+      "bytes": 8558,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/constants.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/constants.h",
+      "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+    },
+    {
+      "bytes": 19636,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/coordinates.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/coordinates.h",
+      "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+    },
+    {
+      "bytes": 2876,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/disk/disk_model.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/disk/disk_model.h",
+      "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+    },
+    {
+      "bytes": 16284,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/disk/novikov_thorne_disk.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/disk/novikov_thorne_disk.h",
+      "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+    },
+    {
+      "bytes": 1993,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/disk/volumetric_disk.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/disk/volumetric_disk.h",
+      "sha256": "5643b4664bca7f2382ae1a9856c86ef1c506818c6b891bbfd04afcb744a43aaf"
+    },
+    {
+      "bytes": 9490,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/dual_number.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/dual_number.h",
+      "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9"
+    },
+    {
+      "bytes": 1854,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/first_order_number.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/first_order_number.h",
+      "sha256": "9ed51f93e11c2528546729c2ff190f66131c011ebab0c26cf51e38643c5b1ec7"
+    },
+    {
+      "bytes": 3107,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/kerr_orbits.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/kerr_orbits.h",
+      "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+    },
+    {
+      "bytes": 33851,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/metrics/kerr_schild_family.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/metrics/kerr_schild_family.h",
+      "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a"
+    },
+    {
+      "bytes": 10205,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/metrics/metric.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/metrics/metric.h",
+      "sha256": "563a7543e118a813c4a26a40763578bb9b930385abecbf6ae5c6bce1c29e742c"
+    },
+    {
+      "bytes": 21337,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/metrics/morris_thorne_family.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/metrics/morris_thorne_family.h",
+      "sha256": "5d7a2e6f0c64d8df55cc1c91cafc6e78a856b4809adfa338c15a6145f1d37552"
+    },
+    {
+      "bytes": 22072,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/metrics/registry.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/metrics/registry.h",
+      "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072"
+    },
+    {
+      "bytes": 10547,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/polarisation/stokes.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/polarisation/stokes.h",
+      "sha256": "220c618bee8754a5455bd4f2f8c2154bd5ae4c0c2547825395a2473de1a22e2f"
+    },
+    {
+      "bytes": 11498,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/relativistic_transfer.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/relativistic_transfer.h",
+      "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f"
+    },
+    {
+      "bytes": 2404,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/second_order_number.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/second_order_number.h",
+      "sha256": "12f241e7068971ef4e6ec9cabf76010c71b72cf7ac6749be0b31f0f9dc99c6e5"
+    },
+    {
+      "bytes": 6171,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/spectral/blackbody.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/spectral/blackbody.h",
+      "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f"
+    },
+    {
+      "bytes": 4322,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/spectral/blackbody_laws.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/spectral/blackbody_laws.h",
+      "sha256": "3846d9cdf8db6e034585ac3e4dcb14f2edb1c4e57a649a1c2ff8964d408bd0c0"
+    },
+    {
+      "bytes": 9441,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/spectral/colour_modes.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/spectral/colour_modes.h",
+      "sha256": "97d1f488c79830682012b6ee073f45428ca83eb6bf32a16b6e377af73c70dd50"
+    },
+    {
+      "bytes": 5757,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/spectral/spectral_radiance.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/spectral/spectral_radiance.h",
+      "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+    },
+    {
+      "bytes": 1743,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/srgb_transfer.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/srgb_transfer.h",
+      "sha256": "d8bf1764d4dcd55ba079d11bb0fde7cb0a89619e2d1f3a46f144fc46dfa02ba3"
+    },
+    {
+      "bytes": 6421,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/tensor.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/tensor.h",
+      "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7"
+    },
+    {
+      "bytes": 5685,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/twofold.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/twofold.h",
+      "sha256": "2ace9a10d430dbf4dab870602dbc8ca0545ada2c2e350ca6cd263dd8c92e93f1"
+    },
+    {
+      "bytes": 1439,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/core/xyz_srgb.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/core/xyz_srgb.h",
+      "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48"
+    },
+    {
+      "bytes": 7542,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_camera.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_camera.slang",
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+    },
+    {
+      "bytes": 12632,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_coupled.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_coupled.slang",
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    {
+      "bytes": 17259,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_deviation.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_deviation.slang",
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+    },
+    {
+      "bytes": 16688,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_disk.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_disk.slang",
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+    },
+    {
+      "bytes": 9374,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_ellis_topology.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_ellis_topology.slang",
+      "sha256": "de0f2120591ecebbc00325eb6877cf4c6e8ebd0259637e300d4289ef82ab6e0b"
+    },
+    {
+      "bytes": 23338,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_integrator.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_integrator.slang",
+      "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+    },
+    {
+      "bytes": 23616,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_kerr_infinity.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_kerr_infinity.slang",
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c"
+    },
+    {
+      "bytes": 30379,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_metrics.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_metrics.slang",
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    {
+      "bytes": 1773,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_point_star.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_point_star.slang",
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+    },
+    {
+      "bytes": 2212,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_trace_continuation.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_trace_continuation.slang",
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+    },
+    {
+      "bytes": 15656,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_trace_event.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_trace_event.slang",
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+    },
+    {
+      "bytes": 5519,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/gr_types.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/gr_types.slang",
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    {
+      "bytes": 36380,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/kernels/parity_probe.slang",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/kernels/parity_probe.slang",
+      "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+    },
+    {
+      "bytes": 30350,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/oracle/kerr_boyer_lindquist.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/oracle/kerr_boyer_lindquist.h",
+      "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+    },
+    {
+      "bytes": 6297,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/oracle/metric_interface.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/oracle/metric_interface.h",
+      "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af"
+    },
+    {
+      "bytes": 8470,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/oracle/transport_types.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/oracle/transport_types.h",
+      "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9"
+    },
+    {
+      "bytes": 7908,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/render/dispatch_governor.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/render/dispatch_governor.h",
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a"
+    },
+    {
+      "bytes": 207,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/src/sirius/render/pixel_sampling.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/src/sirius/render/pixel_sampling.h",
+      "sha256": "2cbb598c156886799eba95b0cb84f8c98bfe8ad435f5c79f8ecd1bfe732fadc3"
+    },
+    {
+      "bytes": 10200,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/tests/CMakeLists.txt",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/tests/CMakeLists.txt",
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    {
+      "bytes": 5448,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/tests/backend/CMakeLists.txt",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/tests/backend/CMakeLists.txt",
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357"
+    },
+    {
+      "bytes": 117467,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/tests/backend/kernel_parity_test.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/tests/backend/kernel_parity_test.cpp",
+      "sha256": "8d2e747d4d375e4a8849c32a33d66cce148de7b5dea28977da212138fa97f986"
+    },
+    {
+      "bytes": 130331,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/tests/operating_model.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/tests/operating_model.json",
+      "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+    },
+    {
+      "bytes": 427,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/tests/support/fail_on_skip.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/tests/support/fail_on_skip.h",
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    },
+    {
+      "bytes": 5563,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/tests/support/point_star_angular_oracle.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/tests/support/point_star_angular_oracle.h",
+      "sha256": "d8d3d0e2a59453aac84dda55673e82a7ddf7fc579b90dcc649bbbc5399eae4ac"
+    },
+    {
+      "bytes": 796,
+      "origin": "out/science-p4-ordinary-fp32-parity/recovery/source/tests/support/test_resource.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/recovery/source/tests/support/test_resource.h",
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3"
+    },
+    {
+      "bytes": 12933,
+      "origin": "out/science-p4-ordinary-fp32-parity/run_owned.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/run_owned.py",
+      "sha256": "492c75609a0dc8ff5eaa0299f7206820bb8a42f85c3ecc5b9b0af98f2496ba9f"
+    },
+    {
+      "bytes": 8428,
+      "origin": "out/science-p4-ordinary-fp32-parity/run_parity.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/run_parity.py",
+      "sha256": "3bff9ae5a0b0e070a885f5cc61027f35dcb1b0a3f76ae9acdfc33e2b9a40a638"
+    },
+    {
+      "bytes": 146556,
+      "origin": "out/p4-parity-setup-diagnostic/actions.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/actions.json",
+      "sha256": "5ca5d4be2a486610fde61609217fc5981b3d0ec7d85369502cb0f576290a9cf9"
+    },
+    {
+      "bytes": 267943,
+      "origin": "out/p4-parity-setup-diagnostic/compile-device/inputs-after.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-device/inputs-after.json",
+      "sha256": "5258de90e21958a610366b75999581cf8d42660ba9520e35e53c4940087d1b02"
+    },
+    {
+      "bytes": 267943,
+      "origin": "out/p4-parity-setup-diagnostic/compile-device/inputs-before.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-device/inputs-before.json",
+      "sha256": "5258de90e21958a610366b75999581cf8d42660ba9520e35e53c4940087d1b02"
+    },
+    {
+      "bytes": 2518,
+      "origin": "out/p4-parity-setup-diagnostic/compile-device/owner.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-device/owner.json",
+      "sha256": "21628b07ca5041c243c1e61f21cb19c43abf3dde9ac28ebe0ca9b95529c2a294"
+    },
+    {
+      "bytes": 7357,
+      "origin": "out/p4-parity-setup-diagnostic/compile-device/samples.jsonl",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-device/samples.jsonl",
+      "sha256": "d81f63262e0dd460c0bcdfd3d1590a6a53064329f4c200e9fdf6ee287ea1a75e"
+    },
+    {
+      "bytes": 0,
+      "origin": "out/p4-parity-setup-diagnostic/compile-device/stderr.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-device/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "origin": "out/p4-parity-setup-diagnostic/compile-device/stdout.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-device/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 18601,
+      "origin": "out/p4-parity-setup-diagnostic/compile-device-result.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-device-result.json",
+      "sha256": "ba127209f3b77dfa4ff02b2321bed4eac25071829de4c7894f945730decb1eac"
+    },
+    {
+      "bytes": 268835,
+      "origin": "out/p4-parity-setup-diagnostic/compile-driver/inputs-after.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-driver/inputs-after.json",
+      "sha256": "4be6fb2b69f74ed003c8e68063a815c5f4e96d633051ecdc6e7c0947a9fc8214"
+    },
+    {
+      "bytes": 268835,
+      "origin": "out/p4-parity-setup-diagnostic/compile-driver/inputs-before.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-driver/inputs-before.json",
+      "sha256": "4be6fb2b69f74ed003c8e68063a815c5f4e96d633051ecdc6e7c0947a9fc8214"
+    },
+    {
+      "bytes": 2516,
+      "origin": "out/p4-parity-setup-diagnostic/compile-driver/owner.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-driver/owner.json",
+      "sha256": "44c5ba2c23d2ee230969926bd051e60e312ffc69fb924c56e045d47ed753a3f7"
+    },
+    {
+      "bytes": 5957,
+      "origin": "out/p4-parity-setup-diagnostic/compile-driver/samples.jsonl",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-driver/samples.jsonl",
+      "sha256": "69f9586f47d5e571f96d98165b8af6aa43393c378e2e86351635789662df2b64"
+    },
+    {
+      "bytes": 0,
+      "origin": "out/p4-parity-setup-diagnostic/compile-driver/stderr.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-driver/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "origin": "out/p4-parity-setup-diagnostic/compile-driver/stdout.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-driver/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 18285,
+      "origin": "out/p4-parity-setup-diagnostic/compile-driver-result.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/compile-driver-result.json",
+      "sha256": "37a88341441d512805e5e50c2581b0dbecaa594c735dd4f0be3c77fe89c7d9f1"
+    },
+    {
+      "bytes": 18654,
+      "origin": "out/p4-parity-setup-diagnostic/context.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/context.json",
+      "sha256": "7d7aff258967af5fe29a7280743bd545b2507c171c419f1db363c5cba43215fb"
+    },
+    {
+      "bytes": 6358,
+      "origin": "out/p4-parity-setup-diagnostic/instrumentation-transform.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/instrumentation-transform.json",
+      "sha256": "b4c921c75917ed743cbd512c044ec3f94df2b82b911af8cc492efd0ebb875b0e"
+    },
+    {
+      "bytes": 7847,
+      "origin": "out/p4-parity-setup-diagnostic/instrumentation.patch",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/instrumentation.patch",
+      "sha256": "b1c1134f26be35f46b55dee1fe9a3e3075bccc03902019b103e3ab9ebf75d4a9"
+    },
+    {
+      "bytes": 58674,
+      "origin": "out/p4-parity-setup-diagnostic/instrumented-vulkan_device.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/instrumented-vulkan_device.cpp",
+      "sha256": "1054e8a5032c3f56a3f85e71d7410eb0f57d886194f7f5e278745c4724f30475"
+    },
+    {
+      "bytes": 269667,
+      "origin": "out/p4-parity-setup-diagnostic/link/inputs-after.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/link/inputs-after.json",
+      "sha256": "0ea644a27e59e1546375a37628220281f9cd58056a5247e216efb9c5ea600009"
+    },
+    {
+      "bytes": 269667,
+      "origin": "out/p4-parity-setup-diagnostic/link/inputs-before.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/link/inputs-before.json",
+      "sha256": "0ea644a27e59e1546375a37628220281f9cd58056a5247e216efb9c5ea600009"
+    },
+    {
+      "bytes": 2484,
+      "origin": "out/p4-parity-setup-diagnostic/link/owner.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/link/owner.json",
+      "sha256": "ee07d23c51e7b1fcf7cb1ecc3d86e4b6e39499b50d11aa951a5888f1fbac1a29"
+    },
+    {
+      "bytes": 570,
+      "origin": "out/p4-parity-setup-diagnostic/link/samples.jsonl",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/link/samples.jsonl",
+      "sha256": "ebccab48575066426eb448f07084d67258e1bd4519ef82cf8ce484c8952ee937"
+    },
+    {
+      "bytes": 0,
+      "origin": "out/p4-parity-setup-diagnostic/link/stderr.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/link/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "origin": "out/p4-parity-setup-diagnostic/link/stdout.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/link/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1636,
+      "origin": "out/p4-parity-setup-diagnostic/link-result.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/link-result.json",
+      "sha256": "0bc21d9a0f42135f0d4ea0ce047162724e9cb3b9c866a8dad53f093645936390"
+    },
+    {
+      "bytes": 36482,
+      "origin": "out/p4-parity-setup-diagnostic/link-review.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/link-review.json",
+      "sha256": "7fca7fce9b1ee02c130cde1f235b372700471a9a41f20c2a23187555c130a60c"
+    },
+    {
+      "bytes": 13348,
+      "origin": "out/p4-parity-setup-diagnostic/operate.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/operate.py",
+      "sha256": "477e2b29fd392dd40a9e67729ff2932b7522e88367d7574c1b520faf88538db1"
+    },
+    {
+      "bytes": 41349,
+      "origin": "out/p4-parity-setup-diagnostic/original-dependencies.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/original-dependencies.json",
+      "sha256": "b89b71a2a04bab3ed4b844e1fe8061531052e4130a568da7df118a42b6c2f580"
+    },
+    {
+      "bytes": 16385,
+      "origin": "out/p4-parity-setup-diagnostic/original-symbols.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/original-symbols.json",
+      "sha256": "a4e23e991aa1588829e90a132e421225745067cdff77b19c16075d6662f5c5c6"
+    },
+    {
+      "bytes": 20791,
+      "origin": "out/p4-parity-setup-diagnostic/owned_guard.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/owned_guard.py",
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    {
+      "bytes": 175187,
+      "origin": "out/p4-parity-setup-diagnostic/preparation.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/preparation.json",
+      "sha256": "2a9c0c06aafd6bb7a756fd2266e6edb8f50ef4403a2a7b56512424a2efd53203"
+    },
+    {
+      "bytes": 19696,
+      "origin": "out/p4-parity-setup-diagnostic/prepare.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/prepare.py",
+      "sha256": "67f747874197b75632840472f30e47659a2be4b6ba0549620fa82d6c946d995f"
+    },
+    {
+      "bytes": 144926,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/allocation-reader-correction/actions.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/allocation-reader-correction/actions.json",
+      "sha256": "969442afae43e59509f53a3bc6a2e72e2d2cc3c45e45a2e33941ff61dabee55e"
+    },
+    {
+      "bytes": 3056,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/allocation-reader-correction/correction.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/allocation-reader-correction/correction.json",
+      "sha256": "2cafce3a945a34053628a9f350410ee8e1712ca44a81270913f19af4fb3813bc"
+    },
+    {
+      "bytes": 3871,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/allocation-reader-correction/parity-1/owner.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/allocation-reader-correction/parity-1/owner.json",
+      "sha256": "b2ea36a0752d9af094953f72d98851cb87065b0b15b1b52690ad631bef1358b6"
+    },
+    {
+      "bytes": 100695,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/allocation-reader-correction/preparation.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/allocation-reader-correction/preparation.json",
+      "sha256": "653adfac57e4ce08c4533c5cde1ccbda71f3a5a47d77c9f77026130f147ae251"
+    },
+    {
+      "bytes": 8428,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/allocation-reader-correction/run_parity.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/allocation-reader-correction/run_parity.py",
+      "sha256": "3bff9ae5a0b0e070a885f5cc61027f35dcb1b0a3f76ae9acdfc33e2b9a40a638"
+    },
+    {
+      "bytes": 56500,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/original-vulkan_device.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/original-vulkan_device.cpp",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    {
+      "bytes": 17763,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/CMakeLists.txt",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/backend/CMakeLists.txt",
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2"
+    },
+    {
+      "bytes": 9669,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/device.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/backend/device.h",
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    {
+      "bytes": 56500,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    {
+      "bytes": 9768,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/vulkan/vulkan_device.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/backend/vulkan/vulkan_device.h",
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de"
+    },
+    {
+      "bytes": 1636,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/vulkan/vulkan_portability.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/backend/vulkan/vulkan_portability.h",
+      "sha256": "e3ff78fff5f8c3388be773b324db936fce0bca242b5d58318717c719428d5bff"
+    },
+    {
+      "bytes": 3989,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/base/contracts.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/base/contracts.h",
+      "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+    },
+    {
+      "bytes": 2283,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/base/error.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/base/error.h",
+      "sha256": "6e66cba357b556ecbb0a112227bdfc64ce1fdecf3f6268c614dc8f7dee45ce4a"
+    },
+    {
+      "bytes": 4788,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/base/resource_locator.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/base/resource_locator.cpp",
+      "sha256": "6c8c5f9302baa48f46dd1cad9118fd85c0ce5df747b38db90712694a1d5a304e"
+    },
+    {
+      "bytes": 1665,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/base/resource_locator.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/base/resource_locator.h",
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa"
+    },
+    {
+      "bytes": 43067,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/camera.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/camera.h",
+      "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630"
+    },
+    {
+      "bytes": 3255,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/camera_sampling.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/camera_sampling.h",
+      "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803"
+    },
+    {
+      "bytes": 5440,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/celestial_tangent_basis.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/celestial_tangent_basis.h",
+      "sha256": "e02003f3d27f4411efd5ab7a551eb95a55fccadc91d1c7a378626cfba8039248"
+    },
+    {
+      "bytes": 1858,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/cie1931_observer.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/cie1931_observer.h",
+      "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949"
+    },
+    {
+      "bytes": 8558,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/constants.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/constants.h",
+      "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+    },
+    {
+      "bytes": 19636,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/coordinates.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/coordinates.h",
+      "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+    },
+    {
+      "bytes": 2876,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/disk/disk_model.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/disk/disk_model.h",
+      "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+    },
+    {
+      "bytes": 16284,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/disk/novikov_thorne_disk.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/disk/novikov_thorne_disk.h",
+      "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+    },
+    {
+      "bytes": 1993,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/disk/volumetric_disk.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/disk/volumetric_disk.h",
+      "sha256": "5643b4664bca7f2382ae1a9856c86ef1c506818c6b891bbfd04afcb744a43aaf"
+    },
+    {
+      "bytes": 9490,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/dual_number.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/dual_number.h",
+      "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9"
+    },
+    {
+      "bytes": 1854,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/first_order_number.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/first_order_number.h",
+      "sha256": "9ed51f93e11c2528546729c2ff190f66131c011ebab0c26cf51e38643c5b1ec7"
+    },
+    {
+      "bytes": 3107,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/kerr_orbits.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/kerr_orbits.h",
+      "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+    },
+    {
+      "bytes": 33851,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/metrics/kerr_schild_family.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/metrics/kerr_schild_family.h",
+      "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a"
+    },
+    {
+      "bytes": 10205,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/metrics/metric.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/metrics/metric.h",
+      "sha256": "563a7543e118a813c4a26a40763578bb9b930385abecbf6ae5c6bce1c29e742c"
+    },
+    {
+      "bytes": 21337,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/metrics/morris_thorne_family.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/metrics/morris_thorne_family.h",
+      "sha256": "5d7a2e6f0c64d8df55cc1c91cafc6e78a856b4809adfa338c15a6145f1d37552"
+    },
+    {
+      "bytes": 22072,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/metrics/registry.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/metrics/registry.h",
+      "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072"
+    },
+    {
+      "bytes": 10547,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/polarisation/stokes.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/polarisation/stokes.h",
+      "sha256": "220c618bee8754a5455bd4f2f8c2154bd5ae4c0c2547825395a2473de1a22e2f"
+    },
+    {
+      "bytes": 11498,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/relativistic_transfer.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/relativistic_transfer.h",
+      "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f"
+    },
+    {
+      "bytes": 2404,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/second_order_number.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/second_order_number.h",
+      "sha256": "12f241e7068971ef4e6ec9cabf76010c71b72cf7ac6749be0b31f0f9dc99c6e5"
+    },
+    {
+      "bytes": 6171,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/spectral/blackbody.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/spectral/blackbody.h",
+      "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f"
+    },
+    {
+      "bytes": 4322,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/spectral/blackbody_laws.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/spectral/blackbody_laws.h",
+      "sha256": "3846d9cdf8db6e034585ac3e4dcb14f2edb1c4e57a649a1c2ff8964d408bd0c0"
+    },
+    {
+      "bytes": 9441,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/spectral/colour_modes.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/spectral/colour_modes.h",
+      "sha256": "97d1f488c79830682012b6ee073f45428ca83eb6bf32a16b6e377af73c70dd50"
+    },
+    {
+      "bytes": 5757,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/spectral/spectral_radiance.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/spectral/spectral_radiance.h",
+      "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+    },
+    {
+      "bytes": 1743,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/srgb_transfer.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/srgb_transfer.h",
+      "sha256": "d8bf1764d4dcd55ba079d11bb0fde7cb0a89619e2d1f3a46f144fc46dfa02ba3"
+    },
+    {
+      "bytes": 6421,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/tensor.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/tensor.h",
+      "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7"
+    },
+    {
+      "bytes": 5685,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/twofold.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/twofold.h",
+      "sha256": "2ace9a10d430dbf4dab870602dbc8ca0545ada2c2e350ca6cd263dd8c92e93f1"
+    },
+    {
+      "bytes": 1439,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/xyz_srgb.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/core/xyz_srgb.h",
+      "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48"
+    },
+    {
+      "bytes": 30350,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/oracle/kerr_boyer_lindquist.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/oracle/kerr_boyer_lindquist.h",
+      "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+    },
+    {
+      "bytes": 6297,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/oracle/metric_interface.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/oracle/metric_interface.h",
+      "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af"
+    },
+    {
+      "bytes": 8470,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/oracle/transport_types.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/oracle/transport_types.h",
+      "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9"
+    },
+    {
+      "bytes": 7908,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/render/dispatch_governor.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/render/dispatch_governor.h",
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a"
+    },
+    {
+      "bytes": 207,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/render/pixel_sampling.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/src/sirius/render/pixel_sampling.h",
+      "sha256": "2cbb598c156886799eba95b0cb84f8c98bfe8ad435f5c79f8ecd1bfe732fadc3"
+    },
+    {
+      "bytes": 5448,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/tests/backend/CMakeLists.txt",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/tests/backend/CMakeLists.txt",
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357"
+    },
+    {
+      "bytes": 117467,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/tests/backend/kernel_parity_test.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/tests/backend/kernel_parity_test.cpp",
+      "sha256": "8d2e747d4d375e4a8849c32a33d66cce148de7b5dea28977da212138fa97f986"
+    },
+    {
+      "bytes": 427,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/tests/support/fail_on_skip.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/tests/support/fail_on_skip.h",
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    },
+    {
+      "bytes": 5563,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/tests/support/point_star_angular_oracle.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/tests/support/point_star_angular_oracle.h",
+      "sha256": "d8d3d0e2a59453aac84dda55673e82a7ddf7fc579b90dcc649bbbc5399eae4ac"
+    },
+    {
+      "bytes": 796,
+      "origin": "out/p4-parity-setup-diagnostic/recovery/source/tests/support/test_resource.h",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/recovery/source/tests/support/test_resource.h",
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3"
+    },
+    {
+      "bytes": 5562236,
+      "origin": "out/p4-parity-setup-diagnostic/resources/kernels/parity_probe.spv",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/resources/kernels/parity_probe.spv",
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    {
+      "bytes": 270741,
+      "origin": "out/p4-parity-setup-diagnostic/run/inputs-after.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run/inputs-after.json",
+      "sha256": "1f5c764bebad2fa0437a15fa17697b27d68e50d539f5b6057c4dfc15abfd4659"
+    },
+    {
+      "bytes": 270741,
+      "origin": "out/p4-parity-setup-diagnostic/run/inputs-before.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run/inputs-before.json",
+      "sha256": "1f5c764bebad2fa0437a15fa17697b27d68e50d539f5b6057c4dfc15abfd4659"
+    },
+    {
+      "bytes": 3487,
+      "origin": "out/p4-parity-setup-diagnostic/run/owner.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run/owner.json",
+      "sha256": "a51d2264960d51803fc0b11ca39036355bb8af382638f889105cfc1bd69ff30a"
+    },
+    {
+      "bytes": 2022808,
+      "origin": "out/p4-parity-setup-diagnostic/run/samples.jsonl",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run/samples.jsonl",
+      "sha256": "31848dea176ee3cd539d579e81cfade046e7edfc18942c5ed568756cace157e1"
+    },
+    {
+      "bytes": 5457,
+      "origin": "out/p4-parity-setup-diagnostic/run/stderr.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run/stderr.log",
+      "sha256": "90ae8ea7a53b4744c37649d09ff71644a69d88122b514de611df9e78ba400174"
+    },
+    {
+      "bytes": 584,
+      "origin": "out/p4-parity-setup-diagnostic/run/stdout.log",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run/stdout.log",
+      "sha256": "f3180daa8e501726ff0ce7b33bb718fdf102352043eda1ddb473b03257e3a908"
+    },
+    {
+      "bytes": 10994,
+      "origin": "out/p4-parity-setup-diagnostic/run-result.json",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run-result.json",
+      "sha256": "89aa7af06ed3c25bace3eb785bee656e83fd864b391dad1f731feb3ce9b2b379"
+    },
+    {
+      "bytes": 12933,
+      "origin": "out/p4-parity-setup-diagnostic/run_owned.py",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/run_owned.py",
+      "sha256": "492c75609a0dc8ff5eaa0299f7206820bb8a42f85c3ecc5b9b0af98f2496ba9f"
+    },
+    {
+      "bytes": 8406,
+      "origin": "out/p4-parity-setup-diagnostic/setup_probe.cpp",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/out/setup_probe.cpp",
+      "sha256": "d173dd8d7431a9abd0ad78f988f5c7804c7f07997722b40ef18d4cd3783ba880"
+    },
+    {
+      "bytes": 15752,
+      "origin": "bin/linux-gcc/p4-parity-setup-diagnostic/instrumented-vulkan_device.d",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/bin/instrumented-vulkan_device.d",
+      "sha256": "eb2cca14653ae0e059f3965b41b589280e56e040ec0f723b2a3d0639a1019a0d"
+    },
+    {
+      "bytes": 301888,
+      "origin": "bin/linux-gcc/p4-parity-setup-diagnostic/instrumented-vulkan_device.o",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/bin/instrumented-vulkan_device.o",
+      "sha256": "8a42de0f5d5690308c7c70c40572aff3727eabe6fe37792a31b4b8cc1cf2ff3a"
+    },
+    {
+      "bytes": 5562236,
+      "origin": "bin/linux-gcc/p4-parity-setup-diagnostic/resources/kernels/parity_probe.spv",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/bin/resources/kernels/parity_probe.spv",
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    {
+      "bytes": 273928,
+      "origin": "bin/linux-gcc/p4-parity-setup-diagnostic/setup_probe",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/bin/setup_probe",
+      "sha256": "1349129193c71b9577cb12d2ecd52e498425adb54244340bfd9589e12b57af01"
+    },
+    {
+      "bytes": 15858,
+      "origin": "bin/linux-gcc/p4-parity-setup-diagnostic/setup_probe.d",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/bin/setup_probe.d",
+      "sha256": "0413579eb93aa45a15f2f2b8fe312625b48729b625b81cb918e779e3a7bf85d6"
+    },
+    {
+      "bytes": 2716296,
+      "origin": "bin/linux-gcc/p4-parity-setup-diagnostic/setup_probe.map",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/bin/setup_probe.map",
+      "sha256": "7a077b371c62e137041cc12a971ef947651dd5ce670dd5c357bd13ceef44c8cd"
+    },
+    {
+      "bytes": 208120,
+      "origin": "bin/linux-gcc/p4-parity-setup-diagnostic/setup_probe.o",
+      "recovery": "out/science-p4-ordinary-fp32-parity-isolated/recovery/setup-premise/bin/setup_probe.o",
+      "sha256": "ffed49309216c66a3c3c84b976be6b1157da2eb688532ab34307d46875dd6eea"
+    }
+  ],
+  "kind": "ordinary-fp32-parity-isolated-scheduling-premise",
+  "original_attempt": {
+    "diagnostic_timeout_seconds": 300.94033823599966,
+    "identity": {
+      "bytes": 3871,
+      "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1/owner.json",
+      "sha256": "b2ea36a0752d9af094953f72d98851cb87065b0b15b1b52690ad631bef1358b6"
+    },
+    "owner": "out/science-p4-ordinary-fp32-parity-isolated/recovery/prior-parity-attempt/parity-1/owner.json",
+    "scientific_verdict": null,
+    "status": "INCOMPLETE"
+  },
+  "scheduling": {
+    "causal_speedup_claimed": false,
+    "completed_exact_setup_under_same_diagnostic_guard": true,
+    "first_only_then_stop_on_incomplete": true,
+    "isolation_is_root_operator_scheduling_responsibility": true,
+    "limit_increase": false,
+    "material_change": "Root will run first unchanged original case serially, isolated from the 15-worker Alcubierre reconstruction.",
+    "numerical_evidence_reused": false,
+    "original_case_completion_forecast": null
+  },
+  "schema_version": 1,
+  "scientific_or_platform_or_mandatory_or_release_qualification_claimed": false
+}

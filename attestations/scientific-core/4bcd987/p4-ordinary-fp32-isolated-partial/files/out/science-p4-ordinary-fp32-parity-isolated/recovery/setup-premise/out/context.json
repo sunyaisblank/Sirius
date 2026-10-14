@@ -1,0 +1,365 @@
+{
+  "call_contract": {
+    "active_records": 0,
+    "actual_record_dispatches": 0,
+    "buffer_bytes_in_order": [
+      256,
+      1024,
+      16
+    ],
+    "buffer_usage": "storage",
+    "dispatch": [
+      1,
+      1,
+      1
+    ],
+    "fixture_records": 4,
+    "initial_writes_in_order": [
+      "params16bytes",
+      "result1024zero_bytes"
+    ],
+    "opcode": 2,
+    "readback_bytes": 1024,
+    "result_stride": 64,
+    "sample_buffer_write": false,
+    "sample_stride": 16
+  },
+  "complete_source_bindings": [
+    {
+      "path": "src/sirius/backend/CMakeLists.txt",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/CMakeLists.txt",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2"
+    },
+    {
+      "path": "src/sirius/backend/device.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/device.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    {
+      "path": "src/sirius/backend/vulkan/vulkan_device.cpp",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    {
+      "path": "src/sirius/backend/vulkan/vulkan_device.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/vulkan/vulkan_device.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de"
+    },
+    {
+      "path": "src/sirius/backend/vulkan/vulkan_portability.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/backend/vulkan/vulkan_portability.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e3ff78fff5f8c3388be773b324db936fce0bca242b5d58318717c719428d5bff"
+    },
+    {
+      "path": "src/sirius/base/contracts.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/base/contracts.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+    },
+    {
+      "path": "src/sirius/base/error.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/base/error.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6e66cba357b556ecbb0a112227bdfc64ce1fdecf3f6268c614dc8f7dee45ce4a"
+    },
+    {
+      "path": "src/sirius/base/resource_locator.cpp",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/base/resource_locator.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6c8c5f9302baa48f46dd1cad9118fd85c0ce5df747b38db90712694a1d5a304e"
+    },
+    {
+      "path": "src/sirius/base/resource_locator.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/base/resource_locator.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa"
+    },
+    {
+      "path": "src/sirius/core/camera.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/camera.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630"
+    },
+    {
+      "path": "src/sirius/core/camera_sampling.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/camera_sampling.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803"
+    },
+    {
+      "path": "src/sirius/core/celestial_tangent_basis.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/celestial_tangent_basis.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e02003f3d27f4411efd5ab7a551eb95a55fccadc91d1c7a378626cfba8039248"
+    },
+    {
+      "path": "src/sirius/core/cie1931_observer.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/cie1931_observer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949"
+    },
+    {
+      "path": "src/sirius/core/constants.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/constants.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+    },
+    {
+      "path": "src/sirius/core/coordinates.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/coordinates.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+    },
+    {
+      "path": "src/sirius/core/disk/disk_model.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/disk/disk_model.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+    },
+    {
+      "path": "src/sirius/core/disk/novikov_thorne_disk.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/disk/novikov_thorne_disk.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+    },
+    {
+      "path": "src/sirius/core/disk/volumetric_disk.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/disk/volumetric_disk.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5643b4664bca7f2382ae1a9856c86ef1c506818c6b891bbfd04afcb744a43aaf"
+    },
+    {
+      "path": "src/sirius/core/dual_number.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/dual_number.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9"
+    },
+    {
+      "path": "src/sirius/core/first_order_number.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/first_order_number.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "9ed51f93e11c2528546729c2ff190f66131c011ebab0c26cf51e38643c5b1ec7"
+    },
+    {
+      "path": "src/sirius/core/kerr_orbits.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/kerr_orbits.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+    },
+    {
+      "path": "src/sirius/core/metrics/kerr_schild_family.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/metrics/kerr_schild_family.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a"
+    },
+    {
+      "path": "src/sirius/core/metrics/metric.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/metrics/metric.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "563a7543e118a813c4a26a40763578bb9b930385abecbf6ae5c6bce1c29e742c"
+    },
+    {
+      "path": "src/sirius/core/metrics/morris_thorne_family.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/metrics/morris_thorne_family.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "5d7a2e6f0c64d8df55cc1c91cafc6e78a856b4809adfa338c15a6145f1d37552"
+    },
+    {
+      "path": "src/sirius/core/metrics/registry.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/metrics/registry.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072"
+    },
+    {
+      "path": "src/sirius/core/polarisation/stokes.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/polarisation/stokes.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "220c618bee8754a5455bd4f2f8c2154bd5ae4c0c2547825395a2473de1a22e2f"
+    },
+    {
+      "path": "src/sirius/core/relativistic_transfer.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/relativistic_transfer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f"
+    },
+    {
+      "path": "src/sirius/core/second_order_number.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/second_order_number.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "12f241e7068971ef4e6ec9cabf76010c71b72cf7ac6749be0b31f0f9dc99c6e5"
+    },
+    {
+      "path": "src/sirius/core/spectral/blackbody.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/spectral/blackbody.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f"
+    },
+    {
+      "path": "src/sirius/core/spectral/blackbody_laws.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/spectral/blackbody_laws.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3846d9cdf8db6e034585ac3e4dcb14f2edb1c4e57a649a1c2ff8964d408bd0c0"
+    },
+    {
+      "path": "src/sirius/core/spectral/colour_modes.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/spectral/colour_modes.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "97d1f488c79830682012b6ee073f45428ca83eb6bf32a16b6e377af73c70dd50"
+    },
+    {
+      "path": "src/sirius/core/spectral/spectral_radiance.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/spectral/spectral_radiance.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+    },
+    {
+      "path": "src/sirius/core/srgb_transfer.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/srgb_transfer.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d8bf1764d4dcd55ba079d11bb0fde7cb0a89619e2d1f3a46f144fc46dfa02ba3"
+    },
+    {
+      "path": "src/sirius/core/tensor.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/tensor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7"
+    },
+    {
+      "path": "src/sirius/core/twofold.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/twofold.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "2ace9a10d430dbf4dab870602dbc8ca0545ada2c2e350ca6cd263dd8c92e93f1"
+    },
+    {
+      "path": "src/sirius/core/xyz_srgb.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/core/xyz_srgb.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48"
+    },
+    {
+      "path": "src/sirius/oracle/kerr_boyer_lindquist.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/oracle/kerr_boyer_lindquist.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe"
+    },
+    {
+      "path": "src/sirius/oracle/metric_interface.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/oracle/metric_interface.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3a81096cb56d50174ec097bfd9a9675a2aef68125be1d4d8335216dc9b20c2af"
+    },
+    {
+      "path": "src/sirius/oracle/transport_types.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/oracle/transport_types.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "e4a4a49a7464224d95b2a941b07b4305a37049a3640e894f8ecd6d657e615db9"
+    },
+    {
+      "path": "src/sirius/render/dispatch_governor.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/render/dispatch_governor.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a"
+    },
+    {
+      "path": "src/sirius/render/pixel_sampling.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/src/sirius/render/pixel_sampling.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "2cbb598c156886799eba95b0cb84f8c98bfe8ad435f5c79f8ecd1bfe732fadc3"
+    },
+    {
+      "path": "tests/backend/CMakeLists.txt",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/tests/backend/CMakeLists.txt",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357"
+    },
+    {
+      "path": "tests/backend/kernel_parity_test.cpp",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/tests/backend/kernel_parity_test.cpp",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "8d2e747d4d375e4a8849c32a33d66cce148de7b5dea28977da212138fa97f986"
+    },
+    {
+      "path": "tests/support/fail_on_skip.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/tests/support/fail_on_skip.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+    },
+    {
+      "path": "tests/support/point_star_angular_oracle.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/tests/support/point_star_angular_oracle.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "d8d3d0e2a59453aac84dda55673e82a7ddf7fc579b90dcc649bbbc5399eae4ac"
+    },
+    {
+      "path": "tests/support/test_resource.h",
+      "recovery": "out/p4-parity-setup-diagnostic/recovery/source/tests/support/test_resource.h",
+      "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3"
+    }
+  ],
+  "cost_scope": "Owner wall and driver whole_setup include construction/module read/load/buffers/writes/first pipeline and submit/wait/readback/destruction. Marker overhead remains included; no warm/cold or performance conclusion.",
+  "diagnostic_only_difference": [
+    ".github/workflows/ci.yml",
+    "scripts/diagnose-macos-retained.py",
+    "scripts/governance/build_policy.py",
+    "scripts/macos_metal_probe.py",
+    "scripts/macos_moltenvk_integration.py",
+    "scripts/macos_vulkan_identity.py"
+  ],
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "original_archive_membership": "out/p4-parity-setup-diagnostic/original-symbols.json",
+  "original_compile_command": {
+    "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/src/sirius/.. -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o -c /home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp",
+    "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+    "file": "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp",
+    "output": "src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o"
+  },
+  "owned_product_root": "bin/linux-gcc/p4-parity-setup-diagnostic",
+  "owned_source_root": "out/p4-parity-setup-diagnostic",
+  "owner_reuse": {
+    "change": "Same actual loader/LVP/LLVM collection extension as released parity owner; process/source/input/cleanup limits unchanged.",
+    "guard": "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/owned_guard.py",
+    "source": "attestations/scientific-core/4bcd987/p4-cpu-radiation-current-source/files/out/p4-cpu-radiation-current-source/run_owned.py"
+  },
+  "phases": [
+    "compile-device",
+    "compile-driver",
+    "link",
+    "run"
+  ],
+  "prepared_only": true,
+  "product_source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "products": {
+    "compile-device": [
+      "bin/linux-gcc/p4-parity-setup-diagnostic/instrumented-vulkan_device.o",
+      "bin/linux-gcc/p4-parity-setup-diagnostic/instrumented-vulkan_device.d"
+    ],
+    "compile-driver": [
+      "bin/linux-gcc/p4-parity-setup-diagnostic/setup_probe.o",
+      "bin/linux-gcc/p4-parity-setup-diagnostic/setup_probe.d"
+    ],
+    "link": [
+      "bin/linux-gcc/p4-parity-setup-diagnostic/setup_probe",
+      "bin/linux-gcc/p4-parity-setup-diagnostic/setup_probe.map"
+    ]
+  },
+  "public_failure_boundaries": "Original Vulkan TU bodies and error branches remain unchanged; RAII markers and wrappers only surround original calls at the original sites. No eager pipeline, deferred construction, prewarming, preload/layer, specialization or global driver-control flag.",
+  "required_provider_mappings": [
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+  ],
+  "runner_source_revision": "f5d649bf5067d1d68dc9215462f37830122f0540",
+  "runtime_shader": "bin/linux-gcc/p4-parity-setup-diagnostic/resources/kernels/parity_probe.spv",
+  "scope": "One full ordinary module and exact four-record original zero-active setup shape/public call order; diagnosis only. No active record dispatch, changed shader, optimization, numerical/scientific acceptance or qualification.",
+  "staged_shader": "out/p4-parity-setup-diagnostic/resources/kernels/parity_probe.spv"
+}

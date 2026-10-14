@@ -1,0 +1,20 @@
+--- original-run_owned.py
++++ run_owned.py
+@@ -109,13 +109,15 @@
+             members = guard.group_members(child.pid)
+             for item in members:
+                 observed[item['pid']] = item['start_ticks']
+-            if allowed and not report['provider_mappings']:
++            if allowed and {line.split(None, 5)[5] for e in report['provider_mappings'] for line in e['maps']} != set(['/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so', '/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1', '/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275']):
+                 for item in members:
+                     try:
+                         prior = guard.proc(item['pid'])
+                         assert prior['start_ticks'] == item['start_ticks'] and prior['session'] == child.pid
+                         provider = '/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so'
+-                        lines = [line for line in Path(f"/proc/{item['pid']}/maps").read_text().splitlines() if provider in line]
++                        required_mappings = ['/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so', '/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1', '/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275']
++                        lines = [line for line in Path(f"/proc/{item['pid']}/maps").read_text().splitlines()
++                                 if len(line.split(None, 5)) == 6 and line.split(None, 5)[5] in required_mappings]
+                         current = guard.proc(item['pid'])
+                         assert current['start_ticks'] == item['start_ticks'] and current['session'] == child.pid
+                         if lines:

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="238"
+	timestamp="2026-10-15T00:49:38"
+	>
+	<testcase name="KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel" classname="KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel" time="238.4" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory"/>
+		</properties>
+		<system-out>Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
+[ParityProbe] phase=initialization opcode=2 offset=0 count=0 submit_wait_ms=96197.6 pipeline_setup_ms=141616 total_ms=237814 success=1
+[ParityProbe] phase=actual opcode=2 offset=0 count=4 submit_wait_ms=0.933351 pipeline_setup_ms=0.001312 total_ms=1.00655 success=1
+[ParityProbe] completed opcode=2 records=4 submissions=1 allocated_bytes=1296
+[       OK ] KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel (238132 ms)
+[----------] 1 test from KernelParity (238132 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (238132 ms total...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+</testsuite>

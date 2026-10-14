@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel",
+  "ordinary_fp32": true,
+  "original_assertions_changed": false,
+  "qualification_claimed": false,
+  "p4_complete": false,
+  "outer_diagnostic_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "owner": {
+    "bytes": 4045,
+    "sha256": "2559cd294bfd07e49ee8dff07380f72301f887dbdc5ea056dab06e0d8b31c502",
+    "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity-isolated/parity-1/owner.json"
+  },
+  "gtest": {
+    "bytes": 958,
+    "sha256": "c90c346502a59eb43fb0f680ee28e2c9dde5acb96f91756169f49e2e3598ccef",
+    "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity-isolated/parity-1/gtest.xml"
+  },
+  "ctest": {
+    "bytes": 1642,
+    "sha256": "4c5c489e2978e9dee2bf4dea5f3980528ae78360725752e1cbb7d1c6327ffbea",
+    "resolved_path": "/home/astra/.project/Sirius/out/science-p4-ordinary-fp32-parity-isolated/parity-1/ctest.xml"
+  },
+  "provider_mappings": {
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+      "bytes": 143545784,
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e",
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+    }
+  },
+  "original_properties": {
+    "parity_opcode_2_completed_records": "4",
+    "parity_opcode_2_actual_submissions": "1",
+    "parity_opcode_2_maximum_submit_ms": "0.933351",
+    "parity_opcode_2_allocated_bytes": "1296"
+  },
+  "original_dispatch_phases": [
+    [
+      "initialization",
+      "2",
+      "0",
+      "0",
+      "96197.6",
+      "141616",
+      "237814",
+      "1"
+    ],
+    [
+      "actual",
+      "2",
+      "0",
+      "4",
+      "0.933351",
+      "0.001312",
+      "1.00655",
+      "1"
+    ]
+  ],
+  "reference": "Double AccretionDiskD Page\u2013Thorne temperature/ISCO; prograde, Schwarzschild, retrograde M=2, and truncated inner edge; original tolerances and positivity/diagnostics.",
+  "provider_scope": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "cache_policy": "Original mature software-provider policy disables Mesa shader cache; no new cache output or cold-performance gate.",
+    "scope": "Explicit existing Mesa llvmpipe/Lavapipe route only; actual loader/LVP/LLVM mappings required. No Dozen, native platform, performance or cache warmness claim."
+  },
+  "no_performance_or_cache_warmness_claim": true
+}
