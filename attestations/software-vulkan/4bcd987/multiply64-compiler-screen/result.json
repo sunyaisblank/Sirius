@@ -1,0 +1,264 @@
+{
+  "acceptance": {
+    "compiler_owner": {
+      "bytes": 2061,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-compiler/compile-endpoint-normal/owner.json",
+      "sha256": "7cdbfa21efdb027d54161cd0b66478b06ec7d6a1e9e6dcaffd1e23ffe35abb59",
+      "symlink_target": null
+    },
+    "compiler_result": {
+      "bytes": 5830,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-compiler/compiler-result.json",
+      "sha256": "dfd1e7564ec96e3e0af0b66da547c2855abaf9c6975a16e588033e9fee627a6c",
+      "symlink_target": null
+    },
+    "passed": true,
+    "scope": "Terminal compiler ownership, exact stock reuse and complete candidate structure only. No Vulkan/JIT execution, arithmetic, benefit or qualification verdict."
+  },
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-multiply64-compiler/screen.py",
+      "compile"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "compile-endpoint-normal",
+    "child_exit": 0,
+    "child_pid": 349822,
+    "child_start_ticks": "5202733",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 349818,
+      "pid": 349818,
+      "ppid": 1313,
+      "rss_kib": 20756,
+      "session": 349818,
+      "start_ticks": "5202698",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "meaning": "Compiler-only one complete normal portable Endpoint candidate with exact accepted stock SPV/source/tool/control reuse. Explicit Int64 multiply only; original Divide and interface/modes/barriers retained. No Vulkan/JIT/arithmetic/benefit/qualification execution.",
+    "minimum_sampled_available_kib": 19408136,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 349822,
+        "saved_start_ticks": "5202733"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 349823,
+        "saved_start_ticks": "5202786"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 349825,
+        "saved_start_ticks": "5202833"
+      }
+    ],
+    "passed": true,
+    "peak_sampled_rss_kib": 240596,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "Compiler-only one complete normal portable Endpoint candidate with exact accepted stock SPV/source/tool/control reuse. Explicit Int64 multiply only; original Divide and interface/modes/barriers retained. No Vulkan/JIT/arithmetic/benefit/qualification execution.",
+    "source": {
+      "revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 1.5525527819991112,
+    "whole_inputs_unchanged": true
+  },
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false,
+  "result": {
+    "benefit_established": false,
+    "candidate_multiply_graph": {
+      "complete_discarded_bit_jam": true,
+      "normalized_unsigned_operands": true,
+      "same_common_round_call": true,
+      "shift_values": [
+        20,
+        21
+      ],
+      "upper_bit": 47,
+      "wide_product": "%product"
+    },
+    "candidate_only_allowance": "Explicit multiply64 normal Endpoint only; exact Int64 multiset, one unsigned64 type. Original floating/order/layout/barrier policies retained.",
+    "complete_descriptor_and_workgroup_type_decorations_exact": true,
+    "execution_modes_exact": true,
+    "modules": {
+      "candidate": {
+        "assembly": {
+          "bytes": 419205,
+          "mode": 420,
+          "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.final.spvasm",
+          "sha256": "47cef6018951b4faa4052e1daa5c72e99609703bab636614f726def2eb899588",
+          "symlink_target": null
+        },
+        "bodies": {
+          "PB32Divide": {
+            "bytes": 6186,
+            "mode": 420,
+            "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.PB32Divide.spvasm",
+            "sha256": "ff9cf3d621aaeb42b5e27706581a28de53cf739dfdf37c024c25d5bf4318ec34",
+            "symlink_target": null
+          },
+          "PB32Multiply": {
+            "bytes": 4719,
+            "mode": 420,
+            "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.PB32Multiply.spvasm",
+            "sha256": "b311fefa833eb8dd73bdefc80fb9db9a75fef2f953e89c29b300bba8f0ab2526",
+            "symlink_target": null
+          }
+        },
+        "capabilities": [
+          "Int64",
+          "Shader",
+          "RoundingModeRTE"
+        ],
+        "integer_widths": [
+          "32",
+          "64"
+        ],
+        "module": {
+          "bytes": 150236,
+          "mode": 420,
+          "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.spv",
+          "sha256": "a2cd60d52011e81fb75125046f613e9ab67ce7ed1c970a39f056284e88678c32",
+          "symlink_target": null
+        }
+      },
+      "stock": {
+        "assembly": {
+          "bytes": 422552,
+          "mode": 420,
+          "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/stock-endpoint-normal.final.spvasm",
+          "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+          "symlink_target": null
+        },
+        "bodies": {
+          "PB32Divide": {
+            "bytes": 6186,
+            "mode": 420,
+            "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/stock-endpoint-normal.PB32Divide.spvasm",
+            "sha256": "eeebc7bfdcd5aee8293ea5ae9ab4ea6fcfb1837ce5f63f5f2dc4fa27276733fb",
+            "symlink_target": null
+          },
+          "PB32Multiply": {
+            "bytes": 4215,
+            "mode": 420,
+            "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/stock-endpoint-normal.PB32Multiply.spvasm",
+            "sha256": "48dac617ffd727712f86b54f27fc351c48fda2f97a32dc00fd5c8497eeffdb03",
+            "symlink_target": null
+          }
+        },
+        "capabilities": [
+          "Shader",
+          "RoundingModeRTE"
+        ],
+        "integer_widths": [
+          "32"
+        ],
+        "module": {
+          "bytes": 151400,
+          "mode": 420,
+          "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/stock-endpoint-normal.spv",
+          "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+          "symlink_target": null
+        }
+      }
+    },
+    "next_review": "Ordinary full-module lowering must show surviving work removal; reject equivalent/worse lowering before numerical controls. No JIT/runtime harness is prepared.",
+    "ordered_barrier_operands_exact": true,
+    "original_divide_unpack_round_normalized_bodies_equal": true,
+    "runtime_or_numerical_admission": false,
+    "schema": "sirius-multiply64-compiler-screen/v1",
+    "stock_builder_and_control_policy_reused_unchanged": true,
+    "stock_equals_current_canonical": true,
+    "stock_reuse": {
+      "archive_manifest": {
+        "bytes": 47874,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/manifest.json",
+        "sha256": "229b3a64b30db736b895642a73d0dc5c7630650a4dc3192253cc6a3bdcc3ae9d",
+        "symlink_target": null
+      },
+      "guard_controls": {
+        "bytes": 4131,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-policy-controls.json",
+        "sha256": "53cee5814753826dd2765b60a7bfa747dc554a1afbc65807f26ea1dfe107142a",
+        "symlink_target": null
+      },
+      "original_acceptance": {
+        "bytes": 742,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-screen-capability-order/compiler-acceptance.json",
+        "sha256": "cb69644a9e0e4c0a177a668d80af3411fe7dcb262f9ddeac1b3183eacf71380b",
+        "symlink_target": null
+      },
+      "original_owner": {
+        "bytes": 2145,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-screen-capability-order/compile-endpoint-normal/owner.json",
+        "sha256": "b41e34048b64afab27cdfcbb7d149a05c30139fd8695bf3635a93c9f4b48c1f2",
+        "symlink_target": null
+      },
+      "scope": "Exact accepted full stock/compiler-policy reuse; no stock compiler or policy execution repeated.",
+      "source_joins": 8,
+      "tool_joins": 16
+    }
+  },
+  "schema": "sirius-multiply64-complete-endpoint-compiler-evidence-v1",
+  "scope": "One full normal Endpoint candidate compiled; exact stock module/source/tool and12 policy controls reused. Direct unsigned64 product through20/21 shift/jam; original Divide/Unpack/Round/interfaces/modes/barriers retained. No ordinary driver lowering, arithmetic, benefit, native-wide/global profile or production adoption evidence.",
+  "stock_reuse": {
+    "archive_manifest": {
+      "bytes": 47874,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/manifest.json",
+      "sha256": "229b3a64b30db736b895642a73d0dc5c7630650a4dc3192253cc6a3bdcc3ae9d",
+      "symlink_target": null
+    },
+    "guard_controls": {
+      "bytes": 4131,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-policy-controls.json",
+      "sha256": "53cee5814753826dd2765b60a7bfa747dc554a1afbc65807f26ea1dfe107142a",
+      "symlink_target": null
+    },
+    "original_acceptance": {
+      "bytes": 742,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-screen-capability-order/compiler-acceptance.json",
+      "sha256": "cb69644a9e0e4c0a177a668d80af3411fe7dcb262f9ddeac1b3183eacf71380b",
+      "symlink_target": null
+    },
+    "original_owner": {
+      "bytes": 2145,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-screen-capability-order/compile-endpoint-normal/owner.json",
+      "sha256": "b41e34048b64afab27cdfcbb7d149a05c30139fd8695bf3635a93c9f4b48c1f2",
+      "symlink_target": null
+    },
+    "scope": "Exact accepted full stock/compiler-policy reuse; no stock compiler or policy execution repeated.",
+    "source_joins": 8,
+    "tool_joins": 16
+  }
+}

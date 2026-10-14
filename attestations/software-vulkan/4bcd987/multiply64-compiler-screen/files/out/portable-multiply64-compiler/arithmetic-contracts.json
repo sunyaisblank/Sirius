@@ -1,0 +1,208 @@
+{
+  "artifacts": {
+    "candidate_header": {
+      "bytes": 13438,
+      "path": "out/portable-multiply64-screen/candidate/src/sirius/kernels/portable_binary32.h",
+      "sha256": "77b1144c6c177b3c9ad8907ce654c8bd0e9f647fc18a355d105e48cec41578c9"
+    },
+    "canonical_header": {
+      "bytes": 12797,
+      "path": "out/portable-multiply64-screen/stock/src/sirius/kernels/portable_binary32.h",
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    },
+    "surgical_patch": {
+      "bytes": 2043,
+      "path": "out/portable-multiply64-screen/candidate.patch",
+      "sha256": "7d74c768408fa6f007191e4f2aa9311390b870b95e1025cd9871f338a43ce24e"
+    }
+  },
+  "candidate_macro": "SIRIUS_PB32_MULTIPLY64",
+  "candidate_scope": "Only PB32Multiply finite nonzero product construction and shift/jam. Original guards/unpack and common PB32Round call retained. Original two-word expression is byte-exact #else. Header comment and conditional C++ alias are the only other edits.",
+  "canonical_product_base": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "canonical_source_inputs": {
+    "scripts/build-retained-kernels.py": {
+      "base_blob": "6768c166aabefa3fdb8ab450be9e0b877a93eaae",
+      "bytes": 35006,
+      "bytes_equal_base_current_checkout": true,
+      "current_blob": "6768c166aabefa3fdb8ab450be9e0b877a93eaae",
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "base_blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94",
+      "bytes": 56500,
+      "bytes_equal_base_current_checkout": true,
+      "current_blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    "src/sirius/kernels/portable_binary32.h": {
+      "base_blob": "40fee72b36c0946d5943cbcd9bcf0c77e473a54a",
+      "bytes": 12797,
+      "bytes_equal_base_current_checkout": true,
+      "current_blob": "40fee72b36c0946d5943cbcd9bcf0c77e473a54a",
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    },
+    "src/sirius/kernels/retained_pair.slang": {
+      "base_blob": "b58757383966ef11d229b9caa0cfaab0a5f19225",
+      "bytes": 18139,
+      "bytes_equal_base_current_checkout": true,
+      "current_blob": "b58757383966ef11d229b9caa0cfaab0a5f19225",
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    "src/sirius/kernels/retained_scalar.slang": {
+      "base_blob": "40ed498f4a077393c47b02883975784ea0312f78",
+      "bytes": 3102,
+      "bytes_equal_base_current_checkout": true,
+      "current_blob": "40ed498f4a077393c47b02883975784ea0312f78",
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    "src/sirius/kernels/retained_triple.slang": {
+      "base_blob": "655ff7001694fbd3682790217af4b807aef9d091",
+      "bytes": 15360,
+      "bytes_equal_base_current_checkout": true,
+      "current_blob": "655ff7001694fbd3682790217af4b807aef9d091",
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    }
+  },
+  "capability_and_fallback": "Future selected modules need explicit shaderInt64 support plus logical-device enablement and candidate-only capability/type admission. Canonical application currently enables only shaderFloat64. Default macro-absent source/fallback, PB32Wide representation, public32-bit words, modes/layout/tables/barriers and native/FMA behavior must remain unchanged; no production cross-provider selector is claimed.",
+  "claims": {
+    "arithmetic_equivalence_executed": false,
+    "production_adopted": false,
+    "qualification": false,
+    "retained_arithmetic_exercised": false,
+    "runtime_benefit": false
+  },
+  "clean_preparation_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "compiler_or_runtime_admitted": false,
+  "cost_hypothesis": "Carry one exact64 product through direct shift/jam may avoid duplicated low-product formation and cross-word reconstruction. Existing LLVM already uses wide multiplication. Wider shifts, sticky extraction, lane packing, LLVM re-splitting, register pressure and frame growth may negate removal. No runtime gain inferred.",
+  "future_first_finish_line": "Only if root separately authorizes: full original Endpoint normal compiler/ordinary lowering comparison with byte-exact canonical Divide and original strict interfaces/modes/guards. Reject equivalent or worse lowering before numerical controls; inspect native product/jam work, all allocated sections/relocations and frame effects. No compiler/JIT/arithmetic/benefit harness is part of this packet.",
+  "history_boundary": {
+    "distinct_from": {
+      "issue77": "Rejected reuse between high and residual exact products; this candidate retains that original duplicate structure.",
+      "issue94_and98": "Rejected hardware-floating estimates/guarded normal products; this candidate remains exact integer.",
+      "optional64_divide": "Sole benefit rejected; complete original PB32Divide is restored and unchanged here.",
+      "previous_shift_jam_simplification": "Already folded20/21 distance branches; no branch-removal premise claimed."
+    },
+    "identical_optional64_multiply_trial_found": false,
+    "scope": "Read-only #44 comments, current open/closed arithmetic issues and canonical header ancestry through4bcd; not an exhaustive absence proof."
+  },
+  "mathematical_argument": {
+    "exact_product": "P=uint64(m)*uint64(n) is in [2^46,(2^24-1)^2], hence P<2^48 and no uint64 overflow. Both operands widen before multiplication.",
+    "exception_order": "Unchanged canonical NaN precedence, infinity-times-zero invalid, other infinity signs, and XOR signs of zero products.",
+    "normalization": "Original high-word bit15 equals P bit47. upper chooses s=21, otherwise s=20; P>>s has leading bit26 and fits27bits.",
+    "precondition": "After unchanged NaN/Inf/zero guards, both finite nonzero words unpack to normalized unsigned significands m,n in [2^23,2^24).",
+    "residual_contract": "PB32ProductResidual admission at abs<=2^60, original independent second product, reconstruction shift23..25/refusal, exact subtraction, low rounding, signed high zero, positive exact-zero low and valid assignment remain byte-exact.",
+    "rounding": "The same extended word and exponent enter unchanged PB32Round, preserving nearest-even ties, carry/binade changes, gradual underflow/minnormal transitions, signed underflow zero and overflow.",
+    "safe_ranges": {
+      "extended_bits_maximum": 27,
+      "output_pre_round_exponent_inclusive": [
+        -298,
+        255
+      ],
+      "shift_values": [
+        20,
+        21
+      ],
+      "unpacked_exponents_inclusive": [
+        -149,
+        127
+      ],
+      "wide_product_bits_maximum": 48
+    },
+    "scope": "Source algebra and bounded integer reasoning; no exhaustive machine-checked proof, compilation or arithmetic run.",
+    "sticky_equivalence": "uint(P>>s) OR bool(P & ((uint64(1)<<s)-1)) equals original low/high shift/jam for s20/21. The discarded mask includes every lost bit; no intermediate rounding is introduced."
+  },
+  "ordinary_stock_evidence": {
+    "archive": "attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen",
+    "evidence_commit": "34f22437f8d9ae863d36bdcee01ab64edc71b572",
+    "llvm_locus": {
+      "lines_inclusive": [
+        17081,
+        17104
+      ],
+      "observation": "Separate same-operands vector32 low multiply and widened vector64 high multiply, followed by two-word shift/jam.",
+      "path": "capture-stock-endpoint-normal/optimized-05.ll"
+    },
+    "manifest_sha256": "229b3a64b30db736b895642a73d0dc5c7630650a4dc3192253cc6a3bdcc3ae9d",
+    "native_locus": {
+      "function": "cs_co_variant.resume",
+      "function_section_offset_hex": "0x5f00",
+      "object": "capture-stock-endpoint-normal/jit-10.elf",
+      "observation": "Adjacent vpmulld and two vpmuludq plus lane shuffle/permutation survive in the actual allocated-section-verified called JIT object.",
+      "section": ".ltext",
+      "section_relative_offset_hex": "0xe45d"
+    },
+    "pins": {
+      "files/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.final.spvasm": {
+        "bytes": 422552,
+        "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994"
+      },
+      "files/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.spv": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      },
+      "files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/actual-code-review.json": {
+        "bytes": 4344,
+        "sha256": "157d036ccc58a5e455e9380d432ade5fd632320b2c653af81c53e74459ee4f48"
+      },
+      "files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/capture-verification.json": {
+        "bytes": 1300,
+        "sha256": "01ff7ab835a742f0f22a47b919d3be420cb3c97b6aff77cc25188d59553d9fca"
+      },
+      "files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/jit-10.elf": {
+        "bytes": 1049832,
+        "sha256": "fb2cc33824dafab6bc16f4596c4c230aa641e549782a1eaf670b8184d6438e97"
+      },
+      "files/out/portable-divide64-jit-preparation/capture-stock-endpoint-normal/optimized-05.ll": {
+        "bytes": 13237373,
+        "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7"
+      },
+      "manifest.json": {
+        "bytes": 47874,
+        "sha256": "229b3a64b30db736b895642a73d0dc5c7630650a4dc3192253cc6a3bdcc3ae9d"
+      }
+    },
+    "scope": "Original full normal Endpoint module; short-input refusal canary. Heavy retained multiplication was not exercised; no arithmetic or cost measurement. Candidate divide lowering in same archive is not evidence for multiply."
+  },
+  "prepared_only": true,
+  "schema": "sirius-portable-multiply64-source-contract/v1",
+  "shared_header_scope_warning": "PB32ProductResidual is also used by native FP64 non-FMA retained paths. A future global macro definition would change their high PB32Multiply too. Future module profiling must opt in only explicitly selected portable modules; do not infer unaffected native-wide bytes from this header-only packet. No builder/device/profile edit is prepared.",
+  "source_only_relations": {
+    "canonical_header_matches_base_current_and_checkout": true,
+    "complete_reversal_equals_canonical_header": true,
+    "unchanged_function_and_fragment_pins": {
+      "PB32Divide": {
+        "bytes": 1197,
+        "sha256": "b82c9a9c7a42345c8514c8ffbd57f54366d2e38952a9d885dc80e10a1eb1eccf"
+      },
+      "PB32Multiply_original_fallback_fragment": {
+        "bytes": 189,
+        "sha256": "9ea94c330a1cce73495dbe9e05d2f50410cd4ba711c1c9d760463ebdd229ffc1"
+      },
+      "PB32Multiply_special_guards_and_unpack_prefix": {
+        "bytes": 380,
+        "sha256": "e3a5ea573a7f787dd28e7452a3e800d9014e1a926f73ed1a47beab3a37893c9e"
+      },
+      "PB32ProductResidual": {
+        "bytes": 1953,
+        "sha256": "99f4d09898c87f4dab62b7d1be22a080efbd77d8003cf875466ba49ee922d5ec"
+      },
+      "PB32Round": {
+        "bytes": 757,
+        "sha256": "7bc932e79f7cff1c1d3b43a130439073362f1873c7a50bfcf6039d2b3e6085dd"
+      },
+      "PB32Unpack": {
+        "bytes": 480,
+        "sha256": "09f2e0a683495fe72aac35a6db2151ea1357729412a294b8c6dd93c54875eb39"
+      },
+      "PB32WideProduct": {
+        "bytes": 553,
+        "sha256": "c02334292e15108e550276378a7fc78d35c2ad4db8eda9524b4ec1b2c923540b"
+      },
+      "PB32WideShiftJam": {
+        "bytes": 554,
+        "sha256": "8d8ca6579ecab6ab91ad58366edff8ca820ce3aaa132cb0d26a775d76b4659c0"
+      }
+    }
+  },
+  "uint64_seam": "Same C++ conditional std::uint64_t alias and Slang uint64_t spelling as accepted optional64 division; macro is new and default absent. No DIVIDE64 macro or arithmetic remains."
+}

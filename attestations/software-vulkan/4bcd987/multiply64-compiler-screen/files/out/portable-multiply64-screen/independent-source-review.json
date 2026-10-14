@@ -1,0 +1,30 @@
+{
+  "compiler_or_runtime_or_arithmetic_admitted": false,
+  "cost_scope": "Ordinary LLVM/native code shows low32 multiply beside widened high product. Removing duplicate work is conjectural; the called canary did not exercise multiplication.",
+  "math": "Both normalized operands in [2^23,2^24); product in [2^46,2^48). Original high bit15 equals product bit47; identical20/21 shift and sticky preserves the same27-bit extended significand and original Round.",
+  "passed": true,
+  "pins": {
+    "candidate.patch": {
+      "bytes": 2043,
+      "sha256": "7d74c768408fa6f007191e4f2aa9311390b870b95e1025cd9871f338a43ce24e"
+    },
+    "candidate/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 13438,
+      "sha256": "77b1144c6c177b3c9ad8907ce654c8bd0e9f647fc18a355d105e48cec41578c9"
+    },
+    "contracts.json": {
+      "bytes": 11951,
+      "sha256": "6724849141fe71ba8ec99267794834c3cc5f376ef3d6bb369c717156c415a846"
+    },
+    "source-freeze.json": {
+      "bytes": 863,
+      "sha256": "eb71ecbc4f20e6d68c1d5f8635d569f08e6a317be86bfff5ede29128ae33f9fe"
+    }
+  },
+  "production_adopted": false,
+  "profile_scope": "Future selection must be explicit; global define also affects native-FP64 non-FMA residual high through shared header.",
+  "qualification_claimed": false,
+  "reviewer": "/root/forensic_obligations",
+  "schema": "sirius-multiply64-independent-source-review-v1",
+  "unchanged": "Original guards, Unpack, Round, Divide, ProductResidual and complete fallback; full canonical reversal verified."
+}

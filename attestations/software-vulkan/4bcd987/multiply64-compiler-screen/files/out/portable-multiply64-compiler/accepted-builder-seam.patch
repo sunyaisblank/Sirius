@@ -1,0 +1,55 @@
+--- accepted-divide64-builder.py
++++ candidate/scripts/build-retained-kernels.py
+@@ -49,11 +49,11 @@
+     return text.replace(local_size, local_size + modes, 1)
+ 
+ 
+-def portable_normal_sum_controls(text, diagnostic_divide64=False):
++def portable_normal_sum_controls(text, diagnostic_multiply64=False):
+     """Admit guarded binary32 FastTwoSum and positive upward-bound sums."""
+-    expected_capabilities = ["Int64", "Shader"] if diagnostic_divide64 else ["Shader"]
+-    expected_widths = {"32", "64"} if diagnostic_divide64 else {"32"}
+-    if ((sorted(re.findall(r"OpCapability (\S+)", text)) if diagnostic_divide64 else
++    expected_capabilities = ["Int64", "Shader"] if diagnostic_multiply64 else ["Shader"]
++    expected_widths = {"32", "64"} if diagnostic_multiply64 else {"32"}
++    if ((sorted(re.findall(r"OpCapability (\S+)", text)) if diagnostic_multiply64 else
+          re.findall(r"OpCapability (\S+)", text)) != expected_capabilities or
+             set(re.findall(r"OpTypeInt (\d+) [01]", text)) != expected_widths or
+             re.findall(r"OpTypeFloat (\d+)", text) != ["32"]):
+@@ -291,15 +291,15 @@
+     return references
+ 
+ 
+-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False, diagnostic_divide64=False):
++def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False, diagnostic_multiply64=False):
+     raw = destination.with_suffix(".compiler.spv")
+     assembly = destination.with_suffix(".spvasm")
+     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+-    if diagnostic_divide64:
++    if diagnostic_multiply64:
+         if (source.stem != "retained_endpoint" or not portable or not normal_sum32 or
+                 fp64 or fma or stage_seven_owner):
+             raise ValueError("diagnostic Int64 is restricted to this normal Endpoint screen")
+-        definitions.append("-DSIRIUS_PB32_DIVIDE64=1")
++        definitions.append("-DSIRIUS_PB32_MULTIPLY64=1")
+     if transport_specialized is not None:
+         if source.stem != "retained_transport":
+             raise ValueError("the second transport table belongs only to Transport")
+@@ -390,13 +390,13 @@
+         # The separate normal-sum variant admits only guarded normal arithmetic.
+         capabilities = re.findall(r"OpCapability (\S+)", text)
+         integer_widths = re.findall(r"OpTypeInt (\d+) [01]", text)
+-        expected_capabilities = ["Int64", "Shader"] if diagnostic_divide64 else ["Shader"]
+-        expected_widths = {"32", "64"} if diagnostic_divide64 else {"32"}
+-        if ((sorted(capabilities) if diagnostic_divide64 else capabilities) != expected_capabilities or
++        expected_capabilities = ["Int64", "Shader"] if diagnostic_multiply64 else ["Shader"]
++        expected_widths = {"32", "64"} if diagnostic_multiply64 else {"32"}
++        if ((sorted(capabilities) if diagnostic_multiply64 else capabilities) != expected_capabilities or
+                 not integer_widths or set(integer_widths) != expected_widths):
+             raise ValueError("portable retained stage introduced an optional capability or non-32-bit integer")
+         if normal_sum32:
+-            text = portable_normal_sum_controls(text, diagnostic_divide64=diagnostic_divide64)
++            text = portable_normal_sum_controls(text, diagnostic_multiply64=diagnostic_multiply64)
+         elif "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
+             raise ValueError("portable retained stage depends on native floating arithmetic")
+         entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]

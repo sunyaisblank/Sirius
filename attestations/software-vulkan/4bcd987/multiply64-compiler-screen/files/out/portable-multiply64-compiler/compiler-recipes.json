@@ -1,0 +1,108 @@
+{
+  "candidate": {
+    "additional_readback_argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.final.spvasm"
+    ],
+    "intervening_original_builder_operations": [
+      "Replace raw with optimized after spirv-opt",
+      "Apply original normal-sum controls and RoundingModeRTE to disassembly after all retained original float/order guards; candidate permits only declared Int64/unsigned64 types",
+      "After validation remove transient raw and assembly"
+    ],
+    "ordered_original_tool_argv": [
+      [
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/out/portable-multiply64-compiler/candidate/src/sirius/kernels/retained_endpoint.slang",
+        "-DSIRIUS_PB32_MULTIPLY64=1",
+        "-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=11240",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=9903",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=84",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_PREFIX=202",
+        "-DSIRIUS_RETAINED_NORMAL_SUM32=1",
+        "-DSIRIUS_RETAINED_PORTABLE=1",
+        "-DSIRIUS_RETAINED_PARALLEL_ENDPOINT=1",
+        "-DSIRIUS_RETAINED_REGISTERS=612",
+        "-DSIRIUS_RETAINED_TERMS=5",
+        "-DSIRIUS_RETAINED_LANES=64",
+        "-DSIRIUS_RETAINED_EXECUTION_LANES=16",
+        "-DSIRIUS_RETAINED_LAYERS=111",
+        "-DSIRIUS_RETAINED_PREFIX=250",
+        "-I",
+        "/home/astra/.project/Sirius/out/portable-multiply64-compiler/candidate/src/sirius/kernels",
+        "-O0",
+        "-target",
+        "spirv",
+        "-profile",
+        "spirv_1_5",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.compiler.spv"
+      ],
+      [
+        "/usr/bin/spirv-opt",
+        "--target-env=vulkan1.2",
+        "--ssa-rewrite",
+        "--eliminate-dead-code-aggressive",
+        "--preserve-bindings",
+        "--preserve-interface",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.compiler.spv",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.optimized.spv"
+      ],
+      [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.compiler.spv",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.spvasm"
+      ],
+      [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+        "--target-env",
+        "spv1.5",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.spvasm",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.spv"
+      ],
+      [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "--target-env",
+        "vulkan1.2",
+        "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.spv"
+      ]
+    ],
+    "production_builder_call": {
+      "builder": "/home/astra/.project/Sirius/out/portable-multiply64-compiler/candidate/scripts/build-retained-kernels.py",
+      "destination": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-compiler/modules/candidate-endpoint-normal.spv",
+      "diagnostic_multiply64": true,
+      "endpoint_specialized": [
+        11240,
+        9903,
+        84,
+        202
+      ],
+      "fma": false,
+      "fp64": false,
+      "layers": 111,
+      "normal_sum32": true,
+      "portable": true,
+      "prefix": 250,
+      "registers": 612,
+      "source": "/home/astra/.project/Sirius/out/portable-multiply64-compiler/candidate/src/sirius/kernels/retained_endpoint.slang",
+      "stage_seven_owner": false,
+      "terms": 5
+    },
+    "source": "/home/astra/.project/Sirius/out/portable-multiply64-compiler/candidate/src/sirius/kernels/retained_endpoint.slang"
+  },
+  "execute_via": "Only run_owned.py compile-endpoint-normal after root clean pin-context. This listing is immutable review data, not an alternate launch path.",
+  "schema": "sirius-multiply64-review-only-full-endpoint-recipe/v1",
+  "stock": {
+    "operation": "Copy exact accepted stock SPV and final disassembly; no stock compiler/validator/policy rerun.",
+    "reuse_evidence": "/home/astra/.project/Sirius/out/portable-multiply64-compiler/stock-reuse.json",
+    "reuse_source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.spv"
+  }
+}

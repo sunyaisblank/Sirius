@@ -1,0 +1,46 @@
+{
+  "actual_binary_opcodes_match_disassembly": true,
+  "candidate_SPV": {
+    "bytes": 150236,
+    "instructions": 10167,
+    "sha256": "a2cd60d52011e81fb75125046f613e9ab67ce7ed1c970a39f056284e88678c32"
+  },
+  "complete_interface_modes_ordered_barriers_equal": true,
+  "every_UDiv_is32bit": true,
+  "explicit_inputs": 87,
+  "normalized_divide_unpack_round_equal": true,
+  "original_NoContraction_decorations": 10,
+  "passed": true,
+  "pins": {
+    "compile-endpoint-normal/owner.json": {
+      "bytes": 2061,
+      "sha256": "7cdbfa21efdb027d54161cd0b66478b06ec7d6a1e9e6dcaffd1e23ffe35abb59"
+    },
+    "compiler-acceptance.json": {
+      "bytes": 763,
+      "sha256": "f1117c60c4dfea24d22e9e06594204825f0bef80be78b681395b7669a3164788"
+    },
+    "compiler-result.json": {
+      "bytes": 5830,
+      "sha256": "dfd1e7564ec96e3e0af0b66da547c2855abaf9c6975a16e588033e9fee627a6c"
+    }
+  },
+  "qualification_claimed": false,
+  "relaxed_or_FMA_decorations": false,
+  "retired_recorded_births": 3,
+  "reviewer": "/root/forensic_obligations",
+  "schema": "sirius-multiply64-compiler-independent-terminal-review-v1",
+  "scope": "Compiler structure only. No ordinary driver lowering, JIT, arithmetic, numerical, benefit, native-wide/global profile or production adoption admission.",
+  "source_pins": 84,
+  "stock_SPV": {
+    "bytes": 151400,
+    "exact_accepted_reuse": true,
+    "instructions": 10248
+  },
+  "strict_capability_multiset": [
+    "Int64",
+    "Shader",
+    "RoundingModeRTE"
+  ],
+  "whole_input_comparisons": 618
+}
