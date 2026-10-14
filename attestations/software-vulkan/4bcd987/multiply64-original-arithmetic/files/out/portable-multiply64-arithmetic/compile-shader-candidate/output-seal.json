@@ -1,0 +1,45 @@
+{
+  "inputs_before": {
+    "bytes": 454113,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/compile-shader-candidate/inputs-before.json",
+    "sha256": "078a221826da1248f8b21f1509974282bba976f86593a9b6003cbfd3cf6ecd25"
+  },
+  "label": "compile-shader-candidate",
+  "operator_context": {
+    "bytes": 746,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/operator-context.json",
+    "sha256": "16a842cc5f9aff2978dc5dacf76ce14a7ef8499cceadcf5ec2d397cb9b171d9c"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/candidate.raw.spv": {
+      "bytes": 28740,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/candidate.raw.spv",
+      "sha256": "d3337343d5592696ff5b353048d429a5d7b9080f050537fcb30a51f9cb0fb1b3"
+    }
+  },
+  "recipe": [
+    [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/probe.slang",
+      "-DSIRIUS_PB32_MULTIPLY64=1",
+      "-I",
+      "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/candidate/src/sirius/kernels",
+      "-O0",
+      "-target",
+      "spirv",
+      "-profile",
+      "spirv_1_5",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/candidate.raw.spv"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 350993,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/source-freeze.json",
+    "sha256": "475bdcafcfb5d47a00af61987b119d8029ae3acd16fb74be5fe86e4465835f75"
+  }
+}

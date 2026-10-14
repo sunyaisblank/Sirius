@@ -1,0 +1,481 @@
+{
+  "files": {
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/candidate.raw.spv": {
+      "bytes": 28740,
+      "sha256": "d3337343d5592696ff5b353048d429a5d7b9080f050537fcb30a51f9cb0fb1b3"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/candidate.spv": {
+      "bytes": 26336,
+      "sha256": "8c5871e76dd91fbafbb34eb7efa3997f3d72485bf4fa16e3953575419cb601b6"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/candidate.spvasm": {
+      "bytes": 72467,
+      "sha256": "d0ab405d60cad18f680fa4aa30f44fdde64fd8def49287db0ac0b81e66cbc6ff"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/gpu": {
+      "bytes": 258536,
+      "sha256": "93d85da756b93fb242683b1c9a11e2b5731a9f5b24875d07fb504b408bfb16e7"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/gpu.map": {
+      "bytes": 2724858,
+      "sha256": "1cb73c648ea465e374c838ecced574b634532866dfd488f211c05a40c06d4713"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/host": {
+      "bytes": 615696,
+      "sha256": "ed7605604850196eac39fb7cd92fd313cb899731f24ff389564b697f5c049871"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/host.d": {
+      "bytes": 465,
+      "sha256": "30061a6293e6dbd4abbb15ec75665256055cee0001fcd5f280ee2f19596ae494"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/host.o": {
+      "bytes": 92672,
+      "sha256": "b6a47aa06aa3adde2b323e3d6015817869c1a3b438e3036753dc9f75c58cf75f"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/stock.spv": {
+      "bytes": 27500,
+      "sha256": "92d261966262c3bc93457bd95cabe2c7a3da007748cc0cf7f46b038311a7b019"
+    },
+    "files/bin/linux-gcc/portable-multiply64-arithmetic/stock.spvasm": {
+      "bytes": 75783,
+      "sha256": "aefc7ead4a18b92ea973931a47e946e6104211ff2d6c56a39db6afa38935856e"
+    },
+    "files/out/portable-multiply64-arithmetic/accepted-reader-additions.patch": {
+      "bytes": 7388,
+      "sha256": "85511598e27bbe332bdb2f7c223edb8bd95c806e116a813267720393c2a5c220"
+    },
+    "files/out/portable-multiply64-arithmetic/actions.json": {
+      "bytes": 1099663,
+      "sha256": "291e05aed1d7e683daa3b3ffb98b9110b73d1231982c45d439f2e7f333623959"
+    },
+    "files/out/portable-multiply64-arithmetic/arithmetic-adapter.patch": {
+      "bytes": 16759,
+      "sha256": "d5bff3c907311270c3babf281a80246165473ce3a6052428b58c0d6e1da32433"
+    },
+    "files/out/portable-multiply64-arithmetic/arithmetic-result.json": {
+      "bytes": 18326,
+      "sha256": "5529013f3212b01a81a79e5719983011502a8c0655f8df9fc46089a1458b9159"
+    },
+    "files/out/portable-multiply64-arithmetic/build-review.json": {
+      "bytes": 51392,
+      "sha256": "5aa0d0c6174c0f13fa5ece580037c9b644aff2c4c04286992db84ed4baea970d"
+    },
+    "files/out/portable-multiply64-arithmetic/candidate.patch": {
+      "bytes": 2043,
+      "sha256": "7d74c768408fa6f007191e4f2aa9311390b870b95e1025cd9871f338a43ce24e"
+    },
+    "files/out/portable-multiply64-arithmetic/candidate/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 13438,
+      "sha256": "77b1144c6c177b3c9ad8907ce654c8bd0e9f647fc18a355d105e48cec41578c9"
+    },
+    "files/out/portable-multiply64-arithmetic/collector-precheck-correction.json": {
+      "bytes": 889,
+      "sha256": "5fba90da9d79dca1b6322dd0cf62a3024e7f984a193ceaf70348a97f2ded2b16"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-host/inputs-after.json": {
+      "bytes": 454113,
+      "sha256": "078a221826da1248f8b21f1509974282bba976f86593a9b6003cbfd3cf6ecd25"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-host/inputs-before.json": {
+      "bytes": 454113,
+      "sha256": "078a221826da1248f8b21f1509974282bba976f86593a9b6003cbfd3cf6ecd25"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-host/output-seal.json": {
+      "bytes": 2869,
+      "sha256": "9da093e3d27da073b8d458f3bdbcdeba5c5cbc00e682174f07094b86b8286fd8"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-host/owner.json": {
+      "bytes": 1989,
+      "sha256": "7c4957f7844e7b2c7e79f12f2d07bfaaa7b3367e47f0a82ae5afe6fea209782d"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-host/samples.jsonl": {
+      "bytes": 4263,
+      "sha256": "088ea19dc91de2adfda9cc49791477acea713e6ce59787cb50cd90cf0ed2ef19"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-host/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-host/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-shader-candidate/inputs-after.json": {
+      "bytes": 454113,
+      "sha256": "078a221826da1248f8b21f1509974282bba976f86593a9b6003cbfd3cf6ecd25"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-shader-candidate/inputs-before.json": {
+      "bytes": 454113,
+      "sha256": "078a221826da1248f8b21f1509974282bba976f86593a9b6003cbfd3cf6ecd25"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-shader-candidate/output-seal.json": {
+      "bytes": 1678,
+      "sha256": "705436da95e3af23bf94851e87cbed6abfbc538319970e6a9f278bce506792d2"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-shader-candidate/owner.json": {
+      "bytes": 1886,
+      "sha256": "a2e0c7eda62538144928812f535db4f44c316a6606e8a5f824d9e78b740c1ab0"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-shader-candidate/samples.jsonl": {
+      "bytes": 801,
+      "sha256": "d6fe88fea7467e7d7a0666e10db61eb9cec4764a23af27679b1a92ec8fe56442"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-shader-candidate/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/compile-shader-candidate/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/corpus-contract.json": {
+      "bytes": 1651,
+      "sha256": "e70c280b09cae830b240afc56a5a07e1d6c0b8cf8667af5a23305d365c6a86fb"
+    },
+    "files/out/portable-multiply64-arithmetic/disassemble-shader-candidate/inputs-after.json": {
+      "bytes": 455645,
+      "sha256": "dfcfe990fe2459f5101504d33146aa5a28dbf7ade7d07138d0272acb819c4bb6"
+    },
+    "files/out/portable-multiply64-arithmetic/disassemble-shader-candidate/inputs-before.json": {
+      "bytes": 455645,
+      "sha256": "dfcfe990fe2459f5101504d33146aa5a28dbf7ade7d07138d0272acb819c4bb6"
+    },
+    "files/out/portable-multiply64-arithmetic/disassemble-shader-candidate/output-seal.json": {
+      "bytes": 1476,
+      "sha256": "86f602ad809348c15c9aaced76f9594b00d9675b39ef8e7ac19b6c4eb3f4ab94"
+    },
+    "files/out/portable-multiply64-arithmetic/disassemble-shader-candidate/owner.json": {
+      "bytes": 1765,
+      "sha256": "5460cc311e8004eb2b2ffe2368714cbf567a39cb7954523c87b7394814c62e11"
+    },
+    "files/out/portable-multiply64-arithmetic/disassemble-shader-candidate/samples.jsonl": {
+      "bytes": 450,
+      "sha256": "31ced353f8e8b3617ced7deb9ea55624a0f020868e18b618b354f7e8c442edd3"
+    },
+    "files/out/portable-multiply64-arithmetic/disassemble-shader-candidate/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/disassemble-shader-candidate/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-gpu-candidate/actual.bin": {
+      "bytes": 2788288,
+      "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-gpu-candidate/inputs-after.json": {
+      "bytes": 458486,
+      "sha256": "74bd19c2b93d5d72065b88e424895a41e888de6a83353c8895ab4eb2c4adc24c"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-gpu-candidate/inputs-before.json": {
+      "bytes": 458486,
+      "sha256": "74bd19c2b93d5d72065b88e424895a41e888de6a83353c8895ab4eb2c4adc24c"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-gpu-candidate/owner.json": {
+      "bytes": 3729,
+      "sha256": "f51e37c422fd684b6afa5ebc86bbf5bdd201a797f45e4f6fa2ff327b1ee5de7a"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-gpu-candidate/samples.jsonl": {
+      "bytes": 2034,
+      "sha256": "1b180921c70a7337f5d03a91f8ea056e6171b8cb39e65ba0ecff5484c47951a9"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-gpu-candidate/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-gpu-candidate/stdout.log": {
+      "bytes": 122,
+      "sha256": "5a9ceead3470c44ec71df522d7c8107fe26c62f265987f2ec3ba5886abd95825"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-host/gtest.xml": {
+      "bytes": 927,
+      "sha256": "5befda82ba3ead5ca7c9e9002d3a5d0ac1a90c477abaafa3c4d199d49e8bdcf9"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-host/inputs-after.json": {
+      "bytes": 458486,
+      "sha256": "74bd19c2b93d5d72065b88e424895a41e888de6a83353c8895ab4eb2c4adc24c"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-host/inputs-before.json": {
+      "bytes": 458486,
+      "sha256": "74bd19c2b93d5d72065b88e424895a41e888de6a83353c8895ab4eb2c4adc24c"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-host/owner.json": {
+      "bytes": 1742,
+      "sha256": "f7f0bcb7ecb25bb5ef579a3cb1dbda212a0a962473b51e3c5eb13a00dde373c1"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-host/samples.jsonl": {
+      "bytes": 222,
+      "sha256": "f5e2634896ee1c5e91f0761af0bafa183ed8d8191152107aa525dff942e0af1d"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-host/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/execute-host/stdout.log": {
+      "bytes": 627,
+      "sha256": "6cb659ca19525d4f0c52ca8dedc1046f740261186073a96f71041285a07f7c35"
+    },
+    "files/out/portable-multiply64-arithmetic/expected.bin": {
+      "bytes": 2788288,
+      "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+    },
+    "files/out/portable-multiply64-arithmetic/fixture.json": {
+      "bytes": 924,
+      "sha256": "0a2beb8a2668c2f54acfb9592681089edafc113f87861371f42519415bd9c97a"
+    },
+    "files/out/portable-multiply64-arithmetic/gate.py": {
+      "bytes": 25006,
+      "sha256": "10eff9d539e4a43d351482e2169d7a3eb19f32164a5ccdfde4cbca064ce33fdd"
+    },
+    "files/out/portable-multiply64-arithmetic/gpu.cpp": {
+      "bytes": 4168,
+      "sha256": "8b02baf49c0f94a06292889a93ed33e9344423b1aeafeee77b73df8ff0ab4d83"
+    },
+    "files/out/portable-multiply64-arithmetic/independent-source-review.json": {
+      "bytes": 1238,
+      "sha256": "1cc4216b6a5bf5a4d7d41eb90e8a3a401bc90929344f3769b97d8366b0a6ddc4"
+    },
+    "files/out/portable-multiply64-arithmetic/independent-terminal-review.json": {
+      "bytes": 1741,
+      "sha256": "f8fe144e55635e95b1cd62a6da1083c39d15186ad1bebc045fdcababbd0804c2"
+    },
+    "files/out/portable-multiply64-arithmetic/input.bin": {
+      "bytes": 2788292,
+      "sha256": "5eda64c4af63a0d7507802c4f56a728b3a56d9458328e7f5dabeed300012f605"
+    },
+    "files/out/portable-multiply64-arithmetic/interface_signature.py": {
+      "bytes": 8205,
+      "sha256": "315e231e07d0885d889e13ba40b9df65060d014d8ae46abf47155fd8a36b12fc"
+    },
+    "files/out/portable-multiply64-arithmetic/link-host/inputs-after.json": {
+      "bytes": 454943,
+      "sha256": "a8757b2fd151fe9e7806e9b4036309ddfe38bcff7dd124e938643b86bcecd6fa"
+    },
+    "files/out/portable-multiply64-arithmetic/link-host/inputs-before.json": {
+      "bytes": 454943,
+      "sha256": "a8757b2fd151fe9e7806e9b4036309ddfe38bcff7dd124e938643b86bcecd6fa"
+    },
+    "files/out/portable-multiply64-arithmetic/link-host/output-seal.json": {
+      "bytes": 1556,
+      "sha256": "fe74ae77487043e2133a5d86b97a6938013dfadbd3889a2b087c9c38ee20b722"
+    },
+    "files/out/portable-multiply64-arithmetic/link-host/owner.json": {
+      "bytes": 2111,
+      "sha256": "1ce43df41e77c29bdde0adaa6252512ac5c078492ded50845df928cfd044093d"
+    },
+    "files/out/portable-multiply64-arithmetic/link-host/samples.jsonl": {
+      "bytes": 1049,
+      "sha256": "ef781d76e0facd29baa918f6fd2b8ae02f5d697b22ba523d0154cbc3b7552121"
+    },
+    "files/out/portable-multiply64-arithmetic/link-host/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/link-host/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/operator-build.log": {
+      "bytes": 4086,
+      "sha256": "babf4e29daf4aa4bffa7d9e4f1acc994b08591e4387f3d4154ec5e71f7b8291a"
+    },
+    "files/out/portable-multiply64-arithmetic/operator-context.json": {
+      "bytes": 746,
+      "sha256": "16a842cc5f9aff2978dc5dacf76ce14a7ef8499cceadcf5ec2d397cb9b171d9c"
+    },
+    "files/out/portable-multiply64-arithmetic/operator-runtime.log": {
+      "bytes": 1043,
+      "sha256": "620ed64f235ed41f3c8df820d3fa28ef6e2faf353080c975dc5420e90ab16fd0"
+    },
+    "files/out/portable-multiply64-arithmetic/optimize-shader-candidate/inputs-after.json": {
+      "bytes": 454722,
+      "sha256": "642819b501e81a586abf259d3db07e8503e4bee6ba28dfaaf36a4a7f6313490f"
+    },
+    "files/out/portable-multiply64-arithmetic/optimize-shader-candidate/inputs-before.json": {
+      "bytes": 454722,
+      "sha256": "642819b501e81a586abf259d3db07e8503e4bee6ba28dfaaf36a4a7f6313490f"
+    },
+    "files/out/portable-multiply64-arithmetic/optimize-shader-candidate/output-seal.json": {
+      "bytes": 1536,
+      "sha256": "70fd45b771f62bb89f2d31df572309e5b9220381d2888aab9fecb8f2909e0297"
+    },
+    "files/out/portable-multiply64-arithmetic/optimize-shader-candidate/owner.json": {
+      "bytes": 1759,
+      "sha256": "c5b0baae5a5c713b0a666353733c61ab3aefd331f5657cad15f093d651de642c"
+    },
+    "files/out/portable-multiply64-arithmetic/optimize-shader-candidate/samples.jsonl": {
+      "bytes": 449,
+      "sha256": "12c6b3474f68c446ff55b2cb0c16d05628d9bd7e78356eb16e1f908c5371d5f0"
+    },
+    "files/out/portable-multiply64-arithmetic/optimize-shader-candidate/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/optimize-shader-candidate/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/portable-multiply64-arithmetic/packet.json": {
+      "bytes": 312982,
+      "sha256": "feb73f506b16afb00e7343e004a2b711724659a8854c10e2886e88c760746b6a"
+    },
+    "files/out/portable-multiply64-arithmetic/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/out/portable-multiply64-arithmetic/preparation.json": {
+      "bytes": 8774,
+      "sha256": "1e7e2c2a296333c0bb87dd70ca1d70f7eacf275cd0695966fa5791c8238059dd"
+    },
+    "files/out/portable-multiply64-arithmetic/prepare-build/inputs-after.json": {
+      "bytes": 452355,
+      "sha256": "b7e80b14a7929f6c91e6db942826dcdb6c327c07eb6678c269ac8c681282d163"
+    },
+    "files/out/portable-multiply64-arithmetic/prepare-build/inputs-before.json": {
+      "bytes": 452355,
+      "sha256": "b7e80b14a7929f6c91e6db942826dcdb6c327c07eb6678c269ac8c681282d163"
+    },
+    "files/out/portable-multiply64-arithmetic/prepare-build/output-seal.json": {
+      "bytes": 2437,
+      "sha256": "3bba4299db4e04fe9595c930b2f0a81e1413afa4a8e541878432b83ebf8dba89"
+    },
+    "files/out/portable-multiply64-arithmetic/prepare-build/owner.json": {
+      "bytes": 1735,
+      "sha256": "8c086b86c9ab88e83611473e50e2726fa22e514bf5f85368abff18f59f796637"
+    },
+    "files/out/portable-multiply64-arithmetic/prepare-build/samples.jsonl": {
+      "bytes": 450,
+      "sha256": "278ac6c91a6a41e47f707c73f7428d08b55378a85487e27634819432896973c3"
+    },
+    "files/out/portable-multiply64-arithmetic/prepare-build/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/prepare-build/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/probe.slang": {
+      "bytes": 1129,
+      "sha256": "e99028b1a26d22c2a79ccd4dcbbe095a972f4e0ff17d12a28fe5b5c31bb60468"
+    },
+    "files/out/portable-multiply64-arithmetic/run_owned.py": {
+      "bytes": 12933,
+      "sha256": "492c75609a0dc8ff5eaa0299f7206820bb8a42f85c3ecc5b9b0af98f2496ba9f"
+    },
+    "files/out/portable-multiply64-arithmetic/runtime-context.json": {
+      "bytes": 11231,
+      "sha256": "c23ebdff43a9c5ba62a04a0d6f991b01139fbd5a9a5a67924642b0576ed380b0"
+    },
+    "files/out/portable-multiply64-arithmetic/source-freeze.json": {
+      "bytes": 350993,
+      "sha256": "475bdcafcfb5d47a00af61987b119d8029ae3acd16fb74be5fe86e4465835f75"
+    },
+    "files/out/portable-multiply64-arithmetic/stock/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    },
+    "files/out/portable-multiply64-arithmetic/validate-shader-candidate/inputs-after.json": {
+      "bytes": 455325,
+      "sha256": "b4f29998223d2bfd0571fec558a2915cf44590157410000f0c00e2844c21047f"
+    },
+    "files/out/portable-multiply64-arithmetic/validate-shader-candidate/inputs-before.json": {
+      "bytes": 455325,
+      "sha256": "b4f29998223d2bfd0571fec558a2915cf44590157410000f0c00e2844c21047f"
+    },
+    "files/out/portable-multiply64-arithmetic/validate-shader-candidate/output-seal.json": {
+      "bytes": 1071,
+      "sha256": "638366eb975f0ff8c2f00b5707a461f5d40e86c3dea5f384e2ee49399d274fe1"
+    },
+    "files/out/portable-multiply64-arithmetic/validate-shader-candidate/owner.json": {
+      "bytes": 1758,
+      "sha256": "b085cbd7b8ae47558b38ce3641bea363238c73f4c909587fdc9f58737e710cc6"
+    },
+    "files/out/portable-multiply64-arithmetic/validate-shader-candidate/samples.jsonl": {
+      "bytes": 449,
+      "sha256": "dd62f1554f0ab2244dc215f8045e807b0588975bf6a1eb86718c6484e597233a"
+    },
+    "files/out/portable-multiply64-arithmetic/validate-shader-candidate/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/validate-shader-candidate/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/verify-build/inputs-after.json": {
+      "bytes": 457644,
+      "sha256": "7b2931efa885ef2184bff208ca2665e6ab23976e14dffb40fdce5fff8a810843"
+    },
+    "files/out/portable-multiply64-arithmetic/verify-build/inputs-before.json": {
+      "bytes": 457644,
+      "sha256": "7b2931efa885ef2184bff208ca2665e6ab23976e14dffb40fdce5fff8a810843"
+    },
+    "files/out/portable-multiply64-arithmetic/verify-build/output-seal.json": {
+      "bytes": 1092,
+      "sha256": "f5078f34b71f8fbb35da64d9fbb7480460e4ad3d2a0d9dc0b463fd8898921918"
+    },
+    "files/out/portable-multiply64-arithmetic/verify-build/owner.json": {
+      "bytes": 1733,
+      "sha256": "9438e4cfc88ed46a42d5ad4b787231c01e990bef5b79020a1a10df1cf3e462e3"
+    },
+    "files/out/portable-multiply64-arithmetic/verify-build/samples.jsonl": {
+      "bytes": 897,
+      "sha256": "a95ac4dc860bfa5353e95e5ac234f647f9c528ecf7d88b27f07d9b8fe7f35bc6"
+    },
+    "files/out/portable-multiply64-arithmetic/verify-build/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-multiply64-arithmetic/verify-build/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "preserve-finite-result.py": {
+      "bytes": 113867,
+      "sha256": "96ca40a0364fa269d96b523ddf95877a2bc1a239fa1c4c1d9f50852de079cc60"
+    },
+    "result.json": {
+      "bytes": 42451,
+      "sha256": "e05fdddbc071e7a63e066bb0720a405e4e2293803669704a2f16e70a65e1d703"
+    },
+    "runner-source/.github/workflows/ci.yml": {
+      "bytes": 33642,
+      "sha256": "8c629e05c0f166bc8b3795478abd808c587f28cfb8dfd09f6d431a7e7eb19146"
+    },
+    "runner-source/scripts/diagnose-macos-retained.py": {
+      "bytes": 46569,
+      "sha256": "8998d73985e3c330f4d7b55d5a421c33c06ceff5cfa160cda6ea54bb97cd9034"
+    },
+    "runner-source/scripts/governance/build_policy.py": {
+      "bytes": 71323,
+      "sha256": "841560051d11252e75aa1c0e3e2973e401edb1456eb53437af7df1bdf500bc67"
+    },
+    "runner-source/scripts/macos_metal_probe.py": {
+      "bytes": 16087,
+      "sha256": "e61c75e6b6769150b4e18632418cbffc1382db1730ca2dbd9b5fb5b813789804"
+    },
+    "runner-source/scripts/macos_moltenvk_integration.py": {
+      "bytes": 41404,
+      "sha256": "c6e20d512bd49cb197ffc79761ea47858b1a27f40949dca07829540417cf27b6"
+    },
+    "runner-source/scripts/macos_vulkan_identity.py": {
+      "bytes": 8915,
+      "sha256": "7f70c1a2a341ea071624dfb01993289a89d54f3377afb48035437469c7d81025"
+    },
+    "runner-source/scripts/runtime_identity.py": {
+      "bytes": 27490,
+      "sha256": "00aa1aa63250599db1cc33692b51dcf73e236be7596f19fc1b603807bbccc8f2"
+    }
+  },
+  "qualification_claimed": false
+}

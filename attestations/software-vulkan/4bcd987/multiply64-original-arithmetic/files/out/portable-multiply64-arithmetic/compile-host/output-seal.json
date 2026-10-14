@@ -1,0 +1,68 @@
+{
+  "inputs_before": {
+    "bytes": 454113,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/compile-host/inputs-before.json",
+    "sha256": "078a221826da1248f8b21f1509974282bba976f86593a9b6003cbfd3cf6ecd25"
+  },
+  "label": "compile-host",
+  "operator_context": {
+    "bytes": 746,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/operator-context.json",
+    "sha256": "16a842cc5f9aff2978dc5dacf76ce14a7ef8499cceadcf5ec2d397cb9b171d9c"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/host.d": {
+      "bytes": 465,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/host.d",
+      "sha256": "30061a6293e6dbd4abbb15ec75665256055cee0001fcd5f280ee2f19596ae494"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/host.o": {
+      "bytes": 92672,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/host.o",
+      "sha256": "b6a47aa06aa3adde2b323e3d6015817869c1a3b438e3036753dc9f75c58cf75f"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_PB32_MULTIPLY64=1",
+      "-I/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/candidate/src",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/host.o",
+      "-c",
+      "/home/astra/.project/Sirius/tests/backend/portable_binary32_test.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/host.d"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 350993,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/source-freeze.json",
+    "sha256": "475bdcafcfb5d47a00af61987b119d8029ae3acd16fb74be5fe86e4465835f75"
+  }
+}

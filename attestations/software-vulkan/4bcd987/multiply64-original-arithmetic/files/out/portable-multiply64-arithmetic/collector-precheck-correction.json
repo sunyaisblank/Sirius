@@ -1,0 +1,11 @@
+{
+  "actual_accepted_schema_value": "SIRIUS_PB32_MULTIPLY64=1",
+  "arithmetic_or_build_actions_reexecuted": false,
+  "correction": "Require the exact actual macro definition including =1.",
+  "correction_scope": "Temporary evidence collector only; no producer, gate, input or acceptance changed.",
+  "initial_collector_precheck": "Compared candidate_macro to symbol without the explicit =1 value; assertion failed before bundle creation.",
+  "producer_results_unchanged": true,
+  "schema": "sirius-preserver-precheck-correction-v1",
+  "second_collector_precheck": "Importlib-loaded gate.py could not import its pinned local interface_signature.py because collector omitted the packet directory from sys.path. Failure occurred before bundle creation.",
+  "second_correction": "Add this exact packet directory first in the temporary collector import path before loading its local reader."
+}

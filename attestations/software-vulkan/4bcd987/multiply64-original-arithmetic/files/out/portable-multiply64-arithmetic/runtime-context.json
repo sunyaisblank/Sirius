@@ -1,0 +1,151 @@
+{
+  "all_build_output_seals": {
+    "compile-host": {
+      "bytes": 2869,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/compile-host/output-seal.json",
+      "sha256": "9da093e3d27da073b8d458f3bdbcdeba5c5cbc00e682174f07094b86b8286fd8"
+    },
+    "compile-shader-candidate": {
+      "bytes": 1678,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/compile-shader-candidate/output-seal.json",
+      "sha256": "705436da95e3af23bf94851e87cbed6abfbc538319970e6a9f278bce506792d2"
+    },
+    "disassemble-shader-candidate": {
+      "bytes": 1476,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/disassemble-shader-candidate/output-seal.json",
+      "sha256": "86f602ad809348c15c9aaced76f9594b00d9675b39ef8e7ac19b6c4eb3f4ab94"
+    },
+    "link-host": {
+      "bytes": 1556,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/link-host/output-seal.json",
+      "sha256": "fe74ae77487043e2133a5d86b97a6938013dfadbd3889a2b087c9c38ee20b722"
+    },
+    "optimize-shader-candidate": {
+      "bytes": 1536,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/optimize-shader-candidate/output-seal.json",
+      "sha256": "70fd45b771f62bb89f2d31df572309e5b9220381d2888aab9fecb8f2909e0297"
+    },
+    "prepare-build": {
+      "bytes": 2437,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/prepare-build/output-seal.json",
+      "sha256": "3bba4299db4e04fe9595c930b2f0a81e1413afa4a8e541878432b83ebf8dba89"
+    },
+    "validate-shader-candidate": {
+      "bytes": 1071,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/validate-shader-candidate/output-seal.json",
+      "sha256": "638366eb975f0ff8c2f00b5707a461f5d40e86c3dea5f384e2ee49399d274fe1"
+    },
+    "verify-build": {
+      "bytes": 1092,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/verify-build/output-seal.json",
+      "sha256": "f5078f34b71f8fbb35da64d9fbb7480460e4ad3d2a0d9dc0b463fd8898921918"
+    }
+  },
+  "build_review": {
+    "bytes": 51392,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/build-review.json",
+    "sha256": "5aa0d0c6174c0f13fa5ece580037c9b644aff2c4c04286992db84ed4baea970d"
+  },
+  "gpu": {
+    "bytes": 258536,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/gpu",
+    "sha256": "93d85da756b93fb242683b1c9a11e2b5731a9f5b24875d07fb504b408bfb16e7"
+  },
+  "host": {
+    "bytes": 615696,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/host",
+    "sha256": "ed7605604850196eac39fb7cd92fd313cb899731f24ff389564b697f5c049871"
+  },
+  "modules": {
+    "candidate": {
+      "assembly": {
+        "bytes": 72467,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/candidate.spvasm",
+        "sha256": "d0ab405d60cad18f680fa4aa30f44fdde64fd8def49287db0ac0b81e66cbc6ff"
+      },
+      "capabilities": [
+        "Int64",
+        "Shader"
+      ],
+      "divide_loops": 1,
+      "divide_widths": [
+        32
+      ],
+      "integer_widths": [
+        "32",
+        "64"
+      ],
+      "module": {
+        "bytes": 26336,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/candidate.spv",
+        "sha256": "8c5871e76dd91fbafbb34eb7efa3997f3d72485bf4fa16e3953575419cb601b6"
+      },
+      "multiply_graph": {
+        "body": "%PB32Multiply = OpFunction %uint None %109\n        %a_9 = OpFunctionParameter %uint\n        %b_1 = OpFunctionParameter %uint\n        %566 = OpLabel\n        %600 = OpBitwiseXor %uint %a_9 %b_1\n     %sign_1 = OpShiftRightLogical %uint %600 %int_31\n        %602 = OpFunctionCall %bool %PB32Nan %a_9\n               OpSelectionMerge %572 None\n               OpBranchConditional %602 %570 %571\n        %570 = OpLabel\n               OpBranch %572\n        %571 = OpLabel\n        %606 = OpFunctionCall %bool %PB32Nan %b_1\n               OpBranch %572\n        %572 = OpLabel\n       %1731 = OpPhi %bool %true %570 %606 %571\n               OpSelectionMerge %574 None\n               OpBranchConditional %1731 %573 %574\n        %573 = OpLabel\n               OpReturnValue %uint_2143289344\n        %574 = OpLabel\n        %612 = OpFunctionCall %bool %PB32Infinity %a_9\n               OpSelectionMerge %577 None\n               OpBranchConditional %612 %575 %576\n        %575 = OpLabel\n               OpBranch %577\n        %576 = OpLabel\n        %616 = OpFunctionCall %bool %PB32Infinity %b_1\n               OpBranch %577\n        %577 = OpLabel\n       %1732 = OpPhi %bool %true %575 %616 %576\n               OpSelectionMerge %585 None\n               OpBranchConditional %1732 %578 %585\n        %578 = OpLabel\n        %621 = OpFunctionCall %bool %PB32Zero %a_9\n               OpSelectionMerge %581 None\n               OpBranchConditional %621 %579 %580\n        %579 = OpLabel\n               OpBranch %581\n        %580 = OpLabel\n        %625 = OpFunctionCall %bool %PB32Zero %b_1\n               OpBranch %581\n        %581 = OpLabel\n       %1737 = OpPhi %bool %true %579 %625 %580\n               OpSelectionMerge %584 None\n               OpBranchConditional %1737 %582 %583\n        %582 = OpLabel\n               OpBranch %584\n        %583 = OpLabel\n        %632 = OpShiftLeftLogical %uint %sign_1 %int_31\n        %633 = OpBitwiseOr %uint %632 %uint_2139095040\n               OpBranch %584\n        %584 = OpLabel\n       %1738 = OpPhi %uint %uint_2143289344 %582 %633 %583\n               OpReturnValue %1738\n        %585 = OpLabel\n        %638 = OpFunctionCall %bool %PB32Zero %a_9\n               OpSelectionMerge %588 None\n               OpBranchConditional %638 %586 %587\n        %586 = OpLabel\n               OpBranch %588\n        %587 = OpLabel\n        %642 = OpFunctionCall %bool %PB32Zero %b_1\n               OpBranch %588\n        %588 = OpLabel\n       %1733 = OpPhi %bool %true %586 %642 %587\n               OpSelectionMerge %590 None\n               OpBranchConditional %1733 %589 %590\n        %589 = OpLabel\n        %647 = OpShiftLeftLogical %uint %sign_1 %int_31\n               OpReturnValue %647\n        %590 = OpLabel\n       %aa_0 = OpFunctionCall %PB32Finite %PB32Unpack %a_9\n       %bb_0 = OpFunctionCall %PB32Finite %PB32Unpack %b_1\n        %651 = OpCompositeExtract %uint %aa_0 0\n        %653 = OpUConvert %ulong %651\n        %654 = OpCompositeExtract %uint %bb_0 0\n        %655 = OpUConvert %ulong %654\n    %product = OpIMul %ulong %653 %655\n        %657 = OpBitwiseAnd %ulong %product %ulong_140737488355328\n      %upper = OpINotEqual %bool %657 %ulong_0\n               OpSelectionMerge %593 None\n               OpBranchConditional %upper %591 %592\n        %591 = OpLabel\n               OpBranch %593\n        %592 = OpLabel\n               OpBranch %593\n        %593 = OpLabel\n       %1734 = OpPhi %uint %uint_21 %591 %uint_20 %592\n        %669 = OpShiftLeftLogical %ulong %ulong_1 %1734\n        %671 = OpISub %ulong %669 %ulong_1\n  %discarded = OpBitwiseAnd %ulong %product %671\n        %674 = OpShiftRightLogical %ulong %product %1734\n        %675 = OpUConvert %uint %674\n        %676 = OpINotEqual %bool %discarded %ulong_0\n               OpSelectionMerge %596 None\n               OpBranchConditional %676 %594 %595\n        %594 = OpLabel\n               OpBranch %596\n        %595 = OpLabel\n               OpBranch %596\n        %596 = OpLabel\n       %1735 = OpPhi %uint %uint_1 %594 %uint_0 %595\n %extended_0 = OpBitwiseOr %uint %675 %1735\n        %684 = OpCompositeExtract %int %aa_0 1\n        %685 = OpCompositeExtract %int %bb_0 1\n        %686 = OpIAdd %int %684 %685\n               OpSelectionMerge %599 None\n               OpBranchConditional %upper %597 %598\n        %597 = OpLabel\n               OpBranch %599\n        %598 = OpLabel\n               OpBranch %599\n        %599 = OpLabel\n       %1736 = OpPhi %int %int_1 %597 %int_0 %598\n        %693 = OpIAdd %int %686 %1736\n        %694 = OpFunctionCall %uint %PB32Round %sign_1 %693 %extended_0\n               OpReturnValue %694\n               OpFunctionEnd\n",
+        "complete_discarded_bit_jam": true,
+        "normalized_unsigned_operands": true,
+        "same_common_round_call": true,
+        "shift_values": [
+          20,
+          21
+        ],
+        "upper_bit": 47,
+        "wide_product": "%product"
+      },
+      "original_divide_unpack_round_normalized_bodies_equal": true
+    },
+    "stock": {
+      "assembly": {
+        "bytes": 75783,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/stock.spvasm",
+        "sha256": "aefc7ead4a18b92ea973931a47e946e6104211ff2d6c56a39db6afa38935856e"
+      },
+      "capabilities": [
+        "Shader"
+      ],
+      "divide_loops": 1,
+      "divide_widths": [
+        32
+      ],
+      "integer_widths": [
+        "32"
+      ],
+      "module": {
+        "bytes": 27500,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/stock.spv",
+        "sha256": "92d261966262c3bc93457bd95cabe2c7a3da007748cc0cf7f46b038311a7b019"
+      },
+      "multiply_graph": null,
+      "original_divide_unpack_round_normalized_bodies_equal": true
+    }
+  },
+  "original_expected": {
+    "bytes": 2788288,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/expected.bin",
+    "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+  },
+  "original_input": {
+    "bytes": 2788292,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/input.bin",
+    "sha256": "5eda64c4af63a0d7507802c4f56a728b3a56d9458328e7f5dabeed300012f605"
+  },
+  "same_admitted_host_reuse": {
+    "device_object": {
+      "bytes": 293320,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+      "sha256": "15c4b34606b7cdfd49adb6ba740eaadf312f0e7e4baf57f9d1f083526e463c56"
+    },
+    "historical_pair_review": {
+      "bytes": 25314,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-pair-review/pair-review.json",
+      "sha256": "42faa6ac8b93d4a8f93c4ff5859da4dfd96c7c0fc0e2662488c748ffb781404d"
+    },
+    "original_output_seal": {
+      "bytes": 2171,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-jit-preparation/compile-device/output-seal.json",
+      "sha256": "42a18d35b00d387df02c41059cb821d1b240660006f829d23ef5ba0facce748d"
+    },
+    "scope": "Exact accepted compiled Int64 device object/source and historical public-argument witness reused. No fresh numeric-process argument capture is claimed."
+  },
+  "scope": "Original integer-only primitive corpus; no retained-program/table or normal-sum runtime acceptance."
+}

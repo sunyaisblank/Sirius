@@ -1,0 +1,27 @@
+{
+  "inputs_before": {
+    "bytes": 455325,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/validate-shader-candidate/inputs-before.json",
+    "sha256": "b4f29998223d2bfd0571fec558a2915cf44590157410000f0c00e2844c21047f"
+  },
+  "label": "validate-shader-candidate",
+  "operator_context": {
+    "bytes": 746,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/operator-context.json",
+    "sha256": "16a842cc5f9aff2978dc5dacf76ce14a7ef8499cceadcf5ec2d397cb9b171d9c"
+  },
+  "outputs": {},
+  "recipe": [
+    [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.2",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic/candidate.spv"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 350993,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/source-freeze.json",
+    "sha256": "475bdcafcfb5d47a00af61987b119d8029ae3acd16fb74be5fe86e4465835f75"
+  }
+}

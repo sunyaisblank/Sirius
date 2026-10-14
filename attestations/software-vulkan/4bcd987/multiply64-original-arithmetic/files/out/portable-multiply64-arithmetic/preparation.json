@@ -1,0 +1,164 @@
+{
+  "accepted_pure_readers": {
+    "excerpt_pins": [
+      {
+        "bytes": 313,
+        "sha256": "88004369b52d0bbaaad536539ae2ad8a5d89340efb26303f8dedaabaf08ebfd7"
+      },
+      {
+        "bytes": 894,
+        "sha256": "d71bcfa67d749e23d59c3832232b1811e7049bbd4a7f3a823c9b1eee1a0ec418"
+      },
+      {
+        "bytes": 5695,
+        "sha256": "6a56f4a851ee6b42b211b4272cd0fc89a0cc773e95f6940b1f0c210a280ca950"
+      }
+    ],
+    "names": [
+      "function_body",
+      "normalized_function",
+      "multiply_shape"
+    ],
+    "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-compiler-screen/files/out/portable-multiply64-compiler/screen.py"
+  },
+  "actions": {
+    "bytes": 1099663,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/actions.json",
+    "sha256": "291e05aed1d7e683daa3b3ffb98b9110b73d1231982c45d439f2e7f333623959"
+  },
+  "archives": {
+    "multiply_compiler": {
+      "commit": "9d75e3bb8cb67ef0e323ed1d0800197b5f64887a",
+      "manifest": {
+        "bytes": 13619,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-compiler-screen/manifest.json",
+        "sha256": "8efda3f7595b0c1d84dcf38cda3aaa984cc5b998e9118d7c17402ac6a4a19039"
+      },
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-compiler-screen"
+    },
+    "ordinary_jit": {
+      "commit": "099179a367c530eba342738f0ea3353d34f20657",
+      "manifest": {
+        "bytes": 13132,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-ordinary-jit-screen/manifest.json",
+        "sha256": "f956155766611616ccab3409daa2f6ac1fd9f8777bb18ff4d04a0235f9a3817d"
+      },
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/multiply64-ordinary-jit-screen"
+    },
+    "original_arithmetic": {
+      "commit": "f2f5055988df7f4f6335e27c9c326365c76487ff",
+      "manifest": {
+        "bytes": 34116,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/manifest.json",
+        "sha256": "b0c5baa9dc01accb442a9d5b58172fe96d2a20c3d5db31ad251062d731e9e9a3"
+      },
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic"
+    }
+  },
+  "claims": {
+    "arithmetic_passed": false,
+    "performance_benefit": false,
+    "production_adopted": false,
+    "qualification": false,
+    "retained_profiles_admitted": false
+  },
+  "complete_output_words": 697072,
+  "execution_performed": false,
+  "execution_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+  "fresh_runtime_cases": [
+    "execute-host",
+    "execute-gpu-candidate"
+  ],
+  "full_original_records": 174268,
+  "future_archive": {
+    "destination": "attestations/software-vulkan/4bcd987/multiply64-original-arithmetic",
+    "inner_result": "files/out/portable-multiply64-arithmetic/arithmetic-result.json",
+    "schema": "sirius-multiply64-original-arithmetic-result-v1",
+    "tag": "evidence/issue-44-multiply64-original-arithmetic"
+  },
+  "future_bin_root": "/home/astra/.project/Sirius/bin/linux-gcc/portable-multiply64-arithmetic",
+  "future_phase_order": [
+    "prepare-build",
+    "compile-host",
+    "link-host",
+    "compile-shader-candidate",
+    "optimize-shader-candidate",
+    "validate-shader-candidate",
+    "disassemble-shader-candidate",
+    "verify-build"
+  ],
+  "operations": 14,
+  "out_root": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic",
+  "packet": {
+    "bytes": 312982,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/packet.json",
+    "sha256": "feb73f506b16afb00e7343e004a2b711724659a8854c10e2886e88c760746b6a"
+  },
+  "prepared_only": true,
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "prospective_commands": [
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/gate.py pin-context",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py prepare-build",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py compile-host",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py link-host",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py compile-shader-candidate",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py optimize-shader-candidate",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py validate-shader-candidate",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py disassemble-shader-candidate",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py verify-build",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/gate.py pin-runtime",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py execute-host",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py execute-gpu-candidate",
+    "/usr/bin/python3 -B /home/astra/.project/Sirius/out/portable-multiply64-arithmetic/gate.py review"
+  ],
+  "prospective_per_owner_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "reused_helpers": {
+    "gpu.cpp": {
+      "byte_exact": true,
+      "bytes": 4168,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/gpu.cpp",
+      "sha256": "8b02baf49c0f94a06292889a93ed33e9344423b1aeafeee77b73df8ff0ab4d83",
+      "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/gpu.cpp"
+    },
+    "owned_guard.py": {
+      "byte_exact": true,
+      "bytes": 20791,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/owned_guard.py",
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/owned_guard.py"
+    },
+    "probe.slang": {
+      "byte_exact": true,
+      "bytes": 1129,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/probe.slang",
+      "sha256": "e99028b1a26d22c2a79ccd4dcbbe095a972f4e0ff17d12a28fe5b5c31bb60468",
+      "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/probe.slang"
+    },
+    "run_owned.py": {
+      "byte_exact": true,
+      "bytes": 12933,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/run_owned.py",
+      "sha256": "492c75609a0dc8ff5eaa0299f7206820bb8a42f85c3ecc5b9b0af98f2496ba9f",
+      "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/run_owned.py"
+    }
+  },
+  "schema": "sirius-multiply64-original-arithmetic-preparation-v1",
+  "source_freeze": {
+    "bytes": 350993,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-multiply64-arithmetic/source-freeze.json",
+    "sha256": "475bdcafcfb5d47a00af61987b119d8029ae3acd16fb74be5fe86e4465835f75"
+  },
+  "source_pitfalls": [
+    "Reuse258536-byte full numeric GPU ELF, never253536-byte one-word refusal canary ABI.",
+    "Unsigned Int64 must be explicitly enabled on the logical device through the exact accepted private object; canonical application device policy is not changed or admitted.",
+    "MULTIPLY64 must be explicit only for candidate host/probe; Divide/Unpack/Round, stock fallback and complete interface/modes/barriers remain original.",
+    "Full14 operations include53524 ProductResidual rows; this integer-only probe does not execute the native-FP64 non-FMA retained residual profile also affected by a global macro.",
+    "Candidate module must show unsigned64 exact product and bit47/20-or21/discarded-bit jam through the same Round; Divide remains32-bit/one4-chunkloop.",
+    "Archive-only dependency references allow mutable compiler/JIT prototype roots to retire. No original corpus, provider, allocation, launch, timeout or acceptance setting is weakened."
+  ],
+  "stock_reuse": "Final accepted f2f5055 complete source/build/producer/corpus/provider receipt only, all737 static pins and17 terminal owners; no stock rerun and no rejected historical reader."
+}
