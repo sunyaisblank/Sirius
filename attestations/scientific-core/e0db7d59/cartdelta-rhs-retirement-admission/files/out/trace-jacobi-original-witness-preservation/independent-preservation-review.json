@@ -1,0 +1,137 @@
+{
+  "schema": "sirius-original-trace-jacobi-independent-preservation-review-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "reviewed_utc": "2026-10-15T17:08:20.658197+00:00",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "passed": true,
+  "scientific_attempt_passed": false,
+  "blockers": [],
+  "scope": "Byte preservation and provenance of the previously reviewed bounded incomplete stop; this PASS is not P2 numerical acceptance or retirement admission.",
+  "pins": {
+    "manifest": {
+      "path": "attestations/scientific-core/e0db7d59/trace-jacobi-source-and-software-rss-stop/manifest.json",
+      "bytes": 9631,
+      "sha256": "1022cd2ae6fdaa1156c083348fd9ea89d6642bcf0927efc95e158e7c23b69cdc"
+    },
+    "preservation": {
+      "path": "attestations/scientific-core/e0db7d59/trace-jacobi-source-and-software-rss-stop/preservation.json",
+      "bytes": 18092,
+      "sha256": "bfc06bd16c1fc46b602aceed5d9dbc1956967815c39dfa47c9983c714d9c1d99"
+    },
+    "catalogue": {
+      "path": "out/trace-jacobi-original-witness-preservation/static-archive-dependencies.json",
+      "bytes": 296348,
+      "sha256": "22971ab8d407736e9de4ed3f43642aa6ec47658b9ee06691a55e43ec5e1708d6"
+    },
+    "independent_terminal_stop": {
+      "path": "attestations/scientific-core/e0db7d59/trace-jacobi-source-and-software-rss-stop/files/out/trace-jacobi-original-witness-e0db7d59/independent-terminal-stop-review.json",
+      "bytes": 9752,
+      "sha256": "4c063fed4efa0f8209e8c6ce3ddb7627c79f7071658b1d08cd0da7b5b20dfa0e"
+    },
+    "root_preservation_check": {
+      "path": "out/trace-jacobi-original-witness-preservation/root-preservation-check.json",
+      "bytes": 808,
+      "sha256": "02a0d4bb2cc3b8203b75331ecbd8a2fe88da7c90b576b5e8712d3e34c926c894"
+    },
+    "retirement_source_contract": {
+      "path": "attestations/scientific-core/e0db7d59/trace-jacobi-source-and-software-rss-stop/files/out/kerr-cartdelta-rhs-retirement/source-contracts.json",
+      "bytes": 953822,
+      "sha256": "3a9bbd7b3ebd7f1535573cb861fe78c2704697a4bfc82ebefc7d71de8f60f430"
+    }
+  },
+  "complete_file_coverage": {
+    "actual_bundle_files": 50,
+    "manifest_entries_excluding_itself": 49,
+    "payload_copy_pairs": 48,
+    "exact_manifest_tree_and_all_hashes": true,
+    "all48_raw_to_bundle_copy_pairs_byte_exact": true,
+    "payload_partition": {
+      "all_current_P2_files": 32,
+      "late_coupled_publication_files": 5,
+      "issue53_and100_followup_files": 9,
+      "prospective_retirement_source_contract": 1,
+      "static_catalogue": 1
+    },
+    "all_current_raw_P2_files_covered_without_extras": true,
+    "no_missing_XML_or_positive_acceptance_synthesized": true
+  },
+  "static_input_backing": {
+    "catalogue_exact_actual_before_after_set": 621,
+    "preflight_files_plus_self": 621,
+    "all_saved_input_identities_equal_catalogue_and_current": true,
+    "partition": {
+      "exact_source_blob": 538,
+      "external_host_input_hash_only": 36,
+      "held_canonical_build_metadata_hash_only": 2,
+      "already_preserved_canonical_product_bytes": 14,
+      "current_packet_copy": 20,
+      "already_preserved_software_bytes": 7,
+      "already_preserved_coupled_bytes": 2,
+      "already_preserved_coupled_metadata": 2
+    },
+    "all20_current_packet_static_final_copies_byte_exact": true,
+    "distinct_named_commit_path_pairs_independently_checked": 557,
+    "all_named_git_objects_regular_blobs_and_bytes_match": true,
+    "canonical_alias_roles": "Actual Linux backend ELF is byte-backed by b5c4f2a cd99 evidence. Six compiled/staged parity/trace pairs and generated alignment receipt use exact d066 CI blob aliases. Alias identity does not imply foreign-OS executable interchangeability or a new ELF relink.",
+    "external_host_binary_backups_claimed": false,
+    "Cache_and_Ninja_byte_backups_or_reconstruction_claimed": false,
+    "prior_bundles_recursively_copied": false
+  },
+  "bounded_stop_disposition": {
+    "owner_passed": false,
+    "child_exit": -15,
+    "stop_reason": "diagnostic_sampled_rss_guard",
+    "wall_seconds": 188.78222234197892,
+    "peak_sampled_aggregate_RSS_KiB": 4203496,
+    "limit_RSS_KiB": 4194304,
+    "excess_KiB": 9192,
+    "minimum_available_KiB": 15806704,
+    "XML_present": false,
+    "collector_executed": false,
+    "completed_rung_or_numeric_result_known": false,
+    "prior_terminal_audit_completed_and_ownership_valid": true,
+    "historical_pending_flags_preserved": "Creation-time source/runtime/catalogue/root-stop flags remain unchanged and are composed with actual later evidence, never converted into a positive result.",
+    "no_P2_numerical_failure_FP64_unsupported_phase_allocation_or_performance_claim": true
+  },
+  "late_publication_and_issue_records": {
+    "coupled_commit": "4fea48f0797f3f905310e7555b1071bf54a2a528",
+    "publication_receipt_push_log_recorded_remote_ref_and_local_tag_join": true,
+    "publication_actual_push_closed_zero_and_fresh_remote_verification_recorded": true,
+    "new_network_request_by_reviewer": false,
+    "issue53_existing_comment_id": 6189673442,
+    "issue53_after_body_exact_request_prior_body_exact_suffix": true,
+    "issue53_scope": "Exact named finite software/native/coupled passes and build-only CI are distinct. Its update predates the P2 attempt and explicitly claims no pending P2 result; this later bundle preserves the subsequent incomplete stop.",
+    "issue100_existing_comment_id": 6173565863,
+    "issue100_after_body_exact_request_prior_body_exact_prefix": true,
+    "issue100_scope": "Five named folders, nine directory enumerations/18 entries and zero filename candidates; no all-storage/content/cloud search or original July identity. Original identity remains unresolved and the user answer is not a waiver."
+  },
+  "retirement_boundary": {
+    "source_catalogue_candidate_files": 643,
+    "recorded_backed_files": 638,
+    "explicit_transport_encoding_omissions": 5,
+    "source_contract_only": true,
+    "deletion_authorized_or_performed": false,
+    "retirement_independent_review_or_fresh_consumer_birth_keep_set_audit_performed_here": false,
+    "raw_inputs_retired": false,
+    "holds_released": false,
+    "requirement": "Copying the prospective contract admits no cleanup. Its independent source admission, exact publication and fresh root removal predicates remain separate."
+  },
+  "checkout": {
+    "head": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "new_bundle_publication_by_root_pending": true,
+    "this_ignored_review_committed_or_pushed": false
+  },
+  "method": "Passive stdlib JSON/text/hash and read-only Git blob/tag/tree-status reads. No helper/project import/parser/tool/provider/test/network/process/signal/removal execution or existing artifact/source mutation; no proposed lifetime candidate inspected.",
+  "claim_limits": [
+    "No unchanged retry or guard raise authorized.",
+    "No positive trace/Jacobi/P2, completed precision rung, cold-frame/performance, Mandatory/full science/UI/external-domain/release qualification."
+  ]
+}
