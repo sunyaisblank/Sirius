@@ -1,0 +1,543 @@
+{
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "tag": "evidence/issue-53-trace-failure-context-ci-02ee51f",
+  "commit": "391d0edd7164e109410bef6c3a110ed410970ef6",
+  "bundle": "attestations/qualification/02ee51f/diagnostic-ci-38711720394",
+  "bundle_files": 151,
+  "manifest": {
+    "bytes": 28237,
+    "sha256": "0785e56e4cb0b5f864de26c3f70f5b862c8c5ec0bc38e26d2208b608c1686abf"
+  },
+  "all_local_and_named_git_bytes_checked": true,
+  "raw_copied_files": {
+    "out/trace-failure-context-checks/artifacts-current.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/artifacts-current.json",
+      "identity": {
+        "bytes": 3022,
+        "sha256": "58ecd46c6498f70dba4130c48af52cddada25afd22c32690fc425b122ba5f91b"
+      }
+    },
+    "out/trace-failure-context-checks/artifacts-macos-first.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/artifacts-macos-first.json",
+      "identity": {
+        "bytes": 1521,
+        "sha256": "8dffbdd78f089032ec41259f3d8714fa18ab3990d6f71a04275008527bdb4c7e"
+      }
+    },
+    "out/trace-failure-context-checks/build.stderr": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/build.stderr",
+      "identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "out/trace-failure-context-checks/build.stdout": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/build.stdout",
+      "identity": {
+        "bytes": 1177,
+        "sha256": "e56412ec6a5b583306197dc3478558387a86f882a97528c634b201bec29d40f0"
+      }
+    },
+    "out/trace-failure-context-checks/dispatch.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/dispatch.json",
+      "identity": {
+        "bytes": 148,
+        "sha256": "6586919d5e957e08627f5b3b38589fd15a41675d3891e86357ff0a089b16b66a"
+      }
+    },
+    "out/trace-failure-context-checks/dispatch.stderr": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/dispatch.stderr",
+      "identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "out/trace-failure-context-checks/dispatch.stdout": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/dispatch.stdout",
+      "identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "out/trace-failure-context-checks/final.diff": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/final.diff",
+      "identity": {
+        "bytes": 3457,
+        "sha256": "34917feb0c37a69b71850c79293184fd12798aec5ba072b6f557cad6be4cf4f7"
+      }
+    },
+    "out/trace-failure-context-checks/format.stderr": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/format.stderr",
+      "identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "out/trace-failure-context-checks/format.stdout": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/format.stdout",
+      "identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "out/trace-failure-context-checks/jobs-current.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/jobs-current.json",
+      "identity": {
+        "bytes": 14220,
+        "sha256": "5e7d9affb6652c3fe8b0381b4aeb416c8abb33d290fd94a8b734c980dd3606f2"
+      }
+    },
+    "out/trace-failure-context-checks/jobs-initial.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/jobs-initial.json",
+      "identity": {
+        "bytes": 12901,
+        "sha256": "77c9d39e315335292e61b18daacf7d208899ef01328a46786236703b8859d170"
+      }
+    },
+    "out/trace-failure-context-checks/macos-artifact-download.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/macos-artifact-download.json",
+      "identity": {
+        "bytes": 7404,
+        "sha256": "020b1f40917f97559134b353e03770fb71ded9e17377224e89067accc859788b"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/alignment_receipt.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/alignment_receipt.json",
+      "identity": {
+        "bytes": 1240,
+        "sha256": "2befc45be435b643daea2968290f8ad3b51997787618c6e3b5d22598f282c5ef"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/ctest-inventory.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/ctest-inventory.json",
+      "identity": {
+        "bytes": 1196362,
+        "sha256": "3cd0e1714c43d9ea7084e956fabaeef542703564976a0bfa08a46b123e03797b"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/macos-build.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/macos-build.json",
+      "identity": {
+        "bytes": 8900,
+        "sha256": "c4137b525f44da71e04f05d7217a4a16031ae5e35f151e5ac9b4223fa0ed2b2a"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/native-build-gate-log": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/native-build-gate-log",
+      "identity": {
+        "bytes": 2923,
+        "sha256": "8eca753df4ef7d8da5ceed2a55711a4e1d171ec98827c1a3b58b1ea52ad8d1a9"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/native-build-tested-sirius_app_tests": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/native-build-tested-sirius_app_tests",
+      "identity": {
+        "bytes": 9623824,
+        "sha256": "afd47aef33c76a49a7a5a2f39e1ec09644aa4b34e94619c4d712626ca1f73e6d"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/native-build-tested-sirius_backend_tests": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/native-build-tested-sirius_backend_tests",
+      "identity": {
+        "bytes": 11581976,
+        "sha256": "290f5af7379d848e9812cf709dd3bfd29ef9b54542ca08a1074d9346ebbb1546"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/native-build-tested-sirius_base_tests": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/native-build-tested-sirius_base_tests",
+      "identity": {
+        "bytes": 641344,
+        "sha256": "458c5034879d2b770850f8f5e915a51a339c128aa23c4303ef1f28cc1e0d7324"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/native-build-tested-sirius_core_tests": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/native-build-tested-sirius_core_tests",
+      "identity": {
+        "bytes": 3359360,
+        "sha256": "ba996721d16302ce4cdf785630f519ad2b8f5a741c940682b09a08d282360d00"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/native-build-tested-sirius_oracle_tests": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/native-build-tested-sirius_oracle_tests",
+      "identity": {
+        "bytes": 1168928,
+        "sha256": "47717392648b6a1fb37fa41f1f4dc92dcf45830fe40ca1b357cb138fab0dffdc"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/native-build-tested-sirius_render_tests": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/native-build-tested-sirius_render_tests",
+      "identity": {
+        "bytes": 10531504,
+        "sha256": "c48d776d7e83306000077920639c95a0b2224e8f25f2cc7b298f74a2335b0d6f"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/native_build_gate.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/native_build_gate.json",
+      "identity": {
+        "bytes": 9651,
+        "sha256": "a9f7c8cfffc8f2173e2c5a4091a58ee63c047f6d87d0c35691e6b42594447bd7"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/native_build_gate_junit.xml": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/native_build_gate_junit.xml",
+      "identity": {
+        "bytes": 5159,
+        "sha256": "2dfc3a983e672761f51026d08d4dac4fa66a63c2520ebbfcc4ee7f1f6678f08d"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/qualification-product-operating_model": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/qualification-product-operating_model",
+      "identity": {
+        "bytes": 130611,
+        "sha256": "b1c00980837dbf22070353077cd0cc492c6cc582ae7bf9679571ab63602196e6"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/qualification-product-starfield": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/qualification-product-starfield",
+      "identity": {
+        "bytes": 29984397,
+        "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/qualification-product-trace_fp32comp_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/qualification-product-trace_fp32comp_spv",
+      "identity": {
+        "bytes": 4041472,
+        "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/qualification-product-trace_fp64_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/qualification-product-trace_fp64_spv",
+      "identity": {
+        "bytes": 3916620,
+        "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/qualification-product-trace_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/qualification-product-trace_spv",
+      "identity": {
+        "bytes": 4038148,
+        "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/qualification-product-viewer_rdsd003a_fragment": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/qualification-product-viewer_rdsd003a_fragment",
+      "identity": {
+        "bytes": 1167,
+        "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/qualification-product-viewer_rdsd003a_vertex": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/qualification-product-viewer_rdsd003a_vertex",
+      "identity": {
+        "bytes": 198,
+        "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/qualification-sirius.bin": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/qualification-sirius.bin",
+      "identity": {
+        "bytes": 8356520,
+        "sha256": "58601925856121f8d3e0ef20001897c9faf8f8404ed99172c03b6363ed1db660"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-camera_frame_probe_fp32comp_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-camera_frame_probe_fp32comp_spv",
+      "identity": {
+        "bytes": 36660,
+        "sha256": "62fea5c064210321cdfaac002298a9fd318c699cd0dc7bda0bf2aef0cc36a046"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-camera_frame_probe_fp64_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-camera_frame_probe_fp64_spv",
+      "identity": {
+        "bytes": 37728,
+        "sha256": "a2c6b90faf3ccf00d2d51b4532a95e3015c6dc320220f5209949740c22707936"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-camera_frame_probe_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-camera_frame_probe_spv",
+      "identity": {
+        "bytes": 36660,
+        "sha256": "62fea5c064210321cdfaac002298a9fd318c699cd0dc7bda0bf2aef0cc36a046"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-coupled_probe_fp64_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-coupled_probe_fp64_spv",
+      "identity": {
+        "bytes": 2288152,
+        "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-infinity_probe_fp32comp_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-infinity_probe_fp32comp_spv",
+      "identity": {
+        "bytes": 100040,
+        "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-infinity_probe_fp64_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-infinity_probe_fp64_spv",
+      "identity": {
+        "bytes": 100568,
+        "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-infinity_probe_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-infinity_probe_spv",
+      "identity": {
+        "bytes": 99692,
+        "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-metric_consistency_probe_fp32comp_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-metric_consistency_probe_fp32comp_spv",
+      "identity": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-metric_consistency_probe_fp64_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-metric_consistency_probe_fp64_spv",
+      "identity": {
+        "bytes": 66064,
+        "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-metric_consistency_probe_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-metric_consistency_probe_spv",
+      "identity": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-parity_probe_fp32comp_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-parity_probe_fp32comp_spv",
+      "identity": {
+        "bytes": 6306768,
+        "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-parity_probe_fp64_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-parity_probe_fp64_spv",
+      "identity": {
+        "bytes": 6290916,
+        "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-parity_probe_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-parity_probe_spv",
+      "identity": {
+        "bytes": 6302544,
+        "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-portable_binary32_reference": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-portable_binary32_reference",
+      "identity": {
+        "bytes": 4182444,
+        "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-retained_camera_fixture": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-retained_camera_fixture",
+      "identity": {
+        "bytes": 416303,
+        "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-retained_camera_fp32_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-retained_camera_fp32_spv",
+      "identity": {
+        "bytes": 35160,
+        "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-retained_camera_fp32comp_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-retained_camera_fp32comp_spv",
+      "identity": {
+        "bytes": 35196,
+        "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-smoke_spv": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-smoke_spv",
+      "identity": {
+        "bytes": 1404,
+        "sha256": "55f47c5adda0ecacec02331e95ce3dde3c7dbfc2cbdb171ed68f2c6d7a37e273"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-trace_cuda": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-trace_cuda",
+      "identity": {
+        "bytes": 623756,
+        "sha256": "4c7d93bae9aa2d7c60162b1f884f7e4b805910069e3285c0cefbd7a15680a390"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build/test-input-trace_metal": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/macos-native-build/test-input-trace_metal",
+      "identity": {
+        "bytes": 340035,
+        "sha256": "b6d4a5a435b944c2b80a4d8219b65a9f28c4cbc480d308246d6a17a3fc586bf2"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build-admission.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/macos-native-build-admission.json",
+      "identity": {
+        "bytes": 699,
+        "sha256": "56005dbc7eb06b9a6d1f1345c4e14d220944399f57e51afef9fb54b353d3220e"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build-verify.stderr": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/macos-native-build-verify.stderr",
+      "identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "out/trace-failure-context-checks/macos-native-build-verify.stdout": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/macos-native-build-verify.stdout",
+      "identity": {
+        "bytes": 91,
+        "sha256": "e9bf5830ffbc2a3f1c923e7382e670c28b1d37f21539534797d35a6736cd9150"
+      }
+    },
+    "out/trace-failure-context-checks/result.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/result.json",
+      "identity": {
+        "bytes": 27301,
+        "sha256": "837149bd077b615cdd5669dd2b56d60865d186fa2fbe2e4384b4baf211c0b0ad"
+      }
+    },
+    "out/trace-failure-context-checks/run-current.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/run-current.json",
+      "identity": {
+        "bytes": 12142,
+        "sha256": "b24df1ef2d72078aa909494d170c56493363128ea176278ef2c9dc37bb13cfdb"
+      }
+    },
+    "out/trace-failure-context-checks/run-logs.zip": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/run-logs.zip",
+      "identity": {
+        "bytes": 141464,
+        "sha256": "a00b509ae8e13ec47684618ce66be41b026c23f7194212cb8bde0071cd6a0ec7"
+      }
+    },
+    "out/trace-failure-context-checks/runs-initial.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/runs-initial.json",
+      "identity": {
+        "bytes": 12175,
+        "sha256": "2b978079b60a1aa4ff14f46568e0217edaffba0c28e4fb2156d0be2b1ccf55ec"
+      }
+    },
+    "out/trace-failure-context-checks/source-author.diff": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/source-author.diff",
+      "identity": {
+        "bytes": 3386,
+        "sha256": "1c2fd6efc53d5c30f16030b4ed896fc6d0824180a279f4d51959fd0ea48cc8cf"
+      }
+    },
+    "out/trace-failure-context-checks/source-checks.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/source-checks.json",
+      "identity": {
+        "bytes": 1782,
+        "sha256": "4a0fb57f0db9afb3171786497a825b8e16e3ee5b5a1d8c5093a74d32c5fd22b6"
+      }
+    },
+    "out/trace-failure-context-checks/source-revision.txt": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/source-revision.txt",
+      "identity": {
+        "bytes": 41,
+        "sha256": "0d88e5f06895c99b9ec209fc377c77ea07d8eec3500fe239b45be16f7cc4be42"
+      }
+    },
+    "out/trace-failure-context-checks/trace_continuation_probe.author.h": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/trace_continuation_probe.author.h",
+      "identity": {
+        "bytes": 13728,
+        "sha256": "213f5dc82c5dc06b66ab6ba39cf378917b43451ad714349a9f8fd406a6a2cd64"
+      }
+    },
+    "out/trace-failure-context-checks/trace_continuation_probe.original.h": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/trace_continuation_probe.original.h",
+      "identity": {
+        "bytes": 11185,
+        "sha256": "86e28bf045a8cdb780979ebdd1866f48e841355ddbf4927d1d4d2b886df22ee1"
+      }
+    },
+    "out/trace-failure-context-checks/windows-gate-diagnostics/LastTest.log": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/windows-gate-diagnostics/LastTest.log",
+      "identity": {
+        "bytes": 10961,
+        "sha256": "2b49ff016656bf983df38b2b78b7456ef49e4892e257e97a721ecd72f9dbd872"
+      }
+    },
+    "out/trace-failure-context-checks/windows-gate-diagnostics/LastTestsFailed.log": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/windows-gate-diagnostics/LastTestsFailed.log",
+      "identity": {
+        "bytes": 65,
+        "sha256": "a0431b85a99ee1d4fa0af9e82783eb72dc1ba775d1cd55cc0fd71303d4d10232"
+      }
+    },
+    "out/trace-failure-context-checks/windows-gate-diagnostics/native_build_gate_ctest.log": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/windows-gate-diagnostics/native_build_gate_ctest.log",
+      "identity": {
+        "bytes": 3087,
+        "sha256": "aa87b9dc45b42946990a8cc818ffb56e38556815671232c908f791925d5db26d"
+      }
+    },
+    "out/trace-failure-context-checks/windows-gate-diagnostics/native_build_gate_junit.xml": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/windows-gate-diagnostics/native_build_gate_junit.xml",
+      "identity": {
+        "bytes": 5155,
+        "sha256": "8e209aecb1b24cb17567a63ba373cc296c00df9c5ae245ec3be9b3076bbfd5a7"
+      }
+    },
+    "out/trace-failure-context-checks/windows-gate-diagnostics.zip": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/windows-gate-diagnostics.zip",
+      "identity": {
+        "bytes": 4616,
+        "sha256": "c874c67f35b56318c27b9a99cc51a620ba77b63bb203127e65638000fe37093e"
+      }
+    },
+    "out/trace-failure-context-checks/windows-initial-controls.log": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/windows-initial-controls.log",
+      "identity": {
+        "bytes": 4966,
+        "sha256": "1cf1dff5bff5f0a16a87ae9891ebd3161260b0f498a301bdc70704eac7db640b"
+      }
+    },
+    "out/trace-failure-context-checks/windows-native-gate-failure.log": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/windows-native-gate-failure.log",
+      "identity": {
+        "bytes": 9936,
+        "sha256": "94a4c62bdbaa4379bbe0b9dcd3c08467f556f609d5da992cc6d7f53284a995fd"
+      }
+    },
+    "out/trace-failure-context-checks/windows-product-admission.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/windows-product-admission.json",
+      "identity": {
+        "bytes": 22779,
+        "sha256": "7ca163f76d332491547610e18dd66ca88652abe9c928c6d0380dbbe2354aca70"
+      }
+    },
+    "out/trace-failure-context-checks/windows-product-artifact-download.json": {
+      "destination": "attestations/qualification/02ee51f/diagnostic-ci-38711720394/source-and-ci-checks/windows-product-artifact-download.json",
+      "identity": {
+        "bytes": 1153,
+        "sha256": "a2f2749c4af154e8467caed172027c3cf287b4247261f3341450bae9832f9ffc"
+      }
+    }
+  },
+  "omitted_product_containers": {
+    "macos-native-attestation.zip": {
+      "bytes": 58432417,
+      "sha256": "b657242a1ae6dc8ee5669e06b17447a7b1ba4a6bb6649f0826632203a06d69e0"
+    },
+    "sirius-windows-diagnostic-build-products.zip": {
+      "bytes": 64206469,
+      "sha256": "9af629e64f268389a20e450b063c5d3aa33fd6b188d6de26609e08c02e4f7aab"
+    }
+  },
+  "stage_files_retained": 75
+}
