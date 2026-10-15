@@ -1,0 +1,66 @@
+--- a/src/sirius/kernels/gr_integrator.slang
++++ b/src/sirius/kernels/gr_integrator.slang
+@@ -32,31 +32,39 @@
+                                           out Vec4Cart dx, out Vec4Cart du) {
+     dx = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+     du = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
++    // Reuse one acceleration call site for the same four ordered RK4 stages.
++    // Keep already-dt-scaled increments, stage-local refusal and the final sum.
++    Vec4Cart dx1 = dx, dx2 = dx, dx3 = dx, dx4 = dx;
++    Vec4Cart du1 = du, du2 = du, du3 = du, du4 = du;
++    Vec4Cart previousDx = dx, previousDu = du;
+     Vec4Cart acceleration;
+-    if (!TryGeodesicAccelerationCart(state, M, a, Q, Lambda, acceleration)) return false;
+-    Vec4Cart dx1 = ScaleVec4Cart(state.u, dt);
+-    Vec4Cart du1 = ScaleVec4Cart(acceleration, dt);
+-
+-    GeodesicStateCart s2;
+-    s2.x = AddVec4Cart(state.x, ScaleVec4Cart(dx1, 0.5f));
+-    s2.u = AddVec4Cart(state.u, ScaleVec4Cart(du1, 0.5f));
+-    if (!TryGeodesicAccelerationCart(s2, M, a, Q, Lambda, acceleration)) return false;
+-    Vec4Cart dx2 = ScaleVec4Cart(s2.u, dt);
+-    Vec4Cart du2 = ScaleVec4Cart(acceleration, dt);
+-
+-    GeodesicStateCart s3;
+-    s3.x = AddVec4Cart(state.x, ScaleVec4Cart(dx2, 0.5f));
+-    s3.u = AddVec4Cart(state.u, ScaleVec4Cart(du2, 0.5f));
+-    if (!TryGeodesicAccelerationCart(s3, M, a, Q, Lambda, acceleration)) return false;
+-    Vec4Cart dx3 = ScaleVec4Cart(s3.u, dt);
+-    Vec4Cart du3 = ScaleVec4Cart(acceleration, dt);
+-
+-    GeodesicStateCart s4;
+-    s4.x = AddVec4Cart(state.x, dx3);
+-    s4.u = AddVec4Cart(state.u, du3);
+-    if (!TryGeodesicAccelerationCart(s4, M, a, Q, Lambda, acceleration)) return false;
+-    Vec4Cart dx4 = ScaleVec4Cart(s4.u, dt);
+-    Vec4Cart du4 = ScaleVec4Cart(acceleration, dt);
++    [loop] for (int stage = 0; stage < 4; ++stage) {
++        GeodesicStateCart stageState = state;
++        if (stage == 1 || stage == 2) {
++            stageState.x = AddVec4Cart(state.x, ScaleVec4Cart(previousDx, 0.5f));
++            stageState.u = AddVec4Cart(state.u, ScaleVec4Cart(previousDu, 0.5f));
++        } else if (stage == 3) {
++            stageState.x = AddVec4Cart(state.x, previousDx);
++            stageState.u = AddVec4Cart(state.u, previousDu);
++        }
++        if (!TryGeodesicAccelerationCart(stageState, M, a, Q, Lambda,
++                                         acceleration)) return false;
++        previousDx = ScaleVec4Cart(stageState.u, dt);
++        previousDu = ScaleVec4Cart(acceleration, dt);
++        if (stage == 0) {
++            dx1 = previousDx;
++            du1 = previousDu;
++        } else if (stage == 1) {
++            dx2 = previousDx;
++            du2 = previousDu;
++        } else if (stage == 2) {
++            dx3 = previousDx;
++            du3 = previousDu;
++        } else {
++            dx4 = previousDx;
++            du4 = previousDu;
++        }
++    }
+ 
+     Real sixth = Real(1.0) / Real(6.0);
+     dx = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(dx1, ScaleVec4Cart(dx2, 2.0f)),

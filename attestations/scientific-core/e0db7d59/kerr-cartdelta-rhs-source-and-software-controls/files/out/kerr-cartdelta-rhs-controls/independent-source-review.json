@@ -1,0 +1,216 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-controls-independent-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "runtime_admitted": false,
+  "source_revision_before_integration": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "blockers": [],
+  "review_scope": "Independent passive source review of seven copied apparatus files and the parent-authorized common-static-input strengthening. No source integration, new build, concrete runtime metadata, scientific result or execution admission.",
+  "pins": {
+    "actions.pending.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/actions.pending.json",
+      "bytes": 42039,
+      "sha256": "8b7f6dbaedf54f76d120ac63dca101a482a5491968c1b641b5aaa835264de643"
+    },
+    "originals/actions.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/originals/actions.json",
+      "bytes": 39135,
+      "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+    },
+    "originals/root_acceptance.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/originals/root_acceptance.py",
+      "bytes": 3755,
+      "sha256": "0b01313e0adabb4511624758c7de3f631d270e59e4d6c121605f0789c4646ca4"
+    },
+    "owned_guard.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/root_acceptance.py",
+      "bytes": 3757,
+      "sha256": "34b7ee5a700ab9c88622cd2e50e66f114cc78ab865e704187a641f46732b5ca4"
+    },
+    "run_owned.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "source-contracts.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/source-contracts.json",
+      "bytes": 6178,
+      "sha256": "6509ac76369cc24aa39c8ecfb327f4156cdc5d8020f38dedbf62e0492151c661"
+    }
+  },
+  "exact_reuse": {
+    "run_owned_and_guard_mature_bytes_exact": true,
+    "originals_known_original_action_and_checkpoint_pins_exact": true,
+    "checkpoint_inverse_exact": "Only one out/kerr-shared-loop-controls directory literal becomes out/kerr-cartdelta-rhs-controls; no functional predicate change.",
+    "pending_actions_changed_keys_only": [
+      "revision",
+      "frozen_inputs",
+      "scope"
+    ],
+    "all_other_argv_limits_provider_cache_XML_values_original_exact": true,
+    "passive_Python_AST_parse_only": true
+  },
+  "ordered_original_controls": [
+    {
+      "case": "captured-fp32",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "positive_XML_property": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      },
+      "pending_frozen_inputs": 47,
+      "all_prior_four_receipts": 0
+    },
+    {
+      "case": "captured-fp32comp",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "positive_XML_property": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      },
+      "pending_frozen_inputs": 51,
+      "all_prior_four_receipts": 4
+    },
+    {
+      "case": "retry-fp32",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "positive_XML_property": {
+        "name": "fp32_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "pending_frozen_inputs": 55,
+      "all_prior_four_receipts": 8
+    },
+    {
+      "case": "retry-fp32comp",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "positive_XML_property": {
+        "name": "fp32comp_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "pending_frozen_inputs": 59,
+      "all_prior_four_receipts": 12
+    },
+    {
+      "case": "retry-fp64",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "positive_XML_property": {
+        "name": "fp64_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "pending_frozen_inputs": 63,
+      "all_prior_four_receipts": 16
+    },
+    {
+      "case": "unrepresented-stage",
+      "test": "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+      "positive_XML_property": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      },
+      "pending_frozen_inputs": 67,
+      "all_prior_four_receipts": 20
+    },
+    {
+      "case": "null-projection",
+      "test": "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+      "positive_XML_property": {
+        "name": "parity_opcode_10_completed_records",
+        "value": "8"
+      },
+      "pending_frozen_inputs": 71,
+      "all_prior_four_receipts": 24
+    },
+    {
+      "case": "precision-invariants",
+      "test": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+      "positive_XML_property": {
+        "name": "fp64_evidence",
+        "value": "native_invariants_executed"
+      },
+      "pending_frozen_inputs": 75,
+      "all_prior_four_receipts": 28
+    }
+  ],
+  "chain_and_checkpoint_contract": {
+    "pending_base_inputs": 47,
+    "pending_counts": [
+      47,
+      51,
+      55,
+      59,
+      63,
+      67,
+      71,
+      75
+    ],
+    "each_prior_ancestor_owner_before_after_XML_included": true,
+    "all_actual_input_sets_duplicate_free": true,
+    "no_own_output_as_input": true,
+    "no_retired_old_work_prefix_in_frozen_inputs": true,
+    "checkpoint_behavior": "Checks each previous accepted receipt and all its saved files, root-preflight pinned files, current owner/whole input maps/source and fresh saved births, child/session provider maps, sampled guards, exact one completed XML and positive property; writes acceptance only after all predicates.",
+    "root_obligation": "Root retains/checks prior accepted checkpoint bytepins before each next launch; no skipped-ancestor execution or continuation after nonpass. Mature runner itself does not interpret root_required_xml or readiness admission, so root checkpoint ordering is required."
+  },
+  "approved_root_materialization_amendment": {
+    "explicit_parent_authorization": true,
+    "supersedes_only_revision_literal_wording_in_readiness_conditions_0": true,
+    "allowed_changes": "Replace pending revision with actual new clean/pushed source HEAD AND append the SAME common owned static apparatus paths to every action.frozen_inputs. No existing runtime path, ancestor record, argv/filter, threshold, guard, cache or XML substitution.",
+    "common_static_paths": "Changed root_acceptance.py, source-contracts.json, actions.pending.json, final actions.json, both mature helpers, both preserved originals, this independent review, and admitted root-preflight/current readiness-inventory-compiled observations as appropriate.",
+    "hash_cycle_rule": "Actions contain path strings only. Root-preflight may pin final actions and this review, but must exclude its own file and all own mutable outputs; no receipt may embed its own final hash.",
+    "final_required_equality": "Root independently verifies final exact input sets as pending runtime47 + all4n prior records + identical duplicate-free shared static additions; array ordering may differ only where it does not alter exact content or command/ancestor order.",
+    "runtime_admission_pending": true
+  },
+  "unchanged_governors": {
+    "kind": "test",
+    "expected_exit_int": 0,
+    "software_provider": true,
+    "device": "0",
+    "ICD": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "disable_software_shader_cache": false,
+    "seconds_external_diagnostic": 300,
+    "aggregate_RSS_KiB": 4194304,
+    "WSL_reserve_KiB": 2097152,
+    "original_RunProbe_physical_ms": 1000,
+    "external_LVP_condition": "Root must explicitly set and record LVP_JIT_OPTIMIZATION_LEVEL=0 for each focused launch. The byte-exact runner does not inject/record this setting; pending actions alone do not prove it."
+  },
+  "pending_admission_conditions": [
+    "Root integrates/materially identifies the reviewed CartDelta source and its actual clean/pushed revision; currentcd99 and static code footprint are not numerical/runtime admission.",
+    "Fresh strict build/alignment/backend/object/source dependency, registration, three parity compiled/staged pairs and complete current interpreter/DSO/ICD/provider closure must be bound to actual new products. No historical readiness/inventory/outcome replay.",
+    "Root preflight freshly pins all final concrete files and complete shared static apparatus, verifies precise input sets/no cycles, exact original eight order and output absence, and records external LVP0/defaultcache.",
+    "One launch per original action, stop first nonpass, original XML and positive property accepted with current saved pins before next."
+  ],
+  "absence_verified": [
+    "actions.json",
+    "readiness.json",
+    "inventory.json",
+    "compiled-size-observation.json",
+    "plan.json",
+    "root-preflight.json",
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "limits": [
+    "Source preparation only; no new shader emission, numerical/compiler equivalence, cost or performance claim.",
+    "Prior software sevenPASS plus last external300s timeout remains incomplete evidence, not a numerical assertion failure; no unchanged retry or guard raise authorized.",
+    "No image, all40fields/fullP1/Mandatory/fullscience/cold-frame/UI/latency/release admission."
+  ],
+  "workspace": {
+    "tracked_clean": true,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "source_committed_pushed": "0 ahead / 0 behind",
+    "worktrees": 1,
+    "sidecar_pending_root_preservation": true
+  },
+  "operations": "Only passive file/hash/JSON/stdlibAST/read-onlyGit; no authored helper/import/project parser/compiler/provider/test/network execution; no seven-file/source mutation."
+}

@@ -1,0 +1,7 @@
+{
+  "schema": "sirius-cartdelta-rhs-preflight-set-check-correction-v1",
+  "initial_metadata_attempt_stopped_before_any_outputs_or_tests": true,
+  "reason": "Root compared32 resolvedldd dependencies against33 explicitlibrary inputs. The extra is the directly loadedLVP provider itself, which its ownldd output correctly doesnotlist.",
+  "corrected_predicate": "resolvedlddset32 == explicitlibraryset33 minus separatelypinnedprovider. No dependency, workload, frozenruntimepath, source or scientificassertion changed.",
+  "repeated_project_tools_or_tests": false
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-controls-source-contracts-pending-v1",
+  "author": "/root/sanitizer_gate_contract",
+  "source_only": true,
+  "runtime_ready": false,
+  "runtime_admitted": false,
+  "independently_reviewed": false,
+  "current_source_before_integration": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "required_action_revision_literal": "ROOT_PENDING_NEW_SOURCE_REVISION",
+  "provenance": {
+    "old_controls": "out/kerr-shared-loop-controls",
+    "old_acceptance": "out/kerr-composite-shared-loop-checks/root_acceptance.py",
+    "static_candidate_bundle": "attestations/scientific-core/cd99fd06/kerr-cartdelta-rhs-static-screen",
+    "static_candidate_archive_commit": "b2a6b46adc960b504bb1774b2003f02efd2fad6a",
+    "candidate_applied_or_new_products_claimed": false
+  },
+  "source_pins": {
+    "run_owned.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "originals/actions.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/originals/actions.json",
+      "bytes": 39135,
+      "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+    },
+    "originals/root_acceptance.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/originals/root_acceptance.py",
+      "bytes": 3755,
+      "sha256": "0b01313e0adabb4511624758c7de3f631d270e59e4d6c121605f0789c4646ca4"
+    },
+    "root_acceptance.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/root_acceptance.py",
+      "bytes": 3757,
+      "sha256": "34b7ee5a700ab9c88622cd2e50e66f114cc78ab865e704187a641f46732b5ca4"
+    },
+    "actions.pending.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/actions.pending.json",
+      "bytes": 42039,
+      "sha256": "8b7f6dbaedf54f76d120ac63dca101a482a5491968c1b641b5aaa835264de643"
+    }
+  },
+  "exact_copy_and_delta_proofs": {
+    "run_owned_byte_exact": true,
+    "owned_guard_byte_exact": true,
+    "original_actions_and_acceptance_byte_exact": true,
+    "root_acceptance": "Exactly one literal old directory replaced by new directory; inverse replacement reproduces all 3755 original bytes. No functional code or schema change.",
+    "actions": "JSON key order preserved. Per-action only revision placeholder, literal old-to-new work paths in frozen_inputs, and scope prose differ. All argv/kind/provider/cache/exit/limits/XML-property values are unchanged.",
+    "root_acceptance_literal_replacement_occurrences": 1,
+    "changed_action_keys": [
+      "revision",
+      "frozen_inputs",
+      "scope"
+    ],
+    "per_action_frozen_input_counts": [
+      47,
+      51,
+      55,
+      59,
+      63,
+      67,
+      71,
+      75
+    ]
+  },
+  "order": [
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "unchanged_protocol": {
+    "seconds": 300,
+    "aggregate_rss_kib": 4194304,
+    "reserve_kib": 2097152,
+    "kind": "test",
+    "expected_exit": 0,
+    "software_provider": true,
+    "device": "0",
+    "ICD": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "disable_software_shader_cache": false,
+    "physical_submission_assertion_ms": 1000,
+    "XML": "Exactly one completed original named test, zero failures/errors/disabled/skips and exact per-action positive property.",
+    "orchestration": "Root only, original order, once per action, accept each before next, stop first nonpass; preserve any incomplete outcome without unchanged retry."
+  },
+  "readiness_conditions": [
+    "Root integrates the reviewed material CartDelta change and identifies clean pushed new HEAD; replace only pending revision literal when materializing final actions.json. No current cd99 product or static footprint success is runtime admission.",
+    "Root owns fresh strict build/source alignment admission and actual backend ELF/object/dependency provenance; bind all current loaded modules/resources and selected three parity compiled/staged pairs, complete runtime libraries/ICD/loader/LVP/interpreter identities and exact registration/positive properties.",
+    "Root materializes fresh readiness.json, compiled-size-observation.json and inventory.json; no inherited readiness, inventory, compiled observations, XML or numerical outcomes may be copied.",
+    "Before any execution root-preflight.json must pin the changed root_acceptance.py, pending and final actions, both mature helpers, this source-contracts.json, preserved originals and all fresh readiness/inventory/compiled records. Root must also bind this complete static apparatus and current runtime/source inputs in the admitted before/after closure, without own output self-inputs.",
+    "Root independently checks final action order/filters/limits/XML and fresh output absence, current source/build/resource/provider dependency closure, and relevant environment. LVP_JIT_OPTIMIZATION_LEVEL=0 is an external focused-only setting: unchanged mature runner does not inject it or record it in declared_output_environment, so root must record exact environment separately. No original cold-frame cache/governor/deadline authority follows.",
+    "Independent source review of this adaptation and root final concrete readiness/admission precede helper or native/provider execution."
+  ],
+  "prior_outcome": "cd99 first seven finite controls passed; final precision-invariants stopped at the external diagnostic300s guard without XML or final numerical verdict. This is incomplete evidence, not a scientific assertion failure.",
+  "scope": "Source-copy preparation only. No new source integration, build, inventory, runtime readiness, numerical equivalence, native/software cost, full image/P1/Mandatory/release acceptance.",
+  "operations_performed": "Passive file/JSON/hash source copying and equality checks only; no project helper/parser/compiler/validator/disassembler/provider/test/network execution."
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "sirius-cartdelta-rhs-root-observed-child-environment-v1",
+  "case": "precision-invariants",
+  "observed_utc": "2026-10-15T15:28:37.851627+00:00",
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "controller": {
+    "pid": 953542,
+    "start_ticks": "12747455",
+    "session": 953541,
+    "birth_stable_across_environment_read": true,
+    "environment": {
+      "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+      "MESA_SHADER_CACHE_DISABLE": null,
+      "VK_DRIVER_FILES": null,
+      "VK_ICD_FILENAMES": null,
+      "SIRIUS_VULKAN_DEVICE": null,
+      "PYTHONOPTIMIZE": null,
+      "GTEST_OUTPUT": null
+    }
+  },
+  "child": {
+    "pid": 953551,
+    "start_ticks": "12747510",
+    "session": 953551,
+    "birth_stable_across_environment_read": true,
+    "environment": {
+      "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+      "MESA_SHADER_CACHE_DISABLE": null,
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "VK_ICD_FILENAMES": null,
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "PYTHONOPTIMIZE": null,
+      "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/kerr-cartdelta-rhs-controls/precision-invariants/gtest.xml"
+    }
+  },
+  "scope": "Actual same birth environment snapshot only; no numerical/provider/coldness/timing verdict."
+}

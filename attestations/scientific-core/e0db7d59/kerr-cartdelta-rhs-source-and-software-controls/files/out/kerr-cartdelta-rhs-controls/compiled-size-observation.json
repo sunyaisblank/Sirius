@@ -1,0 +1,97 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-canonical-compiled-size-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "strict_build_exit": 0,
+  "modules": [
+    {
+      "module": "trace.spv",
+      "before_source": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+      "before": {
+        "bytes": 3101296,
+        "sha256": "97a2d15a61497307376d4bb8c029f6610846d8d1360bd5a83d046ae7f9e6a6d3"
+      },
+      "after": {
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "reduction_bytes": 106844,
+      "reduction_percent": 3.4451403542261043
+    },
+    {
+      "module": "trace_fp32comp.spv",
+      "before_source": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+      "before": {
+        "bytes": 3104620,
+        "sha256": "340bb145b6b4b75758fadb4f14b7ce23f511f25bd24a25bde9fef3007b5dfba7"
+      },
+      "after": {
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "reduction_bytes": 106844,
+      "reduction_percent": 3.441451771875463
+    },
+    {
+      "module": "trace_fp64.spv",
+      "before_source": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+      "before": {
+        "bytes": 2958224,
+        "sha256": "9ee6bd205c5d75f934ad08b0221ec4a41b32f7c5fc8346775c0ef470960bc6eb"
+      },
+      "after": {
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      },
+      "reduction_bytes": 111200,
+      "reduction_percent": 3.7590121640551897
+    },
+    {
+      "module": "parity_probe.spv",
+      "before_source": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+      "before": {
+        "bytes": 4293556,
+        "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+      },
+      "after": {
+        "bytes": 3969508,
+        "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed"
+      },
+      "reduction_bytes": 324048,
+      "reduction_percent": 7.547310434520942
+    },
+    {
+      "module": "parity_probe_fp32comp.spv",
+      "before_source": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+      "before": {
+        "bytes": 4297780,
+        "sha256": "748c5aae46d240a22fefc868fc227b5e3db7d13223495945d3ea25117f97abaf"
+      },
+      "after": {
+        "bytes": 3973732,
+        "sha256": "2524459927bf743700a3e2024a73e6794a1030a09220898470604fd51d1d0bfc"
+      },
+      "reduction_bytes": 324048,
+      "reduction_percent": 7.539892688783511
+    },
+    {
+      "module": "parity_probe_fp64.spv",
+      "before_source": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+      "before": {
+        "bytes": 4213296,
+        "sha256": "c637ef03554c751ac7c8ddc5a29f5732aec2e22c128bd51d6206e138f34931b4"
+      },
+      "after": {
+        "bytes": 3879216,
+        "sha256": "3dbc622818259a3cbf0c2abc95efc406f48b8284bc3b0bd2ccbc7d9c2fbcc2aa"
+      },
+      "reduction_bytes": 334080,
+      "reduction_percent": 7.929184182644656
+    }
+  ],
+  "parity3_reproduce_controlled_candidate_bytes": true,
+  "coupled_fp64": {
+    "bytes": 1225888,
+    "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+  },
+  "scope": "Actualcanonical19shader outputs and originalspirv-val/CUDA/MSL gates completed. Staticbyteobservations only; no numerical/JIT/RSS/cost/deadline/retainedcold/performance qualification."
+}

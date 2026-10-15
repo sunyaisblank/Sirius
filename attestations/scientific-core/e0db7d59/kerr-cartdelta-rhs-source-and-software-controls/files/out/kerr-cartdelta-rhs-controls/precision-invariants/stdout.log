@@ -1,0 +1,21 @@
+Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison
+[ParityProbe] phase=initialization opcode=6 offset=0 count=0 submit_wait_ms=37.217 pipeline_setup_ms=94474.7 total_ms=94512 success=1
+[ParityProbe] phase=actual opcode=6 offset=0 count=1 submit_wait_ms=6.64388 pipeline_setup_ms=0.002218 total_ms=6.71152 success=1
+[ParityProbe] completed opcode=6 records=1 submissions=1 allocated_bytes=336
+[ParityProbe] phase=initialization opcode=6 offset=0 count=0 submit_wait_ms=37.0358 pipeline_setup_ms=86042.9 total_ms=86080.1 success=1
+[ParityProbe] phase=actual opcode=6 offset=0 count=1 submit_wait_ms=7.59856 pipeline_setup_ms=0.001088 total_ms=7.64386 success=1
+[ParityProbe] completed opcode=6 records=1 submissions=1 allocated_bytes=336
+[ParityProbe] phase=initialization opcode=6 offset=0 count=0 submit_wait_ms=129.526 pipeline_setup_ms=87395.7 total_ms=87525.4 success=1
+[ParityProbe] phase=actual opcode=6 offset=0 count=1 submit_wait_ms=19.4909 pipeline_setup_ms=0.00132 total_ms=19.5533 success=1
+[ParityProbe] completed opcode=6 records=1 submissions=1 allocated_bytes=336
+[       OK ] KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison (268394 ms)
+[----------] 1 test from KernelParity (268394 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (268395 ms total)
+[  PASSED  ] 1 test.

@@ -1,0 +1,68 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "--gtest_filter=KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "retry-fp32comp",
+  "child_exit": 0,
+  "child_pid": 947131,
+  "child_start_ticks": "12652416",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 947126,
+    "pid": 947127,
+    "ppid": 947126,
+    "rss_kib": 21016,
+    "session": 947126,
+    "start_ticks": "12652384",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/kerr-cartdelta-rhs-controls/retry-fp32comp/gtest.xml",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Pending focused control for the reviewed CartDelta RK4 shared-RHS loop material source change; original test body, assertions, RunProbe1000ms, tolerances, 300s external diagnostic, aggregate4GiB, reserve2GiB and default cache remain unchanged. Requires root integration to a new clean source revision and fresh build, alignment, registration, modules/resources and runtime dependency admission. The preceding cd99 sequence passed seven finite controls; its last precision-invariants attempt ended at the external300s guard with no XML or final numerical verdict. Any focused external LVP_JIT_OPTIMIZATION_LEVEL=0 setting must be explicitly admitted and recorded by root; it is separate from original cold-frame authority. Stop at first nonpass; no image/fullP1/performance/Mandatory/release claim.",
+  "minimum_sampled_available_kib": 19542916,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 947131,
+      "saved_start_ticks": "12652416"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 1023672,
+  "provider_mappings": [
+    {
+      "maps": [
+        "705305400000-70530545b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "70530545b000-70530586b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "70530586b000-705305ec6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "705305ec6000-705305f61000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 947131,
+      "pid": 947131,
+      "start_ticks": "12652416"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "Pending focused control for the reviewed CartDelta RK4 shared-RHS loop material source change; original test body, assertions, RunProbe1000ms, tolerances, 300s external diagnostic, aggregate4GiB, reserve2GiB and default cache remain unchanged. Requires root integration to a new clean source revision and fresh build, alignment, registration, modules/resources and runtime dependency admission. The preceding cd99 sequence passed seven finite controls; its last precision-invariants attempt ended at the external300s guard with no XML or final numerical verdict. Any focused external LVP_JIT_OPTIMIZATION_LEVEL=0 setting must be explicitly admitted and recorded by root; it is separate from original cold-frame authority. Stop at first nonpass; no image/fullP1/performance/Mandatory/release claim.",
+  "source": {
+    "revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 81.14918845900684,
+  "whole_inputs_unchanged": true
+}

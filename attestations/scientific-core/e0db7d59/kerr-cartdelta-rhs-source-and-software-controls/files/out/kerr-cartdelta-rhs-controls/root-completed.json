@@ -1,0 +1,236 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-root-completed-eight-controls-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "completed_utc": "2026-10-15T15:34:50.529199+00:00",
+  "all_eight_passed": true,
+  "cases": [
+    {
+      "case": "captured-fp32",
+      "test_seconds": "162.81",
+      "owner_seconds": 163.0275854979991,
+      "peak_sampled_aggregate_RSS_KiB": 2901148,
+      "fresh_whole_input_rows": 608,
+      "required_positive_property": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      }
+    },
+    {
+      "case": "captured-fp32comp",
+      "test_seconds": "165.34",
+      "owner_seconds": 165.54612643099972,
+      "peak_sampled_aggregate_RSS_KiB": 2928212,
+      "fresh_whole_input_rows": 612,
+      "required_positive_property": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      }
+    },
+    {
+      "case": "retry-fp32",
+      "test_seconds": "134.33",
+      "owner_seconds": 134.72486771200784,
+      "peak_sampled_aggregate_RSS_KiB": 1022496,
+      "fresh_whole_input_rows": 616,
+      "required_positive_property": {
+        "name": "fp32_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      }
+    },
+    {
+      "case": "retry-fp32comp",
+      "test_seconds": "80.971",
+      "owner_seconds": 81.14918845900684,
+      "peak_sampled_aggregate_RSS_KiB": 1023672,
+      "fresh_whole_input_rows": 620,
+      "required_positive_property": {
+        "name": "fp32comp_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      }
+    },
+    {
+      "case": "retry-fp64",
+      "test_seconds": "168.849",
+      "owner_seconds": 169.08417503000237,
+      "peak_sampled_aggregate_RSS_KiB": 1961536,
+      "fresh_whole_input_rows": 624,
+      "required_positive_property": {
+        "name": "fp64_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      }
+    },
+    {
+      "case": "unrepresented-stage",
+      "test_seconds": "99.285",
+      "owner_seconds": 99.51949504500953,
+      "peak_sampled_aggregate_RSS_KiB": 1028088,
+      "fresh_whole_input_rows": 628,
+      "required_positive_property": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      }
+    },
+    {
+      "case": "null-projection",
+      "test_seconds": "94.035",
+      "owner_seconds": 94.21569752799405,
+      "peak_sampled_aggregate_RSS_KiB": 1022352,
+      "fresh_whole_input_rows": 632,
+      "required_positive_property": {
+        "name": "parity_opcode_10_completed_records",
+        "value": "8"
+      }
+    },
+    {
+      "case": "precision-invariants",
+      "test_seconds": "268.394",
+      "owner_seconds": 268.7160267880099,
+      "peak_sampled_aggregate_RSS_KiB": 1344856,
+      "fresh_whole_input_rows": 636,
+      "required_positive_property": {
+        "name": "fp64_evidence",
+        "value": "native_invariants_executed"
+      }
+    }
+  ],
+  "root_preflight": {
+    "bytes": 152341,
+    "sha256": "33667964fa3f0c642415eda607eda0bb4995ee5a0334f4fd7375fd08698ddac1"
+  },
+  "whole_preflight_files": 607,
+  "final_consumed_input_rows": 636,
+  "fresh_saved_births_absent": [
+    {
+      "case": "captured-fp32",
+      "role": "controller",
+      "pid": 939764,
+      "start_ticks": "12549500",
+      "absent": true
+    },
+    {
+      "case": "captured-fp32",
+      "role": "child",
+      "pid": 939768,
+      "start_ticks": "12549558",
+      "absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "role": "controller",
+      "pid": 941218,
+      "start_ticks": "12574155",
+      "absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "role": "child",
+      "pid": 941222,
+      "start_ticks": "12574187",
+      "absent": true
+    },
+    {
+      "case": "retry-fp32",
+      "role": "controller",
+      "pid": 942911,
+      "start_ticks": "12599512",
+      "absent": true
+    },
+    {
+      "case": "retry-fp32",
+      "role": "child",
+      "pid": 942915,
+      "start_ticks": "12599567",
+      "absent": true
+    },
+    {
+      "case": "retry-fp32comp",
+      "role": "controller",
+      "pid": 947127,
+      "start_ticks": "12652384",
+      "absent": true
+    },
+    {
+      "case": "retry-fp32comp",
+      "role": "child",
+      "pid": 947131,
+      "start_ticks": "12652416",
+      "absent": true
+    },
+    {
+      "case": "retry-fp64",
+      "role": "controller",
+      "pid": 947700,
+      "start_ticks": "12668954",
+      "absent": true
+    },
+    {
+      "case": "retry-fp64",
+      "role": "child",
+      "pid": 947704,
+      "start_ticks": "12668987",
+      "absent": true
+    },
+    {
+      "case": "unrepresented-stage",
+      "role": "controller",
+      "pid": 951220,
+      "start_ticks": "12718095",
+      "absent": true
+    },
+    {
+      "case": "unrepresented-stage",
+      "role": "child",
+      "pid": 951224,
+      "start_ticks": "12718130",
+      "absent": true
+    },
+    {
+      "case": "null-projection",
+      "role": "controller",
+      "pid": 952297,
+      "start_ticks": "12733428",
+      "absent": true
+    },
+    {
+      "case": "null-projection",
+      "role": "child",
+      "pid": 952322,
+      "start_ticks": "12733496",
+      "absent": true
+    },
+    {
+      "case": "precision-invariants",
+      "role": "controller",
+      "pid": 953542,
+      "start_ticks": "12747455",
+      "absent": true
+    },
+    {
+      "case": "precision-invariants",
+      "role": "child",
+      "pid": 953551,
+      "start_ticks": "12747510",
+      "absent": true
+    }
+  ],
+  "all_actual_owned_helpers_observed_closed_zero": true,
+  "all_positive_collectors_observed_closed_zero": true,
+  "collector_sixth_closure_poll_order": "Sixth completed positive receipt and root checkpoint were verified/finalized before seventh launch; actual collector session31435 closure0 polled immediately after seventh launch. No claim closure observed before launch.",
+  "settings": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+    "MESA_SHADER_CACHE_DISABLE": null,
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "external_diagnostic_seconds": 300,
+    "aggregate_RSS_KiB": 4194304,
+    "WSL_reserve_KiB": 2097152,
+    "original_actual_submission_ms": 1000
+  },
+  "independent_seven_review": {
+    "bytes": 20777,
+    "sha256": "df1105f6f8016c3219bcc99c003411fdefba11e9c5fdb3ab67ac0e6604e07082"
+  },
+  "independent_eighth_review_pending": true,
+  "native_preparation_or_launch_authorized_by_this_receipt": false,
+  "scope": "Eight exact original focused controls with original assertions; final three conservation rungs and actual FP64 completed. No cold frame, cache-hit/miss/coldness/performance improvement, image/fullP1/all40fields/fullscience/Mandatory/eight-domain/native/UI/installed-release acceptance."
+}

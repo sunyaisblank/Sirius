@@ -1,0 +1,55 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-accepted-control-v1",
+  "passed": true,
+  "case": "null-projection",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "exact_one_completed_XML_zero_FESD": true,
+  "required_positive_property": {
+    "name": "parity_opcode_10_completed_records",
+    "value": "8"
+  },
+  "test_seconds": "94.035",
+  "owner_seconds": 94.21569752799405,
+  "peak_sampled_aggregate_RSS_KiB": 1022352,
+  "fresh_whole_input_rows": 632,
+  "owned_child_and_controller_births_absent": true,
+  "source_and_inputs_unchanged": true,
+  "files": {
+    "out/kerr-cartdelta-rhs-controls/null-projection/gtest.xml": {
+      "bytes": 949,
+      "sha256": "cffe753095eb44203413b7a55759d34debe2172435d8471a58a69a4e38777cc8"
+    },
+    "out/kerr-cartdelta-rhs-controls/null-projection/inputs-after.json": {
+      "bytes": 152285,
+      "sha256": "025df0819efa178c19bb04fa9861efe0cb9587de372c1fd1d3f81f1f453eb443"
+    },
+    "out/kerr-cartdelta-rhs-controls/null-projection/inputs-before.json": {
+      "bytes": 152285,
+      "sha256": "025df0819efa178c19bb04fa9861efe0cb9587de372c1fd1d3f81f1f453eb443"
+    },
+    "out/kerr-cartdelta-rhs-controls/null-projection/owner.json": {
+      "bytes": 3730,
+      "sha256": "ec8e4f3b1d5d7af4d8d4330e8c120fa2ef202f7f4ea31db62192cab2d5c17754"
+    },
+    "out/kerr-cartdelta-rhs-controls/null-projection/samples.jsonl": {
+      "bytes": 781425,
+      "sha256": "b22ac25ef4653d9c1d792d1f2f31cf4b0771381d3d746dd61d59bc2f0e2791b1"
+    },
+    "out/kerr-cartdelta-rhs-controls/null-projection/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-controls/null-projection/stdout.log": {
+      "bytes": 1022,
+      "sha256": "021adfb7db4f8120434ab3caa1a863c7d6a18b6f5c3e961761f9c774b5520ef5"
+    },
+    "out/kerr-cartdelta-rhs-controls/root-null-projection-environment.json": {
+      "bytes": 1253,
+      "sha256": "a8b2f82a88ac66fb089c95cc03ce1b0b6485c0042d067cf452068f078f0e0950"
+    }
+  },
+  "scope": "One exact focused parity control with original assertions and guards; no fullimage/allP1/Mandatory/latency/release qualification.",
+  "actual_child_environment_and_birth_evidence": true,
+  "actual_LVP_maps_inode_device_join": true,
+  "root_checkpoint_finalized_before_next_launch": true
+}

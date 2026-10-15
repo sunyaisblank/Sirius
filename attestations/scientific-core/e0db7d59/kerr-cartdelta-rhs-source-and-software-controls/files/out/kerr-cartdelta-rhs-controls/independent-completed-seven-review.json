@@ -1,0 +1,519 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-independent-completed-seven-review-v1",
+  "passed": true,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "completed_controls_reviewed": 7,
+  "reviewed_order": [
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection"
+  ],
+  "eighth_case_reviewed": false,
+  "eighth_case_verdict": null,
+  "blockers": [],
+  "scope": "Only firstseven completed originalfocused softwarecases and their ownedrootsavedreceipts. No eighthdirectory/output/environment content or eighthprocess inspected; no all8 verdict.",
+  "static_pins": {
+    "root-preflight.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-preflight.json",
+      "bytes": 152341,
+      "sha256": "33667964fa3f0c642415eda607eda0bb4995ee5a0334f4fd7375fd08698ddac1"
+    },
+    "readiness.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/readiness.json",
+      "bytes": 23126,
+      "sha256": "a4fe7f069d802787b5541d31d74ca62736b5e6a7c82ab71116d4bd4f91a89b34"
+    },
+    "actions.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/actions.json",
+      "bytes": 52935,
+      "sha256": "06b88d6852e85f1e271eeee1cdc3dcd980ae1b62abc10059f78021371e3d44a8"
+    },
+    "independent-source-review.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/independent-source-review.json",
+      "bytes": 10045,
+      "sha256": "5edd143cad02ff5c1a234ca53700c41040c51187a46b35520150ccf75da992be"
+    },
+    "independent-runtime-admission.json": {
+      "path": "out/kerr-cartdelta-rhs-controls/independent-runtime-admission.json",
+      "bytes": 13105,
+      "sha256": "0e22fb68a05fcb58691914868585d1478ab2711dce9e94725f64abf3f860f740"
+    },
+    "run_owned.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "path": "out/kerr-cartdelta-rhs-controls/root_acceptance.py",
+      "bytes": 3757,
+      "sha256": "34b7ee5a700ab9c88622cd2e50e66f114cc78ab865e704187a641f46732b5ca4"
+    }
+  },
+  "input_closure": {
+    "all607_preflight_files_current_content_and_resolved_identity_match": true,
+    "first_owner_rows": 608,
+    "per_case_before_after_rows": [
+      608,
+      612,
+      616,
+      620,
+      624,
+      628,
+      632
+    ],
+    "before_plus_after_rows": 8680,
+    "unique_consumed_current_files": 632,
+    "all_before_after_rawbytes_equal": true,
+    "exact_prior4records_per_ancestor": true,
+    "all_prior_owner_before_after_XML_pins_preserved": true,
+    "all7_rootcheckpoint_filemaps_current": true
+  },
+  "cases": [
+    {
+      "case": "captured-fp32",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "test_seconds": "162.81",
+      "owner_seconds": 163.0275854979991,
+      "sampled_aggregate_peak_RSS_KiB": 2901148,
+      "minimum_sampled_available_KiB": 15668656,
+      "sample_count": 6336,
+      "before_after_rows_each": 608,
+      "ancestor_rows": 0,
+      "positive_properties": {
+        "parity_opcode_8_completed_records": "1",
+        "parity_opcode_8_actual_submissions": "1",
+        "parity_opcode_8_maximum_submit_ms": "0.944297",
+        "parity_opcode_8_allocated_bytes": "336"
+      },
+      "owner": {
+        "path": "out/kerr-cartdelta-rhs-controls/captured-fp32/owner.json",
+        "bytes": 3860,
+        "sha256": "41200d8a659e22c0ddcfe5205607ab29fe3a1e9d3637282523985ae11c0e42fa"
+      },
+      "root_accepted": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-accepted-captured-fp32.json",
+        "bytes": 2281,
+        "sha256": "cd00bea086dc3469a6af58f4793f11c1d6ae499bc5c871aef526ca97e0cdc68d"
+      },
+      "environment": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-captured-fp32-environment.json",
+        "bytes": 1302,
+        "sha256": "33ecbee2427a5c7864e78e54c68719dd998882883142f4c1f2dc018ab8be87e5"
+      }
+    },
+    {
+      "case": "captured-fp32comp",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "test_seconds": "165.34",
+      "owner_seconds": 165.54612643099972,
+      "sampled_aggregate_peak_RSS_KiB": 2928212,
+      "minimum_sampled_available_KiB": 16866828,
+      "sample_count": 6203,
+      "before_after_rows_each": 612,
+      "ancestor_rows": 4,
+      "positive_properties": {
+        "parity_opcode_8_completed_records": "1",
+        "parity_opcode_8_actual_submissions": "1",
+        "parity_opcode_8_maximum_submit_ms": "0.660013",
+        "parity_opcode_8_allocated_bytes": "336"
+      },
+      "owner": {
+        "path": "out/kerr-cartdelta-rhs-controls/captured-fp32comp/owner.json",
+        "bytes": 3746,
+        "sha256": "1889d4312f128efda865437f80eb81d4b08ed95c5cdcc45af2b0b17dafad2735"
+      },
+      "root_accepted": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-accepted-captured-fp32comp.json",
+        "bytes": 2385,
+        "sha256": "c7f32ed9c543abeec4e0801392424b10353119bfaf7ba584a0a67aca49fd9732"
+      },
+      "environment": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-captured-fp32comp-environment.json",
+        "bytes": 1254,
+        "sha256": "d6eb87a31f2aadbb6bb5b49b76d61dced2f9e18e3a3ce18ec57bedbd0c06c3c3"
+      }
+    },
+    {
+      "case": "retry-fp32",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "test_seconds": "134.33",
+      "owner_seconds": 134.72486771200784,
+      "sampled_aggregate_peak_RSS_KiB": 1022496,
+      "minimum_sampled_available_KiB": 14444924,
+      "sample_count": 3980,
+      "before_after_rows_each": 616,
+      "ancestor_rows": 8,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "0.613216",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "owner": {
+        "path": "out/kerr-cartdelta-rhs-controls/retry-fp32/owner.json",
+        "bytes": 3714,
+        "sha256": "420cefdea69815c4cf1459a9aa684eec0b3febdb08612f091d867eb8dc5c0d18"
+      },
+      "root_accepted": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-accepted-retry-fp32.json",
+        "bytes": 2324,
+        "sha256": "7110088917ec7ce7cb770c3940f8a3b4b6be82a6e042c684c190f15f46bbc956"
+      },
+      "environment": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-retry-fp32-environment.json",
+        "bytes": 1240,
+        "sha256": "c1a66b9eff41b784620d4b59de2ea878e08ae96bf44b3a9ace2cd085688ebd3e"
+      }
+    },
+    {
+      "case": "retry-fp32comp",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "test_seconds": "80.971",
+      "owner_seconds": 81.14918845900684,
+      "sampled_aggregate_peak_RSS_KiB": 1023672,
+      "minimum_sampled_available_KiB": 19542916,
+      "sample_count": 3231,
+      "before_after_rows_each": 620,
+      "ancestor_rows": 12,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "0.484052",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32comp_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "owner": {
+        "path": "out/kerr-cartdelta-rhs-controls/retry-fp32comp/owner.json",
+        "bytes": 3725,
+        "sha256": "249dc6930b9ad791a4efa99e35b0d0fad8627565e4505dc2d0bffccd71de59aa"
+      },
+      "root_accepted": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-accepted-retry-fp32comp.json",
+        "bytes": 2363,
+        "sha256": "91c51b11b69ad7f8e8dc53cd3ac99838444806474a0947c6980a12668ce0553c"
+      },
+      "environment": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-retry-fp32comp-environment.json",
+        "bytes": 1248,
+        "sha256": "cfa52778834c2cd4d623e0450e805db8ac86340a07401493f2dffd487d09af33"
+      }
+    },
+    {
+      "case": "retry-fp64",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "test_seconds": "168.849",
+      "owner_seconds": 169.08417503000237,
+      "sampled_aggregate_peak_RSS_KiB": 1961536,
+      "minimum_sampled_available_KiB": 15111064,
+      "sample_count": 5783,
+      "before_after_rows_each": 624,
+      "ancestor_rows": 16,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "0.796989",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp64_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "owner": {
+        "path": "out/kerr-cartdelta-rhs-controls/retry-fp64/owner.json",
+        "bytes": 3714,
+        "sha256": "cdbd07c5f5c5c40424babe357b470f6e0a52147d4dfb95c49aa619586f104d5d"
+      },
+      "root_accepted": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-accepted-retry-fp64.json",
+        "bytes": 2326,
+        "sha256": "cf92c6a49e54b628d761f6cc86e631fe1897097e65643ed5ccbef0880774d14c"
+      },
+      "environment": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-retry-fp64-environment.json",
+        "bytes": 1240,
+        "sha256": "edbaf0ae4b5d08bee5daf4c6ad1024f44f6c8288df99a3038ac4dc3e121720f2"
+      }
+    },
+    {
+      "case": "unrepresented-stage",
+      "test": "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+      "test_seconds": "99.285",
+      "owner_seconds": 99.51949504500953,
+      "sampled_aggregate_peak_RSS_KiB": 1028088,
+      "minimum_sampled_available_KiB": 17598084,
+      "sample_count": 3752,
+      "before_after_rows_each": 628,
+      "ancestor_rows": 20,
+      "positive_properties": {
+        "parity_opcode_8_completed_records": "1",
+        "parity_opcode_8_actual_submissions": "1",
+        "parity_opcode_8_maximum_submit_ms": "3.97388",
+        "parity_opcode_8_allocated_bytes": "336"
+      },
+      "owner": {
+        "path": "out/kerr-cartdelta-rhs-controls/unrepresented-stage/owner.json",
+        "bytes": 3869,
+        "sha256": "a046332eba073a6c576bbdf293592fe56f61c312cbe1d9303a0906dc2ed3997b"
+      },
+      "root_accepted": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-accepted-unrepresented-stage.json",
+        "bytes": 2379,
+        "sha256": "cc63a0e6bb53c17cf4a06b6a18c78d2dec7d7c4a5fced04dd4787f2377db3919"
+      },
+      "environment": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-unrepresented-stage-environment.json",
+        "bytes": 1261,
+        "sha256": "aebc88f847b11eb2980814344148c29bd918f6eff9c4bb0543597035fc8fc9bb"
+      }
+    },
+    {
+      "case": "null-projection",
+      "test": "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+      "test_seconds": "94.035",
+      "owner_seconds": 94.21569752799405,
+      "sampled_aggregate_peak_RSS_KiB": 1022352,
+      "minimum_sampled_available_KiB": 16258248,
+      "sample_count": 3454,
+      "before_after_rows_each": 632,
+      "ancestor_rows": 24,
+      "positive_properties": {
+        "parity_opcode_10_completed_records": "8",
+        "parity_opcode_10_actual_submissions": "1",
+        "parity_opcode_10_maximum_submit_ms": "0.675977",
+        "parity_opcode_10_allocated_bytes": "2576"
+      },
+      "owner": {
+        "path": "out/kerr-cartdelta-rhs-controls/null-projection/owner.json",
+        "bytes": 3730,
+        "sha256": "ec8e4f3b1d5d7af4d8d4330e8c120fa2ef202f7f4ea31db62192cab2d5c17754"
+      },
+      "root_accepted": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-accepted-null-projection.json",
+        "bytes": 2344,
+        "sha256": "74a7f16072d220851f2956a1240722a3bc1612fc47011f02854dc49c8040695e"
+      },
+      "environment": {
+        "path": "out/kerr-cartdelta-rhs-controls/root-null-projection-environment.json",
+        "bytes": 1253,
+        "sha256": "a8b2f82a88ac66fb089c95cc03ce1b0b6485c0042d067cf452068f078f0e0950"
+      }
+    }
+  ],
+  "guards_and_provider": {
+    "original_outer_diagnostic_seconds": 300,
+    "aggregate_RSS_KiB": 4194304,
+    "WSL_reserve_KiB": 2097152,
+    "original_physical_actual_submit_ms": 1000,
+    "all_actualXML_submit_values_finite_positive_within1000": true,
+    "zeroactive_initialization": "Actualsoftwarezeroactive phase is separately observed and itsJIT/pipeline time is not governed by actualsample1000ms assertions; no sampledeadline waiver.",
+    "all7_same_birth_controller_and_child_environment_snapshots": "ActualLVP_JIT_OPTIMIZATION_LEVEL0,defaultcacheunset,normalPythonassertions,childexactICD/device0/XMLpath.",
+    "provider": {
+      "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "device": "08:50",
+      "inode": 143595,
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    },
+    "all_saved_LVP_maps_current_inode_device_path_and_child_birth_session_join": true,
+    "saved_map_lines": 30,
+    "sample_rows": 32739,
+    "fresh_saved_completed_birth_checks": [
+      {
+        "case": "captured-fp32",
+        "kind": "controller",
+        "pid": 939764,
+        "saved_start_ticks": "12549500",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32",
+        "kind": "child",
+        "pid": 939768,
+        "saved_start_ticks": "12549558",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32comp",
+        "kind": "controller",
+        "pid": 941218,
+        "saved_start_ticks": "12574155",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32comp",
+        "kind": "child",
+        "pid": 941222,
+        "saved_start_ticks": "12574187",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp32",
+        "kind": "controller",
+        "pid": 942911,
+        "saved_start_ticks": "12599512",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp32",
+        "kind": "child",
+        "pid": 942915,
+        "saved_start_ticks": "12599567",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp32comp",
+        "kind": "controller",
+        "pid": 947127,
+        "saved_start_ticks": "12652384",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp32comp",
+        "kind": "child",
+        "pid": 947131,
+        "saved_start_ticks": "12652416",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp64",
+        "kind": "controller",
+        "pid": 947700,
+        "saved_start_ticks": "12668954",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp64",
+        "kind": "child",
+        "pid": 947704,
+        "saved_start_ticks": "12668987",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "unrepresented-stage",
+        "kind": "controller",
+        "pid": 951220,
+        "saved_start_ticks": "12718095",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "unrepresented-stage",
+        "kind": "child",
+        "pid": 951224,
+        "saved_start_ticks": "12718130",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "null-projection",
+        "kind": "controller",
+        "pid": 952297,
+        "saved_start_ticks": "12733428",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "null-projection",
+        "kind": "child",
+        "pid": 952322,
+        "saved_start_ticks": "12733496",
+        "current_start_ticks": null,
+        "absent": true
+      }
+    ],
+    "only_explicit_completed_birth_proc_reads": true,
+    "cleanup_errors_or_remainers": 0,
+    "sampling_scope": "Matureowned-session aggregateRSS includingcontroller; onlyrecordedsampled maxima/reserve, no unsampled peak/globalallconsumer absence claim."
+  },
+  "original_assertion_scope": {
+    "test_source": {
+      "path": "tests/backend/kernel_parity_test.cpp",
+      "bytes": 129641,
+      "sha256": "4bf064bb7902dcad59050d4374051a44b9b3cdc619ec9fbb97686e222345b563"
+    },
+    "test_source_byte_exact_cd99": true,
+    "captured": "Exact8capturedF32statebits, actualcoarse2/fine4 selection, unchanged2e-5normalizedcomparison toBOTH independentcanonical128 endpointarrays; exactintegrationtolerance2e-5, errorRatio[0,1], unprojected/projectednullbounds5e-4. RawGPUreadbacknotindependentlysaved.",
+    "minimum_retry": "Actual4flat-offnull/accepted neighbour/floor controls, realrung-sizedgap, unchangedrollback/attemptcounts/nullrejection, firstordinary1/2 thenfloor2/4(F32/COMP) or32/64(F64) actualselection; unsupportedFP64refusal isnot acceptedproperty.",
+    "unrepresented_stage": "Originalsingularsheetmidpoint declinesbeforemetric, rejectedtableaustateunchanged, errorabovebudget andrequestedshrink.",
+    "null_projection": "Original8casescoverpast/future/nearesttemporalbranch/nearstationary/exactlinearg00/spatialfallback/unrepresentedNaN, preservingunchangedcomponents andnullresidualbounds."
+  },
+  "acceptance_order_observation": {
+    "saved_ownership_intervals": [
+      {
+        "previous": "captured-fp32",
+        "next": "captured-fp32comp",
+        "next_controller_start_minus_previous_child_start_seconds": 245.97,
+        "previous_owner_wall_seconds": 163.0275854979991,
+        "scientific_ownership_intervals_disjoint": true
+      },
+      {
+        "previous": "captured-fp32comp",
+        "next": "retry-fp32",
+        "next_controller_start_minus_previous_child_start_seconds": 253.25,
+        "previous_owner_wall_seconds": 165.54612643099972,
+        "scientific_ownership_intervals_disjoint": true
+      },
+      {
+        "previous": "retry-fp32",
+        "next": "retry-fp32comp",
+        "next_controller_start_minus_previous_child_start_seconds": 528.17,
+        "previous_owner_wall_seconds": 134.72486771200784,
+        "scientific_ownership_intervals_disjoint": true
+      },
+      {
+        "previous": "retry-fp32comp",
+        "next": "retry-fp64",
+        "next_controller_start_minus_previous_child_start_seconds": 165.38,
+        "previous_owner_wall_seconds": 81.14918845900684,
+        "scientific_ownership_intervals_disjoint": true
+      },
+      {
+        "previous": "retry-fp64",
+        "next": "unrepresented-stage",
+        "next_controller_start_minus_previous_child_start_seconds": 491.08,
+        "previous_owner_wall_seconds": 169.08417503000237,
+        "scientific_ownership_intervals_disjoint": true
+      },
+      {
+        "previous": "unrepresented-stage",
+        "next": "null-projection",
+        "next_controller_start_minus_previous_child_start_seconds": 152.98,
+        "previous_owner_wall_seconds": 99.51949504500953,
+        "scientific_ownership_intervals_disjoint": true
+      }
+    ],
+    "root_reported_sixth_checkpoint": "Rootacceptancecollector session31435 initiallyreturnedrunning; sixthacceptancefile waswritten and rootmanuallyfinalizeditscheckpoint before seventhscientificlaunch. Collector actualclosed0 waspolled immediatelyafter seventhlaunch.",
+    "precision": "Do not claim collectorprocessclosure observed before seventhlaunch. Savedpreviousscientificowner/childwindow is complete and disjoint from seventh; no scientifictestoverlap follows from delayedpostprocessingpoll.",
+    "seventh_checkpoint_before_eighth_launch": "Rootreported; this review deliberatelydoesnot inspecteighthdirectory/process to reconstructthat event."
+  },
+  "limits": [
+    "No eighthoutcome/all8 acceptance; parentmust request terminal8 audit after actualclosure.",
+    "No rawreadbackvectors/framebuffer/all40fields/fullP1/image/Mandatory/fullscience/coldframe/latency/nativeprovider/UI/release acceptance.",
+    "Elapsedtest/owner/zeroactivepipeline/physicalsubmit windows differ; no benefit or drivercost conclusion."
+  ],
+  "workspace": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_clean": true,
+    "source_committed_pushed": "0 ahead / 0 behind",
+    "worktrees": 1,
+    "sidecar_pending_root_preservation": true
+  },
+  "operations": "Passive stdlibJSON/XML/hash/source/read-onlyGit/proc ofexplicitcompletedbirths only. No authoredhelper/import/projectparser/provider/test/CI/network execution; onlythissidecarwritten."
+}

@@ -1,0 +1,336 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-independent-completion-review-v1",
+  "passed": true,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "original_focused_controls_passed": 8,
+  "blockers": [],
+  "root_sole_actual_operator": true,
+  "scope": "Independent completed eighthcase audit composed with unchangedfirst7review. Complete original8focused software sequence accepted only; no image/native/fullP1/Mandatory/performance/coldframe qualification.",
+  "first_seven_review": {
+    "path": "out/kerr-cartdelta-rhs-controls/independent-completed-seven-review.json",
+    "bytes": 20777,
+    "sha256": "df1105f6f8016c3219bcc99c003411fdefba11e9c5fdb3ab67ac0e6604e07082"
+  },
+  "all8_root_acceptance_pins": {
+    "captured-fp32": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-accepted-captured-fp32.json",
+      "bytes": 2281,
+      "sha256": "cd00bea086dc3469a6af58f4793f11c1d6ae499bc5c871aef526ca97e0cdc68d"
+    },
+    "captured-fp32comp": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-accepted-captured-fp32comp.json",
+      "bytes": 2385,
+      "sha256": "c7f32ed9c543abeec4e0801392424b10353119bfaf7ba584a0a67aca49fd9732"
+    },
+    "retry-fp32": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-accepted-retry-fp32.json",
+      "bytes": 2324,
+      "sha256": "7110088917ec7ce7cb770c3940f8a3b4b6be82a6e042c684c190f15f46bbc956"
+    },
+    "retry-fp32comp": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-accepted-retry-fp32comp.json",
+      "bytes": 2363,
+      "sha256": "91c51b11b69ad7f8e8dc53cd3ac99838444806474a0947c6980a12668ce0553c"
+    },
+    "retry-fp64": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-accepted-retry-fp64.json",
+      "bytes": 2326,
+      "sha256": "cf92c6a49e54b628d761f6cc86e631fe1897097e65643ed5ccbef0880774d14c"
+    },
+    "unrepresented-stage": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-accepted-unrepresented-stage.json",
+      "bytes": 2379,
+      "sha256": "cc63a0e6bb53c17cf4a06b6a18c78d2dec7d7c4a5fced04dd4787f2377db3919"
+    },
+    "null-projection": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-accepted-null-projection.json",
+      "bytes": 2344,
+      "sha256": "74a7f16072d220851f2956a1240722a3bc1612fc47011f02854dc49c8040695e"
+    },
+    "precision-invariants": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-accepted-precision-invariants.json",
+      "bytes": 2446,
+      "sha256": "a896cb08da6fef33a27c2c308a0822fd5e75345ed9eea58eb7d994bc4ac61670"
+    }
+  },
+  "current_input_and_source_closure": {
+    "all607_static_preflight_pins_current": true,
+    "root_preflight": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-preflight.json",
+      "bytes": 152341,
+      "sha256": "33667964fa3f0c642415eda607eda0bb4995ee5a0334f4fd7375fd08698ddac1"
+    },
+    "actions": {
+      "path": "out/kerr-cartdelta-rhs-controls/actions.json",
+      "bytes": 52935,
+      "sha256": "06b88d6852e85f1e271eeee1cdc3dcd980ae1b62abc10059f78021371e3d44a8"
+    },
+    "readiness": {
+      "path": "out/kerr-cartdelta-rhs-controls/readiness.json",
+      "bytes": 23126,
+      "sha256": "a4fe7f069d802787b5541d31d74ca62736b5e6a7c82ab71116d4bd4f91a89b34"
+    },
+    "mature_collector": {
+      "path": "out/kerr-cartdelta-rhs-controls/root_acceptance.py",
+      "bytes": 3757,
+      "sha256": "34b7ee5a700ab9c88622cd2e50e66f114cc78ab865e704187a641f46732b5ca4"
+    },
+    "source_runtime_admission": {
+      "path": "out/kerr-cartdelta-rhs-controls/independent-runtime-admission.json",
+      "bytes": 13105,
+      "sha256": "0e22fb68a05fcb58691914868585d1478ab2711dce9e94725f64abf3f860f740"
+    },
+    "before_after_per_case": [
+      608,
+      612,
+      616,
+      620,
+      624,
+      628,
+      632,
+      636
+    ],
+    "all_before_after_rawbytes_equal": true,
+    "before_plus_after_rows": 9952,
+    "unique_consumed_current_files": 636,
+    "exact_ancestor4records_per_prior_case": [
+      0,
+      4,
+      8,
+      12,
+      16,
+      20,
+      24,
+      28
+    ],
+    "all8_saved_rootcheckpoint8file_maps_current": true,
+    "no_skipped_ancestor": true,
+    "test_source": {
+      "path": "tests/backend/kernel_parity_test.cpp",
+      "bytes": 129641,
+      "sha256": "4bf064bb7902dcad59050d4374051a44b9b3cdc619ec9fbb97686e222345b563"
+    },
+    "test_source_byte_exact_cd99": true
+  },
+  "eighth_actual": {
+    "case": "precision-invariants",
+    "test": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+    "test_seconds": "268.394",
+    "owner_seconds": 268.7160267880099,
+    "sampled_aggregate_peak_RSS_KiB": 1344856,
+    "minimum_sampled_available_KiB": 16200128,
+    "samples": 10297,
+    "input_rows_each": 636,
+    "owner": {
+      "path": "out/kerr-cartdelta-rhs-controls/precision-invariants/owner.json",
+      "bytes": 3753,
+      "sha256": "f1244c9311879470e5fc689468d7c83fa863ad95d13260a4f7c801bb090c6e73"
+    },
+    "XML": {
+      "path": "out/kerr-cartdelta-rhs-controls/precision-invariants/gtest.xml",
+      "bytes": 1038,
+      "sha256": "b18b0e06bb0e9a030b67e4affdafaa3d761125029d6f5d90c59528e9bd8c0095"
+    },
+    "stdout": {
+      "path": "out/kerr-cartdelta-rhs-controls/precision-invariants/stdout.log",
+      "bytes": 1743,
+      "sha256": "23a047f49f778b0666578a266aabb4036bd3541716c6ba1c4ec1e376e3044d39"
+    },
+    "samples_pin": {
+      "path": "out/kerr-cartdelta-rhs-controls/precision-invariants/samples.jsonl",
+      "bytes": 2346190,
+      "sha256": "0fdc5783a0ae25d7f8fb1c35d291dc6a14e3516906da56b5dc4f9577b59088f5"
+    },
+    "actual_environment": {
+      "path": "out/kerr-cartdelta-rhs-controls/root-precision-invariants-environment.json",
+      "bytes": 1263,
+      "sha256": "d1ce7cecf03b6f965e4161e5b3552f7dd3415082b4cd5d19f90d808d0253e5df"
+    },
+    "exact_one_completed_XML_zero_FESD": true,
+    "positive_properties": {
+      "parity_opcode_6_completed_records": "1",
+      "parity_opcode_6_actual_submissions": "1",
+      "parity_opcode_6_maximum_submit_ms": "19.490856",
+      "parity_opcode_6_allocated_bytes": "336",
+      "fp64_evidence": "native_invariants_executed"
+    },
+    "three_distinct_source_ordered_rungs": "Originaltest executesF32,compensatedF32,then actualFP64. Threeoriginalopcode6count1completed336B stdoutmarkers; eachactualphase<=1000ms; lastXML opcode6properties describe finalrung and alonewouldnot countall3.",
+    "three_actual_submit_ms_printed": [
+      "6.64388",
+      "7.59856",
+      "19.4909"
+    ],
+    "unsupported_FP64_refusal_did_not_satisfy_acceptance": true,
+    "original_assertions": "Originala0.998launch: all3rungsfinite/progress>100,physicalescape2/radius>=200; compensatedsumdrift<=F32sum*1.25+1e-7; actualFP64energy/angular/Carterdrift<1e-6,null<1e-8,FP64sum<=F32sum+1e-8. No newthresholds or imagecomparison.",
+    "raw_GPU_result_vectors_saved": false
+  },
+  "ownership_provider_and_guards": {
+    "all8_owners_terminal_passed_child0": true,
+    "all8_source_inputs_unchanged": true,
+    "cleanup_errors_remaining_adopted": 0,
+    "native_or_current_CI_execution_by_reviewer": false,
+    "provider": {
+      "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "device": "08:50",
+      "inode": 143595,
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    },
+    "all8_samechild_session_birth_inode_device_maps_join": true,
+    "saved_LVP_mapping_lines": 34,
+    "all8_saved_LVP0_defaultcache_ICDdevice0_environment_birthsnapshots_join": true,
+    "fresh_saved_birth_absences": [
+      {
+        "case": "captured-fp32",
+        "kind": "controller",
+        "pid": 939764,
+        "saved_start_ticks": "12549500",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32",
+        "kind": "child",
+        "pid": 939768,
+        "saved_start_ticks": "12549558",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32comp",
+        "kind": "controller",
+        "pid": 941218,
+        "saved_start_ticks": "12574155",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32comp",
+        "kind": "child",
+        "pid": 941222,
+        "saved_start_ticks": "12574187",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp32",
+        "kind": "controller",
+        "pid": 942911,
+        "saved_start_ticks": "12599512",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp32",
+        "kind": "child",
+        "pid": 942915,
+        "saved_start_ticks": "12599567",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp32comp",
+        "kind": "controller",
+        "pid": 947127,
+        "saved_start_ticks": "12652384",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp32comp",
+        "kind": "child",
+        "pid": 947131,
+        "saved_start_ticks": "12652416",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp64",
+        "kind": "controller",
+        "pid": 947700,
+        "saved_start_ticks": "12668954",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "retry-fp64",
+        "kind": "child",
+        "pid": 947704,
+        "saved_start_ticks": "12668987",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "unrepresented-stage",
+        "kind": "controller",
+        "pid": 951220,
+        "saved_start_ticks": "12718095",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "unrepresented-stage",
+        "kind": "child",
+        "pid": 951224,
+        "saved_start_ticks": "12718130",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "null-projection",
+        "kind": "controller",
+        "pid": 952297,
+        "saved_start_ticks": "12733428",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "null-projection",
+        "kind": "child",
+        "pid": 952322,
+        "saved_start_ticks": "12733496",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "precision-invariants",
+        "kind": "controller",
+        "pid": 953542,
+        "saved_start_ticks": "12747455",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "precision-invariants",
+        "kind": "child",
+        "pid": 953551,
+        "saved_start_ticks": "12747510",
+        "current_start_ticks": null,
+        "absent": true
+      }
+    ],
+    "first7_samples_previously_reviewed_and_rehashed": 32739,
+    "eighth_sample_count": 10297,
+    "total_samples": 43036,
+    "original_outer_diagnostic_seconds": 300,
+    "aggregate_RSS_KiB": 4194304,
+    "WSL_reserve_KiB": 2097152,
+    "physical_actual_submission_ms": 1000,
+    "separate_zeroactive_initialization": "Originalzeroworkinitialization excludesactualrays andhaspositivefinitetiming; original1000ms appliesactualwork. No unsampledRSS/windowbenefit or alteredcache/governor claim."
+  },
+  "prior_order_observation": "First7receiptremainsunchanged, including precise sixthrootcollector closurepoll observation. Eighthowner complete now; no hidden assertion that postprocessingprocess closure was observed before seventhlaunch.",
+  "limitations": [
+    "Original8finiteparity/conservation witnesses only; not fullP1/all40fields/fourcolumn/dense/pupil/film/image/native/Mandatory/fullscience/UI/release acceptance.",
+    "No capacity/performance/latency/coldness/hitrate/nativeWindows outcome or deadline-budget qualification; test/owner/JIT/physicalsubmit timings have different scopes.",
+    "RawGPUreadbackvectors/framebuffernotarchived; actualoriginaltestassertions andmarkers reviewed, no independent recomputation ofnumericoutputs.",
+    "Doesnotdepend on future root-completed.json; rootmust separately approve/preserve exactraw receipts."
+  ],
+  "workspace": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_source_clean": true,
+    "source_committed_pushed": "0 ahead / 0 behind",
+    "worktrees": 1,
+    "sidecar_pending_root_preservation": true
+  },
+  "operations": "Passive stdlibJSON/XML/hash/source/read-onlyGit/proc saved completedbirths only. No authoredhelper/import/projectparser/provider/test/CI/network execution or source/input edits; first7receiptunchanged."
+}

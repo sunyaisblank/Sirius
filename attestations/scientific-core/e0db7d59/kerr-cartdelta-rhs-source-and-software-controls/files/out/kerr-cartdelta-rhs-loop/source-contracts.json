@@ -1,0 +1,141 @@
+{
+  "schema": "sirius-kerr-cartdelta-four-stage-rhs-loop-source-contracts-v1",
+  "source_only": true,
+  "admitted": false,
+  "applied_to_tracked_source": false,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "source_change_scope": "Only the stage evaluation region of IntegrateGeodesicRK4CartDelta; original declaration/output initialization and complete sixth/final-sum/candidate/endpoint-check tail preserved verbatim; all other module bytes unchanged.",
+  "files": {
+    "original": {
+      "path": "out/kerr-cartdelta-rhs-loop/original/gr_integrator.slang",
+      "bytes": 27190,
+      "sha256": "e7b2c282edec4c4e3e768c3b1d20559c4c59c9a4c9a6e091932a274c4162ff11"
+    },
+    "candidate": {
+      "path": "out/kerr-cartdelta-rhs-loop/candidate/gr_integrator.slang",
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+    },
+    "patch": {
+      "path": "out/kerr-cartdelta-rhs-loop/cartdelta-rhs-loop.patch",
+      "bytes": 3064,
+      "sha256": "434e4fd4f87da32214a274bfce69c5d2f65255ee18f51e5683233fb2e8fdec99"
+    }
+  },
+  "unchanged_defining_sources": {
+    "src/sirius/kernels/gr_types.slang": {
+      "path": "src/sirius/kernels/gr_types.slang",
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    "src/sirius/kernels/gr_metrics.slang": {
+      "path": "src/sirius/kernels/gr_metrics.slang",
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "path": "src/sirius/kernels/trace.slang",
+      "bytes": 63460,
+      "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+    },
+    "src/sirius/kernels/parity_probe.slang": {
+      "path": "src/sirius/kernels/parity_probe.slang",
+      "bytes": 44089,
+      "sha256": "1d81e295c4bc288ba3a5032222c4bbbd95b2381d843526a50520b1222f25dc26"
+    },
+    "scripts/governance/metric_policy.py": {
+      "path": "scripts/governance/metric_policy.py",
+      "bytes": 26523,
+      "sha256": "794938eda2a28b582eff8250d2c8f6d051de9e7f0c1ad50760546e114ae2fa02"
+    }
+  },
+  "hoare_contract": {
+    "preconditions": [
+      "Same GeodesicStateCart, Real dt and float M/a/Q/Lambda as the original function; no new domain predicate or input restriction.",
+      "Same active Real precision definition, compiler arithmetic/mode/flag contract and original fallible acceleration/metric authority.",
+      "Loop index begins at zero and visits exactly0,1,2,3 on success; stage variables initialized from the original zero out-vectors; no dynamic RK stage array/index."
+    ],
+    "induction_invariant": "Before stage j, previousDx/previousDu equal original dx_j/du_j for j>0, and every completed named increment equals its original; dx/du out-parameters remain their original zero values until all four acceleration calls succeed.",
+    "stage_inputs": [
+      {
+        "stage": 0,
+        "position": "exact state.x assignment",
+        "tangent": "exact state.u assignment",
+        "extra_arithmetic": "none; no add-zero/multiply-one"
+      },
+      {
+        "stage": 1,
+        "position": "state.x + Scale(original dx1,0.5f)",
+        "tangent": "state.u + Scale(original du1,0.5f)"
+      },
+      {
+        "stage": 2,
+        "position": "state.x + Scale(original dx2,0.5f)",
+        "tangent": "state.u + Scale(original du2,0.5f)"
+      },
+      {
+        "stage": 3,
+        "position": "state.x + original dx3",
+        "tangent": "state.u + original du3",
+        "extra_arithmetic": "no multiply-one"
+      }
+    ],
+    "rhs_and_increment_order": "For each visited stage, call unchanged TryGeodesicAccelerationCart first; only on true compute Scale(stageState.u,dt), then Scale(acceleration,dt), then assign that stage pair. Do not precompute dt/2 or reassociate dt-scaled increments.",
+    "successful_postcondition": "Exactly four unchanged acceleration evaluations and original stage expressions, followed by byte-exact original dx/du weighted grouping, Real(1.0)/Real(6.0), candidate position and endpoint domain predicate.",
+    "failed_stage_postcondition": "Failure at stage j performs exactly j+1 acceleration calls, returns immediately with both dx/du still zero, and performs no later stages or endpoint check.",
+    "failed_endpoint_postcondition": "As original, after all four stages dx/du remain the computed nonzero-or-zero increments even when the final endpoint predicate returns false. Public state wrapper still returns false with result equal to its input state.",
+    "caller_rollback": "Unchanged IntegrateGeodesicRK4Cart initializes result=state and commits only on true; unchanged composite pair resets only failed local pass and still evaluates independent fine pass; shared failure/projection/acceptance/commit tail unchanged."
+  },
+  "precision_and_operation_order": {
+    "FP32": "Real=float unchanged",
+    "FP32COMP": "Real=float unchanged; compensation/commit remains outside this delta function",
+    "FP64": "Real=double unchanged; original float ABI family parameters and exact0.5f/2.0f constants unchanged",
+    "contraction_and_metric": "All metric/Christoffel code and the unrolled4x4x4 contraction remain exact original source. No reassociation, projection, epsilon, floor, tolerance, controller exponent, cache, limit or guard changes.",
+    "storage": "Eight named dx/du stage vectors plus two rolling previous-increment vectors; no newly dynamically indexed local arrays, coefficient tables, helper functions or public ABI changes."
+  },
+  "caller_scope": {
+    "direct_chain": [
+      "IntegrateGeodesicRK4CartDelta -> IntegrateGeodesicRK4Cart -> AdvanceGeodesicRK4 Kerr branch -> AdvanceCompositeGeodesicRK4Pair -> AttemptAdaptiveGeodesicStepWithResolution",
+      "trace.slang and parity_probe.slang import the shared module and consume the unchanged adaptive wrappers."
+    ],
+    "unchanged_families": [
+      "All Morris-Thorne and Warp bodies/signatures/calls byte-exact. Warp literal-five acceleration-occurrence source-governance check remains untouched."
+    ],
+    "unchanged_work_bounds": {
+      "successful_RHS_per_Kerr_RK4": 4,
+      "ordinary_coarse1_fine2_max_successful_RHS": 12,
+      "FP32_or_COMP_floor_coarse2_fine4_max_successful_RHS": 24,
+      "FP64_floor_coarse32_fine64_max_successful_RHS": 384
+    },
+    "not_in_scope": [
+      "Retained embedded arithmetic/renderer and original128x128 cold-frame gate",
+      "Issue44 arithmetic prototypes/benefit gates",
+      "Trace continuation40-field ABI, scenes, physical1000ms caps, XML/test registrations, all focused assertions"
+    ]
+  },
+  "cost_and_lowering_limits": [
+    "Four source RHS callsites become one source RHS callsite inside a literal [loop] four-stage evaluator. No actual emitted metric-copy count or JIT-cause claim is made.",
+    "Compiler may unroll/duplicate the body despite source shape, or introduce loop Phi/select/control/register/spill costs. Actual same-recipe emitted artifacts must establish whether metric body duplication/program size changes.",
+    "Named initialized stage variables avoid dynamically indexed RK stage arrays; their loop-carried values may increase register lifetime or spills. Existing metric arrays remain unchanged.",
+    "No physical RHS count reduction, changed arithmetic algorithm or performance guarantee. The observed software budget stop motivates a source-footprint hypothesis, not an attributed failure phase."
+  ],
+  "source_preparation_checks": {
+    "exact_inverse_to_original": true,
+    "only_one_function_stage_region_changed": true,
+    "original_Kerr_delta_RHS_source_sites": 4,
+    "candidate_Kerr_delta_RHS_source_sites": 1,
+    "final_tail_and_remaining_module_exact": true,
+    "canonical_source_unchanged": true
+  },
+  "history_scope": "Bounded source history inspected: accepted2904edbf shares outer coarse/fine RK4 callsite; no four-stage Kerr RHS-sharing implementation/rejection was found in that bounded history. This is not an exhaustive historical nonexistence claim.",
+  "execution": {
+    "candidate_or_helper_imports": 0,
+    "compilers": 0,
+    "validators": 0,
+    "providers": 0,
+    "tests": 0,
+    "network": 0,
+    "root_review_required_before_apply_or_execution": true
+  },
+  "live_source_status": "Current cd99 tracked source and W/N/C input closures remain untouched; no current runtime files were read."
+}

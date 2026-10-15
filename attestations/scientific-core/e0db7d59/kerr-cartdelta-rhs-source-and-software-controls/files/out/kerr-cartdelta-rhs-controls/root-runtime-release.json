@@ -1,0 +1,31 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-root-runtime-release-v1",
+  "released_utc": "2026-10-15T14:55:24.176872+00:00",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "all607_preflight_inputs_fresh_current": true,
+  "independent_runtime_review": {
+    "bytes": 13105,
+    "sha256": "0e22fb68a05fcb58691914868585d1478ab2711dce9e94725f64abf3f860f740"
+  },
+  "root_preflight": {
+    "bytes": 152341,
+    "sha256": "33667964fa3f0c642415eda607eda0bb4995ee5a0334f4fd7375fd08698ddac1"
+  },
+  "normal_Python_assertions": true,
+  "actual_root_inherited_protected_environment": {},
+  "order": [
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "actual_launch_command_prefix": "LVP_JIT_OPTIMIZATION_LEVEL=0 /usr/bin/python3 -B out/kerr-cartdelta-rhs-controls/run_owned.py",
+  "actual_child_env_birth_snapshot_required_each_case": true,
+  "stop_first_nonpass": true,
+  "root_acceptance_before_next": true,
+  "scope": "Releasefororiginalfinite8softwarecontrols only; no scientificresult/adoption/fullMandatory/retainedcoldframe/latency/UI/releasequalification."
+}
