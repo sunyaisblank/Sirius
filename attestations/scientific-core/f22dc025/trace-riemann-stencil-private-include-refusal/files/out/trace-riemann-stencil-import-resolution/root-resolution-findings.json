@@ -1,0 +1,182 @@
+{
+  "schema": "sirius-riemann-stencil-import-resolution-static-findings-v1",
+  "created_utc": "2026-10-15T20:49:01.320321+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_second_refusal": {
+    "path": "out/trace-riemann-stencil-private-import/root-import-refusal.json",
+    "bytes": 20547,
+    "sha256": "dc1fdae40594d90596f14d21688aecb83cf3628f1f40b10e68db30ecc2c1ea2d"
+  },
+  "official_upstream_tag": "v2026.12",
+  "official_upstream_commit": "a7fbf1ab0e9ddd18b0a9eaa675ddc95f63532fee",
+  "upstream_sources": {
+    "out/trace-riemann-stencil-import-resolution/slang-compiler-api.cpp": {
+      "bytes": 58,
+      "sha256": "16a289e030063d28a0fade032ad22c862ec190aab36f59e819123b481e7c7ca5"
+    },
+    "out/trace-riemann-stencil-import-resolution/slang-compiler-options.cpp": {
+      "bytes": 16300,
+      "sha256": "b64bb70559b43fa3e8eb0c0d3b689feb9793e6451269b8f6ef3fd8e01f69a650"
+    },
+    "out/trace-riemann-stencil-import-resolution/slang-include-system.cpp": {
+      "bytes": 6240,
+      "sha256": "2d19bc8de88db9493a3c441756ba70142e450315a7d2c841bbb763856ac378c3"
+    },
+    "out/trace-riemann-stencil-import-resolution/slang-include-system.h": {
+      "bytes": 2619,
+      "sha256": "98c7215103fc3485be3f7405ad4f10fc034bf1e6f76673b8a6e9677759918a80"
+    },
+    "out/trace-riemann-stencil-import-resolution/slang-session.cpp": {
+      "bytes": 78324,
+      "sha256": "3d313839232e6cc6dfc98bf4a646d76a2299a7d694057e00e2bfa03d96126fdf"
+    },
+    "out/trace-riemann-stencil-import-resolution/upstream-fetch-records.json": {
+      "bytes": 2643,
+      "sha256": "57c64b2ee2caaf97e486c6db4a109ce28a5e5ed7cf7fe67ae219eba4025c3586"
+    },
+    "out/trace-riemann-stencil-import-resolution/upstream-header-fetch-record.json": {
+      "bytes": 627,
+      "sha256": "23326f1f960b45482420abfa00b890361f396f4b522f317f0f68d413cf266b76"
+    },
+    "out/trace-riemann-stencil-import-resolution/upstream-tag.json": {
+      "bytes": 349,
+      "sha256": "cbea137cd7e96506e768d69dcb4d0b60afbeef0740328d358d35b6851de4ce3d"
+    },
+    "out/trace-riemann-stencil-import-resolution/upstream-tree.json": {
+      "bytes": 3033419,
+      "sha256": "96a8e1a07aad06bc4117a962446abd4c4a137b107a40a63e508abb3a19e8bd0d"
+    }
+  },
+  "source_graph": {
+    "src/sirius/kernels/trace.slang": {
+      "identity": {
+        "bytes": 63460,
+        "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+      },
+      "import_lines": [
+        {
+          "line": 40,
+          "text": "import gr_types;"
+        },
+        {
+          "line": 41,
+          "text": "import gr_metrics;"
+        },
+        {
+          "line": 42,
+          "text": "import gr_integrator;"
+        },
+        {
+          "line": 43,
+          "text": "import gr_camera;"
+        },
+        {
+          "line": 44,
+          "text": "import gr_disk;"
+        },
+        {
+          "line": 45,
+          "text": "import gr_deviation;"
+        },
+        {
+          "line": 46,
+          "text": "import gr_trace_event;"
+        },
+        {
+          "line": 47,
+          "text": "import gr_ellis_topology;"
+        },
+        {
+          "line": 48,
+          "text": "import gr_point_star;"
+        },
+        {
+          "line": 49,
+          "text": "import gr_trace_continuation;"
+        }
+      ]
+    },
+    "src/sirius/kernels/gr_camera.slang": {
+      "identity": {
+        "bytes": 7542,
+        "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+      },
+      "import_lines": [
+        {
+          "line": 3,
+          "text": "import gr_types;"
+        },
+        {
+          "line": 4,
+          "text": "import gr_deviation;"
+        }
+      ]
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "identity": {
+        "bytes": 5519,
+        "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+      },
+      "import_lines": []
+    },
+    "src/sirius/kernels/gr_metrics.slang": {
+      "identity": {
+        "bytes": 30379,
+        "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+      },
+      "import_lines": [
+        {
+          "line": 17,
+          "text": "import gr_types;"
+        }
+      ]
+    },
+    "src/sirius/kernels/gr_integrator.slang": {
+      "identity": {
+        "bytes": 27452,
+        "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+      },
+      "import_lines": [
+        {
+          "line": 8,
+          "text": "import gr_types;"
+        },
+        {
+          "line": 9,
+          "text": "import gr_metrics;"
+        }
+      ]
+    },
+    "src/sirius/kernels/gr_deviation.slang": {
+      "identity": {
+        "bytes": 17259,
+        "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+      },
+      "import_lines": [
+        {
+          "line": 20,
+          "text": "import gr_types;"
+        },
+        {
+          "line": 21,
+          "text": "import gr_metrics;"
+        }
+      ]
+    }
+  },
+  "upstream_static_rules": {
+    "include_system_lines112_136": "Mode::Quote checks importer-relative file first and only searches configured directories if not found.",
+    "header_lines38_48": "findFile path overload defaults to Mode::Quote.",
+    "session_lines1471_1496": "findOrImportModule returns an already loaded name before path search.",
+    "session_lines1591_1639": "Search receives actual requesting source location/path and default include lookup.",
+    "session_lines1196_1220": "Loaded source module is registered by name; failure removes it."
+  },
+  "actual_installed_behavior": "Both recorded firstcandidate compiler main children loaded canonical gr_camera before canonical gr_deviation; private gr_deviation was not selected even with explicit private-I before canonical-I. These actual file-open facts are retained separately.",
+  "inference": "Importer-relative first load through canonical camera plus name cache explains both observed selections. Upstream source version family matches reported compiler version, but installed binary source/build correspondence is not proved. This is a grounded repair hypothesis, not actual success proof.",
+  "proposed_smallest_candidate_source_delta": "Move the private trace existing import gr_deviation immediately before its import gr_camera, preserving the exact import multiset, all function/body/math bytes and private gr_deviation body. Retain reviewed candidate-only private-I before canonical-I and every other argv/guard unchanged; no extra module copies or aliases.",
+  "new_compile_authorized": false,
+  "required_before_any_new_compile": "Preserve/publish second refusal; separate exact source identity/patch/preimages/independent/root reviews and fresh current metadata admission. Actual main compiler source opens plus ordinary emitted new distance-loop still required before candidate acceptance/later8.",
+  "source_candidate_applied": false,
+  "source_build_hold_release": false,
+  "scope": "Static source-resolution investigation only. No compiler/test/provider execution, new stencil selection, numerical/runtime/JIT/RSS/performance/adoption or fullqualification."
+}

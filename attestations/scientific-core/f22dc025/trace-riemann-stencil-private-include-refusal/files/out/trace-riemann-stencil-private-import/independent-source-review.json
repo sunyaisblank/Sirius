@@ -1,0 +1,209 @@
+{
+  "schema": "sirius-riemann-stencil-private-import-independent-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "compiler_execution_admitted": false,
+  "runtime_admitted": false,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T20:33:03.730302+00:00",
+  "blockers": [],
+  "twelve_source_pins": {
+    "actions.pending.json": {
+      "path": "out/trace-riemann-stencil-private-import/actions.pending.json",
+      "bytes": 75609,
+      "sha256": "7e117bcff7d1658f69e1f0280c68e310887063d17413547f5138e7063c0c6171"
+    },
+    "commands.pending.json": {
+      "path": "out/trace-riemann-stencil-private-import/commands.pending.json",
+      "bytes": 3730,
+      "sha256": "1a6f8c5c982915caf024cd7d609f2f50460d3ac5c6f0301aff9de219645bc106"
+    },
+    "inputs/candidate/gr_deviation.slang": {
+      "path": "out/trace-riemann-stencil-private-import/inputs/candidate/gr_deviation.slang",
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    "inputs/candidate/trace.slang": {
+      "path": "out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "originals/actions.pending.json": {
+      "path": "out/trace-riemann-stencil-private-import/originals/actions.pending.json",
+      "bytes": 72384,
+      "sha256": "b8159a5dc78b4880f7cd3f35ba127d7d23cf497bb10e6f85708036bdb451a130"
+    },
+    "originals/commands.pending.json": {
+      "path": "out/trace-riemann-stencil-private-import/originals/commands.pending.json",
+      "bytes": 3380,
+      "sha256": "b02e971f3ca276670297cdf6036aca76676abeedc236a25cae36e250efef8ef1"
+    },
+    "originals/pair-loop-actions.pending.json": {
+      "path": "out/trace-riemann-stencil-private-import/originals/pair-loop-actions.pending.json",
+      "bytes": 58234,
+      "sha256": "b6300c31ee3dec319381cd71527e08c87ec0d92bcbb3b79b41f631ecf7376c57"
+    },
+    "originals/pair-loop-commands.pending.json": {
+      "path": "out/trace-riemann-stencil-private-import/originals/pair-loop-commands.pending.json",
+      "bytes": 2326,
+      "sha256": "8d828213df2157fb9fdcefeb0c4d156817d057117209d8902c1ac8763a17876b"
+    },
+    "originals/root-import-refusal.json": {
+      "path": "out/trace-riemann-stencil-private-import/originals/root-import-refusal.json",
+      "bytes": 20440,
+      "sha256": "39096911a8d9ab404a2391dad6fd822c3de691fbe1f9b2fa1aeaa77b73872d71"
+    },
+    "owned_guard.py": {
+      "path": "out/trace-riemann-stencil-private-import/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "run_owned.py": {
+      "path": "out/trace-riemann-stencil-private-import/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-riemann-stencil-private-import/source-contracts.json",
+      "bytes": 50985,
+      "sha256": "c06a6c8a9ffde414e82a5c3796f881e77a29ef90a02a98874fd88ee4e5cbd945"
+    }
+  },
+  "exact_source_and_preimage_checks": {
+    "mature_owner_guard_exact_e573_747_and_AST_valid": true,
+    "private_shader_bodies_exact_reviewed_predecessors": {
+      "trace_bytes": 63512,
+      "trace_sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9",
+      "gr_deviation_bytes": 17768,
+      "gr_deviation_sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    "only_two_private_source_files": true,
+    "five_original_preimages_full_bytes_equal_previous_actual_files": true,
+    "preimages": [
+      "prior_stencil_actions",
+      "prior_stencil_commands",
+      "earlier_pairloop_actions",
+      "earlier_pairloop_commands",
+      "actual_root_import_refusal"
+    ],
+    "six_existing_stencil_source_proof_pins_current": true,
+    "fourteen_canonical_source_CMake_hashes_and_named_f22_Git_bytes_equal": true,
+    "body_review_reused": {
+      "path": "out/trace-riemann-stencil-loop/independent-source-review.json",
+      "bytes": 10927,
+      "sha256": "e02883244e3f6aea0d62f617ac6cfcdcf40c0dd8772e701a4a6c9752856e7a79"
+    },
+    "no_body_math_ABI_mode_tolerance_governor_or_test_change": true
+  },
+  "exact_recipe_delta": {
+    "original_Ninja_five_target_recipe_receipt": {
+      "path": "out/e2-original-cpu-witnesses-pending/five-target-commands.stdout",
+      "bytes": 242029,
+      "sha256": "b5e7628ae76a02cea711cb8c339fcee7079c00b09cf739d903242b087a73d807"
+    },
+    "ten_label_order": [
+      "control-fp32",
+      "candidate-fp32",
+      "control-fp32comp",
+      "candidate-fp32comp",
+      "control-fp64",
+      "candidate-fp64",
+      "control-cuda",
+      "candidate-cuda",
+      "control-metal",
+      "candidate-metal"
+    ],
+    "all5_controls": "Original canonical source/include/flags/backendCWD; only owned output namespace changes through the byte-exact owner work directory.",
+    "all5_candidates": "Previous private trace source argument retargeted to the new namespace; insert exactly [-I, private_candidate_directory] immediately before the original [-I, canonical_kernels_directory]. All other argv tokens/order unchanged.",
+    "private_include_pair": [
+      "-I",
+      "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate"
+    ],
+    "preserved_canonical_include_pair": [
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/backend/../kernels"
+    ],
+    "CWD": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+    "preserved_settings": {
+      "kind": "compile",
+      "software_provider": false,
+      "disable_software_shader_cache": false,
+      "expected_exit": 0,
+      "seconds": 300,
+      "aggregate_RSS_KiB": 4194304,
+      "minimum_available_KiB": 2097152
+    },
+    "other_flags": "SPIRV1.5/ComputeMain/compute; COMP and FP64 macros, FP64 warning30082, original CUDA/Metal target flags remain exact.",
+    "scope": "This is an explicit causal search-policy correction after measured import refusal, not source/output-only equivalence for candidates or an unchanged failed runtime retry. Its success is unproved until actual observation."
+  },
+  "prospective_selector_and_output_contract": {
+    "common_selectors": 54,
+    "per_action_pending_counts": [
+      54,
+      61,
+      68,
+      75,
+      82,
+      89,
+      96,
+      103,
+      110,
+      117
+    ],
+    "mechanical_form": "Common51 predecessor selectors retarget exactly to the new namespace, then add the two specifically named earlier pair-loop preimages and copied refusal. Each later action adds exactly all six raw owner/input-before/input-after/stdout/stderr/sample files plus product for every preceding action.",
+    "no_duplicate_own_or_future_mutable_output_selector": true,
+    "commands_match_explicit_order_and_mature_owner_labels": true,
+    "revision": "ROOT_PENDING_REVISION",
+    "all_actual_case_folders_absent": true,
+    "actual_actions_readiness_inventory_preflight_absent": true,
+    "no_XML_collector_or_new_execution_helper_added": true
+  },
+  "preserved_prior_refusal": {
+    "copied_record_exact_previous_root_bytes": true,
+    "classification": "PRIVATE_STENCIL_OVERRIDE_NOT_SELECTED_NO_LATER_OPERATIONS",
+    "passed": false,
+    "audit_completed": true,
+    "actual_compiler_owner_exits": [
+      0,
+      0
+    ],
+    "private_trace_selected": true,
+    "new_private_gr_deviation_selected": false,
+    "actual_selected_gr_deviation": "Canonical17259B source, not intended17768B private source.",
+    "candidate_product": "2620748B/6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22, identical prior pair-loop code.",
+    "new_candidate_validation_disassembly_acceptance_later8_or_provider_runtime": false,
+    "immutable_archive_and_publication": "ROOT_PENDING_PUBLISHED_REFUSAL_ARCHIVE",
+    "independent_refusal_receipt": "Actual selected filename/hash intentionally pending; not fabricated.",
+    "historical_path_scope": "Copied record retains historical lexical paths as evidence. It grants no demand for newly executing or mutating the old packet."
+  },
+  "first_candidate_fail_closed_gate": {
+    "intended_participating_source_count": 11,
+    "private_overrides": [
+      "trace",
+      "gr_deviation"
+    ],
+    "remaining_canonical_modules": 9,
+    "actual_selection_proved": false,
+    "before_first_candidate_acceptance_attribution_or_later8": "Root must join actual same-birth compiler source opens to selected source bytes, exclude owner/Git hashing, and independently verify the actual new bounded stencil distance loop in ordinary emitted SPV. Same-directory placement, extra-I intent or compiler exit0 alone cannot pass.",
+    "on_wrong_or_unproved_selection": "Stop and preserve compiler-success/source-selection-refusal separately. No hidden include/CWD/body/flag/cache change, acceptance relabel or unchanged retry.",
+    "all5_new_control_byte_equalities_and_separate_posttools_still_required": true,
+    "posttool_boundary": "Root separately admits original validation/disassembly/ABI/CFG/precision checks. CUDA/MSL are emitted source only; no Slang-owner aggregateRSS/session guarantee transfers to separate posttools."
+  },
+  "remaining_conditions_before_any_execution": [
+    "Preserve/publish the actual prior refusal and bind actual independent refusal audit/publication/manifest/member identities; these remain placeholders now.",
+    "Root independently admits fresh current source/tracked inputs, intended11/two override bytes, tools/resources/dependencies/environment, exact candidate-only flags, baselines, final actions/readiness/preflight and absent exclusive outputs. Existing matching metadata may be reused by exact identity, with no compulsory helper/tool rerun invented by this source review.",
+    "Root records exact source-open observer and actual compiler PID/birth/exec/CWD provenance plus required emitted-loop proof, preserving original stop-first/guards/cache settings and the gate before candidate acceptance/later progress."
+  ],
+  "method": "Passive standard-library source/text/JSON/hash/AST and read-only Git only. No helper/project import/parser/tool/compiler/provider/test/network/process/cache query, canonical/Git mutation or write outside this new receipt.",
+  "checkout": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "new_packet_and_review_committed_or_pushed": false
+  },
+  "limits": "SOURCE preparation PASS only. No concrete execution, actual import/lowering, numerical/provider/JIT/RSS/performance/source adoption/hold release, full scientific/Mandatory/native/UI/cold/eight-domain/release qualification or cleanup admission."
+}

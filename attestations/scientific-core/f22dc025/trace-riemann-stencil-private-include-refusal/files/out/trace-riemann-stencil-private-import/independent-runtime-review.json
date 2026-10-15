@@ -1,0 +1,204 @@
+{
+  "schema": "sirius-riemann-stencil-private-import-independent-runtime-metadata-review-v1",
+  "created_utc": "2026-10-15T20:42:22.665152+00:00",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": true,
+  "metadata_admitted": true,
+  "blockers": [],
+  "critical_pins": {
+    "actions.json": {
+      "bytes": 4606239,
+      "sha256": "57dbc7d384c2cde3ae8b2f53bcc3aff5e9f56f2b95a1a23e6fcca0beaf6232e0",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/actions.json"
+    },
+    "actions.pending.json": {
+      "bytes": 75609,
+      "sha256": "7e117bcff7d1658f69e1f0280c68e310887063d17413547f5138e7063c0c6171",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/actions.pending.json"
+    },
+    "commands.pending.json": {
+      "bytes": 3730,
+      "sha256": "1a6f8c5c982915caf024cd7d609f2f50460d3ac5c6f0301aff9de219645bc106",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/commands.pending.json"
+    },
+    "readiness.json": {
+      "bytes": 15259,
+      "sha256": "56fdd7c26b24f4b93ecdef2d8f1a3d2aa9ca631d256760d9cf3203ba1ec7692c",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/readiness.json"
+    },
+    "root-preflight.json": {
+      "bytes": 1580596,
+      "sha256": "0a194bb33ea16dd02c92ba8ccd4320ef52389c6ff10766802559e64c8b7f1366",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/root-preflight.json"
+    },
+    "root-compiler-tool-observation.json": {
+      "bytes": 1362194,
+      "sha256": "78635eb9b36a0fe3461edb48fe68f3454fa7fc55574aa99ca3296e1e73bf1778",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/root-compiler-tool-observation.json"
+    },
+    "root-metadata-query-records.json": {
+      "bytes": 13192,
+      "sha256": "08311a14f8df21224392084c3233c5cfb0265717edbca1a2f399941c4d4908ca",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/root-metadata-query-records.json"
+    },
+    "root-source-open-observer.json": {
+      "bytes": 5825,
+      "sha256": "8da31ce32ae63b70f602908f40eab794102173f80e735cae15e3fe468c6e3d2f",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/root-source-open-observer.json"
+    },
+    "root-source-open-observer-membership.json": {
+      "bytes": 2498,
+      "sha256": "1e1654d79637fa22e11181302867f8f4c1af8cd0a297033229b11289a125daee",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/root-source-open-observer-membership.json"
+    },
+    "root-source-open-observer-reuse.json": {
+      "bytes": 2515,
+      "sha256": "59eb7fe1b7a0a2faaada28b2305f900314481c92c3372409e9fae943e4df67b7",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/root-source-open-observer-reuse.json"
+    },
+    "source-contracts.json": {
+      "bytes": 50985,
+      "sha256": "c06a6c8a9ffde414e82a5c3796f881e77a29ef90a02a98874fd88ee4e5cbd945",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/source-contracts.json"
+    },
+    "independent-source-review.json": {
+      "bytes": 10956,
+      "sha256": "738f1f35298013f581bafd374183d485427cafced52d3dceb8495a3f76b0ca0f",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/independent-source-review.json"
+    }
+  },
+  "admission_scope": {
+    "root_first_two_only": [
+      "control-fp32",
+      "candidate-fp32"
+    ],
+    "all_ten_operations_admitted": false,
+    "root_release_still_required": true,
+    "candidate_acceptance_or_attribution_admitted": false,
+    "actual_private_import_selection_proved": false,
+    "provider_or_numerical_execution_admitted": false,
+    "source_build_hold_release": false
+  },
+  "closure": {
+    "current_rich_static_pins_checked": 4635,
+    "tracked_source_files": 538,
+    "pending_selector_counts": {
+      "control-fp32": 54,
+      "candidate-fp32": 61,
+      "control-fp32comp": 68,
+      "candidate-fp32comp": 75,
+      "control-fp64": 82,
+      "candidate-fp64": 89,
+      "control-cuda": 96,
+      "candidate-cuda": 103,
+      "control-metal": 110,
+      "candidate-metal": 117
+    },
+    "exact_actual_owner_input_rows": {
+      "control-fp32": 4636,
+      "candidate-fp32": 4643,
+      "control-fp32comp": 4650,
+      "candidate-fp32comp": 4657,
+      "control-fp64": 4664,
+      "candidate-fp64": 4671,
+      "control-cuda": 4678,
+      "candidate-cuda": 4685,
+      "control-metal": 4692,
+      "candidate-metal": 4699
+    },
+    "owner_input_rule": "Exact normalized tracked+helpers+actions+frozen union equals 4635 static keys + preflight self + seven prior raw/product paths per preceding operation. Pending selectors remain an ordered subsequence; no functional action change beyond exact revision and frozen-input strengthening.",
+    "all_ten_exclusive_case_folders_absent": true,
+    "prior_refusal_current_raw_files_frozen": 60,
+    "prior_refusal_preservation_files_frozen": 6,
+    "immutable_refusal_manifest_and_preservation_frozen": true,
+    "observer_external_tool_target_and_six_DSOs_in_static": true
+  },
+  "recipes_and_guards": {
+    "same_pending_argv_settings_scope": true,
+    "candidate_only_delta": "Private entry/output namespace and the reviewed private -I pair immediately before original canonical -I; controls retain original canonical argv/CWD/flags.",
+    "kind": "compile",
+    "software_provider": false,
+    "disable_software_shader_cache": false,
+    "expected_exit": 0,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "mature_owner_and_guard_byte_exact": true,
+    "all_previous_seven_raw_product_dependencies_retained_per_operation": true,
+    "assertions_enabled": true
+  },
+  "metadata_reuse": {
+    "installed_regular_paths": 3692,
+    "installed_unique_ELFs": 10,
+    "resolved_saved_ldd_union": 15,
+    "operation_tool_pins": 9,
+    "historical_actual_queries_closed0": 22,
+    "new_queries_executed": 0,
+    "exact_query_records_and_enriched_projection": true,
+    "all_current_tool_resource_DSO_identities_match_saved_records": true,
+    "selected_environment_matches_previous_record": true,
+    "protected_overrides": {},
+    "historical_query_date_retained": true,
+    "scope": "The copied original query text and initial --version/-version correction retain historical wording; explicit reuse metadata records zero new queries. This review executed none."
+  },
+  "prior_refusal_joins": {
+    "commit": "05171782f392f060ca2ffa50747faa813069c5a6",
+    "named_Git_full_blob_bytes_checked": 79,
+    "reused_observation_query_refusal_and_twelve_observer_files_match_named_Git_and_current_raw": true,
+    "root_publication": {
+      "bytes": 1507,
+      "sha256": "f67300075e2988f0eddad047f6b64843ad62dd97e05254a0da80ca2986531142",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-refusal-preservation/root-git-preservation.json"
+    },
+    "saved_actual_push_exit": 0,
+    "saved_fresh_remote_after_push_closure_exit": 0,
+    "saved_remote_tag_and_local_tag_match_commit": true,
+    "prior_refusal_passed": false,
+    "scope": "Local Git and saved root publication evidence checked; no fresh network operation by reviewer. Prior refusal remains false after two successful compiler owners and canonical gr_deviation selection."
+  },
+  "baseline_and_source_graph": {
+    "five_current_baselines_match_previous_actual_controls": true,
+    "three_actual_backend_resources_kernel_copies_match_canonical": true,
+    "new_five_control_byte_equalities_still_pending": true,
+    "intended_sources": 11,
+    "private_overrides": 2,
+    "remaining_canonical_sources": 9,
+    "canonical_directory_entries": 33,
+    "private_directory_entries": 2,
+    "intended_graph_is_not_actual_import_proof": true
+  },
+  "observer_composition": {
+    "copied_historical_records_and_streams": 12,
+    "new_capability_operations": 0,
+    "exact_original_historical_paths_preserved": true,
+    "final_filter_includes_exec_CWD_open_readlink_and_clone_fork_lineage": true,
+    "required_identity": "Actual saved Slang child PID/start birth/exec/CWD; successful source opens on that child or explicitly rooted worker clone/fork lineage with lifecycle ordering. Parent owner and sibling Git hashing opens cannot count; unresolved identity refuses.",
+    "accounting": "Root strace observer remains outside owned Slang/controller sampled aggregate RSS. Tool/true/six DSO files are frozen; observer process memory has no transferred guard and no timing/RSS/performance attribution.",
+    "mandatory_after_first_candidate": "Before candidate acceptance/attribution or any later eight operations, root must join actual same-birth source opens and independently validate/disassemble ordinary emitted candidate FP32 proving both private source bodies, the new bounded distance loop and remaining nine canonical source closure. Placement and private-I ordering alone do not prove selection."
+  },
+  "posttools_and_progression": {
+    "stop_first_nonpass": true,
+    "later_eight_held": true,
+    "all_five_control_baseline_equalities_before_source_attribution": true,
+    "original_SPIRV_validation_and_ordinary_disassembly_separately_required": true,
+    "posttools_timeout_seconds": 300,
+    "posttools_kill_after_seconds": 10,
+    "posttools_guard_transfer": false,
+    "CUDA_Metal_scope": "Source emission only."
+  },
+  "review_limits": [
+    "Passive stdlib file/hash/JSON/text and read-only Git only; no helper/project import/parser/tool/compiler/provider/test/network/process/cache operation executed.",
+    "This is concrete compiler-metadata admission for the first two operations only; no actual compiler source-selection, output, numerical, runtime, JIT, RSS, performance, adoption, scientific/Mandatory/release qualification result.",
+    "One passive verification used a guessed backend staging path and stopped on its absence; corrected to the explicitly frozen resources/kernels staging paths. No packet file was changed and all final checks passed."
+  ],
+  "workspace": {
+    "source_clean": true,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "source_committed_and_pushed_tracking": "0/0",
+    "worktrees": 1,
+    "review_sidecar_untracked_ignored_not_committed": true
+  }
+}

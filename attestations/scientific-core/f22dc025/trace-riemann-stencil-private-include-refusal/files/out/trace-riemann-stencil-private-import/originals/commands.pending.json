@@ -1,0 +1,42 @@
+{
+  "schema": "sirius-trace-riemann-stencil-offline-compile-pending-commands-v1",
+  "source_only": true,
+  "runtime_or_tool_execution_admitted": false,
+  "revision": "ROOT_PENDING_REVISION",
+  "serial_order": [
+    "control-fp32",
+    "candidate-fp32",
+    "control-fp32comp",
+    "candidate-fp32comp",
+    "control-fp64",
+    "candidate-fp64",
+    "control-cuda",
+    "candidate-cuda",
+    "control-metal",
+    "candidate-metal"
+  ],
+  "stop_first_nonpass": true,
+  "root_sole_tool_operator": true,
+  "commands_after_root_admission": [
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py control-fp32",
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py candidate-fp32",
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py control-fp32comp",
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py candidate-fp32comp",
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py control-fp64",
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py candidate-fp64",
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py control-cuda",
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py candidate-cuda",
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py control-metal",
+    "/usr/bin/python3 out/trace-riemann-stencil-compiler-pending/run_owned.py candidate-metal"
+  ],
+  "hold": "Forensic stencil candidate SOURCEpass +this packet independent/root SOURCEreview +oldprivate pairloop runtime58 immutable Gitpublication/root release +fresh complete actual current materialization/admission. No concurrent compiler/test/provider. ROOT_PENDING_REVISION remains unadmitted; no actualactions/readiness/preflight/inventory/case outputs created.",
+  "postcompile_manual_root_gates": [
+    "Actual private import precedence must bind exactly11 participating source modules: local trace+gr_deviation and9 unchanged canonical modules. Samefolder placement does not prove this; if canonical gr_deviation is selected or resolution is unproved, refuse attribution and do not claim stencil candidate compiled.",
+    "Eachownerterminalpassed/exit0/nostop/noerrors/noownedremainers/sourceandwholeinputsunchanged/freshbirthabsence/guardbounds/outputidentity.",
+    "SPIR-V control+candidate val/disassembly/staticCFG/type/capability/layout/entry/mode checks under separate root-owned admitted operations; CUDA/MSL fullgeneratedsourceinspection as appropriate.",
+    "All5controls byteequal freshlypinnedcanonicalbaseline before differenceattribution; any mismatch is screenrefusal, not numericalcandidatefailure.",
+    "No XMLcollector/property or numerical/provider/runtime/performance/adoptionacceptance.",
+    "Compare candidate with prior pairloop-only leaf after matching baseline/tool/source closure; preserve old runtime timeout as timeout/noXML, not failure of a new stencil candidate or a proven allocation/JIT cause."
+  ],
+  "first_candidate_output_gate": "After candidate-fp32 producer closes, root must separately validate/disassemble/check actual11source selection and emitted new distance-loop before accepting candidate identity or proceeding to control-fp32comp. First compile may establish evidence for this gate; logical source placement is not its proof."
+}

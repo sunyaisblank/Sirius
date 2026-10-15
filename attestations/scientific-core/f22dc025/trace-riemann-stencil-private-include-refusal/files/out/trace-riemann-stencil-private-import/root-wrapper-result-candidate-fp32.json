@@ -1,0 +1,25 @@
+{
+  "schema": "sirius-stencil-root-traced-owner-wrapper-result-v1",
+  "case": "candidate-fp32",
+  "actual_wrapper_observed_closed_exit": 0,
+  "actual_wrapper_argv": [
+    "/usr/bin/strace",
+    "-f",
+    "-yy",
+    "-s",
+    "4096",
+    "-e",
+    "trace=execve,chdir,fchdir,openat,openat2,readlink,readlinkat,clone,clone3,fork,vfork",
+    "-o",
+    "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/root-source-opens-candidate-fp32.trace",
+    "/usr/bin/python3",
+    "-u",
+    "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/run_owned.py",
+    "candidate-fp32"
+  ],
+  "observer_trace": {
+    "bytes": 3078094,
+    "sha256": "22638ac2954de45742b336cb137c2d2183469c31cfc875d51d03c4d2fe9b0d60"
+  },
+  "scope": "Root tracer remains separate from Slang owner resource accounting. Actual owner terminal/controller exit and source-open lineage need separate root checks; no compile timing/performance claim."
+}
