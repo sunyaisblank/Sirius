@@ -1,0 +1,397 @@
+{
+  "schema": "sirius-cartdelta-rhs-loop-independent-three-rung-footprint-review-v1",
+  "passed": true,
+  "source_and_static_footprint_review_passed": true,
+  "semantic_runtime_or_cost_admitted": false,
+  "candidate_applied": false,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "scope": "Independent of candidate/source-analysis author and root operator. Passive source/hash/text/JSON/read-onlyGit only; no liveN/W/C read or authored helper/parser/compiler/validator/disassembler/provider/test/network execution.",
+  "pins": {
+    "out/kerr-cartdelta-rhs-loop/candidate/gr_integrator.slang": {
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+    },
+    "out/kerr-cartdelta-rhs-loop/cartdelta-rhs-loop.patch": {
+      "bytes": 3064,
+      "sha256": "434e4fd4f87da32214a274bfce69c5d2f65255ee18f51e5683233fb2e8fdec99"
+    },
+    "out/kerr-cartdelta-rhs-loop/source-contracts.json": {
+      "bytes": 8428,
+      "sha256": "50e251a3f32de69112952319ecd894a6779df893af46b104f106506e9a0a241e"
+    },
+    "out/kerr-cartdelta-rhs-loop/independent-source-review.json": {
+      "bytes": 8711,
+      "sha256": "1fa7ecafaf05072d5c26932902144e3fcae3e19ea4ba4a6fb09d02f173aac835"
+    },
+    "out/kerr-cartdelta-rhs-screen/preparation.json": {
+      "bytes": 6644,
+      "sha256": "a394f6c77aa24a2100beccd4611cd79ce070d9d68ff2d32bb1c417e33ddc8362"
+    },
+    "out/kerr-cartdelta-rhs-screen/three-rung-footprint-result.json": {
+      "bytes": 7880,
+      "sha256": "e142b286c53a430301d97e2b3b062f95d16c512d391e87172fd191a15a86fc16"
+    },
+    "out/kerr-cartdelta-rhs-screen/emitted-fp32-source-analysis.json": {
+      "bytes": 16567,
+      "sha256": "dc523ece7a587f76c0c8c2c0f366de063cff2b05c005ebd191383b42139fc8af"
+    }
+  },
+  "controlled_static_comparisons": {
+    "fp32": {
+      "original": {
+        "bytes": 4293556,
+        "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+      },
+      "candidate": {
+        "bytes": 3969508,
+        "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed"
+      },
+      "reduction_bytes": 324048,
+      "reduction_percent": 7.547310434520942
+    },
+    "fp32comp": {
+      "original": {
+        "bytes": 4297780,
+        "sha256": "748c5aae46d240a22fefc868fc227b5e3db7d13223495945d3ea25117f97abaf"
+      },
+      "candidate": {
+        "bytes": 3973732,
+        "sha256": "2524459927bf743700a3e2024a73e6794a1030a09220898470604fd51d1d0bfc"
+      },
+      "reduction_bytes": 324048,
+      "reduction_percent": 7.539892688783511
+    },
+    "fp64": {
+      "original": {
+        "bytes": 4213296,
+        "sha256": "c637ef03554c751ac7c8ddc5a29f5732aec2e22c128bd51d6206e138f34931b4"
+      },
+      "candidate": {
+        "bytes": 3879216,
+        "sha256": "3dbc622818259a3cbf0c2abc95efc406f48b8284bc3b0bd2ccbc7d9c2fbcc2aa"
+      },
+      "reduction_bytes": 334080,
+      "reduction_percent": 7.929184182644656
+    }
+  },
+  "actual_declaration_counts": {
+    "fp32": {
+      "original_then_candidate": {
+        "functions": [
+          1,
+          1
+        ],
+        "calls": [
+          0,
+          0
+        ],
+        "loops": [
+          4178,
+          3896
+        ],
+        "DontUnroll": [
+          12,
+          18
+        ],
+        "OpPhi": [
+          0,
+          0
+        ],
+        "Function_variables": [
+          14446,
+          13840
+        ],
+        "Function_array_variables": [
+          1822,
+          1642
+        ]
+      },
+      "unchanged_capabilities": [
+        "OpCapability Shader"
+      ]
+    },
+    "fp32comp": {
+      "original_then_candidate": {
+        "functions": [
+          1,
+          1
+        ],
+        "calls": [
+          0,
+          0
+        ],
+        "loops": [
+          4178,
+          3896
+        ],
+        "DontUnroll": [
+          12,
+          18
+        ],
+        "OpPhi": [
+          0,
+          0
+        ],
+        "Function_variables": [
+          14486,
+          13880
+        ],
+        "Function_array_variables": [
+          1822,
+          1642
+        ]
+      },
+      "unchanged_capabilities": [
+        "OpCapability Shader"
+      ]
+    },
+    "fp64": {
+      "original_then_candidate": {
+        "functions": [
+          1,
+          1
+        ],
+        "calls": [
+          0,
+          0
+        ],
+        "loops": [
+          3975,
+          3693
+        ],
+        "DontUnroll": [
+          12,
+          18
+        ],
+        "OpPhi": [
+          0,
+          0
+        ],
+        "Function_variables": [
+          14106,
+          13500
+        ],
+        "Function_array_variables": [
+          1768,
+          1588
+        ]
+      },
+      "unchanged_capabilities": [
+        "OpCapability Float64",
+        "OpCapability Shader"
+      ]
+    }
+  },
+  "loop_witness_columns": [
+    "Function_int_counter",
+    "header_ID",
+    "OpLoopMerge_line",
+    "counter_less4_line",
+    "merge_ID",
+    "continue_ID",
+    "increment_line",
+    "stage_scalar"
+  ],
+  "six_four_stage_loop_witnesses_per_rung": {
+    "fp32": [
+      [
+        "%52138",
+        "%52190",
+        59160,
+        59168,
+        "%52284",
+        "%52283",
+        60936,
+        "float"
+      ],
+      [
+        "%89123",
+        "%89175",
+        105898,
+        105906,
+        "%89269",
+        "%89268",
+        107754,
+        "float"
+      ],
+      [
+        "%102842",
+        "%102894",
+        122494,
+        122502,
+        "%102988",
+        "%102987",
+        124350,
+        "float"
+      ],
+      [
+        "%116584",
+        "%116636",
+        138731,
+        138739,
+        "%116730",
+        "%116729",
+        140587,
+        "float"
+      ],
+      [
+        "%131890",
+        "%131942",
+        157268,
+        157276,
+        "%132036",
+        "%132035",
+        159103,
+        "float"
+      ],
+      [
+        "%154767",
+        "%154819",
+        185321,
+        185329,
+        "%154913",
+        "%154912",
+        187097,
+        "float"
+      ]
+    ],
+    "fp32comp": [
+      [
+        "%52364",
+        "%52416",
+        59200,
+        59208,
+        "%52510",
+        "%52509",
+        60976,
+        "float"
+      ],
+      [
+        "%89349",
+        "%89401",
+        105938,
+        105946,
+        "%89495",
+        "%89494",
+        107794,
+        "float"
+      ],
+      [
+        "%103068",
+        "%103120",
+        122534,
+        122542,
+        "%103214",
+        "%103213",
+        124390,
+        "float"
+      ],
+      [
+        "%116810",
+        "%116862",
+        138771,
+        138779,
+        "%116956",
+        "%116955",
+        140627,
+        "float"
+      ],
+      [
+        "%132124",
+        "%132176",
+        157316,
+        157324,
+        "%132270",
+        "%132269",
+        159151,
+        "float"
+      ],
+      [
+        "%155301",
+        "%155353",
+        185497,
+        185505,
+        "%155447",
+        "%155446",
+        187273,
+        "float"
+      ]
+    ],
+    "fp64": [
+      [
+        "%47199",
+        "%47251",
+        52757,
+        52765,
+        "%47345",
+        "%47344",
+        54602,
+        "double"
+      ],
+      [
+        "%80348",
+        "%80400",
+        95543,
+        95551,
+        "%80494",
+        "%80493",
+        97406,
+        "double"
+      ],
+      [
+        "%94148",
+        "%94200",
+        112448,
+        112456,
+        "%94294",
+        "%94293",
+        114311,
+        "double"
+      ],
+      [
+        "%107971",
+        "%108023",
+        129002,
+        129010,
+        "%108117",
+        "%108116",
+        130865,
+        "double"
+      ],
+      [
+        "%123369",
+        "%123421",
+        147872,
+        147880,
+        "%123515",
+        "%123514",
+        149725,
+        "double"
+      ],
+      [
+        "%146412",
+        "%146464",
+        176320,
+        176328,
+        "%146558",
+        "%146557",
+        178165,
+        "double"
+      ]
+    ]
+  },
+  "verified": [
+    "All31original module pins checked against actual current/namedcd99Git bytes; flatprivate copy has exact other30 and only candidategr. Candidate patch reconstructs exactly; original prefix/finalsum/allremainingmodule bytes unchanged. FourRHS source sites become oneinside literal4stage loop, original stage0copy/half1/half2/direct3 expressions and fallibleRHS ordering preserved in source. Separate independentSOURCEPASS pinned.",
+    "All6SPV/ASM pins and12compile/validation logpins match root records; originals reproduce currentcanonical3rungs byteexactly, reductions independently recomputed. Actualbuild.ninja source/entry/spirv1_5/compute flags,COMPmacro andFP64warning30082 match screen mapping; declared2tool pins current. Rootreported6compile/6validation/6disasm exits0 are not reexecuted or inferred from emptylogs.",
+    "All18bounded loop witnesses read: signed32 Functioncounter initial0,load<4,eq0/1/2/3,onlyincrement+1,andcontinuebackedge. Counter has onlylocal loads/stores,not stage-array indexing. COMP usesfloat andFP64double typed arithmetic/pointers; literal4array declarations present. Wholemodule1function/noCall/noPhi counts and unchangedcapabilities/local64 verified.",
+    "Source/module ABI unchanged at source level. Emission is memory-form Function locals and existingarrays; decreased static Function-variable/array/loop declarations do not establish dynamic metricwork/register lifetime/spills or driverlowering."
+  ],
+  "limits": [
+    "Bounded source/typed-loop/footprint inspection only, no complete CFG/dataflow/bitwise or semantic equivalence, numerical/runtime/fullABI proof. Successful physical RHS count remains4perRK4; original refusal/endpoint semantics still need actual checks.",
+    "No driverJIT/RSS/stack/register/spill/timing/cost gain, software300s completion, trace/coupled variant compile, originalimage/retainedcoldframe, Mandatory/science/release admission. Toolpins cover declared executables,not new compilerDSO load tracing.",
+    "One passive review stopped before receipt because reviewer entered an incorrect fullSHA for the abbreviated FP32analysis reference. Corrected to actual dc523ece...fc8af; not a packet/compiler/runtime failure and no project/tool repeated.",
+    "Currenttrackedcd99 and canonicalproducts unchanged; root must finish/preserve native7 before any candidateapply. No source/frozeninput mutation by reviewer."
+  ],
+  "blockers": []
+}

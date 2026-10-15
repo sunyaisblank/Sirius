@@ -1,0 +1,224 @@
+{
+  "schema": "sirius-kerr-rhs-loop-three-rung-static-footprint-v1",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "completed_utc": "2026-10-15T14:10:02.183800+00:00",
+  "candidate_applied": false,
+  "all3_controlled_originals_byte_exact": true,
+  "all6_actual_compiles_and_validators_exit0": true,
+  "original_preset_flags_unchanged": true,
+  "explicit_mapping": "Input/include/output paths only, copied31source modules with only reviewedgr_integrator delta changed for candidate; currentcanonical products unchanged.",
+  "rungs": {
+    "fp32": {
+      "original": {
+        "path": "bin/linux-gcc/cartdelta-rhs-screen/original-parity-fp32.spv",
+        "bytes": 4293556,
+        "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+      },
+      "candidate": {
+        "path": "bin/linux-gcc/cartdelta-rhs-screen/candidate-parity-fp32.spv",
+        "bytes": 3969508,
+        "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed"
+      },
+      "reduction_bytes": 324048,
+      "reduction_percent": 7.547310434520942,
+      "original_reproduces_current_canonical_bytes": true,
+      "compiler_exits": [
+        0,
+        0
+      ],
+      "validator_exits": [
+        0,
+        0
+      ],
+      "static_declarations": {
+        "original": {
+          "functions": 1,
+          "calls": 0,
+          "loops": 4178,
+          "DontUnroll": 12,
+          "OpPhi": 0
+        },
+        "candidate": {
+          "functions": 1,
+          "calls": 0,
+          "loops": 3896,
+          "DontUnroll": 18,
+          "OpPhi": 0
+        }
+      },
+      "disassemblies": {
+        "original": {
+          "path": "out/kerr-cartdelta-rhs-screen/original-parity-fp32.spvasm",
+          "bytes": 12697065,
+          "sha256": "d5821f983264dd57d26888b9d3c439f36bf5a94d436342feea1392651b102848"
+        },
+        "candidate": {
+          "path": "out/kerr-cartdelta-rhs-screen/candidate-parity-fp32.spvasm",
+          "bytes": 11751131,
+          "sha256": "bb8a78a4b1bcbb60c7612bf20e8733f822a74c9eaf87ad2edfcafae4ed98a8b1"
+        }
+      }
+    },
+    "fp32comp": {
+      "original": {
+        "path": "bin/linux-gcc/cartdelta-rhs-screen/original-parity-fp32comp.spv",
+        "bytes": 4297780,
+        "sha256": "748c5aae46d240a22fefc868fc227b5e3db7d13223495945d3ea25117f97abaf"
+      },
+      "candidate": {
+        "path": "bin/linux-gcc/cartdelta-rhs-screen/candidate-parity-fp32comp.spv",
+        "bytes": 3973732,
+        "sha256": "2524459927bf743700a3e2024a73e6794a1030a09220898470604fd51d1d0bfc"
+      },
+      "reduction_bytes": 324048,
+      "reduction_percent": 7.539892688783511,
+      "original_reproduces_current_canonical_bytes": true,
+      "compiler_exits": [
+        0,
+        0
+      ],
+      "validator_exits": [
+        0,
+        0
+      ],
+      "static_declarations": {
+        "original": {
+          "functions": 1,
+          "calls": 0,
+          "loops": 4178,
+          "DontUnroll": 12,
+          "OpPhi": 0
+        },
+        "candidate": {
+          "functions": 1,
+          "calls": 0,
+          "loops": 3896,
+          "DontUnroll": 18,
+          "OpPhi": 0
+        }
+      },
+      "disassemblies": {
+        "original": {
+          "path": "out/kerr-cartdelta-rhs-screen/original-parity-fp32comp.spvasm",
+          "bytes": 12708537,
+          "sha256": "ac0e8dff259dc90983b07fcaff77f5927cd691aad7d3f7498ca9ddf7940ae522"
+        },
+        "candidate": {
+          "path": "out/kerr-cartdelta-rhs-screen/candidate-parity-fp32comp.spvasm",
+          "bytes": 11762571,
+          "sha256": "8e0c31215b25a4f20d5b23ac8fb28d3c4bec282520070a51d51ad67fcade51d1"
+        }
+      }
+    },
+    "fp64": {
+      "original": {
+        "path": "bin/linux-gcc/cartdelta-rhs-screen/original-parity-fp64.spv",
+        "bytes": 4213296,
+        "sha256": "c637ef03554c751ac7c8ddc5a29f5732aec2e22c128bd51d6206e138f34931b4"
+      },
+      "candidate": {
+        "path": "bin/linux-gcc/cartdelta-rhs-screen/candidate-parity-fp64.spv",
+        "bytes": 3879216,
+        "sha256": "3dbc622818259a3cbf0c2abc95efc406f48b8284bc3b0bd2ccbc7d9c2fbcc2aa"
+      },
+      "reduction_bytes": 334080,
+      "reduction_percent": 7.929184182644656,
+      "original_reproduces_current_canonical_bytes": true,
+      "compiler_exits": [
+        0,
+        0
+      ],
+      "validator_exits": [
+        0,
+        0
+      ],
+      "static_declarations": {
+        "original": {
+          "functions": 1,
+          "calls": 0,
+          "loops": 3975,
+          "DontUnroll": 12,
+          "OpPhi": 0
+        },
+        "candidate": {
+          "functions": 1,
+          "calls": 0,
+          "loops": 3693,
+          "DontUnroll": 18,
+          "OpPhi": 0
+        }
+      },
+      "disassemblies": {
+        "original": {
+          "path": "out/kerr-cartdelta-rhs-screen/original-parity-fp64.spvasm",
+          "bytes": 12501005,
+          "sha256": "c7f2971425b0190eb8f84d67d2495e1ab99df81d42a5918d29e62ecab3f6863e"
+        },
+        "candidate": {
+          "path": "out/kerr-cartdelta-rhs-screen/candidate-parity-fp64.spvasm",
+          "bytes": 11523763,
+          "sha256": "e2d70b6cd04fe72160547f0d88041b7c699360924afe7cbd642d72d426694dc4"
+        }
+      }
+    }
+  },
+  "logs": {
+    "out/kerr-cartdelta-rhs-screen/candidate-COMP-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/candidate-COMP-validation.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/candidate-FP64-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/candidate-FP64-validation.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/candidate-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/candidate-validation.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/original-COMP-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/original-COMP-validation.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/original-FP64-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/original-FP64-validation.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/original-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-cartdelta-rhs-screen/original-validation.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "source_candidate": {
+    "bytes": 27452,
+    "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+  },
+  "independent_SOURCE_review": {
+    "bytes": 8711,
+    "sha256": "1fa7ecafaf05072d5c26932902144e3fcae3e19ea4ba4a6fb09d02f173aac835"
+  },
+  "scope": "Static footprint/compiler/validator/loopdeclaration comparison only. No driverJIT/liveness/register/spill/RSS/timing/numerical/bitwise or3rung300s completion claim. Trace/coupled emittedvariants remain for future canonicalbuild; retainedcoldframe/issue44 untouched."
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-loop-FP32parity-footprint-v1",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "observed_utc": "2026-10-15T13:56:10.965520+00:00",
+  "source_candidate_applied": false,
+  "compile_and_original_validator_passed": [
+    {
+      "phase": "original",
+      "compiler_exit": 0,
+      "spirv_val_exit": 0
+    },
+    {
+      "phase": "candidate",
+      "compiler_exit": 0,
+      "spirv_val_exit": 0
+    }
+  ],
+  "original_artifact": {
+    "path": "bin/linux-gcc/cartdelta-rhs-screen/original-parity-fp32.spv",
+    "bytes": 4293556,
+    "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+  },
+  "candidate_artifact": {
+    "path": "bin/linux-gcc/cartdelta-rhs-screen/candidate-parity-fp32.spv",
+    "bytes": 3969508,
+    "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed"
+  },
+  "reduction_bytes": 324048,
+  "reduction_percent": 7.547310434520942,
+  "original_reproduced_current_canonical_bytes": true,
+  "same_31_source_modules_except_reviewed_cartdelta_region": true,
+  "input_tool_baseline_preparation": {
+    "bytes": 6644,
+    "sha256": "a394f6c77aa24a2100beccd4611cd79ce070d9d68ff2d32bb1c417e33ddc8362"
+  },
+  "candidate_SOURCE_review": {
+    "bytes": 8711,
+    "sha256": "1fa7ecafaf05072d5c26932902144e3fcae3e19ea4ba4a6fb09d02f173aac835"
+  },
+  "logs": {
+    "original-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original-validation.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "candidate-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "candidate-validation.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "scope": "Controlled same-recipe FP32parity static binary-size/validator observation only; source/include/output paths mapped to owned diagnostic namespace. No emitted metric-body count, runtime numerical/bitwise equivalence, driverJIT time/RSS cause or benefit, other-rung/trace/coupled verification, retainedcoldframe/issue44/fullscience/release claim. Originalproducts/source/currentnativebatch unchanged."
+}

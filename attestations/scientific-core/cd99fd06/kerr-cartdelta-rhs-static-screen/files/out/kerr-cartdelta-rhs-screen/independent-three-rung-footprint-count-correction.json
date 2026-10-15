@@ -1,0 +1,85 @@
+{
+  "schema": "sirius-cartdelta-rhs-loop-independent-count-correction-v1",
+  "passed": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "corrects_without_overwriting": {
+    "path": "/home/astra/.project/Sirius/out/kerr-cartdelta-rhs-screen/independent-three-rung-footprint-review.json",
+    "bytes": 10391,
+    "sha256": "7568026d03271cddf19ddd59fa8f501cb42827ebe75e50db8dc1588dc26af4b6"
+  },
+  "author_analysis": {
+    "path": "/home/astra/.project/Sirius/out/kerr-cartdelta-rhs-screen/emitted-fp32-source-analysis.json",
+    "bytes": 16567,
+    "sha256": "dc523ece7a587f76c0c8c2c0f366de063cff2b05c005ebd191383b42139fc8af"
+  },
+  "fixed_assembly_inputs": [
+    {
+      "path": "/home/astra/.project/Sirius/out/kerr-cartdelta-rhs-screen/original-parity-fp32.spvasm",
+      "bytes": 12697065,
+      "sha256": "d5821f983264dd57d26888b9d3c439f36bf5a94d436342feea1392651b102848"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/kerr-cartdelta-rhs-screen/candidate-parity-fp32.spvasm",
+      "bytes": 11751131,
+      "sha256": "bb8a78a4b1bcbb60c7612bf20e8733f822a74c9eaf87ad2edfcafae4ed98a8b1"
+    }
+  ],
+  "finding": "My original Function_variables label was too broad: its anchored regex matched only Function declarations without an initializer. The author counted all Function declarations correctly.",
+  "corrected_fp32_counts": {
+    "original": {
+      "all_OpVariable": 14461,
+      "all_Function_variables": 14457,
+      "uninitialized_Function_variables": 14446,
+      "initialized_Function_variables": 11,
+      "initialized_declaration_lines": [
+        4893,
+        6167,
+        7445,
+        8719,
+        8745,
+        9712,
+        9809,
+        10548,
+        11219,
+        11892,
+        13412
+      ]
+    },
+    "candidate": {
+      "all_OpVariable": 13861,
+      "all_Function_variables": 13857,
+      "uninitialized_Function_variables": 13840,
+      "initialized_Function_variables": 17,
+      "initialized_declaration_lines": [
+        5031,
+        6305,
+        7583,
+        8857,
+        8883,
+        9008,
+        9727,
+        9824,
+        9949,
+        10440,
+        10565,
+        10988,
+        11113,
+        11538,
+        11663,
+        12935,
+        13060
+      ]
+    }
+  },
+  "all_Function_variable_reduction": 600,
+  "excluded_declaration_form": "OpVariable %_ptr_Function_bool Function %false",
+  "definition_correction_for_original_review": "Interpret every original actual_declaration_counts.*.original_then_candidate.Function_variables entry as uninitialized_Function_variable_declarations. Only the two FP32 files were rechecked here; no corrected all-Function totals are asserted for FP32_COMP or FP64.",
+  "unaffected": "Omitted declarations are scalar bool, so Function-array counts are unaffected. Binary footprint, stage-loop witnesses and the other accepted findings are unchanged.",
+  "scope": {
+    "fixed_fp32_assembly_text_only": true,
+    "project_or_authored_code_executed": false,
+    "compiler_validator_disassembler_provider_or_test_executed": false,
+    "accepted_receipt_modified": false,
+    "semantic_runtime_or_cost_admitted": false
+  }
+}

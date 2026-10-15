@@ -1,0 +1,496 @@
+{
+  "schema": "sirius-kerr-cartdelta-emitted-fp32-passive-source-analysis-v1",
+  "analysis_completed": true,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "reviewer": "/root/divide_contract_review",
+  "source_authorship_disclosed": "Reviewer authored the source-only CartDelta candidate; root alone compiled, validated and disassembled. This is not independent producer or full semantic acceptance.",
+  "method": "Read only the two fixed SPV byte streams, saved textual disassemblies and reviewed candidate/contracts/independent-source receipt. Inline standard-library text matching counted declarations and attached literal line witnesses; no project helper, semantic SPIR-V reader, policy, compiler, disassembler, provider, test or network executed.",
+  "inputs": {
+    "original_spv": {
+      "path": "bin/linux-gcc/cartdelta-rhs-screen/original-parity-fp32.spv",
+      "bytes": 4293556,
+      "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+    },
+    "candidate_spv": {
+      "path": "bin/linux-gcc/cartdelta-rhs-screen/candidate-parity-fp32.spv",
+      "bytes": 3969508,
+      "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed"
+    },
+    "original_spvasm": {
+      "path": "out/kerr-cartdelta-rhs-screen/original-parity-fp32.spvasm",
+      "bytes": 12697065,
+      "sha256": "d5821f983264dd57d26888b9d3c439f36bf5a94d436342feea1392651b102848"
+    },
+    "candidate_spvasm": {
+      "path": "out/kerr-cartdelta-rhs-screen/candidate-parity-fp32.spvasm",
+      "bytes": 11751131,
+      "sha256": "bb8a78a4b1bcbb60c7612bf20e8733f822a74c9eaf87ad2edfcafae4ed98a8b1"
+    },
+    "candidate_source": {
+      "path": "out/kerr-cartdelta-rhs-loop/candidate/gr_integrator.slang",
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+    },
+    "source_contracts": {
+      "path": "out/kerr-cartdelta-rhs-loop/source-contracts.json",
+      "bytes": 8428,
+      "sha256": "50e251a3f32de69112952319ecd894a6779df893af46b104f106506e9a0a241e"
+    },
+    "independent_source_review": {
+      "path": "out/kerr-cartdelta-rhs-loop/independent-source-review.json",
+      "bytes": 8711,
+      "sha256": "1fa7ecafaf05072d5c26932902144e3fcae3e19ea4ba4a6fb09d02f173aac835"
+    }
+  },
+  "static_artifact_comparison": {
+    "original_bytes": 4293556,
+    "candidate_bytes": 3969508,
+    "reduction_bytes": 324048,
+    "reduction_percent": 7.547310434520942,
+    "same_recipe_compile_validation": "Root reported both controlled compile+original spirv-val exits0 and original byte reproduction; not re-executed by reviewer."
+  },
+  "declaration_counts": {
+    "original": {
+      "assembly_lines": 335977,
+      "total_instruction_declarations": 335972,
+      "opcode_declaration_counts": {
+        "OpFunction": 1,
+        "OpFunctionEnd": 1,
+        "OpFunctionCall": 0,
+        "OpLoopMerge": 4178,
+        "OpVariable": 14461,
+        "OpPhi": 0,
+        "OpLoad": 41769,
+        "OpStore": 41486,
+        "OpFAdd": 4654,
+        "OpFSub": 2147,
+        "OpFMul": 11171,
+        "OpFDiv": 3340,
+        "OpAccessChain": 12260,
+        "OpSelectionMerge": 16955
+      },
+      "floating_arithmetic_declarations": 21312,
+      "loop_control_counts": {
+        "DontUnroll": 12,
+        "None": 2324,
+        "Unroll": 1842
+      },
+      "Function_storage_variable_declarations": 14457,
+      "Function_storage_array_variable_declarations": 1822,
+      "Function_storage_array_variables_by_pointee_type": {
+        "%_arr__arr__arr__arr_float_int_4_int_4_int_4_int_4": 27,
+        "%_arr__arr__arr_float_int_4_int_4_int_4": 229,
+        "%_arr__arr_float_int_4_int_4": 149,
+        "%_arr_float_int_16": 6,
+        "%_arr_float_int_2": 7,
+        "%_arr_float_int_3": 54,
+        "%_arr_float_int_4": 700,
+        "%_arr_float_int_6": 252,
+        "%_arr_float_int_7": 256,
+        "%_arr_float_int_8": 142
+      },
+      "entry_function_loci": [
+        {
+          "line": 496,
+          "instruction": "%ComputeMain = OpFunction %void None %3"
+        },
+        {
+          "line": 335977,
+          "instruction": "OpFunctionEnd"
+        }
+      ],
+      "local_size_loci": [
+        {
+          "line": 11,
+          "instruction": "OpExecutionMode %ComputeMain LocalSize 64 1 1"
+        }
+      ]
+    },
+    "candidate": {
+      "assembly_lines": 311362,
+      "total_instruction_declarations": 311357,
+      "opcode_declaration_counts": {
+        "OpFunction": 1,
+        "OpFunctionEnd": 1,
+        "OpFunctionCall": 0,
+        "OpLoopMerge": 3896,
+        "OpVariable": 13861,
+        "OpPhi": 0,
+        "OpLoad": 39450,
+        "OpStore": 39314,
+        "OpFAdd": 4174,
+        "OpFSub": 1838,
+        "OpFMul": 9461,
+        "OpFDiv": 2650,
+        "OpAccessChain": 11171,
+        "OpSelectionMerge": 15617
+      },
+      "floating_arithmetic_declarations": 18123,
+      "loop_control_counts": {
+        "DontUnroll": 18,
+        "None": 2180,
+        "Unroll": 1698
+      },
+      "Function_storage_variable_declarations": 13857,
+      "Function_storage_array_variable_declarations": 1642,
+      "Function_storage_array_variables_by_pointee_type": {
+        "%_arr__arr__arr__arr_float_int_4_int_4_int_4_int_4": 27,
+        "%_arr__arr__arr_float_int_4_int_4_int_4": 193,
+        "%_arr__arr_float_int_4_int_4": 131,
+        "%_arr_float_int_16": 6,
+        "%_arr_float_int_2": 7,
+        "%_arr_float_int_3": 54,
+        "%_arr_float_int_4": 574,
+        "%_arr_float_int_6": 252,
+        "%_arr_float_int_7": 256,
+        "%_arr_float_int_8": 142
+      },
+      "entry_function_loci": [
+        {
+          "line": 496,
+          "instruction": "%ComputeMain = OpFunction %void None %3"
+        },
+        {
+          "line": 311362,
+          "instruction": "OpFunctionEnd"
+        }
+      ],
+      "local_size_loci": [
+        {
+          "line": 11,
+          "instruction": "OpExecutionMode %ComputeMain LocalSize 64 1 1"
+        }
+      ]
+    }
+  },
+  "six_literal_four_stage_loop_witnesses": [
+    {
+      "context": 0,
+      "stage_counter": "%52138",
+      "initial_zero_line": 59157,
+      "loop_header": {
+        "line": 59160,
+        "instruction": "OpLoopMerge %52284 %52283 DontUnroll"
+      },
+      "exclusive_merge": {
+        "line": 60949,
+        "instruction": "%52284 = OpLabel"
+      },
+      "guard": {
+        "line": 59168,
+        "instruction": "%52195 = OpSLessThan %bool %52194 %int_4",
+        "counter_load_line": 59167
+      },
+      "stage_equality_lines": {
+        "0": [
+          60715
+        ],
+        "1": [
+          59191
+        ],
+        "2": [
+          59196,
+          60723
+        ],
+        "3": [
+          59208
+        ]
+      },
+      "increment": {
+        "line": 60936,
+        "instruction": "%52282 = OpIAdd %int %52281 %int_1",
+        "counter_load_line": 60935,
+        "counter_store_lines": [
+          60945
+        ]
+      },
+      "inner_loop_controls": {
+        "None": 8,
+        "Unroll": 8
+      }
+    },
+    {
+      "context": 1,
+      "stage_counter": "%89123",
+      "initial_zero_line": 105895,
+      "loop_header": {
+        "line": 105898,
+        "instruction": "OpLoopMerge %89269 %89268 DontUnroll"
+      },
+      "exclusive_merge": {
+        "line": 107767,
+        "instruction": "%89269 = OpLabel"
+      },
+      "guard": {
+        "line": 105906,
+        "instruction": "%89180 = OpSLessThan %bool %89179 %int_4",
+        "counter_load_line": 105905
+      },
+      "stage_equality_lines": {
+        "0": [
+          107533
+        ],
+        "1": [
+          105929
+        ],
+        "2": [
+          105934,
+          107541
+        ],
+        "3": [
+          105946
+        ]
+      },
+      "increment": {
+        "line": 107754,
+        "instruction": "%89267 = OpIAdd %int %89266 %int_1",
+        "counter_load_line": 107753,
+        "counter_store_lines": [
+          107763
+        ]
+      },
+      "inner_loop_controls": {
+        "None": 8,
+        "Unroll": 8
+      }
+    },
+    {
+      "context": 2,
+      "stage_counter": "%102842",
+      "initial_zero_line": 122491,
+      "loop_header": {
+        "line": 122494,
+        "instruction": "OpLoopMerge %102988 %102987 DontUnroll"
+      },
+      "exclusive_merge": {
+        "line": 124363,
+        "instruction": "%102988 = OpLabel"
+      },
+      "guard": {
+        "line": 122502,
+        "instruction": "%102899 = OpSLessThan %bool %102898 %int_4",
+        "counter_load_line": 122501
+      },
+      "stage_equality_lines": {
+        "0": [
+          124129
+        ],
+        "1": [
+          122525
+        ],
+        "2": [
+          122530,
+          124137
+        ],
+        "3": [
+          122542
+        ]
+      },
+      "increment": {
+        "line": 124350,
+        "instruction": "%102986 = OpIAdd %int %102985 %int_1",
+        "counter_load_line": 124349,
+        "counter_store_lines": [
+          124359
+        ]
+      },
+      "inner_loop_controls": {
+        "None": 8,
+        "Unroll": 8
+      }
+    },
+    {
+      "context": 3,
+      "stage_counter": "%116584",
+      "initial_zero_line": 138728,
+      "loop_header": {
+        "line": 138731,
+        "instruction": "OpLoopMerge %116730 %116729 DontUnroll"
+      },
+      "exclusive_merge": {
+        "line": 140600,
+        "instruction": "%116730 = OpLabel"
+      },
+      "guard": {
+        "line": 138739,
+        "instruction": "%116641 = OpSLessThan %bool %116640 %int_4",
+        "counter_load_line": 138738
+      },
+      "stage_equality_lines": {
+        "0": [
+          140366
+        ],
+        "1": [
+          138762
+        ],
+        "2": [
+          138767,
+          140374
+        ],
+        "3": [
+          138779
+        ]
+      },
+      "increment": {
+        "line": 140587,
+        "instruction": "%116728 = OpIAdd %int %116727 %int_1",
+        "counter_load_line": 140586,
+        "counter_store_lines": [
+          140596
+        ]
+      },
+      "inner_loop_controls": {
+        "None": 8,
+        "Unroll": 8
+      }
+    },
+    {
+      "context": 4,
+      "stage_counter": "%131890",
+      "initial_zero_line": 157265,
+      "loop_header": {
+        "line": 157268,
+        "instruction": "OpLoopMerge %132036 %132035 DontUnroll"
+      },
+      "exclusive_merge": {
+        "line": 159116,
+        "instruction": "%132036 = OpLabel"
+      },
+      "guard": {
+        "line": 157276,
+        "instruction": "%131947 = OpSLessThan %bool %131946 %int_4",
+        "counter_load_line": 157275
+      },
+      "stage_equality_lines": {
+        "0": [
+          158882
+        ],
+        "1": [
+          157299
+        ],
+        "2": [
+          157304,
+          158890
+        ],
+        "3": [
+          157316
+        ]
+      },
+      "increment": {
+        "line": 159103,
+        "instruction": "%132034 = OpIAdd %int %132033 %int_1",
+        "counter_load_line": 159102,
+        "counter_store_lines": [
+          159112
+        ]
+      },
+      "inner_loop_controls": {
+        "None": 8,
+        "Unroll": 8
+      }
+    },
+    {
+      "context": 5,
+      "stage_counter": "%154767",
+      "initial_zero_line": 185318,
+      "loop_header": {
+        "line": 185321,
+        "instruction": "OpLoopMerge %154913 %154912 DontUnroll"
+      },
+      "exclusive_merge": {
+        "line": 187110,
+        "instruction": "%154913 = OpLabel"
+      },
+      "guard": {
+        "line": 185329,
+        "instruction": "%154824 = OpSLessThan %bool %154823 %int_4",
+        "counter_load_line": 185328
+      },
+      "stage_equality_lines": {
+        "0": [
+          186876
+        ],
+        "1": [
+          185352
+        ],
+        "2": [
+          185357,
+          186884
+        ],
+        "3": [
+          185369
+        ]
+      },
+      "increment": {
+        "line": 187097,
+        "instruction": "%154911 = OpIAdd %int %154910 %int_1",
+        "counter_load_line": 187096,
+        "counter_store_lines": [
+          187106
+        ]
+      },
+      "inner_loop_controls": {
+        "None": 8,
+        "Unroll": 8
+      }
+    }
+  ],
+  "lowering_findings": [
+    "Both artifacts contain one ComputeMain function and zero OpFunctionCall declarations: the old RHS sites are not shared through SPIR-V functions.",
+    "Candidate retains six separate inlined four-stage loop contexts, each initialized0, bounded<4, incremented1, with stage0/1/2/3 selectors and DontUnroll. Source sharing is local to each context, not one module-wide RHS routine.",
+    "Each new stage loop contains8 Unroll and8 None inner loops. Global deltas are Unroll−144, None−144, DontUnroll+6, total loops−282, consistent with18 removed inlined16-loop RHS regions plus6 four-stage loops.",
+    "Kerr stage-state source and first emitted context preserve direct stage3 addition and half-scaled previous increments for stages1/2; original final sum remains source-exact. These witnesses are not an exhaustive emitted equivalence proof.",
+    "Other parity opcode branches, families, metric/projection/conservation calculations and six separate caller contexts remain. Consequently local RHS sharing does not imply a fourfold whole-module reduction.",
+    "Array type inventories are identical. No RK stage array was added in the candidate source. Function-storage array/object/declaration counts describe SPIR-V text, not driver registers, allocation, stack, spills or RSS.",
+    "Both artifacts have zero OpPhi; original O0 output uses Function variables and loads/stores, including candidate loop-carried named stage increments. Backend promotion/unrolling/liveness remains unobserved."
+  ],
+  "work_and_semantic_bounds": {
+    "successful_Kerr_RK4_RHS_evaluations": 4,
+    "failed_stage_RHS_prefix": "1 through4 as original",
+    "ordinary_coarse1_fine2_RHS_max": 12,
+    "FP32_or_COMP_floor_coarse2_fine4_RHS_max": 24,
+    "FP64_floor_coarse32_fine64_RHS_max": 384,
+    "stage_increments": "Original acceleration refusal precedes dt scaling; stage0 exact input, stages1/2 original+0.5*previous dt-scaled increments, stage3 original+previous increments. Original final weighted grouping/1-over6/endpoint check and wrappers retain source contract.",
+    "unaffected": "Physical intervals/floor/tolerances/projection/rollback/modes/caps/cache/test cases and retained renderer remain unchanged."
+  },
+  "recommendation": {
+    "decision": "MATERIAL_STATIC_CHANGE_FP32_ONLY_NOT_THREE_RUNG_300S_ADMISSION",
+    "next_static_scope": "Root-controlled same-recipe COMP and FP64 original/candidate compile/validation and bounded loop/local-storage/type checks before considering canonical trial; do not derive driver-time scaling from module size.",
+    "original_precision_case": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison executes separate FP32, COMP and supported FP64 probes sequentially; this analysis covers FP32 only.",
+    "unresolved": [
+      "Whether backend honors shared stage loop or duplicates it",
+      "Backend promotion/register liveness/stack/spills and stage-selector runtime overhead",
+      "Actual COMP/FP64 emitted footprint and semantics",
+      "Actual complete original300-second three-rung outcome"
+    ]
+  },
+  "nonadmissions": {
+    "driver_JIT_cause": false,
+    "driver_JIT_time_or_memory_improvement": false,
+    "numerical_or_bitwise_equivalence_from_this_analysis": false,
+    "three_rung_300s_completion": false,
+    "performance": false,
+    "original_retained_cold_frame": false,
+    "issue44_benefit": false,
+    "scientific_or_release_qualification": false
+  },
+  "source_and_inputs_stable": true,
+  "mutations": "Only this new analysis JSON; no mutable screen/source module, canonical source, current products or N/W/C inputs read or modified.",
+  "array_types": {
+    "identical_in_original_and_candidate": true,
+    "count": 10,
+    "declarations": [
+      "%_arr_float_int_4 = OpTypeArray %float %int_4",
+      "%_arr__arr_float_int_4_int_4 = OpTypeArray %_arr_float_int_4 %int_4",
+      "%_arr__arr__arr_float_int_4_int_4_int_4 = OpTypeArray %_arr__arr_float_int_4_int_4 %int_4",
+      "%_arr_float_int_3 = OpTypeArray %float %int_3",
+      "%_arr_float_int_16 = OpTypeArray %float %int_16",
+      "%_arr_float_int_7 = OpTypeArray %float %int_7",
+      "%_arr_float_int_6 = OpTypeArray %float %int_6",
+      "%_arr_float_int_8 = OpTypeArray %float %int_8",
+      "%_arr_float_int_2 = OpTypeArray %float %int_2",
+      "%_arr__arr__arr__arr_float_int_4_int_4_int_4_int_4 = OpTypeArray %_arr__arr__arr_float_int_4_int_4_int_4 %int_4"
+    ],
+    "scope": "Type inventory only; per-module Function-storage array variable counts remain below."
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "sirius-kerr-rhs-original-other-rung-baselines-v1",
+  "passed": true,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "source_copy_original_exact": 31,
+  "baselines": {
+    "COMP": {
+      "artifact": {
+        "path": "bin/linux-gcc/cartdelta-rhs-screen/original-parity-fp32comp.spv",
+        "bytes": 4297780,
+        "sha256": "748c5aae46d240a22fefc868fc227b5e3db7d13223495945d3ea25117f97abaf"
+      },
+      "compiler_exit": 0,
+      "validator_exit": 0,
+      "same_bytes_as_current_canonical": true
+    },
+    "FP64": {
+      "artifact": {
+        "path": "bin/linux-gcc/cartdelta-rhs-screen/original-parity-fp64.spv",
+        "bytes": 4213296,
+        "sha256": "c637ef03554c751ac7c8ddc5a29f5732aec2e22c128bd51d6206e138f34931b4"
+      },
+      "compiler_exit": 0,
+      "validator_exit": 0,
+      "same_bytes_as_current_canonical": true
+    }
+  },
+  "scope": "Controlled same-recipe static comparisons only, no numerical/JIT/performance or otherdomain acceptance."
+}

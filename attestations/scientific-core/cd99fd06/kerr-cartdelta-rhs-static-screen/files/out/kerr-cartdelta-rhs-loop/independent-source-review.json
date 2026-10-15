@@ -1,0 +1,128 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-loop-independent-source-review-v1",
+  "passed": true,
+  "verdict": "SOURCE_PASS_PENDING_SEPARATE_EMITTED_AND_RUNTIME_CHECKS",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "applied": false,
+  "blockers": [],
+  "review_scope": "Independent plain-source/text/hash/read-only Git review only. No source parser/import, helper, compiler/formatter/validator/program, provider/test/network execution. No live native/software workspace or output read; only this sidecar written.",
+  "pins": {
+    "original/gr_integrator.slang": {
+      "path": "out/kerr-cartdelta-rhs-loop/original/gr_integrator.slang",
+      "bytes": 27190,
+      "sha256": "e7b2c282edec4c4e3e768c3b1d20559c4c59c9a4c9a6e091932a274c4162ff11"
+    },
+    "candidate/gr_integrator.slang": {
+      "path": "out/kerr-cartdelta-rhs-loop/candidate/gr_integrator.slang",
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+    },
+    "cartdelta-rhs-loop.patch": {
+      "path": "out/kerr-cartdelta-rhs-loop/cartdelta-rhs-loop.patch",
+      "bytes": 3064,
+      "sha256": "434e4fd4f87da32214a274bfce69c5d2f65255ee18f51e5683233fb2e8fdec99"
+    },
+    "source-contracts.json": {
+      "path": "out/kerr-cartdelta-rhs-loop/source-contracts.json",
+      "bytes": 8428,
+      "sha256": "50e251a3f32de69112952319ecd894a6779df893af46b104f106506e9a0a241e"
+    }
+  },
+  "exact_scope_and_provenance": {
+    "original_matches_canonical_and_named_cd99_Git_bytes": true,
+    "patch_regenerated_byte_exact": true,
+    "only_changed_region": "Stage evaluation region between original dx/du zero initialization and first Real sixth final-sum statement in IntegrateGeodesicRK4CartDelta.",
+    "complete_original_prefix_and_final_sum_endpoint_wrapper_all_remaining_module_bytes_exact": true,
+    "inverse_replacing_only_that_region_restores_original_full_file": true,
+    "all_five_contract_defining_sources_current_and_named_Git_exact": true,
+    "source_RHS_callsite_count": {
+      "before": 4,
+      "after": 1
+    },
+    "no_signature_type_resource_ABI_or_registration_change": true
+  },
+  "stage_induction": {
+    "invariant": "Before stage j>0, previousDx/previousDu are exactly the immediately preceding original dt-scaled stage increments; every completed named pair equals its corresponding original expression. Out dx/du stay at original zero initialization until all4 RHS evaluations succeed.",
+    "inputs": [
+      {
+        "j": 0,
+        "state": "Exact state copy; no add-zero or multiply-one arithmetic."
+      },
+      {
+        "j": 1,
+        "state": "Original state + 0.5f times original dt-scaled dx1/du1."
+      },
+      {
+        "j": 2,
+        "state": "Original state + 0.5f times original dt-scaled dx2/du2."
+      },
+      {
+        "j": 3,
+        "state": "Original state + original dx3/du3; no multiply-one."
+      }
+    ],
+    "operation_order": "At each stage, unchanged fallible acceleration first, then Scale(stageState.u,dt), then Scale(acceleration,dt), then plain assignments to that stage pair. No dt/2 rewrite, coefficient table, reassociation or new rounding conversion.",
+    "fixed_index": "Integer visits0,1,2,3 only; no overflow, dynamically indexed RK stage arrays or uninitialized named value reaches successful final sum.",
+    "state_values": "GeodesicStateCart contains exactly x/u Vec4Cart value fields; stage copy/reset introduces no arithmetic or mutable resource alias."
+  },
+  "refusal_and_commit_contract": {
+    "stage_refusal": "Failure at stage j executes j+1 original RHS evaluations and immediately returns false with out dx/du still their original zeros; no later stage or endpoint predicate.",
+    "endpoint_refusal": "After four successes, original weighted grouping and Real(1)/Real(6) compute out dx/du before the unchanged endpoint predicate. A false endpoint leaves those computed deltas, as original; they are not newly zeroed.",
+    "public_wrapper": "IntegrateGeodesicRK4Cart initializes result=state, uses distinct dx/du locals, and commits x/u only on true.",
+    "composite": "Existing coarse/fine passes reset independently to original state; a coarse-stage refusal resets only its pass and does not suppress independent fine execution.",
+    "common_policy_tail": "Representability failure, error estimate, null/projector checks, controller factor/exponent, floor selection, tolerances and downstream caller rollback/counters remain byte-exact.",
+    "no_new_input_domain_restriction": "Original dt/family parameters and fallible metric authority retained; no precomputed half-dt scaling changes representability/underflow/overflow order."
+  },
+  "precision_and_work": {
+    "Real_FP32": "float",
+    "Real_COMP": "float; Kahan carry/commit remains outside this delta and unchanged",
+    "Real_FP64": "double; original float family-parameter ABI and exactly representable0.5f/2.0f constants retained",
+    "successful_RHS_per_Kerr_RK4": 4,
+    "ordinary_pair_max_RHS": 12,
+    "FP32_COMP_exact_floor_max_RHS": 24,
+    "FP64_exact_floor_max_RHS": 384,
+    "physical_work_reduced": false,
+    "all_MorrisThorne_Warp_bodies_and_governance_refusals_byte_exact": true
+  },
+  "actual_caller_scope": {
+    "direct_delta_consumer": "Only IntegrateGeodesicRK4Cart in the bounded src/tests/governance source search, with distinct output locals.",
+    "adaptive_chain": "Kerr branch of AdvanceGeodesicRK4 -> AdvanceCompositeGeodesicRK4Pair -> AttemptAdaptiveGeodesicStepWithResolution -> ordinary and floor public wrappers.",
+    "production_and_parity": "trace.slang and parity_probe.slang consume the unchanged public wrappers; original scene, physical1000ms caps and assertions are not edited.",
+    "additional_probe_consumer": "coupled_probe.slang:64 and87 call AttemptAdaptiveGeodesicStep for scalar and neighbour references, so those emitted reference paths transitively use the changed Kerr delta.",
+    "coupled_tableau_boundary": "gr_coupled.slang itself uses its separate coupled RHS/tableau and the unchanged shared error/null/projector helpers. This patch does not edit its40-field value/layout or coupled evolution algorithm.",
+    "Ellis_boundary": "gr_ellis_topology imports adaptive wrappers but selects the unchanged Morris-Thorne branch.",
+    "caller_source_pins": {
+      "src/sirius/kernels/gr_types.slang": {
+        "path": "src/sirius/kernels/gr_types.slang",
+        "bytes": 5519,
+        "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+      },
+      "src/sirius/kernels/coupled_probe.slang": {
+        "path": "src/sirius/kernels/coupled_probe.slang",
+        "bytes": 6259,
+        "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+      },
+      "src/sirius/kernels/gr_coupled.slang": {
+        "path": "src/sirius/kernels/gr_coupled.slang",
+        "bytes": 12632,
+        "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+      }
+    },
+    "retained_and_issue44": "Original retained renderer/arithmetic/cold128 gate and issue44 prototypes/benefit are separate; none is changed or qualified here."
+  },
+  "lowering_and_validation_limits": [
+    "This is source-level stage/operation correspondence under the existing Real arithmetic contract, not compiled bitwise, numerical or acceptance equivalence. Control-flow/SSA/inlining/contraction/spill choices may change lowered rounding or behavior near thresholds.",
+    "The [loop] attribute and one source callsite do not establish emitted metric-body copies or guaranteed driver treatment. Compiler may unroll/duplicate or add Phi/select/control work.",
+    "Eight named stage vectors plus two rolling vectors avoid new dynamic RK arrays but can extend live ranges/register pressure and cause spills. Existing metric/Christoffel arrays and contractions are unchanged.",
+    "No actual body count, module size, JIT memory/phase/cause, hit rate, latency or performance benefit has been observed for this candidate.",
+    "Current software7PASS plus external300s/noXML incomplete case motivates a changed-program footprint hypothesis only; do not convert timeout into numerical rejection or qualify this unapplied source.",
+    "Root must finish and preserve the current native batch before any source application; emitted-producer, source-governance and original finite runtime checks remain separate. No whole-horizon/fullscience/Mandatory/UI/release claim."
+  ],
+  "workspace": {
+    "tracked_source_clean": true,
+    "source_committed_pushed": "0 ahead / 0 behind",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "sole_worktree": true,
+    "candidate_and_review_uncommitted_pending_root_preservation": true
+  }
+}
