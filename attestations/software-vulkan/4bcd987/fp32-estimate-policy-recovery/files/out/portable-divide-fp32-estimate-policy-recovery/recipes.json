@@ -1,0 +1,39 @@
+{
+  "actual_input": "Originalcomplete427609BrawASM with exactsoleproposalNoContraction annotation and originalRTE32cap/mode insertion by unchanged frozen policy.",
+  "never_rerun": [
+    "Slang",
+    "spirv-opt",
+    "rawSPVdisassembler",
+    "originalstockcompiler/validator/policycontrols"
+  ],
+  "only_new_tool_calls": [
+    [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "--target-env",
+      "spv1.5",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-policy-recovery/candidate-endpoint-normal.spvasm",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-policy-recovery/candidate-endpoint-normal.spv"
+    ],
+    [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.2",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-policy-recovery/candidate-endpoint-normal.spv"
+    ],
+    [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-policy-recovery/candidate-endpoint-normal.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-policy-recovery/candidate-endpoint-normal.final.spvasm"
+    ]
+  ],
+  "original_false_owner_retained": true,
+  "reused_completed_tool_stages": [
+    "originalSlangfullEndpointcompilation",
+    "originalspirv-opt SSA rewrite preservingbindings/interface",
+    "originalrawspirv-dis output"
+  ],
+  "schema": "sirius-fp32-estimate-policy-recovery-recipes-v1",
+  "structural_graph_accepted": false
+}
