@@ -1,0 +1,27 @@
+{
+  "inputs_before": {
+    "bytes": 420152,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/validate-shader-candidate/inputs-before.json",
+    "sha256": "2c79974a4200866571599ce28fed497337589f96b66a9e3f99c8c8edf04be2f2"
+  },
+  "label": "validate-shader-candidate",
+  "operator_context": {
+    "bytes": 806,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/operator-context.json",
+    "sha256": "f88f5c997d584d83d88b2ac2ca6443b14382f0ea7927c4750e8263be08345876"
+  },
+  "outputs": {},
+  "recipe": [
+    [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "--target-env",
+      "vulkan1.2",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/candidate.spv"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 450117,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/source-freeze.json",
+    "sha256": "2c9c18d5d76741cad8bfd8fd01f7d1e1b99568bbb7b19cceb32a85b1dc9bab9f"
+  }
+}

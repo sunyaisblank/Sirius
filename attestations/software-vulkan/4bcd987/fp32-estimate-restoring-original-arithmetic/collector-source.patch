@@ -1,0 +1,165 @@
+--- preserve-finite-result.py@288363-6530bc8c
++++ preserve-finite-result.py+fp32-restoring-arithmetic
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,153 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'fp32-estimate-restoring-original-arithmetic':
++    import stat
++    import xml.etree.ElementTree as ET
++    work = root / 'out/portable-divide-fp32-estimate-restoring-arithmetic'
++    products = root / 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic'
++    bundle = root / 'attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic'
++    tag = 'evidence/issue-44-fp32-estimate-restoring-original-arithmetic'
++    load = lambda path: json.loads(path.read_text())
++    def restoring_arithmetic_record(path):
++        return dict(pin(path), resolved_path=str(path.resolve(strict=True)))
++    reviews = {}
++    for name in ('independent-source-review.json','root-source-admission.json',
++                 'independent-terminal-review.json','root-terminal-admission.json'):
++        review = load(work/name)
++        assert review['passed'] is True, name
++        reviews[name] = restoring_arithmetic_record(work/name)
++    independent = load(work/'independent-terminal-review.json')
++    admission = load(work/'root-terminal-admission.json')
++    assert independent['source_revision'] == admission['source_revision'] == parent
++    for key,name in [('independent_terminal_review','independent-terminal-review.json'),
++                     ('arithmetic_result','arithmetic-result.json')]:
++        path = work/name; expected = admission[key]
++        actual = dict(restoring_arithmetic_record(path),mode=stat.S_IMODE(path.stat().st_mode),
++                      symlink_target=os.readlink(path) if path.is_symlink() else None)
++        assert {'bytes','sha256','resolved_path'} <= set(expected) <= set(actual)
++        assert expected == {field:actual[field] for field in expected}
++    packet = load(work/'packet.json')
++    result = load(work/'arithmetic-result.json')
++    context = load(work/'operator-context.json')
++    runtime = load(work/'runtime-context.json')
++    build = load(work/'build-review.json')
++    actions = load(work/'actions.json')
++    frozen = load(work/'source-freeze.json')
++    assert packet['runner_preparation_revision'] == parent
++    assert packet['source_revision'] == '4bcd9875cd9308deabed06a5fa2f17d2321b0cbc'
++    assert result['schema'] == 'sirius-fp32-estimate-restoring-original-arithmetic-result-v1' and result['passed'] is True
++    assert build['passed'] is True and result['original_records'] == 174268 and result['original_operation_count'] == 14
++    assert result['complete_output_words_per_provider'] == 697072
++    assert result['stock_result_reused'] and result['fresh_candidate_host_and_full_gpu_plus_reused_stock_equal_original_expected']
++    assert result['candidate_macro'] == packet['candidate_macro'] == 'SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1'
++    assert len(frozen['pins']) == 961 and set(frozen['filesystem']) == set(frozen['pins'])
++    for name,expected in frozen['pins'].items():
++        path = Path(name)
++        assert restoring_arithmetic_record(path) == expected, name
++        assert {'mode':stat.S_IMODE(path.stat().st_mode),
++                'symlink_target':os.readlink(path) if path.is_symlink() else None} == frozen['filesystem'][name]
++    assert context['revision'] == parent
++    for key,name in [('actions','actions.json'),('source_freeze','source-freeze.json'),('preparation','preparation.json')]:
++        assert context[key] == restoring_arithmetic_record(work/name)
++    labels = [*packet['outputs'],'execute-host','execute-gpu-candidate']
++    assert len(labels) == 12 and set(labels) == set(actions) == set(result['owners'])
++    owners = {}
++    consumed_unique = set()
++    for label in labels:
++        folder = work/label; owner = load(folder/'owner.json'); action = actions[label]
++        assert owner['status'] == 'terminal' and owner['passed'] is True and owner['child_exit'] == 0
++        assert owner['source'] == {'revision':parent,'status':''} and action['revision'] == parent
++        assert owner['source_unchanged'] and owner['whole_inputs_unchanged']
++        assert owner['stop_reason'] is None and owner['cleanup_errors'] == [] and owner['remaining_owned_processes'] == []
++        assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
++        assert owner['argv'] == [arg.replace('{folder}',str(folder)) for arg in action['argv']]
++        assert owner['limits'] == action['limits'] == {'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++        assert owner['wall_seconds'] < 300 and owner['peak_sampled_rss_kib'] <= 4194304 and owner['minimum_sampled_available_kib'] >= 2097152
++        assert result['owners'][label] == restoring_arithmetic_record(folder/'owner.json')
++        before = load(folder/'inputs-before.json')
++        assert before == load(folder/'inputs-after.json')
++        for name,expected in before.items():
++            assert restoring_arithmetic_record(root/name) == expected, (label,name)
++            consumed_unique.add(str(root/name))
++        for name in action['frozen_inputs']:
++            path = Path(name); key = str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
++            assert before[key] == restoring_arithmetic_record(path)
++        owners[label] = {'owner':restoring_arithmetic_record(folder/'owner.json'),
++            'wall_seconds':owner['wall_seconds'],'peak_sampled_rss_kib':owner['peak_sampled_rss_kib'],
++            'minimum_sampled_available_kib':owner['minimum_sampled_available_kib'],
++            'observed_retired_births':len(owner['observed_births']),'consumed_records':len(before)}
++    seals = {}
++    for label,names in packet['outputs'].items():
++        folder = work/label; seal = load(folder/'output-seal.json')
++        assert seal['label'] == label and seal['recipe'] == packet['recipes'][label]
++        for key,path in [('source_freeze',work/'source-freeze.json'),('operator_context',work/'operator-context.json'),('inputs_before',folder/'inputs-before.json')]:
++            assert seal[key] == restoring_arithmetic_record(path)
++        assert seal['outputs'] == {name:restoring_arithmetic_record(Path(name)) for name in names}
++        seals[label] = restoring_arithmetic_record(folder/'output-seal.json')
++    assert runtime['all_build_output_seals'] == seals
++    assert result['runtime_context'] == restoring_arithmetic_record(work/'runtime-context.json')
++    assert result['build_review'] == runtime['build_review'] == restoring_arithmetic_record(work/'build-review.json')
++    assert runtime['host'] == restoring_arithmetic_record(products/'host') and runtime['gpu'] == restoring_arithmetic_record(products/'gpu')
++    assert result['modules'] == runtime['modules'] == build['modules']
++    candidate = result['modules']['candidate']
++    assert candidate['module'] == result['candidate_shader'] == restoring_arithmetic_record(products/'candidate.spv')
++    assert result['candidate_header'] == restoring_arithmetic_record(work/'candidate/src/sirius/kernels/portable_binary32.h')
++    assert result['candidate_header']['sha256'] == '4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca'
++    assert candidate['capabilities'] == ['Shader'] and candidate['integer_widths'] == ['32'] and candidate['float_widths'] == ['32']
++    assert candidate['original_integer_public_interface_and_LocalSize64_retained'] and candidate['no_Endpoint_RTE_lines_added_to_primitive']
++    assert candidate['all_non_Divide_helper_instances_normalized_equal']['unchanged_non_Divide_helper_bodies'] == 25
++    graph = candidate['divide_estimate_graph']
++    assert [row['shift'] for row in graph['restoring_steps']] == [4,3,2,1,0]
++    assert graph['corrective_UDiv_absent'] and graph['only_original_fallback_UDiv_remains']
++    assert graph['original_complete_prefix_normalized_equal'] and graph['original_complete_fallback_suffix_normalized_equal']
++    assert candidate['op3_actual_Divide_call']['case3_true_block_only'] and candidate['op3_actual_Divide_call']['result_stored']
++    assert result['stock_arithmetic_receipt']['all737_static_inputs_and17_terminal_owners_joined']
++    assert result['stock_arithmetic_receipt'] == build['stock_arithmetic_receipt']
++    assert result['relevant_ordinary_prerequisites'] == build['relevant_ordinary_prerequisites']
++    assert runtime['canonical_numeric_object_relink'] == build['canonical_numeric_object_relink']
++    assert not build['private_Int64_or_Float64_device_object_used'] and not build['original_backend_or_core_archive_extracted']
++    expected = {'bytes':2788288,'sha256':'8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414'}
++    assert pin(work/'expected.bin') == pin(work/'execute-gpu-candidate/actual.bin') == expected
++    assert runtime['original_expected'] == restoring_arithmetic_record(work/'expected.bin') and runtime['original_input'] == restoring_arithmetic_record(work/'input.bin')
++    document = ET.parse(work/'execute-host/gtest.xml').getroot(); cases = document.findall('.//testcase')
++    assert int(document.get('tests','-1')) == 1 and all(int(document.get(key,'0')) == 0 for key in ('failures','errors','disabled'))
++    assert len(cases) == 1 and cases[0].get('classname')+'.'+cases[0].get('name') == 'PortableBinary32.MatchesIndependentExactCorpus'
++    assert cases[0].get('status') == 'run' and cases[0].get('result') == 'completed'
++    assert not any(document.findall('.//'+tag) for tag in ('failure','error','skipped'))
++    properties = {row.get('name'):row.get('value') for row in cases[0].findall('./properties/property')}
++    assert properties['independent_exact_records_checked'] == '174268' and properties['exact_raw_word_mismatches'] == '0'
++    rows = [json.loads(line) for line in (work/'execute-gpu-candidate/stdout.log').read_text().splitlines() if line.startswith('{')]
++    assert len(rows) == 1 and rows[0]['records'] == 174268 and rows[0]['complete_words'] == 697072 and rows[0]['mismatches'] == 0 and rows[0]['driver'] == 'llvmpipe'
++    gpu_owner = load(work/'execute-gpu-candidate/owner.json')
++    births = {(row['pid'],int(row['saved_start_ticks'])) for row in gpu_owner['observed_births']}; observed = set()
++    for mapping_row in gpu_owner['provider_mappings']:
++        assert (mapping_row['pid'],int(mapping_row['start_ticks'])) in births and mapping_row['owned_session'] == gpu_owner['child_pid']
++        for line in mapping_row['maps']:
++            fields = line.split(None,5); assert len(fields) == 6 and fields[5] in packet['provider_identities']
++            provider = packet['provider_identities'][fields[5]]
++            assert [int(part,16) for part in fields[3].split(':')] == provider['device'] and int(fields[4]) == provider['inode']
++            observed.add(fields[5])
++    assert observed == set(packet['provider_identities'])
++    operational = {}
++    for name in ('root-prerequisite-retirement.json','root-prior-jit-issue-receipt.json'):
++        assert (work/name).is_file() and str(work/name) not in frozen['pins']
++        assert all(str(work/name) not in action['frozen_inputs'] for action in actions.values())
++        operational[name] = restoring_arithmetic_record(work/name)
++    assert load(work/'root-prerequisite-retirement.json')['passed'] is True
++    mapping = [(work,'files/out/'+work.name),(products,'files/bin/linux-gcc/'+products.name),
++               (root/'out/preserve-finite-result-fp32-restoring-arithmetic.patch','collector-source.patch')]
++    summary = {'schema':'sirius-fp32-estimate-restoring-original-arithmetic-evidence-v1','passed':True,
++        'source_revision':parent,'product_revision':packet['source_revision'],'result':restoring_arithmetic_record(work/'arithmetic-result.json'),
++        'reviews':reviews,'owners':owners,'build_output_seals':seals,'static_input_count':961,'consumed_unique_inputs':len(consumed_unique),
++        'original_records':174268,'operation_count':14,'complete_output_words_per_gpu':697072,'complete_output_bytes_per_gpu':expected,
++        'fresh_candidate_host_and_full_gpu_plus_exact_stock_reuse':True,'stock_static_joins':737,'stock_terminal_owners_reused':17,
++        'canonical_numeric_GPU_relink':runtime['canonical_numeric_object_relink'],'ordinary_prerequisite_decision':result['relevant_ordinary_prerequisites']['ordinary_cost_decision'],
++        'old_failed_compiler_passed':False,'old_failed_child_exit':1,'current_compiler_and_structural_graph_passed':True,
++        'operational_outside_inputs':operational,'retained_eight_controls_executed':False,'benefit_trial_executed':False,
++        'production_adopted':False,'full_scientific_or_platform_or_release_qualification_claimed':False,
++        'scope':'Unchanged original174268-record14-operation finite primitive corpus: fresh candidate C++ host and complete697072-word GPU readback equal original expected, exact prior stock receipt reused. Canonical numeric GPU object/device/base relink has no private Int64/Float64 dependency; no fresh numeric-process enabled-feature argument trace is claimed. Proposal acceptance/hit-rate/native accuracy and performance remain unproved. No retained profiles, original eight controls, benefit, adoption or qualification acceptance.'}
++    message = 'Preserve FP32 restoring estimate original finite arithmetic and canonical numeric producer joins (#44)\n'
+ elif kind == 'divide-fp32-estimate-restoring-ordinary-jit-screen':
+     import stat
+     work = root / 'out/portable-divide-fp32-estimate-restoring-jit'

@@ -1,0 +1,82 @@
+{
+  "actions": {
+    "bytes": 1141064,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/actions.json",
+    "sha256": "f0929193b438ea73e2bee49d85e5c53bcace4d682210cd7e3ff7ff5bede8525d"
+  },
+  "claims": {
+    "arithmetic_passed": false,
+    "benefit_or_performance": false,
+    "estimate_hit_rate": false,
+    "production_adopted": false,
+    "qualification": false,
+    "retained_control_admitted": false
+  },
+  "complete_output_words": 697072,
+  "execution_performed": false,
+  "fresh_build_and_review_owners": [
+    "prepare-build",
+    "compile-host",
+    "link-host",
+    "link-gpu",
+    "compile-shader-candidate",
+    "optimize-shader-candidate",
+    "assemble-shader-candidate",
+    "validate-shader-candidate",
+    "disassemble-shader-candidate",
+    "verify-build"
+  ],
+  "fresh_numeric_owners": [
+    "execute-host",
+    "execute-gpu-candidate"
+  ],
+  "future_archive": {
+    "path": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic",
+    "tag": "evidence/issue-44-fp32-estimate-restoring-original-arithmetic"
+  },
+  "future_bin_root": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic",
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "no_live_retired_source_dependencies": true,
+  "operations": 14,
+  "original_records": 174268,
+  "out_root": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic",
+  "packet": {
+    "bytes": 326990,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/packet.json",
+    "sha256": "2038e6f132a7197c74793fcf25a72f00de34073493d611381e1cfa4a9e0adf6c"
+  },
+  "prepared_only": true,
+  "prospective_commands": [
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/gate.py pin-context",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py prepare-build",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py compile-host",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py link-host",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py link-gpu",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py compile-shader-candidate",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py optimize-shader-candidate",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py assemble-shader-candidate",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py validate-shader-candidate",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py disassemble-shader-candidate",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py verify-build",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/gate.py pin-runtime",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py execute-host",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py execute-gpu-candidate",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/gate.py review"
+  ],
+  "runner_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "schema": "sirius-fp32-estimate-restoring-original-arithmetic-preparation-v1",
+  "source_freeze": {
+    "bytes": 450117,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/source-freeze.json",
+    "sha256": "2c9c18d5d76741cad8bfd8fd01f7d1e1b99568bbb7b19cceb32a85b1dc9bab9f"
+  },
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "source_scope": "Fresh C++ original corpus test, new original O0+SSA primitive shader with only scoped proposal NoContraction annotation; emitted actual primitive case3/guard/five steps/full prefix/fallback/helpers/interface/modes/barriers must pass before runtime pin. No Endpoint RTE lines.",
+  "static_pins": 961,
+  "stock_reused": true,
+  "stock_scope": "737 exact original frozen joins+17 terminal owners and full original stock output/fixture. Old private host receipts stay historical; new numeric GPU links original gpu.o with canonical device/base only."
+}

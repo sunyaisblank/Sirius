@@ -1,0 +1,23 @@
+--- accepted-FP64/interface_signature.py
++++ primitive/interface_signature.py
+@@ -36,20 +36,3 @@
+     assert found, name
+     return found.group(0) + "\n"
+ 
+-
+-def normalized_function(text, name):
+-    body = function_body(text, name)
+-    definitions = dict(re.findall(r"^\s*(%\S+) = (.+)$", text, re.M))
+-    names = dict(re.findall(r'OpName (%\S+) "([^"]*)"', text))
+-    local = {identifier: "local" + str(i) for i, identifier in enumerate(re.findall(r"^\s*(%\S+) =", body, re.M))}
+-    def value(identifier):
+-        if identifier in local:
+-            return local[identifier]
+-        expression = definitions[identifier]
+-        if expression.startswith("OpFunction "):
+-            return ["function", names[identifier]]
+-        assert expression.startswith(("OpType", "OpConstant", "OpSpecConstant")), expression
+-        return [value(word) if word.startswith("%") else word for word in expression.split()]
+-    return [[value(word) if word.startswith("%") else word for word in line.split()]
+-            for line in body.splitlines() if line.strip()]
+-

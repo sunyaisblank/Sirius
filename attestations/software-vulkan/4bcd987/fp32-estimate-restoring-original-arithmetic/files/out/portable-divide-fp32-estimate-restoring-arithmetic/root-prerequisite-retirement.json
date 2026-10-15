@@ -1,0 +1,694 @@
+{
+  "actual_cost_decision": "COST_PREMISE_SURVIVES_UNPROVEN",
+  "all_archive_files": 102,
+  "all_manifest_and_Git_bytes_verified": true,
+  "archive_commit": "9854d68f8cae7d507401e292fb3e074cd2046878",
+  "archive_manifest": {
+    "bytes": 21015,
+    "sha256": "baf7ecec141dba90583aaa1b27151dd18130787625df9add05dd11ea5dd3ec43"
+  },
+  "archive_tag": "evidence/issue-44-fp32-estimate-restoring-ordinary-jit-screen",
+  "arithmetic_benefit_adoption_or_qualification_claimed": false,
+  "fresh_saved_birth_checks": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 445656,
+      "saved_start_ticks": "8279969"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 445657,
+      "saved_start_ticks": "8279972"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 445658,
+      "saved_start_ticks": "8279983"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 445668,
+      "saved_start_ticks": "8279988"
+    }
+  ],
+  "passed": true,
+  "remote_exact": true,
+  "retired_roots": [
+    {
+      "files": [
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/analyze_capture.py",
+          "bytes": 11150,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/analyze_capture.py",
+          "sha256": "58d484832210971e160c836a98f33e22bb9767d1e2c7a6883a1332c6acecf708"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-acceptance.json",
+          "bytes": 12800,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-acceptance.json",
+          "sha256": "827b0069f06b83154329764f333fd05308df79aa6e14c520ab950e96770f0498"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-actions.json",
+          "bytes": 95424,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-actions.json",
+          "sha256": "be0647e1b13b268e6eaa2157fdb597ec5fc9149e8ed1f86917fee039cfdc5164"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-actions.unpinned.json",
+          "bytes": 95414,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-actions.unpinned.json",
+          "sha256": "a8159406b2e37336f27b71dda4a76da3f7cc4de0c51d989aca7909d7bb1883d9"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/actual-code-review.json",
+          "bytes": 4352,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/actual-code-review.json",
+          "sha256": "572b274f55c052491fe062cc1882d80b67db5443daae5ded187d73ad95e8fc8f"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/actual-loaded-module.json",
+          "bytes": 154,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/actual-loaded-module.json",
+          "sha256": "cea7e2166d538d1932570aa41116fee6ca9723f5e020b7e0fa6ec0892c02928d"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/bindings.json",
+          "bytes": 59774,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/bindings.json",
+          "sha256": "eb889a2a27c72a3b356ca6e05ee2f25294dc08b99b9984265e3dd757647384b3"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/capture-inputs.json",
+          "bytes": 881,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/capture-inputs.json",
+          "sha256": "7bd1e7c750410e6bc9377a047ef7a314c4f82b847a6bb792a66b7118907c05d2"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/capture-verification.json",
+          "bytes": 1300,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/capture-verification.json",
+          "sha256": "94df071a04345cc3642ededbef038f8e817fef0e6fd40ecb9c3ee2336ec57ba4"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/capture.gdb",
+          "bytes": 644,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/capture.gdb",
+          "sha256": "e5e3dd54b3d7ce818d9ff18249d83fdc95ebd78345b29a273d650ab101210923"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/device-features.json",
+          "bytes": 108290,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/device-features.json",
+          "sha256": "90d402a9bd98ca65e74781ebbb7ad7455fb00b9c66168752bfc27c9bb216b4b6"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/feature-review.json",
+          "bytes": 2161,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/feature-review.json",
+          "sha256": "759cdfab0f7a6ae5474bab88db568c25313f9aa578c409b725eff29e09519b09"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/feature-verification.json",
+          "bytes": 2161,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/feature-verification.json",
+          "sha256": "6984700e634e0cfd4361c4f2016ab07db3abb87f55fc7ec275c9e005c536f54d"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/inferior-exit.json",
+          "bytes": 17,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/inferior-exit.json",
+          "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/inferior.json",
+          "bytes": 16,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/inferior.json",
+          "sha256": "0cb60fe175b240a15d2a40fec9354d89515256cfc143f02015b2fb6d5055a50b"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/inputs-after.json",
+          "bytes": 275733,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/inputs-after.json",
+          "sha256": "656a2f37871d16614f0c7aa90190b09611b1a4138eb120847fbe800eae648af2"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/inputs-before.json",
+          "bytes": 275733,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/inputs-before.json",
+          "sha256": "656a2f37871d16614f0c7aa90190b09611b1a4138eb120847fbe800eae648af2"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-00.elf",
+          "bytes": 904,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-00.elf",
+          "sha256": "875a0dde9b424e1950a55f276dc4c80713f1c03ad2b6ad6495f495c6e078f2ac"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-02.elf",
+          "bytes": 888,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-02.elf",
+          "sha256": "96d0a5b1625bd104e4cb5abab10c08cd4f3f8a8943ebfe1edac60de7acf458c5"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-04.elf",
+          "bytes": 1064,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-04.elf",
+          "sha256": "9a46f071d5436ce760b85068502531695943da22adc1b529fb3e8c061469cd3b"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-06.elf",
+          "bytes": 1064,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-06.elf",
+          "sha256": "b02395cf009c28d0b2a5874fea6cbb3d793585c6e0d5c9b55501d516e2ba9c3f"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-08.elf",
+          "bytes": 1064,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-08.elf",
+          "sha256": "ab247a917afa97ae3e62969b4d863a2667d2059d9c5385ef42ade7dd83c86397"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf",
+          "bytes": 1060152,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf",
+          "sha256": "99a6b55c863837080e9154357edbc17554845ae35888763a7bf30863e39e02de"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-11.bin",
+          "bytes": 256,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-11.bin",
+          "sha256": "69026c5229a4403c0d30bf6903179a0f30cd6a0404d01269054d132179a1d482"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin",
+          "bytes": 929925,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin",
+          "sha256": "eedbed1931b40cf1c1f3a6d9db4bb24e8376990d586badf2bf738ecac172323f"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin",
+          "bytes": 96,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin",
+          "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin",
+          "bytes": 48,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin",
+          "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin",
+          "bytes": 468,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin",
+          "sha256": "c97940092622908a94bc8edafaeebb44ab4912c5993744afebe003ddd4cc3b48"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-8.bin",
+          "bytes": 80,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf.live-8.bin",
+          "sha256": "9201b70418e2e4c09f9ea494e27f14106dfc3bc9c9c54aa4fe2d10ceeece1896"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-00.ll",
+          "bytes": 808,
+          "mode": 384,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-00.ll",
+          "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-01.ll",
+          "bytes": 778,
+          "mode": 384,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-01.ll",
+          "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-02.ll",
+          "bytes": 1038,
+          "mode": 384,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-02.ll",
+          "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-03.ll",
+          "bytes": 1008,
+          "mode": 384,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-03.ll",
+          "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-04.ll",
+          "bytes": 1010,
+          "mode": 384,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-04.ll",
+          "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-05.ll",
+          "bytes": 13327510,
+          "mode": 384,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-05.ll",
+          "sha256": "7ffdb8ab87778be52161852710c0c1fa797e6c2a656794c11ef76d09bb83ca0e"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimizer-exports.tsv",
+          "bytes": 218,
+          "mode": 384,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimizer-exports.tsv",
+          "sha256": "69faf7e106dd9bda2b2b349abf9d94029a784ed2b671dee568db23f9be2733a7"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/owner.json",
+          "bytes": 8084,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/owner.json",
+          "sha256": "a7dfd0a28eb3cf9e7614e66431dfa8a62b3495adba8f111d6669a157eaff5576"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/samples.jsonl",
+          "bytes": 462570,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/samples.jsonl",
+          "sha256": "57a2baffcff050cc6f981b3e76e47e765ad0d046c4b85377520d8726ff571abb"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/stderr.log",
+          "bytes": 194,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/stderr.log",
+          "sha256": "d93fea6ada55cbd704a710df15eb8e6f00d0895183d9a7a1d527cc8ab71f3b5e"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/stdout.log",
+          "bytes": 792,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/stdout.log",
+          "sha256": "420f82de131372b160ccb6fe3aada4a496551887037c9c1b3db23f5002d0ba4c"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture_features.py",
+          "bytes": 6302,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture_features.py",
+          "sha256": "8782d766e4eec1958887ce60b753f2a31df2cee3c1c975ed2fa0eff8fd53364f"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/capture_jit.py",
+          "bytes": 15844,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/capture_jit.py",
+          "sha256": "eca9d075648629256e2b78242676cd2506e0e9180a441aab6efaae00d37ded5d"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/contracts.json",
+          "bytes": 2897,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/contracts.json",
+          "sha256": "be9f7727854f010b7b349e708c5a09887339a4b7ddb24402daa106d1641a7262"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/cost-review/candidate-native.txt",
+          "bytes": 10741492,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/cost-review/candidate-native.txt",
+          "sha256": "7417e37f6e8cd5243b43734cd9d9188814a631d5041e8fd67bd81988320c3c5c"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/cost-review/cost-premise-review.json",
+          "bytes": 45332,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/cost-review/cost-premise-review.json",
+          "sha256": "587a96ef97b1f28ecfa6041b433b96433e93d43d7e93a25b1fbf0577e4732f16"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/cost-review/root-native-cost-inputs.json",
+          "bytes": 8313,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/cost-review/root-native-cost-inputs.json",
+          "sha256": "f32ae7cfbccf4ee550b3419e28267c7262caeac19eb68f1d9a546f64a6a75067"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/feature-layout.json",
+          "bytes": 2346,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/feature-layout.json",
+          "sha256": "b67f1d3d32d063e59bd293f805749ec764fccc4f2da98a9f149f10af25b36db3"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/host.py",
+          "bytes": 9790,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/host.py",
+          "sha256": "9689f25c856eac31e753ad971789cee470b42896eaf2e5323663d8718431cfc6"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/independent-source-review.json",
+          "bytes": 11720,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/independent-source-review.json",
+          "sha256": "6b8759444b1fa345721d7f68cb732d1d6a5c843e246b4a60255aa42cf887e803"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/independent-terminal-review.json",
+          "bytes": 14399,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/independent-terminal-review.json",
+          "sha256": "e79dae832b30765138b4f118e8c4725a4ad949107b4db8c815d06721a7995f52"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/inputs.json",
+          "bytes": 3187,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/inputs.json",
+          "sha256": "b01766f06620b0f15c05db81fbe302b08514fa753d7cc007a2840b0ac2b1e7ca"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/module-inputs/candidate-endpoint-normal.spv",
+          "bytes": 154100,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/module-inputs/candidate-endpoint-normal.spv",
+          "sha256": "93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/originals/contracts.json",
+          "bytes": 2701,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/originals/contracts.json",
+          "sha256": "397c49a8f8db87ceefb5f7bfa56c5cb30b63c592b5f819205ae92b01d1390c30"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/originals/host.py",
+          "bytes": 9680,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/originals/host.py",
+          "sha256": "507dc04369412c8278e60660c24bdd461e0c2ef8afb18513041c3128fe575643"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/originals/inputs.json",
+          "bytes": 2705,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/originals/inputs.json",
+          "sha256": "8531519627bd18230af2a81eec6990d55ef049126d5d0bfa10f807e690ee1327"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/originals/prerequisites.py",
+          "bytes": 13699,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/originals/prerequisites.py",
+          "sha256": "d00aee3248c846f5147f29a44dd7ef33a38bbe6daccb7cc5676233437424dbca"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/originals/run_capture.py",
+          "bytes": 6272,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/originals/run_capture.py",
+          "sha256": "91f6f2b475e03e57a902a2a86f2cba750fdf33807f17588b92a0ad14210940d5"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/originals/stock-reuse-inputs.json",
+          "bytes": 400382,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/originals/stock-reuse-inputs.json",
+          "sha256": "772e226e1e66c356fa0c4eb9a937feb213e9975242e4f3b36b42c48073e9cb24"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/origins.json",
+          "bytes": 2023,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/origins.json",
+          "sha256": "a670b007b5ad8eaf69d26c8dc022530a533dca60023716be6491c2adfc9dffc3"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/owned_guard.py",
+          "bytes": 20791,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/owned_guard.py",
+          "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/preparation.json",
+          "bytes": 3443,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/preparation.json",
+          "sha256": "f14d6c7c9f390653413f83ddf4c5b6974086f9eeccf8c73afb5bf64708a51e41"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/prerequisites.py",
+          "bytes": 15658,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/prerequisites.py",
+          "sha256": "bca75897ced20ebbd49fc861ded8d3221a1a5d685a263dc8c6cd281adfdc6069"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/read_features.py",
+          "bytes": 2624,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/read_features.py",
+          "sha256": "7942a803919ea11e57d49e7e09d15172415990f445fd581e9663650a6434af7f"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/.github/workflows/ci.yml",
+          "bytes": 30783,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/.github/workflows/ci.yml",
+          "sha256": "8450d6e57e372f8a2ad34cf862ffb2fba9ce0112bed0610b2c2e06db9dd52de7"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/CMakePresets.json",
+          "bytes": 4902,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/CMakePresets.json",
+          "sha256": "adaa4a858117532f60821a9d7052ccc8cc4983cecf142510b45c4bc7827f8b8a"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/README.md",
+          "bytes": 29987,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/README.md",
+          "sha256": "35809d83b87cc99321e9041f2b6489e416874d53b14da1eba31dc095b07fc38c"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/scripts/governance/build_policy.py",
+          "bytes": 41319,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/scripts/governance/build_policy.py",
+          "sha256": "8e77fcb73aa3da34e2dd581732044f17a4102eeb72f87d9f3757ce7ca8a973ca"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/scripts/validate-native-runtime.py",
+          "bytes": 19335,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/scripts/validate-native-runtime.py",
+          "sha256": "536d2c256e7600f996c5585e8fbeb07eedbf4ad94bb94352eead34254739a7dc"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/scripts/verify-operating-model.py",
+          "bytes": 62283,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/scripts/verify-operating-model.py",
+          "sha256": "e10ce7254ba53f6797d8e8864381ead7ae98c4910cf077afc76df1706e6ccd21"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/gr_ellis_topology.slang",
+          "bytes": 9374,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/gr_ellis_topology.slang",
+          "sha256": "de0f2120591ecebbc00325eb6877cf4c6e8ebd0259637e300d4289ef82ab6e0b"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/gr_integrator.slang",
+          "bytes": 23338,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/gr_integrator.slang",
+          "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/parity_probe.slang",
+          "bytes": 36380,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/parity_probe.slang",
+          "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/trace.slang",
+          "bytes": 63419,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/trace.slang",
+          "sha256": "a66222aa9d6bb3e16b0e2df4b2d903669347badb0118e838091c6e569c590c77"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/tests/backend/kernel_parity_test.cpp",
+          "bytes": 117467,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/tests/backend/kernel_parity_test.cpp",
+          "sha256": "8d2e747d4d375e4a8849c32a33d66cce148de7b5dea28977da212138fa97f986"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/tests/labels/CTestLabels.cmake",
+          "bytes": 78306,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/tests/labels/CTestLabels.cmake",
+          "sha256": "da6b9880142464f3a477d5cbfa1f13718509d5f905bdf91b830c815aace9bc14"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/tests/operating_model.json",
+          "bytes": 130331,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/recovered-source/tests/operating_model.json",
+          "sha256": "044d8e83e3215bad132d3e068134c954110fa6724606d4c8fe683e34214b557b"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/reuse-acceptance.json",
+          "bytes": 10793,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/reuse-acceptance.json",
+          "sha256": "217272396141fe24a974d2003ba627c010231caf4a16fc36096306f7b72a2ea0"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/root-cost-premise-admission.json",
+          "bytes": 1662,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/root-cost-premise-admission.json",
+          "sha256": "c2089c478f71a5c16fbba42e34c621189865fb985ded196ccc825eed4281305b"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/root-future-profile-source-review.json",
+          "bytes": 44472,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/root-future-profile-source-review.json",
+          "sha256": "fda8cdc3ce58d39c31dd60bfc389f76a3789ccf32066fbaddab50f282d7d0f11"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/root-prerequisite-retirement.json",
+          "bytes": 16213,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/root-prerequisite-retirement.json",
+          "sha256": "94ef2b7fe9ea7faf0de61008b7e78375d6094946c6e46767fb529a0f07ebdfcc"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/root-source-admission.json",
+          "bytes": 2120,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/root-source-admission.json",
+          "sha256": "fa5dede91e5acd57ac82820011481305d78f8ef7191f5cfa930997f666d8a176"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/root-terminal-admission.json",
+          "bytes": 2629,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/root-terminal-admission.json",
+          "sha256": "7b401fd0692554e4873c98bd5bd2d684dc47b552b19ef8c55c20e5c09f1ed5f2"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/root-terminal-input-joins.json",
+          "bytes": 3672,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/root-terminal-input-joins.json",
+          "sha256": "da4d4f9e03cde42f67ba2a940d2099e5eba014ebd2e089a9d72c089dee167ea3"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/run_capture.py",
+          "bytes": 6282,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/run_capture.py",
+          "sha256": "8676bc201a8a0c839bfa992fc83540e9b03ae1e1545aa52516d5f825e9a3d370"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/run_capture_owned.py",
+          "bytes": 12949,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/run_capture_owned.py",
+          "sha256": "82406d5df56ca47b41b12d756f65bb3c895459ac506941e9a5efc466849b99e5"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/runtime-context.json",
+          "bytes": 2042,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/runtime-context.json",
+          "sha256": "7fd31f0392b18778c8241c9bafb78d9ba7355d0362019676bd388c0e6c31bdbf"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/source-adaptation.patch",
+          "bytes": 49282,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/source-adaptation.patch",
+          "sha256": "311be58d1f74c8f7f6e56713ca372119d3504bd1bfc6d25c049632d212d27cd3"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/source-contracts.json",
+          "bytes": 2675,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/source-contracts.json",
+          "sha256": "83c67f429e542c14c8157812c25d8edc0e3cf27ef2d6727ccd888ae4053a73df"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/source-freeze.json",
+          "bytes": 351902,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/source-freeze.json",
+          "sha256": "8c427e762aa832d13d4b6dfdb7bcbedf975a5287a597606dd947f4e6e4630b6d"
+        },
+        {
+          "archive_member": "files/out/portable-divide-fp32-estimate-restoring-jit/stock-reuse-inputs.json",
+          "bytes": 401937,
+          "mode": 420,
+          "path": "out/portable-divide-fp32-estimate-restoring-jit/stock-reuse-inputs.json",
+          "sha256": "17be70f29c2bf16a131204ae2ee0fcc6df5ccc4ba7309e3ac34be9d46ca4a604"
+        }
+      ],
+      "root": "out/portable-divide-fp32-estimate-restoring-jit"
+    },
+    {
+      "files": [
+        {
+          "archive_member": "files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-jit/short_input_jit_probe",
+          "bytes": 253224,
+          "mode": 493,
+          "path": "bin/linux-gcc/portable-divide-fp32-estimate-restoring-jit/short_input_jit_probe",
+          "sha256": "c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af"
+        }
+      ],
+      "root": "bin/linux-gcc/portable-divide-fp32-estimate-restoring-jit"
+    }
+  ],
+  "same_boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "schema": "sirius-fp32-restoring-jit-prerequisite-retirement-v1",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "temporary_collector_patch_removed_after_exact_archive_match": true,
+  "utc": "2026-10-15T03:27:46.954056+00:00"
+}

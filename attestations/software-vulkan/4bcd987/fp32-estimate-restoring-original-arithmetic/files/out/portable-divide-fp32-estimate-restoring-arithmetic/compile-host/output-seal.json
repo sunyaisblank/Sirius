@@ -1,0 +1,68 @@
+{
+  "inputs_before": {
+    "bytes": 414173,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/compile-host/inputs-before.json",
+    "sha256": "44010785a256b11b7bbe9fcbe0d35e036f242a8a912ff1ae1a5d04fdcae4c746"
+  },
+  "label": "compile-host",
+  "operator_context": {
+    "bytes": 806,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/operator-context.json",
+    "sha256": "f88f5c997d584d83d88b2ac2ca6443b14382f0ea7927c4750e8263be08345876"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/host.d": {
+      "bytes": 505,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/host.d",
+      "sha256": "42c394f7f8d49b26d984a696f31b601b1b9953461e4db98ff2c0a09ab91c2e2a"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/host.o": {
+      "bytes": 94936,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/host.o",
+      "sha256": "a63392f7d665ac779a253b273b2cd6c2dadd7d41deb74b02560bec9148fdcc6c"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+      "-I/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/candidate/src",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/host.o",
+      "-c",
+      "/home/astra/.project/Sirius/tests/backend/portable_binary32_test.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/host.d"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 450117,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/source-freeze.json",
+    "sha256": "2c9c18d5d76741cad8bfd8fd01f7d1e1b99568bbb7b19cceb32a85b1dc9bab9f"
+  }
+}

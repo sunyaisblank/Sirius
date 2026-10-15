@@ -1,0 +1,46 @@
+{
+  "inputs_before": {
+    "bytes": 414173,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/link-gpu/inputs-before.json",
+    "sha256": "44010785a256b11b7bbe9fcbe0d35e036f242a8a912ff1ae1a5d04fdcae4c746"
+  },
+  "label": "link-gpu",
+  "operator_context": {
+    "bytes": 806,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/operator-context.json",
+    "sha256": "f88f5c997d584d83d88b2ac2ca6443b14382f0ea7927c4750e8263be08345876"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/gpu": {
+      "bytes": 258224,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/gpu",
+      "sha256": "e59650440ad808e70ac8e8d59bc85847ce6985c98341a61e42c0f59ea1aef31e"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/gpu.map": {
+      "bytes": 2713874,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/gpu.map",
+      "sha256": "f028359d9be3234026862cffc9326e8a43cda193decd37badce7b56814202859"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-DNDEBUG",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/numeric-gpu.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/vulkan_device.cpp.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/libsirius_base.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "-ldl",
+      "-pthread",
+      "-Wl,-Map,/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/gpu.map,--cref",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/gpu"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 450117,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/source-freeze.json",
+    "sha256": "2c9c18d5d76741cad8bfd8fd01f7d1e1b99568bbb7b19cceb32a85b1dc9bab9f"
+  }
+}

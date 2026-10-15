@@ -1,0 +1,17 @@
+[
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/gate.py pin-context",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py prepare-build",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py compile-host",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py link-host",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py link-gpu",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py compile-shader-candidate",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py optimize-shader-candidate",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py assemble-shader-candidate",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py validate-shader-candidate",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py disassemble-shader-candidate",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py verify-build",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/gate.py pin-runtime",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py execute-host",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/run_owned.py execute-gpu-candidate",
+  "python3 -B out/portable-divide-fp32-estimate-restoring-arithmetic/gate.py review"
+]

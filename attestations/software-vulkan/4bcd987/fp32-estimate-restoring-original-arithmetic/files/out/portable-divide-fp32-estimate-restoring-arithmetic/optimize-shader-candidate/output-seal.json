@@ -1,0 +1,49 @@
+{
+  "inputs_before": {
+    "bytes": 415934,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/optimize-shader-candidate/inputs-before.json",
+    "sha256": "c601c7eee14c9764b73aa2ac79a320d30b66b8273103697ce273afcf534fb9db"
+  },
+  "label": "optimize-shader-candidate",
+  "operator_context": {
+    "bytes": 806,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/operator-context.json",
+    "sha256": "f88f5c997d584d83d88b2ac2ca6443b14382f0ea7927c4750e8263be08345876"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/candidate.compiler.spv": {
+      "bytes": 30280,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/candidate.compiler.spv",
+      "sha256": "d2acdb6d4ddbc0eec26d4eedf00868b4892d2a96951da70bdd9697c8df49b54c"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/candidate.raw.spvasm": {
+      "bytes": 83302,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/candidate.raw.spvasm",
+      "sha256": "631455d7c1649a91b4b7c72291d3c50a84ef4167aed1006e40017291e29d5b02"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/spirv-opt",
+      "--target-env=vulkan1.2",
+      "--ssa-rewrite",
+      "--eliminate-dead-code-aggressive",
+      "--preserve-bindings",
+      "--preserve-interface",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/candidate.raw.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/candidate.compiler.spv"
+    ],
+    [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/candidate.compiler.spv",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-arithmetic/candidate.raw.spvasm"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 450117,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/source-freeze.json",
+    "sha256": "2c9c18d5d76741cad8bfd8fd01f7d1e1b99568bbb7b19cceb32a85b1dc9bab9f"
+  }
+}

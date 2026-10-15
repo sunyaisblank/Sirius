@@ -1,0 +1,10 @@
+#ifndef SIRIUS_KERNELS_PORTABLE_BINARY32_H
+#define SIRIUS_KERNELS_PORTABLE_BINARY32_H
+
+// Raw-word IEEE binary32 roundTiesToEven with gradual underflow and signed zero.
+// Exact arithmetic uses uint32, including explicit two-word exact products.
+// Arithmetic NaNs are canonical 0x7fc00000; exception flags/payload propagation
+// are outside this value API. Bit operations preserve the input payload bits.
+// The same source is used by C++ and Slang. The default path uses no native
+// floating operation. Optional FP32 quotient proposals are accepted only after
+// exact integer verification; their accuracy is not a correctness premise.

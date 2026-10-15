@@ -1,0 +1,222 @@
+{
+  "actions": {
+    "bytes": 2093426,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/actions.json",
+    "sha256": "86819fcf8abfc79f507c9bcfeeb3af25a51764101108957149375714d960d4b7"
+  },
+  "candidate_header": {
+    "bytes": 14719,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/candidate/src/sirius/kernels/portable_binary32.h",
+    "sha256": "24ea42f825cde5c1378ac57dd194c245ebc2ed396a6cf212d2c642fa2b67d020"
+  },
+  "candidate_macro": "SIRIUS_PB32_DIVIDE_FP64_ESTIMATE=1",
+  "claims": {
+    "arithmetic_passed": false,
+    "estimate_hit_rate": false,
+    "performance": false,
+    "production_adopted": false,
+    "qualification": false,
+    "retained_profiles_admitted": false
+  },
+  "corpus_records": 174268,
+  "execution_performed": false,
+  "fresh_build_and_review_owners": [
+    "prepare-build",
+    "compile-host",
+    "link-host",
+    "compile-shader-candidate",
+    "optimize-shader-candidate",
+    "validate-shader-candidate",
+    "disassemble-shader-candidate",
+    "verify-build"
+  ],
+  "fresh_numeric_owners": [
+    "execute-host",
+    "execute-gpu-candidate"
+  ],
+  "future_archive": {
+    "inner_result": "files/out/portable-divide-fp64-estimate-arithmetic/arithmetic-result.json",
+    "path": "attestations/software-vulkan/4bcd987/fp64-estimate-original-arithmetic",
+    "schema": "sirius-fp64-estimate-original-arithmetic-result-v1",
+    "tag": "evidence/issue-44-fp64-estimate-original-arithmetic"
+  },
+  "future_bin_root": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-arithmetic",
+  "graph_reader": {
+    "bytes": 17797,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/estimate_graph.py",
+    "sha256": "22fc14614c7d61bd9077e6e0f1ec33395c07809d71b4042429b17740d418d7ff"
+  },
+  "independent_source_review_required_before_root_operation": true,
+  "no_live_screen_or_property_scratch_dependency": true,
+  "operations": 14,
+  "out_root": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic",
+  "output_words": 697072,
+  "packet": {
+    "bytes": 314446,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/packet.json",
+    "sha256": "197019e1418d6fc64d8d79eee07357adffa7e29338e4fd35d833547b77fd5451"
+  },
+  "per_owner_limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "prelaunch_evidence_join_correction": {
+    "changed_current_files": [
+      "gate.py",
+      "gate.py.patch",
+      "actions.json",
+      "source-freeze.json",
+      "preparation.json"
+    ],
+    "durable_module_json_comparisons": 2,
+    "exact_source_action_diff": {
+      "bytes": 47160,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/prelaunch-evidence-join-correction/correction.patch",
+      "sha256": "d8566964d15a1dbf5377ed345f1e147e7a4142f2817c37db3ee37811ff8016f0"
+    },
+    "finding": {
+      "bytes": 2430,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/prelaunch-evidence-join-correction/finding.json",
+      "sha256": "98c26d0936706a200f5a64e364d571f501613500ac860a3c8ed4157c049f57d3"
+    },
+    "no_phase_or_operator_failure_observed": true,
+    "prior_preparation": {
+      "bytes": 5230,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/prelaunch-evidence-join-correction/preparation.json",
+      "sha256": "0859d9b7eb58e785cab03921c2dac30263d247703232ba76515c3aef4b7aecd9"
+    },
+    "selected_prior_receipts": {
+      "compile-host": {
+        "added_terminal_receipts": 3,
+        "frozen_inputs": 1898,
+        "prior_labels": [
+          "prepare-build"
+        ]
+      },
+      "compile-shader-candidate": {
+        "added_terminal_receipts": 3,
+        "frozen_inputs": 1898,
+        "prior_labels": [
+          "prepare-build"
+        ]
+      },
+      "disassemble-shader-candidate": {
+        "added_terminal_receipts": 12,
+        "frozen_inputs": 1912,
+        "prior_labels": [
+          "compile-shader-candidate",
+          "optimize-shader-candidate",
+          "prepare-build",
+          "validate-shader-candidate"
+        ]
+      },
+      "execute-gpu-candidate": {
+        "added_terminal_receipts": 24,
+        "frozen_inputs": 1934,
+        "prior_labels": [
+          "compile-host",
+          "compile-shader-candidate",
+          "disassemble-shader-candidate",
+          "link-host",
+          "optimize-shader-candidate",
+          "prepare-build",
+          "validate-shader-candidate",
+          "verify-build"
+        ]
+      },
+      "execute-host": {
+        "added_terminal_receipts": 24,
+        "frozen_inputs": 1934,
+        "prior_labels": [
+          "compile-host",
+          "compile-shader-candidate",
+          "disassemble-shader-candidate",
+          "link-host",
+          "optimize-shader-candidate",
+          "prepare-build",
+          "validate-shader-candidate",
+          "verify-build"
+        ]
+      },
+      "link-host": {
+        "added_terminal_receipts": 6,
+        "frozen_inputs": 1904,
+        "prior_labels": [
+          "compile-host",
+          "prepare-build"
+        ]
+      },
+      "optimize-shader-candidate": {
+        "added_terminal_receipts": 6,
+        "frozen_inputs": 1903,
+        "prior_labels": [
+          "compile-shader-candidate",
+          "prepare-build"
+        ]
+      },
+      "prepare-build": {
+        "added_terminal_receipts": 0,
+        "frozen_inputs": 1889,
+        "prior_labels": []
+      },
+      "validate-shader-candidate": {
+        "added_terminal_receipts": 9,
+        "frozen_inputs": 1908,
+        "prior_labels": [
+          "compile-shader-candidate",
+          "optimize-shader-candidate",
+          "prepare-build"
+        ]
+      },
+      "verify-build": {
+        "added_terminal_receipts": 21,
+        "frozen_inputs": 1928,
+        "prior_labels": [
+          "compile-host",
+          "compile-shader-candidate",
+          "disassemble-shader-candidate",
+          "link-host",
+          "optimize-shader-candidate",
+          "prepare-build",
+          "validate-shader-candidate"
+        ]
+      }
+    },
+    "unchanged": "packet/recipes/header/macro/graph/corpus/probe/GPU/owner/limits"
+  },
+  "prepared_only": true,
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "prospective_commands": [
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/gate.py pin-context",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py prepare-build",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py compile-host",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py link-host",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py compile-shader-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py optimize-shader-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py validate-shader-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py disassemble-shader-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py verify-build",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/gate.py pin-runtime",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py execute-host",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/run_owned.py execute-gpu-candidate",
+    "python3 -B out/portable-divide-fp64-estimate-arithmetic/gate.py review"
+  ],
+  "runner_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "schema": "sirius-fp64-estimate-original-arithmetic-preparation-v1",
+  "source_freeze": {
+    "bytes": 654212,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-arithmetic/source-freeze.json",
+    "sha256": "b59df5c88850a198cd2495452478c75a0428c1280b39f86cca59fb822f9da55c"
+  },
+  "source_limits": [
+    "Standalone probe remains original O0+SSA recipe. Product reader refuses unknown emitted forms; no expectation of exact compiler byte size.",
+    "Original four helper bodies/fallback/entrycase3/uint32 interfaces/local64/no barriers retained. Shader adds Float64 only; noInt64/FToU.",
+    "Physical property/normal Endpoint receipts and actual feature arguments belong to immutable prior screen. Fresh numeric process uses exact reused GPU258536B ELF/Int64 private object with Float64 enabled; no fresh argument capture claimed.",
+    "Original corpus partition12263 is finite-nonzero block entry, not accepted-estimate count.",
+    "Original fixture metadata is copied unchanged as historical reference; this phase does not reuse RTAccumulateTerm or claim unrelated prior focused results."
+  ],
+  "static_pins": 1886,
+  "stock_reused": true,
+  "stock_scope": "Exact f2 source/producer/module/corpus/provider receipt: all737 static inputs and17 accepted original owners, with known-hash historical cache copied from91c. No fresh stock compile/run."
+}

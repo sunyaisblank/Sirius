@@ -1,0 +1,164 @@
+{
+  "closure": {
+    "actions": 12,
+    "all_bytes_resolved_mode_symlink_metadata_match": true,
+    "build_review_owners": 10,
+    "declared_input_counts": {
+      "assemble-shader-candidate": 984,
+      "compile-host": 973,
+      "compile-shader-candidate": 973,
+      "disassemble-shader-candidate": 994,
+      "execute-gpu-candidate": 1022,
+      "execute-host": 1022,
+      "link-gpu": 973,
+      "link-host": 979,
+      "optimize-shader-candidate": 978,
+      "prepare-build": 963,
+      "validate-shader-candidate": 990,
+      "verify-build": 1016
+    },
+    "exact_sets": "Each phase freezes static inputs except auto-recorded actions.json, freeze/preparation/context, and exact transitive prior products/owner/before/after/seals. Numeric actions add runtime-context and all build outputs/receipts.",
+    "numeric_owners": 2,
+    "operational_root_receipts_and_this_review_in_frozen_inputs": false,
+    "own_outputs_or_own_receipts_in_inputs": false,
+    "products_context_bin_owners_exist": false,
+    "static_current": 961
+  },
+  "immutable_reuse": {
+    "five_manifests_plus_selected_or_complete_stock_Git_files_verified": 205,
+    "historical_failure": "Original failed compiler remains false/exit1; stock cache recovery is inherited legitimate archived derivation.",
+    "ordinary_cost": "9854d68f8cae7d507401e292fb3e074cd2046878 capture+independent/root terminal+cost/rootcost accepted records require COST_PREMISE_SURVIVES_UNPROVEN. Relevant immutable records only; completed920-input JIT/compiler/graph algorithms not repeated.",
+    "selected_members": {
+      "canonical0ed": 5,
+      "compiler8078": 5,
+      "complete_stockf2": 181,
+      "graphff2e": 4,
+      "ordinaryJIT9854": 5
+    },
+    "stock_complete_output_equal_expected": true,
+    "stock_static_joins": 737,
+    "stock_terminal_owners": 17
+  },
+  "operation_performed_by_reviewer": false,
+  "ordered_commands": [
+    "gate.py pin-context",
+    "run_owned.py prepare-build",
+    "run_owned.py compile-host",
+    "run_owned.py link-host",
+    "run_owned.py link-gpu",
+    "run_owned.py compile-shader-candidate",
+    "run_owned.py optimize-shader-candidate",
+    "run_owned.py assemble-shader-candidate",
+    "run_owned.py validate-shader-candidate",
+    "run_owned.py disassemble-shader-candidate",
+    "run_owned.py verify-build",
+    "gate.py pin-runtime",
+    "run_owned.py execute-host",
+    "run_owned.py execute-gpu-candidate",
+    "gate.py review"
+  ],
+  "ordering_repair": "Unconsumed draft used sorted output keys, putting assembly first. Author corrected final prospective_commands to this topological order before READY. Gate dependencies and final15-command list independently match.",
+  "original_corpus": {
+    "complete_output_words": 697072,
+    "division_source_partition": {
+      "divide_records": 13674,
+      "non_power_of_two_denominator_significand_records": 10594,
+      "normalization_doubling_records": 5700,
+      "normalization_kept_records": 6563,
+      "optional_finite_nonzero_branch_records": 12263
+    },
+    "expected_sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414",
+    "operations": 14,
+    "ordered_input_expected_reconstructed_from_exact_original_fixture": true,
+    "probe_gpu_fixture_input_expected_owner_guard_match_accepted_stock": true,
+    "records": 174268,
+    "scope": "Branch partitions only; proposal acceptance/hit-rate unobserved."
+  },
+  "packet_author": "/root/forensic_obligations",
+  "passed": true,
+  "pins": {
+    "actions.json": {
+      "bytes": 1141064,
+      "sha256": "f0929193b438ea73e2bee49d85e5c53bcace4d682210cd7e3ff7ff5bede8525d"
+    },
+    "candidate/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 16103,
+      "sha256": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca"
+    },
+    "gate.py": {
+      "bytes": 36976,
+      "sha256": "66b76b931cc40ae1a5ddd129ad6ccff082208ac7d2299a2752ee977ff960029d"
+    },
+    "graph.py": {
+      "bytes": 19847,
+      "sha256": "d1b03f53a2b9c4567b0394aab631f7c9826fe1d6c3a47b7bbcbbe99d186dddb8"
+    },
+    "helper_normalize.py": {
+      "bytes": 4449,
+      "sha256": "2e100f40b7f5e036f22265c0a50be13fcf7d10c611c70ae4c2c14a08a0dab7b7"
+    },
+    "interface_signature.py": {
+      "bytes": 1613,
+      "sha256": "a2614841754e40779b7b16e42a422309e73f981a5992506f6aafdd75f64ae58a"
+    },
+    "packet.json": {
+      "bytes": 326990,
+      "sha256": "2038e6f132a7197c74793fcf25a72f00de34073493d611381e1cfa4a9e0adf6c"
+    },
+    "preparation.json": {
+      "bytes": 4379,
+      "sha256": "9a0fb46a6745759da90dc69c6d91c3631c89ac3d6adf2abf0202f82c6aed9979"
+    },
+    "source-freeze.json": {
+      "bytes": 450117,
+      "sha256": "2c9c18d5d76741cad8bfd8fd01f7d1e1b99568bbb7b19cceb32a85b1dc9bab9f"
+    }
+  },
+  "product_base_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "root_execution_predicates": {
+    "before_runtime": "All10 build/review owners/seals, actual dependency/header/link/resource and emitted primitive graph/policy checks pass before runtime pin.",
+    "bounds": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "prelaunch": "Current final pins, clean4498, assertions enabled, no compiler/interpreter/provider overrides and no outputs; sole root operator executes exact15 commands, stops and preserves first failure.",
+    "provider": "LVP/device0/original cacheOFF for GPU; original full actual.bin and provider maps, host GTEST_OUTPUT XML.",
+    "terminal": "Separate reader after both numeric owners; stable whole inputs/source, exit0/no stop/cleanup/remainers and retired births; complete697072-word GPU comparison/stdout +one exact completed host JUnit case with174268 checked/zero mismatches/no skip."
+  },
+  "root_sole_operator": true,
+  "schema": "sirius-fp32-estimate-restoring-arithmetic-independent-source-review-v1",
+  "scope": "SOURCE admission only. No authored helper/parser/policy/compiler/test/tool/provider executed; no arithmetic, hit-rate, retained-control, benefit, adoption or qualification result.",
+  "source_and_producer": {
+    "canonical_base": {
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    },
+    "canonical_device": {
+      "bytes": 291264,
+      "sha256": "181071b73bc05e54ea60116f654aa6f45c61451a0e422357c638ed1b105131be"
+    },
+    "gpu_link": "Exact original numeric GPU object .d/source/seal joins; fresh link with canonical0ed device/base +Vulkan/dl/pthread only. Current accepted object/base bytes match. Required strong definitions and no backend/core archive extraction checked before runtime. No private Int64/Float64 TU compile or property recursion; no fresh numeric-process feature trace claimed.",
+    "header": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca exact8078 compiler header. Removing optional insertion and explanatory-comment prologue restores canonical49d3008f... stock; all other arithmetic/fallback unchanged.",
+    "helpers": "Actual stock primitive counted26 bodies/25names including two WideShiftJam clones. Compare all25 non-Divide instances with clone-aware identity/exact GLSL import. graph.py byte-exact accepted ff2e source; interface helper narrowed to two used definitions.",
+    "host": "Original test TU/assertions/filter/fail-on-skip retained. Explicit FP32_ESTIMATE macro and candidate/src first; host.d must prove actual candidate header and frozen dependencies. Fixture staged at executable-relative resources.",
+    "numeric_gpu_object": {
+      "bytes": 211360,
+      "sha256": "f9c894c8f443f514e8ebaf8f9ae104fb2354b8aad65363745502db364cb7bb4d"
+    },
+    "primitive": "Original O0 Slang/spirv1.5 and SSA recipe retained. Raw and post-SSA SPV/raw ASM retained. Add exactly one proposal NoContraction line after strict soleFDiv32 policy; exact one-line inverse, assemble/validate Vulkan1.2, full assembler/readback equality. No Endpoint RTE lines.",
+    "required_actual_primitive_graph": "Before runtime pin: op3->unique PB32Divide call/result store/predecessor; actual bit proposal/product/borrow/residual guard/all five mask-subtract-digit steps/q/sticky/Round; unchanged complete prefix/exponent roles/fallback; closed CFG/Phi/dominators/exact new-region coverage; original integer interface/LocalSize64/no barriers; no NoWrap/fastmath/conversions/Int64/Float64."
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "workspace": {
+    "author_frozen_files_modified": false,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "canonical_source_committed_and_pushed": true,
+    "review_in_ignored_out_uncommitted": true,
+    "tracked_status": "clean",
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1
+  }
+}

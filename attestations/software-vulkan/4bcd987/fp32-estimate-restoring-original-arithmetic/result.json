@@ -1,0 +1,297 @@
+{
+  "benefit_trial_executed": false,
+  "build_output_seals": {
+    "assemble-shader-candidate": {
+      "bytes": 2029,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/assemble-shader-candidate/output-seal.json",
+      "sha256": "bcc86b2cdeb428eca33e8a5b98ec5de2615e0d19a41067923529dc188508d03c"
+    },
+    "compile-host": {
+      "bytes": 3079,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/compile-host/output-seal.json",
+      "sha256": "3e5f473de002540e84eda5afab5a5c9fffe27b9c7a825162cd4c1bb6548bc64f"
+    },
+    "compile-shader-candidate": {
+      "bytes": 1848,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/compile-shader-candidate/output-seal.json",
+      "sha256": "6a06ab75a0138097ac6e2896bf683641ec91513b9cc9edbae50c62a8adbc96b6"
+    },
+    "disassemble-shader-candidate": {
+      "bytes": 1616,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/disassemble-shader-candidate/output-seal.json",
+      "sha256": "649138bcf2260d13abaf091007996e2d5afd2ecd2216a08d18856a39d6ca05ca"
+    },
+    "link-gpu": {
+      "bytes": 2279,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/link-gpu/output-seal.json",
+      "sha256": "b979bb3a6464336712215737683f7bca536cc435c5fd13432348d71977f054c1"
+    },
+    "link-host": {
+      "bytes": 1696,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/link-host/output-seal.json",
+      "sha256": "c635e630faad052cb1beee35a42586d14ff2298ccd97f4435fa596663feecf63"
+    },
+    "optimize-shader-candidate": {
+      "bytes": 2463,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/optimize-shader-candidate/output-seal.json",
+      "sha256": "67258c96b5ec3c3a3d59301ad1369eb05a44b683d6f2526417a15d6630e36bb2"
+    },
+    "prepare-build": {
+      "bytes": 3107,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/prepare-build/output-seal.json",
+      "sha256": "0f981a27baf032009222d955a23cf2d17636cb61f3eaa3442769d38527cf33b8"
+    },
+    "validate-shader-candidate": {
+      "bytes": 1151,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/validate-shader-candidate/output-seal.json",
+      "sha256": "ae3a70e306bf73f6fdf6f5242fb0d5642dbef513e647b8b0d58ae3e554feeec3"
+    },
+    "verify-build": {
+      "bytes": 1192,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/verify-build/output-seal.json",
+      "sha256": "ca4c1ede3201682fc7e7256a9cfca120714703ceeb379bfb9a83e41baaab87b3"
+    }
+  },
+  "canonical_numeric_GPU_relink": {
+    "canonical_base": {
+      "bytes": 35862,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/canonical-producer/libsirius_base.a",
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    },
+    "canonical_device_object": {
+      "bytes": 291264,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/canonical-producer/vulkan_device.cpp.o",
+      "sha256": "181071b73bc05e54ea60116f654aa6f45c61451a0e422357c638ed1b105131be"
+    },
+    "canonical_prior_link_owner": {
+      "bytes": 2504,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/link-probe/owner.json",
+      "sha256": "ea9d8b79eaf501649a12f7d9b262b90173986451203aa4b2421ec92b660b7a2d"
+    },
+    "numeric_gpu_object": {
+      "bytes": 211360,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/bin/linux-gcc/portable-divide64-arithmetic/gpu.o",
+      "sha256": "f9c894c8f443f514e8ebaf8f9ae104fb2354b8aad65363745502db364cb7bb4d"
+    },
+    "original_compile_owner": {
+      "bytes": 1741,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/compile-gpu/owner.json",
+      "sha256": "f2b9fb9a53e3ca64a48fd47f629ef89e066693827a2ba662d03e0662b4e667b5"
+    },
+    "original_output_seal": {
+      "bytes": 2039,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-original-arithmetic/files/out/portable-divide64-arithmetic/compile-gpu/output-seal.json",
+      "sha256": "c801c9f1351bed6f18fd006a32a1c0e6058d6ae1c82872e44bd91f53de4d6059"
+    },
+    "scope": "Exact original numeric GPU source/object and .d; fresh canonical Vulkan object/base relink, no private Int64/Float64 TU, no new numeric-process feature-argument trace is claimed."
+  },
+  "complete_output_bytes_per_gpu": {
+    "bytes": 2788288,
+    "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414"
+  },
+  "complete_output_words_per_gpu": 697072,
+  "consumed_unique_inputs": 1549,
+  "current_compiler_and_structural_graph_passed": true,
+  "fresh_candidate_host_and_full_gpu_plus_exact_stock_reuse": true,
+  "full_scientific_or_platform_or_release_qualification_claimed": false,
+  "old_failed_child_exit": 1,
+  "old_failed_compiler_passed": false,
+  "operation_count": 14,
+  "operational_outside_inputs": {
+    "root-prerequisite-retirement.json": {
+      "bytes": 36858,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/root-prerequisite-retirement.json",
+      "sha256": "5075836f152f4f7765e4566172e79ad07a19e32b2942837fb199678db232cd32"
+    },
+    "root-prior-jit-issue-receipt.json": {
+      "bytes": 4913,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/root-prior-jit-issue-receipt.json",
+      "sha256": "0ee09c4389ae008489304138d8b0bbb0075010d80ee3fb55ecf4264c5be95f26"
+    }
+  },
+  "ordinary_prerequisite_decision": "COST_PREMISE_SURVIVES_UNPROVEN",
+  "original_records": 174268,
+  "owners": {
+    "assemble-shader-candidate": {
+      "consumed_records": 1511,
+      "minimum_sampled_available_kib": 20238120,
+      "observed_retired_births": 1,
+      "owner": {
+        "bytes": 1801,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/assemble-shader-candidate/owner.json",
+        "sha256": "0f95464839243f6addf1fb164333f4d860d4174c6014fe12a64217e96ab7c41b"
+      },
+      "peak_sampled_rss_kib": 47168,
+      "wall_seconds": 0.7869624750019284
+    },
+    "compile-host": {
+      "consumed_records": 1500,
+      "minimum_sampled_available_kib": 20047408,
+      "observed_retired_births": 3,
+      "owner": {
+        "bytes": 2031,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/compile-host/owner.json",
+        "sha256": "fe6832981020ba5455a74c37d0024e34f3ccd638838ff2a164012c9e98280ae6"
+      },
+      "peak_sampled_rss_kib": 327064,
+      "wall_seconds": 2.838774770993041
+    },
+    "compile-shader-candidate": {
+      "consumed_records": 1500,
+      "minimum_sampled_available_kib": 20119216,
+      "observed_retired_births": 2,
+      "owner": {
+        "bytes": 1928,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/compile-shader-candidate/owner.json",
+        "sha256": "732f6c9dbaf49d71cdfe3f98be28995c8f8c7ea3e7a29caae4c49e411078b049"
+      },
+      "peak_sampled_rss_kib": 235308,
+      "wall_seconds": 1.0423718740057666
+    },
+    "disassemble-shader-candidate": {
+      "consumed_records": 1521,
+      "minimum_sampled_available_kib": 20185324,
+      "observed_retired_births": 1,
+      "owner": {
+        "bytes": 1807,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/disassemble-shader-candidate/owner.json",
+        "sha256": "3110d8e946716695eb5689bfbc0532b8a44e0b19f1c670f7111816735ce7922d"
+      },
+      "peak_sampled_rss_kib": 46912,
+      "wall_seconds": 0.5341466219979338
+    },
+    "execute-gpu-candidate": {
+      "consumed_records": 1549,
+      "minimum_sampled_available_kib": 20248300,
+      "observed_retired_births": 1,
+      "owner": {
+        "bytes": 3964,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-gpu-candidate/owner.json",
+        "sha256": "baa9a4666ba9216be0c8438b36cc93aa7679128cbc31011c016a9cad5d2f0093"
+      },
+      "peak_sampled_rss_kib": 141504,
+      "wall_seconds": 0.2571307570033241
+    },
+    "execute-host": {
+      "consumed_records": 1549,
+      "minimum_sampled_available_kib": 20224788,
+      "observed_retired_births": 1,
+      "owner": {
+        "bytes": 1917,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-host/owner.json",
+        "sha256": "735125480f8f313781a2a022afb3b042877b359dc17f55822f239261cd528997"
+      },
+      "peak_sampled_rss_kib": 25304,
+      "wall_seconds": 0.2753233760013245
+    },
+    "link-gpu": {
+      "consumed_records": 1500,
+      "minimum_sampled_available_kib": 20276724,
+      "observed_retired_births": 3,
+      "owner": {
+        "bytes": 2023,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/link-gpu/owner.json",
+        "sha256": "09a1197b46496253f4be6b2d853be0a7a0337e51c66fb9bb0adf756b75d83d79"
+      },
+      "peak_sampled_rss_kib": 51556,
+      "wall_seconds": 0.7896246900054393
+    },
+    "link-host": {
+      "consumed_records": 1506,
+      "minimum_sampled_available_kib": 20239032,
+      "observed_retired_births": 3,
+      "owner": {
+        "bytes": 2025,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/link-host/owner.json",
+        "sha256": "7e5e992546c30f60a197f498fd419177abfca703394dbd2fc6ec7194ec28232a"
+      },
+      "peak_sampled_rss_kib": 51672,
+      "wall_seconds": 0.7871367619954981
+    },
+    "optimize-shader-candidate": {
+      "consumed_records": 1505,
+      "minimum_sampled_available_kib": 20061768,
+      "observed_retired_births": 2,
+      "owner": {
+        "bytes": 1929,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/optimize-shader-candidate/owner.json",
+        "sha256": "475baed39394955b18d2074d9e864596ea50c15f72ff21b1ee2e53d4cc77eb4b"
+      },
+      "peak_sampled_rss_kib": 46696,
+      "wall_seconds": 0.7975372750079259
+    },
+    "prepare-build": {
+      "consumed_records": 1490,
+      "minimum_sampled_available_kib": 20232372,
+      "observed_retired_births": 1,
+      "owner": {
+        "bytes": 1777,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/prepare-build/owner.json",
+        "sha256": "0e5e928dc35e9a0c1bb8d555fbbb06fbd96636432f2c11fcfddcc75227fdeb33"
+      },
+      "peak_sampled_rss_kib": 46780,
+      "wall_seconds": 0.5394998919946374
+    },
+    "validate-shader-candidate": {
+      "consumed_records": 1517,
+      "minimum_sampled_available_kib": 20301868,
+      "observed_retired_births": 1,
+      "owner": {
+        "bytes": 1801,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/validate-shader-candidate/owner.json",
+        "sha256": "be4d20dc802eefb199a092e48d8663593cb819bfb9eed16a8f3ef458a309e2ad"
+      },
+      "peak_sampled_rss_kib": 46908,
+      "wall_seconds": 0.5334196539915865
+    },
+    "verify-build": {
+      "consumed_records": 1543,
+      "minimum_sampled_available_kib": 20211816,
+      "observed_retired_births": 1,
+      "owner": {
+        "bytes": 1774,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/verify-build/owner.json",
+        "sha256": "cdb23f8aa35c6e4ea3347bb32fcd7c9b177072e6d0dff3548407167ee3c64a83"
+      },
+      "peak_sampled_rss_kib": 95828,
+      "wall_seconds": 2.067103016001056
+    }
+  },
+  "passed": true,
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "production_adopted": false,
+  "result": {
+    "bytes": 32932,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/arithmetic-result.json",
+    "sha256": "a20e20d00856afac4a59e7e3603c414817c07d7b7d64f6bd33cbe21198940a76"
+  },
+  "retained_eight_controls_executed": false,
+  "reviews": {
+    "independent-source-review.json": {
+      "bytes": 8767,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/independent-source-review.json",
+      "sha256": "4be6553b2f4f912d8c7dd354aecc30ce9e06a21e437221d7695b0602cbb607f9"
+    },
+    "independent-terminal-review.json": {
+      "bytes": 9856,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/independent-terminal-review.json",
+      "sha256": "e21c5887047253dd1bd9ed70f0bd21fbd76a5eda2f1532bfc7de4d8400b516e5"
+    },
+    "root-source-admission.json": {
+      "bytes": 2315,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/root-source-admission.json",
+      "sha256": "f816230bdffa8768432f86bf638a8777ad75cacd1f9ce440e66553524d39573f"
+    },
+    "root-terminal-admission.json": {
+      "bytes": 2489,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/root-terminal-admission.json",
+      "sha256": "066031904d019ed15ff134452e652b4e1ccdc177cbb1aaf2836fff48e8a66684"
+    }
+  },
+  "schema": "sirius-fp32-estimate-restoring-original-arithmetic-evidence-v1",
+  "scope": "Unchanged original174268-record14-operation finite primitive corpus: fresh candidate C++ host and complete697072-word GPU readback equal original expected, exact prior stock receipt reused. Canonical numeric GPU object/device/base relink has no private Int64/Float64 dependency; no fresh numeric-process enabled-feature argument trace is claimed. Proposal acceptance/hit-rate/native accuracy and performance remain unproved. No retained profiles, original eight controls, benefit, adoption or qualification acceptance.",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "static_input_count": 961,
+  "stock_static_joins": 737,
+  "stock_terminal_owners_reused": 17
+}
