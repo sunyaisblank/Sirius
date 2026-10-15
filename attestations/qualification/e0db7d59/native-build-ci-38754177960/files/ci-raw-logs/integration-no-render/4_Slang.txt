@@ -1,0 +1,12 @@
+﻿2026-10-15T14:45:27.3931918Z ##[group]Run TAG=v2026.12.0.1
+2026-10-15T14:45:27.3932255Z [36;1mTAG=v2026.12.0.1[0m
+2026-10-15T14:45:27.3932554Z [36;1marchive="$RUNNER_TEMP/slang-${TAG#v}.tgz"[0m
+2026-10-15T14:45:27.3932930Z [36;1mcurl --fail --location --silent --show-error \[0m
+2026-10-15T14:45:27.3933561Z [36;1m  "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \[0m
+2026-10-15T14:45:27.3934123Z [36;1m  --output "$archive"[0m
+2026-10-15T14:45:27.3934576Z [36;1mecho "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  $archive" \[0m
+2026-10-15T14:45:27.3935048Z [36;1m  | sha256sum --check -[0m
+2026-10-15T14:45:27.3935427Z [36;1msudo mkdir -p /opt/slang && sudo tar xzf "$archive" -C /opt/slang[0m
+2026-10-15T14:45:27.4008571Z shell: /usr/bin/bash -e {0}
+2026-10-15T14:45:27.4008849Z ##[endgroup]
+2026-10-15T14:45:28.0485875Z /home/runner/work/_temp/slang-2026.12.0.1.tgz: OK

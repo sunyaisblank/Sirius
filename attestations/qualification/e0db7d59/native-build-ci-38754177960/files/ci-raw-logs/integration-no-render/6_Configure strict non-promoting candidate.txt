@@ -1,0 +1,73 @@
+﻿2026-10-15T14:45:35.7425176Z ##[group]Run cmake --preset linux-ci -DSIRIUS_ALIGNMENT_MODE=qualification
+2026-10-15T14:45:35.7425741Z [36;1mcmake --preset linux-ci -DSIRIUS_ALIGNMENT_MODE=qualification[0m
+2026-10-15T14:45:35.7494702Z shell: /usr/bin/bash -e {0}
+2026-10-15T14:45:35.7494982Z ##[endgroup]
+2026-10-15T14:45:37.6681750Z Preset CMake variables:
+2026-10-15T14:45:37.6682095Z 
+2026-10-15T14:45:37.6701785Z   BUILD_TESTS="ON"
+2026-10-15T14:45:37.6702125Z   CMAKE_BUILD_TYPE="Release"
+2026-10-15T14:45:37.6702421Z   CMAKE_CXX_COMPILER="g++-14"
+2026-10-15T14:45:37.6702785Z   CMAKE_C_COMPILER="gcc-14"
+2026-10-15T14:45:37.6703043Z   CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+2026-10-15T14:45:37.6703325Z   SIRIUS_CONTRACT_MODE="2"
+2026-10-15T14:45:37.6703580Z   SIRIUS_MANDATORY_TESTS="ON"
+2026-10-15T14:45:37.6703848Z   SIRIUS_REQUIRE_VULKAN_RUNTIME="ON"
+2026-10-15T14:45:37.6704113Z   SIRIUS_WERROR="ON"
+2026-10-15T14:45:37.6704246Z 
+2026-10-15T14:45:37.6704413Z -- The CXX compiler identification is GNU 14.2.0
+2026-10-15T14:45:39.1863501Z -- The C compiler identification is GNU 14.2.0
+2026-10-15T14:45:39.2070023Z -- Detecting CXX compiler ABI info
+2026-10-15T14:45:39.4401819Z -- Detecting CXX compiler ABI info - done
+2026-10-15T14:45:39.4572884Z -- Check for working CXX compiler: /usr/bin/g++-14 - skipped
+2026-10-15T14:45:39.4579067Z -- Detecting CXX compile features
+2026-10-15T14:45:39.4588618Z -- Detecting CXX compile features - done
+2026-10-15T14:45:39.4791437Z -- Detecting C compiler ABI info
+2026-10-15T14:45:39.6103275Z -- Detecting C compiler ABI info - done
+2026-10-15T14:45:39.6271946Z -- Check for working C compiler: /usr/bin/gcc-14 - skipped
+2026-10-15T14:45:39.6275763Z -- Detecting C compile features
+2026-10-15T14:45:39.6281117Z -- Detecting C compile features - done
+2026-10-15T14:45:39.7989484Z -- Found Python3: /usr/bin/python3.12 (found version "3.12.3") found components: Interpreter
+2026-10-15T14:45:44.3605426Z -- ┌─ FTXUI options ─────────────────────
+2026-10-15T14:45:44.3608019Z -- │ FTXUI_ENABLE_INSTALL     : OFF
+2026-10-15T14:45:44.3608573Z -- │ FTXUI_BUILD_EXAMPLES     : OFF
+2026-10-15T14:45:44.3609045Z -- │ FTXUI_QUIET              : OFF
+2026-10-15T14:45:44.3609495Z -- │ FTXUI_BUILD_DOCS         : OFF
+2026-10-15T14:45:44.3609970Z -- │ FTXUI_BUILD_TESTS        : OFF
+2026-10-15T14:45:44.3610429Z -- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+2026-10-15T14:45:44.3610902Z -- │ FTXUI_ENABLE_COVERAGE    : OFF
+2026-10-15T14:45:44.3611329Z -- │ FTXUI_DEV_WARNINGS       : OFF
+2026-10-15T14:45:44.3611759Z -- │ FTXUI_CLANG_TIDY         : OFF
+2026-10-15T14:45:44.3612281Z -- └─────────────────────────────────────
+2026-10-15T14:45:44.3684398Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+2026-10-15T14:45:44.7059396Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+2026-10-15T14:45:44.7071030Z -- Found Threads: TRUE
+2026-10-15T14:46:02.4059605Z -- Using the multi-header code from /home/runner/work/Sirius/Sirius/bin/linux-ci/_deps/json-src/include/
+2026-10-15T14:46:03.8274321Z -- alignment receipt generated: 0/8 domains admitted
+2026-10-15T14:46:03.9371978Z -- Including Wayland support
+2026-10-15T14:46:03.9372559Z -- Including X11 support
+2026-10-15T14:46:03.9462092Z -- Looking for memfd_create
+2026-10-15T14:46:04.0013743Z -- Looking for memfd_create - found
+2026-10-15T14:46:04.0072730Z -- Found PkgConfig: /usr/bin/pkg-config (found version "1.8.1")
+2026-10-15T14:46:04.0081209Z -- Checking for modules 'wayland-client>=0.2.7;wayland-cursor>=0.2.7;wayland-egl>=0.2.7;xkbcommon>=0.5.0'
+2026-10-15T14:46:04.0228638Z --   Found wayland-client, version 1.22.0
+2026-10-15T14:46:04.0304420Z --   Found wayland-cursor, version 1.22.0
+2026-10-15T14:46:04.0379831Z --   Found wayland-egl, version 18.1.0
+2026-10-15T14:46:04.0454770Z --   Found xkbcommon, version 1.6.0
+2026-10-15T14:46:04.1960326Z -- Found X11: /usr/include
+2026-10-15T14:46:04.1963648Z -- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so
+2026-10-15T14:46:04.2549381Z -- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so - found
+2026-10-15T14:46:04.2550572Z -- Looking for gethostbyname
+2026-10-15T14:46:04.3097361Z -- Looking for gethostbyname - found
+2026-10-15T14:46:04.3098081Z -- Looking for connect
+2026-10-15T14:46:04.3643400Z -- Looking for connect - found
+2026-10-15T14:46:04.3643865Z -- Looking for remove
+2026-10-15T14:46:04.4183494Z -- Looking for remove - found
+2026-10-15T14:46:04.4184009Z -- Looking for shmat
+2026-10-15T14:46:04.4723992Z -- Looking for shmat - found
+2026-10-15T14:46:04.4725184Z -- Looking for IceConnectionNumber in ICE
+2026-10-15T14:46:04.5544220Z -- Looking for IceConnectionNumber in ICE - found
+2026-10-15T14:46:06.7452383Z -- Mandatory test gating: ENABLED
+2026-10-15T14:46:06.7457655Z -- Release packaging: DISABLED (configure SIRIUS_ALIGNMENT_MODE=release with the complete attestation set)
+2026-10-15T14:46:06.7476304Z -- Configuring done (31.0s)
+2026-10-15T14:46:06.8157594Z -- Generating done (0.1s)
+2026-10-15T14:46:06.8166426Z -- Build files have been written to: /home/runner/work/Sirius/Sirius/bin/linux-ci

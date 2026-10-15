@@ -1,0 +1,1049 @@
+﻿2026-10-15T14:45:08.7114955Z Current runner version: '2.337.0'
+2026-10-15T14:45:08.7139017Z ##[group]Runner Image Provisioner
+2026-10-15T14:45:08.7139803Z Hosted Compute Agent
+2026-10-15T14:45:08.7140318Z Version: 20261002.596
+2026-10-15T14:45:08.7140903Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-15T14:45:08.7141557Z Build Date: 2026-10-02T22:28:27Z
+2026-10-15T14:45:08.7142163Z Worker ID: {301057b2-20e9-42f7-bf05-3179d17fe038}
+2026-10-15T14:45:08.7142809Z Region: westus3
+2026-10-15T14:45:08.7143285Z Cloud: Azure
+2026-10-15T14:45:08.7143786Z ##[endgroup]
+2026-10-15T14:45:08.7145471Z ##[group]Operating System
+2026-10-15T14:45:08.7146257Z Microsoft Windows Server 2022
+2026-10-15T14:45:08.7146823Z 10.0.20348
+2026-10-15T14:45:08.7147279Z Datacenter
+2026-10-15T14:45:08.7147744Z ##[endgroup]
+2026-10-15T14:45:08.7148225Z ##[group]Runner Image
+2026-10-15T14:45:08.7148735Z Image: windows-2022
+2026-10-15T14:45:08.7149252Z Version: 20261004.326.1
+2026-10-15T14:45:08.7150626Z Included Software: https://github.com/actions/runner-images/blob/win22/20261004.326/images/windows/Windows2022-Readme.md
+2026-10-15T14:45:08.7152115Z Image Release: https://github.com/actions/runner-images/releases/tag/win22%2F20261004.326
+2026-10-15T14:45:08.7152997Z ##[endgroup]
+2026-10-15T14:45:08.7154130Z ##[group]GITHUB_TOKEN Permissions
+2026-10-15T14:45:08.7155921Z Contents: read
+2026-10-15T14:45:08.7156545Z Metadata: read
+2026-10-15T14:45:08.7157051Z Packages: read
+2026-10-15T14:45:08.7157565Z ##[endgroup]
+2026-10-15T14:45:08.7159529Z Secret source: Actions
+2026-10-15T14:45:08.7160379Z Cache mode: write
+2026-10-15T14:45:08.7161068Z Prepare workflow directory
+2026-10-15T14:45:08.7560297Z Prepare all required actions
+2026-10-15T14:45:08.7607353Z Getting action download info
+2026-10-15T14:45:09.1865363Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-15T14:45:09.2878794Z Download action repository 'jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa' (SHA:37effcfa045411f8bfbbda26df2fd1b3bf3436fa)
+2026-10-15T14:45:09.9022271Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-10-15T14:45:10.1816326Z Complete job name: integration-windows-no-render
+2026-10-15T14:45:10.3626269Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-15T14:45:10.3628073Z with:
+2026-10-15T14:45:10.3628839Z   repository: sunyaisblank/Sirius
+2026-10-15T14:45:10.3637159Z   token: ***
+2026-10-15T14:45:10.3637925Z   ssh-strict: true
+2026-10-15T14:45:10.3638714Z   ssh-user: git
+2026-10-15T14:45:10.3639496Z   persist-credentials: true
+2026-10-15T14:45:10.3640376Z   clean: true
+2026-10-15T14:45:10.3641183Z   sparse-checkout-cone-mode: true
+2026-10-15T14:45:10.3642111Z   fetch-depth: 1
+2026-10-15T14:45:10.3642890Z   fetch-tags: false
+2026-10-15T14:45:10.3643682Z   show-progress: true
+2026-10-15T14:45:10.3644469Z   lfs: false
+2026-10-15T14:45:10.3645226Z   submodules: false
+2026-10-15T14:45:10.3646022Z   set-safe-directory: true
+2026-10-15T14:45:10.3646918Z   allow-unsafe-pr-checkout: false
+2026-10-15T14:45:10.3648041Z ##[endgroup]
+2026-10-15T14:45:10.5046000Z Syncing repository: sunyaisblank/Sirius
+2026-10-15T14:45:10.5048538Z ##[group]Getting Git version info
+2026-10-15T14:45:10.5049627Z Working directory is 'D:\a\Sirius\Sirius'
+2026-10-15T14:45:10.5960068Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-10-15T14:45:10.9766325Z git version 2.56.0.windows.1
+2026-10-15T14:45:10.9810906Z ##[endgroup]
+2026-10-15T14:45:10.9825716Z Temporarily overriding HOME='D:\a\_temp\315042a7-aae4-498e-8eaa-7c55785915df' before making global git config changes
+2026-10-15T14:45:10.9828076Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T14:45:10.9836264Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Sirius\Sirius
+2026-10-15T14:45:11.0428708Z Deleting the contents of 'D:\a\Sirius\Sirius'
+2026-10-15T14:45:11.0432929Z ##[group]Determining repository object format
+2026-10-15T14:45:11.0435260Z ##[endgroup]
+2026-10-15T14:45:11.0436737Z ##[group]Initializing the repository
+2026-10-15T14:45:11.0443898Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\Sirius\Sirius
+2026-10-15T14:45:11.1391479Z Initialized empty Git repository in D:/a/Sirius/Sirius/.git/
+2026-10-15T14:45:11.1427488Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/sunyaisblank/Sirius
+2026-10-15T14:45:11.2052622Z ##[endgroup]
+2026-10-15T14:45:11.2054818Z ##[group]Disabling automatic garbage collection
+2026-10-15T14:45:11.2059784Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-10-15T14:45:11.2349524Z ##[endgroup]
+2026-10-15T14:45:11.2351485Z ##[group]Setting up auth
+2026-10-15T14:45:11.2352936Z Removing SSH command configuration
+2026-10-15T14:45:11.2360961Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T14:45:11.2641161Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-10-15T14:45:12.7030118Z Removing HTTP extra header
+2026-10-15T14:45:12.7038824Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T14:45:12.7325995Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-10-15T14:45:13.1967604Z Removing includeIf entries pointing to credentials config files
+2026-10-15T14:45:13.1981202Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T14:45:13.2260883Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-15T14:45:13.6831349Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-10-15T14:45:13.7124554Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/Sirius/Sirius/.git.path D:\a\_temp\git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config
+2026-10-15T14:45:13.7411080Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path D:\a\_temp\git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config
+2026-10-15T14:45:13.7781365Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config
+2026-10-15T14:45:13.8074499Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config
+2026-10-15T14:45:13.8357214Z ##[endgroup]
+2026-10-15T14:45:13.8357988Z ##[group]Fetching the repository
+2026-10-15T14:45:13.8369522Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e0db7d5970d4878a1b5418c4dc058a435f2df8e9:refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T14:45:17.1001851Z From https://github.com/sunyaisblank/Sirius
+2026-10-15T14:45:17.1002960Z  * [new ref]         e0db7d5970d4878a1b5418c4dc058a435f2df8e9 -> origin/development/minimum-step-floor-2026-10-15
+2026-10-15T14:45:17.1046569Z [command]"C:\Program Files\Git\bin\git.exe" branch --list --remote origin/development/minimum-step-floor-2026-10-15
+2026-10-15T14:45:17.1412378Z   origin/development/minimum-step-floor-2026-10-15
+2026-10-15T14:45:17.1446498Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T14:45:17.1762707Z e0db7d5970d4878a1b5418c4dc058a435f2df8e9
+2026-10-15T14:45:17.1787587Z ##[endgroup]
+2026-10-15T14:45:17.1788033Z ##[group]Determining the checkout info
+2026-10-15T14:45:17.1788699Z ##[endgroup]
+2026-10-15T14:45:17.1796671Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-10-15T14:45:17.2225750Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-10-15T14:45:17.2500643Z ##[group]Checking out the ref
+2026-10-15T14:45:17.2509325Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B development/minimum-step-floor-2026-10-15 refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T14:45:17.6301529Z Switched to a new branch 'development/minimum-step-floor-2026-10-15'
+2026-10-15T14:45:17.6322577Z branch 'development/minimum-step-floor-2026-10-15' set up to track 'origin/development/minimum-step-floor-2026-10-15'.
+2026-10-15T14:45:17.6388453Z ##[endgroup]
+2026-10-15T14:45:17.6778491Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-10-15T14:45:17.7046997Z e0db7d5970d4878a1b5418c4dc058a435f2df8e9
+2026-10-15T14:45:17.7497126Z ##[group]Run jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+2026-10-15T14:45:17.7497674Z with:
+2026-10-15T14:45:17.7497870Z   vulkan_version: 1.4.357.0
+2026-10-15T14:45:17.7498102Z   install_runtime: true
+2026-10-15T14:45:17.7498308Z   cache: false
+2026-10-15T14:45:17.7498493Z   stripdown: true
+2026-10-15T14:45:17.7501367Z   github_token: ***
+2026-10-15T14:45:17.7501580Z ##[endgroup]
+2026-10-15T14:45:17.9063279Z Using github_token to authenticate GitHub API requests.
+2026-10-15T14:45:17.9066321Z 🔽 Downloading Vulkan SDK 1.4.357.0
+2026-10-15T14:45:18.0467940Z ✔️ Http(200): The requested VULKAN_SDK 1.4.357.0 is downloadable.
+2026-10-15T14:45:18.0469063Z     URL: https://sdk.lunarg.com/sdk/download/1.4.357.0/windows/vulkansdk-windows-X64-1.4.357.0.exe
+2026-10-15T14:45:23.1249705Z ✔️ Download completed successfully!
+2026-10-15T14:45:23.1250113Z    File: C:\Users\RUNNER~1\AppData\Local\Temp\VulkanSDK-Installer.exe
+2026-10-15T14:45:23.1252724Z    SHA HASH URL: https://sdk.lunarg.com/sdk/sha/1.4.357.0/windows/vulkansdk-windows-X64-1.4.357.0.exe.json
+2026-10-15T14:45:24.0792459Z    SHA verified: C:\Users\RUNNER~1\AppData\Local\Temp\VulkanSDK-Installer.exe
+2026-10-15T14:45:24.0793209Z 📦 Extracting Vulkan SDK...
+2026-10-15T14:45:46.4372981Z    Installed into folder: C:\VulkanSDK\1.4.357.0
+2026-10-15T14:45:46.4373976Z 📦 Placing Vulkan Runtime into the SDK folder...
+2026-10-15T14:45:46.4378212Z    Copying x86 runtime files to SDK path (SysWOW64 -> runtime/x86)
+2026-10-15T14:45:46.4422985Z    Copying x64 runtime files to SDK path (system32 -> runtime/x64)
+2026-10-15T14:45:46.4508864Z    Installed into folder: C:\VulkanSDK\1.4.357.0\runtime
+2026-10-15T14:45:46.4519957Z ✔️ [PATH] Added path to Vulkan SDK to environment variable PATH.
+2026-10-15T14:45:46.4525851Z ✔️ [ENV] Set env variable VULKAN_SDK -> "C:\VulkanSDK\1.4.357.0".
+2026-10-15T14:45:46.4528102Z ✔️ [ENV] Set env variable VULKAN_VERSION -> "1.4.357.0".
+2026-10-15T14:45:46.4530764Z ℹ️ [INFO] Path to Vulkan Runtime: C:\VulkanSDK\1.4.357.0\runtime
+2026-10-15T14:45:46.4531376Z ✅ Done.
+2026-10-15T14:45:46.4827012Z ##[group]Run Get-Command slangc -ErrorAction Stop
+2026-10-15T14:45:46.4827499Z [36;1mGet-Command slangc -ErrorAction Stop[0m
+2026-10-15T14:45:46.4827859Z [36;1mGet-Command spirv-val -ErrorAction Stop[0m
+2026-10-15T14:45:46.4828238Z [36;1m$runtime = Join-Path $env:VULKAN_SDK "runtime\x64"[0m
+2026-10-15T14:45:46.4828660Z [36;1mif (-not (Test-Path (Join-Path $runtime "vulkan-1.dll"))) {[0m
+2026-10-15T14:45:46.4829046Z [36;1m  throw "pinned Vulkan loader is absent"[0m
+2026-10-15T14:45:46.4829322Z [36;1m}[0m
+2026-10-15T14:45:46.4829638Z [36;1m$runtime | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append[0m
+2026-10-15T14:45:46.4949532Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T14:45:46.4949891Z env:
+2026-10-15T14:45:46.4950087Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T14:45:46.4950343Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T14:45:46.4950556Z ##[endgroup]
+2026-10-15T14:45:47.2483664Z 
+2026-10-15T14:45:47.2500048Z [32;1mCommandType    [0m[32;1m Name                                              [0m[32;1m Version   [0m[32;1m Source[0m
+2026-10-15T14:45:47.2501145Z [32;1m-----------    [0m [32;1m----                                              [0m [32;1m-------   [0m [32;1m------[0m
+2026-10-15T14:45:47.2502103Z Application     slangc.exe                                         0.0.0.0    C:\VulkanSDK\1.4.357.0\bin\slangc.exe
+2026-10-15T14:45:47.2670511Z Application     spirv-val.exe                                      0.0.0.0    C:\VulkanSDK\1.4.357.0\bin\spirv-val.exe
+2026-10-15T14:45:47.3557218Z 
+2026-10-15T14:45:47.4072082Z ##[group]Run cmake --preset windows-msvc -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON -DCMAKE_CONFIGURATION_TYPES=Release
+2026-10-15T14:45:47.4073228Z [36;1mcmake --preset windows-msvc -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON -DCMAKE_CONFIGURATION_TYPES=Release[0m
+2026-10-15T14:45:47.4114487Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T14:45:47.4114842Z env:
+2026-10-15T14:45:47.4115034Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T14:45:47.4115640Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T14:45:47.4116002Z ##[endgroup]
+2026-10-15T14:45:48.8894830Z Preset CMake variables:
+2026-10-15T14:45:48.8895180Z 
+2026-10-15T14:45:48.8895404Z   BUILD_TESTS="ON"
+2026-10-15T14:45:48.8895773Z   CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+2026-10-15T14:45:48.8896240Z   SIRIUS_CONTRACT_MODE="2"
+2026-10-15T14:45:48.8896740Z   SIRIUS_MANDATORY_TESTS="ON"
+2026-10-15T14:45:48.8897291Z   SIRIUS_WERROR="ON"
+2026-10-15T14:45:48.8897508Z 
+2026-10-15T14:45:49.8489673Z -- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+2026-10-15T14:46:02.6808894Z -- The CXX compiler identification is MSVC 19.44.35229.0
+2026-10-15T14:46:03.7281834Z -- The C compiler identification is MSVC 19.44.35229.0
+2026-10-15T14:46:03.8329697Z -- Detecting CXX compiler ABI info
+2026-10-15T14:46:04.8701571Z -- Detecting CXX compiler ABI info - done
+2026-10-15T14:46:04.8835763Z -- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+2026-10-15T14:46:04.8851737Z -- Detecting CXX compile features
+2026-10-15T14:46:04.8906899Z -- Detecting CXX compile features - done
+2026-10-15T14:46:04.9069244Z -- Detecting C compiler ABI info
+2026-10-15T14:46:05.5570240Z -- Detecting C compiler ABI info - done
+2026-10-15T14:46:05.5701300Z -- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+2026-10-15T14:46:05.5705310Z -- Detecting C compile features
+2026-10-15T14:46:05.5711704Z -- Detecting C compile features - done
+2026-10-15T14:46:06.9394203Z -- Found Python3: C:/hostedtoolcache/windows/Python/3.14.8/x64/python3.exe (found version "3.14.8") found components: Interpreter
+2026-10-15T14:46:14.0830112Z -- ┌─ FTXUI options ─────────────────────
+2026-10-15T14:46:14.0830802Z -- │ FTXUI_ENABLE_INSTALL     : OFF
+2026-10-15T14:46:14.0831217Z -- │ FTXUI_BUILD_EXAMPLES     : OFF
+2026-10-15T14:46:14.0831749Z -- │ FTXUI_QUIET              : OFF
+2026-10-15T14:46:14.0832200Z -- │ FTXUI_BUILD_DOCS         : OFF
+2026-10-15T14:46:14.0832489Z -- │ FTXUI_BUILD_TESTS        : OFF
+2026-10-15T14:46:14.0832774Z -- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+2026-10-15T14:46:14.0833058Z -- │ FTXUI_ENABLE_COVERAGE    : OFF
+2026-10-15T14:46:14.0833346Z -- │ FTXUI_DEV_WARNINGS       : OFF
+2026-10-15T14:46:14.0833618Z -- │ FTXUI_CLANG_TIDY         : OFF
+2026-10-15T14:46:14.0834220Z -- └─────────────────────────────────────
+2026-10-15T14:46:14.1294550Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+2026-10-15T14:46:15.8946595Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+2026-10-15T14:46:15.8947136Z -- Looking for pthread_create in pthreads
+2026-10-15T14:46:16.4640169Z -- Looking for pthread_create in pthreads - not found
+2026-10-15T14:46:16.4640999Z -- Looking for pthread_create in pthread
+2026-10-15T14:46:17.0139456Z -- Looking for pthread_create in pthread - not found
+2026-10-15T14:46:17.0151457Z -- Found Threads: TRUE
+2026-10-15T14:46:36.6796656Z -- Using the multi-header code from D:/a/Sirius/Sirius/bin/windows-msvc/_deps/json-src/include/
+2026-10-15T14:46:39.0990599Z -- alignment receipt generated: 0/8 domains admitted
+2026-10-15T14:46:39.2054402Z -- Including Win32 support
+2026-10-15T14:46:43.8484059Z -- Mandatory test gating: ENABLED
+2026-10-15T14:46:43.8548801Z -- Release packaging: DISABLED (configure SIRIUS_ALIGNMENT_MODE=release with the complete attestation set)
+2026-10-15T14:46:43.8553428Z -- Configuring done (55.0s)
+2026-10-15T14:46:44.0799694Z -- Generating done (0.2s)
+2026-10-15T14:46:44.0808847Z -- Build files have been written to: D:/a/Sirius/Sirius/bin/windows-msvc
+2026-10-15T14:46:44.1913369Z ##[group]Run cmake --build --preset windows-msvc --config Release --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j2
+2026-10-15T14:46:44.1915150Z [36;1mcmake --build --preset windows-msvc --config Release --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j2[0m
+2026-10-15T14:46:44.1956622Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T14:46:44.1956979Z env:
+2026-10-15T14:46:44.1957175Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T14:46:44.1957426Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T14:46:44.1957656Z ##[endgroup]
+2026-10-15T14:46:44.5261966Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:46:44.5551673Z 
+2026-10-15T14:46:44.7946390Z   Checking File Globs
+2026-10-15T14:46:44.9250898Z   1>Checking Build System
+2026-10-15T14:46:45.0280154Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T14:46:45.2020243Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T14:46:45.2413932Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+2026-10-15T14:46:45.3532589Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:46:45.3825597Z 
+2026-10-15T14:46:45.5935707Z   Checking File Globs
+2026-10-15T14:46:45.7694963Z   1>Verifying test-label, operating-model, and repository-structure governance
+2026-10-15T14:46:46.9264978Z   CTest label file is up to date
+2026-10-15T14:46:48.1192325Z   operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-15T14:46:49.9957715Z   repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-15T14:46:50.0690460Z   strict qualification/release policy rejected every weakened configuration and product
+2026-10-15T14:46:58.6591938Z   escaping-copy controls: filesystem symlinks
+2026-10-15T14:46:58.6592431Z   build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-15T14:46:58.7110550Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+2026-10-15T14:46:58.8228954Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:46:58.8521549Z 
+2026-10-15T14:46:59.0592609Z   Checking File Globs
+2026-10-15T14:46:59.3740945Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/ftxui-src/CMakeLists.txt
+2026-10-15T14:46:59.5418781Z   box.cpp
+2026-10-15T14:46:59.5678110Z   Building Custom Rule D:/a/Sirius/Sirius/lib/glfw/src/CMakeLists.txt
+2026-10-15T14:46:59.6545583Z   context.c
+2026-10-15T14:46:59.7143994Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T14:46:59.8693657Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T14:47:01.0231345Z   1>Compiling camera_frame_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:01.0232799Z   3>Compiling metric_consistency_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:01.0411781Z   color.cpp
+2026-10-15T14:47:01.5306456Z   init.c
+2026-10-15T14:47:01.9068297Z   warning[E41018]: returning without initializing out parameter
+2026-10-15T14:47:01.9546196Z   color_info.cpp
+2026-10-15T14:47:01.9665075Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T14:47:01.9860941Z       |
+2026-10-15T14:47:02.1491891Z   input.c
+2026-10-15T14:47:02.1582072Z   276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T14:47:02.2487008Z       |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T14:47:02.2515739Z   ----'
+2026-10-15T14:47:02.2523283Z   warning[E41035]: possible use of uninitialized variable
+2026-10-15T14:47:02.2528553Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T14:47:02.2534446Z       |
+2026-10-15T14:47:02.2539793Z   375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T14:47:02.2545570Z       |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T14:47:02.2550081Z   ----'
+2026-10-15T14:47:02.3116752Z   monitor.c
+2026-10-15T14:47:02.3543198Z   1>Compiling camera_frame_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:02.3545110Z   3>Compiling metric_consistency_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:02.5867067Z   platform.c
+2026-10-15T14:47:02.5961958Z   screen.cpp
+2026-10-15T14:47:02.8460124Z   vulkan.c
+2026-10-15T14:47:03.1287917Z   window.c
+2026-10-15T14:47:03.4102777Z   egl_context.c
+2026-10-15T14:47:03.5140439Z   1>Compiling camera_frame_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:03.6968240Z   osmesa_context.c
+2026-10-15T14:47:03.7071268Z   warning[E41018]: returning without initializing out parameter
+2026-10-15T14:47:03.7239247Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T14:47:03.8273277Z       |
+2026-10-15T14:47:03.9423516Z   276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T14:47:03.9770059Z       |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T14:47:03.9922961Z   null_init.c
+2026-10-15T14:47:04.1454953Z   ----'
+2026-10-15T14:47:04.1763364Z   warning[E41035]: possible use of uninitialized variable
+2026-10-15T14:47:04.1919352Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T14:47:04.1950982Z       |
+2026-10-15T14:47:04.1956708Z   375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T14:47:04.1960256Z       |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T14:47:04.1966317Z   ----'
+2026-10-15T14:47:04.2387888Z   3>Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)
+2026-10-15T14:47:04.3338993Z   null_monitor.c
+2026-10-15T14:47:04.4957516Z   string.cpp
+2026-10-15T14:47:04.5532703Z   null_window.c
+2026-10-15T14:47:04.7793127Z   null_joystick.c
+2026-10-15T14:47:05.0139078Z   win32_module.c
+2026-10-15T14:47:05.1202021Z   terminal.cpp
+2026-10-15T14:47:05.2869084Z   win32_time.c
+2026-10-15T14:47:05.4903670Z   1>Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:05.6829572Z   win32_thread.c
+2026-10-15T14:47:05.8181434Z   warning[E41018]: returning without initializing out parameter
+2026-10-15T14:47:05.8974378Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T14:47:05.9754998Z       |
+2026-10-15T14:47:06.0140872Z   Generating Code...
+2026-10-15T14:47:06.0147182Z   276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T14:47:06.0687533Z   win32_init.c
+2026-10-15T14:47:06.1299618Z       |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T14:47:06.1339801Z   ----'
+2026-10-15T14:47:06.1349429Z   warning[E41035]: possible use of uninitialized variable
+2026-10-15T14:47:06.1352228Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T14:47:06.1367924Z       |
+2026-10-15T14:47:06.1384982Z   375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T14:47:06.1726133Z       |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T14:47:06.2381093Z   ----'
+2026-10-15T14:47:06.2496161Z   win32_joystick.c
+2026-10-15T14:47:06.8047955Z   win32_monitor.c
+2026-10-15T14:47:07.5699208Z   win32_window.c
+2026-10-15T14:47:07.9915891Z   Generating Code...
+2026-10-15T14:47:09.1336143Z   Compiling...
+2026-10-15T14:47:09.2197812Z   wgl_context.c
+2026-10-15T14:47:09.4156070Z   Generating Code...
+2026-10-15T14:47:09.5954572Z   screen.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-screen.lib
+2026-10-15T14:47:10.0100834Z   glfw.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\glfw\src\Release\glfw3.lib
+2026-10-15T14:47:10.4126526Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/CMakeLists.txt
+2026-10-15T14:47:10.5083576Z   2>Compiling infinity_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:10.5260895Z   2>Compiling infinity_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:10.5471101Z   2>Compiling infinity_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:10.5675880Z   2>Compiling metric_consistency_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:10.6142774Z   contracts.cpp
+2026-10-15T14:47:10.9486383Z   resource_locator.cpp
+2026-10-15T14:47:13.7148814Z   4>Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:15.1887536Z   Generating Code...
+2026-10-15T14:47:16.0581356Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:47:16.1151353Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/core/CMakeLists.txt
+2026-10-15T14:47:16.2516410Z   tensor.cpp
+2026-10-15T14:47:16.9351972Z   geodesic_integrator.cpp
+2026-10-15T14:47:18.0344050Z   Generating Code...
+2026-10-15T14:47:20.0830729Z   2>Compiling Slang kernel trace.slang -> SPIR-V (+spirv-val)
+2026-10-15T14:47:24.8320609Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:47:24.8898997Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt
+2026-10-15T14:47:24.9969997Z   geodesic_tracer.cpp
+2026-10-15T14:47:29.1503726Z   2>Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:29.2902564Z   4>Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)
+2026-10-15T14:47:30.2815643Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T14:47:30.8428424Z   4>Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)
+2026-10-15T14:47:32.2053495Z   4>Compiling Slang kernel smoke.slang -> SPIR-V (+spirv-val)
+2026-10-15T14:47:32.8167825Z   3>Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:40.2806792Z   2>Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:49.7779730Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt
+2026-10-15T14:47:49.8538079Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/ftxui-src/CMakeLists.txt
+2026-10-15T14:47:49.9904493Z   automerge.cpp
+2026-10-15T14:47:49.9958642Z   1>Building bounded retained camera and joint transport stages
+2026-10-15T14:47:50.4869235Z   blink.cpp
+2026-10-15T14:47:50.9521117Z   bold.cpp
+2026-10-15T14:47:51.4183501Z   hyperlink.cpp
+2026-10-15T14:47:51.9257878Z   border.cpp
+2026-10-15T14:47:52.5659954Z   box_helper.cpp
+2026-10-15T14:47:52.7949865Z   canvas.cpp
+2026-10-15T14:47:53.5530346Z   clear_under.cpp
+2026-10-15T14:47:54.1031452Z   color.cpp
+2026-10-15T14:47:54.6312660Z   composite_decorator.cpp
+2026-10-15T14:47:55.1521689Z   dbox.cpp
+2026-10-15T14:47:55.6653989Z   dim.cpp
+2026-10-15T14:47:56.1513933Z   flex.cpp
+2026-10-15T14:47:56.6815000Z   flexbox.cpp
+2026-10-15T14:47:57.1901001Z   flexbox_config.cpp
+2026-10-15T14:47:57.2051379Z   flexbox_helper.cpp
+2026-10-15T14:47:57.5619600Z   focus.cpp
+2026-10-15T14:47:58.0482586Z   frame.cpp
+2026-10-15T14:47:58.2469157Z   Camera 5292 instructions; 613 registers; [47720, 61048, 512324, 512324] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:47:58.5861693Z   gauge.cpp
+2026-10-15T14:47:59.1172239Z   graph.cpp
+2026-10-15T14:47:59.6297158Z   Generating Code...
+2026-10-15T14:48:02.5779241Z   Compiling...
+2026-10-15T14:48:02.5779637Z   gridbox.cpp
+2026-10-15T14:48:03.0805281Z   hbox.cpp
+2026-10-15T14:48:03.5863981Z   inverted.cpp
+2026-10-15T14:48:04.0641592Z   linear_gradient.cpp
+2026-10-15T14:48:04.1573040Z   Transport optional FMA32: validated
+2026-10-15T14:48:04.1574249Z   Transport 2587 instructions; 459 registers; [85364, 98008, 99740, 99740] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:04.7366534Z   node.cpp
+2026-10-15T14:48:05.0767118Z   node_decorator.cpp
+2026-10-15T14:48:05.5873431Z   paragraph.cpp
+2026-10-15T14:48:06.2661674Z   reflect.cpp
+2026-10-15T14:48:06.7750752Z   scroll_indicator.cpp
+2026-10-15T14:48:07.2696329Z   separator.cpp
+2026-10-15T14:48:07.7856491Z   size.cpp
+2026-10-15T14:48:08.3137511Z   spinner.cpp
+2026-10-15T14:48:08.8433903Z   strikethrough.cpp
+2026-10-15T14:48:09.3443260Z   table.cpp
+2026-10-15T14:48:09.7961814Z   Endpoint optional FMA32: validated
+2026-10-15T14:48:09.7962911Z   Endpoint 2205 instructions; 612 registers; [99300, 111960, 145344, 145344] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:09.9430114Z   text.cpp
+2026-10-15T14:48:10.4583340Z   underlined.cpp
+2026-10-15T14:48:10.9545595Z   underlined_double.cpp
+2026-10-15T14:48:11.4175458Z   util.cpp
+2026-10-15T14:48:11.9478441Z   vbox.cpp
+2026-10-15T14:48:12.4769650Z   Generating Code...
+2026-10-15T14:48:12.5446394Z   Dense 6345 instructions; 815 registers; [77952, 90628, 116204, 116204] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:15.7562647Z   Initialize 1961 instructions; 362 registers; [57108, 70468, 77444, 77444] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:22.1220857Z   RayCamera 6115 instructions; 660 registers; [45368, 58728, 475256, 475256] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:24.9715166Z   DopriPhase 2088 instructions; 629 registers; [58740, 72100, 92844, 92844] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:25.0712002Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt
+2026-10-15T14:48:25.1862951Z   dom.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-dom.lib
+2026-10-15T14:48:25.2771520Z   vulkan_device.cpp
+2026-10-15T14:48:25.2846984Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/ftxui-src/CMakeLists.txt
+2026-10-15T14:48:25.3693510Z   animation.cpp
+2026-10-15T14:48:25.9366282Z   button.cpp
+2026-10-15T14:48:26.8398663Z   catch_event.cpp
+2026-10-15T14:48:27.5145271Z   checkbox.cpp
+2026-10-15T14:48:28.2991500Z   collapsible.cpp
+2026-10-15T14:48:28.3439757Z   retained_compute.cpp
+2026-10-15T14:48:29.0445320Z   component.cpp
+2026-10-15T14:48:29.9201997Z   component_options.cpp
+2026-10-15T14:48:30.6684617Z   container.cpp
+2026-10-15T14:48:31.4431343Z   dropdown.cpp
+2026-10-15T14:48:32.1782430Z   event.cpp
+2026-10-15T14:48:32.5515994Z   hoverable.cpp
+2026-10-15T14:48:33.5095586Z   input.cpp
+2026-10-15T14:48:34.4346319Z   loop.cpp
+2026-10-15T14:48:35.1851808Z   maybe.cpp
+2026-10-15T14:48:35.4201896Z   retained_integrator.cpp
+2026-10-15T14:48:35.8540440Z   menu.cpp
+2026-10-15T14:48:36.9066726Z   modal.cpp
+2026-10-15T14:48:37.5368850Z   radiobox.cpp
+2026-10-15T14:48:37.8808785Z   retained_trace_executor.cpp
+2026-10-15T14:48:38.5048603Z   renderer.cpp
+2026-10-15T14:48:39.1995133Z   resizable_split.cpp
+2026-10-15T14:48:39.8925604Z   screen_interactive.cpp
+2026-10-15T14:48:41.1632498Z   Generating Code...
+2026-10-15T14:48:41.7643113Z   Generating Code...
+2026-10-15T14:48:47.4215919Z   Compiling...
+2026-10-15T14:48:47.4216316Z   slider.cpp
+2026-10-15T14:48:48.6537929Z   terminal_input_parser.cpp
+2026-10-15T14:48:50.1089379Z   util.cpp
+2026-10-15T14:48:50.8141181Z   window.cpp
+2026-10-15T14:48:51.8062165Z   Generating Code...
+2026-10-15T14:48:53.9186477Z   component.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-component.lib
+2026-10-15T14:48:59.6497688Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T14:48:59.7068793Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/render/CMakeLists.txt
+2026-10-15T14:48:59.8063203Z cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj]
+2026-10-15T14:48:59.8063826Z   exr_writer.cpp
+2026-10-15T14:49:01.3543902Z   stb_impl.cpp
+2026-10-15T14:49:01.5297123Z   stb_write_impl.cpp
+2026-10-15T14:49:01.5963963Z   Generating Code...
+2026-10-15T14:49:05.0852752Z   png_writer.cpp
+2026-10-15T14:49:05.7449467Z   render_evidence.cpp
+2026-10-15T14:49:10.8773930Z   memory_governor.cpp
+2026-10-15T14:49:12.2683614Z   dispatch_governor.cpp
+2026-10-15T14:49:13.8363807Z   render_session.cpp
+2026-10-15T14:49:17.6869458Z   pixel_shading.cpp
+2026-10-15T14:49:21.0830843Z   point_source_detector.cpp
+2026-10-15T14:49:22.9476350Z   ray_work_queue.cpp
+2026-10-15T14:49:25.1136879Z   vulkan_renderer.cpp
+2026-10-15T14:49:29.1545707Z   Generating Code...
+2026-10-15T14:49:43.2670093Z cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj]
+2026-10-15T14:49:43.2694911Z   miniz.c
+2026-10-15T14:49:44.2760008Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T14:49:44.3301084Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/app/CMakeLists.txt
+2026-10-15T14:49:44.4096106Z   alignment_authority.cpp
+2026-10-15T14:49:47.9912617Z   command_router.cpp
+2026-10-15T14:49:51.7736922Z   render_command.cpp
+2026-10-15T14:49:56.5790135Z   info_command.cpp
+2026-10-15T14:50:01.2811945Z   config_command.cpp
+2026-10-15T14:50:05.1455485Z   cli_output.cpp
+2026-10-15T14:50:08.8541986Z   config_loader.cpp
+2026-10-15T14:50:12.9109721Z   session_config_adapter.cpp
+2026-10-15T14:50:17.7159854Z   platform_paths.cpp
+2026-10-15T14:50:19.5940455Z   view_command.cpp
+2026-10-15T14:50:24.3083963Z   interactive_viewer.cpp
+2026-10-15T14:50:27.4675244Z   Generating Code...
+2026-10-15T14:50:48.8289907Z cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\sirius_app_lib.vcxproj]
+2026-10-15T14:50:48.8290562Z   glad.c
+2026-10-15T14:50:49.2637896Z   sirius_app_lib.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_lib.lib
+2026-10-15T14:50:49.3238130Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/app/CMakeLists.txt
+2026-10-15T14:50:49.3905495Z   main.cpp
+2026-10-15T14:50:53.7582435Z   sirius.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius.exe
+2026-10-15T14:50:53.7691731Z   Staging Sirius runtime resources beside the executable	Staging interactive-viewer shaders beside the executable	Staging Vulkan runtime kernels beside the executable
+2026-10-15T14:50:54.0608277Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:50:54.0905511Z 
+2026-10-15T14:50:54.2948635Z   Checking File Globs
+2026-10-15T14:50:54.5261847Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/CMakeLists.txt
+2026-10-15T14:50:54.5695692Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:50:54.6527375Z   gtest-all.cc
+2026-10-15T14:50:59.8214111Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:50:59.8748663Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/CMakeLists.txt
+2026-10-15T14:50:59.9359424Z   gtest_main.cc
+2026-10-15T14:51:00.8250830Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:51:00.8755478Z   Building Custom Rule D:/a/Sirius/Sirius/tests/CMakeLists.txt
+2026-10-15T14:51:00.9721949Z   contracts_test.cpp
+2026-10-15T14:51:02.8441454Z   error_test.cpp
+2026-10-15T14:51:04.8994466Z   sha256_test.cpp
+2026-10-15T14:51:07.6957233Z   Generating Code...
+2026-10-15T14:51:10.1216298Z   sirius_base_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\Release\sirius_base_tests.exe
+2026-10-15T14:51:10.2835770Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:51:10.3123405Z 
+2026-10-15T14:51:10.5157065Z   Checking File Globs
+2026-10-15T14:51:10.7475061Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:51:10.7746068Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:51:10.8361887Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:51:10.8631383Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:51:10.9458796Z   Building Custom Rule D:/a/Sirius/Sirius/tests/core/CMakeLists.txt
+2026-10-15T14:51:11.0826256Z   autodiff_dual_test.cpp
+2026-10-15T14:51:13.0906654Z   retained_arithmetic_test.cpp
+2026-10-15T14:51:15.3733876Z   dopri_segment_test.cpp
+2026-10-15T14:51:17.4415165Z   blackbody_planck_test.cpp
+2026-10-15T14:51:19.5113134Z   cpu_geodesic_reference_test.cpp
+2026-10-15T14:51:21.9792637Z   render_pipeline_integration_test.cpp
+2026-10-15T14:51:24.8038554Z   blackbody_test.cpp
+2026-10-15T14:51:26.9524457Z   camera_sampling_test.cpp
+2026-10-15T14:51:29.0123302Z   camera_film_differential_test.cpp
+2026-10-15T14:51:31.4816358Z   camera_continuous_projection_test.cpp
+2026-10-15T14:51:33.6196264Z   camera_test.cpp
+2026-10-15T14:51:35.7597394Z   cie1931_observer_authority_test.cpp
+2026-10-15T14:51:37.7163045Z   coordinates_test.cpp
+2026-10-15T14:51:39.7398420Z   geodesic_conservation_test.cpp
+2026-10-15T14:51:41.8857841Z   geodesic_determinism_test.cpp
+2026-10-15T14:51:44.0524096Z   geodesic_equation_test.cpp
+2026-10-15T14:51:45.8853760Z   geodesic_live_path_test.cpp
+2026-10-15T14:51:48.1473630Z   geodesic_naninf_test.cpp
+2026-10-15T14:51:50.3245417Z   geodesic_path_test.cpp
+2026-10-15T14:51:52.5603232Z   geodesic_stability_test.cpp
+2026-10-15T14:51:54.4165764Z   Generating Code...
+2026-10-15T14:52:11.6096706Z   Compiling...
+2026-10-15T14:52:11.6097133Z   killing_vector_conservation_test.cpp
+2026-10-15T14:52:13.7652948Z   christoffel_test.cpp
+2026-10-15T14:52:15.5975589Z   kerr_orbit_authority_test.cpp
+2026-10-15T14:52:17.7110300Z   kerr_schild_field_equation_test.cpp
+2026-10-15T14:52:19.8124333Z   horizon_authority_test.cpp
+2026-10-15T14:52:21.9449132Z   kerr_test.cpp
+2026-10-15T14:52:24.0742773Z   metric_derivative_test.cpp
+2026-10-15T14:52:26.2484039Z   metric_loader_test.cpp
+2026-10-15T14:52:28.4934550Z   metric_registry_test.cpp
+2026-10-15T14:52:30.6759186Z   morris_thorne_cartesian_test.cpp
+2026-10-15T14:52:32.8643057Z   reissner_nordstrom_test.cpp
+2026-10-15T14:52:34.9713335Z   rk45_integrator_test.cpp
+2026-10-15T14:52:37.3135538Z   schwarzschild_test.cpp
+2026-10-15T14:52:39.4215911Z   walker_penrose_test.cpp
+2026-10-15T14:52:41.6666302Z   warp_drive_test.cpp
+2026-10-15T14:52:43.7749216Z   stokes_test.cpp
+2026-10-15T14:52:45.7879849Z   tensor_inverse_test.cpp
+2026-10-15T14:52:47.8775890Z   novikov_thorne_disk_test.cpp
+2026-10-15T14:52:49.9196594Z   turbulence_test.cpp
+2026-10-15T14:52:51.8563088Z   volumetric_disk_test.cpp
+2026-10-15T14:52:53.6834984Z   Generating Code...
+2026-10-15T14:53:14.9610095Z   Compiling...
+2026-10-15T14:53:14.9610669Z   postprocess_test.cpp
+2026-10-15T14:53:16.9937404Z   srgb_transfer_authority_test.cpp
+2026-10-15T14:53:18.9485716Z   xyz_srgb_authority_test.cpp
+2026-10-15T14:53:20.9158660Z   spectral_radiance_test.cpp
+2026-10-15T14:53:22.8715471Z   starfield_test.cpp
+2026-10-15T14:53:25.3418846Z   point_source_response_test.cpp
+2026-10-15T14:53:27.9031241Z   point_source_transfer_test.cpp
+2026-10-15T14:53:30.2101132Z   source_sky_differential_test.cpp
+2026-10-15T14:53:32.3895234Z   source_sky_map_test.cpp
+2026-10-15T14:53:34.5839913Z   kerr_infinity_test.cpp
+2026-10-15T14:53:36.8664930Z   tensor_test.cpp
+2026-10-15T14:53:38.7458496Z   Generating Code...
+2026-10-15T14:53:49.1174607Z   sirius_core_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\core\Release\sirius_core_tests.exe
+2026-10-15T14:53:49.4759227Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:53:49.5067539Z 
+2026-10-15T14:53:49.7303216Z   Checking File Globs
+2026-10-15T14:53:49.9590969Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:53:49.9942717Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:53:50.0597953Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:53:50.0842179Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:53:50.1746586Z   Building Custom Rule D:/a/Sirius/Sirius/tests/oracle/CMakeLists.txt
+2026-10-15T14:53:50.2836790Z   analytic_benchmarks_test.cpp
+2026-10-15T14:53:52.3760151Z   analytic_solutions_test.cpp
+2026-10-15T14:53:54.5531736Z   metric_invariants_test.cpp
+2026-10-15T14:53:56.8781195Z   polarisation_transport_test.cpp
+2026-10-15T14:53:58.9556135Z   transport_types_test.cpp
+2026-10-15T14:54:00.9053158Z   kerr_metric_test.cpp
+2026-10-15T14:54:03.1485531Z   symplectic_integrator_test.cpp
+2026-10-15T14:54:05.1956514Z   beam_propagation_test.cpp
+2026-10-15T14:54:07.2118776Z   Generating Code...
+2026-10-15T14:54:15.8760114Z   sirius_oracle_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\oracle\Release\sirius_oracle_tests.exe
+2026-10-15T14:54:16.0890679Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:54:16.1206693Z 
+2026-10-15T14:54:16.3603966Z   Checking File Globs
+2026-10-15T14:54:16.5301082Z   1>Generating independent exact binary32 arithmetic expectations
+2026-10-15T14:54:18.7113000Z   {"bytes": 4182444, "categories": {"primitive/declared-halfway-boundary": 24, "primitive/edge-cross": 38332, "primitive/raw-fixed-seed": 28672, "primitive/subnormal-fixed-seed": 28672, "primitive/unary-edge": 468, "primitive/unary-fixed-seed": 24576, "residual/analytic-selfcheck": 16, "residual/bounded-raw-fixed-seed": 16384, "residual/edge-cross": 4356, "residual/product-rounding-boundaries": 8192, "residual/scaled-mantissa-fixed-seed": 16384, "residual/subnormal-input-fixed-seed": 8192}, "fixture_sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e", "magic": "PB32", "negative_zero_residuals": 9635, "nonzero_rounded_residuals": 31239, "primitive_cases": 120744, "records": 174268, "residual_cases": 53524, "subnormal_residuals": 5517, "version": 1}
+2026-10-15T14:54:18.7522880Z   Building Custom Rule D:/a/Sirius/Sirius/tests/backend/CMakeLists.txt
+2026-10-15T14:54:18.8103639Z   1>Building bounded retained camera program and independent witnesses
+2026-10-15T14:54:19.4458798Z   program_camera_probe-fp32: compiled and validated
+2026-10-15T14:54:19.8582690Z   program_camera_probe-fp32comp: compiled and validated
+2026-10-15T14:54:19.9015557Z   Building Custom Rule D:/a/Sirius/Sirius/tests/backend/CMakeLists.txt
+2026-10-15T14:54:19.9819190Z   1>
+2026-10-15T14:54:20.0378036Z   1>Staging exact qualification inputs beside sirius_backend_tests
+2026-10-15T14:54:20.7029125Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+2026-10-15T14:54:20.8931056Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:54:20.9170925Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:54:21.0135144Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:54:21.0374815Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:54:21.0994125Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T14:54:21.1173689Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T14:54:21.2155577Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T14:54:21.3045220Z   Building Custom Rule D:/a/Sirius/Sirius/tests/backend/CMakeLists.txt
+2026-10-15T14:54:21.3927919Z   portable_binary32_test.cpp
+2026-10-15T14:54:24.0754582Z   cpu_jacobi_oracle_test.cpp
+2026-10-15T14:54:26.6038010Z   cpu_trace_boundary_test.cpp
+2026-10-15T14:54:29.4165980Z   coupled_transport_test.cpp
+2026-10-15T14:54:32.0741647Z   full_path_acceptance_test.cpp
+2026-10-15T14:54:36.2083426Z   polarisation_acceptance_test.cpp
+2026-10-15T14:54:39.0743030Z   source_sky_map_trace_test.cpp
+2026-10-15T14:54:41.5887479Z   source_sky_infinity_trace_test.cpp
+2026-10-15T14:54:44.3576979Z   volume_acceptance_test.cpp
+2026-10-15T14:54:47.9578728Z   vulkan_smoke_test.cpp
+2026-10-15T14:54:51.8540290Z   kernel_parity_test.cpp
+2026-10-15T14:54:55.8523238Z   kernel_metric_consistency_test.cpp
+2026-10-15T14:54:59.1417908Z   kernel_camera_frame_test.cpp
+2026-10-15T14:55:02.5239745Z   retained_camera_program_test.cpp
+2026-10-15T14:55:05.7405563Z   retained_compute_test.cpp
+2026-10-15T14:55:17.6172575Z   retained_dopri_test.cpp
+2026-10-15T14:55:22.3454089Z   kernel_infinity_test.cpp
+2026-10-15T14:55:25.8878603Z   kernel_trace_test.cpp
+2026-10-15T14:55:29.5722885Z   kernel_beam_test.cpp
+2026-10-15T14:55:32.9961336Z   kernel_portability_test.cpp
+2026-10-15T14:55:35.6100394Z   Generating Code...
+2026-10-15T14:56:59.2951705Z   sirius_backend_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\Release\sirius_backend_tests.exe
+2026-10-15T14:56:59.5367614Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:56:59.5657083Z 
+2026-10-15T14:56:59.7778828Z   Checking File Globs
+2026-10-15T14:57:00.0405108Z   glfw.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\glfw\src\Release\glfw3.lib
+2026-10-15T14:57:00.0801889Z   screen.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-screen.lib
+2026-10-15T14:57:00.1039986Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:57:00.2483002Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T14:57:00.3278265Z   1>
+2026-10-15T14:57:00.4078176Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T14:57:00.4293974Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:57:00.5148789Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:57:00.5428264Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:57:00.5895329Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T14:57:00.5925510Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T14:57:00.6733268Z   dom.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-dom.lib
+2026-10-15T14:57:00.7248579Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T14:57:00.7784967Z   component.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-component.lib
+2026-10-15T14:57:00.8501272Z   sirius_app_lib.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_lib.lib
+2026-10-15T14:57:00.9204959Z   sirius.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius.exe
+2026-10-15T14:57:00.9377269Z   Staging Sirius runtime resources beside the executable	Staging interactive-viewer shaders beside the executable	Staging Vulkan runtime kernels beside the executable
+2026-10-15T14:57:01.1791274Z   Building Custom Rule D:/a/Sirius/Sirius/tests/app/CMakeLists.txt
+2026-10-15T14:57:01.2585056Z   alignment_authority_test.cpp
+2026-10-15T14:57:05.3730775Z   config_validation_test.cpp
+2026-10-15T14:57:10.7119261Z   config_environment_test.cpp
+2026-10-15T14:57:15.0139932Z   config_schema_roundtrip_test.cpp
+2026-10-15T14:57:19.5938509Z   render_command_parse_test.cpp
+2026-10-15T14:57:24.9160703Z   session_config_adapter_test.cpp
+2026-10-15T14:57:30.2989992Z   platform_paths_test.cpp
+2026-10-15T14:57:32.9167339Z   config_loading_test.cpp
+2026-10-15T14:57:38.1431094Z   command_router_test.cpp
+2026-10-15T14:57:42.2421233Z   viewer_display_contract_test.cpp
+2026-10-15T14:57:45.1237391Z   Generating Code...
+2026-10-15T14:58:01.8310637Z   sirius_app_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_tests.exe
+2026-10-15T14:58:02.0286299Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:58:02.0591853Z 
+2026-10-15T14:58:02.2927363Z   Checking File Globs
+2026-10-15T14:58:02.4417147Z   1>
+2026-10-15T14:58:02.4832002Z   1>
+2026-10-15T14:58:02.5386624Z   1>
+2026-10-15T14:58:02.5904873Z   1>Staging exact qualification inputs beside sirius_render_tests
+2026-10-15T14:58:03.2244441Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+2026-10-15T14:58:03.3772405Z   screen.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-screen.lib
+2026-10-15T14:58:03.4472591Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:58:03.4770650Z   glfw.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\glfw\src\Release\glfw3.lib
+2026-10-15T14:58:03.5964336Z   dom.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-dom.lib
+2026-10-15T14:58:03.6477817Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:58:03.6540865Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T14:58:03.7517329Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:58:03.8332527Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:58:03.8479238Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T14:58:03.8895111Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T14:58:03.9732778Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T14:58:04.0291416Z   component.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-component.lib
+2026-10-15T14:58:04.0808112Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T14:58:04.1467254Z   sirius_app_lib.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_lib.lib
+2026-10-15T14:58:04.2188629Z   sirius.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius.exe
+2026-10-15T14:58:04.2319456Z   Staging Sirius runtime resources beside the executable	Staging interactive-viewer shaders beside the executable	Staging Vulkan runtime kernels beside the executable
+2026-10-15T14:58:04.4735887Z   Building Custom Rule D:/a/Sirius/Sirius/tests/render/CMakeLists.txt
+2026-10-15T14:58:04.5646172Z   alcubierre_acceptance_test.cpp
+2026-10-15T14:58:08.3642217Z   app_render_execution_test.cpp
+2026-10-15T14:58:14.2126647Z   geodesic_tracer_test.cpp
+2026-10-15T14:58:17.3271850Z   exr_writer_test.cpp
+2026-10-15T14:58:20.0542650Z   png_writer_test.cpp
+2026-10-15T14:58:22.7394034Z   film_pipeline_test.cpp
+2026-10-15T14:58:24.7857918Z   spectral_emission_test.cpp
+2026-10-15T14:58:26.8146524Z   render_session_probe_test.cpp
+2026-10-15T14:58:32.9002701Z   tile_scheduler_test.cpp
+2026-10-15T14:58:35.0529408Z   progress_tracker_test.cpp
+2026-10-15T14:58:37.3505816Z   render_evidence_test.cpp
+2026-10-15T14:58:42.8732295Z   memory_governor_test.cpp
+2026-10-15T14:58:45.0013764Z   dispatch_governor_test.cpp
+2026-10-15T14:58:47.8889930Z   vulkan_render_test.cpp
+2026-10-15T14:58:52.9639332Z   ray_bundle_test.cpp
+2026-10-15T14:58:55.5141288Z   starfield_point_test.cpp
+2026-10-15T14:58:58.3622108Z   point_source_detector_test.cpp
+2026-10-15T14:59:01.4482649Z   point_source_detector_physics_test.cpp
+2026-10-15T14:59:05.6438939Z   ray_work_queue_test.cpp
+2026-10-15T14:59:09.1583301Z   doppler_toggle_test.cpp
+2026-10-15T14:59:11.9684858Z   Generating Code...
+2026-10-15T14:59:53.4239478Z   Compiling...
+2026-10-15T14:59:53.4240278Z   camera_aberration_test.cpp
+2026-10-15T14:59:55.4887546Z   pixel_sampling_test.cpp
+2026-10-15T14:59:57.4959459Z   shadow_boundary_test.cpp
+2026-10-15T15:00:01.2952917Z   Generating Code...
+2026-10-15T15:00:05.3894525Z   sirius_render_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_render_tests.exe
+2026-10-15T15:00:05.7050043Z ##[group]Run if (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "unexpected promotion receipt before integration controls" }
+2026-10-15T15:00:05.7051359Z [36;1mif (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "unexpected promotion receipt before integration controls" }[0m
+2026-10-15T15:00:05.7052258Z [36;1mctest --test-dir bin/windows-msvc -C Release --output-on-failure --no-tests=error `[0m
+2026-10-15T15:00:05.7055414Z [36;1m  -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'[0m
+2026-10-15T15:00:05.7058648Z [36;1mif (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "integration controls created a promotion receipt" }[0m
+2026-10-15T15:00:05.7101140Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T15:00:05.7101565Z env:
+2026-10-15T15:00:05.7101813Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T15:00:05.7102129Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T15:00:05.7102407Z ##[endgroup]
+2026-10-15T15:00:06.4797496Z Internal ctest changing into directory: D:/a/Sirius/Sirius/bin/windows-msvc
+2026-10-15T15:00:06.5649123Z Test project D:/a/Sirius/Sirius/bin/windows-msvc
+2026-10-15T15:00:06.6747382Z       Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+2026-10-15T15:00:13.6349019Z  1/10 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    6.96 sec
+2026-10-15T15:00:13.6360000Z       Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2026-10-15T15:00:13.7043380Z  2/10 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.07 sec
+2026-10-15T15:00:13.7046147Z       Start   16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+2026-10-15T15:00:13.8049013Z  3/10 Test   #16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls ..........   Passed    0.10 sec
+2026-10-15T15:00:13.8051677Z       Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+2026-10-15T15:00:22.0129667Z  4/10 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................   Passed    8.21 sec
+2026-10-15T15:00:22.0132751Z       Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+2026-10-15T15:00:55.2430068Z  5/10 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   33.23 sec
+2026-10-15T15:00:55.2433803Z       Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+2026-10-15T15:00:55.7741113Z  6/10 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.53 sec
+2026-10-15T15:00:55.7744470Z       Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+2026-10-15T15:00:55.8744024Z  7/10 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.10 sec
+2026-10-15T15:00:55.8747299Z       Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+2026-10-15T15:00:56.0597250Z  8/10 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.18 sec
+2026-10-15T15:00:56.0600447Z       Start 1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+2026-10-15T15:00:56.0696246Z  9/10 Test #1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.01 sec
+2026-10-15T15:00:56.0697600Z       Start 1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+2026-10-15T15:00:56.7531477Z 10/10 Test #1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.68 sec
+2026-10-15T15:00:56.7538765Z 
+2026-10-15T15:00:56.7539067Z 100% tests passed, 0 tests failed out of 10
+2026-10-15T15:00:56.7539421Z 
+2026-10-15T15:00:56.7539793Z Label Time Summary:
+2026-10-15T15:00:56.7540365Z Correctness    =   0.69 sec*proc (2 tests)
+2026-10-15T15:00:56.7540953Z Mandatory      =  50.07 sec*proc (10 tests)
+2026-10-15T15:00:56.7541424Z Operational    =  50.07 sec*proc (10 tests)
+2026-10-15T15:00:56.7541651Z 
+2026-10-15T15:00:56.7541761Z Total Test time (real) =  50.19 sec
+2026-10-15T15:00:56.7938118Z ##[group]Run $ErrorActionPreference = "Stop"
+2026-10-15T15:00:56.7938790Z [36;1m$ErrorActionPreference = "Stop"[0m
+2026-10-15T15:00:56.7939168Z [36;1m$revision = (git rev-parse HEAD).Trim()[0m
+2026-10-15T15:00:56.7939878Z [36;1mif ($LASTEXITCODE -ne 0 -or $revision -ne $env:GITHUB_SHA -or (git status --porcelain)) { throw "diagnostic source identity mismatch" }[0m
+2026-10-15T15:00:56.7940667Z [36;1m$alignment = "bin/windows-msvc/generated/sirius/alignment_receipt.json"[0m
+2026-10-15T15:00:56.7941446Z [36;1mif ((Get-Content -Raw $alignment | ConvertFrom-Json).source_revision -ne $revision) { throw "diagnostic alignment revision mismatch" }[0m
+2026-10-15T15:00:56.7942300Z [36;1m$volumes = @("bin/windows-msvc/src/sirius/app/Release", "bin/windows-msvc/tests/backend/Release")[0m
+2026-10-15T15:00:56.7943101Z [36;1m$executables = @("sirius.exe", "sirius_backend_tests.exe")[0m
+2026-10-15T15:00:56.7943739Z [36;1m$loader = Get-Item -LiteralPath (Join-Path $env:VULKAN_SDK "runtime/x64/vulkan-1.dll")[0m
+2026-10-15T15:00:56.7944309Z [36;1m$cache = Get-Content -Raw "bin/windows-msvc/CMakeCache.txt"[0m
+2026-10-15T15:00:56.7945013Z [36;1mif ($cache -notmatch '(?m)^BUILD_SHARED_LIBS:BOOL=OFF\r?$') { throw "diagnostic volumes require the existing static-library topology" }[0m
+2026-10-15T15:00:56.7945920Z [36;1mif ($cache -match '(?m)^GLFW_LIBRARY_TYPE:STRING=(?!STATIC\r?$)[^\r\n]+') { throw "diagnostic GLFW DLL topology is not represented" }[0m
+2026-10-15T15:00:56.7946685Z [36;1m$instance = [regex]::Match($cache, '(?m)^CMAKE_GENERATOR_INSTANCE:[^=]+=(.+)$')[0m
+2026-10-15T15:00:56.7947282Z [36;1mif (-not $instance.Success) { throw "selected Visual Studio instance is absent" }[0m
+2026-10-15T15:00:56.7947971Z [36;1m$compiler = @(Get-ChildItem -Path "bin/windows-msvc/CMakeFiles/*/CMakeCXXCompiler.cmake" -File)[0m
+2026-10-15T15:00:56.7948647Z [36;1mif ($compiler.Count -ne 1) { throw "selected C++ compiler metadata is ambiguous" }[0m
+2026-10-15T15:00:56.7949405Z [36;1m$compilerVersion = [regex]::Match((Get-Content -Raw $compiler[0].FullName), 'set\(CMAKE_CXX_COMPILER_VERSION "(19\.(\d+)\.[^"]+)"\)')[0m
+2026-10-15T15:00:56.7950194Z [36;1mif (-not $compilerVersion.Success) { throw "selected MSVC compiler version is absent" }[0m
+2026-10-15T15:00:56.7951013Z [36;1m$redistVersionFile = Join-Path ($instance.Groups[1].Value.Trim()) "VC/Auxiliary/Build/Microsoft.VCRedistVersion.default.txt"[0m
+2026-10-15T15:00:56.7951723Z [36;1m$redistVersion = (Get-Content -Raw $redistVersionFile).Trim()[0m
+2026-10-15T15:00:56.7952463Z [36;1mif ($redistVersion -notmatch ('^14\.' + $compilerVersion.Groups[2].Value + '\.')) { throw "selected MSVC and release CRT versions do not match" }[0m
+2026-10-15T15:00:56.7953359Z [36;1m$crtDirectory = Join-Path ($instance.Groups[1].Value.Trim()) "VC/Redist/MSVC/$redistVersion/x64/Microsoft.VC143.CRT"[0m
+2026-10-15T15:00:56.7954491Z [36;1m$crtNames = @("concrt140.dll", "msvcp140.dll", "msvcp140_1.dll", "msvcp140_2.dll", "msvcp140_atomic_wait.dll", "msvcp140_codecvt_ids.dll", "vcruntime140.dll", "vcruntime140_1.dll", "Microsoft.VC143.CRT.manifest")[0m
+2026-10-15T15:00:56.7955743Z [36;1m$crt = @($crtNames | ForEach-Object { $path = Join-Path $crtDirectory $_; if (Test-Path -LiteralPath $path -PathType Leaf) { Get-Item -LiteralPath $path } })[0m
+2026-10-15T15:00:56.7956601Z [36;1mforeach ($name in @("msvcp140.dll", "vcruntime140.dll", "vcruntime140_1.dll")) {[0m
+2026-10-15T15:00:56.7957170Z [36;1m  if ($name -notin $crt.Name) { throw "selected release CRT missing: $name" }[0m
+2026-10-15T15:00:56.7957808Z [36;1m}[0m
+2026-10-15T15:00:56.7958060Z [36;1m$files = @{}[0m
+2026-10-15T15:00:56.7958323Z [36;1m$origins = @{}[0m
+2026-10-15T15:00:56.7958708Z [36;1mforeach ($dll in @($loader) + @($crt)) { $origins[$dll.Name] = $dll.FullName }[0m
+2026-10-15T15:00:56.7959214Z [36;1mfor ($index = 0; $index -lt $volumes.Count; $index++) {[0m
+2026-10-15T15:00:56.7959597Z [36;1m  $volume = $volumes[$index][0m
+2026-10-15T15:00:56.7961618Z [36;1m  foreach ($dll in @($loader) + @($crt)) { Copy-Item -LiteralPath $dll.FullName -Destination $volume -Force }[0m
+2026-10-15T15:00:56.7962549Z [36;1m  $payload = @(Get-Item -LiteralPath (Join-Path $volume $executables[$index]))[0m
+2026-10-15T15:00:56.7963211Z [36;1m  $payload += @(Get-ChildItem -Path "$volume/*.dll", "$volume/*.manifest" -File -Force)[0m
+2026-10-15T15:00:56.7963858Z [36;1m  $payload += @(Get-ChildItem -LiteralPath "$volume/resources" -Recurse -File -Force)[0m
+2026-10-15T15:00:56.7964355Z [36;1m  foreach ($file in $payload) {[0m
+2026-10-15T15:00:56.7964832Z [36;1m    $relative = [IO.Path]::GetRelativePath($PWD.Path, $file.FullName).Replace('\', '/')[0m
+2026-10-15T15:00:56.7965660Z [36;1m    $files[$relative] = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant() }[0m
+2026-10-15T15:00:56.7966438Z [36;1m  }[0m
+2026-10-15T15:00:56.7966670Z [36;1m}[0m
+2026-10-15T15:00:56.7967175Z [36;1m$compilerCopy = "bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake"[0m
+2026-10-15T15:00:56.7967863Z [36;1mCopy-Item -LiteralPath $compiler[0].FullName -Destination $compilerCopy[0m
+2026-10-15T15:00:56.7968473Z [36;1mforeach ($path in @($alignment, "bin/windows-msvc/CMakeCache.txt", $compilerCopy)) {[0m
+2026-10-15T15:00:56.7968973Z [36;1m  $file = Get-Item -LiteralPath $path[0m
+2026-10-15T15:00:56.7969606Z [36;1m  $files[$path] = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant() }[0m
+2026-10-15T15:00:56.7970198Z [36;1m}[0m
+2026-10-15T15:00:56.7970625Z [36;1m$registrationRoot = "bin/windows-msvc/generated/sirius/windows-mandatory-registration"[0m
+2026-10-15T15:00:56.7971352Z [36;1mif (Test-Path -LiteralPath $registrationRoot) { throw "registration export already exists" }[0m
+2026-10-15T15:00:56.7972102Z [36;1m$registrationFiles = @(Get-ChildItem -LiteralPath "bin/windows-msvc" -Recurse -File | Where-Object {[0m
+2026-10-15T15:00:56.7972890Z [36;1m  $_.Name -in @("CTestTestfile.cmake", "cmake_install.cmake") -or $_.Name -match '_(tests|include)(-[^.]+)?\.cmake$'[0m
+2026-10-15T15:00:56.7973430Z [36;1m})[0m
+2026-10-15T15:00:56.7973782Z [36;1mforeach ($target in @("base", "core", "oracle", "backend", "app", "render")) {[0m
+2026-10-15T15:00:56.7974254Z [36;1m  foreach ($kind in @("tests", "include")) {[0m
+2026-10-15T15:00:56.7974884Z [36;1m    if (@($registrationFiles | Where-Object { $_.Name -match "^sirius_${target}_tests\[\d+\]_${kind}\.cmake$" }).Count -ne 1) {[0m
+2026-10-15T15:00:56.7975584Z [36;1m      throw "configured GoogleTest discovery is incomplete: $target/$kind"[0m
+2026-10-15T15:00:56.7976006Z [36;1m    }[0m
+2026-10-15T15:00:56.7976233Z [36;1m  }[0m
+2026-10-15T15:00:56.7976448Z [36;1m}[0m
+2026-10-15T15:00:56.7976742Z [36;1m$registrationFiles += @(Get-Item -LiteralPath @([0m
+2026-10-15T15:00:56.7977265Z [36;1m  "bin/windows-msvc/CTestTestfile.cmake", "bin/windows-msvc/cmake_install.cmake",[0m
+2026-10-15T15:00:56.7977795Z [36;1m  "bin/windows-msvc/tests/evidence_governance.cmake",[0m
+2026-10-15T15:00:56.7978268Z [36;1m  "bin/windows-msvc/tests/alignment_receipt_integrity.cmake",[0m
+2026-10-15T15:00:56.7978730Z [36;1m  "bin/windows-msvc/tests/volume_initialization.cmake",[0m
+2026-10-15T15:00:56.7979154Z [36;1m  "bin/windows-msvc/verify_sirius_install.cmake",[0m
+2026-10-15T15:00:56.7979578Z [36;1m  "bin/windows-msvc/tests/source-governance-ctest.json",[0m
+2026-10-15T15:00:56.7980028Z [36;1m  "tests/operational/required_skip_rejection.cmake",[0m
+2026-10-15T15:00:56.7980580Z [36;1m  "tests/operational/vulkan_runtime_profile.cmake", "tests/operational/p1_burn_in.cmake"))[0m
+2026-10-15T15:00:56.7981064Z [36;1m$configuredRoots = @{}[0m
+2026-10-15T15:00:56.7981712Z [36;1mforeach ($key in @("CMAKE_HOME_DIRECTORY", "CMAKE_CACHEFILE_DIR", "CMAKE_COMMAND", "CMAKE_CTEST_COMMAND", "CMAKE_ROOT", "_Python3_EXECUTABLE")) {[0m
+2026-10-15T15:00:56.7982946Z [36;1m  $entry = [regex]::Match($cache, "(?m)^${key}:[^=]+=(.+?)\r?$")[0m
+2026-10-15T15:00:56.7983501Z [36;1m  if (-not $entry.Success) { throw "configured root/tool is absent: $key" }[0m
+2026-10-15T15:00:56.7983995Z [36;1m  $configuredRoots[$key] = $entry.Groups[1].Value[0m
+2026-10-15T15:00:56.7984337Z [36;1m}[0m
+2026-10-15T15:00:56.7984739Z [36;1mif ([IO.Path]::GetFullPath($configuredRoots.CMAKE_HOME_DIRECTORY) -ne $PWD.Path -or[0m
+2026-10-15T15:00:56.7985475Z [36;1m    [IO.Path]::GetFullPath($configuredRoots.CMAKE_CACHEFILE_DIR) -ne (Resolve-Path "bin/windows-msvc").Path) {[0m
+2026-10-15T15:00:56.7986216Z [36;1m  throw "configured registration roots differ from the exported checkout/build"[0m
+2026-10-15T15:00:56.7986664Z [36;1m}[0m
+2026-10-15T15:00:56.7986903Z [36;1m$configuredTools = @{}[0m
+2026-10-15T15:00:56.7987391Z [36;1mforeach ($key in @("CMAKE_COMMAND", "CMAKE_CTEST_COMMAND", "_Python3_EXECUTABLE")) {[0m
+2026-10-15T15:00:56.7988009Z [36;1m  $tool = Get-Item -LiteralPath $configuredRoots[$key][0m
+2026-10-15T15:00:56.7988818Z [36;1m  $configuredTools[$key] = @{ path = $tool.FullName; bytes = $tool.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $tool.FullName).Hash.ToLowerInvariant() }[0m
+2026-10-15T15:00:56.7989549Z [36;1m}[0m
+2026-10-15T15:00:56.7991164Z [36;1m$registration = @{ schema = "sirius-windows-configured-mandatory-registration-v1"; source_revision = $revision; configuration = "Release"; configured_roots = $configuredRoots; configured_tools = $configuredTools; files = @{}; execution_claimed = $false; scope = "Unmodified configured registration/install recipes and the preceding governance inventory; no Mandatory execution, qualification, or tool substitution admission." }[0m
+2026-10-15T15:00:56.7993013Z [36;1mforeach ($file in @($registrationFiles | Sort-Object -Property FullName -Unique)) {[0m
+2026-10-15T15:00:56.7993657Z [36;1m  $relative = [IO.Path]::GetRelativePath($PWD.Path, $file.FullName).Replace('\', '/')[0m
+2026-10-15T15:00:56.7994175Z [36;1m  $destination = "$registrationRoot/$relative"[0m
+2026-10-15T15:00:56.7994713Z [36;1m  New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null[0m
+2026-10-15T15:00:56.7995358Z [36;1m  Copy-Item -LiteralPath $file.FullName -Destination $destination[0m
+2026-10-15T15:00:56.7996103Z [36;1m  $identity = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant() }[0m
+2026-10-15T15:00:56.7997176Z [36;1m  if ((Get-FileHash -Algorithm SHA256 -LiteralPath $destination).Hash.ToLowerInvariant() -ne $identity.sha256) { throw "registration copy changed: $relative" }[0m
+2026-10-15T15:00:56.7997925Z [36;1m  $files[$destination] = $identity[0m
+2026-10-15T15:00:56.7998629Z [36;1m  $registration.files[$relative] = @{ source_path = $file.FullName; artifact_path = $destination; bytes = $identity.bytes; sha256 = $identity.sha256 }[0m
+2026-10-15T15:00:56.7999294Z [36;1m}[0m
+2026-10-15T15:00:56.7999666Z [36;1m$registrationMetadata = "$registrationRoot/registration-metadata.json"[0m
+2026-10-15T15:00:56.8000509Z [36;1m[IO.File]::WriteAllText((Join-Path $PWD.Path $registrationMetadata), ($registration | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))[0m
+2026-10-15T15:00:56.8001301Z [36;1m$metadataFile = Get-Item -LiteralPath $registrationMetadata[0m
+2026-10-15T15:00:56.8002146Z [36;1m$files[$registrationMetadata] = @{ bytes = $metadataFile.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $registrationMetadata).Hash.ToLowerInvariant() }[0m
+2026-10-15T15:00:56.8005088Z [36;1m$record = @{ schema = "sirius-windows-diagnostic-build-products-v1"; source_revision = $revision; repository = $env:GITHUB_REPOSITORY; run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT; msvc_version = $compilerVersion.Groups[1].Value; release_crt_version = $redistVersion; runtime_dll_origins = $origins; files = $files; diagnostic_build_only = $true; qualification_claimed = $false; scope = "Strict compiled CLI/backend-test volumes and configured CTest/install recipes only; no native runtime, rendering, UI, scientific, release or native-build attestation claim. Windows OS/UCRT and the physical graphics driver remain host dependencies." }[0m
+2026-10-15T15:00:56.8007675Z [36;1m$output = "bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json"[0m
+2026-10-15T15:00:56.8008504Z [36;1m[IO.File]::WriteAllText((Join-Path $PWD.Path $output), ($record | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))[0m
+2026-10-15T15:00:56.8049632Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T15:00:56.8050028Z env:
+2026-10-15T15:00:56.8050263Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T15:00:56.8050562Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T15:00:56.8050830Z ##[endgroup]
+2026-10-15T15:00:59.2826715Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-15T15:00:59.2827236Z with:
+2026-10-15T15:00:59.2827538Z   name: sirius-windows-diagnostic-build-products
+2026-10-15T15:00:59.2830456Z   path: bin/windows-msvc/src/sirius/app/Release/sirius.exe
+bin/windows-msvc/src/sirius/app/Release/*.dll
+bin/windows-msvc/src/sirius/app/Release/*.manifest
+bin/windows-msvc/src/sirius/app/Release/resources
+bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe
+bin/windows-msvc/tests/backend/Release/*.dll
+bin/windows-msvc/tests/backend/Release/*.manifest
+bin/windows-msvc/tests/backend/Release/resources
+bin/windows-msvc/generated/sirius/alignment_receipt.json
+bin/windows-msvc/CMakeCache.txt
+bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake
+bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json
+bin/windows-msvc/generated/sirius/windows-mandatory-registration
+
+2026-10-15T15:00:59.2833344Z   include-hidden-files: true
+2026-10-15T15:00:59.2833662Z   if-no-files-found: error
+2026-10-15T15:00:59.2833944Z   compression-level: 6
+2026-10-15T15:00:59.2834199Z   overwrite: false
+2026-10-15T15:00:59.2834438Z   archive: true
+2026-10-15T15:00:59.2834668Z env:
+2026-10-15T15:00:59.2834906Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T15:00:59.2835237Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T15:00:59.2835504Z ##[endgroup]
+2026-10-15T15:00:59.5605846Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-15T15:00:59.5610379Z The least common ancestor is D:\a\Sirius\Sirius\bin\windows-msvc. This will be the root directory of the artifact
+2026-10-15T15:00:59.5610988Z With the provided path, there will be 139 files uploaded
+2026-10-15T15:00:59.5617415Z Artifact name is valid!
+2026-10-15T15:00:59.5619409Z Root directory input is valid!
+2026-10-15T15:00:59.9230229Z Uploading artifact: sirius-windows-diagnostic-build-products.zip
+2026-10-15T15:00:59.9275469Z Beginning upload of artifact content to blob storage
+2026-10-15T15:01:01.1404630Z Uploaded bytes 8388608
+2026-10-15T15:01:01.4967790Z Uploaded bytes 16777216
+2026-10-15T15:01:01.5731811Z Uploaded bytes 25165824
+2026-10-15T15:01:01.6304927Z Uploaded bytes 33554432
+2026-10-15T15:01:02.4991589Z Uploaded bytes 41943040
+2026-10-15T15:01:03.3372854Z Uploaded bytes 50331648
+2026-10-15T15:01:03.9904331Z Uploaded bytes 57241793
+2026-10-15T15:01:04.0531216Z Finished uploading artifact content to blob storage!
+2026-10-15T15:01:04.0535662Z SHA256 digest of uploaded artifact is 3530a01ebf944fe5a206d6fb6b9251bf6fd5c8e3b744b137d8271edce3a96370
+2026-10-15T15:01:04.0538188Z Finalizing artifact upload
+2026-10-15T15:01:04.4933065Z Artifact sirius-windows-diagnostic-build-products successfully finalized. Artifact ID 11983617435
+2026-10-15T15:01:04.4933984Z Artifact sirius-windows-diagnostic-build-products has been successfully uploaded! Final size is 57241793 bytes. Artifact ID is 11983617435
+2026-10-15T15:01:04.4941775Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38754177960/artifacts/11983617435
+2026-10-15T15:01:04.5188432Z ##[group]Run cmake --build --preset windows-msvc --config Release --target RunNativeBuildEvidence -j2
+2026-10-15T15:01:04.5189251Z [36;1mcmake --build --preset windows-msvc --config Release --target RunNativeBuildEvidence -j2[0m
+2026-10-15T15:01:04.5228398Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T15:01:04.5228745Z env:
+2026-10-15T15:01:04.5228938Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T15:01:04.5229204Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T15:01:04.5229429Z ##[endgroup]
+2026-10-15T15:01:04.8531265Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T15:01:04.8826562Z 
+2026-10-15T15:01:05.1179657Z   Checking File Globs
+2026-10-15T15:01:05.2576702Z   1>Verifying test-label, operating-model, and repository-structure governance
+2026-10-15T15:01:06.4153897Z   CTest label file is up to date
+2026-10-15T15:01:07.5977055Z   operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-15T15:01:09.4558456Z   repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-15T15:01:09.5246952Z   strict qualification/release policy rejected every weakened configuration and product
+2026-10-15T15:01:17.6633243Z   escaping-copy controls: filesystem symlinks
+2026-10-15T15:01:17.6634285Z   build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-15T15:01:17.7245681Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T15:01:17.8759464Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T15:01:18.0721548Z   glfw.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\glfw\src\Release\glfw3.lib
+2026-10-15T15:01:18.1306657Z   screen.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-screen.lib
+2026-10-15T15:01:18.1343501Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T15:01:18.2815241Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T15:01:18.3415246Z   1>
+2026-10-15T15:01:18.3705885Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T15:01:18.4362041Z   dom.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-dom.lib
+2026-10-15T15:01:18.5253751Z   1>
+2026-10-15T15:01:18.5475274Z   1>
+2026-10-15T15:01:18.5766117Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T15:01:18.6279040Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T15:01:18.6410556Z   1>Staging exact qualification inputs beside sirius_backend_tests
+2026-10-15T15:01:18.7239790Z   sirius_base_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\Release\sirius_base_tests.exe
+2026-10-15T15:01:18.9581958Z   sirius_core_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\core\Release\sirius_core_tests.exe
+2026-10-15T15:01:19.3226542Z   sirius_oracle_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\oracle\Release\sirius_oracle_tests.exe
+2026-10-15T15:01:19.3897118Z   component.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-component.lib
+2026-10-15T15:01:19.4422971Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T15:01:19.5428774Z   1>Staging exact qualification inputs beside sirius_render_tests
+2026-10-15T15:01:20.2175713Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T15:01:20.3132529Z   sirius_backend_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\Release\sirius_backend_tests.exe
+2026-10-15T15:01:20.5250998Z   sirius_app_lib.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_lib.lib
+2026-10-15T15:01:20.5792767Z   sirius.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius.exe
+2026-10-15T15:01:20.5871226Z   Staging Sirius runtime resources beside the executable	Staging interactive-viewer shaders beside the executable	Staging Vulkan runtime kernels beside the executable
+2026-10-15T15:01:20.8911205Z   sirius_app_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_tests.exe
+2026-10-15T15:01:21.0467050Z   sirius_render_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_render_tests.exe
+2026-10-15T15:01:21.2479722Z   1>=== NATIVE BUILD NON-RENDER EVIDENCE GATE ===
+2026-10-15T15:02:12.4610440Z   native build gate bound 7 compiled executables and 9 products and 20 generated test inputs to 9 non-render controls
+2026-10-15T15:02:12.5011023Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+2026-10-15T15:02:12.6695205Z ##[group]Run python scripts/verify-attestation.py --record-build --domain windows-native-build --platform windows --source-revision e0db7d5970d4878a1b5418c4dc058a435f2df8e9 --source-root . --artifact bin/windows-msvc/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/windows-msvc/generated/sirius/alignment_receipt.json --native-build-gate bin/windows-msvc/generated/sirius/native_build_gate.json --native-build-gate-log bin/windows-msvc/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/windows-msvc/src/sirius/app/Release/sirius.exe --test-dir bin/windows-msvc --output attestations/windows-build.json
+2026-10-15T15:02:12.6699958Z [36;1mpython scripts/verify-attestation.py --record-build --domain windows-native-build --platform windows --source-revision e0db7d5970d4878a1b5418c4dc058a435f2df8e9 --source-root . --artifact bin/windows-msvc/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/windows-msvc/generated/sirius/alignment_receipt.json --native-build-gate bin/windows-msvc/generated/sirius/native_build_gate.json --native-build-gate-log bin/windows-msvc/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/windows-msvc/src/sirius/app/Release/sirius.exe --test-dir bin/windows-msvc --output attestations/windows-build.json[0m
+2026-10-15T15:02:12.6741557Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T15:02:12.6741899Z env:
+2026-10-15T15:02:12.6742085Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T15:02:12.6742336Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T15:02:12.6742558Z ##[endgroup]
+2026-10-15T15:02:15.5351396Z build attestation recorded and verified: attestations\windows-build.json
+2026-10-15T15:02:15.6750363Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-15T15:02:15.6750849Z with:
+2026-10-15T15:02:15.6751082Z   name: sirius-windows-native-attestation
+2026-10-15T15:02:15.6751388Z   path: attestations
+2026-10-15T15:02:15.6751617Z   if-no-files-found: warn
+2026-10-15T15:02:15.6751849Z   compression-level: 6
+2026-10-15T15:02:15.6752062Z   overwrite: false
+2026-10-15T15:02:15.6752270Z   include-hidden-files: false
+2026-10-15T15:02:15.6752496Z   archive: true
+2026-10-15T15:02:15.6752682Z env:
+2026-10-15T15:02:15.6752862Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T15:02:15.6753113Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T15:02:15.6753328Z ##[endgroup]
+2026-10-15T15:02:15.8479353Z With the provided path, there will be 40 files uploaded
+2026-10-15T15:02:15.8484496Z Artifact name is valid!
+2026-10-15T15:02:15.8486150Z Root directory input is valid!
+2026-10-15T15:02:16.2067767Z Uploading artifact: sirius-windows-native-attestation.zip
+2026-10-15T15:02:16.2111245Z Beginning upload of artifact content to blob storage
+2026-10-15T15:02:17.9420761Z Uploaded bytes 8388608
+2026-10-15T15:02:18.2911113Z Uploaded bytes 16777216
+2026-10-15T15:02:18.5242604Z Uploaded bytes 25165824
+2026-10-15T15:02:18.5273184Z Uploaded bytes 33554432
+2026-10-15T15:02:18.8305122Z Uploaded bytes 41943040
+2026-10-15T15:02:19.5900893Z Uploaded bytes 50331648
+2026-10-15T15:02:19.8132063Z Uploaded bytes 53709086
+2026-10-15T15:02:19.8764661Z Finished uploading artifact content to blob storage!
+2026-10-15T15:02:19.8768869Z SHA256 digest of uploaded artifact is 496e75c2f689c201bcddb8d91a9e39a5ede250ec9f0d17dcb2ec5950fd0533ae
+2026-10-15T15:02:19.8771570Z Finalizing artifact upload
+2026-10-15T15:02:20.2852797Z Artifact sirius-windows-native-attestation successfully finalized. Artifact ID 11983133697
+2026-10-15T15:02:20.2854248Z Artifact sirius-windows-native-attestation has been successfully uploaded! Final size is 53709086 bytes. Artifact ID is 11983133697
+2026-10-15T15:02:20.2861746Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38754177960/artifacts/11983133697
+2026-10-15T15:02:20.3159026Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-15T15:02:20.3159713Z with:
+2026-10-15T15:02:20.3160020Z   name: sirius-gate-diagnostics-integration-windows-no-render
+2026-10-15T15:02:20.3161079Z   path: bin/**/generated/sirius/*gate*.json
+bin/**/generated/sirius/*gate*.xml
+bin/**/generated/sirius/*gate*.log
+bin/**/Testing/Temporary/LastTest.log
+bin/**/Testing/Temporary/LastTestsFailed.log
+linux-tests.xml
+windows-tests.xml
+macos-tests.xml
+
+2026-10-15T15:02:20.3162045Z   if-no-files-found: ignore
+2026-10-15T15:02:20.3162287Z   compression-level: 6
+2026-10-15T15:02:20.3162509Z   overwrite: false
+2026-10-15T15:02:20.3162718Z   include-hidden-files: false
+2026-10-15T15:02:20.3162960Z   archive: true
+2026-10-15T15:02:20.3163162Z env:
+2026-10-15T15:02:20.3163347Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T15:02:20.3163613Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T15:02:20.3163835Z ##[endgroup]
+2026-10-15T15:02:21.4612631Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-15T15:02:21.4616119Z The least common ancestor is D:\a\Sirius\Sirius. This will be the root directory of the artifact
+2026-10-15T15:02:21.4616859Z With the provided path, there will be 4 files uploaded
+2026-10-15T15:02:21.4622389Z Artifact name is valid!
+2026-10-15T15:02:21.4624114Z Root directory input is valid!
+2026-10-15T15:02:21.8149832Z Uploading artifact: sirius-gate-diagnostics-integration-windows-no-render.zip
+2026-10-15T15:02:21.8194856Z Beginning upload of artifact content to blob storage
+2026-10-15T15:02:22.0674244Z Uploaded bytes 5848
+2026-10-15T15:02:22.1257413Z Finished uploading artifact content to blob storage!
+2026-10-15T15:02:22.1258799Z SHA256 digest of uploaded artifact is 94b3446b3f217bd81e79e880f1e9302f1733eddeda4d96b00c0997037ef4cb7e
+2026-10-15T15:02:22.1259764Z Finalizing artifact upload
+2026-10-15T15:02:22.5152112Z Artifact sirius-gate-diagnostics-integration-windows-no-render successfully finalized. Artifact ID 11983193665
+2026-10-15T15:02:22.5153884Z Artifact sirius-gate-diagnostics-integration-windows-no-render has been successfully uploaded! Final size is 5848 bytes. Artifact ID is 11983193665
+2026-10-15T15:02:22.5160119Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38754177960/artifacts/11983193665
+2026-10-15T15:02:22.5456979Z Post job cleanup.
+2026-10-15T15:02:22.7331027Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-10-15T15:02:22.7616665Z git version 2.56.0.windows.1
+2026-10-15T15:02:22.7690183Z Temporarily overriding HOME='D:\a\_temp\8c2ee4ce-41d2-4d8b-812d-10fbc6f9f7d4' before making global git config changes
+2026-10-15T15:02:22.7691461Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T15:02:22.7703474Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Sirius\Sirius
+2026-10-15T15:02:22.8017019Z Removing SSH command configuration
+2026-10-15T15:02:22.8027515Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T15:02:22.8338567Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-10-15T15:02:23.2996278Z Removing HTTP extra header
+2026-10-15T15:02:23.3005658Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T15:02:23.3298580Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-10-15T15:02:23.7695513Z Removing includeIf entries pointing to credentials config files
+2026-10-15T15:02:23.7706493Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T15:02:23.7961322Z includeif.gitdir:D:/a/Sirius/Sirius/.git.path
+2026-10-15T15:02:23.7961928Z includeif.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path
+2026-10-15T15:02:23.7962609Z includeif.gitdir:/github/workspace/.git.path
+2026-10-15T15:02:23.7963096Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-15T15:02:23.7990963Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/Sirius/Sirius/.git.path
+2026-10-15T15:02:23.8243179Z D:\a\_temp\git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config
+2026-10-15T15:02:23.8276725Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/Sirius/Sirius/.git.path D\:\\a\\_temp\\git\-credentials\-46b47b7c\-af85\-4ca4\-bde1\-25ba8fabcbd9\.config
+2026-10-15T15:02:23.8607655Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path
+2026-10-15T15:02:23.8854474Z D:\a\_temp\git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config
+2026-10-15T15:02:23.8885149Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-46b47b7c\-af85\-4ca4\-bde1\-25ba8fabcbd9\.config
+2026-10-15T15:02:23.9161126Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-15T15:02:23.9407994Z /github/runner_temp/git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config
+2026-10-15T15:02:23.9438059Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-46b47b7c\-af85\-4ca4\-bde1\-25ba8fabcbd9\.config
+2026-10-15T15:02:23.9725490Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-15T15:02:23.9989452Z /github/runner_temp/git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config
+2026-10-15T15:02:24.0021319Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-46b47b7c\-af85\-4ca4\-bde1\-25ba8fabcbd9\.config
+2026-10-15T15:02:24.0310044Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-15T15:02:24.4879975Z Removing credentials config 'D:\a\_temp\git-credentials-46b47b7c-af85-4ca4-bde1-25ba8fabcbd9.config'
+2026-10-15T15:02:24.5051998Z Cleaning up orphan processes
+2026-10-15T15:02:24.5268393Z Terminate orphan process: pid (4592) (vctip)
+2026-10-15T15:02:24.5334261Z Terminate orphan process: pid (7784) (MSBuild)
+2026-10-15T15:02:24.5477200Z Terminate orphan process: pid (4676) (conhost)

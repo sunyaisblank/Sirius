@@ -1,0 +1,577 @@
+{
+  "release_crt_version": "14.44.35112",
+  "run_attempt": "1",
+  "schema": "sirius-windows-diagnostic-build-products-v1",
+  "scope": "Strict compiled CLI/backend-test volumes and configured CTest/install recipes only; no native runtime, rendering, UI, scientific, release or native-build attestation claim. Windows OS/UCRT and the physical graphics driver remain host dependencies.",
+  "msvc_version": "19.44.35229.0",
+  "run_id": "38754177960",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "diagnostic_build_only": true,
+  "runtime_dll_origins": {
+    "vulkan-1.dll": "C:\\VulkanSDK\\1.4.357.0\\runtime\\x64\\vulkan-1.dll",
+    "msvcp140_2.dll": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Redist\\MSVC\\14.44.35112\\x64\\Microsoft.VC143.CRT\\msvcp140_2.dll",
+    "vcruntime140.dll": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Redist\\MSVC\\14.44.35112\\x64\\Microsoft.VC143.CRT\\vcruntime140.dll",
+    "msvcp140_atomic_wait.dll": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Redist\\MSVC\\14.44.35112\\x64\\Microsoft.VC143.CRT\\msvcp140_atomic_wait.dll",
+    "vcruntime140_1.dll": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Redist\\MSVC\\14.44.35112\\x64\\Microsoft.VC143.CRT\\vcruntime140_1.dll",
+    "msvcp140_1.dll": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Redist\\MSVC\\14.44.35112\\x64\\Microsoft.VC143.CRT\\msvcp140_1.dll",
+    "msvcp140.dll": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Redist\\MSVC\\14.44.35112\\x64\\Microsoft.VC143.CRT\\msvcp140.dll",
+    "concrt140.dll": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Redist\\MSVC\\14.44.35112\\x64\\Microsoft.VC143.CRT\\concrt140.dll",
+    "msvcp140_codecvt_ids.dll": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Redist\\MSVC\\14.44.35112\\x64\\Microsoft.VC143.CRT\\msvcp140_codecvt_ids.dll"
+  },
+  "files": {
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/lib/glfw/src/CTestTestfile.cmake": {
+      "sha256": "6a925017aef0143cf39569c7a02711c97c52dc4c81c3ec1eeb33c68daba92e37",
+      "bytes": 298
+    },
+    "bin/windows-msvc/src/sirius/app/Release/msvcp140_2.dll": {
+      "sha256": "3ea06f0ee098b4823cb79599df3780e7f23cce52c19aac31d2a0d47efe33a5e9",
+      "bytes": 280200
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "sha256": "2524459927bf743700a3e2024a73e6794a1030a09220898470604fd51d1d0bfc",
+      "bytes": 3973732
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/parity_probe_fp64.spv": {
+      "sha256": "3dbc622818259a3cbf0c2abc95efc406f48b8284bc3b0bd2ccbc7d9c2fbcc2aa",
+      "bytes": 3879216
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/parity_probe.spv": {
+      "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed",
+      "bytes": 3969508
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/app/CTestTestfile.cmake": {
+      "sha256": "2917a80abf23925b0413b261480d70b59771c9d35562ca0dd32cecef55b81f34",
+      "bytes": 332
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/googletest-build/googletest/cmake_install.cmake": {
+      "sha256": "f7c0c9a65c22c53702c2ab5daf98e677d6f3856c9806a003546432c6bf676c4b",
+      "bytes": 1366
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/lib/glfw/CTestTestfile.cmake": {
+      "sha256": "cd34d938393b944f63e908790070f8e3cced8ab4fc744c76ff2755b132bf8764",
+      "bytes": 306
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/trace_fp32comp.spv": {
+      "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d",
+      "bytes": 2997776
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39",
+      "bytes": 37728
+    },
+    "bin/windows-msvc/generated/sirius/alignment_receipt.json": {
+      "sha256": "e0c71063e683313dc2fa27a27d5aa85a635759c0d2b451ffdd10a54bba5b4b74",
+      "bytes": 1240
+    },
+    "bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe": {
+      "sha256": "20757b15af2b60d8fb7b52cb0373ba9862049f77e001e5ede9783ef61fa0b49a",
+      "bytes": 11103744
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/ftxui-build/doc/cmake_install.cmake": {
+      "sha256": "c49e3a434de1c69ece56aaed3e79673d8b64a3dd70b2f6ab62e3abfecb8d4460",
+      "bytes": 1342
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/backend/CTestTestfile.cmake": {
+      "sha256": "95731109fe89861663b72dcd98352be012c522efec9e3043778dbff082c12503",
+      "bytes": 310
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/backend/sirius_backend_tests[1]_include.cmake": {
+      "sha256": "f3e10ff4e6052e198ebcd873101ac0c4a3c570b33142bbf041dca2653b68b2f0",
+      "bytes": 292
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/core/sirius_core_tests[1]_include.cmake": {
+      "sha256": "ee78e89dd1278b715ea9ea283e06530809c835e39f8e7711e08f50e193bf903a",
+      "bytes": 274
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/lib/glfw/src/cmake_install.cmake": {
+      "sha256": "d5b99502ddc3c775db6913d945cf59697f0d4a80d15bf21db57339ef1054b7fa",
+      "bytes": 1309
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/trace_fp32comp.spv": {
+      "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d",
+      "bytes": 2997776
+    },
+    "bin/windows-msvc/src/sirius/app/Release/msvcp140.dll": {
+      "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9",
+      "bytes": 557728
+    },
+    "bin/windows-msvc/tests/backend/Release/msvcp140_codecvt_ids.dll": {
+      "sha256": "f2069a52880ec885ee7f0511186100eb7fada0411a2b4948fafea7735b878a18",
+      "bytes": 31872
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/sirius_base_tests[1]_tests.cmake": {
+      "sha256": "80343f0641f0cd2bd33465c45764b0df3bbe3fae80b1243d6c285f0ac8a0a298",
+      "bytes": 6612
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/registration-metadata.json": {
+      "sha256": "f7a6b0d604aa7a2fb646b633af05d6418e6edd12f163bb70bb374b057c4afcf9",
+      "bytes": 28670
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/backend/cmake_install.cmake": {
+      "sha256": "e07d42eeac24f9a32f4ab3c01f7099b976322e2ff0e0d30848b51309e48c228a",
+      "bytes": 1321
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1",
+      "bytes": 35196
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/backend/cmake_install.cmake": {
+      "sha256": "dc4c6488bf4222f5791a8f38f61b8995043782a79a9d578087a9122314331826",
+      "bytes": 1311
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/oracle/CTestTestfile.cmake": {
+      "sha256": "0ecaaed2ba9e20bf1f41a96a8d3f5f35edd2e9ebcb2658b3e3047d198619cfcc",
+      "bytes": 308
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/trace_fp64.spv": {
+      "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076",
+      "bytes": 2847024
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/verify_sirius_install.cmake": {
+      "sha256": "15ca7637b0ee276c4fd2a83709e9059060d06ce49109ce61b8a8475d8c0b109e",
+      "bytes": 4838
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/CTestTestfile.cmake": {
+      "sha256": "2f56df6d38d660e0d0216e5185be5be97e947d3715b5b174e0f901fe46a70225",
+      "bytes": 385
+    },
+    "bin/windows-msvc/src/sirius/app/Release/vcruntime140_1.dll": {
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f",
+      "bytes": 49792
+    },
+    "bin/windows-msvc/tests/backend/Release/vcruntime140_1.dll": {
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f",
+      "bytes": 49792
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "sha256": "2524459927bf743700a3e2024a73e6794a1030a09220898470604fd51d1d0bfc",
+      "bytes": 3973732
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551",
+      "bytes": 100568
+    },
+    "bin/windows-msvc/tests/backend/Release/vulkan-1.dll": {
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+      "bytes": 1685432
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7",
+      "bytes": 35160
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/infinity_probe.spv": {
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e",
+      "bytes": 99692
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39",
+      "bytes": 37728
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/alignment_receipt_integrity.cmake": {
+      "sha256": "7ef350a69db38867f6065d6eb64be38ad2c65cfe78d57826f1257af9e5977f4d",
+      "bytes": 10282
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/trace_fp64.spv": {
+      "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076",
+      "bytes": 2847024
+    },
+    "bin/windows-msvc/src/sirius/app/Release/vcruntime140.dll": {
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066",
+      "bytes": 124544
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/googletest-build/CTestTestfile.cmake": {
+      "sha256": "cdea0ba6f227c6232ac652be6370f42c0d6c2fb9d0542ab634dcb99cf8b8e6d4",
+      "bytes": 356
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/tests/operational/p1_burn_in.cmake": {
+      "sha256": "05739dab13c61b52d83e0596a0b0116207e7b91f591a34bb83f4a4d22abb89b0",
+      "bytes": 1188
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/metric_consistency_probe.spv": {
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "bytes": 65616
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/smoke.spv": {
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2",
+      "bytes": 1404
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/render/CTestTestfile.cmake": {
+      "sha256": "0a87fc2982cf9270189bc56a0a5f3e37e696ddf0cc6bedc2d578fa5e4131837e",
+      "bytes": 308
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/oracle/CTestTestfile.cmake": {
+      "sha256": "dad43550ca652fce6b6b6ab3f290b95422cba4b4c383893070164bc3debf3a94",
+      "bytes": 458
+    },
+    "bin/windows-msvc/src/sirius/app/Release/msvcp140_1.dll": {
+      "sha256": "bfad5aef4c63a669e3c140655cdfdf395b6c979b400a447bd5dcb65ed8826c3d",
+      "bytes": 35952
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8",
+      "bytes": 100040
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/tests/operational/required_skip_rejection.cmake": {
+      "sha256": "8ca130647983be98b52dc85543a8cc9a5e9dedb1d412b961d80bd1ac7d52b7c5",
+      "bytes": 1445
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/oracle/cmake_install.cmake": {
+      "sha256": "21d038bde410db788544cff3898283c295ec289a3f3a1dd660ec8cefbc683e3e",
+      "bytes": 1319
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "bytes": 65616
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/parity_probe_fp64.spv": {
+      "sha256": "3dbc622818259a3cbf0c2abc95efc406f48b8284bc3b0bd2ccbc7d9c2fbcc2aa",
+      "bytes": 3879216
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/smoke.spv": {
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2",
+      "bytes": 1404
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551",
+      "bytes": 100568
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/model/alignment_receipt.json": {
+      "sha256": "e0c71063e683313dc2fa27a27d5aa85a635759c0d2b451ffdd10a54bba5b4b74",
+      "bytes": 1240
+    },
+    "bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake": {
+      "sha256": "0d3430047398ee357bbf65db10906b7cf793a22dd8b02c6db6f6372d2a4db77f",
+      "bytes": 6407
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/backend/CTestTestfile.cmake": {
+      "sha256": "3fcc65eacce6232033f976729541668088912f934175332cc86fc7b37ffe7aca",
+      "bytes": 462
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/camera_frame_probe.spv": {
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "bytes": 36660
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0",
+      "bytes": 66064
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/camera_frame_probe.spv": {
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "bytes": 36660
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/app/sirius_app_tests[1]_include.cmake": {
+      "sha256": "6733c6e75e29df12c3ff42dd3223487f755040092a5f589ac12c28ca1b335a29",
+      "bytes": 268
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/source-governance-ctest.json": {
+      "sha256": "f9088fb42a6980444808e754b29cd0104137b31e89482314788ad4e9dfe14470",
+      "bytes": 1059497
+    },
+    "bin/windows-msvc/CMakeCache.txt": {
+      "sha256": "3191c8040e161a1df1aacb397100b08f952526e5e2ab00ba0aeddc253731eef7",
+      "bytes": 28668
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "bytes": 36660
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/CTestTestfile.cmake": {
+      "sha256": "ec61547cd63cbe3a63cf344c46c9e4350324aea32085bc1c2d76803e49640992",
+      "bytes": 9682
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/ftxui-build/examples/cmake_install.cmake": {
+      "sha256": "a9e1f545c8fc905d3130e97eb53cb257de47af460376981f4f639f0654724848",
+      "bytes": 1352
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/oracle/sirius_oracle_tests[1]_tests.cmake": {
+      "sha256": "46c526931ba62b24c17075ff6d6dd3e1208ac9f03a8ddcac99179deaf494cdbd",
+      "bytes": 67622
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7",
+      "bytes": 35160
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/portability/trace.cu": {
+      "sha256": "884254219fdfc88a63dd9bff2ed81977fd7fdf878f333ac9e962ea6aa78c7e6c",
+      "bytes": 655258
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/render/cmake_install.cmake": {
+      "sha256": "24bbe3814dd8c7a11523db3fabd72f5a0dab24a4641adda65cb0035580a2936f",
+      "bytes": 1309
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/cmake_install.cmake": {
+      "sha256": "4d66a8b97435e9fc2436781703b491a86e71c1aa92a1380d0def66863b7491df",
+      "bytes": 5022
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/render/cmake_install.cmake": {
+      "sha256": "9a3cafe81b834337d6ad756abbe06108af801e843d7d54e1bbbe959f5b34fd8a",
+      "bytes": 1319
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/core/cmake_install.cmake": {
+      "sha256": "bc6e6229b784a7a77e138fa12a8441f4b1f2f8f48d9c10c39878d30869b0996c",
+      "bytes": 1315
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/trace.spv": {
+      "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd",
+      "bytes": 2994452
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/trace.spv": {
+      "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd",
+      "bytes": 2994452
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/json-subbuild/cmake_install.cmake": {
+      "sha256": "7763ba0889989ee9a796b127f0f3ec4dca415810e5c4e292485794c4f24ac78b",
+      "bytes": 1975
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/googletest-subbuild/cmake_install.cmake": {
+      "sha256": "2d3573e95901b50b37647ddfbb0be432334c41b48356282b43ad3e1827b799fc",
+      "bytes": 1999
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/shaders/RDSD003A.vert": {
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de",
+      "bytes": 198
+    },
+    "bin/windows-msvc/src/sirius/app/Release/vulkan-1.dll": {
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+      "bytes": 1685432
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/portability/trace.metal": {
+      "sha256": "558d0bd7fe9aebc19b608fd6ffae992590171a162fb4b229bef2201eef2da431",
+      "bytes": 363866
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/core/CTestTestfile.cmake": {
+      "sha256": "2a4c51f1c4e711660b056cde1dff86a2eb8cdbad9663624b6f89bcb588b7bf40",
+      "bytes": 450
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/sirius_base_tests[1]_include.cmake": {
+      "sha256": "f51c7ee964db7ebbb8bc18208c57b6b5296f59e2e0a197aefcb075cef6ef73a2",
+      "bytes": 264
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/volume_initialization.cmake": {
+      "sha256": "4ba49204d509bbad04ebd12a357f92c4f25151d50922604aeb246decee8eb373",
+      "bytes": 12159
+    },
+    "bin/windows-msvc/tests/backend/Release/msvcp140_atomic_wait.dll": {
+      "sha256": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479",
+      "bytes": 50304
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/googletest-build/cmake_install.cmake": {
+      "sha256": "5dc04206cb887325bf1f3056c386a860c7b13283feda305b11bdc651b028b918",
+      "bytes": 1550
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e",
+      "bytes": 4182444
+    },
+    "bin/windows-msvc/tests/backend/Release/msvcp140.dll": {
+      "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9",
+      "bytes": 557728
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/infinity_probe.spv": {
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e",
+      "bytes": 99692
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/CTestTestfile.cmake": {
+      "sha256": "1cb693d1ae5da914965ff2110d533f2ab7c4c0a4220dd4b56f49e936d57762fe",
+      "bytes": 407
+    },
+    "bin/windows-msvc/tests/backend/Release/msvcp140_1.dll": {
+      "sha256": "bfad5aef4c63a669e3c140655cdfdf395b6c979b400a447bd5dcb65ed8826c3d",
+      "bytes": 35952
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/render/sirius_render_tests[1]_tests.cmake": {
+      "sha256": "4895ff9ded65e29e224453027aeb2bcbd888d452fd7fc77d377d9fbba32a0d06",
+      "bytes": 134706
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/core/CTestTestfile.cmake": {
+      "sha256": "e7397a6e17d683390ac799e5a95eeddf91e49a0f19257f132f677033a054edc3",
+      "bytes": 304
+    },
+    "bin/windows-msvc/tests/backend/Release/vcruntime140.dll": {
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066",
+      "bytes": 124544
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/app/cmake_install.cmake": {
+      "sha256": "b2f19a1f2d34dbd153a03291f610d470b56b106d364a55a28f1888800e47e993",
+      "bytes": 1491
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/app/CTestTestfile.cmake": {
+      "sha256": "a04388e073fab8804ead93815b4b362837259649c43525ef914177fc7daa4dd2",
+      "bytes": 446
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/oracle/cmake_install.cmake": {
+      "sha256": "fb2ebf353f662d3bd631fd7192f19b1f8d18310d1b079dd66d8e0b791766270b",
+      "bytes": 1309
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/backend/sirius_backend_tests[1]_tests.cmake": {
+      "sha256": "a986585a62b654df91b945aadef31ddce8a2e4b83606775e3cb202c2374f0535",
+      "bytes": 113675
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "bytes": 65616
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/ftxui-build/cmake_install.cmake": {
+      "sha256": "0f872152eece749c5401f4de730873303c3a03594de71b92bbc93004c5e503d4",
+      "bytes": 1625
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/portability/trace.metal": {
+      "sha256": "558d0bd7fe9aebc19b608fd6ffae992590171a162fb4b229bef2201eef2da431",
+      "bytes": 363866
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/portability/trace.cu": {
+      "sha256": "884254219fdfc88a63dd9bff2ed81977fd7fdf878f333ac9e962ea6aa78c7e6c",
+      "bytes": 655258
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/core/sirius_core_tests[1]_tests.cmake": {
+      "sha256": "c0f883ba56b4cad31308b4596e5e207b2349c0729939672c5f4d2a7d91f43148",
+      "bytes": 270028
+    },
+    "bin/windows-msvc/src/sirius/app/Release/sirius.exe": {
+      "sha256": "f4c3ac9274b351b7d604cdbf37dc277739edd4a1392a2e45eb0bee3f630138ed",
+      "bytes": 7890432
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/tests/operational/vulkan_runtime_profile.cmake": {
+      "sha256": "5262379014bd1e7d4de97b22070d0a426251453a3c5d0ed91c805a3360f8dfed",
+      "bytes": 1012
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/cmake_install.cmake": {
+      "sha256": "a5d1d5927a4e81d5ff55a5f04d9660026272a47555bdda2bc89dfc27ec04df24",
+      "bytes": 2201
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667",
+      "bytes": 1225888
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "bytes": 36660
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/ftxui-subbuild/cmake_install.cmake": {
+      "sha256": "d8ffb462f6090f5fdbbd440d75701615c43313070bbfad724a25a9ffffbe3324",
+      "bytes": 1979
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/parity_probe.spv": {
+      "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed",
+      "bytes": 3969508
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1",
+      "bytes": 35196
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/evidence_governance.cmake": {
+      "sha256": "c14ce6cc7015693f84b73429c1837f2dd8ac11c6aa96416782bf627047f67707",
+      "bytes": 2844
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/app/sirius_app_tests[1]_tests.cmake": {
+      "sha256": "2b88fb8247b5dac4fa84b455ec60597d800110aa270fc647a3b84731d9ef3395",
+      "bytes": 53119
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4",
+      "bytes": 421866
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/app/cmake_install.cmake": {
+      "sha256": "039200e038ea751bf184657041705e66110ec5f8070698af72c3b46d9bdb9fd1",
+      "bytes": 1303
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/metric_consistency_probe.spv": {
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "bytes": 65616
+    },
+    "bin/windows-msvc/src/sirius/app/Release/concrt140.dll": {
+      "sha256": "2405355f0a58067b258f8df33c327e3a3d716eaac5a3a5aebb757842d85bd376",
+      "bytes": 324208
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/src/sirius/cmake_install.cmake": {
+      "sha256": "019c7e7a4c2d48a6a64b74b8e858cc20c0e1117597401ddf590288b7689fa392",
+      "bytes": 2236
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/lib/glfw/cmake_install.cmake": {
+      "sha256": "7f1e320a0cadfb5979416e4d0318a6ad7e3d824ac77fbb37071903427ec56582",
+      "bytes": 1483
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/render/CTestTestfile.cmake": {
+      "sha256": "d85f039cf8667d7ff1c6370d6b59608fc813a445bda0de298af997416c5e460b",
+      "bytes": 458
+    },
+    "bin/windows-msvc/tests/backend/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e",
+      "bytes": 4182444
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/googletest-build/googlemock/cmake_install.cmake": {
+      "sha256": "71a8fe0779638dc15fe33b9cadb7b07232f0a47dd26c5bf6fe0bf29714365b23",
+      "bytes": 1572
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/core/cmake_install.cmake": {
+      "sha256": "e22a9534e8b059a18ea484d73b1040070363d3cb29df3082f47c34fb4e81f5bf",
+      "bytes": 1305
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/shaders/RDSD003A.frag": {
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c",
+      "bytes": 1167
+    },
+    "bin/windows-msvc/tests/backend/Release/msvcp140_2.dll": {
+      "sha256": "3ea06f0ee098b4823cb79599df3780e7f23cce52c19aac31d2a0d47efe33a5e9",
+      "bytes": 280200
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/oracle/sirius_oracle_tests[1]_include.cmake": {
+      "sha256": "d833fe918b23ab7a01f6f7f36fb26e4a95840e949252f6257e0cfbe7d396ad93",
+      "bytes": 286
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/assets/Starfield.png": {
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c",
+      "bytes": 29984397
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/googletest-build/googletest/CTestTestfile.cmake": {
+      "sha256": "2e5a0ced5a5aa1683ef314258e00285e22a204255612b209344d037aca9f5c9c",
+      "bytes": 355
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4",
+      "bytes": 421866
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/tests/render/sirius_render_tests[1]_include.cmake": {
+      "sha256": "5a70953e3814e1e605ccd2f5f5acaac1c1d900f5ae82b0b381c20be11a0ed186",
+      "bytes": 286
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/googletest-build/googlemock/CTestTestfile.cmake": {
+      "sha256": "f5546947c5a229aeae085e08e0dd6ed2d6c4587019029fda58b39c00855b1378",
+      "bytes": 381
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8",
+      "bytes": 100040
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667",
+      "bytes": 1225888
+    },
+    "bin/windows-msvc/tests/backend/Release/concrt140.dll": {
+      "sha256": "2405355f0a58067b258f8df33c327e3a3d716eaac5a3a5aebb757842d85bd376",
+      "bytes": 324208
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/model/operating_model.json": {
+      "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781",
+      "bytes": 130827
+    },
+    "bin/windows-msvc/src/sirius/app/Release/msvcp140_atomic_wait.dll": {
+      "sha256": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479",
+      "bytes": 50304
+    },
+    "bin/windows-msvc/src/sirius/app/Release/msvcp140_codecvt_ids.dll": {
+      "sha256": "f2069a52880ec885ee7f0511186100eb7fada0411a2b4948fafea7735b878a18",
+      "bytes": 31872
+    },
+    "bin/windows-msvc/src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0",
+      "bytes": 66064
+    },
+    "bin/windows-msvc/generated/sirius/windows-mandatory-registration/bin/windows-msvc/_deps/json-build/cmake_install.cmake": {
+      "sha256": "80044695312ccb1cb1341bdb1e20700d16d64a5df92665d047433ccad08f36e8",
+      "bytes": 1332
+    }
+  },
+  "repository": "sunyaisblank/Sirius",
+  "qualification_claimed": false
+}

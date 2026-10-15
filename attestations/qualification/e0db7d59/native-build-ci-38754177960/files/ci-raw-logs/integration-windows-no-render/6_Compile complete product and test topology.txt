@@ -1,0 +1,490 @@
+﻿2026-10-15T14:46:44.1913346Z ##[group]Run cmake --build --preset windows-msvc --config Release --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j2
+2026-10-15T14:46:44.1915146Z [36;1mcmake --build --preset windows-msvc --config Release --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j2[0m
+2026-10-15T14:46:44.1956609Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T14:46:44.1956969Z env:
+2026-10-15T14:46:44.1957173Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T14:46:44.1957424Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T14:46:44.1957654Z ##[endgroup]
+2026-10-15T14:46:44.5261926Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:46:44.5551628Z 
+2026-10-15T14:46:44.7946358Z   Checking File Globs
+2026-10-15T14:46:44.9250776Z   1>Checking Build System
+2026-10-15T14:46:45.0280111Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T14:46:45.2020204Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T14:46:45.2413889Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+2026-10-15T14:46:45.3532550Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:46:45.3825545Z 
+2026-10-15T14:46:45.5935665Z   Checking File Globs
+2026-10-15T14:46:45.7694923Z   1>Verifying test-label, operating-model, and repository-structure governance
+2026-10-15T14:46:46.9264920Z   CTest label file is up to date
+2026-10-15T14:46:48.1192274Z   operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-15T14:46:49.9957641Z   repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-15T14:46:50.0690420Z   strict qualification/release policy rejected every weakened configuration and product
+2026-10-15T14:46:58.6591892Z   escaping-copy controls: filesystem symlinks
+2026-10-15T14:46:58.6592428Z   build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-15T14:46:58.7110512Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+2026-10-15T14:46:58.8228912Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:46:58.8521497Z 
+2026-10-15T14:46:59.0592570Z   Checking File Globs
+2026-10-15T14:46:59.3740892Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/ftxui-src/CMakeLists.txt
+2026-10-15T14:46:59.5418732Z   box.cpp
+2026-10-15T14:46:59.5678070Z   Building Custom Rule D:/a/Sirius/Sirius/lib/glfw/src/CMakeLists.txt
+2026-10-15T14:46:59.6545539Z   context.c
+2026-10-15T14:46:59.7143950Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T14:46:59.8693588Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T14:47:01.0231293Z   1>Compiling camera_frame_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:01.0232792Z   3>Compiling metric_consistency_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:01.0411740Z   color.cpp
+2026-10-15T14:47:01.5306397Z   init.c
+2026-10-15T14:47:01.9068240Z   warning[E41018]: returning without initializing out parameter
+2026-10-15T14:47:01.9546172Z   color_info.cpp
+2026-10-15T14:47:01.9665036Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T14:47:01.9860907Z       |
+2026-10-15T14:47:02.1491835Z   input.c
+2026-10-15T14:47:02.1582027Z   276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T14:47:02.2486962Z       |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T14:47:02.2513517Z   ----'
+2026-10-15T14:47:02.2523263Z   warning[E41035]: possible use of uninitialized variable
+2026-10-15T14:47:02.2528533Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T14:47:02.2534428Z       |
+2026-10-15T14:47:02.2539775Z   375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T14:47:02.2545554Z       |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T14:47:02.2550068Z   ----'
+2026-10-15T14:47:02.3116701Z   monitor.c
+2026-10-15T14:47:02.3543144Z   1>Compiling camera_frame_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:02.3545094Z   3>Compiling metric_consistency_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:02.5867020Z   platform.c
+2026-10-15T14:47:02.5961914Z   screen.cpp
+2026-10-15T14:47:02.8460071Z   vulkan.c
+2026-10-15T14:47:03.1287870Z   window.c
+2026-10-15T14:47:03.4102696Z   egl_context.c
+2026-10-15T14:47:03.5140393Z   1>Compiling camera_frame_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:03.6968187Z   osmesa_context.c
+2026-10-15T14:47:03.7071231Z   warning[E41018]: returning without initializing out parameter
+2026-10-15T14:47:03.7239196Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T14:47:03.8273231Z       |
+2026-10-15T14:47:03.9423459Z   276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T14:47:03.9770008Z       |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T14:47:03.9922909Z   null_init.c
+2026-10-15T14:47:04.1454906Z   ----'
+2026-10-15T14:47:04.1763314Z   warning[E41035]: possible use of uninitialized variable
+2026-10-15T14:47:04.1919306Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T14:47:04.1950933Z       |
+2026-10-15T14:47:04.1956688Z   375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T14:47:04.1960239Z       |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T14:47:04.1966303Z   ----'
+2026-10-15T14:47:04.2387829Z   3>Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)
+2026-10-15T14:47:04.3338937Z   null_monitor.c
+2026-10-15T14:47:04.4957457Z   string.cpp
+2026-10-15T14:47:04.5532659Z   null_window.c
+2026-10-15T14:47:04.7793089Z   null_joystick.c
+2026-10-15T14:47:05.0139026Z   win32_module.c
+2026-10-15T14:47:05.1201981Z   terminal.cpp
+2026-10-15T14:47:05.2869062Z   win32_time.c
+2026-10-15T14:47:05.4903615Z   1>Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:05.6829521Z   win32_thread.c
+2026-10-15T14:47:05.8181377Z   warning[E41018]: returning without initializing out parameter
+2026-10-15T14:47:05.8974337Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T14:47:05.9754948Z       |
+2026-10-15T14:47:06.0140813Z   Generating Code...
+2026-10-15T14:47:06.0147163Z   276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T14:47:06.0687477Z   win32_init.c
+2026-10-15T14:47:06.1299559Z       |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T14:47:06.1339773Z   ----'
+2026-10-15T14:47:06.1349412Z   warning[E41035]: possible use of uninitialized variable
+2026-10-15T14:47:06.1352209Z      --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T14:47:06.1367909Z       |
+2026-10-15T14:47:06.1384965Z   375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T14:47:06.1724663Z       |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T14:47:06.2381039Z   ----'
+2026-10-15T14:47:06.2496117Z   win32_joystick.c
+2026-10-15T14:47:06.8047899Z   win32_monitor.c
+2026-10-15T14:47:07.5699157Z   win32_window.c
+2026-10-15T14:47:07.9915869Z   Generating Code...
+2026-10-15T14:47:09.1336090Z   Compiling...
+2026-10-15T14:47:09.2197757Z   wgl_context.c
+2026-10-15T14:47:09.4156013Z   Generating Code...
+2026-10-15T14:47:09.5954512Z   screen.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-screen.lib
+2026-10-15T14:47:10.0100774Z   glfw.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\glfw\src\Release\glfw3.lib
+2026-10-15T14:47:10.4126473Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/CMakeLists.txt
+2026-10-15T14:47:10.5083526Z   2>Compiling infinity_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:10.5260837Z   2>Compiling infinity_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:10.5471023Z   2>Compiling infinity_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:10.5675829Z   2>Compiling metric_consistency_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:10.6142722Z   contracts.cpp
+2026-10-15T14:47:10.9486327Z   resource_locator.cpp
+2026-10-15T14:47:13.7148764Z   4>Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:15.1887477Z   Generating Code...
+2026-10-15T14:47:16.0581303Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:47:16.1151298Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/core/CMakeLists.txt
+2026-10-15T14:47:16.2516354Z   tensor.cpp
+2026-10-15T14:47:16.9351930Z   geodesic_integrator.cpp
+2026-10-15T14:47:18.0344003Z   Generating Code...
+2026-10-15T14:47:20.0830674Z   2>Compiling Slang kernel trace.slang -> SPIR-V (+spirv-val)
+2026-10-15T14:47:24.8320557Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:47:24.8898910Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt
+2026-10-15T14:47:24.9969945Z   geodesic_tracer.cpp
+2026-10-15T14:47:29.1503678Z   2>Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:29.2902516Z   4>Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)
+2026-10-15T14:47:30.2815595Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T14:47:30.8428374Z   4>Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)
+2026-10-15T14:47:32.2053447Z   4>Compiling Slang kernel smoke.slang -> SPIR-V (+spirv-val)
+2026-10-15T14:47:32.8167780Z   3>Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:40.2806752Z   2>Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)
+2026-10-15T14:47:49.7779669Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt
+2026-10-15T14:47:49.8538041Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/ftxui-src/CMakeLists.txt
+2026-10-15T14:47:49.9904447Z   automerge.cpp
+2026-10-15T14:47:49.9958611Z   1>Building bounded retained camera and joint transport stages
+2026-10-15T14:47:50.4869191Z   blink.cpp
+2026-10-15T14:47:50.9521072Z   bold.cpp
+2026-10-15T14:47:51.4183463Z   hyperlink.cpp
+2026-10-15T14:47:51.9257834Z   border.cpp
+2026-10-15T14:47:52.5659915Z   box_helper.cpp
+2026-10-15T14:47:52.7949821Z   canvas.cpp
+2026-10-15T14:47:53.5530305Z   clear_under.cpp
+2026-10-15T14:47:54.1031409Z   color.cpp
+2026-10-15T14:47:54.6312617Z   composite_decorator.cpp
+2026-10-15T14:47:55.1521648Z   dbox.cpp
+2026-10-15T14:47:55.6653945Z   dim.cpp
+2026-10-15T14:47:56.1513887Z   flex.cpp
+2026-10-15T14:47:56.6814951Z   flexbox.cpp
+2026-10-15T14:47:57.1900959Z   flexbox_config.cpp
+2026-10-15T14:47:57.2051345Z   flexbox_helper.cpp
+2026-10-15T14:47:57.5619555Z   focus.cpp
+2026-10-15T14:47:58.0482546Z   frame.cpp
+2026-10-15T14:47:58.2468831Z   Camera 5292 instructions; 613 registers; [47720, 61048, 512324, 512324] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:47:58.5861649Z   gauge.cpp
+2026-10-15T14:47:59.1172156Z   graph.cpp
+2026-10-15T14:47:59.6297113Z   Generating Code...
+2026-10-15T14:48:02.5779194Z   Compiling...
+2026-10-15T14:48:02.5779632Z   gridbox.cpp
+2026-10-15T14:48:03.0805243Z   hbox.cpp
+2026-10-15T14:48:03.5863940Z   inverted.cpp
+2026-10-15T14:48:04.0641552Z   linear_gradient.cpp
+2026-10-15T14:48:04.1572999Z   Transport optional FMA32: validated
+2026-10-15T14:48:04.1574231Z   Transport 2587 instructions; 459 registers; [85364, 98008, 99740, 99740] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:04.7366495Z   node.cpp
+2026-10-15T14:48:05.0767074Z   node_decorator.cpp
+2026-10-15T14:48:05.5873390Z   paragraph.cpp
+2026-10-15T14:48:06.2661628Z   reflect.cpp
+2026-10-15T14:48:06.7750699Z   scroll_indicator.cpp
+2026-10-15T14:48:07.2696257Z   separator.cpp
+2026-10-15T14:48:07.7856443Z   size.cpp
+2026-10-15T14:48:08.3137469Z   spinner.cpp
+2026-10-15T14:48:08.8433856Z   strikethrough.cpp
+2026-10-15T14:48:09.3443217Z   table.cpp
+2026-10-15T14:48:09.7961767Z   Endpoint optional FMA32: validated
+2026-10-15T14:48:09.7962901Z   Endpoint 2205 instructions; 612 registers; [99300, 111960, 145344, 145344] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:09.9430073Z   text.cpp
+2026-10-15T14:48:10.4583300Z   underlined.cpp
+2026-10-15T14:48:10.9545551Z   underlined_double.cpp
+2026-10-15T14:48:11.4175414Z   util.cpp
+2026-10-15T14:48:11.9478395Z   vbox.cpp
+2026-10-15T14:48:12.4769609Z   Generating Code...
+2026-10-15T14:48:12.5446349Z   Dense 6345 instructions; 815 registers; [77952, 90628, 116204, 116204] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:15.7562604Z   Initialize 1961 instructions; 362 registers; [57108, 70468, 77444, 77444] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:22.1220797Z   RayCamera 6115 instructions; 660 registers; [45368, 58728, 475256, 475256] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:24.9715126Z   DopriPhase 2088 instructions; 629 registers; [58740, 72100, 92844, 92844] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T14:48:25.0711966Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt
+2026-10-15T14:48:25.1862910Z   dom.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-dom.lib
+2026-10-15T14:48:25.2771474Z   vulkan_device.cpp
+2026-10-15T14:48:25.2846957Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/ftxui-src/CMakeLists.txt
+2026-10-15T14:48:25.3693461Z   animation.cpp
+2026-10-15T14:48:25.9366242Z   button.cpp
+2026-10-15T14:48:26.8398625Z   catch_event.cpp
+2026-10-15T14:48:27.5145223Z   checkbox.cpp
+2026-10-15T14:48:28.2991461Z   collapsible.cpp
+2026-10-15T14:48:28.3439711Z   retained_compute.cpp
+2026-10-15T14:48:29.0445239Z   component.cpp
+2026-10-15T14:48:29.9201955Z   component_options.cpp
+2026-10-15T14:48:30.6684576Z   container.cpp
+2026-10-15T14:48:31.4431301Z   dropdown.cpp
+2026-10-15T14:48:32.1782388Z   event.cpp
+2026-10-15T14:48:32.5515953Z   hoverable.cpp
+2026-10-15T14:48:33.5095540Z   input.cpp
+2026-10-15T14:48:34.4346279Z   loop.cpp
+2026-10-15T14:48:35.1851765Z   maybe.cpp
+2026-10-15T14:48:35.4201863Z   retained_integrator.cpp
+2026-10-15T14:48:35.8540387Z   menu.cpp
+2026-10-15T14:48:36.9066691Z   modal.cpp
+2026-10-15T14:48:37.5368812Z   radiobox.cpp
+2026-10-15T14:48:37.8808737Z   retained_trace_executor.cpp
+2026-10-15T14:48:38.5048559Z   renderer.cpp
+2026-10-15T14:48:39.1995094Z   resizable_split.cpp
+2026-10-15T14:48:39.8925565Z   screen_interactive.cpp
+2026-10-15T14:48:41.1632457Z   Generating Code...
+2026-10-15T14:48:41.7643090Z   Generating Code...
+2026-10-15T14:48:47.4215873Z   Compiling...
+2026-10-15T14:48:47.4216311Z   slider.cpp
+2026-10-15T14:48:48.6537884Z   terminal_input_parser.cpp
+2026-10-15T14:48:50.1088909Z   util.cpp
+2026-10-15T14:48:50.8141136Z   window.cpp
+2026-10-15T14:48:51.8062116Z   Generating Code...
+2026-10-15T14:48:53.9186438Z   component.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-component.lib
+2026-10-15T14:48:59.6497654Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T14:48:59.7068767Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/render/CMakeLists.txt
+2026-10-15T14:48:59.8063165Z cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj]
+2026-10-15T14:48:59.8063823Z   exr_writer.cpp
+2026-10-15T14:49:01.3543857Z   stb_impl.cpp
+2026-10-15T14:49:01.5297084Z   stb_write_impl.cpp
+2026-10-15T14:49:01.5963923Z   Generating Code...
+2026-10-15T14:49:05.0852712Z   png_writer.cpp
+2026-10-15T14:49:05.7449429Z   render_evidence.cpp
+2026-10-15T14:49:10.8773889Z   memory_governor.cpp
+2026-10-15T14:49:12.2683544Z   dispatch_governor.cpp
+2026-10-15T14:49:13.8363765Z   render_session.cpp
+2026-10-15T14:49:17.6869420Z   pixel_shading.cpp
+2026-10-15T14:49:21.0830801Z   point_source_detector.cpp
+2026-10-15T14:49:22.9476311Z   ray_work_queue.cpp
+2026-10-15T14:49:25.1136838Z   vulkan_renderer.cpp
+2026-10-15T14:49:29.1545666Z   Generating Code...
+2026-10-15T14:49:43.2670056Z cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj]
+2026-10-15T14:49:43.2694895Z   miniz.c
+2026-10-15T14:49:44.2759957Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T14:49:44.3301051Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/app/CMakeLists.txt
+2026-10-15T14:49:44.4096068Z   alignment_authority.cpp
+2026-10-15T14:49:47.9912582Z   command_router.cpp
+2026-10-15T14:49:51.7736876Z   render_command.cpp
+2026-10-15T14:49:56.5790088Z   info_command.cpp
+2026-10-15T14:50:01.2811870Z   config_command.cpp
+2026-10-15T14:50:05.1455447Z   cli_output.cpp
+2026-10-15T14:50:08.8541791Z   config_loader.cpp
+2026-10-15T14:50:12.9109682Z   session_config_adapter.cpp
+2026-10-15T14:50:17.7159814Z   platform_paths.cpp
+2026-10-15T14:50:19.5940412Z   view_command.cpp
+2026-10-15T14:50:24.3083927Z   interactive_viewer.cpp
+2026-10-15T14:50:27.4675046Z   Generating Code...
+2026-10-15T14:50:48.8289869Z cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\sirius_app_lib.vcxproj]
+2026-10-15T14:50:48.8290559Z   glad.c
+2026-10-15T14:50:49.2637855Z   sirius_app_lib.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_lib.lib
+2026-10-15T14:50:49.3238091Z   Building Custom Rule D:/a/Sirius/Sirius/src/sirius/app/CMakeLists.txt
+2026-10-15T14:50:49.3905454Z   main.cpp
+2026-10-15T14:50:53.7582401Z   sirius.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius.exe
+2026-10-15T14:50:53.7691683Z   Staging Sirius runtime resources beside the executable	Staging interactive-viewer shaders beside the executable	Staging Vulkan runtime kernels beside the executable
+2026-10-15T14:50:54.0608237Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:50:54.0905466Z 
+2026-10-15T14:50:54.2948597Z   Checking File Globs
+2026-10-15T14:50:54.5261809Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/CMakeLists.txt
+2026-10-15T14:50:54.5695650Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:50:54.6527339Z   gtest-all.cc
+2026-10-15T14:50:59.8214071Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:50:59.8748627Z   Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/CMakeLists.txt
+2026-10-15T14:50:59.9359387Z   gtest_main.cc
+2026-10-15T14:51:00.8249834Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:51:00.8755438Z   Building Custom Rule D:/a/Sirius/Sirius/tests/CMakeLists.txt
+2026-10-15T14:51:00.9721911Z   contracts_test.cpp
+2026-10-15T14:51:02.8441407Z   error_test.cpp
+2026-10-15T14:51:04.8994427Z   sha256_test.cpp
+2026-10-15T14:51:07.6957191Z   Generating Code...
+2026-10-15T14:51:10.1216257Z   sirius_base_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\Release\sirius_base_tests.exe
+2026-10-15T14:51:10.2835729Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:51:10.3123366Z 
+2026-10-15T14:51:10.5157026Z   Checking File Globs
+2026-10-15T14:51:10.7475024Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:51:10.7746019Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:51:10.8361848Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:51:10.8631326Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:51:10.9458727Z   Building Custom Rule D:/a/Sirius/Sirius/tests/core/CMakeLists.txt
+2026-10-15T14:51:11.0826222Z   autodiff_dual_test.cpp
+2026-10-15T14:51:13.0906614Z   retained_arithmetic_test.cpp
+2026-10-15T14:51:15.3733834Z   dopri_segment_test.cpp
+2026-10-15T14:51:17.4415126Z   blackbody_planck_test.cpp
+2026-10-15T14:51:19.5113091Z   cpu_geodesic_reference_test.cpp
+2026-10-15T14:51:21.9792599Z   render_pipeline_integration_test.cpp
+2026-10-15T14:51:24.8038508Z   blackbody_test.cpp
+2026-10-15T14:51:26.9524419Z   camera_sampling_test.cpp
+2026-10-15T14:51:29.0123266Z   camera_film_differential_test.cpp
+2026-10-15T14:51:31.4816319Z   camera_continuous_projection_test.cpp
+2026-10-15T14:51:33.6196217Z   camera_test.cpp
+2026-10-15T14:51:35.7597356Z   cie1931_observer_authority_test.cpp
+2026-10-15T14:51:37.7163004Z   coordinates_test.cpp
+2026-10-15T14:51:39.7398377Z   geodesic_conservation_test.cpp
+2026-10-15T14:51:41.8857771Z   geodesic_determinism_test.cpp
+2026-10-15T14:51:44.0524050Z   geodesic_equation_test.cpp
+2026-10-15T14:51:45.8853716Z   geodesic_live_path_test.cpp
+2026-10-15T14:51:48.1473588Z   geodesic_naninf_test.cpp
+2026-10-15T14:51:50.3245374Z   geodesic_path_test.cpp
+2026-10-15T14:51:52.5603188Z   geodesic_stability_test.cpp
+2026-10-15T14:51:54.4165724Z   Generating Code...
+2026-10-15T14:52:11.6096664Z   Compiling...
+2026-10-15T14:52:11.6097128Z   killing_vector_conservation_test.cpp
+2026-10-15T14:52:13.7652903Z   christoffel_test.cpp
+2026-10-15T14:52:15.5975544Z   kerr_orbit_authority_test.cpp
+2026-10-15T14:52:17.7110260Z   kerr_schild_field_equation_test.cpp
+2026-10-15T14:52:19.8124291Z   horizon_authority_test.cpp
+2026-10-15T14:52:21.9449093Z   kerr_test.cpp
+2026-10-15T14:52:24.0742734Z   metric_derivative_test.cpp
+2026-10-15T14:52:26.2483997Z   metric_loader_test.cpp
+2026-10-15T14:52:28.4934515Z   metric_registry_test.cpp
+2026-10-15T14:52:30.6759117Z   morris_thorne_cartesian_test.cpp
+2026-10-15T14:52:32.8643017Z   reissner_nordstrom_test.cpp
+2026-10-15T14:52:34.9713288Z   rk45_integrator_test.cpp
+2026-10-15T14:52:37.3135489Z   schwarzschild_test.cpp
+2026-10-15T14:52:39.4215866Z   walker_penrose_test.cpp
+2026-10-15T14:52:41.6666263Z   warp_drive_test.cpp
+2026-10-15T14:52:43.7749178Z   stokes_test.cpp
+2026-10-15T14:52:45.7879805Z   tensor_inverse_test.cpp
+2026-10-15T14:52:47.8775849Z   novikov_thorne_disk_test.cpp
+2026-10-15T14:52:49.9196550Z   turbulence_test.cpp
+2026-10-15T14:52:51.8563046Z   volumetric_disk_test.cpp
+2026-10-15T14:52:53.6834936Z   Generating Code...
+2026-10-15T14:53:14.9610055Z   Compiling...
+2026-10-15T14:53:14.9610659Z   postprocess_test.cpp
+2026-10-15T14:53:16.9937356Z   srgb_transfer_authority_test.cpp
+2026-10-15T14:53:18.9485673Z   xyz_srgb_authority_test.cpp
+2026-10-15T14:53:20.9158619Z   spectral_radiance_test.cpp
+2026-10-15T14:53:22.8715426Z   starfield_test.cpp
+2026-10-15T14:53:25.3418805Z   point_source_response_test.cpp
+2026-10-15T14:53:27.9029700Z   point_source_transfer_test.cpp
+2026-10-15T14:53:30.2101083Z   source_sky_differential_test.cpp
+2026-10-15T14:53:32.3895194Z   source_sky_map_test.cpp
+2026-10-15T14:53:34.5839874Z   kerr_infinity_test.cpp
+2026-10-15T14:53:36.8664887Z   tensor_test.cpp
+2026-10-15T14:53:38.7458454Z   Generating Code...
+2026-10-15T14:53:49.1174568Z   sirius_core_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\core\Release\sirius_core_tests.exe
+2026-10-15T14:53:49.4759182Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:53:49.5067485Z 
+2026-10-15T14:53:49.7303170Z   Checking File Globs
+2026-10-15T14:53:49.9590923Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:53:49.9942678Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:53:50.0597917Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:53:50.0842101Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:53:50.1746540Z   Building Custom Rule D:/a/Sirius/Sirius/tests/oracle/CMakeLists.txt
+2026-10-15T14:53:50.2836753Z   analytic_benchmarks_test.cpp
+2026-10-15T14:53:52.3760110Z   analytic_solutions_test.cpp
+2026-10-15T14:53:54.5531694Z   metric_invariants_test.cpp
+2026-10-15T14:53:56.8781147Z   polarisation_transport_test.cpp
+2026-10-15T14:53:58.9556097Z   transport_types_test.cpp
+2026-10-15T14:54:00.9053120Z   kerr_metric_test.cpp
+2026-10-15T14:54:03.1485493Z   symplectic_integrator_test.cpp
+2026-10-15T14:54:05.1956475Z   beam_propagation_test.cpp
+2026-10-15T14:54:07.2118730Z   Generating Code...
+2026-10-15T14:54:15.8760045Z   sirius_oracle_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\oracle\Release\sirius_oracle_tests.exe
+2026-10-15T14:54:16.0890640Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:54:16.1206617Z 
+2026-10-15T14:54:16.3603893Z   Checking File Globs
+2026-10-15T14:54:16.5301042Z   1>Generating independent exact binary32 arithmetic expectations
+2026-10-15T14:54:18.7112959Z   {"bytes": 4182444, "categories": {"primitive/declared-halfway-boundary": 24, "primitive/edge-cross": 38332, "primitive/raw-fixed-seed": 28672, "primitive/subnormal-fixed-seed": 28672, "primitive/unary-edge": 468, "primitive/unary-fixed-seed": 24576, "residual/analytic-selfcheck": 16, "residual/bounded-raw-fixed-seed": 16384, "residual/edge-cross": 4356, "residual/product-rounding-boundaries": 8192, "residual/scaled-mantissa-fixed-seed": 16384, "residual/subnormal-input-fixed-seed": 8192}, "fixture_sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e", "magic": "PB32", "negative_zero_residuals": 9635, "nonzero_rounded_residuals": 31239, "primitive_cases": 120744, "records": 174268, "residual_cases": 53524, "subnormal_residuals": 5517, "version": 1}
+2026-10-15T14:54:18.7522840Z   Building Custom Rule D:/a/Sirius/Sirius/tests/backend/CMakeLists.txt
+2026-10-15T14:54:18.8103573Z   1>Building bounded retained camera program and independent witnesses
+2026-10-15T14:54:19.4458756Z   program_camera_probe-fp32: compiled and validated
+2026-10-15T14:54:19.8582654Z   program_camera_probe-fp32comp: compiled and validated
+2026-10-15T14:54:19.9015510Z   Building Custom Rule D:/a/Sirius/Sirius/tests/backend/CMakeLists.txt
+2026-10-15T14:54:19.9818727Z   1>
+2026-10-15T14:54:20.0377997Z   1>Staging exact qualification inputs beside sirius_backend_tests
+2026-10-15T14:54:20.7029086Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+2026-10-15T14:54:20.8931029Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:54:20.9170880Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:54:21.0135105Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:54:21.0374536Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:54:21.0994088Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T14:54:21.1173658Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T14:54:21.2155538Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T14:54:21.3045183Z   Building Custom Rule D:/a/Sirius/Sirius/tests/backend/CMakeLists.txt
+2026-10-15T14:54:21.3927880Z   portable_binary32_test.cpp
+2026-10-15T14:54:24.0754538Z   cpu_jacobi_oracle_test.cpp
+2026-10-15T14:54:26.6037968Z   cpu_trace_boundary_test.cpp
+2026-10-15T14:54:29.4165939Z   coupled_transport_test.cpp
+2026-10-15T14:54:32.0741607Z   full_path_acceptance_test.cpp
+2026-10-15T14:54:36.2083385Z   polarisation_acceptance_test.cpp
+2026-10-15T14:54:39.0742991Z   source_sky_map_trace_test.cpp
+2026-10-15T14:54:41.5887411Z   source_sky_infinity_trace_test.cpp
+2026-10-15T14:54:44.3576940Z   volume_acceptance_test.cpp
+2026-10-15T14:54:47.9578690Z   vulkan_smoke_test.cpp
+2026-10-15T14:54:51.8540251Z   kernel_parity_test.cpp
+2026-10-15T14:54:55.8523193Z   kernel_metric_consistency_test.cpp
+2026-10-15T14:54:59.1417867Z   kernel_camera_frame_test.cpp
+2026-10-15T14:55:02.5239705Z   retained_camera_program_test.cpp
+2026-10-15T14:55:05.7405515Z   retained_compute_test.cpp
+2026-10-15T14:55:17.6172535Z   retained_dopri_test.cpp
+2026-10-15T14:55:22.3454045Z   kernel_infinity_test.cpp
+2026-10-15T14:55:25.8878562Z   kernel_trace_test.cpp
+2026-10-15T14:55:29.5722839Z   kernel_beam_test.cpp
+2026-10-15T14:55:32.9961293Z   kernel_portability_test.cpp
+2026-10-15T14:55:35.6100352Z   Generating Code...
+2026-10-15T14:56:59.2951663Z   sirius_backend_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\Release\sirius_backend_tests.exe
+2026-10-15T14:56:59.5367576Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:56:59.5657006Z 
+2026-10-15T14:56:59.7778785Z   Checking File Globs
+2026-10-15T14:57:00.0405067Z   glfw.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\glfw\src\Release\glfw3.lib
+2026-10-15T14:57:00.0801839Z   screen.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-screen.lib
+2026-10-15T14:57:00.1039948Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:57:00.2482963Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T14:57:00.3278212Z   1>
+2026-10-15T14:57:00.4078131Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T14:57:00.4293918Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:57:00.5148753Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:57:00.5428226Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:57:00.5895276Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T14:57:00.5925492Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T14:57:00.6733229Z   dom.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-dom.lib
+2026-10-15T14:57:00.7248541Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T14:57:00.7784922Z   component.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-component.lib
+2026-10-15T14:57:00.8501234Z   sirius_app_lib.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_lib.lib
+2026-10-15T14:57:00.9204920Z   sirius.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius.exe
+2026-10-15T14:57:00.9376999Z   Staging Sirius runtime resources beside the executable	Staging interactive-viewer shaders beside the executable	Staging Vulkan runtime kernels beside the executable
+2026-10-15T14:57:01.1791236Z   Building Custom Rule D:/a/Sirius/Sirius/tests/app/CMakeLists.txt
+2026-10-15T14:57:01.2585007Z   alignment_authority_test.cpp
+2026-10-15T14:57:05.3730733Z   config_validation_test.cpp
+2026-10-15T14:57:10.7119220Z   config_environment_test.cpp
+2026-10-15T14:57:15.0139894Z   config_schema_roundtrip_test.cpp
+2026-10-15T14:57:19.5938458Z   render_command_parse_test.cpp
+2026-10-15T14:57:24.9160658Z   session_config_adapter_test.cpp
+2026-10-15T14:57:30.2989952Z   platform_paths_test.cpp
+2026-10-15T14:57:32.9167269Z   config_loading_test.cpp
+2026-10-15T14:57:38.1431049Z   command_router_test.cpp
+2026-10-15T14:57:42.2421191Z   viewer_display_contract_test.cpp
+2026-10-15T14:57:45.1237348Z   Generating Code...
+2026-10-15T14:58:01.8310599Z   sirius_app_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_tests.exe
+2026-10-15T14:58:02.0286227Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T14:58:02.0591807Z 
+2026-10-15T14:58:02.2927320Z   Checking File Globs
+2026-10-15T14:58:02.4417104Z   1>
+2026-10-15T14:58:02.4831965Z   1>
+2026-10-15T14:58:02.5386585Z   1>
+2026-10-15T14:58:02.5904833Z   1>Staging exact qualification inputs beside sirius_render_tests
+2026-10-15T14:58:03.2244405Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+2026-10-15T14:58:03.3772354Z   screen.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-screen.lib
+2026-10-15T14:58:03.4472551Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T14:58:03.4770604Z   glfw.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\glfw\src\Release\glfw3.lib
+2026-10-15T14:58:03.5964284Z   dom.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-dom.lib
+2026-10-15T14:58:03.6477769Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T14:58:03.6540812Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T14:58:03.7517282Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T14:58:03.8332490Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T14:58:03.8479192Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T14:58:03.8895062Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T14:58:03.9732731Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T14:58:04.0291372Z   component.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-component.lib
+2026-10-15T14:58:04.0808062Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T14:58:04.1467191Z   sirius_app_lib.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_lib.lib
+2026-10-15T14:58:04.2188599Z   sirius.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius.exe
+2026-10-15T14:58:04.2319430Z   Staging Sirius runtime resources beside the executable	Staging interactive-viewer shaders beside the executable	Staging Vulkan runtime kernels beside the executable
+2026-10-15T14:58:04.4735839Z   Building Custom Rule D:/a/Sirius/Sirius/tests/render/CMakeLists.txt
+2026-10-15T14:58:04.5646134Z   alcubierre_acceptance_test.cpp
+2026-10-15T14:58:08.3642175Z   app_render_execution_test.cpp
+2026-10-15T14:58:14.2126608Z   geodesic_tracer_test.cpp
+2026-10-15T14:58:17.3271810Z   exr_writer_test.cpp
+2026-10-15T14:58:20.0542607Z   png_writer_test.cpp
+2026-10-15T14:58:22.7393995Z   film_pipeline_test.cpp
+2026-10-15T14:58:24.7857878Z   spectral_emission_test.cpp
+2026-10-15T14:58:26.8146478Z   render_session_probe_test.cpp
+2026-10-15T14:58:32.9002659Z   tile_scheduler_test.cpp
+2026-10-15T14:58:35.0527972Z   progress_tracker_test.cpp
+2026-10-15T14:58:37.3505768Z   render_evidence_test.cpp
+2026-10-15T14:58:42.8732251Z   memory_governor_test.cpp
+2026-10-15T14:58:45.0013726Z   dispatch_governor_test.cpp
+2026-10-15T14:58:47.8889889Z   vulkan_render_test.cpp
+2026-10-15T14:58:52.9639288Z   ray_bundle_test.cpp
+2026-10-15T14:58:55.5141248Z   starfield_point_test.cpp
+2026-10-15T14:58:58.3622023Z   point_source_detector_test.cpp
+2026-10-15T14:59:01.4482604Z   point_source_detector_physics_test.cpp
+2026-10-15T14:59:05.6438894Z   ray_work_queue_test.cpp
+2026-10-15T14:59:09.1583257Z   doppler_toggle_test.cpp
+2026-10-15T14:59:11.9684814Z   Generating Code...
+2026-10-15T14:59:53.4239433Z   Compiling...
+2026-10-15T14:59:53.4240262Z   camera_aberration_test.cpp
+2026-10-15T14:59:55.4887503Z   pixel_sampling_test.cpp
+2026-10-15T14:59:57.4959421Z   shadow_boundary_test.cpp
+2026-10-15T15:00:01.2952865Z   Generating Code...
+2026-10-15T15:00:05.3894463Z   sirius_render_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_render_tests.exe

@@ -1,0 +1,46 @@
+﻿2026-10-15T15:00:59.2826636Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-15T15:00:59.2827233Z with:
+2026-10-15T15:00:59.2827535Z   name: sirius-windows-diagnostic-build-products
+2026-10-15T15:00:59.2830446Z   path: bin/windows-msvc/src/sirius/app/Release/sirius.exe
+bin/windows-msvc/src/sirius/app/Release/*.dll
+bin/windows-msvc/src/sirius/app/Release/*.manifest
+bin/windows-msvc/src/sirius/app/Release/resources
+bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe
+bin/windows-msvc/tests/backend/Release/*.dll
+bin/windows-msvc/tests/backend/Release/*.manifest
+bin/windows-msvc/tests/backend/Release/resources
+bin/windows-msvc/generated/sirius/alignment_receipt.json
+bin/windows-msvc/CMakeCache.txt
+bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake
+bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json
+bin/windows-msvc/generated/sirius/windows-mandatory-registration
+
+2026-10-15T15:00:59.2833277Z   include-hidden-files: true
+2026-10-15T15:00:59.2833659Z   if-no-files-found: error
+2026-10-15T15:00:59.2833942Z   compression-level: 6
+2026-10-15T15:00:59.2834197Z   overwrite: false
+2026-10-15T15:00:59.2834436Z   archive: true
+2026-10-15T15:00:59.2834666Z env:
+2026-10-15T15:00:59.2834903Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T15:00:59.2835208Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T15:00:59.2835502Z ##[endgroup]
+2026-10-15T15:00:59.5605811Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-15T15:00:59.5610362Z The least common ancestor is D:\a\Sirius\Sirius\bin\windows-msvc. This will be the root directory of the artifact
+2026-10-15T15:00:59.5610985Z With the provided path, there will be 139 files uploaded
+2026-10-15T15:00:59.5617398Z Artifact name is valid!
+2026-10-15T15:00:59.5619395Z Root directory input is valid!
+2026-10-15T15:00:59.9230205Z Uploading artifact: sirius-windows-diagnostic-build-products.zip
+2026-10-15T15:00:59.9275427Z Beginning upload of artifact content to blob storage
+2026-10-15T15:01:01.1404593Z Uploaded bytes 8388608
+2026-10-15T15:01:01.4967747Z Uploaded bytes 16777216
+2026-10-15T15:01:01.5731763Z Uploaded bytes 25165824
+2026-10-15T15:01:01.6304888Z Uploaded bytes 33554432
+2026-10-15T15:01:02.4991550Z Uploaded bytes 41943040
+2026-10-15T15:01:03.3372820Z Uploaded bytes 50331648
+2026-10-15T15:01:03.9904289Z Uploaded bytes 57241793
+2026-10-15T15:01:04.0531171Z Finished uploading artifact content to blob storage!
+2026-10-15T15:01:04.0535646Z SHA256 digest of uploaded artifact is 3530a01ebf944fe5a206d6fb6b9251bf6fd5c8e3b744b137d8271edce3a96370
+2026-10-15T15:01:04.0538181Z Finalizing artifact upload
+2026-10-15T15:01:04.4933040Z Artifact sirius-windows-diagnostic-build-products successfully finalized. Artifact ID 11983617435
+2026-10-15T15:01:04.4933981Z Artifact sirius-windows-diagnostic-build-products has been successfully uploaded! Final size is 57241793 bytes. Artifact ID is 11983617435
+2026-10-15T15:01:04.4941743Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38754177960/artifacts/11983617435

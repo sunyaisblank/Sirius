@@ -1,0 +1,33 @@
+﻿2026-10-15T14:52:55.4440620Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-15T14:52:55.4442110Z with:
+2026-10-15T14:52:55.4443280Z   name: sirius-macos-native-attestation
+2026-10-15T14:52:55.4444010Z   path: attestations
+2026-10-15T14:52:55.4444640Z   if-no-files-found: warn
+2026-10-15T14:52:55.4445980Z   compression-level: 6
+2026-10-15T14:52:55.4447370Z   overwrite: false
+2026-10-15T14:52:55.4449120Z   include-hidden-files: false
+2026-10-15T14:52:55.4450190Z   archive: true
+2026-10-15T14:52:55.4451210Z env:
+2026-10-15T14:52:55.4451890Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T14:52:55.4453320Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T14:52:55.4453760Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T14:52:55.4455010Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T14:52:55.4456520Z ##[endgroup]
+2026-10-15T14:52:55.6705440Z With the provided path, there will be 40 files uploaded
+2026-10-15T14:52:55.6706020Z Artifact name is valid!
+2026-10-15T14:52:55.6706230Z Root directory input is valid!
+2026-10-15T14:52:56.0245320Z Uploading artifact: sirius-macos-native-attestation.zip
+2026-10-15T14:52:56.0452850Z Beginning upload of artifact content to blob storage
+2026-10-15T14:52:57.1151710Z Uploaded bytes 8388608
+2026-10-15T14:52:57.6884220Z Uploaded bytes 16777216
+2026-10-15T14:52:57.9878390Z Uploaded bytes 25165824
+2026-10-15T14:52:58.2829460Z Uploaded bytes 33554432
+2026-10-15T14:52:58.5598110Z Uploaded bytes 41943040
+2026-10-15T14:52:59.5458860Z Uploaded bytes 50331648
+2026-10-15T14:53:00.0950490Z Uploaded bytes 54880180
+2026-10-15T14:53:00.1245070Z Finished uploading artifact content to blob storage!
+2026-10-15T14:53:00.1249990Z SHA256 digest of uploaded artifact is c1a30c41b63a80ea0bd13379394d402e0984018cc302d3ec2ea2bb4becc3aefd
+2026-10-15T14:53:00.1254640Z Finalizing artifact upload
+2026-10-15T14:53:00.4390620Z Artifact sirius-macos-native-attestation successfully finalized. Artifact ID 11983306656
+2026-10-15T14:53:00.4391890Z Artifact sirius-macos-native-attestation has been successfully uploaded! Final size is 54880180 bytes. Artifact ID is 11983306656
+2026-10-15T14:53:00.4393010Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38754177960/artifacts/11983306656

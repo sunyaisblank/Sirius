@@ -1,0 +1,19 @@
+﻿2026-10-15T14:45:46.4826990Z ##[group]Run Get-Command slangc -ErrorAction Stop
+2026-10-15T14:45:46.4827495Z [36;1mGet-Command slangc -ErrorAction Stop[0m
+2026-10-15T14:45:46.4827856Z [36;1mGet-Command spirv-val -ErrorAction Stop[0m
+2026-10-15T14:45:46.4828236Z [36;1m$runtime = Join-Path $env:VULKAN_SDK "runtime\x64"[0m
+2026-10-15T14:45:46.4828658Z [36;1mif (-not (Test-Path (Join-Path $runtime "vulkan-1.dll"))) {[0m
+2026-10-15T14:45:46.4829044Z [36;1m  throw "pinned Vulkan loader is absent"[0m
+2026-10-15T14:45:46.4829319Z [36;1m}[0m
+2026-10-15T14:45:46.4829635Z [36;1m$runtime | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append[0m
+2026-10-15T14:45:46.4949521Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T14:45:46.4949888Z env:
+2026-10-15T14:45:46.4950084Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T14:45:46.4950340Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T14:45:46.4950554Z ##[endgroup]
+2026-10-15T14:45:47.2483608Z 
+2026-10-15T14:45:47.2499935Z [32;1mCommandType    [0m[32;1m Name                                              [0m[32;1m Version   [0m[32;1m Source[0m
+2026-10-15T14:45:47.2501138Z [32;1m-----------    [0m [32;1m----                                              [0m [32;1m-------   [0m [32;1m------[0m
+2026-10-15T14:45:47.2502097Z Application     slangc.exe                                         0.0.0.0    C:\VulkanSDK\1.4.357.0\bin\slangc.exe
+2026-10-15T14:45:47.2670495Z Application     spirv-val.exe                                      0.0.0.0    C:\VulkanSDK\1.4.357.0\bin\spirv-val.exe
+2026-10-15T14:45:47.3557168Z 

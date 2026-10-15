@@ -1,0 +1,23 @@
+﻿2026-10-15T14:52:04.3960170Z ##[group]Run cmake --build --preset macos --target RunNativeBuildEvidence -j3
+2026-10-15T14:52:04.3960730Z [36;1mcmake --build --preset macos --target RunNativeBuildEvidence -j3[0m
+2026-10-15T14:52:04.4006370Z shell: /bin/bash -e {0}
+2026-10-15T14:52:04.4006640Z env:
+2026-10-15T14:52:04.4006960Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T14:52:04.4007270Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T14:52:04.4007680Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T14:52:04.4008340Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T14:52:04.4009080Z ##[endgroup]
+2026-10-15T14:52:04.5181390Z [0/2] Re-checking globbed directories...
+2026-10-15T14:52:05.3767350Z [1/6] Verifying revision-bound upstream/downstream alignment
+2026-10-15T14:52:05.3779490Z alignment receipt is current: 0/8 domains admitted
+2026-10-15T14:52:05.9671390Z [2/6] Staging exact qualification inputs beside sirius_render_tests
+2026-10-15T14:52:05.9687960Z [3/6] Staging exact qualification inputs beside sirius_backend_tests
+2026-10-15T14:52:12.3875600Z [4/6] Verifying test-label, operating-model, and repository-structure governance
+2026-10-15T14:52:12.3877820Z CTest label file is up to date
+2026-10-15T14:52:12.3879650Z operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-15T14:52:12.3882690Z repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-15T14:52:12.3884890Z strict qualification/release policy rejected every weakened configuration and product
+2026-10-15T14:52:12.3886010Z escaping-copy controls: filesystem symlinks
+2026-10-15T14:52:12.3887240Z build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-15T14:52:54.2976950Z [5/6] === NATIVE BUILD NON-RENDER EVIDENCE GATE ===
+2026-10-15T14:52:54.2979570Z native build gate bound 7 compiled executables and 9 products and 20 generated test inputs to 9 non-render controls

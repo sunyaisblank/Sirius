@@ -1,0 +1,10 @@
+﻿2026-10-15T14:52:54.3463440Z ##[group]Run python3 scripts/verify-attestation.py --record-build --domain macos-native-build --platform macos --source-revision e0db7d5970d4878a1b5418c4dc058a435f2df8e9 --source-root . --artifact bin/macos/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/macos/generated/sirius/alignment_receipt.json --native-build-gate bin/macos/generated/sirius/native_build_gate.json --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/macos/src/sirius/app/sirius --test-dir bin/macos --output attestations/macos-build.json
+2026-10-15T14:52:54.3469960Z [36;1mpython3 scripts/verify-attestation.py --record-build --domain macos-native-build --platform macos --source-revision e0db7d5970d4878a1b5418c4dc058a435f2df8e9 --source-root . --artifact bin/macos/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/macos/generated/sirius/alignment_receipt.json --native-build-gate bin/macos/generated/sirius/native_build_gate.json --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/macos/src/sirius/app/sirius --test-dir bin/macos --output attestations/macos-build.json[0m
+2026-10-15T14:52:54.3518690Z shell: /bin/bash -e {0}
+2026-10-15T14:52:54.3518880Z env:
+2026-10-15T14:52:54.3519070Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T14:52:54.3519310Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T14:52:54.3519610Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T14:52:54.3520190Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T14:52:54.3520750Z ##[endgroup]
+2026-10-15T14:52:55.4130480Z build attestation recorded and verified: attestations/macos-build.json

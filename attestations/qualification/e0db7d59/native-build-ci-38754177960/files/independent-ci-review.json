@@ -1,0 +1,155 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-independent-completed-CI-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "run_id": 38754177960,
+  "run_attempt": 1,
+  "scope": "Completed requested CI/build evidence only; independent passive stdlib/source/JSON/XML/ZIP/hash/read-only Git checks, without importing or executing project code.",
+  "pins": {
+    "completed_run": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/ci-progress.json",
+      "bytes": 12148,
+      "sha256": "ec50db4450bec9830ea9013e613e7839cd1f4d35444edf1b2f3d4f64f8a1869c"
+    },
+    "jobs": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/ci-jobs-progress.json",
+      "bytes": 14220,
+      "sha256": "bfecb84ab5fc56d273874df29798f3511ceaba4535ffe5baa46771374417301a"
+    },
+    "artifacts_API": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/artifacts-progress.json",
+      "bytes": 3761,
+      "sha256": "290697323ae4b0e3681d229bb1edaa7d86d336d816489d56f20a88e091576342"
+    },
+    "windows_attestation": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/windows-native/windows-build.json",
+      "bytes": 9131,
+      "sha256": "6f7afb793b855348cf5c87026d2e762e33d09af354744bf7d071ee26d1f9f67f"
+    },
+    "macos_attestation": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/macos-native/macos-build.json",
+      "bytes": 8900,
+      "sha256": "d0f436ad5c4295aecdd55bc041dd543b25bb2542116e28be87b2743024ea16de"
+    },
+    "windows_gate": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/windows-native/native_build_gate.json",
+      "bytes": 10013,
+      "sha256": "9fd21db5a1a18822319e5a185bbb9a57d09d8f6b50d651e5432fb269898f58a7"
+    },
+    "macos_gate": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/macos-native/native_build_gate.json",
+      "bytes": 9651,
+      "sha256": "39d1b3ef443bff4e1150d1deb25994c79ab6eb880928022042483ca8bb718b82"
+    },
+    "windows_diagnostic_M": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/windows-diagnostic/generated/sirius/windows-diagnostic-build-products.json",
+      "bytes": 32517,
+      "sha256": "ade92dd474eb7c10177c8fa1bba1cf4461c28ddb09a427ca81f635b7cbbcef08"
+    },
+    "configured_registration_metadata": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/windows-diagnostic/generated/sirius/windows-mandatory-registration/registration-metadata.json",
+      "bytes": 28670,
+      "sha256": "f7a6b0d604aa7a2fb646b633af05d6418e6edd12f163bb70bb374b057c4afcf9"
+    },
+    "raw_log_identity": {
+      "path": "out/kerr-cartdelta-rhs-ci-e0db7d59/ci-raw-log-container-identity.json",
+      "bytes": 8782,
+      "sha256": "6070e999cc74ec3566660eb416869b9d2d40e52c42b10e2ccc6e018e2a56c7a8"
+    }
+  },
+  "archive_API_and_actual_results": [
+    {
+      "artifact_id": 11983711020,
+      "archive": "macos-diagnostic-logs.zip",
+      "bytes": 5690,
+      "sha256": "5649b29f45d71a0da8f95a9a0321ac4b51bcd98f297011b34909f24c696d77c3",
+      "members": 4
+    },
+    {
+      "artifact_id": 11983617435,
+      "archive": "windows-diagnostic.zip",
+      "bytes": 57241793,
+      "sha256": "3530a01ebf944fe5a206d6fb6b9251bf6fd5c8e3b744b137d8271edce3a96370",
+      "members": 139
+    },
+    {
+      "artifact_id": 11983306656,
+      "archive": "macos-native.zip",
+      "bytes": 54880180,
+      "sha256": "c1a30c41b63a80ea0bd13379394d402e0984018cc302d3ec2ea2bb4becc3aefd",
+      "members": 40
+    },
+    {
+      "artifact_id": 11983193665,
+      "archive": "windows-diagnostic-logs.zip",
+      "bytes": 5848,
+      "sha256": "94b3446b3f217bd81e79e880f1e9302f1733eddeda4d96b00c0997037ef4cb7e",
+      "members": 4
+    },
+    {
+      "artifact_id": 11983133697,
+      "archive": "windows-native.zip",
+      "bytes": 53709086,
+      "sha256": "496e75c2f689c201bcddb8d91a9e39a5ede250ec9f0d17dcb2ec5950fd0533ae",
+      "members": 40
+    }
+  ],
+  "verified": {
+    "run_join": "Completed success, workflow_dispatch attempt1 on exact e0 source; selected/after-dispatch/before-list/dispatch inputs and all job/artifact records agree. Empty dispatch response is retained without treating it as a JSON record.",
+    "requested_jobs_success": [
+      "integration-no-render",
+      "integration-macos-no-render",
+      "integration-windows-no-render"
+    ],
+    "unrequested_qualification_jobs_skipped": 5,
+    "transport": "All5 actual ZIP byte counts/SHA256 equal exact API artifact records; all227 file members match identity maps and extracted bytes. No traversal, absolute/drive paths, symlinks, duplicate or case-colliding members. Extracted sets are exact.",
+    "raw_CI_logs": "Actual raw ZIP and46 safe extracted members match its local identity map. No API digest is claimed for this extra log container.",
+    "native_each": {
+      "registered": 1152,
+      "selected": 9,
+      "executed": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "disabled": 0,
+      "all_registration_Mandatory": true,
+      "exact_authority_names_from_source": true,
+      "tested_executables_bound": 7,
+      "product_artifacts_bound": 9,
+      "test_input_artifacts_bound": 20,
+      "attestation_payload_artifacts": 39
+    },
+    "native_bindings": "Both complete39-artifact attestation payloads hash correctly. All7 receipt-labelled tested executables,9 products and20 canonical input selectors bind actual archived bytes; source-root products match exact named e0 Git bytes. JUnit is the original9-case authority selection with zero FESD; logs/JUnit/gate/inventory hashes, CLI qualification claims and diagnostic log copies agree.",
+    "source_and_alignment": "Both gate sources and receipts name clean e0 qualification source. Alignment admits0of8 with empty records; all3 actual configure logs report0/8 and release packaging DISABLED. Strict Windows cache retains contract2/Werror/Mandatory/requiredVulkan, Release and sanitizersnone; no attestation-root reuse.",
+    "windows_diagnostic": "M138 payload+M itself is exact139-member artifact; run/source/repository/attempt/build-only/no-qualification flags agree. CLI/backend equal native-gate executables. Both volumes contain all20 exact input aliases plus3 trace products; all38 staged SPVs, DLL identities, CLI assets/model/viewer and alignment copies join their declared authorities.",
+    "configured_registration": {
+      "payload_files": 63,
+      "CTestTestfiles": 18,
+      "recursive_install_files": 25,
+      "gtest_tests": 6,
+      "gtest_includes": 6,
+      "operational_plus_install_verifier": 7,
+      "saved_inventory": 1,
+      "execution_claimed": false
+    },
+    "prior_named_449a_comparison": "Both complete1152 inventories, including commands/properties, equal the accepted449a archive. Of63 configured payloads,62 are byte-identical; verify_sirius_install.cmake differs only by one required source-revision cd99\u2192e0 literal. Exact inverse substitution recovers prior bytes. All current63 exported bytes match registration metadata and M; configured roots/tools match prior named metadata.",
+    "Python_alias": "Configured python3.exe records Length0 with target digest434b361fe0c5960d404974feed493db47f2603a1ace2574312104fbed0182c6f. This is retained alias metadata, not a nonempty executable backup or tool-substitution admission.",
+    "existing_verifier_logs": "Both preserved root-operated verify-attestation logs contain the expected successful current-platform record. They were not rerun/imported by this reviewer.",
+    "source_policy": "Current workflow/build-gate/attestation verifier/model source bytes match named e0 Git; branch clean/tracked, source committed/pushed, sole worktree."
+  },
+  "passive_check_correction": "An overstrong cross-revision63-file equality check was narrowed after inspecting the sole legitimate source-revision substitution. A cache inspection was corrected to parse one record per line. No CI artifact/source/helper changed or workload reran.",
+  "limits": {
+    "build_only_accepted": true,
+    "native_runtime_science_image_full_Mandatory_UI_latency_release_admitted": false,
+    "full1152_estate_executed": false,
+    "new_tool_substitution_or_native_staging_admitted": false,
+    "live_software_controls_or_current_native_packet_read": false,
+    "root_product_joins_used_as_evidence": false,
+    "project_helper_verifier_provider_CMake_binary_test_compiler_network_execution": false,
+    "tracked_build_or_existing_inputs_modified": false,
+    "Git_preservation_or_push_by_reviewer": false
+  },
+  "blockers": []
+}
