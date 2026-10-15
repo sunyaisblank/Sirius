@@ -1,0 +1,168 @@
+{
+  "schema": "sirius-native-windows-kerr-rhs-independent-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "runtime_admitted": false,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "blockers": [],
+  "critical_pins": {
+    "source-contracts.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/source-contracts.json",
+      "bytes": 15407,
+      "sha256": "0091d1297b82de6254ad40cbed82d27944330432e67fae99daf2e6a03b474bc6"
+    },
+    "preparation.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/preparation.json",
+      "bytes": 3567,
+      "sha256": "c858d0d2a096c17ffdd7fb72b32f6be8d1a695cb30d490866830d2ce5045186d"
+    },
+    "native-rhs-adaptation.patch": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/native-rhs-adaptation.patch",
+      "bytes": 13054,
+      "sha256": "d9ad186a313a639093e5373a78b1f3031bbb1633c87707419285a4c46b6ab855"
+    },
+    "run_system.py": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/run_system.py",
+      "bytes": 19322,
+      "sha256": "8219114bd4dfb92588b41c6f683e60be3693624c2b6e4928ffbc10cf069532b4"
+    },
+    "run_terminal.py": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/run_terminal.py",
+      "bytes": 18548,
+      "sha256": "38c3050708fc6f379578ff04fc4653797f66539f89f916ceeebec4681e62c766"
+    },
+    "prepare_bindings.py": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/prepare_bindings.py",
+      "bytes": 12262,
+      "sha256": "05b0da6f1aed74ff5523f645c57038246dc4923403249e89cc6b4bd66856d665"
+    },
+    "run_native_control.ps1": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/run_native_control.ps1",
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/terminal-audit.ps1",
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/emergency_native_cleanup.ps1",
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "plan.pending.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/plan.pending.json",
+      "bytes": 2209,
+      "sha256": "d80a5f7f6f29d7230fc14f82763f9db02d3100e78bcf595344a56f9d88e8a13b"
+    },
+    "plan.regressions.pending.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/plan.regressions.pending.json",
+      "bytes": 4279,
+      "sha256": "6ed9a158619d4545159c0d669d0b88b9ab2c1dad1b0f54789056652a350f8e74"
+    },
+    "execution-bindings.pending.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/execution-bindings.pending.json",
+      "bytes": 2143,
+      "sha256": "3bd6cd9ad96db0b40db841aa75f47614d8ee68e4d83d54efc63585824c4f81f5"
+    }
+  },
+  "provenance_and_delta": {
+    "named_archive_commit": "4767db8a07560ee3eea39aadc8b3490ade903f58",
+    "named_archive_work": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/native-windows-kerr-shared-loop-cd99fd06",
+    "all9_original_preimages_actual_git_rev_parse_and_show_bytes": true,
+    "all9_forward_and_inverse_literal_transforms_exact": true,
+    "literal_substitutions": {
+      "cd99fd06627cf1f2e1ece74fcf90abf129178940": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "native-windows-kerr-shared-loop-cd99fd06": "native-windows-kerr-rhs-e0db7d59",
+      "diagnostic-cd99fd06": "diagnostic-e0db7d59",
+      "38735683288": "38754177960"
+    },
+    "all3_PS_byte_exact": true,
+    "three_Python_AST_parsed_without_import_execution": true,
+    "unified_patch_exact_from_preimages": true,
+    "old_CI_directory_occurrences": 0,
+    "no_actual_plan_bindings_freeze_stage_outcomes_copied": true
+  },
+  "unchanged_protocol": {
+    "selected_order": [
+      "floor-fp32",
+      "floor-fp32comp",
+      "floor-fp64",
+      "captured-fp32",
+      "captured-fp32comp",
+      "kerr-image",
+      "kerr-precision"
+    ],
+    "selected_original_tests": {
+      "floor-fp32": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "floor-fp32comp": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "floor-fp64": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "captured-fp32": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "captured-fp32comp": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "kerr-image": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "kerr-precision": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene"
+    },
+    "expected_exit_typed_int": 0,
+    "first5_native_owner_seconds": 900,
+    "image_precision_native_owner_seconds": 28800,
+    "bridge_allowance_seconds": 480,
+    "terminal_seconds": 60,
+    "Windows_child_WorkingSet_guard_bytes": 4294967296,
+    "sampled_WSL_reserve_KiB": 2097152,
+    "cache": "OriginaldefaultAMDcache/inheritedoverriderefusal unchanged.",
+    "original_physical1000ms_assertions_and_settings": true,
+    "all14_system_terminal_commands_exact_new_namespace": true
+  },
+  "authority_and_ownership": {
+    "CI_source_run_attempt": [
+      "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "38754177960",
+      "1"
+    ],
+    "native_authority": "Current same-source passed nativeGate9zeroFESD plus both executable pins joined to diagnosticM. No diagnosticM-only fallback.",
+    "manifest_members": "Generic complete actualmanifest and exact regular-file whole-stage set with executable/SDKloader/alignment/source joins; no inherited76/121/membercount constant.",
+    "ownership": "Byte-exact mature heldhandle/WindowsWorkingSet/deadline/cleanup/exit source/birth/bootstrap owner. Future fresh same-childSDKloader+expectedAMD mapped rows and terminalpostseals required; installedfiles alone are insufficient.",
+    "predecessors": "Everypreviousaccepted whole_inputs pin checked before fresh snapshot; distinctsystem/terminal argv and cleanup; no firstnonpass continuation.",
+    "positive_XML": "Exactoneoriginalcompleted zeroFESD required by unchanged wrappers. Threefloor actualrung properties and precision native_comparison_executed enforced. Unsupportedrefusal cannot satisfy comparison.",
+    "captured_property_root_condition": "Inherited wrappers do NOT explicitly enforce captured parity_opcode_8_completed_records=1. Root must additionally check and save bothcaptured XML properties/actualcompleted marker: parity_opcode_8_completed_records=1, parity_opcode_8_actual_submissions=1, parity_opcode_8_allocated_bytes=336, and positive finite parity_opcode_8_maximum_submit_ms<=1000, before accepting or advancing, as in prior completed7 audit. This is retained source scope, not a new regression; mature helperbytes unchanged.",
+    "failure_path_limit": "Success-only terminalwrapper requires positivecase first; root must separately audit truthful teardown/provider/ownership on firstnonpass when that path refuses. Never promote failure or launch latercase."
+  },
+  "pending_holds": [
+    "All8currentsoftwareowners terminal/reviewed and explicitroot decision before nativeauthorization. SourcePASS doesnot infer that decision.",
+    "Actual newCI/source/products/M/nativeGate/fullstage/hostAMD/SDK admission and completephysicalinputmap before root actual reviewedpreparer.",
+    "After preparation, independent+root concrete plan/freeze/bindings/currentpins/all14argv+cleanup/outputabsence review required before native launch."
+  ],
+  "absence_checked": [
+    "plan.json",
+    "execution-bindings.json",
+    "source-freeze.json",
+    "root-ci-stage-admission.json",
+    "native",
+    "temp",
+    "bin/windows-msvc/diagnostic-e0db7d59"
+  ],
+  "pending_nulls_verified": [
+    "artifact.id",
+    "artifact.zip_identity",
+    "manifest_identity",
+    "native_gate_identity",
+    "gate_sha256",
+    "expected_amd_module",
+    "files",
+    "all pendingargv/cleanup"
+  ],
+  "limits": [
+    "No actualnewCI/product/binding/nativeprovider/numerical execution admission. Priorcd99sevenPASS doesnot qualify newproducts.",
+    "No fullP1/all40field/whole-horizon-domain/Mandatory/UI/performance/release claim; sampledchildRSS is not aggregateWindows/bootstrap containment; accessiblecensus is not global/allconsumerabsence."
+  ],
+  "passive_check_correction": "Initial source-landmark assertion expected capturedproperty literal in wrappers and stopped before any write. Read complete propertybranches and retained explicitrootcheck condition above; no helper/source/runtime mutation or execution.",
+  "workspace": {
+    "tracked_source_clean": true,
+    "source_committed_pushed": "0 ahead / 0 behind",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "worktrees": 1,
+    "sidecar_pending_root_preservation": true
+  },
+  "operations": "Passive source/hash/JSON/stdlibAST/namedGit only. No helper/projectparser/provider/test/CI/network execution or liveCI/softwarecase-output reads; wrote only thissidecar."
+}

@@ -1,0 +1,794 @@
+{
+  "schema": "sirius-native-windows-kerr-rhs-independent-completion-review-v1",
+  "passed": true,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "reviewed_utc": "2026-10-15T16:25:45.215437+00:00",
+  "original_tests_passed": 7,
+  "all_seven_completed_original_cases_accepted": true,
+  "reviewed_order": [
+    "floor-fp32",
+    "floor-fp32comp",
+    "floor-fp64",
+    "captured-fp32",
+    "captured-fp32comp",
+    "kerr-image",
+    "kerr-precision"
+  ],
+  "blockers": [],
+  "prior_six_receipt": {
+    "path": "out/native-windows-kerr-rhs-e0db7d59/independent-completed-six-review.json",
+    "bytes": 25641,
+    "sha256": "f9fd6dba7420099c77f1a97ac6b6c03be65ae08e81e605e47643ccfb3a03fc01"
+  },
+  "prior_six_unchanged_and_exactly_composed": true,
+  "method": "Passive stdlib content-hash/JSON/XML/source, explicit saved-completed Linuxbirth checks and read-onlyGit. No authored helper/import/parser/project/native/provider/tool/test/CI/network execution. Reuses admitted source/CI/software/runtime semantic review; not dependent on a root completed-results summary.",
+  "critical_pins": {
+    "execution-bindings.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/execution-bindings.json",
+      "bytes": 253136,
+      "sha256": "acaa4581a7b265e163977a35348b852609eafeb96e970fb6628af04e1665c5e1"
+    },
+    "source-freeze.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/source-freeze.json",
+      "bytes": 221962,
+      "sha256": "449eb7d4cf3e886de75c2e8b50cae5df21aaa580f03353b89ac1c7351a2fed8f"
+    },
+    "plan.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/plan.json",
+      "bytes": 4278,
+      "sha256": "464379228cd02a8904dbe0f5d21626c14a80a0046c4c750e3d3d5d02b21fef03"
+    },
+    "root-ci-stage-admission.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/root-ci-stage-admission.json",
+      "bytes": 223701,
+      "sha256": "32b4ec423139b064a08c657b8649760fb72039c9f50387a0ead4c0899a982e72"
+    },
+    "independent-runtime-admission.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/independent-runtime-admission.json",
+      "bytes": 13591,
+      "sha256": "3fe6f0e199d9cc34992884783dd69ee33603b630d77659eee662ec30dd5ca8e5"
+    },
+    "independent-source-review.json": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/independent-source-review.json",
+      "bytes": 9020,
+      "sha256": "c045a8e9d7ac320a4fc1b098298ca491573dab4cdb92c2833a70284d278addfc"
+    }
+  },
+  "closure": {
+    "all1176_static_content_pins_freshly_match": true,
+    "1173base_plus_admission_plus_plan_equals1175freeze": true,
+    "freeze_plus_freezefile_equals1176binding_excluding_itself": true,
+    "owner_includes_binding_itself": true,
+    "before_after_current_rows": [
+      1177,
+      1189,
+      1201,
+      1213,
+      1225,
+      1237,
+      1249
+    ],
+    "total_before_plus_after_rows": 16982,
+    "unique_consumed_paths": 1249,
+    "exact_prior_record_counts": [
+      0,
+      12,
+      24,
+      36,
+      48,
+      60,
+      72
+    ],
+    "accepted_records_after_batch": 84,
+    "all_seven_owner_maps_exact_sets_and_current_bytes": true,
+    "all_rootnotes13pins_each_including_samebirth_environment_stable": true,
+    "all_accepted9raw_records_and_terminal3_perancestor_rechecked": true,
+    "no_skipped_ancestor_or_self_output_bypass": true
+  },
+  "cases": [
+    {
+      "label": "floor-fp32",
+      "original_test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "passed": true,
+      "test_seconds": "248.749",
+      "native_owner_seconds": 251.2332497,
+      "bridge_seconds": 283.67651239200495,
+      "sampled_native_child_WorkingSet_peak_bytes": 1040211968,
+      "memory_samples": 246,
+      "before_after_current_rows": 1177,
+      "prior_accepted_records": 0,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "17.448300",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "terminal_accessible_consumer_scan": {
+        "processes": 279,
+        "hidden_field_records": 175,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-accepted-floor-fp32.json",
+        "bytes": 2999,
+        "sha256": "916316b81a018a76671a9a90e47f19e940afdc9af176d2c5cae93744cdaab50a"
+      },
+      "terminal_acceptance": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/terminal-floor-fp32-accepted.json",
+        "bytes": 8452,
+        "sha256": "18d793e4cfabfee78612e1850aa8a95e5a2b5c9935c1ab61b2f12b11e7b1e8da"
+      },
+      "raw_XML": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/native/floor-fp32/gtest.xml",
+        "bytes": 1045,
+        "sha256": "990643945c2fe96723971a956fbc3e2579e6d596dfec1662c2c314e4a21d8d08"
+      },
+      "input_maps": {
+        "before": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/floor-fp32-inputs-before.json",
+          "bytes": 212756,
+          "sha256": "5c0cd9a3753b43e3842fc6c0f72b4880144683549db8264255f88b6b0afdd60f"
+        },
+        "after": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/floor-fp32-inputs-after.json",
+          "bytes": 212756,
+          "sha256": "5c0cd9a3753b43e3842fc6c0f72b4880144683549db8264255f88b6b0afdd60f"
+        }
+      },
+      "launch_environment": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-floor-fp32-launch-environment.json",
+        "bytes": 791,
+        "sha256": "6c7b62a2ca1646528f24fb8443326a07ab51c01da5a7fed3bb80e8e67fdfdf32"
+      }
+    },
+    {
+      "label": "floor-fp32comp",
+      "original_test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "passed": true,
+      "test_seconds": "219.125",
+      "native_owner_seconds": 220.5924775,
+      "bridge_seconds": 248.95087828600663,
+      "sampled_native_child_WorkingSet_peak_bytes": 987967488,
+      "memory_samples": 219,
+      "before_after_current_rows": 1189,
+      "prior_accepted_records": 12,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "17.210400",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32comp_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "terminal_accessible_consumer_scan": {
+        "processes": 283,
+        "hidden_field_records": 175,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-accepted-floor-fp32comp.json",
+        "bytes": 3059,
+        "sha256": "8770fabf8c633b790a78586dd22143656568313cd688a64cdebbe914f9c1d79b"
+      },
+      "terminal_acceptance": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/terminal-floor-fp32comp-accepted.json",
+        "bytes": 10977,
+        "sha256": "a3bbdb33d63f102163a596a24d4eef467e714310ccb68efb3eee9963b8bd8d3f"
+      },
+      "raw_XML": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/native/floor-fp32comp/gtest.xml",
+        "bytes": 1054,
+        "sha256": "0598cf7eb82bed16ab726be6013117dced3a89915aa96bf4306fa1a2d5e790a5"
+      },
+      "input_maps": {
+        "before": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/floor-fp32comp-inputs-before.json",
+          "bytes": 214900,
+          "sha256": "9683823f726a07ac21291d9fdf3c2b04dac88846ee47ca3edec19e17e318a681"
+        },
+        "after": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/floor-fp32comp-inputs-after.json",
+          "bytes": 214900,
+          "sha256": "9683823f726a07ac21291d9fdf3c2b04dac88846ee47ca3edec19e17e318a681"
+        }
+      },
+      "launch_environment": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-floor-fp32comp-launch-environment.json",
+        "bytes": 795,
+        "sha256": "5447bcdfef687434a98029cdab339400b365343cca4c119ac9bb6e545dcdf807"
+      }
+    },
+    {
+      "label": "floor-fp64",
+      "original_test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "passed": true,
+      "test_seconds": "285.402",
+      "native_owner_seconds": 286.554652,
+      "bridge_seconds": 314.9758003450115,
+      "sampled_native_child_WorkingSet_peak_bytes": 1071124480,
+      "memory_samples": 283,
+      "before_after_current_rows": 1201,
+      "prior_accepted_records": 24,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "20.982800",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp64_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "terminal_accessible_consumer_scan": {
+        "processes": 281,
+        "hidden_field_records": 177,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-accepted-floor-fp64.json",
+        "bytes": 2998,
+        "sha256": "7b1c3503a41fe5799774c73a005647515995b3c19a4d3e47573d263036a846ce"
+      },
+      "terminal_acceptance": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/terminal-floor-fp64-accepted.json",
+        "bytes": 13370,
+        "sha256": "41911b0e8b72ea7f5dfd819e83ce57860858f6727b55e4f623fe15371858edf5"
+      },
+      "raw_XML": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/native/floor-fp64/gtest.xml",
+        "bytes": 1046,
+        "sha256": "d808f1991c9a86c94561fe8346767a4c29c31bd020fe4024f3e185f2bbb1eff4"
+      },
+      "input_maps": {
+        "before": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/floor-fp64-inputs-before.json",
+          "bytes": 217093,
+          "sha256": "3a5729ef1a6d1514413891594b5b70b7c0743f48492e7e269b846f60c43569be"
+        },
+        "after": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/floor-fp64-inputs-after.json",
+          "bytes": 217093,
+          "sha256": "3a5729ef1a6d1514413891594b5b70b7c0743f48492e7e269b846f60c43569be"
+        }
+      },
+      "launch_environment": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-floor-fp64-launch-environment.json",
+        "bytes": 791,
+        "sha256": "fcb196c438c9debc8e6a1bd565edcd4e18c6f1d45169db2a2484dcf4a0d82ea0"
+      }
+    },
+    {
+      "label": "captured-fp32",
+      "original_test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "passed": true,
+      "test_seconds": "0.491",
+      "native_owner_seconds": 1.8521227999999998,
+      "bridge_seconds": 30.252548370001023,
+      "sampled_native_child_WorkingSet_peak_bytes": 44761088,
+      "memory_samples": 2,
+      "before_after_current_rows": 1213,
+      "prior_accepted_records": 36,
+      "positive_properties": {
+        "parity_opcode_8_completed_records": "1",
+        "parity_opcode_8_actual_submissions": "1",
+        "parity_opcode_8_maximum_submit_ms": "17.087100",
+        "parity_opcode_8_allocated_bytes": "336"
+      },
+      "terminal_accessible_consumer_scan": {
+        "processes": 290,
+        "hidden_field_records": 181,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-accepted-captured-fp32.json",
+        "bytes": 2967,
+        "sha256": "b63b6082ce71ebb999c1c5ed9e0f3e14a7c1839a85308cde1960017d0b26b50f"
+      },
+      "terminal_acceptance": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/terminal-captured-fp32-accepted.json",
+        "bytes": 15786,
+        "sha256": "7e516f727948198e1bee51e7c643eda9d01432de2112c54b0a544398251f6dc2"
+      },
+      "raw_XML": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/native/captured-fp32/gtest.xml",
+        "bytes": 953,
+        "sha256": "81f40b590c9b0d9fe77bee211703c72bda38f33c683bd4f95531f1ab6d8e817b"
+      },
+      "input_maps": {
+        "before": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/captured-fp32-inputs-before.json",
+          "bytes": 219238,
+          "sha256": "4ee1b7883684030915d78adeb4f4ca01165c07ef9187d2331d230cd171d28a4f"
+        },
+        "after": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/captured-fp32-inputs-after.json",
+          "bytes": 219238,
+          "sha256": "4ee1b7883684030915d78adeb4f4ca01165c07ef9187d2331d230cd171d28a4f"
+        }
+      },
+      "launch_environment": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-captured-fp32-launch-environment.json",
+        "bytes": 798,
+        "sha256": "f0f5e15e58cb2c0ae63f4e56e345789f6b55aa3574851bc3ada0a4eae903a782"
+      }
+    },
+    {
+      "label": "captured-fp32comp",
+      "original_test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "passed": true,
+      "test_seconds": "0.489",
+      "native_owner_seconds": 1.8646239999999998,
+      "bridge_seconds": 31.998142031996395,
+      "sampled_native_child_WorkingSet_peak_bytes": 44756992,
+      "memory_samples": 2,
+      "before_after_current_rows": 1225,
+      "prior_accepted_records": 48,
+      "positive_properties": {
+        "parity_opcode_8_completed_records": "1",
+        "parity_opcode_8_actual_submissions": "1",
+        "parity_opcode_8_maximum_submit_ms": "17.709600",
+        "parity_opcode_8_allocated_bytes": "336"
+      },
+      "terminal_accessible_consumer_scan": {
+        "processes": 280,
+        "hidden_field_records": 176,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-accepted-captured-fp32comp.json",
+        "bytes": 3024,
+        "sha256": "83c090c53bd0b04440c481304c8e69b5537930cc2b7d8d5623e4757f4b16a386"
+      },
+      "terminal_acceptance": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/terminal-captured-fp32comp-accepted.json",
+        "bytes": 18337,
+        "sha256": "976a82b5cfecbdaf941b5874e043a7eac671b0c1922822d89d56c47cbb921d2b"
+      },
+      "raw_XML": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/native/captured-fp32comp/gtest.xml",
+        "bytes": 957,
+        "sha256": "0cc08a45acf36f84be53b90e47ba5b5f2b8c40d368b71b5105d5e658f7d89a65"
+      },
+      "input_maps": {
+        "before": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/captured-fp32comp-inputs-before.json",
+          "bytes": 221416,
+          "sha256": "840240ecc7010ea29c669419b38a63220d1b47f9439950fa0d435d7cd3746c30"
+        },
+        "after": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/captured-fp32comp-inputs-after.json",
+          "bytes": 221416,
+          "sha256": "840240ecc7010ea29c669419b38a63220d1b47f9439950fa0d435d7cd3746c30"
+        }
+      },
+      "launch_environment": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-captured-fp32comp-launch-environment.json",
+        "bytes": 802,
+        "sha256": "c66b3e60cca31e35c4e81d18cd24155b951524dcb81b7296f5b62e04a912d064"
+      }
+    },
+    {
+      "label": "kerr-image",
+      "original_test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "passed": true,
+      "test_seconds": "211.801",
+      "native_owner_seconds": 213.4986655,
+      "bridge_seconds": 249.9396928339993,
+      "sampled_native_child_WorkingSet_peak_bytes": 1124995072,
+      "memory_samples": 211,
+      "before_after_current_rows": 1237,
+      "prior_accepted_records": 60,
+      "positive_properties": {},
+      "terminal_accessible_consumer_scan": {
+        "processes": 287,
+        "hidden_field_records": 179,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-accepted-kerr-image.json",
+        "bytes": 2729,
+        "sha256": "26241538990f42d756cda7c19532c1e5aa041431935f523d8fd58313c42600ea"
+      },
+      "terminal_acceptance": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/terminal-kerr-image-accepted.json",
+        "bytes": 20690,
+        "sha256": "36943d82082f0e0970894ca0e141a0c8d57be0293d1fb9786166935618ba0ed3"
+      },
+      "raw_XML": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/native/kerr-image/gtest.xml",
+        "bytes": 594,
+        "sha256": "b799eb982f7ce648dae3dde512e4c2d1a525c6d79bddaaee5aa4949f05b4a430"
+      },
+      "input_maps": {
+        "before": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/kerr-image-inputs-before.json",
+          "bytes": 223643,
+          "sha256": "ad4849f24dc6ff86635f8fbc5be256e1d3b938ae8e4f4b05daee44bcfc0d1465"
+        },
+        "after": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/kerr-image-inputs-after.json",
+          "bytes": 223643,
+          "sha256": "ad4849f24dc6ff86635f8fbc5be256e1d3b938ae8e4f4b05daee44bcfc0d1465"
+        }
+      },
+      "launch_environment": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-kerr-image-launch-environment.json",
+        "bytes": 795,
+        "sha256": "c3659fee6cb010415d4957647e59053579976f9602b59f918a6edc4cf414e2ba"
+      }
+    },
+    {
+      "label": "kerr-precision",
+      "original_test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+      "passed": true,
+      "test_seconds": "270.024",
+      "native_owner_seconds": 270.6872788,
+      "bridge_seconds": 304.6984095929947,
+      "sampled_native_child_WorkingSet_peak_bytes": 1362972672,
+      "memory_samples": 268,
+      "before_after_current_rows": 1249,
+      "prior_accepted_records": 72,
+      "positive_properties": {
+        "fp64_evidence": "native_comparison_executed"
+      },
+      "terminal_accessible_consumer_scan": {
+        "processes": 279,
+        "hidden_field_records": 175,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-accepted-kerr-precision.json",
+        "bytes": 2838,
+        "sha256": "4ae5b13c98b66dd91abedd3ed8dbfe52dab5abb609518e7b0e8188b8250784c1"
+      },
+      "terminal_acceptance": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/terminal-kerr-precision-accepted.json",
+        "bytes": 23306,
+        "sha256": "80c9dd44cb78ba62804482de25a297d6d8a694f9b7cddf06b5358ae5b5e55c3b"
+      },
+      "raw_XML": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/native/kerr-precision/gtest.xml",
+        "bytes": 715,
+        "sha256": "4b134b738ffbb9e965cded1750a883df41a6d9c61c4bf2ad2793b34a0fec6e0d"
+      },
+      "input_maps": {
+        "before": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/kerr-precision-inputs-before.json",
+          "bytes": 225788,
+          "sha256": "04acb43fecf7cc2b5bcdb5fcc608c4d5fa0d563b326607bdcfaffc86dd6361e9"
+        },
+        "after": {
+          "path": "out/native-windows-kerr-rhs-e0db7d59/kerr-precision-inputs-after.json",
+          "bytes": 225788,
+          "sha256": "04acb43fecf7cc2b5bcdb5fcc608c4d5fa0d563b326607bdcfaffc86dd6361e9"
+        }
+      },
+      "launch_environment": {
+        "path": "out/native-windows-kerr-rhs-e0db7d59/root-kerr-precision-launch-environment.json",
+        "bytes": 799,
+        "sha256": "35713bf02493d2808776fbfeea9273d735a4a0f5faeaea31150da7ba830bbfb5"
+      }
+    }
+  ],
+  "ownership": {
+    "fresh_saved_completed_Linux_birth_checks": [
+      {
+        "pid": 960111,
+        "recorded_start_ticks": "12849823",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 960146,
+        "recorded_start_ticks": "12850326",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 970225,
+        "recorded_start_ticks": "12881759",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 973935,
+        "recorded_start_ticks": "12894148",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 973944,
+        "recorded_start_ticks": "12894583",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 983686,
+        "recorded_start_ticks": "12930802",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 986893,
+        "recorded_start_ticks": "12934931",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 986901,
+        "recorded_start_ticks": "12935495",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 997263,
+        "recorded_start_ticks": "12971052",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1000701,
+        "recorded_start_ticks": "12977378",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1000761,
+        "recorded_start_ticks": "12978113",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1009570,
+        "recorded_start_ticks": "12986186",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1013111,
+        "recorded_start_ticks": "12994425",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1013135,
+        "recorded_start_ticks": "12995277",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1021213,
+        "recorded_start_ticks": "13001686",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1024550,
+        "recorded_start_ticks": "13008436",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1024596,
+        "recorded_start_ticks": "13009869",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1033455,
+        "recorded_start_ticks": "13038179",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1036977,
+        "recorded_start_ticks": "13044485",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1037033,
+        "recorded_start_ticks": "13045699",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 1046499,
+        "recorded_start_ticks": "13077770",
+        "current_start_ticks": null,
+        "recorded_birth_absent": true
+      }
+    ],
+    "Windows_owner_and_test_exact_recordedbirth_postterminal_observations": [
+      {
+        "case": "floor-fp32",
+        "kind": "owner",
+        "pid": 4324,
+        "recorded_start_utc": "2026-10-15T15:45:35.3528654Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "floor-fp32",
+        "kind": "test",
+        "pid": 9560,
+        "recorded_start_utc": "2026-10-15T15:46:04.3452012Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "floor-fp32comp",
+        "kind": "owner",
+        "pid": 3264,
+        "recorded_start_utc": "2026-10-15T15:52:58.3320349Z",
+        "pid_currently_live": true,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "floor-fp32comp",
+        "kind": "test",
+        "pid": 4656,
+        "recorded_start_utc": "2026-10-15T15:53:22.1563634Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "floor-fp64",
+        "kind": "owner",
+        "pid": 15556,
+        "recorded_start_utc": "2026-10-15T15:59:47.8965102Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "floor-fp64",
+        "kind": "test",
+        "pid": 4212,
+        "recorded_start_utc": "2026-10-15T16:00:11.6122248Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "captured-fp32",
+        "kind": "owner",
+        "pid": 22468,
+        "recorded_start_utc": "2026-10-15T16:06:54.5797663Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "captured-fp32",
+        "kind": "test",
+        "pid": 24184,
+        "recorded_start_utc": "2026-10-15T16:07:18.3821502Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "captured-fp32comp",
+        "kind": "owner",
+        "pid": 17328,
+        "recorded_start_utc": "2026-10-15T16:09:46.4001761Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "captured-fp32comp",
+        "kind": "test",
+        "pid": 23060,
+        "recorded_start_utc": "2026-10-15T16:10:10.5172008Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "kerr-image",
+        "kind": "owner",
+        "pid": 25344,
+        "recorded_start_utc": "2026-10-15T16:12:12.5144776Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "kerr-image",
+        "kind": "test",
+        "pid": 17020,
+        "recorded_start_utc": "2026-10-15T16:12:41.9189043Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "kerr-precision",
+        "kind": "owner",
+        "pid": 23284,
+        "recorded_start_utc": "2026-10-15T16:18:11.2004252Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "kerr-precision",
+        "kind": "test",
+        "pid": 21804,
+        "recorded_start_utc": "2026-10-15T16:18:40.7014360Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      }
+    ],
+    "memory_samples": 1231,
+    "all_actual_samechild_SDK_AMD_and_executable_postseals_match": true,
+    "SDKloader": {
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696"
+    },
+    "AMD": {
+      "bytes": 103213064,
+      "name": "amdvlk64.dll",
+      "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+      "version": "9.2.10.395"
+    },
+    "guard_semantics": "Native900s first5/28800s image+precision, bridge+480s/terminal60s. Child sampledWorkingSet4GiB and WSLavailable2GiB, not aggregateWindows descendant containment. No stop or cleanup error observed in any seven raw owner/bridge receipts.",
+    "absence_scope": "Fresh21 Linux recordedbirth absences; exact14 savedWindowsbirth postterminal observations. A reusedPID3264 in floor-fp32comp terminal receipt is not confused with the absent ownedbirth. Accessible command/executable census with savedhidden-field gaps; no globalWindows/handleabsence claim.",
+    "environment_scope": "All seven actual samebirthLinux protected snapshots empty; Windowsowners record absent protected overrides and ownedTEMP/TMP. Original native defaultcache apparatus retained. No fullWindowsenvironment, cachehit/miss/coldness inference."
+  },
+  "original_image_and_precision": {
+    "source": {
+      "path": "tests/backend/kernel_trace_test.cpp",
+      "bytes": 30289,
+      "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a"
+    },
+    "continuation_helper": {
+      "path": "tests/support/trace_continuation_probe.h",
+      "bytes": 13798,
+      "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399"
+    },
+    "original_64x64_scene_parameters_and_64active_row_work_bound_preserved": true,
+    "original_physical1000ms_assertions_preserved": true,
+    "image": {
+      "allchannel_finiteness_nonconstancy_and_shadowband_assertions_completed": true,
+      "stdout_shadow_fraction": "0.109375",
+      "stdout_luminance_range": [
+        "0",
+        "0.874792"
+      ]
+    },
+    "precision": {
+      "XML_fp64_evidence": "native_comparison_executed",
+      "unsupported_refusal_is_not_accepted_as_comparison": true,
+      "test_seconds": "270.024",
+      "native_owner_seconds": 270.6872788,
+      "bridge_seconds": 304.6984095929947,
+      "sampled_native_child_WorkingSet_peak_bytes": 1362972672,
+      "stdout_mean_absolute_difference": "1.63447e-7",
+      "stdout_maximum_absolute_difference": "7.92742e-6",
+      "stdout_fp64_range": [
+        "0",
+        "1"
+      ],
+      "stdout_black32": 448,
+      "stdout_black64": 448,
+      "original_assertions": "ActualFP64 trajectory nonempty and same-sized asFP32; allFP64radiance finite; contrast>1e-3; blackcountdifference<=2percent; meanAbsDiff<1e-2; maxAbsDiff<2.0. Original tests and tolerances unchanged."
+    },
+    "raw_image_framebuffers_saved": false
+  },
+  "checkout": {
+    "head": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+    "tracked_tree_clean": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "new_review_sidecar_committed_or_pushed": false
+  },
+  "limitations": [
+    "Finite original nativeAMD seven-case acceptance only. No rawframebuffer/pixel-byte replay or stronger same-scene physical-reference claim.",
+    "Rung retries/capturedstate/image/precision witnesses do not complete fullP1/40fields/dense/pupil/film or all scientific acceptance.",
+    "No1080pBardeen,retainedcold,fullMandatory,UI,release,coldness,latency/performance or globalWindowsabsence claim.",
+    "No next coupled witness launch admission; root decision remains separate."
+  ]
+}

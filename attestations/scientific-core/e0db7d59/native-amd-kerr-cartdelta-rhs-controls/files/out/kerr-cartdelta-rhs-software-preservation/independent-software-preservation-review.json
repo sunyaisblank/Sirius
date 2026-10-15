@@ -1,0 +1,80 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-independent-software-preservation-review-v1",
+  "passed": true,
+  "preservation_audit_passed": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewer_role": "Independent of current software execution, terminal result reviews and preservation packing; earlier source-copy author and CI/static preservation reviewer.",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "pins": {
+    "manifest": {
+      "path": "attestations/scientific-core/e0db7d59/kerr-cartdelta-rhs-source-and-software-controls/manifest.json",
+      "bytes": 24324,
+      "sha256": "011419362ad3d32c8aa6836ba22fc7723f1a08f8641b3958a7bf74ea678b391d"
+    },
+    "preservation": {
+      "path": "attestations/scientific-core/e0db7d59/kerr-cartdelta-rhs-source-and-software-controls/preservation.json",
+      "bytes": 201611,
+      "sha256": "eadff8fec8de3494bf770433145e028f529462b0114444595cff15137be46cba"
+    },
+    "accepted_first_seven_review": {
+      "path": "attestations/scientific-core/e0db7d59/kerr-cartdelta-rhs-source-and-software-controls/files/out/kerr-cartdelta-rhs-controls/independent-completed-seven-review.json",
+      "bytes": 20777,
+      "sha256": "df1105f6f8016c3219bcc99c003411fdefba11e9c5fdb3ab67ac0e6604e07082"
+    },
+    "accepted_completion_review": {
+      "path": "attestations/scientific-core/e0db7d59/kerr-cartdelta-rhs-source-and-software-controls/files/out/kerr-cartdelta-rhs-controls/independent-completion-review.json",
+      "bytes": 12563,
+      "sha256": "87c38d0007db662219cbe85358d48c7cf0e56ea471287111922de55a2576d7a2"
+    },
+    "historical_root_completed": {
+      "path": "attestations/scientific-core/e0db7d59/kerr-cartdelta-rhs-source-and-software-controls/files/out/kerr-cartdelta-rhs-controls/root-completed.json",
+      "bytes": 6780,
+      "sha256": "421991063f919787f5226d5e20e1b7537e1634756ac42beeb378d365ed66ffa4"
+    }
+  },
+  "verified": {
+    "bundle_files": 131,
+    "manifest_leaves": 130,
+    "exact_payload_pairs": 129,
+    "payload_partition": {
+      "completed_software_W": 110,
+      "checks": 5,
+      "candidate_K": 5,
+      "late_retirement_proofs": 5,
+      "late_CI_preservation": 4
+    },
+    "all_manifest_and_source_copy_bytes_SHA256_safe_sets_exact": true,
+    "actual_before_after_input_rows": 9952,
+    "unique_actual_and_preflight_inputs": 636,
+    "input_backing_partition": {
+      "exact_named_source_Git_blobs": 538,
+      "exact_private_copies": 52,
+      "named_canonical_product_byte_aliases": 8,
+      "external_hash_only": 36,
+      "held_Cache_and_Ninja_hash_only": 2
+    },
+    "source_Git": "All538 paths resolve at named e0 source to the declared blob IDs; each actual Git blob length/SHA256 and Git object hash matches its copied input identity.",
+    "products": "All8 actual canonical paths match declared input identities and exact named Git leaves. Linux backend ELF is genuinely backed by historical Linux b5c4f2a bytes;6 compiled/staged parity aliases join d066 CI and b2a6 static candidate bytes; alignment joins d066. No fresh C++ relink or foreign-OS ELF producer claim.",
+    "prior_reuse": "Four named manifest/preservation pairs and3 retirement leaves at2a86604d match exact Git bytes. Those3 leaves are referenced rather than duplicated; no recursive prior bundle copied.",
+    "finite_outcomes": "All8 original action owners are terminal child0/no stop/cleanup/remainers with stable before/after maps, original300s/4GiB aggregate/2GiB reserve. All8 one-case XMLs are completed/zeroFESD with exact required positive properties; accepted root-file links match copied bytes.",
+    "last_case": "Final precision-invariants XML passed in268.394s; stdout has3 completed opcode6 actual records/submissions and final positive native_invariants_executed property. Owner wall268.7160267880099s remains distinct from XML test time.",
+    "environment": "All8 preserved child snapshots explicitly record LVP_JIT_OPTIMIZATION_LEVEL=0, LVP ICD/device0 and MESA_SHADER_CACHE_DISABLE unset. Default-cache/physical1000ms assertions remain scoped to original focused diagnostics; no cold/performance inference.",
+    "chronology": "Original root-completed pending-eighth-review field remains unchanged and is composed with actual final independent PASS. Sixth collector closure polling after seventh launch remains candid in accepted records; no chronology rewritten.",
+    "workspace": {
+      "status": "## development/minimum-step-floor-2026-10-15...origin/development/minimum-step-floor-2026-10-15",
+      "sole_worktree": true,
+      "source_clean_committed_and_pushed": true
+    }
+  },
+  "limits": {
+    "finite_original_eight_PASS_preserved": true,
+    "raw_or_held_inputs_released_modified_or_retired": false,
+    "current_native_N_outputs_bindings_or_processes_read": false,
+    "fresh_process_or_global_consumer_absence_claim": false,
+    "hash_only_38_rows_binary_backup_or_reconstruction_claim": false,
+    "new_numerical_reanalysis_runtime_native_image_all40_P1_Mandatory_cold128_performance_release_admission": false,
+    "project_helpers_parsers_compilers_providers_tests_network_signals_or_Git_mutation_executed": false,
+    "operator_next_step": "Root owns Git preservation/push and separate future hold-safe retirement. All current W/checks/K/retirement/CI followup inputs remain intact, including active native holds."
+  },
+  "blockers": []
+}

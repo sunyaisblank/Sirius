@@ -1,0 +1,79 @@
+{
+  "schema": "sirius-native-windows-kerr-rhs-source-preparation-v1",
+  "source_only": true,
+  "admitted": false,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "origin_commit": "4767db8a07560ee3eea39aadc8b3490ade903f58",
+  "helpers": {
+    "run_system.py": {
+      "bytes": 19322,
+      "sha256": "8219114bd4dfb92588b41c6f683e60be3693624c2b6e4928ffbc10cf069532b4"
+    },
+    "run_terminal.py": {
+      "bytes": 18548,
+      "sha256": "38c3050708fc6f379578ff04fc4653797f66539f89f916ceeebec4681e62c766"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "prepare_bindings.py": {
+      "bytes": 12262,
+      "sha256": "05b0da6f1aed74ff5523f645c57038246dc4923403249e89cc6b4bd66856d665"
+    }
+  },
+  "source_contracts": {
+    "bytes": 15407,
+    "sha256": "0091d1297b82de6254ad40cbed82d27944330432e67fae99daf2e6a03b474bc6"
+  },
+  "patch": {
+    "bytes": 13054,
+    "sha256": "d9ad186a313a639093e5373a78b1f3031bbb1633c87707419285a4c46b6ab855"
+  },
+  "selected_profile": "floor-regressions-then-original-kerr",
+  "selected_commands": [
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py floor-fp32",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py floor-fp32",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py floor-fp64",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py floor-fp64",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py captured-fp32",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py captured-fp32",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py kerr-image",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py kerr-image",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py kerr-precision",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py kerr-precision"
+  ],
+  "binding_preparation_command": "python3 -B out/native-windows-kerr-rhs-e0db7d59/prepare_bindings.py",
+  "binding_preparation_executed": false,
+  "native_launch_authorized": false,
+  "actual_products_admitted": false,
+  "actual_CI_packet": "out/kerr-cartdelta-rhs-ci-e0db7d59",
+  "stage": "bin/windows-msvc/diagnostic-e0db7d59",
+  "pending_actual_CI_fields": [
+    "Current requested CI terminal/product/source validation and nativeGate authority",
+    "Actual artifact ID/ZIP/M/nativeGate/executable/loader/AMD/host identities",
+    "Current root-ci-stage-admission.json complete physical input map",
+    "Actual final source/input/member counts and14argv+cleanup pairs",
+    "Independent/root concrete bindings/runtime admission and software-terminal root decision"
+  ],
+  "actual_files_required_absent": [
+    "plan.json",
+    "execution-bindings.json",
+    "source-freeze.json",
+    "root-ci-stage-admission.json",
+    "native",
+    "temp"
+  ]
+}

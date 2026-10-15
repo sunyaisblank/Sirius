@@ -1,0 +1,400 @@
+{
+  "schema": "sirius-native-kerr-rhs-root-completed-results-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "all_seven_passed": true,
+  "completed_utc": "2026-10-15T16:25:33.285736+00:00",
+  "cases": [
+    {
+      "case": "floor-fp32",
+      "test_seconds": "248.749",
+      "native_owner_seconds": 251.2332497,
+      "bridge_seconds": 283.67651239200495,
+      "peak_native_child_WorkingSet_bytes": 1040211968,
+      "whole_input_rows": 1177,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "17.448300",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32_evidence": "real_adaptive_minimum_retry_controls_executed"
+      }
+    },
+    {
+      "case": "floor-fp32comp",
+      "test_seconds": "219.125",
+      "native_owner_seconds": 220.5924775,
+      "bridge_seconds": 248.95087828600663,
+      "peak_native_child_WorkingSet_bytes": 987967488,
+      "whole_input_rows": 1189,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "17.210400",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32comp_evidence": "real_adaptive_minimum_retry_controls_executed"
+      }
+    },
+    {
+      "case": "floor-fp64",
+      "test_seconds": "285.402",
+      "native_owner_seconds": 286.554652,
+      "bridge_seconds": 314.9758003450115,
+      "peak_native_child_WorkingSet_bytes": 1071124480,
+      "whole_input_rows": 1201,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "20.982800",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp64_evidence": "real_adaptive_minimum_retry_controls_executed"
+      }
+    },
+    {
+      "case": "captured-fp32",
+      "test_seconds": "0.491",
+      "native_owner_seconds": 1.8521227999999998,
+      "bridge_seconds": 30.252548370001023,
+      "peak_native_child_WorkingSet_bytes": 44761088,
+      "whole_input_rows": 1213,
+      "positive_properties": {
+        "parity_opcode_8_completed_records": "1",
+        "parity_opcode_8_actual_submissions": "1",
+        "parity_opcode_8_maximum_submit_ms": "17.087100",
+        "parity_opcode_8_allocated_bytes": "336"
+      }
+    },
+    {
+      "case": "captured-fp32comp",
+      "test_seconds": "0.489",
+      "native_owner_seconds": 1.8646239999999998,
+      "bridge_seconds": 31.998142031996395,
+      "peak_native_child_WorkingSet_bytes": 44756992,
+      "whole_input_rows": 1225,
+      "positive_properties": {
+        "parity_opcode_8_completed_records": "1",
+        "parity_opcode_8_actual_submissions": "1",
+        "parity_opcode_8_maximum_submit_ms": "17.709600",
+        "parity_opcode_8_allocated_bytes": "336"
+      }
+    },
+    {
+      "case": "kerr-image",
+      "test_seconds": "211.801",
+      "native_owner_seconds": 213.4986655,
+      "bridge_seconds": 249.9396928339993,
+      "peak_native_child_WorkingSet_bytes": 1124995072,
+      "whole_input_rows": 1237,
+      "positive_properties": {}
+    },
+    {
+      "case": "kerr-precision",
+      "test_seconds": "270.024",
+      "native_owner_seconds": 270.6872788,
+      "bridge_seconds": 304.6984095929947,
+      "peak_native_child_WorkingSet_bytes": 1362972672,
+      "whole_input_rows": 1249,
+      "positive_properties": {
+        "fp64_evidence": "native_comparison_executed"
+      }
+    }
+  ],
+  "image_summary": {
+    "shadow_fraction": 0.109375,
+    "luminance_min": 0.0,
+    "luminance_max": 0.874792
+  },
+  "precision_summary": {
+    "mean_abs_difference": 1.63447e-07,
+    "max_abs_difference": 7.92742e-06,
+    "FP64_min": 0.0,
+    "FP64_max": 1.0,
+    "black32": 448,
+    "black64": 448
+  },
+  "binding": {
+    "bytes": 253136,
+    "sha256": "acaa4581a7b265e163977a35348b852609eafeb96e970fb6628af04e1665c5e1"
+  },
+  "static_binding_files": 1176,
+  "owner_static_with_binding_itself": 1177,
+  "final_predecessor_input_rows": 1249,
+  "all84_case_ancestor_records_preserved": true,
+  "fresh_saved_Linux_births_absent": [
+    {
+      "case": "floor-fp32",
+      "role": "controller",
+      "pid": 960111,
+      "saved_start_ticks": "12849823",
+      "absent": true
+    },
+    {
+      "case": "floor-fp32",
+      "role": "interop_child",
+      "pid": 960146,
+      "saved_start_ticks": "12850326",
+      "absent": true
+    },
+    {
+      "case": "floor-fp32",
+      "role": "terminal_interop_child",
+      "pid": 970225,
+      "saved_start_ticks": "12881759",
+      "absent": true
+    },
+    {
+      "case": "floor-fp32comp",
+      "role": "controller",
+      "pid": 973935,
+      "saved_start_ticks": "12894148",
+      "absent": true
+    },
+    {
+      "case": "floor-fp32comp",
+      "role": "interop_child",
+      "pid": 973944,
+      "saved_start_ticks": "12894583",
+      "absent": true
+    },
+    {
+      "case": "floor-fp32comp",
+      "role": "terminal_interop_child",
+      "pid": 983686,
+      "saved_start_ticks": "12930802",
+      "absent": true
+    },
+    {
+      "case": "floor-fp64",
+      "role": "controller",
+      "pid": 986893,
+      "saved_start_ticks": "12934931",
+      "absent": true
+    },
+    {
+      "case": "floor-fp64",
+      "role": "interop_child",
+      "pid": 986901,
+      "saved_start_ticks": "12935495",
+      "absent": true
+    },
+    {
+      "case": "floor-fp64",
+      "role": "terminal_interop_child",
+      "pid": 997263,
+      "saved_start_ticks": "12971052",
+      "absent": true
+    },
+    {
+      "case": "captured-fp32",
+      "role": "controller",
+      "pid": 1000701,
+      "saved_start_ticks": "12977378",
+      "absent": true
+    },
+    {
+      "case": "captured-fp32",
+      "role": "interop_child",
+      "pid": 1000761,
+      "saved_start_ticks": "12978113",
+      "absent": true
+    },
+    {
+      "case": "captured-fp32",
+      "role": "terminal_interop_child",
+      "pid": 1009570,
+      "saved_start_ticks": "12986186",
+      "absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "role": "controller",
+      "pid": 1013111,
+      "saved_start_ticks": "12994425",
+      "absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "role": "interop_child",
+      "pid": 1013135,
+      "saved_start_ticks": "12995277",
+      "absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "role": "terminal_interop_child",
+      "pid": 1021213,
+      "saved_start_ticks": "13001686",
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "role": "controller",
+      "pid": 1024550,
+      "saved_start_ticks": "13008436",
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "role": "interop_child",
+      "pid": 1024596,
+      "saved_start_ticks": "13009869",
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "role": "terminal_interop_child",
+      "pid": 1033455,
+      "saved_start_ticks": "13038179",
+      "absent": true
+    },
+    {
+      "case": "kerr-precision",
+      "role": "controller",
+      "pid": 1036977,
+      "saved_start_ticks": "13044485",
+      "absent": true
+    },
+    {
+      "case": "kerr-precision",
+      "role": "interop_child",
+      "pid": 1037033,
+      "saved_start_ticks": "13045699",
+      "absent": true
+    },
+    {
+      "case": "kerr-precision",
+      "role": "terminal_interop_child",
+      "pid": 1046499,
+      "saved_start_ticks": "13077770",
+      "absent": true
+    }
+  ],
+  "saved_Windows_terminal_birth_absences": [
+    {
+      "case": "floor-fp32",
+      "kind": "owner",
+      "pid": 4324,
+      "recorded_start_utc": "2026-10-15T15:45:35.3528654Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "floor-fp32",
+      "kind": "test",
+      "pid": 9560,
+      "recorded_start_utc": "2026-10-15T15:46:04.3452012Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "floor-fp32comp",
+      "kind": "owner",
+      "pid": 3264,
+      "recorded_start_utc": "2026-10-15T15:52:58.3320349Z",
+      "pid_currently_live": true,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "floor-fp32comp",
+      "kind": "test",
+      "pid": 4656,
+      "recorded_start_utc": "2026-10-15T15:53:22.1563634Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "floor-fp64",
+      "kind": "owner",
+      "pid": 15556,
+      "recorded_start_utc": "2026-10-15T15:59:47.8965102Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "floor-fp64",
+      "kind": "test",
+      "pid": 4212,
+      "recorded_start_utc": "2026-10-15T16:00:11.6122248Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "captured-fp32",
+      "kind": "owner",
+      "pid": 22468,
+      "recorded_start_utc": "2026-10-15T16:06:54.5797663Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "captured-fp32",
+      "kind": "test",
+      "pid": 24184,
+      "recorded_start_utc": "2026-10-15T16:07:18.3821502Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "kind": "owner",
+      "pid": 17328,
+      "recorded_start_utc": "2026-10-15T16:09:46.4001761Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "kind": "test",
+      "pid": 23060,
+      "recorded_start_utc": "2026-10-15T16:10:10.5172008Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "kerr-image",
+      "kind": "owner",
+      "pid": 25344,
+      "recorded_start_utc": "2026-10-15T16:12:12.5144776Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "kerr-image",
+      "kind": "test",
+      "pid": 17020,
+      "recorded_start_utc": "2026-10-15T16:12:41.9189043Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "kerr-precision",
+      "kind": "owner",
+      "pid": 23284,
+      "recorded_start_utc": "2026-10-15T16:18:11.2004252Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "kerr-precision",
+      "kind": "test",
+      "pid": 21804,
+      "recorded_start_utc": "2026-10-15T16:18:40.7014360Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    }
+  ],
+  "all_actual_system_terminal_and_root_checkpoint_operations_observed_closed_zero": true,
+  "native_child_WorkingSet_guard_bytes": 4294967296,
+  "WSL_reserve_KiB": 2097152,
+  "native_first5_seconds": 900,
+  "native_image_precision_seconds": 28800,
+  "bridge_allowance_seconds": 480,
+  "terminal_seconds": 60,
+  "original_actual_submission_ms": 1000,
+  "default_AMD_cache_policy_unchanged": true,
+  "independent_completed_six_review": {
+    "bytes": 25641,
+    "sha256": "f9fd6dba7420099c77f1a97ac6b6c03be65ae08e81e605e47643ccfb3a03fc01"
+  },
+  "final_independent_completion_review_pending_at_creation": true,
+  "scope": "Seven exact original finite nativeAMD controls only; samechild stagedSDK+AMD observations and dated postseals/accessible consumer audits preserved. Raw framebuffers are not saved. No global Windows or aggregate bootstrap containment, coldness/latency/performance, fullP1/all40fields/fullMandatory/eight-domain/UI/installed-release acceptance."
+}

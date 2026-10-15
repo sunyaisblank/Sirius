@@ -1,0 +1,91 @@
+{
+  "schema": "sirius-native-windows-kerr-composite-plan-v1",
+  "admitted": false,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "runner_source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "control_profile": "floor-regressions-then-original-kerr",
+  "stage": "bin/windows-msvc/diagnostic-e0db7d59",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "order": [
+    "floor-fp32",
+    "floor-fp32comp",
+    "floor-fp64",
+    "captured-fp32",
+    "captured-fp32comp",
+    "kerr-image",
+    "kerr-precision"
+  ],
+  "actions": {
+    "floor-fp32": {
+      "kind": "Control",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "expected_exit": 0,
+      "owner_seconds": 900,
+      "bridge_outer_seconds": 1380
+    },
+    "floor-fp32comp": {
+      "kind": "Control",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "expected_exit": 0,
+      "owner_seconds": 900,
+      "bridge_outer_seconds": 1380
+    },
+    "floor-fp64": {
+      "kind": "Control",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "expected_exit": 0,
+      "owner_seconds": 900,
+      "bridge_outer_seconds": 1380
+    },
+    "captured-fp32": {
+      "kind": "Control",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "expected_exit": 0,
+      "owner_seconds": 900,
+      "bridge_outer_seconds": 1380
+    },
+    "captured-fp32comp": {
+      "kind": "Control",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "expected_exit": 0,
+      "owner_seconds": 900,
+      "bridge_outer_seconds": 1380
+    },
+    "kerr-image": {
+      "kind": "Control",
+      "test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "expected_exit": 0,
+      "owner_seconds": 28800,
+      "bridge_outer_seconds": 29280
+    },
+    "kerr-precision": {
+      "kind": "Control",
+      "test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+      "expected_exit": 0,
+      "owner_seconds": 28800,
+      "bridge_outer_seconds": 29280
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "Unchanged held-handle Windows owner samples child WorkingSet64/PrivateMemorySize64 under4GiB. WSL sampled MemAvailable reserve2GiB; Linux bridge owner+480seconds; separate terminal60seconds. Original trace/P1 physical1000ms assertions unchanged; outer900/28800 bounds are prospective external diagnostics, not original whole-test deadlines or aggregate Windows/bootstrap memory guarantees. Default AMD cache and inherited override refusal unchanged.",
+  "prospective_commands": [
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py floor-fp32",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py floor-fp32",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py floor-fp64",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py floor-fp64",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py captured-fp32",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py captured-fp32",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py kerr-image",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py kerr-image",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py kerr-precision",
+    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py kerr-precision"
+  ],
+  "stop_on_first_nonpass": true,
+  "scope": "Source-only pending positive-control protocol. No sampler/near rerun. Image then precision only after image terminal acceptance. Optional five parity witnesses run first only after explicit root selection. No fullMandatory, whole-domain horizon, image archive, performance or release qualification claim."
+}
