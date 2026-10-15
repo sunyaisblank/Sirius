@@ -1,0 +1,56 @@
+{
+  "inputs_before": {
+    "bytes": 949016,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls-continuation/link-candidate/inputs-before.json",
+    "sha256": "6941ade9bfccd27025fd9322a76886a7b4ef83ac1d652aa1361cccd249627462"
+  },
+  "label": "link-candidate",
+  "operator_context": {
+    "bytes": 810,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls-continuation/operator-context.json",
+    "sha256": "4982e53703c2d29cae66fa9266313f5d0fc9cf678ec2032207352dad1688f31d"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/candidate.map": {
+      "bytes": 1192408,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/candidate.map",
+      "sha256": "c8dc699bbe80feb6b2834da763fb15ec0d12a21a2f5b8eaaf9a2bc81ff4cf226"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/original_candidate_controls": {
+      "bytes": 10803440,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/original_candidate_controls",
+      "sha256": "644cacd545692ae6a4bd308ab32804bcf4a6699404a0b04020d3d9b5618d9033"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-DNDEBUG",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/observer.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/compute-sealed.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o",
+      "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-jit/int64-vulkan_device.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "-ldl",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/candidate.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/original_candidate_controls"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 1014747,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp64-estimate-controls-continuation/source-freeze.json",
+    "sha256": "7dca628a0e50f92fd83b5c0720dcc7a51d8ba4962256b40998d8cca1758e262e"
+  }
+}

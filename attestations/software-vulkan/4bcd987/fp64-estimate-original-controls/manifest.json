@@ -1,0 +1,789 @@
+{
+  "files": {
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/candidate.map": {
+      "bytes": 1192408,
+      "sha256": "c8dc699bbe80feb6b2834da763fb15ec0d12a21a2f5b8eaaf9a2bc81ff4cf226"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/compute-sealed.d": {
+      "bytes": 815,
+      "sha256": "3219cf082dd2a94cfaa336a8c62229d845fda7c4cc29c21de41bd933107352c7"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/compute-sealed.o": {
+      "bytes": 5731160,
+      "sha256": "4d18eb18fc7bfb4a65ce793fcc3124a4d263e74b07e5247c5b17a8b065e675bc"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/headers/retained_kernels.h": {
+      "bytes": 8036565,
+      "sha256": "1e5adcd49f4b37f72e40f8b29c85c415ef6113700de3f11388366eecd7542fb4"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/headers/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/headers/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/observer.d": {
+      "bytes": 4802,
+      "sha256": "6b7e72e933f3d45f5f30ec08eb09d90ab13e20a651bbd152f8219102b44ce1f3"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/observer.o": {
+      "bytes": 9314320,
+      "sha256": "a41a6bc4f307e8fc31c188768dfe84f2d4671d6765d79512898fd29bd041c6a1"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/original_baseline_controls": {
+      "bytes": 10753968,
+      "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/original_candidate_controls": {
+      "bytes": 10803440,
+      "sha256": "644cacd545692ae6a4bd308ab32804bcf4a6699404a0b04020d3d9b5618d9033"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/portability/trace.cu": {
+      "bytes": 316063,
+      "sha256": "e8460dbe10346d5cf457a533c7126707b87cbd108f43c7a8f2fb6e92f5e8fd8d"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/portability/trace.metal": {
+      "bytes": 338766,
+      "sha256": "879d15908e66449f789652f40a329b731bebc65dca396659b636cf834943df06"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/controls/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+    },
+    "files/out/original-cold-kerr-source-review-continuation/root-review.json": {
+      "bytes": 689,
+      "sha256": "9d7f10f8a8e70ff99a9d638b78b4b59d438e3c2e0f39c47ac4eb792e736c8fda"
+    },
+    "files/out/original-cold-kerr-source-review-continuation/source-findings.json": {
+      "bytes": 13708,
+      "sha256": "9cf63fabbe68c34992633b08f82a437e3f5d7babc1129ed9258e041beede003b"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/actions.json": {
+      "bytes": 5242566,
+      "sha256": "0dcd00362d4b9be221eac63941e8bb584383a42c07b578d7468ddced98c1799a"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/actions.unpinned.json": {
+      "bytes": 5242566,
+      "sha256": "0dcd00362d4b9be221eac63941e8bb584383a42c07b578d7468ddced98c1799a"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/audited-observer.cpp": {
+      "bytes": 335033,
+      "sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/baseline-create.disassembly": {
+      "bytes": 221174,
+      "sha256": "ae53eb39a129ea7478dd7067c3680370b4f5efa69af130aa206ee438f79d40cc"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/candidate-create.disassembly": {
+      "bytes": 221189,
+      "sha256": "a896a459b8d23b4fa638c4cb00fd63df2ae0383214f5035671d4603bfe7654f3"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/check_controls.py": {
+      "bytes": 4168,
+      "sha256": "53b055d8f8d24aef8c4e2592e4f51300b5254c96324690ac7efe5f4837866659"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/commands.json": {
+      "bytes": 1974,
+      "sha256": "7f225061ca47c9b335e805cbcf3456cb846b8f741620bb3daa34e652ac7f2e04"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed/inputs-after.json": {
+      "bytes": 944847,
+      "sha256": "937c6bc178775f230564291f8674a1c4d815d6dfe4aca0337196f85b4e9f60f4"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed/inputs-before.json": {
+      "bytes": 944847,
+      "sha256": "937c6bc178775f230564291f8674a1c4d815d6dfe4aca0337196f85b4e9f60f4"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed/output-seal.json": {
+      "bytes": 2602,
+      "sha256": "e452cf16d29a4388e59420ab72e7b505b33709c6651c0fa68d980330466f7775"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed/owner.json": {
+      "bytes": 2226,
+      "sha256": "c48bd189c267c243c677012782ab4e5189b818e584e1e283b569e05b00c899d7"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed/samples.jsonl": {
+      "bytes": 10416,
+      "sha256": "2fb7089a3b5d9e369644ae84759db926e583662546375883d5d26b7869d6ecaa"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer/inputs-after.json": {
+      "bytes": 944847,
+      "sha256": "937c6bc178775f230564291f8674a1c4d815d6dfe4aca0337196f85b4e9f60f4"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer/inputs-before.json": {
+      "bytes": 944847,
+      "sha256": "937c6bc178775f230564291f8674a1c4d815d6dfe4aca0337196f85b4e9f60f4"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer/output-seal.json": {
+      "bytes": 3182,
+      "sha256": "0cd670a5ec8d06fed27925e23a946cd178a0ba1e8427a0486c105ceaa376dd5b"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer/owner.json": {
+      "bytes": 2343,
+      "sha256": "27245f6065b7a6ca4decbba299c9adf9f59dd46cc71ee9ada9beda50e7443e3a"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer/samples.jsonl": {
+      "bytes": 74005,
+      "sha256": "89b5d4adcc5fbda1f338d8673efdcd2e661d97fc9dc4521afb9c8b7fdf45eb3f"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/contract/baseline.json": {
+      "bytes": 7636,
+      "sha256": "6ebf145c9660e158e61ad035a85392906ca5ebaf18029ab9bce8d38c2ddfda82"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/contract/build-and-arrays.json": {
+      "bytes": 7638,
+      "sha256": "e730e649fe1644d13ea1ddff57f43dfeaa7686a3a8b4a7dfe3884954c70696f7"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/contract/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/contract/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-1/gtest.xml": {
+      "bytes": 10041,
+      "sha256": "85c267a709841176b279924fcc7826d7c41e60995da606c95b0485494276c448"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-1/inputs-after.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-1/inputs-before.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-1/owner.json": {
+      "bytes": 3563,
+      "sha256": "24aa0aaad06dcc63565243524e432ae3527baec1182f3252feb5fcad2f6986b0"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-1/samples.jsonl": {
+      "bytes": 693124,
+      "sha256": "4b14b6e04e922327b109b904dcd9182cd66ae517e74c57f3c4375ea3578a3796"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-1/stderr.log": {
+      "bytes": 13700,
+      "sha256": "3fa0a73a38959ab4d534640e40f2690060b7c6089a7795282433b2cfe2bc4ccd"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-1/stdout.log": {
+      "bytes": 750,
+      "sha256": "55f556aea4bee76d34a99bbd96db2cf10bba14d158d456fa0dddc6da66db2391"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-2/gtest.xml": {
+      "bytes": 661,
+      "sha256": "d5cd443e6f488c918b831740ec73c2881dd0dc4540580ea314dfe647018d0b3d"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-2/inputs-after.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-2/inputs-before.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-2/owner.json": {
+      "bytes": 3556,
+      "sha256": "7ca21fe6ca46ca67ac9d23398c8d31d4d0102a6d0496f1c31927a99d56017f66"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-2/samples.jsonl": {
+      "bytes": 597824,
+      "sha256": "b001ef02b711a802c5010fabafa9ee18130c03b1ddddb08320c22f8a8d2b122c"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-2/stdout.log": {
+      "bytes": 729,
+      "sha256": "200a917829611be6b3d741f9b790c061e6164573d41e1d8327a845711e76f817"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-3/gtest.xml": {
+      "bytes": 1005,
+      "sha256": "b7a26aa9b17c74458286dcbfad0a2efd4870d498734bd90921aae07ec445140a"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-3/inputs-after.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-3/inputs-before.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-3/owner.json": {
+      "bytes": 3562,
+      "sha256": "2b8b95d6519ba85c2c1a82925cea08abaca6ce0ee6c30658d468d8693524feca"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-3/samples.jsonl": {
+      "bytes": 1241098,
+      "sha256": "d0616e2f789822dea2d28b31d16cd4cbef7e24b41c4f94860ece53c7e33ebd76"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-3/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-3/stdout.log": {
+      "bytes": 750,
+      "sha256": "de4dca800474fcd9b56b9208fd8ed4bcd524b8072b3f619a1c7ece31a5ed65a3"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-4/gtest.xml": {
+      "bytes": 609,
+      "sha256": "45f5791fe58fe5142131ea030faa90d6fe977a7254e67901eba675b915d38125"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-4/inputs-after.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-4/inputs-before.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-4/owner.json": {
+      "bytes": 3544,
+      "sha256": "4d8fefda1cdf533558ed590f3a81ca622674c87ac394e2370bc43731d703ac1c"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-4/samples.jsonl": {
+      "bytes": 901752,
+      "sha256": "d83836bd6477154522e01b4a847ceed2b133aabca8e66c1adc39a813db0db358"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-4/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-4/stdout.log": {
+      "bytes": 689,
+      "sha256": "27040d523baff21416a907a3f13297712ec1c5b670f24769940c7fac09525a2f"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-5/gtest.xml": {
+      "bytes": 619,
+      "sha256": "4866febbf6a7c4fe1848785addb71dfb87307605f012af12da2a181ffb58b904"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-5/inputs-after.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-5/inputs-before.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-5/owner.json": {
+      "bytes": 3554,
+      "sha256": "ec085b243fe1194cb92754dc7aab56dd04484950eb1f7c821f913dbe75a2b4be"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-5/samples.jsonl": {
+      "bytes": 1034076,
+      "sha256": "bf5198c6133b22141e18ad2f284a182c5f297b1fe4f313a3f1ad9601ce10a7db"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-5/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-5/stdout.log": {
+      "bytes": 719,
+      "sha256": "d6209e9969f7532c2ffa64cfa3f9eae90110dde8c52d4e86ea2e0271db4d8190"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-6/gtest.xml": {
+      "bytes": 625,
+      "sha256": "d8f269d1ceac727df040728be0d3f221447244a97dbfd952d283a2d2aa268083"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-6/inputs-after.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-6/inputs-before.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-6/owner.json": {
+      "bytes": 3559,
+      "sha256": "0cfa4e7015b367d4aa92d56d66b7129b022599577546961479916d619807d6d5"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-6/samples.jsonl": {
+      "bytes": 1072667,
+      "sha256": "4550453e594f1b8fe60f2769efea927cdf63ff289f3e75f2a05caff10b2d0b96"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-6/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-6/stdout.log": {
+      "bytes": 734,
+      "sha256": "9e1320036f10c954a771e17965ad295dedb4e030349f486e8e5aca811fbb9908"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-7/gtest.xml": {
+      "bytes": 44830,
+      "sha256": "a45bfdab2f37c1d5de9c0f8a7420932dfe4886a33b33134cb4ae19087c3583f4"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-7/inputs-after.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-7/inputs-before.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-7/owner.json": {
+      "bytes": 3561,
+      "sha256": "8a8842438d7cf86435439da60fad5d4cd26a6548c25c19a13be4e03206e9c329"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-7/samples.jsonl": {
+      "bytes": 458032,
+      "sha256": "a6e7d4397c58f99cb9707b299d6be224499c7063427142495afe7482db610b36"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-7/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-7/stdout.log": {
+      "bytes": 744,
+      "sha256": "9f526c0d1e0a2796750165b9eea2b3a6cc85459c06f928eb9684ba3d640a15fd"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-8/gtest.xml": {
+      "bytes": 40739,
+      "sha256": "7c62bc5efe6ee7565ff351ff443d3006d62cb6887c8b0c84097894cd97b70a62"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-8/inputs-after.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-8/inputs-before.json": {
+      "bytes": 954779,
+      "sha256": "1a650b54072fc2f2ffda61d59b5b7159ea988301724c1ce189252443fd13f268"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-8/owner.json": {
+      "bytes": 3550,
+      "sha256": "47099e307b665eedd00941b6a10b9ccda58bfdce65fcfc437d13823bbb49bf77"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-8/samples.jsonl": {
+      "bytes": 498625,
+      "sha256": "d06744f2ef3ba5e555a30cb8a8f64ef347628cf6a310222bf2365107024ee62d"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-8/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-8/stdout.log": {
+      "bytes": 708,
+      "sha256": "42c611bafde5a1688f757fdc1423dc5921911565ed9888c65f9b2609ee8aa3f5"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/control-acceptance.json": {
+      "bytes": 6380,
+      "sha256": "d7c42bff2f20599a2bce3b306d0ece3860c4e62f4d9b533ecf2f97fd2ce8e314"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/endpoint-route-acceptance.json": {
+      "bytes": 16396,
+      "sha256": "5384a0400aa832b497a8aa57b45ee754b3a6054d440a3fa27df0b9a11f99e945"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/gate.py": {
+      "bytes": 14872,
+      "sha256": "87c3c20c2665bb7b8d2137db56db92f32531baa3d89f494f009bebd0aed07ebe"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/gate.py.patch": {
+      "bytes": 25011,
+      "sha256": "350bfb881be1ead4dcbbd036139c8049b0c2847e1fe7a8b8d9c29a31b3f51099"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/independent-source-review.json": {
+      "bytes": 9781,
+      "sha256": "24c7680fa6f8945c15e76df206965b001f47e60301ef3c30c2da54d35485911c"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/independent-terminal-review.json": {
+      "bytes": 22642,
+      "sha256": "339438b22497a66f9e149a23dad12bd5e7be169efb9f0612d97d164182561c9d"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate/inputs-after.json": {
+      "bytes": 949016,
+      "sha256": "6941ade9bfccd27025fd9322a76886a7b4ef83ac1d652aa1361cccd249627462"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate/inputs-before.json": {
+      "bytes": 949016,
+      "sha256": "6941ade9bfccd27025fd9322a76886a7b4ef83ac1d652aa1361cccd249627462"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate/output-seal.json": {
+      "bytes": 3385,
+      "sha256": "76df3ea6eb75a0c54c304fda85e3f48556cf6a38701d44257e807a93913e921f"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate/owner.json": {
+      "bytes": 2207,
+      "sha256": "333b860d86f7fe025b84f0ea69316fb5b8934742b86f49cc74a0b775dbf2d6a7"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate/samples.jsonl": {
+      "bytes": 1372,
+      "sha256": "1d9a8f312fbe487de0927e1b8ed7d4c09578ab3d5f377c5e5763476cd4e958dd"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/operator-context.json": {
+      "bytes": 810,
+      "sha256": "4982e53703c2d29cae66fa9266313f5d0fc9cf678ec2032207352dad1688f31d"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/original-baseline-timestamps.xml": {
+      "bytes": 40867,
+      "sha256": "fb6ab12fb9abec4b134fb8e795138feec999464e55e81c7f433063e3cec7e2eb"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/original-factored-readbacks.xml": {
+      "bytes": 10004,
+      "sha256": "d57c88e545e89d882b668dbdf3e6c0e6d8e3bfb3d26531ae7808f97e9dabf329"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/originals/gate.py": {
+      "bytes": 32916,
+      "sha256": "7555102aa40acb86ab22ca8f3007a9aa50ea723eea8ea74a8a88ae883971cb91"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/originals/packet.json": {
+      "bytes": 47650,
+      "sha256": "be6a03249712420b4392f0a29046721e70f19ad5880b147f7143c5c89cb22ea3"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/originals/profile.json": {
+      "bytes": 3996,
+      "sha256": "04f4591f79c79663230072b52b73fe4d1d88c737cb947d428e78c9cf2086d4c8"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/originals/verify_producer.py": {
+      "bytes": 9864,
+      "sha256": "a50f5408a2107309ab263a64cc0e8957f4a5372ca855829d978f5a1037bb8449"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/packet.json": {
+      "bytes": 27475,
+      "sha256": "40774bd60a8a14b5e18933de446fc1a1ba9557c590e2d5656c312c9a8fa07eac"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/preparation-draft.json": {
+      "bytes": 1360,
+      "sha256": "1b75426a3e3fa498492ecc9d21f43366a8de878dd0b733a022374cf36314b101"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/preparation.json": {
+      "bytes": 9237,
+      "sha256": "dffbeb7f8249abf9f5eaf7476cfe0d235b12efa6e2abb4c6209304bf917d73fc"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/prepare-producer/inputs-after.json": {
+      "bytes": 932619,
+      "sha256": "d2fcadf55ddf4f9e9ee770e5927842c4472e15eaa5004ebaaacadd134dbe890a"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/prepare-producer/inputs-before.json": {
+      "bytes": 932619,
+      "sha256": "d2fcadf55ddf4f9e9ee770e5927842c4472e15eaa5004ebaaacadd134dbe890a"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/prepare-producer/output-seal.json": {
+      "bytes": 12734,
+      "sha256": "a14453081b67681da4e9d88360ee080257f137792c5d8468bceb829e50f8107e"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/prepare-producer/owner.json": {
+      "bytes": 1958,
+      "sha256": "17b9d63ec43ed0a1e9dd5535b040ca98f14baff9e6cbcf81a72eaa463ad418f3"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/prepare-producer/samples.jsonl": {
+      "bytes": 19892,
+      "sha256": "c97f8c36dd117a552039549799e2c8f3ff647de9f9a6797b54cd00e27bb17d6a"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/prepare-producer/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/prepare-producer/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/prerequisite_receipts.py": {
+      "bytes": 10669,
+      "sha256": "c9cc44c1ea7e6e5268f5ae51b603ff1e4e36cdb76bff9ffd6e799cb4cc98d827"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/prerequisites-result.json": {
+      "bytes": 10999,
+      "sha256": "b00c9e5daa4e0a40f4cdd5941a7ba80967a21acaec7e2bbb47c5711abf9ed068"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/producer-acceptance.json": {
+      "bytes": 32518,
+      "sha256": "cd42f63ecf125f17c364db595b284730f5f61bab6be2805820380256ec4bf0e2"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/producer-feature-acceptance.json": {
+      "bytes": 181988,
+      "sha256": "0f72a606d124e40fd1ff514f92f90c42e301154cccd0d9145958d8f20a19ef8b"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/profile.json": {
+      "bytes": 4263,
+      "sha256": "8dee8e84aa3b21439c2ad939f282b27a534dea56483bd8ef089919aecfc301a7"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/protected-before.json": {
+      "bytes": 21913,
+      "sha256": "3a5cdc2757ea8797747c131838debd0a5c49e0e50eda1b5ee015848d4b842c8f"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/provenance.json": {
+      "bytes": 2507,
+      "sha256": "7bb14ab320e8cfaee509b0e0bb8e55f2d9b5d68bc0cb0cdbcd57cba0f1cd8afb"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/root-prelaunch-input-check.json": {
+      "bytes": 2026,
+      "sha256": "11a75a19c9308c2f290c7364fcda4c872c4ae0ed33f2a4a9aad851743bb11ce9"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/root-prepared-product-check.json": {
+      "bytes": 5620,
+      "sha256": "f0aaedd51d74dc69e9a3fcbda7f1c247531e936ce1e6079f425095cd509a5ba9"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/root-runtime-admission.json": {
+      "bytes": 4978,
+      "sha256": "2fb011dfaf108d1a8b31700ad8f97279ec73d33ed0009fdcb2388f69987c6d82"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/root-source-admission.json": {
+      "bytes": 1898,
+      "sha256": "2b9bc0a3136a2ae671996d7eb6efa8bee6f89d5312235f88bdc5ecb1785e2bd8"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/root-terminal-admission.json": {
+      "bytes": 1415,
+      "sha256": "f03d5dbcb602768d3a1e5f69b99e2b1ecdadaf82b7f99c0c4dadb7f69b74878c"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/root-terminal-input-check.json": {
+      "bytes": 15070,
+      "sha256": "a8e33f449a1956b94353388b24474b3c60fa0215c586c7653489a7274d7199ac"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/run_owned.py": {
+      "bytes": 12933,
+      "sha256": "492c75609a0dc8ff5eaa0299f7206820bb8a42f85c3ecc5b9b0af98f2496ba9f"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/runtime-context.json": {
+      "bytes": 12412,
+      "sha256": "6821e5e7321340f58152bbbf1120d666191ffb9a43b9108e50930d2c1eef58cc"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/source-freeze.json": {
+      "bytes": 1014747,
+      "sha256": "7dca628a0e50f92fd83b5c0720dcc7a51d8ba4962256b40998d8cca1758e262e"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-controls/inputs-after.json": {
+      "bytes": 970270,
+      "sha256": "01c98d977b71b8eba811804a351323a8c43f83911352a31f3a4ff1a0fc90c8f0"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-controls/inputs-before.json": {
+      "bytes": 970270,
+      "sha256": "01c98d977b71b8eba811804a351323a8c43f83911352a31f3a4ff1a0fc90c8f0"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-controls/output-seal.json": {
+      "bytes": 1378,
+      "sha256": "0038bbb83e6d1f54ea85b4c830e52700e6f5cdca770f0fa0b6c12c21f0c406ac"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-controls/owner.json": {
+      "bytes": 2084,
+      "sha256": "7baa02a23b23bf4517edd631a97a7b4aec12d63d20a2406af1b8995dfe33f1d9"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-controls/samples.jsonl": {
+      "bytes": 13161,
+      "sha256": "89a186d572261eab2e0c0294d3fd894a6147aa6510dc3fa66bcb5ba0a137af8c"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-controls/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-controls/stdout.log": {
+      "bytes": 160,
+      "sha256": "9e30ddd7181820c7a3c4cdc6123f57e8f449cfa5385291625d21bbf77daa54d4"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-endpoint-routes/inputs-after.json": {
+      "bytes": 970270,
+      "sha256": "01c98d977b71b8eba811804a351323a8c43f83911352a31f3a4ff1a0fc90c8f0"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-endpoint-routes/inputs-before.json": {
+      "bytes": 970270,
+      "sha256": "01c98d977b71b8eba811804a351323a8c43f83911352a31f3a4ff1a0fc90c8f0"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-endpoint-routes/output-seal.json": {
+      "bytes": 1414,
+      "sha256": "9cb4a381d03a8c07040cc21a5b014f9e9a214b4971af67767e6c94795cd43f19"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-endpoint-routes/owner.json": {
+      "bytes": 1970,
+      "sha256": "2b32de61f2ac5391b1df37bd2017f6b4d0206053b01f4c2dc86d372d237b9b36"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-endpoint-routes/samples.jsonl": {
+      "bytes": 897,
+      "sha256": "69bb6e7076d13b3d45ac0192155baa20ec61ba5aa72510becbc6bd6b2d7b5fa9"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-endpoint-routes/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-endpoint-routes/stdout.log": {
+      "bytes": 99,
+      "sha256": "04d5ca7671254cb1828fd26c2c7917bf278ca04af6b03487a759885ada003bab"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-producer/inputs-after.json": {
+      "bytes": 951093,
+      "sha256": "c814b1ab58ca74eb8d0d88eed95136f6e0f1b3c9516a56e4a828a9f029c1b356"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-producer/inputs-before.json": {
+      "bytes": 951093,
+      "sha256": "c814b1ab58ca74eb8d0d88eed95136f6e0f1b3c9516a56e4a828a9f029c1b356"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-producer/output-seal.json": {
+      "bytes": 3246,
+      "sha256": "88b5d1043f074f77899d9f3db1d1ee8edc170b7a8e25e5fb69cd1192f699bce5"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-producer/owner.json": {
+      "bytes": 2213,
+      "sha256": "169b005ad2e4f152ad8560de4d89fe29ba5e4f2814487019055c5b3430097c95"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-producer/samples.jsonl": {
+      "bytes": 2643,
+      "sha256": "64b90babb80140dc31236746c84d8c36e24b378e3a0d670f4d433bd904bc932f"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-producer/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify-producer/stdout.log": {
+      "bytes": 731,
+      "sha256": "5ccadfc1b559e3cc218b69325e7db5cda24320350f04f56d31bda32972c53c64"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify_control_routes.py": {
+      "bytes": 5238,
+      "sha256": "7b736438643902d724882d5e9d8fc1ee69105fcadc0e6bf03d3da054114ea760"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify_producer.py": {
+      "bytes": 9903,
+      "sha256": "a956cef057c2f40421758f9ffda2d9a4f1f457945a155c0af4421961194e683f"
+    },
+    "files/out/portable-divide-fp64-estimate-controls-continuation/verify_producer.py.patch": {
+      "bytes": 1618,
+      "sha256": "c835bb3129c51f32e7ea7ff31f7c078bc69449a3c48167c194631567f223d3fd"
+    },
+    "preserve-finite-result.py": {
+      "bytes": 209134,
+      "sha256": "908f878994ac99e54c05e1708c4783e1c3ac499cbf7c5d31bfc0f1afcadba619"
+    },
+    "result.json": {
+      "bytes": 257033,
+      "sha256": "6f8f35bc30e2c2cf58800a45d61433fe5994c7f45bf80dd4f529bba703d9facb"
+    },
+    "runner-source/.github/workflows/ci.yml": {
+      "bytes": 33866,
+      "sha256": "bc6e773d2abaa9cc7f1f3530811996312e7155f57f7426695f87ad4dcdf197e1"
+    },
+    "runner-source/scripts/diagnose-macos-retained.py": {
+      "bytes": 46569,
+      "sha256": "8998d73985e3c330f4d7b55d5a421c33c06ceff5cfa160cda6ea54bb97cd9034"
+    },
+    "runner-source/scripts/governance/build_policy.py": {
+      "bytes": 71532,
+      "sha256": "53dbfdc1107c871e38b824746d75142f0edff3ce535bd91d97b393f16e49d142"
+    },
+    "runner-source/scripts/macos_metal_probe.py": {
+      "bytes": 16087,
+      "sha256": "e61c75e6b6769150b4e18632418cbffc1382db1730ca2dbd9b5fb5b813789804"
+    },
+    "runner-source/scripts/macos_moltenvk_integration.py": {
+      "bytes": 41404,
+      "sha256": "c6e20d512bd49cb197ffc79761ea47858b1a27f40949dca07829540417cf27b6"
+    },
+    "runner-source/scripts/macos_vulkan_identity.py": {
+      "bytes": 8915,
+      "sha256": "7f70c1a2a341ea071624dfb01993289a89d54f3377afb48035437469c7d81025"
+    },
+    "runner-source/scripts/runtime_identity.py": {
+      "bytes": 27490,
+      "sha256": "00aa1aa63250599db1cc33692b51dcf73e236be7596f19fc1b603807bbccc8f2"
+    }
+  },
+  "qualification_claimed": false
+}

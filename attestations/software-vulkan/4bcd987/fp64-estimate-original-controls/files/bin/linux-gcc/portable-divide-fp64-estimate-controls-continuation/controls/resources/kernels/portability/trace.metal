@@ -1,0 +1,18952 @@
+#include <metal_stdlib>
+#include <metal_math>
+#include <metal_texture>
+using namespace metal;
+
+#line 277 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang"
+void MakeCelestialTangentBasis_0(float3 inputDirection_0, float3 thread* first_0, float3 thread* second_0)
+{
+    float3 direction_0 = normalize(inputDirection_0);
+
+
+
+    float _S1 = abs(inputDirection_0.x);
+
+#line 283
+    float _S2 = abs(inputDirection_0.y);
+
+#line 283
+    bool _S3;
+
+#line 283
+    if(_S1 <= _S2)
+    {
+
+#line 283
+        _S3 = _S1 <= (abs(inputDirection_0.z));
+
+#line 283
+    }
+    else
+    {
+
+#line 283
+        _S3 = false;
+
+#line 283
+    }
+
+#line 283
+    float3 reference_0;
+
+#line 283
+    if(_S3)
+    {
+
+#line 283
+        reference_0 = float3(1.0, 0.0, 0.0);
+
+#line 283
+    }
+    else
+    {
+
+#line 285
+        if(_S2 <= (abs(inputDirection_0.z)))
+        {
+
+#line 285
+            reference_0 = float3(0.0, 1.0, 0.0);
+
+#line 285
+        }
+        else
+        {
+
+#line 285
+            reference_0 = float3(0.0, 0.0, 1.0);
+
+#line 285
+        }
+
+#line 283
+    }
+
+#line 283
+    float3 _S4 = reference_0 - float3(dot(reference_0, direction_0))  * direction_0;
+
+#line 283
+    float3 _S5 = float3((1.0 / sqrt(dot(_S4, _S4)))) ;
+
+#line 292
+    *first_0 = _S4 * _S5;
+
+    *second_0 = cross(direction_0, reference_0) * _S5;
+    return;
+}
+
+
+#line 12253 "hlsl.meta.slang"
+float ldexp_0(float x_0, float exp_0)
+{
+
+#line 12261
+    return x_0 * exp2(exp_0);
+}
+
+
+#line 150 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_disk.slang"
+constant array<float, int(16)> PT_GL_WEIGHTS_0 = { 0.02715245820581913, 0.06225352361798286, 0.09515850991010666, 0.12462896853685379, 0.14959599077701569, 0.1691565215587616, 0.18260350823402405, 0.18945060670375824, 0.18945060670375824, 0.18260350823402405, 0.1691565215587616, 0.14959599077701569, 0.12462896853685379, 0.09515850991010666, 0.06225352361798286, 0.02715245820581913 };
+
+#line 144
+constant array<float, int(16)> PT_GL_NODES_0 = { -0.98940092325210571, -0.94457501173019409, -0.86563122272491455, -0.75540441274642944, -0.61787623167037964, -0.4580167829990387, -0.28160354495048523, -0.09501250833272934, 0.09501250833272934, 0.28160354495048523, 0.4580167829990387, 0.61787623167037964, 0.75540441274642944, 0.86563122272491455, 0.94457501173019409, 0.98940092325210571 };
+
+#line 232 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
+constant array<float3, int(12)> gradients_0 = { float3(1.0, 1.0, 0.0), float3(-1.0, 1.0, 0.0), float3(1.0, -1.0, 0.0), float3(-1.0, -1.0, 0.0), float3(1.0, 0.0, 1.0), float3(-1.0, 0.0, 1.0), float3(1.0, 0.0, -1.0), float3(-1.0, 0.0, -1.0), float3(0.0, 1.0, 1.0), float3(0.0, -1.0, 1.0), float3(0.0, 1.0, -1.0), float3(0.0, -1.0, -1.0) };
+
+#line 421
+struct _Array_natural_vectorx3Cfloatx2C4x3E4_0
+{
+    array<packed_float4, int(4)> data_0;
+};
+
+
+#line 421
+struct TraceContinuation_natural_0
+{
+    packed_float4 x_1;
+    packed_float4 u_0;
+    _Array_natural_vectorx3Cfloatx2C4x3E4_0 X_0;
+    _Array_natural_vectorx3Cfloatx2C4x3E4_0 V_0;
+    packed_float4 compX_0;
+    packed_float4 compU_0;
+    packed_float4 integration_0;
+    packed_float4 source_0;
+    packed_float4 volume_0;
+    packed_uint4 control_0;
+    packed_uint4 identity_0;
+};
+
+
+#line 140
+struct KernelContext_0
+{
+    float device* params_0;
+    TraceContinuation_natural_0 device* continuation_0;
+    float device* radiance_0;
+    uint device* pointOffsets_0;
+    uint device* pointIndices_0;
+    float device* pointStars_0;
+    uint device* starfield_0;
+};
+
+
+#line 65
+float3 P3_0(uint base_0, KernelContext_0 thread* kernelContext_0)
+{
+
+#line 65
+    return float3(kernelContext_0->params_0[base_0], kernelContext_0->params_0[base_0 + 1U], kernelContext_0->params_0[base_0 + 2U]);
+}
+
+
+#line 45 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_trace_continuation.slang"
+bool TraceReasonFinalizable_0(uint reason_0)
+{
+
+#line 45
+    bool _S6;
+    if(reason_0 == 1U)
+    {
+
+#line 46
+        _S6 = true;
+
+#line 46
+    }
+    else
+    {
+
+#line 46
+        _S6 = reason_0 == 2U;
+
+#line 46
+    }
+
+#line 46
+    if(_S6)
+    {
+
+#line 46
+        _S6 = true;
+
+#line 46
+    }
+    else
+    {
+
+#line 46
+        _S6 = reason_0 == 3U;
+
+#line 46
+    }
+    if(_S6)
+    {
+
+#line 47
+        _S6 = true;
+
+#line 47
+    }
+    else
+    {
+
+#line 47
+        _S6 = reason_0 == 10U;
+
+#line 47
+    }
+
+#line 46
+    return _S6;
+}
+
+
+#line 48 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_types.slang"
+struct Vec4Cart_0
+{
+    float t_0;
+    float x_2;
+    float y_0;
+    float z_0;
+};
+
+
+#line 61
+Vec4Cart_0 MakeVec4Cart_0(float t_1, float x_3, float y_1, float z_1)
+{
+
+#line 62
+    thread Vec4Cart_0 v_0;
+    (&v_0)->t_0 = t_1;
+
+#line 63
+    (&v_0)->x_2 = x_3;
+
+#line 63
+    (&v_0)->y_0 = y_1;
+
+#line 63
+    (&v_0)->z_0 = z_1;
+    return v_0;
+}
+
+
+#line 10 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_camera.slang"
+struct ThinLensProjectionSample_0
+{
+    float pupilRight_0;
+    float pupilUp_0;
+    float3 direction_1;
+};
+
+
+#line 16
+ThinLensProjectionSample_0 ProjectThinLensSample_0(float imageRight_0, float imageUp_0, float tanHalfFov_0, float focalLength_0, float aperture_0, float focusDistance_0, float sampleU_0, float sampleV_0)
+{
+
+    float focusRight_0 = imageRight_0 * tanHalfFov_0 * focusDistance_0;
+    float focusUp_0 = imageUp_0 * tanHalfFov_0 * focusDistance_0;
+
+
+
+    float pupilAngle_0 = 6.28318548202514648 * sampleU_0;
+    float pupilRadius_0 = focalLength_0 / 50.0 / (2.0 * aperture_0) * sqrt(sampleV_0);
+
+    thread ThinLensProjectionSample_0 sample_0;
+    float _S7 = pupilRadius_0 * cos(pupilAngle_0);
+
+#line 28
+    (&sample_0)->pupilRight_0 = _S7;
+    float _S8 = pupilRadius_0 * sin(pupilAngle_0);
+
+#line 29
+    (&sample_0)->pupilUp_0 = _S8;
+    (&sample_0)->direction_1 = normalize(float3(focusDistance_0, focusUp_0 - _S8, focusRight_0 - _S7));
+
+
+
+    return sample_0;
+}
+
+
+#line 440 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_metrics.slang"
+bool IsWarpDriveEventRepresented_0(const Vec4Cart_0 thread* pos_0, float vs_0, float sigma_0, float R_0, float xs_0, float ys_0, float zs_0)
+{
+
+#line 441
+    bool _S9;
+
+    if(!isfinite(pos_0->t_0))
+    {
+
+#line 443
+        _S9 = true;
+
+#line 443
+    }
+    else
+    {
+
+#line 443
+        _S9 = !isfinite(pos_0->x_2);
+
+#line 443
+    }
+
+#line 443
+    if(_S9)
+    {
+
+#line 443
+        _S9 = true;
+
+#line 443
+    }
+    else
+    {
+
+#line 443
+        _S9 = !isfinite(pos_0->y_0);
+
+#line 443
+    }
+
+#line 443
+    if(_S9)
+    {
+
+#line 443
+        _S9 = true;
+
+#line 443
+    }
+    else
+    {
+
+#line 443
+        _S9 = !isfinite(pos_0->z_0);
+
+#line 443
+    }
+
+#line 443
+    if(_S9)
+    {
+
+#line 443
+        _S9 = true;
+
+#line 443
+    }
+    else
+    {
+
+#line 443
+        _S9 = !isfinite(vs_0);
+
+#line 443
+    }
+    if(_S9)
+    {
+
+#line 444
+        _S9 = true;
+
+#line 444
+    }
+    else
+    {
+
+#line 444
+        _S9 = (abs(vs_0)) > 10.0;
+
+#line 444
+    }
+
+#line 444
+    if(_S9)
+    {
+
+#line 444
+        _S9 = true;
+
+#line 444
+    }
+    else
+    {
+
+#line 444
+        _S9 = !isfinite(sigma_0);
+
+#line 444
+    }
+
+#line 444
+    if(_S9)
+    {
+
+#line 444
+        _S9 = true;
+
+#line 444
+    }
+    else
+    {
+
+#line 444
+        _S9 = !(sigma_0 > 0.0);
+
+#line 444
+    }
+
+#line 444
+    if(_S9)
+    {
+
+#line 444
+        _S9 = true;
+
+#line 444
+    }
+    else
+    {
+
+#line 444
+        _S9 = sigma_0 > 1000.0;
+
+#line 444
+    }
+    if(_S9)
+    {
+
+#line 445
+        _S9 = true;
+
+#line 445
+    }
+    else
+    {
+
+#line 445
+        _S9 = !isfinite(R_0);
+
+#line 445
+    }
+
+#line 445
+    if(_S9)
+    {
+
+#line 445
+        _S9 = true;
+
+#line 445
+    }
+    else
+    {
+
+#line 445
+        _S9 = !(R_0 > 0.0);
+
+#line 445
+    }
+
+#line 445
+    if(_S9)
+    {
+
+#line 445
+        _S9 = true;
+
+#line 445
+    }
+    else
+    {
+
+#line 445
+        _S9 = R_0 > 1000.0;
+
+#line 445
+    }
+
+#line 445
+    if(_S9)
+    {
+
+#line 445
+        _S9 = true;
+
+#line 445
+    }
+    else
+    {
+
+#line 445
+        _S9 = !isfinite(xs_0);
+
+#line 445
+    }
+    if(_S9)
+    {
+
+#line 446
+        _S9 = true;
+
+#line 446
+    }
+    else
+    {
+
+#line 446
+        _S9 = !isfinite(ys_0);
+
+#line 446
+    }
+
+#line 446
+    if(_S9)
+    {
+
+#line 446
+        _S9 = true;
+
+#line 446
+    }
+    else
+    {
+
+#line 446
+        _S9 = !isfinite(zs_0);
+
+#line 446
+    }
+
+#line 443
+    if(_S9)
+    {
+
+
+        return false;
+    }
+    float sigmaR_0 = sigma_0 * R_0;
+    if(sigmaR_0 >= 0.10000000149011612)
+    {
+
+#line 450
+        _S9 = sigmaR_0 <= 100.0;
+
+#line 450
+    }
+    else
+    {
+
+#line 450
+        _S9 = false;
+
+#line 450
+    }
+
+#line 450
+    return _S9;
+}
+
+float AlcubierreShapeFunction_0(float rs_0, float sigma_1, float R_1)
+{
+
+
+    return (tanh(sigma_1 * (rs_0 + R_1)) - tanh(sigma_1 * (rs_0 - R_1))) / max(2.0 * tanh(sigma_1 * R_1), 1.00000001335143196e-10);
+}
+
+
+#line 469
+void GetWarpDriveMetric_0(const Vec4Cart_0 thread* pos_1, float vs_1, float sigma_2, float R_2, float xs_1, float ys_1, float zs_1, array<array<float, int(4)>, int(4)> thread* g_0, array<array<float, int(4)>, int(4)> thread* g_inv_0)
+{
+
+    int i_0 = int(0);
+
+    for(;;)
+    {
+
+#line 474
+        if(i_0 < int(4))
+        {
+        }
+        else
+        {
+
+#line 474
+            break;
+        }
+
+#line 474
+        int j_0 = int(0);
+        for(;;)
+        {
+
+#line 475
+            if(j_0 < int(4))
+            {
+            }
+            else
+            {
+
+#line 475
+                break;
+            }
+
+#line 475
+            (*g_0)[i_0][j_0] = 0.0;
+
+#line 475
+            (*g_inv_0)[i_0][j_0] = 0.0;
+
+#line 475
+            j_0 = j_0 + int(1);
+
+#line 475
+        }
+
+#line 474
+        i_0 = i_0 + int(1);
+
+#line 474
+    }
+
+#line 474
+    bool _S10 = IsWarpDriveEventRepresented_0(pos_1, vs_1, sigma_2, R_2, xs_1, ys_1, zs_1);
+
+    if(!_S10)
+    {
+
+#line 476
+        return;
+    }
+
+#line 485
+    float dx_0 = pos_1->x_2 - (xs_1 + vs_1 * pos_1->t_0);
+    float dy_0 = pos_1->y_0 - ys_1;
+    float dz_0 = pos_1->z_0 - zs_1;
+
+#line 495
+    float vsf_0 = vs_1 * AlcubierreShapeFunction_0(max(sqrt(dx_0 * dx_0 + dy_0 * dy_0 + dz_0 * dz_0), 1.00000001335143196e-10), sigma_2, R_2);
+
+
+    float _S11 = 1.0 - vsf_0 * vsf_0;
+
+#line 498
+    (*g_0)[int(0)][int(0)] = - _S11;
+    float _S12 = - vsf_0;
+
+#line 499
+    (*g_0)[int(0)][int(1)] = _S12;
+    (*g_0)[int(1)][int(0)] = _S12;
+    (*g_0)[int(1)][int(1)] = 1.0;
+    (*g_0)[int(2)][int(2)] = 1.0;
+    (*g_0)[int(3)][int(3)] = 1.0;
+
+
+    (*g_inv_0)[int(0)][int(0)] = -1.0;
+    (*g_inv_0)[int(0)][int(1)] = _S12;
+    (*g_inv_0)[int(1)][int(0)] = _S12;
+    (*g_inv_0)[int(1)][int(1)] = _S11;
+    (*g_inv_0)[int(2)][int(2)] = 1.0;
+    (*g_inv_0)[int(3)][int(3)] = 1.0;
+    return;
+}
+
+
+#line 363
+bool IsMorrisThorneCartesianEventRepresented_0(const Vec4Cart_0 thread* pos_2, float b0_0, float Phi0_0, int shapeType_0)
+{
+
+#line 364
+    bool _S13;
+
+#line 370
+    if(shapeType_0 != int(0))
+    {
+
+#line 370
+        _S13 = true;
+
+#line 370
+    }
+    else
+    {
+
+#line 370
+        _S13 = !isfinite(b0_0);
+
+#line 370
+    }
+
+#line 370
+    if(_S13)
+    {
+
+#line 370
+        _S13 = true;
+
+#line 370
+    }
+    else
+    {
+
+#line 370
+        _S13 = !(b0_0 > 0.0);
+
+#line 370
+    }
+
+#line 370
+    if(_S13)
+    {
+
+#line 370
+        _S13 = true;
+
+#line 370
+    }
+    else
+    {
+
+#line 370
+        _S13 = Phi0_0 != 0.0;
+
+#line 370
+    }
+
+#line 370
+    if(_S13)
+    {
+
+#line 370
+        _S13 = true;
+
+#line 370
+    }
+    else
+    {
+
+#line 370
+        _S13 = !isfinite(pos_2->t_0);
+
+#line 370
+    }
+    if(_S13)
+    {
+
+#line 371
+        _S13 = true;
+
+#line 371
+    }
+    else
+    {
+
+#line 371
+        _S13 = !isfinite(pos_2->x_2);
+
+#line 371
+    }
+
+#line 371
+    if(_S13)
+    {
+
+#line 371
+        _S13 = true;
+
+#line 371
+    }
+    else
+    {
+
+#line 371
+        _S13 = !isfinite(pos_2->y_0);
+
+#line 371
+    }
+
+#line 371
+    if(_S13)
+    {
+
+#line 371
+        _S13 = true;
+
+#line 371
+    }
+    else
+    {
+
+#line 371
+        _S13 = !isfinite(pos_2->z_0);
+
+#line 371
+    }
+
+#line 370
+    if(_S13)
+    {
+        return false;
+    }
+    float rho2_0 = pos_2->x_2 * pos_2->x_2 + pos_2->y_0 * pos_2->y_0 + pos_2->z_0 * pos_2->z_0;
+    if(isfinite(rho2_0))
+    {
+
+#line 375
+        _S13 = rho2_0 > 0.0;
+
+#line 375
+    }
+    else
+    {
+
+#line 375
+        _S13 = false;
+
+#line 375
+    }
+
+#line 375
+    return _S13;
+}
+
+void GetMorrisThorneCartesianMetric_0(const Vec4Cart_0 thread* pos_3, float b0_1, float Phi0_1, int shapeType_1, array<array<float, int(4)>, int(4)> thread* g_1, array<array<float, int(4)>, int(4)> thread* g_inv_1)
+{
+    int i_1 = int(0);
+
+    for(;;)
+    {
+
+#line 382
+        if(i_1 < int(4))
+        {
+        }
+        else
+        {
+
+#line 382
+            break;
+        }
+
+#line 382
+        int j_1 = int(0);
+        for(;;)
+        {
+
+#line 383
+            if(j_1 < int(4))
+            {
+            }
+            else
+            {
+
+#line 383
+                break;
+            }
+
+#line 383
+            (*g_1)[i_1][j_1] = 0.0;
+
+#line 383
+            (*g_inv_1)[i_1][j_1] = 0.0;
+
+#line 383
+            j_1 = j_1 + int(1);
+
+#line 383
+        }
+
+#line 382
+        i_1 = i_1 + int(1);
+
+#line 382
+    }
+
+#line 382
+    bool _S14 = IsMorrisThorneCartesianEventRepresented_0(pos_3, b0_1, Phi0_1, shapeType_1);
+
+    if(!_S14)
+    {
+
+#line 384
+        return;
+    }
+
+    float halfB0OverRho_0 = 0.5 * b0_1 / sqrt(pos_3->x_2 * pos_3->x_2 + pos_3->y_0 * pos_3->y_0 + pos_3->z_0 * pos_3->z_0);
+
+    float conformalBase_0 = 1.0 + halfB0OverRho_0 * halfB0OverRho_0;
+    float conformal_0 = conformalBase_0 * conformalBase_0;
+    float _S15 = 1.0 / conformal_0;
+    (*g_1)[int(0)][int(0)] = -1.0;
+    (*g_inv_1)[int(0)][int(0)] = -1.0;
+
+#line 393
+    i_1 = int(0);
+    for(;;)
+    {
+
+#line 394
+        if(i_1 < int(3))
+        {
+        }
+        else
+        {
+
+#line 394
+            break;
+        }
+
+#line 395
+        int _S16 = i_1 + int(1);
+
+#line 395
+        (*g_1)[_S16][_S16] = conformal_0;
+        (*g_inv_1)[_S16][_S16] = _S15;
+
+#line 394
+        i_1 = _S16;
+
+#line 394
+    }
+
+
+
+    return;
+}
+
+
+#line 55
+float ComputeKerrRadiusCart_0(float x_4, float y_2, float z_2, float a_0)
+{
+
+#line 56
+    float _S17 = max(max(abs(x_4), abs(y_2)), max(abs(z_2), abs(a_0)));
+    if(_S17 == 0.0)
+    {
+
+#line 57
+        return 0.0;
+    }
+    float scaledX_0 = x_4 / _S17;
+    float scaledY_0 = y_2 / _S17;
+    float scaledZ_0 = z_2 / _S17;
+    float scaledA_0 = a_0 / _S17;
+
+    float reduced_0 = scaledX_0 * scaledX_0 + scaledY_0 * scaledY_0 + scaledZ_0 * scaledZ_0 - scaledA_0 * scaledA_0;
+    float scaledCross_0 = 2.0 * scaledA_0 * scaledZ_0;
+    float discriminantRoot_0 = sqrt(reduced_0 * reduced_0 + scaledCross_0 * scaledCross_0);
+
+#line 66
+    float scaledRadius_0;
+
+    if(reduced_0 >= 0.0)
+    {
+
+#line 68
+        scaledRadius_0 = sqrt(0.5 * (reduced_0 + discriminantRoot_0));
+
+#line 68
+    }
+    else
+    {
+
+#line 68
+        bool _S18;
+
+        if(scaledA_0 != 0.0)
+        {
+
+#line 70
+            _S18 = scaledZ_0 != 0.0;
+
+#line 70
+        }
+        else
+        {
+
+#line 70
+            _S18 = false;
+
+#line 70
+        }
+
+#line 70
+        if(_S18)
+        {
+
+#line 70
+            scaledRadius_0 = sqrt(2.0) * abs(scaledA_0 * scaledZ_0) / sqrt(discriminantRoot_0 - reduced_0);
+
+#line 70
+        }
+        else
+        {
+
+#line 70
+            scaledRadius_0 = 0.0;
+
+#line 70
+        }
+
+#line 68
+    }
+
+#line 74
+    return _S17 * scaledRadius_0;
+}
+
+
+#line 98
+void GetKerrSchildFamilyMetric_0(const Vec4Cart_0 thread* pos_4, float M_0, float a_1, float Q_0, float Lambda_0, array<array<float, int(4)>, int(4)> thread* g_2, array<array<float, int(4)>, int(4)> thread* g_inv_2)
+{
+    int j_2;
+
+#line 100
+    int nu_0;
+
+#line 100
+    float _S19 = pos_4->x_2;
+
+#line 100
+    float _S20 = pos_4->y_0;
+
+#line 100
+    float _S21 = pos_4->z_0;
+
+#line 108
+    float a2_0 = a_1 * a_1;
+    float Q2_0 = Q_0 * Q_0;
+
+#line 109
+    int i_2 = int(0);
+
+    for(;;)
+    {
+
+#line 111
+        if(i_2 < int(4))
+        {
+        }
+        else
+        {
+
+#line 111
+            break;
+        }
+
+#line 111
+        j_2 = int(0);
+        for(;;)
+        {
+
+#line 112
+            if(j_2 < int(4))
+            {
+            }
+            else
+            {
+
+#line 112
+                break;
+            }
+
+#line 112
+            (*g_2)[i_2][j_2] = 0.0;
+
+#line 112
+            (*g_inv_2)[i_2][j_2] = 0.0;
+
+#line 112
+            j_2 = j_2 + int(1);
+
+#line 112
+        }
+
+#line 111
+        i_2 = i_2 + int(1);
+
+#line 111
+    }
+
+
+    (*g_2)[int(0)][int(0)] = -1.0;
+
+#line 114
+    (*g_inv_2)[int(0)][int(0)] = -1.0;
+    (*g_2)[int(1)][int(1)] = 1.0;
+
+#line 115
+    (*g_inv_2)[int(1)][int(1)] = 1.0;
+    (*g_2)[int(2)][int(2)] = 1.0;
+
+#line 116
+    (*g_inv_2)[int(2)][int(2)] = 1.0;
+    (*g_2)[int(3)][int(3)] = 1.0;
+
+#line 117
+    (*g_inv_2)[int(3)][int(3)] = 1.0;
+
+    bool _S22 = M_0 == 0.0;
+
+#line 119
+    bool _S23;
+
+#line 119
+    if(_S22)
+    {
+
+#line 119
+        _S23 = a_1 == 0.0;
+
+#line 119
+    }
+    else
+    {
+
+#line 119
+        _S23 = false;
+
+#line 119
+    }
+
+#line 119
+    if(_S23)
+    {
+
+#line 119
+        _S23 = Q_0 == 0.0;
+
+#line 119
+    }
+    else
+    {
+
+#line 119
+        _S23 = false;
+
+#line 119
+    }
+
+#line 119
+    if(_S23)
+    {
+
+#line 119
+        _S23 = Lambda_0 == 0.0;
+
+#line 119
+    }
+    else
+    {
+
+#line 119
+        _S23 = false;
+
+#line 119
+    }
+
+#line 119
+    if(_S23)
+    {
+
+#line 120
+        return;
+    }
+
+    float r_0 = ComputeKerrRadiusCart_0(_S19, _S20, _S21, a_1);
+    float r2_0 = r_0 * r_0;
+
+    if(_S22)
+    {
+
+#line 126
+        _S23 = a_1 == 0.0;
+
+#line 126
+    }
+    else
+    {
+
+#line 126
+        _S23 = false;
+
+#line 126
+    }
+
+#line 126
+    if(_S23)
+    {
+
+#line 126
+        _S23 = Q_0 == 0.0;
+
+#line 126
+    }
+    else
+    {
+
+#line 126
+        _S23 = false;
+
+#line 126
+    }
+
+#line 126
+    if(_S23)
+    {
+
+#line 126
+        _S23 = r_0 == 0.0;
+
+#line 126
+    }
+    else
+    {
+
+#line 126
+        _S23 = false;
+
+#line 126
+    }
+
+#line 126
+    if(_S23)
+    {
+
+#line 127
+        return;
+    }
+
+
+    if(M_0 != 0.0)
+    {
+
+#line 131
+        _S23 = true;
+
+#line 131
+    }
+    else
+    {
+
+#line 131
+        _S23 = Q_0 != 0.0;
+
+#line 131
+    }
+
+#line 131
+    float H_0;
+
+#line 131
+    if(_S23)
+    {
+
+#line 132
+        float cosine_0 = _S21 / r_0;
+
+#line 132
+        H_0 = (2.0 * M_0 * r_0 - Q2_0) / (r2_0 + a2_0 * cosine_0 * cosine_0);
+
+#line 131
+    }
+    else
+    {
+
+#line 131
+        H_0 = 0.0;
+
+#line 131
+    }
+
+#line 136
+    if(a_1 == 0.0)
+    {
+
+#line 136
+        _S23 = Lambda_0 != 0.0;
+
+#line 136
+    }
+    else
+    {
+
+#line 136
+        _S23 = false;
+
+#line 136
+    }
+
+#line 136
+    if(_S23)
+    {
+
+#line 136
+        H_0 = H_0 + Lambda_0 * r2_0 / 3.0;
+
+#line 136
+    }
+
+
+
+    float denom_0 = r2_0 + a2_0;
+
+
+    float _S24 = (r_0 * _S19 + a_1 * _S20) / denom_0;
+    float _S25 = (r_0 * _S20 - a_1 * _S19) / denom_0;
+    float _S26 = _S21 / r_0;
+
+#line 141
+    array<float, int(4)> l_0 = { 1.0, _S24, _S25, _S26 };
+
+#line 141
+    j_2 = int(0);
+
+#line 148
+    for(;;)
+    {
+
+#line 148
+        if(j_2 < int(4))
+        {
+        }
+        else
+        {
+
+#line 148
+            break;
+        }
+
+#line 148
+        nu_0 = int(0);
+        for(;;)
+        {
+
+#line 149
+            if(nu_0 < int(4))
+            {
+            }
+            else
+            {
+
+#line 149
+                break;
+            }
+
+#line 150
+            (*g_2)[j_2][nu_0] = (*g_2)[j_2][nu_0] + H_0 * l_0[j_2] * l_0[nu_0];
+
+#line 149
+            nu_0 = nu_0 + int(1);
+
+#line 149
+        }
+
+#line 148
+        j_2 = j_2 + int(1);
+
+#line 148
+    }
+
+
+
+    array<float, int(4)> _S27 = { 1.0, - _S24, - _S25, - _S26 };
+
+#line 152
+    j_2 = int(0);
+    for(;;)
+    {
+
+#line 153
+        if(j_2 < int(4))
+        {
+        }
+        else
+        {
+
+#line 153
+            break;
+        }
+
+#line 153
+        nu_0 = int(0);
+        for(;;)
+        {
+
+#line 154
+            if(nu_0 < int(4))
+            {
+            }
+            else
+            {
+
+#line 154
+                break;
+            }
+
+#line 155
+            (*g_inv_2)[j_2][nu_0] = (*g_inv_2)[j_2][nu_0] - H_0 * _S27[j_2] * _S27[nu_0];
+
+#line 154
+            nu_0 = nu_0 + int(1);
+
+#line 154
+        }
+
+#line 153
+        j_2 = j_2 + int(1);
+
+#line 153
+    }
+
+
+
+    return;
+}
+
+
+#line 44 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_camera.slang"
+float MetricDotCart_0(const array<array<float, int(4)>, int(4)> thread* metric_0, const Vec4Cart_0 thread* lhs_0, const Vec4Cart_0 thread* rhs_0)
+{
+
+#line 45
+    array<float, int(4)> _S28 = { lhs_0->t_0, lhs_0->x_2, lhs_0->y_0, lhs_0->z_0 };
+    array<float, int(4)> _S29 = { rhs_0->t_0, rhs_0->x_2, rhs_0->y_0, rhs_0->z_0 };
+
+#line 46
+    int mu_0 = int(0);
+
+#line 46
+    float result_0 = 0.0;
+
+    for(;;)
+    {
+
+#line 48
+        if(mu_0 < int(4))
+        {
+        }
+        else
+        {
+
+#line 48
+            break;
+        }
+
+#line 48
+        int nu_1 = int(0);
+        for(;;)
+        {
+
+#line 49
+            if(nu_1 < int(4))
+            {
+            }
+            else
+            {
+
+#line 49
+                break;
+            }
+
+#line 50
+            float result_1 = result_0 + (*metric_0)[mu_0][nu_1] * _S28[mu_0] * _S29[nu_1];
+
+#line 49
+            nu_1 = nu_1 + int(1);
+
+#line 49
+            result_0 = result_1;
+
+#line 49
+        }
+
+#line 48
+        mu_0 = mu_0 + int(1);
+
+#line 48
+    }
+
+#line 53
+    return result_0;
+}
+
+
+#line 44
+float MetricDotCart_1(const array<array<float, int(4)>, int(4)> thread* metric_1, const Vec4Cart_0 thread* lhs_1, const Vec4Cart_0 thread* rhs_1)
+{
+
+#line 45
+    array<float, int(4)> _S30 = { lhs_1->t_0, lhs_1->x_2, lhs_1->y_0, lhs_1->z_0 };
+    array<float, int(4)> _S31 = { rhs_1->t_0, rhs_1->x_2, rhs_1->y_0, rhs_1->z_0 };
+
+#line 46
+    int mu_1 = int(0);
+
+#line 46
+    float result_2 = 0.0;
+
+    for(;;)
+    {
+
+#line 48
+        if(mu_1 < int(4))
+        {
+        }
+        else
+        {
+
+#line 48
+            break;
+        }
+
+#line 48
+        int nu_2 = int(0);
+        for(;;)
+        {
+
+#line 49
+            if(nu_2 < int(4))
+            {
+            }
+            else
+            {
+
+#line 49
+                break;
+            }
+
+#line 50
+            float result_3 = result_2 + (*metric_1)[mu_1][nu_2] * _S30[mu_1] * _S31[nu_2];
+
+#line 49
+            nu_2 = nu_2 + int(1);
+
+#line 49
+            result_2 = result_3;
+
+#line 49
+        }
+
+#line 48
+        mu_1 = mu_1 + int(1);
+
+#line 48
+    }
+
+#line 53
+    return result_2;
+}
+
+
+#line 79 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_types.slang"
+Vec4Cart_0 ScaleVec4Cart_0(const Vec4Cart_0 thread* a_2, float s_0)
+{
+
+#line 80
+    return MakeVec4Cart_0(a_2->t_0 * s_0, a_2->x_2 * s_0, a_2->y_0 * s_0, a_2->z_0 * s_0);
+}
+
+
+#line 79
+Vec4Cart_0 ScaleVec4Cart_1(const Vec4Cart_0 thread* a_3, float s_1)
+{
+
+#line 80
+    return MakeVec4Cart_0(a_3->t_0 * s_1, a_3->x_2 * s_1, a_3->y_0 * s_1, a_3->z_0 * s_1);
+}
+
+
+#line 75
+Vec4Cart_0 AddVec4Cart_0(const Vec4Cart_0 thread* a_4, const Vec4Cart_0 thread* b_0)
+{
+
+#line 76
+    return MakeVec4Cart_0(a_4->t_0 + b_0->t_0, a_4->x_2 + b_0->x_2, a_4->y_0 + b_0->y_0, a_4->z_0 + b_0->z_0);
+}
+
+
+#line 56 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_camera.slang"
+Vec4Cart_0 NormaliseSpacelike_0(const array<array<float, int(4)>, int(4)> thread* metric_2, const Vec4Cart_0 thread* vector_0)
+{
+
+#line 56
+    float _S32 = MetricDotCart_1(metric_2, vector_0, vector_0);
+
+#line 56
+    Vec4Cart_0 _S33 = ScaleVec4Cart_1(vector_0, 1.0 / sqrt(_S32));
+    return _S33;
+}
+
+
+#line 37
+struct CameraObserverFrame_0
+{
+    Vec4Cart_0 time_0;
+    Vec4Cart_0 forward_0;
+    Vec4Cart_0 up_0;
+    Vec4Cart_0 right_0;
+};
+
+
+#line 63
+CameraObserverFrame_0 BuildCameraObserverFrame_0(const array<array<float, int(4)>, int(4)> thread* metric_3, const array<array<float, int(4)>, int(4)> thread* inverseMetric_0, float3 camDir_0, float3 camUp_0, float3 camRight_0, float3 cameraBeta_0)
+{
+
+
+    thread CameraObserverFrame_0 reference_1;
+
+    float _S34 = - (1.0 / sqrt(- (*inverseMetric_0)[int(0)][int(0)]));
+
+#line 69
+    Vec4Cart_0 _S35 = MakeVec4Cart_0(_S34 * (*inverseMetric_0)[int(0)][int(0)], _S34 * (*inverseMetric_0)[int(1)][int(0)], _S34 * (*inverseMetric_0)[int(2)][int(0)], _S34 * (*inverseMetric_0)[int(3)][int(0)]);
+
+#line 69
+    (&reference_1)->time_0 = _S35;
+
+#line 74
+    Vec4Cart_0 _S36 = MakeVec4Cart_0(0.0, camDir_0.x, camDir_0.y, camDir_0.z);
+
+#line 74
+    thread Vec4Cart_0 _S37 = _S36;
+
+#line 74
+    thread Vec4Cart_0 _S38 = _S35;
+
+#line 74
+    float _S39 = MetricDotCart_0(metric_3, &_S37, &_S38);
+
+#line 74
+    thread Vec4Cart_0 _S40 = _S35;
+
+#line 74
+    Vec4Cart_0 _S41 = ScaleVec4Cart_0(&_S40, _S39);
+
+#line 74
+    thread Vec4Cart_0 _S42 = _S36;
+
+#line 74
+    thread Vec4Cart_0 _S43 = _S41;
+
+#line 74
+    Vec4Cart_0 _S44 = AddVec4Cart_0(&_S42, &_S43);
+
+#line 74
+    thread Vec4Cart_0 _S45 = _S44;
+
+#line 74
+    Vec4Cart_0 _S46 = NormaliseSpacelike_0(metric_3, &_S45);
+
+#line 79
+    (&reference_1)->forward_0 = _S46;
+
+
+
+    Vec4Cart_0 _S47 = MakeVec4Cart_0(0.0, - camUp_0.x, - camUp_0.y, - camUp_0.z);
+
+#line 83
+    thread Vec4Cart_0 _S48 = _S47;
+
+#line 83
+    thread Vec4Cart_0 _S49 = _S35;
+
+#line 83
+    float _S50 = MetricDotCart_0(metric_3, &_S48, &_S49);
+
+#line 83
+    thread Vec4Cart_0 _S51 = _S35;
+
+#line 83
+    Vec4Cart_0 _S52 = ScaleVec4Cart_0(&_S51, _S50);
+
+#line 83
+    thread Vec4Cart_0 _S53 = _S47;
+
+#line 83
+    thread Vec4Cart_0 _S54 = _S52;
+
+#line 83
+    Vec4Cart_0 _S55 = AddVec4Cart_0(&_S53, &_S54);
+
+#line 83
+    thread Vec4Cart_0 _S56 = _S55;
+
+#line 83
+    thread Vec4Cart_0 _S57 = _S46;
+
+#line 83
+    float _S58 = MetricDotCart_0(metric_3, &_S56, &_S57);
+
+#line 90
+    float _S59 = - _S58;
+
+#line 90
+    thread Vec4Cart_0 _S60 = _S46;
+
+#line 90
+    Vec4Cart_0 _S61 = ScaleVec4Cart_0(&_S60, _S59);
+
+#line 90
+    thread Vec4Cart_0 _S62 = _S55;
+
+#line 90
+    thread Vec4Cart_0 _S63 = _S61;
+
+#line 90
+    Vec4Cart_0 _S64 = AddVec4Cart_0(&_S62, &_S63);
+
+#line 90
+    thread Vec4Cart_0 _S65 = _S64;
+
+#line 90
+    Vec4Cart_0 _S66 = NormaliseSpacelike_0(metric_3, &_S65);
+    (&reference_1)->up_0 = _S66;
+
+
+    Vec4Cart_0 _S67 = MakeVec4Cart_0(0.0, camRight_0.x, camRight_0.y, camRight_0.z);
+
+#line 94
+    thread Vec4Cart_0 _S68 = _S67;
+
+#line 94
+    thread Vec4Cart_0 _S69 = _S35;
+
+#line 94
+    float _S70 = MetricDotCart_0(metric_3, &_S68, &_S69);
+
+#line 94
+    thread Vec4Cart_0 _S71 = _S35;
+
+#line 94
+    Vec4Cart_0 _S72 = ScaleVec4Cart_0(&_S71, _S70);
+
+#line 94
+    thread Vec4Cart_0 _S73 = _S67;
+
+#line 94
+    thread Vec4Cart_0 _S74 = _S72;
+
+#line 94
+    Vec4Cart_0 _S75 = AddVec4Cart_0(&_S73, &_S74);
+
+#line 94
+    thread Vec4Cart_0 _S76 = _S75;
+
+#line 94
+    thread Vec4Cart_0 _S77 = _S46;
+
+#line 94
+    float _S78 = MetricDotCart_0(metric_3, &_S76, &_S77);
+
+#line 101
+    float _S79 = - _S78;
+
+#line 101
+    thread Vec4Cart_0 _S80 = _S46;
+
+#line 101
+    Vec4Cart_0 _S81 = ScaleVec4Cart_0(&_S80, _S79);
+
+#line 101
+    thread Vec4Cart_0 _S82 = _S75;
+
+#line 101
+    thread Vec4Cart_0 _S83 = _S81;
+
+#line 101
+    Vec4Cart_0 _S84 = AddVec4Cart_0(&_S82, &_S83);
+
+#line 101
+    thread Vec4Cart_0 _S85 = _S84;
+
+#line 101
+    thread Vec4Cart_0 _S86 = _S66;
+
+#line 101
+    float _S87 = MetricDotCart_0(metric_3, &_S85, &_S86);
+
+
+    float _S88 = - _S87;
+
+#line 104
+    thread Vec4Cart_0 _S89 = _S66;
+
+#line 104
+    Vec4Cart_0 _S90 = ScaleVec4Cart_0(&_S89, _S88);
+
+#line 104
+    thread Vec4Cart_0 _S91 = _S84;
+
+#line 104
+    thread Vec4Cart_0 _S92 = _S90;
+
+#line 104
+    Vec4Cart_0 _S93 = AddVec4Cart_0(&_S91, &_S92);
+
+#line 104
+    thread Vec4Cart_0 _S94 = _S93;
+
+#line 104
+    Vec4Cart_0 _S95 = NormaliseSpacelike_0(metric_3, &_S94);
+    (&reference_1)->right_0 = _S95;
+
+
+    float _S96 = cameraBeta_0.x;
+
+#line 108
+    float _S97 = cameraBeta_0.y;
+
+#line 108
+    float _S98 = cameraBeta_0.z;
+
+#line 108
+    float3 representedBeta_0 = float3(_S96, _S97, _S98);
+    float betaSquared_0 = dot(representedBeta_0, representedBeta_0);
+    if(betaSquared_0 == 0.0)
+    {
+
+#line 110
+        return reference_1;
+    }
+
+#line 111
+    float gamma_0 = 1.0 / sqrt(1.0 - betaSquared_0);
+
+#line 111
+    thread Vec4Cart_0 _S99 = (&reference_1)->forward_0;
+
+#line 111
+    Vec4Cart_0 _S100 = ScaleVec4Cart_0(&_S99, _S96);
+
+#line 111
+    thread Vec4Cart_0 _S101 = (&reference_1)->up_0;
+
+#line 111
+    Vec4Cart_0 _S102 = ScaleVec4Cart_0(&_S101, _S97);
+
+#line 111
+    thread Vec4Cart_0 _S103 = _S100;
+
+#line 111
+    thread Vec4Cart_0 _S104 = _S102;
+
+#line 111
+    Vec4Cart_0 _S105 = AddVec4Cart_0(&_S103, &_S104);
+
+#line 111
+    thread Vec4Cart_0 _S106 = (&reference_1)->right_0;
+
+#line 111
+    Vec4Cart_0 _S107 = ScaleVec4Cart_0(&_S106, _S98);
+
+#line 111
+    thread Vec4Cart_0 _S108 = _S105;
+
+#line 111
+    thread Vec4Cart_0 _S109 = _S107;
+
+#line 111
+    Vec4Cart_0 _S110 = AddVec4Cart_0(&_S108, &_S109);
+
+#line 116
+    thread CameraObserverFrame_0 boosted_0;
+
+#line 116
+    thread Vec4Cart_0 _S111 = (&reference_1)->time_0;
+
+#line 116
+    thread Vec4Cart_0 _S112 = _S110;
+
+#line 116
+    Vec4Cart_0 _S113 = AddVec4Cart_0(&_S111, &_S112);
+
+#line 116
+    thread Vec4Cart_0 _S114 = _S113;
+
+#line 116
+    Vec4Cart_0 _S115 = ScaleVec4Cart_0(&_S114, gamma_0);
+    (&boosted_0)->time_0 = _S115;
+    float coefficient_0 = (gamma_0 - 1.0) / betaSquared_0;
+
+
+    float _S116 = coefficient_0 * _S96;
+
+#line 121
+    thread Vec4Cart_0 _S117 = _S110;
+
+#line 121
+    Vec4Cart_0 _S118 = ScaleVec4Cart_0(&_S117, _S116);
+
+#line 121
+    thread Vec4Cart_0 _S119 = (&reference_1)->forward_0;
+
+#line 121
+    thread Vec4Cart_0 _S120 = _S118;
+
+#line 121
+    Vec4Cart_0 _S121 = AddVec4Cart_0(&_S119, &_S120);
+    float _S122 = gamma_0 * _S96;
+
+#line 122
+    thread Vec4Cart_0 _S123 = (&reference_1)->time_0;
+
+#line 122
+    Vec4Cart_0 _S124 = ScaleVec4Cart_0(&_S123, _S122);
+
+#line 122
+    thread Vec4Cart_0 _S125 = _S121;
+
+#line 122
+    thread Vec4Cart_0 _S126 = _S124;
+
+#line 122
+    Vec4Cart_0 _S127 = AddVec4Cart_0(&_S125, &_S126);
+
+#line 119
+    (&boosted_0)->forward_0 = _S127;
+
+#line 125
+    float _S128 = coefficient_0 * _S97;
+
+#line 125
+    thread Vec4Cart_0 _S129 = _S110;
+
+#line 125
+    Vec4Cart_0 _S130 = ScaleVec4Cart_0(&_S129, _S128);
+
+#line 125
+    thread Vec4Cart_0 _S131 = (&reference_1)->up_0;
+
+#line 125
+    thread Vec4Cart_0 _S132 = _S130;
+
+#line 125
+    Vec4Cart_0 _S133 = AddVec4Cart_0(&_S131, &_S132);
+    float _S134 = gamma_0 * _S97;
+
+#line 126
+    thread Vec4Cart_0 _S135 = (&reference_1)->time_0;
+
+#line 126
+    Vec4Cart_0 _S136 = ScaleVec4Cart_0(&_S135, _S134);
+
+#line 126
+    thread Vec4Cart_0 _S137 = _S133;
+
+#line 126
+    thread Vec4Cart_0 _S138 = _S136;
+
+#line 126
+    Vec4Cart_0 _S139 = AddVec4Cart_0(&_S137, &_S138);
+
+#line 123
+    (&boosted_0)->up_0 = _S139;
+
+#line 129
+    float _S140 = coefficient_0 * _S98;
+
+#line 129
+    thread Vec4Cart_0 _S141 = _S110;
+
+#line 129
+    Vec4Cart_0 _S142 = ScaleVec4Cart_0(&_S141, _S140);
+
+#line 129
+    thread Vec4Cart_0 _S143 = (&reference_1)->right_0;
+
+#line 129
+    thread Vec4Cart_0 _S144 = _S142;
+
+#line 129
+    Vec4Cart_0 _S145 = AddVec4Cart_0(&_S143, &_S144);
+    float _S146 = gamma_0 * _S98;
+
+#line 130
+    thread Vec4Cart_0 _S147 = (&reference_1)->time_0;
+
+#line 130
+    Vec4Cart_0 _S148 = ScaleVec4Cart_0(&_S147, _S146);
+
+#line 130
+    thread Vec4Cart_0 _S149 = _S145;
+
+#line 130
+    thread Vec4Cart_0 _S150 = _S148;
+
+#line 130
+    Vec4Cart_0 _S151 = AddVec4Cart_0(&_S149, &_S150);
+
+#line 127
+    (&boosted_0)->right_0 = _S151;
+
+
+
+    return boosted_0;
+}
+
+Vec4Cart_0 PastDirectedCameraRay_0(const CameraObserverFrame_0 thread* frame_0, float3 screenDirection_0)
+{
+
+#line 135
+    float3 direction_2 = float3(screenDirection_0.x, screenDirection_0.y, screenDirection_0.z);
+
+    float3 direction_3 = direction_2 / float3(sqrt(dot(direction_2, direction_2))) ;
+
+#line 137
+    Vec4Cart_0 _S152 = ScaleVec4Cart_0(&frame_0->time_0, -1.0);
+
+#line 137
+    Vec4Cart_0 _S153 = ScaleVec4Cart_0(&frame_0->forward_0, direction_3.x);
+
+#line 137
+    thread Vec4Cart_0 _S154 = _S152;
+
+#line 137
+    thread Vec4Cart_0 _S155 = _S153;
+
+#line 137
+    Vec4Cart_0 _S156 = AddVec4Cart_0(&_S154, &_S155);
+
+#line 137
+    Vec4Cart_0 _S157 = ScaleVec4Cart_0(&frame_0->up_0, direction_3.y);
+
+#line 137
+    thread Vec4Cart_0 _S158 = _S156;
+
+#line 137
+    thread Vec4Cart_0 _S159 = _S157;
+
+#line 137
+    Vec4Cart_0 _S160 = AddVec4Cart_0(&_S158, &_S159);
+
+#line 137
+    Vec4Cart_0 _S161 = ScaleVec4Cart_0(&frame_0->right_0, direction_3.z);
+
+#line 137
+    thread Vec4Cart_0 _S162 = _S160;
+
+#line 137
+    thread Vec4Cart_0 _S163 = _S161;
+
+#line 137
+    Vec4Cart_0 _S164 = AddVec4Cart_0(&_S162, &_S163);
+    return _S164;
+}
+
+
+#line 146
+void SachsScreenBasis_0(const CameraObserverFrame_0 thread* frame_1, float3 restDirection_0, Vec4Cart_0 thread* first_1, Vec4Cart_0 thread* second_1)
+{
+    thread float3 firstComponents_0;
+    thread float3 secondComponents_0;
+    MakeCelestialTangentBasis_0(float3(restDirection_0.x, restDirection_0.y, restDirection_0.z), &firstComponents_0, &secondComponents_0);
+
+#line 150
+    Vec4Cart_0 _S165 = ScaleVec4Cart_0(&frame_1->forward_0, firstComponents_0.x);
+
+#line 150
+    Vec4Cart_0 _S166 = ScaleVec4Cart_0(&frame_1->up_0, firstComponents_0.y);
+
+#line 150
+    thread Vec4Cart_0 _S167 = _S165;
+
+#line 150
+    thread Vec4Cart_0 _S168 = _S166;
+
+#line 150
+    Vec4Cart_0 _S169 = AddVec4Cart_0(&_S167, &_S168);
+
+#line 150
+    Vec4Cart_0 _S170 = ScaleVec4Cart_0(&frame_1->right_0, firstComponents_0.z);
+
+#line 150
+    thread Vec4Cart_0 _S171 = _S169;
+
+#line 150
+    thread Vec4Cart_0 _S172 = _S170;
+
+#line 150
+    Vec4Cart_0 _S173 = AddVec4Cart_0(&_S171, &_S172);
+
+    *first_1 = _S173;
+
+#line 152
+    Vec4Cart_0 _S174 = ScaleVec4Cart_0(&frame_1->forward_0, secondComponents_0.x);
+
+#line 152
+    Vec4Cart_0 _S175 = ScaleVec4Cart_0(&frame_1->up_0, secondComponents_0.y);
+
+#line 152
+    thread Vec4Cart_0 _S176 = _S174;
+
+#line 152
+    thread Vec4Cart_0 _S177 = _S175;
+
+#line 152
+    Vec4Cart_0 _S178 = AddVec4Cart_0(&_S176, &_S177);
+
+#line 152
+    Vec4Cart_0 _S179 = ScaleVec4Cart_0(&frame_1->right_0, secondComponents_0.z);
+
+#line 152
+    thread Vec4Cart_0 _S180 = _S178;
+
+#line 152
+    thread Vec4Cart_0 _S181 = _S179;
+
+#line 152
+    Vec4Cart_0 _S182 = AddVec4Cart_0(&_S180, &_S181);
+
+
+
+    *second_1 = _S182;
+
+
+
+    return;
+}
+
+
+#line 35 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_trace_continuation.slang"
+float4 TracePack_0(const Vec4Cart_0 thread* v_1)
+{
+
+#line 35
+    return float4(v_1->t_0, v_1->x_2, v_1->y_0, v_1->z_0);
+}
+
+
+#line 24 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_ellis_topology.slang"
+float EllisOppositeEscapeRadius_0(float b0_2, float escapeRadius_0)
+{
+
+#line 25
+    return b0_2 * b0_2 / (4.0 * escapeRadius_0);
+}
+
+
+#line 105 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_types.slang"
+struct GeodesicStateCart_0
+{
+    Vec4Cart_0 x_5;
+    Vec4Cart_0 u_1;
+};
+
+
+#line 14 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_ellis_topology.slang"
+struct EllisTopologyTraceResult_0
+{
+    GeodesicStateCart_0 state_0;
+    int termination_0;
+    int attempts_0;
+    float affineLength_0;
+};
+
+
+#line 55
+struct EllisTopologyContinuation_0
+{
+    EllisTopologyTraceResult_0 trace_0;
+    float adaptiveStep_0;
+    Vec4Cart_0 compensationX_0;
+    Vec4Cart_0 compensationU_0;
+    uint accepted_0;
+    float lastStep_0;
+    uint failure_0;
+};
+
+
+#line 65
+EllisTopologyContinuation_0 InitEllisTwoSheet_0(const GeodesicStateCart_0 thread* launch_0, int maxAttempts_0, float stepScale_0, float minStep_0, float maxStep_0, float escapeRadius_1, float b0_3, int wormShape_0)
+{
+
+    Vec4Cart_0 _S183 = { 0.0, 0.0, 0.0, 0.0 };
+
+#line 68
+    GeodesicStateCart_0 _S184 = { _S183, _S183 };
+
+#line 68
+    EllisTopologyTraceResult_0 _S185 = { _S184, int(0), int(0), 0.0 };
+
+#line 68
+    thread EllisTopologyContinuation_0 continuation_1;
+
+#line 68
+    (&continuation_1)->trace_0 = _S185;
+
+#line 68
+    (&continuation_1)->adaptiveStep_0 = 0.0;
+
+#line 68
+    (&continuation_1)->compensationX_0 = _S183;
+
+#line 68
+    (&continuation_1)->compensationU_0 = _S183;
+
+#line 68
+    (&continuation_1)->accepted_0 = 0U;
+
+#line 68
+    (&continuation_1)->lastStep_0 = 0.0;
+
+#line 68
+    (&continuation_1)->failure_0 = 0U;
+    (&(&continuation_1)->trace_0)->state_0 = *launch_0;
+    (&(&continuation_1)->trace_0)->termination_0 = int(0);
+    (&continuation_1)->adaptiveStep_0 = maxStep_0;
+    float throatRadius_0 = 0.5 * b0_3;
+    float oppositeRadius_0 = EllisOppositeEscapeRadius_0(b0_3, escapeRadius_1);
+
+#line 73
+    bool _S186;
+    if(maxAttempts_0 > int(0))
+    {
+
+#line 74
+        _S186 = isfinite(stepScale_0);
+
+#line 74
+    }
+    else
+    {
+
+#line 74
+        _S186 = false;
+
+#line 74
+    }
+
+#line 74
+    if(_S186)
+    {
+
+#line 74
+        _S186 = stepScale_0 > 0.0;
+
+#line 74
+    }
+    else
+    {
+
+#line 74
+        _S186 = false;
+
+#line 74
+    }
+
+#line 74
+    if(_S186)
+    {
+
+#line 74
+        _S186 = isfinite(minStep_0);
+
+#line 74
+    }
+    else
+    {
+
+#line 74
+        _S186 = false;
+
+#line 74
+    }
+    if(_S186)
+    {
+
+#line 75
+        _S186 = minStep_0 > 0.0;
+
+#line 75
+    }
+    else
+    {
+
+#line 75
+        _S186 = false;
+
+#line 75
+    }
+
+#line 75
+    if(_S186)
+    {
+
+#line 75
+        _S186 = isfinite(maxStep_0);
+
+#line 75
+    }
+    else
+    {
+
+#line 75
+        _S186 = false;
+
+#line 75
+    }
+
+#line 75
+    if(_S186)
+    {
+
+#line 75
+        _S186 = maxStep_0 >= minStep_0;
+
+#line 75
+    }
+    else
+    {
+
+#line 75
+        _S186 = false;
+
+#line 75
+    }
+    if(_S186)
+    {
+
+#line 76
+        _S186 = isfinite(escapeRadius_1);
+
+#line 76
+    }
+    else
+    {
+
+#line 76
+        _S186 = false;
+
+#line 76
+    }
+
+#line 76
+    if(_S186)
+    {
+
+#line 76
+        _S186 = escapeRadius_1 > throatRadius_0;
+
+#line 76
+    }
+    else
+    {
+
+#line 76
+        _S186 = false;
+
+#line 76
+    }
+    if(_S186)
+    {
+
+#line 77
+        _S186 = isfinite(b0_3);
+
+#line 77
+    }
+    else
+    {
+
+#line 77
+        _S186 = false;
+
+#line 77
+    }
+
+#line 77
+    if(_S186)
+    {
+
+#line 77
+        _S186 = b0_3 > 0.0;
+
+#line 77
+    }
+    else
+    {
+
+#line 77
+        _S186 = false;
+
+#line 77
+    }
+
+#line 77
+    if(_S186)
+    {
+
+#line 77
+        _S186 = isfinite(oppositeRadius_0);
+
+#line 77
+    }
+    else
+    {
+
+#line 77
+        _S186 = false;
+
+#line 77
+    }
+    if(_S186)
+    {
+
+#line 78
+        _S186 = oppositeRadius_0 > 0.0;
+
+#line 78
+    }
+    else
+    {
+
+#line 78
+        _S186 = false;
+
+#line 78
+    }
+
+#line 78
+    if(_S186)
+    {
+
+#line 78
+        _S186 = oppositeRadius_0 < throatRadius_0;
+
+#line 78
+    }
+    else
+    {
+
+#line 78
+        _S186 = false;
+
+#line 78
+    }
+    if(_S186)
+    {
+
+#line 79
+        _S186 = wormShape_0 == int(0);
+
+#line 79
+    }
+    else
+    {
+
+#line 79
+        _S186 = false;
+
+#line 79
+    }
+
+#line 74
+    if(!_S186)
+    {
+
+#line 80
+        (&continuation_1)->failure_0 = 1U;
+        return continuation_1;
+    }
+
+    return continuation_1;
+}
+
+
+#line 21 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_trace_continuation.slang"
+struct TraceContinuation_0
+{
+    float4 x_1;
+    float4 u_0;
+    array<float4, int(4)> X_0;
+    array<float4, int(4)> V_0;
+    float4 compX_0;
+    float4 compU_0;
+    float4 integration_0;
+    float4 source_0;
+    float4 volume_0;
+    uint4 control_0;
+    uint4 identity_0;
+};
+
+
+bool TraceStateFinite_0(const TraceContinuation_0 thread* record_0)
+{
+
+#line 37
+    bool _S187;
+
+#line 37
+    int i_3 = int(0);
+    for(;;)
+    {
+
+#line 38
+        if(i_3 < int(4))
+        {
+        }
+        else
+        {
+
+#line 38
+            break;
+        }
+
+#line 39
+        if(!all(isfinite(record_0->X_0[i_3])))
+        {
+
+#line 39
+            _S187 = true;
+
+#line 39
+        }
+        else
+        {
+
+#line 39
+            _S187 = !all(isfinite(record_0->V_0[i_3]));
+
+#line 39
+        }
+
+#line 39
+        if(_S187)
+        {
+
+#line 39
+            return false;
+        }
+
+#line 38
+        i_3 = i_3 + int(1);
+
+#line 38
+    }
+
+    if(all(isfinite(record_0->x_1)))
+    {
+
+#line 40
+        _S187 = all(isfinite(record_0->u_0));
+
+#line 40
+    }
+    else
+    {
+
+#line 40
+        _S187 = false;
+
+#line 40
+    }
+
+#line 40
+    if(_S187)
+    {
+
+#line 40
+        _S187 = all(isfinite(record_0->compX_0));
+
+#line 40
+    }
+    else
+    {
+
+#line 40
+        _S187 = false;
+
+#line 40
+    }
+    if(_S187)
+    {
+
+#line 41
+        _S187 = all(isfinite(record_0->compU_0));
+
+#line 41
+    }
+    else
+    {
+
+#line 41
+        _S187 = false;
+
+#line 41
+    }
+
+#line 41
+    if(_S187)
+    {
+
+#line 41
+        _S187 = all(isfinite(record_0->integration_0));
+
+#line 41
+    }
+    else
+    {
+
+#line 41
+        _S187 = false;
+
+#line 41
+    }
+    if(_S187)
+    {
+
+#line 42
+        _S187 = all(isfinite(record_0->source_0));
+
+#line 42
+    }
+    else
+    {
+
+#line 42
+        _S187 = false;
+
+#line 42
+    }
+
+#line 42
+    if(_S187)
+    {
+
+#line 42
+        _S187 = all(isfinite(record_0->volume_0));
+
+#line 42
+    }
+    else
+    {
+
+#line 42
+        _S187 = false;
+
+#line 42
+    }
+
+#line 40
+    return _S187;
+}
+
+
+#line 36
+Vec4Cart_0 TraceUnpack_0(float4 v_2)
+{
+
+#line 36
+    return MakeVec4Cart_0(v_2.x, v_2.y, v_2.z, v_2.w);
+}
+
+
+#line 409 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_integrator.slang"
+float AdaptiveIntegrationTolerance_0()
+{
+
+
+    return 0.00001999999949476;
+}
+
+
+float AdaptiveNullTolerance_0()
+{
+
+#line 425
+    return 0.00050000002374873;
+}
+
+
+#line 460 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_metrics.slang"
+float AlcubierreShapeDerivative_0(float rs_1, float sigma_3, float R_3)
+{
+
+#line 461
+    float cosh_plus_0 = cosh(sigma_3 * (rs_1 + R_3));
+    float cosh_minus_0 = cosh(sigma_3 * (rs_1 - R_3));
+
+
+
+    return sigma_3 * (1.0 / (cosh_plus_0 * cosh_plus_0) - 1.0 / (cosh_minus_0 * cosh_minus_0)) / max(2.0 * tanh(sigma_3 * R_3), 1.00000001335143196e-10);
+}
+
+
+#line 514
+void GetWarpDriveChristoffel_0(const Vec4Cart_0 thread* pos_5, float vs_2, float sigma_4, float R_4, float xs_2, float ys_2, float zs_2, array<array<array<float, int(4)>, int(4)>, int(4)> thread* Gamma_0)
+{
+
+    int j_3;
+
+#line 517
+    int k_0;
+
+#line 517
+    int mu_2;
+
+#line 517
+    int nu_3;
+
+#line 517
+    int i_4 = int(0);
+
+    for(;;)
+    {
+
+#line 519
+        if(i_4 < int(4))
+        {
+        }
+        else
+        {
+
+#line 519
+            break;
+        }
+
+#line 519
+        j_3 = int(0);
+        for(;;)
+        {
+
+#line 520
+            if(j_3 < int(4))
+            {
+            }
+            else
+            {
+
+#line 520
+                break;
+            }
+
+#line 520
+            k_0 = int(0);
+            for(;;)
+            {
+
+#line 521
+                if(k_0 < int(4))
+                {
+                }
+                else
+                {
+
+#line 521
+                    break;
+                }
+
+#line 522
+                (*Gamma_0)[i_4][j_3][k_0] = 0.0;
+
+#line 521
+                k_0 = k_0 + int(1);
+
+#line 521
+            }
+
+#line 520
+            j_3 = j_3 + int(1);
+
+#line 520
+        }
+
+#line 519
+        i_4 = i_4 + int(1);
+
+#line 519
+    }
+
+#line 519
+    bool _S188 = IsWarpDriveEventRepresented_0(pos_5, vs_2, sigma_4, R_4, xs_2, ys_2, zs_2);
+
+
+
+    if(!_S188)
+    {
+
+#line 523
+        return;
+    }
+
+#line 529
+    float dx_1 = pos_5->x_2 - (xs_2 + vs_2 * pos_5->t_0);
+    float dy_1 = pos_5->y_0 - ys_2;
+    float dz_1 = pos_5->z_0 - zs_2;
+
+    float _S189 = max(sqrt(dx_1 * dx_1 + dy_1 * dy_1 + dz_1 * dz_1), 1.00000001335143196e-10);
+
+
+    float _S190 = AlcubierreShapeFunction_0(_S189, sigma_4, R_4);
+    float df_drs_0 = AlcubierreShapeDerivative_0(_S189, sigma_4, R_4);
+
+    float _S191 = - vs_2;
+    array<float, int(4)> _S192 = { df_drs_0 * (_S191 * dx_1 / _S189), df_drs_0 * (dx_1 / _S189), df_drs_0 * (dy_1 / _S189), df_drs_0 * (dz_1 / _S189) };
+
+
+
+    thread array<array<float, int(4)>, int(4)> metric_4;
+    thread array<array<float, int(4)>, int(4)> inverseMetric_1;
+
+#line 545
+    GetWarpDriveMetric_0(pos_5, vs_2, sigma_4, R_4, xs_2, ys_2, zs_2, &metric_4, &inverseMetric_1);
+
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> dg_0;
+
+#line 547
+    j_3 = int(0);
+    for(;;)
+    {
+
+#line 548
+        if(j_3 < int(4))
+        {
+        }
+        else
+        {
+
+#line 548
+            break;
+        }
+
+#line 548
+        mu_2 = int(0);
+        for(;;)
+        {
+
+#line 549
+            if(mu_2 < int(4))
+            {
+            }
+            else
+            {
+
+#line 549
+                break;
+            }
+
+#line 549
+            nu_3 = int(0);
+            for(;;)
+            {
+
+#line 550
+                if(nu_3 < int(4))
+                {
+                }
+                else
+                {
+
+#line 550
+                    break;
+                }
+
+#line 551
+                dg_0[j_3][mu_2][nu_3] = 0.0;
+
+#line 550
+                nu_3 = nu_3 + int(1);
+
+#line 550
+            }
+
+#line 549
+            mu_2 = mu_2 + int(1);
+
+#line 549
+        }
+
+#line 554
+        dg_0[j_3][int(0)][int(0)] = 2.0 * vs_2 * vs_2 * _S190 * _S192[j_3];
+        float _S193 = _S191 * _S192[j_3];
+
+#line 555
+        dg_0[j_3][int(0)][int(1)] = _S193;
+        dg_0[j_3][int(1)][int(0)] = _S193;
+
+#line 548
+        j_3 = j_3 + int(1);
+
+#line 548
+    }
+
+#line 548
+    k_0 = int(0);
+
+#line 559
+    for(;;)
+    {
+
+#line 559
+        if(k_0 < int(4))
+        {
+        }
+        else
+        {
+
+#line 559
+            break;
+        }
+
+#line 559
+        mu_2 = int(0);
+        for(;;)
+        {
+
+#line 560
+            if(mu_2 < int(4))
+            {
+            }
+            else
+            {
+
+#line 560
+                break;
+            }
+
+#line 560
+            nu_3 = int(0);
+            for(;;)
+            {
+
+#line 561
+                if(nu_3 < int(4))
+                {
+                }
+                else
+                {
+
+#line 561
+                    break;
+                }
+
+#line 561
+                int sigmaIndex_0 = int(0);
+
+#line 561
+                float sum_0 = 0.0;
+
+                for(;;)
+                {
+
+#line 563
+                    if(sigmaIndex_0 < int(4))
+                    {
+                    }
+                    else
+                    {
+
+#line 563
+                        break;
+                    }
+
+#line 564
+                    float sum_1 = sum_0 + inverseMetric_1[k_0][sigmaIndex_0] * (dg_0[mu_2][sigmaIndex_0][nu_3] + dg_0[nu_3][sigmaIndex_0][mu_2] - dg_0[sigmaIndex_0][mu_2][nu_3]);
+
+#line 563
+                    sigmaIndex_0 = sigmaIndex_0 + int(1);
+
+#line 563
+                    sum_0 = sum_1;
+
+#line 563
+                }
+
+#line 568
+                (*Gamma_0)[k_0][mu_2][nu_3] = 0.5 * sum_0;
+
+#line 561
+                nu_3 = nu_3 + int(1);
+
+#line 561
+            }
+
+#line 560
+            mu_2 = mu_2 + int(1);
+
+#line 560
+        }
+
+#line 559
+        k_0 = k_0 + int(1);
+
+#line 559
+    }
+
+#line 572
+    return;
+}
+
+
+#line 162 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_integrator.slang"
+bool TryGeodesicAccelerationWarpCart_0(const GeodesicStateCart_0 thread* state_1, float vs_3, float sigma_5, float R_5, float xs_3, float ys_3, float zs_3, Vec4Cart_0 thread* acceleration_0)
+{
+
+    *acceleration_0 = MakeVec4Cart_0(0.0, 0.0, 0.0, 0.0);
+
+#line 165
+    bool _S194 = IsWarpDriveEventRepresented_0(&state_1->x_5, vs_3, sigma_5, R_5, xs_3, ys_3, zs_3);
+    if(!_S194)
+    {
+
+#line 166
+        return false;
+    }
+
+#line 167
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> Gamma_1;
+
+#line 167
+    GetWarpDriveChristoffel_0(&state_1->x_5, vs_3, sigma_5, R_5, xs_3, ys_3, zs_3, &Gamma_1);
+
+    array<float, int(4)> _S195 = { (&state_1->u_1)->t_0, (&state_1->u_1)->x_2, (&state_1->u_1)->y_0, (&state_1->u_1)->z_0 };
+    thread array<float, int(4)> acc_0;
+
+#line 170
+    acc_0[int(0)] = 0.0;
+
+#line 170
+    acc_0[int(1)] = 0.0;
+
+#line 170
+    acc_0[int(2)] = 0.0;
+
+#line 170
+    acc_0[int(3)] = 0.0;
+
+#line 170
+    int mu_3 = int(0);
+    for(;;)
+    {
+
+#line 171
+        if(mu_3 < int(4))
+        {
+        }
+        else
+        {
+
+#line 171
+            break;
+        }
+
+#line 171
+        int nu_4 = int(0);
+        for(;;)
+        {
+
+#line 172
+            if(nu_4 < int(4))
+            {
+            }
+            else
+            {
+
+#line 172
+                break;
+            }
+
+#line 172
+            int rho_0 = int(0);
+            for(;;)
+            {
+
+#line 173
+                if(rho_0 < int(4))
+                {
+                }
+                else
+                {
+
+#line 173
+                    break;
+                }
+
+#line 174
+                acc_0[mu_3] = acc_0[mu_3] - Gamma_1[mu_3][nu_4][rho_0] * _S195[nu_4] * _S195[rho_0];
+
+#line 173
+                rho_0 = rho_0 + int(1);
+
+#line 173
+            }
+
+#line 172
+            nu_4 = nu_4 + int(1);
+
+#line 172
+        }
+
+#line 171
+        mu_3 = mu_3 + int(1);
+
+#line 171
+    }
+
+
+
+    *acceleration_0 = MakeVec4Cart_0(acc_0[int(0)], acc_0[int(1)], acc_0[int(2)], acc_0[int(3)]);
+
+#line 175
+    bool _S196;
+    if(isfinite(acceleration_0->t_0))
+    {
+
+#line 176
+        _S196 = isfinite(acceleration_0->x_2);
+
+#line 176
+    }
+    else
+    {
+
+#line 176
+        _S196 = false;
+
+#line 176
+    }
+
+#line 176
+    if(_S196)
+    {
+
+#line 176
+        _S196 = isfinite(acceleration_0->y_0);
+
+#line 176
+    }
+    else
+    {
+
+#line 176
+        _S196 = false;
+
+#line 176
+    }
+    if(_S196)
+    {
+
+#line 177
+        _S196 = isfinite(acceleration_0->z_0);
+
+#line 177
+    }
+    else
+    {
+
+#line 177
+        _S196 = false;
+
+#line 177
+    }
+
+#line 176
+    return _S196;
+}
+
+
+bool IntegrateGeodesicRK4WarpCartDelta_0(const GeodesicStateCart_0 thread* state_2, float dt_0, float vs_4, float sigma_6, float R_6, float xs_4, float ys_4, float zs_4, Vec4Cart_0 thread* dx_2, Vec4Cart_0 thread* du_0)
+{
+
+    Vec4Cart_0 _S197 = MakeVec4Cart_0(0.0, 0.0, 0.0, 0.0);
+
+#line 183
+    *dx_2 = _S197;
+    *du_0 = _S197;
+    thread Vec4Cart_0 acceleration_1;
+
+#line 185
+    bool _S198 = TryGeodesicAccelerationWarpCart_0(state_2, vs_4, sigma_6, R_6, xs_4, ys_4, zs_4, &acceleration_1);
+    if(!_S198)
+    {
+
+#line 187
+        return false;
+    }
+
+#line 187
+    Vec4Cart_0 _S199 = ScaleVec4Cart_0(&state_2->u_1, dt_0);
+
+#line 187
+    thread Vec4Cart_0 _S200 = acceleration_1;
+
+#line 187
+    Vec4Cart_0 _S201 = ScaleVec4Cart_0(&_S200, dt_0);
+
+
+
+    thread GeodesicStateCart_0 s2_0;
+
+#line 191
+    thread Vec4Cart_0 _S202 = _S199;
+
+#line 191
+    Vec4Cart_0 _S203 = ScaleVec4Cart_0(&_S202, 0.5);
+
+#line 191
+    thread Vec4Cart_0 _S204 = _S203;
+
+#line 191
+    Vec4Cart_0 _S205 = AddVec4Cart_0(&state_2->x_5, &_S204);
+    (&s2_0)->x_5 = _S205;
+
+#line 192
+    thread Vec4Cart_0 _S206 = _S201;
+
+#line 192
+    Vec4Cart_0 _S207 = ScaleVec4Cart_0(&_S206, 0.5);
+
+#line 192
+    thread Vec4Cart_0 _S208 = _S207;
+
+#line 192
+    Vec4Cart_0 _S209 = AddVec4Cart_0(&state_2->u_1, &_S208);
+    (&s2_0)->u_1 = _S209;
+
+#line 193
+    thread GeodesicStateCart_0 _S210 = s2_0;
+
+#line 193
+    bool _S211 = TryGeodesicAccelerationWarpCart_0(&_S210, vs_4, sigma_6, R_6, xs_4, ys_4, zs_4, &acceleration_1);
+    if(!_S211)
+    {
+
+#line 195
+        return false;
+    }
+
+#line 195
+    thread Vec4Cart_0 _S212 = (&s2_0)->u_1;
+
+#line 195
+    Vec4Cart_0 _S213 = ScaleVec4Cart_0(&_S212, dt_0);
+
+#line 195
+    thread Vec4Cart_0 _S214 = acceleration_1;
+
+#line 195
+    Vec4Cart_0 _S215 = ScaleVec4Cart_0(&_S214, dt_0);
+
+
+
+    thread GeodesicStateCart_0 s3_0;
+
+#line 199
+    thread Vec4Cart_0 _S216 = _S213;
+
+#line 199
+    Vec4Cart_0 _S217 = ScaleVec4Cart_0(&_S216, 0.5);
+
+#line 199
+    thread Vec4Cart_0 _S218 = _S217;
+
+#line 199
+    Vec4Cart_0 _S219 = AddVec4Cart_0(&state_2->x_5, &_S218);
+    (&s3_0)->x_5 = _S219;
+
+#line 200
+    thread Vec4Cart_0 _S220 = _S215;
+
+#line 200
+    Vec4Cart_0 _S221 = ScaleVec4Cart_0(&_S220, 0.5);
+
+#line 200
+    thread Vec4Cart_0 _S222 = _S221;
+
+#line 200
+    Vec4Cart_0 _S223 = AddVec4Cart_0(&state_2->u_1, &_S222);
+    (&s3_0)->u_1 = _S223;
+
+#line 201
+    thread GeodesicStateCart_0 _S224 = s3_0;
+
+#line 201
+    bool _S225 = TryGeodesicAccelerationWarpCart_0(&_S224, vs_4, sigma_6, R_6, xs_4, ys_4, zs_4, &acceleration_1);
+    if(!_S225)
+    {
+
+#line 203
+        return false;
+    }
+
+#line 203
+    thread Vec4Cart_0 _S226 = (&s3_0)->u_1;
+
+#line 203
+    Vec4Cart_0 _S227 = ScaleVec4Cart_0(&_S226, dt_0);
+
+#line 203
+    thread Vec4Cart_0 _S228 = acceleration_1;
+
+#line 203
+    Vec4Cart_0 _S229 = ScaleVec4Cart_0(&_S228, dt_0);
+
+
+
+    thread GeodesicStateCart_0 s4_0;
+
+#line 207
+    thread Vec4Cart_0 _S230 = _S227;
+
+#line 207
+    Vec4Cart_0 _S231 = AddVec4Cart_0(&state_2->x_5, &_S230);
+    (&s4_0)->x_5 = _S231;
+
+#line 208
+    thread Vec4Cart_0 _S232 = _S229;
+
+#line 208
+    Vec4Cart_0 _S233 = AddVec4Cart_0(&state_2->u_1, &_S232);
+    (&s4_0)->u_1 = _S233;
+
+#line 209
+    thread GeodesicStateCart_0 _S234 = s4_0;
+
+#line 209
+    bool _S235 = TryGeodesicAccelerationWarpCart_0(&_S234, vs_4, sigma_6, R_6, xs_4, ys_4, zs_4, &acceleration_1);
+    if(!_S235)
+    {
+
+#line 211
+        return false;
+    }
+
+#line 211
+    thread Vec4Cart_0 _S236 = (&s4_0)->u_1;
+
+#line 211
+    Vec4Cart_0 _S237 = ScaleVec4Cart_0(&_S236, dt_0);
+
+#line 211
+    thread Vec4Cart_0 _S238 = acceleration_1;
+
+#line 211
+    Vec4Cart_0 _S239 = ScaleVec4Cart_0(&_S238, dt_0);
+
+#line 211
+    thread Vec4Cart_0 _S240 = _S213;
+
+#line 211
+    Vec4Cart_0 _S241 = ScaleVec4Cart_0(&_S240, 2.0);
+
+#line 211
+    thread Vec4Cart_0 _S242 = _S199;
+
+#line 211
+    thread Vec4Cart_0 _S243 = _S241;
+
+#line 211
+    Vec4Cart_0 _S244 = AddVec4Cart_0(&_S242, &_S243);
+
+#line 211
+    thread Vec4Cart_0 _S245 = _S227;
+
+#line 211
+    Vec4Cart_0 _S246 = ScaleVec4Cart_0(&_S245, 2.0);
+
+#line 211
+    thread Vec4Cart_0 _S247 = _S246;
+
+#line 211
+    thread Vec4Cart_0 _S248 = _S237;
+
+#line 211
+    Vec4Cart_0 _S249 = AddVec4Cart_0(&_S247, &_S248);
+
+#line 211
+    thread Vec4Cart_0 _S250 = _S244;
+
+#line 211
+    thread Vec4Cart_0 _S251 = _S249;
+
+#line 211
+    Vec4Cart_0 _S252 = AddVec4Cart_0(&_S250, &_S251);
+
+#line 211
+    thread Vec4Cart_0 _S253 = _S252;
+
+#line 211
+    Vec4Cart_0 _S254 = ScaleVec4Cart_0(&_S253, 0.1666666716337204);
+
+#line 216
+    *dx_2 = _S254;
+
+#line 216
+    thread Vec4Cart_0 _S255 = _S215;
+
+#line 216
+    Vec4Cart_0 _S256 = ScaleVec4Cart_0(&_S255, 2.0);
+
+#line 216
+    thread Vec4Cart_0 _S257 = _S201;
+
+#line 216
+    thread Vec4Cart_0 _S258 = _S256;
+
+#line 216
+    Vec4Cart_0 _S259 = AddVec4Cart_0(&_S257, &_S258);
+
+#line 216
+    thread Vec4Cart_0 _S260 = _S229;
+
+#line 216
+    Vec4Cart_0 _S261 = ScaleVec4Cart_0(&_S260, 2.0);
+
+#line 216
+    thread Vec4Cart_0 _S262 = _S261;
+
+#line 216
+    thread Vec4Cart_0 _S263 = _S239;
+
+#line 216
+    Vec4Cart_0 _S264 = AddVec4Cart_0(&_S262, &_S263);
+
+#line 216
+    thread Vec4Cart_0 _S265 = _S259;
+
+#line 216
+    thread Vec4Cart_0 _S266 = _S264;
+
+#line 216
+    Vec4Cart_0 _S267 = AddVec4Cart_0(&_S265, &_S266);
+
+#line 216
+    thread Vec4Cart_0 _S268 = _S267;
+
+#line 216
+    Vec4Cart_0 _S269 = ScaleVec4Cart_0(&_S268, 0.1666666716337204);
+
+    *du_0 = _S269;
+
+#line 218
+    thread Vec4Cart_0 _S270 = *dx_2;
+
+#line 218
+    Vec4Cart_0 _S271 = AddVec4Cart_0(&state_2->x_5, &_S270);
+
+#line 218
+    thread Vec4Cart_0 _S272 = _S269;
+
+#line 218
+    Vec4Cart_0 _S273 = AddVec4Cart_0(&state_2->u_1, &_S272);
+
+#line 218
+    thread Vec4Cart_0 _S274 = _S271;
+
+#line 218
+    bool _S275 = IsWarpDriveEventRepresented_0(&_S274, vs_4, sigma_6, R_6, xs_4, ys_4, zs_4);
+
+#line 218
+    bool _S276;
+
+
+
+    if(_S275)
+    {
+
+#line 222
+        _S276 = isfinite(_S273.t_0);
+
+#line 222
+    }
+    else
+    {
+
+#line 222
+        _S276 = false;
+
+#line 222
+    }
+    if(_S276)
+    {
+
+#line 223
+        _S276 = isfinite(_S273.x_2);
+
+#line 223
+    }
+    else
+    {
+
+#line 223
+        _S276 = false;
+
+#line 223
+    }
+
+#line 223
+    if(_S276)
+    {
+
+#line 223
+        _S276 = isfinite(_S273.y_0);
+
+#line 223
+    }
+    else
+    {
+
+#line 223
+        _S276 = false;
+
+#line 223
+    }
+    if(_S276)
+    {
+
+#line 224
+        _S276 = isfinite(_S273.z_0);
+
+#line 224
+    }
+    else
+    {
+
+#line 224
+        _S276 = false;
+
+#line 224
+    }
+
+#line 222
+    return _S276;
+}
+
+
+
+bool IntegrateGeodesicRK4WarpCart_0(const GeodesicStateCart_0 thread* state_3, float dt_1, float vs_5, float sigma_7, float R_7, float xs_5, float ys_5, float zs_5, GeodesicStateCart_0 thread* result_4)
+{
+
+    *result_4 = *state_3;
+    thread Vec4Cart_0 dx_3;
+
+#line 231
+    thread Vec4Cart_0 du_1;
+
+#line 231
+    bool _S277 = IntegrateGeodesicRK4WarpCartDelta_0(state_3, dt_1, vs_5, sigma_7, R_7, xs_5, ys_5, zs_5, &dx_3, &du_1);
+    if(!_S277)
+    {
+
+#line 233
+        return false;
+    }
+
+#line 233
+    thread Vec4Cart_0 _S278 = dx_3;
+
+#line 233
+    Vec4Cart_0 _S279 = AddVec4Cart_0(&state_3->x_5, &_S278);
+    result_4->x_5 = _S279;
+
+#line 234
+    thread Vec4Cart_0 _S280 = du_1;
+
+#line 234
+    Vec4Cart_0 _S281 = AddVec4Cart_0(&state_3->u_1, &_S280);
+    result_4->u_1 = _S281;
+    return true;
+}
+
+
+#line 403 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_metrics.slang"
+void GetMorrisThorneCartesianChristoffel_0(const Vec4Cart_0 thread* pos_6, float b0_4, float Phi0_2, int shapeType_2, array<array<array<float, int(4)>, int(4)>, int(4)> thread* Gamma_2)
+{
+    int k_1;
+
+#line 405
+    int j_4;
+
+#line 405
+    int i_5 = int(0);
+
+    for(;;)
+    {
+
+#line 407
+        if(i_5 < int(4))
+        {
+        }
+        else
+        {
+
+#line 407
+            break;
+        }
+
+#line 407
+        j_4 = int(0);
+        for(;;)
+        {
+
+#line 408
+            if(j_4 < int(4))
+            {
+            }
+            else
+            {
+
+#line 408
+                break;
+            }
+
+#line 408
+            k_1 = int(0);
+            for(;;)
+            {
+
+#line 409
+                if(k_1 < int(4))
+                {
+                }
+                else
+                {
+
+#line 409
+                    break;
+                }
+
+#line 410
+                (*Gamma_2)[i_5][j_4][k_1] = 0.0;
+
+#line 409
+                k_1 = k_1 + int(1);
+
+#line 409
+            }
+
+#line 408
+            j_4 = j_4 + int(1);
+
+#line 408
+        }
+
+#line 407
+        i_5 = i_5 + int(1);
+
+#line 407
+    }
+
+#line 407
+    bool _S282 = IsMorrisThorneCartesianEventRepresented_0(pos_6, b0_4, Phi0_2, shapeType_2);
+
+
+
+    if(!_S282)
+    {
+
+#line 411
+        return;
+    }
+    float rho2_1 = pos_6->x_2 * pos_6->x_2 + pos_6->y_0 * pos_6->y_0 + pos_6->z_0 * pos_6->z_0;
+    float halfB0OverRho_1 = 0.5 * b0_4 / sqrt(rho2_1);
+    float q_0 = halfB0OverRho_1 * halfB0OverRho_1;
+    float _S283 = 1.0 + q_0;
+    array<float, int(3)> _S284 = { pos_6->x_2, pos_6->y_0, pos_6->z_0 };
+    thread array<float, int(3)> w_0;
+
+#line 418
+    k_1 = int(0);
+    for(;;)
+    {
+
+#line 419
+        if(k_1 < int(3))
+        {
+        }
+        else
+        {
+
+#line 419
+            break;
+        }
+
+#line 420
+        w_0[k_1] = -2.0 * q_0 * _S284[k_1] / (_S283 * rho2_1);
+
+#line 419
+        k_1 = k_1 + int(1);
+
+#line 419
+    }
+
+#line 419
+    int l_1 = int(0);
+
+
+
+    for(;;)
+    {
+
+#line 423
+        if(l_1 < int(3))
+        {
+        }
+        else
+        {
+
+#line 423
+            break;
+        }
+
+#line 423
+        i_5 = int(0);
+        for(;;)
+        {
+
+#line 424
+            if(i_5 < int(3))
+            {
+            }
+            else
+            {
+
+#line 424
+                break;
+            }
+
+#line 424
+            j_4 = int(0);
+            for(;;)
+            {
+
+#line 425
+                if(j_4 < int(3))
+                {
+                }
+                else
+                {
+
+#line 425
+                    break;
+                }
+
+#line 425
+                float _S285;
+                if(l_1 == j_4)
+                {
+
+#line 426
+                    _S285 = w_0[i_5];
+
+#line 426
+                }
+                else
+                {
+
+#line 426
+                    _S285 = 0.0;
+
+#line 426
+                }
+
+#line 426
+                float _S286;
+                if(l_1 == i_5)
+                {
+
+#line 427
+                    _S286 = w_0[j_4];
+
+#line 427
+                }
+                else
+                {
+
+#line 427
+                    _S286 = 0.0;
+
+#line 427
+                }
+
+#line 427
+                float _S287 = _S285 + _S286;
+
+#line 427
+                float _S288;
+                if(i_5 == j_4)
+                {
+
+#line 428
+                    _S288 = w_0[l_1];
+
+#line 428
+                }
+                else
+                {
+
+#line 428
+                    _S288 = 0.0;
+
+#line 428
+                }
+                int _S289 = j_4 + int(1);
+
+#line 429
+                (*Gamma_2)[l_1 + int(1)][i_5 + int(1)][_S289] = _S287 - _S288;
+
+#line 425
+                j_4 = _S289;
+
+#line 425
+            }
+
+#line 424
+            i_5 = i_5 + int(1);
+
+#line 424
+        }
+
+#line 423
+        l_1 = l_1 + int(1);
+
+#line 423
+    }
+
+#line 433
+    return;
+}
+
+
+#line 85 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_integrator.slang"
+bool TryGeodesicAccelerationMorrisThorneCart_0(const GeodesicStateCart_0 thread* state_4, float b0_5, float Phi0_3, int shapeType_3, Vec4Cart_0 thread* acceleration_2)
+{
+
+    *acceleration_2 = MakeVec4Cart_0(0.0, 0.0, 0.0, 0.0);
+
+#line 88
+    bool _S290 = IsMorrisThorneCartesianEventRepresented_0(&state_4->x_5, b0_5, Phi0_3, shapeType_3);
+    if(!_S290)
+    {
+
+#line 89
+        return false;
+    }
+
+#line 90
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> Gamma_3;
+
+#line 90
+    GetMorrisThorneCartesianChristoffel_0(&state_4->x_5, b0_5, Phi0_3, shapeType_3, &Gamma_3);
+
+    array<float, int(4)> _S291 = { (&state_4->u_1)->t_0, (&state_4->u_1)->x_2, (&state_4->u_1)->y_0, (&state_4->u_1)->z_0 };
+    thread array<float, int(4)> acc_1;
+
+#line 93
+    acc_1[int(0)] = 0.0;
+
+#line 93
+    acc_1[int(1)] = 0.0;
+
+#line 93
+    acc_1[int(2)] = 0.0;
+
+#line 93
+    acc_1[int(3)] = 0.0;
+
+#line 93
+    int mu_4 = int(0);
+    for(;;)
+    {
+
+#line 94
+        if(mu_4 < int(4))
+        {
+        }
+        else
+        {
+
+#line 94
+            break;
+        }
+
+#line 94
+        int nu_5 = int(0);
+        for(;;)
+        {
+
+#line 95
+            if(nu_5 < int(4))
+            {
+            }
+            else
+            {
+
+#line 95
+                break;
+            }
+
+#line 95
+            int rho_1 = int(0);
+            for(;;)
+            {
+
+#line 96
+                if(rho_1 < int(4))
+                {
+                }
+                else
+                {
+
+#line 96
+                    break;
+                }
+
+#line 97
+                acc_1[mu_4] = acc_1[mu_4] - Gamma_3[mu_4][nu_5][rho_1] * _S291[nu_5] * _S291[rho_1];
+
+#line 96
+                rho_1 = rho_1 + int(1);
+
+#line 96
+            }
+
+#line 95
+            nu_5 = nu_5 + int(1);
+
+#line 95
+        }
+
+#line 94
+        mu_4 = mu_4 + int(1);
+
+#line 94
+    }
+
+
+
+    *acceleration_2 = MakeVec4Cart_0(acc_1[int(0)], acc_1[int(1)], acc_1[int(2)], acc_1[int(3)]);
+    return true;
+}
+
+bool IntegrateGeodesicRK4MorrisThorneCartDelta_0(const GeodesicStateCart_0 thread* state_5, float dt_2, float b0_6, float Phi0_4, int shapeType_4, Vec4Cart_0 thread* dx_4, Vec4Cart_0 thread* du_2)
+{
+
+    Vec4Cart_0 _S292 = MakeVec4Cart_0(0.0, 0.0, 0.0, 0.0);
+
+#line 105
+    *dx_4 = _S292;
+    *du_2 = _S292;
+    thread Vec4Cart_0 acceleration_3;
+
+#line 107
+    bool _S293 = TryGeodesicAccelerationMorrisThorneCart_0(state_5, b0_6, Phi0_4, shapeType_4, &acceleration_3);
+    if(!_S293)
+    {
+
+#line 109
+        return false;
+    }
+
+#line 109
+    Vec4Cart_0 _S294 = ScaleVec4Cart_0(&state_5->u_1, dt_2);
+
+#line 109
+    thread Vec4Cart_0 _S295 = acceleration_3;
+
+#line 109
+    Vec4Cart_0 _S296 = ScaleVec4Cart_0(&_S295, dt_2);
+
+
+
+    thread GeodesicStateCart_0 s2_1;
+
+#line 113
+    thread Vec4Cart_0 _S297 = _S294;
+
+#line 113
+    Vec4Cart_0 _S298 = ScaleVec4Cart_0(&_S297, 0.5);
+
+#line 113
+    thread Vec4Cart_0 _S299 = _S298;
+
+#line 113
+    Vec4Cart_0 _S300 = AddVec4Cart_0(&state_5->x_5, &_S299);
+    (&s2_1)->x_5 = _S300;
+
+#line 114
+    thread Vec4Cart_0 _S301 = _S296;
+
+#line 114
+    Vec4Cart_0 _S302 = ScaleVec4Cart_0(&_S301, 0.5);
+
+#line 114
+    thread Vec4Cart_0 _S303 = _S302;
+
+#line 114
+    Vec4Cart_0 _S304 = AddVec4Cart_0(&state_5->u_1, &_S303);
+    (&s2_1)->u_1 = _S304;
+
+#line 115
+    thread GeodesicStateCart_0 _S305 = s2_1;
+
+#line 115
+    bool _S306 = TryGeodesicAccelerationMorrisThorneCart_0(&_S305, b0_6, Phi0_4, shapeType_4, &acceleration_3);
+    if(!_S306)
+    {
+
+#line 117
+        return false;
+    }
+
+#line 117
+    thread Vec4Cart_0 _S307 = (&s2_1)->u_1;
+
+#line 117
+    Vec4Cart_0 _S308 = ScaleVec4Cart_0(&_S307, dt_2);
+
+#line 117
+    thread Vec4Cart_0 _S309 = acceleration_3;
+
+#line 117
+    Vec4Cart_0 _S310 = ScaleVec4Cart_0(&_S309, dt_2);
+
+
+
+    thread GeodesicStateCart_0 s3_1;
+
+#line 121
+    thread Vec4Cart_0 _S311 = _S308;
+
+#line 121
+    Vec4Cart_0 _S312 = ScaleVec4Cart_0(&_S311, 0.5);
+
+#line 121
+    thread Vec4Cart_0 _S313 = _S312;
+
+#line 121
+    Vec4Cart_0 _S314 = AddVec4Cart_0(&state_5->x_5, &_S313);
+    (&s3_1)->x_5 = _S314;
+
+#line 122
+    thread Vec4Cart_0 _S315 = _S310;
+
+#line 122
+    Vec4Cart_0 _S316 = ScaleVec4Cart_0(&_S315, 0.5);
+
+#line 122
+    thread Vec4Cart_0 _S317 = _S316;
+
+#line 122
+    Vec4Cart_0 _S318 = AddVec4Cart_0(&state_5->u_1, &_S317);
+    (&s3_1)->u_1 = _S318;
+
+#line 123
+    thread GeodesicStateCart_0 _S319 = s3_1;
+
+#line 123
+    bool _S320 = TryGeodesicAccelerationMorrisThorneCart_0(&_S319, b0_6, Phi0_4, shapeType_4, &acceleration_3);
+    if(!_S320)
+    {
+
+#line 125
+        return false;
+    }
+
+#line 125
+    thread Vec4Cart_0 _S321 = (&s3_1)->u_1;
+
+#line 125
+    Vec4Cart_0 _S322 = ScaleVec4Cart_0(&_S321, dt_2);
+
+#line 125
+    thread Vec4Cart_0 _S323 = acceleration_3;
+
+#line 125
+    Vec4Cart_0 _S324 = ScaleVec4Cart_0(&_S323, dt_2);
+
+
+
+    thread GeodesicStateCart_0 s4_1;
+
+#line 129
+    thread Vec4Cart_0 _S325 = _S322;
+
+#line 129
+    Vec4Cart_0 _S326 = AddVec4Cart_0(&state_5->x_5, &_S325);
+    (&s4_1)->x_5 = _S326;
+
+#line 130
+    thread Vec4Cart_0 _S327 = _S324;
+
+#line 130
+    Vec4Cart_0 _S328 = AddVec4Cart_0(&state_5->u_1, &_S327);
+    (&s4_1)->u_1 = _S328;
+
+#line 131
+    thread GeodesicStateCart_0 _S329 = s4_1;
+
+#line 131
+    bool _S330 = TryGeodesicAccelerationMorrisThorneCart_0(&_S329, b0_6, Phi0_4, shapeType_4, &acceleration_3);
+    if(!_S330)
+    {
+
+#line 133
+        return false;
+    }
+
+#line 133
+    thread Vec4Cart_0 _S331 = (&s4_1)->u_1;
+
+#line 133
+    Vec4Cart_0 _S332 = ScaleVec4Cart_0(&_S331, dt_2);
+
+#line 133
+    thread Vec4Cart_0 _S333 = acceleration_3;
+
+#line 133
+    Vec4Cart_0 _S334 = ScaleVec4Cart_0(&_S333, dt_2);
+
+#line 133
+    thread Vec4Cart_0 _S335 = _S308;
+
+#line 133
+    Vec4Cart_0 _S336 = ScaleVec4Cart_0(&_S335, 2.0);
+
+#line 133
+    thread Vec4Cart_0 _S337 = _S294;
+
+#line 133
+    thread Vec4Cart_0 _S338 = _S336;
+
+#line 133
+    Vec4Cart_0 _S339 = AddVec4Cart_0(&_S337, &_S338);
+
+#line 133
+    thread Vec4Cart_0 _S340 = _S322;
+
+#line 133
+    Vec4Cart_0 _S341 = ScaleVec4Cart_0(&_S340, 2.0);
+
+#line 133
+    thread Vec4Cart_0 _S342 = _S341;
+
+#line 133
+    thread Vec4Cart_0 _S343 = _S332;
+
+#line 133
+    Vec4Cart_0 _S344 = AddVec4Cart_0(&_S342, &_S343);
+
+#line 133
+    thread Vec4Cart_0 _S345 = _S339;
+
+#line 133
+    thread Vec4Cart_0 _S346 = _S344;
+
+#line 133
+    Vec4Cart_0 _S347 = AddVec4Cart_0(&_S345, &_S346);
+
+#line 133
+    thread Vec4Cart_0 _S348 = _S347;
+
+#line 133
+    Vec4Cart_0 _S349 = ScaleVec4Cart_0(&_S348, 0.1666666716337204);
+
+#line 138
+    *dx_4 = _S349;
+
+#line 138
+    thread Vec4Cart_0 _S350 = _S310;
+
+#line 138
+    Vec4Cart_0 _S351 = ScaleVec4Cart_0(&_S350, 2.0);
+
+#line 138
+    thread Vec4Cart_0 _S352 = _S296;
+
+#line 138
+    thread Vec4Cart_0 _S353 = _S351;
+
+#line 138
+    Vec4Cart_0 _S354 = AddVec4Cart_0(&_S352, &_S353);
+
+#line 138
+    thread Vec4Cart_0 _S355 = _S324;
+
+#line 138
+    Vec4Cart_0 _S356 = ScaleVec4Cart_0(&_S355, 2.0);
+
+#line 138
+    thread Vec4Cart_0 _S357 = _S356;
+
+#line 138
+    thread Vec4Cart_0 _S358 = _S334;
+
+#line 138
+    Vec4Cart_0 _S359 = AddVec4Cart_0(&_S357, &_S358);
+
+#line 138
+    thread Vec4Cart_0 _S360 = _S354;
+
+#line 138
+    thread Vec4Cart_0 _S361 = _S359;
+
+#line 138
+    Vec4Cart_0 _S362 = AddVec4Cart_0(&_S360, &_S361);
+
+#line 138
+    thread Vec4Cart_0 _S363 = _S362;
+
+#line 138
+    Vec4Cart_0 _S364 = ScaleVec4Cart_0(&_S363, 0.1666666716337204);
+
+    *du_2 = _S364;
+
+#line 140
+    thread Vec4Cart_0 _S365 = *dx_4;
+
+#line 140
+    Vec4Cart_0 _S366 = AddVec4Cart_0(&state_5->x_5, &_S365);
+
+#line 140
+    thread Vec4Cart_0 _S367 = _S366;
+
+#line 140
+    bool _S368 = IsMorrisThorneCartesianEventRepresented_0(&_S367, b0_6, Phi0_4, shapeType_4);
+
+
+    return _S368;
+}
+
+bool IntegrateGeodesicRK4MorrisThorneCart_0(const GeodesicStateCart_0 thread* state_6, float dt_3, float b0_7, float Phi0_5, int shapeType_5, GeodesicStateCart_0 thread* result_5)
+{
+
+    *result_5 = *state_6;
+    thread Vec4Cart_0 dx_5;
+
+#line 150
+    thread Vec4Cart_0 du_3;
+
+#line 150
+    bool _S369 = IntegrateGeodesicRK4MorrisThorneCartDelta_0(state_6, dt_3, b0_7, Phi0_5, shapeType_5, &dx_5, &du_3);
+    if(!_S369)
+    {
+
+#line 152
+        return false;
+    }
+
+#line 152
+    thread Vec4Cart_0 _S370 = dx_5;
+
+#line 152
+    Vec4Cart_0 _S371 = AddVec4Cart_0(&state_6->x_5, &_S370);
+    result_5->x_5 = _S371;
+
+#line 153
+    thread Vec4Cart_0 _S372 = du_3;
+
+#line 153
+    Vec4Cart_0 _S373 = AddVec4Cart_0(&state_6->u_1, &_S372);
+    result_5->u_1 = _S373;
+    return true;
+}
+
+
+#line 82 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_metrics.slang"
+bool IsKerrSchildFamilyEventRepresented_0(const Vec4Cart_0 thread* event_0, float M_1, float a_5, float Q_1, float Lambda_1)
+{
+
+#line 83
+    bool _S374;
+    if(!isfinite(event_0->t_0))
+    {
+
+#line 84
+        _S374 = true;
+
+#line 84
+    }
+    else
+    {
+
+#line 84
+        _S374 = !isfinite(event_0->x_2);
+
+#line 84
+    }
+
+#line 84
+    if(_S374)
+    {
+
+#line 84
+        _S374 = true;
+
+#line 84
+    }
+    else
+    {
+
+#line 84
+        _S374 = !isfinite(event_0->y_0);
+
+#line 84
+    }
+
+#line 84
+    if(_S374)
+    {
+
+#line 84
+        _S374 = true;
+
+#line 84
+    }
+    else
+    {
+
+#line 84
+        _S374 = !isfinite(event_0->z_0);
+
+#line 84
+    }
+    if(_S374)
+    {
+
+#line 85
+        _S374 = true;
+
+#line 85
+    }
+    else
+    {
+
+#line 85
+        _S374 = !isfinite(M_1);
+
+#line 85
+    }
+
+#line 85
+    if(_S374)
+    {
+
+#line 85
+        _S374 = true;
+
+#line 85
+    }
+    else
+    {
+
+#line 85
+        _S374 = !isfinite(a_5);
+
+#line 85
+    }
+
+#line 85
+    if(_S374)
+    {
+
+#line 85
+        _S374 = true;
+
+#line 85
+    }
+    else
+    {
+
+#line 85
+        _S374 = !isfinite(Q_1);
+
+#line 85
+    }
+    if(_S374)
+    {
+
+#line 86
+        _S374 = true;
+
+#line 86
+    }
+    else
+    {
+
+#line 86
+        _S374 = !isfinite(Lambda_1);
+
+#line 86
+    }
+
+#line 84
+    if(_S374)
+    {
+
+        return false;
+    }
+    bool _S375 = M_1 == 0.0;
+
+#line 89
+    if(_S375)
+    {
+
+#line 89
+        _S374 = a_5 == 0.0;
+
+#line 89
+    }
+    else
+    {
+
+#line 89
+        _S374 = false;
+
+#line 89
+    }
+
+#line 89
+    if(_S374)
+    {
+
+#line 89
+        _S374 = Q_1 == 0.0;
+
+#line 89
+    }
+    else
+    {
+
+#line 89
+        _S374 = false;
+
+#line 89
+    }
+
+#line 89
+    if(_S374)
+    {
+
+#line 89
+        _S374 = Lambda_1 == 0.0;
+
+#line 89
+    }
+    else
+    {
+
+#line 89
+        _S374 = false;
+
+#line 89
+    }
+
+#line 89
+    if(_S374)
+    {
+
+#line 89
+        return true;
+    }
+
+#line 90
+    if(_S375)
+    {
+
+#line 90
+        _S374 = a_5 == 0.0;
+
+#line 90
+    }
+    else
+    {
+
+#line 90
+        _S374 = false;
+
+#line 90
+    }
+
+#line 90
+    if(_S374)
+    {
+
+#line 90
+        _S374 = Q_1 == 0.0;
+
+#line 90
+    }
+    else
+    {
+
+#line 90
+        _S374 = false;
+
+#line 90
+    }
+
+#line 90
+    if(_S374)
+    {
+
+#line 90
+        _S374 = (event_0->x_2) == 0.0;
+
+#line 90
+    }
+    else
+    {
+
+#line 90
+        _S374 = false;
+
+#line 90
+    }
+    if(_S374)
+    {
+
+#line 91
+        _S374 = (event_0->y_0) == 0.0;
+
+#line 91
+    }
+    else
+    {
+
+#line 91
+        _S374 = false;
+
+#line 91
+    }
+
+#line 91
+    if(_S374)
+    {
+
+#line 91
+        _S374 = (event_0->z_0) == 0.0;
+
+#line 91
+    }
+    else
+    {
+
+#line 91
+        _S374 = false;
+
+#line 91
+    }
+
+#line 90
+    if(_S374)
+    {
+        return true;
+    }
+    float r_1 = ComputeKerrRadiusCart_0(event_0->x_2, event_0->y_0, event_0->z_0, a_5);
+    if(isfinite(r_1))
+    {
+
+#line 95
+        _S374 = r_1 > 0.0;
+
+#line 95
+    }
+    else
+    {
+
+#line 95
+        _S374 = false;
+
+#line 95
+    }
+
+#line 95
+    return _S374;
+}
+
+
+#line 162
+void GetKerrSchildFamilyChristoffel_0(const Vec4Cart_0 thread* pos_7, float M_2, float a_6, float Q_2, float Lambda_2, array<array<array<float, int(4)>, int(4)>, int(4)> thread* Gamma_4)
+{
+    int j_5;
+
+#line 164
+    int k_2;
+
+#line 164
+    float sum_2;
+
+#line 164
+    int nu_6;
+
+#line 164
+    int i_6 = int(0);
+
+    for(;;)
+    {
+
+#line 166
+        if(i_6 < int(4))
+        {
+        }
+        else
+        {
+
+#line 166
+            break;
+        }
+
+#line 166
+        j_5 = int(0);
+        for(;;)
+        {
+
+#line 167
+            if(j_5 < int(4))
+            {
+            }
+            else
+            {
+
+#line 167
+                break;
+            }
+
+#line 167
+            k_2 = int(0);
+            for(;;)
+            {
+
+#line 168
+                if(k_2 < int(4))
+                {
+                }
+                else
+                {
+
+#line 168
+                    break;
+                }
+
+#line 169
+                (*Gamma_4)[i_6][j_5][k_2] = 0.0;
+
+#line 168
+                k_2 = k_2 + int(1);
+
+#line 168
+            }
+
+#line 167
+            j_5 = j_5 + int(1);
+
+#line 167
+        }
+
+#line 166
+        i_6 = i_6 + int(1);
+
+#line 166
+    }
+
+#line 171
+    bool _S376 = M_2 == 0.0;
+
+#line 171
+    bool _S377;
+
+#line 171
+    if(_S376)
+    {
+
+#line 171
+        _S377 = a_6 == 0.0;
+
+#line 171
+    }
+    else
+    {
+
+#line 171
+        _S377 = false;
+
+#line 171
+    }
+
+#line 171
+    if(_S377)
+    {
+
+#line 171
+        _S377 = Q_2 == 0.0;
+
+#line 171
+    }
+    else
+    {
+
+#line 171
+        _S377 = false;
+
+#line 171
+    }
+
+#line 171
+    if(_S377)
+    {
+
+#line 171
+        _S377 = Lambda_2 == 0.0;
+
+#line 171
+    }
+    else
+    {
+
+#line 171
+        _S377 = false;
+
+#line 171
+    }
+
+#line 171
+    if(_S377)
+    {
+
+#line 172
+        return;
+    }
+
+#line 172
+    float _S378 = pos_7->x_2;
+
+#line 172
+    float _S379 = pos_7->y_0;
+
+#line 172
+    float _S380 = pos_7->z_0;
+
+#line 179
+    float a2_1 = a_6 * a_6;
+    float Q2_1 = Q_2 * Q_2;
+    float R2_0 = pos_7->x_2 * pos_7->x_2 + pos_7->y_0 * pos_7->y_0 + pos_7->z_0 * pos_7->z_0;
+
+    float r_2 = ComputeKerrRadiusCart_0(pos_7->x_2, pos_7->y_0, pos_7->z_0, a_6);
+    if(_S376)
+    {
+
+#line 184
+        _S377 = a_6 == 0.0;
+
+#line 184
+    }
+    else
+    {
+
+#line 184
+        _S377 = false;
+
+#line 184
+    }
+
+#line 184
+    if(_S377)
+    {
+
+#line 184
+        _S377 = Q_2 == 0.0;
+
+#line 184
+    }
+    else
+    {
+
+#line 184
+        _S377 = false;
+
+#line 184
+    }
+
+#line 184
+    if(_S377)
+    {
+
+#line 184
+        _S377 = r_2 == 0.0;
+
+#line 184
+    }
+    else
+    {
+
+#line 184
+        _S377 = false;
+
+#line 184
+    }
+
+#line 184
+    if(_S377)
+    {
+
+#line 185
+        return;
+    }
+    float r2_1 = r_2 * r_2;
+
+    float Rm2_0 = R2_0 - a2_1;
+
+#line 197
+    float _S381 = 4.0 * sqrt(Rm2_0 * Rm2_0 + 4.0 * a2_1 * _S380 * _S380);
+
+#line 197
+    float d_r2_dx_0 = _S378 + 4.0 * _S378 * Rm2_0 / _S381;
+    float d_r2_dy_0 = _S379 + 4.0 * _S379 * Rm2_0 / _S381;
+    float d_r2_dz_0 = _S380 + 4.0 * _S380 * (R2_0 + a2_1) / _S381;
+
+    thread array<float, int(4)> dr_0;
+    dr_0[int(0)] = 0.0;
+    float _S382 = 2.0 * r_2;
+
+#line 203
+    dr_0[int(1)] = d_r2_dx_0 / _S382;
+    dr_0[int(2)] = d_r2_dy_0 / _S382;
+    dr_0[int(3)] = d_r2_dz_0 / _S382;
+
+    float denom_1 = r2_1 + a2_1;
+    float denom2_0 = denom_1 * denom_1;
+
+
+    float _S383 = r_2 * _S378 + a_6 * _S379;
+
+#line 211
+    float _S384 = _S383 / denom_1;
+    float _S385 = r_2 * _S379 - a_6 * _S378;
+
+#line 212
+    float _S386 = _S385 / denom_1;
+    float _S387 = _S380 / r_2;
+
+#line 209
+    array<float, int(4)> l_2 = { 1.0, _S384, _S386, _S387 };
+
+#line 215
+    array<float, int(4)> _S388 = { 1.0, - _S384, - _S386, - _S387 };
+
+    thread array<array<float, int(4)>, int(4)> dl_0;
+
+#line 217
+    i_6 = int(0);
+    for(;;)
+    {
+
+#line 218
+        if(i_6 < int(4))
+        {
+        }
+        else
+        {
+
+#line 218
+            break;
+        }
+
+#line 218
+        j_5 = int(0);
+        for(;;)
+        {
+
+#line 219
+            if(j_5 < int(4))
+            {
+            }
+            else
+            {
+
+#line 219
+                break;
+            }
+
+#line 219
+            dl_0[i_6][j_5] = 0.0;
+
+#line 219
+            j_5 = j_5 + int(1);
+
+#line 219
+        }
+
+#line 218
+        i_6 = i_6 + int(1);
+
+#line 218
+    }
+
+#line 224
+    dl_0[int(1)][int(1)] = (r_2 + _S378 * dr_0[int(1)]) / denom_1 - _S383 * (_S382 * dr_0[int(1)]) / denom2_0;
+    dl_0[int(2)][int(1)] = (_S378 * dr_0[int(2)] + a_6) / denom_1 - _S383 * (_S382 * dr_0[int(2)]) / denom2_0;
+    dl_0[int(3)][int(1)] = _S378 * dr_0[int(3)] / denom_1 - _S383 * (_S382 * dr_0[int(3)]) / denom2_0;
+
+
+
+    dl_0[int(1)][int(2)] = (_S379 * dr_0[int(1)] - a_6) / denom_1 - _S385 * (_S382 * dr_0[int(1)]) / denom2_0;
+    dl_0[int(2)][int(2)] = (r_2 + _S379 * dr_0[int(2)]) / denom_1 - _S385 * (_S382 * dr_0[int(2)]) / denom2_0;
+    dl_0[int(3)][int(2)] = _S379 * dr_0[int(3)] / denom_1 - _S385 * (_S382 * dr_0[int(3)]) / denom2_0;
+
+    float _S389 = - _S380;
+
+#line 234
+    dl_0[int(1)][int(3)] = _S389 * dr_0[int(1)] / r2_1;
+    dl_0[int(2)][int(3)] = _S389 * dr_0[int(2)] / r2_1;
+    dl_0[int(3)][int(3)] = 1.0 / r_2 - _S380 * dr_0[int(3)] / r2_1;
+
+    float cosine_1 = _S380 / r_2;
+    float sigma_8 = r2_1 + a2_1 * cosine_1 * cosine_1;
+
+
+    bool _S390 = M_2 != 0.0;
+
+#line 242
+    if(_S390)
+    {
+
+#line 242
+        _S377 = true;
+
+#line 242
+    }
+    else
+    {
+
+#line 242
+        _S377 = Q_2 != 0.0;
+
+#line 242
+    }
+
+#line 242
+    float asymptoticH_0;
+
+#line 242
+    if(_S377)
+    {
+
+#line 242
+        asymptoticH_0 = (2.0 * M_2 * r_2 - Q2_1) / sigma_8;
+
+#line 242
+    }
+    else
+    {
+
+#line 242
+        asymptoticH_0 = 0.0;
+
+#line 242
+    }
+
+
+
+    bool _S391 = a_6 == 0.0;
+
+#line 246
+    if(_S391)
+    {
+
+#line 246
+        _S377 = Lambda_2 != 0.0;
+
+#line 246
+    }
+    else
+    {
+
+#line 246
+        _S377 = false;
+
+#line 246
+    }
+
+#line 246
+    float H_1;
+
+#line 246
+    if(_S377)
+    {
+
+#line 246
+        H_1 = asymptoticH_0 + Lambda_2 * r2_1 / 3.0;
+
+#line 246
+    }
+    else
+    {
+
+#line 246
+        H_1 = asymptoticH_0;
+
+#line 246
+    }
+
+
+
+    thread array<float, int(4)> dH_0;
+
+#line 250
+    dH_0[int(0)] = 0.0;
+
+#line 250
+    dH_0[int(1)] = 0.0;
+
+#line 250
+    dH_0[int(2)] = 0.0;
+
+#line 250
+    dH_0[int(3)] = 0.0;
+
+#line 250
+    j_5 = int(1);
+    for(;;)
+    {
+
+#line 251
+        if(j_5 <= int(3))
+        {
+        }
+        else
+        {
+
+#line 251
+            break;
+        }
+
+#line 252
+        if(_S390)
+        {
+
+#line 252
+            _S377 = true;
+
+#line 252
+        }
+        else
+        {
+
+#line 252
+            _S377 = Q_2 != 0.0;
+
+#line 252
+        }
+
+#line 252
+        if(_S377)
+        {
+
+#line 253
+            if(j_5 == int(3))
+            {
+
+#line 253
+                sum_2 = 1.0 / r_2;
+
+#line 253
+            }
+            else
+            {
+
+#line 253
+                sum_2 = 0.0;
+
+#line 253
+            }
+
+
+
+            dH_0[j_5] = (2.0 * M_2 * dr_0[j_5] - asymptoticH_0 * (_S382 * dr_0[j_5] + 2.0 * a2_1 * cosine_1 * (sum_2 - _S380 * dr_0[j_5] / r2_1))) / sigma_8;
+
+#line 252
+        }
+
+#line 252
+        bool _S392;
+
+#line 259
+        if(_S391)
+        {
+
+#line 259
+            _S392 = Lambda_2 != 0.0;
+
+#line 259
+        }
+        else
+        {
+
+#line 259
+            _S392 = false;
+
+#line 259
+        }
+
+#line 259
+        if(_S392)
+        {
+
+#line 260
+            dH_0[j_5] = dH_0[j_5] + 2.0 * Lambda_2 / 3.0 * r_2 * dr_0[j_5];
+
+#line 259
+        }
+
+#line 251
+        j_5 = j_5 + int(1);
+
+#line 251
+    }
+
+#line 264
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> dg_1;
+
+#line 264
+    j_5 = int(0);
+    for(;;)
+    {
+
+#line 265
+        if(j_5 < int(4))
+        {
+        }
+        else
+        {
+
+#line 265
+            break;
+        }
+
+#line 265
+        k_2 = int(0);
+        for(;;)
+        {
+
+#line 266
+            if(k_2 < int(4))
+            {
+            }
+            else
+            {
+
+#line 266
+                break;
+            }
+
+#line 266
+            nu_6 = int(0);
+            for(;;)
+            {
+
+#line 267
+                if(nu_6 < int(4))
+                {
+                }
+                else
+                {
+
+#line 267
+                    break;
+                }
+
+#line 268
+                dg_1[j_5][k_2][nu_6] = dH_0[j_5] * l_2[k_2] * l_2[nu_6] + H_1 * dl_0[j_5][k_2] * l_2[nu_6] + H_1 * l_2[k_2] * dl_0[j_5][nu_6];
+
+#line 267
+                nu_6 = nu_6 + int(1);
+
+#line 267
+            }
+
+#line 266
+            k_2 = k_2 + int(1);
+
+#line 266
+        }
+
+#line 265
+        j_5 = j_5 + int(1);
+
+#line 265
+    }
+
+#line 272
+    array<float, int(4)> _S393 = { -1.0, 1.0, 1.0, 1.0 };
+
+#line 272
+    j_5 = int(0);
+
+    for(;;)
+    {
+
+#line 274
+        if(j_5 < int(4))
+        {
+        }
+        else
+        {
+
+#line 274
+            break;
+        }
+
+#line 274
+        k_2 = int(0);
+        for(;;)
+        {
+
+#line 275
+            if(k_2 < int(4))
+            {
+            }
+            else
+            {
+
+#line 275
+                break;
+            }
+
+#line 275
+            nu_6 = k_2;
+            for(;;)
+            {
+
+#line 276
+                if(nu_6 < int(4))
+                {
+                }
+                else
+                {
+
+#line 276
+                    break;
+                }
+
+#line 276
+                int s_2 = int(0);
+
+#line 276
+                sum_2 = 0.0;
+
+                for(;;)
+                {
+
+#line 278
+                    if(s_2 < int(4))
+                    {
+                    }
+                    else
+                    {
+
+#line 278
+                        break;
+                    }
+
+#line 278
+                    float g_inv_lam_s_0;
+                    if(j_5 == s_2)
+                    {
+
+#line 279
+                        g_inv_lam_s_0 = _S393[j_5];
+
+#line 279
+                    }
+                    else
+                    {
+
+#line 279
+                        g_inv_lam_s_0 = 0.0;
+
+#line 279
+                    }
+
+
+                    float sum_3 = sum_2 + (g_inv_lam_s_0 - H_1 * _S388[j_5] * _S388[s_2]) * (dg_1[k_2][s_2][nu_6] + dg_1[nu_6][s_2][k_2] - dg_1[s_2][k_2][nu_6]);
+
+#line 278
+                    s_2 = s_2 + int(1);
+
+#line 278
+                    sum_2 = sum_3;
+
+#line 278
+                }
+
+#line 284
+                float _S394 = 0.5 * sum_2;
+
+#line 284
+                (*Gamma_4)[j_5][k_2][nu_6] = _S394;
+                (*Gamma_4)[j_5][nu_6][k_2] = _S394;
+
+#line 276
+                nu_6 = nu_6 + int(1);
+
+#line 276
+            }
+
+#line 275
+            k_2 = k_2 + int(1);
+
+#line 275
+        }
+
+#line 274
+        j_5 = j_5 + int(1);
+
+#line 274
+    }
+
+#line 290
+    return;
+}
+
+
+#line 13 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_integrator.slang"
+bool TryGeodesicAccelerationCart_0(const GeodesicStateCart_0 thread* state_7, float M_3, float a_7, float Q_3, float Lambda_3, Vec4Cart_0 thread* acceleration_4)
+{
+    *acceleration_4 = MakeVec4Cart_0(0.0, 0.0, 0.0, 0.0);
+
+#line 15
+    bool _S395 = IsKerrSchildFamilyEventRepresented_0(&state_7->x_5, M_3, a_7, Q_3, Lambda_3);
+    if(!_S395)
+    {
+
+#line 16
+        return false;
+    }
+
+#line 17
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> Gamma_5;
+
+#line 17
+    GetKerrSchildFamilyChristoffel_0(&state_7->x_5, M_3, a_7, Q_3, Lambda_3, &Gamma_5);
+
+    array<float, int(4)> _S396 = { (&state_7->u_1)->t_0, (&state_7->u_1)->x_2, (&state_7->u_1)->y_0, (&state_7->u_1)->z_0 };
+    thread array<float, int(4)> acc_2;
+
+#line 20
+    acc_2[int(0)] = 0.0;
+
+#line 20
+    acc_2[int(1)] = 0.0;
+
+#line 20
+    acc_2[int(2)] = 0.0;
+
+#line 20
+    acc_2[int(3)] = 0.0;
+
+#line 20
+    int mu_5 = int(0);
+    for(;;)
+    {
+
+#line 21
+        if(mu_5 < int(4))
+        {
+        }
+        else
+        {
+
+#line 21
+            break;
+        }
+
+#line 21
+        int nu_7 = int(0);
+        for(;;)
+        {
+
+#line 22
+            if(nu_7 < int(4))
+            {
+            }
+            else
+            {
+
+#line 22
+                break;
+            }
+
+#line 22
+            int rho_2 = int(0);
+            for(;;)
+            {
+
+#line 23
+                if(rho_2 < int(4))
+                {
+                }
+                else
+                {
+
+#line 23
+                    break;
+                }
+
+#line 24
+                acc_2[mu_5] = acc_2[mu_5] - Gamma_5[mu_5][nu_7][rho_2] * _S396[nu_7] * _S396[rho_2];
+
+#line 23
+                rho_2 = rho_2 + int(1);
+
+#line 23
+            }
+
+#line 22
+            nu_7 = nu_7 + int(1);
+
+#line 22
+        }
+
+#line 21
+        mu_5 = mu_5 + int(1);
+
+#line 21
+    }
+
+
+
+    *acceleration_4 = MakeVec4Cart_0(acc_2[int(0)], acc_2[int(1)], acc_2[int(2)], acc_2[int(3)]);
+    return true;
+}
+
+
+bool IntegrateGeodesicRK4CartDelta_0(const GeodesicStateCart_0 thread* state_8, float dt_4, float M_4, float a_8, float Q_4, float Lambda_4, Vec4Cart_0 thread* dx_6, Vec4Cart_0 thread* du_4)
+{
+
+    Vec4Cart_0 _S397 = MakeVec4Cart_0(0.0, 0.0, 0.0, 0.0);
+
+#line 33
+    *dx_6 = _S397;
+    *du_4 = _S397;
+    thread Vec4Cart_0 acceleration_5;
+
+#line 35
+    bool _S398 = TryGeodesicAccelerationCart_0(state_8, M_4, a_8, Q_4, Lambda_4, &acceleration_5);
+    if(!_S398)
+    {
+
+#line 36
+        return false;
+    }
+
+#line 36
+    Vec4Cart_0 _S399 = ScaleVec4Cart_0(&state_8->u_1, dt_4);
+
+#line 36
+    thread Vec4Cart_0 _S400 = acceleration_5;
+
+#line 36
+    Vec4Cart_0 _S401 = ScaleVec4Cart_0(&_S400, dt_4);
+
+
+
+    thread GeodesicStateCart_0 s2_2;
+
+#line 40
+    thread Vec4Cart_0 _S402 = _S399;
+
+#line 40
+    Vec4Cart_0 _S403 = ScaleVec4Cart_0(&_S402, 0.5);
+
+#line 40
+    thread Vec4Cart_0 _S404 = _S403;
+
+#line 40
+    Vec4Cart_0 _S405 = AddVec4Cart_0(&state_8->x_5, &_S404);
+    (&s2_2)->x_5 = _S405;
+
+#line 41
+    thread Vec4Cart_0 _S406 = _S401;
+
+#line 41
+    Vec4Cart_0 _S407 = ScaleVec4Cart_0(&_S406, 0.5);
+
+#line 41
+    thread Vec4Cart_0 _S408 = _S407;
+
+#line 41
+    Vec4Cart_0 _S409 = AddVec4Cart_0(&state_8->u_1, &_S408);
+    (&s2_2)->u_1 = _S409;
+
+#line 42
+    thread GeodesicStateCart_0 _S410 = s2_2;
+
+#line 42
+    bool _S411 = TryGeodesicAccelerationCart_0(&_S410, M_4, a_8, Q_4, Lambda_4, &acceleration_5);
+    if(!_S411)
+    {
+
+#line 43
+        return false;
+    }
+
+#line 43
+    thread Vec4Cart_0 _S412 = (&s2_2)->u_1;
+
+#line 43
+    Vec4Cart_0 _S413 = ScaleVec4Cart_0(&_S412, dt_4);
+
+#line 43
+    thread Vec4Cart_0 _S414 = acceleration_5;
+
+#line 43
+    Vec4Cart_0 _S415 = ScaleVec4Cart_0(&_S414, dt_4);
+
+
+
+    thread GeodesicStateCart_0 s3_2;
+
+#line 47
+    thread Vec4Cart_0 _S416 = _S413;
+
+#line 47
+    Vec4Cart_0 _S417 = ScaleVec4Cart_0(&_S416, 0.5);
+
+#line 47
+    thread Vec4Cart_0 _S418 = _S417;
+
+#line 47
+    Vec4Cart_0 _S419 = AddVec4Cart_0(&state_8->x_5, &_S418);
+    (&s3_2)->x_5 = _S419;
+
+#line 48
+    thread Vec4Cart_0 _S420 = _S415;
+
+#line 48
+    Vec4Cart_0 _S421 = ScaleVec4Cart_0(&_S420, 0.5);
+
+#line 48
+    thread Vec4Cart_0 _S422 = _S421;
+
+#line 48
+    Vec4Cart_0 _S423 = AddVec4Cart_0(&state_8->u_1, &_S422);
+    (&s3_2)->u_1 = _S423;
+
+#line 49
+    thread GeodesicStateCart_0 _S424 = s3_2;
+
+#line 49
+    bool _S425 = TryGeodesicAccelerationCart_0(&_S424, M_4, a_8, Q_4, Lambda_4, &acceleration_5);
+    if(!_S425)
+    {
+
+#line 50
+        return false;
+    }
+
+#line 50
+    thread Vec4Cart_0 _S426 = (&s3_2)->u_1;
+
+#line 50
+    Vec4Cart_0 _S427 = ScaleVec4Cart_0(&_S426, dt_4);
+
+#line 50
+    thread Vec4Cart_0 _S428 = acceleration_5;
+
+#line 50
+    Vec4Cart_0 _S429 = ScaleVec4Cart_0(&_S428, dt_4);
+
+
+
+    thread GeodesicStateCart_0 s4_2;
+
+#line 54
+    thread Vec4Cart_0 _S430 = _S427;
+
+#line 54
+    Vec4Cart_0 _S431 = AddVec4Cart_0(&state_8->x_5, &_S430);
+    (&s4_2)->x_5 = _S431;
+
+#line 55
+    thread Vec4Cart_0 _S432 = _S429;
+
+#line 55
+    Vec4Cart_0 _S433 = AddVec4Cart_0(&state_8->u_1, &_S432);
+    (&s4_2)->u_1 = _S433;
+
+#line 56
+    thread GeodesicStateCart_0 _S434 = s4_2;
+
+#line 56
+    bool _S435 = TryGeodesicAccelerationCart_0(&_S434, M_4, a_8, Q_4, Lambda_4, &acceleration_5);
+    if(!_S435)
+    {
+
+#line 57
+        return false;
+    }
+
+#line 57
+    thread Vec4Cart_0 _S436 = (&s4_2)->u_1;
+
+#line 57
+    Vec4Cart_0 _S437 = ScaleVec4Cart_0(&_S436, dt_4);
+
+#line 57
+    thread Vec4Cart_0 _S438 = acceleration_5;
+
+#line 57
+    Vec4Cart_0 _S439 = ScaleVec4Cart_0(&_S438, dt_4);
+
+#line 57
+    thread Vec4Cart_0 _S440 = _S413;
+
+#line 57
+    Vec4Cart_0 _S441 = ScaleVec4Cart_0(&_S440, 2.0);
+
+#line 57
+    thread Vec4Cart_0 _S442 = _S399;
+
+#line 57
+    thread Vec4Cart_0 _S443 = _S441;
+
+#line 57
+    Vec4Cart_0 _S444 = AddVec4Cart_0(&_S442, &_S443);
+
+#line 57
+    thread Vec4Cart_0 _S445 = _S427;
+
+#line 57
+    Vec4Cart_0 _S446 = ScaleVec4Cart_0(&_S445, 2.0);
+
+#line 57
+    thread Vec4Cart_0 _S447 = _S446;
+
+#line 57
+    thread Vec4Cart_0 _S448 = _S437;
+
+#line 57
+    Vec4Cart_0 _S449 = AddVec4Cart_0(&_S447, &_S448);
+
+#line 57
+    thread Vec4Cart_0 _S450 = _S444;
+
+#line 57
+    thread Vec4Cart_0 _S451 = _S449;
+
+#line 57
+    Vec4Cart_0 _S452 = AddVec4Cart_0(&_S450, &_S451);
+
+#line 57
+    thread Vec4Cart_0 _S453 = _S452;
+
+#line 57
+    Vec4Cart_0 _S454 = ScaleVec4Cart_0(&_S453, 0.1666666716337204);
+
+#line 62
+    *dx_6 = _S454;
+
+#line 62
+    thread Vec4Cart_0 _S455 = _S415;
+
+#line 62
+    Vec4Cart_0 _S456 = ScaleVec4Cart_0(&_S455, 2.0);
+
+#line 62
+    thread Vec4Cart_0 _S457 = _S401;
+
+#line 62
+    thread Vec4Cart_0 _S458 = _S456;
+
+#line 62
+    Vec4Cart_0 _S459 = AddVec4Cart_0(&_S457, &_S458);
+
+#line 62
+    thread Vec4Cart_0 _S460 = _S429;
+
+#line 62
+    Vec4Cart_0 _S461 = ScaleVec4Cart_0(&_S460, 2.0);
+
+#line 62
+    thread Vec4Cart_0 _S462 = _S461;
+
+#line 62
+    thread Vec4Cart_0 _S463 = _S439;
+
+#line 62
+    Vec4Cart_0 _S464 = AddVec4Cart_0(&_S462, &_S463);
+
+#line 62
+    thread Vec4Cart_0 _S465 = _S459;
+
+#line 62
+    thread Vec4Cart_0 _S466 = _S464;
+
+#line 62
+    Vec4Cart_0 _S467 = AddVec4Cart_0(&_S465, &_S466);
+
+#line 62
+    thread Vec4Cart_0 _S468 = _S467;
+
+#line 62
+    Vec4Cart_0 _S469 = ScaleVec4Cart_0(&_S468, 0.1666666716337204);
+
+    *du_4 = _S469;
+
+#line 64
+    thread Vec4Cart_0 _S470 = *dx_6;
+
+#line 64
+    Vec4Cart_0 _S471 = AddVec4Cart_0(&state_8->x_5, &_S470);
+
+#line 64
+    thread Vec4Cart_0 _S472 = _S471;
+
+#line 64
+    bool _S473 = IsKerrSchildFamilyEventRepresented_0(&_S472, M_4, a_8, Q_4, Lambda_4);
+
+
+    return _S473;
+}
+
+bool IntegrateGeodesicRK4Cart_0(const GeodesicStateCart_0 thread* state_9, float dt_5, float M_5, float a_9, float Q_5, float Lambda_5, GeodesicStateCart_0 thread* result_6)
+{
+
+    *result_6 = *state_9;
+    thread Vec4Cart_0 dx_7;
+
+#line 74
+    thread Vec4Cart_0 du_5;
+
+#line 74
+    bool _S474 = IntegrateGeodesicRK4CartDelta_0(state_9, dt_5, M_5, a_9, Q_5, Lambda_5, &dx_7, &du_5);
+    if(!_S474)
+    {
+
+#line 75
+        return false;
+    }
+
+#line 75
+    thread Vec4Cart_0 _S475 = dx_7;
+
+#line 75
+    Vec4Cart_0 _S476 = AddVec4Cart_0(&state_9->x_5, &_S475);
+    result_6->x_5 = _S476;
+
+#line 76
+    thread Vec4Cart_0 _S477 = du_5;
+
+#line 76
+    Vec4Cart_0 _S478 = AddVec4Cart_0(&state_9->u_1, &_S477);
+    result_6->u_1 = _S478;
+    return true;
+}
+
+
+#line 251
+bool AdvanceGeodesicRK4_0(const GeodesicStateCart_0 thread* state_10, float step_0, bool isWarp_0, bool isWormhole_0, float M_6, float a_10, float Q_6, float Lambda_6, float warpVs_0, float warpSigma_0, float warpR_0, float throatB0_0, int wormShape_1, GeodesicStateCart_0 thread* result_7)
+{
+
+#line 257
+    if(isWarp_0)
+    {
+
+#line 257
+        bool _S479 = IntegrateGeodesicRK4WarpCart_0(state_10, step_0, warpVs_0, warpSigma_0, warpR_0, 0.0, 0.0, 0.0, result_7);
+        return _S479;
+    }
+
+    if(isWormhole_0)
+    {
+
+#line 261
+        bool _S480 = IntegrateGeodesicRK4MorrisThorneCart_0(state_10, step_0, throatB0_0, 0.0, wormShape_1, result_7);
+        return _S480;
+    }
+
+#line 262
+    bool _S481 = IntegrateGeodesicRK4Cart_0(state_10, step_0, M_6, a_10, Q_6, Lambda_6, result_7);
+
+
+    return _S481;
+}
+
+float RelativeStepDifference_0(const GeodesicStateCart_0 thread* start_0, const GeodesicStateCart_0 thread* first_2, const GeodesicStateCart_0 thread* second_2)
+{
+    array<float, int(8)> _S482 = { (&start_0->x_5)->t_0, (&start_0->x_5)->x_2, (&start_0->x_5)->y_0, (&start_0->x_5)->z_0, (&start_0->u_1)->t_0, (&start_0->u_1)->x_2, (&start_0->u_1)->y_0, (&start_0->u_1)->z_0 };
+
+    array<float, int(8)> _S483 = { (&first_2->x_5)->t_0, (&first_2->x_5)->x_2, (&first_2->x_5)->y_0, (&first_2->x_5)->z_0, (&first_2->u_1)->t_0, (&first_2->u_1)->x_2, (&first_2->u_1)->y_0, (&first_2->u_1)->z_0 };
+
+    array<float, int(8)> _S484 = { (&second_2->x_5)->t_0, (&second_2->x_5)->x_2, (&second_2->x_5)->y_0, (&second_2->x_5)->z_0, (&second_2->u_1)->t_0, (&second_2->u_1)->x_2, (&second_2->u_1)->y_0, (&second_2->u_1)->z_0 };
+
+#line 274
+    float error_0 = 0.0;
+
+#line 274
+    int component_0 = int(0);
+
+
+    for(;;)
+    {
+
+#line 277
+        if(component_0 < int(8))
+        {
+        }
+        else
+        {
+
+#line 277
+            break;
+        }
+
+        float _S485 = max(error_0, abs(_S484[component_0] - _S483[component_0]) / max(1.0, max(abs(_S482[component_0]), abs(_S484[component_0]))));
+
+#line 277
+        int component_1 = component_0 + int(1);
+
+#line 277
+        error_0 = _S485;
+
+#line 277
+        component_0 = component_1;
+
+#line 277
+    }
+
+#line 284
+    return error_0 / 15.0;
+}
+
+float RelativeNullConstraint_0(const array<array<float, int(4)>, int(4)> thread* metric_5, const Vec4Cart_0 thread* tangent_0)
+{
+
+#line 288
+    array<float, int(4)> _S486 = { tangent_0->t_0, tangent_0->x_2, tangent_0->y_0, tangent_0->z_0 };
+
+#line 288
+    int mu_6 = int(0);
+
+#line 288
+    float contraction_0 = 0.0;
+
+#line 288
+    float scale_0 = 0.0;
+
+
+    for(;;)
+    {
+
+#line 291
+        if(mu_6 < int(4))
+        {
+        }
+        else
+        {
+
+#line 291
+            break;
+        }
+
+#line 291
+        int nu_8 = int(0);
+        for(;;)
+        {
+
+#line 292
+            if(nu_8 < int(4))
+            {
+            }
+            else
+            {
+
+#line 292
+                break;
+            }
+
+#line 293
+            float term_0 = (*metric_5)[mu_6][nu_8] * _S486[mu_6] * _S486[nu_8];
+            float contraction_1 = contraction_0 + term_0;
+            float scale_1 = scale_0 + abs(term_0);
+
+#line 292
+            nu_8 = nu_8 + int(1);
+
+#line 292
+            contraction_0 = contraction_1;
+
+#line 292
+            scale_0 = scale_1;
+
+#line 292
+        }
+
+#line 291
+        mu_6 = mu_6 + int(1);
+
+#line 291
+    }
+
+#line 298
+    return abs(contraction_0) / max(scale_0, 9.99999968265522539e-21);
+}
+
+float DeviceRealEpsilon_0()
+{
+
+
+    return 1.1920928955078125e-07;
+}
+
+
+#line 313
+bool ProjectNullTangentWithSelection_0(const array<array<float, int(4)>, int(4)> thread* metric_6, const Vec4Cart_0 thread* tangent_1, Vec4Cart_0 thread* projected_0, int thread* selectedComponent_0)
+{
+
+#line 314
+    int nu_9;
+
+#line 314
+    int j_6;
+    *projected_0 = *tangent_1;
+    *selectedComponent_0 = int(-1);
+
+#line 316
+    float _S487 = tangent_1->t_0;
+
+#line 316
+    bool temporalRepresented_0;
+    if(!isfinite(tangent_1->t_0))
+    {
+
+#line 317
+        temporalRepresented_0 = true;
+
+#line 317
+    }
+    else
+    {
+
+#line 317
+        temporalRepresented_0 = !isfinite(tangent_1->x_2);
+
+#line 317
+    }
+
+#line 317
+    if(temporalRepresented_0)
+    {
+
+#line 317
+        temporalRepresented_0 = true;
+
+#line 317
+    }
+    else
+    {
+
+#line 317
+        temporalRepresented_0 = !isfinite(tangent_1->y_0);
+
+#line 317
+    }
+    if(temporalRepresented_0)
+    {
+
+#line 318
+        temporalRepresented_0 = true;
+
+#line 318
+    }
+    else
+    {
+
+#line 318
+        temporalRepresented_0 = !isfinite(tangent_1->z_0);
+
+#line 318
+    }
+
+#line 317
+    if(temporalRepresented_0)
+    {
+        return false;
+    }
+
+#line 319
+    float _S488 = tangent_1->x_2;
+
+#line 319
+    float _S489 = tangent_1->y_0;
+
+#line 319
+    float _S490 = tangent_1->z_0;
+
+
+    array<float, int(4)> components_0 = { _S487, tangent_1->x_2, tangent_1->y_0, tangent_1->z_0 };
+
+#line 322
+    float metricScale_0 = 0.0;
+
+#line 322
+    int mu_7 = int(0);
+
+    for(;;)
+    {
+
+#line 324
+        if(mu_7 < int(4))
+        {
+        }
+        else
+        {
+
+#line 324
+            break;
+        }
+
+#line 324
+        nu_9 = int(0);
+        for(;;)
+        {
+
+#line 325
+            if(nu_9 < int(4))
+            {
+            }
+            else
+            {
+
+#line 325
+                break;
+            }
+
+#line 325
+            float _S491 = (*metric_6)[mu_7][nu_9];
+            if(!isfinite((*metric_6)[mu_7][nu_9]))
+            {
+
+#line 326
+                return false;
+            }
+
+#line 327
+            float _S492 = max(metricScale_0, abs(_S491));
+
+#line 325
+            int nu_10 = nu_9 + int(1);
+
+#line 325
+            metricScale_0 = _S492;
+
+#line 325
+            nu_9 = nu_10;
+
+#line 325
+        }
+
+#line 324
+        mu_7 = mu_7 + int(1);
+
+#line 324
+    }
+
+#line 330
+    if(!(metricScale_0 > 0.0))
+    {
+
+#line 330
+        return false;
+    }
+    float _S493 = 64.0 * DeviceRealEpsilon_0();
+    thread array<float, int(4)> bestComponents_0;
+
+#line 333
+    bestComponents_0[int(0)] = _S487;
+
+#line 333
+    bestComponents_0[int(1)] = _S488;
+
+#line 333
+    bestComponents_0[int(2)] = _S489;
+
+#line 333
+    bestComponents_0[int(3)] = _S490;
+
+#line 333
+    temporalRepresented_0 = false;
+
+#line 333
+    float bestCorrection_0 = 1.00000001504746622e+30;
+
+#line 333
+    bool bestRepresented_0 = false;
+
+#line 333
+    nu_9 = int(0);
+
+
+
+    for(;;)
+    {
+
+#line 337
+        if(nu_9 < int(4))
+        {
+        }
+        else
+        {
+
+#line 337
+            break;
+        }
+
+#line 337
+        bool _S494;
+        if(nu_9 > int(0))
+        {
+
+#line 338
+            _S494 = temporalRepresented_0;
+
+#line 338
+        }
+        else
+        {
+
+#line 338
+            _S494 = false;
+
+#line 338
+        }
+
+#line 338
+        bool temporalRepresented_1;
+
+#line 338
+        bool bestRepresented_1;
+
+#line 338
+        float bestCorrection_1;
+
+#line 338
+        if(_S494)
+        {
+
+#line 338
+            temporalRepresented_1 = temporalRepresented_0;
+
+#line 338
+            bestCorrection_1 = bestCorrection_0;
+
+#line 338
+            bestRepresented_1 = bestRepresented_0;
+
+#line 337
+            int component_2 = nu_9 + int(1);
+
+#line 337
+            temporalRepresented_0 = temporalRepresented_1;
+
+#line 337
+            bestCorrection_0 = bestCorrection_1;
+
+#line 337
+            bestRepresented_0 = bestRepresented_1;
+
+#line 337
+            nu_9 = component_2;
+
+#line 337
+            continue;
+        }
+
+#line 337
+        float _S495 = (*metric_6)[nu_9][nu_9];
+
+#line 337
+        int i_7 = int(0);
+
+#line 337
+        float B_0 = 0.0;
+
+#line 337
+        float C_0 = 0.0;
+
+#line 342
+        for(;;)
+        {
+
+#line 342
+            if(i_7 < int(4))
+            {
+            }
+            else
+            {
+
+#line 342
+                break;
+            }
+
+#line 343
+            if(i_7 == nu_9)
+            {
+
+#line 343
+                bestCorrection_1 = C_0;
+
+#line 343
+                i_7 = i_7 + int(1);
+
+#line 343
+                C_0 = bestCorrection_1;
+
+#line 342
+                continue;
+            }
+
+#line 342
+            int _S496 = i_7;
+
+            float B_1 = B_0 + ((*metric_6)[nu_9][i_7] + (*metric_6)[i_7][nu_9]) * components_0[i_7];
+
+#line 344
+            j_6 = int(0);
+
+#line 344
+            bestCorrection_1 = C_0;
+            for(;;)
+            {
+
+#line 345
+                if(j_6 < int(4))
+                {
+                }
+                else
+                {
+
+#line 345
+                    break;
+                }
+
+#line 346
+                if(j_6 == nu_9)
+                {
+
+#line 346
+                    j_6 = j_6 + int(1);
+
+#line 345
+                    continue;
+                }
+
+#line 345
+                bestCorrection_1 = bestCorrection_1 + (*metric_6)[i_7][j_6] * components_0[_S496] * components_0[j_6];
+
+#line 345
+                j_6 = j_6 + int(1);
+
+#line 345
+            }
+
+#line 345
+            B_0 = B_1;
+
+#line 342
+            i_7 = i_7 + int(1);
+
+#line 342
+            C_0 = bestCorrection_1;
+
+#line 342
+        }
+
+#line 342
+        bool _S497;
+
+#line 350
+        if(!isfinite(_S495))
+        {
+
+#line 350
+            _S497 = true;
+
+#line 350
+        }
+        else
+        {
+
+#line 350
+            _S497 = !isfinite(B_0);
+
+#line 350
+        }
+
+#line 350
+        bool _S498;
+
+#line 350
+        if(_S497)
+        {
+
+#line 350
+            _S498 = true;
+
+#line 350
+        }
+        else
+        {
+
+#line 350
+            _S498 = !isfinite(C_0);
+
+#line 350
+        }
+
+#line 350
+        if(_S498)
+        {
+
+#line 350
+            temporalRepresented_1 = temporalRepresented_0;
+
+#line 350
+            bestCorrection_1 = bestCorrection_0;
+
+#line 350
+            bestRepresented_1 = bestRepresented_0;
+
+#line 337
+            int component_2 = nu_9 + int(1);
+
+#line 337
+            temporalRepresented_0 = temporalRepresented_1;
+
+#line 337
+            bestCorrection_0 = bestCorrection_1;
+
+#line 337
+            bestRepresented_0 = bestRepresented_1;
+
+#line 337
+            nu_9 = component_2;
+
+#line 337
+            continue;
+        }
+
+#line 352
+        thread array<float, int(2)> roots_0;
+
+#line 352
+        roots_0[int(0)] = 0.0;
+
+#line 352
+        roots_0[int(1)] = 0.0;
+
+        if(_S495 == 0.0)
+        {
+
+#line 355
+            if(B_0 == 0.0)
+            {
+
+#line 355
+                temporalRepresented_1 = temporalRepresented_0;
+
+#line 355
+                bestCorrection_1 = bestCorrection_0;
+
+#line 355
+                bestRepresented_1 = bestRepresented_0;
+
+#line 337
+                int component_2 = nu_9 + int(1);
+
+#line 337
+                temporalRepresented_0 = temporalRepresented_1;
+
+#line 337
+                bestCorrection_0 = bestCorrection_1;
+
+#line 337
+                bestRepresented_0 = bestRepresented_1;
+
+#line 337
+                nu_9 = component_2;
+
+#line 337
+                continue;
+            }
+
+#line 356
+            roots_0[int(0)] = - C_0 / B_0;
+
+#line 356
+            j_6 = int(1);
+
+#line 354
+        }
+        else
+        {
+
+            float fourAC_0 = 4.0 * _S495 * C_0;
+            float _S499 = B_0 * B_0;
+
+#line 359
+            float discriminant_0 = _S499 - fourAC_0;
+            float discriminantScale_0 = _S499 + abs(fourAC_0);
+            if(!isfinite(discriminant_0))
+            {
+
+#line 361
+                temporalRepresented_1 = true;
+
+#line 361
+            }
+            else
+            {
+
+#line 361
+                temporalRepresented_1 = discriminant_0 < (- _S493 * discriminantScale_0);
+
+#line 361
+            }
+
+#line 361
+            if(temporalRepresented_1)
+            {
+
+#line 361
+                temporalRepresented_1 = temporalRepresented_0;
+
+#line 361
+                bestCorrection_1 = bestCorrection_0;
+
+#line 361
+                bestRepresented_1 = bestRepresented_0;
+
+#line 337
+                int component_2 = nu_9 + int(1);
+
+#line 337
+                temporalRepresented_0 = temporalRepresented_1;
+
+#line 337
+                bestCorrection_0 = bestCorrection_1;
+
+#line 337
+                bestRepresented_0 = bestRepresented_1;
+
+#line 337
+                nu_9 = component_2;
+
+#line 337
+                continue;
+            }
+
+#line 366
+            float sqrtDiscriminant_0 = sqrt(max(discriminant_0, 0.0));
+
+            if(B_0 >= 0.0)
+            {
+
+#line 368
+                metricScale_0 = sqrtDiscriminant_0;
+
+#line 368
+            }
+            else
+            {
+
+#line 368
+                metricScale_0 = - sqrtDiscriminant_0;
+
+#line 368
+            }
+
+#line 367
+            float q_1 = -0.5 * (B_0 + metricScale_0);
+
+            if(q_1 == 0.0)
+            {
+
+#line 370
+                float _S500 = - B_0 / (2.0 * _S495);
+
+#line 370
+                roots_0[int(0)] = _S500;
+                roots_0[int(1)] = _S500;
+
+#line 369
+            }
+            else
+            {
+
+                roots_0[int(0)] = q_1 / _S495;
+                roots_0[int(1)] = C_0 / q_1;
+
+#line 369
+            }
+
+#line 369
+            j_6 = int(2);
+
+#line 354
+        }
+
+#line 354
+        bestCorrection_1 = bestCorrection_0;
+
+#line 354
+        temporalRepresented_1 = temporalRepresented_0;
+
+#line 354
+        bestRepresented_1 = bestRepresented_0;
+
+#line 354
+        int rootIndex_0 = int(0);
+
+#line 378
+        for(;;)
+        {
+
+#line 378
+            if(rootIndex_0 < int(2))
+            {
+            }
+            else
+            {
+
+#line 378
+                break;
+            }
+
+#line 379
+            if(rootIndex_0 >= j_6)
+            {
+
+#line 379
+                rootIndex_0 = rootIndex_0 + int(1);
+
+#line 378
+                continue;
+            }
+            float root_0 = roots_0[rootIndex_0];
+            if(!isfinite(roots_0[rootIndex_0]))
+            {
+
+#line 381
+                rootIndex_0 = rootIndex_0 + int(1);
+
+#line 378
+                continue;
+            }
+
+
+
+            float correction_0 = abs(root_0 - components_0[nu_9]) / (1.0 + abs(components_0[nu_9]));
+
+            if(correction_0 >= bestCorrection_1)
+            {
+
+#line 385
+                rootIndex_0 = rootIndex_0 + int(1);
+
+#line 378
+                continue;
+            }
+
+#line 378
+            int i_8 = int(0);
+
+#line 386
+            for(;;)
+            {
+
+#line 386
+                if(i_8 < int(4))
+                {
+                }
+                else
+                {
+
+#line 386
+                    break;
+                }
+
+#line 386
+                bestComponents_0[i_8] = components_0[i_8];
+
+#line 386
+                i_8 = i_8 + int(1);
+
+#line 386
+            }
+            bestComponents_0[nu_9] = root_0;
+
+            *selectedComponent_0 = nu_9;
+
+#line 389
+            bool temporalRepresented_2;
+
+            if(nu_9 == int(0))
+            {
+
+#line 391
+                temporalRepresented_2 = true;
+
+#line 391
+            }
+            else
+            {
+
+#line 391
+                temporalRepresented_2 = temporalRepresented_1;
+
+#line 391
+            }
+
+#line 391
+            bestCorrection_1 = correction_0;
+
+#line 391
+            temporalRepresented_1 = temporalRepresented_2;
+
+#line 391
+            bestRepresented_1 = true;
+
+#line 378
+            rootIndex_0 = rootIndex_0 + int(1);
+
+#line 378
+        }
+
+#line 337
+        int component_2 = nu_9 + int(1);
+
+#line 337
+        temporalRepresented_0 = temporalRepresented_1;
+
+#line 337
+        bestCorrection_0 = bestCorrection_1;
+
+#line 337
+        bestRepresented_0 = bestRepresented_1;
+
+#line 337
+        nu_9 = component_2;
+
+#line 337
+    }
+
+#line 394
+    if(!bestRepresented_0)
+    {
+
+#line 394
+        return false;
+    }
+
+#line 395
+    *projected_0 = MakeVec4Cart_0(bestComponents_0[int(0)], bestComponents_0[int(1)], bestComponents_0[int(2)], bestComponents_0[int(3)]);
+
+    return true;
+}
+
+bool ProjectNullTangentPreservingBranch_0(const array<array<float, int(4)>, int(4)> thread* metric_7, const Vec4Cart_0 thread* tangent_2, Vec4Cart_0 thread* projected_1)
+{
+    thread int selectedComponent_1;
+
+#line 402
+    bool _S501 = ProjectNullTangentWithSelection_0(metric_7, tangent_2, projected_1, &selectedComponent_1);
+    return _S501;
+}
+
+
+#line 239
+struct AdaptiveGeodesicStep_0
+{
+    GeodesicStateCart_0 candidate_0;
+    float errorRatio_0;
+    float nullResidual_0;
+    float projectedNullResidual_0;
+    float stepFactor_0;
+    bool accepted_1;
+};
+
+
+#line 432
+AdaptiveGeodesicStep_0 AttemptAdaptiveGeodesicStep_0(const GeodesicStateCart_0 thread* state_11, float step_1, bool isWarp_1, bool isWormhole_1, float M_7, float a_11, float Q_7, float Lambda_7, float warpVs_1, float warpSigma_1, float warpR_1, float throatB0_1, int wormShape_2, float integrationTolerance_0, float nullTolerance_0)
+{
+
+
+
+    thread AdaptiveGeodesicStep_0 result_8;
+    (&result_8)->candidate_0 = *state_11;
+    thread GeodesicStateCart_0 fullStep_0 = *state_11;
+
+#line 439
+    bool _S502 = AdvanceGeodesicRK4_0(state_11, step_1, isWarp_1, isWormhole_1, M_7, a_11, Q_7, Lambda_7, warpVs_1, warpSigma_1, warpR_1, throatB0_1, wormShape_2, &fullStep_0);
+
+
+
+    thread GeodesicStateCart_0 firstHalf_0 = *state_11;
+
+    float _S503 = step_1 * 0.5;
+
+#line 445
+    bool _S504 = AdvanceGeodesicRK4_0(state_11, _S503, isWarp_1, isWormhole_1, M_7, a_11, Q_7, Lambda_7, warpVs_1, warpSigma_1, warpR_1, throatB0_1, wormShape_2, &firstHalf_0);
+
+#line 445
+    bool candidateRepresented_0;
+
+    if(_S504)
+    {
+
+#line 447
+        thread GeodesicStateCart_0 _S505 = firstHalf_0;
+
+#line 447
+        bool _S506 = AdvanceGeodesicRK4_0(&_S505, _S503, isWarp_1, isWormhole_1, M_7, a_11, Q_7, Lambda_7, warpVs_1, warpSigma_1, warpR_1, throatB0_1, wormShape_2, &(&result_8)->candidate_0);
+
+#line 447
+        candidateRepresented_0 = _S506;
+
+#line 447
+    }
+    else
+    {
+
+#line 447
+        candidateRepresented_0 = false;
+
+#line 447
+    }
+
+#line 447
+    bool _S507;
+
+
+    if(!_S502)
+    {
+
+#line 450
+        _S507 = true;
+
+#line 450
+    }
+    else
+    {
+
+#line 450
+        _S507 = !_S504;
+
+#line 450
+    }
+
+#line 450
+    if(_S507)
+    {
+
+#line 450
+        candidateRepresented_0 = true;
+
+#line 450
+    }
+    else
+    {
+
+#line 450
+        candidateRepresented_0 = !candidateRepresented_0;
+
+#line 450
+    }
+
+#line 450
+    if(candidateRepresented_0)
+    {
+
+#line 451
+        (&result_8)->candidate_0 = *state_11;
+        (&result_8)->errorRatio_0 = 1.00000001504746622e+30;
+        (&result_8)->nullResidual_0 = 1.00000001504746622e+30;
+        (&result_8)->projectedNullResidual_0 = 1.00000001504746622e+30;
+        (&result_8)->stepFactor_0 = 0.5;
+        (&result_8)->accepted_1 = false;
+        return result_8;
+    }
+
+#line 457
+    thread GeodesicStateCart_0 _S508 = fullStep_0;
+
+#line 457
+    thread GeodesicStateCart_0 _S509 = (&result_8)->candidate_0;
+
+#line 457
+    float _S510 = RelativeStepDifference_0(state_11, &_S508, &_S509);
+
+    (&result_8)->errorRatio_0 = _S510 / integrationTolerance_0;
+
+
+    thread array<array<float, int(4)>, int(4)> candidateMetric_0;
+    thread array<array<float, int(4)>, int(4)> candidateInverse_0;
+    if(isWarp_1)
+    {
+
+#line 464
+        thread Vec4Cart_0 _S511 = (&(&result_8)->candidate_0)->x_5;
+
+#line 464
+        GetWarpDriveMetric_0(&_S511, warpVs_1, warpSigma_1, warpR_1, 0.0, 0.0, 0.0, &candidateMetric_0, &candidateInverse_0);
+
+#line 464
+    }
+    else
+    {
+        if(isWormhole_1)
+        {
+
+#line 467
+            thread Vec4Cart_0 _S512 = (&(&result_8)->candidate_0)->x_5;
+
+#line 467
+            GetMorrisThorneCartesianMetric_0(&_S512, throatB0_1, 0.0, wormShape_2, &candidateMetric_0, &candidateInverse_0);
+
+#line 467
+        }
+        else
+        {
+
+#line 467
+            thread Vec4Cart_0 _S513 = (&(&result_8)->candidate_0)->x_5;
+
+#line 467
+            GetKerrSchildFamilyMetric_0(&_S513, M_7, a_11, Q_7, Lambda_7, &candidateMetric_0, &candidateInverse_0);
+
+#line 467
+        }
+
+#line 464
+    }
+
+#line 464
+    thread array<array<float, int(4)>, int(4)> _S514 = candidateMetric_0;
+
+#line 464
+    thread Vec4Cart_0 _S515 = (&(&result_8)->candidate_0)->u_1;
+
+#line 464
+    float _S516 = RelativeNullConstraint_0(&_S514, &_S515);
+
+#line 474
+    (&result_8)->nullResidual_0 = _S516;
+
+#line 474
+    thread array<array<float, int(4)>, int(4)> _S517 = candidateMetric_0;
+
+#line 474
+    thread Vec4Cart_0 _S518 = (&(&result_8)->candidate_0)->u_1;
+    thread Vec4Cart_0 projectedTangent_0;
+
+#line 475
+    bool _S519 = ProjectNullTangentPreservingBranch_0(&_S517, &_S518, &projectedTangent_0);
+
+
+    if(_S519)
+    {
+
+#line 479
+        (&(&result_8)->candidate_0)->u_1 = projectedTangent_0;
+
+#line 479
+        thread array<array<float, int(4)>, int(4)> _S520 = candidateMetric_0;
+
+#line 479
+        thread Vec4Cart_0 _S521 = projectedTangent_0;
+
+#line 479
+        float _S522 = RelativeNullConstraint_0(&_S520, &_S521);
+        (&result_8)->projectedNullResidual_0 = _S522;
+
+#line 478
+    }
+    else
+    {
+
+
+        (&result_8)->projectedNullResidual_0 = 1.00000001504746622e+30;
+
+#line 478
+    }
+
+#line 486
+    (&result_8)->stepFactor_0 = clamp(0.89999997615814209 * pow(1.0 / max((&result_8)->errorRatio_0, 9.999999960041972e-13), 0.20000000298023224), 0.20000000298023224, 2.0);
+
+    if(_S519)
+    {
+
+#line 488
+        candidateRepresented_0 = ((&result_8)->errorRatio_0) <= 1.0;
+
+#line 488
+    }
+    else
+    {
+
+#line 488
+        candidateRepresented_0 = false;
+
+#line 488
+    }
+
+#line 488
+    if(candidateRepresented_0)
+    {
+
+#line 488
+        candidateRepresented_0 = ((&result_8)->nullResidual_0) <= nullTolerance_0;
+
+#line 488
+    }
+    else
+    {
+
+#line 488
+        candidateRepresented_0 = false;
+
+#line 488
+    }
+    if(candidateRepresented_0)
+    {
+
+#line 489
+        candidateRepresented_0 = ((&result_8)->projectedNullResidual_0) <= nullTolerance_0;
+
+#line 489
+    }
+    else
+    {
+
+#line 489
+        candidateRepresented_0 = false;
+
+#line 489
+    }
+
+#line 488
+    (&result_8)->accepted_1 = candidateRepresented_0;
+
+
+    if(!candidateRepresented_0)
+    {
+
+#line 492
+        if(!_S519)
+        {
+
+#line 492
+            candidateRepresented_0 = true;
+
+#line 492
+        }
+        else
+        {
+
+#line 492
+            candidateRepresented_0 = ((&result_8)->nullResidual_0) > nullTolerance_0;
+
+#line 492
+        }
+
+#line 492
+        if(candidateRepresented_0)
+        {
+
+#line 492
+            candidateRepresented_0 = true;
+
+#line 492
+        }
+        else
+        {
+
+#line 492
+            candidateRepresented_0 = ((&result_8)->projectedNullResidual_0) > nullTolerance_0;
+
+#line 492
+        }
+
+#line 491
+    }
+    else
+    {
+
+#line 491
+        candidateRepresented_0 = false;
+
+#line 491
+    }
+
+#line 491
+    if(candidateRepresented_0)
+    {
+
+        (&result_8)->stepFactor_0 = min((&result_8)->stepFactor_0, 0.5);
+
+#line 491
+    }
+
+#line 496
+    return result_8;
+}
+
+
+#line 8 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_trace_event.slang"
+bool IsFiniteAcceptedSegmentValue_0(const Vec4Cart_0 thread* value_0)
+{
+
+#line 8
+    bool _S523;
+    if(isfinite(value_0->t_0))
+    {
+
+#line 9
+        _S523 = isfinite(value_0->x_2);
+
+#line 9
+    }
+    else
+    {
+
+#line 9
+        _S523 = false;
+
+#line 9
+    }
+
+#line 9
+    if(_S523)
+    {
+
+#line 9
+        _S523 = isfinite(value_0->y_0);
+
+#line 9
+    }
+    else
+    {
+
+#line 9
+        _S523 = false;
+
+#line 9
+    }
+    if(_S523)
+    {
+
+#line 10
+        _S523 = isfinite(value_0->z_0);
+
+#line 10
+    }
+    else
+    {
+
+#line 10
+        _S523 = false;
+
+#line 10
+    }
+
+#line 9
+    return _S523;
+}
+
+
+#line 44
+float PolynomialEpsilon_0()
+{
+
+
+    return 1.1920928955078125e-07;
+}
+
+
+#line 207
+void SphericalSegmentPolynomial_0(const Vec4Cart_0 thread* start_1, const Vec4Cart_0 thread* startVelocity_0, const Vec4Cart_0 thread* finish_0, const Vec4Cart_0 thread* finishVelocity_0, float affineLength_1, float captureRadius_0, array<float, int(7)> thread* coefficients_0)
+{
+
+    int index_0 = int(0);
+    for(;;)
+    {
+
+#line 211
+        if(index_0 < int(7))
+        {
+        }
+        else
+        {
+
+#line 211
+            break;
+        }
+
+#line 211
+        (*coefficients_0)[index_0] = 0.0;
+
+#line 211
+        index_0 = index_0 + int(1);
+
+#line 211
+    }
+    (*coefficients_0)[int(0)] = - captureRadius_0 * captureRadius_0;
+    array<float, int(3)> _S524 = { start_1->x_2, start_1->y_0, start_1->z_0 };
+    array<float, int(3)> _S525 = { finish_0->x_2, finish_0->y_0, finish_0->z_0 };
+    array<float, int(3)> _S526 = { startVelocity_0->x_2, startVelocity_0->y_0, startVelocity_0->z_0 };
+    array<float, int(3)> _S527 = { finishVelocity_0->x_2, finishVelocity_0->y_0, finishVelocity_0->z_0 };
+
+#line 216
+    int axis_0 = int(0);
+    for(;;)
+    {
+
+#line 217
+        if(axis_0 < int(3))
+        {
+        }
+        else
+        {
+
+#line 217
+            break;
+        }
+
+#line 218
+        float startDelta_0 = affineLength_1 * _S526[axis_0];
+        float finishDelta_0 = affineLength_1 * _S527[axis_0];
+        thread array<float, int(4)> component_3;
+        component_3[int(0)] = _S524[axis_0];
+        component_3[int(1)] = startDelta_0;
+        component_3[int(2)] = -3.0 * _S524[axis_0] + 3.0 * _S525[axis_0] - 2.0 * startDelta_0 - finishDelta_0;
+
+
+        component_3[int(3)] = 2.0 * _S524[axis_0] - 2.0 * _S525[axis_0] + startDelta_0 + finishDelta_0;
+
+#line 226
+        int left_0 = int(0);
+
+
+        for(;;)
+        {
+
+#line 229
+            if(left_0 <= int(3))
+            {
+            }
+            else
+            {
+
+#line 229
+                break;
+            }
+
+#line 229
+            int right_1 = int(0);
+            for(;;)
+            {
+
+#line 230
+                if(right_1 <= int(3))
+                {
+                }
+                else
+                {
+
+#line 230
+                    break;
+                }
+
+#line 231
+                (*coefficients_0)[left_0 + right_1] = (*coefficients_0)[left_0 + right_1] + component_3[left_0] * component_3[right_1];
+
+#line 230
+                right_1 = right_1 + int(1);
+
+#line 230
+            }
+
+#line 229
+            left_0 = left_0 + int(1);
+
+#line 229
+        }
+
+#line 217
+        axis_0 = axis_0 + int(1);
+
+#line 217
+    }
+
+#line 233
+    return;
+}
+
+
+#line 60
+float PolynomialValueTolerance_0(const array<float, int(7)> thread* coefficients_1, int degree_0)
+{
+
+#line 60
+    float scale_2 = 0.0;
+
+#line 60
+    int power_0 = int(0);
+
+    for(;;)
+    {
+
+#line 62
+        if(power_0 <= degree_0)
+        {
+        }
+        else
+        {
+
+#line 62
+            break;
+        }
+
+#line 63
+        float _S528 = max(scale_2, abs((*coefficients_1)[power_0]));
+
+#line 62
+        int power_1 = power_0 + int(1);
+
+#line 62
+        scale_2 = _S528;
+
+#line 62
+        power_0 = power_1;
+
+#line 62
+    }
+
+
+    return 256.0 * PolynomialEpsilon_0() * max(scale_2, 1.00000000317107685e-30);
+}
+
+void AppendUnitRoot_0(array<float, int(6)> thread* roots_1, int thread* rootCount_0, float root_1, float fractionTolerance_0)
+{
+    float _S529 = clamp(root_1, 0.0, 1.0);
+
+#line 70
+    bool _S530;
+    if((*rootCount_0) > int(0))
+    {
+
+#line 71
+        _S530 = (abs(_S529 - (*roots_1)[*rootCount_0 - int(1)])) <= fractionTolerance_0;
+
+#line 71
+    }
+    else
+    {
+
+#line 71
+        _S530 = false;
+
+#line 71
+    }
+
+#line 71
+    if(_S530)
+    {
+
+#line 71
+        return;
+    }
+
+#line 72
+    if((*rootCount_0) < int(6))
+    {
+
+#line 72
+        int _S531 = *rootCount_0;
+
+#line 72
+        *rootCount_0 = *rootCount_0 + int(1);
+
+#line 72
+        (*roots_1)[_S531] = _S529;
+
+#line 72
+    }
+    return;
+}
+
+
+#line 75
+int FindLinearRoots_0(const array<float, int(7)> thread* coefficients_2, array<float, int(6)> thread* roots_2)
+{
+
+#line 75
+    int index_1 = int(0);
+    for(;;)
+    {
+
+#line 76
+        if(index_1 < int(6))
+        {
+        }
+        else
+        {
+
+#line 76
+            break;
+        }
+
+#line 76
+        (*roots_2)[index_1] = 0.0;
+
+#line 76
+        index_1 = index_1 + int(1);
+
+#line 76
+    }
+
+#line 76
+    float _S532 = PolynomialValueTolerance_0(coefficients_2, int(1));
+
+    float fractionTolerance_1 = 512.0 * PolynomialEpsilon_0();
+
+#line 78
+    float _S533 = (*coefficients_2)[int(1)];
+    if((abs((*coefficients_2)[int(1)])) <= _S532)
+    {
+
+#line 79
+        return int(0);
+    }
+
+#line 80
+    float root_2 = - (*coefficients_2)[int(0)] / _S533;
+    thread int count_0 = int(0);
+
+#line 81
+    bool _S534;
+    if(isfinite(root_2))
+    {
+
+#line 82
+        _S534 = root_2 >= (- fractionTolerance_1);
+
+#line 82
+    }
+    else
+    {
+
+#line 82
+        _S534 = false;
+
+#line 82
+    }
+
+#line 82
+    if(_S534)
+    {
+
+#line 82
+        _S534 = root_2 <= (1.0 + fractionTolerance_1);
+
+#line 82
+    }
+    else
+    {
+
+#line 82
+        _S534 = false;
+
+#line 82
+    }
+
+#line 82
+    if(_S534)
+    {
+        AppendUnitRoot_0(roots_2, &count_0, root_2, fractionTolerance_1);
+
+#line 82
+    }
+
+
+
+    return count_0;
+}
+
+
+#line 52
+float EvaluatePolynomial_0(const array<float, int(7)> thread* coefficients_3, int degree_1, float argument_0)
+{
+    int _S535 = degree_1 - int(1);
+
+#line 54
+    float value_1 = (*coefficients_3)[degree_1];
+
+#line 54
+    int power_2 = _S535;
+
+#line 54
+    for(;;)
+    {
+
+#line 54
+        if(power_2 >= int(0))
+        {
+        }
+        else
+        {
+
+#line 54
+            break;
+        }
+
+#line 55
+        float _S536 = value_1 * argument_0 + (*coefficients_3)[power_2];
+
+#line 54
+        int power_3 = power_2 - int(1);
+
+#line 54
+        value_1 = _S536;
+
+#line 54
+        power_2 = power_3;
+
+#line 54
+    }
+
+
+    return value_1;
+}
+
+
+#line 89
+int FindRootsFromCriticalPoints_0(const array<float, int(7)> thread* coefficients_4, int degree_2, const array<float, int(6)> thread* criticalRoots_0, int criticalCount_0, array<float, int(6)> thread* roots_3)
+{
+    bool _S537;
+
+#line 91
+    int index_2 = int(0);
+    for(;;)
+    {
+
+#line 92
+        if(index_2 < int(6))
+        {
+        }
+        else
+        {
+
+#line 92
+            break;
+        }
+
+#line 92
+        (*roots_3)[index_2] = 0.0;
+
+#line 92
+        index_2 = index_2 + int(1);
+
+#line 92
+    }
+
+#line 92
+    float _S538 = PolynomialValueTolerance_0(coefficients_4, degree_2);
+
+    float fractionTolerance_2 = 512.0 * PolynomialEpsilon_0();
+    thread array<float, int(8)> boundaries_0;
+
+#line 95
+    index_2 = int(0);
+    for(;;)
+    {
+
+#line 96
+        if(index_2 < int(8))
+        {
+        }
+        else
+        {
+
+#line 96
+            break;
+        }
+
+#line 96
+        boundaries_0[index_2] = 0.0;
+
+#line 96
+        index_2 = index_2 + int(1);
+
+#line 96
+    }
+
+    boundaries_0[int(0)] = 0.0;
+
+#line 98
+    index_2 = int(0);
+
+#line 98
+    int boundaryCount_0 = int(1);
+    for(;;)
+    {
+
+#line 99
+        if(index_2 < criticalCount_0)
+        {
+        }
+        else
+        {
+
+#line 99
+            break;
+        }
+
+#line 99
+        float _S539 = (*criticalRoots_0)[index_2];
+
+        if(((*criticalRoots_0)[index_2]) > fractionTolerance_2)
+        {
+
+#line 101
+            _S537 = _S539 < (1.0 - fractionTolerance_2);
+
+#line 101
+        }
+        else
+        {
+
+#line 101
+            _S537 = false;
+
+#line 101
+        }
+
+#line 101
+        if(_S537)
+        {
+
+#line 102
+            int _S540 = boundaryCount_0 + int(1);
+
+#line 102
+            boundaries_0[boundaryCount_0] = _S539;
+
+#line 102
+            boundaryCount_0 = _S540;
+
+#line 101
+        }
+
+#line 99
+        index_2 = index_2 + int(1);
+
+#line 99
+    }
+
+#line 105
+    int _S541 = boundaryCount_0 + int(1);
+
+#line 105
+    boundaries_0[boundaryCount_0] = 1.0;
+
+    thread int rootCount_1 = int(0);
+
+#line 107
+    int interval_0 = int(0);
+    for(;;)
+    {
+
+#line 108
+        int _S542 = interval_0 + int(1);
+
+#line 108
+        if(_S542 < _S541)
+        {
+        }
+        else
+        {
+
+#line 108
+            break;
+        }
+
+#line 109
+        float lower_0 = boundaries_0[interval_0];
+        float upper_0 = boundaries_0[_S542];
+
+#line 110
+        float _S543 = EvaluatePolynomial_0(coefficients_4, degree_2, boundaries_0[interval_0]);
+
+#line 110
+        float _S544 = EvaluatePolynomial_0(coefficients_4, degree_2, boundaries_0[_S542]);
+
+
+        if((abs(_S543)) <= _S538)
+        {
+
+#line 114
+            AppendUnitRoot_0(roots_3, &rootCount_1, lower_0, fractionTolerance_2);
+
+#line 113
+        }
+
+
+        float _S545 = - _S538;
+
+#line 116
+        if(_S543 < _S545)
+        {
+
+#line 116
+            _S537 = _S544 > _S538;
+
+#line 116
+        }
+        else
+        {
+
+#line 116
+            _S537 = false;
+
+#line 116
+        }
+
+#line 116
+        bool signChange_0;
+
+#line 116
+        if(_S537)
+        {
+
+#line 116
+            signChange_0 = true;
+
+#line 116
+        }
+        else
+        {
+
+#line 117
+            if(_S543 > _S538)
+            {
+
+#line 117
+                signChange_0 = _S544 < _S545;
+
+#line 117
+            }
+            else
+            {
+
+#line 117
+                signChange_0 = false;
+
+#line 117
+            }
+
+#line 116
+        }
+
+        if(signChange_0)
+        {
+
+#line 118
+            float rootLower_0 = lower_0;
+
+#line 118
+            float rootUpper_0 = upper_0;
+
+#line 118
+            float rootLowerValue_0 = _S543;
+
+#line 118
+            int iteration_0 = int(0);
+
+
+
+            for(;;)
+            {
+
+#line 122
+                if(iteration_0 < int(48))
+                {
+                }
+                else
+                {
+
+#line 122
+                    break;
+                }
+
+#line 123
+                float midpoint_0 = (rootLower_0 + rootUpper_0) * 0.5;
+
+#line 123
+                float _S546 = EvaluatePolynomial_0(coefficients_4, degree_2, midpoint_0);
+
+                if((rootLowerValue_0 < 0.0) == (_S546 < 0.0))
+                {
+
+#line 125
+                    rootLower_0 = midpoint_0;
+
+#line 125
+                    rootLowerValue_0 = _S546;
+
+#line 125
+                }
+                else
+                {
+
+#line 125
+                    rootUpper_0 = midpoint_0;
+
+#line 125
+                }
+
+#line 122
+                iteration_0 = iteration_0 + int(1);
+
+#line 122
+            }
+
+#line 132
+            AppendUnitRoot_0(roots_3, &rootCount_1, (rootLower_0 + rootUpper_0) * 0.5, fractionTolerance_2);
+
+#line 118
+        }
+
+#line 108
+        interval_0 = _S542;
+
+#line 108
+    }
+
+#line 108
+    float _S547 = EvaluatePolynomial_0(coefficients_4, degree_2, 1.0);
+
+#line 136
+    if((abs(_S547)) <= _S538)
+    {
+
+#line 137
+        AppendUnitRoot_0(roots_3, &rootCount_1, 1.0, fractionTolerance_2);
+
+#line 136
+    }
+
+
+    return rootCount_1;
+}
+
+int FindQuadraticRoots_0(const array<float, int(7)> thread* coefficients_5, array<float, int(6)> thread* roots_4)
+{
+
+#line 142
+    float _S548 = (*coefficients_5)[int(2)];
+    float _S549 = abs((*coefficients_5)[int(2)]);
+
+#line 143
+    float _S550 = PolynomialValueTolerance_0(coefficients_5, int(2));
+
+#line 143
+    if(_S549 <= _S550)
+    {
+
+#line 143
+        int _S551 = FindLinearRoots_0(coefficients_5, roots_4);
+        return _S551;
+    }
+    thread array<float, int(7)> derivative_0;
+
+#line 146
+    int index_3 = int(0);
+    for(;;)
+    {
+
+#line 147
+        if(index_3 < int(7))
+        {
+        }
+        else
+        {
+
+#line 147
+            break;
+        }
+
+#line 147
+        derivative_0[index_3] = 0.0;
+
+#line 147
+        index_3 = index_3 + int(1);
+
+#line 147
+    }
+    derivative_0[int(0)] = (*coefficients_5)[int(1)];
+    derivative_0[int(1)] = 2.0 * _S548;
+
+#line 149
+    thread array<float, int(7)> _S552 = derivative_0;
+    thread array<float, int(6)> critical_0;
+
+#line 150
+    int _S553 = FindLinearRoots_0(&_S552, &critical_0);
+
+#line 150
+    thread array<float, int(6)> _S554 = critical_0;
+
+#line 150
+    int _S555 = FindRootsFromCriticalPoints_0(coefficients_5, int(2), &_S554, _S553, roots_4);
+
+    return _S555;
+}
+
+int FindCubicRoots_0(const array<float, int(7)> thread* coefficients_6, array<float, int(6)> thread* roots_5)
+{
+
+#line 156
+    float _S556 = abs((*coefficients_6)[int(3)]);
+
+#line 156
+    float _S557 = PolynomialValueTolerance_0(coefficients_6, int(3));
+
+#line 156
+    if(_S556 <= _S557)
+    {
+
+#line 156
+        int _S558 = FindQuadraticRoots_0(coefficients_6, roots_5);
+        return _S558;
+    }
+    thread array<float, int(7)> derivative_1;
+
+#line 159
+    int index_4 = int(0);
+    for(;;)
+    {
+
+#line 160
+        if(index_4 < int(7))
+        {
+        }
+        else
+        {
+
+#line 160
+            break;
+        }
+
+#line 160
+        derivative_1[index_4] = 0.0;
+
+#line 160
+        index_4 = index_4 + int(1);
+
+#line 160
+    }
+
+#line 160
+    int power_4 = int(1);
+    for(;;)
+    {
+
+#line 161
+        if(power_4 <= int(3))
+        {
+        }
+        else
+        {
+
+#line 161
+            break;
+        }
+
+#line 162
+        derivative_1[power_4 - int(1)] = float(power_4) * (*coefficients_6)[power_4];
+
+#line 161
+        power_4 = power_4 + int(1);
+
+#line 161
+    }
+
+#line 161
+    thread array<float, int(7)> _S559 = derivative_1;
+
+    thread array<float, int(6)> critical_1;
+
+#line 163
+    int _S560 = FindQuadraticRoots_0(&_S559, &critical_1);
+
+#line 163
+    thread array<float, int(6)> _S561 = critical_1;
+
+#line 163
+    int _S562 = FindRootsFromCriticalPoints_0(coefficients_6, int(3), &_S561, _S560, roots_5);
+
+    return _S562;
+}
+
+int FindQuarticRoots_0(const array<float, int(7)> thread* coefficients_7, array<float, int(6)> thread* roots_6)
+{
+
+#line 169
+    float _S563 = abs((*coefficients_7)[int(4)]);
+
+#line 169
+    float _S564 = PolynomialValueTolerance_0(coefficients_7, int(4));
+
+#line 169
+    if(_S563 <= _S564)
+    {
+
+#line 169
+        int _S565 = FindCubicRoots_0(coefficients_7, roots_6);
+        return _S565;
+    }
+    thread array<float, int(7)> derivative_2;
+
+#line 172
+    int index_5 = int(0);
+    for(;;)
+    {
+
+#line 173
+        if(index_5 < int(7))
+        {
+        }
+        else
+        {
+
+#line 173
+            break;
+        }
+
+#line 173
+        derivative_2[index_5] = 0.0;
+
+#line 173
+        index_5 = index_5 + int(1);
+
+#line 173
+    }
+
+#line 173
+    int power_5 = int(1);
+    for(;;)
+    {
+
+#line 174
+        if(power_5 <= int(4))
+        {
+        }
+        else
+        {
+
+#line 174
+            break;
+        }
+
+#line 175
+        derivative_2[power_5 - int(1)] = float(power_5) * (*coefficients_7)[power_5];
+
+#line 174
+        power_5 = power_5 + int(1);
+
+#line 174
+    }
+
+#line 174
+    thread array<float, int(7)> _S566 = derivative_2;
+
+    thread array<float, int(6)> critical_2;
+
+#line 176
+    int _S567 = FindCubicRoots_0(&_S566, &critical_2);
+
+#line 176
+    thread array<float, int(6)> _S568 = critical_2;
+
+#line 176
+    int _S569 = FindRootsFromCriticalPoints_0(coefficients_7, int(4), &_S568, _S567, roots_6);
+
+    return _S569;
+}
+
+int FindQuinticRoots_0(const array<float, int(7)> thread* coefficients_8, array<float, int(6)> thread* roots_7)
+{
+
+#line 182
+    float _S570 = abs((*coefficients_8)[int(5)]);
+
+#line 182
+    float _S571 = PolynomialValueTolerance_0(coefficients_8, int(5));
+
+#line 182
+    if(_S570 <= _S571)
+    {
+
+#line 182
+        int _S572 = FindQuarticRoots_0(coefficients_8, roots_7);
+        return _S572;
+    }
+    thread array<float, int(7)> derivative_3;
+
+#line 185
+    int index_6 = int(0);
+    for(;;)
+    {
+
+#line 186
+        if(index_6 < int(7))
+        {
+        }
+        else
+        {
+
+#line 186
+            break;
+        }
+
+#line 186
+        derivative_3[index_6] = 0.0;
+
+#line 186
+        index_6 = index_6 + int(1);
+
+#line 186
+    }
+
+#line 186
+    int power_6 = int(1);
+    for(;;)
+    {
+
+#line 187
+        if(power_6 <= int(5))
+        {
+        }
+        else
+        {
+
+#line 187
+            break;
+        }
+
+#line 188
+        derivative_3[power_6 - int(1)] = float(power_6) * (*coefficients_8)[power_6];
+
+#line 187
+        power_6 = power_6 + int(1);
+
+#line 187
+    }
+
+#line 187
+    thread array<float, int(7)> _S573 = derivative_3;
+
+    thread array<float, int(6)> critical_3;
+
+#line 189
+    int _S574 = FindQuarticRoots_0(&_S573, &critical_3);
+
+#line 189
+    thread array<float, int(6)> _S575 = critical_3;
+
+#line 189
+    int _S576 = FindRootsFromCriticalPoints_0(coefficients_8, int(5), &_S575, _S574, roots_7);
+
+    return _S576;
+}
+
+int FindSexticRoots_0(const array<float, int(7)> thread* coefficients_9, array<float, int(6)> thread* roots_8)
+{
+
+#line 195
+    float _S577 = abs((*coefficients_9)[int(6)]);
+
+#line 195
+    float _S578 = PolynomialValueTolerance_0(coefficients_9, int(6));
+
+#line 195
+    if(_S577 <= _S578)
+    {
+
+#line 195
+        int _S579 = FindQuinticRoots_0(coefficients_9, roots_8);
+        return _S579;
+    }
+    thread array<float, int(7)> derivative_4;
+
+#line 198
+    int index_7 = int(0);
+    for(;;)
+    {
+
+#line 199
+        if(index_7 < int(7))
+        {
+        }
+        else
+        {
+
+#line 199
+            break;
+        }
+
+#line 199
+        derivative_4[index_7] = 0.0;
+
+#line 199
+        index_7 = index_7 + int(1);
+
+#line 199
+    }
+
+#line 199
+    int power_7 = int(1);
+    for(;;)
+    {
+
+#line 200
+        if(power_7 <= int(6))
+        {
+        }
+        else
+        {
+
+#line 200
+            break;
+        }
+
+#line 201
+        derivative_4[power_7 - int(1)] = float(power_7) * (*coefficients_9)[power_7];
+
+#line 200
+        power_7 = power_7 + int(1);
+
+#line 200
+    }
+
+#line 200
+    thread array<float, int(7)> _S580 = derivative_4;
+
+    thread array<float, int(6)> critical_4;
+
+#line 202
+    int _S581 = FindQuinticRoots_0(&_S580, &critical_4);
+
+#line 202
+    thread array<float, int(6)> _S582 = critical_4;
+
+#line 202
+    int _S583 = FindRootsFromCriticalPoints_0(coefficients_9, int(6), &_S582, _S581, roots_8);
+
+    return _S583;
+}
+
+
+#line 13
+Vec4Cart_0 AcceptedSegmentPosition_0(const Vec4Cart_0 thread* start_2, const Vec4Cart_0 thread* startVelocity_1, const Vec4Cart_0 thread* finish_1, const Vec4Cart_0 thread* finishVelocity_1, float affineLength_2, float fraction_0)
+{
+
+    float s2_3 = fraction_0 * fraction_0;
+    float s3_3 = s2_3 * fraction_0;
+    float _S584 = 3.0 * s2_3;
+    float h10_0 = s3_3 - 2.0 * s2_3 + fraction_0;
+    float h01_0 = -2.0 * s3_3 + _S584;
+    float h11_0 = s3_3 - s2_3;
+
+#line 21
+    Vec4Cart_0 _S585 = ScaleVec4Cart_0(start_2, 2.0 * s3_3 - _S584 + 1.0);
+
+#line 21
+    Vec4Cart_0 _S586 = ScaleVec4Cart_0(startVelocity_1, affineLength_2 * h10_0);
+
+#line 21
+    thread Vec4Cart_0 _S587 = _S585;
+
+#line 21
+    thread Vec4Cart_0 _S588 = _S586;
+
+#line 21
+    Vec4Cart_0 _S589 = AddVec4Cart_0(&_S587, &_S588);
+
+#line 21
+    Vec4Cart_0 _S590 = ScaleVec4Cart_0(finish_1, h01_0);
+
+#line 21
+    Vec4Cart_0 _S591 = ScaleVec4Cart_0(finishVelocity_1, affineLength_2 * h11_0);
+
+#line 21
+    thread Vec4Cart_0 _S592 = _S590;
+
+#line 21
+    thread Vec4Cart_0 _S593 = _S591;
+
+#line 21
+    Vec4Cart_0 _S594 = AddVec4Cart_0(&_S592, &_S593);
+
+#line 21
+    thread Vec4Cart_0 _S595 = _S589;
+
+#line 21
+    thread Vec4Cart_0 _S596 = _S594;
+
+#line 21
+    Vec4Cart_0 _S597 = AddVec4Cart_0(&_S595, &_S596);
+    return _S597;
+}
+
+
+#line 29
+Vec4Cart_0 AcceptedSegmentTangent_0(const Vec4Cart_0 thread* start_3, const Vec4Cart_0 thread* startVelocity_2, const Vec4Cart_0 thread* finish_2, const Vec4Cart_0 thread* finishVelocity_2, float affineLength_3, float fraction_1)
+{
+
+    float s2_4 = fraction_1 * fraction_1;
+    float _S598 = 6.0 * fraction_1;
+    float _S599 = 3.0 * s2_4;
+
+#line 34
+    float dh10_0 = _S599 - 4.0 * fraction_1 + 1.0;
+    float dh01_0 = -6.0 * s2_4 + _S598;
+    float dh11_0 = _S599 - 2.0 * fraction_1;
+
+#line 36
+    Vec4Cart_0 _S600 = ScaleVec4Cart_0(start_3, (6.0 * s2_4 - _S598) / affineLength_3);
+
+#line 36
+    Vec4Cart_0 _S601 = ScaleVec4Cart_0(startVelocity_2, dh10_0);
+
+#line 36
+    thread Vec4Cart_0 _S602 = _S600;
+
+#line 36
+    thread Vec4Cart_0 _S603 = _S601;
+
+#line 36
+    Vec4Cart_0 _S604 = AddVec4Cart_0(&_S602, &_S603);
+
+#line 36
+    Vec4Cart_0 _S605 = ScaleVec4Cart_0(finish_2, dh01_0 / affineLength_3);
+
+#line 36
+    Vec4Cart_0 _S606 = ScaleVec4Cart_0(finishVelocity_2, dh11_0);
+
+#line 36
+    thread Vec4Cart_0 _S607 = _S605;
+
+#line 36
+    thread Vec4Cart_0 _S608 = _S606;
+
+#line 36
+    Vec4Cart_0 _S609 = AddVec4Cart_0(&_S607, &_S608);
+
+#line 36
+    thread Vec4Cart_0 _S610 = _S604;
+
+#line 36
+    thread Vec4Cart_0 _S611 = _S609;
+
+#line 36
+    Vec4Cart_0 _S612 = AddVec4Cart_0(&_S610, &_S611);
+    return _S612;
+}
+
+
+#line 243
+bool FindSphericalBoundaryEvent_0(const Vec4Cart_0 thread* start_4, const Vec4Cart_0 thread* startVelocity_3, const Vec4Cart_0 thread* finish_3, const Vec4Cart_0 thread* finishVelocity_3, float affineLength_4, float boundaryRadius_0, int radialSense_0, float thread* fraction_2, Vec4Cart_0 thread* eventPosition_0, Vec4Cart_0 thread* eventTangent_0)
+{
+
+
+    *fraction_2 = 0.0;
+    *eventPosition_0 = *start_4;
+    *eventTangent_0 = *startVelocity_3;
+
+#line 249
+    bool _S613;
+    if(isfinite(affineLength_4))
+    {
+
+#line 250
+        _S613 = affineLength_4 > 0.0;
+
+#line 250
+    }
+    else
+    {
+
+#line 250
+        _S613 = false;
+
+#line 250
+    }
+
+#line 250
+    if(_S613)
+    {
+
+#line 250
+        _S613 = isfinite(boundaryRadius_0);
+
+#line 250
+    }
+    else
+    {
+
+#line 250
+        _S613 = false;
+
+#line 250
+    }
+    if(_S613)
+    {
+
+#line 251
+        _S613 = boundaryRadius_0 > 0.0;
+
+#line 251
+    }
+    else
+    {
+
+#line 251
+        _S613 = false;
+
+#line 251
+    }
+
+#line 251
+    if(_S613)
+    {
+
+#line 252
+        if(radialSense_0 == int(0))
+        {
+
+#line 252
+            _S613 = true;
+
+#line 252
+        }
+        else
+        {
+
+#line 252
+            _S613 = radialSense_0 == int(1);
+
+#line 252
+        }
+        if(_S613)
+        {
+
+#line 253
+            _S613 = true;
+
+#line 253
+        }
+        else
+        {
+
+#line 253
+            _S613 = radialSense_0 == int(-1);
+
+#line 253
+        }
+
+#line 251
+    }
+    else
+    {
+
+#line 251
+        _S613 = false;
+
+#line 251
+    }
+
+
+    if(_S613)
+    {
+
+#line 254
+        bool _S614 = IsFiniteAcceptedSegmentValue_0(start_4);
+
+#line 254
+        _S613 = _S614;
+
+#line 254
+    }
+    else
+    {
+
+#line 254
+        _S613 = false;
+
+#line 254
+    }
+    if(_S613)
+    {
+
+#line 255
+        bool _S615 = IsFiniteAcceptedSegmentValue_0(startVelocity_3);
+
+#line 255
+        _S613 = _S615;
+
+#line 255
+    }
+    else
+    {
+
+#line 255
+        _S613 = false;
+
+#line 255
+    }
+    if(_S613)
+    {
+
+#line 256
+        bool _S616 = IsFiniteAcceptedSegmentValue_0(finish_3);
+
+#line 256
+        _S613 = _S616;
+
+#line 256
+    }
+    else
+    {
+
+#line 256
+        _S613 = false;
+
+#line 256
+    }
+    if(_S613)
+    {
+
+#line 257
+        bool _S617 = IsFiniteAcceptedSegmentValue_0(finishVelocity_3);
+
+#line 257
+        _S613 = _S617;
+
+#line 257
+    }
+    else
+    {
+
+#line 257
+        _S613 = false;
+
+#line 257
+    }
+
+#line 250
+    if(!_S613)
+    {
+
+#line 258
+        return false;
+    }
+
+#line 258
+    Vec4Cart_0 _S618 = ScaleVec4Cart_0(startVelocity_3, affineLength_4 / 3.0);
+
+#line 258
+    thread Vec4Cart_0 _S619 = _S618;
+
+#line 258
+    Vec4Cart_0 _S620 = AddVec4Cart_0(start_4, &_S619);
+
+#line 258
+    Vec4Cart_0 _S621 = ScaleVec4Cart_0(finishVelocity_3, - affineLength_4 / 3.0);
+
+#line 258
+    thread Vec4Cart_0 _S622 = _S621;
+
+#line 258
+    Vec4Cart_0 _S623 = AddVec4Cart_0(finish_3, &_S622);
+
+#line 269
+    float interiorLimit_0 = boundaryRadius_0 * boundaryRadius_0 * (1.0 - 64.0 * PolynomialEpsilon_0());
+
+    float startSquared_0 = start_4->x_2 * start_4->x_2 + start_4->y_0 * start_4->y_0 + start_4->z_0 * start_4->z_0;
+    float finishSquared_0 = finish_3->x_2 * finish_3->x_2 + finish_3->y_0 * finish_3->y_0 + finish_3->z_0 * finish_3->z_0;
+
+#line 272
+    float _S624 = _S620.x_2;
+
+#line 272
+    float _S625 = _S620.y_0;
+
+#line 272
+    float _S626 = _S620.z_0;
+    float control1Squared_0 = _S624 * _S624 + _S625 * _S625 + _S626 * _S626;
+
+#line 273
+    float _S627 = _S623.x_2;
+
+#line 273
+    float _S628 = _S623.y_0;
+
+#line 273
+    float _S629 = _S623.z_0;
+
+    float control2Squared_0 = _S627 * _S627 + _S628 * _S628 + _S629 * _S629;
+
+    if(isfinite(interiorLimit_0))
+    {
+
+#line 277
+        _S613 = startSquared_0 < interiorLimit_0;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S613 = false;
+
+#line 277
+    }
+
+#line 277
+    if(_S613)
+    {
+
+#line 277
+        _S613 = finishSquared_0 < interiorLimit_0;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S613 = false;
+
+#line 277
+    }
+    if(_S613)
+    {
+
+#line 278
+        _S613 = control1Squared_0 < interiorLimit_0;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S613 = false;
+
+#line 278
+    }
+
+#line 278
+    if(_S613)
+    {
+
+#line 278
+        _S613 = control2Squared_0 < interiorLimit_0;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S613 = false;
+
+#line 278
+    }
+
+#line 277
+    if(_S613)
+    {
+        return false;
+    }
+    thread array<float, int(7)> coefficients_10;
+
+#line 281
+    SphericalSegmentPolynomial_0(start_4, startVelocity_3, finish_3, finishVelocity_3, affineLength_4, boundaryRadius_0, &coefficients_10);
+
+#line 281
+    thread array<float, int(7)> _S630 = coefficients_10;
+
+
+    thread array<float, int(6)> roots_9;
+
+#line 284
+    int _S631 = FindSexticRoots_0(&_S630, &roots_9);
+
+    if(_S631 == int(0))
+    {
+
+#line 286
+        return false;
+    }
+
+#line 286
+    int root_3 = int(0);
+
+    for(;;)
+    {
+
+#line 288
+        if(root_3 < _S631)
+        {
+        }
+        else
+        {
+
+#line 288
+            break;
+        }
+
+#line 289
+        float candidateFraction_0 = roots_9[root_3];
+
+#line 289
+        Vec4Cart_0 _S632 = AcceptedSegmentPosition_0(start_4, startVelocity_3, finish_3, finishVelocity_3, affineLength_4, roots_9[root_3]);
+
+#line 289
+        Vec4Cart_0 _S633 = AcceptedSegmentTangent_0(start_4, startVelocity_3, finish_3, finishVelocity_3, affineLength_4, roots_9[root_3]);
+
+#line 289
+        float _S634 = _S632.x_2;
+
+#line 289
+        float _S635 = _S632.y_0;
+
+#line 289
+        float _S636 = _S632.z_0;
+
+#line 296
+        float sampledRadius_0 = sqrt(_S634 * _S634 + _S635 * _S635 + _S636 * _S636);
+
+
+        if(isfinite(sampledRadius_0))
+        {
+
+#line 299
+            _S613 = sampledRadius_0 > 0.0;
+
+#line 299
+        }
+        else
+        {
+
+#line 299
+            _S613 = false;
+
+#line 299
+        }
+
+#line 299
+        if(!_S613)
+        {
+
+#line 299
+            root_3 = root_3 + int(1);
+
+#line 288
+            continue;
+        }
+
+#line 301
+        float radialNumerator_0 = _S632.x_2 * _S633.x_2 + _S632.y_0 * _S633.y_0 + _S632.z_0 * _S633.z_0;
+
+        if(!isfinite(radialNumerator_0))
+        {
+
+#line 303
+            root_3 = root_3 + int(1);
+
+#line 288
+            continue;
+        }
+
+#line 288
+        bool _S637;
+
+#line 304
+        if(radialSense_0 == int(1))
+        {
+
+#line 304
+            _S637 = !(radialNumerator_0 > 0.0);
+
+#line 304
+        }
+        else
+        {
+
+#line 304
+            _S637 = false;
+
+#line 304
+        }
+
+#line 304
+        if(_S637)
+        {
+
+#line 305
+            root_3 = root_3 + int(1);
+
+#line 288
+            continue;
+        }
+
+#line 288
+        bool _S638;
+
+#line 306
+        if(radialSense_0 == int(-1))
+        {
+
+#line 306
+            _S638 = !(radialNumerator_0 < 0.0);
+
+#line 306
+        }
+        else
+        {
+
+#line 306
+            _S638 = false;
+
+#line 306
+        }
+
+#line 306
+        if(_S638)
+        {
+
+#line 307
+            root_3 = root_3 + int(1);
+
+#line 288
+            continue;
+        }
+
+#line 308
+        *fraction_2 = candidateFraction_0;
+        *eventPosition_0 = _S632;
+        *eventTangent_0 = _S633;
+        float surfaceScale_0 = boundaryRadius_0 / sampledRadius_0;
+        eventPosition_0->x_2 = eventPosition_0->x_2 * surfaceScale_0;
+        eventPosition_0->y_0 = eventPosition_0->y_0 * surfaceScale_0;
+        eventPosition_0->z_0 = eventPosition_0->z_0 * surfaceScale_0;
+        return true;
+    }
+    return false;
+}
+
+
+#line 243
+bool FindSphericalBoundaryEvent_1(const Vec4Cart_0 thread* start_5, const Vec4Cart_0 thread* startVelocity_4, const Vec4Cart_0 thread* finish_4, const Vec4Cart_0 thread* finishVelocity_4, float affineLength_5, float boundaryRadius_1, int radialSense_1, float thread* fraction_3, Vec4Cart_0 thread* eventPosition_1, Vec4Cart_0 thread* eventTangent_1)
+{
+
+
+    *fraction_3 = 0.0;
+    *eventPosition_1 = *start_5;
+    *eventTangent_1 = *startVelocity_4;
+
+#line 249
+    bool _S639;
+    if(isfinite(affineLength_5))
+    {
+
+#line 250
+        _S639 = affineLength_5 > 0.0;
+
+#line 250
+    }
+    else
+    {
+
+#line 250
+        _S639 = false;
+
+#line 250
+    }
+
+#line 250
+    if(_S639)
+    {
+
+#line 250
+        _S639 = isfinite(boundaryRadius_1);
+
+#line 250
+    }
+    else
+    {
+
+#line 250
+        _S639 = false;
+
+#line 250
+    }
+    if(_S639)
+    {
+
+#line 251
+        _S639 = boundaryRadius_1 > 0.0;
+
+#line 251
+    }
+    else
+    {
+
+#line 251
+        _S639 = false;
+
+#line 251
+    }
+
+#line 251
+    if(_S639)
+    {
+
+#line 252
+        if(radialSense_1 == int(0))
+        {
+
+#line 252
+            _S639 = true;
+
+#line 252
+        }
+        else
+        {
+
+#line 252
+            _S639 = radialSense_1 == int(1);
+
+#line 252
+        }
+        if(_S639)
+        {
+
+#line 253
+            _S639 = true;
+
+#line 253
+        }
+        else
+        {
+
+#line 253
+            _S639 = radialSense_1 == int(-1);
+
+#line 253
+        }
+
+#line 251
+    }
+    else
+    {
+
+#line 251
+        _S639 = false;
+
+#line 251
+    }
+
+
+    if(_S639)
+    {
+
+#line 254
+        bool _S640 = IsFiniteAcceptedSegmentValue_0(start_5);
+
+#line 254
+        _S639 = _S640;
+
+#line 254
+    }
+    else
+    {
+
+#line 254
+        _S639 = false;
+
+#line 254
+    }
+    if(_S639)
+    {
+
+#line 255
+        bool _S641 = IsFiniteAcceptedSegmentValue_0(startVelocity_4);
+
+#line 255
+        _S639 = _S641;
+
+#line 255
+    }
+    else
+    {
+
+#line 255
+        _S639 = false;
+
+#line 255
+    }
+    if(_S639)
+    {
+
+#line 256
+        bool _S642 = IsFiniteAcceptedSegmentValue_0(finish_4);
+
+#line 256
+        _S639 = _S642;
+
+#line 256
+    }
+    else
+    {
+
+#line 256
+        _S639 = false;
+
+#line 256
+    }
+    if(_S639)
+    {
+
+#line 257
+        bool _S643 = IsFiniteAcceptedSegmentValue_0(finishVelocity_4);
+
+#line 257
+        _S639 = _S643;
+
+#line 257
+    }
+    else
+    {
+
+#line 257
+        _S639 = false;
+
+#line 257
+    }
+
+#line 250
+    if(!_S639)
+    {
+
+#line 258
+        return false;
+    }
+
+#line 258
+    Vec4Cart_0 _S644 = ScaleVec4Cart_0(startVelocity_4, affineLength_5 / 3.0);
+
+#line 258
+    thread Vec4Cart_0 _S645 = _S644;
+
+#line 258
+    Vec4Cart_0 _S646 = AddVec4Cart_0(start_5, &_S645);
+
+#line 258
+    Vec4Cart_0 _S647 = ScaleVec4Cart_0(finishVelocity_4, - affineLength_5 / 3.0);
+
+#line 258
+    thread Vec4Cart_0 _S648 = _S647;
+
+#line 258
+    Vec4Cart_0 _S649 = AddVec4Cart_0(finish_4, &_S648);
+
+#line 269
+    float interiorLimit_1 = boundaryRadius_1 * boundaryRadius_1 * (1.0 - 64.0 * PolynomialEpsilon_0());
+
+    float startSquared_1 = start_5->x_2 * start_5->x_2 + start_5->y_0 * start_5->y_0 + start_5->z_0 * start_5->z_0;
+    float finishSquared_1 = finish_4->x_2 * finish_4->x_2 + finish_4->y_0 * finish_4->y_0 + finish_4->z_0 * finish_4->z_0;
+
+#line 272
+    float _S650 = _S646.x_2;
+
+#line 272
+    float _S651 = _S646.y_0;
+
+#line 272
+    float _S652 = _S646.z_0;
+    float control1Squared_1 = _S650 * _S650 + _S651 * _S651 + _S652 * _S652;
+
+#line 273
+    float _S653 = _S649.x_2;
+
+#line 273
+    float _S654 = _S649.y_0;
+
+#line 273
+    float _S655 = _S649.z_0;
+
+    float control2Squared_1 = _S653 * _S653 + _S654 * _S654 + _S655 * _S655;
+
+    if(isfinite(interiorLimit_1))
+    {
+
+#line 277
+        _S639 = startSquared_1 < interiorLimit_1;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S639 = false;
+
+#line 277
+    }
+
+#line 277
+    if(_S639)
+    {
+
+#line 277
+        _S639 = finishSquared_1 < interiorLimit_1;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S639 = false;
+
+#line 277
+    }
+    if(_S639)
+    {
+
+#line 278
+        _S639 = control1Squared_1 < interiorLimit_1;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S639 = false;
+
+#line 278
+    }
+
+#line 278
+    if(_S639)
+    {
+
+#line 278
+        _S639 = control2Squared_1 < interiorLimit_1;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S639 = false;
+
+#line 278
+    }
+
+#line 277
+    if(_S639)
+    {
+        return false;
+    }
+    thread array<float, int(7)> coefficients_11;
+
+#line 281
+    SphericalSegmentPolynomial_0(start_5, startVelocity_4, finish_4, finishVelocity_4, affineLength_5, boundaryRadius_1, &coefficients_11);
+
+#line 281
+    thread array<float, int(7)> _S656 = coefficients_11;
+
+
+    thread array<float, int(6)> roots_10;
+
+#line 284
+    int _S657 = FindSexticRoots_0(&_S656, &roots_10);
+
+    if(_S657 == int(0))
+    {
+
+#line 286
+        return false;
+    }
+
+#line 286
+    int root_4 = int(0);
+
+    for(;;)
+    {
+
+#line 288
+        if(root_4 < _S657)
+        {
+        }
+        else
+        {
+
+#line 288
+            break;
+        }
+
+#line 289
+        float candidateFraction_1 = roots_10[root_4];
+
+#line 289
+        Vec4Cart_0 _S658 = AcceptedSegmentPosition_0(start_5, startVelocity_4, finish_4, finishVelocity_4, affineLength_5, roots_10[root_4]);
+
+#line 289
+        Vec4Cart_0 _S659 = AcceptedSegmentTangent_0(start_5, startVelocity_4, finish_4, finishVelocity_4, affineLength_5, roots_10[root_4]);
+
+#line 289
+        float _S660 = _S658.x_2;
+
+#line 289
+        float _S661 = _S658.y_0;
+
+#line 289
+        float _S662 = _S658.z_0;
+
+#line 296
+        float sampledRadius_1 = sqrt(_S660 * _S660 + _S661 * _S661 + _S662 * _S662);
+
+
+        if(isfinite(sampledRadius_1))
+        {
+
+#line 299
+            _S639 = sampledRadius_1 > 0.0;
+
+#line 299
+        }
+        else
+        {
+
+#line 299
+            _S639 = false;
+
+#line 299
+        }
+
+#line 299
+        if(!_S639)
+        {
+
+#line 299
+            root_4 = root_4 + int(1);
+
+#line 288
+            continue;
+        }
+
+#line 301
+        float radialNumerator_1 = _S658.x_2 * _S659.x_2 + _S658.y_0 * _S659.y_0 + _S658.z_0 * _S659.z_0;
+
+        if(!isfinite(radialNumerator_1))
+        {
+
+#line 303
+            root_4 = root_4 + int(1);
+
+#line 288
+            continue;
+        }
+
+#line 288
+        bool _S663;
+
+#line 304
+        if(radialSense_1 == int(1))
+        {
+
+#line 304
+            _S663 = !(radialNumerator_1 > 0.0);
+
+#line 304
+        }
+        else
+        {
+
+#line 304
+            _S663 = false;
+
+#line 304
+        }
+
+#line 304
+        if(_S663)
+        {
+
+#line 305
+            root_4 = root_4 + int(1);
+
+#line 288
+            continue;
+        }
+
+#line 288
+        bool _S664;
+
+#line 306
+        if(radialSense_1 == int(-1))
+        {
+
+#line 306
+            _S664 = !(radialNumerator_1 < 0.0);
+
+#line 306
+        }
+        else
+        {
+
+#line 306
+            _S664 = false;
+
+#line 306
+        }
+
+#line 306
+        if(_S664)
+        {
+
+#line 307
+            root_4 = root_4 + int(1);
+
+#line 288
+            continue;
+        }
+
+#line 308
+        *fraction_3 = candidateFraction_1;
+        *eventPosition_1 = _S658;
+        *eventTangent_1 = _S659;
+        float surfaceScale_1 = boundaryRadius_1 / sampledRadius_1;
+        eventPosition_1->x_2 = eventPosition_1->x_2 * surfaceScale_1;
+        eventPosition_1->y_0 = eventPosition_1->y_0 * surfaceScale_1;
+        eventPosition_1->z_0 = eventPosition_1->z_0 * surfaceScale_1;
+        return true;
+    }
+    return false;
+}
+
+
+#line 87 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_ellis_topology.slang"
+void AttemptEllisTwoSheet_0(EllisTopologyTraceResult_0 thread* result_9, float thread* adaptiveStep_1, Vec4Cart_0 thread* compensationX_1, Vec4Cart_0 thread* compensationU_1, uint thread* accepted_2, float thread* lastStep_1, uint thread* failure_1, float stepScale_1, float minStep_1, float maxStep_1, float escapeRadius_2, float b0_8, int wormShape_3)
+{
+
+#line 93
+    float oppositeRadius_1 = EllisOppositeEscapeRadius_0(b0_8, escapeRadius_2);
+    result_9->attempts_0 = result_9->attempts_0 + int(1);
+    float radius_0 = sqrt((&(&result_9->state_0)->x_5)->x_2 * (&(&result_9->state_0)->x_5)->x_2 + (&(&result_9->state_0)->x_5)->y_0 * (&(&result_9->state_0)->x_5)->y_0 + (&(&result_9->state_0)->x_5)->z_0 * (&(&result_9->state_0)->x_5)->z_0);
+
+
+
+    float radialNumerator_2 = (&(&result_9->state_0)->x_5)->x_2 * (&(&result_9->state_0)->u_1)->x_2 + (&(&result_9->state_0)->x_5)->y_0 * (&(&result_9->state_0)->u_1)->y_0 + (&(&result_9->state_0)->x_5)->z_0 * (&(&result_9->state_0)->u_1)->z_0;
+
+#line 99
+    bool _S665;
+
+    if(radius_0 >= escapeRadius_2)
+    {
+
+#line 101
+        _S665 = radialNumerator_2 > 0.0;
+
+#line 101
+    }
+    else
+    {
+
+#line 101
+        _S665 = false;
+
+#line 101
+    }
+
+#line 101
+    if(_S665)
+    {
+
+#line 102
+        result_9->termination_0 = int(1);
+        return;
+    }
+    if(radius_0 <= oppositeRadius_1)
+    {
+
+#line 105
+        _S665 = radialNumerator_2 < 0.0;
+
+#line 105
+    }
+    else
+    {
+
+#line 105
+        _S665 = false;
+
+#line 105
+    }
+
+#line 105
+    if(_S665)
+    {
+
+#line 106
+        result_9->termination_0 = int(2);
+        return;
+    }
+
+
+    float _S666 = min(clamp(stepScale_1 * max(radius_0, b0_8), minStep_1, maxStep_1), *adaptiveStep_1);
+
+
+
+    float _S667 = AdaptiveIntegrationTolerance_0();
+
+#line 115
+    float _S668 = AdaptiveNullTolerance_0();
+
+#line 115
+    thread GeodesicStateCart_0 _S669 = result_9->state_0;
+
+#line 115
+    AdaptiveGeodesicStep_0 _S670 = AttemptAdaptiveGeodesicStep_0(&_S669, _S666, false, true, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, b0_8, wormShape_3, _S667, _S668);
+    if(!_S670.accepted_1)
+    {
+
+#line 117
+        if(_S666 <= (minStep_1 * 1.00010001659393311))
+        {
+
+#line 118
+            *failure_1 = 3U;
+            return;
+        }
+        *adaptiveStep_1 = max(minStep_1, _S666 * _S670.stepFactor_0);
+        return;
+    }
+    *adaptiveStep_1 = clamp(_S666 * _S670.stepFactor_0, minStep_1, maxStep_1);
+
+#line 124
+    thread Vec4Cart_0 _S671 = (&result_9->state_0)->x_5;
+
+#line 124
+    thread Vec4Cart_0 _S672 = (&result_9->state_0)->u_1;
+
+#line 124
+    thread Vec4Cart_0 _S673 = _S670.candidate_0.x_5;
+
+#line 124
+    thread Vec4Cart_0 _S674 = _S670.candidate_0.u_1;
+
+#line 136
+    thread float observerFraction_0;
+    thread Vec4Cart_0 observerPosition_0;
+    thread Vec4Cart_0 observerTangent_0;
+
+#line 138
+    bool _S675 = FindSphericalBoundaryEvent_0(&_S671, &_S672, &_S673, &_S674, _S666, escapeRadius_2, int(1), &observerFraction_0, &observerPosition_0, &observerTangent_0);
+
+#line 138
+    thread Vec4Cart_0 _S676 = (&result_9->state_0)->x_5;
+
+#line 138
+    thread Vec4Cart_0 _S677 = (&result_9->state_0)->u_1;
+
+#line 138
+    thread Vec4Cart_0 _S678 = _S670.candidate_0.x_5;
+
+#line 138
+    thread Vec4Cart_0 _S679 = _S670.candidate_0.u_1;
+
+#line 143
+    thread float oppositeFraction_0;
+    thread Vec4Cart_0 oppositePosition_0;
+    thread Vec4Cart_0 oppositeTangent_0;
+
+#line 145
+    bool _S680 = FindSphericalBoundaryEvent_0(&_S676, &_S677, &_S678, &_S679, _S666, oppositeRadius_1, int(-1), &oppositeFraction_0, &oppositePosition_0, &oppositeTangent_0);
+
+#line 151
+    if(_S675)
+    {
+
+#line 151
+        if(!_S680)
+        {
+
+#line 151
+            _S665 = true;
+
+#line 151
+        }
+        else
+        {
+
+#line 151
+            _S665 = observerFraction_0 <= oppositeFraction_0;
+
+#line 151
+        }
+
+#line 151
+    }
+    else
+    {
+
+#line 151
+        _S665 = false;
+
+#line 151
+    }
+
+#line 151
+    if(_S665)
+    {
+
+#line 152
+        (&result_9->state_0)->x_5 = observerPosition_0;
+        (&result_9->state_0)->u_1 = observerTangent_0;
+        *lastStep_1 = _S666 * observerFraction_0;
+        *accepted_2 = *accepted_2 + 1U;
+        result_9->affineLength_0 = result_9->affineLength_0 + _S666 * observerFraction_0;
+        result_9->termination_0 = int(1);
+        return;
+    }
+    if(_S680)
+    {
+
+#line 161
+        (&result_9->state_0)->x_5 = oppositePosition_0;
+        (&result_9->state_0)->u_1 = oppositeTangent_0;
+        *lastStep_1 = _S666 * oppositeFraction_0;
+        *accepted_2 = *accepted_2 + 1U;
+        result_9->affineLength_0 = result_9->affineLength_0 + _S666 * oppositeFraction_0;
+        result_9->termination_0 = int(2);
+        return;
+    }
+
+    result_9->state_0 = _S670.candidate_0;
+    *lastStep_1 = _S666;
+    *accepted_2 = *accepted_2 + 1U;
+    result_9->affineLength_0 = result_9->affineLength_0 + _S666;
+    return;
+}
+
+
+#line 176
+void AdvanceEllisTwoSheet_0(EllisTopologyContinuation_0 thread* continuation_2, int maxAttempts_1, float stepScale_2, float minStep_2, float maxStep_2, float escapeRadius_3, float b0_9, int wormShape_4)
+{
+
+    bool _S681;
+    if((continuation_2->failure_0) != 0U)
+    {
+
+#line 180
+        _S681 = true;
+
+#line 180
+    }
+    else
+    {
+
+#line 180
+        _S681 = ((&continuation_2->trace_0)->termination_0) != int(0);
+
+#line 180
+    }
+
+#line 180
+    if(_S681)
+    {
+
+#line 181
+        return;
+    }
+
+#line 182
+    if(((&continuation_2->trace_0)->attempts_0) >= maxAttempts_1)
+    {
+
+#line 183
+        continuation_2->failure_0 = 2U;
+        return;
+    }
+    AttemptEllisTwoSheet_0(&continuation_2->trace_0, &continuation_2->adaptiveStep_0, &continuation_2->compensationX_0, &continuation_2->compensationU_0, &continuation_2->accepted_0, &continuation_2->lastStep_0, &continuation_2->failure_0, stepScale_2, minStep_2, maxStep_2, escapeRadius_3, b0_9, wormShape_4);
+
+#line 191
+    if(((&continuation_2->trace_0)->termination_0) == int(0))
+    {
+
+#line 191
+        _S681 = (continuation_2->failure_0) == 0U;
+
+#line 191
+    }
+    else
+    {
+
+#line 191
+        _S681 = false;
+
+#line 191
+    }
+    if(_S681)
+    {
+
+#line 192
+        _S681 = ((&continuation_2->trace_0)->attempts_0) >= maxAttempts_1;
+
+#line 192
+    }
+    else
+    {
+
+#line 192
+        _S681 = false;
+
+#line 192
+    }
+
+#line 191
+    if(_S681)
+    {
+
+        continuation_2->failure_0 = 2U;
+
+#line 191
+    }
+
+
+
+    return;
+}
+
+
+#line 321 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_trace_event.slang"
+bool FindSphericalCaptureEvent_0(const Vec4Cart_0 thread* start_6, const Vec4Cart_0 thread* startVelocity_5, const Vec4Cart_0 thread* finish_5, const Vec4Cart_0 thread* finishVelocity_5, float affineLength_6, float captureRadius_1, float thread* fraction_4, Vec4Cart_0 thread* eventPosition_2, Vec4Cart_0 thread* eventTangent_2)
+{
+
+    bool _S682 = FindSphericalBoundaryEvent_1(start_6, startVelocity_5, finish_5, finishVelocity_5, affineLength_6, captureRadius_1, int(0), fraction_4, eventPosition_2, eventTangent_2);
+    return _S682;
+}
+
+
+#line 286 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
+float VolumeScaleHeight_0(float r_3, float innerRadius_0, float hOverR_0, float hPower_0)
+{
+
+#line 286
+    bool _S683;
+    if(r_3 <= 0.0)
+    {
+
+#line 287
+        _S683 = true;
+
+#line 287
+    }
+    else
+    {
+
+#line 287
+        _S683 = innerRadius_0 <= 0.0;
+
+#line 287
+    }
+
+#line 287
+    if(_S683)
+    {
+
+#line 287
+        return 0.0;
+    }
+    return clamp(hOverR_0 * pow(r_3 / innerRadius_0, hPower_0), 0.00999999977648258, 0.5) * r_3;
+}
+
+bool IsInsideVolumeDisk_0(float cylindricalR_0, float z_3, float innerRadius_1, float outerRadius_0, float hOverR_1, float hPower_1)
+{
+
+#line 293
+    bool _S684;
+    if(cylindricalR_0 < innerRadius_1)
+    {
+
+#line 294
+        _S684 = true;
+
+#line 294
+    }
+    else
+    {
+
+#line 294
+        _S684 = cylindricalR_0 > outerRadius_0;
+
+#line 294
+    }
+
+#line 294
+    if(_S684)
+    {
+
+#line 294
+        return false;
+    }
+    return (abs(z_3)) <= (3.0 * VolumeScaleHeight_0(cylindricalR_0, innerRadius_1, hOverR_1, hPower_1));
+}
+
+
+#line 39 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_disk.slang"
+float TruncatedGaussianOpacityDensity_0(float tauRef_0, float radius_1, float referenceRadius_0, float scaleHeight_0, float height_0)
+{
+    bool _S685;
+    if(!isfinite(tauRef_0))
+    {
+
+#line 42
+        _S685 = true;
+
+#line 42
+    }
+    else
+    {
+
+#line 42
+        _S685 = tauRef_0 < 0.0;
+
+#line 42
+    }
+
+#line 42
+    if(_S685)
+    {
+
+#line 42
+        _S685 = true;
+
+#line 42
+    }
+    else
+    {
+
+#line 42
+        _S685 = !isfinite(radius_1);
+
+#line 42
+    }
+
+#line 42
+    if(_S685)
+    {
+
+#line 42
+        _S685 = true;
+
+#line 42
+    }
+    else
+    {
+
+#line 42
+        _S685 = radius_1 <= 0.0;
+
+#line 42
+    }
+
+#line 42
+    if(_S685)
+    {
+
+#line 42
+        _S685 = true;
+
+#line 42
+    }
+    else
+    {
+
+#line 42
+        _S685 = !isfinite(referenceRadius_0);
+
+#line 42
+    }
+    if(_S685)
+    {
+
+#line 43
+        _S685 = true;
+
+#line 43
+    }
+    else
+    {
+
+#line 43
+        _S685 = referenceRadius_0 <= 0.0;
+
+#line 43
+    }
+
+#line 43
+    if(_S685)
+    {
+
+#line 43
+        _S685 = true;
+
+#line 43
+    }
+    else
+    {
+
+#line 43
+        _S685 = !isfinite(scaleHeight_0);
+
+#line 43
+    }
+    if(_S685)
+    {
+
+#line 44
+        _S685 = true;
+
+#line 44
+    }
+    else
+    {
+
+#line 44
+        _S685 = scaleHeight_0 <= 0.0;
+
+#line 44
+    }
+
+#line 44
+    if(_S685)
+    {
+
+#line 44
+        _S685 = true;
+
+#line 44
+    }
+    else
+    {
+
+#line 44
+        _S685 = !isfinite(height_0);
+
+#line 44
+    }
+
+#line 42
+    if(_S685)
+    {
+
+        return 0.0;
+    }
+    float zOverH_0 = height_0 / scaleHeight_0;
+    if(!isfinite(zOverH_0))
+    {
+
+#line 48
+        _S685 = true;
+
+#line 48
+    }
+    else
+    {
+
+#line 48
+        _S685 = (abs(zOverH_0)) > 3.0;
+
+#line 48
+    }
+
+#line 48
+    if(_S685)
+    {
+
+#line 49
+        return 0.0;
+    }
+
+    float density_0 = tauRef_0 * pow(radius_1 / referenceRadius_0, -1.5) * exp(-0.5 * zOverH_0 * zOverH_0) / (2.49986100196838379 * scaleHeight_0);
+
+    if(isfinite(density_0))
+    {
+
+#line 54
+        _S685 = density_0 >= 0.0;
+
+#line 54
+    }
+    else
+    {
+
+#line 54
+        _S685 = false;
+
+#line 54
+    }
+
+#line 54
+    float _S686;
+
+#line 54
+    if(_S685)
+    {
+
+#line 54
+        _S686 = density_0;
+
+#line 54
+    }
+    else
+    {
+
+#line 54
+        _S686 = 0.0;
+
+#line 54
+    }
+
+#line 54
+    return _S686;
+}
+
+
+#line 243 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
+float TurbulenceFade_0(float t_2)
+{
+
+#line 244
+    return t_2 * t_2 * t_2 * (t_2 * (t_2 * 6.0 - 15.0) + 10.0);
+}
+
+
+#line 221
+uint TurbulenceHash_0(uint x_6, uint y_3, uint z_4, uint seed_0)
+{
+
+
+    uint h_0 = ((seed_0 ^ (x_6 * 374761393U)) ^ (y_3 * 668265263U)) ^ (z_4 * 1013904223U);
+    uint h_1 = ((h_0 >> 16U) ^ h_0) * 2654435761U;
+
+    return ((h_1 >> 16U) ^ h_1) * 2654435761U;
+}
+
+float3 TurbulenceGradient_0(uint h_2)
+{
+
+#line 240
+    return gradients_0[h_2 % 12U];
+}
+
+
+#line 247
+float TurbulencePerlin_0(float3 p_0, uint seed_1)
+{
+
+#line 248
+    int3 _S687 = int3(floor(p_0));
+    float3 f_0 = p_0 - float3(_S687);
+    float _S688 = TurbulenceFade_0(f_0.x);
+
+#line 250
+    float _S689 = TurbulenceFade_0(f_0.y);
+
+#line 250
+    float _S690 = TurbulenceFade_0(f_0.z);
+    thread array<float, int(8)> corner_0;
+
+#line 251
+    int z_5 = int(0);
+    for(;;)
+    {
+
+#line 252
+        if(z_5 <= int(1))
+        {
+        }
+        else
+        {
+
+#line 252
+            break;
+        }
+
+#line 252
+        int y_4 = int(0);
+        for(;;)
+        {
+
+#line 253
+            if(y_4 <= int(1))
+            {
+            }
+            else
+            {
+
+#line 253
+                break;
+            }
+
+#line 253
+            int x_7 = int(0);
+            for(;;)
+            {
+
+#line 254
+                if(x_7 <= int(1))
+                {
+                }
+                else
+                {
+
+#line 254
+                    break;
+                }
+
+                corner_0[z_5 * int(4) + y_4 * int(2) + x_7] = dot(TurbulenceGradient_0(TurbulenceHash_0(uint(_S687.x + x_7), uint(_S687.y + y_4), uint(_S687.z + z_5), seed_1)), f_0 - float3(float(x_7), float(y_4), float(z_5)));
+
+#line 254
+                x_7 = x_7 + int(1);
+
+#line 254
+            }
+
+#line 253
+            y_4 = y_4 + int(1);
+
+#line 253
+        }
+
+#line 252
+        z_5 = z_5 + int(1);
+
+#line 252
+    }
+
+#line 268
+    return mix(mix(mix(corner_0[int(0)], corner_0[int(1)], _S688), mix(corner_0[int(2)], corner_0[int(3)], _S688), _S689), mix(mix(corner_0[int(4)], corner_0[int(5)], _S688), mix(corner_0[int(6)], corner_0[int(7)], _S688), _S689), _S690);
+}
+
+float TurbulenceDensityFactor_0(float3 p_1)
+{
+
+#line 271
+    uint octave_0 = 0U;
+
+#line 271
+    float octaveAmplitude_0 = 1.0;
+
+#line 271
+    float frequency_0 = 0.20000000298023224;
+
+#line 271
+    float value_2 = 0.0;
+
+#line 271
+    float totalAmplitude_0 = 0.0;
+
+#line 276
+    for(;;)
+    {
+
+#line 276
+        if(octave_0 < 6U)
+        {
+        }
+        else
+        {
+
+#line 276
+            break;
+        }
+
+#line 277
+        float value_3 = value_2 + octaveAmplitude_0 * TurbulencePerlin_0(p_1 * float3(frequency_0) , 12345U + octave_0);
+
+        float totalAmplitude_1 = totalAmplitude_0 + octaveAmplitude_0;
+        float octaveAmplitude_1 = octaveAmplitude_0 * 0.5;
+        float frequency_1 = frequency_0 * 2.0;
+
+#line 276
+        octave_0 = octave_0 + 1U;
+
+#line 276
+        octaveAmplitude_0 = octaveAmplitude_1;
+
+#line 276
+        frequency_0 = frequency_1;
+
+#line 276
+        value_2 = value_3;
+
+#line 276
+        totalAmplitude_0 = totalAmplitude_1;
+
+#line 276
+    }
+
+#line 283
+    return max(1.0 + 0.30000001192092896 * value_2 / totalAmplitude_0, 0.00999999977648258);
+}
+
+
+#line 231 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_disk.slang"
+float ShakuraSunyaevFluxShape_0(float r_4, float rInner_0)
+{
+
+#line 231
+    bool _S691;
+    if(r_4 <= rInner_0)
+    {
+
+#line 232
+        _S691 = true;
+
+#line 232
+    }
+    else
+    {
+
+#line 232
+        _S691 = rInner_0 <= 0.0;
+
+#line 232
+    }
+
+#line 232
+    if(_S691)
+    {
+
+#line 232
+        return 0.0;
+    }
+
+#line 233
+    float ratio_0 = rInner_0 / r_4;
+    return ratio_0 * ratio_0 * ratio_0 * max(1.0 - sqrt(ratio_0), 0.0);
+}
+
+float ShakuraSunyaevTemperature_0(float temperatureScale_0, float r_5, float rInner_1)
+{
+    if(temperatureScale_0 <= 0.0)
+    {
+
+#line 239
+        return 0.0;
+    }
+
+#line 240
+    float flux_0 = ShakuraSunyaevFluxShape_0(r_5, rInner_1);
+    float reference_2 = ShakuraSunyaevFluxShape_0(1.5 * rInner_1, rInner_1);
+
+#line 241
+    bool _S692;
+
+    if(flux_0 <= 0.0)
+    {
+
+#line 243
+        _S692 = true;
+
+#line 243
+    }
+    else
+    {
+
+#line 243
+        _S692 = reference_2 <= 0.0;
+
+#line 243
+    }
+
+#line 243
+    if(_S692)
+    {
+
+#line 243
+        return 0.0;
+    }
+
+#line 244
+    return temperatureScale_0 * pow(flux_0 / reference_2, 0.25);
+}
+
+
+#line 158
+float PtSpecificEnergy_0(float r_6, float a_12)
+{
+
+#line 159
+    float sqrtR_0 = sqrt(r_6);
+    float _S693 = r_6 * r_6;
+    return (_S693 - 2.0 * r_6 + a_12 * sqrtR_0) / (r_6 * sqrt(max(_S693 - 3.0 * r_6 + 2.0 * a_12 * sqrtR_0, 9.99999968265522539e-21)));
+}
+
+float PtSpecificAngularMomentum_0(float r_7, float a_13)
+{
+
+#line 165
+    float sqrtR_1 = sqrt(r_7);
+    float _S694 = r_7 * r_7;
+
+#line 166
+    float _S695 = 2.0 * a_13 * sqrtR_1;
+    return (_S694 - _S695 + a_13 * a_13) / (sqrtR_1 * sqrt(max(_S694 - 3.0 * r_7 + _S695, 9.99999968265522539e-21)));
+}
+
+float PtAngularVelocity_0(float r_8, float a_14)
+{
+
+#line 171
+    return 1.0 / (pow(r_8, 1.5) + a_14);
+}
+
+float PtAngularMomentumDerivative_0(float r_9, float a_15)
+{
+
+#line 175
+    float sqrtR_2 = sqrt(r_9);
+    float _S696 = r_9 * r_9;
+
+#line 176
+    float _S697 = 2.0 * a_15 * sqrtR_2;
+
+#line 176
+    float N_0 = _S696 - _S697 + a_15 * a_15;
+    float radicand_0 = _S696 - 3.0 * r_9 + _S697;
+    if(radicand_0 <= 9.999999960041972e-13)
+    {
+
+#line 178
+        return 0.0;
+    }
+
+#line 179
+    float aOverSqrtR_0 = a_15 / sqrtR_2;
+    float _S698 = 2.0 * r_9;
+
+
+
+    return (_S698 - aOverSqrtR_0 - N_0 * (0.5 / r_9 + 0.5 * (_S698 - 3.0 + aOverSqrtR_0) / radicand_0)) / (sqrtR_2 * sqrt(radicand_0));
+}
+
+float PtAngularVelocityDerivative_0(float r_10, float a_16)
+{
+
+#line 188
+    float denominator_0 = pow(r_10, 1.5) + a_16;
+    return -3.0 * sqrt(r_10) / (2.0 * denominator_0 * denominator_0);
+}
+
+float FullPageThorneFluxShape_0(float r_11, float rInner_2, float aStar_0)
+{
+
+#line 193
+    if(r_11 <= (rInner_2 * 1.0010000467300415))
+    {
+
+#line 193
+        return 0.0;
+    }
+
+#line 194
+    float energy_0 = PtSpecificEnergy_0(r_11, aStar_0);
+    float angularMomentum_0 = PtSpecificAngularMomentum_0(r_11, aStar_0);
+    float omega_0 = PtAngularVelocity_0(r_11, aStar_0);
+    float halfWidth_0 = 0.5 * (r_11 - rInner_2);
+    float _S699 = 0.5 * (r_11 + rInner_2);
+
+#line 198
+    int i_9 = int(0);
+
+#line 198
+    float integral_0 = 0.0;
+
+    for(;;)
+    {
+
+#line 200
+        if(i_9 < int(16))
+        {
+        }
+        else
+        {
+
+#line 200
+            break;
+        }
+
+#line 201
+        float ri_0 = _S699 + halfWidth_0 * PT_GL_NODES_0[i_9];
+
+
+
+        float integral_1 = integral_0 + PT_GL_WEIGHTS_0[i_9] * (PtSpecificEnergy_0(ri_0, aStar_0) - PtAngularVelocity_0(ri_0, aStar_0) * PtSpecificAngularMomentum_0(ri_0, aStar_0)) * PtAngularMomentumDerivative_0(ri_0, aStar_0);
+
+#line 200
+        i_9 = i_9 + int(1);
+
+#line 200
+        integral_0 = integral_1;
+
+#line 200
+    }
+
+#line 208
+    float integral_2 = integral_0 * halfWidth_0;
+    float invariant_0 = energy_0 - omega_0 * angularMomentum_0;
+    if((abs(invariant_0)) < 9.999999960041972e-13)
+    {
+
+#line 210
+        return 0.0;
+    }
+
+    return max(- PtAngularVelocityDerivative_0(r_11, aStar_0) * integral_2 / (invariant_0 * invariant_0) / r_11, 0.0);
+}
+
+float FullPageThorneTemperature_0(float temperatureScale_1, float r_12, float rInner_3, float M_8, float aStar_1)
+{
+
+    float innerInM_0 = rInner_3 / M_8;
+    float flux_1 = FullPageThorneFluxShape_0(r_12 / M_8, innerInM_0, aStar_1);
+    float reference_3 = FullPageThorneFluxShape_0(1.5 * innerInM_0, innerInM_0, aStar_1);
+
+#line 221
+    bool _S700;
+
+    if(flux_1 <= 0.0)
+    {
+
+#line 223
+        _S700 = true;
+
+#line 223
+    }
+    else
+    {
+
+#line 223
+        _S700 = reference_3 <= 0.0;
+
+#line 223
+    }
+
+#line 223
+    if(_S700)
+    {
+
+#line 223
+        return 0.0;
+    }
+
+#line 224
+    return temperatureScale_1 * pow(flux_1 / reference_3, 0.25);
+}
+
+
+#line 299 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
+float VolumeDiskTemperature_0(float cylindricalR_1, float z_6, float innerRadius_2, float innerTemperature_0, int temperatureModel_0, float M_9, float aStar_2, float hOverR_2, float hPower_2)
+{
+    float midplane_0;
+
+    if(temperatureModel_0 == int(1))
+    {
+
+#line 303
+        midplane_0 = ShakuraSunyaevTemperature_0(innerTemperature_0, cylindricalR_1, innerRadius_2);
+
+#line 303
+    }
+    else
+    {
+
+#line 303
+        midplane_0 = FullPageThorneTemperature_0(innerTemperature_0, cylindricalR_1, innerRadius_2, M_9, aStar_2);
+
+#line 303
+    }
+
+
+
+    return max(midplane_0, 0.0);
+}
+
+
+#line 250 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_disk.slang"
+bool KerrPhotonKillingQuantitiesCart_0(const Vec4Cart_0 thread* position_0, const Vec4Cart_0 thread* pastVelocity_0, const array<array<float, int(4)>, int(4)> thread* metric_8, float thread* energy_1, float thread* angularMomentum_1)
+{
+
+    array<float, int(4)> _S701 = { - pastVelocity_0->t_0, - pastVelocity_0->x_2, - pastVelocity_0->y_0, - pastVelocity_0->z_0 };
+
+
+    thread array<float, int(4)> p_2;
+
+#line 256
+    p_2[int(0)] = 0.0;
+
+#line 256
+    p_2[int(1)] = 0.0;
+
+#line 256
+    p_2[int(2)] = 0.0;
+
+#line 256
+    p_2[int(3)] = 0.0;
+
+#line 256
+    int mu_8 = int(0);
+    for(;;)
+    {
+
+#line 257
+        if(mu_8 < int(4))
+        {
+        }
+        else
+        {
+
+#line 257
+            break;
+        }
+
+#line 257
+        int nu_11 = int(0);
+        for(;;)
+        {
+
+#line 258
+            if(nu_11 < int(4))
+            {
+            }
+            else
+            {
+
+#line 258
+                break;
+            }
+
+#line 259
+            p_2[mu_8] = p_2[mu_8] + (*metric_8)[mu_8][nu_11] * _S701[nu_11];
+
+#line 258
+            nu_11 = nu_11 + int(1);
+
+#line 258
+        }
+
+#line 257
+        mu_8 = mu_8 + int(1);
+
+#line 257
+    }
+
+#line 262
+    *energy_1 = - p_2[int(0)];
+    *angularMomentum_1 = - position_0->y_0 * p_2[int(1)] + position_0->x_2 * p_2[int(2)];
+
+#line 263
+    bool _S702;
+    if(isfinite(*energy_1))
+    {
+
+#line 264
+        _S702 = (*energy_1) > 0.0;
+
+#line 264
+    }
+    else
+    {
+
+#line 264
+        _S702 = false;
+
+#line 264
+    }
+
+#line 264
+    if(_S702)
+    {
+
+#line 264
+        _S702 = isfinite(*angularMomentum_1);
+
+#line 264
+    }
+    else
+    {
+
+#line 264
+        _S702 = false;
+
+#line 264
+    }
+
+#line 264
+    return _S702;
+}
+
+
+#line 272
+bool TryKerrStationaryFrameFrequencyTransfer_0(float observerFrequency_0, float energy_2, float angularMomentum_2, float M_10, float a_17, float r_13, float cosTheta_0, float angularVelocity_0, float4 thread* transfer_0)
+{
+
+    *transfer_0 = float4(0.0) ;
+
+#line 275
+    bool _S703;
+    if(!isfinite(observerFrequency_0))
+    {
+
+#line 276
+        _S703 = true;
+
+#line 276
+    }
+    else
+    {
+
+#line 276
+        _S703 = observerFrequency_0 <= 0.0;
+
+#line 276
+    }
+
+#line 276
+    if(_S703)
+    {
+
+#line 276
+        _S703 = true;
+
+#line 276
+    }
+    else
+    {
+
+#line 276
+        _S703 = !isfinite(energy_2);
+
+#line 276
+    }
+    if(_S703)
+    {
+
+#line 277
+        _S703 = true;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S703 = energy_2 <= 0.0;
+
+#line 277
+    }
+
+#line 277
+    if(_S703)
+    {
+
+#line 277
+        _S703 = true;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S703 = !isfinite(angularMomentum_2);
+
+#line 277
+    }
+
+#line 277
+    if(_S703)
+    {
+
+#line 277
+        _S703 = true;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S703 = !isfinite(M_10);
+
+#line 277
+    }
+    if(_S703)
+    {
+
+#line 278
+        _S703 = true;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S703 = M_10 <= 0.0;
+
+#line 278
+    }
+
+#line 278
+    if(_S703)
+    {
+
+#line 278
+        _S703 = true;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S703 = !isfinite(a_17);
+
+#line 278
+    }
+
+#line 278
+    if(_S703)
+    {
+
+#line 278
+        _S703 = true;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S703 = (abs(a_17)) > M_10;
+
+#line 278
+    }
+
+#line 278
+    if(_S703)
+    {
+
+#line 278
+        _S703 = true;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S703 = !isfinite(r_13);
+
+#line 278
+    }
+    if(_S703)
+    {
+
+#line 279
+        _S703 = true;
+
+#line 279
+    }
+    else
+    {
+
+#line 279
+        _S703 = r_13 <= 0.0;
+
+#line 279
+    }
+
+#line 279
+    if(_S703)
+    {
+
+#line 279
+        _S703 = true;
+
+#line 279
+    }
+    else
+    {
+
+#line 279
+        _S703 = !isfinite(cosTheta_0);
+
+#line 279
+    }
+
+#line 279
+    if(_S703)
+    {
+
+#line 279
+        _S703 = true;
+
+#line 279
+    }
+    else
+    {
+
+#line 279
+        _S703 = (abs(cosTheta_0)) >= 1.0;
+
+#line 279
+    }
+
+#line 279
+    if(_S703)
+    {
+
+#line 279
+        _S703 = true;
+
+#line 279
+    }
+    else
+    {
+
+#line 279
+        _S703 = !isfinite(angularVelocity_0);
+
+#line 279
+    }
+
+#line 276
+    if(_S703)
+    {
+
+
+
+        return false;
+    }
+    float sinThetaSquared_0 = (1.0 - cosTheta_0) * (1.0 + cosTheta_0);
+    float _S704 = r_13 * r_13;
+
+#line 284
+    float _S705 = a_17 * a_17;
+
+#line 284
+    float sigma_9 = _S704 + _S705 * cosTheta_0 * cosTheta_0;
+    if(!isfinite(sigma_9))
+    {
+
+#line 285
+        _S703 = true;
+
+#line 285
+    }
+    else
+    {
+
+#line 285
+        _S703 = sigma_9 <= 0.0;
+
+#line 285
+    }
+
+#line 285
+    if(_S703)
+    {
+
+#line 285
+        _S703 = true;
+
+#line 285
+    }
+    else
+    {
+
+#line 285
+        _S703 = sinThetaSquared_0 <= 0.0;
+
+#line 285
+    }
+
+#line 285
+    if(_S703)
+    {
+
+#line 285
+        return false;
+    }
+
+#line 286
+    float _S706 = 2.0 * M_10;
+
+
+
+    float norm_0 = - (1.0 - _S706 * r_13 / sigma_9) + 2.0 * angularVelocity_0 * (-2.0 * M_10 * a_17 * r_13 * sinThetaSquared_0 / sigma_9) + angularVelocity_0 * angularVelocity_0 * (sinThetaSquared_0 * (_S704 + _S705 + _S706 * a_17 * a_17 * r_13 * sinThetaSquared_0 / sigma_9));
+
+    if(!isfinite(norm_0))
+    {
+
+#line 292
+        _S703 = true;
+
+#line 292
+    }
+    else
+    {
+
+#line 292
+        _S703 = norm_0 >= 0.0;
+
+#line 292
+    }
+
+#line 292
+    if(_S703)
+    {
+
+#line 292
+        return false;
+    }
+
+#line 293
+    float timeComponent_0 = 1.0 / sqrt(- norm_0);
+    float frameFrequency_0 = timeComponent_0 * (energy_2 - angularVelocity_0 * angularMomentum_2);
+    if(!isfinite(frameFrequency_0))
+    {
+
+#line 295
+        _S703 = true;
+
+#line 295
+    }
+    else
+    {
+
+#line 295
+        _S703 = frameFrequency_0 <= 0.0;
+
+#line 295
+    }
+
+#line 295
+    if(_S703)
+    {
+
+#line 295
+        return false;
+    }
+
+#line 296
+    *transfer_0 = float4(observerFrequency_0 / frameFrequency_0, frameFrequency_0, angularVelocity_0, timeComponent_0);
+
+    return true;
+}
+
+
+#line 272
+bool TryKerrStationaryFrameFrequencyTransfer_1(float observerFrequency_1, float energy_3, float angularMomentum_3, float M_11, float a_18, float r_14, float cosTheta_1, float angularVelocity_1, float4 thread* transfer_1)
+{
+
+    *transfer_1 = float4(0.0) ;
+
+#line 275
+    bool _S707;
+    if(!isfinite(observerFrequency_1))
+    {
+
+#line 276
+        _S707 = true;
+
+#line 276
+    }
+    else
+    {
+
+#line 276
+        _S707 = observerFrequency_1 <= 0.0;
+
+#line 276
+    }
+
+#line 276
+    if(_S707)
+    {
+
+#line 276
+        _S707 = true;
+
+#line 276
+    }
+    else
+    {
+
+#line 276
+        _S707 = !isfinite(energy_3);
+
+#line 276
+    }
+    if(_S707)
+    {
+
+#line 277
+        _S707 = true;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S707 = energy_3 <= 0.0;
+
+#line 277
+    }
+
+#line 277
+    if(_S707)
+    {
+
+#line 277
+        _S707 = true;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S707 = !isfinite(angularMomentum_3);
+
+#line 277
+    }
+
+#line 277
+    if(_S707)
+    {
+
+#line 277
+        _S707 = true;
+
+#line 277
+    }
+    else
+    {
+
+#line 277
+        _S707 = !isfinite(M_11);
+
+#line 277
+    }
+    if(_S707)
+    {
+
+#line 278
+        _S707 = true;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S707 = M_11 <= 0.0;
+
+#line 278
+    }
+
+#line 278
+    if(_S707)
+    {
+
+#line 278
+        _S707 = true;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S707 = !isfinite(a_18);
+
+#line 278
+    }
+
+#line 278
+    if(_S707)
+    {
+
+#line 278
+        _S707 = true;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S707 = (abs(a_18)) > M_11;
+
+#line 278
+    }
+
+#line 278
+    if(_S707)
+    {
+
+#line 278
+        _S707 = true;
+
+#line 278
+    }
+    else
+    {
+
+#line 278
+        _S707 = !isfinite(r_14);
+
+#line 278
+    }
+    if(_S707)
+    {
+
+#line 279
+        _S707 = true;
+
+#line 279
+    }
+    else
+    {
+
+#line 279
+        _S707 = r_14 <= 0.0;
+
+#line 279
+    }
+
+#line 279
+    if(_S707)
+    {
+
+#line 279
+        _S707 = true;
+
+#line 279
+    }
+    else
+    {
+
+#line 279
+        _S707 = !isfinite(cosTheta_1);
+
+#line 279
+    }
+
+#line 279
+    if(_S707)
+    {
+
+#line 279
+        _S707 = true;
+
+#line 279
+    }
+    else
+    {
+
+#line 279
+        _S707 = (abs(cosTheta_1)) >= 1.0;
+
+#line 279
+    }
+
+#line 279
+    if(_S707)
+    {
+
+#line 279
+        _S707 = true;
+
+#line 279
+    }
+    else
+    {
+
+#line 279
+        _S707 = !isfinite(angularVelocity_1);
+
+#line 279
+    }
+
+#line 276
+    if(_S707)
+    {
+
+
+
+        return false;
+    }
+    float sinThetaSquared_1 = (1.0 - cosTheta_1) * (1.0 + cosTheta_1);
+    float _S708 = r_14 * r_14;
+
+#line 284
+    float _S709 = a_18 * a_18;
+
+#line 284
+    float sigma_10 = _S708 + _S709 * cosTheta_1 * cosTheta_1;
+    if(!isfinite(sigma_10))
+    {
+
+#line 285
+        _S707 = true;
+
+#line 285
+    }
+    else
+    {
+
+#line 285
+        _S707 = sigma_10 <= 0.0;
+
+#line 285
+    }
+
+#line 285
+    if(_S707)
+    {
+
+#line 285
+        _S707 = true;
+
+#line 285
+    }
+    else
+    {
+
+#line 285
+        _S707 = sinThetaSquared_1 <= 0.0;
+
+#line 285
+    }
+
+#line 285
+    if(_S707)
+    {
+
+#line 285
+        return false;
+    }
+
+#line 286
+    float _S710 = 2.0 * M_11;
+
+
+
+    float norm_1 = - (1.0 - _S710 * r_14 / sigma_10) + 2.0 * angularVelocity_1 * (-2.0 * M_11 * a_18 * r_14 * sinThetaSquared_1 / sigma_10) + angularVelocity_1 * angularVelocity_1 * (sinThetaSquared_1 * (_S708 + _S709 + _S710 * a_18 * a_18 * r_14 * sinThetaSquared_1 / sigma_10));
+
+    if(!isfinite(norm_1))
+    {
+
+#line 292
+        _S707 = true;
+
+#line 292
+    }
+    else
+    {
+
+#line 292
+        _S707 = norm_1 >= 0.0;
+
+#line 292
+    }
+
+#line 292
+    if(_S707)
+    {
+
+#line 292
+        return false;
+    }
+
+#line 293
+    float timeComponent_1 = 1.0 / sqrt(- norm_1);
+    float frameFrequency_1 = timeComponent_1 * (energy_3 - angularVelocity_1 * angularMomentum_3);
+    if(!isfinite(frameFrequency_1))
+    {
+
+#line 295
+        _S707 = true;
+
+#line 295
+    }
+    else
+    {
+
+#line 295
+        _S707 = frameFrequency_1 <= 0.0;
+
+#line 295
+    }
+
+#line 295
+    if(_S707)
+    {
+
+#line 295
+        return false;
+    }
+
+#line 296
+    *transfer_1 = float4(observerFrequency_1 / frameFrequency_1, frameFrequency_1, angularVelocity_1, timeComponent_1);
+
+    return true;
+}
+
+
+
+
+bool KerrZamoFrequencyTransfer_0(float observerFrequency_2, float energy_4, float angularMomentum_4, float M_12, float a_19, float r_15, float cosTheta_2, float4 thread* transfer_2)
+{
+
+    *transfer_2 = float4(0.0) ;
+
+#line 307
+    bool _S711;
+    if(!isfinite(M_12))
+    {
+
+#line 308
+        _S711 = true;
+
+#line 308
+    }
+    else
+    {
+
+#line 308
+        _S711 = M_12 <= 0.0;
+
+#line 308
+    }
+
+#line 308
+    if(_S711)
+    {
+
+#line 308
+        _S711 = true;
+
+#line 308
+    }
+    else
+    {
+
+#line 308
+        _S711 = !isfinite(a_19);
+
+#line 308
+    }
+
+#line 308
+    if(_S711)
+    {
+
+#line 308
+        _S711 = true;
+
+#line 308
+    }
+    else
+    {
+
+#line 308
+        _S711 = (abs(a_19)) > M_12;
+
+#line 308
+    }
+
+#line 308
+    if(_S711)
+    {
+
+#line 308
+        _S711 = true;
+
+#line 308
+    }
+    else
+    {
+
+#line 308
+        _S711 = !isfinite(r_15);
+
+#line 308
+    }
+    if(_S711)
+    {
+
+#line 309
+        _S711 = true;
+
+#line 309
+    }
+    else
+    {
+
+#line 309
+        _S711 = r_15 <= 0.0;
+
+#line 309
+    }
+
+#line 309
+    if(_S711)
+    {
+
+#line 309
+        _S711 = true;
+
+#line 309
+    }
+    else
+    {
+
+#line 309
+        _S711 = !isfinite(cosTheta_2);
+
+#line 309
+    }
+
+#line 309
+    if(_S711)
+    {
+
+#line 309
+        _S711 = true;
+
+#line 309
+    }
+    else
+    {
+
+#line 309
+        _S711 = (abs(cosTheta_2)) >= 1.0;
+
+#line 309
+    }
+
+#line 308
+    if(_S711)
+    {
+        return false;
+    }
+    float sinThetaSquared_2 = (1.0 - cosTheta_2) * (1.0 + cosTheta_2);
+    float _S712 = r_15 * r_15;
+
+#line 313
+    float _S713 = a_19 * a_19;
+
+#line 313
+    float sigma_11 = _S712 + _S713 * cosTheta_2 * cosTheta_2;
+    float gtphi_0 = -2.0 * M_12 * a_19 * r_15 * sinThetaSquared_2 / sigma_11;
+    float gphiphi_0 = sinThetaSquared_2 * (_S712 + _S713 + 2.0 * M_12 * a_19 * a_19 * r_15 * sinThetaSquared_2 / sigma_11);
+
+    if(!isfinite(gphiphi_0))
+    {
+
+#line 317
+        _S711 = true;
+
+#line 317
+    }
+    else
+    {
+
+#line 317
+        _S711 = gphiphi_0 <= 0.0;
+
+#line 317
+    }
+
+#line 317
+    if(_S711)
+    {
+
+#line 317
+        return false;
+    }
+
+#line 318
+    bool _S714 = TryKerrStationaryFrameFrequencyTransfer_1(observerFrequency_2, energy_4, angularMomentum_4, M_12, a_19, r_15, cosTheta_2, - gtphi_0 / gphiphi_0, transfer_2);
+
+#line 318
+    return _S714;
+}
+
+
+#line 14
+float ObservedDiskBolometricSource_0(float emittedSource_0, float redshift_0)
+{
+
+#line 15
+    float g2_0 = redshift_0 * redshift_0;
+    return emittedSource_0 * g2_0 * g2_0;
+}
+
+
+#line 59
+float CieGaussian_0(float wavelengthNm_0, float centre_0, float leftWidth_0, float rightWidth_0, float amplitude_0)
+{
+
+#line 60
+    float width_0;
+    if(wavelengthNm_0 < centre_0)
+    {
+
+#line 61
+        width_0 = leftWidth_0;
+
+#line 61
+    }
+    else
+    {
+
+#line 61
+        width_0 = rightWidth_0;
+
+#line 61
+    }
+    float offset_0 = (wavelengthNm_0 - centre_0) * width_0;
+    return amplitude_0 * exp(-0.5 * offset_0 * offset_0);
+}
+
+
+
+float3 Cie1931TwoDegreeFit_0(float wavelengthNm_1)
+{
+
+#line 68
+    bool _S715;
+    if(!isfinite(wavelengthNm_1))
+    {
+
+#line 69
+        _S715 = true;
+
+#line 69
+    }
+    else
+    {
+
+#line 69
+        _S715 = wavelengthNm_1 < 380.0;
+
+#line 69
+    }
+
+#line 69
+    if(_S715)
+    {
+
+#line 69
+        _S715 = true;
+
+#line 69
+    }
+    else
+    {
+
+#line 69
+        _S715 = wavelengthNm_1 > 780.0;
+
+#line 69
+    }
+
+#line 69
+    if(_S715)
+    {
+
+#line 70
+        return float3(0.0) ;
+    }
+
+#line 79
+    return float3(CieGaussian_0(wavelengthNm_1, 442.0, 0.06239999830722809, 0.03739999979734421, 0.3619999885559082) + CieGaussian_0(wavelengthNm_1, 599.79998779296875, 0.02639999985694885, 0.03229999914765358, 1.0559999942779541) - CieGaussian_0(wavelengthNm_1, 501.100006103515625, 0.04899999871850014, 0.03819999843835831, 0.06499999761581421), CieGaussian_0(wavelengthNm_1, 568.79998779296875, 0.02129999920725822, 0.02470000088214874, 0.82099997997283936) + CieGaussian_0(wavelengthNm_1, 530.9000244140625, 0.06129999831318855, 0.03220000118017197, 0.28600001335144043), CieGaussian_0(wavelengthNm_1, 437.0, 0.08449999988079071, 0.02779999934136868, 1.21700000762939453) + CieGaussian_0(wavelengthNm_1, 459.0, 0.03849999979138374, 0.07249999791383743, 0.6809999942779541));
+}
+
+
+
+
+float3 XyzD65ToLinearSrgb_0(float3 xyz_0)
+{
+
+#line 86
+    thread float3 rgb_0;
+    float _S716 = xyz_0.x;
+
+#line 87
+    float _S717 = xyz_0.y;
+    float _S718 = xyz_0.z;
+
+#line 87
+    rgb_0.x = 3.24096989631652832 * _S716 - 1.53738319873809814 * _S717 - 0.49861076474189758 * _S718;
+
+    rgb_0.y = -0.96924364566802979 * _S716 + 1.87596750259399414 * _S717 + 0.04155505821108818 * _S718;
+
+    rgb_0.z = 0.05563008040189743 * _S716 - 0.20397695899009705 * _S717 + 1.05697154998779297 * _S718;
+
+    return rgb_0;
+}
+
+
+
+float3 BlackbodyColor_0(float T_0)
+{
+
+#line 99
+    if(T_0 <= 0.0)
+    {
+
+#line 99
+        return float3(0.0) ;
+    }
+
+#line 100
+    float3 _S719 = float3(0.0) ;
+
+#line 100
+    int sample_1 = int(0);
+
+#line 100
+    float3 xyz_1 = _S719;
+
+#line 105
+    for(;;)
+    {
+
+#line 105
+        if(sample_1 < int(32))
+        {
+        }
+        else
+        {
+
+#line 105
+            break;
+        }
+
+#line 106
+        float wavelengthNm_2 = 380.0 + (float(sample_1) + 0.5) * 12.5;
+
+
+
+        float3 xyz_2 = xyz_1 + Cie1931TwoDegreeFit_0(wavelengthNm_2) * float3((1.0 / (pow(wavelengthNm_2, 5.0) * (exp(1.4387769e+07 / (wavelengthNm_2 * T_0)) - 1.0)))) ;
+
+#line 105
+        sample_1 = sample_1 + int(1);
+
+#line 105
+        xyz_1 = xyz_2;
+
+#line 105
+    }
+
+#line 114
+    float3 rgb_1 = max(XyzD65ToLinearSrgb_0(xyz_1), _S719);
+    return rgb_1 / float3(max(max(rgb_1.x, rgb_1.y), max(rgb_1.z, 9.99999968265522539e-21))) ;
+}
+
+
+#line 22
+float GreyLayerAbsorbedFraction_0(float deltaTau_0)
+{
+
+#line 22
+    bool _S720;
+    if(!isfinite(deltaTau_0))
+    {
+
+#line 23
+        _S720 = true;
+
+#line 23
+    }
+    else
+    {
+
+#line 23
+        _S720 = deltaTau_0 < 0.0;
+
+#line 23
+    }
+
+#line 23
+    if(_S720)
+    {
+
+#line 23
+        return 0.0;
+    }
+
+#line 24
+    if(deltaTau_0 <= 0.00999999977648258)
+    {
+
+#line 25
+        return deltaTau_0 * (1.0 - deltaTau_0 * (0.5 - deltaTau_0 / 6.0));
+    }
+    return 1.0 - exp(- deltaTau_0);
+}
+
+
+#line 319 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
+void AccumulateVolumeSegment_0(const Vec4Cart_0 thread* start_7, const Vec4Cart_0 thread* finish_6, const Vec4Cart_0 thread* startVelocity_6, const Vec4Cart_0 thread* finishVelocity_6, float affineLength_7, int sampleCount_0, bool volumeEnabled_0, bool turbulenceEnabled_0, bool dopplerBeaming_0, float innerRadius_3, float outerRadius_1, float innerTemperature_1, int temperatureModel_1, float M_13, float a_20, float aStar_3, float hOverR_3, float hPower_3, float tauMidplane_0, float observerFrequency_3, float thread* opticalDepth_0, float3 thread* emission_0)
+{
+
+#line 328
+    bool _S721;
+    if(affineLength_7 <= 0.0)
+    {
+
+#line 329
+        _S721 = true;
+
+#line 329
+    }
+    else
+    {
+
+#line 329
+        _S721 = (*opticalDepth_0) >= 10.0;
+
+#line 329
+    }
+
+#line 329
+    if(_S721)
+    {
+
+#line 329
+        return;
+    }
+
+#line 330
+    float _S722 = float(sampleCount_0);
+
+#line 330
+    float _S723 = affineLength_7 / _S722;
+
+#line 330
+    int sample_2 = int(0);
+    for(;;)
+    {
+
+#line 331
+        if(sample_2 < sampleCount_0)
+        {
+        }
+        else
+        {
+
+#line 331
+            break;
+        }
+
+#line 332
+        float fraction_5 = (float(sample_2) + 0.5) / _S722;
+
+#line 332
+        Vec4Cart_0 _S724 = AcceptedSegmentPosition_0(start_7, startVelocity_6, finish_6, finishVelocity_6, affineLength_7, fraction_5);
+
+#line 332
+        Vec4Cart_0 _S725 = AcceptedSegmentTangent_0(start_7, startVelocity_6, finish_6, finishVelocity_6, affineLength_7, fraction_5);
+
+#line 339
+        float diskR_0 = ComputeKerrRadiusCart_0(_S724.x_2, _S724.y_0, _S724.z_0, a_20);
+
+
+        float3 _S726 = float3(0.0) ;
+
+        if(volumeEnabled_0)
+        {
+
+#line 344
+            _S721 = IsInsideVolumeDisk_0(diskR_0, _S724.z_0, innerRadius_3, outerRadius_1, hOverR_3, hPower_3);
+
+#line 344
+        }
+        else
+        {
+
+#line 344
+            _S721 = false;
+
+#line 344
+        }
+
+#line 344
+        float diskDeltaTau_0;
+
+#line 344
+        float3 diskSource_0;
+
+#line 344
+        if(_S721)
+        {
+
+
+            float diskOpacity_0 = TruncatedGaussianOpacityDensity_0(tauMidplane_0, diskR_0, innerRadius_3, VolumeScaleHeight_0(diskR_0, innerRadius_3, hOverR_3, hPower_3), _S724.z_0);
+
+#line 348
+            float diskOpacity_1;
+
+            if(turbulenceEnabled_0)
+            {
+
+
+                float diskPhi_0 = atan2(_S724.y_0, _S724.x_2);
+
+#line 354
+                diskOpacity_1 = diskOpacity_0 * TurbulenceDensityFactor_0(float3(diskR_0 * cos(diskPhi_0), diskR_0 * sin(diskPhi_0), _S724.z_0));
+
+#line 350
+            }
+            else
+            {
+
+#line 350
+                diskOpacity_1 = diskOpacity_0;
+
+#line 350
+            }
+
+#line 360
+            float temperature_0 = VolumeDiskTemperature_0(diskR_0, _S724.z_0, innerRadius_3, innerTemperature_1, temperatureModel_1, M_13, aStar_3, hOverR_3, hPower_3);
+
+#line 360
+            bool _S727;
+
+
+            if(isfinite(diskOpacity_1))
+            {
+
+#line 363
+                _S727 = diskOpacity_1 > 0.0;
+
+#line 363
+            }
+            else
+            {
+
+#line 363
+                _S727 = false;
+
+#line 363
+            }
+
+#line 363
+            if(_S727)
+            {
+
+#line 363
+                thread Vec4Cart_0 _S728 = _S724;
+
+
+                thread array<array<float, int(4)>, int(4)> localMetric_0;
+                thread array<array<float, int(4)>, int(4)> localInverse_0;
+
+#line 367
+                GetKerrSchildFamilyMetric_0(&_S728, M_13, a_20, 0.0, 0.0, &localMetric_0, &localInverse_0);
+
+#line 367
+                thread Vec4Cart_0 _S729 = _S724;
+
+#line 367
+                thread Vec4Cart_0 _S730 = _S725;
+
+#line 367
+                thread array<array<float, int(4)>, int(4)> _S731 = localMetric_0;
+
+
+                thread float energy_5;
+                thread float angularMomentum_5;
+
+#line 371
+                bool _S732 = KerrPhotonKillingQuantitiesCart_0(&_S729, &_S730, &_S731, &energy_5, &angularMomentum_5);
+                if(!_S732)
+                {
+                    sample_2 = sample_2 + int(1);
+
+#line 331
+                    continue;
+                }
+
+#line 376
+                float sqrtM_0 = sqrt(M_13);
+
+                float cosTheta_3 = _S724.z_0 / diskR_0;
+
+                thread float4 zamoTransfer_0;
+
+#line 379
+                thread float4 emitterTransfer_0;
+
+                bool _S733 = TryKerrStationaryFrameFrequencyTransfer_0(observerFrequency_3, energy_5, angularMomentum_5, M_13, a_20, diskR_0, cosTheta_3, sqrtM_0 / (pow(diskR_0, 1.5) + a_20 * sqrtM_0), &emitterTransfer_0);
+
+#line 381
+                bool _S734;
+
+                if(!_S733)
+                {
+
+#line 383
+                    _S734 = true;
+
+#line 383
+                }
+                else
+                {
+
+#line 384
+                    bool _S735 = KerrZamoFrequencyTransfer_0(observerFrequency_3, energy_5, angularMomentum_5, M_13, a_20, diskR_0, cosTheta_3, &zamoTransfer_0);
+
+#line 384
+                    _S734 = !_S735;
+
+#line 383
+                }
+
+#line 381
+                if(_S734)
+                {
+
+#line 387
+                    sample_2 = sample_2 + int(1);
+
+#line 331
+                    continue;
+                }
+
+#line 393
+                float emittedFrequency_0 = emitterTransfer_0.y;
+                float _S736 = diskOpacity_1 * emittedFrequency_0 * _S723;
+
+#line 394
+                bool _S737;
+
+
+                if(isfinite(temperature_0))
+                {
+
+#line 397
+                    _S737 = temperature_0 > 0.0;
+
+#line 397
+                }
+                else
+                {
+
+#line 397
+                    _S737 = false;
+
+#line 397
+                }
+
+#line 397
+                if(_S737)
+                {
+
+#line 398
+                    float emittedSource_1 = pow(temperature_0 / innerTemperature_1, 4.0);
+                    if(dopplerBeaming_0)
+                    {
+
+#line 399
+                        diskDeltaTau_0 = emittedFrequency_0;
+
+#line 399
+                    }
+                    else
+                    {
+
+#line 399
+                        diskDeltaTau_0 = zamoTransfer_0.y;
+
+#line 399
+                    }
+                    float gFactor_0 = observerFrequency_3 / diskDeltaTau_0;
+
+#line 400
+                    diskSource_0 = BlackbodyColor_0(temperature_0 * gFactor_0) * float3(ObservedDiskBolometricSource_0(emittedSource_1, gFactor_0)) ;
+
+#line 397
+                }
+                else
+                {
+
+#line 397
+                    diskSource_0 = _S726;
+
+#line 397
+                }
+
+#line 397
+                diskDeltaTau_0 = _S736;
+
+#line 363
+            }
+            else
+            {
+
+#line 363
+                diskDeltaTau_0 = 0.0;
+
+#line 363
+                diskSource_0 = _S726;
+
+#line 363
+            }
+
+#line 344
+        }
+        else
+        {
+
+#line 344
+            diskDeltaTau_0 = 0.0;
+
+#line 344
+            diskSource_0 = _S726;
+
+#line 344
+        }
+
+#line 408
+        if(diskDeltaTau_0 <= 0.0)
+        {
+
+#line 408
+            sample_2 = sample_2 + int(1);
+
+#line 331
+            continue;
+        }
+
+#line 409
+        float _S738 = min(diskDeltaTau_0, 10.0 - *opticalDepth_0);
+
+
+        *emission_0 = *emission_0 + float3(exp(- *opticalDepth_0))  * diskSource_0 * float3(GreyLayerAbsorbedFraction_0(_S738)) ;
+        float _S739 = *opticalDepth_0 + _S738;
+
+#line 413
+        *opticalDepth_0 = _S739;
+        if(_S739 >= 10.0)
+        {
+
+#line 414
+            break;
+        }
+
+#line 331
+        sample_2 = sample_2 + int(1);
+
+#line 331
+    }
+
+#line 416
+    return;
+}
+
+
+#line 310
+float EvaluateCubic_0(float coefficientA_0, float coefficientB_0, float coefficientC_0, float coefficientD_0, float fraction_6)
+{
+    return ((coefficientA_0 * fraction_6 + coefficientB_0) * fraction_6 + coefficientC_0) * fraction_6 + coefficientD_0;
+}
+
+
+#line 326 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_disk.slang"
+float2 ComputeKerrDiskTransferCart_0(float r_16, float phi_0, const Vec4Cart_0 thread* photonVelocity_0, float observerFrequency_4, float M_14, float a_21)
+{
+
+#line 327
+    bool _S740;
+    if(M_14 <= 0.0)
+    {
+
+#line 328
+        _S740 = true;
+
+#line 328
+    }
+    else
+    {
+
+#line 328
+        _S740 = r_16 <= 0.0;
+
+#line 328
+    }
+
+#line 328
+    if(_S740)
+    {
+
+#line 328
+        _S740 = true;
+
+#line 328
+    }
+    else
+    {
+
+#line 328
+        _S740 = observerFrequency_4 <= 0.0;
+
+#line 328
+    }
+
+#line 328
+    if(_S740)
+    {
+
+#line 328
+        _S740 = true;
+
+#line 328
+    }
+    else
+    {
+
+#line 328
+        _S740 = (abs(a_21)) > M_14;
+
+#line 328
+    }
+
+#line 328
+    if(_S740)
+    {
+
+#line 329
+        return float2(0.0) ;
+    }
+
+    float rho_3 = sqrt(r_16 * r_16 + a_21 * a_21);
+
+    Vec4Cart_0 position_1 = MakeVec4Cart_0(0.0, rho_3 * cos(phi_0), rho_3 * sin(phi_0), 0.0);
+
+#line 334
+    thread Vec4Cart_0 _S741 = position_1;
+    thread array<array<float, int(4)>, int(4)> metric_9;
+    thread array<array<float, int(4)>, int(4)> metricInverse_0;
+
+#line 336
+    GetKerrSchildFamilyMetric_0(&_S741, M_14, a_21, 0.0, 0.0, &metric_9, &metricInverse_0);
+
+#line 336
+    thread Vec4Cart_0 _S742 = position_1;
+
+#line 336
+    thread array<array<float, int(4)>, int(4)> _S743 = metric_9;
+
+
+    thread float energy_6;
+    thread float angularMomentum_6;
+
+#line 340
+    bool _S744 = KerrPhotonKillingQuantitiesCart_0(&_S742, photonVelocity_0, &_S743, &energy_6, &angularMomentum_6);
+    if(!_S744)
+    {
+        return float2(0.0) ;
+    }
+    float sqrtM_1 = sqrt(M_14);
+
+
+    thread float4 zamoTransfer_1;
+
+#line 347
+    thread float4 emitterTransfer_1;
+
+    bool _S745 = TryKerrStationaryFrameFrequencyTransfer_0(observerFrequency_4, energy_6, angularMomentum_6, M_14, a_21, r_16, 0.0, sqrtM_1 / (pow(r_16, 1.5) + a_21 * sqrtM_1), &emitterTransfer_1);
+
+    if(!_S745)
+    {
+
+#line 351
+        _S740 = true;
+
+#line 351
+    }
+    else
+    {
+
+#line 352
+        bool _S746 = KerrZamoFrequencyTransfer_0(observerFrequency_4, energy_6, angularMomentum_6, M_14, a_21, r_16, 0.0, &zamoTransfer_1);
+
+#line 352
+        _S740 = !_S746;
+
+#line 351
+    }
+
+#line 349
+    if(_S740)
+    {
+
+
+
+        return float2(0.0) ;
+    }
+    return float2(emitterTransfer_1.x, zamoTransfer_1.x);
+}
+
+
+#line 27 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang"
+void GetRiemannTensorCart_0(const Vec4Cart_0 thread* x_8, float M_15, float a_22, float Q_8, float Lambda_8, array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> thread* R_8)
+{
+    int rho_4;
+
+#line 29
+    int sig_0;
+
+#line 29
+    int nu_12;
+
+#line 29
+    int mu_9;
+
+#line 29
+    int mu_10 = int(0);
+
+    for(;;)
+    {
+
+#line 31
+        if(mu_10 < int(4))
+        {
+        }
+        else
+        {
+
+#line 31
+            break;
+        }
+
+#line 31
+        nu_12 = int(0);
+        for(;;)
+        {
+
+#line 32
+            if(nu_12 < int(4))
+            {
+            }
+            else
+            {
+
+#line 32
+                break;
+            }
+
+#line 32
+            rho_4 = int(0);
+            for(;;)
+            {
+
+#line 33
+                if(rho_4 < int(4))
+                {
+                }
+                else
+                {
+
+#line 33
+                    break;
+                }
+
+#line 33
+                sig_0 = int(0);
+                for(;;)
+                {
+
+#line 34
+                    if(sig_0 < int(4))
+                    {
+                    }
+                    else
+                    {
+
+#line 34
+                        break;
+                    }
+
+#line 35
+                    (*R_8)[mu_10][nu_12][rho_4][sig_0] = 0.0;
+
+#line 34
+                    sig_0 = sig_0 + int(1);
+
+#line 34
+                }
+
+#line 33
+                rho_4 = rho_4 + int(1);
+
+#line 33
+            }
+
+#line 32
+            nu_12 = nu_12 + int(1);
+
+#line 32
+        }
+
+#line 31
+        mu_10 = mu_10 + int(1);
+
+#line 31
+    }
+
+#line 37
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> Gamma_6;
+
+#line 37
+    GetKerrSchildFamilyChristoffel_0(x_8, M_15, a_22, Q_8, Lambda_8, &Gamma_6);
+
+#line 51
+    float _S747 = 0.03999999910593033 * max(1.0, ComputeKerrRadiusCart_0(x_8->x_2, x_8->y_0, x_8->z_0, a_22));
+
+
+
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> dGamma_0;
+
+#line 55
+    mu_10 = int(0);
+    for(;;)
+    {
+
+#line 56
+        if(mu_10 < int(4))
+        {
+        }
+        else
+        {
+
+#line 56
+            break;
+        }
+
+#line 56
+        nu_12 = int(0);
+        for(;;)
+        {
+
+#line 57
+            if(nu_12 < int(4))
+            {
+            }
+            else
+            {
+
+#line 57
+                break;
+            }
+
+#line 57
+            sig_0 = int(0);
+            for(;;)
+            {
+
+#line 58
+                if(sig_0 < int(4))
+                {
+                }
+                else
+                {
+
+#line 58
+                    break;
+                }
+
+#line 59
+                dGamma_0[int(0)][mu_10][nu_12][sig_0] = 0.0;
+
+#line 58
+                sig_0 = sig_0 + int(1);
+
+#line 58
+            }
+
+#line 57
+            nu_12 = nu_12 + int(1);
+
+#line 57
+        }
+
+#line 56
+        mu_10 = mu_10 + int(1);
+
+#line 56
+    }
+
+#line 56
+    rho_4 = int(1);
+
+#line 61
+    for(;;)
+    {
+
+#line 61
+        if(rho_4 < int(4))
+        {
+        }
+        else
+        {
+
+#line 61
+            break;
+        }
+
+#line 62
+        thread Vec4Cart_0 xp_0 = *x_8;
+        thread Vec4Cart_0 xm_0 = *x_8;
+        thread Vec4Cart_0 xpp_0 = *x_8;
+        thread Vec4Cart_0 xmm_0 = *x_8;
+
+        thread Vec4Cart_0 xppp_0 = *x_8;
+        thread Vec4Cart_0 xmmm_0 = *x_8;
+
+        if(rho_4 == int(1))
+        {
+
+#line 71
+            (&xp_0)->x_2 = (&xp_0)->x_2 + _S747;
+            (&xm_0)->x_2 = (&xm_0)->x_2 - _S747;
+            float _S748 = 2.0 * _S747;
+
+#line 73
+            (&xpp_0)->x_2 = (&xpp_0)->x_2 + _S748;
+            (&xmm_0)->x_2 = (&xmm_0)->x_2 - _S748;
+
+            float _S749 = 3.0 * _S747;
+
+#line 76
+            (&xppp_0)->x_2 = (&xppp_0)->x_2 + _S749;
+            (&xmmm_0)->x_2 = (&xmmm_0)->x_2 - _S749;
+
+#line 70
+        }
+        else
+        {
+
+#line 79
+            if(rho_4 == int(2))
+            {
+
+#line 80
+                (&xp_0)->y_0 = (&xp_0)->y_0 + _S747;
+                (&xm_0)->y_0 = (&xm_0)->y_0 - _S747;
+                float _S750 = 2.0 * _S747;
+
+#line 82
+                (&xpp_0)->y_0 = (&xpp_0)->y_0 + _S750;
+                (&xmm_0)->y_0 = (&xmm_0)->y_0 - _S750;
+
+                float _S751 = 3.0 * _S747;
+
+#line 85
+                (&xppp_0)->y_0 = (&xppp_0)->y_0 + _S751;
+                (&xmmm_0)->y_0 = (&xmmm_0)->y_0 - _S751;
+
+#line 79
+            }
+            else
+            {
+
+#line 89
+                (&xp_0)->z_0 = (&xp_0)->z_0 + _S747;
+                (&xm_0)->z_0 = (&xm_0)->z_0 - _S747;
+                float _S752 = 2.0 * _S747;
+
+#line 91
+                (&xpp_0)->z_0 = (&xpp_0)->z_0 + _S752;
+                (&xmm_0)->z_0 = (&xmm_0)->z_0 - _S752;
+
+                float _S753 = 3.0 * _S747;
+
+#line 94
+                (&xppp_0)->z_0 = (&xppp_0)->z_0 + _S753;
+                (&xmmm_0)->z_0 = (&xmmm_0)->z_0 - _S753;
+
+#line 79
+            }
+
+#line 70
+        }
+
+#line 70
+        thread Vec4Cart_0 _S754 = xp_0;
+
+#line 99
+        thread array<array<array<float, int(4)>, int(4)>, int(4)> Gamma_plus_0;
+
+#line 99
+        GetKerrSchildFamilyChristoffel_0(&_S754, M_15, a_22, Q_8, Lambda_8, &Gamma_plus_0);
+
+#line 99
+        thread Vec4Cart_0 _S755 = xm_0;
+        thread array<array<array<float, int(4)>, int(4)>, int(4)> Gamma_minus_0;
+
+#line 100
+        GetKerrSchildFamilyChristoffel_0(&_S755, M_15, a_22, Q_8, Lambda_8, &Gamma_minus_0);
+
+#line 100
+        mu_10 = int(0);
+
+
+
+        for(;;)
+        {
+
+#line 104
+            if(mu_10 < int(4))
+            {
+            }
+            else
+            {
+
+#line 104
+                break;
+            }
+
+#line 104
+            nu_12 = int(0);
+            for(;;)
+            {
+
+#line 105
+                if(nu_12 < int(4))
+                {
+                }
+                else
+                {
+
+#line 105
+                    break;
+                }
+
+#line 105
+                sig_0 = int(0);
+                for(;;)
+                {
+
+#line 106
+                    if(sig_0 < int(4))
+                    {
+                    }
+                    else
+                    {
+
+#line 106
+                        break;
+                    }
+
+#line 107
+                    dGamma_0[rho_4][mu_10][nu_12][sig_0] = 45.0 * (Gamma_plus_0[mu_10][nu_12][sig_0] - Gamma_minus_0[mu_10][nu_12][sig_0]);
+
+#line 106
+                    sig_0 = sig_0 + int(1);
+
+#line 106
+                }
+
+#line 105
+                nu_12 = nu_12 + int(1);
+
+#line 105
+            }
+
+#line 104
+            mu_10 = mu_10 + int(1);
+
+#line 104
+        }
+
+#line 104
+        thread Vec4Cart_0 _S756 = xpp_0;
+
+#line 104
+        GetKerrSchildFamilyChristoffel_0(&_S756, M_15, a_22, Q_8, Lambda_8, &Gamma_plus_0);
+
+#line 104
+        thread Vec4Cart_0 _S757 = xmm_0;
+
+#line 104
+        GetKerrSchildFamilyChristoffel_0(&_S757, M_15, a_22, Q_8, Lambda_8, &Gamma_minus_0);
+
+#line 104
+        mu_9 = int(0);
+
+#line 118
+        for(;;)
+        {
+
+#line 118
+            if(mu_9 < int(4))
+            {
+            }
+            else
+            {
+
+#line 118
+                break;
+            }
+
+#line 118
+            nu_12 = int(0);
+            for(;;)
+            {
+
+#line 119
+                if(nu_12 < int(4))
+                {
+                }
+                else
+                {
+
+#line 119
+                    break;
+                }
+
+#line 119
+                sig_0 = int(0);
+                for(;;)
+                {
+
+#line 120
+                    if(sig_0 < int(4))
+                    {
+                    }
+                    else
+                    {
+
+#line 120
+                        break;
+                    }
+
+#line 127
+                    dGamma_0[rho_4][mu_9][nu_12][sig_0] = dGamma_0[rho_4][mu_9][nu_12][sig_0] - 9.0 * (Gamma_plus_0[mu_9][nu_12][sig_0] - Gamma_minus_0[mu_9][nu_12][sig_0]);
+
+#line 120
+                    sig_0 = sig_0 + int(1);
+
+#line 120
+                }
+
+#line 119
+                nu_12 = nu_12 + int(1);
+
+#line 119
+            }
+
+#line 118
+            mu_9 = mu_9 + int(1);
+
+#line 118
+        }
+
+#line 118
+        thread Vec4Cart_0 _S758 = xppp_0;
+
+#line 118
+        GetKerrSchildFamilyChristoffel_0(&_S758, M_15, a_22, Q_8, Lambda_8, &Gamma_plus_0);
+
+#line 118
+        thread Vec4Cart_0 _S759 = xmmm_0;
+
+#line 118
+        GetKerrSchildFamilyChristoffel_0(&_S759, M_15, a_22, Q_8, Lambda_8, &Gamma_minus_0);
+
+#line 118
+        sig_0 = int(0);
+
+#line 132
+        for(;;)
+        {
+
+#line 132
+            if(sig_0 < int(4))
+            {
+            }
+            else
+            {
+
+#line 132
+                break;
+            }
+
+#line 132
+            nu_12 = int(0);
+            for(;;)
+            {
+
+#line 133
+                if(nu_12 < int(4))
+                {
+                }
+                else
+                {
+
+#line 133
+                    break;
+                }
+
+#line 133
+                int sig_1 = int(0);
+                for(;;)
+                {
+
+#line 134
+                    if(sig_1 < int(4))
+                    {
+                    }
+                    else
+                    {
+
+#line 134
+                        break;
+                    }
+
+#line 135
+                    dGamma_0[rho_4][sig_0][nu_12][sig_1] = (dGamma_0[rho_4][sig_0][nu_12][sig_1] + (Gamma_plus_0[sig_0][nu_12][sig_1] - Gamma_minus_0[sig_0][nu_12][sig_1])) / (60.0 * _S747);
+
+#line 134
+                    sig_1 = sig_1 + int(1);
+
+#line 134
+                }
+
+#line 133
+                nu_12 = nu_12 + int(1);
+
+#line 133
+            }
+
+#line 132
+            sig_0 = sig_0 + int(1);
+
+#line 132
+        }
+
+#line 61
+        rho_4 = rho_4 + int(1);
+
+#line 61
+    }
+
+#line 61
+    mu_10 = int(0);
+
+#line 145
+    for(;;)
+    {
+
+#line 145
+        if(mu_10 < int(4))
+        {
+        }
+        else
+        {
+
+#line 145
+            break;
+        }
+
+#line 145
+        mu_9 = int(0);
+        for(;;)
+        {
+
+#line 146
+            if(mu_9 < int(4))
+            {
+            }
+            else
+            {
+
+#line 146
+                break;
+            }
+
+#line 146
+            rho_4 = int(0);
+            for(;;)
+            {
+
+#line 147
+                if(rho_4 < int(4))
+                {
+                }
+                else
+                {
+
+#line 147
+                    break;
+                }
+
+#line 147
+                sig_0 = int(0);
+                for(;;)
+                {
+
+#line 148
+                    if(sig_0 < int(4))
+                    {
+                    }
+                    else
+                    {
+
+#line 148
+                        break;
+                    }
+
+#line 149
+                    float _S760 = dGamma_0[rho_4][mu_10][mu_9][sig_0] - dGamma_0[sig_0][mu_10][mu_9][rho_4];
+
+#line 149
+                    nu_12 = int(0);
+
+#line 149
+                    float val_0 = _S760;
+                    for(;;)
+                    {
+
+#line 150
+                        if(nu_12 < int(4))
+                        {
+                        }
+                        else
+                        {
+
+#line 150
+                            break;
+                        }
+
+#line 151
+                        float val_1 = val_0 + (Gamma_6[mu_10][nu_12][rho_4] * Gamma_6[nu_12][mu_9][sig_0] - Gamma_6[mu_10][nu_12][sig_0] * Gamma_6[nu_12][mu_9][rho_4]);
+
+#line 150
+                        nu_12 = nu_12 + int(1);
+
+#line 150
+                        val_0 = val_1;
+
+#line 150
+                    }
+
+
+                    (*R_8)[mu_10][mu_9][rho_4][sig_0] = val_0;
+
+#line 148
+                    sig_0 = sig_0 + int(1);
+
+#line 148
+                }
+
+#line 147
+                rho_4 = rho_4 + int(1);
+
+#line 147
+            }
+
+#line 146
+            mu_9 = mu_9 + int(1);
+
+#line 146
+        }
+
+#line 145
+        mu_10 = mu_10 + int(1);
+
+#line 145
+    }
+
+#line 155
+    return;
+}
+
+
+#line 179
+void GeodesicDeviationRhs_0(const array<array<array<float, int(4)>, int(4)>, int(4)> thread* Gamma_7, const array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> thread* R_9, const Vec4Cart_0 thread* k_3, float4 xi_0, float4 V_1, float4 thread* dXi_0, float4 thread* dV_0)
+{
+    int beta_0;
+    array<float, int(4)> _S761 = { k_3->t_0, k_3->x_2, k_3->y_0, k_3->z_0 };
+    array<float, int(4)> _S762 = { xi_0.x, xi_0.y, xi_0.z, xi_0.w };
+    array<float, int(4)> _S763 = { V_1.x, V_1.y, V_1.z, V_1.w };
+    thread array<float, int(4)> d_xi_0;
+
+#line 185
+    d_xi_0[int(0)] = 0.0;
+
+#line 185
+    d_xi_0[int(1)] = 0.0;
+
+#line 185
+    d_xi_0[int(2)] = 0.0;
+
+#line 185
+    d_xi_0[int(3)] = 0.0;
+    thread array<float, int(4)> d_v_0;
+
+#line 186
+    d_v_0[int(0)] = 0.0;
+
+#line 186
+    d_v_0[int(1)] = 0.0;
+
+#line 186
+    d_v_0[int(2)] = 0.0;
+
+#line 186
+    d_v_0[int(3)] = 0.0;
+
+#line 186
+    int mu_11 = int(0);
+
+    for(;;)
+    {
+
+#line 188
+        if(mu_11 < int(4))
+        {
+        }
+        else
+        {
+
+#line 188
+            break;
+        }
+
+#line 189
+        d_xi_0[mu_11] = _S763[mu_11];
+
+#line 189
+        int alpha_0 = int(0);
+        for(;;)
+        {
+
+#line 190
+            if(alpha_0 < int(4))
+            {
+            }
+            else
+            {
+
+#line 190
+                break;
+            }
+
+#line 190
+            beta_0 = int(0);
+            for(;;)
+            {
+
+#line 191
+                if(beta_0 < int(4))
+                {
+                }
+                else
+                {
+
+#line 191
+                    break;
+                }
+
+#line 192
+                float _S764 = (*Gamma_7)[mu_11][alpha_0][beta_0] * _S761[alpha_0];
+
+#line 192
+                d_xi_0[mu_11] = d_xi_0[mu_11] - _S764 * _S762[beta_0];
+                d_v_0[mu_11] = d_v_0[mu_11] - _S764 * _S763[beta_0];
+
+#line 191
+                beta_0 = beta_0 + int(1);
+
+#line 191
+            }
+
+#line 190
+            alpha_0 = alpha_0 + int(1);
+
+#line 190
+        }
+
+#line 190
+        beta_0 = int(0);
+
+#line 196
+        for(;;)
+        {
+
+#line 196
+            if(beta_0 < int(4))
+            {
+            }
+            else
+            {
+
+#line 196
+                break;
+            }
+
+#line 196
+            int rho_5 = int(0);
+            for(;;)
+            {
+
+#line 197
+                if(rho_5 < int(4))
+                {
+                }
+                else
+                {
+
+#line 197
+                    break;
+                }
+
+#line 197
+                int sigma_12 = int(0);
+                for(;;)
+                {
+
+#line 198
+                    if(sigma_12 < int(4))
+                    {
+                    }
+                    else
+                    {
+
+#line 198
+                        break;
+                    }
+
+#line 199
+                    d_v_0[mu_11] = d_v_0[mu_11] - (*R_9)[mu_11][beta_0][rho_5][sigma_12] * _S761[beta_0] * _S762[rho_5] * _S761[sigma_12];
+
+#line 198
+                    sigma_12 = sigma_12 + int(1);
+
+#line 198
+                }
+
+#line 197
+                rho_5 = rho_5 + int(1);
+
+#line 197
+            }
+
+#line 196
+            beta_0 = beta_0 + int(1);
+
+#line 196
+        }
+
+#line 188
+        mu_11 = mu_11 + int(1);
+
+#line 188
+    }
+
+#line 201
+    *dXi_0 = float4(d_xi_0[int(0)], d_xi_0[int(1)], d_xi_0[int(2)], d_xi_0[int(3)]);
+    *dV_0 = float4(d_v_0[int(0)], d_v_0[int(1)], d_v_0[int(2)], d_v_0[int(3)]);
+    return;
+}
+
+
+
+
+void AdvanceJacobiPairAcceptedSegment_0(const Vec4Cart_0 thread* startPosition_0, const Vec4Cart_0 thread* startTangent_0, const Vec4Cart_0 thread* endPosition_0, const Vec4Cart_0 thread* endTangent_0, float dLambda_0, float M_16, float a_23, float Q_9, float Lambda_9, float4 thread* xiA_0, float4 thread* VA_0, float4 thread* xiB_0, float4 thread* VB_0)
+{
+
+
+
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> R_10;
+
+#line 214
+    GetRiemannTensorCart_0(startPosition_0, M_16, a_23, Q_9, Lambda_9, &R_10);
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> Gamma_8;
+
+#line 215
+    GetKerrSchildFamilyChristoffel_0(startPosition_0, M_16, a_23, Q_9, Lambda_9, &Gamma_8);
+
+#line 215
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> _S765 = Gamma_8;
+
+#line 215
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> _S766 = R_10;
+    thread float4 k1XiA_0;
+
+#line 216
+    thread float4 k1VA_0;
+
+#line 216
+    GeodesicDeviationRhs_0(&_S765, &_S766, startTangent_0, *xiA_0, *VA_0, &k1XiA_0, &k1VA_0);
+
+#line 216
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> _S767 = Gamma_8;
+
+#line 216
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> _S768 = R_10;
+    thread float4 k1XiB_0;
+
+#line 217
+    thread float4 k1VB_0;
+
+#line 217
+    GeodesicDeviationRhs_0(&_S767, &_S768, startTangent_0, *xiB_0, *VB_0, &k1XiB_0, &k1VB_0);
+
+#line 217
+    Vec4Cart_0 _S769 = AddVec4Cart_0(startPosition_0, endPosition_0);
+
+#line 217
+    thread Vec4Cart_0 _S770 = _S769;
+
+#line 217
+    Vec4Cart_0 _S771 = ScaleVec4Cart_0(&_S770, 0.5);
+
+#line 217
+    Vec4Cart_0 _S772 = ScaleVec4Cart_0(endTangent_0, -1.0);
+
+#line 217
+    thread Vec4Cart_0 _S773 = _S772;
+
+#line 217
+    Vec4Cart_0 _S774 = AddVec4Cart_0(startTangent_0, &_S773);
+
+#line 228
+    float _S775 = dLambda_0 / 8.0;
+
+#line 228
+    thread Vec4Cart_0 _S776 = _S774;
+
+#line 228
+    Vec4Cart_0 _S777 = ScaleVec4Cart_0(&_S776, _S775);
+
+#line 228
+    thread Vec4Cart_0 _S778 = _S771;
+
+#line 228
+    thread Vec4Cart_0 _S779 = _S777;
+
+#line 228
+    Vec4Cart_0 _S780 = AddVec4Cart_0(&_S778, &_S779);
+
+#line 228
+    Vec4Cart_0 _S781 = ScaleVec4Cart_0(startPosition_0, -1.0);
+
+#line 228
+    thread Vec4Cart_0 _S782 = _S781;
+
+#line 228
+    Vec4Cart_0 _S783 = AddVec4Cart_0(endPosition_0, &_S782);
+
+
+
+    float _S784 = 1.5 / dLambda_0;
+
+#line 232
+    thread Vec4Cart_0 _S785 = _S783;
+
+#line 232
+    Vec4Cart_0 _S786 = ScaleVec4Cart_0(&_S785, _S784);
+
+#line 232
+    Vec4Cart_0 _S787 = AddVec4Cart_0(startTangent_0, endTangent_0);
+
+#line 232
+    thread Vec4Cart_0 _S788 = _S787;
+
+#line 232
+    Vec4Cart_0 _S789 = ScaleVec4Cart_0(&_S788, -0.25);
+
+#line 232
+    thread Vec4Cart_0 _S790 = _S786;
+
+#line 232
+    thread Vec4Cart_0 _S791 = _S789;
+
+#line 232
+    Vec4Cart_0 _S792 = AddVec4Cart_0(&_S790, &_S791);
+
+#line 232
+    thread Vec4Cart_0 _S793 = _S780;
+
+#line 232
+    GetRiemannTensorCart_0(&_S793, M_16, a_23, Q_9, Lambda_9, &R_10);
+
+#line 232
+    thread Vec4Cart_0 _S794 = _S780;
+
+#line 232
+    GetKerrSchildFamilyChristoffel_0(&_S794, M_16, a_23, Q_9, Lambda_9, &Gamma_8);
+
+#line 232
+    float4 _S795 = float4((0.5 * dLambda_0)) ;
+
+#line 238
+    float4 _S796 = *xiA_0 + k1XiA_0 * _S795;
+    float4 _S797 = *VA_0 + k1VA_0 * _S795;
+
+#line 239
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> _S798 = Gamma_8;
+
+#line 239
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> _S799 = R_10;
+
+#line 239
+    thread Vec4Cart_0 _S800 = _S792;
+
+#line 216
+    thread float4 k2XiA_0;
+
+#line 216
+    thread float4 k2VA_0;
+
+#line 216
+    GeodesicDeviationRhs_0(&_S798, &_S799, &_S800, _S796, _S797, &k2XiA_0, &k2VA_0);
+
+#line 241
+    float4 _S801 = *xiA_0 + k2XiA_0 * _S795;
+    float4 _S802 = *VA_0 + k2VA_0 * _S795;
+
+#line 242
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> _S803 = Gamma_8;
+
+#line 242
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> _S804 = R_10;
+
+#line 242
+    thread Vec4Cart_0 _S805 = _S792;
+
+#line 216
+    thread float4 k3XiA_0;
+
+#line 216
+    thread float4 k3VA_0;
+
+#line 216
+    GeodesicDeviationRhs_0(&_S803, &_S804, &_S805, _S801, _S802, &k3XiA_0, &k3VA_0);
+
+#line 244
+    float4 _S806 = *xiB_0 + k1XiB_0 * _S795;
+    float4 _S807 = *VB_0 + k1VB_0 * _S795;
+
+#line 245
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> _S808 = Gamma_8;
+
+#line 245
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> _S809 = R_10;
+
+#line 245
+    thread Vec4Cart_0 _S810 = _S792;
+
+#line 217
+    thread float4 k2XiB_0;
+
+#line 217
+    thread float4 k2VB_0;
+
+#line 217
+    GeodesicDeviationRhs_0(&_S808, &_S809, &_S810, _S806, _S807, &k2XiB_0, &k2VB_0);
+
+#line 247
+    float4 _S811 = *xiB_0 + k2XiB_0 * _S795;
+    float4 _S812 = *VB_0 + k2VB_0 * _S795;
+
+#line 248
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> _S813 = Gamma_8;
+
+#line 248
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> _S814 = R_10;
+
+#line 248
+    thread Vec4Cart_0 _S815 = _S792;
+
+#line 217
+    thread float4 k3XiB_0;
+
+#line 217
+    thread float4 k3VB_0;
+
+#line 217
+    GeodesicDeviationRhs_0(&_S813, &_S814, &_S815, _S811, _S812, &k3XiB_0, &k3VB_0);
+
+#line 217
+    GetRiemannTensorCart_0(endPosition_0, M_16, a_23, Q_9, Lambda_9, &R_10);
+
+#line 217
+    GetKerrSchildFamilyChristoffel_0(endPosition_0, M_16, a_23, Q_9, Lambda_9, &Gamma_8);
+
+#line 217
+    float4 _S816 = float4(dLambda_0) ;
+
+#line 253
+    float4 _S817 = *xiA_0 + k3XiA_0 * _S816;
+
+#line 253
+    float4 _S818 = *VA_0 + k3VA_0 * _S816;
+
+#line 253
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> _S819 = Gamma_8;
+
+#line 253
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> _S820 = R_10;
+
+#line 216
+    thread float4 k4XiA_0;
+
+#line 216
+    thread float4 k4VA_0;
+
+#line 216
+    GeodesicDeviationRhs_0(&_S819, &_S820, endTangent_0, _S817, _S818, &k4XiA_0, &k4VA_0);
+
+#line 255
+    float4 _S821 = *xiB_0 + k3XiB_0 * _S816;
+
+#line 255
+    float4 _S822 = *VB_0 + k3VB_0 * _S816;
+
+#line 255
+    thread array<array<array<float, int(4)>, int(4)>, int(4)> _S823 = Gamma_8;
+
+#line 255
+    thread array<array<array<array<float, int(4)>, int(4)>, int(4)>, int(4)> _S824 = R_10;
+
+#line 217
+    thread float4 k4XiB_0;
+
+#line 217
+    thread float4 k4VB_0;
+
+#line 217
+    GeodesicDeviationRhs_0(&_S823, &_S824, endTangent_0, _S821, _S822, &k4XiB_0, &k4VB_0);
+
+#line 217
+    float4 _S825 = float4(2.0) ;
+
+#line 217
+    float4 _S826 = float4((dLambda_0 / 6.0)) ;
+
+#line 258
+    *xiA_0 = *xiA_0 + (k1XiA_0 + k2XiA_0 * _S825 + k3XiA_0 * _S825 + k4XiA_0) * _S826;
+    *VA_0 = *VA_0 + (k1VA_0 + k2VA_0 * _S825 + k3VA_0 * _S825 + k4VA_0) * _S826;
+    *xiB_0 = *xiB_0 + (k1XiB_0 + k2XiB_0 * _S825 + k3XiB_0 * _S825 + k4XiB_0) * _S826;
+    *VB_0 = *VB_0 + (k1VB_0 + k2VB_0 * _S825 + k3VB_0 * _S825 + k4VB_0) * _S826;
+    return;
+}
+
+
+#line 31 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_ellis_topology.slang"
+bool MapEllisSecondSheetSkyDirection_0(const Vec4Cart_0 thread* position_2, float3 chartDirection_0, float3 thread* mappedDirection_0)
+{
+    *mappedDirection_0 = float3(0.0, 0.0, 1.0);
+
+#line 33
+    float _S827 = position_2->x_2;
+
+#line 33
+    float _S828 = position_2->y_0;
+
+#line 33
+    float _S829 = position_2->z_0;
+    float radius_2 = sqrt(position_2->x_2 * position_2->x_2 + position_2->y_0 * position_2->y_0 + position_2->z_0 * position_2->z_0);
+
+#line 34
+    bool _S830;
+
+    if(isfinite(radius_2))
+    {
+
+#line 36
+        _S830 = radius_2 > 0.0;
+
+#line 36
+    }
+    else
+    {
+
+#line 36
+        _S830 = false;
+
+#line 36
+    }
+
+#line 36
+    if(!_S830)
+    {
+
+#line 36
+        _S830 = true;
+
+#line 36
+    }
+    else
+    {
+
+#line 36
+        _S830 = !all(isfinite(chartDirection_0));
+
+#line 36
+    }
+
+#line 36
+    if(_S830)
+    {
+
+#line 37
+        return false;
+    }
+
+#line 38
+    float3 normal_0 = float3(_S827, _S828, _S829) / float3(radius_2) ;
+    float3 direction_4 = float3(chartDirection_0.x, chartDirection_0.y, chartDirection_0.z);
+
+    float norm_2 = sqrt(dot(direction_4, direction_4));
+    if(isfinite(norm_2))
+    {
+
+#line 42
+        _S830 = norm_2 > 0.0;
+
+#line 42
+    }
+    else
+    {
+
+#line 42
+        _S830 = false;
+
+#line 42
+    }
+
+#line 42
+    if(!_S830)
+    {
+
+#line 42
+        return false;
+    }
+
+#line 43
+    float3 reflected_0 = direction_4 - float3((2.0 * dot(normal_0, direction_4)))  * normal_0;
+    float3 _S831 = float3(reflected_0.x, reflected_0.y, reflected_0.z);
+
+#line 44
+    *mappedDirection_0 = _S831;
+    return all(isfinite(_S831));
+}
+
+
+#line 320 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang"
+float BeamScaleExponent_0(float value_4, int exponent_0)
+{
+
+#line 321
+    if(value_4 == 0.0)
+    {
+
+#line 321
+        return value_4;
+    }
+
+#line 321
+    float _S832 = value_4;
+
+#line 321
+    int _S833 = exponent_0;
+    for(;;)
+    {
+
+#line 322
+        if(_S833 > int(120))
+        {
+        }
+        else
+        {
+
+#line 322
+            break;
+        }
+        int _S834 = _S833 - int(120);
+
+#line 324
+        _S832 = ldexp_0(_S832, 120.0);
+
+#line 324
+        _S833 = _S834;
+
+#line 322
+    }
+
+
+
+    for(;;)
+    {
+
+#line 326
+        if(_S833 < int(-120))
+        {
+        }
+        else
+        {
+
+#line 326
+            break;
+        }
+        int _S835 = _S833 + int(120);
+
+#line 328
+        _S832 = ldexp_0(_S832, -120.0);
+
+#line 328
+        _S833 = _S835;
+
+#line 326
+    }
+
+
+
+    return ldexp_0(_S832, float(_S833));
+}
+
+
+#line 305
+float BeamProductResidual_0(float a_24, float b_1, float roundedProduct_0)
+{
+
+#line 306
+    precise float sa_0 = 4097.0 * a_24;
+
+#line 306
+    precise float sb_0 = 4097.0 * b_1;
+    precise float ah_0 = sa_0 - (sa_0 - a_24);
+
+#line 307
+    precise float bh_0 = sb_0 - (sb_0 - b_1);
+    precise float al_0 = a_24 - ah_0;
+
+#line 308
+    precise float bl_0 = b_1 - bh_0;
+    precise float e1_0 = roundedProduct_0 - ah_0 * bh_0;
+    precise float e2_0 = e1_0 - al_0 * bh_0;
+    precise float e3_0 = e2_0 - ah_0 * bl_0;
+    precise float residual_0 = al_0 * bl_0 - e3_0;
+    return residual_0;
+}
+
+
+#line 333
+void BeamEllipseFromTransverseMap_0(float beamA_0, float beamB_0, float beamC_0, float beamD_0, float thread* semiMajor_0, float thread* semiMinor_0, float thread* orientation_0, float thread* determinant_0)
+{
+
+    float _S836 = max(max(abs(beamA_0), abs(beamB_0)), max(abs(beamC_0), abs(beamD_0)));
+    if(_S836 == 0.0)
+    {
+
+#line 338
+        *determinant_0 = 0.0;
+
+#line 338
+        *orientation_0 = 0.0;
+
+#line 338
+        *semiMinor_0 = 0.0;
+
+#line 338
+        *semiMajor_0 = 0.0;
+        return;
+    }
+    thread int exponent_1;
+    float _S837 = (frexp((_S836), *((&exponent_1))));
+    float a_25 = BeamScaleExponent_0(beamA_0, - exponent_1);
+
+#line 343
+    float b_2 = BeamScaleExponent_0(beamB_0, - exponent_1);
+    float c_0 = BeamScaleExponent_0(beamC_0, - exponent_1);
+
+#line 344
+    float d_0 = BeamScaleExponent_0(beamD_0, - exponent_1);
+
+
+    thread int ae_0;
+    float af_0 = (frexp((beamA_0), *((&ae_0))));
+
+#line 347
+    thread int be_0;
+    float bf_0 = (frexp((beamB_0), *((&be_0))));
+
+#line 347
+    thread int ce_0;
+
+    float cf_0 = (frexp((beamC_0), *((&ce_0))));
+
+#line 347
+    thread int de_0;
+
+    float df_0 = (frexp((beamD_0), *((&de_0))));
+
+#line 349
+    bool hasAD_0;
+    if(beamA_0 != 0.0)
+    {
+
+#line 350
+        hasAD_0 = beamD_0 != 0.0;
+
+#line 350
+    }
+    else
+    {
+
+#line 350
+        hasAD_0 = false;
+
+#line 350
+    }
+
+#line 350
+    bool hasBC_0;
+    if(beamB_0 != 0.0)
+    {
+
+#line 351
+        hasBC_0 = beamC_0 != 0.0;
+
+#line 351
+    }
+    else
+    {
+
+#line 351
+        hasBC_0 = false;
+
+#line 351
+    }
+
+#line 351
+    bool _S838;
+    if(hasAD_0)
+    {
+
+#line 352
+        _S838 = hasBC_0;
+
+#line 352
+    }
+    else
+    {
+
+#line 352
+        _S838 = false;
+
+#line 352
+    }
+
+#line 352
+    int determinantExponent_0;
+
+#line 352
+    if(_S838)
+    {
+
+#line 352
+        determinantExponent_0 = max(ae_0 + de_0, be_0 + ce_0);
+
+#line 352
+    }
+    else
+    {
+
+#line 353
+        if(hasAD_0)
+        {
+
+#line 353
+            determinantExponent_0 = ae_0 + de_0;
+
+#line 353
+        }
+        else
+        {
+
+#line 353
+            if(hasBC_0)
+            {
+
+#line 353
+                determinantExponent_0 = be_0 + ce_0;
+
+#line 353
+            }
+            else
+            {
+
+#line 353
+                determinantExponent_0 = int(0);
+
+#line 353
+            }
+
+#line 353
+        }
+
+#line 352
+    }
+
+    precise float ad_0 = af_0 * df_0;
+
+#line 354
+    precise float bc_0 = bf_0 * cf_0;
+
+
+    precise float normalizedDeterminant_0 = BeamScaleExponent_0(ad_0, ae_0 + de_0 - determinantExponent_0) - BeamScaleExponent_0(bc_0, be_0 + ce_0 - determinantExponent_0) + (BeamScaleExponent_0(BeamProductResidual_0(af_0, df_0, ad_0), ae_0 + de_0 - determinantExponent_0) - BeamScaleExponent_0(BeamProductResidual_0(bf_0, cf_0, bc_0), be_0 + ce_0 - determinantExponent_0));
+
+
+    float normalizedMajor_0 = 0.5 * (length(float2(a_25 + d_0, b_2 - c_0)) + length(float2(a_25 - d_0, b_2 + c_0)));
+
+    *semiMajor_0 = BeamScaleExponent_0(normalizedMajor_0, exponent_1);
+
+
+    *semiMinor_0 = BeamScaleExponent_0(abs(normalizedDeterminant_0) / normalizedMajor_0, determinantExponent_0 - exponent_1);
+
+    *orientation_0 = 0.5 * atan2(2.0 * (a_25 * c_0 + b_2 * d_0), a_25 * a_25 + b_2 * b_2 - c_0 * c_0 - d_0 * d_0);
+    *determinant_0 = BeamScaleExponent_0(normalizedDeterminant_0, determinantExponent_0);
+    return;
+}
+
+
+#line 6 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_point_star.slang"
+float PointStarAngularWeight_0(float3 direction_5, float3 star_0, float3 tangentA_0, float3 tangentB_0, float cutoff_0, float cosOrientation_0, float sinOrientation_0, float invMajorSquared_0, float invMinorSquared_0)
+{
+
+
+    float normSquared_0 = dot(direction_5, direction_5);
+
+#line 10
+    bool _S839;
+    if(normSquared_0 < 0.25)
+    {
+
+#line 11
+        _S839 = true;
+
+#line 11
+    }
+    else
+    {
+
+#line 11
+        _S839 = normSquared_0 > 4.0;
+
+#line 11
+    }
+
+#line 11
+    float3 _S840;
+
+#line 11
+    if(_S839)
+    {
+
+#line 11
+        _S840 = direction_5 / float3(sqrt(normSquared_0)) ;
+
+#line 11
+    }
+    else
+    {
+
+#line 11
+        _S840 = direction_5;
+
+#line 11
+    }
+
+
+    float3 normal_1 = cross(_S840, star_0 - _S840);
+    float sine_0 = length(normal_1);
+    float angle_0 = atan2(sine_0, dot(_S840, star_0));
+    if(angle_0 > cutoff_0)
+    {
+
+#line 17
+        return 0.0;
+    }
+
+#line 18
+    thread float2 offset_1 = float2(0.0) ;
+    if(sine_0 > 0.0)
+    {
+
+#line 20
+        float3 tangent_3 = cross(normal_1, normalize(_S840)) / float3(sine_0) ;
+        offset_1 = float2(angle_0)  * float2(dot(tangent_3, tangentA_0), dot(tangent_3, tangentB_0));
+
+#line 19
+    }
+    else
+    {
+        if(angle_0 > 0.0)
+        {
+
+            if(invMajorSquared_0 != invMinorSquared_0)
+            {
+
+#line 25
+                return 0.0;
+            }
+
+#line 26
+            offset_1.x = angle_0;
+
+#line 22
+        }
+
+#line 19
+    }
+
+#line 28
+    float alongMajor_0 = cosOrientation_0 * offset_1.x + sinOrientation_0 * offset_1.y;
+    float alongMinor_0 = - sinOrientation_0 * offset_1.x + cosOrientation_0 * offset_1.y;
+    return exp(-0.5 * (alongMajor_0 * alongMajor_0 * invMajorSquared_0 + alongMinor_0 * alongMinor_0 * invMinorSquared_0));
+}
+
+
+#line 127 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
+float3 PointStarColor_0(uint starIndex_0, KernelContext_0 thread* kernelContext_1)
+{
+
+    return BlackbodyColor_0(kernelContext_1->pointStars_0[starIndex_0 * 8U + 6U]);
+}
+
+void AccumulatePointStarCell_0(int thetaBin_0, int phiBin_0, float3 dir_0, float3 tangentA_1, float3 tangentB_1, float cutoff_1, float cosOrientation_1, float sinOrientation_1, float invMajorSquared_1, float invMinorSquared_1, float brightnessScale_0, float3 thread* color_0, KernelContext_0 thread* kernelContext_2)
+{
+
+#line 139
+    uint cell_0 = uint(thetaBin_0 * int(512) + phiBin_0);
+
+#line 139
+    uint at_0 = kernelContext_2->pointOffsets_0[cell_0];
+    for(;;)
+    {
+
+#line 140
+        if(at_0 < (kernelContext_2->pointOffsets_0)[cell_0 + 1U])
+        {
+        }
+        else
+        {
+
+#line 140
+            break;
+        }
+
+#line 141
+        uint starIndex_1 = kernelContext_2->pointIndices_0[at_0];
+        uint base_1 = starIndex_1 * 8U;
+
+
+        float weight_0 = PointStarAngularWeight_0(dir_0, float3(kernelContext_2->pointStars_0[base_1], kernelContext_2->pointStars_0[base_1 + 1U], kernelContext_2->pointStars_0[base_1 + 2U]), tangentA_1, tangentB_1, cutoff_1, cosOrientation_1, sinOrientation_1, invMajorSquared_1, invMinorSquared_1);
+
+
+        if(weight_0 == 0.0)
+        {
+
+#line 148
+            at_0 = at_0 + 1U;
+
+#line 140
+            continue;
+        }
+
+#line 150
+        float intensity_0 = pow(10.0, -0.40000000596046448 * kernelContext_2->pointStars_0[base_1 + 4U]) * weight_0 * brightnessScale_0;
+
+#line 150
+        float3 _S841 = PointStarColor_0(starIndex_1, kernelContext_2);
+        *color_0 = *color_0 + _S841 * float3(intensity_0) ;
+
+#line 140
+        at_0 = at_0 + 1U;
+
+#line 140
+    }
+
+#line 153
+    return;
+}
+
+
+
+
+float3 SamplePointStarfield_0(float3 direction_6, float sigmaMajor_0, float sigmaMinor_0, float orientation_1, float brightnessScale_1, KernelContext_0 thread* kernelContext_3)
+{
+
+
+    float lengthDirection_0 = length(direction_6);
+
+#line 163
+    bool _S842;
+    if(lengthDirection_0 < 9.99999968265522539e-21)
+    {
+
+#line 164
+        _S842 = true;
+
+#line 164
+    }
+    else
+    {
+
+#line 164
+        _S842 = sigmaMajor_0 <= 0.0;
+
+#line 164
+    }
+
+#line 164
+    if(_S842)
+    {
+
+#line 164
+        _S842 = true;
+
+#line 164
+    }
+    else
+    {
+
+#line 164
+        _S842 = sigmaMinor_0 <= 0.0;
+
+#line 164
+    }
+
+#line 164
+    if(_S842)
+    {
+
+#line 165
+        return float3(0.0) ;
+    }
+
+#line 166
+    float3 dir_1 = direction_6 / float3(lengthDirection_0) ;
+    thread float3 tangentA_2;
+    thread float3 tangentB_2;
+    MakeCelestialTangentBasis_0(direction_6, &tangentA_2, &tangentB_2);
+    float theta_0 = atan2(length(dir_1.xy), dir_1.z);
+    float phi_1 = atan2(dir_1.y, dir_1.x);
+
+#line 171
+    float phi_2;
+    if(phi_1 < 0.0)
+    {
+
+#line 172
+        phi_2 = phi_1 + 6.28318548202514648;
+
+#line 172
+    }
+    else
+    {
+
+#line 172
+        phi_2 = phi_1;
+
+#line 172
+    }
+    float _S843 = max(sigmaMajor_0, sigmaMinor_0);
+    float _S844 = min(sigmaMajor_0, sigmaMinor_0);
+    float _S845 = min(4.0 * _S843, 3.14159274101257324);
+    int firstTheta_0 = clamp(int(floor(max(theta_0 - _S845, 0.0) / 3.14159274101257324 * 256.0)) - int(1), int(0), int(255));
+
+    int _S846 = clamp(int(floor(min(theta_0 + _S845, 3.14159274101257324) / 3.14159274101257324 * 256.0)) + int(1), int(0), int(255));
+
+
+
+    float sinTheta_0 = sin(theta_0);
+    if(theta_0 > _S845)
+    {
+
+#line 183
+        _S842 = (3.14159274101257324 - theta_0) > _S845;
+
+#line 183
+    }
+    else
+    {
+
+#line 183
+        _S842 = false;
+
+#line 183
+    }
+
+#line 183
+    if(_S842)
+    {
+
+#line 183
+        _S842 = sinTheta_0 > 9.99999993922529029e-09;
+
+#line 183
+    }
+    else
+    {
+
+#line 183
+        _S842 = false;
+
+#line 183
+    }
+
+#line 183
+    float phiHalfWidth_0;
+
+#line 183
+    if(_S842)
+    {
+
+#line 183
+        phiHalfWidth_0 = asin(clamp(sin(_S845) / sinTheta_0, 0.0, 1.0));
+
+#line 183
+    }
+    else
+    {
+
+#line 183
+        phiHalfWidth_0 = 3.14159274101257324;
+
+#line 183
+    }
+
+
+
+    int _S847 = min(int(floor(phi_2 / 6.28318548202514648 * 512.0)), int(511));
+    int _S848 = min(int(ceil(phiHalfWidth_0 / 0.01227184664458036)) + int(1), int(512));
+    bool _S849 = (int(2) * _S848 + int(1)) >= int(512);
+    float _S850 = 1.0 / (_S843 * _S843);
+    float _S851 = 1.0 / (_S844 * _S844);
+    float _S852 = cos(orientation_1);
+    float _S853 = sin(orientation_1);
+    thread float3 color_1 = float3(0.0) ;
+
+#line 194
+    int thetaBin_1 = firstTheta_0;
+
+    for(;;)
+    {
+
+#line 196
+        if(thetaBin_1 <= _S846)
+        {
+        }
+        else
+        {
+
+#line 196
+            break;
+        }
+
+#line 196
+        int phiBin_1;
+        if(_S849)
+        {
+
+#line 197
+            phiBin_1 = int(0);
+            for(;;)
+            {
+
+#line 198
+                if(phiBin_1 < int(512))
+                {
+                }
+                else
+                {
+
+#line 198
+                    break;
+                }
+
+#line 198
+                AccumulatePointStarCell_0(thetaBin_1, phiBin_1, direction_6, tangentA_2, tangentB_2, _S845, _S852, _S853, _S850, _S851, brightnessScale_1, &color_1, kernelContext_3);
+
+#line 198
+                phiBin_1 = phiBin_1 + int(1);
+
+#line 198
+            }
+
+#line 197
+        }
+        else
+        {
+
+#line 197
+            int delta_0 = - _S848;
+
+#line 205
+            for(;;)
+            {
+
+#line 205
+                if(delta_0 <= _S848)
+                {
+                }
+                else
+                {
+
+#line 205
+                    break;
+                }
+
+#line 206
+                int phiBin_2 = (_S847 + delta_0) % int(512);
+                if(phiBin_2 < int(0))
+                {
+
+#line 207
+                    phiBin_1 = phiBin_2 + int(512);
+
+#line 207
+                }
+                else
+                {
+
+#line 207
+                    phiBin_1 = phiBin_2;
+
+#line 207
+                }
+
+#line 207
+                AccumulatePointStarCell_0(thetaBin_1, phiBin_1, direction_6, tangentA_2, tangentB_2, _S845, _S852, _S853, _S850, _S851, brightnessScale_1, &color_1, kernelContext_3);
+
+#line 205
+                delta_0 = delta_0 + int(1);
+
+#line 205
+            }
+
+#line 197
+        }
+
+#line 196
+        thetaBin_1 = thetaBin_1 + int(1);
+
+#line 196
+    }
+
+#line 215
+    return color_1;
+}
+
+
+#line 77
+float3 StarfieldTexel_0(int x_9, int y_5, int width_1, KernelContext_0 thread* kernelContext_4)
+{
+
+#line 78
+    uint packed_0 = kernelContext_4->starfield_0[y_5 * width_1 + x_9];
+
+
+
+    return float3(float(packed_0 & 255U) / 255.0, float((packed_0 >> 8U) & 255U) / 255.0, float((packed_0 >> 16U) & 255U) / 255.0);
+}
+
+
+#line 89
+float3 SampleStarfield_0(float3 dir_2, int width_2, int height_1, KernelContext_0 thread* kernelContext_5)
+{
+
+#line 90
+    float len_0 = length(dir_2);
+    if(len_0 < 1.00000001335143196e-10)
+    {
+
+#line 92
+        return float3(0.00100000004749745, 0.00100000004749745, 0.00100000004749745);
+    }
+    float3 d_1 = dir_2 / float3(len_0) ;
+
+    float theta_1 = acos(clamp(d_1.z, -1.0, 1.0));
+    float phi_3 = atan2(d_1.y, d_1.x);
+
+#line 97
+    float phi_4;
+    if(phi_3 < 0.0)
+    {
+
+#line 98
+        phi_4 = phi_3 + 6.28318548202514648;
+
+#line 98
+    }
+    else
+    {
+
+#line 98
+        phi_4 = phi_3;
+
+#line 98
+    }
+
+#line 103
+    int _S854 = width_2 - int(1);
+
+#line 103
+    float px_0 = phi_4 / 6.28318548202514648 * float(_S854);
+    int _S855 = height_1 - int(1);
+
+#line 104
+    float py_0 = theta_1 / 3.14159274101257324 * float(_S855);
+
+    int x0_0 = int(floor(px_0));
+    int y0_0 = int(floor(py_0));
+    int _S856 = min(x0_0 + int(1), _S854);
+    int _S857 = min(y0_0 + int(1), _S855);
+
+    float fx_0 = px_0 - float(x0_0);
+    float fy_0 = py_0 - float(y0_0);
+
+#line 112
+    float3 _S858 = StarfieldTexel_0(x0_0, y0_0, width_2, kernelContext_5);
+
+#line 112
+    float3 _S859 = StarfieldTexel_0(_S856, y0_0, width_2, kernelContext_5);
+
+#line 112
+    float3 _S860 = StarfieldTexel_0(x0_0, _S857, width_2, kernelContext_5);
+
+#line 112
+    float3 _S861 = StarfieldTexel_0(_S856, _S857, width_2, kernelContext_5);
+
+#line 119
+    float _S862 = 1.0 - fx_0;
+
+#line 119
+    float _S863 = 1.0 - fy_0;
+
+#line 124
+    return _S858 * float3((_S862 * _S863))  + _S859 * float3((fx_0 * _S863))  + _S860 * float3((_S862 * fy_0))  + _S861 * float3((fx_0 * fy_0)) ;
+}
+
+
+#line 71
+float3 SampleBackgroundGradient_0(float3 dir_3)
+{
+
+#line 72
+    return float3(0.5, 0.5, 0.5) + float3(0.5)  * dir_3;
+}
+
+
+#line 420
+[[kernel]] void ComputeMain(uint3 tid_0 [[thread_position_in_grid]], float device* params_1 [[buffer(1)]], TraceContinuation_natural_0 device* continuation_3 [[buffer(6)]], float device* radiance_1 [[buffer(0)]], uint device* pointOffsets_1 [[buffer(4)]], uint device* pointIndices_1 [[buffer(5)]], float device* pointStars_1 [[buffer(3)]], uint device* starfield_1 [[buffer(2)]])
+{
+
+#line 420
+    int right_2;
+
+#line 420
+    int rootCount_2;
+
+#line 420
+    thread KernelContext_0 kernelContext_6;
+
+#line 420
+    (&kernelContext_6)->params_0 = params_1;
+
+#line 420
+    (&kernelContext_6)->continuation_0 = continuation_3;
+
+#line 420
+    (&kernelContext_6)->radiance_0 = radiance_1;
+
+#line 420
+    (&kernelContext_6)->pointOffsets_0 = pointOffsets_1;
+
+#line 420
+    (&kernelContext_6)->pointIndices_0 = pointIndices_1;
+
+#line 420
+    (&kernelContext_6)->pointStars_0 = pointStars_1;
+
+#line 420
+    (&kernelContext_6)->starfield_0 = starfield_1;
+    int imageWidth_0 = int(params_1[int(0)]);
+    int imageHeight_0 = int(params_1[int(1)]);
+    uint metricId_0 = uint(params_1[int(2)]);
+
+    int tileOriginX_0 = int(params_1[int(31)]);
+    int tileOriginY_0 = int(params_1[int(32)]);
+    int tileWidth_0 = int(params_1[int(33)]);
+    int tileHeight_0 = int(params_1[int(34)]);
+
+    int tx_0 = int(tid_0.x);
+    int ty_0 = int(tid_0.y);
+
+#line 431
+    bool escaped_0;
+    if(tx_0 >= tileWidth_0)
+    {
+
+#line 432
+        escaped_0 = true;
+
+#line 432
+    }
+    else
+    {
+
+#line 432
+        escaped_0 = ty_0 >= tileHeight_0;
+
+#line 432
+    }
+
+#line 432
+    if(escaped_0)
+    {
+
+#line 432
+        return;
+    }
+    int ix_0 = tileOriginX_0 + tx_0;
+    int iy_0 = tileOriginY_0 + ty_0;
+    if(ix_0 >= imageWidth_0)
+    {
+
+#line 436
+        escaped_0 = true;
+
+#line 436
+    }
+    else
+    {
+
+#line 436
+        escaped_0 = iy_0 >= imageHeight_0;
+
+#line 436
+    }
+
+#line 436
+    if(escaped_0)
+    {
+
+#line 436
+        return;
+    }
+    float M_17 = (&kernelContext_6)->params_0[int(3)];
+    float a_26 = (&kernelContext_6)->params_0[int(4)];
+    float Q_10 = (&kernelContext_6)->params_0[int(5)];
+    float Lambda_10 = (&kernelContext_6)->params_0[int(6)];
+
+#line 441
+    float3 _S864 = P3_0(7U, &kernelContext_6);
+
+#line 441
+    float3 _S865 = P3_0(10U, &kernelContext_6);
+
+#line 441
+    float3 _S866 = P3_0(13U, &kernelContext_6);
+
+#line 441
+    float3 _S867 = P3_0(16U, &kernelContext_6);
+
+#line 447
+    float fov_0 = (&kernelContext_6)->params_0[int(19)];
+    float aspect_0 = (&kernelContext_6)->params_0[int(20)];
+
+    int maxSteps_0 = int((&kernelContext_6)->params_0[int(21)]);
+    float stepScale_3 = (&kernelContext_6)->params_0[int(22)];
+    float minStep_3 = (&kernelContext_6)->params_0[int(23)];
+    float maxStep_3 = (&kernelContext_6)->params_0[int(24)];
+    float escapeRadius_4 = (&kernelContext_6)->params_0[int(25)];
+    float captureFactor_0 = (&kernelContext_6)->params_0[int(26)];
+
+    bool _S868 = (&kernelContext_6)->params_0[int(27)] > 0.5;
+    float _S869 = (&kernelContext_6)->params_0[int(28)];
+    float _S870 = (&kernelContext_6)->params_0[int(29)];
+    float _S871 = (&kernelContext_6)->params_0[int(30)];
+
+    bool starfieldEnabled_0 = (&kernelContext_6)->params_0[int(35)] > 0.5;
+    int starfieldWidth_0 = int((&kernelContext_6)->params_0[int(36)]);
+    int starfieldHeight_0 = int((&kernelContext_6)->params_0[int(37)]);
+
+    float warpVs_2 = (&kernelContext_6)->params_0[int(38)];
+    float warpSigma_2 = (&kernelContext_6)->params_0[int(39)];
+    float warpR_2 = (&kernelContext_6)->params_0[int(40)];
+
+#line 473
+    float throatB0_2 = (&kernelContext_6)->params_0[int(42)];
+    int wormShape_5 = int((&kernelContext_6)->params_0[int(43)]);
+    float sampleU_1 = (&kernelContext_6)->params_0[int(44)];
+    float sampleV_1 = (&kernelContext_6)->params_0[int(45)];
+    float sampleIndex_0 = (&kernelContext_6)->params_0[int(46)];
+
+#line 477
+    float3 _S872 = P3_0(47U, &kernelContext_6);
+
+    int _S873 = int((&kernelContext_6)->params_0[int(50)]);
+    bool _S874 = (&kernelContext_6)->params_0[int(51)] > 0.5;
+    int lensModel_0 = int((&kernelContext_6)->params_0[int(52)]);
+    float focalLength_1 = (&kernelContext_6)->params_0[int(53)];
+    float aperture_1 = (&kernelContext_6)->params_0[int(54)];
+    float focusDistance_1 = (&kernelContext_6)->params_0[int(55)];
+    bool pointStarfieldEnabled_0 = (&kernelContext_6)->params_0[int(56)] > 0.5;
+    float pixelAngularSize_0 = (&kernelContext_6)->params_0[int(57)];
+    float pointBrightnessScale_0 = (&kernelContext_6)->params_0[int(58)];
+    bool _S875 = (&kernelContext_6)->params_0[int(59)] > 0.5;
+    float _S876 = (&kernelContext_6)->params_0[int(60)];
+    float _S877 = (&kernelContext_6)->params_0[int(61)];
+    float _S878 = (&kernelContext_6)->params_0[int(62)];
+    int _S879 = int((&kernelContext_6)->params_0[int(63)]);
+    bool _S880 = (&kernelContext_6)->params_0[int(64)] > 0.5;
+    bool twoSheetWormhole_0 = (&kernelContext_6)->params_0[int(65)] > 0.5;
+
+#line 501
+    bool beamsEnabled_0 = (&kernelContext_6)->params_0[int(41)] > 0.5;
+
+    int _S881 = ty_0 * tileWidth_0 + tx_0;
+
+#line 503
+    uint slot_0 = uint(_S881);
+    uint action_0 = uint((&kernelContext_6)->params_0[int(68)]);
+    uint4 identity_1 = uint4(uint(ix_0), uint(iy_0), uint(sampleIndex_0), (as_type<uint>(((&kernelContext_6)->params_0[int(69)]))));
+    thread TraceContinuation_0 record_1;
+    bool _S882 = action_0 == 0U;
+
+#line 507
+    if(_S882)
+    {
+
+#line 507
+        float4 _S883 = float4(0.0) ;
+
+#line 507
+        array<float4, int(4)> _S884 = { _S883, _S883, _S883, _S883 };
+
+#line 507
+        uint4 _S885 = uint4(0U) ;
+
+#line 507
+        (&record_1)->x_1 = _S883;
+
+#line 507
+        (&record_1)->u_0 = _S883;
+
+#line 507
+        (&record_1)->X_0 = _S884;
+
+#line 507
+        (&record_1)->V_0 = _S884;
+
+#line 507
+        (&record_1)->compX_0 = _S883;
+
+#line 507
+        (&record_1)->compU_0 = _S883;
+
+#line 507
+        (&record_1)->integration_0 = _S883;
+
+#line 507
+        (&record_1)->source_0 = _S883;
+
+#line 507
+        (&record_1)->volume_0 = _S883;
+
+#line 507
+        (&record_1)->control_0 = _S885;
+
+#line 507
+        (&record_1)->identity_0 = _S885;
+
+#line 507
+    }
+    else
+    {
+
+#line 507
+        TraceContinuation_natural_0 device* _S886 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 507
+        float4 _S887 = float4((*_S886).u_0) ;
+
+#line 507
+        array<float4, int(4)> _S888 = { float4((*_S886).X_0.data_0[int(0)]) , float4((*_S886).X_0.data_0[int(1)]) , float4((*_S886).X_0.data_0[int(2)]) , float4((*_S886).X_0.data_0[int(3)])  };
+
+#line 507
+        array<float4, int(4)> _S889 = { float4((*_S886).V_0.data_0[int(0)]) , float4((*_S886).V_0.data_0[int(1)]) , float4((*_S886).V_0.data_0[int(2)]) , float4((*_S886).V_0.data_0[int(3)])  };
+
+#line 507
+        float4 _S890 = float4((*_S886).compX_0) ;
+
+#line 507
+        float4 _S891 = float4((*_S886).compU_0) ;
+
+#line 507
+        float4 _S892 = float4((*_S886).integration_0) ;
+
+#line 507
+        float4 _S893 = float4((*_S886).source_0) ;
+
+#line 507
+        float4 _S894 = float4((*_S886).volume_0) ;
+
+#line 507
+        uint4 _S895 = uint4((*_S886).control_0) ;
+
+#line 507
+        uint4 _S896 = uint4((*_S886).identity_0) ;
+
+#line 507
+        (&record_1)->x_1 = float4((*_S886).x_1) ;
+
+#line 507
+        (&record_1)->u_0 = _S887;
+
+#line 507
+        (&record_1)->X_0 = _S888;
+
+#line 507
+        (&record_1)->V_0 = _S889;
+
+#line 507
+        (&record_1)->compX_0 = _S890;
+
+#line 507
+        (&record_1)->compU_0 = _S891;
+
+#line 507
+        (&record_1)->integration_0 = _S892;
+
+#line 507
+        (&record_1)->source_0 = _S893;
+
+#line 507
+        (&record_1)->volume_0 = _S894;
+
+#line 507
+        (&record_1)->control_0 = _S895;
+
+#line 507
+        (&record_1)->identity_0 = _S896;
+
+#line 507
+    }
+
+    if((&kernelContext_6)->params_0[int(68)] == 0.0)
+    {
+
+#line 509
+        escaped_0 = true;
+
+#line 509
+    }
+    else
+    {
+
+#line 509
+        escaped_0 = (&kernelContext_6)->params_0[int(68)] == 1.0;
+
+#line 509
+    }
+
+#line 509
+    if(escaped_0)
+    {
+
+#line 509
+        escaped_0 = true;
+
+#line 509
+    }
+    else
+    {
+
+#line 509
+        escaped_0 = (&kernelContext_6)->params_0[int(68)] == 2.0;
+
+#line 509
+    }
+
+#line 509
+    if(!escaped_0)
+    {
+
+#line 510
+        (&record_1)->control_0.x = 2U;
+        (&record_1)->control_0.y = 7U;
+
+#line 511
+        TraceContinuation_natural_0 device* _S897 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 511
+        _S897->x_1 = packed_float4(record_1.x_1) ;
+
+#line 511
+        _S897->u_0 = packed_float4(record_1.u_0) ;
+
+#line 511
+        (&_S897->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 511
+        (&_S897->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 511
+        (&_S897->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 511
+        (&_S897->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 511
+        (&_S897->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 511
+        (&_S897->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 511
+        (&_S897->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 511
+        (&_S897->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 511
+        _S897->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 511
+        _S897->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 511
+        _S897->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 511
+        _S897->source_0 = packed_float4(record_1.source_0) ;
+
+#line 511
+        _S897->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 511
+        _S897->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 511
+        _S897->identity_0 = packed_uint4(record_1.identity_0) ;
+
+        return;
+    }
+    if(action_0 != 0U)
+    {
+
+#line 515
+        if(any(((&record_1)->identity_0) != identity_1))
+        {
+
+#line 515
+            escaped_0 = true;
+
+#line 515
+        }
+        else
+        {
+
+#line 515
+            escaped_0 = ((&record_1)->control_0.x) < 1U;
+
+#line 515
+        }
+        if(escaped_0)
+        {
+
+#line 516
+            escaped_0 = true;
+
+#line 516
+        }
+        else
+        {
+
+#line 516
+            escaped_0 = ((&record_1)->control_0.x) > 3U;
+
+#line 516
+        }
+
+#line 515
+    }
+    else
+    {
+
+#line 515
+        escaped_0 = false;
+
+#line 515
+    }
+
+#line 515
+    if(escaped_0)
+    {
+
+        (&record_1)->control_0.x = 2U;
+        (&record_1)->control_0.y = 8U;
+
+#line 519
+        TraceContinuation_natural_0 device* _S898 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 519
+        _S898->x_1 = packed_float4(record_1.x_1) ;
+
+#line 519
+        _S898->u_0 = packed_float4(record_1.u_0) ;
+
+#line 519
+        (&_S898->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 519
+        (&_S898->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 519
+        (&_S898->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 519
+        (&_S898->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 519
+        (&_S898->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 519
+        (&_S898->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 519
+        (&_S898->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 519
+        (&_S898->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 519
+        _S898->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 519
+        _S898->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 519
+        _S898->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 519
+        _S898->source_0 = packed_float4(record_1.source_0) ;
+
+#line 519
+        _S898->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 519
+        _S898->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 519
+        _S898->identity_0 = packed_uint4(record_1.identity_0) ;
+
+        return;
+    }
+
+
+    bool _S899 = action_0 == 1U;
+
+#line 525
+    if(_S899)
+    {
+
+#line 525
+        escaped_0 = ((&record_1)->control_0.x) != 1U;
+
+#line 525
+    }
+    else
+    {
+
+#line 525
+        escaped_0 = false;
+
+#line 525
+    }
+
+#line 525
+    if(escaped_0)
+    {
+
+#line 525
+        return;
+    }
+
+#line 526
+    bool _S900 = action_0 == 2U;
+
+#line 526
+    if(_S900)
+    {
+
+#line 526
+        escaped_0 = ((&record_1)->control_0.x) == 3U;
+
+#line 526
+    }
+    else
+    {
+
+#line 526
+        escaped_0 = false;
+
+#line 526
+    }
+
+#line 526
+    if(escaped_0)
+    {
+
+#line 526
+        return;
+    }
+
+#line 527
+    if(_S900)
+    {
+
+#line 527
+        if(((&record_1)->control_0.x) != 2U)
+        {
+
+#line 527
+            escaped_0 = true;
+
+#line 527
+        }
+        else
+        {
+
+#line 527
+            escaped_0 = !TraceReasonFinalizable_0((&record_1)->control_0.y);
+
+#line 527
+        }
+
+#line 527
+    }
+    else
+    {
+
+#line 527
+        escaped_0 = false;
+
+#line 527
+    }
+
+#line 527
+    if(escaped_0)
+    {
+        if(((&record_1)->control_0.x) == 1U)
+        {
+
+#line 530
+            (&record_1)->control_0.x = 2U;
+            (&record_1)->control_0.y = 8U;
+
+#line 531
+            TraceContinuation_natural_0 device* _S901 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 531
+            _S901->x_1 = packed_float4(record_1.x_1) ;
+
+#line 531
+            _S901->u_0 = packed_float4(record_1.u_0) ;
+
+#line 531
+            (&_S901->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 531
+            (&_S901->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 531
+            (&_S901->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 531
+            (&_S901->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 531
+            (&_S901->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 531
+            (&_S901->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 531
+            (&_S901->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 531
+            (&_S901->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 531
+            _S901->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 531
+            _S901->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 531
+            _S901->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 531
+            _S901->source_0 = packed_float4(record_1.source_0) ;
+
+#line 531
+            _S901->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 531
+            _S901->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 531
+            _S901->identity_0 = packed_uint4(record_1.identity_0) ;
+
+#line 529
+        }
+
+#line 534
+        return;
+    }
+    bool isWarp_2 = metricId_0 == 2U;
+    bool isWormhole_2 = metricId_0 == 3U;
+
+#line 542
+    float disc_0 = M_17 * M_17 - a_26 * a_26 - Q_10 * Q_10;
+
+#line 542
+    float horizonRadius_0;
+    if(disc_0 > 0.0)
+    {
+
+#line 543
+        horizonRadius_0 = M_17 + sqrt(disc_0);
+
+#line 543
+    }
+    else
+    {
+
+#line 543
+        horizonRadius_0 = M_17;
+
+#line 543
+    }
+    if(isWormhole_2)
+    {
+
+#line 544
+        horizonRadius_0 = 0.5 * throatB0_2;
+
+#line 544
+    }
+    float horizonRadius_1 = horizonRadius_0 * captureFactor_0;
+
+    thread GeodesicStateCart_0 state_12;
+
+
+
+    thread float3 volumeEmission_0;
+    thread float volumeOpticalDepth_0;
+
+    thread array<float4, int(4)> X_1;
+
+#line 554
+    thread array<float4, int(4)> V_2;
+    Vec4Cart_0 compX_1 = MakeVec4Cart_0(0.0, 0.0, 0.0, 0.0);
+
+#line 555
+    float pupilUp_1;
+
+#line 555
+    float pupilRight_1;
+
+#line 555
+    int column_0;
+
+#line 555
+    float3 screenDirection_1;
+
+#line 555
+    uint attempts_1;
+
+#line 555
+    uint reason_1;
+
+#line 555
+    Vec4Cart_0 pos0_0;
+
+
+
+    if(_S882)
+    {
+
+
+        float imageX_0 = (2.0 * (float(ix_0) + sampleU_1) / float(imageWidth_0) - 1.0) * aspect_0;
+        float imageY_0 = 1.0 - 2.0 * (float(iy_0) + sampleV_1) / float(imageHeight_0);
+        float tanHalfFov_1 = tan(fov_0 * 0.5);
+
+
+
+        bool _S902 = lensModel_0 == int(1);
+
+#line 569
+        if(_S902)
+        {
+
+            ThinLensProjectionSample_0 pupil_0 = ProjectThinLensSample_0(imageX_0, imageY_0, tanHalfFov_1, focalLength_1, aperture_1, focusDistance_1, (&kernelContext_6)->params_0[int(66)], (&kernelContext_6)->params_0[int(67)]);
+
+#line 572
+            pupilUp_1 = pupil_0.pupilUp_0;
+
+#line 572
+            pupilRight_1 = pupil_0.pupilRight_0;
+
+#line 572
+            screenDirection_1 = pupil_0.direction_1;
+
+#line 569
+        }
+        else
+        {
+
+#line 579
+            float3 _S903 = normalize(float3(1.0, imageY_0 * tanHalfFov_1, imageX_0 * tanHalfFov_1));
+
+#line 579
+            pupilUp_1 = 0.0;
+
+#line 579
+            pupilRight_1 = 0.0;
+
+#line 579
+            screenDirection_1 = _S903;
+
+#line 569
+        }
+
+#line 585
+        thread array<array<float, int(4)>, int(4)> g_3;
+        thread array<array<float, int(4)>, int(4)> g_inv_3;
+        Vec4Cart_0 pos0_1 = MakeVec4Cart_0(0.0, _S864.x, _S864.y, _S864.z);
+        if(isWarp_2)
+        {
+
+#line 588
+            thread Vec4Cart_0 _S904 = pos0_1;
+
+#line 588
+            GetWarpDriveMetric_0(&_S904, warpVs_2, warpSigma_2, warpR_2, 0.0, 0.0, 0.0, &g_3, &g_inv_3);
+
+#line 588
+        }
+        else
+        {
+
+#line 590
+            if(isWormhole_2)
+            {
+
+#line 590
+                thread Vec4Cart_0 _S905 = pos0_1;
+
+#line 590
+                GetMorrisThorneCartesianMetric_0(&_S905, throatB0_2, 0.0, wormShape_5, &g_3, &g_inv_3);
+
+#line 590
+            }
+            else
+            {
+
+#line 590
+                thread Vec4Cart_0 _S906 = pos0_1;
+
+#line 590
+                GetKerrSchildFamilyMetric_0(&_S906, M_17, a_26, Q_10, Lambda_10, &g_3, &g_inv_3);
+
+#line 590
+            }
+
+#line 588
+        }
+
+#line 588
+        thread array<array<float, int(4)>, int(4)> _S907 = g_3;
+
+#line 588
+        thread array<array<float, int(4)>, int(4)> _S908 = g_inv_3;
+
+#line 588
+        CameraObserverFrame_0 _S909 = BuildCameraObserverFrame_0(&_S907, &_S908, _S865, _S867, _S866, _S872);
+
+#line 588
+        CameraObserverFrame_0 cameraFrame_0;
+
+#line 597
+        if(_S902)
+        {
+
+#line 597
+            thread Vec4Cart_0 _S910 = _S909.up_0;
+
+#line 597
+            Vec4Cart_0 _S911 = ScaleVec4Cart_0(&_S910, pupilUp_1);
+
+#line 597
+            thread Vec4Cart_0 _S912 = pos0_1;
+
+#line 597
+            thread Vec4Cart_0 _S913 = _S911;
+
+#line 597
+            Vec4Cart_0 _S914 = AddVec4Cart_0(&_S912, &_S913);
+
+#line 597
+            thread Vec4Cart_0 _S915 = _S909.right_0;
+
+#line 597
+            Vec4Cart_0 _S916 = ScaleVec4Cart_0(&_S915, pupilRight_1);
+
+#line 597
+            thread Vec4Cart_0 _S917 = _S914;
+
+#line 597
+            thread Vec4Cart_0 _S918 = _S916;
+
+#line 597
+            Vec4Cart_0 _S919 = AddVec4Cart_0(&_S917, &_S918);
+
+#line 604
+            if(isWarp_2)
+            {
+
+#line 604
+                thread Vec4Cart_0 _S920 = _S919;
+
+#line 604
+                GetWarpDriveMetric_0(&_S920, warpVs_2, warpSigma_2, warpR_2, 0.0, 0.0, 0.0, &g_3, &g_inv_3);
+
+#line 604
+            }
+            else
+            {
+
+#line 606
+                if(isWormhole_2)
+                {
+
+#line 606
+                    thread Vec4Cart_0 _S921 = _S919;
+
+#line 606
+                    GetMorrisThorneCartesianMetric_0(&_S921, throatB0_2, 0.0, wormShape_5, &g_3, &g_inv_3);
+
+#line 606
+                }
+                else
+                {
+
+#line 606
+                    thread Vec4Cart_0 _S922 = _S919;
+
+#line 606
+                    GetKerrSchildFamilyMetric_0(&_S922, M_17, a_26, Q_10, Lambda_10, &g_3, &g_inv_3);
+
+#line 606
+                }
+
+#line 604
+            }
+
+#line 604
+            thread array<array<float, int(4)>, int(4)> _S923 = g_3;
+
+#line 604
+            thread array<array<float, int(4)>, int(4)> _S924 = g_inv_3;
+
+#line 604
+            CameraObserverFrame_0 _S925 = BuildCameraObserverFrame_0(&_S923, &_S924, _S865, _S867, _S866, _S872);
+
+#line 604
+            pos0_0 = _S919;
+
+#line 604
+            cameraFrame_0 = _S925;
+
+#line 597
+        }
+        else
+        {
+
+#line 597
+            pos0_0 = pos0_1;
+
+#line 597
+            cameraFrame_0 = _S909;
+
+#line 597
+        }
+
+#line 614
+        (&state_12)->x_5 = pos0_0;
+
+#line 614
+        thread CameraObserverFrame_0 _S926 = cameraFrame_0;
+
+#line 614
+        Vec4Cart_0 _S927 = PastDirectedCameraRay_0(&_S926, screenDirection_1);
+        (&state_12)->u_1 = _S927;
+
+        float3 color_2 = float3(0.0, 0.0, 0.0);
+
+        volumeOpticalDepth_0 = 0.0;
+        volumeEmission_0 = float3(0.0) ;
+
+#line 620
+        thread CameraObserverFrame_0 _S928 = cameraFrame_0;
+
+#line 625
+        thread Vec4Cart_0 launchScreenA_0;
+        thread Vec4Cart_0 launchScreenB_0;
+
+#line 626
+        SachsScreenBasis_0(&_S928, screenDirection_1, &launchScreenA_0, &launchScreenB_0);
+
+        float4 _S929 = float4(0.0) ;
+
+#line 628
+        X_1[int(0)] = _S929;
+
+#line 628
+        X_1[int(1)] = _S929;
+
+#line 628
+        thread Vec4Cart_0 _S930 = launchScreenA_0;
+
+#line 628
+        float4 _S931 = TracePack_0(&_S930);
+
+#line 628
+        float4 _S932 = float4(0.00100000004749745) ;
+        float4 _S933 = _S931 * _S932;
+
+#line 629
+        X_1[int(2)] = _S933;
+
+#line 629
+        thread Vec4Cart_0 _S934 = launchScreenB_0;
+
+#line 629
+        float4 _S935 = TracePack_0(&_S934);
+        float4 _S936 = _S935 * _S932;
+
+#line 630
+        X_1[int(3)] = _S936;
+        V_2[int(0)] = _S933;
+
+#line 631
+        V_2[int(1)] = _S936;
+        V_2[int(2)] = _S929;
+
+#line 632
+        V_2[int(3)] = _S929;
+
+#line 645
+        if(maxSteps_0 <= int(0))
+        {
+
+#line 645
+            reason_1 = 4U;
+
+#line 645
+        }
+        else
+        {
+
+#line 645
+            reason_1 = 0U;
+
+#line 645
+        }
+        if(isWormhole_2)
+        {
+
+#line 646
+            escaped_0 = twoSheetWormhole_0;
+
+#line 646
+        }
+        else
+        {
+
+#line 646
+            escaped_0 = false;
+
+#line 646
+        }
+
+#line 646
+        if(escaped_0)
+        {
+
+#line 646
+            thread GeodesicStateCart_0 _S937 = state_12;
+
+#line 646
+            EllisTopologyContinuation_0 _S938 = InitEllisTwoSheet_0(&_S937, maxSteps_0, stepScale_3, minStep_3, maxStep_3, escapeRadius_4, throatB0_2, wormShape_5);
+
+
+
+            if((_S938.failure_0) != 0U)
+            {
+
+#line 650
+                reason_1 = 7U;
+
+#line 650
+            }
+
+#line 646
+        }
+
+#line 652
+        if(sampleIndex_0 < 0.5)
+        {
+
+#line 653
+            uint _S939 = slot_0 * 4U;
+
+#line 653
+            *((&kernelContext_6)->radiance_0+_S939) = 0.0;
+
+#line 653
+            *((&kernelContext_6)->radiance_0+(_S939 + 1U)) = 0.0;
+            *((&kernelContext_6)->radiance_0+(_S939 + 2U)) = 0.0;
+
+#line 654
+            *((&kernelContext_6)->radiance_0+(_S939 + 3U)) = 0.0;
+
+#line 652
+        }
+
+#line 652
+        thread Vec4Cart_0 _S940 = (&state_12)->x_5;
+
+#line 652
+        float4 _S941 = TracePack_0(&_S940);
+
+#line 657
+        (&record_1)->x_1 = _S941;
+
+#line 657
+        thread Vec4Cart_0 _S942 = (&state_12)->u_1;
+
+#line 657
+        float4 _S943 = TracePack_0(&_S942);
+
+#line 657
+        (&record_1)->u_0 = _S943;
+
+#line 657
+        column_0 = int(0);
+        for(;;)
+        {
+
+#line 658
+            if(column_0 < int(4))
+            {
+            }
+            else
+            {
+
+#line 658
+                break;
+            }
+
+#line 659
+            (&record_1)->X_0[column_0] = X_1[column_0];
+
+#line 659
+            (&record_1)->V_0[column_0] = V_2[column_0];
+
+#line 658
+            column_0 = column_0 + int(1);
+
+#line 658
+        }
+
+#line 658
+        thread Vec4Cart_0 _S944 = compX_1;
+
+#line 658
+        float4 _S945 = TracePack_0(&_S944);
+
+
+        (&record_1)->compX_0 = _S945;
+
+#line 661
+        (&record_1)->compU_0 = _S945;
+        (&record_1)->integration_0 = float4(maxStep_3, 0.0, 0.0, 0.00100000004749745);
+        (&record_1)->source_0 = float4(color_2, 1.0);
+        (&record_1)->volume_0 = float4(volumeEmission_0, volumeOpticalDepth_0);
+        if(reason_1 == 0U)
+        {
+
+#line 665
+            attempts_1 = 1U;
+
+#line 665
+        }
+        else
+        {
+
+#line 665
+            attempts_1 = 2U;
+
+#line 665
+        }
+
+#line 665
+        (&record_1)->control_0 = uint4(attempts_1, reason_1, 0U, 0U);
+
+        (&record_1)->identity_0 = identity_1;
+
+#line 667
+        thread TraceContinuation_0 _S946 = record_1;
+
+#line 667
+        bool _S947 = TraceStateFinite_0(&_S946);
+        if(!_S947)
+        {
+
+#line 669
+            (&record_1)->control_0.x = 2U;
+            (&record_1)->control_0.y = 9U;
+
+#line 668
+        }
+
+#line 668
+        TraceContinuation_natural_0 device* _S948 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 668
+        _S948->x_1 = packed_float4(record_1.x_1) ;
+
+#line 668
+        _S948->u_0 = packed_float4(record_1.u_0) ;
+
+#line 668
+        (&_S948->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 668
+        (&_S948->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 668
+        (&_S948->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 668
+        (&_S948->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 668
+        (&_S948->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 668
+        (&_S948->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 668
+        (&_S948->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 668
+        (&_S948->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 668
+        _S948->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 668
+        _S948->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 668
+        _S948->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 668
+        _S948->source_0 = packed_float4(record_1.source_0) ;
+
+#line 668
+        _S948->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 668
+        _S948->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 668
+        _S948->identity_0 = packed_uint4(record_1.identity_0) ;
+
+#line 673
+        return;
+    }
+
+#line 673
+    thread TraceContinuation_0 _S949 = record_1;
+
+#line 673
+    bool _S950 = TraceStateFinite_0(&_S949);
+
+
+    if(!_S950)
+    {
+
+#line 677
+        (&record_1)->control_0.x = 2U;
+
+#line 677
+        (&record_1)->control_0.y = 9U;
+
+#line 677
+        TraceContinuation_natural_0 device* _S951 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 677
+        _S951->x_1 = packed_float4(record_1.x_1) ;
+
+#line 677
+        _S951->u_0 = packed_float4(record_1.u_0) ;
+
+#line 677
+        (&_S951->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 677
+        (&_S951->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 677
+        (&_S951->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 677
+        (&_S951->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 677
+        (&_S951->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 677
+        (&_S951->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 677
+        (&_S951->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 677
+        (&_S951->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 677
+        _S951->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 677
+        _S951->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 677
+        _S951->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 677
+        _S951->source_0 = packed_float4(record_1.source_0) ;
+
+#line 677
+        _S951->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 677
+        _S951->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 677
+        _S951->identity_0 = packed_uint4(record_1.identity_0) ;
+        return;
+    }
+    (&state_12)->x_5 = TraceUnpack_0((&record_1)->x_1);
+
+#line 680
+    (&state_12)->u_1 = TraceUnpack_0((&record_1)->u_0);
+
+#line 680
+    column_0 = int(0);
+    for(;;)
+    {
+
+#line 681
+        if(column_0 < int(4))
+        {
+        }
+        else
+        {
+
+#line 681
+            break;
+        }
+
+#line 682
+        X_1[column_0] = (&record_1)->X_0[column_0];
+
+#line 682
+        V_2[column_0] = (&record_1)->V_0[column_0];
+
+#line 681
+        column_0 = column_0 + int(1);
+
+#line 681
+    }
+
+
+    Vec4Cart_0 compX_2 = TraceUnpack_0((&record_1)->compX_0);
+
+#line 684
+    Vec4Cart_0 compU_1 = TraceUnpack_0((&record_1)->compU_0);
+    float adaptiveStep_2 = (&record_1)->integration_0.x;
+
+#line 685
+    float affineLength_8 = (&record_1)->integration_0.y;
+    float lastStep_2 = (&record_1)->integration_0.z;
+    float3 color_3 = (&record_1)->source_0.xyz;
+
+#line 687
+    float transmittance_0 = (&record_1)->source_0.w;
+    volumeEmission_0 = (&record_1)->volume_0.xyz;
+
+#line 688
+    volumeOpticalDepth_0 = (&record_1)->volume_0.w;
+    uint attempts_2 = (&record_1)->control_0.z;
+
+#line 689
+    uint accepted_3 = (&record_1)->control_0.w;
+    uint reason_2 = (&record_1)->control_0.y;
+
+#line 690
+    bool terminalEscapeSurface_0;
+
+#line 690
+    float lastStep_3;
+
+#line 690
+    float affineLength_9;
+
+#line 690
+    float exoticScale_0;
+
+#line 690
+    int step_2;
+
+#line 690
+    float3 color_4;
+
+    if(_S899)
+    {
+
+#line 693
+        if(maxSteps_0 <= int(0))
+        {
+
+#line 693
+            escaped_0 = true;
+
+#line 693
+        }
+        else
+        {
+
+#line 693
+            escaped_0 = attempts_2 >= uint(maxSteps_0);
+
+#line 693
+        }
+
+#line 693
+        if(escaped_0)
+        {
+
+#line 694
+            (&record_1)->control_0.x = 2U;
+
+#line 694
+            (&record_1)->control_0.y = 4U;
+
+#line 694
+            TraceContinuation_natural_0 device* _S952 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 694
+            _S952->x_1 = packed_float4(record_1.x_1) ;
+
+#line 694
+            _S952->u_0 = packed_float4(record_1.u_0) ;
+
+#line 694
+            (&_S952->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 694
+            (&_S952->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 694
+            (&_S952->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 694
+            (&_S952->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 694
+            (&_S952->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 694
+            (&_S952->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 694
+            (&_S952->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 694
+            (&_S952->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 694
+            _S952->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 694
+            _S952->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 694
+            _S952->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 694
+            _S952->source_0 = packed_float4(record_1.source_0) ;
+
+#line 694
+            _S952->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 694
+            _S952->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 694
+            _S952->identity_0 = packed_uint4(record_1.identity_0) ;
+            return;
+        }
+
+        if(isWormhole_2)
+        {
+
+#line 698
+            escaped_0 = twoSheetWormhole_0;
+
+#line 698
+        }
+        else
+        {
+
+#line 698
+            escaped_0 = false;
+
+#line 698
+        }
+
+#line 698
+        float transmittance_1;
+
+#line 698
+        uint accepted_4;
+
+#line 698
+        Vec4Cart_0 compU_2;
+
+#line 698
+        if(escaped_0)
+        {
+
+#line 699
+            Vec4Cart_0 _S953 = { 0.0, 0.0, 0.0, 0.0 };
+
+#line 699
+            GeodesicStateCart_0 _S954 = { _S953, _S953 };
+
+#line 699
+            EllisTopologyTraceResult_0 _S955 = { _S954, int(0), int(0), 0.0 };
+
+#line 699
+            thread EllisTopologyContinuation_0 ellis_0;
+
+#line 699
+            (&ellis_0)->trace_0 = _S955;
+
+#line 699
+            (&ellis_0)->adaptiveStep_0 = 0.0;
+
+#line 699
+            (&ellis_0)->compensationX_0 = _S953;
+
+#line 699
+            (&ellis_0)->compensationU_0 = _S953;
+
+#line 699
+            (&ellis_0)->accepted_0 = 0U;
+
+#line 699
+            (&ellis_0)->lastStep_0 = 0.0;
+
+#line 699
+            (&ellis_0)->failure_0 = 0U;
+            (&(&ellis_0)->trace_0)->state_0 = state_12;
+            (&(&ellis_0)->trace_0)->attempts_0 = int(attempts_2);
+            (&(&ellis_0)->trace_0)->affineLength_0 = affineLength_8;
+            (&ellis_0)->adaptiveStep_0 = adaptiveStep_2;
+            (&ellis_0)->compensationX_0 = compX_2;
+
+#line 704
+            (&ellis_0)->compensationU_0 = compU_1;
+            (&ellis_0)->accepted_0 = accepted_3;
+
+#line 705
+            (&ellis_0)->lastStep_0 = lastStep_2;
+            AdvanceEllisTwoSheet_0(&ellis_0, maxSteps_0, stepScale_3, minStep_3, maxStep_3, escapeRadius_4, throatB0_2, wormShape_5);
+
+            state_12 = (&(&ellis_0)->trace_0)->state_0;
+
+#line 708
+            uint _S956 = uint((&(&ellis_0)->trace_0)->attempts_0);
+            float _S957 = (&(&ellis_0)->trace_0)->affineLength_0;
+
+#line 709
+            float _S958 = (&ellis_0)->adaptiveStep_0;
+            Vec4Cart_0 _S959 = (&ellis_0)->compensationX_0;
+
+#line 710
+            Vec4Cart_0 _S960 = (&ellis_0)->compensationU_0;
+            uint _S961 = (&ellis_0)->accepted_0;
+
+#line 711
+            float _S962 = (&ellis_0)->lastStep_0;
+            if(((&(&ellis_0)->trace_0)->termination_0) == int(1))
+            {
+
+#line 712
+                reason_1 = 3U;
+
+#line 712
+            }
+            else
+            {
+
+#line 713
+                if(((&(&ellis_0)->trace_0)->termination_0) == int(2))
+                {
+
+#line 713
+                    reason_1 = 10U;
+
+#line 713
+                }
+                else
+                {
+
+#line 715
+                    if(((&ellis_0)->failure_0) == 3U)
+                    {
+
+#line 715
+                        reason_1 = 5U;
+
+#line 715
+                    }
+                    else
+                    {
+
+#line 716
+                        if(((&ellis_0)->failure_0) == 2U)
+                        {
+
+#line 716
+                            reason_1 = 4U;
+
+#line 716
+                        }
+                        else
+                        {
+
+#line 717
+                            if(((&ellis_0)->failure_0) != 0U)
+                            {
+
+#line 717
+                                reason_1 = 7U;
+
+#line 717
+                            }
+                            else
+                            {
+
+#line 717
+                                reason_1 = reason_2;
+
+#line 717
+                            }
+
+#line 716
+                        }
+
+#line 715
+                    }
+
+#line 713
+                }
+
+#line 712
+            }
+
+#line 712
+            pos0_0 = _S959;
+
+#line 712
+            compU_2 = _S960;
+
+#line 712
+            pupilUp_1 = _S958;
+
+#line 712
+            lastStep_3 = _S962;
+
+#line 712
+            color_4 = color_3;
+
+#line 712
+            transmittance_1 = transmittance_0;
+
+#line 712
+            attempts_1 = _S956;
+
+#line 712
+            affineLength_9 = _S957;
+
+#line 712
+            accepted_4 = _S961;
+
+#line 698
+        }
+        else
+        {
+
+#line 698
+            pupilUp_1 = adaptiveStep_2;
+
+#line 698
+            pupilRight_1 = transmittance_0;
+
+#line 698
+            lastStep_3 = lastStep_2;
+
+#line 698
+            screenDirection_1 = color_3;
+
+#line 698
+            step_2 = int(0);
+
+#line 698
+            attempts_1 = attempts_2;
+
+#line 698
+            affineLength_9 = affineLength_8;
+
+#line 698
+            accepted_4 = accepted_3;
+
+#line 719
+            for(;;)
+            {
+
+#line 719
+                if(step_2 < int(1))
+                {
+                }
+                else
+                {
+
+#line 719
+                    reason_1 = reason_2;
+
+#line 719
+                    color_4 = screenDirection_1;
+
+#line 719
+                    transmittance_1 = pupilRight_1;
+
+#line 719
+                    break;
+                }
+
+#line 720
+                float px_1 = (&(&state_12)->x_5)->x_2;
+                float py_1 = (&(&state_12)->x_5)->y_0;
+                float pz_0 = (&(&state_12)->x_5)->z_0;
+                float rBig_0 = sqrt((&(&state_12)->x_5)->x_2 * (&(&state_12)->x_5)->x_2 + (&(&state_12)->x_5)->y_0 * (&(&state_12)->x_5)->y_0 + (&(&state_12)->x_5)->z_0 * (&(&state_12)->x_5)->z_0);
+
+                if(isWormhole_2)
+                {
+
+#line 726
+                    if(rBig_0 <= horizonRadius_1)
+                    {
+
+#line 726
+                        reason_1 = 1U;
+
+#line 726
+                        color_4 = screenDirection_1;
+
+#line 726
+                        transmittance_1 = pupilRight_1;
+
+                        break;
+                    }
+
+#line 725
+                }
+                else
+                {
+
+
+                    if(!isWarp_2)
+                    {
+                        if((ComputeKerrRadiusCart_0(px_1, py_1, pz_0, a_26)) <= horizonRadius_1)
+                        {
+
+#line 732
+                            reason_1 = 1U;
+
+#line 732
+                            color_4 = screenDirection_1;
+
+#line 732
+                            transmittance_1 = pupilRight_1;
+
+                            break;
+                        }
+
+#line 730
+                    }
+
+#line 725
+                }
+
+#line 742
+                if(isWarp_2)
+                {
+
+#line 742
+                    exoticScale_0 = max(warpR_2, 1.0 / warpSigma_2);
+
+#line 742
+                }
+                else
+                {
+
+#line 742
+                    exoticScale_0 = throatB0_2;
+
+#line 742
+                }
+
+                if(isWarp_2)
+                {
+
+#line 744
+                    escaped_0 = true;
+
+#line 744
+                }
+                else
+                {
+
+#line 744
+                    escaped_0 = isWormhole_2;
+
+#line 744
+                }
+
+#line 744
+                float rStep_0;
+                if(escaped_0)
+                {
+
+#line 745
+                    rStep_0 = max(rBig_0, exoticScale_0);
+
+#line 745
+                }
+                else
+                {
+
+#line 745
+                    rStep_0 = ComputeKerrRadiusCart_0(px_1, py_1, pz_0, a_26);
+
+#line 745
+                }
+
+
+                float _S963 = min(clamp(stepScale_3 * rStep_0, minStep_3, maxStep_3), pupilUp_1);
+
+                uint attempts_3 = attempts_1 + 1U;
+
+
+
+                float _S964 = AdaptiveIntegrationTolerance_0();
+
+#line 754
+                float _S965 = AdaptiveNullTolerance_0();
+
+#line 754
+                thread GeodesicStateCart_0 _S966 = state_12;
+
+#line 754
+                AdaptiveGeodesicStep_0 _S967 = AttemptAdaptiveGeodesicStep_0(&_S966, _S963, isWarp_2, isWormhole_2, M_17, a_26, Q_10, Lambda_10, warpVs_2, warpSigma_2, warpR_2, throatB0_2, wormShape_5, _S964, _S965);
+                if(!_S967.accepted_1)
+                {
+
+#line 756
+                    if(_S963 <= (minStep_3 * 1.00010001659393311))
+                    {
+
+#line 756
+                        reason_1 = 5U;
+
+#line 756
+                        color_4 = screenDirection_1;
+
+#line 756
+                        transmittance_1 = pupilRight_1;
+
+#line 756
+                        attempts_1 = attempts_3;
+
+#line 756
+                        break;
+                    }
+
+#line 756
+                    pupilUp_1 = max(minStep_3, _S963 * _S967.stepFactor_0);
+
+#line 756
+                    transmittance_1 = pupilRight_1;
+
+#line 756
+                    color_4 = screenDirection_1;
+
+#line 719
+                    int _S968 = step_2 + int(1);
+
+#line 719
+                    pupilRight_1 = transmittance_1;
+
+#line 719
+                    screenDirection_1 = color_4;
+
+#line 719
+                    step_2 = _S968;
+
+#line 719
+                    attempts_1 = attempts_3;
+
+#line 719
+                    continue;
+                }
+
+#line 760
+                float _S969 = clamp(_S963 * _S967.stepFactor_0, minStep_3, maxStep_3);
+
+                thread GeodesicStateCart_0 next_0 = _S967.candidate_0;
+
+#line 762
+                thread Vec4Cart_0 _S970 = (&state_12)->x_5;
+
+#line 762
+                thread Vec4Cart_0 _S971 = (&state_12)->u_1;
+
+#line 762
+                thread Vec4Cart_0 _S972 = (&next_0)->x_5;
+
+#line 762
+                thread Vec4Cart_0 _S973 = (&next_0)->u_1;
+
+#line 776
+                thread float escapeFraction_0;
+                thread Vec4Cart_0 escapePosition_0;
+                thread Vec4Cart_0 escapeTangent_0;
+
+#line 778
+                bool _S974 = FindSphericalBoundaryEvent_0(&_S970, &_S971, &_S972, &_S973, _S963, escapeRadius_4, int(1), &escapeFraction_0, &escapePosition_0, &escapeTangent_0);
+
+#line 778
+                float dt_6;
+                if(_S974)
+                {
+
+
+                    (&next_0)->x_5 = escapePosition_0;
+                    (&next_0)->u_1 = escapeTangent_0;
+                    float dt_7 = _S963 * escapeFraction_0;
+
+#line 785
+                    terminalEscapeSurface_0 = true;
+
+#line 785
+                    dt_6 = dt_7;
+
+#line 779
+                }
+                else
+                {
+
+#line 790
+                    float nextRadialNumerator_0 = (&(&next_0)->x_5)->x_2 * (&(&next_0)->u_1)->x_2 + (&(&next_0)->x_5)->y_0 * (&(&next_0)->u_1)->y_0 + (&(&next_0)->x_5)->z_0 * (&(&next_0)->u_1)->z_0;
+
+#line 795
+                    if(((&(&next_0)->x_5)->x_2 * (&(&next_0)->x_5)->x_2 + (&(&next_0)->x_5)->y_0 * (&(&next_0)->x_5)->y_0 + (&(&next_0)->x_5)->z_0 * (&(&next_0)->x_5)->z_0) > (escapeRadius_4 * escapeRadius_4))
+                    {
+
+#line 795
+                        terminalEscapeSurface_0 = nextRadialNumerator_0 > 0.0;
+
+#line 795
+                    }
+                    else
+                    {
+
+#line 795
+                        terminalEscapeSurface_0 = false;
+
+#line 795
+                    }
+
+#line 795
+                    if(terminalEscapeSurface_0)
+                    {
+                        (&record_1)->control_0.x = 2U;
+                        (&record_1)->control_0.y = 6U;
+                        (&record_1)->control_0.z = attempts_3;
+
+#line 799
+                        TraceContinuation_natural_0 device* _S975 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 799
+                        _S975->x_1 = packed_float4(record_1.x_1) ;
+
+#line 799
+                        _S975->u_0 = packed_float4(record_1.u_0) ;
+
+#line 799
+                        (&_S975->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 799
+                        (&_S975->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 799
+                        (&_S975->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 799
+                        (&_S975->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 799
+                        (&_S975->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 799
+                        (&_S975->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 799
+                        (&_S975->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 799
+                        (&_S975->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 799
+                        _S975->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 799
+                        _S975->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 799
+                        _S975->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 799
+                        _S975->source_0 = packed_float4(record_1.source_0) ;
+
+#line 799
+                        _S975->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 799
+                        _S975->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 799
+                        _S975->identity_0 = packed_uint4(record_1.identity_0) ;
+
+                        return;
+                    }
+
+#line 801
+                    terminalEscapeSurface_0 = false;
+
+#line 801
+                    dt_6 = _S963;
+
+#line 779
+                }
+
+#line 779
+                bool terminalCaptureSurface_0;
+
+#line 779
+                bool terminalEscapeSurface_1;
+
+#line 779
+                float dt_8;
+
+#line 810
+                if(isWormhole_2)
+                {
+
+#line 810
+                    thread Vec4Cart_0 _S976 = (&state_12)->x_5;
+
+#line 810
+                    thread Vec4Cart_0 _S977 = (&state_12)->u_1;
+
+#line 810
+                    thread Vec4Cart_0 _S978 = (&next_0)->x_5;
+
+#line 810
+                    thread Vec4Cart_0 _S979 = (&next_0)->u_1;
+                    thread float captureFraction_0;
+                    thread Vec4Cart_0 capturePosition_0;
+                    thread Vec4Cart_0 captureTangent_0;
+
+#line 813
+                    bool _S980 = FindSphericalCaptureEvent_0(&_S976, &_S977, &_S978, &_S979, dt_6, horizonRadius_1, &captureFraction_0, &capturePosition_0, &captureTangent_0);
+                    if(_S980)
+                    {
+
+                        (&next_0)->x_5 = capturePosition_0;
+                        (&next_0)->u_1 = captureTangent_0;
+                        float dt_9 = dt_6 * captureFraction_0;
+
+#line 819
+                        terminalCaptureSurface_0 = false;
+
+#line 819
+                        dt_8 = dt_9;
+
+#line 814
+                    }
+                    else
+                    {
+
+#line 814
+                        terminalCaptureSurface_0 = terminalEscapeSurface_0;
+
+#line 814
+                        dt_8 = dt_6;
+
+#line 814
+                    }
+
+#line 765
+                    bool _S981 = terminalCaptureSurface_0;
+
+#line 765
+                    terminalCaptureSurface_0 = _S980;
+
+#line 765
+                    terminalEscapeSurface_1 = _S981;
+
+#line 810
+                }
+                else
+                {
+
+#line 810
+                    terminalCaptureSurface_0 = false;
+
+#line 810
+                    terminalEscapeSurface_1 = terminalEscapeSurface_0;
+
+#line 810
+                    dt_8 = dt_6;
+
+#line 810
+                }
+
+#line 810
+                bool _S982;
+
+#line 826
+                if(_S875)
+                {
+
+#line 826
+                    _S982 = !isWarp_2;
+
+#line 826
+                }
+                else
+                {
+
+#line 826
+                    _S982 = false;
+
+#line 826
+                }
+
+#line 826
+                bool _S983;
+
+#line 826
+                if(_S982)
+                {
+
+#line 826
+                    _S983 = !isWormhole_2;
+
+#line 826
+                }
+                else
+                {
+
+#line 826
+                    _S983 = false;
+
+#line 826
+                }
+
+#line 826
+                float cr_0;
+
+#line 826
+                if(_S983)
+                {
+
+#line 827
+                    if(M_17 > 9.99999997475242708e-07)
+                    {
+
+#line 827
+                        cr_0 = a_26 / M_17;
+
+#line 827
+                    }
+                    else
+                    {
+
+#line 827
+                        cr_0 = a_26;
+
+#line 827
+                    }
+
+#line 827
+                    thread Vec4Cart_0 _S984 = (&state_12)->x_5;
+
+#line 827
+                    thread Vec4Cart_0 _S985 = (&next_0)->x_5;
+
+#line 827
+                    thread Vec4Cart_0 _S986 = (&state_12)->u_1;
+
+#line 827
+                    thread Vec4Cart_0 _S987 = (&next_0)->u_1;
+
+#line 827
+                    AccumulateVolumeSegment_0(&_S984, &_S985, &_S986, &_S987, dt_8, _S879, _S875, _S880, _S874, _S869, _S870, _S871, _S873, M_17, a_26, cr_0, _S876, _S877, _S878, 1.0, &volumeOpticalDepth_0, &volumeEmission_0);
+
+#line 826
+                }
+
+#line 826
+                bool _S988;
+
+#line 841
+                if(_S868)
+                {
+
+#line 841
+                    _S988 = !_S875;
+
+#line 841
+                }
+                else
+                {
+
+#line 841
+                    _S988 = false;
+
+#line 841
+                }
+
+#line 841
+                bool _S989;
+
+#line 841
+                if(_S988)
+                {
+
+#line 841
+                    _S989 = !isWarp_2;
+
+#line 841
+                }
+                else
+                {
+
+#line 841
+                    _S989 = false;
+
+#line 841
+                }
+
+#line 841
+                bool _S990;
+
+#line 841
+                if(_S989)
+                {
+
+#line 841
+                    _S990 = !isWormhole_2;
+
+#line 841
+                }
+                else
+                {
+
+#line 841
+                    _S990 = false;
+
+#line 841
+                }
+
+#line 841
+                bool _S991;
+
+#line 841
+                if(_S990)
+                {
+
+#line 841
+                    _S991 = dt_8 > 0.0;
+
+#line 841
+                }
+                else
+                {
+
+#line 841
+                    _S991 = false;
+
+#line 841
+                }
+
+#line 841
+                bool _S992;
+                if(_S991)
+                {
+
+#line 842
+                    _S992 = pupilRight_1 > 0.00999999977648258;
+
+#line 842
+                }
+                else
+                {
+
+#line 842
+                    _S992 = false;
+
+#line 842
+                }
+
+#line 842
+                bool _S993;
+
+#line 842
+                bool _S994;
+
+#line 842
+                bool coplanar_0;
+
+#line 842
+                bool terminalDiskHit_0;
+
+#line 842
+                float dt_10;
+
+#line 841
+                if(_S992)
+                {
+                    float dzStart_0 = dt_8 * (&(&state_12)->u_1)->z_0;
+                    float dzEnd_0 = dt_8 * (&(&next_0)->u_1)->z_0;
+
+                    float coefficientA_1 = 2.0 * (&(&state_12)->x_5)->z_0 - 2.0 * (&(&next_0)->x_5)->z_0 + dzStart_0 + dzEnd_0;
+
+                    float coefficientB_1 = -3.0 * (&(&state_12)->x_5)->z_0 + 3.0 * (&(&next_0)->x_5)->z_0 - 2.0 * dzStart_0 - dzEnd_0;
+
+                    float coefficientD_1 = (&(&state_12)->x_5)->z_0;
+
+                    float _S995 = abs(coefficientA_1);
+
+#line 852
+                    float _S996 = abs(coefficientB_1);
+                    float _S997 = abs(dzStart_0);
+
+#line 853
+                    float _S998 = abs((&(&state_12)->x_5)->z_0);
+
+#line 858
+                    float rootTolerance_0 = 0.0000079999999798 * max(1.0, max(max(_S995, _S996), max(_S997, _S998)));
+
+
+                    thread array<float, int(4)> rootFractions_0;
+                    rootFractions_0[int(0)] = 0.0;
+                    rootFractions_0[int(1)] = 0.0;
+                    rootFractions_0[int(2)] = 0.0;
+                    rootFractions_0[int(3)] = 0.0;
+
+                    if(_S995 <= rootTolerance_0)
+                    {
+
+#line 867
+                        _S993 = _S996 <= rootTolerance_0;
+
+#line 867
+                    }
+                    else
+                    {
+
+#line 867
+                        _S993 = false;
+
+#line 867
+                    }
+                    if(_S993)
+                    {
+
+#line 868
+                        _S994 = _S997 <= rootTolerance_0;
+
+#line 868
+                    }
+                    else
+                    {
+
+#line 868
+                        _S994 = false;
+
+#line 868
+                    }
+                    if(_S994)
+                    {
+
+#line 869
+                        coplanar_0 = _S998 <= rootTolerance_0;
+
+#line 869
+                    }
+                    else
+                    {
+
+#line 869
+                        coplanar_0 = false;
+
+#line 869
+                    }
+
+#line 869
+                    bool foundDiskCrossing_0;
+
+#line 869
+                    bool _S999;
+
+#line 869
+                    bool midpointInside_0;
+
+#line 869
+                    float frac_0;
+
+#line 869
+                    int rootIndex_1;
+
+#line 869
+                    int radialIteration_0;
+
+#line 869
+                    int rootCount_3;
+
+                    if(coplanar_0)
+                    {
+
+                        float startRadius_0 = ComputeKerrRadiusCart_0((&(&state_12)->x_5)->x_2, (&(&state_12)->x_5)->y_0, 0.0, a_26);
+
+                        if(startRadius_0 >= _S869)
+                        {
+
+#line 876
+                            foundDiskCrossing_0 = startRadius_0 <= _S870;
+
+#line 876
+                        }
+                        else
+                        {
+
+#line 876
+                            foundDiskCrossing_0 = false;
+
+#line 876
+                        }
+
+#line 876
+                        if(foundDiskCrossing_0)
+                        {
+
+#line 877
+                            rootFractions_0[int(0)] = 0.0;
+
+#line 877
+                            rootCount_3 = int(1);
+
+#line 876
+                        }
+                        else
+                        {
+
+#line 876
+                            cr_0 = 0.0;
+
+#line 876
+                            rootIndex_1 = int(1);
+
+#line 876
+                            rootCount_3 = int(0);
+
+
+
+                            for(;;)
+                            {
+
+#line 880
+                                if(rootIndex_1 <= int(64))
+                                {
+
+#line 880
+                                    _S999 = rootCount_3 == int(0);
+
+#line 880
+                                }
+                                else
+                                {
+
+#line 880
+                                    _S999 = false;
+
+#line 880
+                                }
+
+#line 880
+                                if(_S999)
+                                {
+                                }
+                                else
+                                {
+
+#line 880
+                                    break;
+                                }
+                                float radialUpper_0 = float(rootIndex_1) / 64.0;
+
+#line 882
+                                thread Vec4Cart_0 _S1000 = (&state_12)->x_5;
+
+#line 882
+                                thread Vec4Cart_0 _S1001 = (&state_12)->u_1;
+
+#line 882
+                                thread Vec4Cart_0 _S1002 = (&next_0)->x_5;
+
+#line 882
+                                thread Vec4Cart_0 _S1003 = (&next_0)->u_1;
+
+#line 882
+                                Vec4Cart_0 _S1004 = AcceptedSegmentPosition_0(&_S1000, &_S1001, &_S1002, &_S1003, dt_8, radialUpper_0);
+
+
+                                float upperRadius_0 = ComputeKerrRadiusCart_0(_S1004.x_2, _S1004.y_0, 0.0, a_26);
+
+                                if(upperRadius_0 >= _S869)
+                                {
+
+#line 887
+                                    terminalDiskHit_0 = upperRadius_0 <= _S870;
+
+#line 887
+                                }
+                                else
+                                {
+
+#line 887
+                                    terminalDiskHit_0 = false;
+
+#line 887
+                                }
+                                if(terminalDiskHit_0)
+                                {
+
+#line 888
+                                    frac_0 = cr_0;
+
+#line 888
+                                    transmittance_1 = radialUpper_0;
+
+#line 888
+                                    radialIteration_0 = int(0);
+                                    for(;;)
+                                    {
+
+#line 889
+                                        if(radialIteration_0 < int(40))
+                                        {
+                                        }
+                                        else
+                                        {
+
+#line 889
+                                            break;
+                                        }
+
+                                        float radialMidpoint_0 = (frac_0 + transmittance_1) * 0.5;
+
+#line 892
+                                        thread Vec4Cart_0 _S1005 = (&state_12)->x_5;
+
+#line 892
+                                        thread Vec4Cart_0 _S1006 = (&state_12)->u_1;
+
+#line 892
+                                        thread Vec4Cart_0 _S1007 = (&next_0)->x_5;
+
+#line 892
+                                        thread Vec4Cart_0 _S1008 = (&next_0)->u_1;
+
+#line 892
+                                        Vec4Cart_0 _S1009 = AcceptedSegmentPosition_0(&_S1005, &_S1006, &_S1007, &_S1008, dt_8, radialMidpoint_0);
+
+
+                                        float midpointRadius_0 = ComputeKerrRadiusCart_0(_S1009.x_2, _S1009.y_0, 0.0, a_26);
+
+                                        if(midpointRadius_0 >= _S869)
+                                        {
+
+#line 897
+                                            midpointInside_0 = midpointRadius_0 <= _S870;
+
+#line 897
+                                        }
+                                        else
+                                        {
+
+#line 897
+                                            midpointInside_0 = false;
+
+#line 897
+                                        }
+
+                                        if(midpointInside_0)
+                                        {
+
+#line 899
+                                            transmittance_1 = radialMidpoint_0;
+
+#line 899
+                                        }
+                                        else
+                                        {
+
+#line 899
+                                            frac_0 = radialMidpoint_0;
+
+#line 899
+                                        }
+
+#line 889
+                                        radialIteration_0 = radialIteration_0 + int(1);
+
+#line 889
+                                    }
+
+#line 905
+                                    int _S1010 = rootCount_3 + int(1);
+
+#line 905
+                                    rootFractions_0[rootCount_3] = transmittance_1;
+
+#line 905
+                                    rootCount_3 = _S1010;
+
+#line 888
+                                }
+                                else
+                                {
+
+#line 888
+                                    transmittance_1 = radialUpper_0;
+
+#line 888
+                                }
+
+#line 881
+                                int radialInterval_0 = rootIndex_1 + int(1);
+
+#line 881
+                                cr_0 = transmittance_1;
+
+#line 881
+                                rootIndex_1 = radialInterval_0;
+
+#line 880
+                            }
+
+#line 876
+                        }
+
+#line 871
+                    }
+                    else
+                    {
+
+#line 915
+                        thread array<float, int(4)> breakpoints_0;
+                        breakpoints_0[int(0)] = 0.0;
+                        breakpoints_0[int(1)] = 1.0;
+
+
+                        float _S1011 = coefficientB_1 * coefficientB_1;
+                        float _S1012 = 3.0 * coefficientA_1;
+
+#line 921
+                        float _S1013 = _S1012 * dzStart_0;
+
+#line 920
+                        float derivativeDiscriminant_0 = _S1011 - _S1013;
+
+#line 928
+                        float discriminantTolerance_0 = 0.0000079999999798 * max(1.0, max(_S1011, abs(_S1013)));
+
+                        if(_S995 > rootTolerance_0)
+                        {
+
+#line 930
+                            foundDiskCrossing_0 = derivativeDiscriminant_0 >= (- discriminantTolerance_0);
+
+#line 930
+                        }
+                        else
+                        {
+
+#line 930
+                            foundDiskCrossing_0 = false;
+
+#line 930
+                        }
+
+#line 930
+                        if(foundDiskCrossing_0)
+                        {
+                            float derivativeRoot_0 = sqrt(max(derivativeDiscriminant_0, 0.0));
+                            float _S1014 = - coefficientB_1;
+
+#line 933
+                            float firstCritical_0 = (_S1014 - derivativeRoot_0) / _S1012;
+
+                            float secondCritical_0 = (_S1014 + derivativeRoot_0) / _S1012;
+
+                            if(firstCritical_0 > 0.0)
+                            {
+
+#line 937
+                                _S999 = firstCritical_0 < 1.0;
+
+#line 937
+                            }
+                            else
+                            {
+
+#line 937
+                                _S999 = false;
+
+#line 937
+                            }
+
+#line 937
+                            if(_S999)
+                            {
+
+#line 938
+                                breakpoints_0[int(2)] = firstCritical_0;
+
+#line 938
+                                rootIndex_1 = int(3);
+
+#line 937
+                            }
+                            else
+                            {
+
+#line 937
+                                rootIndex_1 = int(2);
+
+#line 937
+                            }
+
+                            if(secondCritical_0 > 0.0)
+                            {
+
+#line 939
+                                terminalDiskHit_0 = secondCritical_0 < 1.0;
+
+#line 939
+                            }
+                            else
+                            {
+
+#line 939
+                                terminalDiskHit_0 = false;
+
+#line 939
+                            }
+
+#line 939
+                            if(terminalDiskHit_0)
+                            {
+
+#line 940
+                                int _S1015 = rootIndex_1 + int(1);
+
+#line 940
+                                breakpoints_0[rootIndex_1] = secondCritical_0;
+
+#line 940
+                                radialIteration_0 = _S1015;
+
+#line 939
+                            }
+                            else
+                            {
+
+#line 939
+                                radialIteration_0 = rootIndex_1;
+
+#line 939
+                            }
+
+#line 939
+                            rootIndex_1 = radialIteration_0;
+
+#line 930
+                        }
+                        else
+                        {
+
+#line 941
+                            if(_S996 > rootTolerance_0)
+                            {
+
+#line 942
+                                float critical_5 = - dzStart_0 / (2.0 * coefficientB_1);
+                                if(critical_5 > 0.0)
+                                {
+
+#line 943
+                                    _S999 = critical_5 < 1.0;
+
+#line 943
+                                }
+                                else
+                                {
+
+#line 943
+                                    _S999 = false;
+
+#line 943
+                                }
+
+#line 943
+                                if(_S999)
+                                {
+
+#line 944
+                                    breakpoints_0[int(2)] = critical_5;
+
+#line 944
+                                    rootIndex_1 = int(3);
+
+#line 943
+                                }
+                                else
+                                {
+
+#line 943
+                                    rootIndex_1 = int(2);
+
+#line 943
+                                }
+
+#line 941
+                            }
+                            else
+                            {
+
+#line 941
+                                rootIndex_1 = int(2);
+
+#line 941
+                            }
+
+#line 930
+                        }
+
+#line 930
+                        radialIteration_0 = int(0);
+
+#line 946
+                        for(;;)
+                        {
+
+#line 946
+                            if(radialIteration_0 < rootIndex_1)
+                            {
+                            }
+                            else
+                            {
+
+#line 946
+                                break;
+                            }
+
+#line 947
+                            int _S1016 = radialIteration_0 + int(1);
+
+#line 947
+                            right_2 = _S1016;
+
+#line 947
+                            for(;;)
+                            {
+
+#line 947
+                                if(right_2 < rootIndex_1)
+                                {
+                                }
+                                else
+                                {
+
+#line 947
+                                    break;
+                                }
+
+#line 948
+                                if((breakpoints_0[right_2]) < breakpoints_0[radialIteration_0])
+                                {
+
+#line 949
+                                    float swapValue_0 = breakpoints_0[radialIteration_0];
+                                    breakpoints_0[radialIteration_0] = breakpoints_0[right_2];
+                                    breakpoints_0[right_2] = swapValue_0;
+
+#line 948
+                                }
+
+#line 947
+                                right_2 = right_2 + int(1);
+
+#line 947
+                            }
+
+#line 946
+                            radialIteration_0 = _S1016;
+
+#line 946
+                        }
+
+#line 946
+                        right_2 = int(0);
+
+#line 946
+                        rootCount_3 = int(0);
+
+#line 955
+                        for(;;)
+                        {
+
+#line 955
+                            int _S1017 = right_2 + int(1);
+
+#line 955
+                            if(_S1017 < rootIndex_1)
+                            {
+                            }
+                            else
+                            {
+
+#line 955
+                                break;
+                            }
+                            float lower_1 = breakpoints_0[right_2];
+                            float upper_1 = breakpoints_0[_S1017];
+                            float lowerZ_0 = EvaluateCubic_0(coefficientA_1, coefficientB_1, dzStart_0, coefficientD_1, breakpoints_0[right_2]);
+
+                            float upperZ_0 = EvaluateCubic_0(coefficientA_1, coefficientB_1, dzStart_0, coefficientD_1, breakpoints_0[_S1017]);
+
+                            if((abs(lowerZ_0)) <= rootTolerance_0)
+                            {
+
+#line 963
+                                _S999 = rootCount_3 < int(4);
+
+#line 963
+                            }
+                            else
+                            {
+
+#line 963
+                                _S999 = false;
+
+#line 963
+                            }
+
+#line 963
+                            if(_S999)
+                            {
+
+#line 964
+                                if(rootCount_3 == int(0))
+                                {
+
+#line 964
+                                    terminalDiskHit_0 = true;
+
+#line 964
+                                }
+                                else
+                                {
+
+#line 964
+                                    terminalDiskHit_0 = (abs(lower_1 - rootFractions_0[rootCount_3 - int(1)])) > 0.00001999999949476;
+
+#line 964
+                                }
+
+#line 963
+                            }
+                            else
+                            {
+
+#line 963
+                                terminalDiskHit_0 = false;
+
+#line 963
+                            }
+
+#line 963
+                            if(terminalDiskHit_0)
+                            {
+
+
+                                int _S1018 = rootCount_3 + int(1);
+
+#line 967
+                                rootFractions_0[rootCount_3] = lower_1;
+
+#line 967
+                                rootCount_2 = _S1018;
+
+#line 963
+                            }
+                            else
+                            {
+
+#line 963
+                                rootCount_2 = rootCount_3;
+
+#line 963
+                            }
+
+#line 969
+                            if((lowerZ_0 < 0.0) != (upperZ_0 < 0.0))
+                            {
+
+#line 969
+                                cr_0 = lower_1;
+
+#line 969
+                                frac_0 = upper_1;
+
+#line 969
+                                transmittance_1 = lowerZ_0;
+
+#line 969
+                                int rootIteration_0 = int(0);
+
+
+
+                                for(;;)
+                                {
+
+#line 973
+                                    if(rootIteration_0 < int(40))
+                                    {
+                                    }
+                                    else
+                                    {
+
+#line 973
+                                        break;
+                                    }
+
+#line 974
+                                    float midpoint_1 = (cr_0 + frac_0) * 0.5;
+                                    float midpointZ_0 = EvaluateCubic_0(coefficientA_1, coefficientB_1, dzStart_0, coefficientD_1, midpoint_1);
+
+
+                                    if((transmittance_1 < 0.0) == (midpointZ_0 < 0.0))
+                                    {
+
+#line 978
+                                        cr_0 = midpoint_1;
+
+#line 978
+                                        transmittance_1 = midpointZ_0;
+
+#line 978
+                                    }
+                                    else
+                                    {
+
+#line 978
+                                        frac_0 = midpoint_1;
+
+#line 978
+                                    }
+
+#line 973
+                                    rootIteration_0 = rootIteration_0 + int(1);
+
+#line 973
+                                }
+
+#line 986
+                                float rootFraction_0 = (cr_0 + frac_0) * 0.5;
+                                if(rootCount_2 < int(4))
+                                {
+
+#line 988
+                                    if(rootCount_2 == int(0))
+                                    {
+
+#line 988
+                                        midpointInside_0 = true;
+
+#line 988
+                                    }
+                                    else
+                                    {
+
+#line 988
+                                        midpointInside_0 = (abs(rootFraction_0 - rootFractions_0[rootCount_2 - int(1)])) > 0.00001999999949476;
+
+#line 988
+                                    }
+
+#line 987
+                                }
+                                else
+                                {
+
+#line 987
+                                    midpointInside_0 = false;
+
+#line 987
+                                }
+
+#line 987
+                                int rootCount_4;
+
+#line 987
+                                if(midpointInside_0)
+                                {
+
+
+                                    int _S1019 = rootCount_2 + int(1);
+
+#line 991
+                                    rootFractions_0[rootCount_2] = rootFraction_0;
+
+#line 991
+                                    rootCount_4 = _S1019;
+
+#line 987
+                                }
+                                else
+                                {
+
+#line 987
+                                    rootCount_4 = rootCount_2;
+
+#line 987
+                                }
+
+#line 987
+                                rootCount_3 = rootCount_4;
+
+#line 969
+                            }
+                            else
+                            {
+
+#line 969
+                                rootCount_3 = rootCount_2;
+
+#line 969
+                            }
+
+#line 955
+                            right_2 = _S1017;
+
+#line 955
+                        }
+
+#line 997
+                        if((abs(EvaluateCubic_0(coefficientA_1, coefficientB_1, dzStart_0, coefficientD_1, 1.0))) <= rootTolerance_0)
+                        {
+
+#line 997
+                            _S999 = rootCount_3 < int(4);
+
+#line 997
+                        }
+                        else
+                        {
+
+#line 997
+                            _S999 = false;
+
+#line 997
+                        }
+
+#line 997
+                        if(_S999)
+                        {
+
+#line 998
+                            if(rootCount_3 == int(0))
+                            {
+
+#line 998
+                                terminalDiskHit_0 = true;
+
+#line 998
+                            }
+                            else
+                            {
+
+#line 998
+                                terminalDiskHit_0 = (abs(1.0 - rootFractions_0[rootCount_3 - int(1)])) > 0.00001999999949476;
+
+#line 998
+                            }
+
+#line 997
+                        }
+                        else
+                        {
+
+#line 997
+                            terminalDiskHit_0 = false;
+
+#line 997
+                        }
+
+#line 997
+                        if(terminalDiskHit_0)
+                        {
+
+
+                            int _S1020 = rootCount_3 + int(1);
+
+#line 1001
+                            rootFractions_0[rootCount_3] = 1.0;
+
+#line 1001
+                            rootCount_2 = _S1020;
+
+#line 997
+                        }
+                        else
+                        {
+
+#line 997
+                            rootCount_2 = rootCount_3;
+
+#line 997
+                        }
+
+#line 997
+                        rootCount_3 = rootCount_2;
+
+#line 871
+                    }
+
+#line 871
+                    foundDiskCrossing_0 = false;
+
+#line 871
+                    cr_0 = 0.0;
+
+#line 871
+                    frac_0 = 0.0;
+
+#line 871
+                    rootIndex_1 = int(0);
+
+#line 1010
+                    for(;;)
+                    {
+
+#line 1010
+                        if(rootIndex_1 < rootCount_3)
+                        {
+
+#line 1010
+                            _S999 = !foundDiskCrossing_0;
+
+#line 1010
+                        }
+                        else
+                        {
+
+#line 1010
+                            _S999 = false;
+
+#line 1010
+                        }
+
+#line 1010
+                        if(_S999)
+                        {
+                        }
+                        else
+                        {
+
+#line 1010
+                            break;
+                        }
+                        float candidateFraction_2 = rootFractions_0[rootIndex_1];
+
+#line 1012
+                        thread Vec4Cart_0 _S1021 = (&state_12)->x_5;
+
+#line 1012
+                        thread Vec4Cart_0 _S1022 = (&state_12)->u_1;
+
+#line 1012
+                        thread Vec4Cart_0 _S1023 = (&next_0)->x_5;
+
+#line 1012
+                        thread Vec4Cart_0 _S1024 = (&next_0)->u_1;
+
+#line 1012
+                        Vec4Cart_0 _S1025 = AcceptedSegmentPosition_0(&_S1021, &_S1022, &_S1023, &_S1024, dt_8, rootFractions_0[rootIndex_1]);
+
+
+                        float candidateRadius_0 = ComputeKerrRadiusCart_0(_S1025.x_2, _S1025.y_0, 0.0, a_26);
+
+                        if(candidateRadius_0 >= _S869)
+                        {
+
+#line 1017
+                            terminalDiskHit_0 = candidateRadius_0 <= _S870;
+
+#line 1017
+                        }
+                        else
+                        {
+
+#line 1017
+                            terminalDiskHit_0 = false;
+
+#line 1017
+                        }
+
+#line 1017
+                        if(terminalDiskHit_0)
+                        {
+
+#line 1017
+                            thread Vec4Cart_0 _S1026 = (&state_12)->x_5;
+
+#line 1017
+                            thread Vec4Cart_0 _S1027 = (&state_12)->u_1;
+
+#line 1017
+                            thread Vec4Cart_0 _S1028 = (&next_0)->x_5;
+
+#line 1017
+                            thread Vec4Cart_0 _S1029 = (&next_0)->u_1;
+
+#line 1017
+                            Vec4Cart_0 _S1030 = AcceptedSegmentTangent_0(&_S1026, &_S1027, &_S1028, &_S1029, dt_8, candidateFraction_2);
+
+#line 1017
+                            foundDiskCrossing_0 = true;
+
+#line 1017
+                            pos0_0 = _S1025;
+
+#line 1017
+                            cr_0 = candidateRadius_0;
+
+#line 1017
+                            compU_2 = _S1030;
+
+#line 1017
+                            frac_0 = candidateFraction_2;
+
+#line 1017
+                        }
+
+#line 1010
+                        rootIndex_1 = rootIndex_1 + int(1);
+
+#line 1010
+                    }
+
+#line 1026
+                    if(foundDiskCrossing_0)
+                    {
+
+#line 1007
+                        Vec4Cart_0 _S1031 = pos0_0;
+
+#line 1007
+                        Vec4Cart_0 _S1032 = pos0_0;
+
+#line 1031
+                        if(M_17 > 9.99999997475242708e-07)
+                        {
+
+#line 1031
+                            transmittance_1 = a_26 / M_17;
+
+#line 1031
+                        }
+                        else
+                        {
+
+#line 1031
+                            transmittance_1 = a_26;
+
+#line 1031
+                        }
+
+                        if(_S873 == int(1))
+                        {
+
+#line 1033
+                            dt_10 = ShakuraSunyaevTemperature_0(_S871, cr_0, _S869);
+
+#line 1033
+                        }
+                        else
+                        {
+
+#line 1033
+                            dt_10 = FullPageThorneTemperature_0(_S871, cr_0, _S869, M_17, transmittance_1);
+
+#line 1033
+                        }
+
+#line 1039
+                        float cphi_0 = atan2(_S1032.y_0, _S1031.x_2);
+
+#line 1039
+                        thread Vec4Cart_0 _S1033 = compU_2;
+
+#line 1039
+                        float2 _S1034 = ComputeKerrDiskTransferCart_0(cr_0, cphi_0, &_S1033, 1.0, M_17, a_26);
+
+#line 1039
+                        float gFactor_1;
+
+
+                        if(_S874)
+                        {
+
+#line 1042
+                            gFactor_1 = _S1034.x;
+
+#line 1042
+                        }
+                        else
+                        {
+
+#line 1042
+                            gFactor_1 = _S1034.y;
+
+#line 1042
+                        }
+
+
+
+                        float3 emit_0 = BlackbodyColor_0(dt_10 * gFactor_1) * float3(ObservedDiskBolometricSource_0(pow(dt_10 / _S871, 4.0), gFactor_1)) ;
+
+#line 1051
+                        (&next_0)->x_5 = pos0_0;
+                        (&next_0)->u_1 = compU_2;
+                        float dt_11 = dt_8 * frac_0;
+
+#line 1053
+                        terminalDiskHit_0 = true;
+
+#line 1053
+                        transmittance_1 = 0.0;
+
+#line 1053
+                        color_4 = emit_0;
+
+#line 1053
+                        dt_10 = dt_11;
+
+#line 1026
+                    }
+                    else
+                    {
+
+#line 1026
+                        terminalDiskHit_0 = false;
+
+#line 1026
+                        transmittance_1 = pupilRight_1;
+
+#line 1026
+                        color_4 = screenDirection_1;
+
+#line 1026
+                        dt_10 = dt_8;
+
+#line 1026
+                    }
+
+#line 841
+                }
+                else
+                {
+
+#line 841
+                    terminalDiskHit_0 = false;
+
+#line 841
+                    transmittance_1 = pupilRight_1;
+
+#line 841
+                    color_4 = screenDirection_1;
+
+#line 841
+                    dt_10 = dt_8;
+
+#line 841
+                }
+
+#line 1057
+                if(beamsEnabled_0)
+                {
+
+#line 1057
+                    _S993 = !isWarp_2;
+
+#line 1057
+                }
+                else
+                {
+
+#line 1057
+                    _S993 = false;
+
+#line 1057
+                }
+
+#line 1057
+                if(_S993)
+                {
+
+#line 1057
+                    _S994 = !isWormhole_2;
+
+#line 1057
+                }
+                else
+                {
+
+#line 1057
+                    _S994 = false;
+
+#line 1057
+                }
+
+#line 1057
+                if(_S994)
+                {
+
+#line 1057
+                    coplanar_0 = dt_10 > 0.0;
+
+#line 1057
+                }
+                else
+                {
+
+#line 1057
+                    coplanar_0 = false;
+
+#line 1057
+                }
+
+#line 1057
+                if(coplanar_0)
+                {
+
+#line 1057
+                    thread Vec4Cart_0 _S1035 = (&state_12)->x_5;
+
+#line 1057
+                    thread Vec4Cart_0 _S1036 = (&state_12)->u_1;
+
+#line 1057
+                    thread Vec4Cart_0 _S1037 = (&next_0)->x_5;
+
+#line 1057
+                    thread Vec4Cart_0 _S1038 = (&next_0)->u_1;
+
+#line 1057
+                    AdvanceJacobiPairAcceptedSegment_0(&_S1035, &_S1036, &_S1037, &_S1038, dt_10, M_17, a_26, Q_10, Lambda_10, &X_1[int(0)], &V_2[int(0)], &X_1[int(1)], &V_2[int(1)]);
+
+#line 1057
+                    thread Vec4Cart_0 _S1039 = (&state_12)->x_5;
+
+#line 1057
+                    thread Vec4Cart_0 _S1040 = (&state_12)->u_1;
+
+#line 1057
+                    thread Vec4Cart_0 _S1041 = (&next_0)->x_5;
+
+#line 1057
+                    thread Vec4Cart_0 _S1042 = (&next_0)->u_1;
+
+#line 1057
+                    AdvanceJacobiPairAcceptedSegment_0(&_S1039, &_S1040, &_S1041, &_S1042, dt_10, M_17, a_26, Q_10, Lambda_10, &X_1[int(2)], &V_2[int(2)], &X_1[int(3)], &V_2[int(3)]);
+
+#line 1057
+                }
+
+#line 1066
+                float affineLength_10 = affineLength_9 + dt_10;
+
+#line 1066
+                uint accepted_5 = accepted_4 + 1U;
+                state_12 = next_0;
+                if(terminalDiskHit_0)
+                {
+
+#line 1068
+                    reason_1 = 2U;
+
+#line 1068
+                    pupilUp_1 = _S969;
+
+#line 1068
+                    lastStep_3 = dt_10;
+
+#line 1068
+                    attempts_1 = attempts_3;
+
+#line 1068
+                    affineLength_9 = affineLength_10;
+
+#line 1068
+                    accepted_4 = accepted_5;
+
+#line 1068
+                    break;
+                }
+
+#line 1069
+                if(terminalCaptureSurface_0)
+                {
+
+#line 1069
+                    reason_1 = 1U;
+
+#line 1069
+                    pupilUp_1 = _S969;
+
+#line 1069
+                    lastStep_3 = dt_10;
+
+#line 1069
+                    attempts_1 = attempts_3;
+
+#line 1069
+                    affineLength_9 = affineLength_10;
+
+#line 1069
+                    accepted_4 = accepted_5;
+
+                    break;
+                }
+
+#line 1079
+                float nextRadius_0 = sqrt((&(&state_12)->x_5)->x_2 * (&(&state_12)->x_5)->x_2 + (&(&state_12)->x_5)->y_0 * (&(&state_12)->x_5)->y_0 + (&(&state_12)->x_5)->z_0 * (&(&state_12)->x_5)->z_0);
+
+                if(isWormhole_2)
+                {
+
+#line 1082
+                    if(nextRadius_0 <= horizonRadius_1)
+                    {
+
+#line 1082
+                        reason_1 = 1U;
+
+#line 1082
+                        pupilUp_1 = _S969;
+
+#line 1082
+                        lastStep_3 = dt_10;
+
+#line 1082
+                        attempts_1 = attempts_3;
+
+#line 1082
+                        affineLength_9 = affineLength_10;
+
+#line 1082
+                        accepted_4 = accepted_5;
+
+                        break;
+                    }
+
+#line 1081
+                }
+                else
+                {
+
+
+                    if(!isWarp_2)
+                    {
+
+                        if((ComputeKerrRadiusCart_0((&(&state_12)->x_5)->x_2, (&(&state_12)->x_5)->y_0, (&(&state_12)->x_5)->z_0, a_26)) <= horizonRadius_1)
+                        {
+
+#line 1089
+                            reason_1 = 1U;
+
+#line 1089
+                            pupilUp_1 = _S969;
+
+#line 1089
+                            lastStep_3 = dt_10;
+
+#line 1089
+                            attempts_1 = attempts_3;
+
+#line 1089
+                            affineLength_9 = affineLength_10;
+
+#line 1089
+                            accepted_4 = accepted_5;
+
+                            break;
+                        }
+
+#line 1086
+                    }
+
+#line 1081
+                }
+
+#line 1094
+                if(terminalEscapeSurface_1)
+                {
+
+#line 1094
+                    reason_1 = 3U;
+
+#line 1094
+                    pupilUp_1 = _S969;
+
+#line 1094
+                    lastStep_3 = dt_10;
+
+#line 1094
+                    attempts_1 = attempts_3;
+
+#line 1094
+                    affineLength_9 = affineLength_10;
+
+#line 1094
+                    accepted_4 = accepted_5;
+
+                    break;
+                }
+
+#line 1096
+                pupilUp_1 = _S969;
+
+#line 1096
+                lastStep_3 = dt_10;
+
+#line 1096
+                affineLength_9 = affineLength_10;
+
+#line 1096
+                accepted_4 = accepted_5;
+
+#line 719
+                int _S968 = step_2 + int(1);
+
+#line 719
+                pupilRight_1 = transmittance_1;
+
+#line 719
+                screenDirection_1 = color_4;
+
+#line 719
+                step_2 = _S968;
+
+#line 719
+                attempts_1 = attempts_3;
+
+#line 719
+            }
+
+#line 719
+            pos0_0 = compX_2;
+
+#line 719
+            compU_2 = compU_1;
+
+#line 698
+        }
+
+#line 1101
+        if(reason_1 == 0U)
+        {
+
+#line 1101
+            escaped_0 = attempts_1 >= uint(maxSteps_0);
+
+#line 1101
+        }
+        else
+        {
+
+#line 1101
+            escaped_0 = false;
+
+#line 1101
+        }
+
+#line 1101
+        if(escaped_0)
+        {
+
+#line 1101
+            reason_1 = 4U;
+
+#line 1101
+        }
+
+#line 1101
+        thread Vec4Cart_0 _S1043 = (&state_12)->x_5;
+
+#line 1101
+        float4 _S1044 = TracePack_0(&_S1043);
+
+        (&record_1)->x_1 = _S1044;
+
+#line 1103
+        thread Vec4Cart_0 _S1045 = (&state_12)->u_1;
+
+#line 1103
+        float4 _S1046 = TracePack_0(&_S1045);
+
+#line 1103
+        (&record_1)->u_0 = _S1046;
+
+#line 1103
+        column_0 = int(0);
+        for(;;)
+        {
+
+#line 1104
+            if(column_0 < int(4))
+            {
+            }
+            else
+            {
+
+#line 1104
+                break;
+            }
+
+#line 1105
+            (&record_1)->X_0[column_0] = X_1[column_0];
+
+#line 1105
+            (&record_1)->V_0[column_0] = V_2[column_0];
+
+#line 1104
+            column_0 = column_0 + int(1);
+
+#line 1104
+        }
+
+#line 1104
+        thread Vec4Cart_0 _S1047 = pos0_0;
+
+#line 1104
+        float4 _S1048 = TracePack_0(&_S1047);
+
+
+        (&record_1)->compX_0 = _S1048;
+
+#line 1107
+        thread Vec4Cart_0 _S1049 = compU_2;
+
+#line 1107
+        float4 _S1050 = TracePack_0(&_S1049);
+
+#line 1107
+        (&record_1)->compU_0 = _S1050;
+        (&record_1)->integration_0 = float4(pupilUp_1, affineLength_9, lastStep_3, 0.00100000004749745);
+        (&record_1)->source_0 = float4(color_4, transmittance_1);
+        (&record_1)->volume_0 = float4(volumeEmission_0, volumeOpticalDepth_0);
+
+#line 1110
+        uint _S1051;
+        if(reason_1 == 0U)
+        {
+
+#line 1111
+            _S1051 = 1U;
+
+#line 1111
+        }
+        else
+        {
+
+#line 1111
+            _S1051 = 2U;
+
+#line 1111
+        }
+
+#line 1111
+        (&record_1)->control_0 = uint4(_S1051, reason_1, attempts_1, accepted_4);
+
+        (&record_1)->identity_0 = identity_1;
+
+#line 1113
+        thread TraceContinuation_0 _S1052 = record_1;
+
+#line 1113
+        bool _S1053 = TraceStateFinite_0(&_S1052);
+        if(!_S1053)
+        {
+
+#line 1115
+            (&record_1)->control_0.x = 2U;
+            (&record_1)->control_0.y = 9U;
+
+#line 1114
+        }
+
+#line 1114
+        TraceContinuation_natural_0 device* _S1054 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 1114
+        _S1054->x_1 = packed_float4(record_1.x_1) ;
+
+#line 1114
+        _S1054->u_0 = packed_float4(record_1.u_0) ;
+
+#line 1114
+        (&_S1054->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 1114
+        (&_S1054->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 1114
+        (&_S1054->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 1114
+        (&_S1054->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 1114
+        (&_S1054->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 1114
+        (&_S1054->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 1114
+        (&_S1054->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 1114
+        (&_S1054->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 1114
+        _S1054->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 1114
+        _S1054->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 1114
+        _S1054->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 1114
+        _S1054->source_0 = packed_float4(record_1.source_0) ;
+
+#line 1114
+        _S1054->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 1114
+        _S1054->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 1114
+        _S1054->identity_0 = packed_uint4(record_1.identity_0) ;
+
+#line 1119
+        return;
+    }
+    if(reason_2 == 3U)
+    {
+
+#line 1121
+        escaped_0 = true;
+
+#line 1121
+    }
+    else
+    {
+
+#line 1121
+        escaped_0 = reason_2 == 10U;
+
+#line 1121
+    }
+    bool oppositeSheet_0 = reason_2 == 10U;
+    bool captured_0 = reason_2 == 1U;
+
+    float3 _S1055 = float3(0.0, 0.0, 1.0);
+    thread float beamOrientation_0 = 0.0;
+
+#line 1133
+    if(escaped_0)
+    {
+
+#line 1133
+        terminalEscapeSurface_0 = true;
+
+#line 1133
+    }
+    else
+    {
+
+#line 1133
+        if(beamsEnabled_0)
+        {
+
+#line 1133
+            terminalEscapeSurface_0 = !captured_0;
+
+#line 1133
+        }
+        else
+        {
+
+#line 1133
+            terminalEscapeSurface_0 = false;
+
+#line 1133
+        }
+
+#line 1133
+    }
+
+#line 1133
+    if(terminalEscapeSurface_0)
+    {
+
+#line 1134
+        thread array<array<float, int(4)>, int(4)> terminalMetric_0;
+        thread array<array<float, int(4)>, int(4)> terminalInverse_0;
+        if(isWarp_2)
+        {
+
+#line 1136
+            thread Vec4Cart_0 _S1056 = (&state_12)->x_5;
+
+#line 1136
+            GetWarpDriveMetric_0(&_S1056, warpVs_2, warpSigma_2, warpR_2, 0.0, 0.0, 0.0, &terminalMetric_0, &terminalInverse_0);
+
+#line 1136
+        }
+        else
+        {
+            if(isWormhole_2)
+            {
+
+#line 1139
+                thread Vec4Cart_0 _S1057 = (&state_12)->x_5;
+
+#line 1139
+                GetMorrisThorneCartesianMetric_0(&_S1057, throatB0_2, 0.0, wormShape_5, &terminalMetric_0, &terminalInverse_0);
+
+#line 1139
+            }
+            else
+            {
+
+#line 1139
+                thread Vec4Cart_0 _S1058 = (&state_12)->x_5;
+
+#line 1139
+                GetKerrSchildFamilyMetric_0(&_S1058, M_17, a_26, Q_10, Lambda_10, &terminalMetric_0, &terminalInverse_0);
+
+#line 1139
+            }
+
+#line 1136
+        }
+
+#line 1146
+        float3 _S1059 = float3(1.0, 0.0, 0.0);
+        float3 _S1060 = float3(0.0, -1.0, 0.0);
+
+#line 1147
+        float3 _S1061 = float3(0.0) ;
+
+#line 1147
+        thread array<array<float, int(4)>, int(4)> _S1062 = terminalMetric_0;
+
+#line 1147
+        thread array<array<float, int(4)>, int(4)> _S1063 = terminalInverse_0;
+
+#line 1147
+        CameraObserverFrame_0 _S1064 = BuildCameraObserverFrame_0(&_S1062, &_S1063, _S1059, _S1060, _S1055, _S1061);
+
+#line 1147
+        thread array<array<float, int(4)>, int(4)> _S1065 = terminalMetric_0;
+
+#line 1147
+        thread Vec4Cart_0 _S1066 = (&state_12)->u_1;
+
+#line 1147
+        thread Vec4Cart_0 _S1067 = _S1064.time_0;
+
+#line 1147
+        float _S1068 = MetricDotCart_0(&_S1065, &_S1066, &_S1067);
+
+        if(isfinite(_S1068))
+        {
+
+#line 1149
+            terminalEscapeSurface_0 = _S1068 > 0.0;
+
+#line 1149
+        }
+        else
+        {
+
+#line 1149
+            terminalEscapeSurface_0 = false;
+
+#line 1149
+        }
+
+#line 1149
+        if(!terminalEscapeSurface_0)
+        {
+
+#line 1150
+            (&record_1)->control_0.x = 2U;
+
+#line 1150
+            (&record_1)->control_0.y = 9U;
+
+#line 1150
+            TraceContinuation_natural_0 device* _S1069 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 1150
+            _S1069->x_1 = packed_float4(record_1.x_1) ;
+
+#line 1150
+            _S1069->u_0 = packed_float4(record_1.u_0) ;
+
+#line 1150
+            (&_S1069->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 1150
+            (&_S1069->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 1150
+            (&_S1069->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 1150
+            (&_S1069->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 1150
+            (&_S1069->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 1150
+            (&_S1069->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 1150
+            (&_S1069->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 1150
+            (&_S1069->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 1150
+            _S1069->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 1150
+            _S1069->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 1150
+            _S1069->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 1150
+            _S1069->source_0 = packed_float4(record_1.source_0) ;
+
+#line 1150
+            _S1069->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 1150
+            _S1069->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 1150
+            _S1069->identity_0 = packed_uint4(record_1.identity_0) ;
+            return;
+        }
+
+#line 1151
+        thread array<array<float, int(4)>, int(4)> _S1070 = terminalMetric_0;
+
+#line 1151
+        thread Vec4Cart_0 _S1071 = (&state_12)->u_1;
+
+#line 1151
+        thread Vec4Cart_0 _S1072 = _S1064.forward_0;
+
+#line 1151
+        float _S1073 = MetricDotCart_0(&_S1070, &_S1071, &_S1072);
+
+
+        float _S1074 = _S1073 / _S1068;
+
+#line 1154
+        thread array<array<float, int(4)>, int(4)> _S1075 = terminalMetric_0;
+
+#line 1154
+        thread Vec4Cart_0 _S1076 = (&state_12)->u_1;
+
+#line 1154
+        thread Vec4Cart_0 _S1077 = _S1064.up_0;
+
+#line 1154
+        float _S1078 = MetricDotCart_0(&_S1075, &_S1076, &_S1077);
+
+        float _S1079 = _S1078 / _S1068;
+
+#line 1156
+        thread array<array<float, int(4)>, int(4)> _S1080 = terminalMetric_0;
+
+#line 1156
+        thread Vec4Cart_0 _S1081 = (&state_12)->u_1;
+
+#line 1156
+        thread Vec4Cart_0 _S1082 = _S1064.right_0;
+
+#line 1156
+        float _S1083 = MetricDotCart_0(&_S1080, &_S1081, &_S1082);
+
+#line 1153
+        float3 terminalDirection_0 = normalize(float3(_S1074, _S1079, _S1083 / _S1068));
+
+#line 1159
+        if(!all(isfinite(terminalDirection_0)))
+        {
+
+#line 1160
+            (&record_1)->control_0.x = 2U;
+
+#line 1160
+            (&record_1)->control_0.y = 9U;
+
+#line 1160
+            TraceContinuation_natural_0 device* _S1084 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 1160
+            _S1084->x_1 = packed_float4(record_1.x_1) ;
+
+#line 1160
+            _S1084->u_0 = packed_float4(record_1.u_0) ;
+
+#line 1160
+            (&_S1084->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 1160
+            (&_S1084->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 1160
+            (&_S1084->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 1160
+            (&_S1084->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 1160
+            (&_S1084->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 1160
+            (&_S1084->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 1160
+            (&_S1084->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 1160
+            (&_S1084->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 1160
+            _S1084->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 1160
+            _S1084->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 1160
+            _S1084->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 1160
+            _S1084->source_0 = packed_float4(record_1.source_0) ;
+
+#line 1160
+            _S1084->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 1160
+            _S1084->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 1160
+            _S1084->identity_0 = packed_uint4(record_1.identity_0) ;
+            return;
+        }
+        if(oppositeSheet_0)
+        {
+
+#line 1163
+            float3 _S1085;
+
+#line 1163
+            thread Vec4Cart_0 _S1086 = (&state_12)->x_5;
+            thread float3 mappedDirection_1;
+
+#line 1164
+            bool _S1087 = MapEllisSecondSheetSkyDirection_0(&_S1086, terminalDirection_0, &mappedDirection_1);
+            if(_S1087)
+            {
+
+#line 1165
+                _S1085 = normalize(mappedDirection_1);
+
+#line 1165
+            }
+            else
+            {
+
+                (&record_1)->control_0.x = 2U;
+                (&record_1)->control_0.y = 6U;
+
+#line 1170
+                TraceContinuation_natural_0 device* _S1088 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 1170
+                _S1088->x_1 = packed_float4(record_1.x_1) ;
+
+#line 1170
+                _S1088->u_0 = packed_float4(record_1.u_0) ;
+
+#line 1170
+                (&_S1088->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 1170
+                (&_S1088->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 1170
+                (&_S1088->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 1170
+                (&_S1088->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 1170
+                (&_S1088->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 1170
+                (&_S1088->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 1170
+                (&_S1088->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 1170
+                (&_S1088->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 1170
+                _S1088->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 1170
+                _S1088->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 1170
+                _S1088->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 1170
+                _S1088->source_0 = packed_float4(record_1.source_0) ;
+
+#line 1170
+                _S1088->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 1170
+                _S1088->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 1170
+                _S1088->identity_0 = packed_uint4(record_1.identity_0) ;
+
+                return;
+            }
+
+#line 1172
+            screenDirection_1 = _S1085;
+
+#line 1163
+        }
+        else
+        {
+
+#line 1163
+            screenDirection_1 = terminalDirection_0;
+
+#line 1163
+        }
+
+#line 1163
+        thread CameraObserverFrame_0 _S1089 = _S1064;
+
+#line 1175
+        thread Vec4Cart_0 terminalScreenA_0;
+        thread Vec4Cart_0 terminalScreenB_0;
+
+#line 1176
+        SachsScreenBasis_0(&_S1089, screenDirection_1, &terminalScreenA_0, &terminalScreenB_0);
+
+        if(pointStarfieldEnabled_0)
+        {
+
+#line 1178
+            step_2 = int(0);
+
+#line 1178
+        }
+        else
+        {
+
+#line 1178
+            step_2 = int(2);
+
+#line 1178
+        }
+        Vec4Cart_0 xiACart_0 = TraceUnpack_0(X_1[step_2]);
+        Vec4Cart_0 xiBCart_0 = TraceUnpack_0(X_1[step_2 + int(1)]);
+
+#line 1180
+        thread array<array<float, int(4)>, int(4)> _S1090 = terminalMetric_0;
+
+#line 1180
+        thread Vec4Cart_0 _S1091 = xiACart_0;
+
+#line 1180
+        thread Vec4Cart_0 _S1092 = terminalScreenA_0;
+
+#line 1180
+        float _S1093 = MetricDotCart_0(&_S1090, &_S1091, &_S1092);
+
+#line 1180
+        thread array<array<float, int(4)>, int(4)> _S1094 = terminalMetric_0;
+
+#line 1180
+        thread Vec4Cart_0 _S1095 = xiBCart_0;
+
+#line 1180
+        thread Vec4Cart_0 _S1096 = terminalScreenA_0;
+
+#line 1180
+        float _S1097 = MetricDotCart_0(&_S1094, &_S1095, &_S1096);
+
+#line 1180
+        thread array<array<float, int(4)>, int(4)> _S1098 = terminalMetric_0;
+
+#line 1180
+        thread Vec4Cart_0 _S1099 = xiACart_0;
+
+#line 1180
+        thread Vec4Cart_0 _S1100 = terminalScreenB_0;
+
+#line 1180
+        float _S1101 = MetricDotCart_0(&_S1098, &_S1099, &_S1100);
+
+#line 1180
+        thread array<array<float, int(4)>, int(4)> _S1102 = terminalMetric_0;
+
+#line 1180
+        thread Vec4Cart_0 _S1103 = xiBCart_0;
+
+#line 1180
+        thread Vec4Cart_0 _S1104 = terminalScreenB_0;
+
+#line 1180
+        float _S1105 = MetricDotCart_0(&_S1102, &_S1103, &_S1104);
+
+#line 1185
+        thread float beamSemiMajor_0;
+        thread float beamSemiMinor_0;
+        thread float beamDeterminant_0;
+        BeamEllipseFromTransverseMap_0(_S1093, _S1097, _S1101, _S1105, &beamSemiMajor_0, &beamSemiMinor_0, &beamOrientation_0, &beamDeterminant_0);
+
+
+
+        float terminalRadius_0 = length(float3((&(&state_12)->x_5)->x_2, (&(&state_12)->x_5)->y_0, (&(&state_12)->x_5)->z_0));
+
+        if(pointStarfieldEnabled_0)
+        {
+
+#line 1194
+            pupilUp_1 = max(terminalRadius_0 * 0.00100000004749745, 9.999999960041972e-13);
+
+#line 1194
+        }
+        else
+        {
+
+#line 1194
+            pupilUp_1 = 0.00100000004749745;
+
+#line 1194
+        }
+
+        float beamMajorExpansion_0 = beamSemiMajor_0 / pupilUp_1;
+        float beamMinorExpansion_0 = beamSemiMinor_0 / pupilUp_1;
+        float _S1106 = sqrt(max(beamMajorExpansion_0 * beamMinorExpansion_0, 0.0));
+
+#line 1198
+        pupilUp_1 = beamMajorExpansion_0;
+
+#line 1198
+        pupilRight_1 = beamMinorExpansion_0;
+
+#line 1198
+        lastStep_3 = _S1106;
+
+#line 1133
+    }
+    else
+    {
+
+#line 1133
+        screenDirection_1 = _S1055;
+
+#line 1133
+        pupilUp_1 = 1.0;
+
+#line 1133
+        pupilRight_1 = 1.0;
+
+#line 1133
+        lastStep_3 = 1.0;
+
+#line 1133
+    }
+
+#line 1204
+    if(escaped_0)
+    {
+
+        if(beamsEnabled_0)
+        {
+
+#line 1207
+            affineLength_9 = max(pixelAngularSize_0 * pupilUp_1, pixelAngularSize_0);
+
+#line 1207
+        }
+        else
+        {
+
+#line 1207
+            affineLength_9 = 0.30000001192092896 * pixelAngularSize_0;
+
+#line 1207
+        }
+
+
+        if(beamsEnabled_0)
+        {
+
+#line 1210
+            exoticScale_0 = max(pixelAngularSize_0 * pupilRight_1, pixelAngularSize_0);
+
+#line 1210
+        }
+        else
+        {
+
+#line 1210
+            exoticScale_0 = 0.30000001192092896 * pixelAngularSize_0;
+
+#line 1210
+        }
+
+
+        if(pointStarfieldEnabled_0)
+        {
+
+#line 1213
+            float3 _S1107 = SamplePointStarfield_0(screenDirection_1, affineLength_9, exoticScale_0, beamOrientation_0, pointBrightnessScale_0, &kernelContext_6);
+
+#line 1213
+            color_4 = _S1107;
+
+#line 1213
+        }
+        else
+        {
+            if(starfieldEnabled_0)
+            {
+
+#line 1216
+                float3 _S1108 = SampleStarfield_0(screenDirection_1, starfieldWidth_0, starfieldHeight_0, &kernelContext_6);
+
+#line 1216
+                screenDirection_1 = _S1108;
+
+#line 1216
+            }
+            else
+            {
+
+#line 1216
+                screenDirection_1 = SampleBackgroundGradient_0(screenDirection_1);
+
+#line 1216
+            }
+
+#line 1216
+            color_4 = screenDirection_1;
+
+#line 1213
+        }
+
+#line 1213
+        color_4 = color_3 + float3(transmittance_0)  * color_4;
+
+#line 1204
+    }
+    else
+    {
+
+#line 1204
+        color_4 = color_3;
+
+#line 1204
+    }
+
+#line 1220
+    if(volumeOpticalDepth_0 > 0.0)
+    {
+
+#line 1220
+        color_4 = color_4 * float3(exp(- volumeOpticalDepth_0))  + volumeEmission_0;
+
+#line 1220
+    }
+
+#line 1228
+    if(beamsEnabled_0)
+    {
+
+#line 1228
+        escaped_0 = !captured_0;
+
+#line 1228
+    }
+    else
+    {
+
+#line 1228
+        escaped_0 = false;
+
+#line 1228
+    }
+
+#line 1228
+    if(escaped_0)
+    {
+
+#line 1228
+        affineLength_9 = lastStep_3;
+
+#line 1228
+    }
+    else
+    {
+
+#line 1228
+        affineLength_9 = 1.0;
+
+#line 1228
+    }
+
+#line 1233
+    if(sampleIndex_0 > 0.5)
+    {
+        float inverseCount_0 = 1.0 / (sampleIndex_0 + 1.0);
+        int _S1109 = _S881 * int(4);
+
+
+
+        float3 _S1110 = (float3(*((&kernelContext_6)->radiance_0+_S1109), *((&kernelContext_6)->radiance_0+(_S1109 + int(1))), *((&kernelContext_6)->radiance_0+(_S1109 + int(2)))) * float3(sampleIndex_0)  + color_4) * float3(inverseCount_0) ;
+
+#line 1240
+        affineLength_9 = (*((&kernelContext_6)->radiance_0+(_S1109 + int(3))) * sampleIndex_0 + affineLength_9) * inverseCount_0;
+
+#line 1240
+        color_4 = _S1110;
+
+#line 1233
+    }
+
+#line 1243
+    if(!all(isfinite(color_4)))
+    {
+
+#line 1243
+        escaped_0 = true;
+
+#line 1243
+    }
+    else
+    {
+
+#line 1243
+        escaped_0 = !isfinite(affineLength_9);
+
+#line 1243
+    }
+
+#line 1243
+    if(escaped_0)
+    {
+
+#line 1244
+        (&record_1)->control_0.x = 2U;
+
+#line 1244
+        (&record_1)->control_0.y = 9U;
+
+#line 1244
+        TraceContinuation_natural_0 device* _S1111 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 1244
+        _S1111->x_1 = packed_float4(record_1.x_1) ;
+
+#line 1244
+        _S1111->u_0 = packed_float4(record_1.u_0) ;
+
+#line 1244
+        (&_S1111->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 1244
+        (&_S1111->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 1244
+        (&_S1111->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 1244
+        (&_S1111->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 1244
+        (&_S1111->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 1244
+        (&_S1111->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 1244
+        (&_S1111->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 1244
+        (&_S1111->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 1244
+        _S1111->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 1244
+        _S1111->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 1244
+        _S1111->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 1244
+        _S1111->source_0 = packed_float4(record_1.source_0) ;
+
+#line 1244
+        _S1111->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 1244
+        _S1111->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 1244
+        _S1111->identity_0 = packed_uint4(record_1.identity_0) ;
+        return;
+    }
+    int _S1112 = _S881 * int(4);
+
+#line 1247
+    *((&kernelContext_6)->radiance_0+_S1112) = color_4.x;
+    *((&kernelContext_6)->radiance_0+(_S1112 + int(1))) = color_4.y;
+    *((&kernelContext_6)->radiance_0+(_S1112 + int(2))) = color_4.z;
+    *((&kernelContext_6)->radiance_0+(_S1112 + int(3))) = affineLength_9;
+    (&record_1)->control_0.x = 3U;
+
+#line 1251
+    TraceContinuation_natural_0 device* _S1113 = (&kernelContext_6)->continuation_0+slot_0;
+
+#line 1251
+    _S1113->x_1 = packed_float4(record_1.x_1) ;
+
+#line 1251
+    _S1113->u_0 = packed_float4(record_1.u_0) ;
+
+#line 1251
+    (&_S1113->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+
+#line 1251
+    (&_S1113->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+
+#line 1251
+    (&_S1113->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+
+#line 1251
+    (&_S1113->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+
+#line 1251
+    (&_S1113->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+
+#line 1251
+    (&_S1113->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+
+#line 1251
+    (&_S1113->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+
+#line 1251
+    (&_S1113->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+
+#line 1251
+    _S1113->compX_0 = packed_float4(record_1.compX_0) ;
+
+#line 1251
+    _S1113->compU_0 = packed_float4(record_1.compU_0) ;
+
+#line 1251
+    _S1113->integration_0 = packed_float4(record_1.integration_0) ;
+
+#line 1251
+    _S1113->source_0 = packed_float4(record_1.source_0) ;
+
+#line 1251
+    _S1113->volume_0 = packed_float4(record_1.volume_0) ;
+
+#line 1251
+    _S1113->control_0 = packed_uint4(record_1.control_0) ;
+
+#line 1251
+    _S1113->identity_0 = packed_uint4(record_1.identity_0) ;
+
+    return;
+}
+

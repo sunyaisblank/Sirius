@@ -1,0 +1,263 @@
+{
+  "claim_limits": [
+    "No new workload, helper, parser, compiler, provider or device execution; only passive source/Git/JSON/ZIP reads.",
+    "No numerical correctness or full-frame performance qualification; no scalar-estimate deadline inference.",
+    "No proved complete CI root cause or high-value deadline repair. Padding is a bounded source-level work candidate, not an adopted repair.",
+    "Floor repair and old staged legacy trace mismatch are outside this Kerr retained path and do not explain its timeout."
+  ],
+  "examined_sources_equal_original_CI5b5": true,
+  "existing_check_authority_not_executed_here": [
+    {
+      "case": "RetainedComputeTest.ProjectionReserveKeepsLogicalCohortsBounded",
+      "covers": "Logical cohorts/projection reserve, controlled feedback reduction, actual prefix histograms and accepted physical rows.",
+      "source": "tests/backend/retained_compute_test.cpp:4749"
+    },
+    {
+      "case": "RetainedComputeTest.SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState",
+      "covers": "Mixed flat/curved real traces, exact initialization count/reuse, rollback, nested trace registration, coalescing/first-request counters and private serialized safety retry.",
+      "source": "tests/backend/retained_compute_test.cpp:4883"
+    },
+    {
+      "case": "RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback",
+      "covers": "Six zero-active preparation stages, header restoration, no physical-accounting contamination and owner buffer preservation.",
+      "source": "tests/backend/retained_compute_test.cpp:1684"
+    },
+    {
+      "case": "RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates",
+      "covers": "Malformed rows, empty/partial candidate refusal and subsequent recovery.",
+      "source": "tests/backend/retained_compute_test.cpp:5790"
+    },
+    {
+      "case": "VulkanRenderSession.ContinuationRendererPublishesOnlyCompleteFramesWithinActualBudget",
+      "covers": "Original finite flat-frame radiance/publication/residency/counters, compatible-owner reuse and error/cancellation recovery. Its8\u00b2flat/4SPP fixture is not the original128\u00b2Kerr deadline.",
+      "source": "tests/render/vulkan_render_test.cpp:1343"
+    }
+  ],
+  "last_available_snapshot_not_frame_totals": {
+    "accepted_interval_rows": 85421,
+    "batch_subdivisions": 0,
+    "camera_batches": 278,
+    "coalescing_seconds": 0.255509,
+    "completed_first_request_wait_ms": 272.343981,
+    "completed_first_request_waits": 9,
+    "completed_pixels": 403,
+    "initialize_inclusive_dispatch_ms": 750.39112,
+    "initialize_raw_completion_flags": {
+      "one": 467,
+      "other": 0,
+      "zero": 16459
+    },
+    "initialized_phases": 467,
+    "rejected_interval_rows": 3854,
+    "requested_pixels": 16384,
+    "reused_phases": 88871,
+    "safety_reductions": 0,
+    "samples_per_pixel": 1,
+    "scope": "Last completed-batch progress snapshot before timeout; unfinished device work and frame tail are not included. No403\u219216384 extrapolation, per-pixel cost or complete-frame runtime bound.",
+    "separate_software_preparation_wall_seconds": 43.1,
+    "serialized_batch_execution_seconds": 238.427,
+    "shared_endpoint_dense_submissions": 0,
+    "snapshots": 8,
+    "stage_submit_wait_ms": {
+      "dopri_phase": 36557.920067,
+      "endpoint": 91258.207468,
+      "initialize": 743.791436,
+      "transport": 99105.82428
+    },
+    "summed_worker_acceleration_seconds": 1.11217
+  },
+  "lineage": {
+    "prior_archive_manifest": {
+      "bytes": 1692,
+      "path": "attestations/software-vulkan/4498cc4/original-cold-kerr-source-review/manifest.json",
+      "sha256": "0af4cbb5f1aecd42b9b07fbc6a57cfbd4c42b95032dbed902343981b396e9699"
+    },
+    "prior_source_finding": {
+      "bytes": 17129,
+      "path": "attestations/software-vulkan/4498cc4/original-cold-kerr-source-review/files/out/minimum-step-floor-original-cold-kerr/source-findings.json",
+      "sha256": "19b87984d03d6d5dc92f7a88dcf9c3a24c679bd969202e01ae2210979b8fef10"
+    },
+    "prior_source_review_commit": "7b77778d89589c6775b5512016db958a19a36ef1",
+    "raw_evidence": {
+      "archive": "attestations/qualification/5b5fad9/linux-gate-incomplete-38577826600",
+      "log_member": {
+        "bytes": 315351,
+        "name": "bin/linux-ci/generated/sirius/mandatory_gate_ctest.log",
+        "sha256": "2ef5acd4f53bec06c822ac3659c1e9dc219361b0310da08cff5dbd92ea9ef522"
+      },
+      "terminal": "Timeout300.01seconds",
+      "test": "OperationalVulkan.RequiredRuntimeDispatch",
+      "test_number": 25,
+      "whole_zip": {
+        "bytes": 42282,
+        "mtime_ns": 1792008650629842624,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/qualification/5b5fad9/linux-gate-incomplete-38577826600/files/out/native-provider-integration/full-ci-38577826600/linux-gate/gate-diagnostics.zip",
+        "sha256": "5545fa4a05902a266eb2d60e485772a011d44bcdf2d552a88de3ddd8589dd734"
+      }
+    }
+  },
+  "no_launch_prepared": true,
+  "ownership_and_existing_reuse": {
+    "authorities": [
+      {
+        "file": "src/sirius/render/vulkan_renderer.cpp",
+        "line": 432,
+        "meaning": "Lease one idle device+compute pair without holding the cache lock during device work; incompatible state retires both."
+      },
+      {
+        "file": "src/sirius/render/vulkan_renderer.cpp",
+        "line": 900,
+        "meaning": "Only successful completed render retains owner; failures/cancellation retire it."
+      },
+      {
+        "file": "src/sirius/backend/retained_trace_executor.cpp",
+        "line": 56,
+        "meaning": "Destructor stops and joins dispatcher."
+      },
+      {
+        "file": "src/sirius/backend/retained_trace_executor.cpp",
+        "line": 599,
+        "meaning": "Already reuses exact before/after retained phases; rejection invalidates finish without losing original start."
+      },
+      {
+        "file": "src/sirius/backend/retained_trace_executor.cpp",
+        "line": 717,
+        "meaning": "Untransformed exact DP endpoints already bypass sampling dispatch."
+      }
+    ],
+    "do_not_misclassify": "Two Session startup logs are outer Vulkan orchestration and inner physical tracer session, not two proven full-frame executions. Software six-stage zero-active preparation is separately charged and covered by original contracts.",
+    "finding": "No ownership defect established in the bounded reviewed path."
+  },
+  "schema": "sirius-original-cold-kerr-retained-source-attribution-v1",
+  "source_only": true,
+  "source_pins": {
+    "src/sirius/backend/retained_compute.cpp": {
+      "bytes": 45570,
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    },
+    "src/sirius/backend/retained_integrator.cpp": {
+      "bytes": 36518,
+      "path": "src/sirius/backend/retained_integrator.cpp",
+      "sha256": "1e650958d952afab60cebe9a871d8a85b819f15bd87632cde73731313dfdb4da"
+    },
+    "src/sirius/backend/retained_trace_executor.cpp": {
+      "bytes": 37539,
+      "path": "src/sirius/backend/retained_trace_executor.cpp",
+      "sha256": "0a8026051c7273c47e695b0b7e4e9e6830e0105dea5ce2ef0b588cfa2570c9a7"
+    },
+    "src/sirius/backend/retained_trace_executor.h": {
+      "bytes": 8765,
+      "path": "src/sirius/backend/retained_trace_executor.h",
+      "sha256": "ddb502e05c8f53cce27727bcbf7b986044ca1ad8430bdcad6c349d78590d3574"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 56500,
+      "path": "src/sirius/backend/vulkan/vulkan_device.cpp",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    "src/sirius/render/session/pixel_shading.cpp": {
+      "bytes": 28624,
+      "path": "src/sirius/render/session/pixel_shading.cpp",
+      "sha256": "c45315f30a7cb6eecba8129a0d5f3d37d3dc9ae24f44f5b7d142342eff77c26d"
+    },
+    "src/sirius/render/session/render_session.cpp": {
+      "bytes": 53666,
+      "path": "src/sirius/render/session/render_session.cpp",
+      "sha256": "75fb4ac58f2e0ddb89a5f4053ed5372af2753f8592f0fa7eb76e15522530af1e"
+    },
+    "src/sirius/render/vulkan_renderer.cpp": {
+      "bytes": 74538,
+      "path": "src/sirius/render/vulkan_renderer.cpp",
+      "sha256": "f4a7b2e9e702369e1f740957485f1e5bc6ba8cf18ae4fa068dccb7876bf669e5"
+    },
+    "tests/backend/retained_compute_test.cpp": {
+      "bytes": 339892,
+      "path": "tests/backend/retained_compute_test.cpp",
+      "sha256": "abdc5cef56aa3a4409209797b37794553400b855b534204af6cabe583c4fdee1"
+    },
+    "tests/render/vulkan_render_test.cpp": {
+      "bytes": 78622,
+      "path": "tests/render/vulkan_render_test.cpp",
+      "sha256": "0a27b7ff7219d7904b18541c25fb94b563a22ce6a739b7667c03128d18a4efcc"
+    }
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "supported_conclusions": [
+    {
+      "bounds": "238.427s batch execution versus0.255509s coalescing and0.272344s completed empty-queue waits.1.11217s acceleration is summed overlapping worker wall; it must not be subtracted as an exclusive frame component.",
+      "finding": "This observed timeout is dominated by serialized retained batch/device-submit-wait work; the receipt does not support coalescing delay, empty dispatcher queues, worker acceleration or governor reductions as its dominant cost.",
+      "source": [
+        {
+          "file": "src/sirius/backend/retained_trace_executor.cpp",
+          "line": 115,
+          "meaning": "One dispatcher drains gathered requests and runs Execute synchronously."
+        },
+        {
+          "file": "src/sirius/backend/retained_trace_executor.cpp",
+          "line": 154,
+          "meaning": "At most1ms predicate coalescing window; actual waits are separately observed."
+        },
+        {
+          "file": "src/sirius/render/vulkan_renderer.cpp",
+          "line": 576,
+          "meaning": "Completed-batch snapshots log separate cumulative stage and host observations."
+        },
+        {
+          "file": "src/sirius/backend/vulkan/vulkan_device.cpp",
+          "line": 1158,
+          "meaning": "Actual queue submit/wait timing is a host window, not isolated hardware execution or driver compile attribution."
+        }
+      ]
+    },
+    {
+      "bounds_and_risks": "The whole Initialize stage costs0.750391s at this snapshot, bounding its own removable portion. Extra initial-Endpoint padding is included within the91.537s whole Endpoint dispatch window and is not separately timed. No total padding speedup or deadline closure is established. Index ownership, per-row metric/chart, cached retained limbs/radii, invalid/refused rows, cancellation/error fanout and actual submission accounting must remain exact.",
+      "finding": "A mixed gathered interval batch containing n requests but only m missing starts sends all n rows through Initialize and initial Endpoint; n\u2212m placeholders are unused because cached starts are retained.",
+      "observed_support": "Latest initialization readbacks have16459zero/467one flags and467 logical initializations. This is consistent with the source-established inactive-row padding; a zero flag is not a rejected physical interval.",
+      "possible_narrow_correction_not_implemented": "Compact only missing-start indices, initialize/project that subset, then scatter to the same request slots while retaining every cached phase and original interval computation.",
+      "source": [
+        {
+          "file": "src/sirius/backend/retained_trace_executor.cpp",
+          "line": 417,
+          "meaning": "Full-size default initialization packet vector, filled only for missing starts."
+        },
+        {
+          "file": "src/sirius/backend/retained_trace_executor.cpp",
+          "line": 425,
+          "meaning": "Initialize(full vector); Endpoint(full vector) at440; assign results only to missing starts at446."
+        },
+        {
+          "file": "src/sirius/backend/retained_compute.cpp",
+          "line": 808,
+          "meaning": "Initialize dispatches/readbacks inputs.size rows, counting actual prefix and raw invalid completion flags."
+        }
+      ]
+    },
+    {
+      "finding": "The plan reserves128 projection slots but at most64 logical ray workers/cohort rows for this original frame; one dispatcher serves their synchronous camera/interval/sample requests.",
+      "limits": "This is an intentional residency/projection reservation, not a demonstrated bug or authorization to increase concurrency/budgets. Software preparation and current ray limits remain required.",
+      "source": [
+        {
+          "file": "src/sirius/render/vulkan_renderer.cpp",
+          "line": 368,
+          "meaning": "desired_rays=min(64,work_count*rays_per_work); capacity up to2*desired_rays."
+        },
+        {
+          "file": "src/sirius/render/vulkan_renderer.cpp",
+          "line": 551,
+          "meaning": "Executor maximum logical rows=ray_capacity and inner RenderSession workers=ray_capacity."
+        },
+        {
+          "file": "src/sirius/backend/retained_trace_executor.cpp",
+          "line": 119,
+          "meaning": "Gather limit=min(logical maximum,batch limit)."
+        }
+      ]
+    }
+  ],
+  "unchanged_obligations": [
+    "Original cold128x128/1SPP Kerr300s deadline,4GiB outer/2GiB reserve, cacheoff, all governor limits, refusal/rollback and complete output assertions.",
+    "Original independent physical errors/three RK trials/full40-field+4column contracts; no tolerances, radii, work settings or scientific assertions relaxed.",
+    "No unchanged failed-frame retry; only actual material retained-path/provider change and admitted current producer can justify another attempt."
+  ]
+}
