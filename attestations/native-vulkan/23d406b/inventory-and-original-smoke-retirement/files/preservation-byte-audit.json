@@ -1,0 +1,62 @@
+{
+  "schema": "sirius-native-windows-preservation-byte-audit-v1",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "tag": "evidence/issue-48-native-windows-inventory-smoke-23d406b",
+  "commit": "6ef5828147c16395ca2bff4aeca6b662215b0918",
+  "all80_preserved_local_named_git_bytes_match": true,
+  "owned_runtime_files_verified": 78,
+  "current_runtime_input_references_checked": {
+    "named_git": 84,
+    "this_preserved_packet": 8,
+    "observed_host_input_only": 3
+  },
+  "fresh_linux_recorded_births_absent": [
+    {
+      "kind": "inventory-bridge.json:linux_controller",
+      "pid": 543430,
+      "recorded_start_ticks": "10193679",
+      "current_start_ticks": null,
+      "recorded_birth_absent": true
+    },
+    {
+      "kind": "inventory-bridge.json:linux_child",
+      "pid": 543433,
+      "recorded_start_ticks": "10193713",
+      "current_start_ticks": null,
+      "recorded_birth_absent": true
+    },
+    {
+      "kind": "terminal-inventory-bridge.json:linux_child",
+      "pid": 548564,
+      "recorded_start_ticks": "10198670",
+      "current_start_ticks": null,
+      "recorded_birth_absent": true
+    },
+    {
+      "kind": "smoke-bridge.json:linux_controller",
+      "pid": 550966,
+      "recorded_start_ticks": "10203571",
+      "current_start_ticks": null,
+      "recorded_birth_absent": true
+    },
+    {
+      "kind": "smoke-bridge.json:linux_child",
+      "pid": 550971,
+      "recorded_start_ticks": "10203618",
+      "current_start_ticks": null,
+      "recorded_birth_absent": true
+    },
+    {
+      "kind": "terminal-smoke-bridge.json:linux_child",
+      "pid": 557854,
+      "recorded_start_ticks": "10209604",
+      "current_start_ticks": null,
+      "recorded_birth_absent": true
+    }
+  ],
+  "fresh_native_recorded_births_absent": 6,
+  "native_fresh_query_receipt": "fresh-native-retirement.json",
+  "remote_source_and_evidence_exact": true,
+  "audit_seconds": 1.8651746700052172,
+  "full_qualification_claimed": false
+}
