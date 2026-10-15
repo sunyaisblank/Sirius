@@ -1,0 +1,58 @@
+--- 45a/camera_profile.py
++++ reader-recovery/camera_profile.py
+@@ -94,16 +94,32 @@
+     divides=[k for k in local if word(k)[:2]==['OpFDiv',f32]]
+     assert len(divides)==2
+     entry=next(iter(blocks))
+-    dom={label:({entry} if label==entry else set(blocks)) for label in blocks}
+-    for _ in range(len(blocks)+1):
+-        changed=False
+-        for label in blocks:
+-            if label==entry:continue
+-            assert pred[label]
+-            new={label}|set.intersection(*(dom[p] for p in pred[label]))
+-            if dom[label]!=new:dom[label]=new;changed=True
+-        if not changed:break
+-    else:raise AssertionError('camera dominance did not converge')
++    # Exact dominance queries with O(V+E) transient memory rather than one
++    # near-full block set for every block. Query results alone are cached.
++    successors={label:set() for label in blocks}
++    for target,parents in pred.items():
++        for parent in parents:successors[parent].add(target)
++    def can_reach(target,removed=None):
++        assert target in blocks and (removed is None or removed in blocks)
++        if entry==removed or target==removed:return False
++        pending=[entry];seen={entry}
++        while pending:
++            current=pending.pop()
++            if current==target:return True
++            for nxt in successors[current]:
++                if nxt!=removed and nxt not in seen:
++                    seen.add(nxt);pending.append(nxt)
++        return False
++    reachable_queries={};dominance_queries={}
++    def reachable(target):
++        if target not in reachable_queries:reachable_queries[target]=can_reach(target)
++        return reachable_queries[target]
++    def dominates(dominator,target):
++        assert reachable(dominator) and reachable(target)
++        key=(dominator,target)
++        if key not in dominance_queries:
++            dominance_queries[key]=(dominator==entry or dominator==target or not can_reach(target,dominator))
++        return dominance_queries[key]
+     rows=[]
+     for divide in divides:
+         assert re.search(r'OpDecorate '+re.escape(divide)+r' NoContraction(?:\s|$)',candidate)
+@@ -168,10 +184,10 @@
+         assert choices[origin(borrow)]['entry']==where[rlo] and choices[origin(borrow)]['merge']==where[rhi]
+         first=choices[origin(steps[0]['mask'])]['entry'];true_arm(verified,first)
+         success=where[jam]
+-        assert where[guard] in dom[success] and where[product] in dom[success] and where[verified] in dom[success]
++        assert dominates(where[guard],success) and dominates(where[product],success) and dominates(where[verified],success)
+         for step in steps:
+             c=choices[origin(step['mask'])]
+-            assert c['entry'] in dom[success] and c['merge'] in dom[success]
++            assert dominates(c['entry'],success) and dominates(c['merge'],success)
+         assert any(binary(k,'OpIEqual',same(jam),num(0),True) for k in local)  # Original inlined Round zero gate.
+         rows.append({'proposal':divide,'normalization_predicate':norm,'base':base,'normalized_m':m,'denominator':d,'guard':guard,'guess':guess,'product':product,'numerator_words':[nlo,nhi],'residual_words':[rlo,rhi],'verified':verified,'steps':steps,'q':q,'sticky':sticky,'jam':jam,'closed_guard_and_restoring_dataflow':True})
+     signature=integer_division_signature(candidate)

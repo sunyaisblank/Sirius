@@ -1,0 +1,26 @@
+{
+  "exact_reversal": {
+    "camera_profile.py": [
+      {
+        "new": "    # Exact dominance queries with O(V+E) transient memory rather than one\n    # near-full block set for every block. Query results alone are cached.\n    successors={label:set() for label in blocks}\n    for target,parents in pred.items():\n        for parent in parents:successors[parent].add(target)\n    def can_reach(target,removed=None):\n        assert target in blocks and (removed is None or removed in blocks)\n        if entry==removed or target==removed:return False\n        pending=[entry];seen={entry}\n        while pending:\n            current=pending.pop()\n            if current==target:return True\n            for nxt in successors[current]:\n                if nxt!=removed and nxt not in seen:\n                    seen.add(nxt);pending.append(nxt)\n        return False\n    reachable_queries={};dominance_queries={}\n    def reachable(target):\n        if target not in reachable_queries:reachable_queries[target]=can_reach(target)\n        return reachable_queries[target]\n    def dominates(dominator,target):\n        assert reachable(dominator) and reachable(target)\n        key=(dominator,target)\n        if key not in dominance_queries:\n            dominance_queries[key]=(dominator==entry or dominator==target or not can_reach(target,dominator))\n        return dominance_queries[key]\n",
+        "old": "    dom={label:({entry} if label==entry else set(blocks)) for label in blocks}\n    for _ in range(len(blocks)+1):\n        changed=False\n        for label in blocks:\n            if label==entry:continue\n            assert pred[label]\n            new={label}|set.intersection(*(dom[p] for p in pred[label]))\n            if dom[label]!=new:dom[label]=new;changed=True\n        if not changed:break\n    else:raise AssertionError('camera dominance did not converge')\n"
+      },
+      {
+        "new": "        assert dominates(where[guard],success) and dominates(where[product],success) and dominates(where[verified],success)",
+        "old": "        assert where[guard] in dom[success] and where[product] in dom[success] and where[verified] in dom[success]"
+      },
+      {
+        "new": "            assert dominates(c['entry'],success) and dominates(c['merge'],success)",
+        "old": "            assert c['entry'] in dom[success] and c['merge'] in dom[success]"
+      }
+    ],
+    "products_profile.py": [
+      {
+        "new": "'stock_reuse':record(original_work/'stock-reuse-acceptance.json')",
+        "old": "'stock_reuse':record(W/'stock-reuse-acceptance.json')"
+      }
+    ]
+  },
+  "only_algorithm_changed": "Exact same dominance relation via linear-memory removed-node reachability; no arithmetic/Phi/type/signature or source-inlining predicate changed.",
+  "schema": "sirius-fp32-restoring-profile-reader-source-delta-v1"
+}

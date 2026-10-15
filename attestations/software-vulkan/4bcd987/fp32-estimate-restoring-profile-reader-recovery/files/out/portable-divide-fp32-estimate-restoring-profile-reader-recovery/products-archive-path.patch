@@ -1,0 +1,11 @@
+--- 45a/products_profile.py
++++ reader-recovery/products_profile.py
+@@ -118,7 +118,7 @@
+             assert inventory[row['header']][row['array']]==(T/mode/module).read_bytes(),(mode,module)
+     for name in ('retained_owner_layout.h', 'retained_owner_layout.slang'):
+         assert (canonical / name).read_bytes() == (T / 'stock' / name).read_bytes() == (T / 'candidate' / name).read_bytes()
+-    return {'passed': True, 'stock_reuse':record(W/'stock-reuse-acceptance.json'), 'modules': rows, 'headers': headers, 'changed_modules': 17, 'unchanged_modules': 18,
++    return {'passed': True, 'stock_reuse':record(original_work/'stock-reuse-acceptance.json'), 'modules': rows, 'headers': headers, 'changed_modules': 17, 'unchanged_modules': 18,
+             'main_arrays_changed': 17, 'main_arrays_unchanged': 23, 'owner_arrays_unchanged': 2,
+             'all_seven_tables_and_nonarray_ABI_constants_equal': True,
+             'scope': 'Complete original stock35+new candidate35/40+2/7tables source/profile evidence; separately owned compiler remains truthful if this reader refuses. No integrated numerical or benefit verdict.'}

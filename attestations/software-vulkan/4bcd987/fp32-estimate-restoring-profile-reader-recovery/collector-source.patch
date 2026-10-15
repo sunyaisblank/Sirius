@@ -1,0 +1,131 @@
+--- 45a-collector-baseline.py
++++ preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,119 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'fp32-estimate-restoring-profile-reader-recovery':
++    import stat
++    work=root/'out/portable-divide-fp32-estimate-restoring-profile-reader-recovery'
++    bundle=root/'attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-recovery'
++    tag='evidence/issue-44-fp32-estimate-restoring-profile-reader-recovery'
++    def profile_finish_record(path):
++        path=Path(path)
++        return dict(pin(path),mode=stat.S_IMODE(path.stat().st_mode),resolved_path=str(path.resolve(strict=True)),
++                    symlink_target=os.readlink(path) if path.is_symlink() else None)
++    def profile_finish_load(name):return json.loads((work/name).read_text())
++    frozen=profile_finish_load('source-freeze.json');assert len(frozen['pins'])==293
++    assert pin(work/'source-freeze.json')=={'bytes':173919,'sha256':'0609e5bb33fe037c8d6c37a684f4f55a916dd8f12f743df1673ba919be85be01'}
++    for name,expected in frozen['pins'].items():assert profile_finish_record(name)==expected,name
++    packet=profile_finish_load('packet.json');actions=profile_finish_load('actions.json')
++    assert set(actions)=={'read-full-profile'} and (work/'actions.json').read_bytes()==(work/'actions.unpinned.json').read_bytes()
++    action=actions['read-full-profile']
++    assert set(action)=={'kind','revision','argv','frozen_inputs','limits','scope','expected_exit','software_provider'}
++    assert type(action['expected_exit']) is int and action['expected_exit']==0 and action['software_provider'] is False
++    assert len(action['frozen_inputs'])==296
++    context=profile_finish_load('operator-context.json');assert context['revision']==parent
++    for key,name in [('source_freeze','source-freeze.json'),('actions','actions.json'),('preparation','preparation.json')]:assert context[key]==profile_finish_record(work/name)
++    folder=work/'read-full-profile';owner=profile_finish_load('read-full-profile/owner.json')
++    assert owner['status']=='terminal' and owner['passed'] and owner['child_exit']==0
++    assert owner['source']=={'revision':parent,'status':''} and owner['source_unchanged'] and owner['whole_inputs_unchanged']
++    assert owner['argv']==action['argv'] and owner['limits']==packet['limits']=={'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++    assert owner['stop_reason'] is None and owner['cleanup_errors']==[] and owner['remaining_owned_processes']==[] and owner['provider_mappings']==[]
++    assert owner['peak_sampled_rss_kib']<=4194304 and owner['minimum_sampled_available_kib']>=2097152
++    assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
++    assert (folder/'inputs-before.json').read_bytes()==(folder/'inputs-after.json').read_bytes()
++    before=profile_finish_load('read-full-profile/inputs-before.json');assert len(before)==834
++    for name,expected in before.items():
++        path=Path(name);path=root/path if not path.is_absolute() else path
++        assert set(expected)=={'bytes','sha256','resolved_path'}
++        assert {key:profile_finish_record(path)[key] for key in expected}==expected,name
++    for name in action['frozen_inputs']:
++        path=Path(name);key=str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
++        assert before[key]=={field:profile_finish_record(path)[field] for field in before[key]},name
++    seal=profile_finish_load('read-full-profile/output-seal.json');assert seal['label']=='read-full-profile'
++    for key,path in [('source_freeze',work/'source-freeze.json'),('operator_context',work/'operator-context.json'),('inputs_before',folder/'inputs-before.json')]:assert seal[key]==profile_finish_record(path)
++    assert len(packet['outputs'])==17 and seal['outputs']=={name:profile_finish_record(name) for name in packet['outputs']}
++    result=profile_finish_load('profile-result.json');acceptance=profile_finish_load('profile-acceptance.json')
++    assert result['passed'] and acceptance['passed']
++    assert result['schema']=='sirius-fp32-restoring-linear-memory-full-profile-result-v1'
++    assert acceptance['schema']=='sirius-fp32-restoring-linear-memory-full-profile-acceptance-v1'
++    for key,path in [('profile_result',work/'profile-result.json'),('reader_owner',folder/'owner.json'),('output_seal',folder/'output-seal.json')]:assert acceptance[key]==profile_finish_record(path)
++    assert acceptance['all35_modules_40main_2owner_arrays_7tables_accepted']
++    assert acceptance['named_graphs']==13 and acceptance['inlined_camera_footprints']==4
++    assert acceptance['new_disassembly_count']==16 and acceptance['reused_disassembly_count']==54
++    assert acceptance['original_reader_passed'] is False and acceptance['original_reader_child_exit']==-15 and acceptance['original_reader_promoted'] is False
++    assert result['original_failed_reader_promoted'] is False
++    assert not result['arithmetic_or_integrated_or_benefit_or_adoption_admitted'] and not acceptance['arithmetic_or_integrated_or_benefit_or_adoption_admitted']
++    chain=result['accepted_compiler_chain'];assert chain==acceptance['immutable_compiler_chain']
++    assert chain['accepted_candidate_products']==90 and chain['accepted_stock_products']==39
++    assert chain['original_reader_passed'] is False and chain['original_reader_child_exit']==-15 and chain['original_reader_stop_reason']=='diagnostic_sampled_rss_guard'
++    assert chain['partial_dump_prior_graph_acceptance'] is False and chain['historical467_source_and1113_maps_replayed_as_current'] is False
++    assert chain['immutable_manifest']==profile_finish_record(Path(packet['compiled_archive'])/'manifest.json')
++    generated={str(path):profile_finish_record(path) for path in (work/'analysis/candidate').glob('*.spvasm')}
++    assert len(generated)==16 and set(generated)==set(packet['new_assembly_outputs']) and result['new16_assembly']==generated
++    assert len(result['reused54_assembly'])==54 and result['reused54_assembly']==packet['saved_assembly']
++    profile=result['profile'];assert profile['passed'] and len(profile['modules'])==35
++    assert (profile['changed_modules'],profile['unchanged_modules'],profile['main_arrays_changed'],profile['main_arrays_unchanged'],profile['owner_arrays_unchanged'])==(17,18,17,23,2)
++    assert profile['all_seven_tables_and_nonarray_ABI_constants_equal']
++    assert {row['module'] for row in profile['modules']}==set(packet['module_names'])
++    assert sorted(row['module'] for row in profile['modules'] if row['changed'])==packet['changed_modules']
++    named=[];camera=[]
++    for row in profile['modules']:
++        assert row['complete_public_shared_type_layout_modes_and_ordered_barriers_equal']
++        for mode in ('stock','candidate'):
++            record=row[mode];assert {key:profile_finish_record(Path(record['resolved_path']))[key] for key in record}==record
++        if not row['changed']:continue
++        footprint=row['divide_footprint'];policy=footprint['persisted_compiler_policy_join']
++        assert policy['policy_completed_compiler_receipt_reused'] and policy['complete_assembler_readback_instructions_equal']>0
++        assert policy['original_RTE_lines_added']==(2 if row['module'].endswith('_normal_sum.spv') else 0)
++        if footprint['inlined_camera']:
++            camera.append(row['module']);assert len(footprint['sites'])==2 and policy['exact_annotation_inverse_count']==2
++            assert footprint['integer_division_and_loop_counts_unchanged'] and footprint['corrective_UDiv_absent']
++            for site in footprint['sites']:assert [step['shift'] for step in site['steps']]==[4,3,2,1,0] and site['closed_guard_and_restoring_dataflow']
++        else:
++            named.append(row['module']);graph=footprint['complete_named_Divide_graph'];assert policy['exact_annotation_inverse_count']==1
++            assert [step['shift'] for step in graph['restoring_steps']]==[4,3,2,1,0]
++            for field in ('corrective_UDiv_absent','only_original_fallback_UDiv_remains','original_complete_prefix_normalized_equal','original_complete_fallback_suffix_normalized_equal','original_common_round_sign_exponent_join','exact_new_region_instruction_and_block_coverage'):assert graph[field]
++    assert len(named)==13 and len(camera)==4
++    assert sorted(profile['headers']['retained_kernels.h']['changed_arrays'])==packet['changed_arrays']
++    assert profile['headers']['retained_owner_kernels.h']['changed_arrays']==[]
++    independent=profile_finish_load('independent-terminal-review.json');admission=profile_finish_load('root-terminal-admission.json')
++    assert independent['passed'] and admission['passed'] and admission['source_revision']==parent
++    for key,path in [('independent_terminal_review',work/'independent-terminal-review.json'),('profile_acceptance',work/'profile-acceptance.json'),
++                     ('profile_result',work/'profile-result.json'),('reader_owner',folder/'owner.json'),('output_seal',folder/'output-seal.json'),
++                     ('root_terminal_joins',work/'root-terminal-joins.json')]:assert admission[key]==profile_finish_record(path)
++    assert profile_finish_load('root-source-admission.json')['passed'] and profile_finish_load('independent-source-review.json')['passed']
++    fresh=[]
++    for birth in owner['observed_births']:
++        process=Path('/proc')/str(birth['pid'])/'stat'
++        try:current_ticks=process.read_text().rsplit(')',1)[1].split()[19]
++        except (FileNotFoundError,ProcessLookupError):current_ticks=None
++        assert current_ticks is None or str(current_ticks)!=str(birth['saved_start_ticks'])
++        fresh.append({'pid':birth['pid'],'saved_start_ticks':str(birth['saved_start_ticks']),'current_start_ticks':current_ticks,'saved_birth_absent':True})
++    original=root/'out/preserve-finite-result-before-fp32-profile-reader-recovery.py'
++    assert pin(original)=={'bytes':323090,'sha256':'9434200f1e2efeeb8a9e945f4846cded2153bab9590ecdc1550bacccdf9069c5'}
++    mapping=[(work,'files/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery'),
++             (original,'collector-baseline.py'),(root/'out/preserve-finite-result-fp32-profile-reader-recovery.patch','collector-source.patch')]
++    summary={'schema':'sirius-fp32-restoring-full-retained-profile-reader-recovery-evidence-v1','passed':True,'source_revision':parent,
++        'profile_acceptance':pin(work/'profile-acceptance.json'),'profile_result':pin(work/'profile-result.json'),'reader_owner':pin(folder/'owner.json'),
++        'output_seal':pin(folder/'output-seal.json'),'independent_terminal_review':pin(work/'independent-terminal-review.json'),
++        'root_terminal_admission':pin(work/'root-terminal-admission.json'),'source_freeze':pin(work/'source-freeze.json'),
++        'whole293_source_pins_and834_actual_inputs_current':True,'all17_outputs_sealed':True,'fresh_saved_birth_absence':fresh,
++        'full35_modules_17changed18same_40main2owner7tables_accepted':True,'actual13_named_graphs':named,'actual4_inlined_camera_footprints':camera,
++        'new_disassembly_count':16,'reused_disassembly_count':54,'immutable_compiler_archive':{'commit':packet['compiled_commit'],'manifest':packet['compiled_manifest']},
++        'compiler_or_policy_or_provider_or_test_rerun':False,'old_RSS_reader_passed':False,'old_RSS_reader_promoted':False,
++        'integrated_controls_or_benefit_or_production_adoption_or_full_qualification_claimed':False,
++        'camera_scope':acceptance['camera_scope'],
++        'scope':'New reader-only full retained profile acceptance under unchanged300s/4GiB/2GiB limits, exact linear-memory dominance relation and unchanged arithmetic/shape predicates. Whole newwork only; accepted compiler90+stock39 and53prior ASM evidence remain referenced in pushed immutable archives. Original RSSfalse/-15 retained. Original integrated8 and sole20+2benefit remain future.'}
++    message='Preserve successful linear-memory FP32 restoring full retained profile without integrated or benefit admission (#44)\n'
+ elif kind == 'fp32-estimate-restoring-profile-reader-rss-stop':
+     import stat
+     work=root/'out/portable-divide-fp32-estimate-restoring-profile-recovery'
