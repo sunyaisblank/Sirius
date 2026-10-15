@@ -1,0 +1,103 @@
+--- preserve-finite-result-before-fp32-controls-context-stop.py
++++ preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,91 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'fp32-estimate-restoring-controls-context-stop':
++    work=root/'out/portable-divide-fp32-estimate-restoring-controls'
++    products=root/'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls'
++    bundle=root/'attestations/software-vulkan/4bcd987/fp32-estimate-restoring-controls-context-stop'
++    tag='evidence/issue-44-fp32-estimate-restoring-controls-context-stop'
++    def controls_context_record(path):
++        path=Path(path)
++        return dict(pin(path),resolved_path=str(path.resolve(strict=True)))
++    def controls_context_load(name):return json.loads((work/name).read_text())
++    assert pin(work/'source-freeze.json')=={'bytes':390928,'sha256':'d6a2239ecef80e34c9891efb0811230aef988d87bacc98e31a31b3c7ea0d3dbb'}
++    frozen=controls_context_load('source-freeze.json')['pins'];assert len(frozen)==1095
++    for name,expected in frozen.items():assert controls_context_record(name)==expected,name
++    packet=controls_context_load('packet.json');actions=controls_context_load('actions.json');preparation=controls_context_load('preparation.json')
++    assert packet['runner_preparation_revision']==parent
++    labels=[*packet['producer_labels'],*[f'control-{i}' for i in range(1,9)],'verify-controls','verify-endpoint-routes']
++    assert packet['producer_labels']==['prepare-producer','compile-compute-sealed','compile-observer','link-candidate','verify-producer']
++    assert len(labels)==15 and set(actions)==set(labels)
++    assert (work/'actions.json').read_bytes()==(work/'actions.unpinned.json').read_bytes()
++    required={'kind','revision','argv','frozen_inputs','limits','scope','expected_exit','software_provider'}
++    for label,action in actions.items():
++        assert set(action)==required and action['revision']==parent
++        assert type(action['expected_exit']) is int and action['expected_exit']==0
++        assert action['software_provider'] is label.startswith('control-')
++        assert action['limits']=={'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++    expected_commands=[f'python3 -B out/{work.name}/gate.py pin-context',
++        *[f'python3 -B out/{work.name}/run_owned.py {label}' for label in packet['producer_labels']],
++        f'python3 -B out/{work.name}/gate.py pin-runtime',
++        *[f'python3 -B out/{work.name}/run_owned.py control-{i}' for i in range(1,9)],
++        f'python3 -B out/{work.name}/run_owned.py verify-controls',f'python3 -B out/{work.name}/run_owned.py verify-endpoint-routes',
++        f'python3 -B out/{work.name}/gate.py review']
++    assert preparation['commands']==expected_commands and len(expected_commands)==18
++    outputs=[name for names in packet['outputs'].values() for name in names];assert len(outputs)==41
++    absent=[products,work/'operator-context.json',work/'runtime-context.json',*[work/label for label in labels],*[Path(name) for name in outputs]]
++    assert len(absent)==len(set(absent))==59 and all(not path.exists() for path in absent)
++    assert not (work/'prerequisites-result.json').exists()
++    wrong='sirius-fp32-restoring-original-arithmetic-result-v1'
++    actual='sirius-fp32-estimate-restoring-original-arithmetic-result-v1'
++    source=(work/'prerequisite_receipts.py').read_text()
++    assert source.count("ar['schema']=="+repr(wrong))==1 and wrong!=actual
++    arithmetic=Path(packet['arithmetic_work'])/'arithmetic-result.json'
++    assert pin(arithmetic)=={'bytes':32932,'sha256':'a20e20d00856afac4a59e7e3603c414817c07d7b7d64f6bd33cbe21198940a76'}
++    accepted_arithmetic=json.loads(arithmetic.read_text());assert accepted_arithmetic['passed'] and accepted_arithmetic['schema']==actual
++    assert packet['archives']['arithmetic']['commit']=='539edbd263583eb3dfadbe2ea6c650b87eb573f8'
++    assert pin(Path(packet['archives']['arithmetic']['path'])/'manifest.json')==packet['archives']['arithmetic']['manifest']
++    first=controls_context_load('root-first-stop.json');independent=controls_context_load('independent-stop-review.json')
++    admission=controls_context_load('root-context-stop-admission.json')
++    assert first['passed'] and independent['passed'] and admission['passed']
++    assert first['source_revision']==independent['source_revision']==admission['source_revision']==parent
++    assert first['classification']=='PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP'
++    assert first['actual_command']==expected_commands[0] and first['tool_chunk']=='37de22'
++    assert first['tool_session_terminal'] is True and first['tool_exit_code']==1
++    assert first['expected_schema_literal']==wrong and first['actual_arithmetic_schema']==actual
++    assert first['accepted_arithmetic_passed'] and first['accepted_arithmetic_result']==controls_context_record(arithmetic)
++    assert wrong in first['actual_traceback'] and 'prerequisite_receipts.py' in first['actual_traceback'] and 'AssertionError' in first['actual_traceback']
++    assert first['source_freeze_count_current']==1095 and first['frozen_source_current']
++    assert first['prospective_actions_unconsumed']==15 and first['prospective_commands_unexecuted_after_first']==17
++    assert first['producer_compiler_provider_control_or_reader_workloads_launched']==0
++    assert first['operator_context_accepted'] is False and first['context_attempt_passed'] is False
++    assert first['all_absent']=={str(path):True for path in absent}
++    for key,name in [('source_freeze','source-freeze.json'),('packet','packet.json'),('actions','actions.json'),('preparation','preparation.json')]:
++        assert first[key]==controls_context_record(work/name)
++    assert first['historical_source_admissions']==[controls_context_record(work/name) for name in ['independent-source-review.json','root-source-admission.json']]
++    historical=controls_context_load('root-source-admission.json')
++    assert historical['passed'] and historical['source_revision']==parent
++    for key,name in [('source_freeze','source-freeze.json'),('actions','actions.json'),('preparation','preparation.json'),('independent_source_review','independent-source-review.json')]:
++        assert historical[key]==controls_context_record(work/name)
++    assert admission['independent_stop_review']==controls_context_record(work/'independent-stop-review.json')
++    assert admission['root_first_stop']==controls_context_record(work/'root-first-stop.json')
++    original=root/'out/preserve-finite-result-before-fp32-controls-context-stop.py'
++    assert pin(original)=={'bytes':335009,'sha256':'49fbd1918b50df8bd6db049816fe3caf055387275a4d56bd90c0f9acd39980e5'}
++    mapping=[(work,'files/out/portable-divide-fp32-estimate-restoring-controls'),
++        (original,'collector-baseline.py'),(root/'out/preserve-finite-result-fp32-controls-context-stop.patch','collector-source.patch')]
++    summary={'schema':'sirius-fp32-restoring-controls-context-stop-evidence-v1','passed':True,'source_revision':parent,
++        'classification':first['classification'],'actual_failed_context_command':first['actual_command'],'actual_tool_chunk':first['tool_chunk'],
++        'actual_tool_exit_code':1,'context_attempt_passed':False,'operator_context_accepted':False,
++        'expected_schema_literal':wrong,'actual_accepted_arithmetic_schema':actual,'accepted_arithmetic_result':controls_context_record(arithmetic),
++        'source_freeze':controls_context_record(work/'source-freeze.json'),'all1095_frozen_source_inputs_current':True,
++        'all15_actions_and17_remaining_commands_unconsumed':True,'all59_context_bin_owner_and_output_paths_absent':True,
++        'producer_compiler_provider_control_or_reader_workloads_launched':0,
++        'root_first_stop':controls_context_record(work/'root-first-stop.json'),'independent_stop_review':controls_context_record(work/'independent-stop-review.json'),
++        'root_stop_admission':controls_context_record(work/'root-context-stop-admission.json'),
++        'historical_source_admissions':first['historical_source_admissions'],'historical_source_pass_promotes_failed_context':False,
++        'integrated_or_benefit_or_adoption_or_qualification_accepted':False,
++        'scope':'First context attempt failed an inherited exact arithmetic-schema literal before context creation or any owned producer/compiler/provider/control/reader. Original source admissions and accepted539 arithmetic/b207 profile/45a compiler receipts remain unchanged historical evidence. No trial, owner, numerical or benefit rejection is inferred; no global process-absence claim.'}
++    message='Preserve FP32 restoring original-controls prerequisite-schema precontext stop without workload or owner promotion (#44)\n'
+ elif kind == 'fp32-estimate-restoring-profile-reader-recovery':
+     import stat
+     work=root/'out/portable-divide-fp32-estimate-restoring-profile-reader-recovery'

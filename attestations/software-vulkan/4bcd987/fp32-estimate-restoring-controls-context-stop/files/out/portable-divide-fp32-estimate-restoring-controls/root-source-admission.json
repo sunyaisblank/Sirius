@@ -1,0 +1,59 @@
+{
+  "actions": {
+    "bytes": 2001306,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/actions.json",
+    "sha256": "41d2e9f2182e08ad7a429c6a510986f2b44c46bd9586730d5fb6cc878e677717"
+  },
+  "actual_producer_review_required_before_runtime": true,
+  "commands_authorized": [
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/gate.py pin-context",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py prepare-producer",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py compile-compute-sealed",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py compile-observer",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py link-candidate",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py verify-producer",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/gate.py pin-runtime",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py control-1",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py control-2",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py control-3",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py control-4",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py control-5",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py control-6",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py control-7",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py control-8",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py verify-controls",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/run_owned.py verify-endpoint-routes",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls/gate.py review"
+  ],
+  "fresh_topology": {
+    "original_controls": 8,
+    "original_readers": 2,
+    "producer": 5
+  },
+  "independent_source_review": {
+    "bytes": 8986,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/independent-source-review.json",
+    "sha256": "8b4432a64e8d24a2394a7d911d0da82fab09477011126579c55371ebb231ab97"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "passed": true,
+  "preparation": {
+    "bytes": 13210,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/preparation.json",
+    "sha256": "bbbe24265795b4085ab2fb8d0b46f53c152470c9ad943341df1a34fcfdf9949a"
+  },
+  "root_review": "Root fully read final gate/prerequisite/producer source, exact mature source deltas and full independent8986B source review. Passive final837819 checked all1095 current3fieldpins,15typed8keyactions/int0/limits/argv,1098-1206 future closures/exclusions,18exactnewnamespacecommands/41futureoutputs absent/AST/env/clean4498. Earlier bounded d57328 joined5archives312selected,actual arithmetic labels,canonical5rows/9link/62compile deps,33sources/14closure/4outside exact names+hashes,23resources/28strongdefinitions. No authored helper previously executed.",
+  "schema": "sirius-fp32-restoring-controls-root-source-admission-v1",
+  "scope": "Source admission only. Accepted539 primitive andb207 profile reused; old45aRSSreader remainsfalse/-15. Freshproducer,8controls and2complete readers mustpass. No benefit/adoption/science/frame/domain/platform/release qualification inferred.",
+  "source_freeze": {
+    "bytes": 390928,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/source-freeze.json",
+    "sha256": "d6a2239ecef80e34c9891efb0811230aef988d87bacc98e31a31b3c7ea0d3dbb"
+  },
+  "source_receipt_corrections": "Actual execute-host label and sorted4dict-keys plus both current/private hash rows fixed before freeze; no actual failure/retry.",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+}

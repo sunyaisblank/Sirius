@@ -1,0 +1,125 @@
+{
+  "actual_stop": {
+    "accepted_arithmetic_Git_commit": "539edbd263583eb3dfadbe2ea6c650b87eb573f8",
+    "accepted_arithmetic_result": {
+      "bytes": 32932,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/arithmetic-result.json",
+      "sha256": "a20e20d00856afac4a59e7e3603c414817c07d7b7d64f6bd33cbe21198940a76"
+    },
+    "accepted_arithmetic_result_current_bytes_equal_Git": true,
+    "actual_arithmetic_passed": true,
+    "actual_arithmetic_schema": "sirius-fp32-estimate-restoring-original-arithmetic-result-v1",
+    "assertion_source": "prerequisite_receipts.py:78",
+    "call_path": [
+      "gate.py:226 pin-context dispatch",
+      "gate.py:99 validate_actions; verify_static; verify_host_reuse; verify_prerequisites",
+      "gate.py:73 verify(P,R)",
+      "prerequisite_receipts.py:78 schema assertion"
+    ],
+    "causal_conclusion": "The accepted result passes its own arithmetic verdict, but its exact schema string differs from the sealed reader literal. This conjunction must be false; the trace stops there before context write or producer dispatch.",
+    "classification": "PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP",
+    "command": "python3 -B out/portable-divide-fp32-estimate-restoring-controls/gate.py pin-context",
+    "context_attempt_passed": false,
+    "execution_record_authority": "Root actual command record and full traceback preserved in root-first-stop.json; this review did not repeat the command.",
+    "expected_schema_literal": "sirius-fp32-restoring-original-arithmetic-result-v1",
+    "operator_context_accepted": false,
+    "tool_chunk": "37de22",
+    "tool_exit_code": 1,
+    "tool_session_terminal": true,
+    "tool_wall_seconds": 0.770479609
+  },
+  "authorship": "Independent of packet author and root operator. Earlier source admission by /root/divide_contract_review missed the schema literal; that review is retained unchanged.",
+  "bindings": {
+    "actions.json": {
+      "bytes": 2001306,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/actions.json",
+      "sha256": "41d2e9f2182e08ad7a429c6a510986f2b44c46bd9586730d5fb6cc878e677717"
+    },
+    "gate.py": {
+      "bytes": 14664,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/gate.py",
+      "sha256": "2365e1df1194c4aff1c6a5be8a2b5027212c3fee77dd564c518777a26bd7531a"
+    },
+    "independent-source-review.json": {
+      "bytes": 8986,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/independent-source-review.json",
+      "sha256": "8b4432a64e8d24a2394a7d911d0da82fab09477011126579c55371ebb231ab97"
+    },
+    "packet.json": {
+      "bytes": 176007,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/packet.json",
+      "sha256": "17e0ad323ff08b89a5c8e9c0641f0292a4dde54d80f0f9a600067789d1297988"
+    },
+    "preparation.json": {
+      "bytes": 13210,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/preparation.json",
+      "sha256": "bbbe24265795b4085ab2fb8d0b46f53c152470c9ad943341df1a34fcfdf9949a"
+    },
+    "prerequisite_receipts.py": {
+      "bytes": 13451,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/prerequisite_receipts.py",
+      "sha256": "f31c99dbcff73e27b9c9db64c88bd10aa653008825e05346ba3a07e2de709675"
+    },
+    "root-first-stop.json": {
+      "bytes": 12807,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/root-first-stop.json",
+      "sha256": "dd0d1dce080119e131623e58ac7d3215a6be6bf2586afb721eb8348fe902c5f1"
+    },
+    "root-source-admission.json": {
+      "bytes": 4177,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/root-source-admission.json",
+      "sha256": "8a181ec50bdc76fdcfe768bbab131d6983895ea8b4cfb7f6234c4f3b37321d38"
+    },
+    "source-freeze.json": {
+      "bytes": 390928,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/source-freeze.json",
+      "sha256": "d6a2239ecef80e34c9891efb0811230aef988d87bacc98e31a31b3c7ea0d3dbb"
+    }
+  },
+  "decision": "PASS_STOP_EVIDENCE; CONTEXT_ADMISSION_FAILED",
+  "history_and_limits": {
+    "earlier_source_admission_retained_without_revision": true,
+    "miss": "Author, independent reviewer and root source reviews missed this inherited schema mismatch. Earlier source PASS did not establish executable context admission.",
+    "new_producer_original_eight_controls_benefit_adoption_or_qualification_admitted": false,
+    "prior_accepted_539_arithmetic_b207_profile_45a_compiler_not_invalidated": "This metadata failure neither changes their bytes nor demonstrates a numerical or qualification regression.",
+    "recovery": "Preserve this first failed packet and stop. A separate causally corrected source packet and fresh admission are required; no unchanged retry or relaxed numerical assertion, input, deadline or provider contract is authorized by this review."
+  },
+  "passed": true,
+  "passive_checks": {
+    "actions_byte_equal_actions_unpinned": true,
+    "actions_count": 15,
+    "all_1095_rich_frozen_records_equal_current_bytes_size_and_resolved_path": true,
+    "context_write_occurs_only_after_failed_prerequisite_call": "gate.py:107",
+    "exact_absence_union": {
+      "all_currently_absent_including_broken_symlinks": true,
+      "all_declared_unique_phase_outputs": 41,
+      "count": 59,
+      "future_bin_root": 1,
+      "matches_root_stop_path_set": true,
+      "operator_and_runtime_contexts": 2,
+      "prospective_owner_folders": 15
+    },
+    "first_preparation_command_equals_actual_failed_command": true,
+    "new_review_outside_all_frozen_and_action_input_sets": true,
+    "no_post_context_producer_control_or_terminal_reader_workload_launched": true,
+    "owned_workload_owner_birth_or_sample_receipts": "Not applicable: the failed command is precontext metadata admission, not a run_owned workload. No owner or runtime birth/retirement claim is invented.",
+    "prerequisites_result_also_absent": true,
+    "remaining_unexecuted_commands": 17,
+    "root_stop_release_and_both_historical_source_admission_records_equal_current": true,
+    "unconsumed_actions": 15
+  },
+  "review_method": "Passive stdlib JSON/AST/source/hash and read-only Git only; no authored packet function, helper, parser, compiler, test, provider or cleanup executed.",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "schema": "sirius-fp32-restoring-controls-independent-precontext-stop-review-v1",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "workspace": {
+    "HEAD": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "new_review": "Ignored out/ JSON; not committed or pushed by reviewer.",
+    "source_committed_and_pushed": true,
+    "tracked_worktree_clean": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1
+  }
+}
