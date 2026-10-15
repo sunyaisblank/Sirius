@@ -1,0 +1,17 @@
+{
+  "author": "sunyaisblank",
+  "body_bytes": 2808,
+  "body_sha256": "fa570a58e0fc807d0c9f5197080adafca0701af4871c71d701aafa888b06ed57",
+  "comment_id": 6186502787,
+  "create_body_exact": true,
+  "created_at": "2026-10-15T07:05:28Z",
+  "evidence_commit": "1cda8a97db093a31d38aa64222326fa8b78311ed",
+  "fresh_API_readback_body_exact": true,
+  "issue": 53,
+  "passed": true,
+  "posted_body": "The conservation-observer sampling repair is committed and pushed through `248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff` on `development/minimum-step-floor-2026-10-15`.\n\n`ConservationObserver` previously inherited the base executor's unconditional `Sample` refusal. The retained executor already owned the required quartic samples, but the decorator did not forward requests to it. The four-line override now forwards trial, fraction, normal and the optional result unchanged. Private samples do not alter committed conservation counters; numerical settings, tolerances and assertions are unchanged.\n\nStrict GCC configuration, source governance and the rebuilt backend passed. These four original controls each ran once and passed with exactly one XML test and zero failures/errors/skips/disabled cases:\n\n- `CpuTraceBoundary.RetainedQuarticEventsKeepOriginalFractionsAndExcludeLaterDisk`\n- `CpuTraceBoundary.RetainedQuarticVolumeFailurePublishesNothingAndRecovers`\n- `RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates`\n- `FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants`\n\nThe conservation witness executed both binary32 and binary64 product modes with expanded-binary32 state on llvmpipe. Each physically escaped after 70 accepted intervals and one radial turn, with two native samples and 70 outgoing samples. Maximum relative E/Lz/Q drift was at most 1.663e-11; normalized null residual was 6.638e-15. The original independent endpoint/map/covariance assertions also passed. Both device owners bound the observed LVP process and unchanged inputs, using the default shader-cache policy.\n\nThe first source commit's successful build and failed formatting check remain preserved in `f4e6bbd7d117622f99b4a872b83508cbbcc4e456`. No tests ran before that stop. The one-space correction passed clang-format before the current commit, followed by fresh strict builds and the four controls above.\n\n[Immutable focused result and producer aliases](https://github.com/sunyaisblank/Sirius/blob/1cda8a97db093a31d38aa64222326fa8b78311ed/attestations/scientific-core/248ed17/full-path-sampling-focused-controls/result.json), tag `evidence/issue-53-full-path-sampling-focused-controls`: 109 files; manifest SHA256 `2242ee0d09bf455f94246eb2afdee9a36e179f607d529f31be05caf6edfc2628`. Independent terminal review passed; 34 observed build/test births were freshly absent before retiring the 98-file scratch workspace.\n\nThis resolves the missing-sampler contract in the formerly failing CI702 witness. It does not qualify a full image, uniform domain, cold-Kerr latency, full Mandatory CI, sanitizer/platform/native runtime, or release. All eight external domains remain pending and release packaging remains disabled; the prior 64x64 diagnostic RSS stop remains unresolved.\n",
+  "readback_body_sha256": "fa570a58e0fc807d0c9f5197080adafca0701af4871c71d701aafa888b06ed57",
+  "schema": "sirius-full-path-sampling-focused-issue-receipt-v1",
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "url": "https://github.com/sunyaisblank/Sirius/issues/53#issuecomment-6186502787"
+}
