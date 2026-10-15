@@ -1,0 +1,130 @@
+{
+  "schema": "sirius-native-windows-kerr-failure-context-independent-source-review-v1",
+  "passed": true,
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "author": "/root/forensic_obligations",
+  "operator": "/root",
+  "scope": "Final source and materialized-input admission for one expected original negative Kerr capture using current diagnostic-manifest provenance; no native-gate or scientific-result admission.",
+  "pins": {
+    "plan.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/plan.json",
+      "bytes": 2148,
+      "sha256": "66e440e6d52252c799d8229aa71930262ed565e7b505a2375e05d21119215659"
+    },
+    "execution-bindings.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/execution-bindings.json",
+      "bytes": 27687,
+      "sha256": "97c8c023d5f5964d6020786a22c96b7e0e8f14f79412c4a6c3d990400f5caa86"
+    },
+    "source-freeze.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/source-freeze.json",
+      "bytes": 2085,
+      "sha256": "aa08d86c68ca73d55f41acd0f4ec56083bfe693b6215a7fc77b0ff5a3af1acfd"
+    },
+    "preparation.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/preparation.json",
+      "bytes": 5951,
+      "sha256": "775b86900fc9cbad8580b1157a3286e894ebc3b51297eca47bfd05a8e59957cb"
+    },
+    "run_native_control.ps1": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/run_native_control.ps1",
+      "bytes": 13787,
+      "sha256": "1c24ec52168db058c9d0b2bc539814d700daf4ce7b0e350163a68756bf0b1f7c"
+    },
+    "run_system.py": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/run_system.py",
+      "bytes": 20760,
+      "sha256": "20eb62104291621faa385454435bce799ae01277689c93cd0f934796840a0211"
+    },
+    "run_terminal.py": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/run_terminal.py",
+      "bytes": 21503,
+      "sha256": "1f6d13fe39b78bb80b0ba35a020f682b60c79d3cb59b94c024420142831ca3b2"
+    },
+    "failure-context-adaptation.patch": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/failure-context-adaptation.patch",
+      "bytes": 57734,
+      "sha256": "7bcfe651d9475091b171a09872768f837cf82c5708b243b71317a4f0aebba230"
+    },
+    "runtime-input-preservation-refs.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/runtime-input-preservation-refs.json",
+      "bytes": 46246,
+      "sha256": "4e179df8e3250a1f6f6a3d30a1e5009910810dad37773695de48d0c4d8ad7983"
+    }
+  },
+  "checks": {
+    "all_current_physical_bindings": 100,
+    "unique_resolved_physical_files": 100,
+    "exact_closure": {
+      "stage_payloads": 74,
+      "stage_manifest": 1,
+      "helpers": 5,
+      "preparation_freeze_plan": 3,
+      "tracked_source": 6,
+      "durable_ci_proof": 8,
+      "external_host_inputs": 3
+    },
+    "all_13_source_freeze_members_current": true,
+    "plan_pending_to_actual_only_admitted_true": true,
+    "binding_pending_metadata_preserved_except_explicit_materialization": true,
+    "all_89_named_git_aliases_exact_bytes_checked": true,
+    "named_git_sources": {
+      "stage_and_ci": "391d0edd7164e109410bef6c3a110ed410970ef6",
+      "six_current_sources": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d"
+    },
+    "original_five_apparatus_files_exact_named_git39f": true,
+    "terminal_and_emergency_ps_unchanged": true,
+    "previous_full_source_review": "Exact three-file57734B patch reconstructed; native held-handle/birth/guard/launch/DLL/cleanup core inverse checked. Two wrapper context readers AST-identical; unchanged since held source PASS.",
+    "native_argv_and_cleanup_exact_to_reviewed_source": true,
+    "terminal_argv_and_cleanup_exact_to_reviewed_source": true,
+    "exact_single_active_case": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+    "typed_expected_child_exit": 1,
+    "diagnostic_manifest": {
+      "path": "bin/windows-msvc/diagnostic-02ee51f/generated/sirius/windows-diagnostic-build-products.json",
+      "bytes": 16928,
+      "sha256": "03fe9af83a424b003965137d48cbfd0aa8276739836f4272298f87ceeff05864"
+    },
+    "diagnostic_artifact_api_download_source_run_digest_join": true,
+    "manifest_payload_and_executable_roles_current": true,
+    "native_build_gate_file_absent": true,
+    "actual_ci_native_gate_failed_not_accepted": true,
+    "provider_expected_amd_bytes_current": true,
+    "actual_mapped_provider_evidence_still_required": true,
+    "all_context_owner_runtime_outputs_absent": true,
+    "review_outside_all_binding_source_runtime_inputs": true
+  },
+  "future_acceptance": {
+    "control": "Only completed child exit1 and owner statuscompleted, no guard/cleanup/source/manifest/executable change. Exactly one completed original XML failure/zeroerrors-skips-disabled, output.has_value=false plus exact MinimumStep refusal.",
+    "context": "One exact sirius-trace-continuation-failure-v1 JSON object; raw280B packet and272B previous/current records retained. Little-endianfloat32, Advance,64active one-row region, pixel/sample/epoch and current Terminal/MinimumStep joins, attempts bounded2000, finite current physical/source/volume, AMD name and original packet fields required.",
+    "rollback": "Byte/counter equality and previous-running/one-attempt-added are explicit observations; none is presumed or promoted past early validator failure to independent rollback correctness.",
+    "ownership": "Actual same-child staged SDKloader+exact expected AMD maps, current postseals, held-handle exit, recorded native births absent and accessible terminal census required. Permissions/hidden-process gaps remain explicit; no global consumer or unconditional compiler-descendant absence claim.",
+    "result": "Wrapper/terminal return0 admits capture/ownership only. Terminal result keeps pass=false and numerical_test_passed=false; no image/radiance/native gate/fullMandatory/scientific/UI/release/performance qualification."
+  },
+  "bounds": {
+    "native_child_working_set_bytes": 4294967296,
+    "native_owner_seconds": 28800,
+    "linux_bridge_seconds": 29280,
+    "sampled_wsl_available_reserve_kib": 2097152,
+    "terminal_seconds": 60,
+    "scope": "Prospective external diagnostic bounds, not original whole-test deadlines or aggregateWindows/bootstrap/VRAM limits. Default AMD cache and original physical1000ms phase assertion unchanged."
+  },
+  "execution": {
+    "authored_helpers_imported_or_executed": false,
+    "powershell_parser_native_compiler_provider_test_api_executed": false,
+    "source_or_frozen_input_edits": false,
+    "only_file_written": "independent-source-review.json"
+  },
+  "workspace": {
+    "head": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "canonical_source_committed_and_pushed": true,
+    "review": "Ignored uncommitted receipt awaiting root preservation."
+  }
+}

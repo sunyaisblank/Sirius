@@ -1,0 +1,239 @@
+{
+  "pass": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "failure_context_complete": true,
+  "numerical_test_passed": false,
+  "case": "kerr-image",
+  "mode": "native-failure-context",
+  "label": "kerr-image",
+  "record": {
+    "owner": {
+      "schema_version": 1,
+      "kind": "bounded-native-Windows-control",
+      "start_utc": "2026-10-15T09:56:25.2001225Z",
+      "owner_pid": 4248,
+      "owner_start_time_utc": "2026-10-15T09:56:23.6917081Z",
+      "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-02ee51f\\tests\\backend\\Release\\sirius_backend_tests.exe",
+      "test_executable_sha256": "474aff95445d2a1bae1c725417049db3eae87462790f43cfd9a5c0b8cdf06d0b",
+      "arguments": [
+        "--gtest_filter=KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+        "--gtest_color=no",
+        "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-failure-context-02ee51f\\native\\kerr-image\\gtest.xml\""
+      ],
+      "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-02ee51f\\tests\\backend\\Release",
+      "outer_guard_seconds": 28800,
+      "rss_guard_bytes": 4294967296,
+      "outer_stop": false,
+      "status": "completed",
+      "numerical_control_passed": false,
+      "expected_cases": [
+        "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow"
+      ],
+      "qualification_claimed": false,
+      "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+      "invocation_kind": "Control",
+      "system_inventory_passed": false,
+      "environment": {
+        "VK_DRIVER_FILES": null,
+        "VK_ICD_FILENAMES": null,
+        "VK_ADD_DRIVER_FILES": null,
+        "SIRIUS_VULKAN_DEVICE": null,
+        "SIRIUS_PRECISION": null,
+        "SIRIUS_MEMORY_BUDGET_MB": null,
+        "SIRIUS_DISPATCH_TARGET_MS": null,
+        "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-failure-context-02ee51f\\temp\\kerr-image",
+        "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-failure-context-02ee51f\\temp\\kerr-image",
+        "TMPDIR": null
+      },
+      "test_pid": 18224,
+      "test_start_time_utc": "2026-10-15T09:56:27.0960170Z",
+      "returncode": 1,
+      "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+      "owned_process_absent": true,
+      "end_utc": "2026-10-15T10:00:43.5479744Z",
+      "elapsed_seconds": 258.320408,
+      "peak_sampled_rss_bytes": 1232433152,
+      "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+      "live_source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+      "source_diagnostic_manifest_sha256": "03fe9af83a424b003965137d48cbfd0aa8276739836f4272298f87ceeff05864",
+      "diagnostic_build_manifest_authority_used": true,
+      "native_build_gate_authority_used": false,
+      "ci_native_gate_failed": true,
+      "ci_native_gate_accepted": false,
+      "diagnostic_manifest_unchanged": true,
+      "loaded_driver_modules_recorded": true,
+      "test_executable_unchanged": true,
+      "cleanup_errors": []
+    },
+    "bridge": {
+      "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+      "runner_source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+      "kind": "kerr-image",
+      "argv": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-failure-context-02ee51f\\run_native_control.ps1",
+        "-Stage",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-02ee51f\\tests\\backend\\Release",
+        "-Output",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-failure-context-02ee51f\\native\\kerr-image",
+        "-Filter",
+        "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+        "-Seconds",
+        "28800",
+        "-RssBytes",
+        "4294967296",
+        "-TemporaryDirectory",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-failure-context-02ee51f\\temp\\kerr-image",
+        "-BuildRoot",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-02ee51f",
+        "-ExpectedManifestSha256",
+        "03fe9af83a424b003965137d48cbfd0aa8276739836f4272298f87ceeff05864",
+        "-LiveRevision",
+        "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+        "-ExecutableName",
+        "sirius_backend_tests.exe",
+        "-InvocationKind",
+        "Control"
+      ],
+      "binding_sha256": "97c8c023d5f5964d6020786a22c96b7e0e8f14f79412c4a6c3d990400f5caa86",
+      "linux_controller_pid": 612845,
+      "linux_controller_birth": "10756660",
+      "predecessor_inputs": {},
+      "bridge_outer_seconds": 29280,
+      "windows_owner_seconds": 28800,
+      "minimum_wsl_available_kib": 2097152,
+      "resource_scope": "Unchanged native child4GiB sampled WorkingSet64/PrivateMemorySize64 and held-handle exit/birth owner. Linux29280s bridge includes28800s native diagnostic owner+480s bootstrap margin; WSL sampled MemAvailable reserve2GiB, separate terminal60s. Default AMD cache and inherited override refusal unchanged. Original real trace physical1000ms envelope is unmodified. No Windows aggregate/bootstrap memory guarantee or original whole-test deadline claim.",
+      "accepted_owner_execution": true,
+      "numerical_test_passed": false,
+      "expected_child_exit": 1,
+      "completed": true,
+      "cleanup_errors": [],
+      "full_qualification_claimed": false,
+      "minimum_sampled_wsl_available_kib": 16277188,
+      "linux_child_pid": 612867,
+      "linux_child_birth": "10756695",
+      "returncode": 1,
+      "linux_child_birth_absent": true,
+      "diagnostic_build_manifest_authority_used": true,
+      "native_build_gate_authority_used": false,
+      "ci_native_gate_failed": true,
+      "ci_native_gate_accepted": false,
+      "mandatory_or_full_runtime_admitted": false,
+      "failure_context": {
+        "schema": "sirius-native-windows-kerr-failure-context-v1",
+        "raw_context_json": "{\"schema\":\"sirius-trace-continuation-failure-v1\",\"scalar_bytes\":4,\"packet_scalar_bytes\":4,\"record_bytes\":272,\"byte_order\":\"little\",\"action\":1,\"row\":24,\"active\":64,\"active_rectangle\":[0,23,64,1],\"expected_identity\":[24,23,0,24],\"physical_submissions\":3195,\"maximum_attempts\":2000,\"packet_hex\":\"0000804200008042000000000000803f6666663f00000000000000000000000000000000000020c200000000000000000000803f0000803f0000000000000000000000000000803f000000009a99193f0000803f0000fa448fc2753d0ad7a33c000000400000c842295c8f3f00000000000000000000000000000000000000000000b841000080420000803f000000000000803f0000803f0000000000000000000000000000000000000000000000000000003f0000003f00000000000000000000000000000000000000000000803f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f0000003f0000803f18000000\",\"previous_record_hex\":\"bb0a9ec2da18e8bfd204aebe7ab932be402a12c2f78b01c0ebb68841f98d20c00000000000000000000000000000000000000000000000000000000000000000ed7e21aa2dbb823a9508c6b60f019338cb1f38aa00000000bba1823a1b9aa738ed7e21aa2dbb823a9508c6b60f019338cb1f38aa00000000bba1823a1b9aa738000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ad7a33c74023d42f263a53c6f12833a0000000000000000000000000000803f000000000000000000000000000000000100000000000000630000005900000018000000170000000000000018000000\",\"current_record_hex\":\"bb0a9ec2da18e8bfd204aebe7ab932be402a12c2f78b01c0ebb68841f98d20c00000000000000000000000000000000000000000000000000000000000000000ed7e21aa2dbb823a9508c6b60f019338cb1f38aa00000000bba1823a1b9aa738ed7e21aa2dbb823a9508c6b60f019338cb1f38aa00000000bba1823a1b9aa738000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ad7a33c74023d42f263a53c6f12833a0000000000000000000000000000803f000000000000000000000000000000000200000005000000640000005900000018000000170000000000000018000000\",\"device_name_bytes_hex\":\"414d4420526164656f6e203738304d204772617068696373\"}",
+        "previous_control": [
+          1,
+          0,
+          99,
+          89
+        ],
+        "current_control": [
+          2,
+          5,
+          100,
+          89
+        ],
+        "rollback_comparisons": {
+          "physical_vectors_0_through_11_equal": true,
+          "accepted_affine_length_last_interval_beam_seed_equal": true,
+          "source_and_volume_equal": true,
+          "accepted_attempt_count_equal": true,
+          "one_attempt_added": true,
+          "previous_running": true
+        },
+        "rollback_comparison_is_observation_not_acceptance": true,
+        "numerical_test_passed": false,
+        "radiance_publication_admitted": false
+      },
+      "expected_completed_failure_captured": true,
+      "loaded_provider_evidence_complete": true,
+      "whole_inputs_unchanged": true,
+      "elapsed_seconds": 261.01888424600475,
+      "signals": []
+    },
+    "stdout_sha256": "7c25bb7fc81cc27c9b03bd8ad538858ca7586d212302e5cf682d604f150b621a",
+    "whole_inputs": {
+      "kerr-image-bridge.json": {
+        "bytes": 5791,
+        "sha256": "6b6fc157a3ceac76f31c994383639b0fd43435487536890e19b76eedfca80cfa"
+      },
+      "native/kerr-image/owner.json": {
+        "bytes": 3454,
+        "sha256": "fd2d80ae22e948cf7d6364ef444185dd0e8df09162b0afc3c8244eb8ce0b08f9"
+      },
+      "native/kerr-image/stdout.log": {
+        "bytes": 3086,
+        "sha256": "7c25bb7fc81cc27c9b03bd8ad538858ca7586d212302e5cf682d604f150b621a"
+      },
+      "native/kerr-image/stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/kerr-image/memory.json": {
+        "bytes": 34812,
+        "sha256": "5f037acf5dbf652371679418fb5c8c62cf58600ed31870f8216b23ffce2fb125"
+      },
+      "kerr-image-inputs-before.json": {
+        "bytes": 20311,
+        "sha256": "7fca1ee663dceeefac53ee59f8237c93ea6450c8e60effb85e8cfec95b0526bb"
+      },
+      "kerr-image-inputs-after.json": {
+        "bytes": 20311,
+        "sha256": "7fca1ee663dceeefac53ee59f8237c93ea6450c8e60effb85e8cfec95b0526bb"
+      },
+      "native/kerr-image/gtest.xml": {
+        "bytes": 5459,
+        "sha256": "328af77a684c83c70fe834d03e854e8b43583922c3acb7962c551f9229699b69"
+      },
+      "native/kerr-image/driver-modules.json": {
+        "bytes": 684,
+        "sha256": "0791702b401dad15d045ba91ab55770e02b725394a394b11b8898ad2f62b7fba"
+      }
+    },
+    "failure_context": {
+      "schema": "sirius-native-windows-kerr-failure-context-v1",
+      "raw_context_json": "{\"schema\":\"sirius-trace-continuation-failure-v1\",\"scalar_bytes\":4,\"packet_scalar_bytes\":4,\"record_bytes\":272,\"byte_order\":\"little\",\"action\":1,\"row\":24,\"active\":64,\"active_rectangle\":[0,23,64,1],\"expected_identity\":[24,23,0,24],\"physical_submissions\":3195,\"maximum_attempts\":2000,\"packet_hex\":\"0000804200008042000000000000803f6666663f00000000000000000000000000000000000020c200000000000000000000803f0000803f0000000000000000000000000000803f000000009a99193f0000803f0000fa448fc2753d0ad7a33c000000400000c842295c8f3f00000000000000000000000000000000000000000000b841000080420000803f000000000000803f0000803f0000000000000000000000000000000000000000000000000000003f0000003f00000000000000000000000000000000000000000000803f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f0000003f0000803f18000000\",\"previous_record_hex\":\"bb0a9ec2da18e8bfd204aebe7ab932be402a12c2f78b01c0ebb68841f98d20c00000000000000000000000000000000000000000000000000000000000000000ed7e21aa2dbb823a9508c6b60f019338cb1f38aa00000000bba1823a1b9aa738ed7e21aa2dbb823a9508c6b60f019338cb1f38aa00000000bba1823a1b9aa738000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ad7a33c74023d42f263a53c6f12833a0000000000000000000000000000803f000000000000000000000000000000000100000000000000630000005900000018000000170000000000000018000000\",\"current_record_hex\":\"bb0a9ec2da18e8bfd204aebe7ab932be402a12c2f78b01c0ebb68841f98d20c00000000000000000000000000000000000000000000000000000000000000000ed7e21aa2dbb823a9508c6b60f019338cb1f38aa00000000bba1823a1b9aa738ed7e21aa2dbb823a9508c6b60f019338cb1f38aa00000000bba1823a1b9aa738000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ad7a33c74023d42f263a53c6f12833a0000000000000000000000000000803f000000000000000000000000000000000200000005000000640000005900000018000000170000000000000018000000\",\"device_name_bytes_hex\":\"414d4420526164656f6e203738304d204772617068696373\"}",
+      "previous_control": [
+        1,
+        0,
+        99,
+        89
+      ],
+      "current_control": [
+        2,
+        5,
+        100,
+        89
+      ],
+      "rollback_comparisons": {
+        "physical_vectors_0_through_11_equal": true,
+        "accepted_affine_length_last_interval_beam_seed_equal": true,
+        "source_and_volume_equal": true,
+        "accepted_attempt_count_equal": true,
+        "one_attempt_added": true,
+        "previous_running": true
+      },
+      "rollback_comparison_is_observation_not_acceptance": true,
+      "numerical_test_passed": false,
+      "radiance_publication_admitted": false
+    }
+  },
+  "terminal_receipt": "out/native-windows-kerr-failure-context-02ee51f/terminal-kerr-image.json",
+  "terminal_receipt_sha256": "da782cda93ad0587dbbcb2ebd5900d9d6355988cbba1cef16d5f1a8447061e0d",
+  "terminal_bridge_sha256": "be4224937e37d5658f8e7d772ef0eea5de1e310cb31a324572cd22b0197fd1d5",
+  "loaded_provider_evidence_complete": true,
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "diagnostic_build_manifest_authority_used": true,
+  "native_build_gate_authority_used": false,
+  "ci_native_gate_failed": true,
+  "ci_native_gate_accepted": false,
+  "mandatory_or_full_runtime_admitted": false,
+  "scope": "One expected completed original Kerr MinimumStep failure with exact host context and actual SDKloader+AMD. Ownership/provider/context audit accepted; numerical test remains failed. No image publication, independent-physics repair, precision/UI/fullMandatory/fullscience/domain/release claim."
+}

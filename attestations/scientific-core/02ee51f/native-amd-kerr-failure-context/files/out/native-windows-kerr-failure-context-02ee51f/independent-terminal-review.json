@@ -1,0 +1,297 @@
+{
+  "schema": "sirius-native-windows-kerr-failure-context-independent-terminal-review-v1",
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "author": "/root/forensic_obligations",
+  "operator": "/root",
+  "passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "expected_failure_capture_passed": true,
+  "failure_context_complete": true,
+  "numerical_test_passed": false,
+  "radiance_publication_admitted": false,
+  "disposition": "EXPECTED_ORIGINAL_MINIMUM_STEP_FAILURE_CAPTURED_WITH_VALID_OWNERSHIP",
+  "pins": {
+    "execution-bindings.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/execution-bindings.json",
+      "bytes": 27687,
+      "sha256": "97c8c023d5f5964d6020786a22c96b7e0e8f14f79412c4a6c3d990400f5caa86"
+    },
+    "source-freeze.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/source-freeze.json",
+      "bytes": 2085,
+      "sha256": "aa08d86c68ca73d55f41acd0f4ec56083bfe693b6215a7fc77b0ff5a3af1acfd"
+    },
+    "independent-source-review.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/independent-source-review.json",
+      "bytes": 7024,
+      "sha256": "3dd16f64299a05b661fd4d53de2314a3394b55354f1e0d6c0c2bf80d414b97d7"
+    },
+    "root-runtime-admission.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/root-runtime-admission.json",
+      "bytes": 697,
+      "sha256": "fc4a887afbb652ef30d1ebfcd1b29220068d354e30c0c4a9aa6308929db63634"
+    },
+    "kerr-image-inputs-before.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/kerr-image-inputs-before.json",
+      "bytes": 20311,
+      "sha256": "7fca1ee663dceeefac53ee59f8237c93ea6450c8e60effb85e8cfec95b0526bb"
+    },
+    "kerr-image-inputs-after.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/kerr-image-inputs-after.json",
+      "bytes": 20311,
+      "sha256": "7fca1ee663dceeefac53ee59f8237c93ea6450c8e60effb85e8cfec95b0526bb"
+    },
+    "kerr-image-bridge.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/kerr-image-bridge.json",
+      "bytes": 5791,
+      "sha256": "6b6fc157a3ceac76f31c994383639b0fd43435487536890e19b76eedfca80cfa"
+    },
+    "native/kerr-image/owner.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/native/kerr-image/owner.json",
+      "bytes": 3454,
+      "sha256": "fd2d80ae22e948cf7d6364ef444185dd0e8df09162b0afc3c8244eb8ce0b08f9"
+    },
+    "native/kerr-image/gtest.xml": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/native/kerr-image/gtest.xml",
+      "bytes": 5459,
+      "sha256": "328af77a684c83c70fe834d03e854e8b43583922c3acb7962c551f9229699b69"
+    },
+    "terminal-kerr-image.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/terminal-kerr-image.json",
+      "bytes": 4051,
+      "sha256": "da782cda93ad0587dbbcb2ebd5900d9d6355988cbba1cef16d5f1a8447061e0d"
+    },
+    "terminal-kerr-image-bridge.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/terminal-kerr-image-bridge.json",
+      "bytes": 2464,
+      "sha256": "be4224937e37d5658f8e7d772ef0eea5de1e310cb31a324572cd22b0197fd1d5"
+    },
+    "terminal-kerr-image-accepted.json": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/terminal-kerr-image-accepted.json",
+      "bytes": 14895,
+      "sha256": "a912c6027511fbaa42b8fc155f050a93e87e521c6b0a2374d14c62c1ac234daa"
+    }
+  },
+  "checks": {
+    "all_100_physical_binding_pins_current": true,
+    "all_13_frozen_source_members_current": true,
+    "actual_whole_input_paths": 101,
+    "before_after_rows": 202,
+    "before_after_bytes_equal_and_all_current": true,
+    "actual_argv_matches_admitted_native_and_terminal_bindings": true,
+    "accepted_record_owner_bridge_context_and_all_9_whole_receipt_pins_current": true,
+    "source_manifest_executable_postseals_match": true,
+    "actual_diagnostic_manifest_only_no_native_gate": true,
+    "actual_scientific_status_false_through_all_receipts": true,
+    "same_owned_child_loader_and_amd_module_receipts_join_postseals": true,
+    "native_recorded_births_absent": 2,
+    "fresh_linux_births_absent": [
+      {
+        "pid": 612845,
+        "saved_start_ticks": "10756660",
+        "fresh_absence_checked": true
+      },
+      {
+        "pid": 612867,
+        "saved_start_ticks": "10756695",
+        "fresh_absence_checked": true
+      },
+      {
+        "pid": 622066,
+        "saved_start_ticks": "10784344",
+        "fresh_absence_checked": true
+      }
+    ],
+    "superseded_apparatus": "Preserved prior unexecuted source only; no superseded path is in current101-map runtime closure."
+  },
+  "actual_run": {
+    "original_case": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+    "test_status": "run/completed/onefailure/zeroerrors-skips-disabled",
+    "child_exit_code": 1,
+    "native_owner_status": "completed",
+    "test_seconds": 256.046,
+    "native_owner_seconds": 258.320408,
+    "bridge_seconds": 261.01888424600475,
+    "terminal_audit_seconds": 2.0080665010027587,
+    "memory_sample_rows": 253,
+    "peak_sampled_native_child_working_set_bytes": 1232433152,
+    "minimum_sampled_wsl_available_kib": 16277188,
+    "guard_triggered": false,
+    "cleanup_errors": [],
+    "signals": [],
+    "stdout": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/native/kerr-image/stdout.log",
+      "bytes": 3086,
+      "sha256": "7c25bb7fc81cc27c9b03bd8ad538858ca7586d212302e5cf682d604f150b621a"
+    },
+    "stderr_bytes": 0
+  },
+  "context_observations": {
+    "raw_context": "Exact JSON substring from XML failure message equals XML failure text, native stdout, bridge capture and accepted terminal record; original raw files retain all hex bytes without reconstruction.",
+    "raw_packet_bytes": 280,
+    "previous_record_bytes": 272,
+    "current_record_bytes": 272,
+    "byte_order": "little",
+    "scalar_bytes": 4,
+    "action": {
+      "code": 1,
+      "name": "Advance"
+    },
+    "row_in_active_region": 24,
+    "active_rectangle": [
+      0,
+      23,
+      64,
+      1
+    ],
+    "active_pixels": 64,
+    "pixel_sample_epoch": [
+      24,
+      23,
+      0,
+      24
+    ],
+    "physical_submissions": 3195,
+    "physical_submissions_scope": "Cumulative probe dispatch count across its processed regions, not this pixel attempt count or a complete-frame total.",
+    "maximum_attempts": 2000,
+    "previous_control": [
+      1,
+      0,
+      99,
+      89
+    ],
+    "current_control": [
+      2,
+      5,
+      100,
+      89
+    ],
+    "current_reason": {
+      "code": 5,
+      "name": "MinimumStep"
+    },
+    "adaptive_step": {
+      "bits_hex": "3ca3d70a",
+      "float_value": 0.019999999552965164,
+      "equal_previous_current_and_packet_minimum_step_bits": true
+    },
+    "integration_vector": [
+      0.019999999552965164,
+      47.25239562988281,
+      0.020189259201288223,
+      0.0010000000474974513
+    ],
+    "all_current_60_physical_source_volume_floats_finite": true,
+    "unchanged_bytes": "All0..239 physical/source/volume bytes and256..271 identity bytes equal. Only byte offsets240,244,248 differ (phase, termination, attempt low bytes).",
+    "rollback_observations": {
+      "physical_vectors_0_through_11_equal": true,
+      "accepted_affine_length_last_interval_beam_seed_equal": true,
+      "source_and_volume_equal": true,
+      "accepted_attempt_count_equal": true,
+      "one_attempt_added": true,
+      "previous_running": true
+    },
+    "rollback_or_error_cause_limit": "Single adjacent host snapshots establish these equalities only. Early MinimumStep enum refusal does not independently prove complete rollback semantics, rejected error norm, projection/null cause, precise numerical subtype, or a physics repair."
+  },
+  "provider": {
+    "loader": {
+      "name": "vulkan-1.dll",
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-02ee51f\\tests\\backend\\Release\\vulkan-1.dll",
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+      "version": "1.4.357.0"
+    },
+    "amd": {
+      "name": "amdvlk64.dll",
+      "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+      "bytes": 103213064,
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+      "version": "9.2.10.395"
+    },
+    "current_file_and_postseals_match": true,
+    "installed_system32_loader": "Input-only distinct file, not substituted for actual stagedSDK loader.",
+    "fresh_feature_enable_or_all_pipeline_trace_claimed": false
+  },
+  "ownership": {
+    "native_owner_pid": 4248,
+    "native_owner_start_utc": "2026-10-15T09:56:23.6917081Z",
+    "native_test_pid": 18224,
+    "native_test_start_utc": "2026-10-15T09:56:27.0960170Z",
+    "held_handle_exit_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "bootstrap_exact_owner_birth": true,
+    "terminal_auditor_bootstrap_exact": true,
+    "accessible_census": {
+      "processes": 303,
+      "hidden_field_records": 196,
+      "matches": [],
+      "accessible_compilers": []
+    },
+    "census_limits": "Root-operated Windows terminal receipt checks owner/test PID+UTC births, loaded-file postseals and accessible command/executable consumers.196hidden-field records prevent global-consumer absence claims; no handle enumeration or unconditional compiler-descendant ownership. No Windows query by reviewer.",
+    "resource_limits": "Native sampled child WorkingSet64 guard4GiB/native28800s, Linux bridge29280s and separate sampledWSL reserve2GiB, terminal60s. PrivateMemorySize64 is recorded. No aggregateWindows/bootstrap/VRAM bound. Default driver cache and original physical1000ms submission assertion unchanged."
+  },
+  "qualification": {
+    "diagnostic_build_manifest_authority_used": true,
+    "native_build_gate_authority_used": false,
+    "ci_native_gate_failed": true,
+    "ci_native_gate_accepted": false,
+    "scientific_image_pass": false,
+    "precision_comparison": false,
+    "sampler_or_conservation_rerun": false,
+    "full_native_mandatory_science_ui_release": false,
+    "latency_abba_or_performance": false
+  },
+  "execution": {
+    "authored_helpers_imported_or_executed": false,
+    "native_provider_parser_compiler_tool_test_api_execution": false,
+    "source_or_frozen_input_edits": false,
+    "only_file_written": "independent-terminal-review.json",
+    "method": "Passive stdlib JSON/XML/hex/struct/hash/source reads and Linux/proc birth checks; no authored reader invocation."
+  },
+  "workspace": {
+    "head": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+    "tracked_tree_clean": true,
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "source_committed_and_pushed": true,
+    "review": "Ignored receipt outside all source/runtime maps, uncommitted pending root preservation."
+  },
+  "root_preservation_retirement_crosscheck": {
+    "pins": {
+      "result.json": {
+        "path": "out/native-kerr-context-preservation/result.json",
+        "bytes": 5936,
+        "sha256": "ff10fbb1a4c593fe0fafe25f1edc54e9b0854a56a2ef9bff6c03b54743c165ad"
+      },
+      "native-births.json": {
+        "path": "out/native-kerr-context-preservation/native-births.json",
+        "bytes": 366,
+        "sha256": "8720c68eb5a3cf8a26c68a1a6488f52dc691540f9de4f9f36cac560cb5bb2bb7"
+      },
+      "native-births-checked.json": {
+        "path": "out/native-kerr-context-preservation/native-births-checked.json",
+        "bytes": 1047,
+        "sha256": "4ec2f31a1aaaaada1112edaf9642370c42587c4bae2af6c7acac8e59d22ea5dd"
+      },
+      "check-native-births.ps1": {
+        "path": "out/native-kerr-context-preservation/check-native-births.ps1",
+        "bytes": 709,
+        "sha256": "e030e8aa79bb32a9db6584fe68932ac8d37e42f4a2de27475616694e54b44756"
+      },
+      "linux-births-checked.json": {
+        "path": "out/native-kerr-context-preservation/linux-births-checked.json",
+        "bytes": 548,
+        "sha256": "3fd92ce333d2da482b185d8d05b34c527fc2d5ac24f5d5133adc5e6473dd00fa"
+      }
+    },
+    "root_negative_result_context_and_complete_decoded_previous_current_records_exact": true,
+    "root_fresh_native_owner_test_auditor_births_absent": 3,
+    "root_linux_recorded_births_absent": 3,
+    "root_check_stderr_bytes": 0,
+    "scope": "Passive exact joining of root-operated read-only birth checks and negative result. Terminal receipt itself checked owner/test births; this extra root receipt also retires its auditor. No new native query or authored function execution by reviewer."
+  }
+}

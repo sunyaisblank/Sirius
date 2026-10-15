@@ -1,0 +1,34 @@
+{
+  "schema": "sirius-native-windows-kerr-failure-context-plan-v1",
+  "admitted": false,
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "runner_source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "stage": "bin/windows-msvc/diagnostic-02ee51f",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "order": [
+    "kerr-image"
+  ],
+  "actions": {
+    "kerr-image": {
+      "kind": "Control",
+      "test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "expected_exit": 1,
+      "owner_seconds": 28800,
+      "bridge_outer_seconds": 29280
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "prospective_commands": [
+    "python3 -B out/native-windows-kerr-failure-context-02ee51f/run_system.py kerr-image",
+    "python3 -B out/native-windows-kerr-failure-context-02ee51f/run_terminal.py kerr-image"
+  ],
+  "resource_semantics": "Unchanged native child4GiB sampled WorkingSet64/PrivateMemorySize64 and held-handle exit/birth owner. Linux29280s bridge includes28800s native diagnostic owner+480s bootstrap margin; WSL sampled MemAvailable reserve2GiB, separate terminal60s. Default AMD cache and inherited override refusal unchanged. Original real trace physical1000ms envelope is unmodified. No Windows aggregate/bootstrap memory guarantee or original whole-test deadline claim.",
+  "expected_outcome": "Original numerical test fails with completed child exit1 and exactly one MinimumStep XML failure carrying exact host context. Wrapper success means capture/ownership/provider acceptance only; numerical test remains failed.",
+  "scope": "One original64x64 Kerr image case only. No sampler/conservation/precision rerun, image publication, shader/ABI/physics/settings change or science/UI/fullMandatory/release claim. Diagnostic manifest is negative-capture provenance only; current native9 gate failed and is not accepted.",
+  "ci_native_gate_failed": true,
+  "ci_native_gate_accepted": false,
+  "diagnostic_build_manifest_authority_used": true,
+  "native_build_gate_authority_used": false
+}

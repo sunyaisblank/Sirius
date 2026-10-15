@@ -1,0 +1,60 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "bounded-native-Windows-control",
+    "start_utc":  "2026-10-15T09:56:25.2001225Z",
+    "owner_pid":  4248,
+    "owner_start_time_utc":  "2026-10-15T09:56:23.6917081Z",
+    "test_executable":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-02ee51f\\tests\\backend\\Release\\sirius_backend_tests.exe",
+    "test_executable_sha256":  "474aff95445d2a1bae1c725417049db3eae87462790f43cfd9a5c0b8cdf06d0b",
+    "arguments":  [
+                      "--gtest_filter=KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+                      "--gtest_color=no",
+                      "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-failure-context-02ee51f\\native\\kerr-image\\gtest.xml\""
+                  ],
+    "working_directory":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-02ee51f\\tests\\backend\\Release",
+    "outer_guard_seconds":  28800,
+    "rss_guard_bytes":  4294967296,
+    "outer_stop":  false,
+    "status":  "completed",
+    "numerical_control_passed":  false,
+    "expected_cases":  [
+                           "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow"
+                       ],
+    "qualification_claimed":  false,
+    "scope":  "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind":  "Control",
+    "system_inventory_passed":  false,
+    "environment":  {
+                        "VK_DRIVER_FILES":  null,
+                        "VK_ICD_FILENAMES":  null,
+                        "VK_ADD_DRIVER_FILES":  null,
+                        "SIRIUS_VULKAN_DEVICE":  null,
+                        "SIRIUS_PRECISION":  null,
+                        "SIRIUS_MEMORY_BUDGET_MB":  null,
+                        "SIRIUS_DISPATCH_TARGET_MS":  null,
+                        "TEMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-failure-context-02ee51f\\temp\\kerr-image",
+                        "TMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-failure-context-02ee51f\\temp\\kerr-image",
+                        "TMPDIR":  null
+                    },
+    "test_pid":  18224,
+    "test_start_time_utc":  "2026-10-15T09:56:27.0960170Z",
+    "returncode":  1,
+    "exit_code_source":  "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent":  true,
+    "end_utc":  "2026-10-15T10:00:43.5479744Z",
+    "elapsed_seconds":  258.320408,
+    "peak_sampled_rss_bytes":  1232433152,
+    "source_revision":  "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+    "live_source_revision":  "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+    "source_diagnostic_manifest_sha256":  "03fe9af83a424b003965137d48cbfd0aa8276739836f4272298f87ceeff05864",
+    "diagnostic_build_manifest_authority_used":  true,
+    "native_build_gate_authority_used":  false,
+    "ci_native_gate_failed":  true,
+    "ci_native_gate_accepted":  false,
+    "diagnostic_manifest_unchanged":  true,
+    "loaded_driver_modules_recorded":  true,
+    "test_executable_unchanged":  true,
+    "cleanup_errors":  [
+
+                       ]
+}

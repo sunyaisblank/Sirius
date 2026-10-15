@@ -1,0 +1,54 @@
+{
+  "schema": "sirius-superseded-native-gate-authority-source-v1",
+  "status": "UNEXECUTED_SUPERSEDED_SOURCE_ONLY",
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "runtime_plan_or_bindings_materialized": false,
+  "native_or_helper_execution_performed": false,
+  "reason": "ActualCI38711720394 diagnostic producer was exported, but later native9 gate self-test timed out10s. No native_build_gate exists; original source draft native-gate authority cannot be used. Replacement uses current diagnostic manifest only for negative fault capture; no positive gate is fabricated.",
+  "files": {
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "execution-bindings.pending.json": {
+      "bytes": 2077,
+      "sha256": "a21717e536112c1b175b14b8b76fbf4517cd0732762989f0e1385a256bc1f5a0"
+    },
+    "failure-context-adaptation.patch": {
+      "bytes": 47400,
+      "sha256": "f207045a646ec7c80207f007c2b9f9a424bc865b9822ac538c5068a84ca92723"
+    },
+    "plan.pending.json": {
+      "bytes": 1877,
+      "sha256": "d547daf4ae49ca26370c888aa1f1afed5e7942e3055d28fc1c3bbd00b14d9b88"
+    },
+    "preparation.json": {
+      "bytes": 4665,
+      "sha256": "be373a86e6f3c96e5549f05bd825ee348d21e470aef7afe180ee479cd949d967"
+    },
+    "root-source-review.json": {
+      "bytes": 1240,
+      "sha256": "89c8c5424c19c46b3d7474d877618c5c5e85f7fd86bc9be53d8e7ff136166891"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "run_system.py": {
+      "bytes": 20954,
+      "sha256": "9459e8a673c3c700e356642f5241af0496bd2a5f6f65ceea06a3926c43cb5492"
+    },
+    "run_terminal.py": {
+      "bytes": 21782,
+      "sha256": "b9301fbde1bbcf4e5070711d51dcc3d6a0a38d9657c43c8fc25165348285d311"
+    },
+    "source-freeze.json": {
+      "bytes": 2085,
+      "sha256": "8e123fc03c16f5026a061d5d2451c83b0aadb3f0e999de4f28520aa6881d28e2"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    }
+  }
+}

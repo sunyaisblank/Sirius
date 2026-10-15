@@ -1,0 +1,98 @@
+{
+  "schema": "sirius-native-windows-kerr-failure-context-preparation-v1",
+  "source_only": true,
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "source_freeze": {
+    "bytes": 2085,
+    "sha256": "8e123fc03c16f5026a061d5d2451c83b0aadb3f0e999de4f28520aa6881d28e2"
+  },
+  "source_member_count": 13,
+  "helpers": {
+    "run_system.py": {
+      "bytes": 20954,
+      "sha256": "9459e8a673c3c700e356642f5241af0496bd2a5f6f65ceea06a3926c43cb5492"
+    },
+    "run_terminal.py": {
+      "bytes": 21782,
+      "sha256": "b9301fbde1bbcf4e5070711d51dcc3d6a0a38d9657c43c8fc25165348285d311"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    }
+  },
+  "originals": {
+    "run_system.py": {
+      "bytes": 24104,
+      "sha256": "436b8d1fda6d4a2e2859ad448de5eab6f14702667485bab6a2e07d5bc2891af7"
+    },
+    "run_terminal.py": {
+      "bytes": 23474,
+      "sha256": "a41fc4374313060184d7b6becd2bdd8db97158cfee96a6bccb78bceda8ad1a23"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    }
+  },
+  "apparatus_origin": {
+    "commit": "39f843af203e824693391e2cf47f8821e923f801",
+    "tag": "evidence/issue-53-native-amd-original-controls-23d406b",
+    "bundle": "attestations/scientific-core/23d406b/native-amd-original-controls",
+    "work_member": "files/out/native-windows-science-controls-23d406b",
+    "scope": "Historical source apparatus and diagnostic motivation only; not current source/product authority and not replayed as retired current paths."
+  },
+  "patch": {
+    "bytes": 47400,
+    "sha256": "f207045a646ec7c80207f007c2b9f9a424bc865b9822ac538c5068a84ca92723"
+  },
+  "prospective_commands": [
+    "python3 -B out/native-windows-kerr-failure-context-02ee51f/run_system.py kerr-image",
+    "python3 -B out/native-windows-kerr-failure-context-02ee51f/run_terminal.py kerr-image"
+  ],
+  "pending_root_fields": [
+    "actual successful currentCI diagnostic/native artifact IDs+ZIP and manifest/gate pins",
+    "exact current manifest payload+manifest+copied nativegate input map and helper/metadata files",
+    "expected current samehost AMD module row and staged SDKloader manifest row",
+    "exact one native action+cleanup argv and terminal audit+cleanup argv",
+    "admitted plan.json/execution-bindings.json only after independent source and root product/runtime admission"
+  ],
+  "source_contracts": [
+    "Only two Python wrappers adapt the single original completed exit1 capture; three PS scripts remain exact39f/8caa bytes.",
+    "No historical23d current-source prerequisite, four-phase loop, old producer identity or retired input-path replay remains active.",
+    "Exact one original XML failure/message carries one sirius-trace-continuation-failure-v1 JSON object; raw JSON retained unchanged with exact280packetbytes and272previous/currentbytes.",
+    "Reader requires little-endian binary32 record layout, actionAdvance,64active one-row region/identity/sample/epoch joins and current Terminal/MinimumStep. Actual device name must be AMD Radeon780M.",
+    "Rollback comparisons explicitly report previous/current byte-range/counter equality without presuming success; validator early enum failure is not promoted to rollback evidence.",
+    "Fresh samechild actualSDKloader exactstage/path/hash and expectedsamehost AMD required; native gate is current producer authority only.",
+    "Native child/scientific status remains failed. Separate terminal return0 accepts birth/held-handle/provider/wholeinput/context audit only.",
+    "No helper/parser/provider/test/tool execution performed; currentCI product admission remains pending."
+  ],
+  "runtime_files_required_absent": [
+    "plan.json",
+    "execution-bindings.json",
+    "native",
+    "temp"
+  ],
+  "outside_all_runtime_inputs": [
+    "root source/product/runtime admissions",
+    "independent source/terminal reviews",
+    "root issue/retirement/result/collector reports",
+    "other operational reports"
+  ]
+}
