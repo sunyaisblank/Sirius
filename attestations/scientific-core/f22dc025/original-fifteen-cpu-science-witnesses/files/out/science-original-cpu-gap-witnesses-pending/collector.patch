@@ -1,0 +1,10 @@
+--- originals/root_acceptance.py
++++ root_acceptance.py
+@@ -1,6 +1,6 @@
+ from pathlib import Path
+ import hashlib,json,sys,subprocess,xml.etree.ElementTree as ET
+-r=Path.cwd();w=r/'out/e2-original-cpu-witnesses-pending';label=sys.argv[1]
++r=Path.cwd();w=r/'out/science-original-cpu-gap-witnesses-pending';label=sys.argv[1]
+ def doc(p):return json.loads(p.read_text())
+ def pin(p):
+  raw=p.read_bytes();return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}

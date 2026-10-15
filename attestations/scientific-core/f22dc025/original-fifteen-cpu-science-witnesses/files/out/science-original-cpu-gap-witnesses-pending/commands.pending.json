@@ -1,0 +1,138 @@
+{
+  "schema": "sirius-science-original-cpu-gap-pending-commands-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "revision": "ROOT_PENDING_NEW_REVISION",
+  "serial_order": [
+    "p1-oracle-conservation",
+    "p1-live-conservation",
+    "p2-oracle-radial",
+    "p2-oracle-circular",
+    "p2-live-radial",
+    "p2-p3-star-flicker",
+    "p3-index-envelope",
+    "p4-oracle-truncated-edge",
+    "p4-live-truncated-edge",
+    "p5-pupil-focus",
+    "p5-four-dimensional-samples",
+    "p6-hdr-roundtrip",
+    "p6-film-exr-isolation",
+    "e1-nine-cpu-frames",
+    "e3-no-icd-cpu-publication"
+  ],
+  "stop_first_nonpass": true,
+  "root_sole_metadata_and_execution_operator": true,
+  "launches_after_root_admission": [
+    {
+      "case": "p1-oracle-conservation",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p1-oracle-conservation",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p1-oracle-conservation",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p1-live-conservation",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p1-live-conservation",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p1-live-conservation",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p2-oracle-radial",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p2-oracle-radial",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p2-oracle-radial",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p2-oracle-circular",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p2-oracle-circular",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p2-oracle-circular",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p2-live-radial",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p2-live-radial",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p2-live-radial",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p2-p3-star-flicker",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p2-p3-star-flicker",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p2-p3-star-flicker",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p3-index-envelope",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p3-index-envelope",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p3-index-envelope",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p4-oracle-truncated-edge",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p4-oracle-truncated-edge",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p4-oracle-truncated-edge",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p4-live-truncated-edge",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p4-live-truncated-edge",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p4-live-truncated-edge",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p5-pupil-focus",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p5-pupil-focus",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p5-pupil-focus",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p5-four-dimensional-samples",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p5-four-dimensional-samples",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p5-four-dimensional-samples",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p6-hdr-roundtrip",
+      "root_per_launch_environment": {
+        "TMPDIR": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip"
+      },
+      "owner_command_after_root_admission": "TMPDIR=/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip /usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p6-hdr-roundtrip",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p6-hdr-roundtrip",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "p6-film-exr-isolation",
+      "root_per_launch_environment": {
+        "TMPDIR": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation"
+      },
+      "owner_command_after_root_admission": "TMPDIR=/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation /usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py p6-film-exr-isolation",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py p6-film-exr-isolation",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "e1-nine-cpu-frames",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py e1-nine-cpu-frames",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py e1-nine-cpu-frames",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    },
+    {
+      "case": "e3-no-icd-cpu-publication",
+      "root_per_launch_environment": {},
+      "owner_command_after_root_admission": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/run_owned.py e3-no-icd-cpu-publication",
+      "collector_command_after_owner_pass": "/usr/bin/python3 out/science-original-cpu-gap-witnesses-pending/root_acceptance.py e3-no-icd-cpu-publication",
+      "advance_only_after_root_accepts_all_current_raw_receipt_and_original_XML": true
+    }
+  ],
+  "hold": "No pendingtemplateexecution. Root freshstrict5ELFbuild/source/dependency/runtimeDSO/assets/registration/currentproof closure +actualcleanHEAD +independent/root SOURCE/runtime admission first.",
+  "TMPDIR_timing": "Onlytwooutputcases: owner creates its unique new casefolder before spawning C++; root suppliesabsoluteTMPDIR through own launch environment, inherited by child. Do not precreate thecasefolder (unchangedfolder.mkdir requiresabsence). Capture actual environment in root launch receipt. Collector runs afterward without a TMPDIR override requirement."
+}

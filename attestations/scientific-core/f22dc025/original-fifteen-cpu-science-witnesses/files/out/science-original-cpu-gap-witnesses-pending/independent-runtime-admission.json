@@ -1,0 +1,349 @@
+{
+  "schema": "sirius-original-science-CPU-gap-independent-runtime-admission-v1",
+  "passed": true,
+  "materialized_metadata_admitted": true,
+  "execution_authorized_by_this_review": false,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewed_utc": "2026-10-15T18:15:45.399737+00:00",
+  "blockers": [],
+  "critical_pins": {
+    "independent-source-review.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/independent-source-review.json",
+      "bytes": 20486,
+      "sha256": "679f63255ea13715bc94e0845bc306f2bb3dbfd438975d73783c7fd9a228ae63"
+    },
+    "source-contracts.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/source-contracts.json",
+      "bytes": 51780,
+      "sha256": "d3a500800a1fe5ca87d0a3e51392c8893a3f1c161735e20a939b936ea119407e"
+    },
+    "actions.pending.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/actions.pending.json",
+      "bytes": 115949,
+      "sha256": "abd62462572c97667ce7d9c5119c5a165f09394d172516636eae2bb930b4a940"
+    },
+    "commands.pending.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/commands.pending.json",
+      "bytes": 8847,
+      "sha256": "3977b006a293cb1065c5e9743b8613637dd520d30cdd4209425906f4ab3e4f5f"
+    },
+    "actions.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/actions.json",
+      "bytes": 816674,
+      "sha256": "a76ca2a056be253a998d8bd321a81fdec99dd55a7ece163ca654361deed79054"
+    },
+    "readiness.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/readiness.json",
+      "bytes": 64624,
+      "sha256": "7a1390dfc359853597f2a3c48460e54ecb87de355da0cf69bae5a2ff82a8182c"
+    },
+    "root-preflight.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/root-preflight.json",
+      "bytes": 326582,
+      "sha256": "e1a5bcb3034cb298e7bc2bc7495fb73c43a9f2b74b2e794b71d7dedd8f25adba"
+    },
+    "build-input-observation.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/build-input-observation.json",
+      "bytes": 256830,
+      "sha256": "7e8e1d4adddbb8aa508712fd38b6d8fc6103361a48d1163a47696947081da5d6"
+    },
+    "run_owned.py": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/root_acceptance.py",
+      "bytes": 3893,
+      "sha256": "fe55382eb4d727ac37a8719fb1e27eb96fea65d4569ecc64c97db05070dbd538"
+    }
+  },
+  "exact_materialization": {
+    "delta_fields_only": [
+      "revision",
+      "scope",
+      "frozen_inputs"
+    ],
+    "all_original15argv_and_registered_active_names_exact": true,
+    "registered_estate": 1152,
+    "original_registered_TIMEOUT_absent": true,
+    "expected_exit_integer_zero_kind_test": true,
+    "software_provider_false_default_cache": true,
+    "required_XML_property_omitted_no_invented_CPU_positive_property": true,
+    "pending71selectors_plus_exact4perancestor_retained_inorder": true,
+    "same_complete_static_strengthening_only": true,
+    "actions": [
+      {
+        "case": "p1-oracle-conservation",
+        "original_name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+        "expected_whole_input_rows": 1269,
+        "frozen_selectors": 849
+      },
+      {
+        "case": "p1-live-conservation",
+        "original_name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+        "expected_whole_input_rows": 1273,
+        "frozen_selectors": 853
+      },
+      {
+        "case": "p2-oracle-radial",
+        "original_name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+        "expected_whole_input_rows": 1277,
+        "frozen_selectors": 857
+      },
+      {
+        "case": "p2-oracle-circular",
+        "original_name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+        "expected_whole_input_rows": 1281,
+        "frozen_selectors": 861
+      },
+      {
+        "case": "p2-live-radial",
+        "original_name": "CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm",
+        "expected_whole_input_rows": 1285,
+        "frozen_selectors": 865
+      },
+      {
+        "case": "p2-p3-star-flicker",
+        "original_name": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
+        "expected_whole_input_rows": 1289,
+        "frozen_selectors": 869
+      },
+      {
+        "case": "p3-index-envelope",
+        "original_name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
+        "expected_whole_input_rows": 1293,
+        "frozen_selectors": 873
+      },
+      {
+        "case": "p4-oracle-truncated-edge",
+        "original_name": "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+        "expected_whole_input_rows": 1297,
+        "frozen_selectors": 877
+      },
+      {
+        "case": "p4-live-truncated-edge",
+        "original_name": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+        "expected_whole_input_rows": 1301,
+        "frozen_selectors": 881
+      },
+      {
+        "case": "p5-pupil-focus",
+        "original_name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+        "expected_whole_input_rows": 1305,
+        "frozen_selectors": 885
+      },
+      {
+        "case": "p5-four-dimensional-samples",
+        "original_name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+        "expected_whole_input_rows": 1309,
+        "frozen_selectors": 889
+      },
+      {
+        "case": "p6-hdr-roundtrip",
+        "original_name": "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+        "expected_whole_input_rows": 1313,
+        "frozen_selectors": 893
+      },
+      {
+        "case": "p6-film-exr-isolation",
+        "original_name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
+        "expected_whole_input_rows": 1317,
+        "frozen_selectors": 897
+      },
+      {
+        "case": "e1-nine-cpu-frames",
+        "original_name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame",
+        "expected_whole_input_rows": 1321,
+        "frozen_selectors": 901
+      },
+      {
+        "case": "e3-no-icd-cpu-publication",
+        "original_name": "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+        "expected_whole_input_rows": 1325,
+        "frozen_selectors": 905
+      }
+    ],
+    "four_ELFs_used_fifth_app_ELF_conservatively_frozen": true,
+    "sequential_stopfirstnonpass": true
+  },
+  "whole_input_closure": {
+    "preflight_current_rows_freshly_hashed": 1268,
+    "tracked_sources": 538,
+    "owner_rows": [
+      1269,
+      1273,
+      1277,
+      1281,
+      1285,
+      1289,
+      1293,
+      1297,
+      1301,
+      1305,
+      1309,
+      1313,
+      1317,
+      1321,
+      1325
+    ],
+    "additional_build_runtime_pins_current": 814,
+    "approved_static_strengthening_selectors": 815,
+    "exact_sets": "Tracked sources plus action apparatus/selectors equal1268 preflight rows +preflight itself +exact four raw files for every earlier case.",
+    "predecessor_raw_files": [
+      "owner.json",
+      "stdout.log",
+      "stderr.log",
+      "gtest.xml"
+    ],
+    "root_collector_rechecks_all_prior_accepted_raw_pins": true,
+    "no_selfhash_cycle_ownfuture_output_or_retired_map_replay": true,
+    "review_sidecar_excluded_from_all_frozen_inputs": true,
+    "all15_case_and_accepted_outputs_absent": true,
+    "root_runtime_release_absent_pending": true
+  },
+  "fresh_build_and_metadata": {
+    "strict_source_application": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-device-lifetime-checks/source-application.json",
+      "bytes": 3974,
+      "sha256": "f00fd8ef248994f09a51f62ec2ba69a94f55463e0cf39b1ce5a0fb33fc61139e"
+    },
+    "all5current_ELFs_exact_strict110command_build_and_source_governance": true,
+    "five_actual_ELFs": {
+      "bin/linux-gcc/tests/backend/sirius_backend_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "bytes": 13502080,
+        "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+      },
+      "bin/linux-gcc/tests/core/sirius_core_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "bytes": 5199120,
+        "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+      },
+      "bin/linux-gcc/tests/oracle/sirius_oracle_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "bytes": 1678696,
+        "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+      },
+      "bin/linux-gcc/src/sirius/app/sirius_app_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_app_tests",
+        "bytes": 11397000,
+        "sha256": "753f08c883336261d15bbe069dc463ca1aba36ec6ce1a56b968715859a7c95b4"
+      },
+      "bin/linux-gcc/src/sirius/app/sirius_render_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "bytes": 12212608,
+        "sha256": "37fef0e35bea4abf28a075ba6b5cf1918cfde318a4988ae0255553f50689f18e"
+      }
+    },
+    "actual_root_metadata_exits": {
+      "ctest_show_only": 0,
+      "ldd7": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ninja_selected_deps": 0,
+      "ninja_five_commands": 0
+    },
+    "VALID_selected_object_dependency_sections": 18,
+    "unique_resolved_dependency_headers": 641,
+    "all18compile_rows_equal_current_compile_commands_and_saved_graph": true,
+    "flags_preserved": [
+      "-Werror",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-std=c++2c",
+      "-DNDEBUG"
+    ],
+    "Release_NDEBUG_does_not_disable_original_GTest_assertions": true,
+    "actual5link_edges_equal_current_Ninja_and_saved_commands": true,
+    "literal_regular_link_input_union": 129,
+    "link_analysis_excludes_order_only_dependencies": true,
+    "all_dependency_and_link_files_current_content_bound": true,
+    "saved_commands_are_graph_metadata_not_claim_new_compiler_execution": true,
+    "actual7ldd_outputs_zero_stderr_no_missing_paths": true,
+    "actual_test_Git_Python_DSO_union": [
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.3"
+    ],
+    "DSO_union_count": 9,
+    "scope": "Current recorded ldd DT_NEEDED closure for the selected binaries/tools, not every possible dynamic import/provider.",
+    "staged_Starfield": {
+      "path": "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png",
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "canonical_asset_exact_bytes_equal": true,
+    "compiled_alignment_mode": "qualification",
+    "compiled_domains_admitted": 0,
+    "compiled_domains_required": 8
+  },
+  "TMPDIR_and_output_ownership": {
+    "corrected_source_review_bound": true,
+    "per_launch_ROOT_directives": {
+      "p6-hdr-roundtrip": {
+        "TMPDIR": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip"
+      },
+      "p6-film-exr-isolation": {
+        "TMPDIR": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation"
+      }
+    },
+    "other13_root_TMPDIR_overrides": false,
+    "case_folders_must_not_be_precreated": true,
+    "mutable_tempfolder_and_outputs_not_frozen_as_current_inputs": true,
+    "source_inheritance": "Unchanged owner creates the unique case folder, copies root os.environ, adds only CPU GTEST_OUTPUT, then passes env to Popen. Selected original writers do not alter TMPDIR; std::filesystem::temp_directory_path uses that inherited value.",
+    "required_actual_evidence": "Root must save its actual per-launch TMPDIR invocation receipt for HDR and film. Combine it with pinned inheritance source and original output/ownership/XML checks.",
+    "optional_child_observation": "An actual same-birth /proc environment snapshot is optional only if observed. No mandatory capture, pause, instrumentation, fabrication or retry of a fast child.",
+    "env_conclusion_scope": "Root invocation plus source-derived child inheritance must be labelled separately from any independently observed child environment.",
+    "original_writer_assertions_codec_files_cleanup_and_guards_retained": true
+  },
+  "runtime_release_conditions": {
+    "materialized_runtime_release_pending": true,
+    "independent_review_does_not_launch": true,
+    "root_must_separately_release_once_serial_exact_original_actions": true,
+    "before_each_next_case": "Fresh-check pinned source/build/inputs and all previous accepted/raw receipts, require exact completed single XML zeroFESD and valid terminal owner before proceeding; stop first nonpass.",
+    "normal_Python_assertions_and_refused_overrides_required": true,
+    "current_reviewer_protected_environment": {},
+    "limits": {
+      "seconds": 300,
+      "aggregate_RSS_KiB": 4194304,
+      "reserve_KiB": 2097152
+    },
+    "external_operator_bounds_not_original_CTest_deadlines": true,
+    "provider_recorded_maps_expected": [],
+    "CPU_scope": "Source requests CPU. Linked Vulkan/resource locks and intentional missing-ICD discovery in the last test are not GPU dispatch evidence or an absence-of-all-driver-activity claim.",
+    "no_concurrent_compiler_screen_during15tests": true
+  },
+  "method": "Passive standard-library source/JSON/hash/text and read-only Git only. No project/helper import, tool/provider/compiler/test/network/process query or packet/source/build mutation; only this review written.",
+  "checkout": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "review_committed_or_pushed": false
+  },
+  "limitations": [
+    "Materialized metadata PASS only; no fifteen-case scientific verdict or automatic execution authorization.",
+    "No complete P1-P6/E1-E4/domain, native/GPU, image reference, UI, Mandatory estate, performance or release promotion."
+  ]
+}

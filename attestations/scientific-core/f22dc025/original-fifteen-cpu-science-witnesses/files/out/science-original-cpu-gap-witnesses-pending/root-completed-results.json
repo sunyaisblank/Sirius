@@ -1,0 +1,1064 @@
+{
+  "schema": "sirius-original-science-CPU-gap-root-completed-results-v1",
+  "created_utc": "2026-10-15T18:39:34.812808+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": true,
+  "all15_original_cases_completed_zero_FESD": true,
+  "cases": [
+    {
+      "case": "p1-oracle-conservation",
+      "test": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+      "test_seconds": "0.002",
+      "owner_seconds": 0.2739518980088178,
+      "sample_count": 1,
+      "peak_sampled_aggregate_RSS_KiB": 23444,
+      "minimum_sampled_available_KiB": 20028532,
+      "whole_input_rows": 1269,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p1-live-conservation",
+      "test": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+      "test_seconds": "0.016",
+      "owner_seconds": 0.27289205297711305,
+      "sample_count": 1,
+      "peak_sampled_aggregate_RSS_KiB": 30144,
+      "minimum_sampled_available_KiB": 20056632,
+      "whole_input_rows": 1273,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p2-oracle-radial",
+      "test": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+      "test_seconds": "0.021",
+      "owner_seconds": 0.2882091370120179,
+      "sample_count": 1,
+      "peak_sampled_aggregate_RSS_KiB": 28412,
+      "minimum_sampled_available_KiB": 20075236,
+      "whole_input_rows": 1277,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p2-oracle-circular",
+      "test": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+      "test_seconds": "0.069",
+      "owner_seconds": 0.3507758339983411,
+      "sample_count": 1,
+      "peak_sampled_aggregate_RSS_KiB": 27868,
+      "minimum_sampled_available_KiB": 17304176,
+      "whole_input_rows": 1281,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p2-live-radial",
+      "test": "CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm",
+      "test_seconds": "0.028",
+      "owner_seconds": 0.3425164670043159,
+      "sample_count": 1,
+      "peak_sampled_aggregate_RSS_KiB": 31344,
+      "minimum_sampled_available_KiB": 17471768,
+      "whole_input_rows": 1285,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p2-p3-star-flicker",
+      "test": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
+      "test_seconds": "29.592",
+      "owner_seconds": 29.71082445399952,
+      "sample_count": 116,
+      "peak_sampled_aggregate_RSS_KiB": 34188,
+      "minimum_sampled_available_KiB": 19060952,
+      "whole_input_rows": 1289,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p3-index-envelope",
+      "test": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
+      "test_seconds": "0.018",
+      "owner_seconds": 0.27349266500095837,
+      "sample_count": 1,
+      "peak_sampled_aggregate_RSS_KiB": 33120,
+      "minimum_sampled_available_KiB": 20071304,
+      "whole_input_rows": 1293,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p4-oracle-truncated-edge",
+      "test": "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+      "test_seconds": "0.008",
+      "owner_seconds": 0.27493033299106173,
+      "sample_count": 1,
+      "peak_sampled_aggregate_RSS_KiB": 28316,
+      "minimum_sampled_available_KiB": 19948656,
+      "whole_input_rows": 1297,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p4-live-truncated-edge",
+      "test": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+      "test_seconds": "155.177",
+      "owner_seconds": 155.3617143679876,
+      "sample_count": 600,
+      "peak_sampled_aggregate_RSS_KiB": 31660,
+      "minimum_sampled_available_KiB": 16624052,
+      "whole_input_rows": 1301,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p5-pupil-focus",
+      "test": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+      "test_seconds": "0.",
+      "owner_seconds": 0.017328413989162073,
+      "sample_count": 0,
+      "peak_sampled_aggregate_RSS_KiB": 0,
+      "minimum_sampled_available_KiB": 19357552,
+      "whole_input_rows": 1305,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p5-four-dimensional-samples",
+      "test": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+      "test_seconds": "0.",
+      "owner_seconds": 0.022218008001800627,
+      "sample_count": 0,
+      "peak_sampled_aggregate_RSS_KiB": 0,
+      "minimum_sampled_available_KiB": 19329596,
+      "whole_input_rows": 1309,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "p6-hdr-roundtrip",
+      "test": "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+      "test_seconds": "0.",
+      "owner_seconds": 0.018351605016505346,
+      "sample_count": 0,
+      "peak_sampled_aggregate_RSS_KiB": 0,
+      "minimum_sampled_available_KiB": 19265592,
+      "whole_input_rows": 1313,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {
+        "TMPDIR": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip"
+      }
+    },
+    {
+      "case": "p6-film-exr-isolation",
+      "test": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
+      "test_seconds": "7.456",
+      "owner_seconds": 7.679661706002662,
+      "sample_count": 30,
+      "peak_sampled_aggregate_RSS_KiB": 181816,
+      "minimum_sampled_available_KiB": 19569376,
+      "whole_input_rows": 1317,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {
+        "TMPDIR": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation"
+      }
+    },
+    {
+      "case": "e1-nine-cpu-frames",
+      "test": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame",
+      "test_seconds": "12.743",
+      "owner_seconds": 12.781658906984376,
+      "sample_count": 50,
+      "peak_sampled_aggregate_RSS_KiB": 193424,
+      "minimum_sampled_available_KiB": 19874716,
+      "whole_input_rows": 1321,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    },
+    {
+      "case": "e3-no-icd-cpu-publication",
+      "test": "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+      "test_seconds": "0.424",
+      "owner_seconds": 0.5435603959776927,
+      "sample_count": 2,
+      "peak_sampled_aggregate_RSS_KiB": 123636,
+      "minimum_sampled_available_KiB": 19948712,
+      "whole_input_rows": 1325,
+      "root_helper_observed_closed_exit": 0,
+      "root_collector_observed_closed_exit": 0,
+      "original_assertions_zero_FESD": true,
+      "TMPDIR_root_invocation": {}
+    }
+  ],
+  "fresh_static_preflight_rows": 1268,
+  "actual_beforeafter_rows_checked": 38910,
+  "unique_whole_input_rows": 1325,
+  "all_beforeafter_current_and_predecessor_raw_pins_exact": true,
+  "normal_Python_assertions_and_original_GTest_assertions_active": true,
+  "test_order_serial_stopfirstnonpass": true,
+  "source_derived_CPU_scope_not_GPU_provider_execution": true,
+  "no_positive_XML_property_invented": true,
+  "runtime_release": {
+    "bytes": 3782,
+    "sha256": "ac66a3e8b76e4f0b44e7a6442acd3515492603504ecc903a58e5087966fd96c9"
+  },
+  "independent_runtime_review": {
+    "bytes": 15215,
+    "sha256": "fc1481d0d88275e6e2cfaaadef0227460afa522d07de1761b1c5bb1286c8a78f"
+  },
+  "saved_owned_birth_rechecks": [
+    {
+      "case": "p1-oracle-conservation",
+      "pid": 1090113,
+      "saved_start_ticks": "13761909",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p1-oracle-conservation",
+      "pid": 1090117,
+      "saved_start_ticks": "13761950",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p1-live-conservation",
+      "pid": 1090165,
+      "saved_start_ticks": "13763887",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p1-live-conservation",
+      "pid": 1090169,
+      "saved_start_ticks": "13763927",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p2-oracle-radial",
+      "pid": 1090323,
+      "saved_start_ticks": "13768125",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p2-oracle-radial",
+      "pid": 1090327,
+      "saved_start_ticks": "13768168",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p2-oracle-circular",
+      "pid": 1090866,
+      "saved_start_ticks": "13777332",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p2-oracle-circular",
+      "pid": 1090870,
+      "saved_start_ticks": "13777413",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p2-live-radial",
+      "pid": 1092194,
+      "saved_start_ticks": "13792381",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p2-live-radial",
+      "pid": 1092199,
+      "saved_start_ticks": "13792462",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p2-p3-star-flicker",
+      "pid": 1092924,
+      "saved_start_ticks": "13800536",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p2-p3-star-flicker",
+      "pid": 1092928,
+      "saved_start_ticks": "13800580",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p3-index-envelope",
+      "pid": 1093680,
+      "saved_start_ticks": "13819750",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p3-index-envelope",
+      "pid": 1093684,
+      "saved_start_ticks": "13819792",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p4-oracle-truncated-edge",
+      "pid": 1095219,
+      "saved_start_ticks": "13855919",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p4-oracle-truncated-edge",
+      "pid": 1095223,
+      "saved_start_ticks": "13855962",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p4-live-truncated-edge",
+      "pid": 1095480,
+      "saved_start_ticks": "13859316",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p4-live-truncated-edge",
+      "pid": 1095484,
+      "saved_start_ticks": "13859355",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p5-pupil-focus",
+      "pid": 1096778,
+      "saved_start_ticks": "13878496",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p5-pupil-focus",
+      "pid": 1096785,
+      "saved_start_ticks": "13878536",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p5-four-dimensional-samples",
+      "pid": 1096857,
+      "saved_start_ticks": "13880109",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p5-four-dimensional-samples",
+      "pid": 1096861,
+      "saved_start_ticks": "13880151",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p6-hdr-roundtrip",
+      "pid": 1096906,
+      "saved_start_ticks": "13881680",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p6-hdr-roundtrip",
+      "pid": 1096910,
+      "saved_start_ticks": "13881718",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p6-film-exr-isolation",
+      "pid": 1096963,
+      "saved_start_ticks": "13882653",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "p6-film-exr-isolation",
+      "pid": 1096967,
+      "saved_start_ticks": "13882691",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "e1-nine-cpu-frames",
+      "pid": 1097072,
+      "saved_start_ticks": "13884391",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "e1-nine-cpu-frames",
+      "pid": 1097079,
+      "saved_start_ticks": "13884433",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "e3-no-icd-cpu-publication",
+      "pid": 1097129,
+      "saved_start_ticks": "13886908",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "e3-no-icd-cpu-publication",
+      "pid": 1097133,
+      "saved_start_ticks": "13886947",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "raw_case_accepted_prelaunch_helper_artifact_pins": {
+    "out/science-original-cpu-gap-witnesses-pending/p1-oracle-conservation/samples.jsonl": {
+      "bytes": 225,
+      "sha256": "221ad81fb9859dccc2984f997634654b756e98703ea64e2822f0f2cc5a632dd1"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-oracle-conservation/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-oracle-conservation/inputs-before.json": {
+      "bytes": 312983,
+      "sha256": "774507612b4e5e290e8e50034091e0024d4379f43885d7b6a3f9e0ae1ace8196"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-oracle-conservation/stdout.log": {
+      "bytes": 812,
+      "sha256": "df55dcf63841c39e41b028e1c302e8e8a5e83879e7aed66fe49d0cbe94937412"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-oracle-conservation/inputs-after.json": {
+      "bytes": 312983,
+      "sha256": "774507612b4e5e290e8e50034091e0024d4379f43885d7b6a3f9e0ae1ace8196"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-oracle-conservation/owner.json": {
+      "bytes": 2088,
+      "sha256": "60326f392b7cacc61d0d9ca5ab9b10e5e43fe56aabe8b9e390a9f8edd0bfc415"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-oracle-conservation/gtest.xml": {
+      "bytes": 631,
+      "sha256": "f1e4d7873b8e7f2616eb3fe023c1d6b2ff3bb34bf7d1a58dc34e73e6df0137b3"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p1-oracle-conservation.json": {
+      "bytes": 2086,
+      "sha256": "3e9345f0ce779c5b44fec2ffd8190299fead870dfc4541fe4cf679d92d3946b5"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p1-oracle-conservation.json": {
+      "bytes": 708,
+      "sha256": "a5318408b8817d50549ac73d6a2c360650832b8145007f6966e96d029da6e56c"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p1-oracle-conservation.log": {
+      "bytes": 578,
+      "sha256": "8f21d6cec3d8a729ab721c2e1c67da26de0155ab2289e451d43e28139cb219b2"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-live-conservation/samples.jsonl": {
+      "bytes": 228,
+      "sha256": "0b0c8328588df7d45fbca980ff7ffa55f0982e3dff036c4bd461b62e5ec2a577"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-live-conservation/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-live-conservation/inputs-before.json": {
+      "bytes": 314280,
+      "sha256": "87aec9bdc23b6505d8072060f5cce34a185674a7444acc2cb5009aa5b6d663ee"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-live-conservation/stdout.log": {
+      "bytes": 726,
+      "sha256": "bc8e83c12ea787694fda261ac30aa2e8d560c686ad27eadd0de8646cb9f89a1e"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-live-conservation/inputs-after.json": {
+      "bytes": 314280,
+      "sha256": "87aec9bdc23b6505d8072060f5cce34a185674a7444acc2cb5009aa5b6d663ee"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-live-conservation/owner.json": {
+      "bytes": 2075,
+      "sha256": "964b766beb13cccf03e80697ac6895c5ec7e88dd55709109d879fe8fdafe30f9"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p1-live-conservation/gtest.xml": {
+      "bytes": 623,
+      "sha256": "26c95c726d06cf53d4e560e8a7deb115ee516662cc21872e32493246f78a7583"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p1-live-conservation.json": {
+      "bytes": 2071,
+      "sha256": "9bb7828b872d1605bc0c9bc0e88ae91c3bc69ba58123174e85dd91254dc44c52"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p1-live-conservation.json": {
+      "bytes": 706,
+      "sha256": "459d97867b635fa5fe0ff5ff9b595085887b6b399b1f148270711d467373e5d4"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p1-live-conservation.log": {
+      "bytes": 577,
+      "sha256": "a6aeba83f99c365f9f76ab911ac61379ad0ee63aea264707a35869463618e545"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-radial/samples.jsonl": {
+      "bytes": 229,
+      "sha256": "eae6dd1b7752e199ea605a6e8067d31236fa021e540ef3a93b0ae9151fc9ce55"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-radial/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-radial/inputs-before.json": {
+      "bytes": 315561,
+      "sha256": "b885f3c1d18d046e4b4844d83cf78626450cb4b85d12af7b91e676f009a3e670"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-radial/stdout.log": {
+      "bytes": 753,
+      "sha256": "0e83479ebe953507c432b39c279a274e9cc92bbf1caeb1df0809633e97aead7a"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-radial/inputs-after.json": {
+      "bytes": 315561,
+      "sha256": "b885f3c1d18d046e4b4844d83cf78626450cb4b85d12af7b91e676f009a3e670"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-radial/owner.json": {
+      "bytes": 2083,
+      "sha256": "a5213ac41045640efeaef402f0b8c0dd841890031b22a6da0dae17a34b8714ce"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-radial/gtest.xml": {
+      "bytes": 630,
+      "sha256": "8c3bd6bfd5a71067566f1ca9ba06acf81bf11274899358449fe01698d331ca47"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p2-oracle-radial.json": {
+      "bytes": 2038,
+      "sha256": "0269dcffab77d9a83a0d790e33d6bae6c7a095076cd405d2cc6b734988e82817"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p2-oracle-radial.json": {
+      "bytes": 702,
+      "sha256": "f7904f59b3224af188dc252407582286cd4e2bcc26521e6b6f824756e8af7180"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p2-oracle-radial.log": {
+      "bytes": 572,
+      "sha256": "768a3240f3ba2a3ed1979ff6836aab2c67e20eeee49c783de40762613dd55905"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-circular/samples.jsonl": {
+      "bytes": 229,
+      "sha256": "06a043eeaa3016bca273ddf351c6183f664420bc93530450f82d056ed5769ebc"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-circular/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-circular/inputs-before.json": {
+      "bytes": 316810,
+      "sha256": "cc8aa8adf585bdeefb824e2eac014dec0964393f338c433d217c56b33589fa35"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-circular/stdout.log": {
+      "bytes": 777,
+      "sha256": "9bdf013c7459c53e6eb374a741e2f09fa72ca97ead5a4034b4972d39dcfeae3b"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-circular/inputs-after.json": {
+      "bytes": 316810,
+      "sha256": "cc8aa8adf585bdeefb824e2eac014dec0964393f338c433d217c56b33589fa35"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-circular/owner.json": {
+      "bytes": 2095,
+      "sha256": "bf0c58756566460bdb609e18e93d8a2ce1ff696554179377029b7a7e4b29074d"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-oracle-circular/gtest.xml": {
+      "bytes": 636,
+      "sha256": "9752f8960e5299b7e72b235f6425d76def9ae59f07ec0900fe804c1ed8f8886f"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p2-oracle-circular.json": {
+      "bytes": 2054,
+      "sha256": "facd02fb454b52aee2363db28212a9577c861206381b8c074fe102762be097db"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p2-oracle-circular.json": {
+      "bytes": 704,
+      "sha256": "1d02e557c4eafb0ce1188b9e11b6f679f718cedf4db4e649832805769d0c19e6"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p2-oracle-circular.log": {
+      "bytes": 574,
+      "sha256": "41b0124d441534aaa8581d6b51bc738699dff4a2cd052500ea66d16e443bf692"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-live-radial/samples.jsonl": {
+      "bytes": 230,
+      "sha256": "9f5596735b8c4b383023f2b07b24e63b20ad5f2fda4b1e8b5908696040d18024"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-live-radial/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-live-radial/inputs-before.json": {
+      "bytes": 318075,
+      "sha256": "12ca0c8a604565ab812d6688e8e60cfebffc9136a51f6c70a6e9bb93543281f0"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-live-radial/stdout.log": {
+      "bytes": 670,
+      "sha256": "ba3a5c8bfc101d04af4709932a68c84aa8385c4b6393dbff060e1444c4b80938"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-live-radial/inputs-after.json": {
+      "bytes": 318075,
+      "sha256": "12ca0c8a604565ab812d6688e8e60cfebffc9136a51f6c70a6e9bb93543281f0"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-live-radial/owner.json": {
+      "bytes": 2056,
+      "sha256": "efda6447f78dbd21c02bfc85c66bee48dd9df403caf94a70290bdffdd8941622"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-live-radial/gtest.xml": {
+      "bytes": 603,
+      "sha256": "84ea1e821a473fe03ce98cceaca273980f2b9ce9e927ba8b785c0acd010be328"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p2-live-radial.json": {
+      "bytes": 2022,
+      "sha256": "8f5329b8faf0473e550092817851846dba87ba6db0f3075d3cb548a23257c026"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p2-live-radial.json": {
+      "bytes": 700,
+      "sha256": "5fe5eeb873c40219d248b212803761787d89f17f301c0dd60f0e1535d1f2fc30"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p2-live-radial.log": {
+      "bytes": 570,
+      "sha256": "63dd967e3294e58dac8d2b5f4f6cfb62d83160b3e2925f768c902e9c2616f4e0"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-p3-star-flicker/samples.jsonl": {
+      "bytes": 26514,
+      "sha256": "26b73e2082d2ecd797d6e9968fc257b944abfb594e4ed75d3b7dd3c72cfbbdc5"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-p3-star-flicker/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-p3-star-flicker/inputs-before.json": {
+      "bytes": 319308,
+      "sha256": "a44354ffd97bd90112cbe68fd45ff7731080b2c07921e3c7bce5affcf7393e18"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-p3-star-flicker/stdout.log": {
+      "bytes": 744,
+      "sha256": "47fd602eafd9a38f58f554d45aa2f11ba3255dd1d039f4c4a26a9b0a4047b4ee"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-p3-star-flicker/inputs-after.json": {
+      "bytes": 319308,
+      "sha256": "a44354ffd97bd90112cbe68fd45ff7731080b2c07921e3c7bce5affcf7393e18"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-p3-star-flicker/owner.json": {
+      "bytes": 2056,
+      "sha256": "d06eb4adbb6baf98522a6f6f2f0247844da4ddf8da2fa826216d46b1d085ab66"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p2-p3-star-flicker/gtest.xml": {
+      "bytes": 599,
+      "sha256": "0c860d7cf9ca312409f6212d17ef58cd89197c536fd3d29143e1f8dccc80992b"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p2-p3-star-flicker.json": {
+      "bytes": 2056,
+      "sha256": "e4ecd5adb6e72db81346d79c38b1dc7d82d11cc5b69f1a10579f037128fc98dc"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p2-p3-star-flicker.json": {
+      "bytes": 704,
+      "sha256": "9fea9cc6d8ef02164ad677ec5dc537e484ebd3f645ed4b15d7dac5cc98980039"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p2-p3-star-flicker.log": {
+      "bytes": 573,
+      "sha256": "a0ed6558212967ba6bf46594d20dde6872eabf5aed89a6b2ca180e971410ce41"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p3-index-envelope/samples.jsonl": {
+      "bytes": 230,
+      "sha256": "df42ab13a46b38bbc06e1f38651cd5b2d4d195ed10506f3fb1f8cde9cd0606a3"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p3-index-envelope/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p3-index-envelope/inputs-before.json": {
+      "bytes": 320573,
+      "sha256": "43057b6cb30c5d52e710d3e1c4d4a1729d58889598eafcc24840f7f440b061bc"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p3-index-envelope/stdout.log": {
+      "bytes": 712,
+      "sha256": "bcfbfede66ca7268e6532d59c3324d776b9c2814cd31e16ec49b8ac3ab04e9ec"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p3-index-envelope/inputs-after.json": {
+      "bytes": 320573,
+      "sha256": "43057b6cb30c5d52e710d3e1c4d4a1729d58889598eafcc24840f7f440b061bc"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p3-index-envelope/owner.json": {
+      "bytes": 2075,
+      "sha256": "02fd70d28e7c326a634776440a2d329923155935e0b47db407762c1af7568e01"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p3-index-envelope/gtest.xml": {
+      "bytes": 615,
+      "sha256": "753bb38ce3f7a89a09145822208f27e8bcf05f6cab49a15920fa9b21e7bb2933"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p3-index-envelope.json": {
+      "bytes": 2047,
+      "sha256": "182b47152bd3a21c63ed903521ed1c9af4e5af520be382c59ea7b6698efe9077"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p3-index-envelope.json": {
+      "bytes": 703,
+      "sha256": "75f995470ec3952c6303c5eae09ba3afd46d0df3e2a34642a08f2e232748fa41"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p3-index-envelope.log": {
+      "bytes": 574,
+      "sha256": "8075cf72c9bff31ed0bf03675f21005180ef80c7f8abcb5e97e3b4e2ea0399b5"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-oracle-truncated-edge/samples.jsonl": {
+      "bytes": 230,
+      "sha256": "6aa0f6ab66ce7a3e348d5ebcede46050d99e99f98921f6a23bf7656bedc66388"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-oracle-truncated-edge/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-oracle-truncated-edge/inputs-before.json": {
+      "bytes": 321830,
+      "sha256": "503b6a45e62b9d6b2f2f27c7b8e11d821d8a32370405e26138187e1a1985e573"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-oracle-truncated-edge/stdout.log": {
+      "bytes": 717,
+      "sha256": "1b8ea13f1d358465f2ef28ffade86359202726231977a4879637182a6b05aa5e"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-oracle-truncated-edge/inputs-after.json": {
+      "bytes": 321830,
+      "sha256": "503b6a45e62b9d6b2f2f27c7b8e11d821d8a32370405e26138187e1a1985e573"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-oracle-truncated-edge/owner.json": {
+      "bytes": 2087,
+      "sha256": "e9ad6c5d2e09922769eb050e3d62175d322f9981fb5958a807a059826d739085"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-oracle-truncated-edge/gtest.xml": {
+      "bytes": 623,
+      "sha256": "a15b4cc52b6434d19398c2cd533ee0704097c75201afc8253f63ecdac43f0755"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p4-oracle-truncated-edge.json": {
+      "bytes": 2103,
+      "sha256": "02678c4d7e2c4feac8e66ad6c853004bfddaf5078f67d785bcf5ade7a820f801"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p4-oracle-truncated-edge.json": {
+      "bytes": 710,
+      "sha256": "90bb59365f3139395e10406f9307ce94b72be3ec903c345307fab35cc02b3de3"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p4-oracle-truncated-edge.log": {
+      "bytes": 581,
+      "sha256": "f8175a1f9f34ffc410e8395ab7324c8d26f672c7bc50e6af7f795b9d909fb4b2"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-live-truncated-edge/samples.jsonl": {
+      "bytes": 136425,
+      "sha256": "33e1fc163b0c43fdf3231d23cc020f56837cfa431bb96d3d5dfd4b56e0c024e7"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-live-truncated-edge/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-live-truncated-edge/inputs-before.json": {
+      "bytes": 323143,
+      "sha256": "9609d01dcbc71ca5a7e4dfbc6823197c2ec01b3607bf9d044a673d391e050935"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-live-truncated-edge/stdout.log": {
+      "bytes": 723,
+      "sha256": "234d9b5bc89dbc37bf30c5f692a59e0f924a14784216a03cca4a616c3139c6e4"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-live-truncated-edge/inputs-after.json": {
+      "bytes": 323143,
+      "sha256": "9609d01dcbc71ca5a7e4dfbc6823197c2ec01b3607bf9d044a673d391e050935"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-live-truncated-edge/owner.json": {
+      "bytes": 2084,
+      "sha256": "f238c354e36ea9d374244053d9cfa47d048bafdbadcb189f536fa5227691ea1a"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p4-live-truncated-edge/gtest.xml": {
+      "bytes": 624,
+      "sha256": "76096928110c07383e15952bb2033b5158314a1fe92134a689aca2ef99824955"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p4-live-truncated-edge.json": {
+      "bytes": 2090,
+      "sha256": "25d217de97d34e7bf564efb78b6cffd50c585e27a225bdbb4eb74524edfb1bcb"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p4-live-truncated-edge.json": {
+      "bytes": 708,
+      "sha256": "6b1414fb364044a397fb721abd94f0951a9c7f3e896d45289c85c4a3bffcd91a"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p4-live-truncated-edge.log": {
+      "bytes": 577,
+      "sha256": "de57aeeb464199f7940f576c9b101d79056b38327e05824df0192466b91f7302"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-pupil-focus/samples.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-pupil-focus/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-pupil-focus/inputs-before.json": {
+      "bytes": 324440,
+      "sha256": "7c36b89cd250b318245f7881e897a76850a6e566998d4f868c16168bccdd239c"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-pupil-focus/stdout.log": {
+      "bytes": 688,
+      "sha256": "23aedd1acb930965b1a1988d16395be25d9d7e893b77c4d64b1762d54cf341ff"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-pupil-focus/inputs-after.json": {
+      "bytes": 324440,
+      "sha256": "7c36b89cd250b318245f7881e897a76850a6e566998d4f868c16168bccdd239c"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-pupil-focus/owner.json": {
+      "bytes": 2053,
+      "sha256": "6b081391ec24de12e5f5e982cb180e7d59d1acc1b70958dcb54911c67455aeff"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-pupil-focus/gtest.xml": {
+      "bytes": 588,
+      "sha256": "38df155e8f584b77b0567433193dad445ae6b2590e6ad8ff0afa9ff7c654df3f"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p5-pupil-focus.json": {
+      "bytes": 2015,
+      "sha256": "3780a4c28a8db48771235b126c8ce39fc9e5f30bcc1829cc2e611f408aab5668"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p5-pupil-focus.json": {
+      "bytes": 700,
+      "sha256": "3dca1d2fa2aa56941160a2e5358444c740b9186449dfae3d41d553ec0aedd011"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p5-pupil-focus.log": {
+      "bytes": 568,
+      "sha256": "e4a64f0994e52eb36c1a279e4e2871ff20159408b9b6bfdb3fde26a0f4024bb4"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-four-dimensional-samples/samples.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-four-dimensional-samples/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-four-dimensional-samples/inputs-before.json": {
+      "bytes": 325673,
+      "sha256": "ef0b89c9d14a84d72c4d8f1ed06dca3571bf5c5ef386ec53c2aab008e076ce62"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-four-dimensional-samples/stdout.log": {
+      "bytes": 665,
+      "sha256": "f592ebabfc4c0fe2567f09b9eadf618258152582f53bedd1f1885afcb3320f55"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-four-dimensional-samples/inputs-after.json": {
+      "bytes": 325673,
+      "sha256": "ef0b89c9d14a84d72c4d8f1ed06dca3571bf5c5ef386ec53c2aab008e076ce62"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-four-dimensional-samples/owner.json": {
+      "bytes": 2074,
+      "sha256": "eb8055970d8086c545d3e3f639e7875ac3be6c9315e6e507eb8f7eb3fc625709"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p5-four-dimensional-samples/gtest.xml": {
+      "bytes": 586,
+      "sha256": "33fa51b6d4d8d7df79a2945e1923cd99399420a782b9e83cd146f6fc56597d35"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p5-four-dimensional-samples.json": {
+      "bytes": 2119,
+      "sha256": "946688f4ca78e04ecb810f29a1604753ead07dce75e76e3b71ef349e5333cf61"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p5-four-dimensional-samples.json": {
+      "bytes": 713,
+      "sha256": "f4818e0224387858ade348e189370d045072b506a8888b1e7f037836da2d7331"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p5-four-dimensional-samples.log": {
+      "bytes": 581,
+      "sha256": "705250317bccacfd9806cff2556456525053fe6778197bb6bd73d28b4027e63d"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip/samples.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip/inputs-before.json": {
+      "bytes": 327010,
+      "sha256": "c233a697f825d5d6039e2cdc616627c41effb977659964566fe8a1ab629763b6"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip/stdout.log": {
+      "bytes": 638,
+      "sha256": "303a87f08c9b6d709fb0e1bb0db006e904ca6fc040c548271532ca356c743fb5"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip/inputs-after.json": {
+      "bytes": 327010,
+      "sha256": "c233a697f825d5d6039e2cdc616627c41effb977659964566fe8a1ab629763b6"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip/owner.json": {
+      "bytes": 2047,
+      "sha256": "da2c3429d6c6a721f47271b212ea13c7b920179dfc6e5e17014d0627ffd1df46"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip/gtest.xml": {
+      "bytes": 576,
+      "sha256": "eca6f1485363dbe3558372da26036d24b77f5a486ac1b3a026f01706e0ddefe6"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p6-hdr-roundtrip.json": {
+      "bytes": 2031,
+      "sha256": "73dcb8c37b8df38ad6c728175b2f38a6a22645d25fa72686dbb0d76f863fd48a"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p6-hdr-roundtrip.json": {
+      "bytes": 813,
+      "sha256": "85baad4168ea6e251855847cd133dc3e94df3b4910a303ebee8d75111daa423a"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p6-hdr-roundtrip.log": {
+      "bytes": 570,
+      "sha256": "07c8e552663066e7d2bacf72aad3c2630945a1640ff192e785fdfc44e4c46d20"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/samples.jsonl": {
+      "bytes": 6892,
+      "sha256": "2c63d7d62fb9f43d0c099b6e3ef5b748ae109632d074b82a7aa4e1604a8cc899"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/inputs-before.json": {
+      "bytes": 328259,
+      "sha256": "0733bac958f3acfefbdd02b42267f5b237ef20f04c8b40420676b86b6bc060b0"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/stdout.log": {
+      "bytes": 6286,
+      "sha256": "5be643480b0bb4081033940e03036b481da65bd3cb8d69f8090c8b64854d6255"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/inputs-after.json": {
+      "bytes": 328259,
+      "sha256": "0733bac958f3acfefbdd02b42267f5b237ef20f04c8b40420676b86b6bc060b0"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/owner.json": {
+      "bytes": 2070,
+      "sha256": "4d0c60ffb01ef28391bec12e7dbc4253f42473eda2ea89353e7cfd9e45604eb9"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/gtest.xml": {
+      "bytes": 608,
+      "sha256": "6bc4bb5ace818ae76603031eda7a0ce07fd6f88c7bf285c558e1391d9c936396"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-p6-film-exr-isolation.json": {
+      "bytes": 2080,
+      "sha256": "bed23ab05be556a4951cd6df404e23ec509b03c5328d872a24c1156641d39113"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p6-film-exr-isolation.json": {
+      "bytes": 823,
+      "sha256": "31f297e7f6819af7f2f67e5881e1009101852fe9974488006a3dae7276339a80"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-p6-film-exr-isolation.log": {
+      "bytes": 577,
+      "sha256": "abd4585a65e67a0a91f2cd07ce96a6e48e85363891e041ecb1ecc0f9af5a0a22"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e1-nine-cpu-frames/samples.jsonl": {
+      "bytes": 11503,
+      "sha256": "242ba3de33c50e825859ab30dd0b8bb569bff7ea23cee8c9d6d1449f2d7f5daf"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e1-nine-cpu-frames/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e1-nine-cpu-frames/inputs-before.json": {
+      "bytes": 329549,
+      "sha256": "1b69eed809612a3df331d62a0f70eaa288fad62ab21406d0070d10f659f85ed9"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e1-nine-cpu-frames/stdout.log": {
+      "bytes": 11944,
+      "sha256": "68c04691f8ad5314c3d0be74db750ca76615f5199ebeffe475a07a74da32d37d"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e1-nine-cpu-frames/inputs-after.json": {
+      "bytes": 329549,
+      "sha256": "1b69eed809612a3df331d62a0f70eaa288fad62ab21406d0070d10f659f85ed9"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e1-nine-cpu-frames/owner.json": {
+      "bytes": 2063,
+      "sha256": "376ba28fa4e21d3b6efda1aad7a7318222099bbc89214f58f0c709d32ca19cb1"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e1-nine-cpu-frames/gtest.xml": {
+      "bytes": 610,
+      "sha256": "4ec7a77c36e8a16974849fc5eb30588e5ea846ac317587a1794d2b09c17f39f4"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-e1-nine-cpu-frames.json": {
+      "bytes": 2060,
+      "sha256": "c86d9239dc63e2f8d74dae16f93c8a5bbabba5748838600e48f9fc20066b6e10"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-e1-nine-cpu-frames.json": {
+      "bytes": 704,
+      "sha256": "d9917bfb7181a0bbe06ee838bea3c7dc8b7553eae1094fca69c9c9ee4e2431ee"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-e1-nine-cpu-frames.log": {
+      "bytes": 575,
+      "sha256": "3744dbc8487ae7d9286e7cc4f19d852eda44276023dda794b7767dec7fbba62b"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e3-no-icd-cpu-publication/samples.jsonl": {
+      "bytes": 461,
+      "sha256": "d605ad0f5e568685f71b1edcd0c244095457c3afc448081f4e79b558d466824c"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e3-no-icd-cpu-publication/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e3-no-icd-cpu-publication/inputs-before.json": {
+      "bytes": 330816,
+      "sha256": "0aa19a021c3e7944a74c851da4883a836cdaf224990bd0297c50253f02ce6c26"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e3-no-icd-cpu-publication/stdout.log": {
+      "bytes": 1944,
+      "sha256": "d9292f01b89f4f6bce9b98aa8de45c3c569559ba2c668566f51700f361ba8875"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e3-no-icd-cpu-publication/inputs-after.json": {
+      "bytes": 330816,
+      "sha256": "0aa19a021c3e7944a74c851da4883a836cdaf224990bd0297c50253f02ce6c26"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e3-no-icd-cpu-publication/owner.json": {
+      "bytes": 2070,
+      "sha256": "206b61044ecaf52afe76b52b6600899357f49534b6f0db4e775a017bdbfe893f"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/e3-no-icd-cpu-publication/gtest.xml": {
+      "bytes": 598,
+      "sha256": "2f1e7359e73cbccb61bf93bd331a6fe18def371e03d87a6eb29829cf09c1cc0c"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-accepted-e3-no-icd-cpu-publication.json": {
+      "bytes": 2112,
+      "sha256": "4f939ce071067eeffcc8e349a8149fe04d528ce083f65a85e1f1e14c83d61400"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-e3-no-icd-cpu-publication.json": {
+      "bytes": 711,
+      "sha256": "bedb6dbdf407ec36b3dba4e169d417b9fb6b2f46aa930c8786ed80484fb150c9"
+    },
+    "out/science-original-cpu-gap-witnesses-pending/root-helper-e3-no-icd-cpu-publication.log": {
+      "bytes": 582,
+      "sha256": "64b70b51515a359922a80515f6ea8873099454c869e23bc211268a2640511496"
+    }
+  },
+  "writer_scope": "Actual root invocation TMPDIR for two writers plus unchanged owner Popen inheritance, original source paths/assertions and no residual own output. No separate child proc-env capture or retained EXR/image bytes claimed. Film test checks display snapshots, not EXR byte equality.",
+  "sampled_RSS_limit_scope": "Sampled aggregate owner-session+controller only; zero samples/peak0 for fast cases are unobserved peaks, not proof of zero/continuous RSS. No universal no-process/no-Vulkan activity claim.",
+  "source_clean_committed_pushed": true,
+  "branch": "development/minimum-step-floor-2026-10-15",
+  "upstream_ahead_behind": [
+    0,
+    0
+  ],
+  "worktrees": 1,
+  "source_build_hold_release": false,
+  "scope": "Fifteen original finite CPU science-gap witnesses only. E2 eleven remains separate. No full P1-P6/E1-E4, physical P3/P5 IMAX/device2GiB/native graphics/UI/Mandatory/cold/latency/full-domain/release qualification."
+}

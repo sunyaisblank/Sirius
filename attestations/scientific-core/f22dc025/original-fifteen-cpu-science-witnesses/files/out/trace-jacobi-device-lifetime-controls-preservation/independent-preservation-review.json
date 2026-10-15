@@ -1,0 +1,159 @@
+{
+  "schema": "sirius-f22-trace-first-rung-stop-independent-preservation-review-v1",
+  "passed": true,
+  "scientific_attempt_passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T18:26:23.186337+00:00",
+  "blockers": [],
+  "scope": "Complete byte preservation and input-role provenance for the reviewed bounded incomplete stop; prospective pair-loop source remains unexecuted. No runtime, source/build hold release or removal admission.",
+  "pins": {
+    "manifest": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-first-rung-rss-stop/manifest.json",
+      "bytes": 9961,
+      "sha256": "e3e87e123d65a23babccb26f25a133f85c4d2e25d488ec34bdcc51e5a5d4589b"
+    },
+    "preservation": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-first-rung-rss-stop/preservation.json",
+      "bytes": 19140,
+      "sha256": "1dea0d023c05691712a60ede787397c6e11f8da628bbbfe7342cf0baf16c13d4"
+    },
+    "static_catalogue": {
+      "path": "out/trace-jacobi-device-lifetime-controls-preservation/static-archive-dependencies.json",
+      "bytes": 700865,
+      "sha256": "bd05c54c2bf038899690ae97bfc3ad659fd9b289c2d92c0c6578c7ce3afb59e0"
+    },
+    "root_bounded_stop": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-first-rung-rss-stop/files/out/trace-jacobi-device-lifetime-controls-f22dc025/root-bounded-stop.json",
+      "bytes": 5164,
+      "sha256": "5f296f18b3ce7f83af720c6daff866adeb0222e6a8b0f759746bb4f84a0006b4"
+    },
+    "independent_terminal_stop_review": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-first-rung-rss-stop/files/out/trace-jacobi-device-lifetime-controls-f22dc025/independent-terminal-stop-review.json",
+      "bytes": 12927,
+      "sha256": "789cb849255abb49e857dd34ff60ca6e7b46c38cb6974a4e27e0b12f58c8a3c9"
+    },
+    "accepted_runtime_admission": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-first-rung-rss-stop/files/out/trace-jacobi-device-lifetime-controls-f22dc025/independent-runtime-admission.json",
+      "bytes": 9458,
+      "sha256": "8a3be449079c09453c7203eaa4801b8843e0babbe0c4a448705f93e0966cf7a6"
+    },
+    "late_CI_publication": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-first-rung-rss-stop/files/out/trace-jacobi-device-lifetime-ci-preservation/root-git-preservation.json",
+      "bytes": 1383,
+      "sha256": "b712f2242ed8be8058b94630daa5323de309d38430a22900c0c973bb54750909"
+    },
+    "prospective_pair_loop_contract": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-first-rung-rss-stop/files/out/trace-jacobi-pair-loop/source-contracts.json",
+      "bytes": 11527,
+      "sha256": "6b9878f7ff343526bed6df58a9ac478157601b3d39364fc8c95998132d0b556b"
+    },
+    "prospective_pair_loop_source_review": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-first-rung-rss-stop/files/out/trace-jacobi-pair-loop/independent-source-review.json",
+      "bytes": 11663,
+      "sha256": "62709208b8b4e868bf11f4a5e61bb7ce1af1118155607c9d0406ed11f9144915"
+    }
+  },
+  "complete_file_coverage": {
+    "actual_regular_bundle_files": 50,
+    "manifest_payloads": 48,
+    "metadata_files": 2,
+    "copy_pairs": 48,
+    "exact_manifest_tree_and_all_payload_hashes": true,
+    "preservation_pins_actual_manifest": true,
+    "all48_raw_to_preserved_copy_pairs_byte_exact": true,
+    "payload_partition": {
+      "entire_actual_P2_raw_packet": 37,
+      "late_CI_publication_files": 5,
+      "prospective_pair_loop_source_files": 5,
+      "static_catalogue": 1
+    },
+    "entire_current_P2_raw_file_set_exactly_covered": true,
+    "no_XML_result_or_positive_acceptance_synthesized": true
+  },
+  "actual_input_catalogue": {
+    "rows": 1297,
+    "exact_before_after_catalogue_path_and_rich_identity_equality": true,
+    "actual_owner_set_preflight1296_plus_preflight_itself": true,
+    "all1297_current_content_and_resolved_path_pins_match": true,
+    "partition": {
+      "tracked_source_Git": 538,
+      "hash_only_host_or_build_dependency": 689,
+      "prior_actual_Linux_CPU_bundle_Git_bytes": 32,
+      "compiled_and_staged_SPIRV_Git_byte_alias": 12,
+      "historical_shader_proof_Git_bytes": 2,
+      "actual_own_bundle_copy": 24
+    },
+    "all584_named_Git_rows_actual_blob_bytes_and_given_objectIDs_checked": true,
+    "all24_own_static_copy_rows_resolve_to_exact_bundle_payloads": true,
+    "actual_Linux_input_commit": "34a94cd5b367dfdb9b62f71be693bf1e80bf7781",
+    "Linux_role_scope": "Actual current Linux backend ELF/Cache/Ninja/alignment and producer/source/build metadata use their real published Linux bytes, including new fe663 backend. No Windows/macOS executable alias.",
+    "SPIRV_alias_scope": "12 compiled/staged roles use exact six module blobs from d0662d27ef039c2a83aa43f6e7df57cd89f9fe76; byte identity does not prove any completed rung.",
+    "historical_shader_proof_scope": "Two exact source-review/contract blobs from2c419ad2f420a50ebb6cc92c37ef0cc30927a63d, not new runtime facts.",
+    "hash_only_boundary": "689 actual host/tool/header/object/link/build dependencies have content/resolved identity only. No byte backup, portability or reconstruction asserted."
+  },
+  "preserved_actual_disposition": {
+    "owner_passed": false,
+    "child_exit": -15,
+    "stop_reason": "diagnostic_sampled_rss_guard",
+    "owner_seconds": 137.3254029410018,
+    "samples": 5400,
+    "peak_sampled_aggregate_RSS_KiB": 4196456,
+    "limit_KiB": 4194304,
+    "excess_KiB": 2152,
+    "minimum_available_KiB": 16030256,
+    "sample_maximum_minimum_and_recorded_input_source_stability_reconciled": true,
+    "only_marker": "[TraceJacobiRung] module=trace.spv phase=begin",
+    "prepared_exercised_later_rung_or_completed_numerical_verdict": false,
+    "XML_present": false,
+    "collector_executed": false,
+    "independent_terminal_review_passed": false,
+    "terminal_audit_completed_and_ownership_record_valid": true,
+    "saved_provider_evidence": "Same saved child birth/session and LVP08:50/inode143595; owner4 and separate live capture5 lines share exact file identity. Environment/defaultcache/cleanup and dated birth checks remain terminal-review scoped.",
+    "source_bound": "Current first-rung stop excludes later-rung retention as its explanation. Factory/module-load/Prepare interval is not narrowed to an actual JIT function or allocating call. Original e0 phase remains unknown.",
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "new_process_or_provider_observation_by_this_reviewer": false
+  },
+  "late_CI_publication": {
+    "commit": "c8bc52bbea5fd0e4b1a56b42bd1f2af3770eddc8",
+    "all5_copy_and_publication_reference_pins_match": true,
+    "recorded_actual_push_closed_exit": 0,
+    "recorded_fresh_remote_after_push_closure_exit": 0,
+    "saved_exact_remote_ref_and_local_tag_join": true,
+    "named_Git_manifest_and_preservation_bytes_match_accepted304file_CI_bundle": true,
+    "scope": "Current three integration/two9-case native-build gates only. Historical rootcheck push_pending is preserved as creation-time state and composed with actual later publication; no scientific promotion."
+  },
+  "prospective_pair_loop_source": {
+    "files": 5,
+    "all5_current_copy_pins_exact": true,
+    "original_slang_equals_current_canonical_source": true,
+    "independent_source_review_passed": true,
+    "tracked_source_applied": false,
+    "compiled": false,
+    "runtime_executed": false,
+    "scope": "Separate one-callsite pair-loop hypothesis only. Source review does not establish emitted footprint, semantics under lowering, JIT/RSS improvement, numerical completion or adoption. It supplies no observed cause for the stopped attempt."
+  },
+  "holds_and_claim_limits": {
+    "new_bundle_Git_publication_pending": true,
+    "raw_inputs_kept": true,
+    "source_build_hold_release": false,
+    "deletion_authorized_or_performed": false,
+    "scope": "No unchanged retry/guard raise, P2 numerical pass/failure or FP64/all3rung result; no fullP1/strong-field/native/Mandatory/cold/performance/fullscience/UI/release qualification."
+  },
+  "checkout": {
+    "head": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "this_ignored_review_committed_or_pushed": false
+  },
+  "method": "Passive stdlib JSON/source/text/hash/regular-file reads and read-only Git only. Existing Forensic terminal audit and prior source/runtime/CI preservation semantics reused. No helper/project import/parser/tool/provider/test/network/process query/signal/Git mutation/removal or existing source/artifact mutation; no live C15case output read."
+}

@@ -1,0 +1,1136 @@
+{
+  "schema": "sirius-original-science-CPU-gap-independent-completion-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewed_utc": "2026-10-15T18:42:12.638689+00:00",
+  "original_cases_completed_zero_FESD": 15,
+  "blockers": [],
+  "critical_pins": {
+    "root-completed-results.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/root-completed-results.json",
+      "bytes": 45960,
+      "sha256": "8b6ad1da07c8fff48d30666e249400d9b8f72dce367d78015831033644dbcafe"
+    },
+    "root-runtime-release.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/root-runtime-release.json",
+      "bytes": 3782,
+      "sha256": "ac66a3e8b76e4f0b44e7a6442acd3515492603504ecc903a58e5087966fd96c9"
+    },
+    "independent-source-review.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/independent-source-review.json",
+      "bytes": 20486,
+      "sha256": "679f63255ea13715bc94e0845bc306f2bb3dbfd438975d73783c7fd9a228ae63"
+    },
+    "independent-runtime-admission.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/independent-runtime-admission.json",
+      "bytes": 15215,
+      "sha256": "fc1481d0d88275e6e2cfaaadef0227460afa522d07de1761b1c5bb1286c8a78f"
+    },
+    "source-contracts.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/source-contracts.json",
+      "bytes": 51780,
+      "sha256": "d3a500800a1fe5ca87d0a3e51392c8893a3f1c161735e20a939b936ea119407e"
+    },
+    "actions.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/actions.json",
+      "bytes": 816674,
+      "sha256": "a76ca2a056be253a998d8bd321a81fdec99dd55a7ece163ca654361deed79054"
+    },
+    "readiness.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/readiness.json",
+      "bytes": 64624,
+      "sha256": "7a1390dfc359853597f2a3c48460e54ecb87de355da0cf69bae5a2ff82a8182c"
+    },
+    "root-preflight.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/root-preflight.json",
+      "bytes": 326582,
+      "sha256": "e1a5bcb3034cb298e7bc2bc7495fb73c43a9f2b74b2e794b71d7dedd8f25adba"
+    },
+    "build-input-observation.json": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/build-input-observation.json",
+      "bytes": 256830,
+      "sha256": "7e8e1d4adddbb8aa508712fd38b6d8fc6103361a48d1163a47696947081da5d6"
+    },
+    "run_owned.py": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/root_acceptance.py",
+      "bytes": 3893,
+      "sha256": "fe55382eb4d727ac37a8719fb1e27eb96fea65d4569ecc64c97db05070dbd538"
+    }
+  },
+  "cases": [
+    {
+      "case": "p1-oracle-conservation",
+      "original_name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+      "XML_test_seconds": "0.002",
+      "owner_seconds": 0.2739518980088178,
+      "samples": 1,
+      "peak_sampled_aggregate_RSS_KiB": 23444,
+      "minimum_sampled_available_KiB": 20028532,
+      "whole_input_rows": 1269,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2088,
+        "sha256": "60326f392b7cacc61d0d9ca5ab9b10e5e43fe56aabe8b9e390a9f8edd0bfc415"
+      },
+      "XML": {
+        "bytes": 631,
+        "sha256": "f1e4d7873b8e7f2616eb3fe023c1d6b2ff3bb34bf7d1a58dc34e73e6df0137b3"
+      },
+      "accepted": {
+        "bytes": 2086,
+        "sha256": "3e9345f0ce779c5b44fec2ffd8190299fead870dfc4541fe4cf679d92d3946b5"
+      }
+    },
+    {
+      "case": "p1-live-conservation",
+      "original_name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+      "XML_test_seconds": "0.016",
+      "owner_seconds": 0.27289205297711305,
+      "samples": 1,
+      "peak_sampled_aggregate_RSS_KiB": 30144,
+      "minimum_sampled_available_KiB": 20056632,
+      "whole_input_rows": 1273,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2075,
+        "sha256": "964b766beb13cccf03e80697ac6895c5ec7e88dd55709109d879fe8fdafe30f9"
+      },
+      "XML": {
+        "bytes": 623,
+        "sha256": "26c95c726d06cf53d4e560e8a7deb115ee516662cc21872e32493246f78a7583"
+      },
+      "accepted": {
+        "bytes": 2071,
+        "sha256": "9bb7828b872d1605bc0c9bc0e88ae91c3bc69ba58123174e85dd91254dc44c52"
+      }
+    },
+    {
+      "case": "p2-oracle-radial",
+      "original_name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+      "XML_test_seconds": "0.021",
+      "owner_seconds": 0.2882091370120179,
+      "samples": 1,
+      "peak_sampled_aggregate_RSS_KiB": 28412,
+      "minimum_sampled_available_KiB": 20075236,
+      "whole_input_rows": 1277,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2083,
+        "sha256": "a5213ac41045640efeaef402f0b8c0dd841890031b22a6da0dae17a34b8714ce"
+      },
+      "XML": {
+        "bytes": 630,
+        "sha256": "8c3bd6bfd5a71067566f1ca9ba06acf81bf11274899358449fe01698d331ca47"
+      },
+      "accepted": {
+        "bytes": 2038,
+        "sha256": "0269dcffab77d9a83a0d790e33d6bae6c7a095076cd405d2cc6b734988e82817"
+      }
+    },
+    {
+      "case": "p2-oracle-circular",
+      "original_name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+      "XML_test_seconds": "0.069",
+      "owner_seconds": 0.3507758339983411,
+      "samples": 1,
+      "peak_sampled_aggregate_RSS_KiB": 27868,
+      "minimum_sampled_available_KiB": 17304176,
+      "whole_input_rows": 1281,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2095,
+        "sha256": "bf0c58756566460bdb609e18e93d8a2ce1ff696554179377029b7a7e4b29074d"
+      },
+      "XML": {
+        "bytes": 636,
+        "sha256": "9752f8960e5299b7e72b235f6425d76def9ae59f07ec0900fe804c1ed8f8886f"
+      },
+      "accepted": {
+        "bytes": 2054,
+        "sha256": "facd02fb454b52aee2363db28212a9577c861206381b8c074fe102762be097db"
+      }
+    },
+    {
+      "case": "p2-live-radial",
+      "original_name": "CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm",
+      "XML_test_seconds": "0.028",
+      "owner_seconds": 0.3425164670043159,
+      "samples": 1,
+      "peak_sampled_aggregate_RSS_KiB": 31344,
+      "minimum_sampled_available_KiB": 17471768,
+      "whole_input_rows": 1285,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2056,
+        "sha256": "efda6447f78dbd21c02bfc85c66bee48dd9df403caf94a70290bdffdd8941622"
+      },
+      "XML": {
+        "bytes": 603,
+        "sha256": "84ea1e821a473fe03ce98cceaca273980f2b9ce9e927ba8b785c0acd010be328"
+      },
+      "accepted": {
+        "bytes": 2022,
+        "sha256": "8f5329b8faf0473e550092817851846dba87ba6db0f3075d3cb548a23257c026"
+      }
+    },
+    {
+      "case": "p2-p3-star-flicker",
+      "original_name": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
+      "XML_test_seconds": "29.592",
+      "owner_seconds": 29.71082445399952,
+      "samples": 116,
+      "peak_sampled_aggregate_RSS_KiB": 34188,
+      "minimum_sampled_available_KiB": 19060952,
+      "whole_input_rows": 1289,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2056,
+        "sha256": "d06eb4adbb6baf98522a6f6f2f0247844da4ddf8da2fa826216d46b1d085ab66"
+      },
+      "XML": {
+        "bytes": 599,
+        "sha256": "0c860d7cf9ca312409f6212d17ef58cd89197c536fd3d29143e1f8dccc80992b"
+      },
+      "accepted": {
+        "bytes": 2056,
+        "sha256": "e4ecd5adb6e72db81346d79c38b1dc7d82d11cc5b69f1a10579f037128fc98dc"
+      }
+    },
+    {
+      "case": "p3-index-envelope",
+      "original_name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
+      "XML_test_seconds": "0.018",
+      "owner_seconds": 0.27349266500095837,
+      "samples": 1,
+      "peak_sampled_aggregate_RSS_KiB": 33120,
+      "minimum_sampled_available_KiB": 20071304,
+      "whole_input_rows": 1293,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2075,
+        "sha256": "02fd70d28e7c326a634776440a2d329923155935e0b47db407762c1af7568e01"
+      },
+      "XML": {
+        "bytes": 615,
+        "sha256": "753bb38ce3f7a89a09145822208f27e8bcf05f6cab49a15920fa9b21e7bb2933"
+      },
+      "accepted": {
+        "bytes": 2047,
+        "sha256": "182b47152bd3a21c63ed903521ed1c9af4e5af520be382c59ea7b6698efe9077"
+      }
+    },
+    {
+      "case": "p4-oracle-truncated-edge",
+      "original_name": "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+      "XML_test_seconds": "0.008",
+      "owner_seconds": 0.27493033299106173,
+      "samples": 1,
+      "peak_sampled_aggregate_RSS_KiB": 28316,
+      "minimum_sampled_available_KiB": 19948656,
+      "whole_input_rows": 1297,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2087,
+        "sha256": "e9ad6c5d2e09922769eb050e3d62175d322f9981fb5958a807a059826d739085"
+      },
+      "XML": {
+        "bytes": 623,
+        "sha256": "a15b4cc52b6434d19398c2cd533ee0704097c75201afc8253f63ecdac43f0755"
+      },
+      "accepted": {
+        "bytes": 2103,
+        "sha256": "02678c4d7e2c4feac8e66ad6c853004bfddaf5078f67d785bcf5ade7a820f801"
+      }
+    },
+    {
+      "case": "p4-live-truncated-edge",
+      "original_name": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+      "XML_test_seconds": "155.177",
+      "owner_seconds": 155.3617143679876,
+      "samples": 600,
+      "peak_sampled_aggregate_RSS_KiB": 31660,
+      "minimum_sampled_available_KiB": 16624052,
+      "whole_input_rows": 1301,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2084,
+        "sha256": "f238c354e36ea9d374244053d9cfa47d048bafdbadcb189f536fa5227691ea1a"
+      },
+      "XML": {
+        "bytes": 624,
+        "sha256": "76096928110c07383e15952bb2033b5158314a1fe92134a689aca2ef99824955"
+      },
+      "accepted": {
+        "bytes": 2090,
+        "sha256": "25d217de97d34e7bf564efb78b6cffd50c585e27a225bdbb4eb74524edfb1bcb"
+      }
+    },
+    {
+      "case": "p5-pupil-focus",
+      "original_name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+      "XML_test_seconds": "0.",
+      "owner_seconds": 0.017328413989162073,
+      "samples": 0,
+      "peak_sampled_aggregate_RSS_KiB": 0,
+      "minimum_sampled_available_KiB": 19357552,
+      "whole_input_rows": 1305,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2053,
+        "sha256": "6b081391ec24de12e5f5e982cb180e7d59d1acc1b70958dcb54911c67455aeff"
+      },
+      "XML": {
+        "bytes": 588,
+        "sha256": "38df155e8f584b77b0567433193dad445ae6b2590e6ad8ff0afa9ff7c654df3f"
+      },
+      "accepted": {
+        "bytes": 2015,
+        "sha256": "3780a4c28a8db48771235b126c8ce39fc9e5f30bcc1829cc2e611f408aab5668"
+      }
+    },
+    {
+      "case": "p5-four-dimensional-samples",
+      "original_name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+      "XML_test_seconds": "0.",
+      "owner_seconds": 0.022218008001800627,
+      "samples": 0,
+      "peak_sampled_aggregate_RSS_KiB": 0,
+      "minimum_sampled_available_KiB": 19329596,
+      "whole_input_rows": 1309,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2074,
+        "sha256": "eb8055970d8086c545d3e3f639e7875ac3be6c9315e6e507eb8f7eb3fc625709"
+      },
+      "XML": {
+        "bytes": 586,
+        "sha256": "33fa51b6d4d8d7df79a2945e1923cd99399420a782b9e83cd146f6fc56597d35"
+      },
+      "accepted": {
+        "bytes": 2119,
+        "sha256": "946688f4ca78e04ecb810f29a1604753ead07dce75e76e3b71ef349e5333cf61"
+      }
+    },
+    {
+      "case": "p6-hdr-roundtrip",
+      "original_name": "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+      "XML_test_seconds": "0.",
+      "owner_seconds": 0.018351605016505346,
+      "samples": 0,
+      "peak_sampled_aggregate_RSS_KiB": 0,
+      "minimum_sampled_available_KiB": 19265592,
+      "whole_input_rows": 1313,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2047,
+        "sha256": "da2c3429d6c6a721f47271b212ea13c7b920179dfc6e5e17014d0627ffd1df46"
+      },
+      "XML": {
+        "bytes": 576,
+        "sha256": "eca6f1485363dbe3558372da26036d24b77f5a486ac1b3a026f01706e0ddefe6"
+      },
+      "accepted": {
+        "bytes": 2031,
+        "sha256": "73dcb8c37b8df38ad6c728175b2f38a6a22645d25fa72686dbb0d76f863fd48a"
+      }
+    },
+    {
+      "case": "p6-film-exr-isolation",
+      "original_name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
+      "XML_test_seconds": "7.456",
+      "owner_seconds": 7.679661706002662,
+      "samples": 30,
+      "peak_sampled_aggregate_RSS_KiB": 181816,
+      "minimum_sampled_available_KiB": 19569376,
+      "whole_input_rows": 1317,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2070,
+        "sha256": "4d0c60ffb01ef28391bec12e7dbc4253f42473eda2ea89353e7cfd9e45604eb9"
+      },
+      "XML": {
+        "bytes": 608,
+        "sha256": "6bc4bb5ace818ae76603031eda7a0ce07fd6f88c7bf285c558e1391d9c936396"
+      },
+      "accepted": {
+        "bytes": 2080,
+        "sha256": "bed23ab05be556a4951cd6df404e23ec509b03c5328d872a24c1156641d39113"
+      }
+    },
+    {
+      "case": "e1-nine-cpu-frames",
+      "original_name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame",
+      "XML_test_seconds": "12.743",
+      "owner_seconds": 12.781658906984376,
+      "samples": 50,
+      "peak_sampled_aggregate_RSS_KiB": 193424,
+      "minimum_sampled_available_KiB": 19874716,
+      "whole_input_rows": 1321,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2063,
+        "sha256": "376ba28fa4e21d3b6efda1aad7a7318222099bbc89214f58f0c709d32ca19cb1"
+      },
+      "XML": {
+        "bytes": 610,
+        "sha256": "4ec7a77c36e8a16974849fc5eb30588e5ea846ac317587a1794d2b09c17f39f4"
+      },
+      "accepted": {
+        "bytes": 2060,
+        "sha256": "c86d9239dc63e2f8d74dae16f93c8a5bbabba5748838600e48f9fc20066b6e10"
+      }
+    },
+    {
+      "case": "e3-no-icd-cpu-publication",
+      "original_name": "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+      "XML_test_seconds": "0.424",
+      "owner_seconds": 0.5435603959776927,
+      "samples": 2,
+      "peak_sampled_aggregate_RSS_KiB": 123636,
+      "minimum_sampled_available_KiB": 19948712,
+      "whole_input_rows": 1325,
+      "XML_properties": {},
+      "owner": {
+        "bytes": 2070,
+        "sha256": "206b61044ecaf52afe76b52b6600899357f49534b6f0db4e775a017bdbfe893f"
+      },
+      "XML": {
+        "bytes": 598,
+        "sha256": "2f1e7359e73cbccb61bf93bd331a6fe18def371e03d87a6eb29829cf09c1cc0c"
+      },
+      "accepted": {
+        "bytes": 2112,
+        "sha256": "4f939ce071067eeffcc8e349a8149fe04d528ce083f65a85e1f1e14c83d61400"
+      }
+    }
+  ],
+  "whole_input_and_acceptance_closure": {
+    "current_preflight_rows_rehashed": 1268,
+    "tracked_source_files": 538,
+    "actual_before_after_rows": 38910,
+    "unique_consumed_paths": 1325,
+    "whole_input_rows_per_case": [
+      1269,
+      1273,
+      1277,
+      1281,
+      1285,
+      1289,
+      1293,
+      1297,
+      1301,
+      1305,
+      1309,
+      1313,
+      1317,
+      1321,
+      1325
+    ],
+    "all_before_equals_after_equals_current_content_and_resolved_identity": true,
+    "exact_ancestor_sets": "Static1268 +preflight itself +four earlier raw files per preceding case, with no missing ancestor or own/future mutable outputs.",
+    "all105_raw_case_files_plus15accepted15prelaunch15helper_pins_checked": 150,
+    "all_accepted_files_match_complete_current_seven_raw_artifacts": true,
+    "all_prelaunch_saved_static_prior_raw_checks_and_release_links_coherent": true,
+    "normal_helpers_and_namespace_only_CPUcollector_bytes_unchanged": true,
+    "all15actual_argv_equal_original1152_registration_and_required_XML_name": true,
+    "no_registered_TIMEOUT_or_optional_positive_XML_property_invented": true,
+    "source_and_admitted5ELF_dependencies_link_resources_runtime9DSOs_current": true,
+    "source_review_and_runtime_admission_reused_without_new_framework": true
+  },
+  "guards_and_ownership": {
+    "all15owners_terminal_passed_child_exit_zero_no_stop": true,
+    "all_cleanup_and_remaining_owned_process_lists_empty": true,
+    "all_root_helper_and_collector_actual_closed0_observations_joined": true,
+    "serial_stopfirstnonpass_and_terminal_predecessor_content_chain": true,
+    "external_operator_seconds_per_case": 300,
+    "aggregate_sampled_RSS_limit_KiB": 4194304,
+    "minimum_available_limit_KiB": 2097152,
+    "all_actual_owner_wall_and_observed_samples_within_guards": true,
+    "total_samples": 805,
+    "maximum_sampled_aggregate_RSS_KiB": 193424,
+    "zero_sample_cases": [
+      "p5-pupil-focus",
+      "p5-four-dimensional-samples",
+      "p6-hdr-roundtrip"
+    ],
+    "sampling_limit": "Three fast cases exited before the first poll and recorded peak0. This is an unobserved peak, not observed zero or continuous RSS certification.",
+    "saved_root_controller_and_child_birth_absence_records_checked": 30,
+    "saved_birth_records_exactly_match_all15owner_birth_identities": true,
+    "root_saved_fresh_absence_records": [
+      {
+        "case": "p1-oracle-conservation",
+        "pid": 1090113,
+        "saved_start_ticks": "13761909",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p1-oracle-conservation",
+        "pid": 1090117,
+        "saved_start_ticks": "13761950",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p1-live-conservation",
+        "pid": 1090165,
+        "saved_start_ticks": "13763887",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p1-live-conservation",
+        "pid": 1090169,
+        "saved_start_ticks": "13763927",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p2-oracle-radial",
+        "pid": 1090323,
+        "saved_start_ticks": "13768125",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p2-oracle-radial",
+        "pid": 1090327,
+        "saved_start_ticks": "13768168",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p2-oracle-circular",
+        "pid": 1090866,
+        "saved_start_ticks": "13777332",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p2-oracle-circular",
+        "pid": 1090870,
+        "saved_start_ticks": "13777413",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p2-live-radial",
+        "pid": 1092194,
+        "saved_start_ticks": "13792381",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p2-live-radial",
+        "pid": 1092199,
+        "saved_start_ticks": "13792462",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p2-p3-star-flicker",
+        "pid": 1092924,
+        "saved_start_ticks": "13800536",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p2-p3-star-flicker",
+        "pid": 1092928,
+        "saved_start_ticks": "13800580",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p3-index-envelope",
+        "pid": 1093680,
+        "saved_start_ticks": "13819750",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p3-index-envelope",
+        "pid": 1093684,
+        "saved_start_ticks": "13819792",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p4-oracle-truncated-edge",
+        "pid": 1095219,
+        "saved_start_ticks": "13855919",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p4-oracle-truncated-edge",
+        "pid": 1095223,
+        "saved_start_ticks": "13855962",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p4-live-truncated-edge",
+        "pid": 1095480,
+        "saved_start_ticks": "13859316",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p4-live-truncated-edge",
+        "pid": 1095484,
+        "saved_start_ticks": "13859355",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p5-pupil-focus",
+        "pid": 1096778,
+        "saved_start_ticks": "13878496",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p5-pupil-focus",
+        "pid": 1096785,
+        "saved_start_ticks": "13878536",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p5-four-dimensional-samples",
+        "pid": 1096857,
+        "saved_start_ticks": "13880109",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p5-four-dimensional-samples",
+        "pid": 1096861,
+        "saved_start_ticks": "13880151",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p6-hdr-roundtrip",
+        "pid": 1096906,
+        "saved_start_ticks": "13881680",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p6-hdr-roundtrip",
+        "pid": 1096910,
+        "saved_start_ticks": "13881718",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p6-film-exr-isolation",
+        "pid": 1096963,
+        "saved_start_ticks": "13882653",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "p6-film-exr-isolation",
+        "pid": 1096967,
+        "saved_start_ticks": "13882691",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "e1-nine-cpu-frames",
+        "pid": 1097072,
+        "saved_start_ticks": "13884391",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "e1-nine-cpu-frames",
+        "pid": 1097079,
+        "saved_start_ticks": "13884433",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "e3-no-icd-cpu-publication",
+        "pid": 1097129,
+        "saved_start_ticks": "13886908",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "case": "e3-no-icd-cpu-publication",
+        "pid": 1097133,
+        "saved_start_ticks": "13886947",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      }
+    ],
+    "reviewer_process_queries": 0,
+    "process_scope": "Only saved owner/root records were reviewed. No fresh census, global process absence or universal no-driver-activity claim.",
+    "no_concurrent_compiler_scope": "Root release records the exclusive serial sequence and root reports no compiler ran alongside it. Independent review rechecks frozen inputs; it does not claim an exhaustive process census."
+  },
+  "CPU_and_original_scientific_scope": {
+    "source_assertions_reused": "Exact admitted original P1 conservation, analytic/live P2 congruence, generated catalogue/flicker/index, truncated disk edge, pupil/four-dimensional sampling, HDR/film, finite nine-metric CPU and missing-ICD CPU-publication witnesses retained all original numerical bounds and refusal semantics.",
+    "CPU_route_evidence": "Source CPU/default or required auto->CPU selection; all recorded provider_mappings remain empty because software_provider=false. This does not establish absence of all Vulkan loader activity.",
+    "actual_session_scene_records": {
+      "p6-film-exr-isolation": [
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Minkowski",
+          "spin": 0,
+          "width": 16,
+          "height": 12,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Minkowski",
+          "spin": 0,
+          "width": 16,
+          "height": 12,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Minkowski",
+          "spin": 0,
+          "width": 16,
+          "height": 12,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Minkowski",
+          "spin": 0,
+          "width": 16,
+          "height": 12,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        }
+      ],
+      "e1-nine-cpu-frames": [
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Minkowski",
+          "spin": 0,
+          "width": 4,
+          "height": 4,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Schwarzschild",
+          "spin": 0,
+          "width": 4,
+          "height": 4,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Kerr",
+          "spin": 0.5,
+          "width": 4,
+          "height": 4,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Reissner-Nordstrom",
+          "spin": 0,
+          "width": 4,
+          "height": 4,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Kerr-Newman",
+          "spin": 0.3,
+          "width": 4,
+          "height": 4,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "de-Sitter",
+          "spin": 0,
+          "width": 4,
+          "height": 4,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Schwarzschild-de-Sitter",
+          "spin": 0,
+          "width": 4,
+          "height": 4,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Morris-Thorne",
+          "spin": 0,
+          "width": 4,
+          "height": 4,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        },
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Alcubierre",
+          "spin": 0,
+          "width": 4,
+          "height": 4,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        }
+      ],
+      "e3-no-icd-cpu-publication": [
+        {
+          "schema": "sirius-render-scene-v1",
+          "backend": "Cpu",
+          "metric": "Minkowski",
+          "spin": 0,
+          "width": 2,
+          "height": 2,
+          "samples_per_pixel": 1,
+          "field_of_view": 60,
+          "disk_enabled": false,
+          "ray_bundles": false,
+          "point_starfield": false,
+          "point_star_count": 0,
+          "point_brightness_scale": 100,
+          "point_seed": 42,
+          "point_min_distance_pc": 1,
+          "point_max_distance_pc": 10000,
+          "camera_beta": [
+            0,
+            0,
+            0
+          ],
+          "lens": "Pinhole",
+          "focal_length": 50,
+          "aperture": 2.799999952316284,
+          "focus_distance": 50
+        }
+      ]
+    },
+    "E1_nine_finite_frames": "Nine actual 4x4/1SPP CPU scenes completed. No full metric-parameter domain claim.",
+    "E3_negative_ICD": "Actual original missing-ICD auto-selection log reports CPU and the original finite/nonnegative RGBA/publication assertions passed. Negative loader discovery is intentional, not a GPU test or proof libvulkan never loads.",
+    "P3_boundary": "Catalogue/index/flicker witness only, not a full physical IMAX framebuffer or device2GiB runtime.",
+    "film_boundary": "Four original CPU writers executed; display snapshots differ for PNG and linear EXR-path snapshots remain equal. No EXR file-byte identity or retained image/codec output is claimed.",
+    "E2_eleven_separate": true,
+    "no_full_criteria_or_native_Mandatory_release_promotion": true
+  },
+  "writer_ownership_and_environment": {
+    "actual_root_launch_receipts": {
+      "p6-hdr-roundtrip": {
+        "path": "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p6-hdr-roundtrip.json",
+        "bytes": 813,
+        "sha256": "85baad4168ea6e251855847cd133dc3e94df3b4910a303ebee8d75111daa423a",
+        "actual_root_owner_launch_environment": {
+          "TMPDIR": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip"
+        }
+      },
+      "p6-film-exr-isolation": {
+        "path": "out/science-original-cpu-gap-witnesses-pending/root-prelaunch-p6-film-exr-isolation.json",
+        "bytes": 823,
+        "sha256": "31f297e7f6819af7f2f67e5881e1009101852fe9974488006a3dae7276339a80",
+        "actual_root_owner_launch_environment": {
+          "TMPDIR": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation"
+        }
+      }
+    },
+    "original_ROOT_TMPDIR_directives_match_actual_receipts": true,
+    "other13launches_no_TMPDIR_override": true,
+    "source_derived_inheritance": "Pinned unchanged owner creates folder before copying os.environ, then passes the exact environment to Popen after CPU GTEST_OUTPUT addition. Original selected writers do not mutate TMPDIR; stdtemp resolution inherits root invocation.",
+    "separate_child_proc_environment_observation_required_or_claimed": false,
+    "corrected_review_scope_retained": true,
+    "film_actual_written_paths": [
+      "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/sirius-film-probe-7071068439560916755/film_probe_0.png",
+      "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/sirius-film-probe-7071068439560916755/film_probe_1.png",
+      "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/sirius-film-probe-7071068439560916755/film_probe_0.exr",
+      "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation/sirius-film-probe-7071068439560916755/film_probe_1.exr"
+    ],
+    "both_writer_cases_currently_only_seven_owned_raw_artifacts_no_residual_subdirectory_or_output": true,
+    "HDR_evidence": "Actual per-launch root TMPDIR receipt +unchanged tempPath source +passed original EXR write/header/read/dimension/metadata/error assertions. Fast child environment was not separately observed.",
+    "cleanup_and_recovery_limits": "Original explicit removes/scoped destructor ran on successful completion; no failed evidence removal, pause, instrumentation, retry or stronger cleanup protocol was introduced.",
+    "no_retained_EXR_image_bytes": true
+  },
+  "method": "Passive standard-library JSON/XML/source/hash and read-only Git only; no helper/project import, tools, compiler/provider/test, network, process query/signal or modification outside this receipt. Python direct object copies preserve integer/string identities.",
+  "checkout": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "new_review_committed_or_pushed": false
+  },
+  "disposition": {
+    "preserve_and_Git_publish_before_compiler": true,
+    "source_build_hold_released_by_this_review": false,
+    "next_runtime_or_retirement_admitted": false
+  },
+  "limitations": [
+    "PASS applies to these fifteen original finite CPU witnesses and truthful owned completion only.",
+    "No full P1-P6/E1-E4 or metric/transport domain, physical P3/P5 image/device, native graphics/UI, Mandatory estate, coldness/latency/performance or release qualification."
+  ]
+}

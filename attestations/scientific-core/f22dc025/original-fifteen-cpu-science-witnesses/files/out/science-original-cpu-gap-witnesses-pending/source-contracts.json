@@ -1,0 +1,1157 @@
+{
+  "schema": "sirius-science-original-cpu-gap-pending-source-contracts-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "revision": "ROOT_PENDING_NEW_REVISION",
+  "source_files": {
+    "run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "bytes": 3893,
+      "sha256": "fe55382eb4d727ac37a8719fb1e27eb96fea65d4569ecc64c97db05070dbd538"
+    },
+    "originals/actions.json": {
+      "bytes": 63453,
+      "sha256": "e964132317a8507ce48b44ff1cdee1f9a3305fc196775048f446408037a18678"
+    },
+    "originals/root_acceptance.py": {
+      "bytes": 3884,
+      "sha256": "825d7063c7742c229882b5f2a7e54439c67a70ac5f3a060ad00b3c3bd88fd813"
+    },
+    "originals/commands.pending.json": {
+      "bytes": 3144,
+      "sha256": "4f6c6d9ca5404dd4079d2c83fbfff34bc1740e0e100410af929e37bd274bf236"
+    },
+    "collector.patch": {
+      "bytes": 469,
+      "sha256": "1f1ea395ae490163a1e5fe5824744bea959e6fdc43c79c502c576d377fd2278c"
+    },
+    "actions.pending.json": {
+      "bytes": 115949,
+      "sha256": "abd62462572c97667ce7d9c5119c5a165f09394d172516636eae2bb930b4a940"
+    },
+    "commands.pending.json": {
+      "bytes": 8847,
+      "sha256": "3977b006a293cb1065c5e9743b8613637dd520d30cdd4209425906f4ab3e4f5f"
+    }
+  },
+  "mature_origin": {
+    "source_packet": "out/e2-original-cpu-witnesses-pending",
+    "reviewed_collector": {
+      "bytes": 3884,
+      "sha256": "825d7063c7742c229882b5f2a7e54439c67a70ac5f3a060ad00b3c3bd88fd813"
+    },
+    "preserved_original_action_template": {
+      "bytes": 63453,
+      "sha256": "e964132317a8507ce48b44ff1cdee1f9a3305fc196775048f446408037a18678"
+    },
+    "preserved_original_commands": {
+      "bytes": 3144,
+      "sha256": "4f6c6d9ca5404dd4079d2c83fbfff34bc1740e0e100410af929e37bd274bf236"
+    },
+    "owner_guard_namedGit_ancestor": "2c419ad2f420a50ebb6cc92c37ef0cc30927a63d",
+    "named_inventory": {
+      "commit": "2c419ad2f420a50ebb6cc92c37ef0cc30927a63d",
+      "path": "attestations/scientific-core/e0db7d59/kerr-cartdelta-rhs-source-and-software-controls/files/out/kerr-cartdelta-rhs-controls/inventory.json",
+      "bytes": 986718,
+      "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f",
+      "registered_tests": 1152
+    },
+    "no_active_CPU11_artifact_modified_or_frozen_by_this_preparation": true
+  },
+  "collector_change": {
+    "only_literal_workdir": {
+      "old": "out/e2-original-cpu-witnesses-pending",
+      "new": "out/science-original-cpu-gap-witnesses-pending"
+    },
+    "exact_inverse": true,
+    "all_CPU_applicability_and_source_input_birth_RSS_wall_cleanup_XML_predecessor_checks_byte_exact": true,
+    "softwarefalse_requires_recorded_provider_mappings_empty": true,
+    "optional_required_XML_property_absent_and_returned_None": true,
+    "no_provider_execution_claim": true
+  },
+  "serial_order": [
+    "p1-oracle-conservation",
+    "p1-live-conservation",
+    "p2-oracle-radial",
+    "p2-oracle-circular",
+    "p2-live-radial",
+    "p2-p3-star-flicker",
+    "p3-index-envelope",
+    "p4-oracle-truncated-edge",
+    "p4-live-truncated-edge",
+    "p5-pupil-focus",
+    "p5-four-dimensional-samples",
+    "p6-hdr-roundtrip",
+    "p6-film-exr-isolation",
+    "e1-nine-cpu-frames",
+    "e3-no-icd-cpu-publication"
+  ],
+  "five_future_ELFs": [
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+    "bin/linux-gcc/tests/core/sirius_core_tests",
+    "bin/linux-gcc/src/sirius/app/sirius_app_tests",
+    "bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "bin/linux-gcc/src/sirius/app/sirius_render_tests"
+  ],
+  "cases": {
+    "p1-oracle-conservation": {
+      "original_filter": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+      "source": "tests/oracle/symplectic_integrator_test.cpp:392",
+      "assertions_and_refusals": "Spin.998 complete outgoing oracle to r>=200, adaptive250segments/1affine with1e-13 config; Eabsolute/Lzrelative/Qrelative maxdrift<1e-10; incomplete segment/absent physical termination fails.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "--gtest_filter=AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 71,
+      "earlier_raw_rows": 0,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p1-live-conservation": {
+      "original_filter": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+      "source": "tests/core/geodesic_live_path_test.cpp:209",
+      "assertions_and_refusals": "Spin.998 original live trajectory must reach physical escape/capture; E/Lz/Carter drift<original1e-4 and null<1e-6. No controller-exhaustion substitution.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+          "--gtest_filter=LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 75,
+      "earlier_raw_rows": 4,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p2-oracle-radial": {
+      "original_filter": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+      "source": "tests/oracle/beam_propagation_test.cpp:340",
+      "assertions_and_refusals": "2000steps dt1e-3 to affine2: exact radial position1e-10, bothscreenaxes/lambda within1e-6, crossinnerproduct1e-12.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "--gtest_filter=BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 79,
+      "earlier_raw_rows": 8,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p2-oracle-circular": {
+      "original_filter": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+      "source": "tests/oracle/beam_propagation_test.cpp:380",
+      "assertions_and_refusals": "Photon-sphere original2000steps dt5e-4 toaffine1: radialcosh/polarcos analytic axes1e-6, r=3 within1e-10, screenorthogonality1e-12.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "--gtest_filter=BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 83,
+      "earlier_raw_rows": 12,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p2-live-radial": {
+      "original_filter": "CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm",
+      "source": "tests/backend/cpu_jacobi_oracle_test.cpp:150",
+      "assertions_and_refusals": "Actual CPU Schwarzschild outward point-source bundle must escape/numericallyvalid; bothaxes equal seed*actualaffine within2e-6relative andarea4e-6.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+          "--gtest_filter=CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 87,
+      "earlier_raw_rows": 16,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p2-p3-star-flicker": {
+      "original_filter": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
+      "source": "tests/render/starfield_point_test.cpp:209",
+      "assertions_and_refusals": "Generated100000stars seed42; flat24x14/8rotations; same catalogue through actualbeam/pinhole filters; countedbrightpixels>0, beamCV<pinholeCV andratio>1.5. No physicalfullframe claim.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+          "--gtest_filter=StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory",
+              "Operational",
+              "Rendering"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 91,
+      "earlier_raw_rows": 20,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p3-index-envelope": {
+      "original_filter": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
+      "source": "tests/render/starfield_point_test.cpp:183",
+      "assertions_and_refusals": "100000generatedstars; index<2MiB, catalogue+index<8MiB, IMAXangularbeam candidates<1percent catalogue. Not a5616x4096render or actual2GiBdevice test.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+          "--gtest_filter=StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory",
+              "Operational",
+              "Rendering"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 95,
+      "earlier_raw_rows": 24,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p4-oracle-truncated-edge": {
+      "original_filter": "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+      "source": "tests/oracle/analytic_benchmarks_test.cpp:199",
+      "assertions_and_refusals": "Exact declaredinner10/zero flux atedge+buffer, positive1.5edge reference, independent PageThornequadrature temperature ratios at4radii within2e-5.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+          "--gtest_filter=AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 99,
+      "earlier_raw_rows": 28,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p4-live-truncated-edge": {
+      "original_filter": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+      "source": "tests/backend/cpu_trace_boundary_test.cpp:601",
+      "assertions_and_refusals": "Warm CPUtracer diskcache atinner6 thenSetConfiginner10; scan original64\u00b2rays up to12crossings; >=6actualcrossings must match changeddeclarededge oracle temperature within2e-3. No staleISCOcache substitution.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+          "--gtest_filter=CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 103,
+      "earlier_raw_rows": 32,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p5-pupil-focus": {
+      "original_filter": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+      "source": "tests/core/camera_test.cpp:219",
+      "assertions_and_refusals": "Original320x180 perspective/focal50/aperture2/focus30,2pupil samples; nonzeropupil boundedbyaperture andrequestedfocus position within5e-6.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+          "--gtest_filter=ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 107,
+      "earlier_raw_rows": 36,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p5-four-dimensional-samples": {
+      "original_filter": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+      "source": "tests/core/camera_sampling_test.cpp:7",
+      "assertions_and_refusals": "Exactly4096samples/all4coordinates in(0,1); independent film/pupil squared-difference moment within.01 of1/3. Reusedfilm-pupil pair gives0 andfails.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+          "--gtest_filter=CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 111,
+      "earlier_raw_rows": 40,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "p6-hdr-roundtrip": {
+      "original_filter": "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+      "source": "tests/render/exr_writer_test.cpp:34",
+      "assertions_and_refusals": "Original16x8HDRgradient Rto3.75/Gto14, EXRwrite/headerparse/load/dimensions/metricKerr+SiriuslinearRGBmetadata andworstnormalizedRGBerror<1e-6. Original fixedstdtempfilename removedbefore/after.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+          "--gtest_filter=EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory",
+              "Operational",
+              "Rendering"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 115,
+      "earlier_raw_rows": 44,
+      "root_TMPDIR_override": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-hdr-roundtrip",
+      "external_output_cases": "Originalstdtemp outputlocation only"
+    },
+    "p6-film-exr-isolation": {
+      "original_filter": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
+      "source": "tests/render/render_session_probe_test.cpp:518",
+      "assertions_and_refusals": "Four original16x12/1SPP serialMinkowski renders: filmoff/on PNGdisplay snapshots differ>1e-4, EXR-path linear snapshots exactlyequal. Each originalwriter runs; no stronger EXRfile-bytecomparison invented.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+          "--gtest_filter=RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory",
+              "Operational",
+              "Rendering"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 119,
+      "earlier_raw_rows": 48,
+      "root_TMPDIR_override": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-pending/p6-film-exr-isolation",
+      "external_output_cases": "Originalstdtemp outputlocation only"
+    },
+    "e1-nine-cpu-frames": {
+      "original_filter": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame",
+      "source": "tests/render/render_session_probe_test.cpp:1039",
+      "assertions_and_refusals": "All9advertisedCPUfamilies representedconfig/4x4/1SPP serial nondisk/write_outputfalse mustConfigure+Complete; exact registrycount9. This is finiteframe coverage, not full metric-domain qualification.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+          "--gtest_filter=RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory",
+              "Operational",
+              "Rendering"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 123,
+      "earlier_raw_rows": 52,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    },
+    "e3-no-icd-cpu-publication": {
+      "original_filter": "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+      "source": "tests/render/app_render_execution_test.cpp:70",
+      "assertions_and_refusals": "Original scopedmissingICDs/clearedselector/fp32 autoconfig mustselectCPU;2x2in-memoryMinkowski completes, progresspublishes,16finite nonnegativeRGBA values/alpha1/positiveRGBsum. NoGPUprovider admitted; negative loaderdiscovery is intentional.",
+      "archived_registration": {
+        "command": [
+          "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+          "--gtest_filter=RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "name": "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory",
+              "Operational",
+              "Rendering"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render"
+          }
+        ]
+      },
+      "provider_execution_required": false,
+      "root_required_XML_property_omitted": true,
+      "pending_input_rows": 127,
+      "earlier_raw_rows": 56,
+      "root_TMPDIR_override": null,
+      "external_output_cases": "No selected source body writes outputfiles; sessionwrite_outputfalse where applicable."
+    }
+  },
+  "actual_case_production_resource_source_content_pins": {
+    "tests/oracle/symplectic_integrator_test.cpp": {
+      "bytes": 22932,
+      "sha256": "a2d324b9b32a7b2d2b45cbc7dbde4cf28f867bb0a8b2531af05d600b8fbb36ab",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "33c19911076f4bf6dbbadd61fa1f7b57def7e3e5"
+    },
+    "tests/core/geodesic_live_path_test.cpp": {
+      "bytes": 19638,
+      "sha256": "153bdf22c3010a1c6209eaf02123896e2df770150bec1495ef5fb87a5eeffd73",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "81672a08824522069425954a2b253a3481291d3d"
+    },
+    "tests/oracle/beam_propagation_test.cpp": {
+      "bytes": 19050,
+      "sha256": "dc32281a8f6cf14780ad5e183e6f0f1a6180811ee06ad84800779d2add1b77d4",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "4b3eb9a0831ff1f53cfc568a923662e11d02e342"
+    },
+    "tests/backend/cpu_jacobi_oracle_test.cpp": {
+      "bytes": 13519,
+      "sha256": "4e1e6724edfa3264365fca89072ba5edf996d936f693d7a76653d53c57346f05",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "dcfcc740005ecb0d9c11b641e60fd6e8802bac63"
+    },
+    "tests/render/starfield_point_test.cpp": {
+      "bytes": 12887,
+      "sha256": "be225da1d56cef2beb1ef904931fde20f1cab9a3d64c83d157d7aaded3b55048",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "a558070fa2b6f162c0f6cb565ec72cab180df4f5"
+    },
+    "tests/oracle/analytic_benchmarks_test.cpp": {
+      "bytes": 13189,
+      "sha256": "b3824e58c34cdce54973f958e1cdb6fb7647102fbc61d2eb8942ef9a3dd46af4",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "6fde5643a550a466007a49ac5ffe0f51460f19ee"
+    },
+    "tests/backend/cpu_trace_boundary_test.cpp": {
+      "bytes": 61159,
+      "sha256": "1fc8c40565eb5d1946550fb6e8db19132666140bf4950f31cde1ff10589181e6",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "67b68bc26dfde2f0e1720c18b2e105f4d9ac50c6"
+    },
+    "tests/core/camera_test.cpp": {
+      "bytes": 15307,
+      "sha256": "b30c8293b114ee41c600b0142e36203638c01042b83e40e812ab74dd3d4c854e",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "147f8bd9af0f448b3a7372881f39b47211fcacc3"
+    },
+    "tests/core/camera_sampling_test.cpp": {
+      "bytes": 1276,
+      "sha256": "43c18389215198d7d264f7a11383484b88704b64a1743664987a2af119f4204d",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "474c7a952663697091f846692777730a45ebb7bc"
+    },
+    "tests/render/exr_writer_test.cpp": {
+      "bytes": 5947,
+      "sha256": "f1e61656c69c904ef8a86fb1a5c5873f10bc633953c59d27bec370e7649b049f",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "ab12c76a7276cf8f92f45162f172034a57e9effc"
+    },
+    "tests/render/render_session_probe_test.cpp": {
+      "bytes": 62654,
+      "sha256": "35ab83d1ddb556abd9d7e3fcd38f0925864f2ba47afc32f702a263eb7ea2101e",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "bc0c5b7b4fc363e7dc470526cbc20e93f72934de"
+    },
+    "tests/render/app_render_execution_test.cpp": {
+      "bytes": 22037,
+      "sha256": "ff65fbb09fcddca268c086ae9df13f72238eecfce70dc89dd69cc231a595399e",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "b78d3a1e114f99bd2ec77a1f1b0b1e6362e0d05b"
+    },
+    "tests/support/scoped_temporary_directory.h": {
+      "bytes": 2243,
+      "sha256": "00fa9dea58e9836081aa71a1e24ebad910c6f444497e312ad46ca02c8fbb16ab",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "30105596811cd044d701731edfe747355dfb588e"
+    },
+    "tests/support/scoped_environment.h": {
+      "bytes": 1593,
+      "sha256": "399fb90582c7972f9e05384fbf6b71ead5440e4badb7c0e3d7b290289aa17bd9",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "32eb8470380a9b6658968a163c4bca49ee356407"
+    },
+    "src/sirius/oracle/adaptive_hamiltonian_integrator.h": {
+      "bytes": 8742,
+      "sha256": "41c7e590a7ef6d8276dcc0142aa17611b813685aad2e35c9133ada2f6ec73874",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "c6f658bb2302ef6b1e99a9abb2c02f7f39f5862c"
+    },
+    "src/sirius/oracle/kerr_boyer_lindquist.h": {
+      "bytes": 30350,
+      "sha256": "414a9f6866165635f3bb8508264949f7019e73b8fe43f3628eb1e94da63843fe",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "af37af15f0210ce8c3e7ce2374135cabfd388287"
+    },
+    "src/sirius/oracle/beam_integrator.h": {
+      "bytes": 13981,
+      "sha256": "6115e6923d6f760d021bacb4b108bd45238f85de8d748733a7003c2fc81c2d68",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "3e0a2426ce363f44a9e450cc889141b01d1c4931"
+    },
+    "src/sirius/core/geodesic_integrator.h": {
+      "bytes": 11150,
+      "sha256": "f2cc9d749a65e99d2d3a7d912b2067ab35738799415d88c6bc16a05bec3e4f2c",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "3c42183568e5af48bb873b090fd46e287f74aab7"
+    },
+    "src/sirius/core/metrics/kerr_schild_family.h": {
+      "bytes": 33851,
+      "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "074a71d54304b04bae7d1f4002f2d97914b0ae62"
+    },
+    "src/sirius/core/metrics/registry.h": {
+      "bytes": 22072,
+      "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "45dab60601637bcd78d10f9dbf455a89c28511e3"
+    },
+    "src/sirius/core/camera.h": {
+      "bytes": 43067,
+      "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "e1f31aa3d23794b3a1cf5e2261c88a1584ef2f0d"
+    },
+    "src/sirius/core/camera_sampling.h": {
+      "bytes": 3255,
+      "sha256": "74f840f85e5b67374c848d364c785aaa25f36e51ba1cbea1382bb2ff0de7d803",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "a59fecece36a2193eac60801c306317d55d09141"
+    },
+    "src/sirius/core/starfield.h": {
+      "bytes": 33009,
+      "sha256": "caae54c6b509eb7dcaa797bec81bf516820413b4a7eecd880592e867b3fb5cd0",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "ecb9476067c6ac542645d07c4bacfb16a49f18c6"
+    },
+    "src/sirius/core/disk/novikov_thorne_disk.h": {
+      "bytes": 16284,
+      "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "75941e077426512c0bf86f33e644937eeaedb45b"
+    },
+    "src/sirius/core/constants.h": {
+      "bytes": 8558,
+      "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "8c656ece23021104aecf5bc0696e9095524b9469"
+    },
+    "src/sirius/backend/cpu/geodesic_tracer.h": {
+      "bytes": 33728,
+      "sha256": "9277719799f1af802459f451c060e5e04f3a5b811d3fa10a273bc71c3e4fbb85",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "8d1b6c68b5f93d32c322f38d999a9cfbd77b9083"
+    },
+    "src/sirius/backend/cpu/geodesic_tracer.cpp": {
+      "bytes": 129889,
+      "sha256": "3c8527e32f72e191acf86fb62d842c34383002761faf7650c3cff7eece2c43d2",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "57aadfc9d287662cafae4dd29851050955bb141c"
+    },
+    "src/sirius/render/session/render_session.h": {
+      "bytes": 18459,
+      "sha256": "7fa8ee2b0dabbbc8a80f6ccfb92c46ed6b4f27e7a9df72b569bd697f56edd169",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "4bb21f5d95393dd518cce149bd157710399e5ce4"
+    },
+    "src/sirius/render/session/render_session.cpp": {
+      "bytes": 53666,
+      "sha256": "75fb4ac58f2e0ddb89a5f4053ed5372af2753f8592f0fa7eb76e15522530af1e",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "e235d929a1d447d771636b736cea1e7dce20f07f"
+    },
+    "src/sirius/render/exr_writer.h": {
+      "bytes": 6712,
+      "sha256": "62ceeba355a60a4b0231103d9dae0b38f286e9ae920a1f27e9a6a4df11f2b20d",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "3dde8bac13b8ba68cb7a7681c7dd44ac08f90a37"
+    },
+    "src/sirius/render/exr_writer.cpp": {
+      "bytes": 7880,
+      "sha256": "577c9934ce4d2584a789e189c6fbc8a7728404a7a9efab3afe3e24a0912266e1",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "5136b64533baa038e0f26bc12c2f0eea3622abc9"
+    },
+    "src/sirius/render/png_writer.h": {
+      "bytes": 1240,
+      "sha256": "6d7ed55f0c63b393ae9b938651343303df2f4b7a9c898f5df81e14e4d03f4a70",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "0796e7b1920f389e2dd0a89234216c75f63b25d5"
+    },
+    "src/sirius/render/png_writer.cpp": {
+      "bytes": 2575,
+      "sha256": "9fbdd9874ee27364b22fc78bd860ac0376d1788673c286061be983e5e80987e7",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "b91a1753aa722e29dda5ebf5fb30634358c791e6"
+    },
+    "src/sirius/render/film_pipeline.h": {
+      "bytes": 12988,
+      "sha256": "1d87ec66f7ad07cdf413391d4d762aa6b0aa55c3e6a6a05282dec5b340968b2f",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "8f666c4107bb3b56639a28f57895c543a91aef95"
+    },
+    "src/sirius/base/resource_locator.h": {
+      "bytes": 1665,
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "4bf298db06231bcffd5d24b5b3152d1b02a8e8e7"
+    },
+    "src/sirius/base/resource_locator.cpp": {
+      "bytes": 4788,
+      "sha256": "6c8c5f9302baa48f46dd1cad9118fd85c0ce5df747b38db90712694a1d5a304e",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "8086dcede856c7350bc41838ea5452ee907ddade"
+    },
+    "src/sirius/app/config/session_config_adapter.cpp": {
+      "bytes": 11094,
+      "sha256": "206dc839e1c634145452b2f19f36d70eabdbd5e2ebee94f077e03544c45f852e",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "067508a47a0f0c650684562af6ec288736cdb2b6"
+    },
+    "tests/operating_model.json": {
+      "bytes": 130827,
+      "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "b1549d7942483d466e05329a951c76dd146eae3c"
+    },
+    "tests/labels/CTestLabels.cmake": {
+      "bytes": 78632,
+      "sha256": "5e990df5d32d5c1d7a1c02f273fdda3c39eb184347c0e04889b1c1692429416b",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "fd9e1254697b01adf5155109703dd5f898136d0e"
+    },
+    "assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c",
+      "named_origin_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "2e652a5d1ba4ac1c64df640694d7584f30eb8a0f"
+    }
+  },
+  "individual_source_pin_scope": "Current unchanged sourcecontent at namedf22 origin, not a globally admitted futureHEAD; future actions keepROOT_PENDING_NEW_REVISION untilrootrevalidatesactualsource/producer/products. Alltrackedsource also capturedbyunchangedowner.",
+  "pending_closure": {
+    "common_known_future_selectors": [
+      "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+      "bin/linux-gcc/tests/core/sirius_core_tests",
+      "bin/linux-gcc/src/sirius/app/sirius_app_tests",
+      "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+      "/usr/bin/git",
+      "/usr/bin/python3.12",
+      "bin/linux-gcc/CMakeCache.txt",
+      "bin/linux-gcc/build.ninja",
+      "bin/linux-gcc/generated/sirius/alignment_receipt.json",
+      "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png",
+      "tests/oracle/symplectic_integrator_test.cpp",
+      "tests/core/geodesic_live_path_test.cpp",
+      "tests/oracle/beam_propagation_test.cpp",
+      "tests/backend/cpu_jacobi_oracle_test.cpp",
+      "tests/render/starfield_point_test.cpp",
+      "tests/oracle/analytic_benchmarks_test.cpp",
+      "tests/backend/cpu_trace_boundary_test.cpp",
+      "tests/core/camera_test.cpp",
+      "tests/core/camera_sampling_test.cpp",
+      "tests/render/exr_writer_test.cpp",
+      "tests/render/render_session_probe_test.cpp",
+      "tests/render/app_render_execution_test.cpp",
+      "tests/support/scoped_temporary_directory.h",
+      "tests/support/scoped_environment.h",
+      "src/sirius/oracle/adaptive_hamiltonian_integrator.h",
+      "src/sirius/oracle/kerr_boyer_lindquist.h",
+      "src/sirius/oracle/beam_integrator.h",
+      "src/sirius/core/geodesic_integrator.h",
+      "src/sirius/core/metrics/kerr_schild_family.h",
+      "src/sirius/core/metrics/registry.h",
+      "src/sirius/core/camera.h",
+      "src/sirius/core/camera_sampling.h",
+      "src/sirius/core/starfield.h",
+      "src/sirius/core/disk/novikov_thorne_disk.h",
+      "src/sirius/core/constants.h",
+      "src/sirius/backend/cpu/geodesic_tracer.h",
+      "src/sirius/backend/cpu/geodesic_tracer.cpp",
+      "src/sirius/render/session/render_session.h",
+      "src/sirius/render/session/render_session.cpp",
+      "src/sirius/render/exr_writer.h",
+      "src/sirius/render/exr_writer.cpp",
+      "src/sirius/render/png_writer.h",
+      "src/sirius/render/png_writer.cpp",
+      "src/sirius/render/film_pipeline.h",
+      "src/sirius/base/resource_locator.h",
+      "src/sirius/base/resource_locator.cpp",
+      "src/sirius/app/config/session_config_adapter.cpp",
+      "tests/operating_model.json",
+      "tests/labels/CTestLabels.cmake",
+      "assets/Starfield.png",
+      "out/trace-jacobi-device-lifetime-checks/configure.log",
+      "out/trace-jacobi-device-lifetime-checks/build.log",
+      "out/trace-jacobi-device-lifetime-checks/source-application.json",
+      "out/trace-jacobi-device-lifetime-checks/source-push.log",
+      "out/trace-jacobi-device-lifetime-checks/source-remote-ref.txt",
+      "out/science-original-cpu-gap-witnesses-pending/run_owned.py",
+      "out/science-original-cpu-gap-witnesses-pending/owned_guard.py",
+      "out/science-original-cpu-gap-witnesses-pending/root_acceptance.py",
+      "out/science-original-cpu-gap-witnesses-pending/originals/actions.json",
+      "out/science-original-cpu-gap-witnesses-pending/originals/root_acceptance.py",
+      "out/science-original-cpu-gap-witnesses-pending/originals/commands.pending.json",
+      "out/science-original-cpu-gap-witnesses-pending/collector.patch",
+      "out/science-original-cpu-gap-witnesses-pending/actions.pending.json",
+      "out/science-original-cpu-gap-witnesses-pending/commands.pending.json",
+      "out/science-original-cpu-gap-witnesses-pending/source-contracts.json",
+      "out/science-original-cpu-gap-witnesses-pending/independent-source-review.json",
+      "out/science-original-cpu-gap-witnesses-pending/readiness.json",
+      "out/science-original-cpu-gap-witnesses-pending/inventory.json",
+      "out/science-original-cpu-gap-witnesses-pending/actions.json",
+      "out/science-original-cpu-gap-witnesses-pending/root-preflight.json"
+    ],
+    "common_count": 71,
+    "per_action_counts": {
+      "p1-oracle-conservation": 71,
+      "p1-live-conservation": 75,
+      "p2-oracle-radial": 79,
+      "p2-oracle-circular": 83,
+      "p2-live-radial": 87,
+      "p2-p3-star-flicker": 91,
+      "p3-index-envelope": 95,
+      "p4-oracle-truncated-edge": 99,
+      "p4-live-truncated-edge": 103,
+      "p5-pupil-focus": 107,
+      "p5-four-dimensional-samples": 111,
+      "p6-hdr-roundtrip": 115,
+      "p6-film-exr-isolation": 119,
+      "e1-nine-cpu-frames": 123,
+      "e3-no-icd-cpu-publication": 127
+    },
+    "serial_ancestors": "Exactly4*n earlier owner/stdout/stderr/gtest.xml selectors; no self/future mutable output. Collector stillchecks priorrootaccepted note plus every preserved rawpin.",
+    "fresh_DSOs_not_guessed": true,
+    "root_must_extend_with_actual_fresh_dependencies": true,
+    "strict_producer_proofs_prospective": [
+      "out/trace-jacobi-device-lifetime-checks/configure.log",
+      "out/trace-jacobi-device-lifetime-checks/build.log",
+      "out/trace-jacobi-device-lifetime-checks/source-application.json",
+      "out/trace-jacobi-device-lifetime-checks/source-push.log",
+      "out/trace-jacobi-device-lifetime-checks/source-remote-ref.txt"
+    ],
+    "producerproof_retargert_if_futureHEAD_changes": "Root mustbindproofs matchingactualnewHEAD orreplacewithcurrentproducer proofbeforefinaladmission; no stale f22buildclaim.",
+    "no_final_readiness_inventory_preflight_actions_buildfacts_written": true
+  },
+  "temporary_outputs": {
+    "root_per_launch_TMPDIR_policy": {
+      "cases": [
+        "p6-film-exr-isolation",
+        "p6-hdr-roundtrip"
+      ],
+      "value": "Absolute futureownedcase folder under thisout root",
+      "defaultcasefolders_created_by_unchanged_owner_before_child_spawn": true,
+      "precreate_casefolder": false,
+      "mutable_tempfolder_or_outputs_added_to_frozen_inputs": false,
+      "actual_root_environment_receipt_required": true
+    },
+    "p6-hdr-roundtrip": {
+      "mechanism": "std::filesystem::temp_directory_path()/sirius_test_roundtrip.exr",
+      "source": "tests/render/exr_writer_test.cpp:28-35",
+      "collision": "Originalfilenamefixed; privateTMPDIR+serialexecution avoidscross-processfilecollision withouttestchanges.",
+      "cleanup": "Originalremovebeforewrite/removeafternormalreadback. Fatalassertionmayleavefile; preserveunderownedoutcase andstop, do not erasefailed evidence."
+    },
+    "p6-film-exr-isolation": {
+      "mechanism": "ScopedTemporaryDirectory(sirius-film-probe) uses stdtemp/clock+workingdirhash+randomnonce and128createattempts",
+      "source": "tests/support/scoped_temporary_directory.h:21-43",
+      "files": [
+        "film_probe_0.png",
+        "film_probe_1.png",
+        "film_probe_0.exr",
+        "film_probe_1.exr"
+      ],
+      "cleanup": "Eachoriginalrenderremovesownfile, scopeddestructorremove_all(error_code). Anyfailure/leftoversremainboundedunderownedout forrootpreservation; no cleanup success fabricated.",
+      "assertions": "Originalsnapshotandwriter/sessionassertions unchanged; no substituted in-memorywriter/no weakercomparison."
+    },
+    "semantic_and_cost_scope": "Only temporaryfilesystemroot changes for2tests alreadyrequestingstdtemp. SameHDRdata/codec/filesnames/format/reads/writes/assertions; filesystemI/O remainsinsideunchanged300s+RSSguard, no timing/performanceclaim.",
+    "other13cases": "No TMPDIRoverride proposed. Generatedcatalogue/oracles/math neednoexternalasset; CPUrender3cases do requireStarfield andwrite_outputfalse exceptfilmcase."
+  },
+  "resources_and_CPU_semantics": {
+    "Starfield": "Exactassets/Starfield.png plusfutureapp-executable/resources/assets/Starfield.png; CPUInitialize mustfailmissing/unreadableinput, no grey/fallback. Rootbindactualresource-lock/currentvolume.",
+    "negative_loader_discovery": "BackendAutoPublishesCpuWithNoIcd intentionallyscopesVK_ICD_FILENAMES andVK_DRIVER_FILES tononexistentpath, VK_ADD_DRIVER_FILES empty, device selector absent, precisionfp32; configmustselectCPU andpublish. No claimlibvulkanneverloaded/no negative discovery. Scopedvariables restore onnormal/fatalreturn.",
+    "source_requests": "Allselectedrenderrequests defaultCPU or explicitlyresolveCPU; no SPV/selectedGPUprovider needed. Preserve registeredbackend/render device-lock through serialscheduling.",
+    "E1_finite_scope": "Nine4x4frames are finiteexistingwitnesses, not fullcharged/cosmological/wormhole/warpparameter-domainqualification."
+  },
+  "Hoare_contract": {
+    "preconditions": [
+      "Root release/decision, independentSOURCEreview, freshactualcleanrevision andstrict5ELFproducer.",
+      "Root actualregistration/currentcompleteCPUdependency/runtimeDSO/assets/build/source/tool/proof closure andtypedint0/finalactions; pendingplaceholdersneveraccepted.",
+      "No parallelotherworkviolatingoriginalbackend/renderresource lock; serializeall15 andacceptpriorallrawclosures beforeadvance.",
+      "For2stdtempwriteractions, rootexactabsoluteTMPDIRmatchesfuturecase; do notprecreate it; ownercreatesbeforechild."
+    ],
+    "invariants": [
+      "Alloriginalassertions/tolerances/requestedCPU/expectedrefusals/formatdecode andphysicaltermination remain.",
+      "Original300s/aggregate4GiB/reserve2GiB/subreaper/signalcleanup/source/input/birth/zeroFESD gates unchanged.",
+      "No no-ICDskip/providertruth invented; CPUfalse hasemptyobservedmaps andmakesnoproviderexecutionclaim.",
+      "No self/futuremutableoutputs frozen; generatedfiles remainownedoutputs, notpreexistinginputs."
+    ],
+    "cancellation_and_recovery": "This packet doesnotaddcancellation/recoveryphysicscoverage. Matureownerinterruption/cleanup mustterminateonlyownedbirth/session andretainfailedverdict; noadvance/retryonfailure. Originaltest-localresource/configrestoration andwritercleanup remain; rootpreservesfailedleftovers insteadofdiscardingproof.",
+    "postconditions": "Per-casefinitePASSrequiresrootactualowner/source/inputs/freshbirth/cleanup andsinglecompletedzeroFESDXML. No source-only performance/runtime/allcriteria/Mandatory/release acceptance."
+  },
+  "guards": {
+    "seconds": 300,
+    "aggregate_rss_kib": 4194304,
+    "reserve_kib": 2097152,
+    "software_provider": false,
+    "default_cache": true,
+    "expected_exit": 0,
+    "optional_required_property_omitted": true,
+    "original_registered_TIMEOUT": null,
+    "outer300s_is_originalcase_deadline": false
+  },
+  "scope_limits": [
+    "15originalfiniteCPUgapscreen only; E2CPU11 remainsseparateactivepacket untouched.",
+    "No unchangedfailedretainedcoldframe orP2pipeline retry authority; currentP2/raw/source/buildholds untouched.",
+    "P3/P5physicalfullframe,E3namedhardware/nativewindow,P1fullshadow/burnin,E4completeMandatory chain remainseparate.",
+    "No freshbuild/DSO/ELF/readiness/runtimefact produced bythisauthor."
+  ],
+  "no_authored_helper_projectimport_tool_compiler_test_provider_network_or_process_query_execution": true,
+  "no_existing_held_inputs_mutated": true
+}
