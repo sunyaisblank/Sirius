@@ -1,0 +1,201 @@
+{
+  "schema": "sirius-native-windows-original-science-finite-result-v1",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "operator": "/root",
+  "all_four_controls_passed": false,
+  "actual_original_controls_started": 3,
+  "completed": 3,
+  "passed": 2,
+  "failed": 1,
+  "errors": 0,
+  "skipped": 0,
+  "precision": {
+    "executed": false,
+    "reason": "Stopped after original kerr-image nonpass; no comparison or unsupported-decline claim."
+  },
+  "plan": {
+    "bytes": 2995,
+    "sha256": "45b89ee56a1c201ab32a2f4807477af2aa8281e82294966bd520a6376b289275"
+  },
+  "bindings": {
+    "bytes": 56461,
+    "sha256": "32d331d09d5e10f80c323879923bc96c12586ac2651555a9c4f0d8e8ed991164"
+  },
+  "source_freeze": {
+    "bytes": 2314,
+    "sha256": "889961c65fd4043994be49a0c8803ff78cbdaf8d180b9139c0a25ccca629ac66"
+  },
+  "independent_source_review": {
+    "bytes": 6670,
+    "sha256": "7b291458687a5c47dd06a60f66a03b9d76af0cd6046e6912ae08099e96dbb3e4"
+  },
+  "runtime_input_preservation_refs": {
+    "bytes": 61767,
+    "sha256": "10a722963eabce5b6b98c4ea0663d947a0b38f57d5ff0563a9f34d4bb9733972"
+  },
+  "physical_binding_members": 129,
+  "source_mutated": false,
+  "tests": [
+    {
+      "case": "retained-sampler",
+      "original_test": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+      "numerical_passed": true,
+      "test_seconds": 135.926,
+      "owner_seconds": 137.1219585,
+      "bridge_seconds": 139.9292495599948,
+      "native_returncode": 0,
+      "sampled_child_peak_working_set_bytes": 485388288,
+      "memory_sample_rows": 135,
+      "whole_input_records": 130,
+      "whole_inputs_unchanged": true,
+      "predecessor_records": 0,
+      "minimum_sampled_wsl_available_kib": 18926936,
+      "no_external_guard_fired": true,
+      "terminal_teardown_passed": true,
+      "original_xml": {
+        "bytes": 622,
+        "sha256": "8f113506d1a4a445d97f5876bbd6d4413fdabb41f2075756c1db0a79f6930125"
+      },
+      "owner": {
+        "bytes": 3301,
+        "sha256": "8e697d1799f2021497b528879720cf91e6f7141d19911e0f3b7b430fe64f3ea4"
+      },
+      "bridge": {
+        "bytes": 2807,
+        "sha256": "893b3567f2d0c3438cdc0d7699a9a32f3e16e273d70d5631df6b3b0a093cf978"
+      },
+      "actual_child_modules": {
+        "bytes": 684,
+        "sha256": "27df4df7fccb8c9c67f5e8111d80979554c7f4c035924d28ab5b1206ab7ee389"
+      },
+      "terminal": {
+        "bytes": 4058,
+        "sha256": "5c297a878ecec73e70dd01999f0bbcf576cb0aac6ffe344327a8f5b142f0ed79"
+      },
+      "terminal_consumer_scan": {
+        "processes": 306,
+        "hidden_field_records": 200,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "terminal_accepted": {
+        "bytes": 8582,
+        "sha256": "9beda79b778f257c8679dd2ce3edf15307d7e4cde4ed668d1d6dbdda911bc88f"
+      }
+    },
+    {
+      "case": "near-conservation",
+      "original_test": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+      "numerical_passed": true,
+      "test_seconds": 7.395,
+      "owner_seconds": 8.2306879,
+      "bridge_seconds": 11.153631072011194,
+      "native_returncode": 0,
+      "sampled_child_peak_working_set_bytes": 151232512,
+      "memory_sample_rows": 11,
+      "whole_input_records": 142,
+      "whole_inputs_unchanged": true,
+      "predecessor_records": 12,
+      "minimum_sampled_wsl_available_kib": 19329244,
+      "no_external_guard_fired": true,
+      "terminal_teardown_passed": true,
+      "original_xml": {
+        "bytes": 3475,
+        "sha256": "8bd9f6df082eb136750a660366ce451fcdcbd592f663346275938f21b93947ac"
+      },
+      "owner": {
+        "bytes": 3308,
+        "sha256": "633780bb028c200c43ea3d8e0cb84517c2e7bcf537587c8c27379aad301f6ba5"
+      },
+      "bridge": {
+        "bytes": 5286,
+        "sha256": "a68d1f79c73233079d111baf59a572c3820a751b5711081df72becc4801c5e60"
+      },
+      "actual_child_modules": {
+        "bytes": 684,
+        "sha256": "27df4df7fccb8c9c67f5e8111d80979554c7f4c035924d28ab5b1206ab7ee389"
+      },
+      "terminal": {
+        "bytes": 4059,
+        "sha256": "470b47f328bd37a0fbf074600735521aa03aa569c2e076ba7b53626b4cc0b588"
+      },
+      "terminal_consumer_scan": {
+        "processes": 307,
+        "hidden_field_records": 200,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "terminal_accepted": {
+        "bytes": 11357,
+        "sha256": "7aa9ebcce68f4582d3dc5097f8526636a070bf2837ccd4c13caf5e78f6140c3f"
+      },
+      "actual_science_properties": {
+        "device": "AMD Radeon 780M Graphics",
+        "evidence_scope": "actual retained camera and intervals; committed physical host views and localized terminal; independently contracted E/Lz/Q and normalized null; one off-plane inward-turn-escape ray per supported product mode; no unprojected-stage or uniform-domain claim",
+        "reference_scalar_mantissa_bits": "53",
+        "kerr_0998_inner_turn_conservation_binary32_products_r0": "endpoint_per_mass=7.7513107044069329e-10;direction_angle_rad=9.5163341194645486e-12;finite_map_relative=3.6269921956433937e-11;infinity_map_relative=6.4733514952317534e-11;beam_covariance_relative=2.3809809438172329e-08;reference_endpoint_gap=1.2778400559909642e-10;reference_map_gap=6.7979281543269362e-11;attempts=70;reference_steps=2421;radial_turns=1;polar_turns=0;reference_step_fraction=0.001;reference_angular_spacing=0.0001",
+        "binary32_products_conservation": "state=expanded_binary32;products=binary32;E_initial=-0.82560919882388406;Lz_initial=8.2314984722104505;Q_initial=26.36980758664744;max_E_relative=1.6265339140825913e-11;max_Lz_relative=7.8244740614862393e-12;max_Q_relative=1.6624584876287401e-11;max_abs_gkk_over_sum_abs_terms=1.1021015221968863e-15;accepted_intervals=70;successful_candidates=70;rolled_back_candidates=0;native_samples=2;outgoing_samples=70;radial_turns=1;min_r_per_mass=10.32921082575939;min_abs_sin_theta=0.87062634383166826;terminal=physical_escape;affine_per_mass=56.205695544722829",
+        "kerr_0998_inner_turn_conservation_binary64_products_r0": "endpoint_per_mass=7.7513107044069329e-10;direction_angle_rad=9.5163341194645486e-12;finite_map_relative=3.6269921956433937e-11;infinity_map_relative=6.4733514952317534e-11;beam_covariance_relative=2.3809809438172329e-08;reference_endpoint_gap=1.2778400559909642e-10;reference_map_gap=6.7979281543269362e-11;attempts=70;reference_steps=2421;radial_turns=1;polar_turns=0;reference_step_fraction=0.001;reference_angular_spacing=0.0001",
+        "binary64_products_conservation": "state=expanded_binary32;products=binary64;E_initial=-0.82560919882388406;Lz_initial=8.2314984722104505;Q_initial=26.36980758664744;max_E_relative=1.6265339140825913e-11;max_Lz_relative=7.8244740614862393e-12;max_Q_relative=1.6624584876287401e-11;max_abs_gkk_over_sum_abs_terms=1.1021015221968863e-15;accepted_intervals=70;successful_candidates=70;rolled_back_candidates=0;native_samples=2;outgoing_samples=70;radial_turns=1;min_r_per_mass=10.32921082575939;min_abs_sin_theta=0.87062634383166826;terminal=physical_escape;affine_per_mass=56.205695544722829",
+        "executed_product_modes": "2"
+      }
+    },
+    {
+      "case": "kerr-image",
+      "original_test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "numerical_passed": false,
+      "test_seconds": 242.082,
+      "owner_seconds": 242.8687914,
+      "bridge_seconds": 245.34178071899805,
+      "native_returncode": 1,
+      "sampled_child_peak_working_set_bytes": 1307820032,
+      "memory_sample_rows": 240,
+      "whole_input_records": 154,
+      "whole_inputs_unchanged": true,
+      "predecessor_records": 24,
+      "minimum_sampled_wsl_available_kib": 19133760,
+      "no_external_guard_fired": true,
+      "terminal_teardown_passed": true,
+      "original_xml": {
+        "bytes": 1097,
+        "sha256": "a25bca6abeb978b725e1cdb19cc4e718733a4e301ae2f67ba96114728566712e"
+      },
+      "owner": {
+        "bytes": 3250,
+        "sha256": "ad0a3724dc039f9f7269520200c46c3de32193113f233a00a118931d7d814463"
+      },
+      "bridge": {
+        "bytes": 7488,
+        "sha256": "b9f2a4d728978a03186ca1ecc3f7c70eb154c83273392367b7deff7f7e241c5c"
+      },
+      "actual_child_modules": {
+        "bytes": 684,
+        "sha256": "27df4df7fccb8c9c67f5e8111d80979554c7f4c035924d28ab5b1206ab7ee389"
+      },
+      "terminal": {
+        "bytes": 4051,
+        "sha256": "8c8395f07385cde938cd683c60700c349da4e253698ba54e50fad316dbd427e0"
+      },
+      "terminal_consumer_scan": {
+        "processes": 302,
+        "hidden_field_records": 195,
+        "matches": [],
+        "accessible_compilers": []
+      },
+      "failure": "D:\\a\\Sirius\\Sirius\\tests\\backend\\kernel_trace_test.cpp:120\nValue of: output.has_value()\n  Actual: false\nExpected: true\nkernel: validate trace continuation: trace termination 5 cannot publish radiance\n",
+      "termination": {
+        "code": 5,
+        "meaning": "MinimumStep",
+        "source": "src/sirius/render/trace_continuation.h:24"
+      },
+      "failure_teardown": {
+        "bytes": 3074,
+        "sha256": "f9233a2b7efc0760584a3d18306447885cd49dd24e6f904daccae4e848074fff"
+      },
+      "precision_followup_stopped": true
+    }
+  ],
+  "resource_scope": "Native child sampled working set4GiB, separate WSL sampled available reserve2GiB. No aggregateWindows/VRAM/allprocess bound. Default driver cache and inherited override refusal unchanged. Original numerical/1000ms legacy submission assertions unmodified.",
+  "claim_limits": "Original active three cases only, PASS/PASS/FAIL. No saved raw image, image-quality pass, FP64 scene comparison, latency/ABBA/preview/UI/fullMandatory/scientific-domain/release claim. Existing current gate proves9buildcontrols/1150registration only. Software priorRSS-stop remains distinct.",
+  "next_uncertainty": "Current4498 exact-floor repair is present. Fulltrace rejected-at-floor branch does not persist exact failed ray/action/rejection subtype. No specific physics/controller fix or unchanged rerun is justified until localized original state and independent reference evidence exist."
+}

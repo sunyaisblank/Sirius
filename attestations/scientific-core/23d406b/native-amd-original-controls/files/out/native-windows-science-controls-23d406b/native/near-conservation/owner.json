@@ -1,0 +1,56 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "bounded-native-Windows-control",
+    "start_utc":  "2026-10-15T08:54:58.4404093Z",
+    "owner_pid":  20132,
+    "owner_start_time_utc":  "2026-10-15T08:54:56.8093103Z",
+    "test_executable":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release\\sirius_backend_tests.exe",
+    "test_executable_sha256":  "e83de1a089627b64ed10f8e4dc22069abad564f8858252a8516ae89c6a77c3fc",
+    "arguments":  [
+                      "--gtest_filter=FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+                      "--gtest_color=no",
+                      "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\native\\near-conservation\\gtest.xml\""
+                  ],
+    "working_directory":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release",
+    "outer_guard_seconds":  28800,
+    "rss_guard_bytes":  4294967296,
+    "outer_stop":  false,
+    "status":  "completed",
+    "numerical_control_passed":  true,
+    "expected_cases":  [
+                           "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants"
+                       ],
+    "qualification_claimed":  false,
+    "scope":  "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind":  "Control",
+    "system_inventory_passed":  false,
+    "environment":  {
+                        "VK_DRIVER_FILES":  null,
+                        "VK_ICD_FILENAMES":  null,
+                        "VK_ADD_DRIVER_FILES":  null,
+                        "SIRIUS_VULKAN_DEVICE":  null,
+                        "SIRIUS_PRECISION":  null,
+                        "SIRIUS_MEMORY_BUDGET_MB":  null,
+                        "SIRIUS_DISPATCH_TARGET_MS":  null,
+                        "TEMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\temp\\near-conservation",
+                        "TMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\temp\\near-conservation",
+                        "TMPDIR":  null
+                    },
+    "test_pid":  25508,
+    "test_start_time_utc":  "2026-10-15T08:54:58.9270139Z",
+    "returncode":  0,
+    "exit_code_source":  "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent":  true,
+    "end_utc":  "2026-10-15T08:55:06.6792416Z",
+    "elapsed_seconds":  8.2306879,
+    "peak_sampled_rss_bytes":  151232512,
+    "source_revision":  "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+    "live_source_revision":  "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+    "source_build_gate_sha256":  "b962047d6e47a5dc03eb986602e681fb2c064a0dc5d728d99b94acf278709e15",
+    "source_build_gate_unchanged":  true,
+    "loaded_driver_modules_recorded":  true,
+    "test_executable_unchanged":  true,
+    "cleanup_errors":  [
+
+                       ]
+}

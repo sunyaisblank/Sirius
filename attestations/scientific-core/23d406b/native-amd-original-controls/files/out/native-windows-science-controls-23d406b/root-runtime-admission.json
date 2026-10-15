@@ -1,0 +1,32 @@
+{
+  "schema": "sirius-native-windows-science-root-runtime-admission-v1",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "admitted": true,
+  "independent_source_review": {
+    "bytes": 6670,
+    "sha256": "7b291458687a5c47dd06a60f66a03b9d76af0cd6046e6912ae08099e96dbb3e4"
+  },
+  "plan": {
+    "bytes": 2995,
+    "sha256": "45b89ee56a1c201ab32a2f4807477af2aa8281e82294966bd520a6376b289275"
+  },
+  "bindings": {
+    "bytes": 56461,
+    "sha256": "32d331d09d5e10f80c323879923bc96c12586ac2651555a9c4f0d8e8ed991164"
+  },
+  "source_freeze": {
+    "bytes": 2314,
+    "sha256": "889961c65fd4043994be49a0c8803ff78cbdaf8d180b9139c0a25ccca629ac66"
+  },
+  "physical_inputs": 129,
+  "ordered_controls": [
+    "retained-sampler",
+    "near-conservation",
+    "kerr-image",
+    "kerr-precision"
+  ],
+  "operator": "/root",
+  "native_and_terminal_once_each_stop_first_nonpass": true,
+  "source_and_runtime_inputs_frozen": true,
+  "scope": "Root read independent source review and exact actual binding pins. Four original native AMD controls only; no performance/fullMandatory/fullscience/UI/rawimage/release claim."
+}

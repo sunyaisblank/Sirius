@@ -1,0 +1,60 @@
+{
+  "schema": "sirius-native-windows-original-science-preparation-v1",
+  "source_only": true,
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "source_freeze": {
+    "bytes": 2314,
+    "sha256": "889961c65fd4043994be49a0c8803ff78cbdaf8d180b9139c0a25ccca629ac66"
+  },
+  "helpers": {
+    "run_system.py": {
+      "bytes": 24104,
+      "sha256": "436b8d1fda6d4a2e2859ad448de5eab6f14702667485bab6a2e07d5bc2891af7"
+    },
+    "run_terminal.py": {
+      "bytes": 23474,
+      "sha256": "a41fc4374313060184d7b6becd2bdd8db97158cfee96a6bccb78bceda8ad1a23"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    }
+  },
+  "patch": {
+    "bytes": 35385,
+    "sha256": "d4e469296eaa92d939dd449ab4a9b9a88a4bb3f8329d786876fea5e679e14f40"
+  },
+  "source_member_count": 14,
+  "selected_prerequisite_files": 28,
+  "actual_runtime_files_absent": [
+    "plan.json",
+    "execution-bindings.json",
+    "native",
+    "temp"
+  ],
+  "prospective_commands": [
+    "python3 -B out/native-windows-science-controls-23d406b/run_system.py retained-sampler",
+    "python3 -B out/native-windows-science-controls-23d406b/run_terminal.py retained-sampler",
+    "python3 -B out/native-windows-science-controls-23d406b/run_system.py near-conservation",
+    "python3 -B out/native-windows-science-controls-23d406b/run_terminal.py near-conservation",
+    "python3 -B out/native-windows-science-controls-23d406b/run_system.py kerr-image",
+    "python3 -B out/native-windows-science-controls-23d406b/run_terminal.py kerr-image",
+    "python3 -B out/native-windows-science-controls-23d406b/run_system.py kerr-precision",
+    "python3 -B out/native-windows-science-controls-23d406b/run_terminal.py kerr-precision"
+  ],
+  "root_required_admission": [
+    "admitted and prerequisite.admitted",
+    "files: all74manifestpayloads+manifest+copiedgate, selected prerequisite archive members+manifest, current source helpers/metadata",
+    "exact four native argv/cleanup argv and terminal argv/cleanup argv",
+    "root independent source/runtime admission; actual plan.json/execution-bindings.json materialization"
+  ],
+  "no_author_helper_or_provider_executed": true
+}

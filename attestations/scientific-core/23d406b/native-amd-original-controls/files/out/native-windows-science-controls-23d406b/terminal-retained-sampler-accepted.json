@@ -1,0 +1,168 @@
+{
+  "pass": true,
+  "case": "retained-sampler",
+  "mode": "native-science",
+  "label": "retained-sampler",
+  "record": {
+    "owner": {
+      "schema_version": 1,
+      "kind": "bounded-native-Windows-control",
+      "start_utc": "2026-10-15T08:52:05.3421670Z",
+      "owner_pid": 23252,
+      "owner_start_time_utc": "2026-10-15T08:52:03.7861277Z",
+      "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release\\sirius_backend_tests.exe",
+      "test_executable_sha256": "e83de1a089627b64ed10f8e4dc22069abad564f8858252a8516ae89c6a77c3fc",
+      "arguments": [
+        "--gtest_filter=RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+        "--gtest_color=no",
+        "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\native\\retained-sampler\\gtest.xml\""
+      ],
+      "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release",
+      "outer_guard_seconds": 900,
+      "rss_guard_bytes": 4294967296,
+      "outer_stop": false,
+      "status": "completed",
+      "numerical_control_passed": true,
+      "expected_cases": [
+        "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates"
+      ],
+      "qualification_claimed": false,
+      "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+      "invocation_kind": "Control",
+      "system_inventory_passed": false,
+      "environment": {
+        "VK_DRIVER_FILES": null,
+        "VK_ICD_FILENAMES": null,
+        "VK_ADD_DRIVER_FILES": null,
+        "SIRIUS_VULKAN_DEVICE": null,
+        "SIRIUS_PRECISION": null,
+        "SIRIUS_MEMORY_BUDGET_MB": null,
+        "SIRIUS_DISPATCH_TARGET_MS": null,
+        "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\temp\\retained-sampler",
+        "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\temp\\retained-sampler",
+        "TMPDIR": null
+      },
+      "test_pid": 21784,
+      "test_start_time_utc": "2026-10-15T08:52:05.8085333Z",
+      "returncode": 0,
+      "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+      "owned_process_absent": true,
+      "end_utc": "2026-10-15T08:54:22.4696619Z",
+      "elapsed_seconds": 137.1219585,
+      "peak_sampled_rss_bytes": 485388288,
+      "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+      "live_source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+      "source_build_gate_sha256": "b962047d6e47a5dc03eb986602e681fb2c064a0dc5d728d99b94acf278709e15",
+      "source_build_gate_unchanged": true,
+      "loaded_driver_modules_recorded": true,
+      "test_executable_unchanged": true,
+      "cleanup_errors": []
+    },
+    "bridge": {
+      "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+      "runner_source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+      "kind": "retained-sampler",
+      "argv": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\run_native_control.ps1",
+        "-Stage",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release",
+        "-Output",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\native\\retained-sampler",
+        "-Filter",
+        "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+        "-Seconds",
+        "900",
+        "-RssBytes",
+        "4294967296",
+        "-TemporaryDirectory",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\temp\\retained-sampler",
+        "-BuildRoot",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b",
+        "-ExpectedGateSha256",
+        "b962047d6e47a5dc03eb986602e681fb2c064a0dc5d728d99b94acf278709e15",
+        "-LiveRevision",
+        "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+        "-ExecutableName",
+        "sirius_backend_tests.exe",
+        "-InvocationKind",
+        "Control"
+      ],
+      "binding_sha256": "32d331d09d5e10f80c323879923bc96c12586ac2651555a9c4f0d8e8ed991164",
+      "linux_controller_pid": 564355,
+      "linux_controller_birth": "10370840",
+      "predecessor_inputs": {},
+      "bridge_outer_seconds": 1380,
+      "windows_owner_seconds": 900,
+      "minimum_wsl_available_kib": 2097152,
+      "resource_scope": "Unchanged held-handle Windows owner samples native child WorkingSet64/PrivateMemorySize64. Windows child RSS4GiB; separate WSL sampled MemAvailable reserve2GiB; Linux bridge owner deadline plus480s and terminal60s. Bounds are prospective external diagnostics, not original whole-test deadlines or an aggregate Windows system/bootstrap memory guarantee. Default AMD cache and inherited override refusal unchanged. Original legacy physical1000ms phase envelope retained; no1000ms retained deadline.",
+      "accepted_owner_execution": true,
+      "completed": true,
+      "cleanup_errors": [],
+      "full_qualification_claimed": false,
+      "minimum_sampled_wsl_available_kib": 18926936,
+      "linux_child_pid": 564360,
+      "linux_child_birth": "10370900",
+      "returncode": 0,
+      "linux_child_birth_absent": true,
+      "native_build_gate_authority_used": true,
+      "mandatory_or_full_runtime_admitted": false,
+      "loaded_provider_evidence_complete": true,
+      "whole_inputs_unchanged": true,
+      "elapsed_seconds": 139.9292495599948,
+      "signals": []
+    },
+    "stdout_sha256": "916b6977b9a12b4e937785a23088cdafdd83f858fcbaf686ae9f558919fbbdc3",
+    "whole_inputs": {
+      "retained-sampler-bridge.json": {
+        "bytes": 2807,
+        "sha256": "893b3567f2d0c3438cdc0d7699a9a32f3e16e273d70d5631df6b3b0a093cf978"
+      },
+      "native/retained-sampler/owner.json": {
+        "bytes": 3301,
+        "sha256": "8e697d1799f2021497b528879720cf91e6f7141d19911e0f3b7b430fe64f3ea4"
+      },
+      "native/retained-sampler/stdout.log": {
+        "bytes": 740,
+        "sha256": "916b6977b9a12b4e937785a23088cdafdd83f858fcbaf686ae9f558919fbbdc3"
+      },
+      "native/retained-sampler/stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/retained-sampler/memory.json": {
+        "bytes": 18589,
+        "sha256": "1636853694778fc5f145a76c42f18a97a94b701c1836be007e2a7d8383ec23c6"
+      },
+      "retained-sampler-inputs-before.json": {
+        "bytes": 27436,
+        "sha256": "f53541a45175627ddee8ed7ec84f9f0d7f2c94bc223dbb12d90486d6c304c4b4"
+      },
+      "retained-sampler-inputs-after.json": {
+        "bytes": 27436,
+        "sha256": "f53541a45175627ddee8ed7ec84f9f0d7f2c94bc223dbb12d90486d6c304c4b4"
+      },
+      "native/retained-sampler/gtest.xml": {
+        "bytes": 622,
+        "sha256": "8f113506d1a4a445d97f5876bbd6d4413fdabb41f2075756c1db0a79f6930125"
+      },
+      "native/retained-sampler/driver-modules.json": {
+        "bytes": 684,
+        "sha256": "27df4df7fccb8c9c67f5e8111d80979554c7f4c035924d28ab5b1206ab7ee389"
+      }
+    }
+  },
+  "terminal_receipt": "out/native-windows-science-controls-23d406b/terminal-retained-sampler.json",
+  "terminal_receipt_sha256": "5c297a878ecec73e70dd01999f0bbcf576cb0aac6ffe344327a8f5b142f0ed79",
+  "terminal_bridge_sha256": "f8d853020579cc794470aead8585680c39f6ea7657ed64248f04aa7246204b78",
+  "loaded_provider_evidence_complete": true,
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "native_build_gate_authority_used": true,
+  "mandatory_or_full_runtime_admitted": false,
+  "scope": "One exact original native-AMD science control only, with actual stagedSDKloader+AMD and original assertions. Near records actual supported-mode count; precision requires actual comparison property. Limited accessible census; no saved image buffer, UI/fullMandatory/fullscience/domain/release qualification claim."
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "sirius-native-windows-original-science-plan-v1",
+  "admitted": false,
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "runner_source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "stage": "bin/windows-msvc/diagnostic-23d406b",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "order": [
+    "retained-sampler",
+    "near-conservation",
+    "kerr-image",
+    "kerr-precision"
+  ],
+  "actions": {
+    "retained-sampler": {
+      "kind": "Control",
+      "test": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+      "expected_exit": 0,
+      "owner_seconds": 900,
+      "bridge_outer_seconds": 1380
+    },
+    "near-conservation": {
+      "kind": "Control",
+      "test": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+      "expected_exit": 0,
+      "owner_seconds": 28800,
+      "bridge_outer_seconds": 29280
+    },
+    "kerr-image": {
+      "kind": "Control",
+      "test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "expected_exit": 0,
+      "owner_seconds": 28800,
+      "bridge_outer_seconds": 29280
+    },
+    "kerr-precision": {
+      "kind": "Control",
+      "test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+      "expected_exit": 0,
+      "owner_seconds": 28800,
+      "bridge_outer_seconds": 29280
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "Unchanged held-handle Windows owner samples native child WorkingSet64/PrivateMemorySize64. Windows child RSS4GiB; separate WSL sampled MemAvailable reserve2GiB; Linux bridge owner deadline plus480s and terminal60s. Bounds are prospective external diagnostics, not original whole-test deadlines or an aggregate Windows system/bootstrap memory guarantee. Default AMD cache and inherited override refusal unchanged. Original legacy physical1000ms phase envelope retained; no1000ms retained deadline.",
+  "prospective_commands": [
+    "python3 -B out/native-windows-science-controls-23d406b/run_system.py retained-sampler",
+    "python3 -B out/native-windows-science-controls-23d406b/run_terminal.py retained-sampler",
+    "python3 -B out/native-windows-science-controls-23d406b/run_system.py near-conservation",
+    "python3 -B out/native-windows-science-controls-23d406b/run_terminal.py near-conservation",
+    "python3 -B out/native-windows-science-controls-23d406b/run_system.py kerr-image",
+    "python3 -B out/native-windows-science-controls-23d406b/run_terminal.py kerr-image",
+    "python3 -B out/native-windows-science-controls-23d406b/run_system.py kerr-precision",
+    "python3 -B out/native-windows-science-controls-23d406b/run_terminal.py kerr-precision"
+  ],
+  "scope": "Four unchanged original native-AMD science controls, stopped on first nonpass. No saved raw images, latency/ABBA/UI/fullMandatory/scientific-domain/release qualification claim."
+}

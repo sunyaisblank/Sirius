@@ -1,0 +1,110 @@
+{
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "runner_source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "kind": "near-conservation",
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\run_native_control.ps1",
+    "-Stage",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release",
+    "-Output",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\native\\near-conservation",
+    "-Filter",
+    "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+    "-Seconds",
+    "28800",
+    "-RssBytes",
+    "4294967296",
+    "-TemporaryDirectory",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-science-controls-23d406b\\temp\\near-conservation",
+    "-BuildRoot",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b",
+    "-ExpectedGateSha256",
+    "b962047d6e47a5dc03eb986602e681fb2c064a0dc5d728d99b94acf278709e15",
+    "-LiveRevision",
+    "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+    "-ExecutableName",
+    "sirius_backend_tests.exe",
+    "-InvocationKind",
+    "Control"
+  ],
+  "binding_sha256": "32d331d09d5e10f80c323879923bc96c12586ac2651555a9c4f0d8e8ed991164",
+  "linux_controller_pid": 575226,
+  "linux_controller_birth": "10388145",
+  "predecessor_inputs": {
+    "out/native-windows-science-controls-23d406b/retained-sampler-bridge.json": {
+      "bytes": 2807,
+      "sha256": "893b3567f2d0c3438cdc0d7699a9a32f3e16e273d70d5631df6b3b0a093cf978"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/owner.json": {
+      "bytes": 3301,
+      "sha256": "8e697d1799f2021497b528879720cf91e6f7141d19911e0f3b7b430fe64f3ea4"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/stdout.log": {
+      "bytes": 740,
+      "sha256": "916b6977b9a12b4e937785a23088cdafdd83f858fcbaf686ae9f558919fbbdc3"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/memory.json": {
+      "bytes": 18589,
+      "sha256": "1636853694778fc5f145a76c42f18a97a94b701c1836be007e2a7d8383ec23c6"
+    },
+    "out/native-windows-science-controls-23d406b/retained-sampler-inputs-before.json": {
+      "bytes": 27436,
+      "sha256": "f53541a45175627ddee8ed7ec84f9f0d7f2c94bc223dbb12d90486d6c304c4b4"
+    },
+    "out/native-windows-science-controls-23d406b/retained-sampler-inputs-after.json": {
+      "bytes": 27436,
+      "sha256": "f53541a45175627ddee8ed7ec84f9f0d7f2c94bc223dbb12d90486d6c304c4b4"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/gtest.xml": {
+      "bytes": 622,
+      "sha256": "8f113506d1a4a445d97f5876bbd6d4413fdabb41f2075756c1db0a79f6930125"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/driver-modules.json": {
+      "bytes": 684,
+      "sha256": "27df4df7fccb8c9c67f5e8111d80979554c7f4c035924d28ab5b1206ab7ee389"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-retained-sampler.json": {
+      "bytes": 4058,
+      "sha256": "5c297a878ecec73e70dd01999f0bbcf576cb0aac6ffe344327a8f5b142f0ed79"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-retained-sampler-bridge.json": {
+      "bytes": 2415,
+      "sha256": "f8d853020579cc794470aead8585680c39f6ea7657ed64248f04aa7246204b78"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-retained-sampler-accepted.json": {
+      "bytes": 8582,
+      "sha256": "9beda79b778f257c8679dd2ce3edf15307d7e4cde4ed668d1d6dbdda911bc88f"
+    }
+  },
+  "bridge_outer_seconds": 29280,
+  "windows_owner_seconds": 28800,
+  "minimum_wsl_available_kib": 2097152,
+  "resource_scope": "Unchanged held-handle Windows owner samples native child WorkingSet64/PrivateMemorySize64. Windows child RSS4GiB; separate WSL sampled MemAvailable reserve2GiB; Linux bridge owner deadline plus480s and terminal60s. Bounds are prospective external diagnostics, not original whole-test deadlines or an aggregate Windows system/bootstrap memory guarantee. Default AMD cache and inherited override refusal unchanged. Original legacy physical1000ms phase envelope retained; no1000ms retained deadline.",
+  "accepted_owner_execution": true,
+  "completed": true,
+  "cleanup_errors": [],
+  "full_qualification_claimed": false,
+  "minimum_sampled_wsl_available_kib": 19329244,
+  "linux_child_pid": 575231,
+  "linux_child_birth": "10388198",
+  "returncode": 0,
+  "linux_child_birth_absent": true,
+  "native_build_gate_authority_used": true,
+  "mandatory_or_full_runtime_admitted": false,
+  "executed_product_modes": 2,
+  "binary64_product_mode_executed": true,
+  "loaded_provider_evidence_complete": true,
+  "whole_inputs_unchanged": true,
+  "elapsed_seconds": 11.153631072011194,
+  "signals": []
+}

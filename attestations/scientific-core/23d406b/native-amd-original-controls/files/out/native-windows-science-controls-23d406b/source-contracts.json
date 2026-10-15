@@ -1,0 +1,201 @@
+{
+  "schema": "sirius-native-windows-original-science-source-contracts-v1",
+  "source_only": true,
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "apparatus_parent": {
+    "commit": "6ef5828147c16395ca2bff4aeca6b662215b0918",
+    "work": "attestations/native-vulkan/23d406b/inventory-and-original-smoke/files/out/native-windows-diagnostic-23d406b",
+    "scope": "Final admitted B two-wrapper apparatus with repaired accepted predecessor pin checks; three PS scripts unchanged8caa."
+  },
+  "original_source": {
+    "tests/backend/retained_dopri_test.cpp": {
+      "bytes": 71601,
+      "sha256": "6e8dc8601d496ef5dc9403e0a75a97bd00ed67f115ad491cb578ff54b3fb93d1"
+    },
+    "tests/backend/full_path_acceptance_test.cpp": {
+      "bytes": 52196,
+      "sha256": "ba52920f31e0c5ff9135c2ccd8b6d43c4261b783f0c5544112daac927eb09dae"
+    },
+    "tests/backend/kernel_trace_test.cpp": {
+      "bytes": 30289,
+      "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "bytes": 11185,
+      "sha256": "86e28bf045a8cdb780979ebdd1866f48e841355ddbf4927d1d4d2b886df22ee1"
+    }
+  },
+  "actual_windows_registration": {
+    "path": "attestations/qualification/23d406b/native-build-ci-38701994420/windows-native-build/ctest-inventory.json",
+    "identity": {
+      "bytes": 1057433,
+      "sha256": "a226fe7876ecdff55c603f0d7296bd22d1914b369311102db363d535dbec2293"
+    },
+    "selected": {
+      "retained-sampler": {
+        "command": [
+          "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe",
+          "--gtest_filter=RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "config": "Release",
+        "name": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend"
+          }
+        ]
+      },
+      "near-conservation": {
+        "command": [
+          "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe",
+          "--gtest_filter=FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "config": "Release",
+        "name": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend"
+          }
+        ]
+      },
+      "kerr-image": {
+        "command": [
+          "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe",
+          "--gtest_filter=KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "config": "Release",
+        "name": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory",
+              "Operational",
+              "Rendering"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend"
+          }
+        ]
+      },
+      "kerr-precision": {
+        "command": [
+          "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe",
+          "--gtest_filter=KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+          "--gtest_also_run_disabled_tests"
+        ],
+        "config": "Release",
+        "name": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+        "properties": [
+          {
+            "name": "SKIP_REGULAR_EXPRESSION",
+            "value": [
+              "\\[  SKIPPED \\]"
+            ]
+          },
+          {
+            "name": "LABELS",
+            "value": [
+              "Correctness",
+              "Mandatory",
+              "Operational",
+              "Rendering"
+            ]
+          },
+          {
+            "name": "RESOURCE_LOCK",
+            "value": [
+              "sirius_vulkan_device"
+            ]
+          },
+          {
+            "name": "WORKING_DIRECTORY",
+            "value": "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend"
+          }
+        ]
+      }
+    },
+    "declared_ctest_timeout": false,
+    "direct_native_owner_arguments": "Exact mature Control PowerShell gtest filter/color/XML args retained; no test source/assertion/fixture change.",
+    "active_case_equivalence": "All four selected source names are active TEST/TEST_F cases, not DISABLED names. Existing byte-exact PS owner direct-Control argv omits CTest discovery-only --gtest_also_run_disabled_tests; that flag has no effect on these selected active cases. No combined flags are inserted in Filter."
+  },
+  "selected_science_contracts": {
+    "retained-sampler": "Original 40physical fields/four columns, physical arrival derivatives, independent interior/endpoint references, inconsistent-rate and invalid-input refusal, allocation bounds and original supported product-mode loop. No fabricated mode count or1000ms cap.",
+    "near-conservation": "Original off-plane near-extremal invariant/escape/turn assertions and Sample forwarding correction; original40fields/four columns/sevenRHS/threeRK/fourquartics. Record actual executed_product_modes1or2; no fabricated unsupported binary64 execution. Default maximum_submission_ms0 unchanged.",
+    "kerr-image": "Original64x64/64active/all parameters/assertions and physical1000ms Init/Advance/Finalize envelope; finite/nonconstant/bounded shadow. NativeAMD distinct from unresolved old software-RSS stops; no traceJIT viability or savedimage claim.",
+    "kerr-precision": "Only after all preceding terminal acceptances. Original64x64 independently rerunfp32/fp64/finite/error/shadow assertions; requires fp64_evidence=native_comparison_executed. Unsupported decline cannot count as comparison."
+  },
+  "ownership_and_provider_contracts": [
+    "Three PS files byte-exact8caa: held process handle/birth, native4GiB RSS/deadline/emergency cleanup; terminal accessible census scope preserved.",
+    "Each phase verifies exact staged SDKloader and fresh AMD map from the same child; historical admitted AMD file identity remains explicit.",
+    "Every prior science accepted record.whole_inputs pin is compared before any fresh snapshot; prior XML/owner/memory/stdout/stderr/maps/inputmaps/bridge plus terminal receipts are frozen as predecessors.",
+    "Initial inventory/smoke prerequisites are selected regular archive members, accepted pins and root/independent joins only; historical old95 maps are not replayed on retired paths."
+  ],
+  "runtime_admitted": false,
+  "executions_performed_by_author": 0,
+  "outside_all_runtime_inputs": [
+    "root source/runtime admissions",
+    "independent source/terminal reviews",
+    "root retirement/issue/result/collector receipts",
+    "other operational reports"
+  ],
+  "pending": "Root final actual plan+bindings, source/runtime admission and sole per-action execution."
+}

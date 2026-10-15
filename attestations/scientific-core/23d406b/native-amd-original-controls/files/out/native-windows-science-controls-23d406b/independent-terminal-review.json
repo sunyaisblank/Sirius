@@ -1,0 +1,332 @@
+{
+  "schema": "sirius-native-windows-original-science-independent-terminal-review-v1",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "packet_author": "/root/forensic_obligations",
+  "source_reviewer": "/root/divide_contract_review",
+  "operator": "/root",
+  "passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "artifact_consistency_passed": true,
+  "disposition": "TWO_ORIGINAL_CONTROLS_PASS_KERR_IMAGE_NUMERICAL_FAILURE_PRECISION_UNRUN",
+  "original_controls_started": 3,
+  "original_controls_completed": 3,
+  "original_controls_passed": 2,
+  "original_controls_failed": 1,
+  "precision_executed": false,
+  "all_four_controls_passed": false,
+  "key_bindings": {
+    "plan.json": {
+      "path": "out/native-windows-science-controls-23d406b/plan.json",
+      "bytes": 2995,
+      "sha256": "45b89ee56a1c201ab32a2f4807477af2aa8281e82294966bd520a6376b289275"
+    },
+    "execution-bindings.json": {
+      "path": "out/native-windows-science-controls-23d406b/execution-bindings.json",
+      "bytes": 56461,
+      "sha256": "32d331d09d5e10f80c323879923bc96c12586ac2651555a9c4f0d8e8ed991164"
+    },
+    "source-freeze.json": {
+      "path": "out/native-windows-science-controls-23d406b/source-freeze.json",
+      "bytes": 2314,
+      "sha256": "889961c65fd4043994be49a0c8803ff78cbdaf8d180b9139c0a25ccca629ac66"
+    },
+    "independent-source-review.json": {
+      "path": "out/native-windows-science-controls-23d406b/independent-source-review.json",
+      "bytes": 6670,
+      "sha256": "7b291458687a5c47dd06a60f66a03b9d76af0cd6046e6912ae08099e96dbb3e4"
+    },
+    "root-runtime-admission.json": {
+      "path": "out/native-windows-science-controls-23d406b/root-runtime-admission.json",
+      "bytes": 1121,
+      "sha256": "d72c80c2c463a450d26b7953cf5b60f8eff7261c23d394d0106caae5a596cfb9"
+    },
+    "runtime-input-preservation-refs.json": {
+      "path": "out/native-windows-science-controls-23d406b/runtime-input-preservation-refs.json",
+      "bytes": 61767,
+      "sha256": "10a722963eabce5b6b98c4ea0663d947a0b38f57d5ff0563a9f34d4bb9733972"
+    },
+    "finite-result.json": {
+      "path": "out/native-windows-science-controls-23d406b/finite-result.json",
+      "bytes": 10107,
+      "sha256": "39d7942ca1dd23a7d493f022365dca6081370c1c098bd1abf09d212a0e116197"
+    },
+    "kerr-image-failure-terminal-audit.json": {
+      "path": "out/native-windows-science-controls-23d406b/kerr-image-failure-terminal-audit.json",
+      "bytes": 3074,
+      "sha256": "f9233a2b7efc0760584a3d18306447885cd49dd24e6f904daccae4e848074fff"
+    }
+  },
+  "checks": {
+    "all_129_physical_binding_identities_current": true,
+    "all_14_frozen_source_identities_current": true,
+    "stage_payloads_current": 74,
+    "stage_payloads_plus_manifest_and_native_gate": 76,
+    "exact_current_input_sets": [
+      130,
+      142,
+      154
+    ],
+    "before_after_raw_rows_checked": 852,
+    "unique_whole_input_paths": 154,
+    "before_after_byte_equal_and_current": true,
+    "interphase_predecessor_counts": [
+      0,
+      12,
+      24
+    ],
+    "accepted_predecessor_record_owner_bridge_whole_inputs_terminal_hashes_exact": true,
+    "prior_inventory_smoke_reuse": "28 selected immutable6ef582 members and manifest/accepted whole-receipt joins, without replaying retired old95 lexical inputs.",
+    "preservation_reference_classes": {
+      "named_git_blob": 117,
+      "new_owned_packet_member": 9,
+      "external_host_input_only": 3
+    },
+    "all_117_named_git_blob_bytes_checked": true,
+    "all_runtime_argv_equal_exact_bindings": true,
+    "test_source_files_unchanged": true,
+    "native_build_gate_and_test_executable_unchanged": true,
+    "native_held_handle_exit_and_same_child_module_capture_source_receipt_join": true,
+    "native_owner_test_births_terminal_recorded_absent": 6,
+    "fresh_linux_recorded_births_absent": 10,
+    "all_module_and_executable_postseals_current": true,
+    "terminal_consumer_matches": [
+      0,
+      0,
+      0
+    ],
+    "terminal_accessible_compilers": [
+      0,
+      0,
+      0
+    ],
+    "terminal_hidden_field_records": [
+      200,
+      200,
+      195
+    ],
+    "kerr_precision_native_temp_bridge_inputs_and_terminal_outputs_absent": true,
+    "kerr_success_only_terminal_bridge_and_accepted_output_absent": true,
+    "root_finite_result_literal_counts_pins_modes_failure_and_scope_consistent": true
+  },
+  "phases": [
+    {
+      "case": "retained-sampler",
+      "original_test": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+      "outcome": "PASS",
+      "exit_code": 0,
+      "test_seconds": 135.926,
+      "owner_seconds": 137.1219585,
+      "bridge_seconds": 139.9292495599948,
+      "peak_sampled_native_child_working_set_bytes": 485388288,
+      "memory_samples": 135,
+      "whole_input_count": 130,
+      "predecessor_count": 0,
+      "xml": {
+        "path": "out/native-windows-science-controls-23d406b/native/retained-sampler/gtest.xml",
+        "bytes": 622,
+        "sha256": "8f113506d1a4a445d97f5876bbd6d4413fdabb41f2075756c1db0a79f6930125"
+      },
+      "owner": {
+        "path": "out/native-windows-science-controls-23d406b/native/retained-sampler/owner.json",
+        "bytes": 3301,
+        "sha256": "8e697d1799f2021497b528879720cf91e6f7141d19911e0f3b7b430fe64f3ea4"
+      },
+      "terminal": {
+        "path": "out/native-windows-science-controls-23d406b/terminal-retained-sampler.json",
+        "bytes": 4058,
+        "sha256": "5c297a878ecec73e70dd01999f0bbcf576cb0aac6ffe344327a8f5b142f0ed79"
+      }
+    },
+    {
+      "case": "near-conservation",
+      "original_test": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+      "outcome": "PASS",
+      "exit_code": 0,
+      "test_seconds": 7.395,
+      "owner_seconds": 8.2306879,
+      "bridge_seconds": 11.153631072011194,
+      "peak_sampled_native_child_working_set_bytes": 151232512,
+      "memory_samples": 11,
+      "whole_input_count": 142,
+      "predecessor_count": 12,
+      "xml": {
+        "path": "out/native-windows-science-controls-23d406b/native/near-conservation/gtest.xml",
+        "bytes": 3475,
+        "sha256": "8bd9f6df082eb136750a660366ce451fcdcbd592f663346275938f21b93947ac"
+      },
+      "owner": {
+        "path": "out/native-windows-science-controls-23d406b/native/near-conservation/owner.json",
+        "bytes": 3308,
+        "sha256": "633780bb028c200c43ea3d8e0cb84517c2e7bcf537587c8c27379aad301f6ba5"
+      },
+      "terminal": {
+        "path": "out/native-windows-science-controls-23d406b/terminal-near-conservation.json",
+        "bytes": 4059,
+        "sha256": "470b47f328bd37a0fbf074600735521aa03aa569c2e076ba7b53626b4cc0b588"
+      }
+    },
+    {
+      "case": "kerr-image",
+      "original_test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "outcome": "FAIL",
+      "exit_code": 1,
+      "test_seconds": 242.082,
+      "owner_seconds": 242.8687914,
+      "bridge_seconds": 245.34178071899805,
+      "peak_sampled_native_child_working_set_bytes": 1307820032,
+      "memory_samples": 240,
+      "whole_input_count": 154,
+      "predecessor_count": 24,
+      "xml": {
+        "path": "out/native-windows-science-controls-23d406b/native/kerr-image/gtest.xml",
+        "bytes": 1097,
+        "sha256": "a25bca6abeb978b725e1cdb19cc4e718733a4e301ae2f67ba96114728566712e"
+      },
+      "owner": {
+        "path": "out/native-windows-science-controls-23d406b/native/kerr-image/owner.json",
+        "bytes": 3250,
+        "sha256": "ad0a3724dc039f9f7269520200c46c3de32193113f233a00a118931d7d814463"
+      },
+      "terminal": {
+        "path": "out/native-windows-science-controls-23d406b/terminal-kerr-image.json",
+        "bytes": 4051,
+        "sha256": "8c8395f07385cde938cd683c60700c349da4e253698ba54e50fad316dbd427e0"
+      }
+    },
+    {
+      "case": "kerr-precision",
+      "original_test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+      "outcome": "UNRUN",
+      "reason": "Stop-first-nonpass after completed kerr-image exit1; no precision comparison or unsupported-decline evidence."
+    }
+  ],
+  "original_science_scope": {
+    "retained_sampler": "Completed original supported-product-mode loop and source assertions: four trial endpoint samples, all40 physical fields, independent interior references/physical arrival derivatives, controlled inconsistent-rate refusal, malformed-input zero rows, allocation bound, rollback/cancellation/lifetime checks. XML prints no executed-mode count; no sampler-specific numeric mode count is invented.",
+    "near_conservation": {
+      "device": "AMD Radeon 780M Graphics",
+      "executed_product_modes": 2,
+      "reference_scalar_mantissa_bits": 53,
+      "modes": {
+        "binary32": {
+          "accepted_intervals": 70,
+          "successful_candidates": 70,
+          "rolled_back_candidates": 0,
+          "native_samples": 2,
+          "outgoing_samples": 70,
+          "radial_turns": 1,
+          "terminal": "physical_escape",
+          "max_E_relative": 1.6265339140825913e-11,
+          "max_Lz_relative": 7.82447406148624e-12,
+          "max_Q_relative": 1.66245848762874e-11,
+          "max_normalized_null": 1.1021015221968863e-15,
+          "minimum_radius_per_mass": 10.32921082575939
+        },
+        "binary64": {
+          "accepted_intervals": 70,
+          "successful_candidates": 70,
+          "rolled_back_candidates": 0,
+          "native_samples": 2,
+          "outgoing_samples": 70,
+          "radial_turns": 1,
+          "terminal": "physical_escape",
+          "max_E_relative": 1.6265339140825913e-11,
+          "max_Lz_relative": 7.82447406148624e-12,
+          "max_Q_relative": 1.66245848762874e-11,
+          "max_normalized_null": 1.1021015221968863e-15,
+          "minimum_radius_per_mass": 10.32921082575939
+        }
+      },
+      "reference_evidence": "Original independent endpoint/direction/finite-map/infinity-map/beam-covariance assertions passed. Actual recorded reference_steps2421, step_fraction0.001, angular_spacing0.0001; one inward-turn-escape witness per mode, not uniform-domain proof."
+    },
+    "kerr_image": {
+      "failure_source": "tests/backend/kernel_trace_test.cpp:120",
+      "failure": "output.has_value() is false; kernel: validate trace continuation: trace termination 5 cannot publish radiance",
+      "termination": {
+        "value": 5,
+        "name": "MinimumStep",
+        "enum_source": "src/sirius/render/trace_continuation.h:24",
+        "refusal_source": "src/sirius/render/trace_continuation.h:101"
+      },
+      "classification": "Completed original numerical/control failure, not timeout/RSS stop/bridge containment failure. Bridge postcondition AssertionError is consequential to native exit1, not an independent scientific cause.",
+      "fixture": "Original64x64,64 active rows, unchanged Kerr/step/tolerance parameters and physical1000ms phase envelope.",
+      "unreached_acceptance": "No output image; subsequent channel finiteness, nonconstant radiance and bounded-shadow assertions cannot establish acceptance. No saved failing ray/action/attempt/error subtype exists here. Current exact-floor repair is present; the remaining numerical cause is unresolved."
+    }
+  },
+  "ownership": {
+    "native_births": [
+      {
+        "case": "retained-sampler",
+        "owner_pid": 23252,
+        "owner_start_utc": "2026-10-15T08:52:03.7861277Z",
+        "test_pid": 21784,
+        "test_start_utc": "2026-10-15T08:52:05.8085333Z",
+        "recorded_native_births_absent": true
+      },
+      {
+        "case": "near-conservation",
+        "owner_pid": 20132,
+        "owner_start_utc": "2026-10-15T08:54:56.8093103Z",
+        "test_pid": 25508,
+        "test_start_utc": "2026-10-15T08:54:58.9270139Z",
+        "recorded_native_births_absent": true
+      },
+      {
+        "case": "kerr-image",
+        "owner_pid": 20460,
+        "owner_start_utc": "2026-10-15T08:55:36.9626988Z",
+        "test_pid": 9064,
+        "test_start_utc": "2026-10-15T08:55:39.1260021Z",
+        "recorded_native_births_absent": true
+      }
+    ],
+    "kerr_failure_teardown": "Root ran exact prebound terminal PowerShell argv once through bounded observer after completed failure, with exact cleanup argv, deadline60s, exit0/errors[]/binding+receipt hashes/bootstrap checked. It proves teardown/provider seals only; success-only run_terminal.py was not used or weakened to admit failure.",
+    "provider": {
+      "observed_loader": {
+        "bytes": 1685432,
+        "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+        "version": "1.4.357.0"
+      },
+      "observed_amd": {
+        "name": "amdvlk64.dll",
+        "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+        "bytes": 103213064,
+        "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+        "version": "9.2.10.395"
+      },
+      "same_owned_child_and_postseal": true,
+      "installed_system32_loader": "Different file identity, input-only; not substituted for observed staged SDK loader."
+    },
+    "limits": "Windows sampled child WorkingSet64 <=4294967296B and original external900/28800s owners; separate Linux bridge reserve2097152KiB and outer+480s. PrivateMemorySize64 is recorded. No aggregate Windows/bootstrap/compiler/VRAM bound. All three completed without outer stop/resource guard/signals/cleanup errors.",
+    "absence_limits": "Fresh Windows terminal receipts check recorded owner/test PID+UTC births and accessible command/executable consumers. Permission gaps200/200/195 remain explicit; no handle enumeration/global consumer or unconditional compiler-descendant absence claim. Reviewer freshly checked recorded Linux PID/start ticks via /proc only."
+  },
+  "scope_limits": {
+    "full_native_or_mandatory_qualification": false,
+    "full_scientific_domain_qualification": false,
+    "image_quality_or_fp64_scene_comparison": false,
+    "preview_ui_or_release_qualification": false,
+    "performance_or_abba_qualification": false,
+    "physics_or_minimum_step_root_cause_proven": false,
+    "provider_feature_enable_trace_claimed": false
+  },
+  "execution": {
+    "authored_helpers_imported_or_executed": false,
+    "powershell_parser_native_provider_compiler_test_api_executed": false,
+    "frozen_source_or_input_mutation": false,
+    "only_file_written": "independent-terminal-review.json",
+    "method": "Passive stdlib JSON/XML/hash/text/source/AST as needed, exact named Git blob reads and Linux /proc birth reads; no native/provider operation."
+  },
+  "workspace": {
+    "head": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "canonical_source_committed_and_pushed": true,
+    "review": "Ignored diagnostic receipt outside every frozen/runtime map; uncommitted and unpushed pending root preservation."
+  }
+}
