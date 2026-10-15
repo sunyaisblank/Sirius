@@ -1,0 +1,71 @@
+{
+  "schema": "sirius-kerr-failure-decimal-state-analysis-independent-source-review-v1",
+  "passed": true,
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "reviewer": "/root/divide_contract_review",
+  "author": "/root/forensic_obligations",
+  "operator": "/root",
+  "scope": "Passive source/math admission of analyse_state.py only; no analysis imports, execution, state calculations or numerical-output admission.",
+  "inputs": {
+    "out/kerr-failure-state-analysis/analyse_state.py": {
+      "bytes": 12765,
+      "sha256": "5c97a89bf27325bfcdcd85af3c1a83ccdff7f211810f3b1fe67b5a7aeb0d5e31"
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "bytes": 7192,
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "bytes": 13798,
+      "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399"
+    },
+    "src/sirius/kernels/gr_metrics.slang": {
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    "tests/support/separated_geodesic_reference.h": {
+      "bytes": 18350,
+      "sha256": "eebea29855b10e946c5f040cb7465219a103312ffd930e544ebe36aac600043b"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "bytes": 63438,
+      "sha256": "9074a188f407a4e22046db652fd19001387a4773cd25ac90d93f9849cccfe88a"
+    }
+  },
+  "source_checks": {
+    "capture_and_layout": "Requires the completed expected-exit1, stable-input failed Kerr bridge and exact source; retains raw JSON and input/script hashes. Packet280B, F32 record272B, physical/source/volume240B, control240 and identity256 offsets agree with host layout. Advance/64active strip/row/sample/epoch/identity/Terminal-MinimumStep/device joins are coherent. It relies on the separately admitted bridge for complete XML/provider/ownership authority.",
+    "exact_inputs": "struct.unpack little-endian binary32 produces exactly representable Python binary64 values; Decimal.from_float preserves those values exactly without decimal-string reinterpretation. Geometry operates in separate local80/60-digit contexts.",
+    "geometry": "Defining positive Kerr radial root including rationalized reduced-negative branch is correct; r2<=0 returns geometry_evaluable=false. For the asserted M1,0<a<M,Q0,Lambda0 sector, coefficient=(2Mr-Q2)/sigma, ell=(1,(rx+ay)/(r2+a2),(ry-ax)/(r2+a2),z/r), and metric=diag(-1,1,1,1)+coefficient*ell*ell agree with the ingoing Cartesian chart.",
+    "independent_linear_algebra": "Generic four-column partial-pivot Gauss-Jordan elimination accumulates signed pivot product before row normalization and computes matrix-times-inverse identity residual. It does not assume determinant=-1 or use the closed-form inverse. Singular pivots raise rather than publish a result.",
+    "contractions_and_invariants": "gkk and denominator sum(abs(gij*ki*kj)) are explicit term-scaled null diagnostics. Covariant p=g*k, signed energy=-p_t, axial momentum=x*p_y-y*p_x and past Eulerian frequency=-k_t_contravariant/sqrt(1+H) have matching conventions; no positivity assertion is imposed on signed Killing energy.",
+    "capture_scale": "Independent high-precision outer horizon M+sqrt(M2-a2-Q2) times exact represented capture factor is correct for the asserted asymptotically flat sector. This is not bit-identical shader horizon/capture arithmetic.",
+    "rollback": "Original byte-range/counter observations are recomputed and must equal the captured observations, but are not required to be true and are never promoted to rollback acceptance.",
+    "failure_and_output": "Invalid raw sizes/hex, nonfinite converted inputs, bridge/schema/identity mismatches and singular metrics stop before output. Input is re-read before publication; output uses exclusive-create mode. Numerical_test_passed and radiance_publication_admitted remain false.",
+    "precision_and_semantics": "80-versus60 digit differences are explicitly not certified error bounds. No interval proof, hidden trial candidates, Christoffels, controller/projector stepping, whole-ray validity or cause of the rejected GPU conjunct is inferred."
+  },
+  "remaining_limits": [
+    "Source admission does not establish actual output or runtime completion; root alone may execute and review concrete results.",
+    "The script validates a selected accepted bridge, not a standalone reconstruction of all terminal provider/source receipts.",
+    "Within-process input re-read is a final equality check, not an atomic filesystem snapshot.",
+    "No conclusion about which GPU trial predicate failed can follow from these committed previous/current records alone."
+  ],
+  "executions": {
+    "analysis_or_authored_helpers_imported_or_executed": false,
+    "capture_values_calculated": false,
+    "compiler_provider_test_or_ci_executed": false,
+    "tracked_source_or_capture_packet_edited": false,
+    "only_file_written": "out/kerr-failure-state-analysis/independent-source-review.json"
+  },
+  "workspace": {
+    "tracked_tree_clean": true,
+    "head": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "source_committed_and_pushed": true,
+    "review_receipt": "Ignored diagnostic source-review receipt; not committed/pushed yet."
+  },
+  "conclusion": "SOURCE PASS with the stated algebra-only scope; no concrete blocker found."
+}

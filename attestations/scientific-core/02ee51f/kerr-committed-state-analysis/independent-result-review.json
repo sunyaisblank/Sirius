@@ -1,0 +1,133 @@
+{
+  "schema": "sirius-kerr-failure-decimal-state-analysis-result-review-v1",
+  "passed": true,
+  "analysis_result_consistency_accepted": true,
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "reviewer": {
+    "agent": "/root/forensic_obligations",
+    "authored_analysis_script": true,
+    "independent_of_operator": true,
+    "operator": "/root",
+    "independent_source_review_agent": "/root/divide_contract_review",
+    "scope": "Author terminal result consistency and provenance review; not independent of analysis implementation."
+  },
+  "pins": {
+    "script": {
+      "bytes": 12765,
+      "sha256": "5c97a89bf27325bfcdcd85af3c1a83ccdff7f211810f3b1fe67b5a7aeb0d5e31"
+    },
+    "input_bridge": {
+      "path": "out/native-windows-kerr-failure-context-02ee51f/kerr-image-bridge.json",
+      "bytes": 5791,
+      "sha256": "6b6fc157a3ceac76f31c994383639b0fd43435487536890e19b76eedfca80cfa"
+    },
+    "result": {
+      "bytes": 28046,
+      "sha256": "aa2eef9d357e9c0afad76dce0021eb0b65dd804b41b3f41d4b87b602fd644327"
+    },
+    "independent_source_review": {
+      "bytes": 5430,
+      "sha256": "fe768d07c28a7078cff4b91a4f8cbca1cfb37381c85d8d3c648bffa0813ddb79"
+    },
+    "root_source_admission": {
+      "bytes": 368,
+      "sha256": "6928f264f6941b35f00a82e639953391a31eff1451f18b5e987604067978dad9"
+    }
+  },
+  "checks": {
+    "accepted_expected_completed_exit1_source_join": true,
+    "current_input_and_script_whole_hashes_join": true,
+    "raw_context_exact_equals_bridge": true,
+    "exact_packet280_and_record272_bytes_join_output": true,
+    "all_exact_decimal_input_vectors_packet_words_control_identity_join": true,
+    "rollback_comparisons_recomputed_from_actual_bytes": true,
+    "both_precision_previous_current_calculations_equal": true,
+    "saved_80_minus_60_differences_match_decimal_string_subtraction": true,
+    "metric_determinant_inverse_consistent_at_both_precisions": true,
+    "input_bridge_rehashed_unchanged_at_review": true
+  },
+  "captured_state": {
+    "identity": [
+      24,
+      23,
+      0,
+      24
+    ],
+    "previous_control": [
+      1,
+      0,
+      99,
+      89
+    ],
+    "current_control": [
+      2,
+      5,
+      100,
+      89
+    ],
+    "physical_submissions": 3195,
+    "rollback_comparisons": {
+      "physical_vectors_0_through_11_equal": true,
+      "accepted_affine_length_last_interval_beam_seed_equal": true,
+      "source_and_volume_equal": true,
+      "accepted_attempt_count_equal": true,
+      "one_attempt_added": true,
+      "previous_running": true
+    },
+    "previous_and_current_geometry_inputs_identical": true
+  },
+  "facts_80_digit_decimal": {
+    "radius": "1.6227316508897407650381144026779688600683234069546960604322506900840534390900481",
+    "normalized_null_residual": "1.0411413985484422004584428760377445860931616683735309454034381103611651414923742E-7",
+    "gkk": "-0.0001409464217291612281510645917108309777985109256353243295538017080933157481215",
+    "absolute_metric_tangent_term_sum": "1353.7682962724229492141672040966683039026476839726353790500905291488688052453209",
+    "energy_minus_p_t": "-0.92614609795100708576947663267251893679238923924342438336832547711231334163646823",
+    "axial_angular_momentum": "0.007471068652958606373455063014553658165232264392906651821971336564781314298438",
+    "independent_outer_horizon_radius": "1.4358899435813398871066696388297445790369823627927658522979163218169318880328385",
+    "independent_buffered_capture_radius": "1.6081967436579574754571859793887625084514614595398268984448108245496312342469136",
+    "radius_minus_independent_capture_radius": "0.0145349072317832895809284232892063516168619474148691619874398655344222048431345",
+    "reference_past_frequency": "24.480161822745865283879849514589805521237719487327547741103853906154198001532985",
+    "stored_adaptive_step": "0.0199999995529651641845703125",
+    "parameter_minimum_step": "0.0199999995529651641845703125",
+    "metric_determinant": "-0.99999999999999999999999999999999999999999999999999999999999999999999999999999980",
+    "metric_inverse_max_identity_residual": "1.53E-79"
+  },
+  "precision_agreement": {
+    "observed_absolute_80_minus_60_differences": {
+      "radius": "6.900840534390900481E-61",
+      "gkk": "5.838017080933157481215E-58",
+      "normalized_null_residual": "4.3124181103611651414923742E-61",
+      "energy_minus_p_t": "4.747711231334163646823E-59",
+      "axial_angular_momentum": "2.8663435218685701562E-59",
+      "metric_determinant": "2.0E-79"
+    },
+    "certified_error_bound": false
+  },
+  "interpretation_limits": [
+    "Committed state is regular under independently evaluated geometry and has a small normalized null residual; this does not establish the rejected GPU candidate was represented or null-consistent.",
+    "Measured gkk is nonzero despite small normalized residual. Existing separated_reference::Trace assumes exact neutral-null dynamics; direct use as an exact-state oracle would require preserving the measured norm or bounding an explicitly changed initial constraint.",
+    "The buffered capture radius here is independent high-precision algebra, not bit-identical shader boundary arithmetic.",
+    "All stated rollback byte comparisons are actual observations for this refusal; no completed image or radiance publication follows.",
+    "No actual GPU full-step/two-half-step trial data or rejection flags were captured. No failed conjunct, production defect, numerical repair or full-ray outcome is identified."
+  ],
+  "next_diagnostic_proposal": {
+    "implemented": false,
+    "scope": "Exact-state independent local continuation over the original represented floor0.0199999995529651641845703125, with refinement agreement and a bracket for the first inward buffered-capture crossing.",
+    "requirements": [
+      "Preserve measured initial metric norm in a norm-aware separated Carter/Mino reference, or explicitly quantify null-constraint projection sensitivity; do not silently feed off-null bytes into the existing null-only Trace.",
+      "Use the buffered capture radius1.608196743657957... from the original capture factor, rather than the reference Trace physical-horizon stopping rule.",
+      "Restrict calculation to this regular local chart and finite interval; no original camera launch or full64x64 scene rerun.",
+      "Report refinement differences and event brackets rather than assume convergence or infer the actual GPU rejected conjunct."
+    ]
+  },
+  "executions_by_reviewer": {
+    "analysis_script_imported_or_executed": false,
+    "metric_or_stepper_reexecuted": false,
+    "provider_compiler_or_test_executed": false,
+    "tracked_source_or_capture_modified": false,
+    "only_file_written": "out/kerr-failure-state-analysis/independent-result-review.json"
+  },
+  "scientific_test_passed": false,
+  "radiance_publication_admitted": false,
+  "production_change_justified": false
+}
