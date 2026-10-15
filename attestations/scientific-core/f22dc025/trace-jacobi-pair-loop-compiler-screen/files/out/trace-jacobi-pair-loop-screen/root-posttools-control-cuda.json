@@ -1,0 +1,22 @@
+{
+  "schema": "sirius-trace-pair-loop-root-posttool-observation-v1",
+  "case": "control-cuda",
+  "created_utc": "2026-10-15T19:07:45.277588+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "product": {
+    "path": "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+    "bytes": 321379,
+    "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+  },
+  "owner_product_check": {
+    "bytes": 3448,
+    "sha256": "bfac0b72f88222e05c312b8a36953f786b215ea11218f6fd9bcacd7610ed429e"
+  },
+  "operations": [],
+  "posttool_guard_scope": "Separate root-owned GNUtimeout300s/TERM/KILL10s per command and actual subprocess completion; no aggregateRSS/reserve or full session-census certification for these posttools. Mature Slangowner guards remain separate.",
+  "SPIRV_validation_and_disassembly_completed": false,
+  "portable_source_only_no_CUDA_or_Metal_native_compiler_executed": true,
+  "files": {},
+  "scope": "Original SPVvalidator and ordinary disassembly only; emitted ABI/CFG/footprint and all5 baseline attribution gate pending. No driver execution/runtime benefit/numerical adoption."
+}

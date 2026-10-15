@@ -1,0 +1,233 @@
+{
+  "schema": "sirius-trace-pair-loop-root-actual-orchestration-v1",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "initial_control_fp32_manual_stages_actual_observed_closed_exit0": [
+    "launch",
+    "owner",
+    "post",
+    "accept"
+  ],
+  "remaining_nine_actual_sequential_stages": [
+    {
+      "case": "candidate-fp32",
+      "stage": "launch",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp32\", \"actual_helper_exit\": 0, \"actual_helper_observed_closed\": true}\n"
+    },
+    {
+      "case": "candidate-fp32",
+      "stage": "owner",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp32\", \"passed\": true, \"role\": \"candidate\", \"variant\": \"fp32\", \"whole_input_rows\": 4322, \"sample_count\": 42, \"owner_seconds\": 11.611397909000516, \"peak_sampled_aggregate_RSS_KiB\": 465300, \"matching_original_control_byteequal_baseline\": null, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv\", \"bytes\": 2620748, \"sha256\": \"6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22\"}}\n"
+    },
+    {
+      "case": "candidate-fp32",
+      "stage": "post",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp32\", \"postoperation\": \"validate\", \"actual_closed_exit\": 0, \"seconds\": 11.02625695100869}\n{\"case\": \"candidate-fp32\", \"postoperation\": \"disassemble\", \"actual_closed_exit\": 0, \"seconds\": 0.4483377310098149}\n{\"case\": \"candidate-fp32\", \"posttools_passed\": true, \"operations\": 2, \"record\": {\"bytes\": 4685, \"sha256\": \"dc19d8df9a6c5b4f7f9233d9d20b205d84625b58a4be915f371424167f35e916\"}}\n"
+    },
+    {
+      "case": "candidate-fp32",
+      "stage": "accept",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp32\", \"accepted_offline_operation\": true, \"whole_input_rows\": 4322, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv\", \"bytes\": 2620748, \"sha256\": \"6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22\"}, \"control_byteequal\": null, \"posttools\": 2, \"saved_artifact_pins\": 16}\n"
+    },
+    {
+      "case": "control-fp32comp",
+      "stage": "launch",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-fp32comp\", \"actual_helper_exit\": 0, \"actual_helper_observed_closed\": true}\n"
+    },
+    {
+      "case": "control-fp32comp",
+      "stage": "owner",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-fp32comp\", \"passed\": true, \"role\": \"control\", \"variant\": \"fp32comp\", \"whole_input_rows\": 4329, \"sample_count\": 35, \"owner_seconds\": 9.306250494002597, \"peak_sampled_aggregate_RSS_KiB\": 487672, \"matching_original_control_byteequal_baseline\": true, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv\", \"bytes\": 2997776, \"sha256\": \"16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d\"}}\n"
+    },
+    {
+      "case": "control-fp32comp",
+      "stage": "post",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-fp32comp\", \"postoperation\": \"validate\", \"actual_closed_exit\": 0, \"seconds\": 12.013334368006326}\n{\"case\": \"control-fp32comp\", \"postoperation\": \"disassemble\", \"actual_closed_exit\": 0, \"seconds\": 0.6903876349970233}\n{\"case\": \"control-fp32comp\", \"posttools_passed\": true, \"operations\": 2, \"record\": {\"bytes\": 4720, \"sha256\": \"78693ad57da00b49b28c2a20f86fe6185a66869c1706bfd6e1a05671911e9408\"}}\n"
+    },
+    {
+      "case": "control-fp32comp",
+      "stage": "accept",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-fp32comp\", \"accepted_offline_operation\": true, \"whole_input_rows\": 4329, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv\", \"bytes\": 2997776, \"sha256\": \"16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d\"}, \"control_byteequal\": true, \"posttools\": 2, \"saved_artifact_pins\": 16}\n"
+    },
+    {
+      "case": "candidate-fp32comp",
+      "stage": "launch",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp32comp\", \"actual_helper_exit\": 0, \"actual_helper_observed_closed\": true}\n"
+    },
+    {
+      "case": "candidate-fp32comp",
+      "stage": "owner",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp32comp\", \"passed\": true, \"role\": \"candidate\", \"variant\": \"fp32comp\", \"whole_input_rows\": 4336, \"sample_count\": 38, \"owner_seconds\": 10.365143250004621, \"peak_sampled_aggregate_RSS_KiB\": 466588, \"matching_original_control_byteequal_baseline\": null, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv\", \"bytes\": 2624072, \"sha256\": \"e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222\"}}\n"
+    },
+    {
+      "case": "candidate-fp32comp",
+      "stage": "post",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp32comp\", \"postoperation\": \"validate\", \"actual_closed_exit\": 0, \"seconds\": 5.450359895010479}\n{\"case\": \"candidate-fp32comp\", \"postoperation\": \"disassemble\", \"actual_closed_exit\": 0, \"seconds\": 0.5725407249992713}\n{\"case\": \"candidate-fp32comp\", \"posttools_passed\": true, \"operations\": 2, \"record\": {\"bytes\": 4753, \"sha256\": \"6302faf902729e217fd1b4a845b8ea8cf4b9e1a26a3927c63291802d15d7b5e6\"}}\n"
+    },
+    {
+      "case": "candidate-fp32comp",
+      "stage": "accept",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp32comp\", \"accepted_offline_operation\": true, \"whole_input_rows\": 4336, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv\", \"bytes\": 2624072, \"sha256\": \"e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222\"}, \"control_byteequal\": null, \"posttools\": 2, \"saved_artifact_pins\": 16}\n"
+    },
+    {
+      "case": "control-fp64",
+      "stage": "launch",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-fp64\", \"actual_helper_exit\": 0, \"actual_helper_observed_closed\": true}\n"
+    },
+    {
+      "case": "control-fp64",
+      "stage": "owner",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-fp64\", \"passed\": true, \"role\": \"control\", \"variant\": \"fp64\", \"whole_input_rows\": 4343, \"sample_count\": 31, \"owner_seconds\": 8.202011493005557, \"peak_sampled_aggregate_RSS_KiB\": 479068, \"matching_original_control_byteequal_baseline\": true, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv\", \"bytes\": 2847024, \"sha256\": \"6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076\"}}\n"
+    },
+    {
+      "case": "control-fp64",
+      "stage": "post",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-fp64\", \"postoperation\": \"validate\", \"actual_closed_exit\": 0, \"seconds\": 11.039316498005064}\n{\"case\": \"control-fp64\", \"postoperation\": \"disassemble\", \"actual_closed_exit\": 0, \"seconds\": 0.4195358619908802}\n{\"case\": \"control-fp64\", \"posttools_passed\": true, \"operations\": 2, \"record\": {\"bytes\": 4652, \"sha256\": \"20d4700b85b1956a3d8005ce0150851e71178129d14d38e69fbb811bbd180587\"}}\n"
+    },
+    {
+      "case": "control-fp64",
+      "stage": "accept",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-fp64\", \"accepted_offline_operation\": true, \"whole_input_rows\": 4343, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv\", \"bytes\": 2847024, \"sha256\": \"6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076\"}, \"control_byteequal\": true, \"posttools\": 2, \"saved_artifact_pins\": 16}\n"
+    },
+    {
+      "case": "candidate-fp64",
+      "stage": "launch",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp64\", \"actual_helper_exit\": 0, \"actual_helper_observed_closed\": true}\n"
+    },
+    {
+      "case": "candidate-fp64",
+      "stage": "owner",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp64\", \"passed\": true, \"role\": \"candidate\", \"variant\": \"fp64\", \"whole_input_rows\": 4350, \"sample_count\": 28, \"owner_seconds\": 7.384731626021676, \"peak_sampled_aggregate_RSS_KiB\": 463732, \"matching_original_control_byteequal_baseline\": null, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv\", \"bytes\": 2553336, \"sha256\": \"31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac\"}}\n"
+    },
+    {
+      "case": "candidate-fp64",
+      "stage": "post",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp64\", \"postoperation\": \"validate\", \"actual_closed_exit\": 0, \"seconds\": 4.080310357006965}\n{\"case\": \"candidate-fp64\", \"postoperation\": \"disassemble\", \"actual_closed_exit\": 0, \"seconds\": 0.5293492599739693}\n{\"case\": \"candidate-fp64\", \"posttools_passed\": true, \"operations\": 2, \"record\": {\"bytes\": 4685, \"sha256\": \"9fd8b2e73a8fbacf8ab9a06e3141a14e1d0547cafe3fefe5ec12e33d568a9ee0\"}}\n"
+    },
+    {
+      "case": "candidate-fp64",
+      "stage": "accept",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-fp64\", \"accepted_offline_operation\": true, \"whole_input_rows\": 4350, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv\", \"bytes\": 2553336, \"sha256\": \"31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac\"}, \"control_byteequal\": null, \"posttools\": 2, \"saved_artifact_pins\": 16}\n"
+    },
+    {
+      "case": "control-cuda",
+      "stage": "launch",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-cuda\", \"actual_helper_exit\": 0, \"actual_helper_observed_closed\": true}\n"
+    },
+    {
+      "case": "control-cuda",
+      "stage": "owner",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-cuda\", \"passed\": true, \"role\": \"control\", \"variant\": \"cuda\", \"whole_input_rows\": 4357, \"sample_count\": 8, \"owner_seconds\": 2.2465691450051963, \"peak_sampled_aggregate_RSS_KiB\": 273640, \"matching_original_control_byteequal_baseline\": true, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu\", \"bytes\": 321379, \"sha256\": \"33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1\"}}\n"
+    },
+    {
+      "case": "control-cuda",
+      "stage": "post",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-cuda\", \"posttools_passed\": true, \"operations\": 0, \"record\": {\"bytes\": 1161, \"sha256\": \"642b7c373014bc8ca886f22e1ae6391a20e0277b0009da328adab409eb970528\"}}\n"
+    },
+    {
+      "case": "control-cuda",
+      "stage": "accept",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-cuda\", \"accepted_offline_operation\": true, \"whole_input_rows\": 4357, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu\", \"bytes\": 321379, \"sha256\": \"33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1\"}, \"control_byteequal\": true, \"posttools\": 0, \"saved_artifact_pins\": 11}\n"
+    },
+    {
+      "case": "candidate-cuda",
+      "stage": "launch",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-cuda\", \"actual_helper_exit\": 0, \"actual_helper_observed_closed\": true}\n"
+    },
+    {
+      "case": "candidate-cuda",
+      "stage": "owner",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-cuda\", \"passed\": true, \"role\": \"candidate\", \"variant\": \"cuda\", \"whole_input_rows\": 4364, \"sample_count\": 6, \"owner_seconds\": 1.6724605589988641, \"peak_sampled_aggregate_RSS_KiB\": 274736, \"matching_original_control_byteequal_baseline\": null, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-cuda/trace.cu\", \"bytes\": 321552, \"sha256\": \"4fabfe9f5d7d2487baf361b09a66aca1c44f8532e8c65cf17b6e22c50ed735a4\"}}\n"
+    },
+    {
+      "case": "candidate-cuda",
+      "stage": "post",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-cuda\", \"posttools_passed\": true, \"operations\": 0, \"record\": {\"bytes\": 1165, \"sha256\": \"df6daf2f744fdf20fcffe1d8417669fb5bd5041042c233839dd3e6ccb5c08690\"}}\n"
+    },
+    {
+      "case": "candidate-cuda",
+      "stage": "accept",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-cuda\", \"accepted_offline_operation\": true, \"whole_input_rows\": 4364, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-cuda/trace.cu\", \"bytes\": 321552, \"sha256\": \"4fabfe9f5d7d2487baf361b09a66aca1c44f8532e8c65cf17b6e22c50ed735a4\"}, \"control_byteequal\": null, \"posttools\": 0, \"saved_artifact_pins\": 11}\n"
+    },
+    {
+      "case": "control-metal",
+      "stage": "launch",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-metal\", \"actual_helper_exit\": 0, \"actual_helper_observed_closed\": true}\n"
+    },
+    {
+      "case": "control-metal",
+      "stage": "owner",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-metal\", \"passed\": true, \"role\": \"control\", \"variant\": \"metal\", \"whole_input_rows\": 4371, \"sample_count\": 8, \"owner_seconds\": 2.2777861949871294, \"peak_sampled_aggregate_RSS_KiB\": 276652, \"matching_original_control_byteequal_baseline\": true, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/control-metal/trace.metal\", \"bytes\": 344056, \"sha256\": \"31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88\"}}\n"
+    },
+    {
+      "case": "control-metal",
+      "stage": "post",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-metal\", \"posttools_passed\": true, \"operations\": 0, \"record\": {\"bytes\": 1166, \"sha256\": \"d22748be0ab3fcf86eaf9beabfef55399d5dd59b7fac7d422c92ff4f2caca68d\"}}\n"
+    },
+    {
+      "case": "control-metal",
+      "stage": "accept",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"control-metal\", \"accepted_offline_operation\": true, \"whole_input_rows\": 4371, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/control-metal/trace.metal\", \"bytes\": 344056, \"sha256\": \"31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88\"}, \"control_byteequal\": true, \"posttools\": 0, \"saved_artifact_pins\": 11}\n"
+    },
+    {
+      "case": "candidate-metal",
+      "stage": "launch",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-metal\", \"actual_helper_exit\": 0, \"actual_helper_observed_closed\": true}\n"
+    },
+    {
+      "case": "candidate-metal",
+      "stage": "owner",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-metal\", \"passed\": true, \"role\": \"candidate\", \"variant\": \"metal\", \"whole_input_rows\": 4378, \"sample_count\": 7, \"owner_seconds\": 2.182995192008093, \"peak_sampled_aggregate_RSS_KiB\": 278608, \"matching_original_control_byteequal_baseline\": null, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-metal/trace.metal\", \"bytes\": 344160, \"sha256\": \"5efed47371922c709b730440c7229e36408ce4b8e54117a77bb365ea38f0dd77\"}}\n"
+    },
+    {
+      "case": "candidate-metal",
+      "stage": "post",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-metal\", \"posttools_passed\": true, \"operations\": 0, \"record\": {\"bytes\": 1170, \"sha256\": \"2b0ba5d48ce74f3bcb142e76d615f6357e6bba32445b42767d177bcd60acdb59\"}}\n"
+    },
+    {
+      "case": "candidate-metal",
+      "stage": "accept",
+      "actual_observed_closed_exit": 0,
+      "output": "{\"case\": \"candidate-metal\", \"accepted_offline_operation\": true, \"whole_input_rows\": 4378, \"product\": {\"path\": \"out/trace-jacobi-pair-loop-screen/candidate-metal/trace.metal\", \"bytes\": 344160, \"sha256\": \"5efed47371922c709b730440c7229e36408ce4b8e54117a77bb365ea38f0dd77\"}, \"control_byteequal\": null, \"posttools\": 0, \"saved_artifact_pins\": 11}\n"
+    }
+  ],
+  "all_ten_actual_helpers_and_required_postoperations_closed0": true,
+  "stop_first_nonpass_enforced": true,
+  "no_concurrent_compiler_or_test": true,
+  "source_adoption": false,
+  "scope": "Actual root tool-orchestration completion records only; no driver/numerical/RSS/JIT/performance or source adoption."
+}

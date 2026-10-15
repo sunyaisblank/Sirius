@@ -1,0 +1,155 @@
+{
+  "schema": "sirius-original-fifteen-CPU-science-independent-preservation-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T18:46:24.466363+00:00",
+  "blockers": [],
+  "bundle": "attestations/scientific-core/f22dc025/original-fifteen-cpu-science-witnesses",
+  "critical_pins": {
+    "manifest": {
+      "path": "attestations/scientific-core/f22dc025/original-fifteen-cpu-science-witnesses/manifest.json",
+      "bytes": 40383,
+      "sha256": "dc8e61d4494a964eeca5bcff6fb44f3069fef232df296f3adfd3cff87dfb2031"
+    },
+    "preservation": {
+      "path": "attestations/scientific-core/f22dc025/original-fifteen-cpu-science-witnesses/preservation.json",
+      "bytes": 75916,
+      "sha256": "bee5bae2eb221d30278826d08bf3bada6f58ac1c6b7de43ec4c975a457451011"
+    },
+    "static_catalog": {
+      "path": "out/science-original-cpu-gap-witnesses-preservation/static-archive-dependencies.json",
+      "bytes": 712086,
+      "sha256": "2a38b296b22df957817d16ba1aefb555aefb51439c703c938c480ef4d7436638"
+    },
+    "root_completed": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/root-completed-results.json",
+      "bytes": 45960,
+      "sha256": "8b6ad1da07c8fff48d30666e249400d9b8f72dce367d78015831033644dbcafe"
+    },
+    "independent_completion": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/independent-completion-review.json",
+      "bytes": 39627,
+      "sha256": "2c011dfb7b4c96466b6c952e5a3005499be2478f65394f3766838034671d33ec"
+    },
+    "root_preflight": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/root-preflight.json",
+      "bytes": 326582,
+      "sha256": "e1a5bcb3034cb298e7bc2bc7495fb73c43a9f2b74b2e794b71d7dedd8f25adba"
+    },
+    "runtime_release": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/root-runtime-release.json",
+      "bytes": 3782,
+      "sha256": "ac66a3e8b76e4f0b44e7a6442acd3515492603504ecc903a58e5087966fd96c9"
+    },
+    "independent_runtime_admission": {
+      "path": "out/science-original-cpu-gap-witnesses-pending/independent-runtime-admission.json",
+      "bytes": 15215,
+      "sha256": "fc1481d0d88275e6e2cfaaadef0227460afa522d07de1761b1c5bb1286c8a78f"
+    },
+    "late_P2_publication": {
+      "path": "out/trace-jacobi-device-lifetime-controls-preservation/root-git-preservation.json",
+      "bytes": 1409,
+      "sha256": "f144df36d5f1563e88586db89df2505413404a87d116539860676b8249e166d6"
+    }
+  },
+  "complete_copy_set": {
+    "actual_bundle_files": 197,
+    "manifest_payloads": 195,
+    "raw_to_archive_pairs": 195,
+    "composition": {
+      "all_current_SCI15_raw": 189,
+      "late_P2_publication": 5,
+      "static_catalog": 1,
+      "manifest_and_preservation": 2
+    },
+    "exact_manifest_tree_and_all_payload_hashes": true,
+    "all_copy_sources_and_targets_byte_exact": true,
+    "all_raw_SCI15_files_included_no_omission": true,
+    "no_bundle_symlinks": true,
+    "metadata": "Manifest lists195 payloads; preservation pins that manifest and the catalogue. No self-hash cycle or unlisted payload."
+  },
+  "actual_input_provenance": {
+    "catalogue_and_actual_consumed_union": 1325,
+    "partition": {
+      "tracked_source_Git": 538,
+      "hash_only_host_or_build_dependency": 674,
+      "prior_actual_current_Linux_CPU_bundle_Git_bytes": 21,
+      "staged_asset_Git_byte_alias": 1,
+      "actual_own_bundle_copy": 91
+    },
+    "all_catalogue_rich_identities_equal_actual_before_after_and_current": true,
+    "actual_before_after_rows": 38910,
+    "whole_input_rows_per_case": [
+      1269,
+      1273,
+      1277,
+      1281,
+      1285,
+      1289,
+      1293,
+      1297,
+      1301,
+      1305,
+      1309,
+      1313,
+      1317,
+      1321,
+      1325
+    ],
+    "all_560_named_commit_path_blob_records_full_bytes_checked": true,
+    "all_91_own_static_copies_exact_in_this_bundle": true,
+    "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "actual_Linux_CPU_bytes_commit": "34a94cd5b367dfdb9b62f71be693bf1e80bf7781",
+    "five_executables": "Actual current Linux app/render/backend/core/oracle ELF bytes each equal their named34a archive blobs. No foreign-platform or stale executable substitution.",
+    "staged_asset": "Starfield.png is an exact source-Git byte alias only; consumer-adjacent resolution remains the accepted runtime/source proof.",
+    "hash_only_boundary": "674 host/build dependencies have explicit identities without retained byte backups. Their hashes are not restoration or independently reproducible producer authority."
+  },
+  "finite_results_and_saved_ownership": {
+    "original_cases_completed_zero_FESD": 15,
+    "all_15_owner_terminal_passed_exit0_no_stop": true,
+    "all_15_XML_exact_original_single_case_run_completed_no_failure_error_skip_disabled": true,
+    "all_source_and_whole_inputs_unchanged_cleanup_errors_and_remainers_empty": true,
+    "root_and_independent_completion_pins_match_preservation": true,
+    "completion_authority": "Reuses the pinned forensic completion/source/runtime review for original scientific assertions. Independently crosschecks every original XML identity, owner/source/whole-input record and recorded root helper/collector closed0 summary; no original test rerun.",
+    "external_limits": {
+      "seconds_per_case": 300,
+      "sampled_aggregate_RSS_KiB": 4194304,
+      "minimum_available_KiB": 2097152
+    },
+    "samples": 805,
+    "maximum_sampled_aggregate_RSS_KiB": 193424,
+    "zero_sample_unobserved_peak_cases": [
+      "p5-pupil-focus",
+      "p5-four-dimensional-samples",
+      "p6-hdr-roundtrip"
+    ],
+    "sample_limits": "All observed samples and owner walls satisfy unchanged bounds. Three fast exits with peak0 have unobserved peaks, not measured zero or continuous RSS proof.",
+    "root_saved_birth_absence_records": 30,
+    "birth_scope": "All30 saved controller/child PID+start records match the15 owners and root recorded absence. No fresh process query, new census or global absence claim by this reviewer.",
+    "CPU_route": "Original CPU/default or negative-ICD auto-to-CPU authority retained. Empty owner provider maps are not proof of no Vulkan loader activity."
+  },
+  "late_P2_publication": {
+    "five_files_copied_exact": true,
+    "commit": "def305c1da0e26a5be1f4fac61fb80974a301829",
+    "tag": "evidence/issue-53-trace-jacobi-first-rung-rss-stop-f22dc025",
+    "joins": "All saved publication pins, actual push exit0/fresh remote-after-closure exit0, exact saved tag ref/local Git tag, and named published manifest/preservation bytes agree. Historical push_pending at isolated check is retained before completed publication.",
+    "scope": "P2 first-begin-only RSS stop remains an incomplete scientific attempt with no XML/completed rung/numerical verdict or identified JIT call. The pair-loop source remains unapplied/uncompiled/unexecuted in these dated receipts; no benefit claim."
+  },
+  "limits": [
+    "Only these fifteen original finite CPU witnesses; E2eleven remains separate. No full P1-P6/E1-E4, physical IMAX/device2GiB, native graphics/UI, Mandatory estate, coldness/latency/performance, eight-domain or release qualification.",
+    "Writer TMPDIR evidence is the recorded root invocation plus unchanged child-environment inheritance/source assertions. No separate child proc-env capture, retained EXR/image buffers, or EXR file-byte equality is invented.",
+    "Preservation PASS grants no source/build hold release, compiler/runtime scheduling, source application, deletion or retirement authority. Publication of this197-file bundle remains root-owned and pending at this review."
+  ],
+  "method": "Passive Python standard-library JSON/XML/hash/file reads and read-only Git cat-file/rev-parse/status/worktree only. No project import/helper/parser/tools/compiler/provider/test/network/process query, source/build change or raw removal; only this new receipt written.",
+  "checkout": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "new_review_committed_or_pushed": false
+  }
+}

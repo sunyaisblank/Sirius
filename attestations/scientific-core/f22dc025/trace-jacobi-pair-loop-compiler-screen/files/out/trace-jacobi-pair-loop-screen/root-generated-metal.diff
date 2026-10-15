@@ -1,0 +1,2478 @@
+--- control-metal
+
++++ candidate-metal
+
+@@ -99,11 +99,11 @@
+
+ constant array<float, int(16)> PT_GL_WEIGHTS_0 = { 0.02715245820581913, 0.06225352361798286, 0.09515850991010666, 0.12462896853685379, 0.14959599077701569, 0.1691565215587616, 0.18260350823402405, 0.18945060670375824, 0.18945060670375824, 0.18260350823402405, 0.1691565215587616, 0.14959599077701569, 0.12462896853685379, 0.09515850991010666, 0.06225352361798286, 0.02715245820581913 };
+ 
+ #line 144
+ constant array<float, int(16)> PT_GL_NODES_0 = { -0.98940092325210571, -0.94457501173019409, -0.86563122272491455, -0.75540441274642944, -0.61787623167037964, -0.4580167829990387, -0.28160354495048523, -0.09501250833272934, 0.09501250833272934, 0.28160354495048523, 0.4580167829990387, 0.61787623167037964, 0.75540441274642944, 0.86563122272491455, 0.94457501173019409, 0.98940092325210571 };
+ 
+-#line 232 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 232 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ constant array<float3, int(12)> gradients_0 = { float3(1.0, 1.0, 0.0), float3(-1.0, 1.0, 0.0), float3(1.0, -1.0, 0.0), float3(-1.0, -1.0, 0.0), float3(1.0, 0.0, 1.0), float3(-1.0, 0.0, 1.0), float3(1.0, 0.0, -1.0), float3(-1.0, 0.0, -1.0), float3(0.0, 1.0, 1.0), float3(0.0, -1.0, 1.0), float3(0.0, 1.0, -1.0), float3(0.0, -1.0, -1.0) };
+ 
+ #line 421
+ struct _Array_natural_vectorx3Cfloatx2C4x3E4_0
+ {
+@@ -9881,11 +9881,11 @@
+
+     bool _S666 = FindSphericalBoundaryEvent_1(start_6, startVelocity_5, finish_5, finishVelocity_5, affineLength_6, captureRadius_1, int(0), fraction_4, eventPosition_2, eventTangent_2);
+     return _S666;
+ }
+ 
+ 
+-#line 286 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 286 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ float VolumeScaleHeight_0(float r_3, float innerRadius_0, float hOverR_0, float hPower_0)
+ {
+ 
+ #line 286
+     bool _S667;
+@@ -10167,11 +10167,11 @@
+
+ #line 54
+     return _S670;
+ }
+ 
+ 
+-#line 243 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 243 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ float TurbulenceFade_0(float t_2)
+ {
+ 
+ #line 244
+     return t_2 * t_2 * t_2 * (t_2 * (t_2 * 6.0 - 15.0) + 10.0);
+@@ -10601,11 +10601,11 @@
+
+ #line 224
+     return temperatureScale_1 * pow(flux_1 / reference_3, 0.25);
+ }
+ 
+ 
+-#line 299 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 299 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ float VolumeDiskTemperature_0(float cylindricalR_1, float z_6, float innerRadius_2, float innerTemperature_0, int temperatureModel_0, float M_12, float aStar_2, float hOverR_2, float hPower_2)
+ {
+     float midplane_0;
+ 
+     if(temperatureModel_0 == int(1))
+@@ -11861,11 +11861,11 @@
+
+     }
+     return 1.0 - exp(- deltaTau_0);
+ }
+ 
+ 
+-#line 319 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 319 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ void AccumulateVolumeSegment_0(const Vec4Cart_0 thread* start_7, const Vec4Cart_0 thread* finish_6, const Vec4Cart_0 thread* startVelocity_6, const Vec4Cart_0 thread* finishVelocity_6, float affineLength_7, int sampleCount_0, bool volumeEnabled_0, bool turbulenceEnabled_0, bool dopplerBeaming_0, float innerRadius_3, float outerRadius_1, float innerTemperature_1, int temperatureModel_1, float M_16, float a_23, float aStar_3, float hOverR_3, float hPower_3, float tauMidplane_0, float observerFrequency_3, float thread* opticalDepth_0, float3 thread* emission_0)
+ {
+ 
+ #line 328
+     bool _S705;
+@@ -13989,11 +13989,11 @@
+
+     float alongMinor_0 = - sinOrientation_0 * offset_1.x + cosOrientation_0 * offset_1.y;
+     return exp(-0.5 * (alongMajor_0 * alongMajor_0 * invMajorSquared_0 + alongMinor_0 * alongMinor_0 * invMinorSquared_0));
+ }
+ 
+ 
+-#line 127 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 127 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ float3 PointStarColor_0(uint starIndex_0, KernelContext_0 thread* kernelContext_1)
+ {
+ 
+     return BlackbodyColor_0(kernelContext_1->pointStars_0[starIndex_0 * 8U + 6U]);
+ }
+@@ -16750,10 +16750,13 @@
+
+                 bool terminalDiskHit_0;
+ 
+ #line 842
+                 float dt_10;
+ 
++#line 842
++                int pair_0;
++
+ #line 841
+                 if(_S976)
+                 {
+                     float dzStart_0 = dt_8 * (&(&state_15)->u_1)->z_0;
+                     float dzEnd_0 = dt_8 * (&(&next_1)->u_1)->z_0;
+@@ -16843,13 +16846,10 @@
+
+ 
+ #line 869
+                     float frac_0;
+ 
+ #line 869
+-                    int rootIndex_1;
+-
+-#line 869
+                     int radialIteration_0;
+ 
+ #line 869
+                     int rootCount_3;
+ 
+@@ -16892,22 +16892,22 @@
+
+ 
+ #line 876
+                             cr_0 = 0.0;
+ 
+ #line 876
+-                            rootIndex_1 = int(1);
++                            pair_0 = int(1);
+ 
+ #line 876
+                             rootCount_3 = int(0);
+ 
+ 
+ 
+                             for(;;)
+                             {
+ 
+ #line 880
+-                                if(rootIndex_1 <= int(64))
++                                if(pair_0 <= int(64))
+                                 {
+ 
+ #line 880
+                                     _S983 = rootCount_3 == int(0);
+ 
+@@ -16930,11 +16930,11 @@
+
+                                 {
+ 
+ #line 880
+                                     break;
+                                 }
+-                                float radialUpper_0 = float(rootIndex_1) / 64.0;
++                                float radialUpper_0 = float(pair_0) / 64.0;
+ 
+ #line 882
+                                 thread Vec4Cart_0 _S984 = (&state_15)->x_5;
+ 
+ #line 882
+@@ -17072,17 +17072,17 @@
+
+ 
+ #line 888
+                                 }
+ 
+ #line 881
+-                                int radialInterval_0 = rootIndex_1 + int(1);
++                                int radialInterval_0 = pair_0 + int(1);
+ 
+ #line 881
+                                 cr_0 = transmittance_1;
+ 
+ #line 881
+-                                rootIndex_1 = radialInterval_0;
++                                pair_0 = radialInterval_0;
+ 
+ #line 880
+                             }
+ 
+ #line 876
+@@ -17162,19 +17162,19 @@
+
+ 
+ #line 938
+                                 breakpoints_0[int(2)] = firstCritical_0;
+ 
+ #line 938
+-                                rootIndex_1 = int(3);
++                                pair_0 = int(3);
+ 
+ #line 937
+                             }
+                             else
+                             {
+ 
+ #line 937
+-                                rootIndex_1 = int(2);
++                                pair_0 = int(2);
+ 
+ #line 937
+                             }
+ 
+                             if(secondCritical_0 > 0.0)
+@@ -17197,31 +17197,31 @@
+
+ #line 939
+                             if(terminalDiskHit_0)
+                             {
+ 
+ #line 940
+-                                int _S999 = rootIndex_1 + int(1);
++                                int _S999 = pair_0 + int(1);
+ 
+ #line 940
+-                                breakpoints_0[rootIndex_1] = secondCritical_0;
++                                breakpoints_0[pair_0] = secondCritical_0;
+ 
+ #line 940
+                                 radialIteration_0 = _S999;
+ 
+ #line 939
+                             }
+                             else
+                             {
+ 
+ #line 939
+-                                radialIteration_0 = rootIndex_1;
++                                radialIteration_0 = pair_0;
+ 
+ #line 939
+                             }
+ 
+ #line 939
+-                            rootIndex_1 = radialIteration_0;
++                            pair_0 = radialIteration_0;
+ 
+ #line 930
+                         }
+                         else
+                         {
+@@ -17255,30 +17255,30 @@
+
+ 
+ #line 944
+                                     breakpoints_0[int(2)] = critical_5;
+ 
+ #line 944
+-                                    rootIndex_1 = int(3);
++                                    pair_0 = int(3);
+ 
+ #line 943
+                                 }
+                                 else
+                                 {
+ 
+ #line 943
+-                                    rootIndex_1 = int(2);
++                                    pair_0 = int(2);
+ 
+ #line 943
+                                 }
+ 
+ #line 941
+                             }
+                             else
+                             {
+ 
+ #line 941
+-                                rootIndex_1 = int(2);
++                                pair_0 = int(2);
+ 
+ #line 941
+                             }
+ 
+ #line 930
+@@ -17290,11 +17290,11 @@
+
+ #line 946
+                         for(;;)
+                         {
+ 
+ #line 946
+-                            if(radialIteration_0 < rootIndex_1)
++                            if(radialIteration_0 < pair_0)
+                             {
+                             }
+                             else
+                             {
+ 
+@@ -17311,11 +17311,11 @@
+
+ #line 947
+                             for(;;)
+                             {
+ 
+ #line 947
+-                                if(right_2 < rootIndex_1)
++                                if(right_2 < pair_0)
+                                 {
+                                 }
+                                 else
+                                 {
+ 
+@@ -17359,11 +17359,11 @@
+
+ 
+ #line 955
+                             int _S1001 = right_2 + int(1);
+ 
+ #line 955
+-                            if(_S1001 < rootIndex_1)
++                            if(_S1001 < pair_0)
+                             {
+                             }
+                             else
+                             {
+ 
+@@ -17683,18 +17683,18 @@
+
+ 
+ #line 871
+                     frac_0 = 0.0;
+ 
+ #line 871
+-                    rootIndex_1 = int(0);
++                    pair_0 = int(0);
+ 
+ #line 1010
+                     for(;;)
+                     {
+ 
+ #line 1010
+-                        if(rootIndex_1 < rootCount_3)
++                        if(pair_0 < rootCount_3)
+                         {
+ 
+ #line 1010
+                             _S983 = !foundDiskCrossing_0;
+ 
+@@ -17717,11 +17717,11 @@
+
+                         {
+ 
+ #line 1010
+                             break;
+                         }
+-                        float candidateFraction_2 = rootFractions_0[rootIndex_1];
++                        float candidateFraction_2 = rootFractions_0[pair_0];
+ 
+ #line 1012
+                         thread Vec4Cart_0 _S1005 = (&state_15)->x_5;
+ 
+ #line 1012
+@@ -17732,11 +17732,11 @@
+
+ 
+ #line 1012
+                         thread Vec4Cart_0 _S1008 = (&next_1)->u_1;
+ 
+ #line 1012
+-                        Vec4Cart_0 _S1009 = AcceptedSegmentPosition_0(&_S1005, &_S1006, &_S1007, &_S1008, dt_8, rootFractions_0[rootIndex_1]);
++                        Vec4Cart_0 _S1009 = AcceptedSegmentPosition_0(&_S1005, &_S1006, &_S1007, &_S1008, dt_8, rootFractions_0[pair_0]);
+ 
+ 
+                         float candidateRadius_0 = ComputeKerrRadiusCart_0(_S1009.x_2, _S1009.y_0, 0.0, a_29);
+ 
+                         if(candidateRadius_0 >= _S853)
+@@ -17792,11 +17792,11 @@
+
+ 
+ #line 1017
+                         }
+ 
+ #line 1010
+-                        rootIndex_1 = rootIndex_1 + int(1);
++                        pair_0 = pair_0 + int(1);
+ 
+ #line 1010
+                     }
+ 
+ #line 1026
+@@ -17992,130 +17992,144 @@
+
+ #line 1057
+                 if(coplanar_0)
+                 {
+ 
+ #line 1057
+-                    thread Vec4Cart_0 _S1019 = (&state_15)->x_5;
+-
+-#line 1057
+-                    thread Vec4Cart_0 _S1020 = (&state_15)->u_1;
+-
+-#line 1057
+-                    thread Vec4Cart_0 _S1021 = (&next_1)->x_5;
+-
+-#line 1057
+-                    thread Vec4Cart_0 _S1022 = (&next_1)->u_1;
+-
+-#line 1057
+-                    AdvanceJacobiPairAcceptedSegment_0(&_S1019, &_S1020, &_S1021, &_S1022, dt_10, M_20, a_29, Q_13, Lambda_13, &X_1[int(0)], &V_2[int(0)], &X_1[int(1)], &V_2[int(1)]);
+-
+-#line 1057
+-                    thread Vec4Cart_0 _S1023 = (&state_15)->x_5;
+-
+-#line 1057
+-                    thread Vec4Cart_0 _S1024 = (&state_15)->u_1;
+-
+-#line 1057
+-                    thread Vec4Cart_0 _S1025 = (&next_1)->x_5;
+-
+-#line 1057
+-                    thread Vec4Cart_0 _S1026 = (&next_1)->u_1;
+-
+-#line 1057
+-                    AdvanceJacobiPairAcceptedSegment_0(&_S1023, &_S1024, &_S1025, &_S1026, dt_10, M_20, a_29, Q_13, Lambda_13, &X_1[int(2)], &V_2[int(2)], &X_1[int(3)], &V_2[int(3)]);
++                    pair_0 = int(0);
++                    for(;;)
++                    {
++
++#line 1058
++                        if(pair_0 < int(2))
++                        {
++                        }
++                        else
++                        {
++
++#line 1058
++                            break;
++                        }
++
++#line 1059
++                        int firstColumn_0 = int(2) * pair_0;
++
++
++
++                        int _S1019 = firstColumn_0 + int(1);
++
++#line 1063
++                        thread Vec4Cart_0 _S1020 = (&state_15)->x_5;
++
++#line 1063
++                        thread Vec4Cart_0 _S1021 = (&state_15)->u_1;
++
++#line 1063
++                        thread Vec4Cart_0 _S1022 = (&next_1)->x_5;
++
++#line 1063
++                        thread Vec4Cart_0 _S1023 = (&next_1)->u_1;
++
++#line 1063
++                        AdvanceJacobiPairAcceptedSegment_0(&_S1020, &_S1021, &_S1022, &_S1023, dt_10, M_20, a_29, Q_13, Lambda_13, &X_1[firstColumn_0], &V_2[firstColumn_0], &X_1[_S1019], &V_2[_S1019]);
++
++#line 1058
++                        pair_0 = pair_0 + int(1);
++
++#line 1058
++                    }
+ 
+ #line 1057
+                 }
+ 
+-#line 1066
++#line 1067
+                 float affineLength_10 = affineLength_9 + dt_10;
+ 
+-#line 1066
++#line 1067
+                 uint accepted_5 = accepted_4 + 1U;
+                 state_15 = next_1;
+                 if(terminalDiskHit_0)
+                 {
+ 
+-#line 1068
++#line 1069
+                     reason_1 = 2U;
+ 
+-#line 1068
++#line 1069
+                     pupilUp_1 = _S953;
+ 
+-#line 1068
++#line 1069
+                     lastStep_3 = dt_10;
+ 
+-#line 1068
++#line 1069
+                     attempts_1 = attempts_3;
+ 
+-#line 1068
++#line 1069
+                     affineLength_9 = affineLength_10;
+ 
+-#line 1068
++#line 1069
+                     accepted_4 = accepted_5;
+ 
+-#line 1068
++#line 1069
+                     break;
+                 }
+ 
+-#line 1069
++#line 1070
+                 if(terminalCaptureSurface_0)
+                 {
+ 
+-#line 1069
++#line 1070
+                     reason_1 = 1U;
+ 
+-#line 1069
++#line 1070
+                     pupilUp_1 = _S953;
+ 
+-#line 1069
++#line 1070
+                     lastStep_3 = dt_10;
+ 
+-#line 1069
++#line 1070
+                     attempts_1 = attempts_3;
+ 
+-#line 1069
++#line 1070
+                     affineLength_9 = affineLength_10;
+ 
+-#line 1069
++#line 1070
+                     accepted_4 = accepted_5;
+ 
+                     break;
+                 }
+ 
+-#line 1079
++#line 1080
+                 float nextRadius_0 = sqrt((&(&state_15)->x_5)->x_2 * (&(&state_15)->x_5)->x_2 + (&(&state_15)->x_5)->y_0 * (&(&state_15)->x_5)->y_0 + (&(&state_15)->x_5)->z_0 * (&(&state_15)->x_5)->z_0);
+ 
+                 if(isWormhole_5)
+                 {
+ 
+-#line 1082
++#line 1083
+                     if(nextRadius_0 <= horizonRadius_1)
+                     {
+ 
+-#line 1082
++#line 1083
+                         reason_1 = 1U;
+ 
+-#line 1082
++#line 1083
+                         pupilUp_1 = _S953;
+ 
+-#line 1082
++#line 1083
+                         lastStep_3 = dt_10;
+ 
+-#line 1082
++#line 1083
+                         attempts_1 = attempts_3;
+ 
+-#line 1082
++#line 1083
+                         affineLength_9 = affineLength_10;
+ 
+-#line 1082
++#line 1083
+                         accepted_4 = accepted_5;
+ 
+                         break;
+                     }
+ 
+-#line 1081
++#line 1082
+                 }
+                 else
+                 {
+ 
+ 
+@@ -18123,72 +18137,72 @@
+
+                     {
+ 
+                         if((ComputeKerrRadiusCart_0((&(&state_15)->x_5)->x_2, (&(&state_15)->x_5)->y_0, (&(&state_15)->x_5)->z_0, a_29)) <= horizonRadius_1)
+                         {
+ 
+-#line 1089
++#line 1090
+                             reason_1 = 1U;
+ 
+-#line 1089
++#line 1090
+                             pupilUp_1 = _S953;
+ 
+-#line 1089
++#line 1090
+                             lastStep_3 = dt_10;
+ 
+-#line 1089
++#line 1090
+                             attempts_1 = attempts_3;
+ 
+-#line 1089
++#line 1090
+                             affineLength_9 = affineLength_10;
+ 
+-#line 1089
++#line 1090
+                             accepted_4 = accepted_5;
+ 
+                             break;
+                         }
+ 
+-#line 1086
++#line 1087
+                     }
+ 
+-#line 1081
++#line 1082
+                 }
+ 
+-#line 1094
++#line 1095
+                 if(terminalEscapeSurface_1)
+                 {
+ 
+-#line 1094
++#line 1095
+                     reason_1 = 3U;
+ 
+-#line 1094
++#line 1095
+                     pupilUp_1 = _S953;
+ 
+-#line 1094
++#line 1095
+                     lastStep_3 = dt_10;
+ 
+-#line 1094
++#line 1095
+                     attempts_1 = attempts_3;
+ 
+-#line 1094
++#line 1095
+                     affineLength_9 = affineLength_10;
+ 
+-#line 1094
++#line 1095
+                     accepted_4 = accepted_5;
+ 
+                     break;
+                 }
+ 
+-#line 1096
++#line 1097
+                 pupilUp_1 = _S953;
+ 
+-#line 1096
++#line 1097
+                 lastStep_3 = dt_10;
+ 
+-#line 1096
++#line 1097
+                 affineLength_9 = affineLength_10;
+ 
+-#line 1096
++#line 1097
+                 accepted_4 = accepted_5;
+ 
+ #line 719
+                 int _S952 = step_6 + int(1);
+ 
+@@ -18214,1057 +18228,1057 @@
+
+             compU_2 = compU_1;
+ 
+ #line 698
+         }
+ 
+-#line 1101
++#line 1102
+         if(reason_1 == 0U)
+         {
+ 
+-#line 1101
++#line 1102
+             escaped_0 = attempts_1 >= uint(maxSteps_0);
+ 
+-#line 1101
++#line 1102
+         }
+         else
+         {
+ 
+-#line 1101
++#line 1102
+             escaped_0 = false;
+ 
+-#line 1101
+-        }
+-
+-#line 1101
++#line 1102
++        }
++
++#line 1102
+         if(escaped_0)
+         {
+ 
+-#line 1101
++#line 1102
+             reason_1 = 4U;
+ 
+-#line 1101
+-        }
+-
+-#line 1101
+-        thread Vec4Cart_0 _S1027 = (&state_15)->x_5;
+-
+-#line 1101
+-        float4 _S1028 = TracePack_0(&_S1027);
+-
+-        (&record_1)->x_1 = _S1028;
+-
+-#line 1103
+-        thread Vec4Cart_0 _S1029 = (&state_15)->u_1;
+-
+-#line 1103
+-        float4 _S1030 = TracePack_0(&_S1029);
+-
+-#line 1103
+-        (&record_1)->u_0 = _S1030;
+-
+-#line 1103
++#line 1102
++        }
++
++#line 1102
++        thread Vec4Cart_0 _S1024 = (&state_15)->x_5;
++
++#line 1102
++        float4 _S1025 = TracePack_0(&_S1024);
++
++        (&record_1)->x_1 = _S1025;
++
++#line 1104
++        thread Vec4Cart_0 _S1026 = (&state_15)->u_1;
++
++#line 1104
++        float4 _S1027 = TracePack_0(&_S1026);
++
++#line 1104
++        (&record_1)->u_0 = _S1027;
++
++#line 1104
+         column_0 = int(0);
+         for(;;)
+         {
+ 
+-#line 1104
++#line 1105
+             if(column_0 < int(4))
+             {
+             }
+             else
+             {
+ 
+-#line 1104
++#line 1105
+                 break;
+             }
+ 
++#line 1106
++            (&record_1)->X_0[column_0] = X_1[column_0];
++
++#line 1106
++            (&record_1)->V_0[column_0] = V_2[column_0];
++
+ #line 1105
+-            (&record_1)->X_0[column_0] = X_1[column_0];
++            column_0 = column_0 + int(1);
+ 
+ #line 1105
+-            (&record_1)->V_0[column_0] = V_2[column_0];
+-
+-#line 1104
+-            column_0 = column_0 + int(1);
+-
+-#line 1104
+-        }
+-
+-#line 1104
+-        thread Vec4Cart_0 _S1031 = pos0_0;
+-
+-#line 1104
+-        float4 _S1032 = TracePack_0(&_S1031);
+-
+-
+-        (&record_1)->compX_0 = _S1032;
+-
+-#line 1107
+-        thread Vec4Cart_0 _S1033 = compU_2;
+-
+-#line 1107
+-        float4 _S1034 = TracePack_0(&_S1033);
+-
+-#line 1107
+-        (&record_1)->compU_0 = _S1034;
++        }
++
++#line 1105
++        thread Vec4Cart_0 _S1028 = pos0_0;
++
++#line 1105
++        float4 _S1029 = TracePack_0(&_S1028);
++
++
++        (&record_1)->compX_0 = _S1029;
++
++#line 1108
++        thread Vec4Cart_0 _S1030 = compU_2;
++
++#line 1108
++        float4 _S1031 = TracePack_0(&_S1030);
++
++#line 1108
++        (&record_1)->compU_0 = _S1031;
+         (&record_1)->integration_0 = float4(pupilUp_1, affineLength_9, lastStep_3, 0.00100000004749745);
+         (&record_1)->source_0 = float4(color_4, transmittance_1);
+         (&record_1)->volume_0 = float4(volumeEmission_0, volumeOpticalDepth_0);
+ 
+-#line 1110
+-        uint _S1035;
++#line 1111
++        uint _S1032;
+         if(reason_1 == 0U)
+         {
+ 
+-#line 1111
+-            _S1035 = 1U;
+-
+-#line 1111
++#line 1112
++            _S1032 = 1U;
++
++#line 1112
+         }
+         else
+         {
+ 
+-#line 1111
+-            _S1035 = 2U;
+-
+-#line 1111
+-        }
+-
+-#line 1111
+-        (&record_1)->control_0 = uint4(_S1035, reason_1, attempts_1, accepted_4);
++#line 1112
++            _S1032 = 2U;
++
++#line 1112
++        }
++
++#line 1112
++        (&record_1)->control_0 = uint4(_S1032, reason_1, attempts_1, accepted_4);
+ 
+         (&record_1)->identity_0 = identity_1;
+ 
+-#line 1113
+-        thread TraceContinuation_0 _S1036 = record_1;
+-
+-#line 1113
+-        bool _S1037 = TraceStateFinite_0(&_S1036);
+-        if(!_S1037)
+-        {
+-
+-#line 1115
++#line 1114
++        thread TraceContinuation_0 _S1033 = record_1;
++
++#line 1114
++        bool _S1034 = TraceStateFinite_0(&_S1033);
++        if(!_S1034)
++        {
++
++#line 1116
+             (&record_1)->control_0.x = 2U;
+             (&record_1)->control_0.y = 9U;
+ 
+-#line 1114
+-        }
+-
+-#line 1114
+-        TraceContinuation_natural_0 device* _S1038 = (&kernelContext_6)->continuation_0+slot_0;
+-
+-#line 1114
+-        _S1038->x_1 = packed_float4(record_1.x_1) ;
+-
+-#line 1114
+-        _S1038->u_0 = packed_float4(record_1.u_0) ;
+-
+-#line 1114
+-        (&_S1038->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+-
+-#line 1114
+-        (&_S1038->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+-
+-#line 1114
+-        (&_S1038->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+-
+-#line 1114
+-        (&_S1038->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+-
+-#line 1114
+-        (&_S1038->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+-
+-#line 1114
+-        (&_S1038->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+-
+-#line 1114
+-        (&_S1038->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+-
+-#line 1114
+-        (&_S1038->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+-
+-#line 1114
+-        _S1038->compX_0 = packed_float4(record_1.compX_0) ;
+-
+-#line 1114
+-        _S1038->compU_0 = packed_float4(record_1.compU_0) ;
+-
+-#line 1114
+-        _S1038->integration_0 = packed_float4(record_1.integration_0) ;
+-
+-#line 1114
+-        _S1038->source_0 = packed_float4(record_1.source_0) ;
+-
+-#line 1114
+-        _S1038->volume_0 = packed_float4(record_1.volume_0) ;
+-
+-#line 1114
+-        _S1038->control_0 = packed_uint4(record_1.control_0) ;
+-
+-#line 1114
+-        _S1038->identity_0 = packed_uint4(record_1.identity_0) ;
+-
+-#line 1119
++#line 1115
++        }
++
++#line 1115
++        TraceContinuation_natural_0 device* _S1035 = (&kernelContext_6)->continuation_0+slot_0;
++
++#line 1115
++        _S1035->x_1 = packed_float4(record_1.x_1) ;
++
++#line 1115
++        _S1035->u_0 = packed_float4(record_1.u_0) ;
++
++#line 1115
++        (&_S1035->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
++
++#line 1115
++        (&_S1035->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
++
++#line 1115
++        (&_S1035->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
++
++#line 1115
++        (&_S1035->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
++
++#line 1115
++        (&_S1035->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
++
++#line 1115
++        (&_S1035->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
++
++#line 1115
++        (&_S1035->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
++
++#line 1115
++        (&_S1035->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
++
++#line 1115
++        _S1035->compX_0 = packed_float4(record_1.compX_0) ;
++
++#line 1115
++        _S1035->compU_0 = packed_float4(record_1.compU_0) ;
++
++#line 1115
++        _S1035->integration_0 = packed_float4(record_1.integration_0) ;
++
++#line 1115
++        _S1035->source_0 = packed_float4(record_1.source_0) ;
++
++#line 1115
++        _S1035->volume_0 = packed_float4(record_1.volume_0) ;
++
++#line 1115
++        _S1035->control_0 = packed_uint4(record_1.control_0) ;
++
++#line 1115
++        _S1035->identity_0 = packed_uint4(record_1.identity_0) ;
++
++#line 1120
+         return;
+     }
+     if(reason_2 == 3U)
+     {
+ 
+-#line 1121
++#line 1122
+         escaped_0 = true;
+ 
+-#line 1121
+-    }
+-    else
+-    {
+-
+-#line 1121
++#line 1122
++    }
++    else
++    {
++
++#line 1122
+         escaped_0 = reason_2 == 10U;
+ 
+-#line 1121
++#line 1122
+     }
+     bool oppositeSheet_0 = reason_2 == 10U;
+     bool captured_0 = reason_2 == 1U;
+ 
+-    float3 _S1039 = float3(0.0, 0.0, 1.0);
++    float3 _S1036 = float3(0.0, 0.0, 1.0);
+     thread float beamOrientation_0 = 0.0;
+ 
+-#line 1133
++#line 1134
+     if(escaped_0)
+     {
+ 
+-#line 1133
++#line 1134
+         terminalEscapeSurface_0 = true;
+ 
+-#line 1133
+-    }
+-    else
+-    {
+-
+-#line 1133
++#line 1134
++    }
++    else
++    {
++
++#line 1134
+         if(beamsEnabled_0)
+         {
+ 
+-#line 1133
++#line 1134
+             terminalEscapeSurface_0 = !captured_0;
+ 
+-#line 1133
++#line 1134
+         }
+         else
+         {
+ 
+-#line 1133
++#line 1134
+             terminalEscapeSurface_0 = false;
+ 
+-#line 1133
+-        }
+-
+-#line 1133
+-    }
+-
+-#line 1133
++#line 1134
++        }
++
++#line 1134
++    }
++
++#line 1134
+     if(terminalEscapeSurface_0)
+     {
+ 
+-#line 1134
++#line 1135
+         thread array<array<float, int(4)>, int(4)> terminalMetric_0;
+         thread array<array<float, int(4)>, int(4)> terminalInverse_0;
+         if(isWarp_5)
+         {
+ 
+-#line 1136
+-            thread Vec4Cart_0 _S1040 = (&state_15)->x_5;
+-
+-#line 1136
+-            GetWarpDriveMetric_0(&_S1040, warpVs_5, warpSigma_5, warpR_5, 0.0, 0.0, 0.0, &terminalMetric_0, &terminalInverse_0);
+-
+-#line 1136
++#line 1137
++            thread Vec4Cart_0 _S1037 = (&state_15)->x_5;
++
++#line 1137
++            GetWarpDriveMetric_0(&_S1037, warpVs_5, warpSigma_5, warpR_5, 0.0, 0.0, 0.0, &terminalMetric_0, &terminalInverse_0);
++
++#line 1137
+         }
+         else
+         {
+             if(isWormhole_5)
+             {
+ 
+-#line 1139
+-                thread Vec4Cart_0 _S1041 = (&state_15)->x_5;
+-
+-#line 1139
+-                GetMorrisThorneCartesianMetric_0(&_S1041, throatB0_5, 0.0, wormShape_8, &terminalMetric_0, &terminalInverse_0);
+-
+-#line 1139
++#line 1140
++                thread Vec4Cart_0 _S1038 = (&state_15)->x_5;
++
++#line 1140
++                GetMorrisThorneCartesianMetric_0(&_S1038, throatB0_5, 0.0, wormShape_8, &terminalMetric_0, &terminalInverse_0);
++
++#line 1140
+             }
+             else
+             {
+ 
+-#line 1139
+-                thread Vec4Cart_0 _S1042 = (&state_15)->x_5;
+-
+-#line 1139
+-                GetKerrSchildFamilyMetric_0(&_S1042, M_20, a_29, Q_13, Lambda_13, &terminalMetric_0, &terminalInverse_0);
+-
+-#line 1139
++#line 1140
++                thread Vec4Cart_0 _S1039 = (&state_15)->x_5;
++
++#line 1140
++                GetKerrSchildFamilyMetric_0(&_S1039, M_20, a_29, Q_13, Lambda_13, &terminalMetric_0, &terminalInverse_0);
++
++#line 1140
+             }
+ 
+-#line 1136
+-        }
+-
+-#line 1146
+-        float3 _S1043 = float3(1.0, 0.0, 0.0);
+-        float3 _S1044 = float3(0.0, -1.0, 0.0);
++#line 1137
++        }
+ 
+ #line 1147
+-        float3 _S1045 = float3(0.0) ;
+-
+-#line 1147
++        float3 _S1040 = float3(1.0, 0.0, 0.0);
++        float3 _S1041 = float3(0.0, -1.0, 0.0);
++
++#line 1148
++        float3 _S1042 = float3(0.0) ;
++
++#line 1148
++        thread array<array<float, int(4)>, int(4)> _S1043 = terminalMetric_0;
++
++#line 1148
++        thread array<array<float, int(4)>, int(4)> _S1044 = terminalInverse_0;
++
++#line 1148
++        CameraObserverFrame_0 _S1045 = BuildCameraObserverFrame_0(&_S1043, &_S1044, _S1040, _S1041, _S1036, _S1042);
++
++#line 1148
+         thread array<array<float, int(4)>, int(4)> _S1046 = terminalMetric_0;
+ 
+-#line 1147
+-        thread array<array<float, int(4)>, int(4)> _S1047 = terminalInverse_0;
+-
+-#line 1147
+-        CameraObserverFrame_0 _S1048 = BuildCameraObserverFrame_0(&_S1046, &_S1047, _S1043, _S1044, _S1039, _S1045);
+-
+-#line 1147
+-        thread array<array<float, int(4)>, int(4)> _S1049 = terminalMetric_0;
+-
+-#line 1147
+-        thread Vec4Cart_0 _S1050 = (&state_15)->u_1;
+-
+-#line 1147
+-        thread Vec4Cart_0 _S1051 = _S1048.time_0;
+-
+-#line 1147
+-        float _S1052 = MetricDotCart_0(&_S1049, &_S1050, &_S1051);
+-
+-        if(isfinite(_S1052))
+-        {
+-
+-#line 1149
+-            terminalEscapeSurface_0 = _S1052 > 0.0;
+-
+-#line 1149
++#line 1148
++        thread Vec4Cart_0 _S1047 = (&state_15)->u_1;
++
++#line 1148
++        thread Vec4Cart_0 _S1048 = _S1045.time_0;
++
++#line 1148
++        float _S1049 = MetricDotCart_0(&_S1046, &_S1047, &_S1048);
++
++        if(isfinite(_S1049))
++        {
++
++#line 1150
++            terminalEscapeSurface_0 = _S1049 > 0.0;
++
++#line 1150
+         }
+         else
+         {
+ 
+-#line 1149
++#line 1150
+             terminalEscapeSurface_0 = false;
+ 
+-#line 1149
+-        }
+-
+-#line 1149
++#line 1150
++        }
++
++#line 1150
+         if(!terminalEscapeSurface_0)
+         {
+ 
+-#line 1150
++#line 1151
+             (&record_1)->control_0.x = 2U;
+ 
+-#line 1150
++#line 1151
+             (&record_1)->control_0.y = 9U;
+ 
+-#line 1150
+-            TraceContinuation_natural_0 device* _S1053 = (&kernelContext_6)->continuation_0+slot_0;
+-
+-#line 1150
+-            _S1053->x_1 = packed_float4(record_1.x_1) ;
+-
+-#line 1150
+-            _S1053->u_0 = packed_float4(record_1.u_0) ;
+-
+-#line 1150
+-            (&_S1053->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+-
+-#line 1150
+-            (&_S1053->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+-
+-#line 1150
+-            (&_S1053->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+-
+-#line 1150
+-            (&_S1053->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+-
+-#line 1150
+-            (&_S1053->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+-
+-#line 1150
+-            (&_S1053->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+-
+-#line 1150
+-            (&_S1053->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+-
+-#line 1150
+-            (&_S1053->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+-
+-#line 1150
+-            _S1053->compX_0 = packed_float4(record_1.compX_0) ;
+-
+-#line 1150
+-            _S1053->compU_0 = packed_float4(record_1.compU_0) ;
+-
+-#line 1150
+-            _S1053->integration_0 = packed_float4(record_1.integration_0) ;
+-
+-#line 1150
+-            _S1053->source_0 = packed_float4(record_1.source_0) ;
+-
+-#line 1150
+-            _S1053->volume_0 = packed_float4(record_1.volume_0) ;
+-
+-#line 1150
+-            _S1053->control_0 = packed_uint4(record_1.control_0) ;
+-
+-#line 1150
+-            _S1053->identity_0 = packed_uint4(record_1.identity_0) ;
++#line 1151
++            TraceContinuation_natural_0 device* _S1050 = (&kernelContext_6)->continuation_0+slot_0;
++
++#line 1151
++            _S1050->x_1 = packed_float4(record_1.x_1) ;
++
++#line 1151
++            _S1050->u_0 = packed_float4(record_1.u_0) ;
++
++#line 1151
++            (&_S1050->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
++
++#line 1151
++            (&_S1050->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
++
++#line 1151
++            (&_S1050->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
++
++#line 1151
++            (&_S1050->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
++
++#line 1151
++            (&_S1050->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
++
++#line 1151
++            (&_S1050->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
++
++#line 1151
++            (&_S1050->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
++
++#line 1151
++            (&_S1050->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
++
++#line 1151
++            _S1050->compX_0 = packed_float4(record_1.compX_0) ;
++
++#line 1151
++            _S1050->compU_0 = packed_float4(record_1.compU_0) ;
++
++#line 1151
++            _S1050->integration_0 = packed_float4(record_1.integration_0) ;
++
++#line 1151
++            _S1050->source_0 = packed_float4(record_1.source_0) ;
++
++#line 1151
++            _S1050->volume_0 = packed_float4(record_1.volume_0) ;
++
++#line 1151
++            _S1050->control_0 = packed_uint4(record_1.control_0) ;
++
++#line 1151
++            _S1050->identity_0 = packed_uint4(record_1.identity_0) ;
+             return;
+         }
+ 
+-#line 1151
+-        thread array<array<float, int(4)>, int(4)> _S1054 = terminalMetric_0;
+-
+-#line 1151
+-        thread Vec4Cart_0 _S1055 = (&state_15)->u_1;
+-
+-#line 1151
+-        thread Vec4Cart_0 _S1056 = _S1048.forward_0;
+-
+-#line 1151
+-        float _S1057 = MetricDotCart_0(&_S1054, &_S1055, &_S1056);
+-
+-
+-        float _S1058 = _S1057 / _S1052;
++#line 1152
++        thread array<array<float, int(4)>, int(4)> _S1051 = terminalMetric_0;
++
++#line 1152
++        thread Vec4Cart_0 _S1052 = (&state_15)->u_1;
++
++#line 1152
++        thread Vec4Cart_0 _S1053 = _S1045.forward_0;
++
++#line 1152
++        float _S1054 = MetricDotCart_0(&_S1051, &_S1052, &_S1053);
++
++
++        float _S1055 = _S1054 / _S1049;
++
++#line 1155
++        thread array<array<float, int(4)>, int(4)> _S1056 = terminalMetric_0;
++
++#line 1155
++        thread Vec4Cart_0 _S1057 = (&state_15)->u_1;
++
++#line 1155
++        thread Vec4Cart_0 _S1058 = _S1045.up_0;
++
++#line 1155
++        float _S1059 = MetricDotCart_0(&_S1056, &_S1057, &_S1058);
++
++        float _S1060 = _S1059 / _S1049;
++
++#line 1157
++        thread array<array<float, int(4)>, int(4)> _S1061 = terminalMetric_0;
++
++#line 1157
++        thread Vec4Cart_0 _S1062 = (&state_15)->u_1;
++
++#line 1157
++        thread Vec4Cart_0 _S1063 = _S1045.right_0;
++
++#line 1157
++        float _S1064 = MetricDotCart_0(&_S1061, &_S1062, &_S1063);
+ 
+ #line 1154
+-        thread array<array<float, int(4)>, int(4)> _S1059 = terminalMetric_0;
+-
+-#line 1154
+-        thread Vec4Cart_0 _S1060 = (&state_15)->u_1;
+-
+-#line 1154
+-        thread Vec4Cart_0 _S1061 = _S1048.up_0;
+-
+-#line 1154
+-        float _S1062 = MetricDotCart_0(&_S1059, &_S1060, &_S1061);
+-
+-        float _S1063 = _S1062 / _S1052;
+-
+-#line 1156
+-        thread array<array<float, int(4)>, int(4)> _S1064 = terminalMetric_0;
+-
+-#line 1156
+-        thread Vec4Cart_0 _S1065 = (&state_15)->u_1;
+-
+-#line 1156
+-        thread Vec4Cart_0 _S1066 = _S1048.right_0;
+-
+-#line 1156
+-        float _S1067 = MetricDotCart_0(&_S1064, &_S1065, &_S1066);
+-
+-#line 1153
+-        float3 terminalDirection_0 = normalize(float3(_S1058, _S1063, _S1067 / _S1052));
+-
+-#line 1159
++        float3 terminalDirection_0 = normalize(float3(_S1055, _S1060, _S1064 / _S1049));
++
++#line 1160
+         if(!all(isfinite(terminalDirection_0)))
+         {
+ 
+-#line 1160
++#line 1161
+             (&record_1)->control_0.x = 2U;
+ 
+-#line 1160
++#line 1161
+             (&record_1)->control_0.y = 9U;
+ 
+-#line 1160
+-            TraceContinuation_natural_0 device* _S1068 = (&kernelContext_6)->continuation_0+slot_0;
+-
+-#line 1160
+-            _S1068->x_1 = packed_float4(record_1.x_1) ;
+-
+-#line 1160
+-            _S1068->u_0 = packed_float4(record_1.u_0) ;
+-
+-#line 1160
+-            (&_S1068->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+-
+-#line 1160
+-            (&_S1068->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+-
+-#line 1160
+-            (&_S1068->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+-
+-#line 1160
+-            (&_S1068->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+-
+-#line 1160
+-            (&_S1068->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+-
+-#line 1160
+-            (&_S1068->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+-
+-#line 1160
+-            (&_S1068->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+-
+-#line 1160
+-            (&_S1068->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+-
+-#line 1160
+-            _S1068->compX_0 = packed_float4(record_1.compX_0) ;
+-
+-#line 1160
+-            _S1068->compU_0 = packed_float4(record_1.compU_0) ;
+-
+-#line 1160
+-            _S1068->integration_0 = packed_float4(record_1.integration_0) ;
+-
+-#line 1160
+-            _S1068->source_0 = packed_float4(record_1.source_0) ;
+-
+-#line 1160
+-            _S1068->volume_0 = packed_float4(record_1.volume_0) ;
+-
+-#line 1160
+-            _S1068->control_0 = packed_uint4(record_1.control_0) ;
+-
+-#line 1160
+-            _S1068->identity_0 = packed_uint4(record_1.identity_0) ;
++#line 1161
++            TraceContinuation_natural_0 device* _S1065 = (&kernelContext_6)->continuation_0+slot_0;
++
++#line 1161
++            _S1065->x_1 = packed_float4(record_1.x_1) ;
++
++#line 1161
++            _S1065->u_0 = packed_float4(record_1.u_0) ;
++
++#line 1161
++            (&_S1065->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
++
++#line 1161
++            (&_S1065->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
++
++#line 1161
++            (&_S1065->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
++
++#line 1161
++            (&_S1065->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
++
++#line 1161
++            (&_S1065->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
++
++#line 1161
++            (&_S1065->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
++
++#line 1161
++            (&_S1065->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
++
++#line 1161
++            (&_S1065->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
++
++#line 1161
++            _S1065->compX_0 = packed_float4(record_1.compX_0) ;
++
++#line 1161
++            _S1065->compU_0 = packed_float4(record_1.compU_0) ;
++
++#line 1161
++            _S1065->integration_0 = packed_float4(record_1.integration_0) ;
++
++#line 1161
++            _S1065->source_0 = packed_float4(record_1.source_0) ;
++
++#line 1161
++            _S1065->volume_0 = packed_float4(record_1.volume_0) ;
++
++#line 1161
++            _S1065->control_0 = packed_uint4(record_1.control_0) ;
++
++#line 1161
++            _S1065->identity_0 = packed_uint4(record_1.identity_0) ;
+             return;
+         }
+         if(oppositeSheet_0)
+         {
+ 
+-#line 1163
+-            float3 _S1069;
+-
+-#line 1163
+-            thread Vec4Cart_0 _S1070 = (&state_15)->x_5;
++#line 1164
++            float3 _S1066;
++
++#line 1164
++            thread Vec4Cart_0 _S1067 = (&state_15)->x_5;
+             thread float3 mappedDirection_1;
+ 
+-#line 1164
+-            bool _S1071 = MapEllisSecondSheetSkyDirection_0(&_S1070, terminalDirection_0, &mappedDirection_1);
+-            if(_S1071)
++#line 1165
++            bool _S1068 = MapEllisSecondSheetSkyDirection_0(&_S1067, terminalDirection_0, &mappedDirection_1);
++            if(_S1068)
+             {
+ 
+-#line 1165
+-                _S1069 = normalize(mappedDirection_1);
+-
+-#line 1165
++#line 1166
++                _S1066 = normalize(mappedDirection_1);
++
++#line 1166
+             }
+             else
+             {
+ 
+                 (&record_1)->control_0.x = 2U;
+                 (&record_1)->control_0.y = 6U;
+ 
+-#line 1170
+-                TraceContinuation_natural_0 device* _S1072 = (&kernelContext_6)->continuation_0+slot_0;
+-
+-#line 1170
+-                _S1072->x_1 = packed_float4(record_1.x_1) ;
+-
+-#line 1170
+-                _S1072->u_0 = packed_float4(record_1.u_0) ;
+-
+-#line 1170
+-                (&_S1072->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+-
+-#line 1170
+-                (&_S1072->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+-
+-#line 1170
+-                (&_S1072->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+-
+-#line 1170
+-                (&_S1072->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+-
+-#line 1170
+-                (&_S1072->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+-
+-#line 1170
+-                (&_S1072->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+-
+-#line 1170
+-                (&_S1072->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+-
+-#line 1170
+-                (&_S1072->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+-
+-#line 1170
+-                _S1072->compX_0 = packed_float4(record_1.compX_0) ;
+-
+-#line 1170
+-                _S1072->compU_0 = packed_float4(record_1.compU_0) ;
+-
+-#line 1170
+-                _S1072->integration_0 = packed_float4(record_1.integration_0) ;
+-
+-#line 1170
+-                _S1072->source_0 = packed_float4(record_1.source_0) ;
+-
+-#line 1170
+-                _S1072->volume_0 = packed_float4(record_1.volume_0) ;
+-
+-#line 1170
+-                _S1072->control_0 = packed_uint4(record_1.control_0) ;
+-
+-#line 1170
+-                _S1072->identity_0 = packed_uint4(record_1.identity_0) ;
++#line 1171
++                TraceContinuation_natural_0 device* _S1069 = (&kernelContext_6)->continuation_0+slot_0;
++
++#line 1171
++                _S1069->x_1 = packed_float4(record_1.x_1) ;
++
++#line 1171
++                _S1069->u_0 = packed_float4(record_1.u_0) ;
++
++#line 1171
++                (&_S1069->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
++
++#line 1171
++                (&_S1069->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
++
++#line 1171
++                (&_S1069->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
++
++#line 1171
++                (&_S1069->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
++
++#line 1171
++                (&_S1069->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
++
++#line 1171
++                (&_S1069->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
++
++#line 1171
++                (&_S1069->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
++
++#line 1171
++                (&_S1069->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
++
++#line 1171
++                _S1069->compX_0 = packed_float4(record_1.compX_0) ;
++
++#line 1171
++                _S1069->compU_0 = packed_float4(record_1.compU_0) ;
++
++#line 1171
++                _S1069->integration_0 = packed_float4(record_1.integration_0) ;
++
++#line 1171
++                _S1069->source_0 = packed_float4(record_1.source_0) ;
++
++#line 1171
++                _S1069->volume_0 = packed_float4(record_1.volume_0) ;
++
++#line 1171
++                _S1069->control_0 = packed_uint4(record_1.control_0) ;
++
++#line 1171
++                _S1069->identity_0 = packed_uint4(record_1.identity_0) ;
+ 
+                 return;
+             }
+ 
+-#line 1172
+-            screenDirection_1 = _S1069;
+-
+-#line 1163
++#line 1173
++            screenDirection_1 = _S1066;
++
++#line 1164
+         }
+         else
+         {
+ 
+-#line 1163
++#line 1164
+             screenDirection_1 = terminalDirection_0;
+ 
+-#line 1163
+-        }
+-
+-#line 1163
+-        thread CameraObserverFrame_0 _S1073 = _S1048;
+-
+-#line 1175
++#line 1164
++        }
++
++#line 1164
++        thread CameraObserverFrame_0 _S1070 = _S1045;
++
++#line 1176
+         thread Vec4Cart_0 terminalScreenA_0;
+         thread Vec4Cart_0 terminalScreenB_0;
+ 
+-#line 1176
+-        SachsScreenBasis_0(&_S1073, screenDirection_1, &terminalScreenA_0, &terminalScreenB_0);
++#line 1177
++        SachsScreenBasis_0(&_S1070, screenDirection_1, &terminalScreenA_0, &terminalScreenB_0);
+ 
+         if(pointStarfieldEnabled_0)
+         {
+ 
+-#line 1178
++#line 1179
+             step_6 = int(0);
+ 
+-#line 1178
++#line 1179
+         }
+         else
+         {
+ 
+-#line 1178
++#line 1179
+             step_6 = int(2);
+ 
+-#line 1178
++#line 1179
+         }
+         Vec4Cart_0 xiACart_0 = TraceUnpack_0(X_1[step_6]);
+         Vec4Cart_0 xiBCart_0 = TraceUnpack_0(X_1[step_6 + int(1)]);
+ 
+-#line 1180
+-        thread array<array<float, int(4)>, int(4)> _S1074 = terminalMetric_0;
+-
+-#line 1180
+-        thread Vec4Cart_0 _S1075 = xiACart_0;
+-
+-#line 1180
+-        thread Vec4Cart_0 _S1076 = terminalScreenA_0;
+-
+-#line 1180
+-        float _S1077 = MetricDotCart_0(&_S1074, &_S1075, &_S1076);
+-
+-#line 1180
+-        thread array<array<float, int(4)>, int(4)> _S1078 = terminalMetric_0;
+-
+-#line 1180
+-        thread Vec4Cart_0 _S1079 = xiBCart_0;
+-
+-#line 1180
+-        thread Vec4Cart_0 _S1080 = terminalScreenA_0;
+-
+-#line 1180
+-        float _S1081 = MetricDotCart_0(&_S1078, &_S1079, &_S1080);
+-
+-#line 1180
+-        thread array<array<float, int(4)>, int(4)> _S1082 = terminalMetric_0;
+-
+-#line 1180
+-        thread Vec4Cart_0 _S1083 = xiACart_0;
+-
+-#line 1180
+-        thread Vec4Cart_0 _S1084 = terminalScreenB_0;
+-
+-#line 1180
+-        float _S1085 = MetricDotCart_0(&_S1082, &_S1083, &_S1084);
+-
+-#line 1180
+-        thread array<array<float, int(4)>, int(4)> _S1086 = terminalMetric_0;
+-
+-#line 1180
+-        thread Vec4Cart_0 _S1087 = xiBCart_0;
+-
+-#line 1180
+-        thread Vec4Cart_0 _S1088 = terminalScreenB_0;
+-
+-#line 1180
+-        float _S1089 = MetricDotCart_0(&_S1086, &_S1087, &_S1088);
+-
+-#line 1185
++#line 1181
++        thread array<array<float, int(4)>, int(4)> _S1071 = terminalMetric_0;
++
++#line 1181
++        thread Vec4Cart_0 _S1072 = xiACart_0;
++
++#line 1181
++        thread Vec4Cart_0 _S1073 = terminalScreenA_0;
++
++#line 1181
++        float _S1074 = MetricDotCart_0(&_S1071, &_S1072, &_S1073);
++
++#line 1181
++        thread array<array<float, int(4)>, int(4)> _S1075 = terminalMetric_0;
++
++#line 1181
++        thread Vec4Cart_0 _S1076 = xiBCart_0;
++
++#line 1181
++        thread Vec4Cart_0 _S1077 = terminalScreenA_0;
++
++#line 1181
++        float _S1078 = MetricDotCart_0(&_S1075, &_S1076, &_S1077);
++
++#line 1181
++        thread array<array<float, int(4)>, int(4)> _S1079 = terminalMetric_0;
++
++#line 1181
++        thread Vec4Cart_0 _S1080 = xiACart_0;
++
++#line 1181
++        thread Vec4Cart_0 _S1081 = terminalScreenB_0;
++
++#line 1181
++        float _S1082 = MetricDotCart_0(&_S1079, &_S1080, &_S1081);
++
++#line 1181
++        thread array<array<float, int(4)>, int(4)> _S1083 = terminalMetric_0;
++
++#line 1181
++        thread Vec4Cart_0 _S1084 = xiBCart_0;
++
++#line 1181
++        thread Vec4Cart_0 _S1085 = terminalScreenB_0;
++
++#line 1181
++        float _S1086 = MetricDotCart_0(&_S1083, &_S1084, &_S1085);
++
++#line 1186
+         thread float beamSemiMajor_0;
+         thread float beamSemiMinor_0;
+         thread float beamDeterminant_0;
+-        BeamEllipseFromTransverseMap_0(_S1077, _S1081, _S1085, _S1089, &beamSemiMajor_0, &beamSemiMinor_0, &beamOrientation_0, &beamDeterminant_0);
++        BeamEllipseFromTransverseMap_0(_S1074, _S1078, _S1082, _S1086, &beamSemiMajor_0, &beamSemiMinor_0, &beamOrientation_0, &beamDeterminant_0);
+ 
+ 
+ 
+         float terminalRadius_0 = length(float3((&(&state_15)->x_5)->x_2, (&(&state_15)->x_5)->y_0, (&(&state_15)->x_5)->z_0));
+ 
+         if(pointStarfieldEnabled_0)
+         {
+ 
+-#line 1194
++#line 1195
+             pupilUp_1 = max(terminalRadius_0 * 0.00100000004749745, 9.999999960041972e-13);
+ 
+-#line 1194
++#line 1195
+         }
+         else
+         {
+ 
+-#line 1194
++#line 1195
+             pupilUp_1 = 0.00100000004749745;
+ 
+-#line 1194
++#line 1195
+         }
+ 
+         float beamMajorExpansion_0 = beamSemiMajor_0 / pupilUp_1;
+         float beamMinorExpansion_0 = beamSemiMinor_0 / pupilUp_1;
+-        float _S1090 = sqrt(max(beamMajorExpansion_0 * beamMinorExpansion_0, 0.0));
+-
+-#line 1198
++        float _S1087 = sqrt(max(beamMajorExpansion_0 * beamMinorExpansion_0, 0.0));
++
++#line 1199
+         pupilUp_1 = beamMajorExpansion_0;
+ 
+-#line 1198
++#line 1199
+         pupilRight_1 = beamMinorExpansion_0;
+ 
+-#line 1198
+-        lastStep_3 = _S1090;
+-
+-#line 1133
+-    }
+-    else
+-    {
+-
+-#line 1133
+-        screenDirection_1 = _S1039;
+-
+-#line 1133
++#line 1199
++        lastStep_3 = _S1087;
++
++#line 1134
++    }
++    else
++    {
++
++#line 1134
++        screenDirection_1 = _S1036;
++
++#line 1134
+         pupilUp_1 = 1.0;
+ 
+-#line 1133
++#line 1134
+         pupilRight_1 = 1.0;
+ 
+-#line 1133
++#line 1134
+         lastStep_3 = 1.0;
+ 
+-#line 1133
+-    }
+-
+-#line 1204
++#line 1134
++    }
++
++#line 1205
+     if(escaped_0)
+     {
+ 
+         if(beamsEnabled_0)
+         {
+ 
+-#line 1207
++#line 1208
+             affineLength_9 = max(pixelAngularSize_0 * pupilUp_1, pixelAngularSize_0);
+ 
+-#line 1207
++#line 1208
+         }
+         else
+         {
+ 
+-#line 1207
++#line 1208
+             affineLength_9 = 0.30000001192092896 * pixelAngularSize_0;
+ 
+-#line 1207
++#line 1208
+         }
+ 
+ 
+         if(beamsEnabled_0)
+         {
+ 
+-#line 1210
++#line 1211
+             exoticScale_0 = max(pixelAngularSize_0 * pupilRight_1, pixelAngularSize_0);
+ 
+-#line 1210
++#line 1211
+         }
+         else
+         {
+ 
+-#line 1210
++#line 1211
+             exoticScale_0 = 0.30000001192092896 * pixelAngularSize_0;
+ 
+-#line 1210
++#line 1211
+         }
+ 
+ 
+         if(pointStarfieldEnabled_0)
+         {
+ 
+-#line 1213
+-            float3 _S1091 = SamplePointStarfield_0(screenDirection_1, affineLength_9, exoticScale_0, beamOrientation_0, pointBrightnessScale_0, &kernelContext_6);
+-
+-#line 1213
+-            color_4 = _S1091;
+-
+-#line 1213
++#line 1214
++            float3 _S1088 = SamplePointStarfield_0(screenDirection_1, affineLength_9, exoticScale_0, beamOrientation_0, pointBrightnessScale_0, &kernelContext_6);
++
++#line 1214
++            color_4 = _S1088;
++
++#line 1214
+         }
+         else
+         {
+             if(starfieldEnabled_0)
+             {
+ 
+-#line 1216
+-                float3 _S1092 = SampleStarfield_0(screenDirection_1, starfieldWidth_0, starfieldHeight_0, &kernelContext_6);
+-
+-#line 1216
+-                screenDirection_1 = _S1092;
+-
+-#line 1216
++#line 1217
++                float3 _S1089 = SampleStarfield_0(screenDirection_1, starfieldWidth_0, starfieldHeight_0, &kernelContext_6);
++
++#line 1217
++                screenDirection_1 = _S1089;
++
++#line 1217
+             }
+             else
+             {
+ 
+-#line 1216
++#line 1217
+                 screenDirection_1 = SampleBackgroundGradient_0(screenDirection_1);
+ 
+-#line 1216
++#line 1217
+             }
+ 
+-#line 1216
++#line 1217
+             color_4 = screenDirection_1;
+ 
+-#line 1213
+-        }
+-
+-#line 1213
++#line 1214
++        }
++
++#line 1214
+         color_4 = color_3 + float3(transmittance_0)  * color_4;
+ 
+-#line 1204
+-    }
+-    else
+-    {
+-
+-#line 1204
++#line 1205
++    }
++    else
++    {
++
++#line 1205
+         color_4 = color_3;
+ 
+-#line 1204
+-    }
+-
+-#line 1220
++#line 1205
++    }
++
++#line 1221
+     if(volumeOpticalDepth_0 > 0.0)
+     {
+ 
+-#line 1220
++#line 1221
+         color_4 = color_4 * float3(exp(- volumeOpticalDepth_0))  + volumeEmission_0;
+ 
+-#line 1220
+-    }
+-
+-#line 1228
++#line 1221
++    }
++
++#line 1229
+     if(beamsEnabled_0)
+     {
+ 
+-#line 1228
++#line 1229
+         escaped_0 = !captured_0;
+ 
+-#line 1228
+-    }
+-    else
+-    {
+-
+-#line 1228
++#line 1229
++    }
++    else
++    {
++
++#line 1229
+         escaped_0 = false;
+ 
+-#line 1228
+-    }
+-
+-#line 1228
++#line 1229
++    }
++
++#line 1229
+     if(escaped_0)
+     {
+ 
+-#line 1228
++#line 1229
+         affineLength_9 = lastStep_3;
+ 
+-#line 1228
+-    }
+-    else
+-    {
+-
+-#line 1228
++#line 1229
++    }
++    else
++    {
++
++#line 1229
+         affineLength_9 = 1.0;
+ 
+-#line 1228
+-    }
+-
+-#line 1233
++#line 1229
++    }
++
++#line 1234
+     if(sampleIndex_0 > 0.5)
+     {
+         float inverseCount_0 = 1.0 / (sampleIndex_0 + 1.0);
+-        int _S1093 = _S865 * int(4);
+-
+-
+-
+-        float3 _S1094 = (float3(*((&kernelContext_6)->radiance_0+_S1093), *((&kernelContext_6)->radiance_0+(_S1093 + int(1))), *((&kernelContext_6)->radiance_0+(_S1093 + int(2)))) * float3(sampleIndex_0)  + color_4) * float3(inverseCount_0) ;
+-
+-#line 1240
+-        affineLength_9 = (*((&kernelContext_6)->radiance_0+(_S1093 + int(3))) * sampleIndex_0 + affineLength_9) * inverseCount_0;
+-
+-#line 1240
+-        color_4 = _S1094;
+-
+-#line 1233
+-    }
+-
+-#line 1243
++        int _S1090 = _S865 * int(4);
++
++
++
++        float3 _S1091 = (float3(*((&kernelContext_6)->radiance_0+_S1090), *((&kernelContext_6)->radiance_0+(_S1090 + int(1))), *((&kernelContext_6)->radiance_0+(_S1090 + int(2)))) * float3(sampleIndex_0)  + color_4) * float3(inverseCount_0) ;
++
++#line 1241
++        affineLength_9 = (*((&kernelContext_6)->radiance_0+(_S1090 + int(3))) * sampleIndex_0 + affineLength_9) * inverseCount_0;
++
++#line 1241
++        color_4 = _S1091;
++
++#line 1234
++    }
++
++#line 1244
+     if(!all(isfinite(color_4)))
+     {
+ 
+-#line 1243
++#line 1244
+         escaped_0 = true;
+ 
+-#line 1243
+-    }
+-    else
+-    {
+-
+-#line 1243
++#line 1244
++    }
++    else
++    {
++
++#line 1244
+         escaped_0 = !isfinite(affineLength_9);
+ 
+-#line 1243
+-    }
+-
+-#line 1243
++#line 1244
++    }
++
++#line 1244
+     if(escaped_0)
+     {
+ 
+-#line 1244
++#line 1245
+         (&record_1)->control_0.x = 2U;
+ 
+-#line 1244
++#line 1245
+         (&record_1)->control_0.y = 9U;
+ 
+-#line 1244
+-        TraceContinuation_natural_0 device* _S1095 = (&kernelContext_6)->continuation_0+slot_0;
+-
+-#line 1244
+-        _S1095->x_1 = packed_float4(record_1.x_1) ;
+-
+-#line 1244
+-        _S1095->u_0 = packed_float4(record_1.u_0) ;
+-
+-#line 1244
+-        (&_S1095->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+-
+-#line 1244
+-        (&_S1095->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+-
+-#line 1244
+-        (&_S1095->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+-
+-#line 1244
+-        (&_S1095->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+-
+-#line 1244
+-        (&_S1095->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+-
+-#line 1244
+-        (&_S1095->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+-
+-#line 1244
+-        (&_S1095->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+-
+-#line 1244
+-        (&_S1095->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+-
+-#line 1244
+-        _S1095->compX_0 = packed_float4(record_1.compX_0) ;
+-
+-#line 1244
+-        _S1095->compU_0 = packed_float4(record_1.compU_0) ;
+-
+-#line 1244
+-        _S1095->integration_0 = packed_float4(record_1.integration_0) ;
+-
+-#line 1244
+-        _S1095->source_0 = packed_float4(record_1.source_0) ;
+-
+-#line 1244
+-        _S1095->volume_0 = packed_float4(record_1.volume_0) ;
+-
+-#line 1244
+-        _S1095->control_0 = packed_uint4(record_1.control_0) ;
+-
+-#line 1244
+-        _S1095->identity_0 = packed_uint4(record_1.identity_0) ;
++#line 1245
++        TraceContinuation_natural_0 device* _S1092 = (&kernelContext_6)->continuation_0+slot_0;
++
++#line 1245
++        _S1092->x_1 = packed_float4(record_1.x_1) ;
++
++#line 1245
++        _S1092->u_0 = packed_float4(record_1.u_0) ;
++
++#line 1245
++        (&_S1092->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
++
++#line 1245
++        (&_S1092->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
++
++#line 1245
++        (&_S1092->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
++
++#line 1245
++        (&_S1092->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
++
++#line 1245
++        (&_S1092->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
++
++#line 1245
++        (&_S1092->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
++
++#line 1245
++        (&_S1092->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
++
++#line 1245
++        (&_S1092->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
++
++#line 1245
++        _S1092->compX_0 = packed_float4(record_1.compX_0) ;
++
++#line 1245
++        _S1092->compU_0 = packed_float4(record_1.compU_0) ;
++
++#line 1245
++        _S1092->integration_0 = packed_float4(record_1.integration_0) ;
++
++#line 1245
++        _S1092->source_0 = packed_float4(record_1.source_0) ;
++
++#line 1245
++        _S1092->volume_0 = packed_float4(record_1.volume_0) ;
++
++#line 1245
++        _S1092->control_0 = packed_uint4(record_1.control_0) ;
++
++#line 1245
++        _S1092->identity_0 = packed_uint4(record_1.identity_0) ;
+         return;
+     }
+-    int _S1096 = _S865 * int(4);
+-
+-#line 1247
+-    *((&kernelContext_6)->radiance_0+_S1096) = color_4.x;
+-    *((&kernelContext_6)->radiance_0+(_S1096 + int(1))) = color_4.y;
+-    *((&kernelContext_6)->radiance_0+(_S1096 + int(2))) = color_4.z;
+-    *((&kernelContext_6)->radiance_0+(_S1096 + int(3))) = affineLength_9;
++    int _S1093 = _S865 * int(4);
++
++#line 1248
++    *((&kernelContext_6)->radiance_0+_S1093) = color_4.x;
++    *((&kernelContext_6)->radiance_0+(_S1093 + int(1))) = color_4.y;
++    *((&kernelContext_6)->radiance_0+(_S1093 + int(2))) = color_4.z;
++    *((&kernelContext_6)->radiance_0+(_S1093 + int(3))) = affineLength_9;
+     (&record_1)->control_0.x = 3U;
+ 
+-#line 1251
+-    TraceContinuation_natural_0 device* _S1097 = (&kernelContext_6)->continuation_0+slot_0;
+-
+-#line 1251
+-    _S1097->x_1 = packed_float4(record_1.x_1) ;
+-
+-#line 1251
+-    _S1097->u_0 = packed_float4(record_1.u_0) ;
+-
+-#line 1251
+-    (&_S1097->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
+-
+-#line 1251
+-    (&_S1097->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
+-
+-#line 1251
+-    (&_S1097->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
+-
+-#line 1251
+-    (&_S1097->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
+-
+-#line 1251
+-    (&_S1097->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
+-
+-#line 1251
+-    (&_S1097->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
+-
+-#line 1251
+-    (&_S1097->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
+-
+-#line 1251
+-    (&_S1097->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
+-
+-#line 1251
+-    _S1097->compX_0 = packed_float4(record_1.compX_0) ;
+-
+-#line 1251
+-    _S1097->compU_0 = packed_float4(record_1.compU_0) ;
+-
+-#line 1251
+-    _S1097->integration_0 = packed_float4(record_1.integration_0) ;
+-
+-#line 1251
+-    _S1097->source_0 = packed_float4(record_1.source_0) ;
+-
+-#line 1251
+-    _S1097->volume_0 = packed_float4(record_1.volume_0) ;
+-
+-#line 1251
+-    _S1097->control_0 = packed_uint4(record_1.control_0) ;
+-
+-#line 1251
+-    _S1097->identity_0 = packed_uint4(record_1.identity_0) ;
++#line 1252
++    TraceContinuation_natural_0 device* _S1094 = (&kernelContext_6)->continuation_0+slot_0;
++
++#line 1252
++    _S1094->x_1 = packed_float4(record_1.x_1) ;
++
++#line 1252
++    _S1094->u_0 = packed_float4(record_1.u_0) ;
++
++#line 1252
++    (&_S1094->X_0)->data_0[int(0)] = packed_float4(record_1.X_0[int(0)]) ;
++
++#line 1252
++    (&_S1094->X_0)->data_0[int(1)] = packed_float4(record_1.X_0[int(1)]) ;
++
++#line 1252
++    (&_S1094->X_0)->data_0[int(2)] = packed_float4(record_1.X_0[int(2)]) ;
++
++#line 1252
++    (&_S1094->X_0)->data_0[int(3)] = packed_float4(record_1.X_0[int(3)]) ;
++
++#line 1252
++    (&_S1094->V_0)->data_0[int(0)] = packed_float4(record_1.V_0[int(0)]) ;
++
++#line 1252
++    (&_S1094->V_0)->data_0[int(1)] = packed_float4(record_1.V_0[int(1)]) ;
++
++#line 1252
++    (&_S1094->V_0)->data_0[int(2)] = packed_float4(record_1.V_0[int(2)]) ;
++
++#line 1252
++    (&_S1094->V_0)->data_0[int(3)] = packed_float4(record_1.V_0[int(3)]) ;
++
++#line 1252
++    _S1094->compX_0 = packed_float4(record_1.compX_0) ;
++
++#line 1252
++    _S1094->compU_0 = packed_float4(record_1.compU_0) ;
++
++#line 1252
++    _S1094->integration_0 = packed_float4(record_1.integration_0) ;
++
++#line 1252
++    _S1094->source_0 = packed_float4(record_1.source_0) ;
++
++#line 1252
++    _S1094->volume_0 = packed_float4(record_1.volume_0) ;
++
++#line 1252
++    _S1094->control_0 = packed_uint4(record_1.control_0) ;
++
++#line 1252
++    _S1094->identity_0 = packed_uint4(record_1.identity_0) ;
+ 
+     return;
+ }
+ 

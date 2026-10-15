@@ -1,0 +1,71 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/env",
+    "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+    "/opt/slang/bin/slangc",
+    "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang",
+    "-DSIRIUS_FP64",
+    "-target",
+    "spirv",
+    "-profile",
+    "spirv_1_5",
+    "-entry",
+    "ComputeMain",
+    "-stage",
+    "compute",
+    "-I",
+    "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+    "-warnings-disable",
+    "30082",
+    "-o",
+    "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "candidate-fp64",
+  "child_exit": 0,
+  "child_pid": 1113449,
+  "child_start_ticks": "14059234",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 1113439,
+    "pid": 1113445,
+    "ppid": 1113440,
+    "rss_kib": 32864,
+    "session": 1113439,
+    "start_ticks": "14059146",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Pending offline Slang candidate fp64 compile only. Original recipeflags/canonicalinclude/sourcebasename/backendCWD retained; ownedoutput only. Root mustcloseSCI15/releaseholds, admit fresh completecompiler/source/tool/DT_NEEDED/assets/flags/wholeinputclosure before anyoperation. No provider/numerical/runtimeacceptance. Controlmustmatchpinnedcanonicalbaseline beforeattributingcandidatedifference; rootseparatevalidation/disassembly/CFG/ABI/footprint required. Original300s/aggregate4GiB/reserve2GiB/defaultcache/CPUfalse/int0 ownership retained; stopfirstnonpass.",
+  "minimum_sampled_available_kib": 16394452,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 1113449,
+      "saved_start_ticks": "14059234"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 463732,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Pending offline Slang candidate fp64 compile only. Original recipeflags/canonicalinclude/sourcebasename/backendCWD retained; ownedoutput only. Root mustcloseSCI15/releaseholds, admit fresh completecompiler/source/tool/DT_NEEDED/assets/flags/wholeinputclosure before anyoperation. No provider/numerical/runtimeacceptance. Controlmustmatchpinnedcanonicalbaseline beforeattributingcandidatedifference; rootseparatevalidation/disassembly/CFG/ABI/footprint required. Original300s/aggregate4GiB/reserve2GiB/defaultcache/CPUfalse/int0 ownership retained; stopfirstnonpass.",
+  "source": {
+    "revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 7.384731626021676,
+  "whole_inputs_unchanged": true
+}

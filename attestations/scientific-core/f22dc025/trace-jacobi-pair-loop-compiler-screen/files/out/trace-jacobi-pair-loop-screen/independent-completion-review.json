@@ -1,0 +1,404 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-independent-offline-completion-review-v1",
+  "created_utc": "2026-10-15T19:19:13.376852+00:00",
+  "passed": true,
+  "audit_completed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer_role": "Independent passive completion reviewer; source/runtime reviews reused. Parent alone executed compiler owners, posttools and root checkpoints. No project helper/import/compiler/validator/disassembler/provider/test/network/process query executed by reviewer.",
+  "reviewed_release_pins": {
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/source-contracts.json",
+      "bytes": 36632,
+      "sha256": "5573e698e6a82f4b6a0a9764ac8a0147edd3ff9ef8804df7e08924433940c795"
+    },
+    "independent-source-review.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/independent-source-review.json",
+      "bytes": 8340,
+      "sha256": "edcc3f61297d440acaf92bf8e3d5891b1d95e775cd744223c12f24274e95799c"
+    },
+    "independent-runtime-admission.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/independent-runtime-admission.json",
+      "bytes": 18382,
+      "sha256": "50d36fa84f7a8d56d7d079a9f91fe36c4078dd2f280e1762365b8f99b0279ede"
+    },
+    "actions.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/actions.json",
+      "bytes": 4350314,
+      "sha256": "76d9f4c40317f27021957d5c9274a6c1967b9bb3e2e8bf33e7cd1742684008ae"
+    },
+    "readiness.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/readiness.json",
+      "bytes": 17349,
+      "sha256": "383b1fa05a951417a75c9e0d0baa8c7989458de610aad54ab1990b39c91cfe63"
+    },
+    "root-preflight.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-preflight.json",
+      "bytes": 1908874,
+      "sha256": "77e908dde0078d475df74062911b168c3f83b1e4b3ff349c8809166e8c46b8f0"
+    },
+    "root-compiler-tool-observation.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-compiler-tool-observation.json",
+      "bytes": 1338589,
+      "sha256": "79f89e2fe0a44232b5f5cb615d2b684f8a58d751bb3df8ede094f849592c42bc"
+    },
+    "root-runtime-release.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-runtime-release.json",
+      "bytes": 6029,
+      "sha256": "58d998a082d0d68ef8190d1c2ab5d5d36dd98ce11d96c4ff0d6c7412d70a7231"
+    },
+    "root-orchestration.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-orchestration.json",
+      "bytes": 16735,
+      "sha256": "02a2965193bad264423fa79292fea6687229e08621ce6eb83f69fcb1ac8cfecd"
+    },
+    "root-completed-operations.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-completed-operations.json",
+      "bytes": 41678,
+      "sha256": "fff3421ee0fd84044b2f041a1d6dd39eebdfcaf9d8365b7ad592652a62a138ba"
+    }
+  },
+  "actual_closure": {
+    "owners": 10,
+    "static_preflight_pins": 4314,
+    "beforeafter_rows": 86930,
+    "normalized_unique_whole_input_rows": 4378,
+    "whole_input_rows_per_owner": [
+      4315,
+      4322,
+      4329,
+      4336,
+      4343,
+      4350,
+      4357,
+      4364,
+      4371,
+      4378
+    ],
+    "raw_case_accepted_prelaunch_helper_ownercheck_posttool_pins": 150,
+    "all_before_equals_after_equals_current": true,
+    "exact_seven_immutable_records_per_ancestor": true,
+    "normalization": "Only lexical checkout-local absolute selectors normalize to mature owner relative keys; external absolute paths remain absolute. Content and resolved identities checked independently.",
+    "all_ten_owner_terminal_passed_exit0": true,
+    "all_original_compile_argv_and_guard_settings_preserved": true,
+    "limits": {
+      "seconds": 300,
+      "sampled_aggregate_RSS_KiB": 4194304,
+      "reserve_KiB": 2097152
+    },
+    "samples": 230,
+    "maximum_sampled_aggregate_RSS_KiB": 487672,
+    "cleanup_errors_and_remaining_owned_processes_empty": true,
+    "provider_mappings_empty": true,
+    "births": {
+      "root_saved_fresh_absence_records": 20,
+      "matched_controller_and_child_identities": true,
+      "reviewer_fresh_process_queries": false,
+      "scope": "Saved root and owner absence observations only; no global process-absence claim."
+    },
+    "root_orchestration_stages": {
+      "first_control_manual_closed0": 4,
+      "remaining_serial_saved_closed0": 36,
+      "saved_total": 40,
+      "root_all_handles_reported_closed": true
+    },
+    "default_compiler_environment": {
+      "release_prelaunch_selected_environment_equal": true,
+      "root_launch_changes": {},
+      "compile_GTEST_OUTPUT": "",
+      "no_cache_or_provider_override_added": true
+    },
+    "all_previously_accepted_raw_products_and_posttool_pins_current": true,
+    "canonical_source_current_clean_committed_pushed": true,
+    "single_worktree": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ]
+  },
+  "cases": [
+    {
+      "case": "control-fp32",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32/owner.json",
+        "bytes": 2783,
+        "sha256": "61156145f59abfd279f9bf485ce1a525daa29fdd6bbd7d4ee879e35e0bf8bcc9"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-fp32.json",
+        "bytes": 4324,
+        "sha256": "04c4cf5123e0e3506f498d0efd66b01d6e2e97c7e522481d4d9ffa7fafa89963"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv",
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "whole_input_rows": 4315,
+      "sample_count": 27,
+      "sampled_peak_aggregate_RSS_KiB": 487444,
+      "owner_seconds": 6.986042936012382,
+      "posttool_operations": 2
+    },
+    {
+      "case": "candidate-fp32",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32/owner.json",
+        "bytes": 2813,
+        "sha256": "f855029da42300c9f484ff23a09db592c4d779868f90e2e2d840a534a124c347"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp32.json",
+        "bytes": 4362,
+        "sha256": "faea7340cc2ffa3718e3559846c34dbe075c8c26bfb81618049abef5ec6263bf"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+        "bytes": 2620748,
+        "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+      },
+      "whole_input_rows": 4322,
+      "sample_count": 42,
+      "sampled_peak_aggregate_RSS_KiB": 465300,
+      "owner_seconds": 11.611397909000516,
+      "posttool_operations": 2
+    },
+    {
+      "case": "control-fp32comp",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32comp/owner.json",
+        "bytes": 2825,
+        "sha256": "0622afa2964e82ab2c16c713a2dd551d8f36e6b35c144188e031ae87c28a5437"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-fp32comp.json",
+        "bytes": 4400,
+        "sha256": "b3fb57d7ca395586e3af9ed559c22272854f36183e10e329ea6be5039dd3b383"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv",
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "whole_input_rows": 4329,
+      "sample_count": 35,
+      "sampled_peak_aggregate_RSS_KiB": 487672,
+      "owner_seconds": 9.306250494002597,
+      "posttool_operations": 2
+    },
+    {
+      "case": "candidate-fp32comp",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/owner.json",
+        "bytes": 2855,
+        "sha256": "c4aed9925baf37b5dccd9c2855546faba60539ec0547048e30c861f3794555f3"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp32comp.json",
+        "bytes": 4438,
+        "sha256": "492f74981af7cae1e8ad38d0b8e0a34044334fe38f6ca7c7bf12dd8a6d121d3b"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv",
+        "bytes": 2624072,
+        "sha256": "e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222"
+      },
+      "whole_input_rows": 4336,
+      "sample_count": 38,
+      "sampled_peak_aggregate_RSS_KiB": 466588,
+      "owner_seconds": 10.365143250004621,
+      "posttool_operations": 2
+    },
+    {
+      "case": "control-fp64",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp64/owner.json",
+        "bytes": 2842,
+        "sha256": "466f558a4eb06775e93620490a85746a4694ab861b77993918a11eca5f7533c7"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-fp64.json",
+        "bytes": 4324,
+        "sha256": "5f8729d300052b6cf057fb46567b2c78f33225d8f34f24a1dc6faf8651fce356"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv",
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      },
+      "whole_input_rows": 4343,
+      "sample_count": 31,
+      "sampled_peak_aggregate_RSS_KiB": 479068,
+      "owner_seconds": 8.202011493005557,
+      "posttool_operations": 2
+    },
+    {
+      "case": "candidate-fp64",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp64/owner.json",
+        "bytes": 2871,
+        "sha256": "785bb1a78c60e50cdcc6b88fed945abc194bf6939d58bc89090c1a9f226320dd"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp64.json",
+        "bytes": 4362,
+        "sha256": "fc813c1bd4381470394b71fd99eef55ae1b35eed3bf62de286e0538c98f8bfd7"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv",
+        "bytes": 2553336,
+        "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+      },
+      "whole_input_rows": 4350,
+      "sample_count": 28,
+      "sampled_peak_aggregate_RSS_KiB": 463732,
+      "owner_seconds": 7.384731626021676,
+      "posttool_operations": 2
+    },
+    {
+      "case": "control-cuda",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-cuda/owner.json",
+        "bytes": 2749,
+        "sha256": "ef7d2d6f0b634c7a299efcde7106fa3c6505df8aaa08d85fb4122ed897825150"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-cuda.json",
+        "bytes": 3346,
+        "sha256": "70a7151936636773019b20eb0d8402c13c09b3191686f30866256649bbae6fe8"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+        "bytes": 321379,
+        "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+      },
+      "whole_input_rows": 4357,
+      "sample_count": 8,
+      "sampled_peak_aggregate_RSS_KiB": 273640,
+      "owner_seconds": 2.2465691450051963,
+      "posttool_operations": 0
+    },
+    {
+      "case": "candidate-cuda",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-cuda/owner.json",
+        "bytes": 2778,
+        "sha256": "d08e0361dbe931228f456492a5c34b9852fc2bd0ce13f18c041e3915789a5fad"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-cuda.json",
+        "bytes": 3374,
+        "sha256": "6f8e3c148a14fc57a6f5d60c02e06df8380e50153cc93ba6162568e645628775"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-cuda/trace.cu",
+        "bytes": 321552,
+        "sha256": "4fabfe9f5d7d2487baf361b09a66aca1c44f8532e8c65cf17b6e22c50ed735a4"
+      },
+      "whole_input_rows": 4364,
+      "sample_count": 6,
+      "sampled_peak_aggregate_RSS_KiB": 274736,
+      "owner_seconds": 1.6724605589988641,
+      "posttool_operations": 0
+    },
+    {
+      "case": "control-metal",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-metal/owner.json",
+        "bytes": 2757,
+        "sha256": "dc7502d34a8032b52f71211dba9e0ce85c0be9d1d5913061c1038aadeffdfb42"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-metal.json",
+        "bytes": 3366,
+        "sha256": "9a423b841dc142d91b7eb7152c9bc6913222ad7157ece0de7680ad183fc6d1d1"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal",
+        "bytes": 344056,
+        "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+      },
+      "whole_input_rows": 4371,
+      "sample_count": 8,
+      "sampled_peak_aggregate_RSS_KiB": 276652,
+      "owner_seconds": 2.2777861949871294,
+      "posttool_operations": 0
+    },
+    {
+      "case": "candidate-metal",
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-metal/owner.json",
+        "bytes": 2785,
+        "sha256": "1263a49d9823858c5ea28a2757d81c074cfbda43129e3ae819f13a8c1b1ab4e3"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-metal.json",
+        "bytes": 3394,
+        "sha256": "6d5376af4f10a79ed034a7760357892d34041336e18be42587b37119d41c4aaa"
+      },
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-metal/trace.metal",
+        "bytes": 344160,
+        "sha256": "5efed47371922c709b730440c7229e36408ce4b8e54117a77bb365ea38f0dd77"
+      },
+      "whole_input_rows": 4378,
+      "sample_count": 7,
+      "sampled_peak_aggregate_RSS_KiB": 278608,
+      "owner_seconds": 2.182995192008093,
+      "posttool_operations": 0
+    }
+  ],
+  "baseline_attribution": {
+    "all_five_control_products_exact_byte_equal_pinned_canonical_baselines": true,
+    "all_three_previously_staged_trace_products_current_unchanged": true,
+    "five_controls_checked_before_candidate_source_effect_attribution": true,
+    "baseline_products": {
+      "fp32": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv",
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "fp64": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv",
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      },
+      "fp32comp": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv",
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "cuda": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu",
+        "bytes": 321379,
+        "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+      },
+      "metal": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal",
+        "bytes": 344056,
+        "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+      }
+    }
+  },
+  "posttools": {
+    "six_SPIRV_products_original_validator_and_disassembler_actual_closed0": true,
+    "separate_tool_operations": 12,
+    "argv_and_output_byte_joins_checked": true,
+    "separate_bounds": "GNU timeout 300s, TERM then KILL after10s per command. No aggregate RSS/reserve/session-census certification for posttools.",
+    "CUDA_and_Metal": "Four emitted source products only; no native CUDA/Metal compiler or runtime executed.",
+    "no_XML_or_scientific_collector": true
+  },
+  "semantic_boundary": {
+    "emitted_CFG_ABI_footprint_review": "Separate independent review, not admitted here; root completion snapshot records it pending.",
+    "historical_owner_product_and_acceptance_pending_fields": "Preserved stage-time snapshots. Final all-five-control equality gate now satisfied; they are not rewritten or promoted into semantic proof.",
+    "candidate_applied": false,
+    "canonical_build_products_changed": false,
+    "source_build_hold_released": false,
+    "numerical_or_provider_execution": false,
+    "JIT_or_driver_memory_screen": false,
+    "runtime_RSS_or_performance_benefit": false,
+    "adoption_or_full_scientific_or_Mandatory_or_release_admission": false,
+    "sampled_RSS_limit": "230 periodic owner samples describe compiler ownership only; no continuous/global memory guarantee, driver JIT result or posttool aggregate-RSS equivalence."
+  },
+  "verdict": "PASS for exact ten offline compiler owners, five baseline controls, current immutable input/product chains and separately completed original SPIRV posttools only.",
+  "receipt_scope": "This new sidecar lies outside frozen owner/preflight inputs; parent preservation/Git publication remains separate."
+}

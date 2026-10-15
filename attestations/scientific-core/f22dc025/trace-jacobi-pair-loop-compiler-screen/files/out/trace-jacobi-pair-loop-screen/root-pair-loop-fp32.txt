@@ -1,0 +1,145 @@
+97047:         %627 = OpLabel
+97048:       %14384 = OpLoad %bool %128
+97049:                OpSelectionMerge %630 None
+97050:                OpBranchConditional %14384 %628 %629
+97051:         %629 = OpLabel
+97052:                OpStore %coplanar %false
+97053:                OpBranch %630
+97054:         %628 = OpLabel
+97055:       %14386 = OpLoad %float %dt_0
+97056:       %14387 = OpFOrdGreaterThan %bool %14386 %float_0
+97057:                OpStore %coplanar %14387
+97058:                OpBranch %630
+97059:         %630 = OpLabel
+97060:       %14392 = OpLoad %bool %coplanar
+97061:                OpSelectionMerge %642 None
+97062:                OpBranchConditional %14392 %631 %642
+97063:         %631 = OpLabel
+97064:                OpStore %pair %int_0
+97065:                OpBranch %632
+97066:         %632 = OpLabel
+97067:                OpLoopMerge %641 %639 DontUnroll
+97068:                OpBranch %633
+97069:         %633 = OpLabel
+97070:                OpBranch %634
+97071:         %634 = OpLabel
+97072:                OpBranch %635
+97073:         %635 = OpLabel
+97074:       %14395 = OpLoad %int %pair
+97075:       %14396 = OpSLessThan %bool %14395 %int_2
+97076:                OpSelectionMerge %636 None
+97077:                OpBranchConditional %14396 %636 %640
+97078:         %640 = OpLabel
+97079:                OpBranch %641
+97080:         %636 = OpLabel
+97081:       %14398 = OpLoad %int %pair
+97082: %firstColumn = OpIMul %int %int_2 %14398
+97083:      %190751 = OpLoad %float %190699
+97084:      %190750 = OpLoad %float %190698
+97085:      %190749 = OpLoad %float %190697
+97086:      %190748 = OpLoad %float %190696
+97087:      %190856 = OpLoad %float %190804
+97088:      %190855 = OpLoad %float %190803
+97089:      %190854 = OpLoad %float %190802
+97090:      %190853 = OpLoad %float %190801
+97091:      %191324 = OpLoad %float %191273
+97092:      %191323 = OpLoad %float %191272
+97093:      %191322 = OpLoad %float %191271
+97094:      %191321 = OpLoad %float %191270
+97095:      %191389 = OpLoad %float %191338
+97096:      %191388 = OpLoad %float %191337
+97097:      %191387 = OpLoad %float %191336
+97098:      %191386 = OpLoad %float %191335
+97099:       %14404 = OpAccessChain %_ptr_Function_v4float %X %firstColumn
+97100:       %14405 = OpAccessChain %_ptr_Function_v4float %V %firstColumn
+97101:       %14406 = OpIAdd %int %firstColumn %int_1
+97102:       %14407 = OpAccessChain %_ptr_Function_v4float %X %14406
+97103:       %14408 = OpAccessChain %_ptr_Function_v4float %V %14406
+97104:                OpStore %187453 %190748
+97105:                OpStore %187454 %190749
+97106:                OpStore %187455 %190750
+97107:                OpStore %187456 %190751
+97108:                OpStore %187491 %190853
+97109:                OpStore %187492 %190854
+97110:                OpStore %187493 %190855
+97111:                OpStore %187494 %190856
+97112:                OpStore %187499 %191321
+123900:       %84196 = OpFAdd %v4float %84193 %84195
+123901:       %84197 = OpLoad %v4float %84039
+123902:       %84198 = OpVectorTimesScalar %v4float %84197 %float_2
+123903:       %84199 = OpFAdd %v4float %84196 %84198
+123904:       %84200 = OpLoad %v4float %84041
+123905:       %84201 = OpFAdd %v4float %84199 %84200
+123906:       %84202 = OpVectorTimesScalar %v4float %84201 %84180
+123907:       %84203 = OpLoad %v4float %170
+123908:       %84204 = OpFAdd %v4float %84203 %84202
+123909:                OpStore %170 %84204
+123910:       %84205 = OpLoad %v4float %84042
+123911:       %84206 = OpLoad %v4float %84044
+123912:       %84207 = OpVectorTimesScalar %v4float %84206 %float_2
+123913:       %84208 = OpFAdd %v4float %84205 %84207
+123914:       %84209 = OpLoad %v4float %84046
+123915:       %84210 = OpVectorTimesScalar %v4float %84209 %float_2
+123916:       %84211 = OpFAdd %v4float %84208 %84210
+123917:       %84213 = OpFAdd %v4float %84211 %102875
+123918:       %84214 = OpVectorTimesScalar %v4float %84213 %84180
+123919:       %84215 = OpLoad %v4float %171
+123920:       %84216 = OpFAdd %v4float %84215 %84214
+123921:                OpStore %171 %84216
+123922:       %84217 = OpLoad %v4float %84043
+123923:       %84218 = OpLoad %v4float %84045
+123924:       %84219 = OpVectorTimesScalar %v4float %84218 %float_2
+123925:       %84220 = OpFAdd %v4float %84217 %84219
+123926:       %84221 = OpLoad %v4float %84047
+123927:       %84222 = OpVectorTimesScalar %v4float %84221 %float_2
+123928:       %84223 = OpFAdd %v4float %84220 %84222
+123929:       %84225 = OpFAdd %v4float %84223 %102884
+123930:       %84226 = OpVectorTimesScalar %v4float %84225 %84180
+123931:       %84227 = OpLoad %v4float %172
+123932:       %84228 = OpFAdd %v4float %84227 %84226
+123933:                OpStore %172 %84228
+123934:                OpStore %14404 %84192
+123935:                OpStore %14405 %84204
+123936:                OpStore %14407 %84216
+123937:                OpStore %14408 %84228
+123938:                OpBranch %637
+123939:         %637 = OpLabel
+123940:                OpBranch %638
+123941:         %638 = OpLabel
+123942:       %16484 = OpLoad %int %pair
+123943:      %pair_0 = OpIAdd %int %16484 %int_1
+123944:                OpStore %pair %pair_0
+123945:                OpBranch %639
+123946:         %639 = OpLabel
+123947:                OpBranch %632
+123948:         %641 = OpLabel
+123949:                OpBranch %642
+123950:         %642 = OpLabel
+123951:       %16490 = OpLoad %float %affineLength
+123952:       %16491 = OpLoad %float %dt_0
+123953: %affineLength_1 = OpFAdd %float %16490 %16491
+123954:       %16493 = OpLoad %uint %accepted
+123955:  %accepted_1 = OpIAdd %uint %16493 %uint_1
+123956:      %191398 = OpLoad %float %191338
+123957:      %191397 = OpLoad %float %191337
+123958:      %191396 = OpLoad %float %191336
+123959:      %191395 = OpLoad %float %191335
+123960:      %191333 = OpLoad %float %191273
+123961:      %191332 = OpLoad %float %191272
+123962:      %191331 = OpLoad %float %191271
+123963:      %191330 = OpLoad %float %191270
+123964:                OpStore %190696 %191330
+123965:                OpStore %190697 %191331
+123966:                OpStore %190698 %191332
+123967:                OpStore %190699 %191333
+123968:                OpStore %190801 %191395
+123969:                OpStore %190802 %191396
+123970:                OpStore %190803 %191397
+123971:                OpStore %190804 %191398
+123972:       %16497 = OpLoad %bool %terminalDiskHit
+123973:                OpSelectionMerge %644 None
+123974:                OpBranchConditional %16497 %643 %644
+123975:         %643 = OpLabel
+123976:       %16499 = OpLoad %float %dt_0
+123977:                OpStore %reason %uint_2
+123978:                OpStore %pupilUp %11174

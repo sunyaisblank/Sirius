@@ -1,0 +1,706 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-independent-emitted-review-v1",
+  "passed": true,
+  "emitted_static_review_only": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T19:17:44.173982+00:00",
+  "blockers": [],
+  "source_and_metadata_pins": {
+    "inputs/candidate/trace.slang": {
+      "path": "out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/source-contracts.json",
+      "bytes": 36632,
+      "sha256": "5573e698e6a82f4b6a0a9764ac8a0147edd3ff9ef8804df7e08924433940c795"
+    },
+    "actions.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/actions.pending.json",
+      "bytes": 58234,
+      "sha256": "b6300c31ee3dec319381cd71527e08c87ec0d92bcbb3b79b41f631ecf7376c57"
+    },
+    "actions.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/actions.json",
+      "bytes": 4350314,
+      "sha256": "76d9f4c40317f27021957d5c9274a6c1967b9bb3e2e8bf33e7cd1742684008ae"
+    },
+    "readiness.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/readiness.json",
+      "bytes": 17349,
+      "sha256": "383b1fa05a951417a75c9e0d0baa8c7989458de610aad54ab1990b39c91cfe63"
+    },
+    "root-preflight.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-preflight.json",
+      "bytes": 1908874,
+      "sha256": "77e908dde0078d475df74062911b168c3f83b1e4b3ff349c8809166e8c46b8f0"
+    },
+    "independent-source-review.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/independent-source-review.json",
+      "bytes": 8340,
+      "sha256": "edcc3f61297d440acaf92bf8e3d5891b1d95e775cd744223c12f24274e95799c"
+    },
+    "independent-runtime-admission.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/independent-runtime-admission.json",
+      "bytes": 18382,
+      "sha256": "50d36fa84f7a8d56d7d079a9f91fe36c4078dd2f280e1762365b8f99b0279ede"
+    },
+    "root-runtime-release.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-runtime-release.json",
+      "bytes": 6029,
+      "sha256": "58d998a082d0d68ef8190d1c2ab5d5d36dd98ce11d96c4ff0d6c7412d70a7231"
+    },
+    "root-orchestration.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-orchestration.json",
+      "bytes": 16735,
+      "sha256": "02a2965193bad264423fa79292fea6687229e08621ce6eb83f69fcb1ac8cfecd"
+    }
+  },
+  "products": {
+    "control-fp32": {
+      "path": "out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv",
+      "bytes": 2994452,
+      "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+    },
+    "candidate-fp32": {
+      "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+      "bytes": 2620748,
+      "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+    },
+    "control-fp32comp": {
+      "path": "out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv",
+      "bytes": 2997776,
+      "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+    },
+    "candidate-fp32comp": {
+      "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv",
+      "bytes": 2624072,
+      "sha256": "e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222"
+    },
+    "control-fp64": {
+      "path": "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv",
+      "bytes": 2847024,
+      "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+    },
+    "candidate-fp64": {
+      "path": "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv",
+      "bytes": 2553336,
+      "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+    },
+    "control-cuda": {
+      "path": "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+      "bytes": 321379,
+      "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+    },
+    "candidate-cuda": {
+      "path": "out/trace-jacobi-pair-loop-screen/candidate-cuda/trace.cu",
+      "bytes": 321552,
+      "sha256": "4fabfe9f5d7d2487baf361b09a66aca1c44f8532e8c65cf17b6e22c50ed735a4"
+    },
+    "control-metal": {
+      "path": "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal",
+      "bytes": 344056,
+      "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+    },
+    "candidate-metal": {
+      "path": "out/trace-jacobi-pair-loop-screen/candidate-metal/trace.metal",
+      "bytes": 344160,
+      "sha256": "5efed47371922c709b730440c7229e36408ce4b8e54117a77bb365ea38f0dd77"
+    }
+  },
+  "six_ordinary_disassemblies": {
+    "fp32": {
+      "control": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-spv-control-fp32.spvasm",
+        "bytes": 8763285,
+        "sha256": "8c19a116890f402ce5f94bbf948bc845faaa465b27e1d1bf3021762d14f212d4"
+      },
+      "candidate": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32.spvasm",
+        "bytes": 7678941,
+        "sha256": "d09528306c6799a2effbea000f06c576d68ef48e0105eb3253b7f7b447021163"
+      }
+    },
+    "fp32comp": {
+      "control": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-spv-control-fp32comp.spvasm",
+        "bytes": 8772174,
+        "sha256": "452eeeaa02af9568e7660ad68418c35248c34a2004f17f878925be52aa2d76ea"
+      },
+      "candidate": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32comp.spvasm",
+        "bytes": 7687806,
+        "sha256": "28477226c3ea7ec5993b55d32ab93a5a879a67b335cd95c0e892db9f084c31d4"
+      }
+    },
+    "fp64": {
+      "control": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-spv-control-fp64.spvasm",
+        "bytes": 8398125,
+        "sha256": "28ff0eef1385ce0f130d6e59318c0f7fbce128b801b16edf77e10e8d72f19a21"
+      },
+      "candidate": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp64.spvasm",
+        "bytes": 7537189,
+        "sha256": "a357064274422c21e3aa7d723798fc98c85545948044330b463ffa50dcef0eb0"
+      }
+    }
+  },
+  "actual_owner_product_posttool_acceptance_pins": {
+    "control-fp32": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32/owner.json",
+        "bytes": 2783,
+        "sha256": "61156145f59abfd279f9bf485ce1a525daa29fdd6bbd7d4ee879e35e0bf8bcc9"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp32.json",
+        "bytes": 3442,
+        "sha256": "7dc9e231a9113e5d538975bed4bb2a875fc61c5ec44f2276b1974ff80e05abfd"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-control-fp32.json",
+        "bytes": 4652,
+        "sha256": "e5582626d4ea1186b4a6f6134b983de09a76d0ac4a3a8929497ca1581998c25b"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-fp32.json",
+        "bytes": 4324,
+        "sha256": "04c4cf5123e0e3506f498d0efd66b01d6e2e97c7e522481d4d9ffa7fafa89963"
+      }
+    },
+    "candidate-fp32": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32/owner.json",
+        "bytes": 2813,
+        "sha256": "f855029da42300c9f484ff23a09db592c4d779868f90e2e2d840a534a124c347"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp32.json",
+        "bytes": 3467,
+        "sha256": "d98d5d6e25b6f40b7a72fdaaec74a7c2c0f15d1cdbd7702d19d4afc453bd4eb4"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp32.json",
+        "bytes": 4685,
+        "sha256": "dc19d8df9a6c5b4f7f9233d9d20b205d84625b58a4be915f371424167f35e916"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp32.json",
+        "bytes": 4362,
+        "sha256": "faea7340cc2ffa3718e3559846c34dbe075c8c26bfb81618049abef5ec6263bf"
+      }
+    },
+    "control-fp32comp": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32comp/owner.json",
+        "bytes": 2825,
+        "sha256": "0622afa2964e82ab2c16c713a2dd551d8f36e6b35c144188e031ae87c28a5437"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp32comp.json",
+        "bytes": 3499,
+        "sha256": "efc3193a0569b568e12e9b2e18e955fb4841b23d127ff0332a5579ebb007e37c"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-control-fp32comp.json",
+        "bytes": 4720,
+        "sha256": "78693ad57da00b49b28c2a20f86fe6185a66869c1706bfd6e1a05671911e9408"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-fp32comp.json",
+        "bytes": 4400,
+        "sha256": "b3fb57d7ca395586e3af9ed559c22272854f36183e10e329ea6be5039dd3b383"
+      }
+    },
+    "candidate-fp32comp": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/owner.json",
+        "bytes": 2855,
+        "sha256": "c4aed9925baf37b5dccd9c2855546faba60539ec0547048e30c861f3794555f3"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp32comp.json",
+        "bytes": 3524,
+        "sha256": "b1b96c182a0c966619c3425438fa5f1b069e06078f2834ae4b418907ac907b55"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp32comp.json",
+        "bytes": 4753,
+        "sha256": "6302faf902729e217fd1b4a845b8ea8cf4b9e1a26a3927c63291802d15d7b5e6"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp32comp.json",
+        "bytes": 4438,
+        "sha256": "492f74981af7cae1e8ad38d0b8e0a34044334fe38f6ca7c7bf12dd8a6d121d3b"
+      }
+    },
+    "control-fp64": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp64/owner.json",
+        "bytes": 2842,
+        "sha256": "466f558a4eb06775e93620490a85746a4694ab861b77993918a11eca5f7533c7"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp64.json",
+        "bytes": 3447,
+        "sha256": "cd3771af517dabb63a16f4328dd4174be7f975b1d028230a305bded4643be6d2"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-control-fp64.json",
+        "bytes": 4652,
+        "sha256": "20d4700b85b1956a3d8005ce0150851e71178129d14d38e69fbb811bbd180587"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-fp64.json",
+        "bytes": 4324,
+        "sha256": "5f8729d300052b6cf057fb46567b2c78f33225d8f34f24a1dc6faf8651fce356"
+      }
+    },
+    "candidate-fp64": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp64/owner.json",
+        "bytes": 2871,
+        "sha256": "785bb1a78c60e50cdcc6b88fed945abc194bf6939d58bc89090c1a9f226320dd"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp64.json",
+        "bytes": 3471,
+        "sha256": "e45116bbff31f0851fe9bfbef12552a8da2e9eb292b45d7b344660918b6cf083"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp64.json",
+        "bytes": 4685,
+        "sha256": "9fd8b2e73a8fbacf8ab9a06e3141a14e1d0547cafe3fefe5ec12e33d568a9ee0"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp64.json",
+        "bytes": 4362,
+        "sha256": "fc813c1bd4381470394b71fd99eef55ae1b35eed3bf62de286e0538c98f8bfd7"
+      }
+    },
+    "control-cuda": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-cuda/owner.json",
+        "bytes": 2749,
+        "sha256": "ef7d2d6f0b634c7a299efcde7106fa3c6505df8aaa08d85fb4122ed897825150"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-control-cuda.json",
+        "bytes": 3448,
+        "sha256": "bfac0b72f88222e05c312b8a36953f786b215ea11218f6fd9bcacd7610ed429e"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-control-cuda.json",
+        "bytes": 1161,
+        "sha256": "642b7c373014bc8ca886f22e1ae6391a20e0277b0009da328adab409eb970528"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-cuda.json",
+        "bytes": 3346,
+        "sha256": "70a7151936636773019b20eb0d8402c13c09b3191686f30866256649bbae6fe8"
+      }
+    },
+    "candidate-cuda": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-cuda/owner.json",
+        "bytes": 2778,
+        "sha256": "d08e0361dbe931228f456492a5c34b9852fc2bd0ce13f18c041e3915789a5fad"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-cuda.json",
+        "bytes": 3472,
+        "sha256": "afb4ceeab0b80f991ccb2de58b5cf94bf7fe49899b739850b1ba08eb29caa992"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-cuda.json",
+        "bytes": 1165,
+        "sha256": "df6daf2f744fdf20fcffe1d8417669fb5bd5041042c233839dd3e6ccb5c08690"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-cuda.json",
+        "bytes": 3374,
+        "sha256": "6f8e3c148a14fc57a6f5d60c02e06df8380e50153cc93ba6162568e645628775"
+      }
+    },
+    "control-metal": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-metal/owner.json",
+        "bytes": 2757,
+        "sha256": "dc7502d34a8032b52f71211dba9e0ce85c0be9d1d5913061c1038aadeffdfb42"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-control-metal.json",
+        "bytes": 3469,
+        "sha256": "a3a9d28ce4adb626ecbe6ac0bee61d5a4302dfb98668c177017dd4c328e7fd74"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-control-metal.json",
+        "bytes": 1166,
+        "sha256": "d22748be0ab3fcf86eaf9beabfef55399d5dd59b7fac7d422c92ff4f2caca68d"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-control-metal.json",
+        "bytes": 3366,
+        "sha256": "9a423b841dc142d91b7eb7152c9bc6913222ad7157ece0de7680ad183fc6d1d1"
+      }
+    },
+    "candidate-metal": {
+      "owner": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-metal/owner.json",
+        "bytes": 2785,
+        "sha256": "1263a49d9823858c5ea28a2757d81c074cfbda43129e3ae819f13a8c1b1ab4e3"
+      },
+      "owner_product": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-metal.json",
+        "bytes": 3492,
+        "sha256": "7b346e6c7a6243936bb467356cac9739e17aecccf3afe8bcbd9d478a0684b436"
+      },
+      "posttools": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-metal.json",
+        "bytes": 1170,
+        "sha256": "2b0ba5d48ce74f3bcb142e76d615f6357e6bba32445b42767d177bcd60acdb59"
+      },
+      "accepted": {
+        "path": "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-metal.json",
+        "bytes": 3394,
+        "sha256": "6d5376af4f10a79ed034a7760357892d34041336e18be42587b37119d41c4aaa"
+      }
+    }
+  },
+  "actual_operation_and_attribution_joins": {
+    "all10_owned_Slang_operations_terminal_passed_child0_no_stop": true,
+    "all10_owner_source_and_whole_inputs_unchanged_no_cleanup_errors_or_remaining_owned_processes": true,
+    "all10_before_after_equal_rows": [
+      4315,
+      4322,
+      4329,
+      4336,
+      4343,
+      4350,
+      4357,
+      4364,
+      4371,
+      4378
+    ],
+    "all_saved_owned_births_absent_root_fresh_rechecks_retained": true,
+    "raw_and_product_metadata_pins_rehashed_current": true,
+    "all5_controls_byte_equal_current_pinned_canonical_baseline": true,
+    "all6_original_spirv_val_and_ordinary_disassembly_operations_saved_actual_exit0": true,
+    "posttool_guard_boundary": "Separate root GNUtimeout300s/TERM/KILL10s posttools; no aggregateRSS/reserve/session-census certification is transferred from Slang owners to those posttools.",
+    "historical_pending_fields": "Earlier per-operation records truthfully retain pending emitted-review/all-five attribution fields. All-five equality is now independently established; those dated files were not edited.",
+    "whole_tool_closure_scope": "Reuses accepted final source/runtime admission for installed compiler/resources/DT_NEEDED closure. This emitted review compares all actual before/after maps and recorded current acceptance; it does not re-run tools or re-hash the whole installed compiler tree."
+  },
+  "ABI_and_modes": {
+    "each_candidate_equals_matching_control": true,
+    "entry": "main",
+    "execution_model": "GLCompute",
+    "local_size": [
+      8,
+      8,
+      1
+    ],
+    "memory_model": "Logical GLSL450",
+    "extension": "SPV_KHR_storage_buffer_storage_class",
+    "storage_set0_bindings": {
+      "radiance": 0,
+      "params": 1,
+      "starfield": 2,
+      "pointStars": 3,
+      "pointOffsets": 4,
+      "pointIndices": 5,
+      "continuation": 6
+    },
+    "all7_root_variable_recursive_types_and44_relevant_interface_decorations_equal": true,
+    "fp32_and_comp": {
+      "capabilities": [
+        "Shader"
+      ],
+      "Real_width": 32,
+      "continuation_stride": 272,
+      "offsets": [
+        0,
+        16,
+        32,
+        96,
+        160,
+        176,
+        192,
+        208,
+        224,
+        240,
+        256
+      ]
+    },
+    "fp64": {
+      "capabilities": [
+        "Float64",
+        "Shader"
+      ],
+      "Real_width": 64,
+      "parameter_and_radiance_float_width": 32,
+      "continuation_stride": 480,
+      "offsets": [
+        0,
+        32,
+        64,
+        192,
+        320,
+        352,
+        384,
+        416,
+        432,
+        448,
+        464
+      ]
+    },
+    "float_control_scope": "Matching capability/entry/execution-mode declarations; no new float-control or FPFastMathMode declaration. Precise arithmetic decorations are not equated merely by total count and no bitwise numerical equivalence is inferred.",
+    "debug_and_functions": "All six contain OpSource Slang1, one inlined entry function and zero OpFunctionCall. No OpString/Line/NoLine/SourceContinued path debug instructions; SPV size differences are not explained by embedded private source paths."
+  },
+  "three_rung_loop_witnesses": {
+    "fp32": {
+      "zero_reset_line": 97064,
+      "header": "%632",
+      "test_block": "%635",
+      "body": "%636",
+      "merge": "%641",
+      "continue": "%639",
+      "firstColumn_line": 97082,
+      "inout_pointers": [
+        "%14404",
+        "%14405",
+        "%14407",
+        "%14408"
+      ],
+      "inout_private_temporaries": [
+        "%169",
+        "%170",
+        "%171",
+        "%172"
+      ],
+      "copyback_values": [
+        "%84192",
+        "%84204",
+        "%84216",
+        "%84228"
+      ],
+      "copyback_block": "%102866",
+      "latch_path": [
+        "%637",
+        "%638",
+        "%639",
+        "%632"
+      ],
+      "increment_line": 123943,
+      "post_loop_commit_block": "%642",
+      "pair_region_Function_stores": 2659
+    },
+    "fp32comp": {
+      "zero_reset_line": 97177,
+      "header": "%645",
+      "test_block": "%648",
+      "body": "%649",
+      "merge": "%654",
+      "continue": "%652",
+      "firstColumn_line": 97195,
+      "inout_pointers": [
+        "%14633",
+        "%14634",
+        "%14636",
+        "%14637"
+      ],
+      "inout_private_temporaries": [
+        "%182",
+        "%183",
+        "%184",
+        "%185"
+      ],
+      "copyback_values": [
+        "%84634",
+        "%84646",
+        "%84658",
+        "%84670"
+      ],
+      "copyback_block": "%103308",
+      "latch_path": [
+        "%650",
+        "%651",
+        "%652",
+        "%645"
+      ],
+      "increment_line": 124056,
+      "post_loop_commit_block": "%655",
+      "pair_region_Function_stores": 2659
+    },
+    "fp64": {
+      "zero_reset_line": 97194,
+      "header": "%637",
+      "test_block": "%640",
+      "body": "%641",
+      "merge": "%646",
+      "continue": "%644",
+      "firstColumn_line": 97212,
+      "inout_pointers": [
+        "%14570",
+        "%14571",
+        "%14573",
+        "%14574"
+      ],
+      "inout_private_temporaries": [
+        "%174",
+        "%175",
+        "%176",
+        "%177"
+      ],
+      "copyback_values": [
+        "%84420",
+        "%84432",
+        "%84444",
+        "%84456"
+      ],
+      "copyback_block": "%99173",
+      "latch_path": [
+        "%642",
+        "%643",
+        "%644",
+        "%637"
+      ],
+      "increment_line": 118334,
+      "post_loop_commit_block": "%647",
+      "pair_region_Function_stores": 2062
+    }
+  },
+  "bounded_CFG_and_dataflow": {
+    "guard": "Observed short-circuit beamsEnabled && !isWarp && !isWormhole && dt>Real0 gates loop initialization. The existing accepted path and event-clipped dt remain source-identical; guard false bypasses to the original post-region commit.",
+    "epoch": "pair is a Function int slot also reused in earlier unrelated code. Proof is restricted to the new explicit zero-reset epoch. Its only epoch uses are test load, index load, increment load and +1 store.",
+    "bounds": "Actual OpLoopMerge DontUnroll, pair<int2, firstColumn=int2*pair, second=firstColumn+int1, pair+=int1. Values0/1 imply column0/1 then2/3 within unchanged private X[4]/V[4]; signed index arithmetic is representable.",
+    "closed_entry_and_body": "Complete OpBranch/OpBranchConditional/OpSwitch default+case successor and predecessor check: each complete loop has only initialization entry and comparison-false merge exit; each body has only comparison-true entry and its normal latch-to-continue outgoing edge. No other side entrance/escape, return/kill/unreachable/call/copy-memory/barrier. All body OpStores have Function pointer storage and all atomic opcodes are absent.",
+    "actual_inout": "Each of four dynamic Function access pointers has exactly its access-chain definition, one initial load into a private temporary and one final copyback. No pointer escape/extra alias use. All four copybacks are in one block and dominate the two trivial latch predecessor blocks, then +1/backedge.",
+    "state_order": "The16 physical input slots loaded at body entry plus dt_0/accepted/affineLength have no body stores. AffineLength addition, accepted+1 and next-to-state writes occur in the post-loop commit block, after both iterations on the entered path.",
+    "remaining_strength_limit": "This is bounded text/typed-SSA control-and-copy review with unchanged helper source, not formal equivalence of every inlined geometry/floating instruction or exhaustive numerical execution.",
+    "actual_Switch_instructions_in_nested_pair_body": {
+      "fp32": 51,
+      "fp32comp": 51,
+      "fp64": 39
+    },
+    "complete_loop_entry_exit": {
+      "fp32": {
+        "entry": [
+          "%631",
+          "%632"
+        ],
+        "exit": [
+          "%640",
+          "%641"
+        ]
+      },
+      "fp32comp": {
+        "entry": [
+          "%644",
+          "%645"
+        ],
+        "exit": [
+          "%653",
+          "%654"
+        ]
+      },
+      "fp64": {
+        "entry": [
+          "%636",
+          "%637"
+        ],
+        "exit": [
+          "%645",
+          "%646"
+        ]
+      }
+    }
+  },
+  "CUDA_and_Metal_source_codegen": {
+    "only_Slang_generated_source_no_native_compiler_or_runtime": true,
+    "helper_definition_bytes_control_equals_candidate": {
+      "CUDA": 6804,
+      "Metal": 6878
+    },
+    "call_sites_control_to_candidate": [
+      2,
+      1
+    ],
+    "observed_form": "Both have pair0 reset, for(;;), pair<int2 else break, 2*pair and +1 private X/V addresses, one original helper call then +1. Metal uses thread pointer storage; CUDA device helper uses private addresses. Same source-line annotations name the changed source locations.",
+    "source_output_bytes": {
+      "CUDA": [
+        321379,
+        321552
+      ],
+      "Metal": [
+        344056,
+        344160
+      ]
+    },
+    "limits": "Generated source grows slightly; native unrolling/inlining/address-index lowering and register/spill/stack/liveness remain unmeasured. Source callsite reduction is not a native code/performance result."
+  },
+  "observed_SPIRV_static_footprint": {
+    "fp32": {
+      "control_bytes": 2994452,
+      "candidate_bytes": 2620748,
+      "control_instructions": 230774,
+      "candidate_instructions": 203162,
+      "control_Function_variables": 9688,
+      "candidate_Function_variables": 8896,
+      "module_bytes_removed": 373704,
+      "module_percent_smaller": 12.479879457075953
+    },
+    "fp32comp": {
+      "control_bytes": 2997776,
+      "candidate_bytes": 2624072,
+      "control_instructions": 230967,
+      "candidate_instructions": 203355,
+      "control_Function_variables": 9704,
+      "candidate_Function_variables": 8912,
+      "module_bytes_removed": 373704,
+      "module_percent_smaller": 12.466041492092804
+    },
+    "fp64": {
+      "control_bytes": 2847024,
+      "candidate_bytes": 2553336,
+      "control_instructions": 219660,
+      "candidate_instructions": 197952,
+      "control_Function_variables": 9364,
+      "candidate_Function_variables": 8737,
+      "module_bytes_removed": 293688,
+      "module_percent_smaller": 10.315613777755297
+    }
+  },
+  "physical_work_and_risks": {
+    "physical_work": "Source void helper remains unchanged: three top-level geometry positions and eight Jacobi RHS evaluations per pair; the loop still executes both pairs. One static inlined body is reused, not half the physical arithmetic.",
+    "counts": "Instruction count is textual Op-word count including declarations/annotations; Function-variable count includes optional initializer forms, not an uninitialized-only regex. Neither is a native instruction, register, spill or stack measurement.",
+    "risk": "Dynamic private indices and loop-carried X/V can change driver lowering/liveness or increase spills despite smaller SPV. No pipeline/JIT/RSS/deadline/runtime/performance gain has been established."
+  },
+  "disposition": {
+    "source_applied": false,
+    "runtime_admitted": false,
+    "source_build_hold_released": false,
+    "cleanup_or_retirement_admitted": false,
+    "static_code_generation_and_bounded_ABI_CFG_PASS_only": true
+  },
+  "method": "Passive standard-library text/regex/JSON/hash/file reads and read-only Git only; no project parser/helper/import/compiler/SPV tool/provider/test/network/process query, canonical change or mutation outside this receipt.",
+  "checkout": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "new_review_committed_or_pushed": false
+  },
+  "limits": [
+    "No numerical/bitwise/scientific/P2 completion, current setup memory, driver/JIT/allocation cause, cold frame, performance, full Mandatory or release qualification.",
+    "No unchanged retry, altered governor/cache, automatic source adoption or retained-module partition conclusion."
+  ],
+  "pre_release_passive_check_correction": {
+    "previous_unreleased_own_receipt_sha256": "fc7a4e5d349dadd350a7f4494d2ae749a345b99af0b64a5b7056a9b997d14d93",
+    "detail": "Initial text-edge check omitted OpSwitch. The subsequent complete-edge check initially overrequired no body exit and caught the intended latch-to-continue edge. Correct bounded definition includes that sole normal edge; complete-loop entry/exit and all Switch targets then passed. Only this own unconsumed/unreleased receipt changed; shader/source/owner/product/posttool artifacts and all guards stayed untouched. No project code/tool/provider ran."
+  }
+}

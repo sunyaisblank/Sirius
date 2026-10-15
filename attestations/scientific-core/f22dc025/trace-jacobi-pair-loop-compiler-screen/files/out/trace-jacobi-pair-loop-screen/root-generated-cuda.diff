@@ -1,0 +1,1858 @@
+--- control-cuda
+
++++ candidate-cuda
+
+@@ -16,11 +16,11 @@
+
+     uint4  control_0;
+     uint4  identity_0;
+ };
+ 
+ 
+-#line 508 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 508 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ struct GlobalParams_0
+ {
+     RWStructuredBuffer<float> radiance_0;
+     StructuredBuffer<float> params_0;
+     StructuredBuffer<uint> starfield_0;
+@@ -418,11 +418,11 @@
+
+ #line 12397
+     return x_11 + (y_3 - x_11) * s_0;
+ }
+ 
+ 
+-#line 232 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 232 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ __device__ static const FixedArray<float3 , 12>  gradients_0 = {
+     float3 {
+         1.0f, 1.0f, 0.0f
+     }, float3 {
+         -1.0f, 1.0f, 0.0f
+@@ -640,11 +640,11 @@
+
+ 
+     return result_10;
+ }
+ 
+ 
+-#line 65 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 65 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ __device__ float3  P3_0(uint base_0)
+ {
+ 
+ #line 65
+     float _S12 = __ldg((&(globalParams_0->params_0)[base_0]));
+@@ -9922,11 +9922,11 @@
+
+     bool _S647 = FindSphericalBoundaryEvent_0(start_5, startVelocity_4, finish_4, finishVelocity_4, affineLength_5, captureRadius_1, int(0), fraction_3, eventPosition_1, eventTangent_1);
+     return _S647;
+ }
+ 
+ 
+-#line 286 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 286 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ __device__ float VolumeScaleHeight_0(float r_3, float innerRadius_0, float hOverR_0, float hPower_0)
+ {
+ 
+ #line 286
+     bool _S648;
+@@ -10208,11 +10208,11 @@
+
+ #line 54
+     return _S651;
+ }
+ 
+ 
+-#line 243 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 243 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ __device__ float TurbulenceFade_0(float t_2)
+ {
+ 
+ #line 244
+     return t_2 * t_2 * t_2 * (t_2 * (t_2 * 6.0f - 15.0f) + 10.0f);
+@@ -10648,11 +10648,11 @@
+
+ #line 224
+     return temperatureScale_1 * (F32_pow((flux_1 / reference_3), (0.25f)));
+ }
+ 
+ 
+-#line 299 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 299 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ __device__ float VolumeDiskTemperature_0(float cylindricalR_1, float z_6, float innerRadius_2, float innerTemperature_0, int temperatureModel_0, float M_12, float aStar_2, float hOverR_2, float hPower_2)
+ {
+     float midplane_0;
+ 
+     if(temperatureModel_0 == int(1))
+@@ -11549,11 +11549,11 @@
+
+     }
+     return 1.0f - (F32_exp((- deltaTau_0)));
+ }
+ 
+ 
+-#line 319 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 319 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ __device__ void AccumulateVolumeSegment_0(Vec4Cart_0 * start_6, Vec4Cart_0 * finish_5, Vec4Cart_0 * startVelocity_5, Vec4Cart_0 * finishVelocity_5, float affineLength_6, int sampleCount_0, bool volumeEnabled_0, bool turbulenceEnabled_0, bool dopplerBeaming_0, float innerRadius_3, float outerRadius_1, float innerTemperature_1, int temperatureModel_1, float M_15, float a_21, float aStar_3, float hOverR_3, float hPower_3, float tauMidplane_0, float observerFrequency_2, float * opticalDepth_0, float3  * emission_0)
+ {
+ 
+ #line 328
+     bool _S684;
+@@ -13688,11 +13688,11 @@
+
+     float alongMinor_0 = - sinOrientation_0 * offset_1.x + cosOrientation_0 * offset_1.y;
+     return (F32_exp((-0.5f * (alongMajor_0 * alongMajor_0 * invMajorSquared_0 + alongMinor_0 * alongMinor_0 * invMinorSquared_0))));
+ }
+ 
+ 
+-#line 127 "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang"
++#line 127 "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang"
+ __device__ float3  PointStarColor_0(uint starIndex_0)
+ {
+ 
+ #line 127
+     float _S801 = __ldg((&(globalParams_0->pointStars_0)[starIndex_0 * 8U + 6U]));
+@@ -16155,10 +16155,13 @@
+
+                 bool terminalDiskHit_0;
+ 
+ #line 842
+                 float dt_10;
+ 
++#line 842
++                int pair_0;
++
+ #line 841
+                 if(_S988)
+                 {
+                     float dzStart_0 = dt_8 * (&(&state_15)->u_1)->z_0;
+                     float dzEnd_0 = dt_8 * (&(&next_1)->u_1)->z_0;
+@@ -16248,13 +16251,10 @@
+
+ 
+ #line 869
+                     float frac_0;
+ 
+ #line 869
+-                    int rootIndex_1;
+-
+-#line 869
+                     int radialIteration_0;
+ 
+ #line 869
+                     int rootCount_3;
+ 
+@@ -16297,22 +16297,22 @@
+
+ 
+ #line 876
+                             cr_0 = 0.0f;
+ 
+ #line 876
+-                            rootIndex_1 = int(1);
++                            pair_0 = int(1);
+ 
+ #line 876
+                             rootCount_3 = int(0);
+ 
+ 
+ 
+                             for(;;)
+                             {
+ 
+ #line 880
+-                                if(rootIndex_1 <= int(64))
++                                if(pair_0 <= int(64))
+                                 {
+ 
+ #line 880
+                                     _S995 = rootCount_3 == int(0);
+ 
+@@ -16335,11 +16335,11 @@
+
+                                 {
+ 
+ #line 880
+                                     break;
+                                 }
+-                                float radialUpper_0 = float(rootIndex_1) / 64.0f;
++                                float radialUpper_0 = float(pair_0) / 64.0f;
+ 
+ #line 882
+                                 Vec4Cart_0 _S996 = (&state_15)->x_20;
+ 
+ #line 882
+@@ -16477,17 +16477,17 @@
+
+ 
+ #line 888
+                                 }
+ 
+ #line 881
+-                                int radialInterval_0 = rootIndex_1 + int(1);
++                                int radialInterval_0 = pair_0 + int(1);
+ 
+ #line 881
+                                 cr_0 = transmittance_1;
+ 
+ #line 881
+-                                rootIndex_1 = radialInterval_0;
++                                pair_0 = radialInterval_0;
+ 
+ #line 880
+                             }
+ 
+ #line 876
+@@ -16567,19 +16567,19 @@
+
+ 
+ #line 938
+                                 breakpoints_0[int(2)] = firstCritical_0;
+ 
+ #line 938
+-                                rootIndex_1 = int(3);
++                                pair_0 = int(3);
+ 
+ #line 937
+                             }
+                             else
+                             {
+ 
+ #line 937
+-                                rootIndex_1 = int(2);
++                                pair_0 = int(2);
+ 
+ #line 937
+                             }
+ 
+                             if(secondCritical_0 > 0.0f)
+@@ -16602,31 +16602,31 @@
+
+ #line 939
+                             if(terminalDiskHit_0)
+                             {
+ 
+ #line 940
+-                                int _S1011 = rootIndex_1 + int(1);
++                                int _S1011 = pair_0 + int(1);
+ 
+ #line 940
+-                                breakpoints_0[rootIndex_1] = secondCritical_0;
++                                breakpoints_0[pair_0] = secondCritical_0;
+ 
+ #line 940
+                                 radialIteration_0 = _S1011;
+ 
+ #line 939
+                             }
+                             else
+                             {
+ 
+ #line 939
+-                                radialIteration_0 = rootIndex_1;
++                                radialIteration_0 = pair_0;
+ 
+ #line 939
+                             }
+ 
+ #line 939
+-                            rootIndex_1 = radialIteration_0;
++                            pair_0 = radialIteration_0;
+ 
+ #line 930
+                         }
+                         else
+                         {
+@@ -16660,30 +16660,30 @@
+
+ 
+ #line 944
+                                     breakpoints_0[int(2)] = critical_5;
+ 
+ #line 944
+-                                    rootIndex_1 = int(3);
++                                    pair_0 = int(3);
+ 
+ #line 943
+                                 }
+                                 else
+                                 {
+ 
+ #line 943
+-                                    rootIndex_1 = int(2);
++                                    pair_0 = int(2);
+ 
+ #line 943
+                                 }
+ 
+ #line 941
+                             }
+                             else
+                             {
+ 
+ #line 941
+-                                rootIndex_1 = int(2);
++                                pair_0 = int(2);
+ 
+ #line 941
+                             }
+ 
+ #line 930
+@@ -16695,11 +16695,11 @@
+
+ #line 946
+                         for(;;)
+                         {
+ 
+ #line 946
+-                            if(radialIteration_0 < rootIndex_1)
++                            if(radialIteration_0 < pair_0)
+                             {
+                             }
+                             else
+                             {
+ 
+@@ -16716,11 +16716,11 @@
+
+ #line 947
+                             for(;;)
+                             {
+ 
+ #line 947
+-                                if(right_3 < rootIndex_1)
++                                if(right_3 < pair_0)
+                                 {
+                                 }
+                                 else
+                                 {
+ 
+@@ -16764,11 +16764,11 @@
+
+ 
+ #line 955
+                             int _S1013 = right_3 + int(1);
+ 
+ #line 955
+-                            if(_S1013 < rootIndex_1)
++                            if(_S1013 < pair_0)
+                             {
+                             }
+                             else
+                             {
+ 
+@@ -17088,18 +17088,18 @@
+
+ 
+ #line 871
+                     frac_0 = 0.0f;
+ 
+ #line 871
+-                    rootIndex_1 = int(0);
++                    pair_0 = int(0);
+ 
+ #line 1010
+                     for(;;)
+                     {
+ 
+ #line 1010
+-                        if(rootIndex_1 < rootCount_3)
++                        if(pair_0 < rootCount_3)
+                         {
+ 
+ #line 1010
+                             _S995 = !foundDiskCrossing_0;
+ 
+@@ -17122,11 +17122,11 @@
+
+                         {
+ 
+ #line 1010
+                             break;
+                         }
+-                        float candidateFraction_1 = rootFractions_0[rootIndex_1];
++                        float candidateFraction_1 = rootFractions_0[pair_0];
+ 
+ #line 1012
+                         Vec4Cart_0 _S1017 = (&state_15)->x_20;
+ 
+ #line 1012
+@@ -17137,11 +17137,11 @@
+
+ 
+ #line 1012
+                         Vec4Cart_0 _S1020 = (&next_1)->u_1;
+ 
+ #line 1012
+-                        Vec4Cart_0 _S1021 = AcceptedSegmentPosition_0(&_S1017, &_S1018, &_S1019, &_S1020, dt_8, rootFractions_0[rootIndex_1]);
++                        Vec4Cart_0 _S1021 = AcceptedSegmentPosition_0(&_S1017, &_S1018, &_S1019, &_S1020, dt_8, rootFractions_0[pair_0]);
+ 
+ 
+                         float candidateRadius_0 = ComputeKerrRadiusCart_0(_S1021.x_17, _S1021.y_4, 0.0f, _S837);
+ 
+                         if(candidateRadius_0 >= _S850)
+@@ -17197,11 +17197,11 @@
+
+ 
+ #line 1017
+                         }
+ 
+ #line 1010
+-                        rootIndex_1 = rootIndex_1 + int(1);
++                        pair_0 = pair_0 + int(1);
+ 
+ #line 1010
+                     }
+ 
+ #line 1026
+@@ -17397,130 +17397,144 @@
+
+ #line 1057
+                 if(coplanar_0)
+                 {
+ 
+ #line 1057
+-                    Vec4Cart_0 _S1031 = (&state_15)->x_20;
+-
+-#line 1057
+-                    Vec4Cart_0 _S1032 = (&state_15)->u_1;
+-
+-#line 1057
+-                    Vec4Cart_0 _S1033 = (&next_1)->x_20;
+-
+-#line 1057
+-                    Vec4Cart_0 _S1034 = (&next_1)->u_1;
+-
+-#line 1057
+-                    AdvanceJacobiPairAcceptedSegment_0(&_S1031, &_S1032, &_S1033, &_S1034, dt_10, _S836, _S837, _S838, _S839, &X_1[int(0)], &V_2[int(0)], &X_1[int(1)], &V_2[int(1)]);
+-
+-#line 1057
+-                    Vec4Cart_0 _S1035 = (&state_15)->x_20;
+-
+-#line 1057
+-                    Vec4Cart_0 _S1036 = (&state_15)->u_1;
+-
+-#line 1057
+-                    Vec4Cart_0 _S1037 = (&next_1)->x_20;
+-
+-#line 1057
+-                    Vec4Cart_0 _S1038 = (&next_1)->u_1;
+-
+-#line 1057
+-                    AdvanceJacobiPairAcceptedSegment_0(&_S1035, &_S1036, &_S1037, &_S1038, dt_10, _S836, _S837, _S838, _S839, &X_1[int(2)], &V_2[int(2)], &X_1[int(3)], &V_2[int(3)]);
++                    pair_0 = int(0);
++                    for(;;)
++                    {
++
++#line 1058
++                        if(pair_0 < int(2))
++                        {
++                        }
++                        else
++                        {
++
++#line 1058
++                            break;
++                        }
++
++#line 1059
++                        int firstColumn_0 = int(2) * pair_0;
++
++
++
++                        int _S1031 = firstColumn_0 + int(1);
++
++#line 1063
++                        Vec4Cart_0 _S1032 = (&state_15)->x_20;
++
++#line 1063
++                        Vec4Cart_0 _S1033 = (&state_15)->u_1;
++
++#line 1063
++                        Vec4Cart_0 _S1034 = (&next_1)->x_20;
++
++#line 1063
++                        Vec4Cart_0 _S1035 = (&next_1)->u_1;
++
++#line 1063
++                        AdvanceJacobiPairAcceptedSegment_0(&_S1032, &_S1033, &_S1034, &_S1035, dt_10, _S836, _S837, _S838, _S839, &X_1[firstColumn_0], &V_2[firstColumn_0], &X_1[_S1031], &V_2[_S1031]);
++
++#line 1058
++                        pair_0 = pair_0 + int(1);
++
++#line 1058
++                    }
+ 
+ #line 1057
+                 }
+ 
+-#line 1066
++#line 1067
+                 float affineLength_9 = affineLength_8 + dt_10;
+ 
+-#line 1066
++#line 1067
+                 uint accepted_5 = accepted_4 + 1U;
+                 state_15 = next_1;
+                 if(terminalDiskHit_0)
+                 {
+ 
+-#line 1068
++#line 1069
+                     reason_1 = 2U;
+ 
+-#line 1068
++#line 1069
+                     pupilUp_1 = _S966;
+ 
+-#line 1068
++#line 1069
+                     lastStep_3 = dt_10;
+ 
+-#line 1068
++#line 1069
+                     attempts_1 = attempts_3;
+ 
+-#line 1068
++#line 1069
+                     affineLength_8 = affineLength_9;
+ 
+-#line 1068
++#line 1069
+                     accepted_4 = accepted_5;
+ 
+-#line 1068
++#line 1069
+                     break;
+                 }
+ 
+-#line 1069
++#line 1070
+                 if(terminalCaptureSurface_0)
+                 {
+ 
+-#line 1069
++#line 1070
+                     reason_1 = 1U;
+ 
+-#line 1069
++#line 1070
+                     pupilUp_1 = _S966;
+ 
+-#line 1069
++#line 1070
+                     lastStep_3 = dt_10;
+ 
+-#line 1069
++#line 1070
+                     attempts_1 = attempts_3;
+ 
+-#line 1069
++#line 1070
+                     affineLength_8 = affineLength_9;
+ 
+-#line 1069
++#line 1070
+                     accepted_4 = accepted_5;
+ 
+                     break;
+                 }
+ 
+-#line 1079
++#line 1080
+                 float nextRadius_0 = (F32_sqrt(((&(&state_15)->x_20)->x_17 * (&(&state_15)->x_20)->x_17 + (&(&state_15)->x_20)->y_4 * (&(&state_15)->x_20)->y_4 + (&(&state_15)->x_20)->z_0 * (&(&state_15)->x_20)->z_0)));
+ 
+                 if(isWormhole_5)
+                 {
+ 
+-#line 1082
++#line 1083
+                     if(nextRadius_0 <= horizonRadius_1)
+                     {
+ 
+-#line 1082
++#line 1083
+                         reason_1 = 1U;
+ 
+-#line 1082
++#line 1083
+                         pupilUp_1 = _S966;
+ 
+-#line 1082
++#line 1083
+                         lastStep_3 = dt_10;
+ 
+-#line 1082
++#line 1083
+                         attempts_1 = attempts_3;
+ 
+-#line 1082
++#line 1083
+                         affineLength_8 = affineLength_9;
+ 
+-#line 1082
++#line 1083
+                         accepted_4 = accepted_5;
+ 
+                         break;
+                     }
+ 
+-#line 1081
++#line 1082
+                 }
+                 else
+                 {
+ 
+ 
+@@ -17528,72 +17542,72 @@
+
+                     {
+ 
+                         if((ComputeKerrRadiusCart_0((&(&state_15)->x_20)->x_17, (&(&state_15)->x_20)->y_4, (&(&state_15)->x_20)->z_0, _S837)) <= horizonRadius_1)
+                         {
+ 
+-#line 1089
++#line 1090
+                             reason_1 = 1U;
+ 
+-#line 1089
++#line 1090
+                             pupilUp_1 = _S966;
+ 
+-#line 1089
++#line 1090
+                             lastStep_3 = dt_10;
+ 
+-#line 1089
++#line 1090
+                             attempts_1 = attempts_3;
+ 
+-#line 1089
++#line 1090
+                             affineLength_8 = affineLength_9;
+ 
+-#line 1089
++#line 1090
+                             accepted_4 = accepted_5;
+ 
+                             break;
+                         }
+ 
+-#line 1086
++#line 1087
+                     }
+ 
+-#line 1081
++#line 1082
+                 }
+ 
+-#line 1094
++#line 1095
+                 if(terminalEscapeSurface_1)
+                 {
+ 
+-#line 1094
++#line 1095
+                     reason_1 = 3U;
+ 
+-#line 1094
++#line 1095
+                     pupilUp_1 = _S966;
+ 
+-#line 1094
++#line 1095
+                     lastStep_3 = dt_10;
+ 
+-#line 1094
++#line 1095
+                     attempts_1 = attempts_3;
+ 
+-#line 1094
++#line 1095
+                     affineLength_8 = affineLength_9;
+ 
+-#line 1094
++#line 1095
+                     accepted_4 = accepted_5;
+ 
+                     break;
+                 }
+ 
+-#line 1096
++#line 1097
+                 pupilUp_1 = _S966;
+ 
+-#line 1096
++#line 1097
+                 lastStep_3 = dt_10;
+ 
+-#line 1096
++#line 1097
+                 affineLength_8 = affineLength_9;
+ 
+-#line 1096
++#line 1097
+                 accepted_4 = accepted_5;
+ 
+ #line 719
+                 int _S965 = step_6 + int(1);
+ 
+@@ -17619,738 +17633,738 @@
+
+             compU_2 = compU_1;
+ 
+ #line 698
+         }
+ 
+-#line 1101
++#line 1102
+         if(reason_1 == 0U)
+         {
+ 
+-#line 1101
++#line 1102
+             escaped_0 = attempts_1 >= uint(maxSteps_0);
+ 
+-#line 1101
++#line 1102
+         }
+         else
+         {
+ 
+-#line 1101
++#line 1102
+             escaped_0 = false;
+ 
+-#line 1101
+-        }
+-
+-#line 1101
++#line 1102
++        }
++
++#line 1102
+         if(escaped_0)
+         {
+ 
+-#line 1101
++#line 1102
+             reason_1 = 4U;
+ 
+-#line 1101
+-        }
+-
+-#line 1101
+-        Vec4Cart_0 _S1039 = (&state_15)->x_20;
+-
+-#line 1101
+-        float4  _S1040 = TracePack_0(&_S1039);
+-
+-        (&record_1)->x_0 = _S1040;
+-
+-#line 1103
+-        Vec4Cart_0 _S1041 = (&state_15)->u_1;
+-
+-#line 1103
+-        float4  _S1042 = TracePack_0(&_S1041);
+-
+-#line 1103
+-        (&record_1)->u_0 = _S1042;
+-
+-#line 1103
++#line 1102
++        }
++
++#line 1102
++        Vec4Cart_0 _S1036 = (&state_15)->x_20;
++
++#line 1102
++        float4  _S1037 = TracePack_0(&_S1036);
++
++        (&record_1)->x_0 = _S1037;
++
++#line 1104
++        Vec4Cart_0 _S1038 = (&state_15)->u_1;
++
++#line 1104
++        float4  _S1039 = TracePack_0(&_S1038);
++
++#line 1104
++        (&record_1)->u_0 = _S1039;
++
++#line 1104
+         column_0 = int(0);
+         for(;;)
+         {
+ 
+-#line 1104
++#line 1105
+             if(column_0 < int(4))
+             {
+             }
+             else
+             {
+ 
+-#line 1104
++#line 1105
+                 break;
+             }
+ 
++#line 1106
++            (&record_1)->X_0[column_0] = X_1[column_0];
++
++#line 1106
++            (&record_1)->V_0[column_0] = V_2[column_0];
++
+ #line 1105
+-            (&record_1)->X_0[column_0] = X_1[column_0];
++            column_0 = column_0 + int(1);
+ 
+ #line 1105
+-            (&record_1)->V_0[column_0] = V_2[column_0];
+-
+-#line 1104
+-            column_0 = column_0 + int(1);
+-
+-#line 1104
+-        }
+-
+-#line 1104
+-        Vec4Cart_0 _S1043 = pos0_0;
+-
+-#line 1104
+-        float4  _S1044 = TracePack_0(&_S1043);
+-
+-
+-        (&record_1)->compX_0 = _S1044;
+-
+-#line 1107
+-        Vec4Cart_0 _S1045 = compU_2;
+-
+-#line 1107
+-        float4  _S1046 = TracePack_0(&_S1045);
+-
+-#line 1107
+-        (&record_1)->compU_0 = _S1046;
++        }
++
++#line 1105
++        Vec4Cart_0 _S1040 = pos0_0;
++
++#line 1105
++        float4  _S1041 = TracePack_0(&_S1040);
++
++
++        (&record_1)->compX_0 = _S1041;
++
++#line 1108
++        Vec4Cart_0 _S1042 = compU_2;
++
++#line 1108
++        float4  _S1043 = TracePack_0(&_S1042);
++
++#line 1108
++        (&record_1)->compU_0 = _S1043;
+         (&record_1)->integration_0 = make_float4 (pupilUp_1, affineLength_8, lastStep_3, 0.00100000004749745f);
+         (&record_1)->source_0 = make_float4 (color_4.x, color_4.y, color_4.z, transmittance_1);
+         (&record_1)->volume_0 = make_float4 (volumeEmission_0.x, volumeEmission_0.y, volumeEmission_0.z, volumeOpticalDepth_0);
+ 
+-#line 1110
+-        uint _S1047;
++#line 1111
++        uint _S1044;
+         if(reason_1 == 0U)
+         {
+ 
+-#line 1111
+-            _S1047 = 1U;
+-
+-#line 1111
++#line 1112
++            _S1044 = 1U;
++
++#line 1112
+         }
+         else
+         {
+ 
+-#line 1111
+-            _S1047 = 2U;
+-
+-#line 1111
+-        }
+-
+-#line 1111
+-        (&record_1)->control_0 = make_uint4 (_S1047, reason_1, attempts_1, accepted_4);
++#line 1112
++            _S1044 = 2U;
++
++#line 1112
++        }
++
++#line 1112
++        (&record_1)->control_0 = make_uint4 (_S1044, reason_1, attempts_1, accepted_4);
+ 
+         (&record_1)->identity_0 = identity_1;
+ 
+-#line 1113
+-        TraceContinuation_0 _S1048 = record_1;
+-
+-#line 1113
+-        bool _S1049 = TraceStateFinite_0(&_S1048);
+-        if(!_S1049)
+-        {
+-
+-#line 1115
++#line 1114
++        TraceContinuation_0 _S1045 = record_1;
++
++#line 1114
++        bool _S1046 = TraceStateFinite_0(&_S1045);
++        if(!_S1046)
++        {
++
++#line 1116
+             *&((&(&record_1)->control_0)->x) = 2U;
+             *&((&(&record_1)->control_0)->y) = 9U;
+ 
+-#line 1114
++#line 1115
+         }
+ 
+ 
+ 
+         *(&(globalParams_0->continuation_0)[slot_0]) = record_1;
+         return;
+     }
+     if(reason_2 == 3U)
+     {
+ 
+-#line 1121
++#line 1122
+         escaped_0 = true;
+ 
+-#line 1121
+-    }
+-    else
+-    {
+-
+-#line 1121
++#line 1122
++    }
++    else
++    {
++
++#line 1122
+         escaped_0 = reason_2 == 10U;
+ 
+-#line 1121
++#line 1122
+     }
+     bool oppositeSheet_0 = reason_2 == 10U;
+     bool captured_0 = reason_2 == 1U;
+ 
+-    float3  _S1050 = make_float3 (0.0f, 0.0f, 1.0f);
++    float3  _S1047 = make_float3 (0.0f, 0.0f, 1.0f);
+     float beamOrientation_0 = 0.0f;
+ 
+-#line 1133
++#line 1134
+     if(escaped_0)
+     {
+ 
+-#line 1133
++#line 1134
+         terminalEscapeSurface_0 = true;
+ 
+-#line 1133
+-    }
+-    else
+-    {
+-
+-#line 1133
++#line 1134
++    }
++    else
++    {
++
++#line 1134
+         if(beamsEnabled_0)
+         {
+ 
+-#line 1133
++#line 1134
+             terminalEscapeSurface_0 = !captured_0;
+ 
+-#line 1133
++#line 1134
+         }
+         else
+         {
+ 
+-#line 1133
++#line 1134
+             terminalEscapeSurface_0 = false;
+ 
+-#line 1133
+-        }
+-
+-#line 1133
+-    }
+-
+-#line 1133
++#line 1134
++        }
++
++#line 1134
++    }
++
++#line 1134
+     if(terminalEscapeSurface_0)
+     {
+ 
+-#line 1134
++#line 1135
+         FixedArray<FixedArray<float, 4> , 4>  terminalMetric_0;
+         FixedArray<FixedArray<float, 4> , 4>  terminalInverse_0;
+         if(isWarp_5)
+         {
+ 
+-#line 1136
+-            Vec4Cart_0 _S1051 = (&state_15)->x_20;
+-
+-#line 1136
+-            GetWarpDriveMetric_0(&_S1051, _S856, _S857, _S858, 0.0f, 0.0f, 0.0f, &terminalMetric_0, &terminalInverse_0);
+-
+-#line 1136
++#line 1137
++            Vec4Cart_0 _S1048 = (&state_15)->x_20;
++
++#line 1137
++            GetWarpDriveMetric_0(&_S1048, _S856, _S857, _S858, 0.0f, 0.0f, 0.0f, &terminalMetric_0, &terminalInverse_0);
++
++#line 1137
+         }
+         else
+         {
+             if(isWormhole_5)
+             {
+ 
+-#line 1139
+-                Vec4Cart_0 _S1052 = (&state_15)->x_20;
+-
+-#line 1139
+-                GetMorrisThorneCartesianMetric_0(&_S1052, _S859, 0.0f, wormShape_8, &terminalMetric_0, &terminalInverse_0);
+-
+-#line 1139
++#line 1140
++                Vec4Cart_0 _S1049 = (&state_15)->x_20;
++
++#line 1140
++                GetMorrisThorneCartesianMetric_0(&_S1049, _S859, 0.0f, wormShape_8, &terminalMetric_0, &terminalInverse_0);
++
++#line 1140
+             }
+             else
+             {
+ 
+-#line 1139
+-                Vec4Cart_0 _S1053 = (&state_15)->x_20;
+-
+-#line 1139
+-                GetKerrSchildFamilyMetric_0(&_S1053, _S836, _S837, _S838, _S839, &terminalMetric_0, &terminalInverse_0);
+-
+-#line 1139
++#line 1140
++                Vec4Cart_0 _S1050 = (&state_15)->x_20;
++
++#line 1140
++                GetKerrSchildFamilyMetric_0(&_S1050, _S836, _S837, _S838, _S839, &terminalMetric_0, &terminalInverse_0);
++
++#line 1140
+             }
+ 
+-#line 1136
+-        }
+-
+-#line 1146
+-        float3  _S1054 = make_float3 (1.0f, 0.0f, 0.0f);
+-        float3  _S1055 = make_float3 (0.0f, -1.0f, 0.0f);
++#line 1137
++        }
+ 
+ #line 1147
+-        float3  _S1056 = make_float3 (0.0f);
+-
+-#line 1147
++        float3  _S1051 = make_float3 (1.0f, 0.0f, 0.0f);
++        float3  _S1052 = make_float3 (0.0f, -1.0f, 0.0f);
++
++#line 1148
++        float3  _S1053 = make_float3 (0.0f);
++
++#line 1148
++        FixedArray<FixedArray<float, 4> , 4>  _S1054 = terminalMetric_0;
++
++#line 1148
++        FixedArray<FixedArray<float, 4> , 4>  _S1055 = terminalInverse_0;
++
++#line 1148
++        CameraObserverFrame_0 _S1056 = BuildCameraObserverFrame_0(&_S1054, &_S1055, _S1051, _S1052, _S1047, _S1053);
++
++#line 1148
+         FixedArray<FixedArray<float, 4> , 4>  _S1057 = terminalMetric_0;
+ 
+-#line 1147
+-        FixedArray<FixedArray<float, 4> , 4>  _S1058 = terminalInverse_0;
+-
+-#line 1147
+-        CameraObserverFrame_0 _S1059 = BuildCameraObserverFrame_0(&_S1057, &_S1058, _S1054, _S1055, _S1050, _S1056);
+-
+-#line 1147
+-        FixedArray<FixedArray<float, 4> , 4>  _S1060 = terminalMetric_0;
+-
+-#line 1147
+-        Vec4Cart_0 _S1061 = (&state_15)->u_1;
+-
+-#line 1147
+-        Vec4Cart_0 _S1062 = _S1059.time_0;
+-
+-#line 1147
+-        float _S1063 = MetricDotCart_0(&_S1060, &_S1061, &_S1062);
+-
+-        if((F32_isfinite((_S1063))))
+-        {
+-
+-#line 1149
+-            terminalEscapeSurface_0 = _S1063 > 0.0f;
+-
+-#line 1149
++#line 1148
++        Vec4Cart_0 _S1058 = (&state_15)->u_1;
++
++#line 1148
++        Vec4Cart_0 _S1059 = _S1056.time_0;
++
++#line 1148
++        float _S1060 = MetricDotCart_0(&_S1057, &_S1058, &_S1059);
++
++        if((F32_isfinite((_S1060))))
++        {
++
++#line 1150
++            terminalEscapeSurface_0 = _S1060 > 0.0f;
++
++#line 1150
+         }
+         else
+         {
+ 
+-#line 1149
++#line 1150
+             terminalEscapeSurface_0 = false;
+ 
+-#line 1149
+-        }
+-
+-#line 1149
++#line 1150
++        }
++
++#line 1150
+         if(!terminalEscapeSurface_0)
+         {
+ 
+-#line 1150
++#line 1151
+             *&((&(&record_1)->control_0)->x) = 2U;
+ 
+-#line 1150
++#line 1151
+             *&((&(&record_1)->control_0)->y) = 9U;
+             *(&(globalParams_0->continuation_0)[slot_0]) = record_1;
+ 
+-#line 1151
++#line 1152
+             return;
+         }
+ 
+-#line 1151
+-        FixedArray<FixedArray<float, 4> , 4>  _S1064 = terminalMetric_0;
+-
+-#line 1151
+-        Vec4Cart_0 _S1065 = (&state_15)->u_1;
+-
+-#line 1151
+-        Vec4Cart_0 _S1066 = _S1059.forward_0;
+-
+-#line 1151
+-        float _S1067 = MetricDotCart_0(&_S1064, &_S1065, &_S1066);
+-
+-
+-        float _S1068 = _S1067 / _S1063;
++#line 1152
++        FixedArray<FixedArray<float, 4> , 4>  _S1061 = terminalMetric_0;
++
++#line 1152
++        Vec4Cart_0 _S1062 = (&state_15)->u_1;
++
++#line 1152
++        Vec4Cart_0 _S1063 = _S1056.forward_0;
++
++#line 1152
++        float _S1064 = MetricDotCart_0(&_S1061, &_S1062, &_S1063);
++
++
++        float _S1065 = _S1064 / _S1060;
++
++#line 1155
++        FixedArray<FixedArray<float, 4> , 4>  _S1066 = terminalMetric_0;
++
++#line 1155
++        Vec4Cart_0 _S1067 = (&state_15)->u_1;
++
++#line 1155
++        Vec4Cart_0 _S1068 = _S1056.up_0;
++
++#line 1155
++        float _S1069 = MetricDotCart_0(&_S1066, &_S1067, &_S1068);
++
++        float _S1070 = _S1069 / _S1060;
++
++#line 1157
++        FixedArray<FixedArray<float, 4> , 4>  _S1071 = terminalMetric_0;
++
++#line 1157
++        Vec4Cart_0 _S1072 = (&state_15)->u_1;
++
++#line 1157
++        Vec4Cart_0 _S1073 = _S1056.right_1;
++
++#line 1157
++        float _S1074 = MetricDotCart_0(&_S1071, &_S1072, &_S1073);
+ 
+ #line 1154
+-        FixedArray<FixedArray<float, 4> , 4>  _S1069 = terminalMetric_0;
+-
+-#line 1154
+-        Vec4Cart_0 _S1070 = (&state_15)->u_1;
+-
+-#line 1154
+-        Vec4Cart_0 _S1071 = _S1059.up_0;
+-
+-#line 1154
+-        float _S1072 = MetricDotCart_0(&_S1069, &_S1070, &_S1071);
+-
+-        float _S1073 = _S1072 / _S1063;
+-
+-#line 1156
+-        FixedArray<FixedArray<float, 4> , 4>  _S1074 = terminalMetric_0;
+-
+-#line 1156
+-        Vec4Cart_0 _S1075 = (&state_15)->u_1;
+-
+-#line 1156
+-        Vec4Cart_0 _S1076 = _S1059.right_1;
+-
+-#line 1156
+-        float _S1077 = MetricDotCart_0(&_S1074, &_S1075, &_S1076);
+-
+-#line 1153
+-        float3  terminalDirection_0 = normalize_0(make_float3 (_S1068, _S1073, _S1077 / _S1063));
+-
+-#line 1159
++        float3  terminalDirection_0 = normalize_0(make_float3 (_S1065, _S1070, _S1074 / _S1060));
++
++#line 1160
+         if(!all_0(isfinite_0(terminalDirection_0)))
+         {
+ 
+-#line 1160
++#line 1161
+             *&((&(&record_1)->control_0)->x) = 2U;
+ 
+-#line 1160
++#line 1161
+             *&((&(&record_1)->control_0)->y) = 9U;
+             *(&(globalParams_0->continuation_0)[slot_0]) = record_1;
+ 
+-#line 1161
++#line 1162
+             return;
+         }
+         if(oppositeSheet_0)
+         {
+ 
+-#line 1163
+-            float3  _S1078;
+-
+-#line 1163
+-            Vec4Cart_0 _S1079 = (&state_15)->x_20;
++#line 1164
++            float3  _S1075;
++
++#line 1164
++            Vec4Cart_0 _S1076 = (&state_15)->x_20;
+             float3  mappedDirection_1;
+ 
+-#line 1164
+-            bool _S1080 = MapEllisSecondSheetSkyDirection_0(&_S1079, terminalDirection_0, &mappedDirection_1);
+-            if(_S1080)
++#line 1165
++            bool _S1077 = MapEllisSecondSheetSkyDirection_0(&_S1076, terminalDirection_0, &mappedDirection_1);
++            if(_S1077)
+             {
+ 
+-#line 1165
+-                _S1078 = normalize_0(mappedDirection_1);
+-
+-#line 1165
++#line 1166
++                _S1075 = normalize_0(mappedDirection_1);
++
++#line 1166
+             }
+             else
+             {
+ 
+                 *&((&(&record_1)->control_0)->x) = 2U;
+                 *&((&(&record_1)->control_0)->y) = 6U;
+                 *(&(globalParams_0->continuation_0)[slot_0]) = record_1;
+                 return;
+             }
+ 
+-#line 1172
+-            screenDirection_1 = _S1078;
+-
+-#line 1163
++#line 1173
++            screenDirection_1 = _S1075;
++
++#line 1164
+         }
+         else
+         {
+ 
+-#line 1163
++#line 1164
+             screenDirection_1 = terminalDirection_0;
+ 
+-#line 1163
+-        }
+-
+-#line 1163
+-        CameraObserverFrame_0 _S1081 = _S1059;
+-
+-#line 1175
++#line 1164
++        }
++
++#line 1164
++        CameraObserverFrame_0 _S1078 = _S1056;
++
++#line 1176
+         Vec4Cart_0 terminalScreenA_0;
+         Vec4Cart_0 terminalScreenB_0;
+ 
+-#line 1176
+-        SachsScreenBasis_0(&_S1081, screenDirection_1, &terminalScreenA_0, &terminalScreenB_0);
++#line 1177
++        SachsScreenBasis_0(&_S1078, screenDirection_1, &terminalScreenA_0, &terminalScreenB_0);
+ 
+         if(pointStarfieldEnabled_0)
+         {
+ 
+-#line 1178
++#line 1179
+             step_6 = int(0);
+ 
+-#line 1178
++#line 1179
+         }
+         else
+         {
+ 
+-#line 1178
++#line 1179
+             step_6 = int(2);
+ 
+-#line 1178
++#line 1179
+         }
+         Vec4Cart_0 xiACart_0 = TraceUnpack_0(X_1[step_6]);
+         Vec4Cart_0 xiBCart_0 = TraceUnpack_0(X_1[step_6 + int(1)]);
+ 
+-#line 1180
+-        FixedArray<FixedArray<float, 4> , 4>  _S1082 = terminalMetric_0;
+-
+-#line 1180
+-        Vec4Cart_0 _S1083 = xiACart_0;
+-
+-#line 1180
+-        Vec4Cart_0 _S1084 = terminalScreenA_0;
+-
+-#line 1180
+-        float _S1085 = MetricDotCart_0(&_S1082, &_S1083, &_S1084);
+-
+-#line 1180
+-        FixedArray<FixedArray<float, 4> , 4>  _S1086 = terminalMetric_0;
+-
+-#line 1180
+-        Vec4Cart_0 _S1087 = xiBCart_0;
+-
+-#line 1180
+-        Vec4Cart_0 _S1088 = terminalScreenA_0;
+-
+-#line 1180
+-        float _S1089 = MetricDotCart_0(&_S1086, &_S1087, &_S1088);
+-
+-#line 1180
+-        FixedArray<FixedArray<float, 4> , 4>  _S1090 = terminalMetric_0;
+-
+-#line 1180
+-        Vec4Cart_0 _S1091 = xiACart_0;
+-
+-#line 1180
+-        Vec4Cart_0 _S1092 = terminalScreenB_0;
+-
+-#line 1180
+-        float _S1093 = MetricDotCart_0(&_S1090, &_S1091, &_S1092);
+-
+-#line 1180
+-        FixedArray<FixedArray<float, 4> , 4>  _S1094 = terminalMetric_0;
+-
+-#line 1180
+-        Vec4Cart_0 _S1095 = xiBCart_0;
+-
+-#line 1180
+-        Vec4Cart_0 _S1096 = terminalScreenB_0;
+-
+-#line 1180
+-        float _S1097 = MetricDotCart_0(&_S1094, &_S1095, &_S1096);
+-
+-#line 1185
++#line 1181
++        FixedArray<FixedArray<float, 4> , 4>  _S1079 = terminalMetric_0;
++
++#line 1181
++        Vec4Cart_0 _S1080 = xiACart_0;
++
++#line 1181
++        Vec4Cart_0 _S1081 = terminalScreenA_0;
++
++#line 1181
++        float _S1082 = MetricDotCart_0(&_S1079, &_S1080, &_S1081);
++
++#line 1181
++        FixedArray<FixedArray<float, 4> , 4>  _S1083 = terminalMetric_0;
++
++#line 1181
++        Vec4Cart_0 _S1084 = xiBCart_0;
++
++#line 1181
++        Vec4Cart_0 _S1085 = terminalScreenA_0;
++
++#line 1181
++        float _S1086 = MetricDotCart_0(&_S1083, &_S1084, &_S1085);
++
++#line 1181
++        FixedArray<FixedArray<float, 4> , 4>  _S1087 = terminalMetric_0;
++
++#line 1181
++        Vec4Cart_0 _S1088 = xiACart_0;
++
++#line 1181
++        Vec4Cart_0 _S1089 = terminalScreenB_0;
++
++#line 1181
++        float _S1090 = MetricDotCart_0(&_S1087, &_S1088, &_S1089);
++
++#line 1181
++        FixedArray<FixedArray<float, 4> , 4>  _S1091 = terminalMetric_0;
++
++#line 1181
++        Vec4Cart_0 _S1092 = xiBCart_0;
++
++#line 1181
++        Vec4Cart_0 _S1093 = terminalScreenB_0;
++
++#line 1181
++        float _S1094 = MetricDotCart_0(&_S1091, &_S1092, &_S1093);
++
++#line 1186
+         float beamSemiMajor_0;
+         float beamSemiMinor_0;
+         float beamDeterminant_0;
+-        BeamEllipseFromTransverseMap_0(_S1085, _S1089, _S1093, _S1097, &beamSemiMajor_0, &beamSemiMinor_0, &beamOrientation_0, &beamDeterminant_0);
++        BeamEllipseFromTransverseMap_0(_S1082, _S1086, _S1090, _S1094, &beamSemiMajor_0, &beamSemiMinor_0, &beamOrientation_0, &beamDeterminant_0);
+ 
+ 
+ 
+         float terminalRadius_0 = length_0(make_float3 ((&(&state_15)->x_20)->x_17, (&(&state_15)->x_20)->y_4, (&(&state_15)->x_20)->z_0));
+ 
+         if(pointStarfieldEnabled_0)
+         {
+ 
+-#line 1194
++#line 1195
+             pupilUp_1 = (F32_max((terminalRadius_0 * 0.00100000004749745f), (9.999999960041972e-13f)));
+ 
+-#line 1194
++#line 1195
+         }
+         else
+         {
+ 
+-#line 1194
++#line 1195
+             pupilUp_1 = 0.00100000004749745f;
+ 
+-#line 1194
++#line 1195
+         }
+ 
+         float beamMajorExpansion_0 = beamSemiMajor_0 / pupilUp_1;
+         float beamMinorExpansion_0 = beamSemiMinor_0 / pupilUp_1;
+-        float _S1098 = (F32_sqrt(((F32_max((beamMajorExpansion_0 * beamMinorExpansion_0), (0.0f))))));
+-
+-#line 1198
++        float _S1095 = (F32_sqrt(((F32_max((beamMajorExpansion_0 * beamMinorExpansion_0), (0.0f))))));
++
++#line 1199
+         pupilUp_1 = beamMajorExpansion_0;
+ 
+-#line 1198
++#line 1199
+         pupilRight_1 = beamMinorExpansion_0;
+ 
+-#line 1198
+-        lastStep_3 = _S1098;
+-
+-#line 1133
+-    }
+-    else
+-    {
+-
+-#line 1133
+-        screenDirection_1 = _S1050;
+-
+-#line 1133
++#line 1199
++        lastStep_3 = _S1095;
++
++#line 1134
++    }
++    else
++    {
++
++#line 1134
++        screenDirection_1 = _S1047;
++
++#line 1134
+         pupilUp_1 = 1.0f;
+ 
+-#line 1133
++#line 1134
+         pupilRight_1 = 1.0f;
+ 
+-#line 1133
++#line 1134
+         lastStep_3 = 1.0f;
+ 
+-#line 1133
+-    }
+-
+-#line 1204
++#line 1134
++    }
++
++#line 1205
+     if(escaped_0)
+     {
+ 
+         if(beamsEnabled_0)
+         {
+ 
+-#line 1207
++#line 1208
+             affineLength_8 = (F32_max((_S873 * pupilUp_1), (_S873)));
+ 
+-#line 1207
++#line 1208
+         }
+         else
+         {
+ 
+-#line 1207
++#line 1208
+             affineLength_8 = 0.30000001192092896f * _S873;
+ 
+-#line 1207
++#line 1208
+         }
+ 
+ 
+         if(beamsEnabled_0)
+         {
+ 
+-#line 1210
++#line 1211
+             exoticScale_0 = (F32_max((_S873 * pupilRight_1), (_S873)));
+ 
+-#line 1210
++#line 1211
+         }
+         else
+         {
+ 
+-#line 1210
++#line 1211
+             exoticScale_0 = 0.30000001192092896f * _S873;
+ 
+-#line 1210
++#line 1211
+         }
+ 
+ 
+         if(pointStarfieldEnabled_0)
+         {
+ 
+-#line 1213
++#line 1214
+             color_4 = SamplePointStarfield_0(screenDirection_1, affineLength_8, exoticScale_0, beamOrientation_0, _S874);
+ 
+-#line 1213
++#line 1214
+         }
+         else
+         {
+             if(starfieldEnabled_0)
+             {
+ 
+-#line 1216
++#line 1217
+                 screenDirection_1 = SampleStarfield_0(screenDirection_1, starfieldWidth_0, starfieldHeight_0);
+ 
+-#line 1216
++#line 1217
+             }
+             else
+             {
+ 
+-#line 1216
++#line 1217
+                 screenDirection_1 = SampleBackgroundGradient_0(screenDirection_1);
+ 
+-#line 1216
++#line 1217
+             }
+ 
+-#line 1216
++#line 1217
+             color_4 = screenDirection_1;
+ 
+-#line 1213
+-        }
+-
+-#line 1213
++#line 1214
++        }
++
++#line 1214
+         color_4 = color_3 + make_float3 (transmittance_0) * color_4;
+ 
+-#line 1204
+-    }
+-    else
+-    {
+-
+-#line 1204
++#line 1205
++    }
++    else
++    {
++
++#line 1205
+         color_4 = color_3;
+ 
+-#line 1204
+-    }
+-
+-#line 1220
++#line 1205
++    }
++
++#line 1221
+     if(volumeOpticalDepth_0 > 0.0f)
+     {
+ 
+-#line 1220
++#line 1221
+         color_4 = color_4 * make_float3 ((F32_exp((- volumeOpticalDepth_0)))) + volumeEmission_0;
+ 
+-#line 1220
+-    }
+-
+-#line 1228
++#line 1221
++    }
++
++#line 1229
+     if(beamsEnabled_0)
+     {
+ 
+-#line 1228
++#line 1229
+         escaped_0 = !captured_0;
+ 
+-#line 1228
+-    }
+-    else
+-    {
+-
+-#line 1228
++#line 1229
++    }
++    else
++    {
++
++#line 1229
+         escaped_0 = false;
+ 
+-#line 1228
+-    }
+-
+-#line 1228
++#line 1229
++    }
++
++#line 1229
+     if(escaped_0)
+     {
+ 
+-#line 1228
++#line 1229
+         affineLength_8 = lastStep_3;
+ 
+-#line 1228
+-    }
+-    else
+-    {
+-
+-#line 1228
++#line 1229
++    }
++    else
++    {
++
++#line 1229
+         affineLength_8 = 1.0f;
+ 
+-#line 1228
+-    }
+-
+-#line 1233
++#line 1229
++    }
++
++#line 1234
+     if(_S863 > 0.5f)
+     {
+         float inverseCount_0 = 1.0f / (_S863 + 1.0f);
+-        int _S1099 = _S886 * int(4);
+-
+-
+-
+-        float3  _S1100 = (make_float3 (*(&(globalParams_0->radiance_0)[_S1099]), *(&(globalParams_0->radiance_0)[_S1099 + int(1)]), *(&(globalParams_0->radiance_0)[_S1099 + int(2)])) * make_float3 (_S863) + color_4) * make_float3 (inverseCount_0);
+-
+-#line 1240
+-        affineLength_8 = (*(&(globalParams_0->radiance_0)[_S1099 + int(3)]) * _S863 + affineLength_8) * inverseCount_0;
+-
+-#line 1240
+-        color_4 = _S1100;
+-
+-#line 1233
+-    }
+-
+-#line 1243
++        int _S1096 = _S886 * int(4);
++
++
++
++        float3  _S1097 = (make_float3 (*(&(globalParams_0->radiance_0)[_S1096]), *(&(globalParams_0->radiance_0)[_S1096 + int(1)]), *(&(globalParams_0->radiance_0)[_S1096 + int(2)])) * make_float3 (_S863) + color_4) * make_float3 (inverseCount_0);
++
++#line 1241
++        affineLength_8 = (*(&(globalParams_0->radiance_0)[_S1096 + int(3)]) * _S863 + affineLength_8) * inverseCount_0;
++
++#line 1241
++        color_4 = _S1097;
++
++#line 1234
++    }
++
++#line 1244
+     if(!all_0(isfinite_0(color_4)))
+     {
+ 
+-#line 1243
++#line 1244
+         escaped_0 = true;
+ 
+-#line 1243
+-    }
+-    else
+-    {
+-
+-#line 1243
++#line 1244
++    }
++    else
++    {
++
++#line 1244
+         escaped_0 = !(F32_isfinite((affineLength_8)));
+ 
+-#line 1243
+-    }
+-
+-#line 1243
++#line 1244
++    }
++
++#line 1244
+     if(escaped_0)
+     {
+ 
+-#line 1244
++#line 1245
+         *&((&(&record_1)->control_0)->x) = 2U;
+ 
+-#line 1244
++#line 1245
+         *&((&(&record_1)->control_0)->y) = 9U;
+         *(&(globalParams_0->continuation_0)[slot_0]) = record_1;
+ 
+-#line 1245
++#line 1246
+         return;
+     }
+-    int _S1101 = _S886 * int(4);
+-
+-#line 1247
+-    *(&(globalParams_0->radiance_0)[_S1101]) = color_4.x;
+-    *(&(globalParams_0->radiance_0)[_S1101 + int(1)]) = color_4.y;
+-    *(&(globalParams_0->radiance_0)[_S1101 + int(2)]) = color_4.z;
+-    *(&(globalParams_0->radiance_0)[_S1101 + int(3)]) = affineLength_8;
++    int _S1098 = _S886 * int(4);
++
++#line 1248
++    *(&(globalParams_0->radiance_0)[_S1098]) = color_4.x;
++    *(&(globalParams_0->radiance_0)[_S1098 + int(1)]) = color_4.y;
++    *(&(globalParams_0->radiance_0)[_S1098 + int(2)]) = color_4.z;
++    *(&(globalParams_0->radiance_0)[_S1098 + int(3)]) = affineLength_8;
+     *&((&(&record_1)->control_0)->x) = 3U;
+     *(&(globalParams_0->continuation_0)[slot_0]) = record_1;
+     return;
+ }
+ 

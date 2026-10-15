@@ -1,0 +1,84 @@
+{
+  "schema": "sirius-trace-pair-loop-root-owner-product-check-v1",
+  "case": "control-cuda",
+  "created_utc": "2026-10-15T19:07:45.001782+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_helper_observed_closed_exit": 0,
+  "owner_terminal_passed_exit0_original_guards": true,
+  "whole_input_rows": 4357,
+  "preflight_local_absolute_paths_normalized_to_owner_relative_keys": true,
+  "before_after_current_and_prior_raw_exact": true,
+  "source_unchanged": true,
+  "sample_count": 8,
+  "owner_seconds": 2.2465691450051963,
+  "peak_sampled_aggregate_RSS_KiB": 273640,
+  "saved_owned_births_fresh_rechecked": [
+    {
+      "pid": 1113509,
+      "saved_start_ticks": "14060962",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 1113513,
+      "saved_start_ticks": "14061116",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "product": {
+    "path": "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+    "bytes": 321379,
+    "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+  },
+  "role": "control",
+  "variant": "cuda",
+  "matching_original_control_byteequal_baseline": true,
+  "control_baseline": {
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu",
+    "bytes": 321379,
+    "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+  },
+  "separate_validation_disassembly_and_root_acceptance_pending": true,
+  "all5_controls_before_candidate_source_attribution": true,
+  "files": {
+    "out/trace-jacobi-pair-loop-screen/control-cuda/samples.jsonl": {
+      "bytes": 1848,
+      "sha256": "aa344552687f7ff95291ae2a175461f5be438cf1ca4215c4fbe4ded74425eae8"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/inputs-before.json": {
+      "bytes": 1448909,
+      "sha256": "abf35b2ff601b09ac7f885cbfcfc0fb674bd281e20cdbc7c8491fb22bce2d1f3"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/inputs-after.json": {
+      "bytes": 1448909,
+      "sha256": "abf35b2ff601b09ac7f885cbfcfc0fb674bd281e20cdbc7c8491fb22bce2d1f3"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu": {
+      "bytes": 321379,
+      "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/owner.json": {
+      "bytes": 2749,
+      "sha256": "ef7d2d6f0b634c7a299efcde7106fa3c6505df8aaa08d85fb4122ed897825150"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-control-cuda.json": {
+      "bytes": 2526,
+      "sha256": "15688ac72872f8d4b29ff8b1dd3a41873dd62c512f5233d94d71477593ba3ef8"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-control-cuda.log": {
+      "bytes": 837,
+      "sha256": "6825b6fe50553738624bf8c9002096585616074aeea4298f174259ec76324941"
+    }
+  },
+  "scope": "One actual offline compiler owner/product only; no scientific/numerical/runtime/RSS/JIT/performance/adoption verdict. Three-dimensional8x8x1 kernel and ABI remain separate emitted checks."
+}

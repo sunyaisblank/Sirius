@@ -1,0 +1,1012 @@
+{
+  "schema": "sirius-trace-pair-loop-root-completed-offline-operations-v1",
+  "created_utc": "2026-10-15T19:13:42.054824+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": true,
+  "all10_original_derived_Slang_operations_and_root_acceptance_completed": true,
+  "all5_controls_exact_byte_equal_original_baseline": {
+    "fp32": {
+      "case": "control-fp32",
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv",
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "baseline": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv",
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "exact_byte_equal": true
+    },
+    "fp32comp": {
+      "case": "control-fp32comp",
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv",
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "baseline": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv",
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "exact_byte_equal": true
+    },
+    "fp64": {
+      "case": "control-fp64",
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv",
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      },
+      "baseline": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv",
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      },
+      "exact_byte_equal": true
+    },
+    "cuda": {
+      "case": "control-cuda",
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+        "bytes": 321379,
+        "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+      },
+      "baseline": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu",
+        "bytes": 321379,
+        "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+      },
+      "exact_byte_equal": true
+    },
+    "metal": {
+      "case": "control-metal",
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal",
+        "bytes": 344056,
+        "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+      },
+      "baseline": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal",
+        "bytes": 344056,
+        "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+      },
+      "exact_byte_equal": true
+    }
+  },
+  "all6_SPIRV_validation_and_disassembly_operations_completed": true,
+  "cases": [
+    {
+      "case": "control-fp32",
+      "role": "control",
+      "variant": "fp32",
+      "owner_seconds": 6.986042936012382,
+      "sample_count": 27,
+      "peak_sampled_aggregate_RSS_KiB": 487444,
+      "whole_input_rows": 4315,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv",
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": true,
+      "postoperations": 2
+    },
+    {
+      "case": "candidate-fp32",
+      "role": "candidate",
+      "variant": "fp32",
+      "owner_seconds": 11.611397909000516,
+      "sample_count": 42,
+      "peak_sampled_aggregate_RSS_KiB": 465300,
+      "whole_input_rows": 4322,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+        "bytes": 2620748,
+        "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": true,
+      "postoperations": 2
+    },
+    {
+      "case": "control-fp32comp",
+      "role": "control",
+      "variant": "fp32comp",
+      "owner_seconds": 9.306250494002597,
+      "sample_count": 35,
+      "peak_sampled_aggregate_RSS_KiB": 487672,
+      "whole_input_rows": 4329,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv",
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": true,
+      "postoperations": 2
+    },
+    {
+      "case": "candidate-fp32comp",
+      "role": "candidate",
+      "variant": "fp32comp",
+      "owner_seconds": 10.365143250004621,
+      "sample_count": 38,
+      "peak_sampled_aggregate_RSS_KiB": 466588,
+      "whole_input_rows": 4336,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv",
+        "bytes": 2624072,
+        "sha256": "e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": true,
+      "postoperations": 2
+    },
+    {
+      "case": "control-fp64",
+      "role": "control",
+      "variant": "fp64",
+      "owner_seconds": 8.202011493005557,
+      "sample_count": 31,
+      "peak_sampled_aggregate_RSS_KiB": 479068,
+      "whole_input_rows": 4343,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv",
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": true,
+      "postoperations": 2
+    },
+    {
+      "case": "candidate-fp64",
+      "role": "candidate",
+      "variant": "fp64",
+      "owner_seconds": 7.384731626021676,
+      "sample_count": 28,
+      "peak_sampled_aggregate_RSS_KiB": 463732,
+      "whole_input_rows": 4350,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv",
+        "bytes": 2553336,
+        "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": true,
+      "postoperations": 2
+    },
+    {
+      "case": "control-cuda",
+      "role": "control",
+      "variant": "cuda",
+      "owner_seconds": 2.2465691450051963,
+      "sample_count": 8,
+      "peak_sampled_aggregate_RSS_KiB": 273640,
+      "whole_input_rows": 4357,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+        "bytes": 321379,
+        "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": false,
+      "postoperations": 0
+    },
+    {
+      "case": "candidate-cuda",
+      "role": "candidate",
+      "variant": "cuda",
+      "owner_seconds": 1.6724605589988641,
+      "sample_count": 6,
+      "peak_sampled_aggregate_RSS_KiB": 274736,
+      "whole_input_rows": 4364,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-cuda/trace.cu",
+        "bytes": 321552,
+        "sha256": "4fabfe9f5d7d2487baf361b09a66aca1c44f8532e8c65cf17b6e22c50ed735a4"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": false,
+      "postoperations": 0
+    },
+    {
+      "case": "control-metal",
+      "role": "control",
+      "variant": "metal",
+      "owner_seconds": 2.2777861949871294,
+      "sample_count": 8,
+      "peak_sampled_aggregate_RSS_KiB": 276652,
+      "whole_input_rows": 4371,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal",
+        "bytes": 344056,
+        "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": false,
+      "postoperations": 0
+    },
+    {
+      "case": "candidate-metal",
+      "role": "candidate",
+      "variant": "metal",
+      "owner_seconds": 2.182995192008093,
+      "sample_count": 7,
+      "peak_sampled_aggregate_RSS_KiB": 278608,
+      "whole_input_rows": 4378,
+      "product": {
+        "path": "out/trace-jacobi-pair-loop-screen/candidate-metal/trace.metal",
+        "bytes": 344160,
+        "sha256": "5efed47371922c709b730440c7229e36408ce4b8e54117a77bb365ea38f0dd77"
+      },
+      "SPIRV_validator_and_disassembler_actual_closed0": false,
+      "postoperations": 0
+    }
+  ],
+  "static_preflight_rows": 4314,
+  "actual_beforeafter_rows_checked": 86930,
+  "unique_whole_input_rows": 4378,
+  "preflight_inside_checkout_absolute_keys_normalized_only_for_owner_sets": true,
+  "all_beforeafter_current_and_exact7n_prior_raw_product_pins_match": true,
+  "raw_case_accepted_prelaunch_helper_ownercheck_posttool_pins": {
+    "out/trace-jacobi-pair-loop-screen/control-fp32/samples.jsonl": {
+      "bytes": 6223,
+      "sha256": "11aff08894662991dd878dbe0ac85b6036b255b0def7afa011fef6aeb6a8afd3"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32/inputs-before.json": {
+      "bytes": 1436731,
+      "sha256": "51e3983a94f2b558a632defcec101bbcaf184575fc4472933356506e18c1dd59"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32/inputs-after.json": {
+      "bytes": 1436731,
+      "sha256": "51e3983a94f2b558a632defcec101bbcaf184575fc4472933356506e18c1dd59"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv": {
+      "bytes": 2994452,
+      "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32/owner.json": {
+      "bytes": 2783,
+      "sha256": "61156145f59abfd279f9bf485ce1a525daa29fdd6bbd7d4ee879e35e0bf8bcc9"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-control-fp32.json": {
+      "bytes": 2526,
+      "sha256": "ff351ea6b1dd66639e822f29a0ad62fc8306afd84f9239beee9a5229bf115e93"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-control-fp32.log": {
+      "bytes": 836,
+      "sha256": "eab42d211d9d93bf913369044723dabc0d8302868ed86fc8c437faa713f109ac"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp32-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp32-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp32-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp32-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-spv-control-fp32.spvasm": {
+      "bytes": 8763285,
+      "sha256": "8c19a116890f402ce5f94bbf948bc845faaa465b27e1d1bf3021762d14f212d4"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp32.json": {
+      "bytes": 3442,
+      "sha256": "7dc9e231a9113e5d538975bed4bb2a875fc61c5ec44f2276b1974ff80e05abfd"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-control-fp32.json": {
+      "bytes": 4652,
+      "sha256": "e5582626d4ea1186b4a6f6134b983de09a76d0ac4a3a8929497ca1581998c25b"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-control-fp32.json": {
+      "bytes": 4324,
+      "sha256": "04c4cf5123e0e3506f498d0efd66b01d6e2e97c7e522481d4d9ffa7fafa89963"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32/samples.jsonl": {
+      "bytes": 9668,
+      "sha256": "0e06fae3d3f2bc757df2b3d4dbeecde7877012033432f17cfbbb1303785f3e6a"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32/inputs-before.json": {
+      "bytes": 1438728,
+      "sha256": "6613571b8d5160dfe21b73ba91816615777c79cece4665271c045515e0520a53"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32/inputs-after.json": {
+      "bytes": 1438728,
+      "sha256": "6613571b8d5160dfe21b73ba91816615777c79cece4665271c045515e0520a53"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv": {
+      "bytes": 2620748,
+      "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32/owner.json": {
+      "bytes": 2813,
+      "sha256": "f855029da42300c9f484ff23a09db592c4d779868f90e2e2d840a534a124c347"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-fp32.json": {
+      "bytes": 2528,
+      "sha256": "c9495564e3af07e8da7a68e809b47022f9e6c875c2d5e678151f59c08bb8ea58"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-candidate-fp32.log": {
+      "bytes": 841,
+      "sha256": "af64328494dc3ca20f28f2e77a87df15c0ee03b9ccc04af19d57d0851ec24e0e"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32.spvasm": {
+      "bytes": 7678941,
+      "sha256": "d09528306c6799a2effbea000f06c576d68ef48e0105eb3253b7f7b447021163"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp32.json": {
+      "bytes": 3467,
+      "sha256": "d98d5d6e25b6f40b7a72fdaaec74a7c2c0f15d1cdbd7702d19d4afc453bd4eb4"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp32.json": {
+      "bytes": 4685,
+      "sha256": "dc19d8df9a6c5b4f7f9233d9d20b205d84625b58a4be915f371424167f35e916"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp32.json": {
+      "bytes": 4362,
+      "sha256": "faea7340cc2ffa3718e3559846c34dbe075c8c26bfb81618049abef5ec6263bf"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32comp/samples.jsonl": {
+      "bytes": 8059,
+      "sha256": "8a57e2a3a9fb076a422566234c3ef3696d431f5844f30a792718a791cc89553f"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32comp/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32comp/inputs-before.json": {
+      "bytes": 1440753,
+      "sha256": "fd0b1ec3db9f474528ea288f48877c4fba5c73bd98bbfb7495409cd7bf98bdff"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32comp/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32comp/inputs-after.json": {
+      "bytes": 1440753,
+      "sha256": "fd0b1ec3db9f474528ea288f48877c4fba5c73bd98bbfb7495409cd7bf98bdff"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv": {
+      "bytes": 2997776,
+      "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp32comp/owner.json": {
+      "bytes": 2825,
+      "sha256": "0622afa2964e82ab2c16c713a2dd551d8f36e6b35c144188e031ae87c28a5437"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-control-fp32comp.json": {
+      "bytes": 2530,
+      "sha256": "176b5f987fef96fab89c041413cda3b40c7680a9367fb6c6522dc362f3b940c2"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-control-fp32comp.log": {
+      "bytes": 844,
+      "sha256": "40b53b611ba7285f2b7f2b81a166ba0b0a24c7069ba2077e8c35c3c4999de05b"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp32comp-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp32comp-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp32comp-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp32comp-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-spv-control-fp32comp.spvasm": {
+      "bytes": 8772174,
+      "sha256": "452eeeaa02af9568e7660ad68418c35248c34a2004f17f878925be52aa2d76ea"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp32comp.json": {
+      "bytes": 3499,
+      "sha256": "efc3193a0569b568e12e9b2e18e955fb4841b23d127ff0332a5579ebb007e37c"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-control-fp32comp.json": {
+      "bytes": 4720,
+      "sha256": "78693ad57da00b49b28c2a20f86fe6185a66869c1706bfd6e1a05671911e9408"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-control-fp32comp.json": {
+      "bytes": 4400,
+      "sha256": "b3fb57d7ca395586e3af9ed559c22272854f36183e10e329ea6be5039dd3b383"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/samples.jsonl": {
+      "bytes": 8752,
+      "sha256": "9d266f62fdcb77abf3b27613d5a34a90acf60f27ca94dd6ab9c39832e63f9d92"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/inputs-before.json": {
+      "bytes": 1442806,
+      "sha256": "f7e7ed9cc265c6ce33cb795d4d5a8b1a85d49e50cec0395e8793b322efdaa527"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/inputs-after.json": {
+      "bytes": 1442806,
+      "sha256": "f7e7ed9cc265c6ce33cb795d4d5a8b1a85d49e50cec0395e8793b322efdaa527"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv": {
+      "bytes": 2624072,
+      "sha256": "e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/owner.json": {
+      "bytes": 2855,
+      "sha256": "c4aed9925baf37b5dccd9c2855546faba60539ec0547048e30c861f3794555f3"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-fp32comp.json": {
+      "bytes": 2532,
+      "sha256": "5973f08daf4fddc67218a9b3e32d4e4c6236466b74a00e68dfc8fb58ea38b4bd"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-candidate-fp32comp.log": {
+      "bytes": 849,
+      "sha256": "b0ab756b7e053d0f5ab61b04785c5f1a1a3580ed714fb63982efbe9218a9a1b6"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32comp.spvasm": {
+      "bytes": 7687806,
+      "sha256": "28477226c3ea7ec5993b55d32ab93a5a879a67b335cd95c0e892db9f084c31d4"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp32comp.json": {
+      "bytes": 3524,
+      "sha256": "b1b96c182a0c966619c3425438fa5f1b069e06078f2834ae4b418907ac907b55"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp32comp.json": {
+      "bytes": 4753,
+      "sha256": "6302faf902729e217fd1b4a845b8ea8cf4b9e1a26a3927c63291802d15d7b5e6"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp32comp.json": {
+      "bytes": 4438,
+      "sha256": "492f74981af7cae1e8ad38d0b8e0a34044334fe38f6ca7c7bf12dd8a6d121d3b"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/samples.jsonl": {
+      "bytes": 7135,
+      "sha256": "dd784ae84e0490b1ad1fd20a04190ebdd34846bb2f420167ab04ad4550b7e0ef"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/inputs-before.json": {
+      "bytes": 1444887,
+      "sha256": "e18a0cd5778ed7c09ab366285b73d148759cfa03d3a26fee93e0eba4a128aaee"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/inputs-after.json": {
+      "bytes": 1444887,
+      "sha256": "e18a0cd5778ed7c09ab366285b73d148759cfa03d3a26fee93e0eba4a128aaee"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv": {
+      "bytes": 2847024,
+      "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/owner.json": {
+      "bytes": 2842,
+      "sha256": "466f558a4eb06775e93620490a85746a4694ab861b77993918a11eca5f7533c7"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-control-fp64.json": {
+      "bytes": 2526,
+      "sha256": "815b762152ebe977a191c2f45e485284cdf867adf80cd3faf7a25b4aaaae5909"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-control-fp64.log": {
+      "bytes": 836,
+      "sha256": "b2a2569c0437889fe394296ee5f917a4b9021284bd173005df90f1c20254596a"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp64-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp64-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp64-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp64-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-spv-control-fp64.spvasm": {
+      "bytes": 8398125,
+      "sha256": "28ff0eef1385ce0f130d6e59318c0f7fbce128b801b16edf77e10e8d72f19a21"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp64.json": {
+      "bytes": 3447,
+      "sha256": "cd3771af517dabb63a16f4328dd4174be7f975b1d028230a305bded4643be6d2"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-control-fp64.json": {
+      "bytes": 4652,
+      "sha256": "20d4700b85b1956a3d8005ce0150851e71178129d14d38e69fbb811bbd180587"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-control-fp64.json": {
+      "bytes": 4324,
+      "sha256": "5f8729d300052b6cf057fb46567b2c78f33225d8f34f24a1dc6faf8651fce356"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/samples.jsonl": {
+      "bytes": 6452,
+      "sha256": "fa8e40a0ca69c7887c5bcd5129f66b22bb7fd36759d9b8f1056d8e134d6b54d5"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-before.json": {
+      "bytes": 1446884,
+      "sha256": "6e35cc03209673340a3417831d5fb8ff046081d1ab11b7c581f0e09ef5511bb2"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-after.json": {
+      "bytes": 1446884,
+      "sha256": "6e35cc03209673340a3417831d5fb8ff046081d1ab11b7c581f0e09ef5511bb2"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv": {
+      "bytes": 2553336,
+      "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/owner.json": {
+      "bytes": 2871,
+      "sha256": "785bb1a78c60e50cdcc6b88fed945abc194bf6939d58bc89090c1a9f226320dd"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-fp64.json": {
+      "bytes": 2528,
+      "sha256": "7346d8fbe863ee0541995edd81dc13fe630df9e7091e830afc3403c34c3d27ce"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-candidate-fp64.log": {
+      "bytes": 840,
+      "sha256": "b31df5e94d26d322a914faba262495ea143047df659fd8c1d916ec9a75467285"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp64.spvasm": {
+      "bytes": 7537189,
+      "sha256": "a357064274422c21e3aa7d723798fc98c85545948044330b463ffa50dcef0eb0"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp64.json": {
+      "bytes": 3471,
+      "sha256": "e45116bbff31f0851fe9bfbef12552a8da2e9eb292b45d7b344660918b6cf083"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp64.json": {
+      "bytes": 4685,
+      "sha256": "9fd8b2e73a8fbacf8ab9a06e3141a14e1d0547cafe3fefe5ec12e33d568a9ee0"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp64.json": {
+      "bytes": 4362,
+      "sha256": "fc813c1bd4381470394b71fd99eef55ae1b35eed3bf62de286e0538c98f8bfd7"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/samples.jsonl": {
+      "bytes": 1848,
+      "sha256": "aa344552687f7ff95291ae2a175461f5be438cf1ca4215c4fbe4ded74425eae8"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/inputs-before.json": {
+      "bytes": 1448909,
+      "sha256": "abf35b2ff601b09ac7f885cbfcfc0fb674bd281e20cdbc7c8491fb22bce2d1f3"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/inputs-after.json": {
+      "bytes": 1448909,
+      "sha256": "abf35b2ff601b09ac7f885cbfcfc0fb674bd281e20cdbc7c8491fb22bce2d1f3"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu": {
+      "bytes": 321379,
+      "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/owner.json": {
+      "bytes": 2749,
+      "sha256": "ef7d2d6f0b634c7a299efcde7106fa3c6505df8aaa08d85fb4122ed897825150"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-control-cuda.json": {
+      "bytes": 2526,
+      "sha256": "15688ac72872f8d4b29ff8b1dd3a41873dd62c512f5233d94d71477593ba3ef8"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-control-cuda.log": {
+      "bytes": 837,
+      "sha256": "6825b6fe50553738624bf8c9002096585616074aeea4298f174259ec76324941"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-control-cuda.json": {
+      "bytes": 3448,
+      "sha256": "bfac0b72f88222e05c312b8a36953f786b215ea11218f6fd9bcacd7610ed429e"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-control-cuda.json": {
+      "bytes": 1161,
+      "sha256": "642b7c373014bc8ca886f22e1ae6391a20e0277b0009da328adab409eb970528"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-control-cuda.json": {
+      "bytes": 3346,
+      "sha256": "70a7151936636773019b20eb0d8402c13c09b3191686f30866256649bbae6fe8"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-cuda/samples.jsonl": {
+      "bytes": 1385,
+      "sha256": "88e077d0c869ccd838dbcd46969efc2299c686d18e346582ab8c495ce7c6fd6e"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-cuda/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-cuda/inputs-before.json": {
+      "bytes": 1450903,
+      "sha256": "373fcc216c3fef6862dfb7f61cd9f5cf9145f0dbe7f0372bc2089ce9adcdfc16"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-cuda/inputs-after.json": {
+      "bytes": 1450903,
+      "sha256": "373fcc216c3fef6862dfb7f61cd9f5cf9145f0dbe7f0372bc2089ce9adcdfc16"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-cuda/trace.cu": {
+      "bytes": 321552,
+      "sha256": "4fabfe9f5d7d2487baf361b09a66aca1c44f8532e8c65cf17b6e22c50ed735a4"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-cuda/owner.json": {
+      "bytes": 2778,
+      "sha256": "d08e0361dbe931228f456492a5c34b9852fc2bd0ce13f18c041e3915789a5fad"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-cuda.json": {
+      "bytes": 2528,
+      "sha256": "305161ce3b0334316f1c17df473a5595995f77d14fd1870e0de81da0832a7d87"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-candidate-cuda.log": {
+      "bytes": 841,
+      "sha256": "e8ced5a619f1d70671ed051981cdaf46b390de05851b64d87b28443584a3f21a"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-cuda.json": {
+      "bytes": 3472,
+      "sha256": "afb4ceeab0b80f991ccb2de58b5cf94bf7fe49899b739850b1ba08eb29caa992"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-cuda.json": {
+      "bytes": 1165,
+      "sha256": "df6daf2f744fdf20fcffe1d8417669fb5bd5041042c233839dd3e6ccb5c08690"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-cuda.json": {
+      "bytes": 3374,
+      "sha256": "6f8e3c148a14fc57a6f5d60c02e06df8380e50153cc93ba6162568e645628775"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/samples.jsonl": {
+      "bytes": 1839,
+      "sha256": "7c930757622584046c82e412e265b16973383fffa5712809fe5fdd94ca5eafe9"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/inputs-before.json": {
+      "bytes": 1452925,
+      "sha256": "c452178f552bc21fa79d83a502877fb9ffde5808a4d1cae1ee6084f2784918d7"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/inputs-after.json": {
+      "bytes": 1452925,
+      "sha256": "c452178f552bc21fa79d83a502877fb9ffde5808a4d1cae1ee6084f2784918d7"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal": {
+      "bytes": 344056,
+      "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/owner.json": {
+      "bytes": 2757,
+      "sha256": "dc7502d34a8032b52f71211dba9e0ce85c0be9d1d5913061c1038aadeffdfb42"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-control-metal.json": {
+      "bytes": 2527,
+      "sha256": "3a784e20fc6d1d1c1fc60b0a20abe2b1a4706c1896af612aeb4e536089bbb860"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-control-metal.log": {
+      "bytes": 839,
+      "sha256": "41075e5fc8ca2e7c7ac653709b21a8afd034fe9c4e56de91c5389f1af75cc14c"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-control-metal.json": {
+      "bytes": 3469,
+      "sha256": "a3a9d28ce4adb626ecbe6ac0bee61d5a4302dfb98668c177017dd4c328e7fd74"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-control-metal.json": {
+      "bytes": 1166,
+      "sha256": "d22748be0ab3fcf86eaf9beabfef55399d5dd59b7fac7d422c92ff4f2caca68d"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-control-metal.json": {
+      "bytes": 3366,
+      "sha256": "9a423b841dc142d91b7eb7152c9bc6913222ad7157ece0de7680ad183fc6d1d1"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-metal/samples.jsonl": {
+      "bytes": 1614,
+      "sha256": "b8f625288533309efd19d8a2772d5d3beed10fdd73ef418d6af01965942f5f30"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-metal/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-metal/inputs-before.json": {
+      "bytes": 1454939,
+      "sha256": "33727dde9c1c9a78adf5f5431153114a1f4cb59c128cc85372f0dc6ac17e347b"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-metal/inputs-after.json": {
+      "bytes": 1454939,
+      "sha256": "33727dde9c1c9a78adf5f5431153114a1f4cb59c128cc85372f0dc6ac17e347b"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-metal/trace.metal": {
+      "bytes": 344160,
+      "sha256": "5efed47371922c709b730440c7229e36408ce4b8e54117a77bb365ea38f0dd77"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-metal/owner.json": {
+      "bytes": 2785,
+      "sha256": "1263a49d9823858c5ea28a2757d81c074cfbda43129e3ae819f13a8c1b1ab4e3"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-metal.json": {
+      "bytes": 2529,
+      "sha256": "0f93a664043eb872b38658d8ef8a791103bde815cb811a2d8de0d11cc358cafe"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-candidate-metal.log": {
+      "bytes": 842,
+      "sha256": "b4e645881f5aaed4f2f53013e401bd467e7822e6c65b80b45f08b62bd4552f22"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-metal.json": {
+      "bytes": 3492,
+      "sha256": "7b346e6c7a6243936bb467356cac9739e17aecccf3afe8bcbd9d478a0684b436"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-metal.json": {
+      "bytes": 1170,
+      "sha256": "2b0ba5d48ce74f3bcb142e76d615f6357e6bba32445b42767d177bcd60acdb59"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-accepted-candidate-metal.json": {
+      "bytes": 3394,
+      "sha256": "6d5376af4f10a79ed034a7760357892d34041336e18be42587b37119d41c4aaa"
+    }
+  },
+  "fresh_saved_owned_birth_rechecks": [
+    {
+      "case": "control-fp32",
+      "pid": 1109467,
+      "saved_start_ticks": "14025914",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "control-fp32",
+      "pid": 1109508,
+      "saved_start_ticks": "14026003",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-fp32",
+      "pid": 1111898,
+      "saved_start_ticks": "14044785",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-fp32",
+      "pid": 1111910,
+      "saved_start_ticks": "14044939",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "control-fp32comp",
+      "pid": 1112296,
+      "saved_start_ticks": "14051487",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "control-fp32comp",
+      "pid": 1112340,
+      "saved_start_ticks": "14051584",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-fp32comp",
+      "pid": 1113052,
+      "saved_start_ticks": "14054298",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-fp32comp",
+      "pid": 1113066,
+      "saved_start_ticks": "14054423",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "control-fp64",
+      "pid": 1113338,
+      "saved_start_ticks": "14056538",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "control-fp64",
+      "pid": 1113342,
+      "saved_start_ticks": "14056659",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-fp64",
+      "pid": 1113445,
+      "saved_start_ticks": "14059146",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-fp64",
+      "pid": 1113449,
+      "saved_start_ticks": "14059234",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "control-cuda",
+      "pid": 1113509,
+      "saved_start_ticks": "14060962",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "control-cuda",
+      "pid": 1113513,
+      "saved_start_ticks": "14061116",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-cuda",
+      "pid": 1113572,
+      "saved_start_ticks": "14062063",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-cuda",
+      "pid": 1113590,
+      "saved_start_ticks": "14062229",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "control-metal",
+      "pid": 1113626,
+      "saved_start_ticks": "14063075",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "control-metal",
+      "pid": 1113646,
+      "saved_start_ticks": "14063222",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-metal",
+      "pid": 1113681,
+      "saved_start_ticks": "14064110",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "case": "candidate-metal",
+      "pid": 1113706,
+      "saved_start_ticks": "14064277",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "actual_root_orchestration": {
+    "bytes": 16735,
+    "sha256": "02a2965193bad264423fa79292fea6687229e08621ce6eb83f69fcb1ac8cfecd"
+  },
+  "runtime_release": {
+    "bytes": 6029,
+    "sha256": "58d998a082d0d68ef8190d1c2ab5d5d36dd98ce11d96c4ff0d6c7412d70a7231"
+  },
+  "independent_runtime_admission": {
+    "bytes": 18382,
+    "sha256": "50d36fa84f7a8d56d7d079a9f91fe36c4078dd2f280e1762365b8f99b0279ede"
+  },
+  "sampled_RSS_scope": "Only observed Slang-owner/controller aggregates, not continuous peaks. Separate validator/disassembler GNUtimeout300s/kill10s has no aggregateRSS claim. No universal no-process/GPU-activity claim.",
+  "all5_control_attribution_gate_now_satisfied": true,
+  "emitted_full_CFG_ABI_footprint_review_pending": true,
+  "source_clean_committed_pushed": true,
+  "branch": "development/minimum-step-floor-2026-10-15",
+  "source_build_hold_release": false,
+  "source_candidate_applied": false,
+  "provider_test_executed": false,
+  "scope": "Ten exact private offline compiler operations only. No numerical/provider/RSS/JIT/performance or scientific/release/adoption qualification; CUDA/MSL source emission has no native compiler/runtime verdict."
+}

@@ -1,0 +1,101 @@
+{
+  "schema": "sirius-trace-pair-loop-root-accepted-offline-operation-v1",
+  "case": "candidate-fp64",
+  "created_utc": "2026-10-15T19:07:35.509893+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 3471,
+    "sha256": "e45116bbff31f0851fe9bfbef12552a8da2e9eb292b45d7b344660918b6cf083"
+  },
+  "posttools": {
+    "bytes": 4685,
+    "sha256": "9fd8b2e73a8fbacf8ab9a06e3141a14e1d0547cafe3fefe5ec12e33d568a9ee0"
+  },
+  "whole_input_rows": 4350,
+  "product": {
+    "path": "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv",
+    "bytes": 2553336,
+    "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+  },
+  "role": "candidate",
+  "variant": "fp64",
+  "matching_original_control_byteequal_baseline": null,
+  "SPIRV_original_validator_and_disassembly_passed": true,
+  "emitted_entry": "main",
+  "emitted_local_size": [
+    8,
+    8,
+    1
+  ],
+  "all5_control_attribution_gate_and_complete_CFG_ABI_footprint_review_pending": true,
+  "files": {
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/samples.jsonl": {
+      "bytes": 6452,
+      "sha256": "fa8e40a0ca69c7887c5bcd5129f66b22bb7fd36759d9b8f1056d8e134d6b54d5"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-before.json": {
+      "bytes": 1446884,
+      "sha256": "6e35cc03209673340a3417831d5fb8ff046081d1ab11b7c581f0e09ef5511bb2"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-after.json": {
+      "bytes": 1446884,
+      "sha256": "6e35cc03209673340a3417831d5fb8ff046081d1ab11b7c581f0e09ef5511bb2"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv": {
+      "bytes": 2553336,
+      "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/owner.json": {
+      "bytes": 2871,
+      "sha256": "785bb1a78c60e50cdcc6b88fed945abc194bf6939d58bc89090c1a9f226320dd"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-fp64.json": {
+      "bytes": 2528,
+      "sha256": "7346d8fbe863ee0541995edd81dc13fe630df9e7091e830afc3403c34c3d27ce"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-candidate-fp64.log": {
+      "bytes": 840,
+      "sha256": "b31df5e94d26d322a914faba262495ea143047df659fd8c1d916ec9a75467285"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp64.spvasm": {
+      "bytes": 7537189,
+      "sha256": "a357064274422c21e3aa7d723798fc98c85545948044330b463ffa50dcef0eb0"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp64.json": {
+      "bytes": 3471,
+      "sha256": "e45116bbff31f0851fe9bfbef12552a8da2e9eb292b45d7b344660918b6cf083"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp64.json": {
+      "bytes": 4685,
+      "sha256": "9fd8b2e73a8fbacf8ab9a06e3141a14e1d0547cafe3fefe5ec12e33d568a9ee0"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

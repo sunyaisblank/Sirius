@@ -1,0 +1,77 @@
+{
+  "schema": "sirius-trace-pair-loop-root-accepted-offline-operation-v1",
+  "case": "control-cuda",
+  "created_utc": "2026-10-15T19:07:46.344512+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 3448,
+    "sha256": "bfac0b72f88222e05c312b8a36953f786b215ea11218f6fd9bcacd7610ed429e"
+  },
+  "posttools": {
+    "bytes": 1161,
+    "sha256": "642b7c373014bc8ca886f22e1ae6391a20e0277b0009da328adab409eb970528"
+  },
+  "whole_input_rows": 4357,
+  "product": {
+    "path": "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+    "bytes": 321379,
+    "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+  },
+  "role": "control",
+  "variant": "cuda",
+  "matching_original_control_byteequal_baseline": true,
+  "SPIRV_original_validator_and_disassembly_passed": false,
+  "emitted_entry": null,
+  "emitted_local_size": null,
+  "all5_control_attribution_gate_and_complete_CFG_ABI_footprint_review_pending": true,
+  "files": {
+    "out/trace-jacobi-pair-loop-screen/control-cuda/samples.jsonl": {
+      "bytes": 1848,
+      "sha256": "aa344552687f7ff95291ae2a175461f5be438cf1ca4215c4fbe4ded74425eae8"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/inputs-before.json": {
+      "bytes": 1448909,
+      "sha256": "abf35b2ff601b09ac7f885cbfcfc0fb674bd281e20cdbc7c8491fb22bce2d1f3"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/inputs-after.json": {
+      "bytes": 1448909,
+      "sha256": "abf35b2ff601b09ac7f885cbfcfc0fb674bd281e20cdbc7c8491fb22bce2d1f3"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu": {
+      "bytes": 321379,
+      "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-cuda/owner.json": {
+      "bytes": 2749,
+      "sha256": "ef7d2d6f0b634c7a299efcde7106fa3c6505df8aaa08d85fb4122ed897825150"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-control-cuda.json": {
+      "bytes": 2526,
+      "sha256": "15688ac72872f8d4b29ff8b1dd3a41873dd62c512f5233d94d71477593ba3ef8"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-control-cuda.log": {
+      "bytes": 837,
+      "sha256": "6825b6fe50553738624bf8c9002096585616074aeea4298f174259ec76324941"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-control-cuda.json": {
+      "bytes": 3448,
+      "sha256": "bfac0b72f88222e05c312b8a36953f786b215ea11218f6fd9bcacd7610ed429e"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-control-cuda.json": {
+      "bytes": 1161,
+      "sha256": "642b7c373014bc8ca886f22e1ae6391a20e0277b0009da328adab409eb970528"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

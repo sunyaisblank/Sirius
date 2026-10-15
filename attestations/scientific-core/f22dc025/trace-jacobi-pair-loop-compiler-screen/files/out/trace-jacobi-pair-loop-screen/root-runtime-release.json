@@ -1,0 +1,101 @@
+{
+  "schema": "sirius-trace-pair-loop-root-offline-compiler-release-v1",
+  "created_utc": "2026-10-15T19:01:23.893131+00:00",
+  "release": true,
+  "offline_codegen_only": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "source_clean_committed_pushed": true,
+  "critical_inputs": {
+    "actions.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/actions.json",
+      "bytes": 4350314,
+      "sha256": "76d9f4c40317f27021957d5c9274a6c1967b9bb3e2e8bf33e7cd1742684008ae"
+    },
+    "readiness.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/readiness.json",
+      "bytes": 17349,
+      "sha256": "383b1fa05a951417a75c9e0d0baa8c7989458de610aad54ab1990b39c91cfe63"
+    },
+    "root-preflight.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-preflight.json",
+      "bytes": 1908874,
+      "sha256": "77e908dde0078d475df74062911b168c3f83b1e4b3ff349c8809166e8c46b8f0"
+    },
+    "root-compiler-tool-observation.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-compiler-tool-observation.json",
+      "bytes": 1338589,
+      "sha256": "79f89e2fe0a44232b5f5cb615d2b684f8a58d751bb3df8ede094f849592c42bc"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/source-contracts.json",
+      "bytes": 36632,
+      "sha256": "5573e698e6a82f4b6a0a9764ac8a0147edd3ff9ef8804df7e08924433940c795"
+    },
+    "independent-source-review.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/independent-source-review.json",
+      "bytes": 8340,
+      "sha256": "edcc3f61297d440acaf92bf8e3d5891b1d95e775cd744223c12f24274e95799c"
+    },
+    "actions.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/actions.pending.json",
+      "bytes": 58234,
+      "sha256": "b6300c31ee3dec319381cd71527e08c87ec0d92bcbb3b79b41f631ecf7376c57"
+    },
+    "commands.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/commands.pending.json",
+      "bytes": 2326,
+      "sha256": "8d828213df2157fb9fdcefeb0c4d156817d057117209d8902c1ac8763a17876b"
+    },
+    "run_owned.py": {
+      "path": "out/trace-jacobi-pair-loop-screen/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/trace-jacobi-pair-loop-screen/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "inputs/candidate/trace.slang": {
+      "path": "out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    }
+  },
+  "independent_runtime_review": {
+    "bytes": 18382,
+    "sha256": "50d36fa84f7a8d56d7d079a9f91fe36c4078dd2f280e1762365b8f99b0279ede"
+  },
+  "all4314_static_pins_fresh_exact": true,
+  "authorized_serial_order": [
+    "control-fp32",
+    "candidate-fp32",
+    "control-fp32comp",
+    "candidate-fp32comp",
+    "control-fp64",
+    "candidate-fp64",
+    "control-cuda",
+    "candidate-cuda",
+    "control-metal",
+    "candidate-metal"
+  ],
+  "actual_root_selected_environment": {
+    "LANG": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "/home/astra/.codex/packages/standalone/releases/0.162.1-x86_64-unknown-linux-musl/codex-path:/home/astra/.local/bin:/home/astra/.codex/tmp/arg0/codex-arg0tWLEn2:/home/astra/.codex/packages/standalone/releases/0.162.1-x86_64-unknown-linux-musl/codex-path:/home/astra/.local/bin:/home/astra/.cargo/bin:/home/astra/.juliaup/bin:/home/astra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/Eclipse Adoptium/jdk-25.0.1.8-hotspot/bin:/mnt/c/Program Files/Microsoft/jdk-25.0.2.10-hotspot/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Neovim/bin:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/PowerShell/7/:/Docker/host/bin:/mnt/c/Users/alarisadmin/AppData/Local/Programs/OpenAI/Codex/bin:/mnt/c/Program Files/PowerShell/7:/mnt/c/Program Files/Eclipse Adoptium/jdk-25.0.1.8-hotspot/bin:/mnt/c/Program Files/Microsoft/jdk-25.0.2.10-hotspot/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Program Files/Neovim/bin:/Docker/host/bin:/mnt/c/Users/alarisadmin/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/alarisadmin/AppData/Local/Microsoft/WinGet/Packages/Fastfetch-cli.Fastfetch_Microsoft.Winget.Source_8wekyb3d8bbwe:/mnt/c/Users/alarisadmin/.local/bin:/snap/bin:/home/astra/.dotnet/tools"
+  },
+  "all_future_casefolders_absent": true,
+  "normal_Python_assertions": true,
+  "no_concurrent_compiler_or_test": true,
+  "per_Slang_owner_limits": {
+    "seconds": 300,
+    "aggregate_sampled_RSS_KiB": 4194304,
+    "reserve_KiB": 2097152
+  },
+  "default_compiler_cache_unchanged": true,
+  "control_baseline_gate": "Every control byteequal pinned original; all5 before attributing any candidate source effect. Stop first nonpass or mismatch.",
+  "posttool_policy": "Only after each Slang helper actual observed CLOSED0. Root validates SPV with original validator argv, then disassembles; separately owned GNUtimeout300s/TERM/KILL10s per posttool, not an aggregateRSS certification. Root manual acceptance requires owned product/whole-input/birth/source checks and allprevious accepted raw/product/posttool pins before advancing. No XML collector.",
+  "source_build_hold_release": false,
+  "scope": "Permits exact ten private offline compiler actions once serially and read-only posttools. No canonical source/build/products edits, provider/runtime/numerical verdict or RSS/JIT/performance/adoption/fullqualification."
+}

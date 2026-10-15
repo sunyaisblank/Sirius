@@ -1,0 +1,149 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-pending-compiler-independent-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "compiler_execution_admitted": false,
+  "runtime_admitted": false,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewed_utc": "2026-10-15T18:39:01.612757+00:00",
+  "blockers": [],
+  "six_source_pins": {
+    "run_owned.py": {
+      "path": "out/trace-jacobi-pair-loop-screen/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/trace-jacobi-pair-loop-screen/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "inputs/candidate/trace.slang": {
+      "path": "out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "actions.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/actions.pending.json",
+      "bytes": 58234,
+      "sha256": "b6300c31ee3dec319381cd71527e08c87ec0d92bcbb3b79b41f631ecf7376c57"
+    },
+    "commands.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/commands.pending.json",
+      "bytes": 2326,
+      "sha256": "8d828213df2157fb9fdcefeb0c4d156817d057117209d8902c1ac8763a17876b"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/source-contracts.json",
+      "bytes": 36632,
+      "sha256": "5573e698e6a82f4b6a0a9764ac8a0147edd3ff9ef8804df7e08924433940c795"
+    }
+  },
+  "original_recipe_receipt": {
+    "path": "out/e2-original-cpu-witnesses-pending/five-target-commands.stdout",
+    "bytes": 242029,
+    "sha256": "b5e7628ae76a02cea711cb8c339fcee7079c00b09cf739d903242b087a73d807"
+  },
+  "pair_loop_source_proofs": {
+    "original.slang": {
+      "path": "out/trace-jacobi-pair-loop/original.slang",
+      "bytes": 63460,
+      "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+    },
+    "candidate.slang": {
+      "path": "out/trace-jacobi-pair-loop/candidate.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "patch.diff": {
+      "path": "out/trace-jacobi-pair-loop/patch.diff",
+      "bytes": 1100,
+      "sha256": "f66d4c196645412ab51498adac9be98c9befb2503f9099c892c53a4c401cb69c"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-pair-loop/source-contracts.json",
+      "bytes": 11527,
+      "sha256": "6b9878f7ff343526bed6df58a9ac478157601b3d39364fc8c95998132d0b556b"
+    },
+    "independent-source-review.json": {
+      "path": "out/trace-jacobi-pair-loop/independent-source-review.json",
+      "bytes": 11663,
+      "sha256": "62709208b8b4e868bf11f4a5e61bb7ce1af1118155607c9d0406ed11f9144915"
+    }
+  },
+  "recipe_checks": {
+    "original_five_saved_lines_exact": [
+      3,
+      17,
+      16,
+      18,
+      19
+    ],
+    "order": [
+      "control-fp32",
+      "candidate-fp32",
+      "control-fp32comp",
+      "candidate-fp32comp",
+      "control-fp64",
+      "candidate-fp64",
+      "control-cuda",
+      "candidate-cuda",
+      "control-metal",
+      "candidate-metal"
+    ],
+    "argv": "Every Slang argv equals its saved Ninja segment except owned -o and candidate-only source selection. /usr/bin/env --chdir preserves the exact lexical backend CWD; no shell pipeline or new compiler flag. FP64 warning30082 and COMP macro retained. Candidate has original trace.slang basename and original canonical include path.",
+    "validation": "Original three trailing spirv-val recipes are recorded but not executed by these ten Slang-only actions. Separate root-owned validation/disassembly remains required; no compiler exit is called validated SPIR-V.",
+    "baseline": "All five fresh controls must equal separately pinned canonical SPV/CUDA/MSL baseline bytes before any candidate source attribution. The mature owner does not implement baseline or product semantic acceptance; root must check actual output existence/identity and this gate. Source-path metadata differences remain distinct from loop/CFG changes."
+  },
+  "closure_and_ownership": {
+    "common_prospective_selectors": 42,
+    "per_action_inputs": [
+      42,
+      49,
+      56,
+      63,
+      70,
+      77,
+      84,
+      91,
+      98,
+      105
+    ],
+    "prior_chain": "Exact preceding six raw owner/before/after/stdout/stderr/samples files plus one declared product per earlier action (7*n). No own/future mutable outputs, XML or collector; no duplicate selectors.",
+    "source_identity": "All14 declared canonical source/CMake rich pins and named f22 commit/path/blob bytes match; original trace equals current canonical. Private candidate equals reviewed pair-loop candidate. Five proof files match exact recorded pins.",
+    "mature_helpers": "run_owned and owned_guard byte-exact approved CPU apparatus; AST inspected without import. Owner requires clean exact revision, absent case directory, whole tracked+declared inputs before/after, session-scoped subreaper, birth-aware cleanup and terminal absence, expected exit0, no stop/errors/remainers. Source/current-input checks and all pass assertions retained.",
+    "guards": {
+      "seconds": 300,
+      "aggregate_rss_kib": 4194304,
+      "reserve_kib": 2097152,
+      "software_provider": false,
+      "disable_software_shader_cache": false,
+      "kind": "compile",
+      "expected_exit": 0
+    },
+    "pending_state": "Revision remains ROOT_PENDING_REVISION; final actions/readiness/preflight and all ten case folders/products absent at review. No actual tool/DSO/environment/resource or final hash closure is asserted by pending source."
+  },
+  "source_and_emission_scope": {
+    "source_delta": "Exactly one contiguous replacement: original two ordered Jacobi pair calls become [loop] pair0..1 with firstColumn=2*pair. Exact unified patch and outside-region equality verified; inherited independent source PASS remains source-only.",
+    "bounds_and_frame": "Indices0/1 then2/3 are bounded and distinct across separate private X/V arrays. Same void helper, central geometry inputs and guard; two calls still execute, with unchanged within-pair RK sums and no new refusal/short circuit. No ABI, continuation, publication, tolerance or physical-work reduction is claimed.",
+    "unestablished": "Actual dynamic-index/inout copy-outs, retained loop/body sharing, closed CFG, all precision/capability/layout/entry/mode equivalence and footprint require actual emitted products. Source callsite reduction does not prove code-size, driver JIT/RSS, timing, numerical or performance improvement."
+  },
+  "required_before_operation": [
+    "Root closes/reviews SCI15 and releases applicable holds; exclusive root compiler scheduling and stop-first-nonpass remain required.",
+    "Root materializes actual clean revision and final typed actions/readiness/preflight, freezing these six sources plus this review and every consumed input without self-hash/output cycles.",
+    "Root binds actual interpreter/assertions-enabled environment, env/slang/validator and DT_NEEDED/loader/optional compiler resources, canonical import closure, flags/CWD/environment, baseline products and producer provenance. Pending selectors are not a complete current admission.",
+    "Root accepts every prior owner/output before advancing, then separately validates/reads actual products and requires all-five baseline equality before source attribution."
+  ],
+  "method": "Passive standard-library file/JSON/hash/AST/text/diff and read-only named Git only. No project helper/import/parser/compiler/validator/provider/test/network/process queries or live SCI15 case-output reads; only this new receipt written.",
+  "checkout": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "pending_packet_and_review_committed_or_pushed": false
+  },
+  "limits": "Admits pending source preparation only. No actual compile/lowering/validation/runtime/qualification/adoption, hold release, retry, guard change or cleanup authority."
+}

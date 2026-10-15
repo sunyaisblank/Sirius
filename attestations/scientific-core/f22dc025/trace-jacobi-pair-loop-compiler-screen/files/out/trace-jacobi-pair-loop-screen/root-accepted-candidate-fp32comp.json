@@ -1,0 +1,101 @@
+{
+  "schema": "sirius-trace-pair-loop-root-accepted-offline-operation-v1",
+  "case": "candidate-fp32comp",
+  "created_utc": "2026-10-15T19:06:51.348514+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 3524,
+    "sha256": "b1b96c182a0c966619c3425438fa5f1b069e06078f2834ae4b418907ac907b55"
+  },
+  "posttools": {
+    "bytes": 4753,
+    "sha256": "6302faf902729e217fd1b4a845b8ea8cf4b9e1a26a3927c63291802d15d7b5e6"
+  },
+  "whole_input_rows": 4336,
+  "product": {
+    "path": "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv",
+    "bytes": 2624072,
+    "sha256": "e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222"
+  },
+  "role": "candidate",
+  "variant": "fp32comp",
+  "matching_original_control_byteequal_baseline": null,
+  "SPIRV_original_validator_and_disassembly_passed": true,
+  "emitted_entry": "main",
+  "emitted_local_size": [
+    8,
+    8,
+    1
+  ],
+  "all5_control_attribution_gate_and_complete_CFG_ABI_footprint_review_pending": true,
+  "files": {
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/samples.jsonl": {
+      "bytes": 8752,
+      "sha256": "9d266f62fdcb77abf3b27613d5a34a90acf60f27ca94dd6ab9c39832e63f9d92"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/inputs-before.json": {
+      "bytes": 1442806,
+      "sha256": "f7e7ed9cc265c6ce33cb795d4d5a8b1a85d49e50cec0395e8793b322efdaa527"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/inputs-after.json": {
+      "bytes": 1442806,
+      "sha256": "f7e7ed9cc265c6ce33cb795d4d5a8b1a85d49e50cec0395e8793b322efdaa527"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv": {
+      "bytes": 2624072,
+      "sha256": "e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/owner.json": {
+      "bytes": 2855,
+      "sha256": "c4aed9925baf37b5dccd9c2855546faba60539ec0547048e30c861f3794555f3"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-fp32comp.json": {
+      "bytes": 2532,
+      "sha256": "5973f08daf4fddc67218a9b3e32d4e4c6236466b74a00e68dfc8fb58ea38b4bd"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-candidate-fp32comp.log": {
+      "bytes": 849,
+      "sha256": "b0ab756b7e053d0f5ab61b04785c5f1a1a3580ed714fb63982efbe9218a9a1b6"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32comp.spvasm": {
+      "bytes": 7687806,
+      "sha256": "28477226c3ea7ec5993b55d32ab93a5a879a67b335cd95c0e892db9f084c31d4"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp32comp.json": {
+      "bytes": 3524,
+      "sha256": "b1b96c182a0c966619c3425438fa5f1b069e06078f2834ae4b418907ac907b55"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp32comp.json": {
+      "bytes": 4753,
+      "sha256": "6302faf902729e217fd1b4a845b8ea8cf4b9e1a26a3927c63291802d15d7b5e6"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

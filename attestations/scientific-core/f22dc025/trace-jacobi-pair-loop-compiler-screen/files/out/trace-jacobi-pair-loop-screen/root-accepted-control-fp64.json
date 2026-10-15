@@ -1,0 +1,101 @@
+{
+  "schema": "sirius-trace-pair-loop-root-accepted-offline-operation-v1",
+  "case": "control-fp64",
+  "created_utc": "2026-10-15T19:07:17.795485+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 3447,
+    "sha256": "cd3771af517dabb63a16f4328dd4174be7f975b1d028230a305bded4643be6d2"
+  },
+  "posttools": {
+    "bytes": 4652,
+    "sha256": "20d4700b85b1956a3d8005ce0150851e71178129d14d38e69fbb811bbd180587"
+  },
+  "whole_input_rows": 4343,
+  "product": {
+    "path": "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv",
+    "bytes": 2847024,
+    "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+  },
+  "role": "control",
+  "variant": "fp64",
+  "matching_original_control_byteequal_baseline": true,
+  "SPIRV_original_validator_and_disassembly_passed": true,
+  "emitted_entry": "main",
+  "emitted_local_size": [
+    8,
+    8,
+    1
+  ],
+  "all5_control_attribution_gate_and_complete_CFG_ABI_footprint_review_pending": true,
+  "files": {
+    "out/trace-jacobi-pair-loop-screen/control-fp64/samples.jsonl": {
+      "bytes": 7135,
+      "sha256": "dd784ae84e0490b1ad1fd20a04190ebdd34846bb2f420167ab04ad4550b7e0ef"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/inputs-before.json": {
+      "bytes": 1444887,
+      "sha256": "e18a0cd5778ed7c09ab366285b73d148759cfa03d3a26fee93e0eba4a128aaee"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/inputs-after.json": {
+      "bytes": 1444887,
+      "sha256": "e18a0cd5778ed7c09ab366285b73d148759cfa03d3a26fee93e0eba4a128aaee"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv": {
+      "bytes": 2847024,
+      "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-fp64/owner.json": {
+      "bytes": 2842,
+      "sha256": "466f558a4eb06775e93620490a85746a4694ab861b77993918a11eca5f7533c7"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-control-fp64.json": {
+      "bytes": 2526,
+      "sha256": "815b762152ebe977a191c2f45e485284cdf867adf80cd3faf7a25b4aaaae5909"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-control-fp64.log": {
+      "bytes": 836,
+      "sha256": "b2a2569c0437889fe394296ee5f917a4b9021284bd173005df90f1c20254596a"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp64-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp64-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp64-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-post-control-fp64-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-spv-control-fp64.spvasm": {
+      "bytes": 8398125,
+      "sha256": "28ff0eef1385ce0f130d6e59318c0f7fbce128b801b16edf77e10e8d72f19a21"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp64.json": {
+      "bytes": 3447,
+      "sha256": "cd3771af517dabb63a16f4328dd4174be7f975b1d028230a305bded4643be6d2"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-control-fp64.json": {
+      "bytes": 4652,
+      "sha256": "20d4700b85b1956a3d8005ce0150851e71178129d14d38e69fbb811bbd180587"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

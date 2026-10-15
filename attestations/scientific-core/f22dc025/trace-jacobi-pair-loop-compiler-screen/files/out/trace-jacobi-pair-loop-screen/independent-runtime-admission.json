@@ -1,0 +1,394 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-offline-compiler-independent-runtime-admission-v1",
+  "passed": true,
+  "materialized_metadata_admitted": true,
+  "compiler_launch_authorized_by_this_receipt": false,
+  "provider_runtime_admitted": false,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewed_utc": "2026-10-15T19:00:18.931328+00:00",
+  "blockers": [],
+  "critical_pins": {
+    "actions.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/actions.json",
+      "bytes": 4350314,
+      "sha256": "76d9f4c40317f27021957d5c9274a6c1967b9bb3e2e8bf33e7cd1742684008ae"
+    },
+    "readiness.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/readiness.json",
+      "bytes": 17349,
+      "sha256": "383b1fa05a951417a75c9e0d0baa8c7989458de610aad54ab1990b39c91cfe63"
+    },
+    "root-preflight.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-preflight.json",
+      "bytes": 1908874,
+      "sha256": "77e908dde0078d475df74062911b168c3f83b1e4b3ff349c8809166e8c46b8f0"
+    },
+    "root-compiler-tool-observation.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-compiler-tool-observation.json",
+      "bytes": 1338589,
+      "sha256": "79f89e2fe0a44232b5f5cb615d2b684f8a58d751bb3df8ede094f849592c42bc"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/source-contracts.json",
+      "bytes": 36632,
+      "sha256": "5573e698e6a82f4b6a0a9764ac8a0147edd3ff9ef8804df7e08924433940c795"
+    },
+    "independent-source-review.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/independent-source-review.json",
+      "bytes": 8340,
+      "sha256": "edcc3f61297d440acaf92bf8e3d5891b1d95e775cd744223c12f24274e95799c"
+    },
+    "actions.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/actions.pending.json",
+      "bytes": 58234,
+      "sha256": "b6300c31ee3dec319381cd71527e08c87ec0d92bcbb3b79b41f631ecf7376c57"
+    },
+    "commands.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-screen/commands.pending.json",
+      "bytes": 2326,
+      "sha256": "8d828213df2157fb9fdcefeb0c4d156817d057117209d8902c1ac8763a17876b"
+    },
+    "run_owned.py": {
+      "path": "out/trace-jacobi-pair-loop-screen/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/trace-jacobi-pair-loop-screen/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "inputs/candidate/trace.slang": {
+      "path": "out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    }
+  },
+  "materialization": {
+    "exact_pending_delta_fields": [
+      "revision",
+      "frozen_inputs"
+    ],
+    "scope_argv_flags_and_guards_unchanged": true,
+    "ten_original_derived_Slang_recipes_exact": true,
+    "original_lexical_backend_CWD_and_canonical_include_retained": true,
+    "candidate_only_source_and_owned_output_relocations": true,
+    "candidate_same_trace_basename_exact_reviewed63512bytes": true,
+    "all_actions_compile_softwarefalse_defaultcache_expected_exit_int0_no_XML": true,
+    "order_and_owned_products": [
+      {
+        "case": "control-fp32",
+        "variant": "fp32",
+        "role": "control",
+        "whole_input_rows": 4315,
+        "frozen_selectors": 3791,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "candidate-fp32",
+        "variant": "fp32",
+        "role": "candidate",
+        "whole_input_rows": 4322,
+        "frozen_selectors": 3798,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "control-fp32comp",
+        "variant": "fp32comp",
+        "role": "control",
+        "whole_input_rows": 4329,
+        "frozen_selectors": 3805,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "candidate-fp32comp",
+        "variant": "fp32comp",
+        "role": "candidate",
+        "whole_input_rows": 4336,
+        "frozen_selectors": 3812,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "control-fp64",
+        "variant": "fp64",
+        "role": "control",
+        "whole_input_rows": 4343,
+        "frozen_selectors": 3819,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "candidate-fp64",
+        "variant": "fp64",
+        "role": "candidate",
+        "whole_input_rows": 4350,
+        "frozen_selectors": 3826,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "control-cuda",
+        "variant": "cuda",
+        "role": "control",
+        "whole_input_rows": 4357,
+        "frozen_selectors": 3833,
+        "owned_product": "trace.cu"
+      },
+      {
+        "case": "candidate-cuda",
+        "variant": "cuda",
+        "role": "candidate",
+        "whole_input_rows": 4364,
+        "frozen_selectors": 3840,
+        "owned_product": "trace.cu"
+      },
+      {
+        "case": "control-metal",
+        "variant": "metal",
+        "role": "control",
+        "whole_input_rows": 4371,
+        "frozen_selectors": 3847,
+        "owned_product": "trace.metal"
+      },
+      {
+        "case": "candidate-metal",
+        "variant": "metal",
+        "role": "candidate",
+        "whole_input_rows": 4378,
+        "frozen_selectors": 3854,
+        "owned_product": "trace.metal"
+      }
+    ],
+    "ten_case_directories_and_products_absent": true,
+    "no_collector_added": true,
+    "guards": {
+      "seconds": 300,
+      "aggregate_controller_plus_owned_session_RSS_KiB": 4194304,
+      "minimum_available_KiB": 2097152
+    }
+  },
+  "whole_input_closure": {
+    "all4314_preflight_file_identities_fresh_current": true,
+    "tracked_sources": 538,
+    "owner_rows": [
+      4315,
+      4322,
+      4329,
+      4336,
+      4343,
+      4350,
+      4357,
+      4364,
+      4371,
+      4378
+    ],
+    "same3749_common_additional_selectors_appended": true,
+    "exact_sets": "Tracked/declared source apparatus equals static4314 +preflight itself +exact seven files per earlier action, six raw owner/input/stdout/stderr/samples records and its declared product.",
+    "all_pending42_plus7n_selectors_retained": true,
+    "preflight_to_owner_path_normalization": "Absolute checkout-local spirv-val/spirv-dis preflight keys become relative bin/linux-gcc/... keys under mature owner key(p); exact resolved identities and4315+7n counts preserved.",
+    "no_self_hash_cycle_or_ownfuture_mutable_output_input": true,
+    "new_review_excluded_from_bound_inputs": true,
+    "current_3692_installed_resource_paths_and_directory_search_snapshots_exact": true,
+    "canonical_source_build_products_held_no_write_authority": true
+  },
+  "source_and_baseline": {
+    "actual_transitive_trace_source_files": 11,
+    "conservative_pending_import_sources": 13,
+    "two_extra_conservative_modules": [
+      "gr_coupled",
+      "gr_kerr_infinity"
+    ],
+    "actual_import_closure_rows": {
+      "src/sirius/kernels/trace.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/trace.slang",
+        "bytes": 63460,
+        "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+      },
+      "src/sirius/kernels/gr_trace_continuation.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang",
+        "bytes": 2212,
+        "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+      },
+      "src/sirius/kernels/gr_types.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang",
+        "bytes": 5519,
+        "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+      },
+      "src/sirius/kernels/gr_point_star.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_point_star.slang",
+        "bytes": 1773,
+        "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+      },
+      "src/sirius/kernels/gr_ellis_topology.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang",
+        "bytes": 9393,
+        "sha256": "ebf8f6413fc3d158b2bc135634a8e6c8d6790c8be8a20b217e46424ba9a58ca8"
+      },
+      "src/sirius/kernels/gr_trace_event.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_event.slang",
+        "bytes": 15656,
+        "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+      },
+      "src/sirius/kernels/gr_integrator.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang",
+        "bytes": 27452,
+        "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+      },
+      "src/sirius/kernels/gr_metrics.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang",
+        "bytes": 30379,
+        "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+      },
+      "src/sirius/kernels/gr_deviation.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang",
+        "bytes": 17259,
+        "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+      },
+      "src/sirius/kernels/gr_disk.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_disk.slang",
+        "bytes": 16688,
+        "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+      },
+      "src/sirius/kernels/gr_camera.slang": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_camera.slang",
+        "bytes": 7542,
+        "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+      }
+    },
+    "canonical_and_private_search_directory_names_unchanged_no_compiled_sibling_override": true,
+    "three_actual_backend_staged_trace_products_equal_current_compiled_products": true,
+    "five_baseline_product_pins": {
+      "fp32": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv",
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "fp64": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv",
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      },
+      "fp32comp": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv",
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "cuda": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu",
+        "bytes": 321379,
+        "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+      },
+      "metal": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal",
+        "bytes": 344056,
+        "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+      }
+    },
+    "strict_producer_application": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-device-lifetime-checks/source-application.json",
+      "bytes": 3974,
+      "sha256": "f00fd8ef248994f09a51f62ec2ba69a94f55463e0cf39b1ce5a0fb33fc61139e"
+    },
+    "original_five_saved_Ninja_recipe_lines_exact": true,
+    "source_review_reused": "The accepted source-only screen review and prior pair-loop semantic review remain separate from emitted-code acceptance."
+  },
+  "actual_tool_metadata": {
+    "Slang_version": "2026.12.0.1",
+    "Slang_version_on_stderr_not_assumed_empty": true,
+    "SPIRV_tools_version": "v2026.3 b707790a898e44038547df54580022fc1cf89c3d",
+    "timeout_version": "GNU coreutils9.4",
+    "env_chdir_recorded_actual_success_and_expected_CWD": true,
+    "actual_tool_pins": {
+      "/usr/bin/env": {
+        "resolved_path": "/usr/bin/env",
+        "bytes": 48072,
+        "sha256": "886e5fa8be716b03eeda48856e0f04493f2969fc148fb7812594ffac647fa050"
+      },
+      "/opt/slang/bin/slangc": {
+        "resolved_path": "/opt/slang/bin/slangc",
+        "bytes": 60464,
+        "sha256": "26d7fd442248bc702dd07c07757d628e5bf20c17a95359aa54191ab19da4ff7b"
+      },
+      "/usr/bin/git": {
+        "resolved_path": "/usr/bin/git",
+        "bytes": 4066232,
+        "sha256": "2a8c18fbf43da9f692d75474c72bea9dfd796c260b0f3dfe456376abc3bbd668"
+      },
+      "/usr/bin/python3": {
+        "resolved_path": "/usr/bin/python3.12",
+        "bytes": 8020928,
+        "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+      },
+      "/usr/bin/python3.12": {
+        "resolved_path": "/usr/bin/python3.12",
+        "bytes": 8020928,
+        "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+      },
+      "/usr/bin/timeout": {
+        "resolved_path": "/usr/bin/timeout",
+        "bytes": 39880,
+        "sha256": "12690a043dfd555a6c14ccc1564f5649c18f1762c0d6ff66729948130898ec52"
+      },
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "bytes": 2405584,
+        "sha256": "7915625ba38ab684aedca680f785614f61f30fe4656f7e4c999717f224a9a442"
+      },
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "bytes": 792008,
+        "sha256": "ba9f6efbf025471a37c5d44abd350e4af7f085854bfa76cca9126f0cad0db466"
+      }
+    },
+    "complete_Slang_regular_path_inventory": 3692,
+    "unique_installed_ELFs_matched_saved_actual_ldd_records": 10,
+    "saved_operation_tool_ldd_captures_matched": 7,
+    "installed_plus_operation_tool_DT_NEEDED_union": 15,
+    "all15_current_DSO_pin_records_exact": true,
+    "actual_selected_environment_equal_tool_observation_readiness_preflight": true,
+    "protected_compiler_provider_override_absence_and_default_cache_recorded": true,
+    "inventory_scope": "Conservative installed modules/libraries/docs are frozen paths, not a claim all were loaded. Saved ldd observations are not actual compiler process maps or an exhaustive compiler-cache/file-access census."
+  },
+  "SCI15_completed_published_handoff": {
+    "all15_original_helpers_collectors_complete_and_independent_review_passed": true,
+    "publication_receipt": {
+      "resolved_path": "/home/astra/.project/Sirius/out/science-original-cpu-gap-witnesses-preservation/root-git-preservation.json",
+      "bytes": 1410,
+      "sha256": "9c025f5494f09c96157f8ccc5623d92bdb957315d6ed8db2f7be41874882b072"
+    },
+    "published_evidence_commit": "031ef445c036fb5bcbce91da4c8ca8c45ccc9c56",
+    "root_observed_actual_push0_then_fresh_remote0_exact_tag": true,
+    "namedGit_manifest_preservation_and_both_completion_receipts_bytes_exact": true,
+    "published197fullblob_preservation_scope_reuses_accepted_root_independent_preservation_proofs": true,
+    "only_exclusive_compiler_scheduling_handoff_released": true,
+    "canonical_source_build_product_holds_retained": true,
+    "no_network_or_fresh_remote_query_by_reviewer": true
+  },
+  "known_metadata_corrections": {
+    "version_stream": "Root metadata collection first stopped on a false empty-stderr assumption; actual Slang version is in stderr. Original captured streams retained; no shader generation or final metadata was produced by that stopped collector.",
+    "imports": "First materializer expected13 actual imports and stopped before final files; actual closure is11 with2 conservative extras still pinned.",
+    "staged_trace": "Actual backend-stage paths come from prior accepted trace input identities and fresh current byte joins, not an app-resource guess."
+  },
+  "required_root_release_and_postconditions": {
+    "execution_release_pending_in_current_metadata": true,
+    "root_runtime_release_not_created": true,
+    "root_must_freshly_recheck_then_own_each_Slang_action_once_serially": true,
+    "before_advance": "Accept terminal passed owner/exit0/no stop/source+whole-input stability/guards/cleanup/birth evidence AND exact owned product identity; all prior raw/product files remain current.",
+    "control_attribution_gate": "All five control products must equal their pinned canonical SPV/CUDA/MSL baseline bytes before any candidate source attribution. A mismatch is a producer/recipe refusal, not a numerical candidate verdict.",
+    "separate_validation_disassembly_required": "These ten actions invoke Slang only. Root must separately perform the original SPIRV validators and admitted disassembly/CFG/type/capability/interface/layout/entry/mode/footprint inspection; private source-path annotations must be distinguished from semantic changes.",
+    "separate_posttool_limits": "The mature aggregate300s/4GiB/2GiB guard applies to ten Slang owners. Any root timeout/validator/disassembler postoperation has separately recorded limits/results and is not silently promoted to that ownership scope.",
+    "no_provider_test_or_scientific_adoption_authority": true
+  },
+  "method": "Passive standard-library JSON/hash/source/regex/file metadata and read-only Git only. No helper/project import/parser, compiler, validator, disassembler, provider, test, program-version/ldd query, network or process query. Only this sidecar written.",
+  "checkout": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "new_review_committed_or_pushed": false
+  },
+  "limitations": [
+    "Offline compiler metadata PASS only; no generated product, successful compiler owner, validated module, numerical verdict, RSS/JIT/performance benefit or source adoption exists yet.",
+    "No held canonical source/build mutation, unchanged runtime retry, guard raise, fullscience/Mandatory/native/UI/release qualification."
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "sirius-trace-pair-loop-root-owner-product-check-v1",
+  "case": "candidate-fp64",
+  "created_utc": "2026-10-15T19:07:29.339183+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_helper_observed_closed_exit": 0,
+  "owner_terminal_passed_exit0_original_guards": true,
+  "whole_input_rows": 4350,
+  "preflight_local_absolute_paths_normalized_to_owner_relative_keys": true,
+  "before_after_current_and_prior_raw_exact": true,
+  "source_unchanged": true,
+  "sample_count": 28,
+  "owner_seconds": 7.384731626021676,
+  "peak_sampled_aggregate_RSS_KiB": 463732,
+  "saved_owned_births_fresh_rechecked": [
+    {
+      "pid": 1113445,
+      "saved_start_ticks": "14059146",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 1113449,
+      "saved_start_ticks": "14059234",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "product": {
+    "path": "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv",
+    "bytes": 2553336,
+    "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+  },
+  "role": "candidate",
+  "variant": "fp64",
+  "matching_original_control_byteequal_baseline": null,
+  "control_baseline": {
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv",
+    "bytes": 2847024,
+    "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+  },
+  "separate_validation_disassembly_and_root_acceptance_pending": true,
+  "all5_controls_before_candidate_source_attribution": true,
+  "files": {
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/samples.jsonl": {
+      "bytes": 6452,
+      "sha256": "fa8e40a0ca69c7887c5bcd5129f66b22bb7fd36759d9b8f1056d8e134d6b54d5"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-before.json": {
+      "bytes": 1446884,
+      "sha256": "6e35cc03209673340a3417831d5fb8ff046081d1ab11b7c581f0e09ef5511bb2"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-after.json": {
+      "bytes": 1446884,
+      "sha256": "6e35cc03209673340a3417831d5fb8ff046081d1ab11b7c581f0e09ef5511bb2"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv": {
+      "bytes": 2553336,
+      "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+    },
+    "out/trace-jacobi-pair-loop-screen/candidate-fp64/owner.json": {
+      "bytes": 2871,
+      "sha256": "785bb1a78c60e50cdcc6b88fed945abc194bf6939d58bc89090c1a9f226320dd"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-fp64.json": {
+      "bytes": 2528,
+      "sha256": "7346d8fbe863ee0541995edd81dc13fe630df9e7091e830afc3403c34c3d27ce"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-candidate-fp64.log": {
+      "bytes": 840,
+      "sha256": "b31df5e94d26d322a914faba262495ea143047df659fd8c1d916ec9a75467285"
+    }
+  },
+  "scope": "One actual offline compiler owner/product only; no scientific/numerical/runtime/RSS/JIT/performance/adoption verdict. Three-dimensional8x8x1 kernel and ABI remain separate emitted checks."
+}

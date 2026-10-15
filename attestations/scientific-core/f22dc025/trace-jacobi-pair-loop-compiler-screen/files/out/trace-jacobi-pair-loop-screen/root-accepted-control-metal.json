@@ -1,0 +1,77 @@
+{
+  "schema": "sirius-trace-pair-loop-root-accepted-offline-operation-v1",
+  "case": "control-metal",
+  "created_utc": "2026-10-15T19:08:06.993025+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 3469,
+    "sha256": "a3a9d28ce4adb626ecbe6ac0bee61d5a4302dfb98668c177017dd4c328e7fd74"
+  },
+  "posttools": {
+    "bytes": 1166,
+    "sha256": "d22748be0ab3fcf86eaf9beabfef55399d5dd59b7fac7d422c92ff4f2caca68d"
+  },
+  "whole_input_rows": 4371,
+  "product": {
+    "path": "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal",
+    "bytes": 344056,
+    "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+  },
+  "role": "control",
+  "variant": "metal",
+  "matching_original_control_byteequal_baseline": true,
+  "SPIRV_original_validator_and_disassembly_passed": false,
+  "emitted_entry": null,
+  "emitted_local_size": null,
+  "all5_control_attribution_gate_and_complete_CFG_ABI_footprint_review_pending": true,
+  "files": {
+    "out/trace-jacobi-pair-loop-screen/control-metal/samples.jsonl": {
+      "bytes": 1839,
+      "sha256": "7c930757622584046c82e412e265b16973383fffa5712809fe5fdd94ca5eafe9"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/inputs-before.json": {
+      "bytes": 1452925,
+      "sha256": "c452178f552bc21fa79d83a502877fb9ffde5808a4d1cae1ee6084f2784918d7"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/inputs-after.json": {
+      "bytes": 1452925,
+      "sha256": "c452178f552bc21fa79d83a502877fb9ffde5808a4d1cae1ee6084f2784918d7"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal": {
+      "bytes": 344056,
+      "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+    },
+    "out/trace-jacobi-pair-loop-screen/control-metal/owner.json": {
+      "bytes": 2757,
+      "sha256": "dc7502d34a8032b52f71211dba9e0ce85c0be9d1d5913061c1038aadeffdfb42"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-prelaunch-control-metal.json": {
+      "bytes": 2527,
+      "sha256": "3a784e20fc6d1d1c1fc60b0a20abe2b1a4706c1896af612aeb4e536089bbb860"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-helper-control-metal.log": {
+      "bytes": 839,
+      "sha256": "41075e5fc8ca2e7c7ac653709b21a8afd034fe9c4e56de91c5389f1af75cc14c"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-owner-product-control-metal.json": {
+      "bytes": 3469,
+      "sha256": "a3a9d28ce4adb626ecbe6ac0bee61d5a4302dfb98668c177017dd4c328e7fd74"
+    },
+    "out/trace-jacobi-pair-loop-screen/root-posttools-control-metal.json": {
+      "bytes": 1166,
+      "sha256": "d22748be0ab3fcf86eaf9beabfef55399d5dd59b7fac7d422c92ff4f2caca68d"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

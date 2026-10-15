@@ -1,0 +1,852 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-offline-compiler-manifest-v1",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "created_utc": "2026-10-15T19:25:55.529657+00:00",
+  "files": {
+    "files/out/trace-jacobi-pair-loop-screen/actions.json": {
+      "bytes": 4350314,
+      "sha256": "76d9f4c40317f27021957d5c9274a6c1967b9bb3e2e8bf33e7cd1742684008ae"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/actions.pending.json": {
+      "bytes": 58234,
+      "sha256": "b6300c31ee3dec319381cd71527e08c87ec0d92bcbb3b79b41f631ecf7376c57"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-cuda/inputs-after.json": {
+      "bytes": 1450903,
+      "sha256": "373fcc216c3fef6862dfb7f61cd9f5cf9145f0dbe7f0372bc2089ce9adcdfc16"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-cuda/inputs-before.json": {
+      "bytes": 1450903,
+      "sha256": "373fcc216c3fef6862dfb7f61cd9f5cf9145f0dbe7f0372bc2089ce9adcdfc16"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-cuda/owner.json": {
+      "bytes": 2778,
+      "sha256": "d08e0361dbe931228f456492a5c34b9852fc2bd0ce13f18c041e3915789a5fad"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-cuda/samples.jsonl": {
+      "bytes": 1385,
+      "sha256": "88e077d0c869ccd838dbcd46969efc2299c686d18e346582ab8c495ce7c6fd6e"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-cuda/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-cuda/trace.cu": {
+      "bytes": 321552,
+      "sha256": "4fabfe9f5d7d2487baf361b09a66aca1c44f8532e8c65cf17b6e22c50ed735a4"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32/inputs-after.json": {
+      "bytes": 1438728,
+      "sha256": "6613571b8d5160dfe21b73ba91816615777c79cece4665271c045515e0520a53"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32/inputs-before.json": {
+      "bytes": 1438728,
+      "sha256": "6613571b8d5160dfe21b73ba91816615777c79cece4665271c045515e0520a53"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32/owner.json": {
+      "bytes": 2813,
+      "sha256": "f855029da42300c9f484ff23a09db592c4d779868f90e2e2d840a534a124c347"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32/samples.jsonl": {
+      "bytes": 9668,
+      "sha256": "0e06fae3d3f2bc757df2b3d4dbeecde7877012033432f17cfbbb1303785f3e6a"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv": {
+      "bytes": 2620748,
+      "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32comp/inputs-after.json": {
+      "bytes": 1442806,
+      "sha256": "f7e7ed9cc265c6ce33cb795d4d5a8b1a85d49e50cec0395e8793b322efdaa527"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32comp/inputs-before.json": {
+      "bytes": 1442806,
+      "sha256": "f7e7ed9cc265c6ce33cb795d4d5a8b1a85d49e50cec0395e8793b322efdaa527"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32comp/owner.json": {
+      "bytes": 2855,
+      "sha256": "c4aed9925baf37b5dccd9c2855546faba60539ec0547048e30c861f3794555f3"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32comp/samples.jsonl": {
+      "bytes": 8752,
+      "sha256": "9d266f62fdcb77abf3b27613d5a34a90acf60f27ca94dd6ab9c39832e63f9d92"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32comp/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32comp/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv": {
+      "bytes": 2624072,
+      "sha256": "e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-after.json": {
+      "bytes": 1446884,
+      "sha256": "6e35cc03209673340a3417831d5fb8ff046081d1ab11b7c581f0e09ef5511bb2"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-before.json": {
+      "bytes": 1446884,
+      "sha256": "6e35cc03209673340a3417831d5fb8ff046081d1ab11b7c581f0e09ef5511bb2"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp64/owner.json": {
+      "bytes": 2871,
+      "sha256": "785bb1a78c60e50cdcc6b88fed945abc194bf6939d58bc89090c1a9f226320dd"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp64/samples.jsonl": {
+      "bytes": 6452,
+      "sha256": "fa8e40a0ca69c7887c5bcd5129f66b22bb7fd36759d9b8f1056d8e134d6b54d5"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv": {
+      "bytes": 2553336,
+      "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-metal/inputs-after.json": {
+      "bytes": 1454939,
+      "sha256": "33727dde9c1c9a78adf5f5431153114a1f4cb59c128cc85372f0dc6ac17e347b"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-metal/inputs-before.json": {
+      "bytes": 1454939,
+      "sha256": "33727dde9c1c9a78adf5f5431153114a1f4cb59c128cc85372f0dc6ac17e347b"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-metal/owner.json": {
+      "bytes": 2785,
+      "sha256": "1263a49d9823858c5ea28a2757d81c074cfbda43129e3ae819f13a8c1b1ab4e3"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-metal/samples.jsonl": {
+      "bytes": 1614,
+      "sha256": "b8f625288533309efd19d8a2772d5d3beed10fdd73ef418d6af01965942f5f30"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-metal/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/candidate-metal/trace.metal": {
+      "bytes": 344160,
+      "sha256": "5efed47371922c709b730440c7229e36408ce4b8e54117a77bb365ea38f0dd77"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/commands.pending.json": {
+      "bytes": 2326,
+      "sha256": "8d828213df2157fb9fdcefeb0c4d156817d057117209d8902c1ac8763a17876b"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-cuda/inputs-after.json": {
+      "bytes": 1448909,
+      "sha256": "abf35b2ff601b09ac7f885cbfcfc0fb674bd281e20cdbc7c8491fb22bce2d1f3"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-cuda/inputs-before.json": {
+      "bytes": 1448909,
+      "sha256": "abf35b2ff601b09ac7f885cbfcfc0fb674bd281e20cdbc7c8491fb22bce2d1f3"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-cuda/owner.json": {
+      "bytes": 2749,
+      "sha256": "ef7d2d6f0b634c7a299efcde7106fa3c6505df8aaa08d85fb4122ed897825150"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-cuda/samples.jsonl": {
+      "bytes": 1848,
+      "sha256": "aa344552687f7ff95291ae2a175461f5be438cf1ca4215c4fbe4ded74425eae8"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-cuda/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu": {
+      "bytes": 321379,
+      "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32/inputs-after.json": {
+      "bytes": 1436731,
+      "sha256": "51e3983a94f2b558a632defcec101bbcaf184575fc4472933356506e18c1dd59"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32/inputs-before.json": {
+      "bytes": 1436731,
+      "sha256": "51e3983a94f2b558a632defcec101bbcaf184575fc4472933356506e18c1dd59"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32/owner.json": {
+      "bytes": 2783,
+      "sha256": "61156145f59abfd279f9bf485ce1a525daa29fdd6bbd7d4ee879e35e0bf8bcc9"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32/samples.jsonl": {
+      "bytes": 6223,
+      "sha256": "11aff08894662991dd878dbe0ac85b6036b255b0def7afa011fef6aeb6a8afd3"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv": {
+      "bytes": 2994452,
+      "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32comp/inputs-after.json": {
+      "bytes": 1440753,
+      "sha256": "fd0b1ec3db9f474528ea288f48877c4fba5c73bd98bbfb7495409cd7bf98bdff"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32comp/inputs-before.json": {
+      "bytes": 1440753,
+      "sha256": "fd0b1ec3db9f474528ea288f48877c4fba5c73bd98bbfb7495409cd7bf98bdff"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32comp/owner.json": {
+      "bytes": 2825,
+      "sha256": "0622afa2964e82ab2c16c713a2dd551d8f36e6b35c144188e031ae87c28a5437"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32comp/samples.jsonl": {
+      "bytes": 8059,
+      "sha256": "8a57e2a3a9fb076a422566234c3ef3696d431f5844f30a792718a791cc89553f"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32comp/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32comp/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv": {
+      "bytes": 2997776,
+      "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp64/inputs-after.json": {
+      "bytes": 1444887,
+      "sha256": "e18a0cd5778ed7c09ab366285b73d148759cfa03d3a26fee93e0eba4a128aaee"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp64/inputs-before.json": {
+      "bytes": 1444887,
+      "sha256": "e18a0cd5778ed7c09ab366285b73d148759cfa03d3a26fee93e0eba4a128aaee"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp64/owner.json": {
+      "bytes": 2842,
+      "sha256": "466f558a4eb06775e93620490a85746a4694ab861b77993918a11eca5f7533c7"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp64/samples.jsonl": {
+      "bytes": 7135,
+      "sha256": "dd784ae84e0490b1ad1fd20a04190ebdd34846bb2f420167ab04ad4550b7e0ef"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv": {
+      "bytes": 2847024,
+      "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-metal/inputs-after.json": {
+      "bytes": 1452925,
+      "sha256": "c452178f552bc21fa79d83a502877fb9ffde5808a4d1cae1ee6084f2784918d7"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-metal/inputs-before.json": {
+      "bytes": 1452925,
+      "sha256": "c452178f552bc21fa79d83a502877fb9ffde5808a4d1cae1ee6084f2784918d7"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-metal/owner.json": {
+      "bytes": 2757,
+      "sha256": "dc7502d34a8032b52f71211dba9e0ce85c0be9d1d5913061c1038aadeffdfb42"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-metal/samples.jsonl": {
+      "bytes": 1839,
+      "sha256": "7c930757622584046c82e412e265b16973383fffa5712809fe5fdd94ca5eafe9"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-metal/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/control-metal/trace.metal": {
+      "bytes": 344056,
+      "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/env-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/env-ldd.stdout": {
+      "bytes": 155,
+      "sha256": "3e11c1da59f3ef4ddef8a7914bf5bfca673637c86fa58015264fe3202be80a65"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/env-version.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/env-version.stdout": {
+      "bytes": 340,
+      "sha256": "2bf81b20cfa9db1fb98cad9603ae6d1c9d3a2056ab1eb989b73594eaf1d70001"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/git-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/git-ldd.stdout": {
+      "bytes": 301,
+      "sha256": "2536eb40efa4f8e6054def12cf3b99927b9b317bd62486a6f576ddb9b81065f3"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/independent-completion-review.json": {
+      "bytes": 16774,
+      "sha256": "78ba5cda5662492c9d48fd4fe6366b337347133363eda2859d5ec4e57bee6298"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/independent-emitted-review.json": {
+      "bytes": 28041,
+      "sha256": "e055e17080b4c1a2961032b71843408d8a9dd80d27f5b3f73f539244e1a83444"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/independent-runtime-admission.json": {
+      "bytes": 18382,
+      "sha256": "50d36fa84f7a8d56d7d079a9f91fe36c4078dd2f280e1762365b8f99b0279ede"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/independent-source-review.json": {
+      "bytes": 8340,
+      "sha256": "edcc3f61297d440acaf92bf8e3d5891b1d95e775cd744223c12f24274e95799c"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/inputs/candidate/trace.slang": {
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/python-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/python-ldd.stdout": {
+      "bytes": 364,
+      "sha256": "f6a833a5e4170695e11aab6718ea5bc2302a7b014c8f4012ad19b93a5dfb82e5"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/readiness.json": {
+      "bytes": 17349,
+      "sha256": "383b1fa05a951417a75c9e0d0baa8c7989458de610aad54ab1990b39c91cfe63"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-candidate-cuda.json": {
+      "bytes": 3374,
+      "sha256": "6f8e3c148a14fc57a6f5d60c02e06df8380e50153cc93ba6162568e645628775"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp32.json": {
+      "bytes": 4362,
+      "sha256": "faea7340cc2ffa3718e3559846c34dbe075c8c26bfb81618049abef5ec6263bf"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp32comp.json": {
+      "bytes": 4438,
+      "sha256": "492f74981af7cae1e8ad38d0b8e0a34044334fe38f6ca7c7bf12dd8a6d121d3b"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-candidate-fp64.json": {
+      "bytes": 4362,
+      "sha256": "fc813c1bd4381470394b71fd99eef55ae1b35eed3bf62de286e0538c98f8bfd7"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-candidate-metal.json": {
+      "bytes": 3394,
+      "sha256": "6d5376af4f10a79ed034a7760357892d34041336e18be42587b37119d41c4aaa"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-control-cuda.json": {
+      "bytes": 3346,
+      "sha256": "70a7151936636773019b20eb0d8402c13c09b3191686f30866256649bbae6fe8"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-control-fp32.json": {
+      "bytes": 4324,
+      "sha256": "04c4cf5123e0e3506f498d0efd66b01d6e2e97c7e522481d4d9ffa7fafa89963"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-control-fp32comp.json": {
+      "bytes": 4400,
+      "sha256": "b3fb57d7ca395586e3af9ed559c22272854f36183e10e329ea6be5039dd3b383"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-control-fp64.json": {
+      "bytes": 4324,
+      "sha256": "5f8729d300052b6cf057fb46567b2c78f33225d8f34f24a1dc6faf8651fce356"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-accepted-control-metal.json": {
+      "bytes": 3366,
+      "sha256": "9a423b841dc142d91b7eb7152c9bc6913222ad7157ece0de7680ad183fc6d1d1"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-compiler-tool-observation.json": {
+      "bytes": 1338589,
+      "sha256": "79f89e2fe0a44232b5f5cb615d2b684f8a58d751bb3df8ede094f849592c42bc"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-completed-operations.json": {
+      "bytes": 41678,
+      "sha256": "fff3421ee0fd84044b2f041a1d6dd39eebdfcaf9d8365b7ad592652a62a138ba"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-emitted-observation.json": {
+      "bytes": 53264,
+      "sha256": "33799af8a452fdba53b47644c611f925cecd3e7bb2577cf3bb24bb7393c529dd"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-generated-cuda.diff": {
+      "bytes": 40830,
+      "sha256": "b062ae398251e7c0aa5852da8caef934ec5a6b5108c31d26ba7e045693e0c211"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-generated-metal.diff": {
+      "bytes": 60427,
+      "sha256": "d5e288f5fc02bbeaa6624708aacd576383dd12e9a089e8c655ef5b9b49b1e067"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-candidate-cuda.log": {
+      "bytes": 841,
+      "sha256": "e8ced5a619f1d70671ed051981cdaf46b390de05851b64d87b28443584a3f21a"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-candidate-fp32.log": {
+      "bytes": 841,
+      "sha256": "af64328494dc3ca20f28f2e77a87df15c0ee03b9ccc04af19d57d0851ec24e0e"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-candidate-fp32comp.log": {
+      "bytes": 849,
+      "sha256": "b0ab756b7e053d0f5ab61b04785c5f1a1a3580ed714fb63982efbe9218a9a1b6"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-candidate-fp64.log": {
+      "bytes": 840,
+      "sha256": "b31df5e94d26d322a914faba262495ea143047df659fd8c1d916ec9a75467285"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-candidate-metal.log": {
+      "bytes": 842,
+      "sha256": "b4e645881f5aaed4f2f53013e401bd467e7822e6c65b80b45f08b62bd4552f22"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-control-cuda.log": {
+      "bytes": 837,
+      "sha256": "6825b6fe50553738624bf8c9002096585616074aeea4298f174259ec76324941"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-control-fp32.log": {
+      "bytes": 836,
+      "sha256": "eab42d211d9d93bf913369044723dabc0d8302868ed86fc8c437faa713f109ac"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-control-fp32comp.log": {
+      "bytes": 844,
+      "sha256": "40b53b611ba7285f2b7f2b81a166ba0b0a24c7069ba2077e8c35c3c4999de05b"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-control-fp64.log": {
+      "bytes": 836,
+      "sha256": "b2a2569c0437889fe394296ee5f917a4b9021284bd173005df90f1c20254596a"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-helper-control-metal.log": {
+      "bytes": 839,
+      "sha256": "41075e5fc8ca2e7c7ac653709b21a8afd034fe9c4e56de91c5389f1af75cc14c"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-orchestration.json": {
+      "bytes": 16735,
+      "sha256": "02a2965193bad264423fa79292fea6687229e08621ce6eb83f69fcb1ac8cfecd"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-cuda.json": {
+      "bytes": 3472,
+      "sha256": "afb4ceeab0b80f991ccb2de58b5cf94bf7fe49899b739850b1ba08eb29caa992"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp32.json": {
+      "bytes": 3467,
+      "sha256": "d98d5d6e25b6f40b7a72fdaaec74a7c2c0f15d1cdbd7702d19d4afc453bd4eb4"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp32comp.json": {
+      "bytes": 3524,
+      "sha256": "b1b96c182a0c966619c3425438fa5f1b069e06078f2834ae4b418907ac907b55"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-fp64.json": {
+      "bytes": 3471,
+      "sha256": "e45116bbff31f0851fe9bfbef12552a8da2e9eb292b45d7b344660918b6cf083"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-candidate-metal.json": {
+      "bytes": 3492,
+      "sha256": "7b346e6c7a6243936bb467356cac9739e17aecccf3afe8bcbd9d478a0684b436"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-control-cuda.json": {
+      "bytes": 3448,
+      "sha256": "bfac0b72f88222e05c312b8a36953f786b215ea11218f6fd9bcacd7610ed429e"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp32.json": {
+      "bytes": 3442,
+      "sha256": "7dc9e231a9113e5d538975bed4bb2a875fc61c5ec44f2276b1974ff80e05abfd"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp32comp.json": {
+      "bytes": 3499,
+      "sha256": "efc3193a0569b568e12e9b2e18e955fb4841b23d127ff0332a5579ebb007e37c"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-control-fp64.json": {
+      "bytes": 3447,
+      "sha256": "cd3771af517dabb63a16f4328dd4174be7f975b1d028230a305bded4643be6d2"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-owner-product-control-metal.json": {
+      "bytes": 3469,
+      "sha256": "a3a9d28ce4adb626ecbe6ac0bee61d5a4302dfb98668c177017dd4c328e7fd74"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-pair-loop-fp32.txt": {
+      "bytes": 6701,
+      "sha256": "f6a58eb52f9a86ed9e9d10e7e977230dba2e8f1e29b9e462b3588dcd772d0c37"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-pair-loop-fp32comp.txt": {
+      "bytes": 6701,
+      "sha256": "534b5582a86d771bab42e7a1a9387b6f6128a4d7ddf7c47ce544651b2629e1d8"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-pair-loop-fp64.txt": {
+      "bytes": 6774,
+      "sha256": "ae7cb4f7d4944706b9cfaeb6ef9ec4eb87fd64142f75999c1c28a5228c215b53"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp32comp-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-candidate-fp64-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp32-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp32-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp32-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp32-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp32comp-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp32comp-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp32comp-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp32comp-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp64-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp64-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp64-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-post-control-fp64-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-candidate-cuda.json": {
+      "bytes": 1165,
+      "sha256": "df6daf2f744fdf20fcffe1d8417669fb5bd5041042c233839dd3e6ccb5c08690"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp32.json": {
+      "bytes": 4685,
+      "sha256": "dc19d8df9a6c5b4f7f9233d9d20b205d84625b58a4be915f371424167f35e916"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp32comp.json": {
+      "bytes": 4753,
+      "sha256": "6302faf902729e217fd1b4a845b8ea8cf4b9e1a26a3927c63291802d15d7b5e6"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-candidate-fp64.json": {
+      "bytes": 4685,
+      "sha256": "9fd8b2e73a8fbacf8ab9a06e3141a14e1d0547cafe3fefe5ec12e33d568a9ee0"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-candidate-metal.json": {
+      "bytes": 1170,
+      "sha256": "2b0ba5d48ce74f3bcb142e76d615f6357e6bba32445b42767d177bcd60acdb59"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-control-cuda.json": {
+      "bytes": 1161,
+      "sha256": "642b7c373014bc8ca886f22e1ae6391a20e0277b0009da328adab409eb970528"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-control-fp32.json": {
+      "bytes": 4652,
+      "sha256": "e5582626d4ea1186b4a6f6134b983de09a76d0ac4a3a8929497ca1581998c25b"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-control-fp32comp.json": {
+      "bytes": 4720,
+      "sha256": "78693ad57da00b49b28c2a20f86fe6185a66869c1706bfd6e1a05671911e9408"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-control-fp64.json": {
+      "bytes": 4652,
+      "sha256": "20d4700b85b1956a3d8005ce0150851e71178129d14d38e69fbb811bbd180587"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-posttools-control-metal.json": {
+      "bytes": 1166,
+      "sha256": "d22748be0ab3fcf86eaf9beabfef55399d5dd59b7fac7d422c92ff4f2caca68d"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-preflight.json": {
+      "bytes": 1908874,
+      "sha256": "77e908dde0078d475df74062911b168c3f83b1e4b3ff349c8809166e8c46b8f0"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-cuda.json": {
+      "bytes": 2528,
+      "sha256": "305161ce3b0334316f1c17df473a5595995f77d14fd1870e0de81da0832a7d87"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-fp32.json": {
+      "bytes": 2528,
+      "sha256": "c9495564e3af07e8da7a68e809b47022f9e6c875c2d5e678151f59c08bb8ea58"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-fp32comp.json": {
+      "bytes": 2532,
+      "sha256": "5973f08daf4fddc67218a9b3e32d4e4c6236466b74a00e68dfc8fb58ea38b4bd"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-fp64.json": {
+      "bytes": 2528,
+      "sha256": "7346d8fbe863ee0541995edd81dc13fe630df9e7091e830afc3403c34c3d27ce"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-candidate-metal.json": {
+      "bytes": 2529,
+      "sha256": "0f93a664043eb872b38658d8ef8a791103bde815cb811a2d8de0d11cc358cafe"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-control-cuda.json": {
+      "bytes": 2526,
+      "sha256": "15688ac72872f8d4b29ff8b1dd3a41873dd62c512f5233d94d71477593ba3ef8"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-control-fp32.json": {
+      "bytes": 2526,
+      "sha256": "ff351ea6b1dd66639e822f29a0ad62fc8306afd84f9239beee9a5229bf115e93"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-control-fp32comp.json": {
+      "bytes": 2530,
+      "sha256": "176b5f987fef96fab89c041413cda3b40c7680a9367fb6c6522dc362f3b940c2"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-control-fp64.json": {
+      "bytes": 2526,
+      "sha256": "815b762152ebe977a191c2f45e485284cdf867adf80cd3faf7a25b4aaaae5909"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-prelaunch-control-metal.json": {
+      "bytes": 2527,
+      "sha256": "3a784e20fc6d1d1c1fc60b0a20abe2b1a4706c1896af612aeb4e536089bbb860"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-runtime-release.json": {
+      "bytes": 6029,
+      "sha256": "58d998a082d0d68ef8190d1c2ab5d5d36dd98ce11d96c4ff0d6c7412d70a7231"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32.spvasm": {
+      "bytes": 7678941,
+      "sha256": "d09528306c6799a2effbea000f06c576d68ef48e0105eb3253b7f7b447021163"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32comp.spvasm": {
+      "bytes": 7687806,
+      "sha256": "28477226c3ea7ec5993b55d32ab93a5a879a67b335cd95c0e892db9f084c31d4"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp64.spvasm": {
+      "bytes": 7537189,
+      "sha256": "a357064274422c21e3aa7d723798fc98c85545948044330b463ffa50dcef0eb0"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-spv-control-fp32.spvasm": {
+      "bytes": 8763285,
+      "sha256": "8c19a116890f402ce5f94bbf948bc845faaa465b27e1d1bf3021762d14f212d4"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-spv-control-fp32comp.spvasm": {
+      "bytes": 8772174,
+      "sha256": "452eeeaa02af9568e7660ad68418c35248c34a2004f17f878925be52aa2d76ea"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/root-spv-control-fp64.spvasm": {
+      "bytes": 8398125,
+      "sha256": "28ff0eef1385ce0f130d6e59318c0f7fbce128b801b16edf77e10e8d72f19a21"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/slang-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/slang-ldd.stdout": {
+      "bytes": 491,
+      "sha256": "e4ab04b0ede6acc99c1179f6278e09027eb76cf1f4abef02294b9adcda6b99d9"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/slang-version.stderr": {
+      "bytes": 12,
+      "sha256": "39bda9f096be4794b1acf98f770245e36b5b0d5e1c09c626e3fdbd3962f86ab3"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/slang-version.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/source-contracts.json": {
+      "bytes": 36632,
+      "sha256": "5573e698e6a82f4b6a0a9764ac8a0147edd3ff9ef8804df7e08924433940c795"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/spirv-dis-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/spirv-dis-ldd.stdout": {
+      "bytes": 374,
+      "sha256": "aa37556081a73da51fc2e9d631526006c9718a9edc9f551d8afb1502033fa730"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/spirv-dis-version.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/spirv-dis-version.stdout": {
+      "bytes": 80,
+      "sha256": "ea2f4f90a0ffd1331e3495a8117b4cfc6eee9286a6bce07f6458a8549cca26e4"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/spirv-val-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/spirv-val-ldd.stdout": {
+      "bytes": 374,
+      "sha256": "b0b6d4f2235bc0d369b03d30987c80c5ec0c9b78036c8bbf323c66b43e601d98"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/spirv-val-version.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/spirv-val-version.stdout": {
+      "bytes": 466,
+      "sha256": "98c25f819040837f84355d8bdbae9bcb45522e3a14c353b7d5ae742d55d6ec69"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/timeout-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/timeout-ldd.stdout": {
+      "bytes": 155,
+      "sha256": "1c5ea8597293826a4a6976296a03034aaa4d07dc08db8f015dc584dae0450cd9"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/timeout-version.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/trace-jacobi-pair-loop-screen/timeout-version.stdout": {
+      "bytes": 307,
+      "sha256": "bc80753ce6a5fbb15395fa8402c2824993f8ed3fc987fedfefc120091999b1ef"
+    },
+    "files/out/science-original-cpu-gap-witnesses-preservation/independent-preservation-review.json": {
+      "bytes": 8263,
+      "sha256": "83733af4126754b0d285858ee3ec82e439a000b9f65b4592f5aedca96f5f4321"
+    },
+    "files/out/science-original-cpu-gap-witnesses-preservation/root-preservation-check.json": {
+      "bytes": 1173,
+      "sha256": "3add13ed311573f475ad4ed60f38e3ed88dd9256059a6c93d053aabd3647278f"
+    },
+    "files/out/science-original-cpu-gap-witnesses-preservation/root-git-preservation.json": {
+      "bytes": 1410,
+      "sha256": "9c025f5494f09c96157f8ccc5623d92bdb957315d6ed8db2f7be41874882b072"
+    },
+    "files/out/science-original-cpu-gap-witnesses-preservation/push.log": {
+      "bytes": 184,
+      "sha256": "bc04597072d89fff5aa7bb95d7a1c7b571461e1d1b91756239740d1319782ed3"
+    },
+    "files/out/science-original-cpu-gap-witnesses-preservation/remote-ref.txt": {
+      "bytes": 107,
+      "sha256": "c7106ab107fdcb806dc3870b1e5da7e1cbb62d6d62ea6802372028e05a5c634c"
+    },
+    "files/out/trace-jacobi-f22-current-issue-followup/issue48-comment-after.json": {
+      "bytes": 7416,
+      "sha256": "1c9e21c6667491ae97af0ad7426fb2e3b1f37427145dc984fb4ec145100f60fa"
+    },
+    "files/out/trace-jacobi-f22-current-issue-followup/issue48-comment-before.json": {
+      "bytes": 5619,
+      "sha256": "805fd11fcad8cb4ca222dc3803695c27c6dfe7fb1279675da57bf92a5487b1a7"
+    },
+    "files/out/trace-jacobi-f22-current-issue-followup/issue48-comment-request.json": {
+      "bytes": 5775,
+      "sha256": "201899d81529207a035632a1eadb13dedbfe79d53ff1e9c4e108de4e894b30a6"
+    },
+    "files/out/trace-jacobi-f22-current-issue-followup/issue53-comment-after.json": {
+      "bytes": 18735,
+      "sha256": "78913ffbde86674eedc3b00dac7cd4d25efbec647afdfff5b9d72d5aeafb77e4"
+    },
+    "files/out/trace-jacobi-f22-current-issue-followup/issue53-comment-before.json": {
+      "bytes": 14989,
+      "sha256": "c61c1adeff6f63850984f4b338c469874ea7e786d93d7353b3d3e17f83fe0b32"
+    },
+    "files/out/trace-jacobi-f22-current-issue-followup/issue53-comment-fresh-before.json": {
+      "bytes": 14989,
+      "sha256": "c61c1adeff6f63850984f4b338c469874ea7e786d93d7353b3d3e17f83fe0b32"
+    },
+    "files/out/trace-jacobi-f22-current-issue-followup/issue53-comment-request.json": {
+      "bytes": 17094,
+      "sha256": "df65b5cdb008ce9a1f78a4f0778e3d18ca5685bb1f516b05a6e6980fde950806"
+    },
+    "files/out/trace-jacobi-f22-current-issue-followup/root-followup-verification.json": {
+      "bytes": 2212,
+      "sha256": "b533d41161d61823093f0144a2503f75183c47a25c728ffe49c490f34d711280"
+    },
+    "files/out/trace-jacobi-pair-loop-screen-preservation/static-archive-dependencies.json": {
+      "bytes": 2892928,
+      "sha256": "30ad2dae93b2c6e33107e3c4de2ee543ea677369ef39def97228e860247cd113"
+    }
+  },
+  "scope": "Exact offline compiler/code/ABI/CFG records and late original-CPU publication/issue updates only; no runtime/scientific/source-adoption qualification."
+}

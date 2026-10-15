@@ -1,0 +1,39 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-offline-compile-pending-commands-v1",
+  "source_only": true,
+  "runtime_or_tool_execution_admitted": false,
+  "revision": "ROOT_PENDING_REVISION",
+  "serial_order": [
+    "control-fp32",
+    "candidate-fp32",
+    "control-fp32comp",
+    "candidate-fp32comp",
+    "control-fp64",
+    "candidate-fp64",
+    "control-cuda",
+    "candidate-cuda",
+    "control-metal",
+    "candidate-metal"
+  ],
+  "stop_first_nonpass": true,
+  "root_sole_tool_operator": true,
+  "commands_after_root_admission": [
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py control-fp32",
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py candidate-fp32",
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py control-fp32comp",
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py candidate-fp32comp",
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py control-fp64",
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py candidate-fp64",
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py control-cuda",
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py candidate-cuda",
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py control-metal",
+    "/usr/bin/python3 out/trace-jacobi-pair-loop-screen/run_owned.py candidate-metal"
+  ],
+  "hold": "AllcurrentSCI15executionmustbeclosed/rootreviewed, rootreleasesource/buildholds; no concurrentcompiler/test. Independent/rootSOURCEreview and actualcompleteSlang/source/flags/CWD/tool/DT_NEEDED/optionalresources/wholeinput/currentrevisionadmission required before firsttool.",
+  "postcompile_manual_root_gates": [
+    "Eachownerterminalpassed/exit0/nostop/noerrors/noownedremainers/sourceandwholeinputsunchanged/freshbirthabsence/guardbounds/outputidentity.",
+    "SPIR-V control+candidate val/disassembly/staticCFG/type/capability/layout/entry/mode checks under separate root-owned admitted operations; CUDA/MSL fullgeneratedsourceinspection as appropriate.",
+    "All5controls byteequal freshlypinnedcanonicalbaseline before differenceattribution; any mismatch is screenrefusal, not numericalcandidatefailure.",
+    "No XMLcollector/property or numerical/provider/runtime/performance/adoptionacceptance."
+  ]
+}
