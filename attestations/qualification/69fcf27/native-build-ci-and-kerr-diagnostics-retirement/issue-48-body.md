@@ -1,0 +1,7 @@
+`69fcf27d` resolves source/build roots once per artifact map while retaining fresh per-artifact resolution/stat/hash, canonical containment, separate pre/post checks and all existing fixtures/deadlines. Existing local selftest and source governance pass.
+
+[CI 38718286928](https://github.com/sunyaisblank/Sirius/actions/runs/38718286928) passed all three integration jobs. Windows and macOS each passed the exact nine native-build controls with 1150 registered tests and zero failures/errors/skips. The Windows build-gate selftest took 8.54382 s under the unchanged 10 s timeout; its initial ten-control pass reports 8.65 s. This does not establish the previous timeout cause, repeatable timing benefit or future margin.
+
+Both native-build attestations passed the existing verifier against exact clean source `69fcf27d`. All 155 selected artifact members match API ZIP identities and manifests; the CLI/backend bytes join across exports, and all 38 diagnostic SPIR-V files match the prior captured build. Preserved source, reviews, logs and artifacts: [evidence commit 6a12f2b](https://github.com/sunyaisblank/Sirius/tree/6a12f2b22c4ad9460bfdeeea007bc64e80031d81/attestations/qualification/69fcf27/native-build-ci-38718286928).
+
+These are two available native-build records. Compiled external-domain admission remains 0/8, and full Mandatory/sanitizer/runtime/UI/release qualification is still open. The original Kerr numerical failure remains tracked in #53; its shader bytes and numerical settings were unchanged by this build-only fix.
