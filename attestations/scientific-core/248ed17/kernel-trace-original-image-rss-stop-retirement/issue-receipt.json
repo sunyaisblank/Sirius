@@ -1,0 +1,16 @@
+{
+  "author": "sunyaisblank",
+  "body_bytes": 2200,
+  "body_sha256": "9edca47f5da942915f8a453efed6156a8aec64d1df954ec00c264cacc2fcb538",
+  "comment_id": 6186971377,
+  "create_body_exact": true,
+  "created_at": "2026-10-15T07:34:25Z",
+  "evidence_commit": "0abce0ad6943d06e391b45e2f5bece092f802b25",
+  "fresh_API_readback_body_exact": true,
+  "issue": 53,
+  "passed": true,
+  "posted_body": "The first original full-image check on the floor-corrected `248ed178` shader inputs did **not** complete. `KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow` stopped at the unchanged sampled 4 GiB ownership guard after 162.646503410 s.\n\nThe final sampled aggregate was 4,200,404 KiB: child 4,174,784 plus controller 25,620, exceeding 4,194,304 by 6,100 KiB. The owner terminated the child with SIGTERM, recorded exit -15, and retired the observed PID/start identity without cleanup errors or remaining processes. All 1,210 before/after input identities remained current and equal; the actual LVP mapping and default cache policy were bound.\n\nThe log contains only the original GoogleTest start. There is no completed image, image metric, numerical shader verdict or test XML. `KernelTrace.Fp64RungAgreesWithFp32OnKerrScene` was not launched because the sequence stops on the first nonpass. The original 64x64 parameters/assertions, 64-active-row bound, physical 1000 ms checks and 4 GiB/2 GiB ownership boundaries were unchanged. The prospective whole-test wall was diagnostic; this was not the separate cold retained-Kerr 300 s gate.\n\n[Immutable incomplete result and producer aliases](https://github.com/sunyaisblank/Sirius/blob/0abce0ad6943d06e391b45e2f5bece092f802b25/attestations/scientific-core/248ed17/kernel-trace-original-image-rss-stop/result.json), tag `evidence/issue-53-kernel-trace-original-image-rss-stop`: 43 files; manifest SHA256 `da298005a15c6c31777737becf5a5fcefdc9870a15cf175c982b324c9ab3bf9a`. Independent review records attempt `passed=false`, audit completed and valid ownership. The 30-file diagnostics were Git-preserved and retired after remote verification.\n\nThe RSS peak does not identify an allocation or executing phase, and the previous 11d17cc diagnostic stop remains unresolved. Parity-probe floor controls are not proof of full-trace initialization memory viability. No unchanged retry, cache change, raised guard or substituted image is accepted. The separately preserved four passing retained-sampler/conservation controls in `1cda8a97` remain valid; full-image, precision comparison, full CI, native domains and release qualification remain incomplete.\n",
+  "schema": "sirius-kernel-trace-rss-stop-issue-receipt-v1",
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "url": "https://github.com/sunyaisblank/Sirius/issues/53#issuecomment-6186971377"
+}
