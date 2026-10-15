@@ -1,0 +1,96 @@
+{
+  "schema": "sirius-kerr-local-hamiltonian-independent-source-review-v1",
+  "passed": true,
+  "source_admission_only": true,
+  "captured_source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "reviewer": {
+    "agent": "/root/forensic_obligations",
+    "author": "/root/divide_contract_review",
+    "operator": "/root",
+    "independent_of_local_reference_author_and_operator": true,
+    "prior_involvement": "Reviewer authored the preceding committed-state Decimal analysis and performed its operator-independent output consistency review; this local Hamiltonian source is independently authored."
+  },
+  "pins": {
+    "local_reference": {
+      "bytes": 18601,
+      "sha256": "c9f32a4a4eeedd442bf974d2354822dd0e8114b1105b9f1b9569e639f3146c4a"
+    },
+    "exact_input_analysis": {
+      "path": "attestations/scientific-core/02ee51f/kerr-committed-state-analysis/result.json",
+      "bytes": 28046,
+      "sha256": "aa2eef9d357e9c0afad76dce0021eb0b65dd804b41b3f41d4b87b602fd644327"
+    },
+    "previous_state_analysis_source": {
+      "path": "attestations/scientific-core/02ee51f/kerr-committed-state-analysis/analyse_state.py",
+      "bytes": 12765,
+      "sha256": "5c97a89bf27325bfcdcd85af3c1a83ccdff7f211810f3b1fe67b5a7aeb0d5e31"
+    },
+    "state_result_review": {
+      "path": "attestations/scientific-core/02ee51f/kerr-committed-state-analysis/independent-result-review.json",
+      "bytes": 6890,
+      "sha256": "efadef9cb27c99bd2af11eb74d22ddff611e9aac95b8ff03e16f5ea7f753cccb"
+    },
+    "raw_bridge_explicit_archive_alias": {
+      "path": "attestations/scientific-core/02ee51f/native-amd-kerr-failure-context/files/out/native-windows-kerr-failure-context-02ee51f/kerr-image-bridge.json",
+      "bytes": 5791,
+      "sha256": "6b6fc157a3ceac76f31c994383639b0fd43435487536890e19b76eedfca80cfa"
+    }
+  },
+  "source_math_findings": {
+    "independent_geometry": "Positive quartic radial root and rationalized negative-reduced branch; h=2Mr/Sigma and ingoing Cartesian ell. Input restriction Q=Lambda0 makes the neutral Kerr formulas applicable. No production imports, camera regeneration or null-only Carter assumption.",
+    "canonical_hamiltonian": "H=1/2[-p_t^2+sum(p_i^2)-h*(-p_t+ell_i*p_i)^2] is the Kerr-Schild inverse-metric Hamiltonian. qdot^t=-p_t+h*w and qdot^i=p_i-h*w*ell_i are its analytic momentum derivatives with consistent signs.",
+    "measured_norm": "Initial p=g*u is formed from the exact captured binary32 q/u in80-digit Decimal and is not projected. H0 remains nonzero; recovered-u residual and 2H0-minus-independent-gkk are emitted. H/norm/E/Lz drifts are reported; exact discrete H conservation is not promised.",
+    "finite_difference_rhs": "Spatial pdot uses negative centered H differences in q at fixed canonical p. Absolute epsilons1e-18 and1e-22 are independent channels, not embedded acceptance thresholds. Stationarity gives exact dp_t=0. Each displacement must survive rounding and every evaluated state/geometry must be finite and have positive radial root.",
+    "integrator": "Classical RK4 acts on all8canonical q/p components. Every run starts from the same immutable initial tuple at the original exact floor; counts32/64/128 and both epsilon channels are compared. No product tolerance/floor/controller or mass-shell correction is used.",
+    "capture_event": "The first sampled outside-to-inside buffered-radius bracket is refined by fresh partial RK4 from its fixed original bracket-start state. Its full-step endpoint matches the original step. Bisection retains numerical sign endpoints and terminates at floor*1e-28 within96iterations. It explicitly does not certify first continuous crossing or equate bracket width with trajectory error.",
+    "reported_comparisons": "Endpoint q/p/u/scalars, adjacent substep refinements, epsilon sensitivities, sampled radial direction changes and sampled invariant drifts are retained without a prefilled convergence/capture/physics verdict."
+  },
+  "input_and_output_findings": {
+    "hard_input_identity": true,
+    "hard_source_and_previous_analysis_source_identity": true,
+    "packet280_and_both_record272_raw_hex": true,
+    "Advance_sample_epoch_identity_and_control_transition_joins": true,
+    "stored_adaptive_step_equals_exact_original_floor": true,
+    "input_and_script_rechecked_before_publication": true,
+    "output_exclusive_create": true,
+    "no_retired_raw_current_path_replay": true,
+    "output_structure": "Six fixed runs, each retaining at most endpoint plus2event-state summaries;4adjacent refinement and3epsilon comparisons. Full trajectories and per-bisection histories are not stored.80significant-digit Decimal strings and fixed raw input bound report structure; no explicit output-byte cap is claimed."
+  },
+  "work_bounds": {
+    "shared_seconds": 240,
+    "rhs_limit": 20000,
+    "geometry_limit": 200000,
+    "rk4_limit": 5000,
+    "event_bisections_limit": 96,
+    "static_rk4_upper_bound": 1024,
+    "static_rhs_upper_bound": 4096,
+    "static_geometry_upper_bound": 31118,
+    "derivation": "6runs:2*(32+64+128)=448ordinaryRK4 plus at most6*96=576event partialRK4. EachRK4 has4RHS and eachRHS7geometrycalls; starting/summary/event checks add at most2446geometrycalls. Wall checks occur on every work tick. Counts are source-loop bounds, not executed observations."
+  },
+  "limits": [
+    "Actual execution/output is not admitted by this source review.",
+    "Finite-difference and RK4 refinement differences are observed sensitivity, not certified error bounds or exact geodesic conservation.",
+    "Numerically sampled/bracketed buffered capture cannot establish original whole-ray or image success.",
+    "No hidden rejected GPU full/two-half-step candidate or projection residual is available; this reference cannot identify the actual GPU rejection conjunct.",
+    "Initial off-null norm is retained, rather than making a null-only physical photon qualification claim."
+  ],
+  "executions_by_reviewer": {
+    "source_parsed_or_imported_or_executed": false,
+    "reference_or_state_calculation_performed": false,
+    "compiler_provider_test_or_ci_executed": false,
+    "tracked_or_packet_source_edited": false,
+    "only_file_written": "out/kerr-local-hamiltonian-reference/independent-source-review.json"
+  },
+  "blockers": [],
+  "workspace": {
+    "head": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+    "tracked_clean": true,
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "source_committed_and_pushed": true,
+    "review_receipt": "Ignored source review, not yet committed/pushed."
+  }
+}

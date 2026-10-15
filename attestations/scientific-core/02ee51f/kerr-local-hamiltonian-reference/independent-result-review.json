@@ -1,0 +1,175 @@
+{
+  "schema": "sirius-kerr-local-hamiltonian-independent-result-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "reference_output_consistent": true,
+  "source_revision": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+  "captured_source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "numerical_test_passed": false,
+  "production_or_shader_modified": false,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reference_author": "/root/divide_contract_review",
+  "independent_source_reviewer": "/root/forensic_obligations",
+  "operator": "/root",
+  "scope": "Passive terminal/output consistency audit of one completed bounded CPU reference. No reference code, state integration, provider, original test or authored reader executed by reviewer.",
+  "pins": {
+    "local_reference.py": {
+      "path": "out/kerr-local-hamiltonian-reference/local_reference.py",
+      "bytes": 18601,
+      "sha256": "c9f32a4a4eeedd442bf974d2354822dd0e8114b1105b9f1b9569e639f3146c4a"
+    },
+    "independent-source-review.json": {
+      "path": "out/kerr-local-hamiltonian-reference/independent-source-review.json",
+      "bytes": 6576,
+      "sha256": "77a2c8bf8a076eb12a3e8e7fcb01b9d1f9f489d2f0e55e389639dee67400edb6"
+    },
+    "root-runtime-admission.json": {
+      "path": "out/kerr-local-hamiltonian-reference/root-runtime-admission.json",
+      "bytes": 772,
+      "sha256": "45932e3f267cffcaf7910a02d05e18ae104fe82892c3d230266708a1dea04429"
+    },
+    "root-execution.json": {
+      "path": "out/kerr-local-hamiltonian-reference/root-execution.json",
+      "bytes": 832,
+      "sha256": "bd3dd14d523af3e943153ce8e209396d86835c0db84ee81e955398f977e84ecd"
+    },
+    "reference.stdout": {
+      "path": "out/kerr-local-hamiltonian-reference/reference.stdout",
+      "bytes": 184,
+      "sha256": "cb3d2cb944787ac91757685715650766c6fa12693777ce09386920f90b0ed872"
+    },
+    "reference.stderr": {
+      "path": "out/kerr-local-hamiltonian-reference/reference.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "result.json": {
+      "path": "out/kerr-local-hamiltonian-reference/result.json",
+      "bytes": 65734,
+      "sha256": "e93e6f2e1925d086238f550dd849da13f1e7b7dc1ae465a3fadcf3118c2275b1"
+    }
+  },
+  "immutable_input_joins": {
+    "analysis_result": {
+      "path": "attestations/scientific-core/02ee51f/kerr-committed-state-analysis/result.json",
+      "bytes": 28046,
+      "sha256": "aa2eef9d357e9c0afad76dce0021eb0b65dd804b41b3f41d4b87b602fd644327"
+    },
+    "analysis_commit": "876075bb7cf3b092712dfa7c685449f3963c4bb9",
+    "raw_bridge_explicit_alias": {
+      "path": "attestations/scientific-core/02ee51f/native-amd-kerr-failure-context/files/out/native-windows-kerr-failure-context-02ee51f/kerr-image-bridge.json",
+      "bytes": 5791,
+      "sha256": "6b6fc157a3ceac76f31c994383639b0fd43435487536890e19b76eedfca80cfa"
+    },
+    "raw_bridge_commit": "2b654bb1c05df655db6d960a908e9ed7e1bf8a91",
+    "analysis_previous_source_and_result_review_Git_bytes_also_checked": true,
+    "exact_raw_context_equal_analysis_reference_and_bridge": true,
+    "no_retired_lexical_capture_paths_opened": true
+  },
+  "checks": {
+    "source_independent_review_runtime_admission_execution_output_identities_match": true,
+    "operator_recorded_exit_code": 0,
+    "operator_elapsed_seconds": 0.7169570029946044,
+    "reference_internal_elapsed_seconds": 0.6510939529980533,
+    "stdout_work_counts_equal_result": true,
+    "stderr_bytes": 0,
+    "six_exact_runs": "epsilon1e-18 and1e-22, each32/64/128substeps over the identical represented floor and initial q/p; no extra/missing run.",
+    "raw_packet280_and_previous_current272_identity_transition_joins": true,
+    "exact_initial_q_and_decoded_u_match_raw_previous_binary32": true,
+    "initial_recovered_u_max_residual": "4E-78",
+    "initial_norm_2H": "-0.0001409464217291612281510645917108309777985109256353243295538017080933157480",
+    "initial_direct_metric_norm_from_analysis": "-0.0001409464217291612281510645917108309777985109256353243295538017080933157481215",
+    "initial_2H_minus_direct_metric_norm": "1.215E-76",
+    "initial_off_null_norm_retained_no_mass_shell_projection": true,
+    "all_18_saved_endpoint_event_state_summaries_finite_and_algebraically_consistent": true,
+    "summary_arithmetic_rechecked": "2H, H/norm/E/Lz drifts, E=-p_t, Lz=x*p_y-y*p_x and radius-minus-capture for each saved endpoint/outside/inside state; stationaryp_t/E identical to initial.",
+    "all_4_substep_refinement_and_3_epsilon_comparisons_recomputed": true,
+    "six_event_status_sign_order_width_and_iteration_checks": true,
+    "all_event_brackets_strictly_within_original_affine_floor": true,
+    "reported_sampled_radial_increases_all_zero": true,
+    "reported_maxima_at_least_saved_endpoint_drift": true,
+    "work_count_derivation": "448ordinaryRK4 +528eventpartialRK4 =976;4RHS perRK4=3904. Geometry=6initial+6*12fixed_run_overhead+32*448ordinary+29*528bisections=29726, exactly matching result/stdout.",
+    "all_work_and_elapsed_limits_satisfied": true
+  },
+  "observations": {
+    "decimal_precision": 80,
+    "decimal_rounding": "ROUND_HALF_EVEN",
+    "exact_affine_floor": "0.0199999995529651641845703125",
+    "sampled_events": "All six report first_sampled_outside_to_inside_bracket_refined at affine approximately0.01496178356, below the original0.0199999995529651641845703125 interval. Original grid brackets and refined outside-positive/inside-nonpositive buffered-radius signs agree.",
+    "event_bisections_per_epsilon": [
+      89,
+      88,
+      87
+    ],
+    "total_event_bisections": 528,
+    "reported_refined_width_approximately": "1.00974193611340357513909241056222485931458722282117e-30",
+    "width_goal": "1.99999995529651641845703125e-30",
+    "endpoint_addition_roundoff": "Absolute bracket-end subtraction differs from stored relative width by at most7.5e-82; below the80-digit endpoint-addition rounding scale. This is serialization/addition consistency only, not a trajectory error bound.",
+    "radius_refinement_1e_minus18": {
+      "32_to_64": "3.26246501789912571171691237797556497145704510094411632778294970120971E-11",
+      "64_to_128": "2.0327165701131054514767183720522498085873792025395577846522789584823E-12"
+    },
+    "finest_epsilon_radius_sensitivity": "1.70644578781319325144828357861589661761746E-38",
+    "energy_drift_all_saved_states": "0",
+    "finest_runs": {
+      "1e-18": {
+        "maximum_sampled_absolute_H_drift": "1.96425065534485189784573522223580281401778020509033668940601002975E-12",
+        "maximum_sampled_absolute_Lz_drift": "2.3901099495864250997637220393802734528176680662889920083968764669977E-12",
+        "endpoint_radius": "1.6032329965712576932797752149562618154369855869194115212975737312857442877490333",
+        "refined_affine_bracket": [
+          "0.014961783562073075323372339101060452493496113686315756426317915641240276991645033",
+          "0.014961783562073075323372339102070194429609517261454848836880140500554864214466204"
+        ]
+      },
+      "1e-22": {
+        "maximum_sampled_absolute_H_drift": "1.9642506553448518978458088873480141093724744791117887701536353448E-12",
+        "maximum_sampled_absolute_Lz_drift": "2.3901099495864250997637155088465590821851218912396308018168110471632E-12",
+        "endpoint_radius": "1.6032329965712576932797752149562618154540500447975434538120565670719032539252079",
+        "refined_affine_bracket": [
+          "0.014961783562073075323372339101060452493496113686315756426317915641240276991645033",
+          "0.014961783562073075323372339102070194429609517261454848836880140500554864214466204"
+        ]
+      }
+    }
+  },
+  "bounds": {
+    "external_seconds": 300,
+    "internal_seconds": 240,
+    "maximum_rhs": 20000,
+    "maximum_geometries": 200000,
+    "maximum_rk4_steps": 5000,
+    "maximum_event_bisections": 96,
+    "actual_counts": {
+      "rhs": 3904,
+      "geometry": 29726,
+      "rk4": 976
+    },
+    "scope": "Finite CPU-reference work/wall bounds; no sampled RSS or broader product latency claim."
+  },
+  "limits": [
+    "Observed refinement and epsilon sensitivity are not rigorous trajectory/error bounds or certified geodesic conservation.",
+    "The numerical bracket is for the first sampled crossing of the chosen buffered capture radius; no certified first continuous event, whole ray, image or physical photon/null qualification.",
+    "Full trajectories and all intermediate extrema are not stored. Saved summary arithmetic and source-loop accounting were audited; no independent rerun of unsaved states or maximum calculations.",
+    "No actual hidden GPU full/two-half-step candidates, projection/error/null rejection conjunct, production physics fix or original numerical-test pass is established.",
+    "Historical native gate remains failed; this CPU analysis grants no native/scientific/UI/Mandatory/release/performance qualification."
+  ],
+  "execution": {
+    "authored_code_or_helpers_imported_or_executed": false,
+    "reference_rhs_geometry_state_integration_or_provider_executed": false,
+    "compiler_test_api_or_native_tool_executed": false,
+    "method": "Passive source/JSON/hex/struct/hash/Git reads and Decimal arithmetic on existing saved summaries only.",
+    "only_file_written": "independent-result-review.json"
+  },
+  "workspace": {
+    "head": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "source_committed_and_pushed": true,
+    "review": "Ignored output audit receipt, not committed/pushed pending root preservation."
+  }
+}
