@@ -161,7 +161,58 @@ jobs:
             $file = Get-Item -LiteralPath $path
             $files[$path] = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant() }
           }
-          $record = @{ schema = "sirius-windows-diagnostic-build-products-v1"; source_revision = $revision; repository = $env:GITHUB_REPOSITORY; run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT; msvc_version = $compilerVersion.Groups[1].Value; release_crt_version = $redistVersion; runtime_dll_origins = $origins; files = $files; diagnostic_build_only = $true; qualification_claimed = $false; scope = "Strict compiled CLI/backend-test volumes only; no native runtime, rendering, UI, scientific, release or native-build attestation claim. Windows OS/UCRT and the physical graphics driver remain host dependencies." }
+          $registrationRoot = "bin/windows-msvc/generated/sirius/windows-mandatory-registration"
+          if (Test-Path -LiteralPath $registrationRoot) { throw "registration export already exists" }
+          $registrationFiles = @(Get-ChildItem -LiteralPath "bin/windows-msvc" -Recurse -File | Where-Object {
+            $_.Name -in @("CTestTestfile.cmake", "cmake_install.cmake") -or $_.Name -match '_(tests|include)(-[^.]+)?\.cmake$'
+          })
+          foreach ($target in @("base", "core", "oracle", "backend", "app", "render")) {
+            foreach ($kind in @("tests", "include")) {
+              if (@($registrationFiles | Where-Object { $_.Name -match "^sirius_${target}_tests\[\d+\]_${kind}\.cmake$" }).Count -ne 1) {
+                throw "configured GoogleTest discovery is incomplete: $target/$kind"
+              }
+            }
+          }
+          $registrationFiles += @(Get-Item -LiteralPath @(
+            "bin/windows-msvc/CTestTestfile.cmake", "bin/windows-msvc/cmake_install.cmake",
+            "bin/windows-msvc/tests/evidence_governance.cmake",
+            "bin/windows-msvc/tests/alignment_receipt_integrity.cmake",
+            "bin/windows-msvc/tests/volume_initialization.cmake",
+            "bin/windows-msvc/verify_sirius_install.cmake",
+            "bin/windows-msvc/tests/source-governance-ctest.json",
+            "tests/operational/required_skip_rejection.cmake",
+            "tests/operational/vulkan_runtime_profile.cmake", "tests/operational/p1_burn_in.cmake"))
+          $configuredRoots = @{}
+          foreach ($key in @("CMAKE_HOME_DIRECTORY", "CMAKE_CACHEFILE_DIR", "CMAKE_COMMAND", "CMAKE_CTEST_COMMAND", "CMAKE_ROOT", "_Python3_EXECUTABLE")) {
+            $entry = [regex]::Match($cache, "(?m)^${key}:[^=]+=(.+?)\r?$")
+            if (-not $entry.Success) { throw "configured root/tool is absent: $key" }
+            $configuredRoots[$key] = $entry.Groups[1].Value
+          }
+          if ([IO.Path]::GetFullPath($configuredRoots.CMAKE_HOME_DIRECTORY) -ne $PWD.Path -or
+              [IO.Path]::GetFullPath($configuredRoots.CMAKE_CACHEFILE_DIR) -ne (Resolve-Path "bin/windows-msvc").Path) {
+            throw "configured registration roots differ from the exported checkout/build"
+          }
+          $configuredTools = @{}
+          foreach ($key in @("CMAKE_COMMAND", "CMAKE_CTEST_COMMAND", "_Python3_EXECUTABLE")) {
+            $tool = Get-Item -LiteralPath $configuredRoots[$key]
+            $configuredTools[$key] = @{ path = $tool.FullName; bytes = $tool.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $tool.FullName).Hash.ToLowerInvariant() }
+          }
+          $registration = @{ schema = "sirius-windows-configured-mandatory-registration-v1"; source_revision = $revision; configuration = "Release"; configured_roots = $configuredRoots; configured_tools = $configuredTools; files = @{}; execution_claimed = $false; scope = "Unmodified configured registration/install recipes and the preceding governance inventory; no Mandatory execution, qualification, or tool substitution admission." }
+          foreach ($file in @($registrationFiles | Sort-Object -Property FullName -Unique)) {
+            $relative = [IO.Path]::GetRelativePath($PWD.Path, $file.FullName).Replace('\', '/')
+            $destination = "$registrationRoot/$relative"
+            New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
+            Copy-Item -LiteralPath $file.FullName -Destination $destination
+            $identity = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant() }
+            if ((Get-FileHash -Algorithm SHA256 -LiteralPath $destination).Hash.ToLowerInvariant() -ne $identity.sha256) { throw "registration copy changed: $relative" }
+            $files[$destination] = $identity
+            $registration.files[$relative] = @{ source_path = $file.FullName; artifact_path = $destination; bytes = $identity.bytes; sha256 = $identity.sha256 }
+          }
+          $registrationMetadata = "$registrationRoot/registration-metadata.json"
+          [IO.File]::WriteAllText((Join-Path $PWD.Path $registrationMetadata), ($registration | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))
+          $metadataFile = Get-Item -LiteralPath $registrationMetadata
+          $files[$registrationMetadata] = @{ bytes = $metadataFile.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $registrationMetadata).Hash.ToLowerInvariant() }
+          $record = @{ schema = "sirius-windows-diagnostic-build-products-v1"; source_revision = $revision; repository = $env:GITHUB_REPOSITORY; run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT; msvc_version = $compilerVersion.Groups[1].Value; release_crt_version = $redistVersion; runtime_dll_origins = $origins; files = $files; diagnostic_build_only = $true; qualification_claimed = $false; scope = "Strict compiled CLI/backend-test volumes and configured CTest/install recipes only; no native runtime, rendering, UI, scientific, release or native-build attestation claim. Windows OS/UCRT and the physical graphics driver remain host dependencies." }
           $output = "bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json"
           [IO.File]::WriteAllText((Join-Path $PWD.Path $output), ($record | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))
       - name: Preserve diagnostic Windows build products
@@ -182,6 +233,7 @@ jobs:
             bin/windows-msvc/CMakeCache.txt
             bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake
             bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json
+            bin/windows-msvc/generated/sirius/windows-mandatory-registration
           include-hidden-files: true
           if-no-files-found: error
       - name: Exact native-build evidence gate
