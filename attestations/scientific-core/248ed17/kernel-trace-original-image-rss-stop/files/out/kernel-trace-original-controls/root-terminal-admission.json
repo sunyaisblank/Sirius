@@ -1,0 +1,40 @@
+{
+  "actual_attempt_passed": false,
+  "admitted_preservation_command": "/usr/bin/python3.12 -B out/preserve-finite-result.py kernel-trace-original-image-rss-stop",
+  "audit_completed": true,
+  "collector_once_only": true,
+  "collector_source_review_full_read_tool_chunk": "645fda",
+  "incomplete_result": {
+    "bytes": 3975,
+    "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/incomplete-result.json",
+    "sha256": "d93e9e31f77a5c98708e90502b78b5c61eb4b8ded42ab1ac6b2f36090f32fb48"
+  },
+  "independent_collector_source_review": {
+    "bytes": 6459,
+    "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/independent-collector-source-review.json",
+    "sha256": "03d0b9364407265d8161790486c9535bb730c76e5e84247ea314f21c3424262c"
+  },
+  "independent_terminal_review": {
+    "bytes": 8192,
+    "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/independent-terminal-review.json",
+    "sha256": "e53d30326cc6f46e40a7a27eaf7872385013a269685f8c82d95b731fec5cd7cd"
+  },
+  "no_unchanged_retry_or_guard_relaxation": true,
+  "ownership_record_valid": true,
+  "passed": true,
+  "precision_unexecuted": true,
+  "root_actual_terminal_input_check": {
+    "bytes": 3344,
+    "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/root-terminal-input-check.json",
+    "sha256": "97694a14a162fbfc3e7073840faa1aecdb7ef3472425498475c542e1097691c4"
+  },
+  "root_collector_source_input_check": {
+    "bytes": 1505,
+    "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/root-collector-source-input-check.json",
+    "sha256": "d300bd434d7d5eaaecc0f078aa5039c53b1617fa3aa3cb3a19d87937f49f94b6"
+  },
+  "schema": "sirius-kernel-trace-root-failure-preservation-admission-v1",
+  "scope": "Admit only preservation of actual false/incomplete original image RSS stop. This admission passes as an ownership/source/data audit; it does not pass the image attempt. No numeric image, memory setup viability, PC/allocation cause, science/domain/native/fullCI/frame/release qualification.",
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "terminal_review_full_read_tool_chunk": "ed4dc2"
+}

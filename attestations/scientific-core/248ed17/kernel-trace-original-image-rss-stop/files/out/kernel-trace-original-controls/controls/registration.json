@@ -1,0 +1,87 @@
+{
+  "current_registry_files_are_selected_current_pins": true,
+  "fresh_query_executed": false,
+  "selected": {
+    "kerr-image": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory",
+            "Operational",
+            "Rendering"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    },
+    "kerr-precision": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory",
+            "Operational",
+            "Rendering"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    }
+  },
+  "source_raw_full_registry": {
+    "actual_archived_file": "/home/astra/.project/Sirius/attestations/scientific-core/248ed17/full-path-sampling-focused-controls/files/out/full-path-conservation-sampling-format-recovery/controls/ctest-registration.json",
+    "identity": {
+      "bytes": 984788,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/scientific-core/248ed17/full-path-sampling-focused-controls/files/out/full-path-conservation-sampling-format-recovery/controls/ctest-registration.json",
+      "sha256": "c358483f3aef740882a4061a5dd650121d3583ea36f2e54473925df7eb1a1407"
+    },
+    "manifest_member": "files/out/full-path-conservation-sampling-format-recovery/controls/ctest-registration.json",
+    "original_lexical_file": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/ctest-registration.json"
+  },
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff"
+}

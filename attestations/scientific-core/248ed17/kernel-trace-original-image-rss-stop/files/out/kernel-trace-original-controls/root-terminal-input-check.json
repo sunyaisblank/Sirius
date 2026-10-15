@@ -1,0 +1,82 @@
+{
+  "actual_LVP_mapping_birth_session_device_inode_bound": true,
+  "actual_image_attempt_passed": false,
+  "actual_original_image_attempts": 1,
+  "audit_completed": true,
+  "before_after_rows_current": 2420,
+  "collector_not_in_runtime_inputs": true,
+  "complete_images": 0,
+  "current_source_clean": true,
+  "default_shader_cache": true,
+  "evidence": {
+    "inputs-after.json": {
+      "bytes": 290523,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/controls/kerr-image/inputs-after.json",
+      "sha256": "86bfe1ebac1a8d48e77468f1f669257db7022d4fcac51833ba1db5177efa046f"
+    },
+    "inputs-before.json": {
+      "bytes": 290523,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/controls/kerr-image/inputs-before.json",
+      "sha256": "86bfe1ebac1a8d48e77468f1f669257db7022d4fcac51833ba1db5177efa046f"
+    },
+    "owner.json": {
+      "bytes": 2424,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/controls/kerr-image/owner.json",
+      "sha256": "3222d4cc536b1600306c65dcae2dadacf8a2f2ceb240a23b818378893f59a1d5"
+    },
+    "samples.jsonl": {
+      "bytes": 1413943,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/controls/kerr-image/samples.jsonl",
+      "sha256": "5b0a487c1a7f4b3801862766c5d1b8d24dfe14c7fbb45f127d626bc39194c4df"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/controls/kerr-image/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 399,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/controls/kerr-image/stdout.log",
+      "sha256": "7bb11324cd8c69ffce07ba196347b5c28eef9a4a3252c09daeb253f7b598bb7f"
+    }
+  },
+  "fresh_observed_births_absent": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 535059,
+      "saved_start_ticks": "9825286"
+    }
+  ],
+  "last_sample": {
+    "aggregate_rss_kib": 4200404,
+    "child_rss_kib": 4174784,
+    "controller_rss_kib": 25620
+  },
+  "minimum_available_kib": 16010428,
+  "numerical_or_image_result_established": false,
+  "original_guard_rss_kib": 4194304,
+  "over_guard_kib": 6100,
+  "owner_child_exit": -15,
+  "passed": true,
+  "peak_sampled_aggregate_rss_kib": 4200404,
+  "phase_or_allocation_cause_identified": false,
+  "precision_folder_absent": true,
+  "precision_test_executions": 0,
+  "root_operator": {
+    "closed": true,
+    "executed_once": true,
+    "exit_code": 1,
+    "session_id": 13443,
+    "terminal_tool_chunk": "78c671"
+  },
+  "samples_checked": 6248,
+  "schema": "sirius-kernel-trace-root-terminal-input-check-v1",
+  "scope": "Passive verification of one guarded incomplete original image attempt. The owner audit passes; the test/image attempt did not complete. No original numerical failure/phase diagnosis/fullscience/domain/native/fullCI/frame/release qualification. No unchanged retry or guard relaxation.",
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "static_rich_pins_current": 1096,
+  "stop_reason": "diagnostic_sampled_rss_guard",
+  "test_XML_absent": true,
+  "wall_seconds": 162.6465034099965,
+  "whole_input_rows_current": 1210
+}

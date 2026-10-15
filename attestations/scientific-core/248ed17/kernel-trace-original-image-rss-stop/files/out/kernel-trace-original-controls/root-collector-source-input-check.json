@@ -1,0 +1,32 @@
+{
+  "AST_and_exact_unified_diff_passed": true,
+  "all_previous_branches_and_common_machinery_unchanged": true,
+  "attempt_passed": false,
+  "branch_full_read_tool_chunk": "11a36b",
+  "collector_and_scratch_outside_all_current_inputs": true,
+  "collector_executed": false,
+  "conditional_failure_preservation_only": true,
+  "exact_inverse_only_new_kind_and_parent_membership": true,
+  "independent_terminal_full_read_chunk": "ed4dc2",
+  "passed": true,
+  "release": {
+    "collector": {
+      "bytes": 417181,
+      "resolved_path": "/home/astra/.project/Sirius/out/preserve-finite-result.py",
+      "sha256": "d0a572f92029a6b8ef6ba0605ef02e34a4b0d70615fc319ee5029fdd292ee8d8"
+    },
+    "patch": {
+      "bytes": 16473,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/collector-kernel-trace-rss-stop.patch",
+      "sha256": "d96bf1496b649b7d561d0719b35e408e8bd47b653600a7880e0a35f72eee7191"
+    },
+    "preimage": {
+      "bytes": 406339,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/collector-before-kernel-trace-rss-stop.py",
+      "sha256": "4a5613414236c6d971ad004fe916f2634e75aae7c5ea2c6376f74035306623d5"
+    }
+  },
+  "schema": "sirius-kernel-trace-root-collector-source-input-check-v1",
+  "scope": "Source-only admission to preserve actual false/auditvalid image stop; separate independent collector review and root preservation admission required.",
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff"
+}

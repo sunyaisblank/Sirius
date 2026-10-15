@@ -1,0 +1,246 @@
+{
+  "current_control_collector_untouched": true,
+  "current_producer_authority": {
+    "archived_current_readiness": {
+      "bytes": 22665,
+      "path": "/home/astra/.project/Sirius/attestations/scientific-core/248ed17/full-path-sampling-focused-controls/files/out/full-path-conservation-sampling-format-recovery/controls/readiness.json",
+      "sha256": "daddeb021092b942f8d54f65514889c04d0785d93021d688a01b8fec5878d2d4"
+    },
+    "controls_archive_commit": "1cda8a97db093a31d38aa64222326fa8b78311ed",
+    "current_backend_ELF": {
+      "bytes": 13472104,
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "sha256": "847b364e74878365ffcc203a2690e777790b446f3d8a35c7eb699530b7f7a57f"
+    },
+    "manifest": {
+      "bytes": 22516,
+      "path": "/home/astra/.project/Sirius/attestations/scientific-core/248ed17/full-path-sampling-focused-controls/manifest.json",
+      "sha256": "2242ee0d09bf455f94246eb2afdee9a36e179f607d529f31be05caf6edfc2628"
+    },
+    "scope": "Current strict producer and staged resource identities are available; their binding is not execution of either target trace case. Archived lexical identities remain historical; no retiredQ recreation or wholemap replay.",
+    "trace_resources": {
+      "trace.spv": {
+        "bytes": 4038148,
+        "equals4498_archived_and_current_staged": true,
+        "matches1cda_readiness": true,
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv",
+        "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+      },
+      "trace_fp32comp.spv": {
+        "bytes": 4041472,
+        "equals4498_archived_and_current_staged": true,
+        "matches1cda_readiness": true,
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv",
+        "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+      },
+      "trace_fp64.spv": {
+        "bytes": 3916620,
+        "equals4498_archived_and_current_staged": true,
+        "matches1cda_readiness": true,
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv",
+        "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+      }
+    }
+  },
+  "current_sources": {
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 56500,
+      "equals4498": true,
+      "equals_pre_floor46a": true,
+      "path": "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp",
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    "src/sirius/kernels/gr_ellis_topology.slang": {
+      "bytes": 9393,
+      "equals4498": true,
+      "equals_pre_floor46a": false,
+      "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang",
+      "sha256": "ebf8f6413fc3d158b2bc135634a8e6c8d6790c8be8a20b217e46424ba9a58ca8"
+    },
+    "src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 23624,
+      "equals4498": true,
+      "equals_pre_floor46a": false,
+      "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang",
+      "sha256": "203c0c922e3a51cefef2badb6e8c8cd49b33600ab8e6ed11c1d372eaa527e471"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "bytes": 63438,
+      "equals4498": true,
+      "equals_pre_floor46a": false,
+      "path": "/home/astra/.project/Sirius/src/sirius/kernels/trace.slang",
+      "sha256": "9074a188f407a4e22046db652fd19001387a4773cd25ac90d93f9849cccfe88a"
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "bytes": 7192,
+      "equals4498": true,
+      "equals_pre_floor46a": true,
+      "path": "/home/astra/.project/Sirius/src/sirius/render/trace_continuation.h",
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005"
+    },
+    "tests/backend/kernel_trace_test.cpp": {
+      "bytes": 30289,
+      "equals4498": true,
+      "equals_pre_floor46a": true,
+      "path": "/home/astra/.project/Sirius/tests/backend/kernel_trace_test.cpp",
+      "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "bytes": 11185,
+      "equals4498": true,
+      "equals_pre_floor46a": true,
+      "path": "/home/astra/.project/Sirius/tests/support/trace_continuation_probe.h",
+      "sha256": "86e28bf045a8cdb780979ebdd1866f48e841355ddbf4927d1d4d2b886df22ee1"
+    }
+  },
+  "decision": "SOURCE_JUSTIFIES_ONE_CHANGED_PROGRAM_ORIGINAL_ATTEMPT_UNDER_UNCHANGED_GUARDS",
+  "historical_CI_boundary": {
+    "823": "Actual failed output request: directtrace terminationMinimumStep5/no output,176.39s.",
+    "824": "Actual initial RunKerrScene<float> failed withMinimumStep5/empty r32,87.19s, before FP64 comparison.",
+    "evidence": "attestations/qualification/5b5fad9/linux-gate-incomplete-38577826600/result.json",
+    "not_newly_executed": true
+  },
+  "initialization_source": {
+    "LoadKernel": "vulkan_device.cpp:753 creates/stores VkShaderModule after precision checks, not compute pipeline.",
+    "physical": "Probe::DispatchPhase:143 validates each actual Initialise/Advance/Finalize submit_wait finitepositive<=1000ms, every original record/epoch/phase/identity/attempts/termination/readback. Failure cannot publish radiance.",
+    "pipeline": "Dispatch uses GetOrCreatePipeline atvulkan_device.cpp:1036; software TraceContinuationProbe::Prepare:37 issues separate zero-active Dispatch with no rays.",
+    "zero_active": "Must succeed with finitepositive submit_wait; separate from active1000ms envelope but inside original external ownership wall/RSS/reserve."
+  },
+  "memory_boundary": {
+    "current_trace_first_pipeline_and_zero_active_viability_proven": false,
+    "next_operation_scope": "Root must separately authorize/prepare one prospective finite whole-test diagnostic owner; no operation authorized by this receipt.",
+    "old_child_component_kib": 4178916,
+    "old_child_exit": -15,
+    "old_controller_component_kib": 21724,
+    "old_execution_source": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "old_failure": "sampled aggregateRSS guard; no numerical/image result. Bothlogs empty; only requestparameters saved.",
+    "old_observer_commit": "11d17cc42761f5c40e925d7ec414178e8697991e",
+    "old_peak_aggregate_rss_kib": 4200640,
+    "old_phase_or_allocation_cause_identified": false,
+    "old_result": {
+      "bytes": 3450,
+      "path": "/home/astra/.project/Sirius/attestations/scientific-core/4bcd987/p1-kerr-minimum-step-observer-rss-stop/result.json",
+      "sha256": "5a4a5e91a8c5ba8021fd29e87c4672acd068cf76792989b08eabfce91b73573d"
+    },
+    "old_shader_cache": "DEFAULT/unset",
+    "old_trace_module": {
+      "bytes": 4038204,
+      "path": "/home/astra/.project/Sirius/attestations/scientific-core/4bcd987/p1-kerr-minimum-step-observer-rss-stop/files/bin/linux-gcc/p1-kerr-minimum-step-observer/resources/kernels/trace.spv",
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "old_wall_seconds": 222.22330182600126,
+    "reason": "No existing contract requires an extra screen. The originaltest already includes first shader/pipeline and separate zero-active software initialization under the same ownedRSS/reserve guard. One exact changedprogram test can supply the missing observation without bypassing or enlarging that boundary; a separate screen would duplicate the prefix. If setup/guard/test remains incomplete or fails, preserve it and do not repeat unchanged.",
+    "separate_fulltrace_memory_screen_mandatory": false,
+    "source_repair_claims_old_RSS_fixed": false,
+    "unchanged_guard_kib": 4194304
+  },
+  "method": "Passive source/JSON/hash/read-onlyGit only. No authored helper/parser/ELFreader/compiler/validator/disassembler/provider/API/test operation. Reviewer participated in earlier source/metadata preparation, independent of root actualoperator.",
+  "module_scope_correction": {
+    "actual1dd_passes": [
+      {
+        "actual_four_record_shared_candidate_floor_control": true,
+        "actual_module": "parity_probe.spv",
+        "cache": "DEFAULT/unset",
+        "full_trace_module_executed": false,
+        "owner": {
+          "bytes": 2417,
+          "path": "/home/astra/.project/Sirius/attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls/files/out/minimum-step-floor-current/controls/fp32/owner.json",
+          "sha256": "36e0a86c9c4a414075a88ee399ad1199863c7cd5a5770f7a17010cd6c3c11cd7"
+        },
+        "peak_sampled_rss_kib": 3608940,
+        "rung": "fp32",
+        "stdout": {
+          "bytes": 1002,
+          "path": "/home/astra/.project/Sirius/attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls/files/out/minimum-step-floor-current/controls/fp32/stdout.log",
+          "sha256": "7e81454c7d225b47ffe368e2e6e500a3f12d9a76f4b1e65a38c85c199dcdbe31"
+        },
+        "wall_seconds": 220.4192086990006
+      },
+      {
+        "actual_four_record_shared_candidate_floor_control": true,
+        "actual_module": "parity_probe_fp32comp.spv",
+        "cache": "DEFAULT/unset",
+        "full_trace_module_executed": false,
+        "owner": {
+          "bytes": 2438,
+          "path": "/home/astra/.project/Sirius/attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls/files/out/minimum-step-floor-current/controls/fp32comp/owner.json",
+          "sha256": "b809858456c092eac96199bd1f0b4623604d9bf812ae1492ffd2b58d26a65949"
+        },
+        "peak_sampled_rss_kib": 3603988,
+        "rung": "fp32comp",
+        "stdout": {
+          "bytes": 1014,
+          "path": "/home/astra/.project/Sirius/attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls/files/out/minimum-step-floor-current/controls/fp32comp/stdout.log",
+          "sha256": "3c18a22fe33df39a21c92be7979bde97d5e97a5dfadf106898ff0b472fabeb43"
+        },
+        "wall_seconds": 297.57408009600476
+      },
+      {
+        "actual_four_record_shared_candidate_floor_control": true,
+        "actual_module": "parity_probe_fp64.spv",
+        "cache": "DEFAULT/unset",
+        "full_trace_module_executed": false,
+        "owner": {
+          "bytes": 2417,
+          "path": "/home/astra/.project/Sirius/attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls/files/out/minimum-step-floor-current/controls/fp64/owner.json",
+          "sha256": "1d34a8b3eb017acab7fa1b4721ed04419d13b9fa6b34cc16f8b2e3b7e0252f3e"
+        },
+        "peak_sampled_rss_kib": 2559044,
+        "rung": "fp64",
+        "stdout": {
+          "bytes": 1001,
+          "path": "/home/astra/.project/Sirius/attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls/files/out/minimum-step-floor-current/controls/fp64/stdout.log",
+          "sha256": "c3eb7f59f9895e279539645b1c7c14e49578eb29a95b27a62468af04d3284eec"
+        },
+        "wall_seconds": 203.4231627209956
+      }
+    ],
+    "example": "143294ms pipeline_setup+76578.7ms zero-active queue time belongs to parity opcode25; actual4recordsubmit0.771524ms.",
+    "floor_result": {
+      "bytes": 2053,
+      "path": "/home/astra/.project/Sirius/attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls/files/out/minimum-step-floor-current/focused-result.json",
+      "sha256": "f321979e11f0ff716154952e7662ec32f2cb833d6a78993702202c8622235879"
+    },
+    "meaning": "220.419/297.574/203.423s were full parity_probe modules, NOT trace modules. No trace firstload memory inference is valid.",
+    "six_control_scope": "SourceGovernance,module capabilities,three shared real-candidate floor controls,one Ellis physical ray; no64x64 trace image."
+  },
+  "new_runtime_packet_prepared": false,
+  "nonclaims": [
+    "OldRSS cause or its repair",
+    "Current fulltrace JIT/setup viability",
+    "CI physical numerical cause or corrected fullimage acceptance",
+    "Cold retainedKerr300 acceptance: distinct retained modules/path, unaffected",
+    "Fullscience/P1/frame/native/domain/platform/release/fullCI qualification"
+  ],
+  "original_cases": [
+    "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+    "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene"
+  ],
+  "passed": true,
+  "reviewer": "/root/forensic_obligations",
+  "runtime_admitted": false,
+  "schema": "sirius-kernel-trace-current-source-review-v1",
+  "source_causality": {
+    "current": "trace.slang:756 calls gr_integrator.slang:431 AdaptiveAttemptAlreadyAtMinimumStep, exact attemptedStep<=minimumStep. Abovefloor rejection selects floor and retries; exactfloor rejection still terminates. Parity/Ellis sites use same policy.",
+    "material_change": true,
+    "old": "trace.slang rejected a real candidate then dt<=minStep*1.0001 could terminate at a represented neighbor above floor, before evaluating exactfloor.",
+    "physical_CI_ray_cause_proven": false,
+    "proof_scope": "Real shared candidate/floor negative+positive fourrecord controls in all3rungs passed. Original RK4/truncation/null/projection tolerances, fixtures/parameters/ABI/publication refusal unchanged. This is not proof that oldCI physical ray rejected only in the erroneous window."
+  },
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "unchanged_test_contract": {
+    "823": "AllRGBA finite; luminance range>1e-3; shadow fraction within[0.005,0.30] (0.5%..30%).",
+    "824": "Own freshfp32 prerequisite then actualsupportedfp64 comparison;fp64 finite/nonconstant,blackpixel difference<=4096/50,meanabsdiff<1e-2,maxabsdiff<2. UnsupportedFP64 decline is refusalonly, not executedFP64 comparison.",
+    "RGBA_values": 16384,
+    "cache": "DEFAULT/unset; no prewarming, tuning or larger workbatch.",
+    "extent": [
+      64,
+      64
+    ],
+    "limits": "Retain4GiB sampledaggregateRSS/2GiB reserve plus actualphysical1000ms. No original whole-case300s deadline established; any new wholewall bound must be explicitly external diagnostic.",
+    "maximum_active_rows": 64,
+    "parameters": "M1,a.9,Q=Lambda0;camera(0,0,-40),forward+z,right+x,up+y;FOV.6/aspect1;attempts2000,stepScale.06,min.02,max2,escape100,capture1.12;sample/pupil.5,Doppler1,disk/starfieldoff. Exact existing source unchanged.",
+    "proposed_sequence": "Root may select823 once then824 only after complete823; preserve824 own original fp32 prerequisite and fixtures/assertions. No unchanged failed retry.",
+    "row_order": "y0..63,64pixels per row; original seven buffers/emptyCSR/no textures."
+  }
+}

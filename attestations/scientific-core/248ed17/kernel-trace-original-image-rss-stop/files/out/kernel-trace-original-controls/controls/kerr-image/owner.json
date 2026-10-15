@@ -1,0 +1,68 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "--gtest_filter=KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+    "--gtest_also_run_disabled_tests"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "kerr-image",
+  "child_exit": -15,
+  "child_pid": 535059,
+  "child_start_ticks": "9825286",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 535055,
+    "pid": 535055,
+    "ppid": 1313,
+    "rss_kib": 25492,
+    "session": 535055,
+    "start_ticks": "9825233",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/kernel-trace-original-controls/controls/kerr-image/gtest.xml",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 28800
+  },
+  "minimum_sampled_available_kib": 16010428,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 535059,
+      "saved_start_ticks": "9825286"
+    }
+  ],
+  "passed": false,
+  "peak_sampled_rss_kib": 4200404,
+  "provider_mappings": [
+    {
+      "maps": [
+        "748dc9000000-748dc905b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "748dc905b000-748dc946b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "748dc946b000-748dc9ac6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "748dc9ac6000-748dc9b61000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 535059,
+      "pid": 535059,
+      "start_ticks": "9825286"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow; all original64x64/settings/assertions/64active/physical1000ms unchanged. Whole28800s/4GiB/2GiB ownership bound is externaldiagnostic; no coldretainedKerr300/fullqualification claim.",
+  "source": {
+    "revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": "diagnostic_sampled_rss_guard",
+  "wall_seconds": 162.6465034099965,
+  "whole_inputs_unchanged": true
+}

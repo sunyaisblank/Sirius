@@ -1,0 +1,149 @@
+{
+  "actual_attempt": {
+    "RSS": {
+      "last_sample_child_KiB": 4174784,
+      "last_sample_controller_component_KiB": 25620,
+      "last_sample_elapsed_seconds": 162.02157428699138,
+      "minimum_available_KiB": 16010428,
+      "over_limit_KiB": 6100,
+      "peak_aggregate_KiB": 4200404
+    },
+    "case": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+    "child_exit": -15,
+    "guard_evidence": "All6248 samples read; final sample is first observed RSS value above original4194304KiB aggregate limit. Available memory remained above reserve and elapsed below wall. Controller component is included as originally required; no limit or accounting change.",
+    "owner_passed": false,
+    "owner_status": "terminal",
+    "raw_outputs": "stdout399B contains only GoogleTest start/RUN. stderr0B. No completed-test line, trace image metrics, completed radiance output or gtest.xml. No numerical MinimumStep/other shader verdict observed.",
+    "root_command_once_closed": {
+      "operator_exit": 1,
+      "session_id": 13443,
+      "terminal_tool_chunk": "78c671"
+    },
+    "second_case": "kerr-precision folder absent: KernelTrace.Fp64RungAgreesWithFp32OnKerrScene never launched. No fp64 execution/refusal/comparison evidence inferred.",
+    "stop_reason": "diagnostic_sampled_rss_guard",
+    "unchanged_external_bounds": {
+      "aggregate_RSS_KiB": 4194304,
+      "reserve_KiB": 2097152,
+      "seconds": 28800
+    },
+    "wall_seconds": 162.6465034099965
+  },
+  "audit_completed": true,
+  "authorship": "Independent terminal reviewer, separate from packet author/source reviewers and root sole operator. No authored helper/parser/ELF reader/compiler/provider/test/tool workload/API or cleanup executed; passive stdlib JSON/source/hash/read-onlyGit/freshproc checks only.",
+  "bindings": {
+    "controls/actions.json": {
+      "bytes": 154960,
+      "sha256": "e2aa2a62f532cdcbd23a42380b60bb423785e69d9ac34b1e5b401d652d379e8b"
+    },
+    "controls/commands.json": {
+      "bytes": 1233,
+      "sha256": "9df34a569bb95abc39b05a2f71768f4d27dbaf8cabe2ac7d9a5a41a09b2e68db"
+    },
+    "controls/kerr-image/inputs-after.json": {
+      "bytes": 290523,
+      "sha256": "86bfe1ebac1a8d48e77468f1f669257db7022d4fcac51833ba1db5177efa046f"
+    },
+    "controls/kerr-image/inputs-before.json": {
+      "bytes": 290523,
+      "sha256": "86bfe1ebac1a8d48e77468f1f669257db7022d4fcac51833ba1db5177efa046f"
+    },
+    "controls/kerr-image/owner.json": {
+      "bytes": 2424,
+      "sha256": "3222d4cc536b1600306c65dcae2dadacf8a2f2ceb240a23b818378893f59a1d5"
+    },
+    "controls/kerr-image/samples.jsonl": {
+      "bytes": 1413943,
+      "sha256": "5b0a487c1a7f4b3801862766c5d1b8d24dfe14c7fbb45f127d626bc39194c4df"
+    },
+    "controls/kerr-image/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "controls/kerr-image/stdout.log": {
+      "bytes": 399,
+      "sha256": "7bb11324cd8c69ffce07ba196347b5c28eef9a4a3252c09daeb253f7b598bb7f"
+    },
+    "controls/source-freeze.json": {
+      "bytes": 293768,
+      "sha256": "a38a92d0fa84471a646916136e7ea956c75d202fab14309c8b61bbf3ec9808f2"
+    },
+    "independent-source-review.json": {
+      "bytes": 6572,
+      "sha256": "44b516c156b5082dd185e9b0f21044bb515b650627e4300c9132301626b8e06b"
+    },
+    "producer-bindings.json": {
+      "bytes": 140605,
+      "sha256": "4ef44c0088ade7752bc2c59371f35ae38ddc678890e8843fc306226e02d371c7"
+    },
+    "root-prelaunch-input-check.json": {
+      "bytes": 3082,
+      "sha256": "992e249a24469b51d5348bc2bfa2845a1186764bed50e456faea39e9eec9fd7f"
+    },
+    "root-runtime-admission.json": {
+      "bytes": 1484,
+      "sha256": "0f19a04f0485af7dd12e29876595d8163af7d529a6052a198c7df4b40c4ce34e"
+    },
+    "root-terminal-input-check.json": {
+      "bytes": 3344,
+      "sha256": "97694a14a162fbfc3e7073840faa1aecdb7ef3472425498475c542e1097691c4"
+    },
+    "source-review.json": {
+      "bytes": 14410,
+      "sha256": "8f43ae09fe0ca95fa54f0e8bd6ccf0e8d105f0c4bb78cffea1e11b087917c7ed"
+    }
+  },
+  "classification": "ORIGINAL_IMAGE_ATTEMPT_INCOMPLETE_SAMPLED_RSS_GUARD_STOP",
+  "numerical_result_observed": false,
+  "original_image_completed": false,
+  "original_image_passed": false,
+  "ownership_record_valid": true,
+  "passed": false,
+  "passive_integrity_and_ownership_checks": {
+    "XML_absent": true,
+    "actual_before_plus_after_records": 2420,
+    "actual_before_records": 1210,
+    "actual_provider": "LVP mapping path/device08:50/inode143595 joins owned sampled PID535059/start9825286/session535059. Current pinned library bytes/device/inode match. Loader/LLVM dependencies are byte-bound inputs; no new live trace for them claimed.",
+    "adopted_children_reaped": [],
+    "all1096_rich_static_inputs_equal_current": true,
+    "all_first_action_declared_inputs_join_actual_map": true,
+    "birth_checks": "Recorded PID/start ticks appears in actual samples; current boot matches; owner retirement and fresh /proc check show no same birth remains.",
+    "both_maps_byte_identical_and_every_record_current": true,
+    "both_original_actions_held_unchanged": true,
+    "cache_and_device": "Actual VK_DRIVER_FILES=LVP/SIRIUS_VULKAN_DEVICE=0; MESA_SHADER_CACHE_DISABLE absent; both actions disable_software_shader_cache=false. Original default cache/no LP/MESA tuning retained.",
+    "cleanup_errors": [],
+    "one_recorded_birth_freshly_absent": {
+      "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+      "current_start_ticks": null,
+      "pid": 535059,
+      "saved_start_ticks": "9825286"
+    },
+    "remaining_owned_processes": [],
+    "review_outside_all_static_both_action_and_actual_input_sets": true,
+    "second_output_folder_absent": true,
+    "source_and_whole_inputs_unchanged": true,
+    "unique_current_inputs": 1210
+  },
+  "precision_test_executed": false,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "schema": "sirius-original-kernel-trace-independent-terminal-review-v1",
+  "source_and_claim_limits": {
+    "material_program_change": "Current actual trace resources include shared exact-floor retry repair. Original image64x64/4096pixels/16384RGBA, original parameters/assertions,64active rows and physical1000ms checks unchanged. Relevant source change justified this one original attempt, not a numeric acceptance claim.",
+    "original_product_obligations": "AllRGBA finite/nonconstant/bounded shadow and original continuation record/identity/epoch/phase/refusal checks remain uncompleted here; no partial frame substitutes for them.",
+    "phase_or_allocation_cause": "Not established. Recorded provider loading/RSS/start log does not identify actual Vulkan pipeline/JIT/allocation/dispatch/record phase or number of advanced pixels. No algorithm/floor-fix counterexample follows from this guard stop.",
+    "prior_evidence": "Earlier parity_probe floor controls are not fulltrace JIT/setup/memory proof. Prior11d17cc RSS observer stop retains unresolved phase/cause. Accepted1cda full-path sampling conservation controls remain valid and distinct; this failure does not revise them.",
+    "qualification": "No completed image, fp64 comparison, current fulltrace setup/memory viability, scientific/domain/frame/native/platform/fullCI/production/release qualification. Source/ownership evidence remains valid while scientific attempt passed=false.",
+    "separate_cold_obligation": "Original retained coldKerr128x128/1SPP300s path is distinct and not retried or qualified by this attempt.",
+    "sequence_policy": "First nonpass stops both-case sequence. Preserve failed attempt/source/receipts before any material repair; no unchanged retry, raised limit, cache change, substituted image or weakened assertions."
+  },
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "workspace": {
+    "HEAD": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "review": "New ignored out/ JSON outside all consumed/frozen inputs; not committed/pushed by reviewer.",
+    "source_committed_and_pushed": true,
+    "tracked_worktree_clean": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1
+  }
+}

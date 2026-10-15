@@ -1,0 +1,88 @@
+{
+  "XML_absent": true,
+  "actual_LVP_mapping_bound": true,
+  "actual_original_image_attempts": 1,
+  "actual_root_operation": {
+    "closed": true,
+    "executed_once": true,
+    "exit_code": 1,
+    "session_id": 13443,
+    "terminal_tool_chunk": "78c671"
+  },
+  "audit_completed": true,
+  "cache": "DEFAULT/unset; selected LVP0 only.",
+  "classification": "ORIGINAL_IMAGE_ATTEMPT_INCOMPLETE_SAMPLED_RSS_GUARD_STOP",
+  "complete_images": 0,
+  "current_full_trace_setup_memory_viability_proven": false,
+  "current_input_rows": 1210,
+  "evidence": {
+    "independent_terminal_review": {
+      "bytes": 8192,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/independent-terminal-review.json",
+      "sha256": "e53d30326cc6f46e40a7a27eaf7872385013a269685f8c82d95b731fec5cd7cd"
+    },
+    "producer_bindings": {
+      "bytes": 140605,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/producer-bindings.json",
+      "sha256": "4ef44c0088ade7752bc2c59371f35ae38ddc678890e8843fc306226e02d371c7"
+    },
+    "root_actual_terminal_input_check": {
+      "bytes": 3344,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/root-terminal-input-check.json",
+      "sha256": "97694a14a162fbfc3e7073840faa1aecdb7ef3472425498475c542e1097691c4"
+    },
+    "runtime_admission": {
+      "bytes": 1484,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/root-runtime-admission.json",
+      "sha256": "0f19a04f0485af7dd12e29876595d8163af7d529a6052a198c7df4b40c4ce34e"
+    },
+    "source_causality": {
+      "bytes": 14410,
+      "resolved_path": "/home/astra/.project/Sirius/out/kernel-trace-original-controls/source-review.json",
+      "sha256": "8f43ae09fe0ca95fa54f0e8bd6ccf0e8d105f0c4bb78cffea1e11b087917c7ed"
+    }
+  },
+  "no_unchanged_retry_or_guard_relaxation": true,
+  "numerical_or_completed_image_result_established": false,
+  "observed_births_freshly_absent": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 535059,
+      "saved_start_ticks": "9825286"
+    }
+  ],
+  "original_64x64_parameters_64active_assertions_and_physical1000ms_unchanged": true,
+  "original_test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+  "outer28800_wall_is_diagnostic_not_cold_retainedKerr300": true,
+  "owner": {
+    "child_exit": -15,
+    "cleanup_errors": [],
+    "guard_rss_kib": 4194304,
+    "last_sample_child_rss_kib": 4174784,
+    "last_sample_controller_rss_kib": 25620,
+    "minimum_available_kib": 16010428,
+    "over_guard_kib": 6100,
+    "passed": false,
+    "peak_sampled_aggregate_rss_kib": 4200404,
+    "remaining_owned_processes": [],
+    "status": "terminal",
+    "stop_reason": "diagnostic_sampled_rss_guard",
+    "wall_seconds": 162.6465034099965
+  },
+  "passed": false,
+  "phase_or_allocation_cause_identified": false,
+  "precision_output_folder_absent": true,
+  "precision_test_executions": 0,
+  "prior_retained_sampling_repair_evidence": {
+    "commit": "1cda8a97db093a31d38aa64222326fa8b78311ed",
+    "four_original_controls_passed": true,
+    "scope": "Separate retained conservation/sampler witnesses remain valid; this legacy image stop does not replace or negate them."
+  },
+  "samples_checked": 6248,
+  "schema": "sirius-kernel-trace-original-image-rss-stop-v1",
+  "scope": "One changed-program original image attempt stopped by unchanged sampled aggregateRSS guard before completing original image or gtest XML. Source/ownership audit is valid, attempt passed=false. Raw logs do not identify executing phase/allocation or numerical failure. Old11d17 RSS cause remains unresolved; parity floor controls are not fulltrace setup proof. No fullscience/frame/native/domain/platform/fullCI/release qualification.",
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "static_rich_pins": 1096,
+  "unexecuted_conditional_test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene"
+}

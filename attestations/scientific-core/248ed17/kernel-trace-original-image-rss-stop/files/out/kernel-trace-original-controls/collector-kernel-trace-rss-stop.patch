@@ -1,0 +1,119 @@
+--- a/out/preserve-finite-result.py
++++ b/out/preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff' if kind == 'full-path-sampling-focused-controls' else 'bd7820aad7d64c4dd65caa1b4bdbd7292a900115' if kind == 'full-path-sampling-build-format-stop' else '4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop', 'fp32-estimate-restoring-original-controls', 'fp32-estimate-restoring-original-benefit') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff' if kind in ('full-path-sampling-focused-controls', 'kernel-trace-original-image-rss-stop') else 'bd7820aad7d64c4dd65caa1b4bdbd7292a900115' if kind == 'full-path-sampling-build-format-stop' else '4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop', 'fp32-estimate-restoring-original-controls', 'fp32-estimate-restoring-original-benefit') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,107 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'kernel-trace-original-image-rss-stop':
++    work=root/'out/kernel-trace-original-controls';controls=work/'controls';case=controls/'kerr-image'
++    bundle=root/'attestations/scientific-core/248ed17/kernel-trace-original-image-rss-stop'
++    tag='evidence/issue-53-kernel-trace-original-image-rss-stop'
++    kload=lambda path:json.loads(Path(path).read_text())
++    krecords={}
++    def krecord(path):
++        path=Path(path);key=str(path)
++        if key not in krecords:krecords[key]=dict(pin(path),resolved_path=str(path.resolve(strict=True)))
++        return krecords[key]
++    result=kload(work/'incomplete-result.json');independent=kload(work/'independent-terminal-review.json');admission=kload(work/'root-terminal-admission.json')
++    assert result['schema']=='sirius-kernel-trace-original-image-rss-stop-v1'
++    assert result['passed'] is False and result['audit_completed'] is True
++    for key,value in [('actual_original_image_attempts',1),('complete_images',0),('precision_test_executions',0)]:
++        assert type(result[key]) is int and result[key]==value
++    assert independent['passed'] is False and independent['audit_completed'] is True and independent['ownership_record_valid'] is True
++    assert admission['passed'] is True and result['source_revision']==independent['source_revision']==admission['source_revision']==parent
++    assert admission['incomplete_result']==krecord(work/'incomplete-result.json')
++    assert admission['independent_terminal_review']==krecord(work/'independent-terminal-review.json')
++    runtime=kload(work/'root-runtime-admission.json');assert runtime['passed'] is True and runtime['source_revision']==parent
++    assert runtime['old_RSS_cause_unresolved'] is True and runtime['current_full_trace_setup_viability_proven'] is False
++    assert runtime['independent_source_review']==krecord(work/'independent-source-review.json')
++    assert runtime['root_actual_prelaunch_input_check']==krecord(work/'root-prelaunch-input-check.json')
++    freeze=kload(controls/'source-freeze.json');assert freeze['revision']==parent and len(freeze['files'])==1096
++    for name,expected in freeze['files'].items():assert krecord(root/name)==expected,name
++    actions=kload(controls/'actions.json');assert set(actions)=={'kerr-image','kerr-precision'}
++    names={'kerr-image':'KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow','kerr-precision':'KernelTrace.Fp64RungAgreesWithFp32OnKerrScene'}
++    registrations=kload(controls/'registration.json');commands=kload(controls/'commands.json')
++    assert commands['order']==['kerr-image','kerr-precision'] and commands['stop_first_nonpass'] is True
++    assert commands['commands']==[['/usr/bin/python3.12','-B',str(controls/'run_owned.py'),name] for name in commands['order']]
++    for label,action in actions.items():
++        assert action['revision']==parent and action['kind']=='test' and type(action['expected_exit']) is int and action['expected_exit']==0
++        assert action['argv']==[str(root/'bin/linux-gcc/tests/backend/sirius_backend_tests'),'--gtest_filter='+names[label],'--gtest_also_run_disabled_tests']
++        assert action['software_provider'] is True and action['disable_software_shader_cache'] is False
++        assert action['limits']=={'seconds':28800,'rss_kib':4194304,'reserve_kib':2097152}
++    for name,sha in [('run_owned.py','e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd'),('owned_guard.py','747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056')]:assert pin(controls/name)['sha256']==sha
++    owner=kload(case/'owner.json');action=actions['kerr-image']
++    assert owner['status']=='terminal' and owner['passed'] is False and type(owner['child_exit']) is int and owner['child_exit']==-15
++    assert owner['stop_reason']=='diagnostic_sampled_rss_guard' and owner['source']=={'revision':parent,'status':''}
++    assert owner['source_unchanged'] is True and owner['whole_inputs_unchanged'] is True
++    assert owner['argv']==action['argv'] and owner['limits']==action['limits']
++    assert owner['cleanup_errors']==[] and owner['remaining_owned_processes']==[]
++    assert owner['peak_sampled_rss_kib']==4200404 and owner['peak_sampled_rss_kib']-action['limits']['rss_kib']==6100
++    assert owner['minimum_sampled_available_kib']>=action['limits']['reserve_kib'] and owner['wall_seconds']<action['limits']['seconds']
++    assert owner['declared_output_environment']=={'GTEST_OUTPUT':'xml:'+str(case/'gtest.xml'),'VK_DRIVER_FILES':'/usr/share/vulkan/icd.d/lvp_icd.json','SIRIUS_VULKAN_DEVICE':'0'}
++    before=kload(case/'inputs-before.json');assert before==kload(case/'inputs-after.json') and before
++    for name,expected in before.items():assert krecord(root/name)==expected,name
++    for name in action['frozen_inputs']:
++        path=root/name;key=str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
++        assert before[key]==krecord(path)
++    collector=Path(__file__).resolve()
++    for path in [collector,work/'collector-before-kernel-trace-rss-stop.py',work/'collector-kernel-trace-rss-stop.patch']:
++        assert str(path) not in before and str(path.relative_to(root)) not in before
++        assert str(path) not in freeze['files'] and str(path) not in action['frozen_inputs']
++    samples=[json.loads(line) for line in (case/'samples.jsonl').read_text().splitlines()]
++    assert len(samples)==6248 and max(row['rss_kib'] for row in samples)==owner['peak_sampled_rss_kib']
++    assert min(row['available_kib'] for row in samples)==owner['minimum_sampled_available_kib']
++    assert samples[-1]['rss_kib']==4200404 and sum(row['rss_kib'] for row in samples[-1]['members'])==4174784
++    assert samples[-1]['rss_kib']-sum(row['rss_kib'] for row in samples[-1]['members'])==25620
++    assert owner['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip() and len(owner['observed_births'])==1
++    births=[]
++    for birth in owner['observed_births']:
++        assert birth['absent'] is True and type(birth['pid']) is int
++        saved=int(birth['saved_start_ticks'])
++        try:
++            raw=(Path('/proc')/str(birth['pid'])/'stat').read_text();current=int(raw[raw.rfind(')')+2:].split()[19])
++        except (FileNotFoundError,ProcessLookupError):current=None
++        assert current!=saved
++        births.append({'pid':birth['pid'],'saved_start_ticks':saved,'current_start_ticks':current,'same_birth_absent':True})
++    lvp=root/'/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so';device=f'{os.major(lvp.stat().st_dev):02x}:{os.minor(lvp.stat().st_dev):02x}';inode=lvp.stat().st_ino
++    assert owner['provider_mappings']
++    for row in owner['provider_mappings']:
++        assert row['pid']==owner['child_pid'] and str(row['start_ticks'])==str(owner['child_start_ticks']) and row['owned_session']==owner['child_pid']
++        assert row['maps']
++        for line in row['maps']:
++            fields=line.split(maxsplit=5);assert fields[3]==device and int(fields[4])==inode and fields[5]==str(lvp)
++    assert not (case/'gtest.xml').exists() and not (controls/'kerr-precision').exists()
++    stdout=(case/'stdout.log').read_text();assert '[ RUN      ] '+names['kerr-image'] in stdout
++    assert '[       OK ]' not in stdout and '[  PASSED  ]' not in stdout and (case/'stderr.log').read_bytes()==b''
++    aliases={}
++    for current,saved_base,member,commit in [
++        ('bin/linux-gcc/tests/backend/sirius_backend_tests','attestations/scientific-core/bd7820a/full-path-sampling-build-format-stop','producer/sirius_backend_tests','f4e6bbd7d117622f99b4a872b83508cbbcc4e456'),
++        ('bin/linux-gcc/kernels/trace.spv','attestations/scientific-core/4498cc4/minimum-step-floor-focused-controls','producer/kernels/trace.spv','1dd9bf1f0c7ec8e91adb89cc3563eb705d353709')]:
++        saved=root/saved_base/member;manifest=kload(root/saved_base/'manifest.json')['files']
++        assert saved.is_file() and not saved.is_symlink() and pin(root/current)==pin(saved)==manifest[member]
++        raw=subprocess.check_output(['git','show',commit+':'+str(saved.relative_to(root))]);assert len(raw)==pin(saved)['bytes'] and hashlib.sha256(raw).hexdigest()==pin(saved)['sha256']
++        aliases[current]={'actual':krecord(root/current),'archived':krecord(saved),'archive_commit':commit,'Git_member':str(saved.relative_to(root))}
++    assert pin(work/'source-review.json')==pin(root/'out/kernel-trace-current-source-review/source-review.json')
++    baseline=work/'collector-before-kernel-trace-rss-stop.py';assert pin(baseline)=={'bytes':406339,'sha256':'4a5613414236c6d971ad004fe916f2634e75aae7c5ea2c6376f74035306623d5'}
++    mapping=[(work,'files/out/'+work.name),(root/'out/kernel-trace-current-source-review','files/out/kernel-trace-current-source-review'),
++        (root/'tests/backend/kernel_trace_test.cpp','source/tests/backend/kernel_trace_test.cpp'),(root/'tests/support/trace_continuation_probe.h','source/tests/support/trace_continuation_probe.h'),
++        (root/'bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o','producer/kernel_trace_test.cpp.o')]
++    summary={'schema':'sirius-kernel-trace-original-image-rss-stop-evidence-v1','passed':False,'audit_completed':True,'source_revision':parent,
++        'incomplete_result':krecord(work/'incomplete-result.json'),'independent_terminal_review':krecord(work/'independent-terminal-review.json'),'root_terminal_admission':krecord(work/'root-terminal-admission.json'),
++        'actual_original_image_attempts':1,'complete_images':0,'precision_test_executions':0,'owner':krecord(case/'owner.json'),'actual_input_rows':len(before),'static_inputs':1096,
++        'sample_count':len(samples),'peak_sampled_aggregate_rss_kib':owner['peak_sampled_rss_kib'],'diagnostic_guard_kib':4194304,'rss_excess_kib':6100,
++        'fresh_observed_birth_absences':births,'producer_archive_aliases':aliases,'cache_policy':'DEFAULT; MESA_SHADER_CACHE_DISABLE unset by original owner',
++        'ownership_record_valid':True,'full_trace_initialization_or_memory_viability_proven':False,'allocation_or_PC_phase_cause_identified':False,
++        'parity_probe_is_not_full_trace':True,'no_unchanged_retry_or_guard_relaxation':True,'scientific_or_native_domain_or_release_qualification':False,
++        'scope':'Preserve one incomplete original64x64 Kerr-image attempt under unchanged64active/physical1000ms/defaultcache and external28800s/4GiB/2GiB guards. Actual aggregateRSS guard stopped child-15; no completed image/XML or numerical verdict. Precision case unrun. Peak alone establishes neither allocation cause nor executingPC/phase. Source causal floor change and previous unresolved RSS remain distinct. Actual LVP-only birth/session/dev/inode mappings; no full provider or platform qualification.'}
++    message='Preserve incomplete original KernelTrace image RSS stop without numerical acceptance (#53)\n'
+ elif kind == 'full-path-sampling-focused-controls':
+     import xml.etree.ElementTree as ET
+     work=root/'out/full-path-conservation-sampling-format-recovery';controls=work/'controls'
