@@ -432,27 +432,76 @@ public bool AdaptiveAttemptAlreadyAtMinimumStep(Real attemptedStep, Real minimum
     return attemptedStep <= minimumStep;
 }
 
+// A fixed composition still covers the caller's complete policy interval.
+// Internal RK4 states are unprojected; any unrepresented substep rolls this
+// local result back to its input. No adaptive retry or affine commit occurs here.
+bool AdvanceCompositeGeodesicRK4(
+    GeodesicStateCart state, Real step, int substeps, bool isWarp, bool isWormhole,
+    float M, float a, float Q, float Lambda,
+    float warpVs, float warpSigma, float warpR, float throatB0, int wormShape,
+    out GeodesicStateCart result) {
+    result = state;
+    if (substeps < 1 || substeps > 64) return false;
+    Real substep = step / Real(substeps);
+    [loop] for (int part = 0; part < substeps; ++part) {
+        GeodesicStateCart next;
+        if (!AdvanceGeodesicRK4(result, substep, isWarp, isWormhole,
+                M, a, Q, Lambda, warpVs, warpSigma, warpR, throatB0, wormShape, next)) {
+            result = state;
+            return false;
+        }
+        result = next;
+    }
+    return true;
+}
+
+// Only the exact represented floor selects the finer fixed composition.
+// Relative fourth-order resolution across 2e-5 and 1e-9 tolerances is calibrated
+// by the next power-of-two fourth root of their ratio (16). This is not an error
+// guarantee; the ordinary error/null predicates remain the acceptance authority.
+public int AdaptiveCoarseSubstepsForAttempt(Real step, Real minimumStep) {
+    if (step != minimumStep) return 1;
+#ifdef SIRIUS_FP64
+    return 32;
+#else
+    return 2;
+#endif
+}
+
 // Shared adaptive candidate authority for trace.slang and the P1 parity probe.
-// The accepted state is the two-half-step solution; the caller owns retry and
-// precision-rung commit so a rejected attempt cannot mutate downstream state.
-public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStep(
+// The candidate is the fine composition; the caller owns retry and precision-
+// rung commit so a rejected attempt cannot mutate downstream state.
+AdaptiveGeodesicStep AttemptAdaptiveGeodesicStepWithResolution(
     GeodesicStateCart state, Real step, bool isWarp, bool isWormhole,
     float M, float a, float Q, float Lambda,
     float warpVs, float warpSigma, float warpR,
-    float throatB0, int wormShape, Real integrationTolerance, Real nullTolerance) {
+    float throatB0, int wormShape, Real integrationTolerance, Real nullTolerance,
+    int coarseSubsteps) {
     AdaptiveGeodesicStep result;
     result.candidate = state;
     GeodesicStateCart fullStep = state;
-    bool fullRepresented = AdvanceGeodesicRK4(
-        state, step, isWarp, isWormhole, M, a, Q, Lambda,
-        warpVs, warpSigma, warpR, throatB0, wormShape, fullStep);
-    GeodesicStateCart firstHalf = state;
-    bool firstHalfRepresented = AdvanceGeodesicRK4(
-        state, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
-        warpVs, warpSigma, warpR, throatB0, wormShape, firstHalf);
-    bool candidateRepresented = firstHalfRepresented && AdvanceGeodesicRK4(
-        firstHalf, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
-        warpVs, warpSigma, warpR, throatB0, wormShape, result.candidate);
+    bool fullRepresented;
+    bool firstHalfRepresented = true;
+    bool candidateRepresented;
+    if (coarseSubsteps == 1) {
+        fullRepresented = AdvanceGeodesicRK4(
+            state, step, isWarp, isWormhole, M, a, Q, Lambda,
+            warpVs, warpSigma, warpR, throatB0, wormShape, fullStep);
+        GeodesicStateCart firstHalf = state;
+        firstHalfRepresented = AdvanceGeodesicRK4(
+            state, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
+            warpVs, warpSigma, warpR, throatB0, wormShape, firstHalf);
+        candidateRepresented = firstHalfRepresented && AdvanceGeodesicRK4(
+            firstHalf, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
+            warpVs, warpSigma, warpR, throatB0, wormShape, result.candidate);
+    } else {
+        fullRepresented = AdvanceCompositeGeodesicRK4(
+            state, step, coarseSubsteps, isWarp, isWormhole, M, a, Q, Lambda,
+            warpVs, warpSigma, warpR, throatB0, wormShape, fullStep);
+        candidateRepresented = AdvanceCompositeGeodesicRK4(
+            state, step, coarseSubsteps * 2, isWarp, isWormhole, M, a, Q, Lambda,
+            warpVs, warpSigma, warpR, throatB0, wormShape, result.candidate);
+    }
     if (!fullRepresented || !firstHalfRepresented || !candidateRepresented) {
         result.candidate = state;
         result.errorRatio = Real(1.0e30f);
@@ -500,4 +549,31 @@ public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStep(
         result.stepFactor = min(result.stepFactor, Real(0.5f));
     }
     return result;
+}
+
+// Callers without a floor retain the original one-full/two-half estimator.
+public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStep(
+    GeodesicStateCart state, Real step, bool isWarp, bool isWormhole,
+    float M, float a, float Q, float Lambda,
+    float warpVs, float warpSigma, float warpR, float throatB0, int wormShape,
+    Real integrationTolerance, Real nullTolerance) {
+    return AttemptAdaptiveGeodesicStepWithResolution(
+        state, step, isWarp, isWormhole, M, a, Q, Lambda,
+        warpVs, warpSigma, warpR, throatB0, wormShape,
+        integrationTolerance, nullTolerance, 1);
+}
+
+// Trace, P1 and the minimum-retry witness select the same resolution before
+// their single counted attempt. Both fixed compositions cover exactly step;
+// the policy interval is never lowered and a rejected state is never committed.
+public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStepAtFloor(
+    GeodesicStateCart state, Real step, Real minimumStep, bool isWarp, bool isWormhole,
+    float M, float a, float Q, float Lambda,
+    float warpVs, float warpSigma, float warpR, float throatB0, int wormShape,
+    Real integrationTolerance, Real nullTolerance) {
+    int coarseSubsteps = AdaptiveCoarseSubstepsForAttempt(step, minimumStep);
+    return AttemptAdaptiveGeodesicStepWithResolution(
+        state, step, isWarp, isWormhole, M, a, Q, Lambda,
+        warpVs, warpSigma, warpR, throatB0, wormShape,
+        integrationTolerance, nullTolerance, coarseSubsteps);
 }

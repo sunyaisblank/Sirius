@@ -103,6 +103,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
         "gtest:KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
         "gtest:KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+        "gtest:KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+        "gtest:KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
         "gtest:RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth",
         "gtest:RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch",
         "gtest:RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection",
@@ -504,7 +506,7 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "1c24b316a8392e2da20a967f042cd6d07bbe91cbb776a4e54eea8ac2a99baccf",
+    "acceptance_criteria": "d124b46462dd6e60778454a73c40e38255246cdcb6b7bcc413c8722417162cd3",
     "required_dimensions": "b70fe43e454e79567070f3bbb374414962fcbe5fd8dee9f40ffa50d78d0bc0db",
     "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
 }

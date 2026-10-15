@@ -529,6 +529,8 @@ set_tests_properties(
     KernelParity.RejectedNeighbourRetriesExactMinimumFp32
     KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp
     KernelParity.RejectedNeighbourRetriesExactMinimumFp64
+    KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32
+    KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp
     KernelParity.NullProjectionPreservesConeBranchAndFailsClosed
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets

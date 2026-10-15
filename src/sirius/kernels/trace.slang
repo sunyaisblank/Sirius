@@ -748,8 +748,8 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 Real dt = min(geometricStep, adaptiveStep);
 
                 ++attempts;
-                AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
-                    state, dt, isWarp, isWormhole, M, a, Q, Lambda,
+                AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStepAtFloor(
+                    state, dt, Real(minStep), isWarp, isWormhole, M, a, Q, Lambda,
                     warpVs, warpSigma, warpR, throatB0, wormShape,
                     AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
                 if (!attempted.accepted) {
