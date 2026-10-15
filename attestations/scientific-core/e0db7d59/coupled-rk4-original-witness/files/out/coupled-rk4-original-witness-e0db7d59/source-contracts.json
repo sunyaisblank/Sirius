@@ -1,0 +1,150 @@
+{
+  "schema": "sirius-coupled-rk4-original-witness-pending-source-contracts-v1",
+  "author": "/root/sanitizer_gate_contract",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "source_only": true,
+  "runtime_ready": false,
+  "runtime_admitted": false,
+  "independently_reviewed": false,
+  "source_pins": {
+    "tests/backend/kernel_parity_test.cpp": {
+      "path": "tests/backend/kernel_parity_test.cpp",
+      "bytes": 129641,
+      "sha256": "4bf064bb7902dcad59050d4374051a44b9b3cdc619ec9fbb97686e222345b563"
+    },
+    "src/sirius/kernels/coupled_probe.slang": {
+      "path": "src/sirius/kernels/coupled_probe.slang",
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+    },
+    "src/sirius/kernels/gr_coupled.slang": {
+      "path": "src/sirius/kernels/gr_coupled.slang",
+      "bytes": 12632,
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    "src/sirius/kernels/gr_integrator.slang": {
+      "path": "src/sirius/kernels/gr_integrator.slang",
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+    },
+    "src/sirius/kernels/gr_metrics.slang": {
+      "path": "src/sirius/kernels/gr_metrics.slang",
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "path": "src/sirius/kernels/gr_types.slang",
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    }
+  },
+  "apparatus_pins": {
+    "run_owned.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "originals/actions.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/originals/actions.json",
+      "bytes": 52935,
+      "sha256": "06b88d6852e85f1e271eeee1cdc3dcd980ae1b62abc10059f78021371e3d44a8"
+    },
+    "originals/root_acceptance.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/originals/root_acceptance.py",
+      "bytes": 3757,
+      "sha256": "34b7ee5a700ab9c88622cd2e50e66f114cc78ab865e704187a641f46732b5ca4"
+    },
+    "root_acceptance.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root_acceptance.py",
+      "bytes": 3767,
+      "sha256": "ccabb1bafcdace2489cfaca6e53d9d6abdfc6e39473a8ff30f2b41ca3b86a929"
+    },
+    "actions.pending.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/actions.pending.json",
+      "bytes": 6097,
+      "sha256": "162c599e5414270642ff43dafba7c024347f63591d9cf360a0fe725dfc3daca5"
+    }
+  },
+  "exact_adaptation": {
+    "source_parent": "out/kerr-cartdelta-rhs-controls",
+    "helpers_byte_exact": true,
+    "collector": "Exactly one work-directory literal retarget; inverse replacement reproduces the complete3757-byte original. No functional code/schema change.",
+    "pending_action": "One labelled action from the mature first-action template. Only gtest filter, required XML name/property, namespace paths/scope and two coupled module selectors change. e0 revision, kind, provider/default-cache/expected-exit/limits and all other XML predicates are unchanged.",
+    "retained_parent_common_inputs": 70,
+    "extra_coupled_selectors": [
+      "bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+      "bin/linux-gcc/tests/backend/resources/kernels/coupled_probe_fp64.spv"
+    ],
+    "pending_declared_inputs": 72,
+    "parent_70_breakdown": "Original47 runtime/metadata selectors plus23 common apparatus/build-provenance selectors; retain overbroad original three parity compiled/staged pairs. Runner automatically adds all tracked source and its own helper/actions inputs.",
+    "old_runtime_or_readiness_records_copied": false
+  },
+  "original_test": {
+    "filter": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+    "source": "tests/backend/kernel_parity_test.cpp:2477",
+    "load_sequence": [
+      "OpenProbe() loads staged resources/kernels/parity_probe.spv",
+      "Original test loads staged resources/kernels/coupled_probe_fp64.spv"
+    ],
+    "positive_XML": {
+      "suite": "KernelParity",
+      "name": "FourColumnRK4MapMatchesIndependentNeighboursFp64",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "disabled": 0,
+      "skipped": 0,
+      "status": "run",
+      "result": "completed",
+      "property": {
+        "name": "fp64_evidence",
+        "value": "actual_four_column_joint_rk4_and_independent_scalar_neighbours"
+      }
+    },
+    "unsupported_or_skip": "Absent Vulkan/kernel skips and unsupported_shaderFloat64 decline cannot satisfy zero-skip plus required positive property; no weakening/refusal bypass.",
+    "packets": [
+      "flat",
+      "positive-spin",
+      "negative-spin",
+      "charged",
+      "de-Sitter",
+      "linear-temporal-root",
+      "spatial-ergoregion-projection",
+      "negative-unrepresented",
+      "negative-over-budget"
+    ],
+    "numerical_assertions": "Original body unchanged: seven successes require12joint stages/errorRatio<=1/nominal scalar match<=1e-12;32 neighbour components finite and near0 at1e-10 flat or3e-8 otherwise, nonzero variation columns and differentiated-null residual<=1e-12; two original negative statuses/fields unchanged.",
+    "physical_timing": "All nine actual count1 dispatches require positive finite submit_wait_ms<=1000. On software ordinal0 the original extra count0 initialization checks unchanged sentinel readback and positive finite timing; it has no1000ms assertion. No extra dispatch or initialization substitution.",
+    "memory_scope": "Original device SetBufferAllocationLimit(1<<30) and allocation checks remain. This1GiB device-buffer accounting does not bound pipeline/JIT/host RSS; mature prospective owner separately samples4GiB aggregate host RSS with2GiB available-memory reserve.",
+    "registration": "Known current completed-CI inventory contains the exact original Mandatory case with device resource lock/skip regex and no TIMEOUT property; root must bind actual current Linux registration before operation.300s is a prospective external diagnostic bound, not a claimed original CTest deadline.",
+    "source_review_context": "Prior forensic64central/87scalar discussion was chat-only; no fabricated receipt or executed sample/work-count evidence is introduced."
+  },
+  "root_readiness_conditions": [
+    "Hold until current native seven-case sequence terminal PASS, independent/root review and explicit root scheduling decision. No helper, test/provider execution or runtime materialization is authorized by this source-only packet.",
+    "Root materializes actions.json from pending only after final source admission. Preserve exact case/guards/assertions; any added common static inputs strengthen closure only. No owned folder/output may be a frozen self-input.",
+    "Root binds clean pushed current e0, actual backend ELF/object/producer/dependencies, source alignment and current registration; independently verify current parity first-load and coupled FP64 compiled/staged byte aliases plus their real loaded resources. Coupled SPV byte/producer observations are deliberately pending here.",
+    "Root binds all runtime/interpreter/provider/loader/ICD identities including inherited32 DSOs plus LVP, source/build proofs and installed dependency closure. Resolve any retired scratch provenance to exact immutable accepted evidence rather than stale files.",
+    "Root alone produces fresh readiness.json, compiled-size-observation.json, inventory.json, ldd records and root-preflight.json. Pin this complete apparatus, collector, pending/final actions, originals/contracts/source review and all actual runtime inputs before launch; no old currentW readiness, observations, inventory, roots preflight or outcome is copied.",
+    "Default cache remains unchanged. Any focused external LVP_JIT_OPTIMIZATION_LEVEL=0 requires separate root environment evidence because byte-exact mature runner neither injects it nor records it in declared_output_environment. This does not alter/admit original retained cold-frame policy.",
+    "Root may operate the single original case once under300s/4194304KiB aggregateRSS/2097152KiB reserve, then use exact mature positive collector only after ownerPASS and required completed positive XML. Any guard/failure/unsupported/incomplete outcome is preserved without unchanged retry or limit increase."
+  ],
+  "prospective_root_commands_not_admitted": [
+    [
+      "/usr/bin/python3",
+      "out/coupled-rk4-original-witness-e0db7d59/run_owned.py",
+      "coupled-rk4-fp64"
+    ],
+    [
+      "/usr/bin/python3",
+      "out/coupled-rk4-original-witness-e0db7d59/root_acceptance.py",
+      "coupled-rk4-fp64"
+    ]
+  ],
+  "scope": "One original finite four-column coupled RK4/scalar-neighbour witness only. No40field/fullP1/E2/retained image/coldframe/fullMandatory/scientific-estate/release/performance claim.",
+  "operations": "Passive source/JSON/hash/Git reads and byte copying only; no new test/framework/functional helper, project imports/parsers/helper/compiler/provider/test/network execution or currentN case-output read."
+}

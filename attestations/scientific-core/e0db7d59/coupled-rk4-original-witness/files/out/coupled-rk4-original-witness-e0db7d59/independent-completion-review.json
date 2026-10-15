@@ -1,0 +1,269 @@
+{
+  "schema": "sirius-original-coupled-rk4-independent-completion-review-v1",
+  "passed": true,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "reviewed_utc": "2026-10-15T16:47:02.499824+00:00",
+  "original_test": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+  "original_test_executions": 1,
+  "completed_original_XML_zero_FESD": true,
+  "required_actual_FP64_property": "actual_four_column_joint_rk4_and_independent_scalar_neighbours",
+  "blockers": [],
+  "critical_pins": {
+    "root-completed-results.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-completed-results.json",
+      "bytes": 3760,
+      "sha256": "b0422f8f5bd313bd8f511c618eae3e4f1c75d7c0516a43df80b4dc98fffe5d97"
+    },
+    "root-accepted-coupled-rk4-fp64.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-accepted-coupled-rk4-fp64.json",
+      "bytes": 2118,
+      "sha256": "adf086e7779dbfc2cb1e6412640a497c36e1c5360eb12457f7c62fe765859aa3"
+    },
+    "root-runtime-release.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-runtime-release.json",
+      "bytes": 4652,
+      "sha256": "49850f7e8e676c83d06c1eda3fadbdae3d30741c6b258c424176f00f0ab2ab8d"
+    },
+    "root-launch-environment.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-launch-environment.json",
+      "bytes": 977,
+      "sha256": "67d11eca7a49414e28d4ada4c7eb7cbcef21ce967834819bf5c40da52e433eb1"
+    },
+    "independent-runtime-admission.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/independent-runtime-admission.json",
+      "bytes": 10558,
+      "sha256": "4fcd9ada8a6449b018425724dc629f9143a24e2b0a6be91e80b6daaa1c3123a2"
+    },
+    "independent-source-review.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/independent-source-review.json",
+      "bytes": 7943,
+      "sha256": "d7b5ad91e09d63e9cf7a88a9fc13a9c6d616fce15df66ad528c4f886df48f4bb"
+    },
+    "actions.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/actions.json",
+      "bytes": 6623,
+      "sha256": "b7fb7ba04e0b9e005a8f1d10ed49c6a15ebafa6ab90341f6c07339ce60c218d2"
+    },
+    "readiness.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/readiness.json",
+      "bytes": 17479,
+      "sha256": "514f3421a8051f4f37632ec276b940ed309d294896745c60a55d54ea2faa26da"
+    },
+    "root-preflight.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-preflight.json",
+      "bytes": 155284,
+      "sha256": "ad0b93e3b5ed3d7e774acbd67f777c84bf9afce671e2012561c1de55ebb7942f"
+    },
+    "root-helper-operation.log": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-helper-operation.log",
+      "bytes": 1203,
+      "sha256": "5c9cf7d8fd8f3bf918d0e85a1b043888489e68da65c115ef785c0333415510b3"
+    },
+    "root-acceptance-operation.log": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-acceptance-operation.log",
+      "bytes": 181,
+      "sha256": "01021128daccc540c38dc3cbc1d5b7f6b824bd6ad0817125d19382ce9d6794fc"
+    }
+  },
+  "actual_raw_case_pins": {
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/gtest.xml": {
+      "bytes": 10027,
+      "sha256": "47dd75416b7db52a1f70ec4d7b7acd7b0735922cd8bbb5d5f520fd270f5ab722"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/inputs-after.json": {
+      "bytes": 148215,
+      "sha256": "4bc619f2693e13040cdc77de0dcf2341d655e17b1f35ce2a6a18147872fb4cd4"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/inputs-before.json": {
+      "bytes": 148215,
+      "sha256": "4bc619f2693e13040cdc77de0dcf2341d655e17b1f35ce2a6a18147872fb4cd4"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/owner.json": {
+      "bytes": 4007,
+      "sha256": "8688f0c1f6f5345f5aff4847bb60cfe068a02f2ff8260b544cfb325b962f4162"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/samples.jsonl": {
+      "bytes": 403902,
+      "sha256": "9bc0a2a440bd8d1b1ad0aa5b9d6552bc243bdeb3f6edbf9c55c693ac26284037"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/stdout.log": {
+      "bytes": 4277,
+      "sha256": "efdd86364ec3ccf0f5a924e990d0f59ace40d04794781483ebca87a4cfd0fb18"
+    }
+  },
+  "closure": {
+    "all615static_current_rich_content_and_resolved_pins_match": true,
+    "before_after_current_exact616": true,
+    "before_plus_after_rows": 1232,
+    "owner_map_equals615preflight_plus_preflightfile": true,
+    "all7raw_accepted_file_pins_match": true,
+    "source_helpers_collector_and_numeric_assertions_unchanged": true,
+    "historical_pending_materialization_flags_retained": true,
+    "actual_release_satisfies_native_archive_push_then_fresh_remote_check_condition": true
+  },
+  "actual_result": {
+    "test_seconds": "44.272",
+    "owner_seconds": 44.39841837299173,
+    "sampled_aggregate_RSS_peak_KiB": 1067992,
+    "minimum_sampled_available_KiB": 18910804,
+    "nine_actual_samples": [
+      {
+        "ordinal": 0,
+        "submit_wait_ms_exact_XML": "1.837133",
+        "requested_bytes": 336,
+        "readback_resident_bytes": 336
+      },
+      {
+        "ordinal": 1,
+        "submit_wait_ms_exact_XML": "2.345412",
+        "requested_bytes": 336,
+        "readback_resident_bytes": 672
+      },
+      {
+        "ordinal": 2,
+        "submit_wait_ms_exact_XML": "1.97607",
+        "requested_bytes": 336,
+        "readback_resident_bytes": 1008
+      },
+      {
+        "ordinal": 3,
+        "submit_wait_ms_exact_XML": "2.487871",
+        "requested_bytes": 336,
+        "readback_resident_bytes": 1344
+      },
+      {
+        "ordinal": 4,
+        "submit_wait_ms_exact_XML": "2.869936",
+        "requested_bytes": 336,
+        "readback_resident_bytes": 1680
+      },
+      {
+        "ordinal": 5,
+        "submit_wait_ms_exact_XML": "2.091602",
+        "requested_bytes": 336,
+        "readback_resident_bytes": 2016
+      },
+      {
+        "ordinal": 6,
+        "submit_wait_ms_exact_XML": "1.968862",
+        "requested_bytes": 336,
+        "readback_resident_bytes": 2352
+      },
+      {
+        "ordinal": 7,
+        "submit_wait_ms_exact_XML": "1.438038",
+        "requested_bytes": 336,
+        "readback_resident_bytes": 2688
+      },
+      {
+        "ordinal": 8,
+        "submit_wait_ms_exact_XML": "2.388796",
+        "requested_bytes": 336,
+        "readback_resident_bytes": 3024
+      }
+    ],
+    "actual_submit_ms_min_exact_XML": "1.438038",
+    "actual_submit_ms_max_exact_XML": "2.869936",
+    "all9actual_samples_original_positive_finite_at_most1000ms": true,
+    "software_zeroactive_initialization_submit_ms_exact_XML": "36165.885915",
+    "initialization_had_original1000ms_cap": false,
+    "initialization_scope": "Existing ordinal0 software zeroactive dispatch and unchanged sentinel-readback assertion only; no throughput or coldness inference.",
+    "per_sample_requested_bytes": 336,
+    "maximum_readback_resident_bytes": 3024,
+    "original_device_buffer_limit_bytes": 1073741824,
+    "raw_readback_values_archived": false
+  },
+  "original_assertion_scope": {
+    "source": {
+      "path": "tests/backend/kernel_parity_test.cpp",
+      "bytes": 129641,
+      "sha256": "4bf064bb7902dcad59050d4374051a44b9b3cdc619ec9fbb97686e222345b563"
+    },
+    "accepted_scenes": 7,
+    "negative_packets": 2,
+    "seven_joint_trials_meet_unchanged_budget_and_nominal_stage_scalar_authority": true,
+    "fourcolumns_independent_scalar_neighbour_errors_original_tolerances": true,
+    "temporal_linear_root_and_ergoregion_spatial_projection_cases": true,
+    "unrepresented_and_overbudget_packets_original_refusal_codes": true,
+    "evidence": "Positive actualFP64 XML plus completed original test establishes its unchanged assertions; raw GPUresult arrays are not archived. This is one finite jointmap/scalar-neighbour witness, not full40physicalfields/P1/dense/pupil/film qualification."
+  },
+  "ownership_and_provider": {
+    "owner_terminal_passed_child0_stopnull_cleanupempty_remainingempty": true,
+    "fresh_exact_saved_Linux_birth_checks": [
+      {
+        "pid": 1055797,
+        "saved_start_ticks": "13190537",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "pid": 1055801,
+        "saved_start_ticks": "13190570",
+        "current_start_ticks": null,
+        "absent": true
+      }
+    ],
+    "sample_count": 1752,
+    "all_sampled_guard_limits_hold": true,
+    "sampled_member_births_and_sessions_match": true,
+    "provider_mapping": {
+      "maps": [
+        "7fea43e00000-7fea43e5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7fea43e5b000-7fea4426b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7fea4426b000-7fea448c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7fea448c6000-7fea44961000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 1055801,
+      "pid": 1055801,
+      "start_ticks": "13190570"
+    },
+    "current_provider_file_dev": "08:50",
+    "current_provider_file_inode": 143595,
+    "provider_file_pin": {
+      "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    },
+    "actual_samebirth_LVP0_and_defaultcache_and_normalassertions": true,
+    "actual_launch_environment_pin": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-launch-environment.json",
+      "bytes": 977,
+      "sha256": "67d11eca7a49414e28d4ada4c7eb7cbcef21ce967834819bf5c40da52e433eb1"
+    },
+    "limits": "Original mature aggregateLinux sampledRSS4GiB/reserve2GiB/prospectiveexternal300s. Device1GiB and actualsubmission1000ms are separate unchanged original limits.",
+    "scope": "Only two exact savedLinuxbirths freshly inspected; no global process absence or Windows/provider rerun."
+  },
+  "native_prerequisite": {
+    "Git_publication_receipt": {
+      "path": "out/native-windows-kerr-rhs-preservation/root-git-preservation.json",
+      "bytes": 1603,
+      "sha256": "7be447777517772b19bfc2de77b579e965d8b47648f0e05dfb9f90226303445a"
+    },
+    "commit": "f8e2064c8cbd6b8df362d012e5d4fbccd329efa0",
+    "pushed_and_fresh_remote_verified_after_closed_actual_push_per_pinned_operator_receipt": true,
+    "local_named_Git_ref_matches": true,
+    "publication_precedes_release_and_launch_observation": true,
+    "no_new_network_check_performed_by_reviewer": true
+  },
+  "checkout": {
+    "head": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+    "tracked_tree_clean": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "new_review_sidecar_committed_or_pushed": false
+  },
+  "review_method": "Passive stdlibJSON/XML/hash/source and exact savedbirth/proc reads; read-onlyGit only. No authored helper/import/parser/projecttool/test/provider/native/network/Gitmutation/signals. Prior independent source and materialized runtime semantics reused.",
+  "limitations": [
+    "No saved raw resultbuffer or new numerical oracle evaluation; original assertions remain the value authority.",
+    "No fullP1/E2/all40physicalfields/dense/pupil/film/image/cold/performance/fullMandatory/fullscience/UI/release qualification.",
+    "No next-test launch, retirement or hold release is admitted by this receipt."
+  ]
+}

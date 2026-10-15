@@ -1,0 +1,216 @@
+{
+  "schema": "sirius-original-coupled-rk4-independent-runtime-admission-v1",
+  "passed": true,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "reviewed_utc": "2026-10-15T16:41:28.866919+00:00",
+  "materialized_readiness_accepted": true,
+  "test_execution_authorized": false,
+  "runtime_release_pending": true,
+  "test_executions_observed": 0,
+  "blockers_in_materialized_metadata": [],
+  "critical_pins": {
+    "actions.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/actions.json",
+      "bytes": 6623,
+      "sha256": "b7fb7ba04e0b9e005a8f1d10ed49c6a15ebafa6ab90341f6c07339ce60c218d2"
+    },
+    "actions.pending.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/actions.pending.json",
+      "bytes": 6097,
+      "sha256": "162c599e5414270642ff43dafba7c024347f63591d9cf360a0fe725dfc3daca5"
+    },
+    "readiness.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/readiness.json",
+      "bytes": 17479,
+      "sha256": "514f3421a8051f4f37632ec276b940ed309d294896745c60a55d54ea2faa26da"
+    },
+    "root-preflight.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-preflight.json",
+      "bytes": 155284,
+      "sha256": "ad0b93e3b5ed3d7e774acbd67f777c84bf9afce671e2012561c1de55ebb7942f"
+    },
+    "independent-source-review.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/independent-source-review.json",
+      "bytes": 7943,
+      "sha256": "d7b5ad91e09d63e9cf7a88a9fc13a9c6d616fce15df66ad528c4f886df48f4bb"
+    },
+    "compiled-size-observation.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/compiled-size-observation.json",
+      "bytes": 8867,
+      "sha256": "928dd28b87a4c98508289a1e25ee78c093933424b5b314d45af57375549125d9"
+    },
+    "root-native-transition-decision.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root-native-transition-decision.json",
+      "bytes": 1724,
+      "sha256": "f5729a20995e893442c59197351cc9c4a23c06a4090a47ac769ead9b24f45e5e"
+    },
+    "source-contracts.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/source-contracts.json",
+      "bytes": 9465,
+      "sha256": "286c3506bda52c654965ee1485c941a1dd220d48c02214cf64dadcd594ce087f"
+    },
+    "run_owned.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root_acceptance.py",
+      "bytes": 3767,
+      "sha256": "ccabb1bafcdace2489cfaca6e53d9d6abdfc6e39473a8ff30f2b41ca3b86a929"
+    }
+  },
+  "concrete_closure": {
+    "all615_current_rich_content_and_resolved_pins_match": true,
+    "tracked_source_files": 538,
+    "runner_whole_inputs_expected": 616,
+    "exact_tracked_plus_automatic_helpers_plus_frozen_path_set_verified": true,
+    "pending72paths_preserved_in_order": true,
+    "same6common_proof_paths_appended_only": [
+      "out/coupled-rk4-original-witness-e0db7d59/root-native-transition-decision.json",
+      "out/native-windows-kerr-rhs-e0db7d59/root-completed-results.json",
+      "out/native-windows-kerr-rhs-e0db7d59/independent-completion-review.json",
+      "out/native-windows-kerr-rhs-preservation/root-preservation-check.json",
+      "attestations/scientific-core/e0db7d59/native-amd-kerr-cartdelta-rhs-controls/manifest.json",
+      "attestations/scientific-core/e0db7d59/native-amd-kerr-cartdelta-rhs-controls/preservation.json"
+    ],
+    "action_fields_other_than_frozen_inputs_byte_semantics_unchanged": true,
+    "78unique_declared_frozen_paths": true,
+    "preflight_excludes_itself_but_owner_includes_it": true,
+    "no_self_hash_cycle_or_case_output_input": true,
+    "case_and_rootacceptance_outputs_absent": true,
+    "review_sidecar_outside_runtime_inputs": true
+  },
+  "original_test": {
+    "name": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+    "selected_argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "--gtest_filter=KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64"
+    ],
+    "registered_argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "--gtest_filter=KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "argv_scope": "Selected original case is active. Registration also supplies --gtest_also_run_disabled_tests; omission by the mature direct runner does not change this active selection, not an exact argv-byte claim.",
+    "registered_TIMEOUT": null,
+    "external_diagnostic_seconds": 300,
+    "original_samples": 9,
+    "accepted_scene_packets": 7,
+    "negative_packets": 2,
+    "physical_submit_ms_cap": 1000,
+    "device_buffer_allocation_limit_bytes": 1073741824,
+    "expected_XML": {
+      "suite": "KernelParity",
+      "name": "FourColumnRK4MapMatchesIndependentNeighboursFp64",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "disabled": 0,
+      "skipped": 0,
+      "status": "run",
+      "result": "completed",
+      "property": {
+        "name": "fp64_evidence",
+        "value": "actual_four_column_joint_rk4_and_independent_scalar_neighbours"
+      }
+    },
+    "positive_property_required": "actual_four_column_joint_rk4_and_independent_scalar_neighbours; unsupported refusal is not positive evidence.",
+    "original_assertions_preserved_via_source_review": true
+  },
+  "producer_and_runtime": {
+    "strict_e0_shader_build_and_governance_reused": true,
+    "fresh_ELF_relink_claimed": false,
+    "backend": {
+      "path": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bytes": 13502112,
+      "sha256": "a34ab6c95b69f7b6667842690409e634cf9b0c7381409e1e336e27da4f5d0be6"
+    },
+    "module_pairs": [
+      {
+        "compiled": "bin/linux-gcc/kernels/parity_probe.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv",
+        "bytes": 3969508,
+        "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed"
+      },
+      {
+        "compiled": "bin/linux-gcc/kernels/parity_probe_fp32comp.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv",
+        "bytes": 3973732,
+        "sha256": "2524459927bf743700a3e2024a73e6794a1030a09220898470604fd51d1d0bfc"
+      },
+      {
+        "compiled": "bin/linux-gcc/kernels/parity_probe_fp64.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv",
+        "bytes": 3879216,
+        "sha256": "3dbc622818259a3cbf0c2abc95efc406f48b8284bc3b0bd2ccbc7d9c2fbcc2aa"
+      },
+      {
+        "compiled": "bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/coupled_probe_fp64.spv",
+        "bytes": 1225888,
+        "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+      }
+    ],
+    "all4compiled_staged_namedGit_alias_bytes_checked": true,
+    "fresh_saved_ldd_stdout_dependency_count": 32,
+    "direct_LVP_distinct_and_pinned": true,
+    "actual_fresh_metadata_query_exits": {
+      "show_only": 0,
+      "backend_ldd": 0,
+      "provider_ldd": 0
+    },
+    "registration_count": 1152,
+    "alignment": "Current qualification0/8 only, no staged backend model/CLI/fullMandatory or release admission.",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "limits_scope": "Aggregate ownedLinux session+controller sampledRSS4GiB/reserve2GiB; prospective300s external bound, not a registered whole-testTIMEOUT. Original nine physical1000ms/device1GiB limits separate."
+  },
+  "prerequisites": {
+    "native_root_completed": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/root-completed-results.json",
+      "bytes": 11557,
+      "sha256": "4ef58dfce6b2cd11f11fc06fe827da365ee44f61312dcdc6b85f80eff69f6c87"
+    },
+    "native_independent_completed": {
+      "path": "out/native-windows-kerr-rhs-e0db7d59/independent-completion-review.json",
+      "bytes": 29858,
+      "sha256": "0af540a8e69e1dd6267f7bfd9cb454974df28ba24c36e68e3538ddbb2021ac8c"
+    },
+    "native7_and_software8_accepted_separately": true,
+    "native_Git_push_and_fresh_remote_verification": "Still a separate root prerequisite at metadata creation; not asserted completed by this passive review. Frozen pending historical fields need not be rewritten when root separately records actual prerelease completion."
+  },
+  "launch_conditions": [
+    "Root must finish exact native-evidence Git preservation/push and fresh remote verification before launch, with separate immutable actual receipt.",
+    "Root must separately release the one test after this materialized-input review and fresh source/current input recheck.",
+    "Launch using explicit LVP_JIT_OPTIMIZATION_LEVEL=0 /usr/bin/python3 -B with normal assertions; mature runner itself does not inject/record that setting. Root must capture actual controller/child samebirth environment and default cache at launch.",
+    "Root must enforce exact one completed zeroFESD XML and actual positive fp64_evidence; owner childexit0 alone does not establish the witness.",
+    "Stop after the original one attempt if any nonpass; no unchanged retry, guard relaxation or numerical assertion change."
+  ],
+  "review_scope": "Independent passive source/stdlibAST/JSON/hash and read-onlyGit only; no project helper/import/parser/test/compiler/provider/native/network/process query or execution. Existing source/CI/native/software semantic admissions reused.",
+  "checkout": {
+    "head": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+    "tracked_tree_clean": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "review_sidecar_committed_or_pushed": false
+  },
+  "limitations": [
+    "No actual coupled numerical/provider/memory/timing result yet.",
+    "No fullP1/E2/all40physicalfields/dense/pupil/film/image/cold/performance/fullMandatory/fullscience/UI/release acceptance.",
+    "This PASS accepts concrete materialized metadata; it is not runtime release."
+  ]
+}

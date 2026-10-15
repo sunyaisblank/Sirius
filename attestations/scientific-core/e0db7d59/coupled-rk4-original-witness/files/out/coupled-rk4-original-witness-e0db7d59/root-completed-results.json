@@ -1,0 +1,112 @@
+{
+  "schema": "sirius-original-coupled-rk4-root-completed-results-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "completed_utc": "2026-10-15T16:44:50.286443+00:00",
+  "passed": true,
+  "actual_helper_and_collector_operations_observed_closed_zero": true,
+  "exact_original_test_completed_zero_FESD": true,
+  "test_seconds": "44.272",
+  "owner_seconds": 44.39841837299173,
+  "peak_sampled_aggregate_RSS_KiB": 1067992,
+  "minimum_sampled_available_KiB": 18910804,
+  "whole_input_rows_unchanged": 616,
+  "actual_FP64_property": "actual_four_column_joint_rk4_and_independent_scalar_neighbours",
+  "actual_samples": [
+    {
+      "ordinal": 0,
+      "submit_wait_ms": 1.837133,
+      "requested_bytes": 336,
+      "readback_resident_bytes": 336
+    },
+    {
+      "ordinal": 1,
+      "submit_wait_ms": 2.345412,
+      "requested_bytes": 336,
+      "readback_resident_bytes": 672
+    },
+    {
+      "ordinal": 2,
+      "submit_wait_ms": 1.97607,
+      "requested_bytes": 336,
+      "readback_resident_bytes": 1008
+    },
+    {
+      "ordinal": 3,
+      "submit_wait_ms": 2.487871,
+      "requested_bytes": 336,
+      "readback_resident_bytes": 1344
+    },
+    {
+      "ordinal": 4,
+      "submit_wait_ms": 2.869936,
+      "requested_bytes": 336,
+      "readback_resident_bytes": 1680
+    },
+    {
+      "ordinal": 5,
+      "submit_wait_ms": 2.091602,
+      "requested_bytes": 336,
+      "readback_resident_bytes": 2016
+    },
+    {
+      "ordinal": 6,
+      "submit_wait_ms": 1.968862,
+      "requested_bytes": 336,
+      "readback_resident_bytes": 2352
+    },
+    {
+      "ordinal": 7,
+      "submit_wait_ms": 1.438038,
+      "requested_bytes": 336,
+      "readback_resident_bytes": 2688
+    },
+    {
+      "ordinal": 8,
+      "submit_wait_ms": 2.388796,
+      "requested_bytes": 336,
+      "readback_resident_bytes": 3024
+    }
+  ],
+  "actual_sample_submit_ms_max": 2.869936,
+  "original_physical_actual_submit_limit_ms": 1000,
+  "software_zeroactive_initialization_submit_ms": 36165.885915,
+  "initialization_original_1000ms_limit": false,
+  "actual_LVP_map_lines": 4,
+  "actual_provider_dev": "08:50",
+  "actual_provider_inode": 143595,
+  "actual_saved_controller_child_births_absent": true,
+  "actual_LVP0_defaultcache_samebirth_environment": {
+    "bytes": 977,
+    "sha256": "67d11eca7a49414e28d4ada4c7eb7cbcef21ce967834819bf5c40da52e433eb1"
+  },
+  "device_buffer_limit_bytes": 1073741824,
+  "max_readback_resident_bytes": 3024,
+  "proofs": {
+    "root-accepted-coupled-rk4-fp64.json": {
+      "bytes": 2118,
+      "sha256": "adf086e7779dbfc2cb1e6412640a497c36e1c5360eb12457f7c62fe765859aa3"
+    },
+    "root-launch-environment.json": {
+      "bytes": 977,
+      "sha256": "67d11eca7a49414e28d4ada4c7eb7cbcef21ce967834819bf5c40da52e433eb1"
+    },
+    "root-runtime-release.json": {
+      "bytes": 4652,
+      "sha256": "49850f7e8e676c83d06c1eda3fadbdae3d30741c6b258c424176f00f0ab2ab8d"
+    },
+    "independent-runtime-admission.json": {
+      "bytes": 10558,
+      "sha256": "4fcd9ada8a6449b018425724dc629f9143a24e2b0a6be91e80b6daaa1c3123a2"
+    },
+    "root-helper-operation.log": {
+      "bytes": 1203,
+      "sha256": "5c9cf7d8fd8f3bf918d0e85a1b043888489e68da65c115ef785c0333415510b3"
+    },
+    "root-acceptance-operation.log": {
+      "bytes": 181,
+      "sha256": "01021128daccc540c38dc3cbc1d5b7f6b824bd6ad0817125d19382ce9d6794fc"
+    }
+  },
+  "scope": "Original seven accepted-scene and two negative four-column RK4/scalar-neighbour packets pass unchanged. Original numerical tests govern values; no raw result buffer saved. Focused defaultcache LVP0 diagnostic only; no full40physicalfields/P1/E2/dense/pupil/film/cold/performance/Mandatory/science/UI/release qualification.",
+  "independent_completed_review_pending": true
+}

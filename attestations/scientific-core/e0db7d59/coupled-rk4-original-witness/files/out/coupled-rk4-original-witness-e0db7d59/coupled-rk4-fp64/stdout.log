@@ -1,0 +1,42 @@
+Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64
+[CoupledDevice] index=0 name=llvmpipe (LLVM 20.1.2, 256 bits) kind=software vendor_id=65541 device_id=0 driver_id=13 driver_name=llvmpipe driver_info=Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2) supports_fp64=1
+[DispatchPhases] coupled_0_initialization pipeline_setup_ms=7920.23 command_setup_ms=0.081102 submit_wait_ms=36165.9 cleanup_ms=0.039758 total_ms=44086.2 pipeline_created=1
+[CoupledStep] coupled_0_initialization submit_wait_ms=36165.9 dispatch_wall_ms=44086.2
+[DispatchPhases] coupled_0_actual pipeline_setup_ms=0.000888 command_setup_ms=0.080167 submit_wait_ms=1.83713 cleanup_ms=0.015956 total_ms=1.93414 pipeline_created=0
+[CoupledStep] coupled_0_actual submit_wait_ms=1.83713 dispatch_wall_ms=1.93495
+[CoupledAllocation] coupled_0 requested_bytes=336 peak_allocated_bytes=336 readback_resident_bytes=336
+[DispatchPhases] coupled_1_actual pipeline_setup_ms=0.000449 command_setup_ms=0.015666 submit_wait_ms=2.34541 cleanup_ms=0.010754 total_ms=2.37228 pipeline_created=0
+[CoupledStep] coupled_1_actual submit_wait_ms=2.34541 dispatch_wall_ms=2.3727
+[CoupledAllocation] coupled_1 requested_bytes=336 peak_allocated_bytes=672 readback_resident_bytes=672
+[DispatchPhases] coupled_2_actual pipeline_setup_ms=0.00024 command_setup_ms=0.01288 submit_wait_ms=1.97607 cleanup_ms=0.009885 total_ms=1.99907 pipeline_created=0
+[CoupledStep] coupled_2_actual submit_wait_ms=1.97607 dispatch_wall_ms=1.9993
+[CoupledAllocation] coupled_2 requested_bytes=336 peak_allocated_bytes=1008 readback_resident_bytes=1008
+[DispatchPhases] coupled_3_actual pipeline_setup_ms=0.00024 command_setup_ms=0.011253 submit_wait_ms=2.48787 cleanup_ms=0.018322 total_ms=2.51769 pipeline_created=0
+[CoupledStep] coupled_3_actual submit_wait_ms=2.48787 dispatch_wall_ms=2.518
+[CoupledAllocation] coupled_3 requested_bytes=336 peak_allocated_bytes=1344 readback_resident_bytes=1344
+[DispatchPhases] coupled_4_actual pipeline_setup_ms=0.000249 command_setup_ms=0.012302 submit_wait_ms=2.86994 cleanup_ms=0.018681 total_ms=2.90117 pipeline_created=0
+[CoupledStep] coupled_4_actual submit_wait_ms=2.86994 dispatch_wall_ms=2.9015
+[CoupledAllocation] coupled_4 requested_bytes=336 peak_allocated_bytes=1680 readback_resident_bytes=1680
+[DispatchPhases] coupled_5_actual pipeline_setup_ms=0.000399 command_setup_ms=0.027927 submit_wait_ms=2.0916 cleanup_ms=0.015246 total_ms=2.13517 pipeline_created=0
+[CoupledStep] coupled_5_actual submit_wait_ms=2.0916 dispatch_wall_ms=2.13576
+[CoupledAllocation] coupled_5 requested_bytes=336 peak_allocated_bytes=2016 readback_resident_bytes=2016
+[DispatchPhases] coupled_6_actual pipeline_setup_ms=0.000349 command_setup_ms=0.01312 submit_wait_ms=1.96886 cleanup_ms=0.016534 total_ms=1.99886 pipeline_created=0
+[CoupledStep] coupled_6_actual submit_wait_ms=1.96886 dispatch_wall_ms=1.99926
+[CoupledAllocation] coupled_6 requested_bytes=336 peak_allocated_bytes=2352 readback_resident_bytes=2352
+[DispatchPhases] coupled_7_actual pipeline_setup_ms=0.000399 command_setup_ms=0.018841 submit_wait_ms=1.43804 cleanup_ms=0.018442 total_ms=1.47572 pipeline_created=0
+[CoupledStep] coupled_7_actual submit_wait_ms=1.43804 dispatch_wall_ms=1.4763
+[CoupledAllocation] coupled_7 requested_bytes=336 peak_allocated_bytes=2688 readback_resident_bytes=2688
+[DispatchPhases] coupled_8_actual pipeline_setup_ms=0.000699 command_setup_ms=0.017653 submit_wait_ms=2.3888 cleanup_ms=0.012031 total_ms=2.41918 pipeline_created=0
+[CoupledStep] coupled_8_actual submit_wait_ms=2.3888 dispatch_wall_ms=2.41949
+[CoupledAllocation] coupled_8 requested_bytes=336 peak_allocated_bytes=3024 readback_resident_bytes=3024
+[       OK ] KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64 (44272 ms)
+[----------] 1 test from KernelParity (44272 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (44273 ms total)
+[  PASSED  ] 1 test.

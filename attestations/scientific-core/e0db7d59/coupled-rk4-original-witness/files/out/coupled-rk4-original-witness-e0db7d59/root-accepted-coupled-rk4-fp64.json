@@ -1,0 +1,48 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-accepted-control-v1",
+  "passed": true,
+  "case": "coupled-rk4-fp64",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "exact_one_completed_XML_zero_FESD": true,
+  "required_positive_property": {
+    "name": "fp64_evidence",
+    "value": "actual_four_column_joint_rk4_and_independent_scalar_neighbours"
+  },
+  "test_seconds": "44.272",
+  "owner_seconds": 44.39841837299173,
+  "peak_sampled_aggregate_RSS_KiB": 1067992,
+  "fresh_whole_input_rows": 616,
+  "owned_child_and_controller_births_absent": true,
+  "source_and_inputs_unchanged": true,
+  "files": {
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/gtest.xml": {
+      "bytes": 10027,
+      "sha256": "47dd75416b7db52a1f70ec4d7b7acd7b0735922cd8bbb5d5f520fd270f5ab722"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/inputs-after.json": {
+      "bytes": 148215,
+      "sha256": "4bc619f2693e13040cdc77de0dcf2341d655e17b1f35ce2a6a18147872fb4cd4"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/inputs-before.json": {
+      "bytes": 148215,
+      "sha256": "4bc619f2693e13040cdc77de0dcf2341d655e17b1f35ce2a6a18147872fb4cd4"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/owner.json": {
+      "bytes": 4007,
+      "sha256": "8688f0c1f6f5345f5aff4847bb60cfe068a02f2ff8260b544cfb325b962f4162"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/samples.jsonl": {
+      "bytes": 403902,
+      "sha256": "9bc0a2a440bd8d1b1ad0aa5b9d6552bc243bdeb3f6edbf9c55c693ac26284037"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/coupled-rk4-original-witness-e0db7d59/coupled-rk4-fp64/stdout.log": {
+      "bytes": 4277,
+      "sha256": "efdd86364ec3ccf0f5a924e990d0f59ace40d04794781483ebca87a4cfd0fb18"
+    }
+  },
+  "scope": "One exact focused parity control with original assertions and guards; no fullimage/allP1/Mandatory/latency/release qualification."
+}

@@ -1,0 +1,128 @@
+{
+  "schema": "sirius-coupled-rk4-original-witness-independent-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "runtime_admitted": false,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "blockers": [],
+  "critical_pins": {
+    "actions.pending.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/actions.pending.json",
+      "bytes": 6097,
+      "sha256": "162c599e5414270642ff43dafba7c024347f63591d9cf360a0fe725dfc3daca5"
+    },
+    "originals/actions.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/originals/actions.json",
+      "bytes": 52935,
+      "sha256": "06b88d6852e85f1e271eeee1cdc3dcd980ae1b62abc10059f78021371e3d44a8"
+    },
+    "originals/root_acceptance.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/originals/root_acceptance.py",
+      "bytes": 3757,
+      "sha256": "34b7ee5a700ab9c88622cd2e50e66f114cc78ab865e704187a641f46732b5ca4"
+    },
+    "owned_guard.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/root_acceptance.py",
+      "bytes": 3767,
+      "sha256": "ccabb1bafcdace2489cfaca6e53d9d6abdfc6e39473a8ff30f2b41ca3b86a929"
+    },
+    "run_owned.py": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "source-contracts.json": {
+      "path": "out/coupled-rk4-original-witness-e0db7d59/source-contracts.json",
+      "bytes": 9465,
+      "sha256": "286c3506bda52c654965ee1485c941a1dd220d48c02214cf64dadcd594ce087f"
+    }
+  },
+  "exact_adaptation": {
+    "mature_run_owned_e573_and_guard747fe_bytes_match": true,
+    "preserved_parent_actions_52935_06b88_and_collector_3757_34b7_exact": true,
+    "collector_only_one_work_directory_literal_delta_and_inverse_exact": true,
+    "one_action": "Originalfirstaction template, only label/filter/XMLname-positiveproperty/newnamespace/scope and twoadditionalcoupled selectors. Allremaining values exact.",
+    "pending_frozen_paths": 72,
+    "parent_runtime_apparatus_selectors_retained": 70,
+    "duplicates": 0,
+    "no_current_parent_scratch_paths_or_own_mutable_output_inputs": true,
+    "stdlibAST_source_parse_only": true
+  },
+  "original_numerical_contract": {
+    "case": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+    "source_byte_exact_cd99": true,
+    "load_order": [
+      "OpenProbe loads stagedparity_probe.spv",
+      "Originalcase loads stagedcoupled_probe_fp64.spv"
+    ],
+    "seven_accepted_scenes": "flat,+spin,-spin,charged,deSitter,lineartemporalroot,spatialergoregionprojection",
+    "two_negative_scenes": "unrepresentedprojection and overbudget",
+    "original_unchanged_assertions": "Actualjoint12stages and errorRatio<=1; nominalscalarcandidate maxdifference<=1e-12; 32centred\u00b1scalarneighbour differences finite/<=1e-10flat or3e-8curved; fournonzero columns/differentiatednullresidual<=1e-12; originalflatclosedforms and negative statuses2/4.",
+    "positive_property": {
+      "name": "fp64_evidence",
+      "value": "actual_four_column_joint_rk4_and_independent_scalar_neighbours"
+    },
+    "refusal_semantics": "ZeroFESD/exactcompletedtest plusrequiredpositiveproperty; shaderFloat64unsupporteddecline or absentdevice/kernel skip cannot satisfy witness.",
+    "caller_scope": "CartDelta change enters coupled_probe64central and87eachscalarneighbour; gr_coupled jointmodule sourceunchanged. No emitted or numerical equivalence assumed."
+  },
+  "memory_timing_and_device_contract": {
+    "nine_actual_count1_submissions": "Eachoriginalpositivefinite submit_wait_ms<=1000, unchanged.",
+    "software_ordinal0_count0_initialization": "Extraoriginalzeroactive dispatch checks unchangedsentinel readback and positivefinite timing; no1000ms assertion on thatinitialization. No replacement of actualsamplework.",
+    "device_buffer_allocation_cap_bytes": 1073741824,
+    "device_cap_scope": "ActualdeviceBufferAllocationBytes via SetBufferAllocationLimit and perallocation/readback checks; distinctfromJIT/pipeline/hostRSS.",
+    "one_sample_ABI": "16floatinput+64floatresult+4floatparams,336requestedbytes;3bindings;64threads/count1.",
+    "host_external_diagnostic_seconds": 300,
+    "aggregate_host_RSS_KiB": 4194304,
+    "WSL_available_reserve_KiB": 2097152,
+    "registration": "No originalregisteredCTestTIMEOUT established in prior current1152inventory; prospective300s is externaldiagnostic only. Runtime must freshlybind exactregistration.",
+    "cache": "Defaultsoftwarecache unchanged; device0/exactLVP ICD from maturehelper. Any focusedexternalLVP0 requires rootsavedactualchildenvironment/birth because helperdoesnot inject/recordit."
+  },
+  "observed_artifacts_source_scope_only": {
+    "current_canonical_coupled": {
+      "path": "bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "current_staged_coupled": {
+      "path": "bin/linux-gcc/tests/backend/resources/kernels/coupled_probe_fp64.spv",
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "matching_bytes": true,
+    "current_runtime_admission": false,
+    "scope": "Passivealready-builtbytes observed only. Rootfuturefreshproducer/ELF/deps/registration/resource/source/provider admission remainsmandatory; no couplingruntimeobserved."
+  },
+  "Hoare_conditions": {
+    "hold_before_materialization": "Allcurrentnative7mustcompletePASS with independent/root review and explicitrootdecision. This source review doesnot authorize or infer currentnativeoutcome.",
+    "prelaunch": "Rootmaterializes exactsingleaction and freshactualreadiness/inventory/compiledobservations/ldd/rootpreflight/currentruntimeclosure. Preserveall72 selectors and bindcomplete7fileapparatus/thisreview/currentproofpaths, no selfhash or ownoutput input. Do not replay retiredcurrentpaths; exactarchivealiases onlywhen needed.",
+    "owner_postcondition": "Once exactoriginalcase underunchanged300s/4GiBaggregate/2GiBreserve, currentclean source+wholeinputs stable, source/provider/dev-inode/birth/session/guards/teardown evidence and ownerchild0.",
+    "acceptance_postcondition": "Unchangedcollector runsafterownerPASS, verifies currentpreflight+beforeaftermaps/savedbirths/provider/guards and exactonecompletedzeroFESD XML+actualFP64property beforepublishing acceptance. Rootmust retain/read actualninepacket timing/allocation/XML/stdout evidence.",
+    "first_nonpass": "Preservetruthfulfailure/guard/unsupported/incomplete disposition; no unchangedretry or largerlimit."
+  },
+  "absent_runtime_outputs_checked": [
+    "actions.json",
+    "readiness.json",
+    "inventory.json",
+    "compiled-size-observation.json",
+    "root-preflight.json",
+    "coupled-rk4-fp64"
+  ],
+  "limits": [
+    "Onefinite40-componentcentral+fourcolumn jointmap/scalarretrace witness; not allphysical40fields/dense/pupil/film/fullP1/E2/science/Mandatory/image/coldframe/performance/release acceptance.",
+    "Priorboundedcoupledreview was chat-only; no fabricatedpriorreceipt or previousruntimePASS inferred.",
+    "No test/shader/settings/functionalhelper change or newframework introduced."
+  ],
+  "workspace": {
+    "tracked_clean": true,
+    "source_committed_pushed": "0 ahead / 0 behind",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "worktrees": 1,
+    "sidecar_pending_root_preservation": true
+  },
+  "operations": "Passive source/hash/JSON/stdlibAST/read-onlyGit only. No helper/import/projectparser/provider/network/test execution; no currentnativecase/process/liveoutput read and no frozenW/N/source/build edits. Onlythissidecarwritten."
+}
