@@ -1,0 +1,422 @@
+{
+  "schema": "sirius-native-windows-original-science-retirement-v1",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "bundle": "attestations/scientific-core/23d406b/native-amd-original-controls",
+  "tag": "evidence/issue-53-native-amd-original-controls-23d406b",
+  "commit": "39f843af203e824693391e2cf47f8821e923f801",
+  "remote": "39f843af203e824693391e2cf47f8821e923f801\trefs/tags/evidence/issue-53-native-amd-original-controls-23d406b",
+  "raw_packet_files_verified_against_named_git": 80,
+  "runtime_inputs": 129,
+  "runtime_preservation_classes": {
+    "external-host-input-only": 3,
+    "named-git-blob": 117,
+    "new-owned-packet-member": 9
+  },
+  "fresh_linux_births_absent": [
+    {
+      "case": "retained-sampler",
+      "kind": "linux_controller",
+      "pid": 564355,
+      "birth": "10370840",
+      "absent": true
+    },
+    {
+      "case": "retained-sampler",
+      "kind": "linux_child",
+      "pid": 564360,
+      "birth": "10370900",
+      "absent": true
+    },
+    {
+      "case": "near-conservation",
+      "kind": "linux_controller",
+      "pid": 575226,
+      "birth": "10388145",
+      "absent": true
+    },
+    {
+      "case": "near-conservation",
+      "kind": "linux_child",
+      "pid": 575231,
+      "birth": "10388198",
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "kind": "linux_controller",
+      "pid": 585282,
+      "birth": "10392143",
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "kind": "linux_child",
+      "pid": 585289,
+      "birth": "10392211",
+      "absent": true
+    },
+    {
+      "case": "retained-sampler",
+      "kind": "linux-terminal-child",
+      "pid": 572007,
+      "birth": "10387041",
+      "absent": true
+    },
+    {
+      "case": "near-conservation",
+      "kind": "linux-terminal-child",
+      "pid": 582103,
+      "birth": "10391005",
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "kind": "failure-audit-controller",
+      "pid": 595053,
+      "birth": "10428513",
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "kind": "failure-audit-linux_child",
+      "pid": 595054,
+      "birth": "10428533",
+      "absent": true
+    }
+  ],
+  "fresh_native_recorded_births_absent": 9,
+  "native_cleanup_query_first_attempt": "Read-only script refused execution policy before body; unchanged query succeeded with same process-local -ExecutionPolicy Bypass used by admitted owner. First refusal stdout/stderr retained.",
+  "issue": "https://github.com/sunyaisblank/Sirius/issues/53#issuecomment-6188558718",
+  "removed_owned_path": "out/native-windows-science-controls-23d406b",
+  "retained_useful_build_volume": "bin/windows-msvc/diagnostic-23d406b",
+  "numerical_disposition": [
+    "PASS",
+    "PASS",
+    "FAIL",
+    "UNRUN"
+  ],
+  "all_four_controls_passed": false,
+  "full_qualification_claimed": false,
+  "raw_files": {
+    "out/native-windows-science-controls-23d406b/native-tool-discovery.json": {
+      "bytes": 453,
+      "sha256": "eb5d59c2467f8cb511ff3bbeb2695dfc3a769e903cb5fc0ffad02f2b9d9381f6"
+    },
+    "out/native-windows-science-controls-23d406b/kerr-image-failure-terminal-audit.json": {
+      "bytes": 3074,
+      "sha256": "f9233a2b7efc0760584a3d18306447885cd49dd24e6f904daccae4e848074fff"
+    },
+    "out/native-windows-science-controls-23d406b/native-tool-discovery.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-retained-sampler.json": {
+      "bytes": 4058,
+      "sha256": "5c297a878ecec73e70dd01999f0bbcf576cb0aac6ffe344327a8f5b142f0ed79"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-near-conservation-bridge.json": {
+      "bytes": 2420,
+      "sha256": "c14c14f26ed9e384887ff636fe81f4a8908bfb8640aa5361e89e36ceeffd1fd4"
+    },
+    "out/native-windows-science-controls-23d406b/run_terminal.py": {
+      "bytes": 23474,
+      "sha256": "a41fc4374313060184d7b6becd2bdd8db97158cfee96a6bccb78bceda8ad1a23"
+    },
+    "out/native-windows-science-controls-23d406b/kerr-image-inputs-after.json": {
+      "bytes": 32043,
+      "sha256": "bdd270772b62819cdde364e0a9665f4966c499e38acd6621bc242d223de85909"
+    },
+    "out/native-windows-science-controls-23d406b/independent-source-review.json": {
+      "bytes": 6670,
+      "sha256": "7b291458687a5c47dd06a60f66a03b9d76af0cd6046e6912ae08099e96dbb3e4"
+    },
+    "out/native-windows-science-controls-23d406b/retained-sampler-inputs-after.json": {
+      "bytes": 27436,
+      "sha256": "f53541a45175627ddee8ed7ec84f9f0d7f2c94bc223dbb12d90486d6c304c4b4"
+    },
+    "out/native-windows-science-controls-23d406b/kerr-image-bridge.json": {
+      "bytes": 7488,
+      "sha256": "b9f2a4d728978a03186ca1ecc3f7c70eb154c83273392367b7deff7f7e241c5c"
+    },
+    "out/native-windows-science-controls-23d406b/root-terminal-admission.json": {
+      "bytes": 1069,
+      "sha256": "ac7f3817387def3ca621790f82c2369f2412ff32556b3f73c0aeae84f062099a"
+    },
+    "out/native-windows-science-controls-23d406b/plan.pending.json": {
+      "bytes": 2996,
+      "sha256": "290f17ce23784c58be27e989a94272cb0b753e5f98119bfeafd1fbc3cfa5ab09"
+    },
+    "out/native-windows-science-controls-23d406b/runtime-input-preservation-refs.json": {
+      "bytes": 61767,
+      "sha256": "10a722963eabce5b6b98c4ea0663d947a0b38f57d5ff0563a9f34d4bb9733972"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-retained-sampler-accepted.json": {
+      "bytes": 8582,
+      "sha256": "9beda79b778f257c8679dd2ce3edf15307d7e4cde4ed668d1d6dbdda911bc88f"
+    },
+    "out/native-windows-science-controls-23d406b/retained-sampler-inputs-before.json": {
+      "bytes": 27436,
+      "sha256": "f53541a45175627ddee8ed7ec84f9f0d7f2c94bc223dbb12d90486d6c304c4b4"
+    },
+    "out/native-windows-science-controls-23d406b/plan.json": {
+      "bytes": 2995,
+      "sha256": "45b89ee56a1c201ab32a2f4807477af2aa8281e82294966bd520a6376b289275"
+    },
+    "out/native-windows-science-controls-23d406b/near-conservation-inputs-after.json": {
+      "bytes": 29733,
+      "sha256": "5bb889e3cfba3c6869e8e5be533a879fe2948c823f76450e5c0c566c07803e6c"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-kerr-image.stdout": {
+      "bytes": 173,
+      "sha256": "55c885d91b5ffdc39d960087a8715538d2638fe6c7759f1b1e548e361e359383"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-near-conservation.stdout": {
+      "bytes": 180,
+      "sha256": "76794ddd13614c3a9ba80b24ac7337982af245dd631c6fed32bf9fd0e35bca6b"
+    },
+    "out/native-windows-science-controls-23d406b/kerr-image-bridge.stdout": {
+      "bytes": 133,
+      "sha256": "47202c46e80418bf840ff9f475fd807a5d2ed236174912754300e3c71a640657"
+    },
+    "out/native-windows-science-controls-23d406b/retained-sampler-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "out/native-windows-science-controls-23d406b/execution-bindings.pending.json": {
+      "bytes": 11835,
+      "sha256": "458bc13076c4304f8e3d26b7eed1834b6f3e837418700b1d7974b4c9c6dad061"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-retained-sampler.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/kerr-image-inputs-before.json": {
+      "bytes": 32043,
+      "sha256": "bdd270772b62819cdde364e0a9665f4966c499e38acd6621bc242d223de85909"
+    },
+    "out/native-windows-science-controls-23d406b/retained-sampler-bridge.stdout": {
+      "bytes": 132,
+      "sha256": "106bbda4d695b8a86b693c6995601f68d689b59e8ac9c047726ea19de3428a9d"
+    },
+    "out/native-windows-science-controls-23d406b/near-conservation-bridge.json": {
+      "bytes": 5286,
+      "sha256": "a68d1f79c73233079d111baf59a572c3820a751b5711081df72becc4801c5e60"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "out/native-windows-science-controls-23d406b/run_system.py": {
+      "bytes": 24104,
+      "sha256": "436b8d1fda6d4a2e2859ad448de5eab6f14702667485bab6a2e07d5bc2891af7"
+    },
+    "out/native-windows-science-controls-23d406b/finite-result.json": {
+      "bytes": 10107,
+      "sha256": "39d7942ca1dd23a7d493f022365dca6081370c1c098bd1abf09d212a0e116197"
+    },
+    "out/native-windows-science-controls-23d406b/independent-terminal-review.json": {
+      "bytes": 15066,
+      "sha256": "fca545e6868ed8d2ffe2c3e8192e8c57d24535ac8a1443e17d1d12ad57a7324d"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-retained-sampler-bridge.json": {
+      "bytes": 2415,
+      "sha256": "f8d853020579cc794470aead8585680c39f6ea7657ed64248f04aa7246204b78"
+    },
+    "out/native-windows-science-controls-23d406b/retained-sampler-bridge.json": {
+      "bytes": 2807,
+      "sha256": "893b3567f2d0c3438cdc0d7699a9a32f3e16e273d70d5631df6b3b0a093cf978"
+    },
+    "out/native-windows-science-controls-23d406b/run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "out/native-windows-science-controls-23d406b/execution-bindings.json": {
+      "bytes": 56461,
+      "sha256": "32d331d09d5e10f80c323879923bc96c12586ac2651555a9c4f0d8e8ed991164"
+    },
+    "out/native-windows-science-controls-23d406b/kerr-image-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/root-source-review.json": {
+      "bytes": 1156,
+      "sha256": "6a37f2e69ecdbeeaba0ca53b902cfe0c1591f979958f35362d65c4349b6c998b"
+    },
+    "out/native-windows-science-controls-23d406b/near-conservation-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-near-conservation.json": {
+      "bytes": 4059,
+      "sha256": "470b47f328bd37a0fbf074600735521aa03aa569c2e076ba7b53626b4cc0b588"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-retained-sampler.stdout": {
+      "bytes": 179,
+      "sha256": "e274cb5afb0696e45bd6bae75e8afbe7d7fd9449feab56a8b40ccba1723c3e49"
+    },
+    "out/native-windows-science-controls-23d406b/source-freeze.json": {
+      "bytes": 2314,
+      "sha256": "889961c65fd4043994be49a0c8803ff78cbdaf8d180b9139c0a25ccca629ac66"
+    },
+    "out/native-windows-science-controls-23d406b/root-runtime-admission.json": {
+      "bytes": 1121,
+      "sha256": "d72c80c2c463a450d26b7953cf5b60f8eff7261c23d394d0106caae5a596cfb9"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-kerr-image.json": {
+      "bytes": 4051,
+      "sha256": "8c8395f07385cde938cd683c60700c349da4e253698ba54e50fad316dbd427e0"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-kerr-image.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/near-conservation-inputs-before.json": {
+      "bytes": 29733,
+      "sha256": "5bb889e3cfba3c6869e8e5be533a879fe2948c823f76450e5c0c566c07803e6c"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-near-conservation-accepted.json": {
+      "bytes": 11357,
+      "sha256": "7aa9ebcce68f4582d3dc5097f8526636a070bf2837ccd4c13caf5e78f6140c3f"
+    },
+    "out/native-windows-science-controls-23d406b/near-conservation-bridge.stdout": {
+      "bytes": 130,
+      "sha256": "18211684df147b1089c858430ddf22364e95a7979bfcd691df08c1f928f6dec5"
+    },
+    "out/native-windows-science-controls-23d406b/preparation.json": {
+      "bytes": 2521,
+      "sha256": "2c1cb4435593bb2cf6acb964f15c42490d89c5990326d9e954e3b01847f690ff"
+    },
+    "out/native-windows-science-controls-23d406b/terminal-near-conservation.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/source-contracts.json": {
+      "bytes": 8420,
+      "sha256": "cbe3ad094372d68a9d9d5d475648a61f46a729e2b7f53d9931961f00e603a988"
+    },
+    "out/native-windows-science-controls-23d406b/science-adaptation.patch": {
+      "bytes": 35385,
+      "sha256": "d4e469296eaa92d939dd449ab4a9b9a88a4bb3f8329d786876fea5e679e14f40"
+    },
+    "out/native-windows-science-controls-23d406b/originals/run_terminal.py": {
+      "bytes": 16051,
+      "sha256": "8f2945ef5a6087f4aa91c3daa95a2689aa5f0c3454c23f28ae1ea8b9e62d67d0"
+    },
+    "out/native-windows-science-controls-23d406b/originals/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "out/native-windows-science-controls-23d406b/originals/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "out/native-windows-science-controls-23d406b/originals/run_system.py": {
+      "bytes": 18017,
+      "sha256": "b4fa36dd337913d4269eeb342a760688b34a176380d43efc8b8e625d9814a70a"
+    },
+    "out/native-windows-science-controls-23d406b/originals/run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "out/native-windows-science-controls-23d406b/native/near-conservation/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/native/near-conservation/driver-modules.json": {
+      "bytes": 684,
+      "sha256": "27df4df7fccb8c9c67f5e8111d80979554c7f4c035924d28ab5b1206ab7ee389"
+    },
+    "out/native-windows-science-controls-23d406b/native/near-conservation/stdout.log": {
+      "bytes": 742,
+      "sha256": "0ce0783bd79d9313008ba7d607dd46a713d9c953a3d7a05d12c256403513e05c"
+    },
+    "out/native-windows-science-controls-23d406b/native/near-conservation/memory.json": {
+      "bytes": 1487,
+      "sha256": "84b8740a47c53098dd66fc11009985e264f3b4f1581601d7edb1f30ed08ec9ce"
+    },
+    "out/native-windows-science-controls-23d406b/native/near-conservation/owner.json": {
+      "bytes": 3308,
+      "sha256": "633780bb028c200c43ea3d8e0cb84517c2e7bcf537587c8c27379aad301f6ba5"
+    },
+    "out/native-windows-science-controls-23d406b/native/near-conservation/gtest.xml": {
+      "bytes": 3475,
+      "sha256": "8bd9f6df082eb136750a660366ce451fcdcbd592f663346275938f21b93947ac"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/driver-modules.json": {
+      "bytes": 684,
+      "sha256": "27df4df7fccb8c9c67f5e8111d80979554c7f4c035924d28ab5b1206ab7ee389"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/stdout.log": {
+      "bytes": 740,
+      "sha256": "916b6977b9a12b4e937785a23088cdafdd83f858fcbaf686ae9f558919fbbdc3"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/memory.json": {
+      "bytes": 18589,
+      "sha256": "1636853694778fc5f145a76c42f18a97a94b701c1836be007e2a7d8383ec23c6"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/owner.json": {
+      "bytes": 3301,
+      "sha256": "8e697d1799f2021497b528879720cf91e6f7141d19911e0f3b7b430fe64f3ea4"
+    },
+    "out/native-windows-science-controls-23d406b/native/retained-sampler/gtest.xml": {
+      "bytes": 622,
+      "sha256": "8f113506d1a4a445d97f5876bbd6d4413fdabb41f2075756c1db0a79f6930125"
+    },
+    "out/native-windows-science-controls-23d406b/native/kerr-image/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-science-controls-23d406b/native/kerr-image/driver-modules.json": {
+      "bytes": 684,
+      "sha256": "27df4df7fccb8c9c67f5e8111d80979554c7f4c035924d28ab5b1206ab7ee389"
+    },
+    "out/native-windows-science-controls-23d406b/native/kerr-image/stdout.log": {
+      "bytes": 1017,
+      "sha256": "f638298a8c613913f02b2e188520f4186ece39689d40e0b1f013eab2ec54bf3b"
+    },
+    "out/native-windows-science-controls-23d406b/native/kerr-image/memory.json": {
+      "bytes": 33132,
+      "sha256": "58e6d9ac3f224a3ce14d9cde45cdb9b1b719ebae9b8da8ec250b46cda1f73ae4"
+    },
+    "out/native-windows-science-controls-23d406b/native/kerr-image/owner.json": {
+      "bytes": 3250,
+      "sha256": "ad0a3724dc039f9f7269520200c46c3de32193113f233a00a118931d7d814463"
+    },
+    "out/native-windows-science-controls-23d406b/native/kerr-image/gtest.xml": {
+      "bytes": 1097,
+      "sha256": "a25bca6abeb978b725e1cdb19cc4e718733a4e301ae2f67ba96114728566712e"
+    },
+    "out/native-windows-science-controls-23d406b/temp/near-conservation/bootstrap.json": {
+      "bytes": 871,
+      "sha256": "df0d052e2c736e98a238bb0385aa73577b27f7aa2c243753dd745d0e57f497ab"
+    },
+    "out/native-windows-science-controls-23d406b/temp/retained-sampler/bootstrap.json": {
+      "bytes": 870,
+      "sha256": "9db1d5d3c4e3bfef9801f8120d799f6392fe7da6b937e134121318156288256a"
+    },
+    "out/native-windows-science-controls-23d406b/temp/terminal-kerr-image/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "9025a2ff4c2958e7548a826713f27408978f97b2309152da0ca0bef672e00fa9"
+    },
+    "out/native-windows-science-controls-23d406b/temp/terminal-near-conservation/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "8aefb1ba3eed999ea7945b7113b6c7e679fadec93bcdbb5c3cd728c49cb00954"
+    },
+    "out/native-windows-science-controls-23d406b/temp/terminal-retained-sampler/bootstrap.json": {
+      "bytes": 222,
+      "sha256": "424e10fbc3edeb89d0da90a2b0b1b95ae2f03bebd49c2ce36bc4ce65d06945ff"
+    },
+    "out/native-windows-science-controls-23d406b/temp/kerr-image/bootstrap.json": {
+      "bytes": 864,
+      "sha256": "9ec5b14e5278770ae892b5b99089136629b80bffeaea78bbcd49e35656b53c8f"
+    }
+  }
+}
