@@ -1,0 +1,885 @@
+{
+  "archive_sources": [
+    {
+      "commit": "8078cfdda9afe5d7478be2c3727858746f22748a",
+      "manifest": {
+        "bytes": 16245,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/manifest.json",
+        "sha256": "d3c485e50c63d7f2270181d072e1b2b0b550a9b8a303a44d5765a42e78312b4c",
+        "symlink_target": null
+      }
+    },
+    {
+      "commit": "a69e600d953c648ebc57bc83990f1c69baa2e6d8",
+      "manifest": {
+        "bytes": 23103,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/manifest.json",
+        "sha256": "f4be9bca44320565afe6e0893fc00792089fd415a1300b85b6e31e8e245834f5",
+        "symlink_target": null
+      }
+    },
+    {
+      "commit": "b1f0795a168807e28143e45221c5a1c584195630",
+      "manifest": {
+        "bytes": 53159,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-controls-profile-reader-stop/manifest.json",
+        "sha256": "806d071b24816b7dde0de3acfe47a7f9c15e4e3daaad96421752fd59c9f52499",
+        "symlink_target": null
+      }
+    }
+  ],
+  "builder": {
+    "bytes": 39716,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+    "sha256": "c69f51e2f1eb36781454ee0a2fb1ab0b2c1a65798f30d39d2add6df16d2261c2",
+    "symlink_target": null
+  },
+  "concrete_applicability": [
+    "Current compile_shader diagnostic flag intentionally admits only portable normal Endpoint with fp64/FMA/stage7owner false; main four compile call sites omit the flag, so normal main35 generation leaves proposal macro OFF.",
+    "Expanding only routing would predictably encounter unique-named-Divide/single-FDiv annotation refusal for four camera modules; the unchanged cameraO1 path historically inlines two Divide sites per module.",
+    "Expanding routing and annotation alone still leaves original nonnormal portable OpTypeFloat rejection; full candidate profile needs a scoped proposal-only exception retaining original integer/mode/layout/barrier contracts.",
+    "All17 selected stock modules have division work:13 named Divide/one fallback UDiv,4 inlined camera/no named Divide/three global UDiv. No selected zero-Divide stage needs blanket optional admission.",
+    "All18 excluded modules must remain macroOFF/unchanged. Native global FDiv32 is not a proposal; owners retain existing named integer Divide but are excluded."
+  ],
+  "counts": {
+    "excluded_FMA": 2,
+    "excluded_native": 14,
+    "excluded_owner": 2,
+    "selected_inlined_camera": 4,
+    "selected_named": 13
+  },
+  "current_frozen_compiler_or_graph_changed": false,
+  "disposition": "FUTURE_FULL_PROFILE_REQUIRES_SCOPED_ADAPTER_BEFORE_EXECUTION",
+  "groups": {
+    "excluded_FMA": [
+      "retained_endpoint_fma.spv",
+      "retained_transport_fma.spv"
+    ],
+    "excluded_native": [
+      "retained_camera.spv",
+      "retained_camera_fp64.spv",
+      "retained_dense.spv",
+      "retained_dense_fp64.spv",
+      "retained_dopri_phase.spv",
+      "retained_dopri_phase_fp64.spv",
+      "retained_endpoint.spv",
+      "retained_endpoint_fp64.spv",
+      "retained_initialize.spv",
+      "retained_initialize_fp64.spv",
+      "retained_ray_camera.spv",
+      "retained_ray_camera_fp64.spv",
+      "retained_transport.spv",
+      "retained_transport_fp64.spv"
+    ],
+    "excluded_owner": [
+      "retained_endpoint_portable_stage7_owner.spv",
+      "retained_transport_portable_stage7_owner.spv"
+    ],
+    "selected_inlined_camera": [
+      "retained_camera_portable.spv",
+      "retained_camera_portable_fp64.spv",
+      "retained_ray_camera_portable.spv",
+      "retained_ray_camera_portable_fp64.spv"
+    ],
+    "selected_named": [
+      "retained_dense_portable.spv",
+      "retained_dense_portable_fp64.spv",
+      "retained_dopri_phase_portable.spv",
+      "retained_dopri_phase_portable_fp64.spv",
+      "retained_dopri_phase_portable_normal_sum.spv",
+      "retained_endpoint_portable.spv",
+      "retained_endpoint_portable_fp64.spv",
+      "retained_endpoint_portable_normal_sum.spv",
+      "retained_initialize_portable.spv",
+      "retained_initialize_portable_fp64.spv",
+      "retained_transport_portable.spv",
+      "retained_transport_portable_fp64.spv",
+      "retained_transport_portable_normal_sum.spv"
+    ]
+  },
+  "inspected_modules": [
+    {
+      "module": "retained_camera.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 136754,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-controls-profile-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-controls/analysis/stock/retained_camera.spvasm",
+        "sha256": "5fa15860300adf9b890b7998e6b5c1e921bec6fc2659069e3aa31080e709afe5",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_camera_fp64.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 175089,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-controls-profile-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-controls/analysis/stock/retained_camera_fp64.spvasm",
+        "sha256": "5af142635f9b69caeec977dd40d3093ae9fbc8ec089a1759840347d2681bc2b6",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_camera_portable.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 1446682,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-controls-profile-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-controls/analysis/candidate/retained_camera_portable.spvasm",
+        "sha256": "6ebfcdc93db4bca5d04115bb26f60d1f1b204263640736a1f95a0d66baa78c4b",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 2
+      },
+      "role": "selected_inlined_camera",
+      "stock_assembly": {
+        "bytes": 1427408,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-controls-profile-reader-stop/files/bin/linux-gcc/portable-divide-fp64-estimate-controls/analysis/stock/retained_camera_portable.spvasm",
+        "sha256": "274680f14bc5229ca6edf22ec9ebbf9a018c42511c54c25a191fb51a8e16e261",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 3,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_camera_portable_fp64.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 1446682,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_camera_portable_fp64.spvasm",
+        "sha256": "6ebfcdc93db4bca5d04115bb26f60d1f1b204263640736a1f95a0d66baa78c4b",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 2
+      },
+      "role": "selected_inlined_camera",
+      "stock_assembly": {
+        "bytes": 1427408,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_camera_portable_fp64.spvasm",
+        "sha256": "274680f14bc5229ca6edf22ec9ebbf9a018c42511c54c25a191fb51a8e16e261",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 3,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_dense.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 226687,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_dense.spvasm",
+        "sha256": "655b3763b3eab22bd02c5e68bfa5605e56364f92262f13a7dcbc064af98ee475",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_dense_fp64.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 263363,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_dense_fp64.spvasm",
+        "sha256": "09f469bed0d8590367ec51ad1f3f92fa0f3b706ef0a0aea47f55086a21ebe26c",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_dense_portable.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 329275,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_dense_portable.spvasm",
+        "sha256": "7ae14f991ba29f6b4e92b25c2dafb795ae61d0d8bdde5c1819ec83eaad4fbd83",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 324376,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_dense_portable.spvasm",
+        "sha256": "774e7093be0ab09b0a56a4132f91c242109008a5c45c6470ac8e559bb4be4060",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 8,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_dense_portable_fp64.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 329275,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_dense_portable_fp64.spvasm",
+        "sha256": "7ae14f991ba29f6b4e92b25c2dafb795ae61d0d8bdde5c1819ec83eaad4fbd83",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 324376,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_dense_portable_fp64.spvasm",
+        "sha256": "774e7093be0ab09b0a56a4132f91c242109008a5c45c6470ac8e559bb4be4060",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 8,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_dopri_phase.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 169798,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_dopri_phase.spvasm",
+        "sha256": "09564717904d8113c9ecc446c03bfe9eb1d2b181db75f46748ed92f4f67d0ee3",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_dopri_phase_fp64.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 208219,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_dopri_phase_fp64.spvasm",
+        "sha256": "a3ceaf1a0f7c49ddd2a3ee4d1bd7d9a5b0d044bcf11255127c3e79358f3f88bf",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_dopri_phase_portable.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 267380,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_dopri_phase_portable.spvasm",
+        "sha256": "ad67b1dc48211e889706063aac475556b9360719aa59aed52065f0b5c6952ff7",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 262481,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_dopri_phase_portable.spvasm",
+        "sha256": "da08751c8623d024cf13cfc00372b388b88920d91f2c638c9849b13edbf1b2d7",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 2,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_dopri_phase_portable_fp64.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 267380,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_dopri_phase_portable_fp64.spvasm",
+        "sha256": "ad67b1dc48211e889706063aac475556b9360719aa59aed52065f0b5c6952ff7",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 262481,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_dopri_phase_portable_fp64.spvasm",
+        "sha256": "da08751c8623d024cf13cfc00372b388b88920d91f2c638c9849b13edbf1b2d7",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 2,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_dopri_phase_portable_normal_sum.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 278704,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_dopri_phase_portable_normal_sum.spvasm",
+        "sha256": "201f55307c9f72ac86668dc24704262a8b53d92703207a71b37da143b7563789",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 273771,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_dopri_phase_portable_normal_sum.spvasm",
+        "sha256": "4114b5293faae5ed30291f84384ba1f64c35e2d52797c2d1b90fb785b9fd5095",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 2,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_endpoint.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 288928,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_endpoint.spvasm",
+        "sha256": "d4d16c8d3385f7b7f9b64a52a34594c8b3144e9606c1f1bb57061c9106951043",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_endpoint_fma.spv",
+      "role": "excluded_FMA",
+      "stock_assembly": {
+        "bytes": 284065,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_endpoint_fma.spvasm",
+        "sha256": "3104e47dbadade6d42fdec4a5c109a9607af1d00251037a8144eb8c87404361a",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_endpoint_fp64.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 325572,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_endpoint_fp64.spvasm",
+        "sha256": "7a06778385cba96beaa285a71a20dba701cd21bc6f491fad45c0449c3dcd57dc",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_endpoint_portable.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 411367,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_endpoint_portable.spvasm",
+        "sha256": "c9952dbc244b48c12da080695fd96446a7138ac59ca31be7fa820a5cb43dfc35",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 406452,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_endpoint_portable.spvasm",
+        "sha256": "47be473f1ca29b4b9ed75abab9298964ccc1267b89516abbee01c5c5a6b85e40",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 10,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_endpoint_portable_fp64.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 411367,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_endpoint_portable_fp64.spvasm",
+        "sha256": "c9952dbc244b48c12da080695fd96446a7138ac59ca31be7fa820a5cb43dfc35",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 406452,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_endpoint_portable_fp64.spvasm",
+        "sha256": "47be473f1ca29b4b9ed75abab9298964ccc1267b89516abbee01c5c5a6b85e40",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 10,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_endpoint_portable_normal_sum.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 427444,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_endpoint_portable_normal_sum.spvasm",
+        "sha256": "0b8b0bfd18ad71bc11fa30a08dfa9f20a9bbd71b8b2a66e48a5d5f0f9a3cf512",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 422552,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_endpoint_portable_normal_sum.spvasm",
+        "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 10,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_endpoint_portable_stage7_owner.spv",
+      "role": "excluded_owner",
+      "stock_assembly": {
+        "bytes": 451567,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_endpoint_portable_stage7_owner.spvasm",
+        "sha256": "d0026fd5e0737e907be9d0cda3a7901b8ed734cf97711442646a2b88ee6b7981",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 13,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_initialize.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 164884,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_initialize.spvasm",
+        "sha256": "eb8527d719cce07359d7976ef5ca512314163cb07db63dde2b6aeb612c77ba86",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_initialize_fp64.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 203324,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_initialize_fp64.spvasm",
+        "sha256": "a47ba4b1bb72c666e2ff7b330396e297ce8f0f056123dfbabd83befa98564d62",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_initialize_portable.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 222908,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_initialize_portable.spvasm",
+        "sha256": "f16b3083c554f50ae3916553ac6e30b0d5835cf2ad2c2de2d9a3db100c8ef943",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 218009,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_initialize_portable.spvasm",
+        "sha256": "127828b105527f7b5b9440d1d2a0defcc3163499acd73b02f7a7c52ccbf193de",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 2,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_initialize_portable_fp64.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 222908,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_initialize_portable_fp64.spvasm",
+        "sha256": "f16b3083c554f50ae3916553ac6e30b0d5835cf2ad2c2de2d9a3db100c8ef943",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 218009,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_initialize_portable_fp64.spvasm",
+        "sha256": "127828b105527f7b5b9440d1d2a0defcc3163499acd73b02f7a7c52ccbf193de",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 2,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_ray_camera.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 129824,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_ray_camera.spvasm",
+        "sha256": "b048dece00e5b1154a40ce1de9cb90583f8201fb62be36c3f007cbd1dc076348",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_ray_camera_fp64.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 168235,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_ray_camera_fp64.spvasm",
+        "sha256": "f6bc9ac71ffbeb94cd80a99ddad2a5d897c2382a09166017995e58360eebb27e",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_ray_camera_portable.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 1341008,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_ray_camera_portable.spvasm",
+        "sha256": "d5611a018481b67ccdcec44e729ffb4e80117ed21a129fcebdf38700e2250440",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 2
+      },
+      "role": "selected_inlined_camera",
+      "stock_assembly": {
+        "bytes": 1321732,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_ray_camera_portable.spvasm",
+        "sha256": "3669b9e947886a8d83eced9b7c6eb2bf36e943b370d264e194e42413c8454d02",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 3,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_ray_camera_portable_fp64.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 1341008,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_ray_camera_portable_fp64.spvasm",
+        "sha256": "d5611a018481b67ccdcec44e729ffb4e80117ed21a129fcebdf38700e2250440",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 2
+      },
+      "role": "selected_inlined_camera",
+      "stock_assembly": {
+        "bytes": 1321732,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_ray_camera_portable_fp64.spvasm",
+        "sha256": "3669b9e947886a8d83eced9b7c6eb2bf36e943b370d264e194e42413c8454d02",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 3,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_transport.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 246554,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_transport.spvasm",
+        "sha256": "cb9003c48a19654f734f653a92e9adec9d67f44006fe4300ad574028c75ba413",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 2,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_transport_fma.spv",
+      "role": "excluded_FMA",
+      "stock_assembly": {
+        "bytes": 241686,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_transport_fma.spvasm",
+        "sha256": "3b2709cd0fa6f0c225fe3688349f2ac965de8e732972519b29fac516c29e6818",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 2,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_transport_fp64.spv",
+      "role": "excluded_native",
+      "stock_assembly": {
+        "bytes": 283164,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_transport_fp64.spvasm",
+        "sha256": "6970c045160ddec96516485b0edd21d7bb5f2eb7f1f6293610ac437082eb8588",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {
+        "32": 1
+      },
+      "stock_global_OpUDiv_count": 2,
+      "stock_named_PB32Divide_instances": 0
+    },
+    {
+      "module": "retained_transport_portable.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 289063,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_transport_portable.spvasm",
+        "sha256": "82324242df8ddfd5dc4ef72318a39db8b2cd60d037b48618f0734456179bf67a",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 284164,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_transport_portable.spvasm",
+        "sha256": "7ff541e30e62c9b7399732886362cbab17e2c43d82ab2c4ebb5932bc2035b200",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 3,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_transport_portable_fp64.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 289063,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_transport_portable_fp64.spvasm",
+        "sha256": "82324242df8ddfd5dc4ef72318a39db8b2cd60d037b48618f0734456179bf67a",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 284164,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_transport_portable_fp64.spvasm",
+        "sha256": "7ff541e30e62c9b7399732886362cbab17e2c43d82ab2c4ebb5932bc2035b200",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 3,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_transport_portable_normal_sum.spv",
+      "prior_FP64_candidate_assembly": {
+        "bytes": 301836,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/candidate/retained_transport_portable_normal_sum.spvasm",
+        "sha256": "cf6b880af66328753254399da89ef451935a22330b57c4724a7d78912efad24d",
+        "symlink_target": null
+      },
+      "prior_FP64_candidate_global_FDiv_width_counts": {
+        "64": 1
+      },
+      "role": "selected_named",
+      "stock_assembly": {
+        "bytes": 296907,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_transport_portable_normal_sum.spvasm",
+        "sha256": "30cc0aa0e85bb0d943e332637b0073059bf77f33d29f1290f9514e3b760eaddb",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 3,
+      "stock_named_Divide_fallback_OpUDiv_count": 1,
+      "stock_named_PB32Divide_instances": 1
+    },
+    {
+      "module": "retained_transport_portable_stage7_owner.spv",
+      "role": "excluded_owner",
+      "stock_assembly": {
+        "bytes": 323774,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-profile-recovery/files/out/portable-divide-fp64-estimate-profile-recovery/analysis/stock/retained_transport_portable_stage7_owner.spvasm",
+        "sha256": "027fbbca796897a82c4ab3c4b63260e6bb144376d30254b2dd827554950606d0",
+        "symlink_target": null
+      },
+      "stock_global_FDiv_width_counts": {},
+      "stock_global_OpUDiv_count": 5,
+      "stock_named_PB32Divide_instances": 1
+    }
+  ],
+  "limits": [
+    "The two-estimate camera evidence is from prior FP64 candidate source, not actual new restoring-FP32 camera emission.",
+    "No claim that future scoped annotation will see exactly two new FDiv32, or that any future new annotations are absent/present, without actual emitted output.",
+    "Current successful Endpoint compiler and graph packet remain unchanged; this is an advance applicability check, not current reader/producer failure.",
+    "Future full profile is conditional on separate actual native-cost admission; no profile construction, implementation, runtime, numerical or performance acceptance here."
+  ],
+  "method": "Passive stdlib text/regex/hash reads only; no builder, parser, policy, compiler, disassembler, provider or test execution.",
+  "passed": true,
+  "prior_profile_packet": {
+    "bytes": 47650,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp64-estimate-controls-profile-reader-stop/files/out/portable-divide-fp64-estimate-controls/packet.json",
+    "sha256": "be6a03249712420b4392f0a29046721e70f19ad5880b147f7143c5c89cb22ea3",
+    "symlink_target": null
+  },
+  "root_requested_separate_operational_finding_not_authored_runtime_input": true,
+  "schema": "sirius-restoring-future-profile-source-applicability-v1",
+  "source_references": [
+    {
+      "line": 110,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "def diagnostic_divide_fp32_proposal_annotation(text):\n    \"\"\"Add the known missing order annotation before the unchanged strict policy.\"\"\"\n    floating = re.findall(r\"(%\\S+) = OpTypeFloat (\\d+)\", text)"
+    },
+    {
+      "line": 117,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "    if len(named) != 1:\n        raise ValueError(\"diagnostic FP32 annotation lost its unique Divide\")\n    body = re.search(r\"^\\s*\" + re.escape(named[0]) + r\" = OpFunction .*?OpFunctionEnd\", text, re.M | re.S)"
+    },
+    {
+      "line": 121,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "    if (not body or len(divisions) != 1 or\n            re.findall(r\"= (OpF(?!unction)\\S+) \", body[0]) != [\"OpFDiv\"] or\n            not re.search(r\"^\\s*\" + re.escape(divisions[0]) + r\" = OpFDiv \", body[0], re.M) or"
+    },
+    {
+      "line": 351,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "        if (not portable or not normal_sum32 or source.stem != \"retained_endpoint\" or\n                fp64 or fma or stage_seven_owner):\n            raise ValueError(\"diagnostic FP32 estimate is limited to the full normal portable Endpoint\")"
+    },
+    {
+      "line": 421,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "    optimization = (\"-O1\" if portable and source.stem in (\"retained_camera\", \"retained_ray_camera\")\n                    else \"-O0\")\n    owner_include = [\"-I\", str(destination.parent)] if stage_seven_owner else []"
+    },
+    {
+      "line": 457,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "        elif \"OpTypeFloat\" in text or re.search(r\"OpExecutionMode\\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)\", text):\n            raise ValueError(\"portable retained stage depends on native floating arithmetic\")\n        entry = re.search(r\"OpEntryPoint GLCompute (%\\S+)\", text)[1]"
+    },
+    {
+      "line": 563,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "        for suffix, name, wide, portable in ((\"\", \"\", False, False),\n                                             (\"_fp64\", \"Fp64\", True, False),\n                                             (\"_portable\", \"Portable\", False, True),"
+    },
+    {
+      "line": 567,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "            code = compile_shader(source / (stem + \".slang\"),\n                                  args.output.parent / (stem + suffix + \".spv\"),\n                                  args.compiler, args.assembler, args.disassembler, args.validator,"
+    },
+    {
+      "line": 581,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "            code = compile_shader(source / (stem + \".slang\"),\n                args.output.parent / (stem + \"_portable_normal_sum.spv\"),\n                args.compiler, args.assembler, args.disassembler, args.validator,"
+    },
+    {
+      "line": 589,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "            code = compile_shader(source / (stem + \".slang\"),\n                args.output.parent / (stem + \"_portable_stage7_owner.spv\"),\n                args.compiler, args.assembler, args.disassembler, args.validator,"
+    },
+    {
+      "line": 604,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/scripts/build-retained-kernels.py",
+      "text": "                code = compile_shader(source / (stem + \".slang\"), destination,\n                    args.compiler, args.assembler, args.disassembler, args.validator,\n                    program[\"registers\"], terms, len(program[\"layer_offsets\"])-1,"
+    }
+  ]
+}

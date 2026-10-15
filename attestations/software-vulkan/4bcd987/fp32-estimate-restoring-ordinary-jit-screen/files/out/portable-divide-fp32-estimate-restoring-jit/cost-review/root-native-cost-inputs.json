@@ -1,0 +1,253 @@
+{
+  "actual_code_review": {
+    "actual_entry": {
+      "actual_entry_pc": 130546679234560,
+      "buffers": [
+        0,
+        1
+      ],
+      "dispatch_id": 0,
+      "file": "jit-10.elf",
+      "function": {
+        "address": 130546679234560,
+        "bytes": 314,
+        "name": "cs_variant",
+        "offset": 0,
+        "section": 3
+      },
+      "kernel": 0,
+      "worker_thread": 34
+    },
+    "actual_loaded_module": {
+      "actual_span_matches_frozen_input": true,
+      "bytes": 154100,
+      "sha256": "93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f",
+      "words": 38525
+    },
+    "case": "capture-candidate-endpoint-normal",
+    "jit_defined_functions": [
+      {
+        "address": 130546679259040,
+        "bytes": 905432,
+        "name": "cs_co_variant.resume",
+        "offset": 24480,
+        "section": 3
+      },
+      {
+        "address": 130546680164480,
+        "bytes": 5,
+        "name": "cs_co_variant.destroy",
+        "offset": 929920,
+        "section": 3
+      },
+      {
+        "address": 130546679234560,
+        "bytes": 314,
+        "name": "cs_variant",
+        "offset": 0,
+        "section": 3
+      },
+      {
+        "address": 130546679234880,
+        "bytes": 24157,
+        "name": "cs_co_variant",
+        "offset": 320,
+        "section": 3
+      }
+    ],
+    "jit_executable_section_bytes": 929925,
+    "jit_object_bytes": 1060152,
+    "linked_section_review": {
+      "file": "jit-10.elf",
+      "live_sections": [
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 929925,
+          "changed_bytes": 31432,
+          "name": ".ltext",
+          "relocation_field_bytes": 42472
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 96,
+          "changed_bytes": 0,
+          "name": ".rodata.cst32",
+          "relocation_field_bytes": 0
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 48,
+          "changed_bytes": 0,
+          "name": ".rodata.cst16",
+          "relocation_field_bytes": 0
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 468,
+          "changed_bytes": 0,
+          "name": ".rodata.cst4",
+          "relocation_field_bytes": 0
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 80,
+          "changed_bytes": 60,
+          "name": ".rodata",
+          "relocation_field_bytes": 80
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 256,
+          "changed_bytes": 32,
+          "name": ".eh_frame",
+          "relocation_field_bytes": 32
+        }
+      ],
+      "relocation_counts": {
+        "1": 5319,
+        "24": 4
+      },
+      "undefined_callback_targets_consistent": {
+        "coro_free": 130546929921120,
+        "coro_malloc": 130546929921136
+      },
+      "undefined_callback_targets_independently_resolved": false,
+      "variant": "endpoint-normal"
+    },
+    "llvm_alloca_instruction_count": 2,
+    "llvm_allocator_call_text": [
+      "@coro_malloc(i32)",
+      "@coro_malloc(i32 %23)"
+    ],
+    "llvm_coroutine_allocator_constant_bytes": [],
+    "llvm_defined_functions": [
+      "cs_variant",
+      "cs_co_variant",
+      "cs_co_variant.resume",
+      "cs_co_variant.destroy"
+    ],
+    "llvm_float_multiply_instruction_count": 0,
+    "llvm_resume_frame_dereferenceable_bytes": [
+      90144
+    ],
+    "ordinary_ir_export": {
+      "bytes": 13327510,
+      "function": 130546604711032,
+      "module": 130546604707536,
+      "module_generation": 5,
+      "optimized_module_observed": true,
+      "path": "optimized-05.ll",
+      "sha256": "7ffdb8ab87778be52161852710c0c1fa797e6c2a656794c11ef76d09bb83ca0e",
+      "successful_optimizer_pass_ids": [
+        10,
+        11
+      ]
+    },
+    "ordinary_pipelines": [
+      "default<O0>",
+      "sroa,early-cse,simplifycfg,reassociate,mem2reg,instsimplify,instcombine<no-verify-fixpoint>"
+    ],
+    "producer": "candidate",
+    "scope": "Actual loaded complete module -> ordinary successful LLVM passes -> lookup generation -> called JIT entry and allocated-section byte/defined-relocation joins. Short-input canary only; no retained arithmetic or runtime benefit verdict. Undefined callbacks are consistency checked only.",
+    "single_completed_dispatch": {
+      "buffers": [
+        0,
+        1
+      ],
+      "captured_ns": 1792033405770315978,
+      "completed": true,
+      "groups_x": 1,
+      "host_thread": 1,
+      "id": 0,
+      "kernel": 0
+    },
+    "variant": "endpoint-normal"
+  },
+  "candidate_native_disassembly": {
+    "bytes": 10741492,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/cost-review/candidate-native.txt",
+    "sha256": "7417e37f6e8cd5243b43734cd9d9188814a631d5041e8fd67bd81988320c3c5c",
+    "symlink_target": null
+  },
+  "command": [
+    "/usr/bin/objdump",
+    "-d",
+    "-w",
+    "-Mintel",
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf"
+  ],
+  "exit_code": 0,
+  "input_records_before_after_equal": {
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/actual-code-review.json": {
+      "bytes": 4352,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/actual-code-review.json",
+      "sha256": "572b274f55c052491fe062cc1882d80b67db5443daae5ded187d73ad95e8fc8f",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf": {
+      "bytes": 1060152,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf",
+      "sha256": "99a6b55c863837080e9154357edbc17554845ae35888763a7bf30863e39e02de",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-05.ll": {
+      "bytes": 13327510,
+      "mode": 384,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-05.ll",
+      "sha256": "7ffdb8ab87778be52161852710c0c1fa797e6c2a656794c11ef76d09bb83ca0e",
+      "symlink_target": null
+    }
+  },
+  "metrics": {
+    "llvm_operation_counts": {
+      "alloca": 2,
+      "fdiv": 6,
+      "udiv": 59,
+      "urem": 12
+    },
+    "native_instruction_count": 153835,
+    "native_selected_function_counts": {
+      "cs_co_variant": {
+        "call": 1,
+        "div": 26,
+        "imul": 5,
+        "vpmulld": 1
+      },
+      "cs_co_variant.destroy": {},
+      "cs_co_variant.resume": {
+        "div": 165,
+        "imul": 99,
+        "vdivps": 4,
+        "vdivss": 2,
+        "vpmulld": 72,
+        "vpmuludq": 92
+      },
+      "cs_variant": {
+        "call": 4,
+        "imul": 2
+      }
+    },
+    "static_explicit_rsp_rbp_memory_operand_instructions": 5449
+  },
+  "objdump": {
+    "bytes": 390848,
+    "mode": 493,
+    "resolved_path": "/usr/bin/x86_64-linux-gnu-objdump",
+    "sha256": "d0041e7511460b9ebfd95ce4f9d93c7ffea398ffc1cb2c316a220dd8e533db3d",
+    "symlink_target": "x86_64-linux-gnu-objdump"
+  },
+  "passed": true,
+  "reused_stock_native_disassembly": {
+    "bytes": 11619912,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/files/out/portable-divide-fp32-estimate-jit/cost-review/stock-native.txt",
+    "sha256": "f9d4e5a008dbec517bbc592035c2b806eba981830087c11500638754c284bb97",
+    "symlink_target": null
+  },
+  "schema": "sirius-fp32-restoring-root-native-cost-inputs-v1",
+  "scope": "One root-operated static objdump of the captured actual called object; source/opcode/frame counts for passive cost review only. No provider/arithmetic/benefit repeat or dynamic path-frequency/cycles/memory traffic claim.",
+  "utc": "2026-10-15T03:05:17.951590+00:00"
+}

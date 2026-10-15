@@ -1,0 +1,1269 @@
+{
+  "actual_called_join": {
+    "actual_loaded_module": {
+      "actual_span_matches_frozen_input": true,
+      "bytes": 154100,
+      "sha256": "93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f",
+      "words": 38525
+    },
+    "allocated_sections_and_relocations": {
+      "file": "jit-10.elf",
+      "live_sections": [
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 929925,
+          "changed_bytes": 31432,
+          "name": ".ltext",
+          "relocation_field_bytes": 42472
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 96,
+          "changed_bytes": 0,
+          "name": ".rodata.cst32",
+          "relocation_field_bytes": 0
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 48,
+          "changed_bytes": 0,
+          "name": ".rodata.cst16",
+          "relocation_field_bytes": 0
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 468,
+          "changed_bytes": 0,
+          "name": ".rodata.cst4",
+          "relocation_field_bytes": 0
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 80,
+          "changed_bytes": 60,
+          "name": ".rodata",
+          "relocation_field_bytes": 80
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 256,
+          "changed_bytes": 32,
+          "name": ".eh_frame",
+          "relocation_field_bytes": 32
+        }
+      ],
+      "relocation_counts": {
+        "1": 5319,
+        "24": 4
+      },
+      "undefined_callback_targets_consistent": {
+        "coro_free": 130546929921120,
+        "coro_malloc": 130546929921136
+      },
+      "undefined_callback_targets_independently_resolved": false,
+      "variant": "endpoint-normal"
+    },
+    "entry": {
+      "actual_entry_pc": 130546679234560,
+      "buffers": [
+        0,
+        1
+      ],
+      "dispatch_id": 0,
+      "file": "jit-10.elf",
+      "function": {
+        "address": 130546679234560,
+        "bytes": 314,
+        "name": "cs_variant",
+        "offset": 0,
+        "section": 3
+      },
+      "kernel": 0,
+      "worker_thread": 34
+    },
+    "four_JIT_functions": [
+      {
+        "address": 130546679259040,
+        "bytes": 905432,
+        "name": "cs_co_variant.resume",
+        "offset": 24480,
+        "section": 3
+      },
+      {
+        "address": 130546680164480,
+        "bytes": 5,
+        "name": "cs_co_variant.destroy",
+        "offset": 929920,
+        "section": 3
+      },
+      {
+        "address": 130546679234560,
+        "bytes": 314,
+        "name": "cs_variant",
+        "offset": 0,
+        "section": 3
+      },
+      {
+        "address": 130546679234880,
+        "bytes": 24157,
+        "name": "cs_co_variant",
+        "offset": 320,
+        "section": 3
+      }
+    ],
+    "ordinary_pipelines": [
+      "default<O0>",
+      "sroa,early-cse,simplifycfg,reassociate,mem2reg,instsimplify,instcombine<no-verify-fixpoint>"
+    ],
+    "scope": "Called short-input entry binds this whole object and its ordinary optimized IR; the canary exits before retained arithmetic. Undefined callbacks consistency only."
+  },
+  "all_six_clones": [
+    {
+      "IR": {
+        "digit16_frame_load": {
+          "line": 64642,
+          "text": "%ssa_22948 = load <8 x i32>, ptr %reg1909.reload.addr, align 32"
+        },
+        "final_q": {
+          "line": 64666,
+          "text": "%ssa_22977 = add <8 x i32> %ssa_22976, %ssa_22924"
+        },
+        "final_residual_nonzero_fold": {
+          "line": 64667,
+          "text": "%ssa_22978 = icmp ne <8 x i32> %ssa_22968, %ssa_22972"
+        },
+        "five_threshold_decisions": [
+          {
+            "line": 64639,
+            "text": "%ssa_22944.not = icmp ult <8 x i32> %ssa_22931, %ssa_22943"
+          },
+          {
+            "line": 64645,
+            "text": "%ssa_22951.not = icmp ult <8 x i32> %ssa_22947, %ssa_22950"
+          },
+          {
+            "line": 64650,
+            "text": "%ssa_22958.not = icmp ult <8 x i32> %ssa_22954, %ssa_22957"
+          },
+          {
+            "line": 64655,
+            "text": "%ssa_22965.not = icmp ult <8 x i32> %ssa_22961, %ssa_22964"
+          },
+          {
+            "line": 64659,
+            "text": "%ssa_22971 = icmp uge <8 x i32> %ssa_22968, %ssa_22889"
+          }
+        ],
+        "original_four_fallback_UDiv": [
+          {
+            "line": 64802,
+            "text": "%25402 = udiv <8 x i32> %ssa_23043, %ssa_22889"
+          },
+          {
+            "line": 64806,
+            "text": "%25404 = udiv <8 x i32> %ssa_23050, %ssa_22889"
+          },
+          {
+            "line": 64813,
+            "text": "%25406 = udiv <8 x i32> %ssa_23057, %ssa_22889"
+          },
+          {
+            "line": 64817,
+            "text": "%25408 = udiv <8 x i32> %ssa_23064, %ssa_22889"
+          }
+        ],
+        "proposal": {
+          "line": 64584,
+          "text": "%ssa_22916 = fdiv <8 x float> %25324, %25325"
+        },
+        "sticky": {
+          "line": 64669,
+          "text": "%ssa_22980 = or <8 x i32> %ssa_22977, %ssa_22979"
+        }
+      },
+      "clone": 1,
+      "function": "cs_co_variant.resume",
+      "lanes": 8,
+      "native": {
+        "core_per_step_branches": 0,
+        "corrective_DIV": 0,
+        "corrective_region_calls": 0,
+        "digit16_frame_source": {
+          "instruction": "vpor   ymm8,ymm4,YMMWORD PTR [rdi+0x8880]",
+          "line": 42373,
+          "pc": "0x76bb44756550"
+        },
+        "exact_residual_reject": {
+          "instruction": "je     76bb447566e3 <cs_co_variant.resume+0x3c743>",
+          "line": 42343,
+          "pc": "0x76bb44756496"
+        },
+        "fallback_skip_branch": {
+          "instruction": "je     76bb44756c54 <cs_co_variant.resume+0x3ccb4>",
+          "line": 42447,
+          "pc": "0x76bb44756736"
+        },
+        "first_fallback_DIV": {
+          "instruction": "div    r13d",
+          "line": 42459,
+          "pc": "0x76bb4475677a"
+        },
+        "five_threshold_decisions": [
+          {
+            "instruction": "vpcmpltud k2,ymm18,ymm2",
+            "line": 42348,
+            "pc": "0x76bb447564ba"
+          },
+          {
+            "instruction": "vpcmpltud k3,ymm2,ymm4",
+            "line": 42351,
+            "pc": "0x76bb447564cd"
+          },
+          {
+            "instruction": "vpcmpltud k4,ymm4,ymm2",
+            "line": 42355,
+            "pc": "0x76bb447564e5"
+          },
+          {
+            "instruction": "vpcmpltud k4,ymm2,ymm7",
+            "line": 42361,
+            "pc": "0x76bb4475650c"
+          },
+          {
+            "instruction": "vpcmpnltud k5,ymm7,ymm21",
+            "line": 42364,
+            "pc": "0x76bb4475651d"
+          }
+        ],
+        "last_fallback_DIV": {
+          "instruction": "div    DWORD PTR [rsp+0x10]",
+          "line": 42629,
+          "pc": "0x76bb44756a9c"
+        },
+        "original_fallback_DIV_packet": 32,
+        "proposal": {
+          "instruction": "vdivps ymm2,ymm2,ymm6",
+          "line": 42303,
+          "pc": "0x76bb44756391"
+        },
+        "proposal_range_reject": {
+          "instruction": "je     76bb447566e3 <cs_co_variant.resume+0x3c743>",
+          "line": 42309,
+          "pc": "0x76bb447563b2"
+        }
+      },
+      "scope": "Static exact-guarded fast path versus full fallback. SIMD accepted-mask work and unfinished-mask fallback can both execute for a mixed group; no accepted-lane frequency observed."
+    },
+    {
+      "IR": {
+        "digit16_frame_load": {
+          "line": 92704,
+          "text": "%ssa_33665 = load <8 x i32>, ptr %reg1909.reload.addr, align 32"
+        },
+        "final_q": {
+          "line": 92728,
+          "text": "%ssa_33694 = add <8 x i32> %ssa_33693, %ssa_33641"
+        },
+        "final_residual_nonzero_fold": {
+          "line": 92729,
+          "text": "%ssa_33695 = icmp ne <8 x i32> %ssa_33685, %ssa_33689"
+        },
+        "five_threshold_decisions": [
+          {
+            "line": 92701,
+            "text": "%ssa_33661.not = icmp ult <8 x i32> %ssa_33648, %ssa_33660"
+          },
+          {
+            "line": 92707,
+            "text": "%ssa_33668.not = icmp ult <8 x i32> %ssa_33664, %ssa_33667"
+          },
+          {
+            "line": 92712,
+            "text": "%ssa_33675.not = icmp ult <8 x i32> %ssa_33671, %ssa_33674"
+          },
+          {
+            "line": 92717,
+            "text": "%ssa_33682.not = icmp ult <8 x i32> %ssa_33678, %ssa_33681"
+          },
+          {
+            "line": 92721,
+            "text": "%ssa_33688 = icmp uge <8 x i32> %ssa_33685, %ssa_33606"
+          }
+        ],
+        "original_four_fallback_UDiv": [
+          {
+            "line": 92863,
+            "text": "%37415 = udiv <8 x i32> %ssa_33764, %ssa_33606"
+          },
+          {
+            "line": 92867,
+            "text": "%37417 = udiv <8 x i32> %ssa_33771, %ssa_33606"
+          },
+          {
+            "line": 92874,
+            "text": "%37419 = udiv <8 x i32> %ssa_33778, %ssa_33606"
+          },
+          {
+            "line": 92878,
+            "text": "%37421 = udiv <8 x i32> %ssa_33785, %ssa_33606"
+          }
+        ],
+        "proposal": {
+          "line": 92646,
+          "text": "%ssa_33633 = fdiv <8 x float> %37337, %37338"
+        },
+        "sticky": {
+          "line": 92731,
+          "text": "%ssa_33697 = or <8 x i32> %ssa_33694, %ssa_33696"
+        }
+      },
+      "clone": 2,
+      "function": "cs_co_variant.resume",
+      "lanes": 8,
+      "native": {
+        "core_per_step_branches": 0,
+        "corrective_DIV": 0,
+        "corrective_region_calls": 0,
+        "digit16_frame_source": {
+          "instruction": "vpor   ymm4,ymm2,YMMWORD PTR [rdi+0x8880]",
+          "line": 61160,
+          "pc": "0x76bb4477465b"
+        },
+        "exact_residual_reject": {
+          "instruction": "je     76bb447747ea <cs_co_variant.resume+0x5a84a>",
+          "line": 61124,
+          "pc": "0x76bb44774583"
+        },
+        "fallback_skip_branch": {
+          "instruction": "je     76bb44774d10 <cs_co_variant.resume+0x5ad70>",
+          "line": 61235,
+          "pc": "0x76bb4477483b"
+        },
+        "first_fallback_DIV": {
+          "instruction": "div    esi",
+          "line": 61246,
+          "pc": "0x76bb44774877"
+        },
+        "five_threshold_decisions": [
+          {
+            "instruction": "vpcmpltud k5,ymm9,ymm0",
+            "line": 61131,
+            "pc": "0x76bb447745af"
+          },
+          {
+            "instruction": "vpcmpltud k7,ymm0,ymm2",
+            "line": 61134,
+            "pc": "0x76bb447745c0"
+          },
+          {
+            "instruction": "vpcmpltud k5,ymm2,ymm0",
+            "line": 61139,
+            "pc": "0x76bb447745dd"
+          },
+          {
+            "instruction": "vpcmpltud k5,ymm0,ymm3",
+            "line": 61145,
+            "pc": "0x76bb44774604"
+          },
+          {
+            "instruction": "vpcmpnltud k6,ymm3,ymm14",
+            "line": 61148,
+            "pc": "0x76bb44774615"
+          }
+        ],
+        "last_fallback_DIV": {
+          "instruction": "div    r13d",
+          "line": 61417,
+          "pc": "0x76bb44774b58"
+        },
+        "original_fallback_DIV_packet": 32,
+        "proposal": {
+          "instruction": "vdivps ymm4,ymm3,ymm6",
+          "line": 61085,
+          "pc": "0x76bb44774491"
+        },
+        "proposal_range_reject": {
+          "instruction": "je     76bb447747ea <cs_co_variant.resume+0x5a84a>",
+          "line": 61090,
+          "pc": "0x76bb447744ac"
+        }
+      },
+      "scope": "Static exact-guarded fast path versus full fallback. SIMD accepted-mask work and unfinished-mask fallback can both execute for a mixed group; no accepted-lane frequency observed."
+    },
+    {
+      "IR": {
+        "digit16_frame_load": {
+          "line": 136615,
+          "text": "%ssa_47267 = load <8 x i32>, ptr %reg1909.reload.addr, align 32"
+        },
+        "final_q": {
+          "line": 136642,
+          "text": "%ssa_47296 = add i32 %ssa_47295, %ssa_47243"
+        },
+        "final_residual_nonzero_fold": {
+          "line": 136643,
+          "text": "%ssa_47297 = icmp ne i32 %ssa_47287, %ssa_47291"
+        },
+        "five_threshold_decisions": [
+          {
+            "line": 136612,
+            "text": "%ssa_47263.not = icmp ult i32 %ssa_47250, %ssa_47262"
+          },
+          {
+            "line": 136621,
+            "text": "%ssa_47270.not = icmp ult i32 %ssa_47266, %ssa_47269"
+          },
+          {
+            "line": 136626,
+            "text": "%ssa_47277.not = icmp ult i32 %ssa_47273, %ssa_47276"
+          },
+          {
+            "line": 136631,
+            "text": "%ssa_47284.not = icmp ult i32 %ssa_47280, %ssa_47283"
+          },
+          {
+            "line": 136635,
+            "text": "%ssa_47290 = icmp uge i32 %ssa_47287, %ssa_47208"
+          }
+        ],
+        "original_four_fallback_UDiv": [
+          {
+            "line": 136818,
+            "text": "%58960 = udiv i32 %ssa_47363, %ssa_47208"
+          },
+          {
+            "line": 136822,
+            "text": "%58961 = udiv i32 %ssa_47370, %ssa_47208"
+          },
+          {
+            "line": 136826,
+            "text": "%58962 = udiv i32 %ssa_47377, %ssa_47208"
+          },
+          {
+            "line": 136834,
+            "text": "%58965 = udiv i32 %ssa_47384, %ssa_47208"
+          }
+        ],
+        "proposal": {
+          "line": 136553,
+          "text": "%ssa_47235 = fdiv float %58847, %58848"
+        },
+        "sticky": {
+          "line": 136645,
+          "text": "%ssa_47299 = or i32 %ssa_47296, %ssa_47298"
+        }
+      },
+      "clone": 3,
+      "function": "cs_co_variant.resume",
+      "lanes": 1,
+      "native": {
+        "core_per_step_branches": 0,
+        "corrective_DIV": 0,
+        "corrective_region_calls": 0,
+        "digit16_frame_source": {
+          "instruction": "mov    esi,DWORD PTR [rdi+rcx*4+0x8880]",
+          "line": 92991,
+          "pc": "0x76bb4479fb91"
+        },
+        "exact_residual_reject": {
+          "instruction": "je     76bb4479fdb3 <cs_co_variant.resume+0x85e13>",
+          "line": 92979,
+          "pc": "0x76bb4479fb5e"
+        },
+        "fallback_skip_branch": {
+          "instruction": "je     76bb447a0053 <cs_co_variant.resume+0x860b3>",
+          "line": 93137,
+          "pc": "0x76bb4479fe42"
+        },
+        "first_fallback_DIV": {
+          "instruction": "div    r13d",
+          "line": 93143,
+          "pc": "0x76bb4479fe58"
+        },
+        "five_threshold_decisions": [
+          {
+            "instruction": "cmp    edx,r8d",
+            "line": 92990,
+            "pc": "0x76bb4479fb8e"
+          },
+          {
+            "instruction": "cmp    edx,ecx",
+            "line": 92998,
+            "pc": "0x76bb4479fbb3"
+          },
+          {
+            "instruction": "cmp    edx,ecx",
+            "line": 93005,
+            "pc": "0x76bb4479fbce"
+          },
+          {
+            "instruction": "cmp    edx,ecx",
+            "line": 93013,
+            "pc": "0x76bb4479fbea"
+          },
+          {
+            "instruction": "cmp    edx,r13d",
+            "line": 93020,
+            "pc": "0x76bb4479fbfe"
+          }
+        ],
+        "last_fallback_DIV": {
+          "instruction": "div    r13d",
+          "line": 93169,
+          "pc": "0x76bb4479fea4"
+        },
+        "original_fallback_DIV_packet": 4,
+        "proposal": {
+          "instruction": "vdivss xmm0,xmm0,xmm3",
+          "line": 92933,
+          "pc": "0x76bb4479fa8a"
+        },
+        "proposal_range_reject": {
+          "instruction": "je     76bb4479fdb3 <cs_co_variant.resume+0x85e13>",
+          "line": 92943,
+          "pc": "0x76bb4479fab6"
+        }
+      },
+      "scope": "Static exact-guarded fast path versus full fallback. SIMD accepted-mask work and unfinished-mask fallback can both execute for a mixed group; no accepted-lane frequency observed."
+    },
+    {
+      "IR": {
+        "digit16_frame_load": {
+          "line": 169477,
+          "text": "%ssa_56927 = load <8 x i32>, ptr %reg1909.reload.addr, align 32"
+        },
+        "final_q": {
+          "line": 169504,
+          "text": "%ssa_56956 = add i32 %ssa_56955, %ssa_56903"
+        },
+        "final_residual_nonzero_fold": {
+          "line": 169505,
+          "text": "%ssa_56957 = icmp ne i32 %ssa_56947, %ssa_56951"
+        },
+        "five_threshold_decisions": [
+          {
+            "line": 169474,
+            "text": "%ssa_56923.not = icmp ult i32 %ssa_56910, %ssa_56922"
+          },
+          {
+            "line": 169483,
+            "text": "%ssa_56930.not = icmp ult i32 %ssa_56926, %ssa_56929"
+          },
+          {
+            "line": 169488,
+            "text": "%ssa_56937.not = icmp ult i32 %ssa_56933, %ssa_56936"
+          },
+          {
+            "line": 169493,
+            "text": "%ssa_56944.not = icmp ult i32 %ssa_56940, %ssa_56943"
+          },
+          {
+            "line": 169497,
+            "text": "%ssa_56950 = icmp uge i32 %ssa_56947, %ssa_56868"
+          }
+        ],
+        "original_four_fallback_UDiv": [
+          {
+            "line": 169680,
+            "text": "%75533 = udiv i32 %ssa_57023, %ssa_56868"
+          },
+          {
+            "line": 169684,
+            "text": "%75534 = udiv i32 %ssa_57030, %ssa_56868"
+          },
+          {
+            "line": 169688,
+            "text": "%75535 = udiv i32 %ssa_57037, %ssa_56868"
+          },
+          {
+            "line": 169696,
+            "text": "%75538 = udiv i32 %ssa_57044, %ssa_56868"
+          }
+        ],
+        "proposal": {
+          "line": 169415,
+          "text": "%ssa_56895 = fdiv float %75420, %75421"
+        },
+        "sticky": {
+          "line": 169507,
+          "text": "%ssa_56959 = or i32 %ssa_56956, %ssa_56958"
+        }
+      },
+      "clone": 4,
+      "function": "cs_co_variant.resume",
+      "lanes": 1,
+      "native": {
+        "core_per_step_branches": 0,
+        "corrective_DIV": 0,
+        "corrective_region_calls": 0,
+        "digit16_frame_source": {
+          "instruction": "mov    esi,DWORD PTR [rdi+rcx*4+0x8880]",
+          "line": 117528,
+          "pc": "0x76bb447bf13a"
+        },
+        "exact_residual_reject": {
+          "instruction": "je     76bb447bf361 <cs_co_variant.resume+0xa53c1>",
+          "line": 117518,
+          "pc": "0x76bb447bf110"
+        },
+        "fallback_skip_branch": {
+          "instruction": "je     76bb447bf600 <cs_co_variant.resume+0xa5660>",
+          "line": 117675,
+          "pc": "0x76bb447bf3ea"
+        },
+        "first_fallback_DIV": {
+          "instruction": "div    r9d",
+          "line": 117681,
+          "pc": "0x76bb447bf3fe"
+        },
+        "five_threshold_decisions": [
+          {
+            "instruction": "cmp    edx,r8d",
+            "line": 117527,
+            "pc": "0x76bb447bf137"
+          },
+          {
+            "instruction": "cmp    edx,ecx",
+            "line": 117538,
+            "pc": "0x76bb447bf168"
+          },
+          {
+            "instruction": "cmp    edx,ecx",
+            "line": 117545,
+            "pc": "0x76bb447bf183"
+          },
+          {
+            "instruction": "cmp    edx,ecx",
+            "line": 117552,
+            "pc": "0x76bb447bf19a"
+          },
+          {
+            "instruction": "cmp    edx,r9d",
+            "line": 117559,
+            "pc": "0x76bb447bf1af"
+          }
+        ],
+        "last_fallback_DIV": {
+          "instruction": "div    r9d",
+          "line": 117707,
+          "pc": "0x76bb447bf441"
+        },
+        "original_fallback_DIV_packet": 4,
+        "proposal": {
+          "instruction": "vdivss xmm0,xmm0,xmm3",
+          "line": 117472,
+          "pc": "0x76bb447bf042"
+        },
+        "proposal_range_reject": {
+          "instruction": "je     76bb447bf361 <cs_co_variant.resume+0xa53c1>",
+          "line": 117482,
+          "pc": "0x76bb447bf06e"
+        }
+      },
+      "scope": "Static exact-guarded fast path versus full fallback. SIMD accepted-mask work and unfinished-mask fallback can both execute for a mixed group; no accepted-lane frequency observed."
+    },
+    {
+      "IR": {
+        "digit16_frame_load": {
+          "line": 184235,
+          "text": "%ssa_61648 = load <8 x i32>, ptr %reg1909.reload.addr, align 32"
+        },
+        "final_q": {
+          "line": 184259,
+          "text": "%ssa_61677 = add <8 x i32> %ssa_61676, %ssa_61624"
+        },
+        "final_residual_nonzero_fold": {
+          "line": 184260,
+          "text": "%ssa_61678 = icmp ne <8 x i32> %ssa_61668, %ssa_61672"
+        },
+        "five_threshold_decisions": [
+          {
+            "line": 184232,
+            "text": "%ssa_61644.not = icmp ult <8 x i32> %ssa_61631, %ssa_61643"
+          },
+          {
+            "line": 184238,
+            "text": "%ssa_61651.not = icmp ult <8 x i32> %ssa_61647, %ssa_61650"
+          },
+          {
+            "line": 184243,
+            "text": "%ssa_61658.not = icmp ult <8 x i32> %ssa_61654, %ssa_61657"
+          },
+          {
+            "line": 184248,
+            "text": "%ssa_61665.not = icmp ult <8 x i32> %ssa_61661, %ssa_61664"
+          },
+          {
+            "line": 184252,
+            "text": "%ssa_61671 = icmp uge <8 x i32> %ssa_61668, %ssa_61589"
+          }
+        ],
+        "original_four_fallback_UDiv": [
+          {
+            "line": 184395,
+            "text": "%82907 = udiv <8 x i32> %ssa_61743, %ssa_61589"
+          },
+          {
+            "line": 184399,
+            "text": "%82909 = udiv <8 x i32> %ssa_61750, %ssa_61589"
+          },
+          {
+            "line": 184406,
+            "text": "%82911 = udiv <8 x i32> %ssa_61757, %ssa_61589"
+          },
+          {
+            "line": 184410,
+            "text": "%82913 = udiv <8 x i32> %ssa_61764, %ssa_61589"
+          }
+        ],
+        "proposal": {
+          "line": 184177,
+          "text": "%ssa_61616 = fdiv <8 x float> %82829, %82830"
+        },
+        "sticky": {
+          "line": 184262,
+          "text": "%ssa_61680 = or <8 x i32> %ssa_61677, %ssa_61679"
+        }
+      },
+      "clone": 5,
+      "function": "cs_co_variant.resume",
+      "lanes": 8,
+      "native": {
+        "core_per_step_branches": 0,
+        "corrective_DIV": 0,
+        "corrective_region_calls": 0,
+        "digit16_frame_source": {
+          "instruction": "vpord  ymm20,ymm5,YMMWORD PTR [rdi+0x8880]",
+          "line": 127793,
+          "pc": "0x76bb447cda0f"
+        },
+        "exact_residual_reject": {
+          "instruction": "je     76bb447cdb98 <cs_co_variant.resume+0xb3bf8>",
+          "line": 127761,
+          "pc": "0x76bb447cd946"
+        },
+        "fallback_skip_branch": {
+          "instruction": "je     76bb447ce0be <cs_co_variant.resume+0xb411e>",
+          "line": 127866,
+          "pc": "0x76bb447cdbeb"
+        },
+        "first_fallback_DIV": {
+          "instruction": "div    r13d",
+          "line": 127875,
+          "pc": "0x76bb447cdc1a"
+        },
+        "five_threshold_decisions": [
+          {
+            "instruction": "vpcmpltud k1,ymm20,ymm3",
+            "line": 127767,
+            "pc": "0x76bb447cd96c"
+          },
+          {
+            "instruction": "vpcmpltud k2,ymm3,ymm5",
+            "line": 127771,
+            "pc": "0x76bb447cd989"
+          },
+          {
+            "instruction": "vpcmpltud k3,ymm5,ymm3",
+            "line": 127775,
+            "pc": "0x76bb447cd9a0"
+          },
+          {
+            "instruction": "vpcmpltud k3,ymm3,ymm10",
+            "line": 127781,
+            "pc": "0x76bb447cd9c7"
+          },
+          {
+            "instruction": "vpcmpnltud k4,ymm10,ymm13",
+            "line": 127784,
+            "pc": "0x76bb447cd9d9"
+          }
+        ],
+        "last_fallback_DIV": {
+          "instruction": "div    DWORD PTR [rsp+0xc]",
+          "line": 128045,
+          "pc": "0x76bb447cdf08"
+        },
+        "original_fallback_DIV_packet": 32,
+        "proposal": {
+          "instruction": "vdivps ymm3,ymm3,ymm0",
+          "line": 127720,
+          "pc": "0x76bb447cd83f"
+        },
+        "proposal_range_reject": {
+          "instruction": "je     76bb447cdb98 <cs_co_variant.resume+0xb3bf8>",
+          "line": 127726,
+          "pc": "0x76bb447cd860"
+        }
+      },
+      "scope": "Static exact-guarded fast path versus full fallback. SIMD accepted-mask work and unfinished-mask fallback can both execute for a mixed group; no accepted-lane frequency observed."
+    },
+    {
+      "IR": {
+        "digit16_frame_load": {
+          "line": 212295,
+          "text": "%ssa_72354 = load <8 x i32>, ptr %reg1909.reload.addr, align 32"
+        },
+        "final_q": {
+          "line": 212319,
+          "text": "%ssa_72383 = add <8 x i32> %ssa_72382, %ssa_72330"
+        },
+        "final_residual_nonzero_fold": {
+          "line": 212320,
+          "text": "%ssa_72384 = icmp ne <8 x i32> %ssa_72374, %ssa_72378"
+        },
+        "five_threshold_decisions": [
+          {
+            "line": 212292,
+            "text": "%ssa_72350.not = icmp ult <8 x i32> %ssa_72337, %ssa_72349"
+          },
+          {
+            "line": 212298,
+            "text": "%ssa_72357.not = icmp ult <8 x i32> %ssa_72353, %ssa_72356"
+          },
+          {
+            "line": 212303,
+            "text": "%ssa_72364.not = icmp ult <8 x i32> %ssa_72360, %ssa_72363"
+          },
+          {
+            "line": 212308,
+            "text": "%ssa_72371.not = icmp ult <8 x i32> %ssa_72367, %ssa_72370"
+          },
+          {
+            "line": 212312,
+            "text": "%ssa_72377 = icmp uge <8 x i32> %ssa_72374, %ssa_72295"
+          }
+        ],
+        "original_four_fallback_UDiv": [
+          {
+            "line": 212454,
+            "text": "%94919 = udiv <8 x i32> %ssa_72453, %ssa_72295"
+          },
+          {
+            "line": 212458,
+            "text": "%94921 = udiv <8 x i32> %ssa_72460, %ssa_72295"
+          },
+          {
+            "line": 212465,
+            "text": "%94923 = udiv <8 x i32> %ssa_72467, %ssa_72295"
+          },
+          {
+            "line": 212469,
+            "text": "%94925 = udiv <8 x i32> %ssa_72474, %ssa_72295"
+          }
+        ],
+        "proposal": {
+          "line": 212237,
+          "text": "%ssa_72322 = fdiv <8 x float> %94841, %94842"
+        },
+        "sticky": {
+          "line": 212322,
+          "text": "%ssa_72386 = or <8 x i32> %ssa_72383, %ssa_72385"
+        }
+      },
+      "clone": 6,
+      "function": "cs_co_variant.resume",
+      "lanes": 8,
+      "native": {
+        "core_per_step_branches": 0,
+        "corrective_DIV": 0,
+        "corrective_region_calls": 0,
+        "digit16_frame_source": {
+          "instruction": "vpor   ymm10,ymm8,YMMWORD PTR [rdi+0x8880]",
+          "line": 146675,
+          "pc": "0x76bb447eb888"
+        },
+        "exact_residual_reject": {
+          "instruction": "je     76bb447eba16 <cs_co_variant.resume+0xd1a76>",
+          "line": 146638,
+          "pc": "0x76bb447eb7a1"
+        },
+        "fallback_skip_branch": {
+          "instruction": "je     76bb447ebf60 <cs_co_variant.resume+0xd1fc0>",
+          "line": 146750,
+          "pc": "0x76bb447eba68"
+        },
+        "first_fallback_DIV": {
+          "instruction": "div    r8d",
+          "line": 146761,
+          "pc": "0x76bb447ebaa8"
+        },
+        "five_threshold_decisions": [
+          {
+            "instruction": "vpcmpltud k5,ymm9,ymm5",
+            "line": 146645,
+            "pc": "0x76bb447eb7d0"
+          },
+          {
+            "instruction": "vpcmpltud k7,ymm5,ymm8",
+            "line": 146649,
+            "pc": "0x76bb447eb7eb"
+          },
+          {
+            "instruction": "vpcmpltud k5,ymm8,ymm5",
+            "line": 146655,
+            "pc": "0x76bb447eb810"
+          },
+          {
+            "instruction": "vpcmpltud k5,ymm5,ymm9",
+            "line": 146661,
+            "pc": "0x76bb447eb837"
+          },
+          {
+            "instruction": "vpcmpnltud k6,ymm9,ymm16",
+            "line": 146664,
+            "pc": "0x76bb447eb849"
+          }
+        ],
+        "last_fallback_DIV": {
+          "instruction": "div    r13d",
+          "line": 146932,
+          "pc": "0x76bb447ebd9b"
+        },
+        "original_fallback_DIV_packet": 32,
+        "proposal": {
+          "instruction": "vdivps ymm5,ymm5,ymm0",
+          "line": 146598,
+          "pc": "0x76bb447eb69f"
+        },
+        "proposal_range_reject": {
+          "instruction": "je     76bb447eba16 <cs_co_variant.resume+0xd1a76>",
+          "line": 146603,
+          "pc": "0x76bb447eb6ba"
+        }
+      },
+      "scope": "Static exact-guarded fast path versus full fallback. SIMD accepted-mask work and unfinished-mask fallback can both execute for a mixed group; no accepted-lane frequency observed."
+    }
+  ],
+  "authorship": {
+    "JIT_source_author": "/root/forensic_obligations",
+    "capture_objdump_and_terminal_reader_operator": "/root",
+    "method": "Passive saved source/IR/native/JSON/hash reads only; no authored helper/parser/analyzer/tool/compiler/provider/test/API/benchmark executed.",
+    "reviewer": "/root/divide_contract_review; authored prior restoring graph and reviewed JIT sources, not independent raw production"
+  },
+  "complete_call_closure": {
+    "defined_functions": [
+      "cs_variant",
+      "cs_co_variant",
+      "cs_co_variant.resume",
+      "cs_co_variant.destroy"
+    ],
+    "native_resume_calls": 0,
+    "native_whole_calls": 5,
+    "new_outlined_arithmetic_helper": false,
+    "original_fallback_present": true
+  },
+  "countercosts": [
+    "Stock\u2192restoring text+7328B/resume+7170B/object+10320B, coroutine frame+448B, fixed resume stack+96B.",
+    "Stock\u2192restoring+1210 static instructions/+77 RSP/RBP-memory-operand instructions; these are not dynamic traffic, measured spills or register pressure.",
+    "Five serial threshold/subtract decisions, mask/permutation/frame16 operations and scalar active-lane extraction remain, plus4vdivps/2vdivss proposal instructions.",
+    "Prior corrective-UDiv\u2192restoring removes34 native DIV/6LLVMUDiv and1120textB/928objectB, but adds34 static instructions/26 static memory-operand instructions. No speed implication."
+  ],
+  "decision": "COST_PREMISE_SURVIVES_UNPROVEN",
+  "input_pins": [
+    {
+      "bytes": 8313,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/cost-review/root-native-cost-inputs.json",
+      "sha256": "f32ae7cfbccf4ee550b3419e28267c7262caeac19eb68f1d9a546f64a6a75067"
+    },
+    {
+      "bytes": 10741492,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/cost-review/candidate-native.txt",
+      "sha256": "7417e37f6e8cd5243b43734cd9d9188814a631d5041e8fd67bd81988320c3c5c"
+    },
+    {
+      "bytes": 13327510,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/optimized-05.ll",
+      "sha256": "7ffdb8ab87778be52161852710c0c1fa797e6c2a656794c11ef76d09bb83ca0e"
+    },
+    {
+      "bytes": 1060152,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/jit-10.elf",
+      "sha256": "99a6b55c863837080e9154357edbc17554845ae35888763a7bf30863e39e02de"
+    },
+    {
+      "bytes": 4352,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/actual-code-review.json",
+      "sha256": "572b274f55c052491fe062cc1882d80b67db5443daae5ded187d73ad95e8fc8f"
+    },
+    {
+      "bytes": 8084,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/owner.json",
+      "sha256": "a7dfd0a28eb3cf9e7614e66431dfa8a62b3495adba8f111d6669a157eaff5576"
+    },
+    {
+      "bytes": 2161,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/capture-candidate-endpoint-normal/feature-review.json",
+      "sha256": "759cdfab0f7a6ae5474bab88db568c25313f9aa578c409b725eff29e09519b09"
+    },
+    {
+      "bytes": 14399,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/independent-terminal-review.json",
+      "sha256": "e79dae832b30765138b4f118e8c4725a4ad949107b4db8c815d06721a7995f52"
+    },
+    {
+      "bytes": 2629,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/root-terminal-admission.json",
+      "sha256": "7b401fd0692554e4873c98bd5bd2d684dc47b552b19ef8c55c20e5c09f1ed5f2"
+    },
+    {
+      "bytes": 10793,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/reuse-acceptance.json",
+      "sha256": "217272396141fe24a974d2003ba627c010231caf4a16fc36096306f7b72a2ea0"
+    },
+    {
+      "bytes": 351902,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/source-freeze.json",
+      "sha256": "8c427e762aa832d13d4b6dfdb7bcbedf975a5287a597606dd947f4e6e4630b6d"
+    },
+    {
+      "bytes": 11720,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/independent-source-review.json",
+      "sha256": "6b8759444b1fa345721d7f68cb732d1d6a5c843e246b4a60255aa42cf887e803"
+    },
+    {
+      "bytes": 44472,
+      "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/root-future-profile-source-review.json",
+      "sha256": "fda8cdc3ce58d39c31dd60bfc389f76a3789ccf32066fbaddab50f282d7d0f11"
+    },
+    {
+      "bytes": 13237373,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll",
+      "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7"
+    },
+    {
+      "bytes": 1049832,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf",
+      "sha256": "58c4804b40c66140fed74b37cbdb125fafd978f619dcc219317d33ebffc022bb"
+    },
+    {
+      "bytes": 4344,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json",
+      "sha256": "3e940e57eda3be646422b9e6ae632dc56ef283b3f48d8c32e140a6107a74dbaa"
+    },
+    {
+      "bytes": 76283,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/files/out/portable-divide-fp32-estimate-jit/cost-review/cost-premise-review.json",
+      "sha256": "d1ada19a47e5f8ac4859f6a90718af23733e3e70d84de39aa36bbcfcc1b0d6ca"
+    },
+    {
+      "bytes": 11619912,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/files/out/portable-divide-fp32-estimate-jit/cost-review/stock-native.txt",
+      "sha256": "f9d4e5a008dbec517bbc592035c2b806eba981830087c11500638754c284bb97"
+    },
+    {
+      "bytes": 33703,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/manifest.json",
+      "sha256": "718e5ce448d725b547b67a8c95cebac234be7d6d95c801268d616d3cb9cadf94"
+    },
+    {
+      "bytes": 16245,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/manifest.json",
+      "sha256": "d3c485e50c63d7f2270181d072e1b2b0b550a9b8a303a44d5765a42e78312b4c"
+    },
+    {
+      "bytes": 16103,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/candidate/src/sirius/kernels/portable_binary32.h",
+      "sha256": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca"
+    },
+    {
+      "bytes": 1296,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/compiler-producer-acceptance.json",
+      "sha256": "0e3468b81a41f8dee39b65509651642540fc4e876e9136238343112731d3d319"
+    },
+    {
+      "bytes": 6866,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/compiler-products.json",
+      "sha256": "e1a46464187f4968489abd1d34511098a0f5ae4dcdf8d37d7a74ca60ff819832"
+    },
+    {
+      "bytes": 10008,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-graph-review/manifest.json",
+      "sha256": "0c20cbf4a9a0b03a5c21d65740317afd8000d32c834bcf7f10530ff4ba6fffce"
+    },
+    {
+      "bytes": 25099,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-graph-review/files/out/portable-divide-fp32-estimate-restoring-graph-review/graph-result.json",
+      "sha256": "ec5ae54bd7f6200429797d301a0174557fc9281c4922bdea4508bb8c01eea535"
+    },
+    {
+      "bytes": 12835,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-graph-review/files/out/portable-divide-fp32-estimate-restoring-graph-review/graph-acceptance.json",
+      "sha256": "fe80d061311a60b8d784965087c23fb0184724554f15aab829424dda8759f940"
+    },
+    {
+      "bytes": 14851,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-graph-review/files/out/portable-divide-fp32-estimate-restoring-graph-review/independent-terminal-review.json",
+      "sha256": "6b6c89e87a5694569aa21bca0ede9c39fd8b1da964671ad409d7b998ffa85f07"
+    },
+    {
+      "bytes": 154100,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.spv",
+      "sha256": "93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f"
+    },
+    {
+      "bytes": 253224,
+      "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/files/bin/linux-gcc/portable-divide-fp32-estimate-jit/short_input_jit_probe",
+      "sha256": "c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af"
+    }
+  ],
+  "integrity_scope": "Pinned accepted source/terminal/reuse receipts carry full914/920/current owner inputs,55actual enabled fields,three-provider inode/birth/session/called-code maps. Historical canonical host Float64 enabled but unused; Int64 disabled. No public feature-compatibility or product-adoption claim. Prior false1, compilerPASS, graphPASS and cost-survives facts remain separate.",
+  "metrics": {
+    "delta_prior_UDiv": {
+      "LLVM_UDiv": -6,
+      "coroutine_frame": 0,
+      "fixed_resume_stack": -96,
+      "imul": -2,
+      "instructions": 34,
+      "native_DIV": -34,
+      "object": -928,
+      "resume": -1120,
+      "static_rsp_rbp_memory_operand_instructions": 26,
+      "text": -1120,
+      "vpmulld": -4,
+      "vpmuludq": 0
+    },
+    "delta_stock": {
+      "LLVM_FDiv": 6,
+      "LLVM_UDiv": 0,
+      "LLVM_URem": 0,
+      "alloca": 0,
+      "calls": 0,
+      "coroutine_frame": 448,
+      "fixed_resume_stack": 96,
+      "imul": 4,
+      "instructions": 1210,
+      "native_DIV": 0,
+      "object": 10320,
+      "resume": 7170,
+      "resume_DIV": 0,
+      "resume_calls": 0,
+      "setup_DIV": 0,
+      "static_rsp_rbp_memory_operand_instructions": 77,
+      "text": 7328,
+      "vpmulld": 4,
+      "vpmuludq": 8
+    },
+    "prior_corrective_UDiv": {
+      "LLVM_UDiv": 65,
+      "coroutine_frame": 90144,
+      "fixed_resume_stack": 43168,
+      "imul": 108,
+      "instructions": 153801,
+      "native_DIV": 225,
+      "object": 1061080,
+      "resume": 906552,
+      "static_rsp_rbp_memory_operand_instructions": 5423,
+      "text": 931045,
+      "vpmulld": 77,
+      "vpmuludq": 92
+    },
+    "restoring": {
+      "LLVM_FDiv": 6,
+      "LLVM_UDiv": 59,
+      "LLVM_URem": 12,
+      "alloca": 2,
+      "calls": 5,
+      "coroutine_frame": 90144,
+      "fixed_resume_stack": 43072,
+      "imul": 106,
+      "instructions": 153835,
+      "native_DIV": 191,
+      "object": 1060152,
+      "resume": 905432,
+      "resume_DIV": 165,
+      "resume_calls": 0,
+      "setup_DIV": 26,
+      "static_rsp_rbp_memory_operand_instructions": 5449,
+      "text": 929925,
+      "vpmulld": 73,
+      "vpmuludq": 92
+    },
+    "stock": {
+      "LLVM_FDiv": 0,
+      "LLVM_UDiv": 59,
+      "LLVM_URem": 12,
+      "alloca": 2,
+      "calls": 5,
+      "coroutine_frame": 89696,
+      "fixed_resume_stack": 42976,
+      "imul": 102,
+      "instructions": 152625,
+      "native_DIV": 191,
+      "object": 1049832,
+      "resume": 898262,
+      "resume_DIV": 165,
+      "resume_calls": 0,
+      "setup_DIV": 26,
+      "static_rsp_rbp_memory_operand_instructions": 5372,
+      "text": 922597,
+      "vpmulld": 69,
+      "vpmuludq": 84
+    }
+  },
+  "next_smallest_action": "Separately source-prepare/admit original174268-record14-operation arithmetic gate with all697072 expected words and exact matching stock reuse. If accepted, repair already-known fullprofile adapter applicability before generation, then original8 controls and unchanged sole20+2 benefit gates. No next packet or workload executed by this receipt.",
+  "no_arithmetic_or_benefit_admission": true,
+  "passed": true,
+  "performance_or_coldness_or_hit_rate_claim": false,
+  "production_adopted": false,
+  "reason": "All6 actual ordinary clones have a guarded five-step compare/select/subtract restoration path with zero corrective integer DIV, and retain the complete original fallback. Potential hot-path savings survive as a hypothesis; the new serial/mask/code/frame costs and unknown acceptance frequency prevent a speed conclusion.",
+  "retained_arithmetic_executed_by_canary": false,
+  "schema": "sirius-fp32-estimate-restoring-ordinary-cost-premise-v1",
+  "source_and_lowering": {
+    "accepted_graph": "Immutable ff2e graph proves original prefix/fallback, bitbuilt proposal, h\u221216, UInt2 product/borrow/high0/R<32d, five literal s4..0 steps, q/sticky/commonRound and all23 other PB32 helper instances. Fresh actual loadedSPV matches compiler93b2623d\u2026c40f.",
+    "digit16_frame": {
+      "hex": "0x8880",
+      "initial_zero": {
+        "line": 4755,
+        "text": "store <8 x i32> zeroinitializer, ptr %reg1909.reload.addr, align 32"
+      },
+      "native_stores": [
+        {
+          "instruction": "vmovdqa YMMWORD PTR [rdi+0x8880],ymm4",
+          "line": 3341,
+          "pc": "0x76bb4471a2df"
+        },
+        {
+          "instruction": "vmovdqa YMMWORD PTR [rdi+0x8880],ymm3",
+          "line": 4426,
+          "pc": "0x76bb4471b90e"
+        }
+      ],
+      "native_zero": {
+        "instruction": "vmovdqa YMMWORD PTR [rcx+0x8880],ymm0",
+        "line": 2146,
+        "pc": "0x76bb447181f8"
+      },
+      "offset": 34944,
+      "scope": "Four vector loads and two first-active-lane scalar extracts join to these frame16 stores. Static consistency only, not universal masked-lane initialization or arithmetic execution proof.",
+      "two_masked_initializers": [
+        {
+          "constant16": {
+            "line": 10339,
+            "text": "%810 = and <8 x i32> %maskfull3308, splat (i32 16)"
+          },
+          "store": {
+            "line": 10342,
+            "text": "store <8 x i32> %812, ptr %reg1909.reload.addr, align 32"
+          }
+        },
+        {
+          "constant16": {
+            "line": 10531,
+            "text": "%928 = and <8 x i32> %maskfull3365, splat (i32 16)"
+          },
+          "store": {
+            "line": 10534,
+            "text": "store <8 x i32> %930, ptr %reg1909.reload.addr, align 32"
+          }
+        }
+      ]
+    },
+    "flags": "Exponent-only0x7f800000 proposal mask follows positive bitbuilt operands; no native Float32 accuracy/RTE premise. LLVM inferred nuw/nsw/disjoint flags are distinct from unsupported SPIR-V NoWrap rejected by the accepted graph.",
+    "mixed_lanes": "An accepted SIMD group pays the restoring packet; any active unfinished lane can additionally cause the full32-DIV fallback. All accepted can skip32 original DIV, scalar can skip4, but no dynamic hit rate or path execution is witnessed.",
+    "remaining_product": "UMulExtended low32 plus widened-high formation remains: each vector site uses low vpmulld plus two vpmuludq/rearrangement, scalar uses low/high imul; no duplicate product-elimination claim.",
+    "step_lowering": "Four explicit selected subtractions; fifth subtraction folds into final residual equality/non-equality used by sticky. Vector compare/masked move/sub and scalar cmp/cmov/setcc retain five threshold decisions, with no per-step branch or outlined helper."
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "utc": "2026-10-15T03:22:07.547174+00:00"
+}

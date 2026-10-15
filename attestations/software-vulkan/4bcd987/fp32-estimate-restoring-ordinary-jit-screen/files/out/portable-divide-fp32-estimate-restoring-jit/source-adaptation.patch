@@ -1,0 +1,644 @@
+--- a/host.py
++++ b/host.py
+@@ -1,9 +1,9 @@
+-"""Reuse canonical host/stock; admit one full FP32-estimate ordinary canary capture."""
++"""Reuse canonical host/stock; admit one full FP32-restoring-estimate ordinary canary capture."""
+ from pathlib import Path
+ import hashlib,json,os,shutil,subprocess,sys
+ sys.dont_write_bytecode=True
+ from prerequisites import WORK,ROOT,P,load,record,content,module,accepted,verify_graph,verify_stock
+-BUILD=ROOT/'bin/linux-gcc/portable-divide-fp32-estimate-jit'
++BUILD=ROOT/'bin/linux-gcc/portable-divide-fp32-estimate-restoring-jit'
+ 
+ def write(path,value):
+     path=Path(path);assert not path.exists(),path
+@@ -108,7 +108,8 @@
+           'complete_durable_stock_report_reproduced':True,'fresh_complete55_feature_queue_extension_order_and_chain_recorded':True,
+           'fresh_inferior_and_called_JIT_maps_join_all_three_provider_files':True,
+           'canonical_stock_raw_feature_arguments_available':False,'canonical_host_Int64_disabled':True,'canonical_unused_default_Float64_enabled':True,
+-          'original_failed_compiler_wrapper_preserved':True,'separate_policy_and_graph_PASS_retained':True,
++          'original_failed_compiler_wrapper_preserved':True,'successful_restoring_compiler_and_graph_PASS_retained':True,
++          'previous_distinct_UDiv_JIT_cost_premise_survived_unproven':True,
+           'graph_receipt':graph,'stock_receipt':stock,
+           'scope':'One new full-module ordinary loaded/called LLVM/JIT capture, original canary refusal before arithmetic. Complete sections/defined relocations/uncovered bytes checked; undefined callbacks consistency only. No arithmetic/hit-rate/cost/benefit or qualification conclusion; actual cost-premise review remains separate.'})
+     print('Candidate ordinary code, actual canonical features and live maps accepted; cost premise unjudged.',flush=True)
+--- a/prerequisites.py
++++ b/prerequisites.py
+@@ -1,4 +1,4 @@
+-"""Archived graph/finisher truth and original canonical stock producer receipts."""
++"""Archived restoring graph/compiler truth and original canonical stock producer receipts."""
+ from pathlib import Path
+ import hashlib,importlib.util,json,os,re,shlex,stat
+ 
+@@ -29,7 +29,7 @@
+     path=Path(name);return path if path.is_absolute() else ROOT/path
+ 
+ def graph_joined(name,pin):
+-    original=original_path(name);retired=ROOT/'out/portable-divide-fp32-estimate-graph-review'
++    original=original_path(name);retired=ROOT/P['graph_original_out']
+     actual=Path(P['graph_archive'])/'files'/original.relative_to(ROOT) if original.is_relative_to(retired) else original
+     seen=record(actual)
+     if actual!=original:
+@@ -39,60 +39,76 @@
+     return actual
+ 
+ def verify_graph():
++    assert re.fullmatch(r'[0-9a-f]{40}',P['graph_commit']), 'actual immutable restoring graph required'
+     archive=Path(P['graph_archive']);manifest=archive/'manifest.json'
+     assert content(manifest)==P['graph_manifest']
+-    rows=load(manifest)['files'];assert len(rows)==43
++    rows=load(manifest)['files']
+     for name,pin in rows.items():assert not (archive/name).is_symlink() and content(archive/name)==pin,name
+-    old=archive/'files/out/portable-divide-fp32-estimate-graph-review'
+-    # Reuse accepted prerequisite verifier only, not graph/policy/control algorithms.
+-    prior=module('immutable_graph_prerequisite_reader',old/'proof.py');prior.R=ROOT
++    old=archive/'files'/P['graph_original_out'];packet=load(old/'packet.json')
++    assert packet['compiler_commit']==P['compiler_commit'] and packet['compiler_manifest']==P['compiler_manifest']
++    assert packet['compiler_archive']==P['compiler_archive'] and packet['candidate_header_sha256']==P['candidate_header_sha256']
++    # This pure completed-compiler verifier joins the current102/636 producer,
++    # not prior JIT933, graph/control algorithms, tools or provider execution.
++    prior=module('immutable_restoring_compiler_prerequisite_reader',old/'proof.py');prior.R=ROOT
+     chain=prior.completed()
+     for name,pin in load(old/'source-freeze.json')['pins'].items():graph_joined(name,pin)
+     context=load(old/'operator-context.json');assert context['revision']==P['operator_revision']
+-    for key,name in [('actions','actions.json'),('source_freeze','source-freeze.json'),('preparation','preparation.json')]:graph_joined(ROOT/'out/portable-divide-fp32-estimate-graph-review'/name,context[key])
++    for key,name in [('actions','actions.json'),('source_freeze','source-freeze.json'),('preparation','preparation.json')]:graph_joined(ROOT/P['graph_original_out']/name,context[key])
+     owner=accepted(old/'read-graph');assert owner['source']=={'revision':P['operator_revision'],'status':''}
+     action=load(old/'actions.json')['read-graph'];assert owner['argv']==action['argv'] and owner['limits']==P['limits']==action['limits']
+-    before=load(old/'read-graph/inputs-before.json');assert len(before)==711
++    before=load(old/'read-graph/inputs-before.json')
+     for name,pin in before.items():graph_joined(name,pin)
+     seal=load(old/'read-graph/output-seal.json')
+-    for key,name in [('source_freeze','source-freeze.json'),('operator_context','operator-context.json'),('inputs_before','read-graph/inputs-before.json')]:graph_joined(ROOT/'out/portable-divide-fp32-estimate-graph-review'/name,seal[key])
+-    expected={str(ROOT/'out/portable-divide-fp32-estimate-graph-review'/name):pin for name,pin in ((Path(key).name,value) for key,value in seal['outputs'].items())}
+-    assert set(expected)=={str(ROOT/'out/portable-divide-fp32-estimate-graph-review'/name) for name in ('graph-result.json','parser-control-result.json')}
++    for key,name in [('source_freeze','source-freeze.json'),('operator_context','operator-context.json'),('inputs_before','read-graph/inputs-before.json')]:graph_joined(ROOT/P['graph_original_out']/name,seal[key])
++    expected={str(ROOT/P['graph_original_out']/name):pin for name,pin in ((Path(key).name,value) for key,value in seal['outputs'].items())}
++    assert set(expected)=={str(ROOT/P['graph_original_out']/name) for name in ('graph-result.json','parser-control-result.json')}
+     for name,pin in expected.items():graph_joined(name,pin)
+     result=load(old/'graph-result.json');tests=load(old/'parser-control-result.json');approval=load(old/'graph-acceptance.json')
++    assert result['schema']=='sirius-fp32-estimate-restoring-full-endpoint-graph-result-v1'
++    assert approval['schema']=='sirius-fp32-estimate-restoring-full-endpoint-graph-acceptance-v1'
+     assert result['passed'] and tests['passed'] and approval['passed'] and approval['structural_graph_accepted']
+-    assert tests['positive_count']==3 and tests['negative_count']==38 and tests['helper_normalization_controls']['passed'] and tests['helper_normalization_controls']['negative_count']==2
++    assert tests['positive_count']==3 and tests['negative_count']==packet['required_graph_negative_controls']
++    assert tests['helper_normalization_controls']['passed'] and tests['helper_normalization_controls']['negative_count']==2
+     assert not result['arithmetic_execution'] and not result['cost_or_hit_rate_or_adoption_established'] and not approval['arithmetic_or_cost_or_adoption_admitted']
+-    for key,name in [('graph_owner','read-graph/owner.json'),('output_seal','read-graph/output-seal.json'),('graph_result','graph-result.json'),('parser_controls','parser-control-result.json')]:graph_joined(ROOT/'out/portable-divide-fp32-estimate-graph-review'/name,approval[key])
+-    for saved in (result['completed_policy_chain'],approval['immutable_policy_chain']):
++    for key,name in [('graph_owner','read-graph/owner.json'),('output_seal','read-graph/output-seal.json'),('graph_result','graph-result.json'),('parser_controls','parser-control-result.json')]:graph_joined(ROOT/P['graph_original_out']/name,approval[key])
++    for saved in (result['completed_compiler_chain'],approval['immutable_compiler_chain']):
+         assert {k:v for k,v in saved.items() if k!='fresh_saved_birth_absence'}=={k:v for k,v in chain.items() if k!='fresh_saved_birth_absence'}
+         assert all(b['saved_birth_absent'] for values in saved['fresh_saved_birth_absence'].values() for b in values)
+     assert approval['original_failed_passed'] is False and approval['original_failed_child_exit']==1
+     assert result['candidate_macro']=='SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1' and result['candidate_header_sha256']==P['candidate_header_sha256']
+     assert result['unchanged_normalized_PB32_helper_instances']['unchanged_non_Divide_helper_bodies']==23
+-    assert result['assembler_and_readback_complete_instructions_equal']==10339
+-    for flag in ('original_complete_prefix_normalized_equal','original_complete_fallback_suffix_normalized_equal','exact_new_region_instruction_and_block_coverage','NoUnsignedWrap_and_NoSignedWrap_absent'):assert result['actual_Divide'][flag]
++    assert result['assembler_and_readback_complete_instructions_equal']==packet['complete_module_instruction_count']
++    actual=result['actual_Divide']
++    for flag in ('original_complete_prefix_normalized_equal','original_complete_fallback_suffix_normalized_equal','exact_new_region_instruction_and_block_coverage','NoUnsignedWrap_and_NoSignedWrap_absent','corrective_UDiv_absent','only_original_fallback_UDiv_remains'):assert actual[flag]
++    assert [step['shift'] for step in actual['restoring_steps']]==[4,3,2,1,0]
+     for name in ('independent-terminal-review.json','root-terminal-admission.json'):
+-        receipt=load(old/name);assert receipt['passed'],name
+-    candidate=Path(chain['candidate_products']['candidate-endpoint-normal.spv']['resolved_path'])
++        assert load(old/name)['passed'],name
++    candidate=Path(chain['candidate_products']['modules/candidate-endpoint-normal.spv']['resolved_path'])
+     assert content(candidate)==P['candidate_module']
+     return {'graph_commit':P['graph_commit'],'graph_manifest':record(manifest),'graph_acceptance':record(old/'graph-acceptance.json'),
+             'graph_result':record(old/'graph-result.json'),'graph_owner':record(old/'read-graph/owner.json'),'graph_output_seal':record(old/'read-graph/output-seal.json'),
+             'graph_terminal_review':record(old/'independent-terminal-review.json'),'candidate_module':record(candidate),
+-            'original_failed_owner':chain['old_failed_owner'],'original_failed_passed':False,'original_failed_child_exit':1,
+-            'policy_owner':chain['policy_owner'],'policy_result':chain['policy_result'],'policy_acceptance':chain['policy_acceptance'],
+-            'graph_passed':True,'policy_passed':True,'graph_or_policy_or_compiler_repeated':False,
++            'original_failed_owner':chain['original_failed_owner'],'original_failed_passed':False,'original_failed_child_exit':1,
++            'compiler_owner':chain['compiler_owner'],'compiler_products':chain['compiler_products'],'compiler_acceptance':chain['compiler_acceptance'],
++            'graph_passed':True,'restoring_compiler_passed':True,'graph_or_policy_or_compiler_repeated':False,
++            'previous_distinct_UDiv_JIT_cost_premise_survived_unproven':True,
+             'fresh_graph_birth_absence':prior.fresh_births(owner),'arithmetic_execution':False}
+ 
+ def verify_stock():
+     data=load(WORK/'stock-reuse-inputs.json');archive=Path(data['archive']);history=Path(data['historical_work'])
+     manifest_path=archive/data['manifest_name'];assert content(manifest_path)['sha256']==data['manifest_sha256']
+-    manifest=load(manifest_path);assert manifest['evidence_commit']==data['evidence_commit'] and manifest['evidence_tag']==data['evidence_tag'] and manifest['source_revision']==P['product_revision']
+-    # Only the matching producer/capture closure is consumed; no scan/hash of all other batch captures.
++    current=load(manifest_path)['files'];original_manifest=Path(data['original_manifest'])
++    assert content(original_manifest)['sha256']==data['original_manifest_sha256']
++    original=load(original_manifest)
++    assert original['source_revision']==P['product_revision'] and original['evidence_commit']==data['original_evidence_commit'] and original['evidence_tag']==data['original_evidence_tag']
+     used={}
+     def manifested(path):
+-        member=str(Path(path).relative_to(archive/'files'));assert content(path)==manifest['files'][member],member
+-        used[member]=content(path)
++        path=Path(path);member=str(path.relative_to(archive));assert not path.is_symlink() and content(path)==current[member],member
++        prefix='stock-comparison/files/'
++        if member.startswith(prefix):
++            old=member[len(prefix):];assert content(path)==original['files'][old],old
++            used[old]=content(path)
++    manifested(original_manifest)
+     recovery=load(history/'input-recovery.json');manifested(history/'input-recovery.json')
+     saved={(row['input'],row['sha256']):row for row in recovery['records']}
+     lookup={(row['original_key'],row['pin']['sha256']):row for row in data['joins']};assert len(lookup)==len(data['joins'])==638
+@@ -104,11 +120,15 @@
+         method=row['method']
+         if method=='exact_current_identity':assert actual==original and str(actual.resolve(strict=True))==pin['resolved_path']
+         elif method=='whole_byte_manifest_archived_owned_file':
+-            assert actual==archive/'files'/row['manifest_member'] and original==ROOT/row['manifest_member']
++            assert actual==archive/'stock-comparison/files'/row['manifest_member'] and original==ROOT/row['manifest_member']
+             assert not actual.is_symlink() and pin['resolved_path']==str(original);manifested(actual)
+         elif method=='exact_original_input_recovery':
+             old=saved[(key,pin['sha256'])];assert {k:old[k] for k in pin}==pin
+-            assert actual==archive/'files'/old['saved_path'] and row['manifest_member']==old['saved_path'];manifested(actual)
++            assert actual==archive/'stock-comparison/files'/old['saved_path'] and row['manifest_member']==old['saved_path'];manifested(actual)
++        elif method=='selected_canonical_producer':
++            assert row['original_method']=='exact_current_identity' and pin['resolved_path']==str(original)
++            assert key in ('bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o','bin/linux-gcc/src/sirius/libsirius_base.a')
++            assert actual==archive/row['selected_manifest_member'];manifested(actual)
+         elif method=='exact_historical_Git_blob':
+             assert row['git_commit']==P['product_revision'] and row['git_path']==str(original.relative_to(ROOT))
+             raw=actual.read_bytes();assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==row['git_blob']
+@@ -118,8 +138,7 @@
+     owners={}
+     for phase,count in (('compile-probe',545),('link-probe',547),('capture-stock-endpoint-normal',633)):
+         folder=history/phase;owners[phase]=accepted(folder)
+-        assert owners[phase]['source']=={'revision':P['product_revision'],'status':''}
+-        assert owners[phase]['limits']==P['limits']
++        assert owners[phase]['source']=={'revision':P['product_revision'],'status':''} and owners[phase]['limits']==P['limits']
+         for name in ('owner.json','inputs-before.json','inputs-after.json'):manifested(folder/name)
+         before=load(folder/'inputs-before.json');assert len(before)==count
+         for key,pin in before.items():joined(key,pin,phase)
+@@ -127,14 +146,13 @@
+     compile_owner=owners['compile-probe'];link=owners['link-probe']
+     source=str(ROOT/'out/guarded-product-high-runtime/short_input_jit_probe.cpp')
+     assert source in compile_owner['argv'] and '-O3' in compile_owner['argv'] and '-MMD' in compile_owner['argv']
+-    device='bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o'
+-    base='bin/linux-gcc/src/sirius/libsirius_base.a'
+-    assert link['argv'].count(str(ROOT/device))==1 and link['argv'].count(str(ROOT/base))==1
+-    assert not any('libsirius_backend.a' in arg for arg in link['argv'])
+-    module=archive/'files/bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv'
++    device='bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o';base='bin/linux-gcc/src/sirius/libsirius_base.a'
++    assert link['argv'].count(str(ROOT/device))==link['argv'].count(str(ROOT/base))==1 and not any('libsirius_backend.a' in arg for arg in link['argv'])
++    stock_host=archive/'stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe'
++    stock_module=archive/'stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv'
+     canary=Path(P['canary']);probe=history/'short_input_jit_probe.cpp'
+-    for path in (module,canary,probe,history/'preparation.json'):manifested(path)
+-    assert content(canary)==P['canary_identity'] and content(module)==P['stock_module']
++    for path in (stock_host,stock_module,canary,probe,history/'preparation.json'):manifested(path)
++    assert content(canary)==content(stock_host)==P['canary_identity'] and content(stock_module)==P['stock_module']
+     assert content(probe)=={'bytes':4212,'sha256':'853c361fa68e8afd3c532cf7cf5847837f1620cc047bd773a39d0955695241d7'}
+     link_before=load(history/'link-probe/inputs-before.json')
+     dev=joined(device,link_before[device],'link-probe');lib=joined(base,link_before[base],'link-probe')
+@@ -143,17 +161,18 @@
+     assert content(ROOT/'src/sirius/backend/vulkan/vulkan_device.cpp')=={'bytes':56500,'sha256':'c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae'}
+     assert content(ROOT/'src/sirius/backend/device.h')=={'bytes':9669,'sha256':'be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983'}
+     stock=history/'capture-stock-endpoint-normal'
+-    # All stock capture raw products used by its complete code reader are manifest-pinned.
+     for path in sorted(stock.iterdir()):
+         if path.is_file():manifested(path)
++    assert len(used)==56 and len([name for name in used if '/capture-stock-endpoint-normal/' in name])==33
+     report=load(stock/'actual-code-review.json')
+     assert report['actual_loaded_module']['sha256']==P['stock_module']['sha256'] and report['single_completed_dispatch']['completed']
+     assert report['ordinary_pipelines']==P['ordinary_pipelines'] and report['ordinary_ir_export']['sha256']=='3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7'
+-    return {'canonical_stock_host':record(canary),'stock_module':record(module),'stock_source':record(probe),'canonical_device_object':record(dev),
++    return {'canonical_stock_host':record(canary),'stock_module':record(stock_module),'stock_source':record(probe),'canonical_device_object':record(dev),'canonical_base_archive':record(lib),
+             'original_compile_owner':record(history/'compile-probe/owner.json'),'original_link_owner':record(history/'link-probe/owner.json'),
+             'original_stock_capture_owner':record(stock/'owner.json'),'stock_code_review':record(stock/'actual-code-review.json'),
+-            'whole_byte_manifest':record(manifest_path),'input_recovery':record(history/'input-recovery.json'),'matched_historical_input_versions':638,
+-            'selected_manifest_members':len(used),'stock_capture_folder':str(stock),
++            'selected_archive_commit':data['evidence_commit'],'selected_archive_manifest':record(manifest_path),
++            'whole_byte_original_manifest':record(original_manifest),'input_recovery':record(history/'input-recovery.json'),'matched_historical_input_versions':638,
++            'selected_manifest_members':len(used),'selected_stock_raw_members':33,'stock_capture_folder':str(stock),
+             'host_is_unmodified_canonical_Create':True,'host_rebuilt':False,'stock_recaptured':False,
+             'historical_stock_raw_feature_argument_capture_available':False,
+-            'scope':'Local complete matching raw-byte stock closure plus original producer/recovery/Git-source identities. No whole historical raw Git/remote-backup claim; canonical default Float64 enable is unused by the new 32-only shader.'}
++            'scope':'Direct638 original input-version/13Git-source/56selectedmember/33raw stock and canonical .o/base byte joins to immutable0ed; not a replay of prior933 and not a whole older multicapture backup claim. Original canonical unusedFloat64/Int64zero host retained.'}
+--- a/run_capture.py
++++ b/run_capture.py
+@@ -18,7 +18,7 @@
+ work = Path(__file__).resolve().parent
+ folder = Path(sys.argv[1]).resolve()
+ module = Path(sys.argv[2]).resolve()
+-stage = root / "bin/linux-gcc/portable-divide-fp32-estimate-jit"
++stage = root / "bin/linux-gcc/portable-divide-fp32-estimate-restoring-jit"
+ executable = stage / "short_input_jit_probe"
+ observer = root / "attestations/software-vulkan/b5d2abf/optimized-ir-stage-code-binding/optimizer_observer.so"
+ assert folder.is_relative_to(work) and folder.exists()
+--- a/inputs.json
++++ b/inputs.json
+@@ -1,20 +1,27 @@
+ {
+-  "canary": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe",
++  "canary": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/files/bin/linux-gcc/portable-divide-fp32-estimate-jit/short_input_jit_probe",
+   "canary_identity": {
+     "bytes": 253224,
+     "sha256": "c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af"
+   },
+-  "candidate_header_sha256": "c21eb8259f2ed51bce2333ded7065c820dd782cf32ce5e46ea8976166503cdb5",
++  "candidate_header_sha256": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca",
+   "candidate_module": {
+-    "bytes": 152844,
+-    "sha256": "0535c0f6a689d2d59896543882e1f5300fdd67fe70509b7dda0996f59ffd03d9"
++    "bytes": 154100,
++    "sha256": "93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f"
+   },
+-  "graph_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review",
+-  "graph_commit": "23619ee8a99ac792d6d76dbeb376356c4168dbc2",
++  "compiler_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler",
++  "compiler_commit": "8078cfdda9afe5d7478be2c3727858746f22748a",
++  "compiler_manifest": {
++    "bytes": 16245,
++    "sha256": "d3c485e50c63d7f2270181d072e1b2b0b550a9b8a303a44d5765a42e78312b4c"
++  },
++  "graph_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-graph-review",
++  "graph_commit": "ff2e0c7fd7504a28adc7baf4f0341ce2c3561c88",
+   "graph_manifest": {
+-    "bytes": 8135,
+-    "sha256": "ed4e368617b9d81f445f8abc29b2719cf6d46cec053c16a1759e5bdf01bc859a"
++    "bytes": 10008,
++    "sha256": "0c20cbf4a9a0b03a5c21d65740317afd8000d32c834bcf7f10530ff4ba6fffce"
+   },
++  "graph_original_out": "out/portable-divide-fp32-estimate-restoring-graph-review",
+   "limits": {
+     "reserve_kib": 2097152,
+     "rss_kib": 4194304,
+@@ -58,8 +65,8 @@
+       "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+     }
+   },
+-  "schema": "sirius-fp32-estimate-canonical-host-ordinary-capture-v1",
+-  "scope": "Full original normal Endpoint, graph accepted only. No optional64 type/capability in shader; unchanged canonical host default Float64 enabled/Int64 disabled. Historical raw stock has no55feature-argument trace. Canary ni<329 returns before arithmetic. One new candidate-only ordinary capture; no accuracy/hitrate/cost/adoption claim.",
++  "schema": "sirius-fp32-estimate-restoring-canonical-host-ordinary-capture-v1",
++  "scope": "Full original normal Endpoint five-step restoring correction, immutable compiler and structural graph accepted. Exact canonical host unused Float64/Int64zero, shader32-only. One prospective original ordinary loaded/called short-input canary, ni<329 refusal before retained arithmetic. Actual native lowering/cost/hit-rate/arithmetic/integrated/benefit/adoption remain unproved.",
+   "stock_module": {
+     "bytes": 151400,
+     "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+--- a/stock-reuse-inputs.json
++++ b/stock-reuse-inputs.json
+@@ -1,8 +1,8 @@
+ {
+-  "archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit",
+-  "evidence_commit": "d79eaf1f16a06a1c3ef8dcc47334940250f471b9",
+-  "evidence_tag": "evidence/issue-98-guarded-product-high-jit-4bcd987",
+-  "historical_work": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime",
++  "archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen",
++  "evidence_commit": "0ed71524fab1974f597ecc96d35c2dced512bb96",
++  "evidence_tag": "evidence/issue-44-fp32-estimate-ordinary-jit-screen",
++  "historical_work": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime",
+   "joins": [
+     {
+       "actual": "/home/astra/.project/Sirius/.clang-format",
+@@ -69,7 +69,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/.github/workflows/ci.yml",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/.github/workflows/ci.yml",
+       "git_blob": "afe033c3a1c50b5cbc5ba1897fd9ba883d57db83",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": ".github/workflows/ci.yml",
+@@ -118,7 +118,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-versions/966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/input-versions/966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7",
+       "manifest_member": "out/guarded-product-high-runtime/input-versions/966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7",
+       "method": "exact_original_input_recovery",
+       "original_key": "/lib/x86_64-linux-gnu/libX11-xcb.so.1",
+@@ -1335,7 +1335,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/CMakePresets.json",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/CMakePresets.json",
+       "git_blob": "2b5cdbc32533a4054d23822c77151935596235e5",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "CMakePresets.json",
+@@ -1354,7 +1354,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/README.md",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/README.md",
+       "git_blob": "320ed499d0c0d5e6dd8aa126bd92754cf163cb1f",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "README.md",
+@@ -1417,7 +1417,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/input-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
+       "manifest_member": "out/guarded-product-high-runtime/input-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
+       "method": "exact_original_input_recovery",
+       "original_key": "bin/linux-gcc/CMakeCache.txt",
+@@ -1454,7 +1454,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv",
+       "manifest_member": "bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv",
+@@ -1469,7 +1469,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/probe.d",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/probe.d",
+       "manifest_member": "bin/linux-gcc/guarded-product-high-runtime/probe.d",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "bin/linux-gcc/guarded-product-high-runtime/probe.d",
+@@ -1485,7 +1485,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/probe.map",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/probe.map",
+       "manifest_member": "bin/linux-gcc/guarded-product-high-runtime/probe.map",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "bin/linux-gcc/guarded-product-high-runtime/probe.map",
+@@ -1500,7 +1500,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/probe.o",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/probe.o",
+       "manifest_member": "bin/linux-gcc/guarded-product-high-runtime/probe.o",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "bin/linux-gcc/guarded-product-high-runtime/probe.o",
+@@ -1516,7 +1516,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe",
+       "manifest_member": "bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe",
+@@ -1531,9 +1531,10 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+-      "method": "exact_current_identity",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/canonical-producer/vulkan_device.cpp.o",
++      "method": "selected_canonical_producer",
+       "original_key": "bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
++      "original_method": "exact_current_identity",
+       "original_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+       "phases": [
+         "compile-probe",
+@@ -1544,12 +1545,14 @@
+         "bytes": 291264,
+         "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+         "sha256": "181071b73bc05e54ea60116f654aa6f45c61451a0e422357c638ed1b105131be"
+-      }
+-    },
+-    {
+-      "actual": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+-      "method": "exact_current_identity",
++      },
++      "selected_manifest_member": "stock-comparison/canonical-producer/vulkan_device.cpp.o"
++    },
++    {
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/canonical-producer/libsirius_base.a",
++      "method": "selected_canonical_producer",
+       "original_key": "bin/linux-gcc/src/sirius/libsirius_base.a",
++      "original_method": "exact_current_identity",
+       "original_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+       "phases": [
+         "compile-probe",
+@@ -1560,7 +1563,8 @@
+         "bytes": 35862,
+         "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+         "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+-      }
++      },
++      "selected_manifest_member": "stock-comparison/canonical-producer/libsirius_base.a"
+     },
+     {
+       "actual": "/home/astra/.project/Sirius/cmake/operating_model_embedded.h.in",
+@@ -3371,7 +3375,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-versions/236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/input-versions/236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285",
+       "manifest_member": "out/guarded-product-high-runtime/input-versions/236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285",
+       "method": "exact_original_input_recovery",
+       "original_key": "out/guarded-product-high-runtime/actions.json",
+@@ -3391,7 +3395,7 @@
+       ]
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/actions.json",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/actions.json",
+       "manifest_member": "out/guarded-product-high-runtime/actions.json",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "out/guarded-product-high-runtime/actions.json",
+@@ -3406,7 +3410,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture_jit.py",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/capture_jit.py",
+       "manifest_member": "out/guarded-product-high-runtime/capture_jit.py",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "out/guarded-product-high-runtime/capture_jit.py",
+@@ -3421,7 +3425,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/owned_guard.py",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/owned_guard.py",
+       "manifest_member": "out/guarded-product-high-runtime/owned_guard.py",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "out/guarded-product-high-runtime/owned_guard.py",
+@@ -3438,7 +3442,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/preparation.json",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/preparation.json",
+       "manifest_member": "out/guarded-product-high-runtime/preparation.json",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "out/guarded-product-high-runtime/preparation.json",
+@@ -3453,7 +3457,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/protected-before.json",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/protected-before.json",
+       "manifest_member": "out/guarded-product-high-runtime/protected-before.json",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "out/guarded-product-high-runtime/protected-before.json",
+@@ -3468,7 +3472,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/run_capture.py",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/run_capture.py",
+       "manifest_member": "out/guarded-product-high-runtime/run_capture.py",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "out/guarded-product-high-runtime/run_capture.py",
+@@ -3483,7 +3487,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/run_owned.py",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/run_owned.py",
+       "manifest_member": "out/guarded-product-high-runtime/run_owned.py",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "out/guarded-product-high-runtime/run_owned.py",
+@@ -3500,7 +3504,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/short_input_jit_probe.cpp",
++      "actual": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+       "manifest_member": "out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+       "method": "whole_byte_manifest_archived_owned_file",
+       "original_key": "out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+@@ -3581,7 +3585,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/scripts/governance/build_policy.py",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/scripts/governance/build_policy.py",
+       "git_blob": "d3019e9b55fc809bfee8642572cc198dce4ac769",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "scripts/governance/build_policy.py",
+@@ -3776,7 +3780,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/scripts/validate-native-runtime.py",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/scripts/validate-native-runtime.py",
+       "git_blob": "3669bbea660a0fca6a94c0de444e2405c57cac2e",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "scripts/validate-native-runtime.py",
+@@ -3875,7 +3879,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/scripts/verify-operating-model.py",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/scripts/verify-operating-model.py",
+       "git_blob": "11993915e29d3b2e1fd7f33b70b1d9b39675049a",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "scripts/verify-operating-model.py",
+@@ -5590,7 +5594,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/src/sirius/kernels/gr_ellis_topology.slang",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/gr_ellis_topology.slang",
+       "git_blob": "d5bd69f2ee71b5363bb357a7aeacc1d8a2ee6923",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "src/sirius/kernels/gr_ellis_topology.slang",
+@@ -5609,7 +5613,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/src/sirius/kernels/gr_integrator.slang",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/gr_integrator.slang",
+       "git_blob": "9a672b9beb8b94d8f60c2b748e436facab8909b8",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "src/sirius/kernels/gr_integrator.slang",
+@@ -5756,7 +5760,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/src/sirius/kernels/parity_probe.slang",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/parity_probe.slang",
+       "git_blob": "4e15441dccc63f06e652cb5a88bdf2bad8e88ab3",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "src/sirius/kernels/parity_probe.slang",
+@@ -6015,7 +6019,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/src/sirius/kernels/trace.slang",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/src/sirius/kernels/trace.slang",
+       "git_blob": "0dff395c71bedabe9e77fdd1290942e4db388e87",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "src/sirius/kernels/trace.slang",
+@@ -7058,7 +7062,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/tests/backend/kernel_parity_test.cpp",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/tests/backend/kernel_parity_test.cpp",
+       "git_blob": "f02e6510afc32bf447f110d74164f450710a893f",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "tests/backend/kernel_parity_test.cpp",
+@@ -8149,7 +8153,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/tests/labels/CTestLabels.cmake",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/tests/labels/CTestLabels.cmake",
+       "git_blob": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "tests/labels/CTestLabels.cmake",
+@@ -8168,7 +8172,7 @@
+       }
+     },
+     {
+-      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/recovered-source/tests/operating_model.json",
++      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-jit/recovered-source/tests/operating_model.json",
+       "git_blob": "b3589f04238e20b6aa82d9a30340a45b4a65af95",
+       "git_commit": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+       "git_path": "tests/operating_model.json",
+@@ -10091,14 +10095,19 @@
+       }
+     }
+   ],
+-  "manifest_name": "whole-byte-manifest.json",
+-  "manifest_sha256": "7b37e0db3bd213049cf8b0ada2a60f72d9b83af5a5c6bbde26faeae4b003867c",
++  "manifest_name": "manifest.json",
++  "manifest_sha256": "718e5ce448d725b547b67a8c95cebac234be7d6d95c801268d616d3cb9cadf94",
++  "original_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit",
++  "original_evidence_commit": "d79eaf1f16a06a1c3ef8dcc47334940250f471b9",
++  "original_evidence_tag": "evidence/issue-98-guarded-product-high-jit-4bcd987",
++  "original_manifest": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/whole-byte-manifest.json",
++  "original_manifest_sha256": "7b37e0db3bd213049cf8b0ada2a60f72d9b83af5a5c6bbde26faeae4b003867c",
+   "phases": [
+     "compile-probe",
+     "link-probe",
+     "capture-stock-endpoint-normal"
+   ],
+-  "schema": "sirius-fp32-estimate-canonical-stock-host-reuse-v1",
+-  "scope": "Actual local raw bytes/whole-byte manifest plus original producer/recovery/source Git identities. Distinct historical actions versions preserved per input record. No claim all old raw artifacts are tracked or remotely backed up.",
++  "schema": "sirius-fp32-restoring-selected-archived-canonical-stock-reuse-v1",
++  "scope": "Direct exact638 original stock input versions, selected56member/33raw stock comparison and canonical device/base producer bytes now Git-backed in0ed. No replay of prior933 JIT closure, whole-old-multicapture backup claim or raw55stock-feature claim.",
+   "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+ }
+--- a/contracts.json
++++ b/contracts.json
+@@ -22,16 +22,16 @@
+   },
+   "feature_scope": "Fresh actual55fields/queue/extensions in original order/chain recorded. Canonical source enables only supported Float64, unused by this32-only module; Int64=0. No extra physical query or property prerequisite. No historical raw55argument trace claimed for canonical stock.",
+   "future_cost_review_only": [
+-    "Enumerate actual ordinary scalar/SIMD clones, complete call closure and executed callable/section/PC.",
+-    "Accepted path must retain native float proposal, exact guard and uint32 corrective division; count actual emitted lowering, not assume8.",
+-    "Original4serialdigit fallback remains; verify branch/mask skip and mixed-lane fallback cost without assuming hot hitrate.",
+-    "Retain code/object/coroutine-frame/alloca/native-stack/spill/register/memory countercosts.",
+-    "Do not infer runtime improvement, numeric equivalence or adoption from static counts/canary."
++    "Enumerate actual ordinary scalar/SIMD clones, complete call closure and called entry/section/PC.",
++    "Separate graph proof establishes source/SSA five restoring steps; actual native packet branches, comparisons/subtractions and lowering must be inspected after new capture without a presumed elimination result.",
++    "Original four-digit fallback must remain; inspect actual branch/mask skip and mixed-lane countercost without assuming hit rate.",
++    "Retain actual code/object/coroutine-frame/alloca/native-stack/spill/register/memory countercosts.",
++    "No runtime improvement, numerical equivalence, benefit or adoption inferred from static counts or this canary."
+   ],
+   "no_agent_helper_or_tool_or_provider_execution": true,
+-  "prerequisites": "Immutable original failed compiler false/1, separate policy finisher PASS, separate fullmodule graph/control PASS retained independently. No compiler/policy/graph controls rerun.",
+-  "schema": "sirius-fp32-estimate-ordinary-capture-contracts-v1",
+-  "stock_provenance": "Exact local whole-byte-manifest/raw artifacts plus recorded compile/link/capture owners,638distinct input versions/input-recovery and namedGit source blobs. No complete remote rawbinary backup claim.",
++  "prerequisites": "Successful restoring compiler102/636 and later immutable full graph/control PASS are required independently; original compiler false/1 remains historical. No compiler/policy/graph controls rerun and no prior933 recursion.",
++  "schema": "sirius-fp32-estimate-restoring-ordinary-capture-contracts-v1",
++  "stock_provenance": "Direct selected0ed archive: complete33stockraw/56manifestedclosure and canonical device/base bytecopies; original638 version and13Git source joins retained. New root does not claim whole older multicapture backup or old raw55feature arguments.",
+   "unchanged_original_capture": [
+     "default<O0> then exact original passes; no tuning based on O0 label",
+     "cacheOFF VK_DRIVER_FILES lvp_icd.json/device0",
