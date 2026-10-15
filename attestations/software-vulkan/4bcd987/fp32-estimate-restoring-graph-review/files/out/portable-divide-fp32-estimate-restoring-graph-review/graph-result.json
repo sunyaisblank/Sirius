@@ -1,0 +1,650 @@
+{
+  "actual_Divide": {
+    "NoUnsignedWrap_and_NoSignedWrap_absent": true,
+    "arithmetic_executed": false,
+    "base": "%remainder_1",
+    "binade_selector": "%2948",
+    "bits": "%2953",
+    "borrow": "%2968",
+    "borrow_test": "%2964",
+    "bound": "%2973",
+    "closed_choices": {
+      "%2944": {
+        "condition": "%2939",
+        "false": "%2942",
+        "header": "%2933",
+        "merge": "%2940",
+        "true": "%2941"
+      },
+      "%2948": {
+        "condition": "%2939",
+        "false": "%2947",
+        "header": "%2940",
+        "merge": "%2945",
+        "true": "%2946"
+      },
+      "%2968": {
+        "condition": "%2964",
+        "false": "%2967",
+        "header": "%2957",
+        "merge": "%2965",
+        "true": "%2966"
+      },
+      "%2975": {
+        "condition": "%2969",
+        "false": "%2972",
+        "header": "%2965",
+        "merge": "%2970",
+        "true": "%2971"
+      },
+      "%2982": {
+        "condition": "%2978",
+        "false": "%2981",
+        "header": "%2977",
+        "merge": "%2979",
+        "true": "%2980"
+      },
+      "%2989": {
+        "condition": "%2985",
+        "false": "%2988",
+        "header": "%2979",
+        "merge": "%2986",
+        "true": "%2987"
+      },
+      "%2996": {
+        "condition": "%2992",
+        "false": "%2995",
+        "header": "%2986",
+        "merge": "%2993",
+        "true": "%2994"
+      },
+      "%3003": {
+        "condition": "%2999",
+        "false": "%3002",
+        "header": "%2993",
+        "merge": "%3000",
+        "true": "%3001"
+      },
+      "%3010": {
+        "condition": "%3006",
+        "false": "%3009",
+        "header": "%3000",
+        "merge": "%3007",
+        "true": "%3008"
+      },
+      "%3017": {
+        "condition": "%3013",
+        "false": "%3016",
+        "header": "%3007",
+        "merge": "%3014",
+        "true": "%3015"
+      }
+    },
+    "corrective_UDiv_absent": true,
+    "cost_or_hit_rate_established": false,
+    "denominator_bits": "%denominatorBits",
+    "digit": "%digit_3",
+    "direct_SSA_no_load_store_alias_admission": true,
+    "divisor": "%2938",
+    "exact_new_region_instruction_and_block_coverage": true,
+    "exponent": "%2943",
+    "fallback_division": "%digit_4",
+    "fallback_preheader": "%2956",
+    "guard_and_success_dominators": [
+      "%2890",
+      "%2893",
+      "%2898",
+      "%2901",
+      "%2906",
+      "%2916",
+      "%2918",
+      "%2923",
+      "%2928",
+      "%2933",
+      "%2940",
+      "%2945",
+      "%2957",
+      "%2965",
+      "%2970",
+      "%2977",
+      "%2979",
+      "%2986",
+      "%2993",
+      "%3000",
+      "%3007",
+      "%3014"
+    ],
+    "guess": "%guess",
+    "h": "%h",
+    "high_difference": "%2963",
+    "high_zero": "%2969",
+    "jam": "%3018",
+    "low_small": "%2974",
+    "native_accuracy_or_RTE_assumed": false,
+    "native_division": "%proposal",
+    "normalization_predicate": "%2939",
+    "normalized_m": "%2944",
+    "numerator_bits": "%numeratorBits",
+    "numerator_hi": "%numeratorHi",
+    "numerator_lo": "%numeratorLo",
+    "only_original_fallback_UDiv_remains": true,
+    "original_common_round_sign_exponent_join": true,
+    "original_complete_fallback_suffix_normalized_equal": true,
+    "original_complete_prefix_normalized_equal": true,
+    "product": "%2960",
+    "product_hi": "%2962",
+    "product_lo": "%2961",
+    "quotient": "%exactQuotient",
+    "range_guard": "%2955",
+    "remainder": "%exactRemainder_3",
+    "remainder_nonzero": "%3013",
+    "residual_hi": "%residualHi",
+    "residual_lo": "%residualLo",
+    "restoring_steps": [
+      {
+        "digit": "%digit",
+        "digit_bit": "%2984",
+        "input_remainder": "%residualLo",
+        "mask": "%2982",
+        "remainder": "%exactRemainder",
+        "selected_subtrahend": "%2983",
+        "shift": 4,
+        "test": "%2978",
+        "threshold": "%threshold4"
+      },
+      {
+        "digit": "%digit_0",
+        "digit_bit": "%2991",
+        "input_remainder": "%exactRemainder",
+        "mask": "%2989",
+        "remainder": "%exactRemainder_0",
+        "selected_subtrahend": "%2990",
+        "shift": 3,
+        "test": "%2985",
+        "threshold": "%threshold3"
+      },
+      {
+        "digit": "%digit_1",
+        "digit_bit": "%2998",
+        "input_remainder": "%exactRemainder_0",
+        "mask": "%2996",
+        "remainder": "%exactRemainder_1",
+        "selected_subtrahend": "%2997",
+        "shift": 2,
+        "test": "%2992",
+        "threshold": "%threshold2"
+      },
+      {
+        "digit": "%digit_2",
+        "digit_bit": "%3005",
+        "input_remainder": "%exactRemainder_1",
+        "mask": "%3003",
+        "remainder": "%exactRemainder_2",
+        "selected_subtrahend": "%3004",
+        "shift": 1,
+        "test": "%2999",
+        "threshold": "%threshold1"
+      },
+      {
+        "digit": "%digit_3",
+        "digit_bit": "%3012",
+        "input_remainder": "%exactRemainder_2",
+        "mask": "%3010",
+        "remainder": "%exactRemainder_3",
+        "selected_subtrahend": "%3011",
+        "shift": 0,
+        "test": "%3006",
+        "threshold": "%2938"
+      }
+    ],
+    "rounded": "%3019",
+    "sign": "%sign_2",
+    "single_existing_UMulExtended_semantics": true,
+    "sticky": "%3017",
+    "verified": "%2975"
+  },
+  "all_float_widths": [
+    32
+  ],
+  "all_integer_widths": [
+    32
+  ],
+  "arithmetic_execution": false,
+  "assembler_and_readback_complete_instructions_equal": 10418,
+  "candidate_header_sha256": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca",
+  "candidate_macro": "SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+  "caps": [
+    "RoundingModeRTE",
+    "Shader"
+  ],
+  "complete_interface_modes_and_ordered_barriers_equal_stock": true,
+  "completed_compiler_chain": {
+    "candidate_products": {
+      "modules/candidate-endpoint-normal.compiler.spv": {
+        "bytes": 154064,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.compiler.spv",
+        "sha256": "1d5cfdb4497af809b49128227b65fdce40f414c25a7c3b456c6de78047d7920d",
+        "symlink_target": null
+      },
+      "modules/candidate-endpoint-normal.final.spvasm": {
+        "bytes": 429986,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.final.spvasm",
+        "sha256": "3cd4f00d517293a6a3c28d0e55e1cf4f3b622b98f5b5b55a75f9f49e3bd4e44c",
+        "symlink_target": null
+      },
+      "modules/candidate-endpoint-normal.raw.spvasm": {
+        "bytes": 431145,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.raw.spvasm",
+        "sha256": "009567bc6afbb7f44c1d260830a7f42b3bb7114e7ceea2ce1a120eb257f278e5",
+        "symlink_target": null
+      },
+      "modules/candidate-endpoint-normal.spv": {
+        "bytes": 154100,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.spv",
+        "sha256": "93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f",
+        "symlink_target": null
+      },
+      "modules/candidate-endpoint-normal.spvasm": {
+        "bytes": 431302,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.spvasm",
+        "sha256": "588e878a91fee2e77f9ad9576ac03efe2fb32dd968b40484495170a4052b1cf9",
+        "symlink_target": null
+      }
+    },
+    "compiler102_static_and636_consumed_inputs_verified": true,
+    "compiler_acceptance": {
+      "bytes": 1296,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/compiler-producer-acceptance.json",
+      "sha256": "0e3468b81a41f8dee39b65509651642540fc4e876e9136238343112731d3d319",
+      "symlink_target": null
+    },
+    "compiler_commit": "8078cfdda9afe5d7478be2c3727858746f22748a",
+    "compiler_independent_source_review": {
+      "bytes": 9489,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/independent-source-review.json",
+      "sha256": "a327d7fb34d9c34004ef82ab1b7cb7944dc09de5a9932f9c5f91121fc2ff5651",
+      "symlink_target": null
+    },
+    "compiler_manifest": {
+      "bytes": 16245,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/manifest.json",
+      "sha256": "d3c485e50c63d7f2270181d072e1b2b0b550a9b8a303a44d5765a42e78312b4c",
+      "symlink_target": null
+    },
+    "compiler_owner": {
+      "bytes": 2294,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/compile-endpoint-normal/owner.json",
+      "sha256": "8c84074cf658954e3dc672ad68b3d3d0799eacb938f68762527b7bf129658dad",
+      "symlink_target": null
+    },
+    "compiler_products": {
+      "bytes": 6866,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/compiler-products.json",
+      "sha256": "e1a46464187f4968489abd1d34511098a0f5ae4dcdf8d37d7a74ca60ff819832",
+      "symlink_target": null
+    },
+    "compiler_root_source_admission": {
+      "bytes": 2512,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/root-source-admission.json",
+      "sha256": "9a4a08fa88b075610d872e8abe6c0c198aad14a29b56dcf3868ea3fe1bc62a41",
+      "symlink_target": null
+    },
+    "compiler_root_terminal_admission": {
+      "bytes": 2995,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/root-terminal-admission.json",
+      "sha256": "b2a52bc6f5786ab16b6adb0558e9d8c75765f7b3155e30a4651e38b183f7220a",
+      "symlink_target": null
+    },
+    "compiler_seal": {
+      "bytes": 4159,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/compile-endpoint-normal/output-seal.json",
+      "sha256": "49449bd137a2c2b8a9bb20c66030c99bcb6ed77430c468b17dc63527d41b4118",
+      "symlink_target": null
+    },
+    "compiler_terminal_review": {
+      "bytes": 15873,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/out/portable-divide-fp32-estimate-restoring-screen/independent-terminal-review.json",
+      "sha256": "691e29c9e9b86b45c14e5d071d539baf76b41537eeeded504bd61f90a3c5725c",
+      "symlink_target": null
+    },
+    "completed_compiler_policy_receipt_reused_without_rerun": true,
+    "explicit_retired_root_relocation_preserves_historical_resolved_identity": true,
+    "fresh_saved_birth_absence": {
+      "accepted_compiler": [
+        {
+          "current_start_ticks": null,
+          "pid": 442812,
+          "same_boot": true,
+          "saved_birth_absent": true,
+          "saved_start_ticks": "8095185"
+        },
+        {
+          "current_start_ticks": null,
+          "pid": 442813,
+          "same_boot": true,
+          "saved_birth_absent": true,
+          "saved_start_ticks": "8095224"
+        },
+        {
+          "current_start_ticks": null,
+          "pid": 442819,
+          "same_boot": true,
+          "saved_birth_absent": true,
+          "saved_start_ticks": "8095288"
+        }
+      ],
+      "original_failed_compiler": [
+        {
+          "current_start_ticks": null,
+          "pid": 434798,
+          "same_boot": true,
+          "saved_birth_absent": true,
+          "saved_start_ticks": "7522279"
+        },
+        {
+          "current_start_ticks": null,
+          "pid": 434799,
+          "same_boot": true,
+          "saved_birth_absent": true,
+          "saved_start_ticks": "7522319"
+        }
+      ]
+    },
+    "original_failed_child_exit": 1,
+    "original_failed_owner": {
+      "bytes": 1658,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/compile-endpoint-normal/owner.json",
+      "sha256": "2e99b40dd28f4f01ddb9a271b9ef2cc757ebdaafb4694c56ad72557616d826e4",
+      "symlink_target": null
+    },
+    "original_failed_passed": false,
+    "previous_UDiv_correction_cost_premise_survived_unproven": true,
+    "raw_assembly": {
+      "bytes": 431145,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.raw.spvasm",
+      "sha256": "009567bc6afbb7f44c1d260830a7f42b3bb7114e7ceea2ce1a120eb257f278e5",
+      "symlink_target": null
+    },
+    "raw_module": {
+      "bytes": 154064,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.compiler.spv",
+      "sha256": "1d5cfdb4497af809b49128227b65fdce40f414c25a7c3b456c6de78047d7920d",
+      "symlink_target": null
+    },
+    "stock_assembly": {
+      "bytes": 422552,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.final.spvasm",
+      "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+      "symlink_target": null
+    },
+    "stock_module": {
+      "bytes": 151400,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.spv",
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "symlink_target": null
+    },
+    "stock_source_tool_receipt": {
+      "archive_manifest": {
+        "bytes": 47874,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/manifest.json",
+        "sha256": "229b3a64b30db736b895642a73d0dc5c7630650a4dc3192253cc6a3bdcc3ae9d",
+        "symlink_target": null
+      },
+      "guard_controls": {
+        "bytes": 4131,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-policy-controls.json",
+        "sha256": "53cee5814753826dd2765b60a7bfa747dc554a1afbc65807f26ea1dfe107142a",
+        "symlink_target": null
+      },
+      "original_acceptance": {
+        "bytes": 742,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-screen-capability-order/compiler-acceptance.json",
+        "sha256": "cb69644a9e0e4c0a177a668d80af3411fe7dcb262f9ddeac1b3183eacf71380b",
+        "symlink_target": null
+      },
+      "original_owner": {
+        "bytes": 2145,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/out/portable-divide64-screen-capability-order/compile-endpoint-normal/owner.json",
+        "sha256": "b41e34048b64afab27cdfcbb7d149a05c30139fd8695bf3635a93c9f4b48c1f2",
+        "symlink_target": null
+      },
+      "scope": "Exact accepted full stock/compiler-policy reuse; no stock compiler or original Int64-policy execution repeated. New FP32-proposal policy remains separately scoped.",
+      "source_joins": 8,
+      "tool_joins": 16
+    }
+  },
+  "completed_compiler_policy_receipt_reused_without_rerun": true,
+  "cost_or_hit_rate_or_adoption_established": false,
+  "inlined_wide_product_semantics": "OpUMulExtended exact UInt2 product; actual helper bodies normalized equal; no standalone function invented.",
+  "named_PB32WideProduct_presence": {
+    "candidate": false,
+    "stock": false
+  },
+  "native_accuracy_or_RTE_assumption": false,
+  "original_normal_sum_policy_retained": true,
+  "passed": true,
+  "products": {
+    "modules/candidate-endpoint-normal.compiler.spv": {
+      "bytes": 154064,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.compiler.spv",
+      "sha256": "1d5cfdb4497af809b49128227b65fdce40f414c25a7c3b456c6de78047d7920d",
+      "symlink_target": null
+    },
+    "modules/candidate-endpoint-normal.final.spvasm": {
+      "bytes": 429986,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.final.spvasm",
+      "sha256": "3cd4f00d517293a6a3c28d0e55e1cf4f3b622b98f5b5b55a75f9f49e3bd4e44c",
+      "symlink_target": null
+    },
+    "modules/candidate-endpoint-normal.raw.spvasm": {
+      "bytes": 431145,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.raw.spvasm",
+      "sha256": "009567bc6afbb7f44c1d260830a7f42b3bb7114e7ceea2ce1a120eb257f278e5",
+      "symlink_target": null
+    },
+    "modules/candidate-endpoint-normal.spv": {
+      "bytes": 154100,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.spv",
+      "sha256": "93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f",
+      "symlink_target": null
+    },
+    "modules/candidate-endpoint-normal.spvasm": {
+      "bytes": 431302,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler/files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler/modules/candidate-endpoint-normal.spvasm",
+      "sha256": "588e878a91fee2e77f9ad9576ac03efe2fb32dd968b40484495170a4052b1cf9",
+      "symlink_target": null
+    }
+  },
+  "schema": "sirius-fp32-estimate-restoring-full-endpoint-graph-result-v1",
+  "single_NoContraction_FDiv_scope_retained": true,
+  "stock_assembly": {
+    "bytes": 422552,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.final.spvasm",
+    "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+    "symlink_target": null
+  },
+  "stock_module": {
+    "bytes": 151400,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.spv",
+    "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+    "symlink_target": null
+  },
+  "unchanged_normalized_PB32_helper_instances": {
+    "PB32_function_bodies": 24,
+    "additional_external_import_supported": "exact OpExtInstImport \"GLSL.std.450\" only",
+    "all_present_helpers": [
+      {
+        "candidate_function_id": "%PB32Abs",
+        "name": "PB32Abs",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Abs"
+      },
+      {
+        "candidate_function_id": "%PB32Add",
+        "name": "PB32Add",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Add"
+      },
+      {
+        "candidate_function_id": "%PB32Equal",
+        "name": "PB32Equal",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Equal"
+      },
+      {
+        "candidate_function_id": "%PB32FromSignedBits",
+        "name": "PB32FromSignedBits",
+        "occurrence": 0,
+        "stock_function_id": "%PB32FromSignedBits"
+      },
+      {
+        "candidate_function_id": "%PB32FromUnsigned",
+        "name": "PB32FromUnsigned",
+        "occurrence": 0,
+        "stock_function_id": "%PB32FromUnsigned"
+      },
+      {
+        "candidate_function_id": "%PB32Infinity",
+        "name": "PB32Infinity",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Infinity"
+      },
+      {
+        "candidate_function_id": "%PB32LeadingBit",
+        "name": "PB32LeadingBit",
+        "occurrence": 0,
+        "stock_function_id": "%PB32LeadingBit"
+      },
+      {
+        "candidate_function_id": "%PB32Less",
+        "name": "PB32Less",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Less"
+      },
+      {
+        "candidate_function_id": "%PB32LessEqual",
+        "name": "PB32LessEqual",
+        "occurrence": 0,
+        "stock_function_id": "%PB32LessEqual"
+      },
+      {
+        "candidate_function_id": "%PB32Multiply",
+        "name": "PB32Multiply",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Multiply"
+      },
+      {
+        "candidate_function_id": "%PB32Nan",
+        "name": "PB32Nan",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Nan"
+      },
+      {
+        "candidate_function_id": "%PB32Negate",
+        "name": "PB32Negate",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Negate"
+      },
+      {
+        "candidate_function_id": "%PB32ProductResidual",
+        "name": "PB32ProductResidual",
+        "occurrence": 0,
+        "stock_function_id": "%PB32ProductResidual"
+      },
+      {
+        "candidate_function_id": "%PB32Round",
+        "name": "PB32Round",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Round"
+      },
+      {
+        "candidate_function_id": "%PB32RoundWide",
+        "name": "PB32RoundWide",
+        "occurrence": 0,
+        "stock_function_id": "%PB32RoundWide"
+      },
+      {
+        "candidate_function_id": "%PB32ShiftJam",
+        "name": "PB32ShiftJam",
+        "occurrence": 0,
+        "stock_function_id": "%PB32ShiftJam"
+      },
+      {
+        "candidate_function_id": "%PB32Sqrt",
+        "name": "PB32Sqrt",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Sqrt"
+      },
+      {
+        "candidate_function_id": "%PB32Unpack",
+        "name": "PB32Unpack",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Unpack"
+      },
+      {
+        "candidate_function_id": "%PB32WideLess",
+        "name": "PB32WideLess",
+        "occurrence": 0,
+        "stock_function_id": "%PB32WideLess"
+      },
+      {
+        "candidate_function_id": "%PB32WideShiftJam",
+        "name": "PB32WideShiftJam",
+        "occurrence": 0,
+        "stock_function_id": "%PB32WideShiftJam"
+      },
+      {
+        "candidate_function_id": "%PB32WideShiftJam_0",
+        "name": "PB32WideShiftJam",
+        "occurrence": 1,
+        "stock_function_id": "%PB32WideShiftJam_0"
+      },
+      {
+        "candidate_function_id": "%PB32WideSubtract",
+        "name": "PB32WideSubtract",
+        "occurrence": 0,
+        "stock_function_id": "%PB32WideSubtract"
+      },
+      {
+        "candidate_function_id": "%PB32Zero",
+        "name": "PB32Zero",
+        "occurrence": 0,
+        "stock_function_id": "%PB32Zero"
+      }
+    ],
+    "external_function_reference_identity": "(OpName, definition-order occurrence ordinal)",
+    "original_type_constant_specconstant_normalization_rules_retained": true,
+    "unchanged_non_Divide_helper_bodies": 23,
+    "unique_PB32_names": 23
+  }
+}

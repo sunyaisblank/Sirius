@@ -1,0 +1,327 @@
+{
+  "accepted": [
+    "exact_actual_module",
+    "all_Divide_local_IDs_renamed_in_full_module",
+    "equivalent_leading_whitespace_and_blank_lines"
+  ],
+  "all_five_restoring_positions_mutated": true,
+  "helper_normalization_controls": {
+    "negative_count": 2,
+    "passed": true,
+    "rejected": [
+      "exact_integer_import_identity_changed",
+      "second_WideShiftJam_typed_shift_changed"
+    ],
+    "scope": "Complete actual module source mutations; no assembler/validator execution."
+  },
+  "mutants_are_complete_actual_module": true,
+  "mutated_modules_assembled_or_validated": false,
+  "negative_count": 75,
+  "passed": true,
+  "positive_count": 3,
+  "rejected": [
+    {
+      "name": "coordinated_fast_and_fallback_wrong_exponent",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "selector_phi_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "selector_other_dominating_predicate",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "proposal_operands_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "numerator_uses_denominator_bits",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "range_mask_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "range_binade_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "h_shift_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "guess_margin_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "wide_product_wrong_divisor",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "wide_high_uses_low",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "borrow_inclusive",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "borrow_phi_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "borrow_added",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "high_zero_inverted",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "residual_bound_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "residual_bound_inclusive",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "residual_guard_false_becomes_true",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_branch_bypasses_guard",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_final_quotient_subtracts",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_quotient_uses_partial_digit",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "sticky_uses_pre_correction_residual",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "sticky_uses_borrow_predicate",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "sticky_phi_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_special_guard_operand_changed",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_fallback_loop_bound_changed",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_fallback_sticky_lost",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_fallback_divisor_changed",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_fallback_round_exponent_changed",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "phi_predecessor_mismatch",
+      "scope": "parser_closed_CFG"
+    },
+    {
+      "name": "switch_side_entrance",
+      "scope": "parser_closed_CFG"
+    },
+    {
+      "name": "extra_typed_call_in_selector_arm",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "extra_typed_arithmetic_in_restoring_arm",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "extra_corrective_UDiv_in_restoring_arm",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step4_inclusive_direction_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step4_mask_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step4_subtract_adds",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step4_wrong_selected_mask",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step4_digit_bit_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step4_threshold_wrong_shift",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step3_inclusive_direction_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step3_mask_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step3_subtract_adds",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step3_wrong_selected_mask",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step3_digit_bit_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step3_threshold_wrong_shift",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step3_uses_stale_residual",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step3_drops_previous_digit",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step2_inclusive_direction_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step2_mask_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step2_subtract_adds",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step2_wrong_selected_mask",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step2_digit_bit_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step2_threshold_wrong_shift",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step2_uses_stale_residual",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step2_drops_previous_digit",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step1_inclusive_direction_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step1_mask_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step1_subtract_adds",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step1_wrong_selected_mask",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step1_digit_bit_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step1_threshold_wrong_shift",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step1_uses_stale_residual",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step1_drops_previous_digit",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step0_inclusive_direction_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step0_mask_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step0_subtract_adds",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step0_wrong_selected_mask",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step0_digit_bit_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step0_threshold_wrong_divisor",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step0_uses_stale_residual",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "restoring_step0_drops_previous_digit",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "unsigned_NoWrap_on_modular_subtraction",
+      "scope": "annotation_contract"
+    },
+    {
+      "name": "signed_NoWrap_on_modular_low_subtraction",
+      "scope": "annotation_contract"
+    },
+    {
+      "name": "proposal_NoContraction_missing",
+      "scope": "annotation_contract"
+    }
+  ],
+  "schema": "sirius-fp32-estimate-restoring-fullmodule-graph-controls-v1",
+  "scope": "Source graph-reader controls only; operand-type/CFG mutations are not independently SPIR-V-validated. Parser-closed-CFG controls are explicitly separate. No execution, numerical or cost admission.",
+  "typed_CFG_semantic_mutations": 70
+}

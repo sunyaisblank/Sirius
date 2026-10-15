@@ -1,0 +1,128 @@
+--- a/out/preserve-finite-result.py
++++ b/out/preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,116 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'divide-fp32-estimate-restoring-graph-review':
++    import stat
++    work = root / 'out/portable-divide-fp32-estimate-restoring-graph-review'
++    bundle = root / 'attestations/software-vulkan/4bcd987/fp32-estimate-restoring-graph-review'
++    tag = 'evidence/issue-44-fp32-estimate-restoring-graph-review'
++    load = lambda path: json.loads(path.read_text())
++    def restoring_graph_record(path):
++        return dict(pin(path), resolved_path=str(path.resolve(strict=True)),
++                    mode=stat.S_IMODE(path.stat().st_mode),
++                    symlink_target=os.readlink(path) if path.is_symlink() else None)
++    def restoring_graph_matches(path, expected):
++        actual = restoring_graph_record(path)
++        assert {key:actual[key] for key in expected if key in actual} == expected, str(path)
++    reviews = {}
++    for name in ('independent-source-review.json','root-source-admission.json',
++                 'independent-terminal-review.json','root-terminal-admission.json'):
++        assert load(work/name)['passed'] is True, name
++        reviews[name] = pin(work/name)
++    assert load(work/'independent-terminal-review.json')['source_revision'] == parent
++    assert reviews['independent-terminal-review.json'] == {'bytes':14851,'sha256':'6b6c89e87a5694569aa21bca0ede9c39fd8b1da964671ad409d7b998ffa85f07'}
++    packet = load(work/'packet.json')
++    assert packet['operator_revision'] == parent
++    frozen = load(work/'source-freeze.json')['pins']
++    assert len(frozen) == 699
++    for name, expected in frozen.items(): restoring_graph_matches(Path(name),expected)
++    folder = work/'read-graph'
++    owner = load(folder/'owner.json')
++    actions = load(work/'actions.json')
++    assert list(actions) == ['read-graph'] and actions == load(work/'actions.unpinned.json')
++    action = actions['read-graph']
++    assert action['revision'] == parent and len(action['frozen_inputs']) == 702
++    assert owner['status'] == 'terminal' and owner['passed'] is True and owner['child_exit'] == 0
++    assert owner['source'] == {'revision':parent,'status':''} and owner['argv'] == action['argv']
++    assert owner['source_unchanged'] and owner['whole_inputs_unchanged']
++    assert owner['stop_reason'] is None and not owner['cleanup_errors'] and not owner['remaining_owned_processes']
++    assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
++    assert not owner['provider_mappings']
++    assert owner['limits'] == action['limits'] == packet['limits'] == {'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++    before = load(folder/'inputs-before.json')
++    assert before == load(folder/'inputs-after.json') and len(before) == 703
++    assert set(action['frozen_inputs']) <= {str(root/name) for name in before}
++    for name, expected in before.items(): restoring_graph_matches(root/name,expected)
++    context = load(work/'operator-context.json')
++    assert context['revision'] == parent
++    for key, name in [('actions','actions.json'),('source_freeze','source-freeze.json'),('preparation','preparation.json')]:
++        assert context[key] == restoring_graph_record(work/name)
++    seal = load(folder/'output-seal.json')
++    assert seal['label'] == 'read-graph' and seal['arithmetic_execution'] is False and seal['cost_or_runtime_or_adoption_admission'] is False
++    for key, path in [('source_freeze',work/'source-freeze.json'),('operator_context',work/'operator-context.json'),('inputs_before',folder/'inputs-before.json')]:
++        assert seal[key] == restoring_graph_record(path)
++    assert seal['outputs'] == {str(work/name):restoring_graph_record(work/name) for name in ('graph-result.json','parser-control-result.json')}
++    result = load(work/'graph-result.json')
++    controls = load(work/'parser-control-result.json')
++    acceptance = load(work/'graph-acceptance.json')
++    assert result['schema'] == 'sirius-fp32-estimate-restoring-full-endpoint-graph-result-v1'
++    assert acceptance['schema'] == 'sirius-fp32-estimate-restoring-full-endpoint-graph-acceptance-v1'
++    assert result['passed'] and controls['passed'] and acceptance['passed'] and acceptance['structural_graph_accepted']
++    assert not result['arithmetic_execution'] and not result['cost_or_hit_rate_or_adoption_established'] and not acceptance['arithmetic_or_cost_or_adoption_admitted']
++    assert controls['positive_count'] == len(controls['accepted']) == 3
++    assert controls['negative_count'] == len(controls['rejected']) == packet['required_graph_negative_controls'] == 75
++    assert len({row['name'] for row in controls['rejected']}) == 75 and controls['all_five_restoring_positions_mutated']
++    assert controls['helper_normalization_controls']['passed'] and controls['helper_normalization_controls']['negative_count'] == 2
++    assert controls['mutants_are_complete_actual_module'] and controls['mutated_modules_assembled_or_validated'] is False
++    for key, path in [('graph_owner',folder/'owner.json'),('graph_result',work/'graph-result.json'),
++                      ('parser_controls',work/'parser-control-result.json'),('output_seal',folder/'output-seal.json')]:
++        assert acceptance[key] == restoring_graph_record(path)
++    chain = result['completed_compiler_chain']
++    assert chain == acceptance['immutable_compiler_chain'] and chain['compiler_commit'] == packet['compiler_commit'] == '8078cfdda9afe5d7478be2c3727858746f22748a'
++    assert chain['compiler102_static_and636_consumed_inputs_verified'] and chain['explicit_retired_root_relocation_preserves_historical_resolved_identity']
++    assert chain['original_failed_passed'] is False and chain['original_failed_child_exit'] == 1
++    assert acceptance['original_failed_passed'] is False and acceptance['original_failed_child_exit'] == 1
++    archive = Path(packet['compiler_archive'])
++    assert pin(archive/'manifest.json') == packet['compiler_manifest']
++    members = load(archive/'manifest.json')['files']
++    assert len(members) == packet['compiler_manifest_members'] == 79
++    for name, expected in members.items(): assert not (archive/name).is_symlink() and pin(archive/name) == expected, name
++    for key in ('compiler_manifest','compiler_owner','compiler_seal','compiler_acceptance','compiler_products','compiler_terminal_review',
++                'compiler_independent_source_review','compiler_root_source_admission','compiler_root_terminal_admission','original_failed_owner'):
++        restoring_graph_matches(Path(chain[key]['resolved_path']),chain[key])
++    failed = load(Path(chain['original_failed_owner']['resolved_path']))
++    assert failed['passed'] is False and failed['child_exit'] == 1
++    assert result['products'] == chain['candidate_products']
++    for value in result['products'].values(): restoring_graph_matches(Path(value['resolved_path']),value)
++    assert result['products']['modules/candidate-endpoint-normal.spv']['sha256'] == packet['candidate_module_sha256'] == '93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f'
++    assert result['assembler_and_readback_complete_instructions_equal'] == packet['complete_module_instruction_count'] == 10418
++    assert result['unchanged_normalized_PB32_helper_instances']['unchanged_non_Divide_helper_bodies'] == 23
++    assert result['unchanged_normalized_PB32_helper_instances']['PB32_function_bodies'] == 24
++    actual = result['actual_Divide']
++    assert [row['shift'] for row in actual['restoring_steps']] == [4,3,2,1,0]
++    assert all(actual[key] for key in ('corrective_UDiv_absent','only_original_fallback_UDiv_remains','original_complete_prefix_normalized_equal',
++        'original_complete_fallback_suffix_normalized_equal','original_common_round_sign_exponent_join','exact_new_region_instruction_and_block_coverage'))
++    retirement = load(work/'root-prerequisite-retirement.json')
++    assert retirement['passed'] and pin(work/'root-prerequisite-retirement.json') == {'bytes':28098,'sha256':'4165f674597e567f56b01c8a54572062232a14abc0857db760365be2b76e14a2'}
++    mapping = [(work,'files/out/'+work.name),
++               (root/'out/preserve-finite-result-fp32-restoring-graph.patch','collector-source.patch')]
++    summary = {'schema':'sirius-fp32-estimate-restoring-graph-evidence-v1','passed':True,'source_revision':parent,
++        'product_revision':'4bcd9875cd9308deabed06a5fa2f17d2321b0cbc','reviews':reviews,
++        'graph_owner':restoring_graph_record(folder/'owner.json'),'result':restoring_graph_record(work/'graph-result.json'),
++        'controls':restoring_graph_record(work/'parser-control-result.json'),'acceptance':restoring_graph_record(work/'graph-acceptance.json'),
++        'output_seal':restoring_graph_record(folder/'output-seal.json'),
++        'static_rich_inputs':699,'declared_inputs':702,'actual_consumed_inputs':703,'positive_count':3,'graph_negative_count':75,'helper_negative_count':2,
++        'restoring_shifts':[4,3,2,1,0],'complete_module_instructions':10418,'unchanged_non_Divide_helpers':23,
++        'compiler_commit':packet['compiler_commit'],'compiler_manifest':packet['compiler_manifest'],
++        'original_failed_compiler_owner_passed':False,'original_failed_compiler_child_exit':1,
++        'previous_distinct_UDiv_JIT_cost':'COST_PREMISE_SURVIVES_UNPROVEN, no arithmetic/benefit trial or performance failure fabricated.',
++        'root_compiler_retirement':pin(work/'root-prerequisite-retirement.json'),
++        'structural_restoring_graph_accepted':True,'native_or_driver_accepted':False,'arithmetic_or_runtime_or_cost_or_benefit_established':False,
++        'production_adopted':False,'qualification_claimed':False,
++        'scope':'One pure full Endpoint structural reader/control owner plus separate terminal acceptance. Actual five-step exact correction, guard/closedCFG/prefix/fullfallback/commonRound and23helper receipts bind immutable successful compiler5products. Source mutation negatives are not independently assembled/validated. No compiler/policy/tool/provider repeated; originalfalse1 stays separate. Native/cost and original numerical/integrated/benefit gates remain future.'}
++    message = 'Preserve FP32 estimate five-step restoring full Endpoint graph and source controls without runtime admission (#44)\n'
+ elif kind == 'divide-fp32-estimate-restoring-compiler':
+     import stat
+     work = root / 'out/portable-divide-fp32-estimate-restoring-screen'

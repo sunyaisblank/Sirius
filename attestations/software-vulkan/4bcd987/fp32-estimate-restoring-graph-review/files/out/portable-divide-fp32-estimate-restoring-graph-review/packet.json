@@ -1,0 +1,39 @@
+{
+  "actual_outputs": [
+    "graph-result.json",
+    "parser-control-result.json",
+    "read-graph/output-seal.json"
+  ],
+  "candidate_header_sha256": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca",
+  "candidate_macro": "SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+  "candidate_module_sha256": "93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f",
+  "compiler_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-compiler",
+  "compiler_bin": "bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler",
+  "compiler_commit": "8078cfdda9afe5d7478be2c3727858746f22748a",
+  "compiler_consumed_count": 636,
+  "compiler_manifest": {
+    "bytes": 16245,
+    "sha256": "d3c485e50c63d7f2270181d072e1b2b0b550a9b8a303a44d5765a42e78312b4c"
+  },
+  "compiler_manifest_members": 79,
+  "compiler_out": "out/portable-divide-fp32-estimate-restoring-screen",
+  "compiler_static_count": 102,
+  "complete_module_instruction_count": 10418,
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "operator_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "product_names": [
+    "modules/candidate-endpoint-normal.compiler.spv",
+    "modules/candidate-endpoint-normal.raw.spvasm",
+    "modules/candidate-endpoint-normal.spvasm",
+    "modules/candidate-endpoint-normal.spv",
+    "modules/candidate-endpoint-normal.final.spvasm"
+  ],
+  "required_graph_negative_controls": 75,
+  "schema": "sirius-fp32-estimate-restoring-graph-review-packet-v1",
+  "scope": "Pure full Endpoint graph reader and source mutation controls only. Successful restoring compiler retained separately from historical false/1 compiler. No compiler, policy, provider, arithmetic, native cost or adoption admission.",
+  "separate_post_terminal_output": "graph-acceptance.json"
+}

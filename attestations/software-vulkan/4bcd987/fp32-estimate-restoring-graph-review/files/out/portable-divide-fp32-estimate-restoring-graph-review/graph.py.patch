@@ -1,0 +1,100 @@
+--- accepted23619/graph.py
++++ restoring/graph.py
+@@ -1,4 +1,4 @@
+-"""Bounded actual-FP32 Divide SSA/closed-CFG proof; never invokes a tool."""
++"""Bounded actual-FP32 restoring Divide SSA/closed-CFG proof; never invokes a tool."""
+ import re
+ 
+ 
+@@ -15,7 +15,7 @@
+     f32=one(k for k,v in definitions.items() if v=='OpTypeFloat 32')
+     assert not re.search(r'\b(?:NoUnsignedWrap|NoSignedWrap)\b',candidate), 'wrapping arithmetic must retain modulo semantics'
+     assert len(local)<400 and not re.search(r'\bOp(?:Load|Store|Variable|AccessChain|PtrAccessChain|CopyMemory|CopyObject)\b',body)
+-    assert len(re.findall(r'= OpUDiv ',body))==2 and body.count('OpLoopMerge')==1
++    assert len(re.findall(r'= OpUDiv ',body))==1 and body.count('OpLoopMerge')==1
+     assert len(re.findall(r'= OpUMulExtended ',body))==1
+     assert len(re.findall(r'= OpFDiv ',candidate))==1
+     assert re.findall(r'= (OpF(?!unction)\S+) ',body)==['OpFDiv']
+@@ -56,7 +56,7 @@
+         row=words(value);return row[:1]==['OpConstant'] and row[1] in (u32,i32) and int(row[2],0)==number
+     number=lambda n:lambda value:constant(value,n)
+     same=lambda value:lambda other:value==other
+-    bool_ops={'OpIEqual','OpINotEqual','OpULessThan','OpULessThanEqual','OpLogicalAnd','OpLogicalOr'}
++    bool_ops={'OpIEqual','OpINotEqual','OpULessThan','OpULessThanEqual','OpUGreaterThanEqual','OpLogicalAnd','OpLogicalOr'}
+     def binary(value,opcode,left,right,commute=False):
+         row=words(value)
+         if len(row)!=4 or row[:2]!=[opcode,boolean if opcode in bool_ops else u32]:return False
+@@ -148,9 +148,19 @@
+     bound=one(k for k in local if binary(k,'OpShiftLeftLogical',same(d),number(5)))
+     low_small=one(k for k in local if isop(k,'OpULessThan',rlo,bound))
+     verified=one(k for k in local if logical_and(k,same(high_zero),same(low_small)))
+-    digit=one(k for k in local if isop(k,'OpUDiv',rlo,d))
+-    low_product=one(k for k in local if binary(k,'OpIMul',same(digit),same(d),True))
+-    rem=one(k for k in local if isop(k,'OpISub',rlo,low_product))
++    # The exact observed five-step straight-line restoring chain. No corrective UDiv.
++    steps=[];rem=rlo;prior_digit=None
++    for shift in (4,3,2,1,0):
++        threshold=(one(k for k in local if binary(k,'OpShiftLeftLogical',same(d),number(shift))) if shift else d)
++        test=one(k for k in local if isop(k,'OpUGreaterThanEqual',rem,threshold))
++        mask=one(k for k in local if choice(k,same(test),number(0xffffffff),number(0),u32))
++        selected=one(k for k in local if binary(k,'OpBitwiseAnd',same(threshold),same(mask),True))
++        next_rem=one(k for k in local if isop(k,'OpISub',rem,selected))
++        bit=one(k for k in local if binary(k,'OpBitwiseAnd',number(1<<shift),same(mask),True))
++        digit=one(k for k in local if binary(k,'OpBitwiseOr',number(0) if prior_digit is None else same(prior_digit),same(bit),True))
++        steps.append({'shift':shift,'input_remainder':rem,'threshold':threshold,'test':test,'mask':mask,
++                      'selected_subtrahend':selected,'remainder':next_rem,'digit_bit':bit,'digit':digit})
++        rem=next_rem;prior_digit=digit
+     quotient=one(k for k in local if binary(k,'OpIAdd',same(guess),same(digit),True))
+     rem_nonzero=one(k for k in local if binary(k,'OpINotEqual',same(rem),number(0),True))
+     sticky=one(k for k in local if choice(k,same(rem_nonzero),number(1),number(0),u32))
+@@ -164,10 +174,18 @@
+     assert choices[borrow]['header']==location[product] and choices[borrow]['merge']==location[rhi]
+     assert choices[verified]['header']==location[rhi] and choices[verified]['condition']==high_zero
+     assert choices[verified]['true']==location[low_small]==location[bound]
+-    verified_branch=branch(verified);assert verified_branch[2]==location[digit] and predecessors[location[digit]]=={location[verified]}
++    first_step=steps[0];first_header=location[first_step['test']]
++    verified_branch=branch(verified);assert verified_branch[2]==first_header and predecessors[first_header]=={location[verified]}
+     rejected=verified_branch[3];assert predecessors[rejected]=={location[verified]} and blocks[rejected]==[rejected+' = OpLabel','OpBranch '+after['preheader']]
+     assert predecessors[after['preheader']]=={location[guard],rejected}
+-    assert location[digit]==location[low_product]==location[rem]==location[quotient]==choices[sticky]['header']
++    for index,step in enumerate(steps):
++        c=choices[step['mask']]
++        assert c['condition']==step['test'] and c['header']==location[step['test']]
++        if step['shift']:assert location[step['threshold']]==c['header']
++        assert c['merge']==location[step['selected_subtrahend']]==location[step['remainder']]==location[step['digit_bit']]==location[step['digit']]
++        if index:assert c['header']==choices[steps[index-1]['mask']]['merge']
++        assert c['header'] in dominators[location[rounded]] and c['merge'] in dominators[location[rounded]]
++    assert location[digit]==location[rem]==location[quotient]==choices[sticky]['header']
+     assert choices[sticky]['merge']==location[jam]==location[rounded]
+     assert blocks[location[rounded]][-1]=='OpReturnValue '+rounded
+     assert location[guard] in dominators[location[rounded]] and location[product] in dominators[location[rounded]] and location[verified] in dominators[location[rounded]]
+@@ -196,15 +214,25 @@
+     exact(location[rhi],[borrow,rhi,high_zero],select_tail(verified))
+     exact(choices[verified]['true'],[bound,low_small],['OpBranch '+choices[verified]['merge']])
+     exact(choices[verified]['false'],[],['OpBranch '+choices[verified]['merge']])
+-    exact(location[verified],[verified],['OpSelectionMerge '+rejected+' None','OpBranchConditional '+verified+' '+location[digit]+' '+rejected])
+-    exact(location[digit],[digit,low_product,rem,quotient,rem_nonzero],select_tail(sticky))
++    exact(location[verified],[verified],['OpSelectionMerge '+rejected+' None','OpBranchConditional '+verified+' '+first_header+' '+rejected])
++    exact(first_header,[first_step['threshold'],first_step['test']],select_tail(first_step['mask']))
++    for index,step in enumerate(steps):
++        empty_choice(step['mask'])
++        ids=[step['mask'],step['selected_subtrahend'],step['remainder'],step['digit_bit'],step['digit']]
++        if index+1<len(steps):
++            nxt=steps[index+1]
++            if nxt['shift']:ids.append(nxt['threshold'])
++            ids.append(nxt['test']);tail=select_tail(nxt['mask'])
++        else:ids.extend([quotient,rem_nonzero]);tail=select_tail(sticky)
++        exact(choices[step['mask']]['merge'],ids,tail)
+     empty_choice(sticky)
+     exact(location[jam],[sticky,jam,rounded],['OpReturnValue '+rounded])
+     exact(rejected,[],['OpBranch '+after['preheader']])
+     exact(after['preheader'],[after['initial']],['OpBranch '+after['loop_label']])
+-    new_labels={choices[selector]['true'],choices[selector]['false'],location[selector],location[product],choices[borrow]['true'],choices[borrow]['false'],location[rhi],choices[verified]['true'],choices[verified]['false'],location[verified],location[digit],choices[sticky]['true'],choices[sticky]['false'],location[jam],rejected,after['preheader']}
++    new_labels={choices[selector]['true'],choices[selector]['false'],location[selector],location[product],choices[borrow]['true'],choices[borrow]['false'],location[rhi],choices[verified]['true'],choices[verified]['false'],location[verified],first_header,choices[sticky]['true'],choices[sticky]['false'],location[jam],rejected,after['preheader']}
++    new_labels.update(label for step in steps for label in (choices[step['mask']]['true'],choices[step['mask']]['false'],choices[step['mask']]['merge']))
+     first_new=body.index(rowline(m))+len(rowline(m));end_new=body.index(after['loop_label']+' = OpLabel')
+     region=body[first_new:end_new]
+     assert set(re.findall(r'(%\S+) = OpLabel',region))==new_labels
+     assert not re.search(r'\b(?:NoUnsignedWrap|NoSignedWrap)\b',candidate)
+-    return {'native_accuracy_or_RTE_assumed':False,'native_division':native_div,'normalization_predicate':norm_pred,'base':base,'normalized_m':m,'divisor':d,'sign':sign,'exponent':exponent,'binade_selector':selector,'numerator_bits':numerator_bits,'denominator_bits':denominator_bits,'bits':bits,'range_guard':guard,'h':h,'guess':guess,'product':product,'product_lo':plo,'product_hi':phi,'numerator_lo':nlo,'numerator_hi':nhi,'residual_lo':rlo,'borrow_test':borrow_test,'borrow':borrow,'high_difference':high_difference,'residual_hi':rhi,'high_zero':high_zero,'bound':bound,'low_small':low_small,'verified':verified,'digit':digit,'low_product':low_product,'remainder':rem,'quotient':quotient,'remainder_nonzero':rem_nonzero,'sticky':sticky,'jam':jam,'rounded':rounded,'fallback_division':after['division'],'fallback_preheader':after['preheader'],'closed_choices':choices,'guard_and_success_dominators':sorted(dominators[location[rounded]]),'original_complete_prefix_normalized_equal':True,'original_complete_fallback_suffix_normalized_equal':True,'direct_SSA_no_load_store_alias_admission':True,'single_existing_UMulExtended_semantics':True,'exact_new_region_instruction_and_block_coverage':True,'NoUnsignedWrap_and_NoSignedWrap_absent':True,'original_common_round_sign_exponent_join':True,'arithmetic_executed':False,'cost_or_hit_rate_established':False}
++    return {'native_accuracy_or_RTE_assumed':False,'native_division':native_div,'normalization_predicate':norm_pred,'base':base,'normalized_m':m,'divisor':d,'sign':sign,'exponent':exponent,'binade_selector':selector,'numerator_bits':numerator_bits,'denominator_bits':denominator_bits,'bits':bits,'range_guard':guard,'h':h,'guess':guess,'product':product,'product_lo':plo,'product_hi':phi,'numerator_lo':nlo,'numerator_hi':nhi,'residual_lo':rlo,'borrow_test':borrow_test,'borrow':borrow,'high_difference':high_difference,'residual_hi':rhi,'high_zero':high_zero,'bound':bound,'low_small':low_small,'verified':verified,'restoring_steps':steps,'digit':digit,'remainder':rem,'corrective_UDiv_absent':True,'only_original_fallback_UDiv_remains':True,'quotient':quotient,'remainder_nonzero':rem_nonzero,'sticky':sticky,'jam':jam,'rounded':rounded,'fallback_division':after['division'],'fallback_preheader':after['preheader'],'closed_choices':choices,'guard_and_success_dominators':sorted(dominators[location[rounded]]),'original_complete_prefix_normalized_equal':True,'original_complete_fallback_suffix_normalized_equal':True,'direct_SSA_no_load_store_alias_admission':True,'single_existing_UMulExtended_semantics':True,'exact_new_region_instruction_and_block_coverage':True,'NoUnsignedWrap_and_NoSignedWrap_absent':True,'original_common_round_sign_exponent_join':True,'arithmetic_executed':False,'cost_or_hit_rate_established':False}
