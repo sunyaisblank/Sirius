@@ -1,0 +1,43 @@
+{
+  "findings": [
+    {
+      "controls": [
+        "unsigned_NoWrap_on_modular_subtraction",
+        "signed_NoWrap_on_modular_low_subtraction"
+      ],
+      "correction": "Reject either decoration anywhere in this fixed module; unsigned low/high subtraction remains modular.",
+      "finding": "Initial source-only draft did not reject wrapping assumptions from NoUnsignedWrap/NoSignedWrap decorations."
+    },
+    {
+      "controls": [
+        "extra_typed_call_in_selector_arm",
+        "extra_typed_arithmetic_in_fast_block",
+        "correction_branch_bypasses_exact_guard"
+      ],
+      "correction": "Require exact ordered definitions and terminators in all new blocks and normalization merge tail, including empty selection arms and exact fallback preheader; compare entire original prefix and loop/tail separately.",
+      "finding": "Initial source-only draft matched useful nodes/predicates but did not cover every instruction in newly introduced blocks."
+    },
+    {
+      "controls": [
+        "coordinated_fast_and_fallback_wrong_exponent",
+        "original_fallback_round_exponent_changed"
+      ],
+      "correction": "Require m/divisor/sign/exponent to occupy their exact corresponding definition positions in the independently equal original normalized prefix.",
+      "finding": "Tail role abstraction alone could hide a coordinated wrong exponent across accepted and fallback Round calls."
+    },
+    {
+      "correction": "Local explicit-function-ID normalizer adds only exact OpExtInstImport \"GLSL.std.450\" semantic identity; all prior function/type/constant/specconstant rules retained. Immutable original helper remains unchanged.",
+      "finding": "All-helper use of immutable original normalized_function would reject the existing GLSL.std.450 OpExtInstImport used by PB32LeadingBit FindUMsb.",
+      "scope": "Prelaunch source finding; no helper or owner ran."
+    },
+    {
+      "correction": "Compare every PB32 (name, definition-order occurrence ordinal) body and bind all external function references with the same clone identity. Require both WideShiftJam instances and all 23 non-Divide helper bodies.",
+      "finding": "A name set plus first-name lookup misses the second PB32WideShiftJam body. Both actual modules have 24 PB32 functions with 23 unique names.",
+      "scope": "Prelaunch source finding; no helper or owner ran."
+    }
+  ],
+  "held_unexecuted_prior_freeze_sha256": "543ba6a906bacff3ce259ff83c16b14966deb00538a1ad867154faad61d2f8fd",
+  "operator_or_reader_executed": false,
+  "schema": "sirius-fp32-estimate-graph-prelaunch-findings-v1",
+  "scope": "Unconsumed preparation corrections only. No failed runtime/reader owner fabricated; no shader or compiler retry."
+}

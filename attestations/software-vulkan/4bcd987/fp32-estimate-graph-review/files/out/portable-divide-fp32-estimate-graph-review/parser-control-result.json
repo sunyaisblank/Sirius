@@ -1,0 +1,178 @@
+{
+  "accepted": [
+    "exact_actual_module",
+    "all_Divide_local_IDs_renamed_in_full_module",
+    "equivalent_leading_whitespace_and_blank_lines"
+  ],
+  "helper_normalization_controls": {
+    "negative_count": 2,
+    "passed": true,
+    "rejected": [
+      "exact_integer_import_identity_changed",
+      "second_WideShiftJam_typed_shift_changed"
+    ],
+    "scope": "Complete actual module source mutations; no assembler/validator execution."
+  },
+  "mutants_are_complete_actual_module": true,
+  "mutated_modules_assembled_or_validated": false,
+  "negative_count": 38,
+  "passed": true,
+  "positive_count": 3,
+  "rejected": [
+    {
+      "name": "coordinated_fast_and_fallback_wrong_exponent",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "selector_phi_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "selector_uses_other_dominating_bool",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "proposal_operands_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "numerator_bitcast_uses_denominator",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "range_mask_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "range_binade_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "h_shift_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "guess_margin_wrong",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "wide_product_wrong_divisor",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "wide_product_high_uses_low",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "borrow_inclusive_comparison",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "borrow_phi_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "borrow_added_instead_of_subtracted",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "high_zero_predicate_inverted",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "residual_bound_wrong_shift",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "residual_bound_inclusive",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "residual_guard_phi_false_becomes_true",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "correction_branch_bypasses_exact_guard",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "correction_wrong_numerator",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "correction_wrong_divisor",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "correction_low_product_wrong_digit",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "exact_quotient_subtracts_digit",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "sticky_uses_borrow_predicate",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "sticky_phi_arms_swapped",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "round_uses_pre_normalized_exponent",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_special_guard_operand_changed",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_fallback_loop_bound_changed",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_fallback_sticky_lost",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_fallback_divisor_changed",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "original_fallback_round_exponent_changed",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "phi_predecessor_mismatch",
+      "scope": "parser_closed_CFG"
+    },
+    {
+      "name": "switch_side_entrance",
+      "scope": "parser_closed_CFG"
+    },
+    {
+      "name": "extra_typed_call_in_selector_arm",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "extra_typed_arithmetic_in_fast_block",
+      "scope": "typed_CFG_semantic"
+    },
+    {
+      "name": "unsigned_NoWrap_on_modular_subtraction",
+      "scope": "annotation_contract"
+    },
+    {
+      "name": "signed_NoWrap_on_modular_low_subtraction",
+      "scope": "annotation_contract"
+    },
+    {
+      "name": "proposal_NoContraction_missing",
+      "scope": "annotation_contract"
+    }
+  ],
+  "schema": "sirius-fp32-estimate-fullmodule-graph-controls-v1",
+  "scope": "Source graph-reader rejection controls; typed/CFG mutations preserve declared operand types and edges unless explicitly parser_closed_CFG. No execution or numerical admission.",
+  "typed_CFG_semantic_mutations": 33
+}

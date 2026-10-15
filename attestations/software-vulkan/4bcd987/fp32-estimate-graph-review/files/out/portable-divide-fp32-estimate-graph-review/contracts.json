@@ -1,0 +1,27 @@
+{
+  "actual_emission": "Direct SSA only; reject Function variables, memory/alias operations and copies within PB32Divide. No generalized memory SSA admission.",
+  "arithmetic_or_cost_or_hit_rate_or_adoption_claim": false,
+  "controls": "Full actual module; 3 source-accepted positives and 38 required rejection mutations. Typed/CFG semantic controls are not independently SPIR-V-validated; explicitly structural/parser controls are scoped separately. Two additional fullmodule helper-normalization negatives reject changed import identity and a typed shift change only in the second WideShiftJam clone.",
+  "coverage": "Exact new-block order/definitions/terminators; exact closed Phi predecessor sets including all Switch edges; accepted-return guard dominators; no extra calls/work admitted.",
+  "exact_graph": [
+    "original complete prefix through normalized m Phi equals stock after definition-order ID normalization",
+    "closed predicate-controlled exponent choice under original A<d",
+    "binary32 operands from exact bit patterns; sole scoped NoContraction FDiv32",
+    "normal positive [2^26,2^27) bit guard before h extraction and g=h-16",
+    "one original UInt2 UMulExtended(g,d)",
+    "modulo2^64 inline low/high subtract and exact borrow",
+    "high zero and Rlo<(d<<5), with correction exclusively in verified arm",
+    "one uint32 correction UDiv(Rlo,d), low product, remainder, q=g+digit, sticky and same PB32Round sign/exponent",
+    "both proposal rejection paths reach exact original fallback preheader; full original radix loop/sticky/Round suffix equals stock"
+  ],
+  "module_contracts": [
+    "only 32-bit integer and float types; exact Shader/RoundingModeRTE capabilities",
+    "complete 10339 assembly/readback instruction equality under definition-order ID renaming",
+    "unchanged original normal policy reused via exact frozen source/result/owner/input/output seals; literal one-annotation/two-RTE-line transform and complete readback join, no policy execution repeated",
+    "full descriptor/storage/workgroup/type layouts, execution modes and ordered barriers equal stock",
+    "all 24 PB32 function instances inventoried; all 23 non-Divide bodies normalized equal by (name,ordinal), including both WideShiftJam clones and exact GLSL.std.450 import; no invented standalone WideProduct function"
+  ],
+  "native_division_accuracy_or_RTE_assumption": false,
+  "ownership": "One future read-graph owner, original 300s/4GiB/2GiB, 64MiB file cap; separate post-terminal acceptance; no compiler/provider. Exact failed compiler + accepted finisher sources/owners/seals/whole inputs remain bound with explicit retired-root historical identity.",
+  "schema": "sirius-fp32-estimate-fullmodule-reader-contracts-v1"
+}

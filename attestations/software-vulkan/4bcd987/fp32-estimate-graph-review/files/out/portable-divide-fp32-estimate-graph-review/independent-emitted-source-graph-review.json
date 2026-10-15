@@ -1,0 +1,494 @@
+{
+  "actual_shape": {
+    "NoUnsignedWrap_NoSignedWrap_absent_whole_module": true,
+    "all_new_region_instructions_manually_reviewed": true,
+    "blocks": 61,
+    "empty_arm_contents": "OpLabel then sole OpBranch; no additional instructions",
+    "empty_arms": [
+      "%2933",
+      "%2934",
+      "%2953",
+      "%2954",
+      "%2959",
+      "%2968",
+      "%2969"
+    ],
+    "fastmath_relaxed_FMA_tokens_absent_whole_module": true,
+    "first_line": 4553,
+    "function": "%PB32Divide",
+    "last_line": 4787,
+    "lines": 235,
+    "local_variables_loads_stores": 0,
+    "new_region_blocks": {
+      "%2932": {
+        "first_line": 4664,
+        "last_line": 4677,
+        "opcodes": [
+          "OpLabel",
+          "OpPhi",
+          "OpBitwiseAnd",
+          "OpBitwiseOr",
+          "OpBitwiseAnd",
+          "OpBitwiseOr",
+          "OpBitcast",
+          "OpBitcast",
+          "OpFDiv",
+          "OpBitcast",
+          "OpBitwiseAnd",
+          "OpIEqual",
+          "OpSelectionMerge",
+          "OpBranchConditional"
+        ]
+      },
+      "%2933": {
+        "first_line": 4660,
+        "last_line": 4661,
+        "opcodes": [
+          "OpLabel",
+          "OpBranch"
+        ]
+      },
+      "%2934": {
+        "first_line": 4662,
+        "last_line": 4663,
+        "opcodes": [
+          "OpLabel",
+          "OpBranch"
+        ]
+      },
+      "%2944": {
+        "first_line": 4678,
+        "last_line": 4692,
+        "opcodes": [
+          "OpLabel",
+          "OpBitwiseAnd",
+          "OpBitwiseOr",
+          "OpShiftLeftLogical",
+          "OpISub",
+          "OpUMulExtended",
+          "OpShiftLeftLogical",
+          "OpShiftRightLogical",
+          "OpCompositeExtract",
+          "OpISub",
+          "OpCompositeExtract",
+          "OpISub",
+          "OpULessThan",
+          "OpSelectionMerge",
+          "OpBranchConditional"
+        ]
+      },
+      "%2952": {
+        "first_line": 4697,
+        "last_line": 4702,
+        "opcodes": [
+          "OpLabel",
+          "OpPhi",
+          "OpISub",
+          "OpIEqual",
+          "OpSelectionMerge",
+          "OpBranchConditional"
+        ]
+      },
+      "%2953": {
+        "first_line": 4693,
+        "last_line": 4694,
+        "opcodes": [
+          "OpLabel",
+          "OpBranch"
+        ]
+      },
+      "%2954": {
+        "first_line": 4695,
+        "last_line": 4696,
+        "opcodes": [
+          "OpLabel",
+          "OpBranch"
+        ]
+      },
+      "%2957": {
+        "first_line": 4709,
+        "last_line": 4712,
+        "opcodes": [
+          "OpLabel",
+          "OpPhi",
+          "OpSelectionMerge",
+          "OpBranchConditional"
+        ]
+      },
+      "%2958": {
+        "first_line": 4703,
+        "last_line": 4706,
+        "opcodes": [
+          "OpLabel",
+          "OpShiftLeftLogical",
+          "OpULessThan",
+          "OpBranch"
+        ]
+      },
+      "%2959": {
+        "first_line": 4707,
+        "last_line": 4708,
+        "opcodes": [
+          "OpLabel",
+          "OpBranch"
+        ]
+      },
+      "%2963": {
+        "first_line": 4730,
+        "last_line": 4731,
+        "opcodes": [
+          "OpLabel",
+          "OpBranch"
+        ]
+      },
+      "%2964": {
+        "first_line": 4713,
+        "last_line": 4720,
+        "opcodes": [
+          "OpLabel",
+          "OpUDiv",
+          "OpIMul",
+          "OpISub",
+          "OpIAdd",
+          "OpINotEqual",
+          "OpSelectionMerge",
+          "OpBranchConditional"
+        ]
+      },
+      "%2967": {
+        "first_line": 4725,
+        "last_line": 4729,
+        "opcodes": [
+          "OpLabel",
+          "OpPhi",
+          "OpBitwiseOr",
+          "OpFunctionCall",
+          "OpReturnValue"
+        ]
+      },
+      "%2968": {
+        "first_line": 4721,
+        "last_line": 4722,
+        "opcodes": [
+          "OpLabel",
+          "OpBranch"
+        ]
+      },
+      "%2969": {
+        "first_line": 4723,
+        "last_line": 4724,
+        "opcodes": [
+          "OpLabel",
+          "OpBranch"
+        ]
+      }
+    },
+    "new_region_calls": [
+      "%PB32Round only, in %2967"
+    ],
+    "no_hidden_new_region_side_effect_or_extra_call_observed": true,
+    "types": {
+      "%PB32Finite": "OpTypeStruct uint,int (significand,exponent)",
+      "%PB32Wide": "OpTypeStruct uint,uint (low,high)",
+      "%float": "OpTypeFloat32",
+      "%int": "OpTypeInt32 signed",
+      "%uint": "OpTypeInt32 unsigned"
+    }
+  },
+  "authority": {
+    "manifest_sha256": "73bb58a389dd788996d4217025c71f5b6516315559e84c1508ee4914dc12aa4e",
+    "original_stop_commit": "f5758f98ee1596cf3dc266a071fcd53e4d2181de",
+    "recovery_commit": "4ad679a141d1279791faa170859ce7f2abbae537",
+    "source_pins": [
+      {
+        "bytes": 7350,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-policy-recovery/manifest.json",
+        "sha256": "73bb58a389dd788996d4217025c71f5b6516315559e84c1508ee4914dc12aa4e"
+      },
+      {
+        "bytes": 426475,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-policy-recovery/files/bin/linux-gcc/portable-divide-fp32-estimate-policy-recovery/candidate-endpoint-normal.final.spvasm",
+        "sha256": "35059592f37aa3f0c34e8c0147497f618073780ede0be2f8f922366519c8255e"
+      },
+      {
+        "bytes": 152844,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-policy-recovery/files/bin/linux-gcc/portable-divide-fp32-estimate-policy-recovery/candidate-endpoint-normal.spv",
+        "sha256": "0535c0f6a689d2d59896543882e1f5300fdd67fe70509b7dda0996f59ffd03d9"
+      },
+      {
+        "bytes": 1564,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-policy-recovery/files/out/portable-divide-fp32-estimate-policy-recovery/policy-acceptance.json",
+        "sha256": "e79d0f3f56ac491e92e90691fa0c487fa4a928262ec3b8f3a0df6fe9ac6c74ff"
+      },
+      {
+        "bytes": 1703,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-policy-recovery/files/out/portable-divide-fp32-estimate-policy-recovery/finish-policy/owner.json",
+        "sha256": "38e64ec3f89a4727c7f2230f93b70c2882ff3cfb000602f59892233eb9908565"
+      },
+      {
+        "bytes": 14973,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/candidate/src/sirius/kernels/portable_binary32.h",
+        "sha256": "c21eb8259f2ed51bce2333ded7065c820dd782cf32ce5e46ea8976166503cdb5"
+      },
+      {
+        "bytes": 5290,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/source-contracts.json",
+        "sha256": "99f49a7f76e3d093dc4bba6f5d947c7285828d24f9f62c8017986df246071736"
+      },
+      {
+        "bytes": 9254,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/independent-arithmetic-source-review.json",
+        "sha256": "5521effdd96fa88165eb79649965b11bb344589a21e157328338940ac48bb40d"
+      },
+      {
+        "bytes": 15737,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/stock-reuse.json",
+        "sha256": "6ba4cd7c1209e326003313a5fbf9f699b0b8eb4f0b6ae3e161a27a3b2ccfb795"
+      },
+      {
+        "bytes": 422552,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/divide64-compiler-jit-screen/files/bin/linux-gcc/portable-divide64-screen-capability-order/modules/stock-endpoint-normal.final.spvasm",
+        "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994"
+      }
+    ],
+    "stock_commit": "34f22437f8d9ae863d36bdcee01ab64edc71b572"
+  },
+  "blockers_found": [],
+  "concrete_CFG": {
+    "dominance": "Manual enumeration of this closed new-region CFG: original finite/normalization prefix precedes%2932; binade predicate dominates%2944; high-zero and low-bound conjunction dominates%2964; %2964 correction/remainder predicate dominates the sticky Round return. Every phi names exactly its actual listed arm predecessors; no side entrance was observed.",
+    "preds": {
+      "%2932": [
+        "%2933",
+        "%2934"
+      ],
+      "%2943": [
+        "%2932",
+        "%2963"
+      ],
+      "%2944": [
+        "%2932"
+      ],
+      "%2952": [
+        "%2953",
+        "%2954"
+      ],
+      "%2957": [
+        "%2958",
+        "%2959"
+      ],
+      "%2958": [
+        "%2952"
+      ],
+      "%2963": [
+        "%2957"
+      ],
+      "%2964": [
+        "%2957"
+      ],
+      "%2967": [
+        "%2968",
+        "%2969"
+      ],
+      "%2973": [
+        "%2943",
+        "%2976"
+      ]
+    },
+    "strength_limit": "Concrete current module inspection, not a general parser or proof that future mutated modules will be rejected."
+  },
+  "limits": {
+    "authored_graphreader_or_negative_controls_executed": false,
+    "cost_benefit_or_deadline_claim": false,
+    "driver_or_provider_executed": false,
+    "future_reader_admission": "Separate source admission and actual owned execution/negative controls remain required. This receipt neither admits forthcoming graph.py/controls.py nor substitutes for their rejection tests.",
+    "independent_owned_reader_success": false,
+    "manual_source_lowering_check_only": true,
+    "numeric_corpus_or_arithmetic_executed": false,
+    "production_adoption_or_scientific_release_qualification": false
+  },
+  "methods": {
+    "immutable_Git_bytes_checked": "recovery manifest, final ASM/SPV, acceptance and actual owner match4ad679a; remaining listed prior references are directly pinned local immutable archive bytes",
+    "manual": "Read the complete actual235-line Divide, classification/unpack/round/shift helpers, types/constants/decorations and corresponding stock/source bodies. Reasoned through integer bounds, actual block predecessors and SSA definitions.",
+    "not_formal_proof": "The argument is manual source reasoning, not machine-checked theorem proof or owned structural-control success",
+    "passive_only": "JSON/file/regex/hash/Git reads and explicit fixed ID token correspondence checks; no authored graph reader, control, policy, helper, compiler, assembler, validator, disassembler or provider imported/run"
+  },
+  "not_final_reader_or_numerical_admission": true,
+  "passed": true,
+  "prior_terminal_scope": {
+    "original_compiler_stop_child_exit": 1,
+    "original_compiler_stop_passed": false,
+    "recovery_child_exit": 0,
+    "recovery_claim": "Remaining original assembler/validator/final-readback finisher only; acceptance explicitly leaves structural_graph_accepted and runtime_or_numerical_admission false",
+    "recovery_owner_passed": true,
+    "recovery_wall_seconds": 1.81299215699255,
+    "this_task_does_not_reaudit_all_terminal_input_rows": true
+  },
+  "reviewer": "/root/sanitizer_gate_contract",
+  "role": "independent manual emitted-source reviewer; not structural-reader author or operator",
+  "schema": "sirius-fp32-estimate-independent-emitted-source-graph-review-v1",
+  "scope": "Manual typed-SSA/control-flow review of the actual archived PB32Divide and relevant preserved helper bodies; no concrete algorithm/lowering defect found within this scope",
+  "unchanged_stock_correspondence": {
+    "comparison_scope": "Exact opcode/operand token correspondence under these manually identified concrete ID maps; insignificant whitespace ignored. No authored/generalized graph reader was run.",
+    "fallback_equal": true,
+    "fallback_fixed_mapping": {
+      "stock%digit": "candidate%digit_0",
+      "stock2910": 2925,
+      "stock2912": 2943,
+      "stock2915": 2930,
+      "stock2916": 2931,
+      "stock2917..2944": "candidate2973..3000 (+56)"
+    },
+    "fallback_tokens": 221,
+    "helpers_equal_tokens_under_explicit_type_plus12_body_plus15_mapping": {
+      "PB32Abs": 6,
+      "PB32Infinity": 7,
+      "PB32LeadingBit": 7,
+      "PB32Nan": 7,
+      "PB32Round": 108,
+      "PB32ShiftJam": 40,
+      "PB32Unpack": 46,
+      "PB32Zero": 7
+    },
+    "prefix_equal": true,
+    "prefix_fixed_mapping": "stock numeric instruction/block IDs+15; function type IDs+12; named constants/function IDs retained; stop at normalized m/exponent phis before new dispatch",
+    "prefix_tokens": 425
+  },
+  "utc": "2026-10-15T01:22:34.944660+00:00",
+  "witnesses": [
+    {
+      "argument": "NaN, infinity/infinity, zero/zero, infinity/divide-by-zero and zero/infinity returns precede proposal evaluation. Unpack is reached only for finite nonzero magnitudes. aa.significand=a and bb.significand=d are [2^23,2^24). %2926 is unsigned a<d; %2931 is m=2a on true and a otherwise; %2930 is original eA-eB minus1 on true. Thus d<=m<2d<2^25 and sign/exponent are unmodified throughout the new arm.",
+      "ids": [
+        "%2884",
+        "%2902",
+        "%2909",
+        "%2919",
+        "%aa_3",
+        "%bb_2",
+        "%2926",
+        "%2930",
+        "%2931"
+      ],
+      "stage": "original exceptional prefix and normalization"
+    },
+    {
+      "argument": "%2933/%2934 are the only predecessors of %2932, selected by the original %2926. Phi%2935 selects1291845632=0x4d000000 when a<d, else1283457024=0x4c800000. It ORs a&0x7fffff, while denominator ORs1065353216=0x3f800000 with d&0x7fffff. OpBitcast converts each to declared float32 and the sole proposal OpFDiv consumes precisely those two values. Under Float32 bit encoding the exact operand ratio is N/d with N=m*2^26; both operands are positive finite normals. No float-to-int numeric conversion appears in this path.",
+      "ids": [
+        "%2935",
+        "%2936",
+        "%numeratorBits",
+        "%denominatorBits",
+        "%2938",
+        "%2939",
+        "%proposal"
+      ],
+      "lines": [
+        4665,
+        4672
+      ],
+      "stage": "actual bit-built operands"
+    },
+    {
+      "argument": "%2940 bitcasts the FDiv result back to uint. (%2940&4286578688=0xff800000)==1283457024=0x4c800000 is the only entrance to %2944. This rejects other signs/exponents before h extraction. h=((bits&0x7fffff)|0x800000)<<3 is [2^26,2^27-8], and guess=h-16 is positive and <2^27. The sole fast product%2947 is OpUMulExtended(%guess,d), not an approximate or low-only product. No accuracy of native FDiv is needed to establish correctness after the later exact guards; poor proposals may reject.",
+      "ids": [
+        "%2940",
+        "%2941",
+        "%2942",
+        "%2944",
+        "%2945",
+        "%2946",
+        "%h",
+        "%guess",
+        "%2947"
+      ],
+      "lines": [
+        4673,
+        4683
+      ],
+      "stage": "proposal bit guard and guess"
+    },
+    {
+      "argument": "Low/high are m<<26 and m>>6, exactly the two UInt32 words of N=m*2^26. Product fields0/1 are low/high from the exact extended unsigned product. residualLo=Nlo-Plo; %2951 is unsigned Nlo<Plo; its two empty arms select borrow1/0 in phi%2955. residualHi=Nhi-Phi-borrow is unsigned modular subtraction. Both N and P are <2^51, so a negative N-P wraps to a value >2^64-2^51 with nonzero high word. No NoUnsignedWrap/NoSignedWrap decoration invalidates the required modular behavior. This does not invoke PB32WideSubtract or its unproved a>=b precondition.",
+      "ids": [
+        "%numeratorLo",
+        "%numeratorHi",
+        "%2948",
+        "%2949",
+        "%residualLo",
+        "%2950",
+        "%2951",
+        "%2955",
+        "%residualHi"
+      ],
+      "lines": [
+        4684,
+        4700
+      ],
+      "stage": "two-word numerator and explicit modular borrow"
+    },
+    {
+      "argument": "Only residualHi==0 reaches block%2958, whose %2961 checks residualLo<(d<<5). Merge%2957 has exactly predecessors%2958/%2959 and selects %2961/false; %2964 has the sole predecessor%2957 under true%2962. Therefore both guards dominate corrective UDiv. As d<<5<2^29 with no overflow, accepted residual is the exact nonnegative R=N-P and satisfies R<32d.",
+      "ids": [
+        "%2956",
+        "%2958",
+        "%2960",
+        "%2961",
+        "%2957",
+        "%2962",
+        "%2964"
+      ],
+      "lines": [
+        4700,
+        4714
+      ],
+      "stage": "exact acceptance and domination"
+    },
+    {
+      "argument": "%digit=OpUDiv uint R,d gives0..31, with nonzero d. %2965=digit*d<2^29 and exactRemainder=R-digit*d is [0,d). exactQuotient=guess+digit=floor(N/d) is [2^26,2^27), so the add cannot overflow. %2966 tests that actual remainder; its empty arms select1/0 into phi%2970. %2971 ORs the exact quotient with this sticky bit and %2972 calls unchanged PB32Round(sign_2,%2930,%2971), then returns. Only the two sticky arms enter%2967; the native proposal and its approximated value never feed Round directly.",
+      "ids": [
+        "%digit",
+        "%2965",
+        "%exactRemainder",
+        "%exactQuotient",
+        "%2966",
+        "%2970",
+        "%2971",
+        "%2972"
+      ],
+      "lines": [
+        4714,
+        4729
+      ],
+      "stage": "one exact correction and sticky Round"
+    },
+    {
+      "argument": "%2943 has exactly two predecessors: %2932 when proposal guard fails, and %2963 when residual acceptance fails. %2963 contains only a branch to%2943. The preheader contains exactly remainder_3=m-d and branch%2973; a,d,m,sign,exponent remain original SSA values with no memory mutation. The original loop starts q1,r=m-d,chunk0; executes radix8/8/8/2 bit chunks via unsigned division/remainder; exits at chunk4; ORs final remainder!=0 and calls the same Round. Each remainder<d<2^24 makes 8-bit shift<2^32; quotient intermediate widths9/17/25/27 bits fit UInt32. There is no retry/reentry into proposal evaluation.",
+      "ids": [
+        "%2943",
+        "%2963",
+        "%remainder_3",
+        "%2973",
+        "%2974",
+        "%2977",
+        "%2979",
+        "%2980",
+        "%2999",
+        "%3000"
+      ],
+      "lines": [
+        4730,
+        4787
+      ],
+      "stage": "all rejections preserve original fallback"
+    }
+  ],
+  "workspace": {
+    "HEAD": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "ahead": 0,
+    "behind": 0,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "canonical_committed_pushed": true,
+    "this_review": "ignored scratch, not committed or pushed",
+    "tracked_status": "",
+    "worktrees": 1
+  }
+}
