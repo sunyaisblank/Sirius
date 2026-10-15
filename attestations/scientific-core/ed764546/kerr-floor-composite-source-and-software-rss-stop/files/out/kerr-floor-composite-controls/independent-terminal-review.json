@@ -1,0 +1,191 @@
+{
+  "schema": "sirius-kerr-floor-composite-controls-independent-terminal-review-v1",
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "numerical_verdict_available": false,
+  "numerical_test_passed": false,
+  "classification": "INCOMPLETE_FIRST_CAPTURED_FP32_ATTEMPT_STOPPED_BY_AGGREGATE_RSS_GUARD",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "operator": "/root",
+  "independence": "Terminal review independent of root execution and product/composite algorithm author. Reviewer prepared only the exact helper copies and eight-action metadata; not independent of that preparation. No authored helper/test/provider executed by reviewer.",
+  "pins": {
+    "actions.json": {
+      "path": "out/kerr-floor-composite-controls/actions.json",
+      "bytes": 36863,
+      "sha256": "2155cf0472b1054b4dade4e969eae16c25e473c9d9820c28c575fefb3b346f53"
+    },
+    "run_owned.py": {
+      "path": "out/kerr-floor-composite-controls/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/kerr-floor-composite-controls/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "readiness.json": {
+      "path": "out/kerr-floor-composite-controls/readiness.json",
+      "bytes": 14423,
+      "sha256": "477a46e96a8b4efcd254ba8dccc5febe35e7b4247c9882f7358952d9f66fe532"
+    },
+    "independent-source-admission.json": {
+      "path": "out/kerr-floor-composite-controls/independent-source-admission.json",
+      "bytes": 8714,
+      "sha256": "fa4f3be6fe2ccc4165e018e60ad97437e559330871f1f7bf930aebb03c4a8f6a"
+    },
+    "preparer-source-review.json": {
+      "path": "out/kerr-floor-composite-controls/preparer-source-review.json",
+      "bytes": 6646,
+      "sha256": "c7175282e847f926318e74619198059375648bb13148bd4ceb668e95077caa32"
+    },
+    "captured-fp32/owner.json": {
+      "path": "out/kerr-floor-composite-controls/captured-fp32/owner.json",
+      "bytes": 2456,
+      "sha256": "f8f8b92ae0f4423f12a715c9831c9dfdd05e22ec363a4249c37d9112538118d1"
+    },
+    "captured-fp32/inputs-before.json": {
+      "path": "out/kerr-floor-composite-controls/captured-fp32/inputs-before.json",
+      "bytes": 139280,
+      "sha256": "e8527fde215750f912a3f81d2de41da77f8083d6e72c22d397727840fc7e58d3"
+    },
+    "captured-fp32/inputs-after.json": {
+      "path": "out/kerr-floor-composite-controls/captured-fp32/inputs-after.json",
+      "bytes": 139280,
+      "sha256": "e8527fde215750f912a3f81d2de41da77f8083d6e72c22d397727840fc7e58d3"
+    },
+    "captured-fp32/samples.jsonl": {
+      "path": "out/kerr-floor-composite-controls/captured-fp32/samples.jsonl",
+      "bytes": 2287967,
+      "sha256": "9ade7a642e36d012e0f3659c47aab59bdd2fa8904c334d3cc887d4d3182c9d3b"
+    },
+    "captured-fp32/stdout.log": {
+      "path": "out/kerr-floor-composite-controls/captured-fp32/stdout.log",
+      "bytes": 418,
+      "sha256": "cf4a7a8e6fd9d4ad67ea4b8b7622b6cc72a7b4273f199eb7122c6a90dc0e2956"
+    },
+    "captured-fp32/stderr.log": {
+      "path": "out/kerr-floor-composite-controls/captured-fp32/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "actual_attempt": {
+    "case": "captured-fp32",
+    "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+    "operator_session": 78360,
+    "operator_closed_exit": 1,
+    "child_exit": -15,
+    "stop_reason": "diagnostic_sampled_rss_guard",
+    "wall_seconds": 257.3113125910022,
+    "external_seconds": 300,
+    "samples": 10014,
+    "peak_aggregate_rss_kib": 4204320,
+    "aggregate_rss_limit_kib": 4194304,
+    "excess_kib": 10016,
+    "last_sample_elapsed_seconds": 256.4860874490114,
+    "last_sample_child_rss_kib": 4182988,
+    "last_sample_controller_rss_kib": 21332,
+    "minimum_sampled_available_kib": 16370100,
+    "reserve_kib": 2097152,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "adopted_children_reaped": []
+  },
+  "checks": {
+    "all_585_actual_whole_input_identities_current": true,
+    "before_after_rows_checked": 1170,
+    "before_after_files_byte_equal": true,
+    "whole_set_exact_tracked_source_helpers_actions_plus44declared_inputs": true,
+    "source_clean_ed764546_and_actions_revision_match": true,
+    "accepted_helper_source_and_action_release_pins_unchanged": true,
+    "all_32_readiness_runtime_library_rows_rehashed_current": true,
+    "all_3_canonical_staged_parity_SPV_pairs_current_and_equal_saved_hashes": true,
+    "current_backend_ELF_identity_matches_actual_before_map": true,
+    "admitted_readiness_frozen_before_spawn_and_unchanged": true,
+    "scope_annotation": "Owner scope retains historical PENDING wording; pinned readiness was admitted/current. Descriptive text does not establish or replace admission.",
+    "all_10014_samples_read_and_aggregate_peak_and_min_reserve_recomputed": true,
+    "first_10013_samples_not_above_RSS_limit": true,
+    "last_sample_above_RSS_limit_before_timeout": true,
+    "same_original_child_session_start_ticks_in_sampled_members": true,
+    "real_LVP_child_map_path_dev_inode_and_current_file_join": true,
+    "no_XML_or_completed_parity_or_GTest_result": true,
+    "native_stdout": "418B: GoogleTest launch and selected RUN line only; no ParityProbe initialization/actual/completion marker.",
+    "stderr_bytes": 0,
+    "all_seven_remaining_action_folders_absent": true,
+    "stop_first_nonpass_observed": true
+  },
+  "birth_and_provider": {
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "same_boot_verified": true,
+    "child": {
+      "pid": 653223,
+      "saved_start_ticks": "11155822",
+      "fresh_current_start_ticks": null,
+      "absent": true
+    },
+    "controller": {
+      "pid": 653219,
+      "saved_start_ticks": "11155775",
+      "fresh_current_start_ticks": null,
+      "absent": true
+    },
+    "observed_owner_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 653223,
+        "saved_start_ticks": "11155822"
+      }
+    ],
+    "provider": {
+      "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "maps_device": "08:50",
+      "inode": 143595,
+      "mapped_pid": 653223,
+      "start_ticks": "11155822",
+      "owned_session": 653223,
+      "actual_before_input_pin": {
+        "bytes": 11929384,
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      }
+    },
+    "limits": "Bounded accessible/proc session observations and exact recorded birth checks only; no global consumer absence or complete live loader/LLVM trace claim."
+  },
+  "unrun_actions": [
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "claim_limits": [
+    "Attempt is incomplete under the original300s/4GiBaggregate/2GiBreserve diagnostic guard. Aggregate RSS includes child and controller; the last child RSS alone was below4GiB.",
+    "No XML, shader output, actual-submit timing, canonical endpoint comparison or numerical verdict exists. GTest start plus mapped LVP does not establish whether pipeline creation, deferred compilation, dispatch, allocation or another phase caused the peak.",
+    "This is not a numerical counterexample, completed captured-state acceptance, setup-memory pass, actual1000ms dispatch pass, performance result or full trace/image/P1/scientific/native/release qualification.",
+    "No unchanged software retry, limit increase or remaining control execution is admitted by this review. Current strict build/source-governance success remains distinct."
+  ],
+  "review_execution": {
+    "authored_code_or_helper_import_or_execution": false,
+    "ELF_parser_compiler_provider_test_or_API_execution": false,
+    "tracked_or_frozen_input_mutation": false,
+    "only_file_written": "independent-terminal-review.json",
+    "method": "Passive JSON/JSONL/text/hash/filesystem and Linux/proc identity checks; all current actual input files hashed after stopped workload."
+  },
+  "workspace": {
+    "head": "ed76454617063f2463a75423b2756e8c957ce6c2",
+    "tracked_tree_clean": true,
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "source_committed_and_pushed": true,
+    "receipt": "Ignored uncommitted diagnostic review outside every current/future action input map, awaiting root preservation."
+  }
+}

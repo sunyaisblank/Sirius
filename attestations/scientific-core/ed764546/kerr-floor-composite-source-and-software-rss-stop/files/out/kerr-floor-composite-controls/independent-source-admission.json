@@ -1,0 +1,232 @@
+{
+  "schema": "sirius-kerr-floor-composite-controls-independent-source-admission-v1",
+  "passed": true,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "scope": "Source/action/readiness composition only. First case had already been launched solely by root before this review; no terminal or numerical acceptance is asserted here.",
+  "reviewer_role": "Independent of root packet preparation and execution; previously reviewed composite source and registration integration.",
+  "pins": {
+    "run_owned.py": {
+      "path": "out/kerr-floor-composite-controls/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/kerr-floor-composite-controls/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "actions.json": {
+      "path": "out/kerr-floor-composite-controls/actions.json",
+      "bytes": 36863,
+      "sha256": "2155cf0472b1054b4dade4e969eae16c25e473c9d9820c28c575fefb3b346f53"
+    },
+    "readiness.json": {
+      "path": "out/kerr-floor-composite-controls/readiness.json",
+      "bytes": 14423,
+      "sha256": "477a46e96a8b4efcd254ba8dccc5febe35e7b4247c9882f7358952d9f66fe532"
+    },
+    "inventory.json": {
+      "path": "out/kerr-floor-composite-controls/inventory.json",
+      "bytes": 986718,
+      "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+    }
+  },
+  "source_and_readiness_checks": {
+    "source_clean_committed_pushed": true,
+    "base_branch_ahead": 0,
+    "base_branch_behind": 0,
+    "root_saved_strict_build_log_hash_matches": true,
+    "current_registration_tests": 1152,
+    "all_eight_selected_names_Mandatory": true,
+    "common_frozen_inputs": 44,
+    "saved_ldd_resolved_paths_subset_of_common_freeze": true,
+    "saved_runtime_dependency_rows": 32,
+    "three_compiled_and_staged_parity_pairs_declared": true,
+    "large_ELF_SPV_and_provider_libraries_rehashed_during_live_case": false,
+    "root_current_product_byte_verification_is_separate": true
+  },
+  "action_checks": [
+    {
+      "action": "captured-fp32",
+      "filter": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "frozen_inputs": 44,
+      "root_required_xml": {
+        "suite": "KernelParity",
+        "name": "CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "disabled": 0,
+        "skipped": 0,
+        "status": "run",
+        "result": "completed",
+        "property": {
+          "name": "parity_opcode_8_completed_records",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "action": "captured-fp32comp",
+      "filter": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "frozen_inputs": 48,
+      "root_required_xml": {
+        "suite": "KernelParity",
+        "name": "CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "disabled": 0,
+        "skipped": 0,
+        "status": "run",
+        "result": "completed",
+        "property": {
+          "name": "parity_opcode_8_completed_records",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "action": "retry-fp32",
+      "filter": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "frozen_inputs": 52,
+      "root_required_xml": {
+        "suite": "KernelParity",
+        "name": "RejectedNeighbourRetriesExactMinimumFp32",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "disabled": 0,
+        "skipped": 0,
+        "status": "run",
+        "result": "completed",
+        "property": {
+          "name": "fp32_evidence",
+          "value": "real_adaptive_minimum_retry_controls_executed"
+        }
+      }
+    },
+    {
+      "action": "retry-fp32comp",
+      "filter": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "frozen_inputs": 56,
+      "root_required_xml": {
+        "suite": "KernelParity",
+        "name": "RejectedNeighbourRetriesExactMinimumFp32Comp",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "disabled": 0,
+        "skipped": 0,
+        "status": "run",
+        "result": "completed",
+        "property": {
+          "name": "fp32comp_evidence",
+          "value": "real_adaptive_minimum_retry_controls_executed"
+        }
+      }
+    },
+    {
+      "action": "retry-fp64",
+      "filter": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "frozen_inputs": 60,
+      "root_required_xml": {
+        "suite": "KernelParity",
+        "name": "RejectedNeighbourRetriesExactMinimumFp64",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "disabled": 0,
+        "skipped": 0,
+        "status": "run",
+        "result": "completed",
+        "property": {
+          "name": "fp64_evidence",
+          "value": "real_adaptive_minimum_retry_controls_executed"
+        }
+      }
+    },
+    {
+      "action": "unrepresented-stage",
+      "filter": "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+      "frozen_inputs": 64,
+      "root_required_xml": {
+        "suite": "KernelParity",
+        "name": "UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "disabled": 0,
+        "skipped": 0,
+        "status": "run",
+        "result": "completed",
+        "property": {
+          "name": "parity_opcode_8_completed_records",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "action": "null-projection",
+      "filter": "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+      "frozen_inputs": 68,
+      "root_required_xml": {
+        "suite": "KernelParity",
+        "name": "NullProjectionPreservesConeBranchAndFailsClosed",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "disabled": 0,
+        "skipped": 0,
+        "status": "run",
+        "result": "completed",
+        "property": {
+          "name": "parity_opcode_10_completed_records",
+          "value": "8"
+        }
+      }
+    },
+    {
+      "action": "precision-invariants",
+      "filter": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+      "frozen_inputs": 72,
+      "root_required_xml": {
+        "suite": "KernelParity",
+        "name": "PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "disabled": 0,
+        "skipped": 0,
+        "status": "run",
+        "result": "completed",
+        "property": {
+          "name": "fp64_evidence",
+          "value": "native_invariants_executed"
+        }
+      }
+    }
+  ],
+  "ownership_and_policy": [
+    "Exact accepted1dd run_owned/guard bytes; no helper modification.",
+    "All8 actions direct exact gtest filters,kindtest,typed integer expected_exit0; original300s/4GiB aggregate RSS/2GiB host reserve.",
+    "Forced software providerLVP0,default shader cache and inherited-override refusal match the original ordinary apparatus.",
+    "Every later action freezes all previous owner/before/after/XML paths; own future output paths are excluded.",
+    "Runner freezes tracked sources and own helpers/actions automatically, in addition to declared inputs.",
+    "Source/input stability, actualLVP mapping, birth/session ownership, bounded cleanup and absence checks precede owner PASS."
+  ],
+  "root_XML_acceptance_required": {
+    "enforced_by_unchanged_runner": false,
+    "root_explicit_policy": "Root must read exact one-case XML/zero failures/errors/skips/disabled and required positive execution property before each following launch; stop at first nonpass.",
+    "readiness_declares_this_manual_policy": true,
+    "refusal_scope": "Unsupported FP64 refusal is not the required executed-positive FP64 witness; report it candidly rather than claim this batch complete."
+  },
+  "scope_note": "Action scope text retains a prospective PENDING admission phrase; the pinned readiness is explicitly admitted/current. This descriptive text does not replace actual root product, XML or terminal acceptance.",
+  "limits": [
+    "Parity probe is not the full trace kernel or a full image.",
+    "Current3 resource pairs are declared with saved root byte identities; this live source review does not repeat heavy byte hashing.",
+    "No raw GPU buffer, full40-field trace, horizon, science, performance, fullMandatory or release claim.",
+    "No authored helper/parser, ldd/CTest query, compiler, provider, test or numerical reference executed by reviewer."
+  ],
+  "blockers": []
+}

@@ -1,0 +1,67 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "--gtest_filter=KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "captured-fp32",
+  "child_exit": -15,
+  "child_pid": 653223,
+  "child_start_ticks": "11155822",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 653218,
+    "pid": 653219,
+    "ppid": 653218,
+    "rss_kib": 21332,
+    "session": 653218,
+    "start_ticks": "11155775",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/kerr-floor-composite-controls/captured-fp32/gtest.xml",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "minimum_sampled_available_kib": 16370100,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 653223,
+      "saved_start_ticks": "11155822"
+    }
+  ],
+  "passed": false,
+  "peak_sampled_rss_kib": 4204320,
+  "provider_mappings": [
+    {
+      "maps": [
+        "71b767c00000-71b767c5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "71b767c5b000-71b76806b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "71b76806b000-71b7686c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "71b7686c6000-71b768761000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 653223,
+      "pid": 653223,
+      "start_ticks": "11155822"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "One exact original/current focused control; unchanged source assertions including actual RunProbe1000ms,4GiB aggregate diagnostic RSS/default cache. PENDING root strict-build/current runtime dependency+resource+registration admission in readiness.json; stop first nonpass; no image/fullP1/release claim.",
+  "source": {
+    "revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": "diagnostic_sampled_rss_guard",
+  "wall_seconds": 257.3113125910022,
+  "whole_inputs_unchanged": true
+}

@@ -1,0 +1,213 @@
+{
+  "schema": "sirius-kerr-floor-composite-independent-source-review-v1",
+  "passed": true,
+  "source_copy_review_passed": true,
+  "source_revision": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+  "scope": "Four-file unexecuted source-copy candidate only; root integration, registration closure, formatting, configure/build and numerical/runtime admission remain separate.",
+  "reviewer": {
+    "independent_of_candidate_author": true,
+    "independent_of_operator": true,
+    "prior_role": "Reviewed the preserved independent local Hamiltonian reference source; did not author or execute that reference or this composite candidate."
+  },
+  "pins": {
+    "patch": {
+      "path": "out/kerr-floor-composite-candidate/candidate.patch",
+      "bytes": 19525,
+      "sha256": "ddc163c479950424d74e02c221f8dafdb1084e74ddcb3b8552659004f5b33186"
+    },
+    "contracts": {
+      "path": "out/kerr-floor-composite-candidate/source-contracts.json",
+      "bytes": 4386,
+      "sha256": "82ba2670231c31e0495a27b898b252768d9f1b7e7c609bd252c417eb484223e4"
+    },
+    "reference": {
+      "path": "attestations/scientific-core/02ee51f/kerr-local-hamiltonian-reference/result.json",
+      "bytes": 65734,
+      "sha256": "e93e6f2e1925d086238f550dd849da13f1e7b7dc1ae465a3fadcf3118c2275b1"
+    },
+    "files": {
+      "src/sirius/kernels/gr_integrator.slang": {
+        "original": {
+          "path": "out/kerr-floor-composite-candidate/original/src/sirius/kernels/gr_integrator.slang",
+          "bytes": 23624,
+          "sha256": "203c0c922e3a51cefef2badb6e8c8cd49b33600ab8e6ed11c1d372eaa527e471"
+        },
+        "candidate": {
+          "path": "out/kerr-floor-composite-candidate/candidate/src/sirius/kernels/gr_integrator.slang",
+          "bytes": 27196,
+          "sha256": "15ec6df994f342b91351c493ee022d2fe8e009c12ee96dd8bd29b4b81e8de552"
+        }
+      },
+      "src/sirius/kernels/trace.slang": {
+        "original": {
+          "path": "out/kerr-floor-composite-candidate/original/src/sirius/kernels/trace.slang",
+          "bytes": 63438,
+          "sha256": "9074a188f407a4e22046db652fd19001387a4773cd25ac90d93f9849cccfe88a"
+        },
+        "candidate": {
+          "path": "out/kerr-floor-composite-candidate/candidate/src/sirius/kernels/trace.slang",
+          "bytes": 63460,
+          "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+        }
+      },
+      "src/sirius/kernels/parity_probe.slang": {
+        "original": {
+          "path": "out/kerr-floor-composite-candidate/original/src/sirius/kernels/parity_probe.slang",
+          "bytes": 40925,
+          "sha256": "885272d041e79077a54702534fc2e91ae2bc89166cd49f077c2978bc5c6eb235"
+        },
+        "candidate": {
+          "path": "out/kerr-floor-composite-candidate/candidate/src/sirius/kernels/parity_probe.slang",
+          "bytes": 44089,
+          "sha256": "1d81e295c4bc288ba3a5032222c4bbbd95b2381d843526a50520b1222f25dc26"
+        }
+      },
+      "tests/backend/kernel_parity_test.cpp": {
+        "original": {
+          "path": "out/kerr-floor-composite-candidate/original/tests/backend/kernel_parity_test.cpp",
+          "bytes": 123996,
+          "sha256": "44cf723524c54a7970344c5ca39932429c06ad1ea1c5b09b761f7c204988ea8f"
+        },
+        "candidate": {
+          "path": "out/kerr-floor-composite-candidate/candidate/tests/backend/kernel_parity_test.cpp",
+          "bytes": 129598,
+          "sha256": "07a298c0a892ebfef48a3185cc39b7af517e4eb44da7ca9645eaad81095c951e"
+        }
+      }
+    }
+  },
+  "passive_byte_checks": {
+    "all_four_originals_equal_current_tracked_and_HEAD_Git_bytes": true,
+    "all_original_candidate_and_patch_contract_pins_match": true,
+    "regenerated_unified_diff_exactly_equals_candidate_patch": true,
+    "original_RK4_metric_projection_tolerance_helpers_prefix_exact": true,
+    "common_representation_failure_error_projection_controller_acceptance_tail_exact": true,
+    "legacy_OP8_body_exact": true,
+    "old_gtests_preserved": 41,
+    "new_gtests": [
+      "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp"
+    ],
+    "all_16_decimal_endpoint_literal_strings_equal_both_saved_reference_channels": true,
+    "all_8_initial_state_bits_equal_original_captured_previous_record": true
+  },
+  "mathematical_review": {
+    "selection_before_attempt": "At step==minimumStep the shared selector returns coarseN2 for FP32/COMP or32 for FP64; any unequal step returns1. Caller counts one attempt before the shared wrapper, without an adaptive retry hidden inside it.",
+    "independence": "At floor, coarseN and fine2N are separate integrations from the same input. The fine2N loop has the same unprojected fine mesh as consecutive half-interval N compositions, rather than reusing the coarse endpoint or any coarse internal state. Ordinary N1 retains the original full/half/half three calls.",
+    "complete_interval": "All selected counts are powers of two. Each composite takes N RK4 substeps of step/N over the original policy interval; policy step, affine commit interval, floors and event settings are unchanged.",
+    "estimator": "For fixed N the composed RK4 method remains fourth order. Halving its internal mesh gives the leading coarse/fine error ratio16, so the unchanged difference/15 estimates fine leading error. The1/5 step controller exponent remains appropriate to varying the total RK4 local interval at fixed resolution; this is asymptotic reasoning, not a guaranteed error bound.",
+    "precision_calibration": "FP64 uses16 times the FP32 internal resolution, the next power-of-two fourth-root calibration for the2e-5 versus1e-9 tolerance ratio. It is not independently established to ensure acceptance or accuracy.",
+    "projection": "No internal substep projects. The original raw fine-candidate null gate, one final branch-preserving projection and projected-null gate remain the acceptance authority.",
+    "bounded_cost": {
+      "maximum_internal_substeps": 64,
+      "ordinary_RHS_calls": 12,
+      "FP32_COMP_floor_RHS_calls": 24,
+      "FP64_floor_RHS_calls": 384,
+      "worst_case_successful_trial_counts_only": true
+    },
+    "guaranteed_convergence_or_deadline_or_performance_claim": false
+  },
+  "production_and_witness_paths": {
+    "shared_wrapper_consumers": [
+      "trace.slang ordinary continuation",
+      "parity_probe.slang OP6 P1 invariant path",
+      "parity_probe.slang OP25 minimum-retry controls",
+      "new opt-in OP8 captured-state controls"
+    ],
+    "legacy_floorless_consumers": "The old AttemptAdaptiveGeodesicStep entry remains N1. Legacy OP8 and the separate Ellis two-sheet authority retain their original implementation; no new composite coverage is claimed for them.",
+    "rejection_and_ownership": "An unrepresented composite substep resets its local result to the input and returns false. Original caller rejection branches still govern state/compensation/affine/counter/publication commits. No accepted-state or40-field continuation layout changes appear in this patch.",
+    "unchanged_contracts": [
+      "Original represented metric/exotic refusal predicates and RK4 stages",
+      "Error normalization/divisor15/tolerances/controller limits and exponent",
+      "Raw/projected null and projection-branch rules",
+      "Trace attempt accounting, exact-floor termination, rejected-step no publication and downstream accepted-state consumers",
+      "FP32-compensated central commit mechanism",
+      "All buffer/sample/result/continuation ABI layouts",
+      "Original RunProbe allocation and1000ms physical submission cap"
+    ],
+    "OP25": "All four original flat-space accepted/rejected floor/adjacent-floor controls remain. New slots26-29 report the same selector used by the actual shared call; existing host assertions now check ordinary1/2, FP32/COMP2/4 and FP6432/64 selection plus original retry/rollback/counters.",
+    "emitted_program_or_actual_execution_reviewed": false
+  },
+  "captured_regression": {
+    "opcode": 8,
+    "opt_in_aux0": 1,
+    "sample_stride": 16,
+    "result_stride": 64,
+    "mass_bits": "3f800000",
+    "spin_bits": "3f666666",
+    "floor_bits": "3ca3d70a",
+    "state_bits": [
+      "c29e0abb",
+      "bfe818da",
+      "beae04d2",
+      "be32b97a",
+      "c2122a40",
+      "c0018bf7",
+      "4188b6eb",
+      "c0208df9"
+    ],
+    "source_input_and_readback_bit_checks": true,
+    "scope": "Only FP32 and compensated FP32 load their original respective parity modules. There is no captured-FP32-state FP64 acceptance claim.",
+    "acceptance_assertions": "Executed marker, accepted flag, unchanged error/null thresholds, selected2/4 resolution, all finite outputs, exact input bits and normalized componentwise bounds against both unprojected canonical128 epsilon channels.",
+    "reference_comparison": "All16 raw decimal constants match the immutable80-digit reference strings. Both epsilon channels round to the same double endpoint at this precision; they preserve provenance/convergence channels rather than provide two distinct double expectations. Bound remains exact binary32 2e-5f with max(1,abs(initial),abs(actual)) scale and no projection allowance.",
+    "old_negative_witness": "The singular-sheet OP8 body remains exact and its existing caller has default aux0=0. The new aux0=1 branch requires exact represented.02f floor before setting its executed marker."
+  },
+  "required_root_integration_before_strict_configure": {
+    "completed_by_this_review": false,
+    "files": {
+      "tests/labels/CTestLabels.cmake": "Regenerate using the existing generator so both new exact test names receive KernelParity Mandatory;Correctness labels.",
+      "tests/operating_model.json": "Add both new exact gtest evidence rows to P1, preserving every prior requirement/evidence row.",
+      "scripts/verify-operating-model.py": "Add those same two gtest names to P1 REQUIRED_EVIDENCE and update only the acceptance_criteria semantic digest for the legitimate model change."
+    },
+    "digest_recipe": "SHA256(json.dumps(model[acceptance_criteria],sort_keys=True,separators=(comma,colon)).encode(UTF-8)); use actual updated JSON bytes via standard library, without changing the policy comparison/assertion.",
+    "generator_command": [
+      "python3",
+      "-B",
+      "scripts/generate-ctest-labels.py"
+    ],
+    "existing_root_checks": [
+      [
+        "python3",
+        "-B",
+        "scripts/generate-ctest-labels.py",
+        "--check"
+      ],
+      [
+        "python3",
+        "-B",
+        "scripts/generate-ctest-labels.py",
+        "--self-test"
+      ],
+      [
+        "python3",
+        "-B",
+        "scripts/verify-operating-model.py"
+      ],
+      [
+        "python3",
+        "-B",
+        "scripts/verify-operating-model.py",
+        "--self-test"
+      ]
+    ],
+    "actual_check_path": "cmake/sirius_alignment.cmake invokes the operating-model verifier at configure; SiriusSourceGovernance and the existing operational evidence control cover the same fail-closed registration/policy joins. No generator/verifier/policy weakening is admitted.",
+    "commands_executed_by_reviewer": false
+  },
+  "limitations": [
+    "Source review does not establish Slang compilation/lowering or GPU numerical acceptance.",
+    "Fixed composite resolution does not guarantee all rays, tolerances,384-RHS FP64 cost or original1000ms submission bounds.",
+    "The captured state is off null; no FP64 admission is inferred from its FP32 regression.",
+    "True past-horizon ingoing-coordinate representation/capture obligations remain unresolved.",
+    "No full40-field/scientific/full-Mandatory/native/release qualification or performance claim."
+  ],
+  "source_math_blockers": [],
+  "workspace": {
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "ahead": 0,
+    "behind": 0,
+    "worktrees": 1,
+    "candidate_and_review": "Ignored uncommitted source-copy diagnostics under out/; root retains integration/execution ownership."
+  },
+  "review_execution": "Passive source/JSON/hash/byte comparison and read-only Git only. No authored source parser/import/helper, numerical reference/control, formatter, compiler, policy tool, provider or test executed."
+}

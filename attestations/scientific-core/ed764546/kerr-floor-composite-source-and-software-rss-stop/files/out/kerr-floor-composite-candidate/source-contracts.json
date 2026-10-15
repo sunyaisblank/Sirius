@@ -1,0 +1,129 @@
+{
+  "schema": "sirius-kerr-floor-composite-source-candidate-v1",
+  "source_only": true,
+  "source_revision": "69fcf27d",
+  "tracked_sources_modified": false,
+  "compiler_or_tests_executed": false,
+  "policy": {
+    "ordinary_coarse_fine": [
+      1,
+      2
+    ],
+    "exact_floor_fp32_and_comp_coarse_fine": [
+      2,
+      4
+    ],
+    "exact_floor_fp64_coarse_fine": [
+      32,
+      64
+    ],
+    "selection_before_one_attempt": true,
+    "unchanged_total_policy_interval": true,
+    "internal_projection": false,
+    "estimator_divisor": 15,
+    "controller_exponent": "1/5",
+    "central_rhs_calls_ordinary": 12,
+    "central_rhs_calls_fp32_floor": 24,
+    "central_rhs_calls_fp64_floor": 384,
+    "maximum_internal_substeps": 64,
+    "precision_ratio_calibration_not_error_guarantee": true
+  },
+  "reference": {
+    "path": "attestations/scientific-core/02ee51f/kerr-local-hamiltonian-reference/result.json",
+    "bytes": 65734,
+    "sha256": "e93e6f2e1925d086238f550dd849da13f1e7b7dc1ae465a3fadcf3118c2275b1",
+    "endpoints": "runs/{1e-18,1e-22}/128/endpoint/{q,u_contravariant}",
+    "raw_input_q_u_bits": [
+      "c29e0abb",
+      "bfe818da",
+      "beae04d2",
+      "be32b97a",
+      "c2122a40",
+      "c0018bf7",
+      "4188b6eb",
+      "c0208df9"
+    ],
+    "floor_bits": "3ca3d70a",
+    "project_reference_to_null": false,
+    "comparison": "Each projected shader output component against each original unprojected canonical128 epsilon variant, abs(actual-reference)/max(1,abs(initial),abs(actual)) <= exact binary32 2e-5f; no extra projection allowance."
+  },
+  "regression": {
+    "opcode": 8,
+    "opt_in_aux": [
+      1,
+      "minimumStep",
+      "initial time"
+    ],
+    "legacy_opcode8_body_unchanged": true,
+    "existing_floor_negative_controls_preserved": true,
+    "fp64_captured_fp32_acceptance_fixture": false,
+    "fp64_policy_selection": "Existing flat-space accepted/rejected floor and adjacent-floor controls report actual coarse/fine counts."
+  },
+  "unchanged_contracts": [
+    "raw and projected null gates",
+    "projection and error/controller tail",
+    "one attempt per Advance",
+    "floor rejection rollback",
+    "all ABI and accepted field consumers",
+    "attempt budgets and 1000 ms physical caps",
+    "no capture or affine commit on rejected trials"
+  ],
+  "scope_limits": [
+    "No numerical or native-cost qualification yet.",
+    "Fixed composition does not guarantee tolerances or physical dispatch deadlines.",
+    "True past-horizon ingoing-coordinate ABI remains a separate unresolved obligation.",
+    "No capture clipping, outgoing chart, terminal search, tolerance, scene or minimum interval changes."
+  ],
+  "files": {
+    "src/sirius/kernels/gr_integrator.slang": {
+      "original": {
+        "bytes": 23624,
+        "sha256": "203c0c922e3a51cefef2badb6e8c8cd49b33600ab8e6ed11c1d372eaa527e471"
+      },
+      "candidate": {
+        "bytes": 27196,
+        "sha256": "15ec6df994f342b91351c493ee022d2fe8e009c12ee96dd8bd29b4b81e8de552"
+      }
+    },
+    "src/sirius/kernels/trace.slang": {
+      "original": {
+        "bytes": 63438,
+        "sha256": "9074a188f407a4e22046db652fd19001387a4773cd25ac90d93f9849cccfe88a"
+      },
+      "candidate": {
+        "bytes": 63460,
+        "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+      }
+    },
+    "src/sirius/kernels/parity_probe.slang": {
+      "original": {
+        "bytes": 40925,
+        "sha256": "885272d041e79077a54702534fc2e91ae2bc89166cd49f077c2978bc5c6eb235"
+      },
+      "candidate": {
+        "bytes": 44089,
+        "sha256": "1d81e295c4bc288ba3a5032222c4bbbd95b2381d843526a50520b1222f25dc26"
+      }
+    },
+    "tests/backend/kernel_parity_test.cpp": {
+      "original": {
+        "bytes": 123996,
+        "sha256": "44cf723524c54a7970344c5ca39932429c06ad1ea1c5b09b761f7c204988ea8f"
+      },
+      "candidate": {
+        "bytes": 129598,
+        "sha256": "07a298c0a892ebfef48a3185cc39b7af517e4eb44da7ca9645eaad81095c951e"
+      }
+    }
+  },
+  "patch": {
+    "bytes": 19525,
+    "sha256": "ddc163c479950424d74e02c221f8dafdb1084e74ddcb3b8552659004f5b33186"
+  },
+  "passive_source_checks": {
+    "unchanged_common_failure_error_projection_controller_acceptance_tail": true,
+    "legacy_opcode8_original_body_exact": true,
+    "four_original_copies_equal_current_tracked_source": true,
+    "formatter_or_compiler_run": false
+  }
+}

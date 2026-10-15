@@ -1,0 +1,110 @@
+{
+  "schema": "sirius-kerr-floor-composite-independent-integration-review-v1",
+  "passed": true,
+  "source_integration_review_passed": true,
+  "base_revision": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+  "scope": "Passive review of the root-applied seven-file integration. This does not admit compilation, tests, GPU execution, numerical/performance/scientific or release qualification.",
+  "prior_candidate_review": {
+    "path": "out/kerr-floor-composite-candidate/independent-source-review.json",
+    "bytes": 12246,
+    "sha256": "e52378cd4ec7a5cde604c8601c2224a2a4fd4f8550569fe2cb3cefa0bae8137b"
+  },
+  "candidate_patch": {
+    "path": "out/kerr-floor-composite-candidate/candidate.patch",
+    "bytes": 19525,
+    "sha256": "ddc163c479950424d74e02c221f8dafdb1084e74ddcb3b8552659004f5b33186"
+  },
+  "integrated_diff": {
+    "bytes": 23845,
+    "sha256": "e7e1271eae74f3aecf66dac08d522145cdccf324584aaf117ab6b6ab084c195d",
+    "files": 7
+  },
+  "current_file_pins": {
+    "scripts/verify-operating-model.py": {
+      "path": "scripts/verify-operating-model.py",
+      "bytes": 62674,
+      "sha256": "3397767ed87bd21fb69da44a678cd16dea4eea4bd7cd0bc7ff57a1a057e6b8c0"
+    },
+    "src/sirius/kernels/gr_integrator.slang": {
+      "path": "src/sirius/kernels/gr_integrator.slang",
+      "bytes": 27196,
+      "sha256": "15ec6df994f342b91351c493ee022d2fe8e009c12ee96dd8bd29b4b81e8de552"
+    },
+    "src/sirius/kernels/parity_probe.slang": {
+      "path": "src/sirius/kernels/parity_probe.slang",
+      "bytes": 44089,
+      "sha256": "1d81e295c4bc288ba3a5032222c4bbbd95b2381d843526a50520b1222f25dc26"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "path": "src/sirius/kernels/trace.slang",
+      "bytes": 63460,
+      "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+    },
+    "tests/backend/kernel_parity_test.cpp": {
+      "path": "tests/backend/kernel_parity_test.cpp",
+      "bytes": 129641,
+      "sha256": "4bf064bb7902dcad59050d4374051a44b9b3cdc619ec9fbb97686e222345b563"
+    },
+    "tests/labels/CTestLabels.cmake": {
+      "path": "tests/labels/CTestLabels.cmake",
+      "bytes": 78632,
+      "sha256": "5e990df5d32d5c1d7a1c02f273fdda3c39eb184347c0e04889b1c1692429416b"
+    },
+    "tests/operating_model.json": {
+      "path": "tests/operating_model.json",
+      "bytes": 130827,
+      "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+    }
+  },
+  "checks": {
+    "exactly_expected_seven_tracked_files_changed": true,
+    "three_integrated_Slang_files_byte_exact_reviewed_candidate": true,
+    "CPP_only_two_wrapping_hunks_vs_reviewed_candidate": true,
+    "CPP_nonwhitespace_bytes_equal_reviewed_candidate": true,
+    "all_41_prior_gtest_names_preserved": true,
+    "only_two_reviewed_new_gtests_added": [
+      "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp"
+    ],
+    "CTestLabels_only_exact_two_added_rows": true,
+    "both_new_tests_in_Mandatory_Correctness_block": true,
+    "operating_model_only_two_P1_evidence_rows_added_byte_inverse_exact": true,
+    "all_prior_P1_requirements_profiles_dependencies_and_evidence_order_preserved": true,
+    "all_other_model_bytes_unchanged": true,
+    "verifier_only_two_REQUIRED_ACCEPTANCE_EVIDENCE_P1_rows_and_acceptance_digest_changed": true,
+    "verifier_inverse_restores_exact_HEAD_source": true,
+    "all_existing_policy_functions_assertions_other_digests_unchanged": true,
+    "canonical_acceptance_digest_matches_actual_updated_JSON": true,
+    "canonical_acceptance_digest": "d124b46462dd6e60778454a73c40e38255246cdcb6b7bcc413c8722417162cd3",
+    "canonical_payload_bytes": 48119
+  },
+  "registration_policy_path": "Exact source test names now join generated Mandatory labels, P1 model evidence and REQUIRED_ACCEPTANCE_EVIDENCE. The existing canonical-JSON acceptance_criteria digest remains fail closed; no parser, guard, generator or policy assertion was relaxed.",
+  "unchanged_prior_candidate_scope": "Composite controller/projection/rollback/ABI/refusal and immutable-reference reasoning remain as reviewed in the pinned candidate receipt. Root formatting changes only two C++ wraps.",
+  "checks_not_executed_by_reviewer": [
+    "Generator/verifier/source-governance scripts",
+    "Formatter",
+    "Configure/build/compiler",
+    "Tests/probes/provider/GPU",
+    "Numerical reference or state calculations"
+  ],
+  "blockers": [],
+  "workspace": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "base_committed_and_pushed": true,
+    "base_ahead": 0,
+    "base_behind": 0,
+    "worktrees": 1,
+    "integration_changes_committed": false,
+    "integration_changes_pushed": false,
+    "pending_tracked_files": [
+      "scripts/verify-operating-model.py",
+      "src/sirius/kernels/gr_integrator.slang",
+      "src/sirius/kernels/parity_probe.slang",
+      "src/sirius/kernels/trace.slang",
+      "tests/backend/kernel_parity_test.cpp",
+      "tests/labels/CTestLabels.cmake",
+      "tests/operating_model.json"
+    ],
+    "owner": "Root retains the seven uncommitted tracked changes and all actual operations."
+  }
+}

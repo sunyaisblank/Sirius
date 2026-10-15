@@ -1,0 +1,88 @@
+[0/2] Re-checking globbed directories...
+[1/2] Re-running CMake...
+-- ┌─ FTXUI options ─────────────────────
+-- │ FTXUI_ENABLE_INSTALL     : OFF
+-- │ FTXUI_BUILD_EXAMPLES     : OFF
+-- │ FTXUI_QUIET              : OFF
+-- │ FTXUI_BUILD_DOCS         : OFF
+-- │ FTXUI_BUILD_TESTS        : OFF
+-- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+-- │ FTXUI_ENABLE_COVERAGE    : OFF
+-- │ FTXUI_DEV_WARNINGS       : OFF
+-- │ FTXUI_CLANG_TIDY         : OFF
+-- └─────────────────────────────────────
+-- Using the multi-header code from /home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include/
+-- alignment receipt generated: 0/8 domains admitted
+-- Including Wayland support
+-- Including X11 support
+-- Mandatory test gating: ENABLED
+-- Release packaging: DISABLED (configure SIRIUS_ALIGNMENT_MODE=release with the complete attestation set)
+-- Configuring done (5.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/astra/.project/Sirius/bin/linux-gcc
+[0/2] Re-checking globbed directories...
+[1/23] Compiling camera_frame_probe.slang (fp32) -> SPIR-V (+spirv-val)
+[2/23] Compiling camera_frame_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+[3/23] Compiling camera_frame_probe.slang (fp64) -> SPIR-V (+spirv-val)
+[4/23] Verifying test-label, operating-model, and repository-structure governance
+CTest label file is up to date
+operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+strict qualification/release policy rejected every weakened configuration and product
+escaping-copy controls: filesystem symlinks
+build-gate receipt rejected missing, stale, skipped, and tampered evidence
+[5/23] Compiling infinity_probe.slang (fp32) -> SPIR-V (+spirv-val)
+warning[E41018]: returning without initializing out parameter
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+    |
+276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+    |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+    |
+375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+    |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[6/23] Compiling infinity_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+warning[E41018]: returning without initializing out parameter
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+    |
+276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+    |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+    |
+375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+    |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[7/23] Compiling infinity_probe.slang (fp64) -> SPIR-V (+spirv-val)
+warning[E41018]: returning without initializing out parameter
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+    |
+276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+    |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+    |
+375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+    |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[8/23] Compiling metric_consistency_probe.slang (fp32) -> SPIR-V (+spirv-val)
+[9/23] Compiling metric_consistency_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+[10/23] Compiling metric_consistency_probe.slang (fp64) -> SPIR-V (+spirv-val)
+[11/23] Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)
+[12/23] Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)
+[13/23] Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)
+[14/23] Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)
+[15/23] Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)
+[16/23] Compiling Slang kernel smoke.slang -> SPIR-V (+spirv-val)
+[17/23] Compiling Slang kernel trace.slang -> SPIR-V (+spirv-val)
+[18/23] Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)
+[19/23] Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)
+[20/23] Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)
+[21/23] Staging exact qualification inputs beside sirius_backend_tests
+[22/23] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o
+[23/23] Linking CXX executable tests/backend/sirius_backend_tests

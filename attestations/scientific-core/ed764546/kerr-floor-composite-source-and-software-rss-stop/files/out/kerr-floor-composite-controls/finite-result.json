@@ -1,0 +1,66 @@
+{
+  "schema": "sirius-kerr-floor-composite-focused-controls-result-v1",
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "source_clean_committed_pushed": true,
+  "strict_gcc_source_build_passed": true,
+  "registered": 1152,
+  "attempted": [
+    "captured-fp32"
+  ],
+  "completed_numerical_tests": 0,
+  "remaining_unrun": [
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "stopped_first_nonpass": true,
+  "root_session": {
+    "id": 78360,
+    "closed": true,
+    "exit": 1
+  },
+  "observation": {
+    "child_exit": -15,
+    "wall_seconds": 257.3113125910022,
+    "stop_reason": "diagnostic_sampled_rss_guard",
+    "peak_sampled_rss_kib": 4204320,
+    "minimum_sampled_available_kib": 16370100,
+    "source_unchanged": true,
+    "whole_inputs_unchanged": true,
+    "remaining_owned_processes": [],
+    "cleanup_errors": [],
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 653223,
+        "saved_start_ticks": "11155822"
+      }
+    ],
+    "provider_mappings": [
+      {
+        "maps": [
+          "71b767c00000-71b767c5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "71b767c5b000-71b76806b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "71b76806b000-71b7686c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "71b7686c6000-71b768761000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+        ],
+        "owned_session": 653223,
+        "pid": 653223,
+        "start_ticks": "11155822"
+      }
+    ]
+  },
+  "frozen_paths": 585,
+  "XML_produced": false,
+  "numerical_verdict": null,
+  "guard_stop_not_numerical_failure": true,
+  "exact_failure_phase_or_JIT_cause_not_proven": true,
+  "fresh_root_observed_births_absent": true,
+  "no_unchanged_software_retry_authorized": true,
+  "scope": "Bounded first software-Vulkan captured-state control stopped at original4GiB aggregate diagnostic RSS. Original300s/defaultcache/1000ms physical assertion unchanged. No candidate acceptance, GPU numerical failure, full image/P1/Mandatory/science/performance/release claim."
+}

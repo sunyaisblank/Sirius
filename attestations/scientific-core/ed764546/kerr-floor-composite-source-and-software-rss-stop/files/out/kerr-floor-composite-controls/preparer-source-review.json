@@ -1,0 +1,145 @@
+{
+  "schema": "sirius-kerr-floor-composite-controls-preparer-source-review-v1",
+  "passed": true,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "role": "Author/preparer self-review of narrow actions and exact accepted helper copies; not independent of this packet. Root independently read/admitted the helpers/actions/current runtime closure before operating.",
+  "operator": "/root",
+  "timing": "Saved after root reported completed strict build and started its first action; this is source/preparation documentation, not a retroactive independent prelaunch gate or terminal verdict.",
+  "pins": {
+    "run_owned.py": {
+      "path": "out/kerr-floor-composite-controls/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/kerr-floor-composite-controls/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "actions.json": {
+      "path": "out/kerr-floor-composite-controls/actions.json",
+      "bytes": 36863,
+      "sha256": "2155cf0472b1054b4dade4e969eae16c25e473c9d9820c28c575fefb3b346f53"
+    },
+    "readiness.json": {
+      "path": "out/kerr-floor-composite-controls/readiness.json",
+      "bytes": 14423,
+      "sha256": "477a46e96a8b4efcd254ba8dccc5febe35e7b4247c9882f7358952d9f66fe532"
+    },
+    "inventory.json": {
+      "path": "out/kerr-floor-composite-controls/inventory.json",
+      "bytes": 986718,
+      "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+    }
+  },
+  "apparatus": "Two helpers byte-exact to accepted1dd9bf1f0c7ec8e91adb89cc3563eb705d353709 floorcontrols. No helper rewrite, parser, orchestration framework or compiler-input catalogue introduced.",
+  "order": [
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "commands": [
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "/home/astra/.project/Sirius/out/kerr-floor-composite-controls/run_owned.py",
+      "captured-fp32"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "/home/astra/.project/Sirius/out/kerr-floor-composite-controls/run_owned.py",
+      "captured-fp32comp"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "/home/astra/.project/Sirius/out/kerr-floor-composite-controls/run_owned.py",
+      "retry-fp32"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "/home/astra/.project/Sirius/out/kerr-floor-composite-controls/run_owned.py",
+      "retry-fp32comp"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "/home/astra/.project/Sirius/out/kerr-floor-composite-controls/run_owned.py",
+      "retry-fp64"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "/home/astra/.project/Sirius/out/kerr-floor-composite-controls/run_owned.py",
+      "unrepresented-stage"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "/home/astra/.project/Sirius/out/kerr-floor-composite-controls/run_owned.py",
+      "null-projection"
+    ],
+    [
+      "/usr/bin/python3.12",
+      "-B",
+      "/home/astra/.project/Sirius/out/kerr-floor-composite-controls/run_owned.py",
+      "precision-invariants"
+    ]
+  ],
+  "checks": {
+    "exact_8_single_test_filters": true,
+    "whole_tracked_source_and_helpers_actions_automatically_frozen_by_owner": true,
+    "common_declared_run_paths": 44,
+    "prior_case_receipt_chain": "Four owner/whole-before/whole-after/XML paths for every predecessor.",
+    "actual_current_registration": 1152,
+    "all_8_exact_names_unique_and_Mandatory": true,
+    "source_build_governance_admitted_by_root_readiness": true,
+    "actual_backend_LVP_Python_dynamic_paths_covered": true,
+    "selected_3_canonical_and_3_staged_parity_module_paths": true,
+    "large_runtime_file_hashes": "Root readiness/operator before-maps are authority; preparer did not rehash libraries/build outputs during live first control.",
+    "physical_assertions": "Original RunProbe actual submit>0 and<=kDispatchStopMs1000 retained; original software zero-active initialization remains separate.",
+    "readiness_binding": "Common inputs include readiness.json; source-only draft could not launch a child before it existed. No source-freeze framework added."
+  },
+  "limits": {
+    "per_action_seconds": 300,
+    "aggregate_owned_session_plus_controller_rss_kib": 4194304,
+    "sampled_host_available_reserve_kib": 2097152,
+    "cache": "default;disable_software_shader_cache=false",
+    "provider": "LVP ICD/device0; inherited conflicting overrides rejected",
+    "ownership": "Source and whole input before/after equality, boot/PID/start/session, observed retirement, pidfd-based bounded cleanup, actual LVP mapping required. No global process/consumer absence or complete loader/LLVM live-mapping claim."
+  },
+  "required_root_xml_acceptance": {
+    "all": "Exactly one selected run/completed testcase; failures/errors/skips/disabled0. Mature run_owned does not read root_required_xml, so root must validate it and owner/current maps after each action and stop first nonpass.",
+    "captured2": "parity_opcode_8_completed_records=1; original actual_submissions1 and actual submit timing positive<=1000.",
+    "retry3": "fp32_evidence/fp32comp_evidence/fp64_evidence=real_adaptive_minimum_retry_controls_executed respectively; opcode25records4. Unsupported fp64 decline is not execution evidence.",
+    "unrepresented": "parity_opcode_8_completed_records=1.",
+    "null": "parity_opcode_10_completed_records=8.",
+    "precision": "fp64_evidence=native_invariants_executed. Original all3rung assertions remain authoritative; opcode6 timing/property is overwritten by final rung and is not3distinct saved timing traces."
+  },
+  "scope": "Eight bounded focused controls only; no full-image software retry or P1/scientific/native/release qualification. No test outcome is admitted here.",
+  "execution_by_preparer": {
+    "helper_import_or_run": false,
+    "compiler_or_provider_or_test": false,
+    "tracked_edits": false,
+    "writes": "Only two exact helper copies, action metadata and this preparer source-review receipt; no runtime owner executed by preparer."
+  },
+  "workspace": {
+    "head": "ed76454617063f2463a75423b2756e8c957ce6c2",
+    "tracked_clean": true,
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "source_committed_and_pushed": true,
+    "packet": "Ignored uncommitted diagnostics pending root preservation."
+  }
+}

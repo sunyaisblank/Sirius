@@ -1,0 +1,362 @@
+--- a/src/sirius/kernels/gr_integrator.slang
++++ b/src/sirius/kernels/gr_integrator.slang
+@@ -432,27 +432,76 @@
+     return attemptedStep <= minimumStep;
+ }
+ 
++// A fixed composition still covers the caller's complete policy interval.
++// Internal RK4 states are unprojected; any unrepresented substep rolls this
++// local result back to its input. No adaptive retry or affine commit occurs here.
++bool AdvanceCompositeGeodesicRK4(
++    GeodesicStateCart state, Real step, int substeps, bool isWarp, bool isWormhole,
++    float M, float a, float Q, float Lambda,
++    float warpVs, float warpSigma, float warpR, float throatB0, int wormShape,
++    out GeodesicStateCart result) {
++    result = state;
++    if (substeps < 1 || substeps > 64) return false;
++    Real substep = step / Real(substeps);
++    [loop] for (int part = 0; part < substeps; ++part) {
++        GeodesicStateCart next;
++        if (!AdvanceGeodesicRK4(result, substep, isWarp, isWormhole,
++                M, a, Q, Lambda, warpVs, warpSigma, warpR, throatB0, wormShape, next)) {
++            result = state;
++            return false;
++        }
++        result = next;
++    }
++    return true;
++}
++
++// Only the exact represented floor selects the finer fixed composition.
++// Relative fourth-order resolution across 2e-5 and 1e-9 tolerances is calibrated
++// by the next power-of-two fourth root of their ratio (16). This is not an error
++// guarantee; the ordinary error/null predicates remain the acceptance authority.
++public int AdaptiveCoarseSubstepsForAttempt(Real step, Real minimumStep) {
++    if (step != minimumStep) return 1;
++#ifdef SIRIUS_FP64
++    return 32;
++#else
++    return 2;
++#endif
++}
++
+ // Shared adaptive candidate authority for trace.slang and the P1 parity probe.
+-// The accepted state is the two-half-step solution; the caller owns retry and
+-// precision-rung commit so a rejected attempt cannot mutate downstream state.
+-public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStep(
++// The candidate is the fine composition; the caller owns retry and precision-
++// rung commit so a rejected attempt cannot mutate downstream state.
++AdaptiveGeodesicStep AttemptAdaptiveGeodesicStepWithResolution(
+     GeodesicStateCart state, Real step, bool isWarp, bool isWormhole,
+     float M, float a, float Q, float Lambda,
+     float warpVs, float warpSigma, float warpR,
+-    float throatB0, int wormShape, Real integrationTolerance, Real nullTolerance) {
++    float throatB0, int wormShape, Real integrationTolerance, Real nullTolerance,
++    int coarseSubsteps) {
+     AdaptiveGeodesicStep result;
+     result.candidate = state;
+     GeodesicStateCart fullStep = state;
+-    bool fullRepresented = AdvanceGeodesicRK4(
+-        state, step, isWarp, isWormhole, M, a, Q, Lambda,
+-        warpVs, warpSigma, warpR, throatB0, wormShape, fullStep);
+-    GeodesicStateCart firstHalf = state;
+-    bool firstHalfRepresented = AdvanceGeodesicRK4(
+-        state, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
+-        warpVs, warpSigma, warpR, throatB0, wormShape, firstHalf);
+-    bool candidateRepresented = firstHalfRepresented && AdvanceGeodesicRK4(
+-        firstHalf, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
+-        warpVs, warpSigma, warpR, throatB0, wormShape, result.candidate);
++    bool fullRepresented;
++    bool firstHalfRepresented = true;
++    bool candidateRepresented;
++    if (coarseSubsteps == 1) {
++        fullRepresented = AdvanceGeodesicRK4(
++            state, step, isWarp, isWormhole, M, a, Q, Lambda,
++            warpVs, warpSigma, warpR, throatB0, wormShape, fullStep);
++        GeodesicStateCart firstHalf = state;
++        firstHalfRepresented = AdvanceGeodesicRK4(
++            state, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
++            warpVs, warpSigma, warpR, throatB0, wormShape, firstHalf);
++        candidateRepresented = firstHalfRepresented && AdvanceGeodesicRK4(
++            firstHalf, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
++            warpVs, warpSigma, warpR, throatB0, wormShape, result.candidate);
++    } else {
++        fullRepresented = AdvanceCompositeGeodesicRK4(
++            state, step, coarseSubsteps, isWarp, isWormhole, M, a, Q, Lambda,
++            warpVs, warpSigma, warpR, throatB0, wormShape, fullStep);
++        candidateRepresented = AdvanceCompositeGeodesicRK4(
++            state, step, coarseSubsteps * 2, isWarp, isWormhole, M, a, Q, Lambda,
++            warpVs, warpSigma, warpR, throatB0, wormShape, result.candidate);
++    }
+     if (!fullRepresented || !firstHalfRepresented || !candidateRepresented) {
+         result.candidate = state;
+         result.errorRatio = Real(1.0e30f);
+@@ -501,3 +550,30 @@
+     }
+     return result;
+ }
++
++// Callers without a floor retain the original one-full/two-half estimator.
++public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStep(
++    GeodesicStateCart state, Real step, bool isWarp, bool isWormhole,
++    float M, float a, float Q, float Lambda,
++    float warpVs, float warpSigma, float warpR, float throatB0, int wormShape,
++    Real integrationTolerance, Real nullTolerance) {
++    return AttemptAdaptiveGeodesicStepWithResolution(
++        state, step, isWarp, isWormhole, M, a, Q, Lambda,
++        warpVs, warpSigma, warpR, throatB0, wormShape,
++        integrationTolerance, nullTolerance, 1);
++}
++
++// Trace, P1 and the minimum-retry witness select the same resolution before
++// their single counted attempt. Both fixed compositions cover exactly step;
++// the policy interval is never lowered and a rejected state is never committed.
++public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStepAtFloor(
++    GeodesicStateCart state, Real step, Real minimumStep, bool isWarp, bool isWormhole,
++    float M, float a, float Q, float Lambda,
++    float warpVs, float warpSigma, float warpR, float throatB0, int wormShape,
++    Real integrationTolerance, Real nullTolerance) {
++    int coarseSubsteps = AdaptiveCoarseSubstepsForAttempt(step, minimumStep);
++    return AttemptAdaptiveGeodesicStepWithResolution(
++        state, step, isWarp, isWormhole, M, a, Q, Lambda,
++        warpVs, warpSigma, warpR, throatB0, wormShape,
++        integrationTolerance, nullTolerance, coarseSubsteps);
++}
+--- a/src/sirius/kernels/trace.slang
++++ b/src/sirius/kernels/trace.slang
+@@ -748,8 +748,8 @@
+                 Real dt = min(geometricStep, adaptiveStep);
+ 
+                 ++attempts;
+-                AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
+-                    state, dt, isWarp, isWormhole, M, a, Q, Lambda,
++                AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStepAtFloor(
++                    state, dt, Real(minStep), isWarp, isWormhole, M, a, Q, Lambda,
+                     warpVs, warpSigma, warpR, throatB0, wormShape,
+                     AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+                 if (!attempted.accepted) {
+--- a/src/sirius/kernels/parity_probe.slang
++++ b/src/sirius/kernels/parity_probe.slang
+@@ -482,8 +482,8 @@
+             }
+             Real geometricStep = clamp(stepScale * rKerr, minStep, maxStep);
+             Real dt = min(geometricStep, adaptiveStep);
+-            AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
+-                state, dt, false, false, p1, p2, 0.0f, 0.0f,
++            AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStepAtFloor(
++                state, dt, minStep, false, false, p1, p2, 0.0f, 0.0f,
+                 0.0f, 0.0f, 0.0f, 0.0f, 0,
+                 AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+             if (!attempted.accepted) {
+@@ -536,6 +536,48 @@
+         results[rb + 10] = float(lastRejectedError);
+         results[rb + 11] = float(lastRejectedNull);
+     } else if (opcode == OP_ADAPTIVE_EVENT_DOMAIN) {
++        // Opt-in captured-state floor witness. aux0=1, aux1=the original
++        // floor and aux2=the original time coordinate; the legacy branch below
++        // retains its original tolerances and one-full/two-half tableau.
++        if (samples[sb + 13] == 1.0f) {
++            Real step = Real(samples[sb + 12]);
++            Real minimumStep = Real(samples[sb + 14]);
++            if (minimumStep != Real(0.02f) || step != minimumStep) return;
++            GeodesicStateCart initial;
++            initial.x = MakeVec4Cart(Real(samples[sb + 15]), Real(c0), Real(c1), Real(c2));
++            initial.u = MakeVec4Cart(Real(samples[sb + 8]), Real(samples[sb + 9]),
++                                     Real(samples[sb + 10]), Real(samples[sb + 11]));
++            int coarseSubsteps = AdaptiveCoarseSubstepsForAttempt(step, minimumStep);
++            AdaptiveGeodesicStep trial = AttemptAdaptiveGeodesicStepAtFloor(
++                initial, step, minimumStep, false, false, p1, p2, p3, p4,
++                0.0f, 0.0f, 0.0f, 0.0f, 0,
++                AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
++            results[rb + 0] = 1.0f;
++            results[rb + 1] = trial.accepted ? 1.0f : 0.0f;
++            results[rb + 2] = float(trial.errorRatio);
++            results[rb + 3] = float(trial.nullResidual);
++            results[rb + 4] = float(trial.projectedNullResidual);
++            results[rb + 5] = float(coarseSubsteps);
++            results[rb + 6] = float(coarseSubsteps * 2);
++            results[rb + 7] = float(trial.stepFactor);
++            results[rb + 8] = float(trial.candidate.x.t);
++            results[rb + 9] = float(trial.candidate.x.x);
++            results[rb + 10] = float(trial.candidate.x.y);
++            results[rb + 11] = float(trial.candidate.x.z);
++            results[rb + 12] = float(trial.candidate.u.t);
++            results[rb + 13] = float(trial.candidate.u.x);
++            results[rb + 14] = float(trial.candidate.u.y);
++            results[rb + 15] = float(trial.candidate.u.z);
++            results[rb + 16] = float(AdaptiveIntegrationTolerance());
++            results[rb + 17] = float(AdaptiveNullTolerance());
++            results[rb + 18] = float(step);
++            results[rb + 19] = float(minimumStep);
++            results[rb + 20] = float(initial.x.t); results[rb + 21] = float(initial.x.x);
++            results[rb + 22] = float(initial.x.y); results[rb + 23] = float(initial.x.z);
++            results[rb + 24] = float(initial.u.t); results[rb + 25] = float(initial.u.x);
++            results[rb + 26] = float(initial.u.y); results[rb + 27] = float(initial.u.z);
++            return;
++        }
+         // Direct event-domain witness for the production adaptive RK4
+         // authority. c=(x,y,z), u=(t,x,y,z), h=attempted step.
+         GeodesicStateCart state;
+@@ -578,12 +620,16 @@
+         bool firstAccepted = false, firstAtFloor = false, secondRejected = false;
+         Real firstError = Real(0.0f), firstNull = Real(0.0f);
+         Real firstProjectedNull = Real(0.0f), firstFactor = Real(0.0f), secondNull = Real(0.0f);
++        int firstCoarseSubsteps = 0, secondCoarseSubsteps = 0;
+         for (int attempt = 0; attempt < 2; ++attempt) {
+             Real dt = adaptiveStep;
+             if (attempt == 1) exactFloorRetry = dt == minimumStep;
++            int coarseSubsteps = AdaptiveCoarseSubstepsForAttempt(dt, minimumStep);
++            if (attempt == 0) firstCoarseSubsteps = coarseSubsteps;
++            else secondCoarseSubsteps = coarseSubsteps;
+             ++attempts;
+-            AdaptiveGeodesicStep trial = AttemptAdaptiveGeodesicStep(
+-                state, dt, false, false, p1, p2, p3, p4,
++            AdaptiveGeodesicStep trial = AttemptAdaptiveGeodesicStepAtFloor(
++                state, dt, minimumStep, false, false, p1, p2, p3, p4,
+                 0.0f, 0.0f, 0.0f, 0.0f, 0,
+                 AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+             if (attempt == 0) {
+@@ -632,6 +678,10 @@
+         results[rb + 20] = float(state.x.y); results[rb + 21] = float(state.x.z);
+         results[rb + 22] = float(state.u.t); results[rb + 23] = float(state.u.x);
+         results[rb + 24] = float(state.u.y); results[rb + 25] = float(state.u.z);
++        results[rb + 26] = float(firstCoarseSubsteps);
++        results[rb + 27] = float(firstCoarseSubsteps * 2);
++        results[rb + 28] = float(secondCoarseSubsteps);
++        results[rb + 29] = float(secondCoarseSubsteps * 2);
+     } else if (opcode == OP_BEAM_ELLIPSE) {
+         // c0,c1,c2,u0 are the row-major transverse Jacobi map.
+         float semiMajor, semiMinor, orientation, determinant;
+--- a/tests/backend/kernel_parity_test.cpp
++++ b/tests/backend/kernel_parity_test.cpp
+@@ -39,6 +39,7 @@
+ 
+ #include <algorithm>
+ #include <array>
++#include <bit>
+ #include <chrono>
+ #include <cmath>
+ #include <cstddef>
+@@ -652,7 +653,7 @@
+         const bool neighbour = index % 2 == 0;
+         const bool retried = rejected && neighbour;
+         const std::size_t base = index * kResultStride;
+-        for (std::size_t slot = 0; slot < 26; ++slot) {
++        for (std::size_t slot = 0; slot < 30; ++slot) {
+             ASSERT_TRUE(std::isfinite(values[base + slot])) << slot;
+         }
+         EXPECT_FLOAT_EQ(values[base], 1.0f);  // Excludes an unexecuted opcode.
+@@ -670,6 +671,12 @@
+         EXPECT_FLOAT_EQ(values[base + 13], retried ? 1.0f : 0.0f);
+         EXPECT_FLOAT_EQ(values[base + 14], retried ? 1.0f : 0.0f);
+         EXPECT_FLOAT_EQ(values[base + 16], rejected ? 1.0f : 0.0f);
++        const float floorCoarse = fp64 ? 32.0f : 2.0f;
++        const float firstCoarse = neighbour ? 1.0f : floorCoarse;
++        EXPECT_FLOAT_EQ(values[base + 26], firstCoarse);
++        EXPECT_FLOAT_EQ(values[base + 27], firstCoarse * 2.0f);
++        EXPECT_FLOAT_EQ(values[base + 28], retried ? floorCoarse : 0.0f);
++        EXPECT_FLOAT_EQ(values[base + 29], retried ? floorCoarse * 2.0f : 0.0f);
+         if (rejected) {
+             EXPECT_GT(values[base + 5], 0.2f)
+                 << "real unprojected null defect must reject despite successful projection";
+@@ -743,6 +750,100 @@
+     ASSERT_NO_FATAL_FAILURE(CheckAdaptiveMinimumRetry(fixture, true));
+     RecordProperty("fp64_evidence", "real_adaptive_minimum_retry_controls_executed");
+ #endif
++}
++
++// Exact captured 02ee failure input; expected endpoints are the two epsilon
++// variants of the independent off-null canonical128 reference, not this shader.
++// attestations/scientific-core/02ee51f/kerr-local-hamiltonian-reference/result.json
++// SHA256 e93e6f2e1925d086238f550dd849da13f1e7b7dc1ae465a3fadcf3118c2275b1.
++// Projection remains enabled in the production candidate; it receives no extra
++// comparison allowance against the unprojected reference.
++void CheckCapturedKerrFloorComposite(Fixture& fixture) {
++    constexpr std::array<std::uint32_t, 8> bits{
++        0xc29e0abbU, 0xbfe818daU, 0xbeae04d2U, 0xbe32b97aU,
++        0xc2122a40U, 0xc0018bf7U, 0x4188b6ebU, 0xc0208df9U};
++    std::array<float, 8> initial{};
++    for (std::size_t component = 0; component < initial.size(); ++component)
++        initial[component] = std::bit_cast<float>(bits[component]);
++    Sample sample;
++    sample.metric_id = kKerrSchild;
++    sample.p1 = std::bit_cast<float>(0x3f800000U);
++    sample.p2 = std::bit_cast<float>(0x3f666666U);
++    sample.c0 = initial[1];
++    sample.c1 = initial[2];
++    sample.c2 = initial[3];
++    sample.u0 = initial[4];
++    sample.u1 = initial[5];
++    sample.u2 = initial[6];
++    sample.u3 = initial[7];
++    sample.h = std::bit_cast<float>(0x3ca3d70aU);
++    sample.aux0 = 1.0f;
++    sample.aux1 = sample.h;
++    sample.aux2 = initial[0];
++    std::vector<float> values;
++    ASSERT_NO_FATAL_FAILURE(
++        RunProbe(*fixture.device, fixture.kernel, kOpAdaptiveEventDomain, {sample}, values));
++    ASSERT_EQ(values.size(), kResultStride);
++    for (std::size_t slot = 0; slot < 28; ++slot) ASSERT_TRUE(std::isfinite(values[slot])) << slot;
++    ASSERT_FLOAT_EQ(values[0], 1.0f);
++    ASSERT_FLOAT_EQ(values[1], 1.0f) << "captured floor must satisfy the unchanged controller";
++    EXPECT_GE(values[2], 0.0f);
++    EXPECT_LE(values[2], 1.0f);
++    EXPECT_GE(values[3], 0.0f);
++    EXPECT_LE(values[3], 5.0e-4f);
++    EXPECT_GE(values[4], 0.0f);
++    EXPECT_LE(values[4], 5.0e-4f);
++    EXPECT_FLOAT_EQ(values[5], 2.0f);
++    EXPECT_FLOAT_EQ(values[6], 4.0f);
++    EXPECT_FLOAT_EQ(values[16], 2.0e-5f);
++    EXPECT_FLOAT_EQ(values[17], 5.0e-4f);
++    EXPECT_FLOAT_EQ(values[18], sample.h);
++    EXPECT_FLOAT_EQ(values[19], sample.h);
++    for (std::size_t component = 0; component < bits.size(); ++component)
++        EXPECT_EQ(std::bit_cast<std::uint32_t>(values[20 + component]), bits[component]) << component;
++    const std::array<std::array<double, 8>, 2> canonical128{
++        std::array<double, 8>{
++            -79.799570441624162558233223717322650551221380590778090754746988484286709436224728,
++            -1.8202467703823457177515115048451890595945153167812340464465525066590685766780510,
++            0.027685776154266467765886208734832478002396034877743872115989725615299983340500018,
++            -0.22451395158848843637398937574837926557314067465843488360195680327490708320297798,
++            -41.527208595688608227845068424642757348285444160854752470372265234225342648361000,
++            1.578743355263571934110989411977532300521510215311718766146806859820545434146184,
++            19.652929412649440026131701649045888470602855491883871650820960368150502799953964,
++            -2.4881305599974561956563712743011895537656090197619601023708897358317191560546884,
++        },
++        std::array<double, 8>{
++            -79.799570441624162558233223717322650551250822425831738805406763796770892126599222,
++            -1.8202467703823457177515115048451890596145469339551803760914231773612844151040904,
++            0.027685776154266467765886208734832477983058847126457806665347464457854276402565590,
++            -0.22451395158848843637398937574837926554469254685979427289671318849256061010985551,
++            -41.527208595688608227845068424642757352578189797162025407946527668681132986990280,
++            1.578743355263571934110989411977532298149858312302949099142256064449929609435633,
++            19.652929412649440026131701649045888469040723876944046953080799750696348224675452,
++            -2.4881305599974561956563712743011895507918125407324741030252037404664615069161061,
++        },
++    };
++    for (std::size_t epsilon = 0; epsilon < canonical128.size(); ++epsilon) {
++        for (std::size_t component = 0; component < initial.size(); ++component) {
++            const double actual = values[8 + component];
++            const double scale =
++                std::max({1.0, std::abs(double(initial[component])), std::abs(actual)});
++            EXPECT_LE(std::abs(actual - canonical128[epsilon][component]) / scale, double(2.0e-5f))
++                << "epsilon variant " << epsilon << ", component " << component;
++        }
++    }
++}
++
++TEST(KernelParity, CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32) {
++    Fixture fixture = OpenProbe();
++    if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
++    ASSERT_NO_FATAL_FAILURE(CheckCapturedKerrFloorComposite(fixture));
++}
++
++TEST(KernelParity, CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp) {
++    Fixture fixture = OpenProbe("parity_probe_fp32comp.spv");
++    if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
++    ASSERT_NO_FATAL_FAILURE(CheckCapturedKerrFloorComposite(fixture));
+ }
+ 
+ TEST(KernelParity, NullProjectionPreservesConeBranchAndFailsClosed) {

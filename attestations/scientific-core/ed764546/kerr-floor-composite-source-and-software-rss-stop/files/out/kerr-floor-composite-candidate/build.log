@@ -1,0 +1,27 @@
+[0/2] Re-checking globbed directories...
+[1/2] Re-running CMake...
+-- ┌─ FTXUI options ─────────────────────
+-- │ FTXUI_ENABLE_INSTALL     : OFF
+-- │ FTXUI_BUILD_EXAMPLES     : OFF
+-- │ FTXUI_QUIET              : OFF
+-- │ FTXUI_BUILD_DOCS         : OFF
+-- │ FTXUI_BUILD_TESTS        : OFF
+-- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+-- │ FTXUI_ENABLE_COVERAGE    : OFF
+-- │ FTXUI_DEV_WARNINGS       : OFF
+-- │ FTXUI_CLANG_TIDY         : OFF
+-- └─────────────────────────────────────
+-- Using the multi-header code from /home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include/
+CMake Error at cmake/sirius_alignment.cmake:82 (message):
+  Sirius alignment configuration failed:
+
+  alignment: qualification alignment requires a clean source tree
+
+Call Stack (most recent call first):
+  CMakeLists.txt:43 (include)
+
+
+-- Configuring incomplete, errors occurred!
+FAILED: build.ninja 
+/usr/bin/cmake --regenerate-during-build -S/home/astra/.project/Sirius -B/home/astra/.project/Sirius/bin/linux-gcc
+ninja: error: rebuilding 'build.ninja': subcommand failed
