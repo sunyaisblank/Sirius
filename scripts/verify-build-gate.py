@@ -131,10 +131,10 @@ def parse_artifacts(values: list[str], option: str) -> dict[str, Path]:
     return artifacts
 
 
-def locate_under_roots(path: Path, source_root: Path, build_dir: Path) -> tuple[str, str]:
+def _locate_under_resolved_roots(path: Path, source_root: Path, build_dir: Path) -> tuple[str, str]:
+    """Locate a fresh artifact path under this map's canonical roots."""
     path = path.resolve()
-    for name, unresolved_root in (("build", build_dir), ("source", source_root)):
-        root = unresolved_root.resolve()
+    for name, root in (("build", build_dir), ("source", source_root)):
         try:
             relative = path.relative_to(root)
         except ValueError:
@@ -147,9 +147,13 @@ def locate_under_roots(path: Path, source_root: Path, build_dir: Path) -> tuple[
 
 def artifact_records(artifacts: dict[str, Path], source_root: Path,
                      build_dir: Path) -> dict[str, dict[str, object]]:
+    # Resolve roots once for this map, never across separate pre/post checks.
+    # Each artifact still resolves freshly before the same containment checks.
+    build_dir = build_dir.resolve()
+    source_root = source_root.resolve()
     records = {}
     for name, path in sorted(artifacts.items()):
-        root, relative = locate_under_roots(path, source_root, build_dir)
+        root, relative = _locate_under_resolved_roots(path, source_root, build_dir)
         records[name] = {
             "root": root,
             "path": relative,
