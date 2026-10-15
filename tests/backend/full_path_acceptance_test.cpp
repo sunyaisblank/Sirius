@@ -540,7 +540,7 @@ class ConservationObserver final : public TraceStepExecutor {
         return success;
     }
     std::optional<CoupledSegmentSample> Sample(CoupledTrial trial, double fraction,
-                                              const Vec4* normal = nullptr) override {
+                                               const Vec4* normal = nullptr) override {
         return executor_.Sample(trial, fraction, normal);
     }
     void RejectLastInterval() override {
