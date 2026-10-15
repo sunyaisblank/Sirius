@@ -622,10 +622,11 @@ TEST(KernelParity, UnrepresentedKerrStageShrinksBeforeMetricEvaluation) {
 
 void CheckAdaptiveMinimumRetry(Fixture& fixture, bool fp64) {
     constexpr float minimum = 0.02f;
-    const float quantum = fp64
-        ? static_cast<float>(std::nextafter(static_cast<double>(minimum),
-                                           std::numeric_limits<double>::infinity()) - minimum)
-        : std::nextafter(minimum, std::numeric_limits<float>::infinity()) - minimum;
+    const float quantum =
+        fp64 ? static_cast<float>(std::nextafter(static_cast<double>(minimum),
+                                                 std::numeric_limits<double>::infinity()) -
+                                  minimum)
+             : std::nextafter(minimum, std::numeric_limits<float>::infinity()) - minimum;
     ASSERT_GT(quantum, 0.0f);
     Sample rejected_neighbour = KerrSchildAt(0.0f, 0.0f, 0.0f, 3.0f, 0.0f, 0.0f);
     rejected_neighbour.u0 = -0.8f;  // Deliberate finite off-null negative control.
@@ -639,8 +640,8 @@ void CheckAdaptiveMinimumRetry(Fixture& fixture, bool fp64) {
     accepted_neighbour.u0 = -1.0f;
     Sample accepted_floor = accepted_neighbour;
     accepted_floor.aux0 = 0.0f;
-    const std::vector<Sample> samples{
-        rejected_neighbour, rejected_floor, accepted_neighbour, accepted_floor};
+    const std::vector<Sample> samples{rejected_neighbour, rejected_floor, accepted_neighbour,
+                                      accepted_floor};
     std::vector<float> values;
     ASSERT_NO_FATAL_FAILURE(
         RunProbe(*fixture.device, fixture.kernel, kOpAdaptiveMinimumRetry, samples, values));
@@ -673,8 +674,10 @@ void CheckAdaptiveMinimumRetry(Fixture& fixture, bool fp64) {
             EXPECT_GT(values[base + 5], 0.2f)
                 << "real unprojected null defect must reject despite successful projection";
             EXPECT_FLOAT_EQ(values[base + 8], 0.5f);
-            if (retried) EXPECT_GT(values[base + 15], 0.2f);
-            else EXPECT_FLOAT_EQ(values[base + 15], 0.0f);
+            if (retried)
+                EXPECT_GT(values[base + 15], 0.2f);
+            else
+                EXPECT_FLOAT_EQ(values[base + 15], 0.0f);
             EXPECT_FLOAT_EQ(values[base + 17], 0.0f);
             const std::array<float, 8> unchanged{0, 3, 0, 0, -0.8f, 1, 0, 0};
             for (std::size_t component = 0; component < unchanged.size(); ++component) {
