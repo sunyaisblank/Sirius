@@ -1,0 +1,125 @@
+--- 539-collector-baseline.py
++++ preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,113 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'fp32-estimate-restoring-profile-owner-stop':
++    import stat
++    work = root/'out/portable-divide-fp32-estimate-restoring-profile'
++    products = root/'bin/linux-gcc/portable-divide-fp32-estimate-restoring-profile'
++    bundle = root/'attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-owner-stop'
++    tag = 'evidence/issue-44-fp32-estimate-restoring-profile-owner-stop'
++    def profile_stop_record(path):
++        path=Path(path)
++        return dict(pin(path),mode=stat.S_IMODE(path.stat().st_mode),resolved_path=str(path.resolve(strict=True)),
++                    symlink_target=os.readlink(path) if path.is_symlink() else None)
++    def profile_stop_load(name):return json.loads((work/name).read_text())
++    frozen=profile_stop_load('source-freeze.json')
++    assert pin(work/'source-freeze.json') == {'bytes':151321,'sha256':'13c7dd46d6a58cb1d371d4dfcbddd5da177b0669ae928c585de934ba6673325e'}
++    assert len(frozen['pins'])==316
++    for name,expected in frozen['pins'].items():assert profile_stop_record(name)==expected,name
++    packet=profile_stop_load('packet.json');actions=profile_stop_load('actions.json')
++    assert (work/'actions.json').read_bytes()==(work/'actions.unpinned.json').read_bytes()
++    assert packet['labels']==['reuse-stock','compile-candidate','read-profile'] and set(actions)==set(packet['labels'])
++    assert all('expected_exit' not in action and action['software_provider'] is False for action in actions.values())
++    assert len(actions['reuse-stock']['frozen_inputs'])==319
++    runner=(work/'run_owned.py').read_text()
++    assert runner.splitlines()[221]=="assert code == action['expected_exit'], (code, action['expected_exit'])"
++    assert runner.index("assert code == action['expected_exit']") < runner.index("report['passed'] = True")
++    context=profile_stop_load('operator-context.json')
++    assert context['revision']==parent
++    for key,name in [('source_freeze','source-freeze.json'),('actions','actions.json'),('preparation','preparation.json')]:
++        assert context[key]==profile_stop_record(work/name)
++    folder=work/'reuse-stock';owner=profile_stop_load('reuse-stock/owner.json')
++    assert owner['status']=='terminal' and owner['passed'] is False and owner['child_exit']==0
++    assert owner['source']=={'revision':parent,'status':''} and owner['source_unchanged'] and owner['whole_inputs_unchanged']
++    assert owner['argv']==actions['reuse-stock']['argv'] and owner['limits']==packet['limits']
++    assert owner['stop_reason'] is None and owner['cleanup_errors']==[] and owner['remaining_owned_processes']==[]
++    assert owner['provider_mappings']==[] and len(owner['observed_births'])==1 and owner['observed_births'][0]['absent']
++    assert (folder/'inputs-before.json').read_bytes()==(folder/'inputs-after.json').read_bytes()
++    before=profile_stop_load('reuse-stock/inputs-before.json');assert len(before)==822
++    for name,expected in before.items():
++        path=Path(name);path=root/path if not path.is_absolute() else path
++        actual=profile_stop_record(path)
++        assert set(expected)=={'bytes','sha256','resolved_path'}
++        assert {key:actual[key] for key in expected}==expected,name
++    for name in actions['reuse-stock']['frozen_inputs']:
++        path=Path(name);key=str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
++        assert before[key]=={key:profile_stop_record(path)[key] for key in before[key]},name
++    seal=profile_stop_load('reuse-stock/output-seal.json')
++    assert seal['label']=='reuse-stock' and seal['recipe']==packet['recipes']['reuse-stock']
++    for key,name in [('source_freeze','source-freeze.json'),('operator_context','operator-context.json'),('inputs_before','reuse-stock/inputs-before.json')]:
++        assert seal[key]==profile_stop_record(work/name)
++    assert set(seal['outputs'])==set(packet['outputs']['reuse-stock'])
++    for name,expected in seal['outputs'].items():assert profile_stop_record(name)==expected,name
++    copied=profile_stop_load('stock-reuse-acceptance.json');assert copied['passed'] and len(copied['copied39'])==39
++    source=Path(packet['stock_reuse_directory']);canonical=root/'bin/linux-gcc/src/sirius/backend/retained'
++    staged={str(path):profile_stop_record(path) for path in (products/'stock').iterdir()}
++    assert staged==copied['copied39'] and len(staged)==39
++    assert len(list((products/'stock').glob('*.spv')))==35
++    assert set(path.name for path in products.iterdir())=={'stock'}
++    for path in (products/'stock').iterdir():
++        assert path.is_file() and not path.is_symlink()
++        assert path.read_bytes()==(source/path.name).read_bytes()==(canonical/path.name).read_bytes()
++    for label in ('compile-candidate','read-profile'):
++        assert not (work/label).exists()
++        assert all(not Path(name).exists() for name in packet['outputs'][label])
++    assert not (products/'candidate').exists() and not (work/'analysis').exists()
++    for name in ('compiler-producer-acceptance.json','profile-acceptance.json'):assert not (work/name).exists()
++    first=profile_stop_load('root-first-stop.json')
++    independent=profile_stop_load('independent-stop-review.json')
++    admission=profile_stop_load('root-owner-stop-admission.json')
++    assert first['passed'] and independent['passed'] and admission['passed']
++    assert admission['source_revision']==parent
++    assert admission['independent_stop_review']==profile_stop_record(work/'independent-stop-review.json')
++    assert admission['root_first_stop']==profile_stop_record(work/'root-first-stop.json')
++    assert first['classification']=='OWNER_METADATA_EXPECTED_EXIT_MISSING'
++    commands=first['actual_commands'];assert len(commands)==2
++    assert commands[0]['argv']==['python3','-B',str(work/'profile.py'),'pin-context'] and commands[0]['exit_code']==0
++    assert commands[1]['argv']==['python3','-B',str(work/'run_owned.py'),'reuse-stock'] and commands[1]['exit_code']==1
++    assert commands[1]['controller_traceback'].endswith("KeyError: 'expected_exit'\n")
++    assert first['original_owner_passed'] is False and first['original_child_exit']==0 and first['original_wrapper_exit']==1
++    assert not first['candidate_compiler_or_profile_reader_executed'] and first['completed_stock_files']==39
++    for key,name in [('owner','reuse-stock/owner.json'),('output_seal','reuse-stock/output-seal.json'),
++                     ('stock_acceptance','stock-reuse-acceptance.json'),('source_freeze','source-freeze.json'),
++                     ('actions','actions.json'),('inputs_before','reuse-stock/inputs-before.json'),
++                     ('root_source_admission','root-source-admission.json'),('independent_source_review','independent-source-review.json')]:
++        assert first[key]==profile_stop_record(work/name)
++    assert profile_stop_load('root-source-admission.json')['passed'] and profile_stop_load('independent-source-review.json')['passed']
++    # Fresh exact saved-birth check only; no global/remote process absence claim.
++    birth=owner['observed_births'][0];process=Path('/proc')/str(birth['pid'])/'stat'
++    try:current_ticks=process.read_text().rsplit(')',1)[1].split()[19]
++    except (FileNotFoundError,ProcessLookupError):current_ticks=None
++    assert current_ticks is None or str(current_ticks)!=str(birth['saved_start_ticks'])
++    operational={name:pin(work/name) for name in ['root-first-stop.json','independent-stop-review.json','root-owner-stop-admission.json',
++        'root-prerequisite-retirement.json','root-prior-arithmetic-issue-receipt.json','root-future-controls-source-review.json']}
++    baseline=root/'out/preserve-finite-result-before-fp32-profile-owner-stop.py'
++    assert pin(baseline)=={'bytes':301518,'sha256':'f8c063161c0e7e04bff2b70be37ec149c750eb8da1dd6a72a53aaeaeccfa81eb'}
++    mapping=[(work,'files/out/portable-divide-fp32-estimate-restoring-profile'),
++             (products,'files/bin/linux-gcc/portable-divide-fp32-estimate-restoring-profile'),
++             (baseline,'collector-baseline.py'),
++             (root/'out/preserve-finite-result-fp32-profile-owner-stop.patch','collector-source.patch')]
++    summary={'schema':'sirius-fp32-restoring-profile-first-owner-metadata-stop-evidence-v1','passed':True,
++        'source_revision':parent,'original_owner_passed':False,'original_child_exit':0,'original_wrapper_exit':1,
++        'classification':'OWNER_METADATA_EXPECTED_EXIT_MISSING','owner':pin(folder/'owner.json'),'whole316_source_pins_unchanged':True,
++        'whole822_actual_inputs_unchanged':True,'all39_stock_staging_outputs_sealed_and_equal_original':True,
++        'source_freeze':pin(work/'source-freeze.json'),'stock_result':pin(work/'stock-reuse-acceptance.json'),'stock_output_seal':pin(folder/'output-seal.json'),
++        'observed_births':owner['observed_births'],'fresh_saved_birth_absent':True,'current_start_ticks':current_ticks,
++        'actual_commands':commands,'operational_reviews':operational,'collector_baseline':pin(baseline),
++        'candidate_compiler_or_profile_reader_executed':False,'original_owner_promoted':False,
++        'full_profile_or_integrated_or_benefit_or_adoption_or_qualification_accepted':False,
++        'scope':'First wrapper metadata failure preserved byte-for-byte. Child0 staging products are valid and sealed, but the original terminal owner remains false. A fresh explicitly corrected action-schema packet requires separate source admission; the original false owner and its sealed products remain historical evidence, without a general failed-owner acceptance path.'}
++    message='Preserve first FP32 restoring full-profile owner-schema stop and sealed stock staging without owner promotion (#44)\n'
+ elif kind == 'fp32-estimate-restoring-original-arithmetic':
+     import stat
+     import xml.etree.ElementTree as ET

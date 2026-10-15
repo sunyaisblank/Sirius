@@ -1,0 +1,141 @@
+{
+  "absence_checks": {
+    "analysis_directory_absent": true,
+    "candidate_compiler_owner_absent": true,
+    "candidate_directory_absent": true,
+    "compiler_products_and_acceptance_absent": true,
+    "profile_reader_owner_absent": true,
+    "profile_result_and_acceptance_absent": true,
+    "sole_new_bin_directory": "stock"
+  },
+  "actual_outcome": {
+    "cleanup_errors": [],
+    "fresh_same_boot_birth_checks": [
+      {
+        "current_start_ticks": null,
+        "pid": 455923,
+        "saved_birth_absent": true,
+        "saved_start_ticks": "8645729"
+      }
+    ],
+    "minimum_sampled_available_kib": 19885896,
+    "owner_passed": false,
+    "owner_status": "terminal",
+    "peak_sampled_rss_kib": 44360,
+    "pin_context_exit": 0,
+    "remaining_owned_processes": [],
+    "stock_child_exit": 0,
+    "stop_reason": null,
+    "wall_seconds": 0.789481183004682,
+    "wrapper_exit": 1
+  },
+  "causal_evidence": {
+    "all_three_actions_missing_expected_exit": true,
+    "failure": "action['expected_exit'] raises KeyError before passed=True is written",
+    "other_required_action_fields_present": [
+      "argv",
+      "kind",
+      "limits",
+      "revision",
+      "scope"
+    ],
+    "root_first_stop": {
+      "bytes": 4543,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/root-first-stop.json",
+      "sha256": "f702db7ee5a7ab822aef704af94a8b3a619fe209c10fdd83669be5c1837de519",
+      "symlink_target": null
+    },
+    "source_line": 222,
+    "wrapper_source": {
+      "bytes": 12451,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/run_owned.py",
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+      "symlink_target": null
+    },
+    "wrapper_trace_scope": "Exact root-recorded tool traceback joined to frozen source/actions; child stdout/stderr are both empty. Wrapper1 is distinct from child0; no compiler/provider/numerical failure is inferred."
+  },
+  "claims": {
+    "full_qualification": false,
+    "new_candidate_compiler_executed": false,
+    "new_full_profile_accepted": false,
+    "new_profile_reader_executed": false,
+    "production_adopted": false,
+    "provider_or_numerical_or_benefit_work_executed": false,
+    "successful_original_owner": false
+  },
+  "classification": "OWNER_METADATA_EXPECTED_EXIT_MISSING",
+  "completed_child_products": {
+    "copied39_rich_records_equal_actual": true,
+    "every_copy_byte_equal_archived_source_and_current_canonical": true,
+    "historical_source33_builder_tools5_product39_receipt_joins": true,
+    "inputs_after": {
+      "bytes": 244655,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/reuse-stock/inputs-after.json",
+      "sha256": "a4260728c9ca86a1d6bb7803a20a4effdec291fb9d636202e52eb2924c1e7292",
+      "symlink_target": null
+    },
+    "inputs_before": {
+      "bytes": 244655,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/reuse-stock/inputs-before.json",
+      "sha256": "a4260728c9ca86a1d6bb7803a20a4effdec291fb9d636202e52eb2924c1e7292",
+      "symlink_target": null
+    },
+    "output_seal": {
+      "bytes": 18983,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/reuse-stock/output-seal.json",
+      "sha256": "46e9b491a78ac0fdb8fe37bd6206932db6bb5e955e708b00c836978bccb24382",
+      "symlink_target": null
+    },
+    "owner": {
+      "bytes": 1433,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/reuse-stock/owner.json",
+      "sha256": "38d8959dda9982303794416590f40c3fd8345b24e574465cc2061030f8dd4acd",
+      "symlink_target": null
+    },
+    "seal_binds_all39_files_plus_stock_acceptance": true,
+    "source_and_prerequisite_scope": "Exact declared source/history with truthful b1 bytes and five selected local historical records; immutable539 arithmetic result and9854 cost receipts remain current. No old blanket-current or raw-b6 backing claim.",
+    "stock_acceptance": {
+      "bytes": 20663,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/stock-reuse-acceptance.json",
+      "sha256": "1092c0bb7f9c9729fafe894e0b8ef014b75a0470526c3995d3b1e9ded8e932ed",
+      "symlink_target": null
+    },
+    "stock_files": 39
+  },
+  "input_and_ownership_closure": {
+    "actions_byte_equal_unpinned": true,
+    "actual_before_after_current_records": 822,
+    "all316_rich_static_pins_current": true,
+    "all319_declared_reuse_inputs_joined": true,
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "no_global_process_absence_claim": true,
+    "operator_context_joins_actions_freeze_preparation": true,
+    "provider_mappings": [],
+    "source_and_whole_inputs_unchanged": true
+  },
+  "meaning_of_passed": "Truthful first-stop and provenance acceptance only; original owner remains failed.",
+  "passed": true,
+  "recovery_boundary": "Preserve this immutable first stop first. Root prospectively selected a fresh namespace with exact source, expected_exit=0 and complete required action-schema preflight, then one original three-owner/seven-command sequence. Repeating the cheap0.789s staging under the corrected declaration checks the full wrapper postcondition; it is a causal metadata repair, not an unchanged failed retry. The original false owner/raw packet remain unchanged. No recovery execution is admitted by this stop review.",
+  "review_execution": "Passive stdlib JSON/hash/AST/source, read-only Git and targeted /proc only. No authored helper/parser/compiler/policy/tool/provider/API/test executed.",
+  "reviewer": "forensic_obligations",
+  "roles": "Independent of profile author and actual operator; authored the prior arithmetic/JIT apparatus and performed the historical source review. That source review missed this required field; it remains unchanged as historical evidence. Root alone operated the two commands.",
+  "schema": "sirius-fp32-restoring-profile-independent-stop-review-v1",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "workspace": {
+    "new_stop_bundle_committed_or_pushed": false,
+    "tracked_clean": true,
+    "upstream": "0/0",
+    "worktrees": 1
+  }
+}

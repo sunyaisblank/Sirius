@@ -1,0 +1,96 @@
+{
+  "actual_commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/profile.py",
+        "pin-context"
+      ],
+      "exit_code": 0,
+      "tool_chunk": "73321d"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/run_owned.py",
+        "reuse-stock"
+      ],
+      "controller_traceback": "Traceback (most recent call last):\n  File \"/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/run_owned.py\", line 222, in <module>\n    assert code == action['expected_exit'], (code, action['expected_exit'])\n                   ~~~~~~^^^^^^^^^^^^^^^^^\nKeyError: 'expected_exit'\n",
+      "exit_code": 1,
+      "tool_chunk": "58f55f",
+      "tool_session": 51303
+    }
+  ],
+  "all39_stock_staging_outputs_sealed_and_equal_original": true,
+  "candidate_compiler_or_profile_reader_executed": false,
+  "classification": "OWNER_METADATA_EXPECTED_EXIT_MISSING",
+  "collector_baseline": {
+    "bytes": 301518,
+    "sha256": "f8c063161c0e7e04bff2b70be37ec149c750eb8da1dd6a72a53aaeaeccfa81eb"
+  },
+  "current_start_ticks": null,
+  "fresh_saved_birth_absent": true,
+  "full_profile_or_integrated_or_benefit_or_adoption_or_qualification_accepted": false,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 455923,
+      "saved_start_ticks": "8645729"
+    }
+  ],
+  "operational_reviews": {
+    "independent-stop-review.json": {
+      "bytes": 6516,
+      "sha256": "db88ca2b3ae5bbb2ad60a7537927beb40b515e9685f956658d91c7cd95a4827e"
+    },
+    "root-first-stop.json": {
+      "bytes": 4543,
+      "sha256": "f702db7ee5a7ab822aef704af94a8b3a619fe209c10fdd83669be5c1837de519"
+    },
+    "root-future-controls-source-review.json": {
+      "bytes": 9486,
+      "sha256": "fa7092791ae2e797ce7188619f6c93a15affab9e8495e6acbc9b0f1eb221f29f"
+    },
+    "root-owner-stop-admission.json": {
+      "bytes": 2746,
+      "sha256": "90f2abaf86199fcc62a52df537c388d628fd1b05125ae0b00679f174c43d8bb9"
+    },
+    "root-prerequisite-retirement.json": {
+      "bytes": 63449,
+      "sha256": "b1967f3809c658a83151b59df16397e96f47aa4228b84f45e14a943f539c5a29"
+    },
+    "root-prior-arithmetic-issue-receipt.json": {
+      "bytes": 3376,
+      "sha256": "341bee614aec9a4adbb7b34105fd5e64a0cc7b943f9a09bfd5addcc645384f55"
+    }
+  },
+  "original_child_exit": 0,
+  "original_owner_passed": false,
+  "original_owner_promoted": false,
+  "original_wrapper_exit": 1,
+  "owner": {
+    "bytes": 1433,
+    "sha256": "38d8959dda9982303794416590f40c3fd8345b24e574465cc2061030f8dd4acd"
+  },
+  "passed": true,
+  "schema": "sirius-fp32-restoring-profile-first-owner-metadata-stop-evidence-v1",
+  "scope": "First wrapper metadata failure preserved byte-for-byte. Child0 staging products are valid and sealed, but the original terminal owner remains false. A fresh explicitly corrected action-schema packet requires separate source admission; the original false owner and its sealed products remain historical evidence, without a general failed-owner acceptance path.",
+  "source_freeze": {
+    "bytes": 151321,
+    "sha256": "13c7dd46d6a58cb1d371d4dfcbddd5da177b0669ae928c585de934ba6673325e"
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "stock_output_seal": {
+    "bytes": 18983,
+    "sha256": "46e9b491a78ac0fdb8fe37bd6206932db6bb5e955e708b00c836978bccb24382"
+  },
+  "stock_result": {
+    "bytes": 20663,
+    "sha256": "1092c0bb7f9c9729fafe894e0b8ef014b75a0470526c3995d3b1e9ded8e932ed"
+  },
+  "whole316_source_pins_unchanged": true,
+  "whole822_actual_inputs_unchanged": true
+}

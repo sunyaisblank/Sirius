@@ -1,0 +1,102 @@
+{
+  "actions": {
+    "bytes": 170640,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/actions.json",
+    "sha256": "76eba5d36a9d1c210ba8194bc3e70f1bdb568913137d01e02ad758955f37d541",
+    "symlink_target": null
+  },
+  "actual_commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/profile.py",
+        "pin-context"
+      ],
+      "exit_code": 0,
+      "tool_chunk": "73321d"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/run_owned.py",
+        "reuse-stock"
+      ],
+      "controller_traceback": "Traceback (most recent call last):\n  File \"/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/run_owned.py\", line 222, in <module>\n    assert code == action['expected_exit'], (code, action['expected_exit'])\n                   ~~~~~~^^^^^^^^^^^^^^^^^\nKeyError: 'expected_exit'\n",
+      "exit_code": 1,
+      "tool_chunk": "58f55f",
+      "tool_session": 51303
+    }
+  ],
+  "actual_inputs_current": 822,
+  "candidate_compiler_or_profile_reader_executed": false,
+  "classification": "OWNER_METADATA_EXPECTED_EXIT_MISSING",
+  "completed_stock_files": 39,
+  "current_static_rich_pins": 316,
+  "fresh_absent_birth": {
+    "absent": true,
+    "current_start_ticks": null,
+    "pid": 455923,
+    "saved_start_ticks": "8645729"
+  },
+  "independent_source_review": {
+    "bytes": 6834,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/independent-source-review.json",
+    "sha256": "f043265ef43f49d89120060cb5b56ca8a225c7d056b45177375493bed6a71bdb",
+    "symlink_target": null
+  },
+  "inputs_before": {
+    "bytes": 244655,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/reuse-stock/inputs-before.json",
+    "sha256": "a4260728c9ca86a1d6bb7803a20a4effdec291fb9d636202e52eb2924c1e7292",
+    "symlink_target": null
+  },
+  "original_child_exit": 0,
+  "original_owner_passed": false,
+  "original_wrapper_exit": 1,
+  "output_seal": {
+    "bytes": 18983,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/reuse-stock/output-seal.json",
+    "sha256": "46e9b491a78ac0fdb8fe37bd6206932db6bb5e955e708b00c836978bccb24382",
+    "symlink_target": null
+  },
+  "owner": {
+    "bytes": 1433,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/reuse-stock/owner.json",
+    "sha256": "38d8959dda9982303794416590f40c3fd8345b24e574465cc2061030f8dd4acd",
+    "symlink_target": null
+  },
+  "passed": true,
+  "recovery_boundary": "Repair action schema and reuse exact completed child0 stock products after immutable first-stop preservation. No unchanged stage/compiler retry, reclassification of false owner or weakened acceptance.",
+  "root_review_miss": "Required expected_exit field was omitted by author and missed by independent/root source reviews; all three prospective actions lack it. Root preserves original false wrapper and completed child0 stock products before recovery.",
+  "root_source_admission": {
+    "bytes": 2589,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/root-source-admission.json",
+    "sha256": "bd458a321480aa1b32b31029c8ff5c757c0ab8fa5bbaad10a57cd51cbd78e950",
+    "symlink_target": null
+  },
+  "schema": "sirius-fp32-restoring-profile-first-owner-stop-v1",
+  "scope": "Acceptance of truthful first-stop/provenance only; no full-profile compiler/graph/integrated/numerical/benefit/adoption/qualification pass.",
+  "source_freeze": {
+    "bytes": 151321,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/source-freeze.json",
+    "sha256": "13c7dd46d6a58cb1d371d4dfcbddd5da177b0669ae928c585de934ba6673325e",
+    "symlink_target": null
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "stock_acceptance": {
+    "bytes": 20663,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/stock-reuse-acceptance.json",
+    "sha256": "1092c0bb7f9c9729fafe894e0b8ef014b75a0470526c3995d3b1e9ded8e932ed",
+    "symlink_target": null
+  }
+}
