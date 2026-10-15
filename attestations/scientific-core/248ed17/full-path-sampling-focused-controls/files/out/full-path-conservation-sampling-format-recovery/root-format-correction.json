@@ -1,0 +1,56 @@
+{
+  "exact_delta": "One leading ASCII space added in continuation indentation. All other source bytes, C++ tokens, line counts and assertions unchanged.",
+  "format_operation": {
+    "argv": [
+      "clang-format-18",
+      "-i",
+      "tests/backend/full_path_acceptance_test.cpp"
+    ],
+    "closed": true,
+    "executed_once": true,
+    "exit_code": 0,
+    "tool_chunk": "269d5f"
+  },
+  "formatter": {
+    "bytes": 97544,
+    "resolved_path": "/usr/lib/llvm-18/bin/clang-format",
+    "sha256": "55cc4a84a64347d12bbcc3fbe9c16599c57a75fda70703d1b91fc95ce1958d84"
+  },
+  "numerical_tests_executed": 0,
+  "parent_revision": "bd7820aad7d64c4dd65caa1b4bdbd7292a900115",
+  "parent_source": {
+    "bytes": 52195,
+    "sha256": "27735b74cf5967c377eb78b0f1f7fe6c69de4e209b9cc8b012c9748119db1222"
+  },
+  "passed": true,
+  "prior_failed_format_and_successful_build_commit": "f4e6bbd7d117622f99b4a872b83508cbbcc4e456",
+  "prior_retirement": {
+    "bytes": 20098,
+    "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-prior-build-format-stop-retirement.json",
+    "sha256": "8b03f56f6300fc5411a8f303d6655a9e62aae75e73a210294797bece6d756139"
+  },
+  "push_closed_zero": "fbe4a8",
+  "remote_revision_check": "6f2008",
+  "required_format_verification": {
+    "argv": [
+      "clang-format-18",
+      "--dry-run",
+      "--Werror",
+      "tests/backend/full_path_acceptance_test.cpp"
+    ],
+    "closed": true,
+    "executed_once_on_corrected_source": true,
+    "exit_code": 0,
+    "preceded_commit": true,
+    "tool_chunk": "feb194"
+  },
+  "schema": "sirius-full-path-sampling-root-format-correction-v1",
+  "scope": "Operational correction receipt outside new build/test inputs. Original formatting failure remains false in immutable history. This records format success and a whitespace-only committed correction; it is not a new build or numerical/scientific/domain/release verdict.",
+  "source_commit_chunk": "71f454",
+  "source_file": {
+    "bytes": 52196,
+    "resolved_path": "/home/astra/.project/Sirius/tests/backend/full_path_acceptance_test.cpp",
+    "sha256": "ba52920f31e0c5ff9135c2ccd8b6d43c4261b783f0c5544112daac927eb09dae"
+  },
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff"
+}

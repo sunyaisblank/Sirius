@@ -1,0 +1,75 @@
+{
+  "actual_LVP_mapping_required_and_bound": true,
+  "actual_root_command": {
+    "closed": true,
+    "executed_once": true,
+    "exit_code": 0,
+    "terminal_tool_chunk": "7e3328"
+  },
+  "before_after_rows_checked": 2448,
+  "case": "near-extremal-conservation",
+  "current_whole_input_rows": 1224,
+  "default_shader_cache": true,
+  "evidence": {
+    "gtest.xml": {
+      "bytes": 3480,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/near-extremal-conservation/gtest.xml",
+      "sha256": "7214f95eecb22f267163dbc4b072e53dda72a99bb61b6a9e13234e110c829d3f"
+    },
+    "inputs-after.json": {
+      "bytes": 296562,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/near-extremal-conservation/inputs-after.json",
+      "sha256": "79cbcf89b67cc3a2e5496a391785640805fab46bd3b1933ae021506e915312e7"
+    },
+    "inputs-before.json": {
+      "bytes": 296562,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/near-extremal-conservation/inputs-before.json",
+      "sha256": "79cbcf89b67cc3a2e5496a391785640805fab46bd3b1933ae021506e915312e7"
+    },
+    "owner.json": {
+      "bytes": 2783,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/near-extremal-conservation/owner.json",
+      "sha256": "648271698075f82fab3e647e9ba2983e48bc6d932b2aea65a42ce4e79a46ed3c"
+    },
+    "samples.jsonl": {
+      "bytes": 246074,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/near-extremal-conservation/samples.jsonl",
+      "sha256": "e4aaa090976e5cc97041a28977b7ccb6eba5a9e89e97c2d668969828813c0f43"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/near-extremal-conservation/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 739,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/near-extremal-conservation/stdout.log",
+      "sha256": "8458315f2dfaefb1509bda606ece09c21a370ca526f547e6628baa31ca9d13b2"
+    }
+  },
+  "exact_one_case_XML_zero_FESD": true,
+  "fresh_observed_births_absent": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 525400,
+      "saved_start_ticks": "9661815"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 813436,
+  "properties": {
+    "binary32_products_conservation": "state=expanded_binary32;products=binary32;E_initial=-0.82560919882387818;Lz_initial=8.2314984722104505;Q_initial=26.369807586647333;max_E_relative=1.6259330395444444e-11;max_Lz_relative=7.8247978667605572e-12;max_Q_relative=1.6624626517848814e-11;max_abs_gkk_over_sum_abs_terms=6.6379015020989733e-15;accepted_intervals=70;successful_candidates=70;rolled_back_candidates=0;native_samples=2;outgoing_samples=70;radial_turns=1;min_r_per_mass=10.329210825759393;min_abs_sin_theta=0.87062634383166904;terminal=physical_escape;affine_per_mass=56.205695544722872",
+    "binary64_products_conservation": "state=expanded_binary32;products=binary64;E_initial=-0.82560919882387818;Lz_initial=8.2314984722104505;Q_initial=26.369807586647333;max_E_relative=1.6259330395444444e-11;max_Lz_relative=7.8247978667605572e-12;max_Q_relative=1.6624626517848814e-11;max_abs_gkk_over_sum_abs_terms=6.6379015020989733e-15;accepted_intervals=70;successful_candidates=70;rolled_back_candidates=0;native_samples=2;outgoing_samples=70;radial_turns=1;min_r_per_mass=10.329210825759393;min_abs_sin_theta=0.87062634383166904;terminal=physical_escape;affine_per_mass=56.205695544722872",
+    "device": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "evidence_scope": "actual retained camera and intervals; committed physical host views and localized terminal; independently contracted E/Lz/Q and normalized null; one off-plane inward-turn-escape ray per supported product mode; no unprojected-stage or uniform-domain claim",
+    "executed_product_modes": "2",
+    "kerr_0998_inner_turn_conservation_binary32_products_r0": "endpoint_per_mass=7.7515943663897247e-10;direction_angle_rad=9.5146898452447754e-12;finite_map_relative=6.3378316561251872e-12;infinity_map_relative=6.066052417714142e-12;beam_covariance_relative=2.3775108344337108e-08;reference_endpoint_gap=1.2806598316539297e-10;reference_map_gap=2.5372719146481228e-11;attempts=70;reference_steps=2421;radial_turns=1;polar_turns=0;reference_step_fraction=0.001;reference_angular_spacing=0.0001",
+    "kerr_0998_inner_turn_conservation_binary64_products_r0": "endpoint_per_mass=7.7515943663897247e-10;direction_angle_rad=9.5146898452447754e-12;finite_map_relative=6.3378316561251872e-12;infinity_map_relative=6.066052417714142e-12;beam_covariance_relative=2.3775108344337108e-08;reference_endpoint_gap=1.2806598316539297e-10;reference_map_gap=2.5372719146481228e-11;attempts=70;reference_steps=2421;radial_turns=1;polar_turns=0;reference_step_fraction=0.001;reference_angular_spacing=0.0001",
+    "reference_scalar_mantissa_bits": "64"
+  },
+  "schema": "sirius-full-path-sampling-root-control-terminal-check-v1",
+  "scope": "One unchanged original focused control only; prospective outer wall is diagnostic. No full scientific/domain/native/release qualification.",
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "wall_seconds": 28.918009241999243
+}

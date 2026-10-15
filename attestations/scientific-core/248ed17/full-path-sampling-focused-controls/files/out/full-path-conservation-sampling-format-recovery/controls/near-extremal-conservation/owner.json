@@ -1,0 +1,70 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "--gtest_filter=FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+    "--gtest_also_run_disabled_tests"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "near-extremal-conservation",
+  "child_exit": 0,
+  "child_pid": 525400,
+  "child_start_ticks": "9661815",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 525396,
+    "pid": 525396,
+    "ppid": 1313,
+    "rss_kib": 25900,
+    "session": 525396,
+    "start_ticks": "9661757",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/near-extremal-conservation/gtest.xml",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 28800
+  },
+  "meaning": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants; unchanged original assertions/fixtures/no added product deadline or submission guard; outer wall is prospective diagnostic only.",
+  "minimum_sampled_available_kib": 18943884,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 525400,
+      "saved_start_ticks": "9661815"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 813436,
+  "provider_mappings": [
+    {
+      "maps": [
+        "75961d000000-75961d05b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "75961d05b000-75961d46b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "75961d46b000-75961dac6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "75961dac6000-75961db5c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "75961db5c000-75961db61000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 525400,
+      "pid": 525400,
+      "start_ticks": "9661815"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants; unchanged original assertions/fixtures/no added product deadline or submission guard; outer wall is prospective diagnostic only.",
+  "source": {
+    "revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 28.918009241999243,
+  "whole_inputs_unchanged": true
+}

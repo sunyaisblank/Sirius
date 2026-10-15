@@ -1,0 +1,41 @@
+{
+  "AST_and_exact_unified_diff_passed": true,
+  "actual_closed_before_maps_checked": [
+    "out/full-path-conservation-sampling-format-recovery/configure/inputs-before.json",
+    "out/full-path-conservation-sampling-format-recovery/build-backend/inputs-before.json",
+    "out/full-path-conservation-sampling-format-recovery/controls/retained-dopri-sampler/inputs-before.json",
+    "out/full-path-conservation-sampling-format-recovery/controls/quartic-volume-rollback/inputs-before.json",
+    "out/full-path-conservation-sampling-format-recovery/controls/quartic-event-fractions/inputs-before.json",
+    "out/full-path-conservation-sampling-format-recovery/controls/near-extremal-conservation/inputs-before.json"
+  ],
+  "all_original_branches_and_common_tail_unchanged": true,
+  "collector_and_scratch_excluded_from_runtime_inputs": true,
+  "collector_executed": false,
+  "exact_inverse_only_new_kind_and_parent_membership": true,
+  "new_branch_full_read_tool_chunks": [
+    "074e39",
+    "7a817f"
+  ],
+  "parent_membership_read_tool_chunk": "074e39",
+  "passed": true,
+  "release": {
+    "collector": {
+      "bytes": 406339,
+      "resolved_path": "/home/astra/.project/Sirius/out/preserve-finite-result.py",
+      "sha256": "4a5613414236c6d971ad004fe916f2634e75aae7c5ea2c6376f74035306623d5"
+    },
+    "patch": {
+      "bytes": 18846,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/collector-focused-controls.patch",
+      "sha256": "aae3cb64179ece6327451b726af6ea6fdce42efe38c71a2dceb6e51fcd6e63e7"
+    },
+    "preimage": {
+      "bytes": 392977,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/collector-before-focused-controls.py",
+      "sha256": "c5efcc315365d567b52da373ebc97cf0e2e5288608f606e7db7be546161b81f7"
+    }
+  },
+  "schema": "sirius-full-path-sampling-root-collector-source-input-check-v1",
+  "scope": "Conditional preservation SOURCE only; requires actual final result, independent terminal review, root terminal admission and separate collector source review before once execution. No new scientific or qualification assertion.",
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff"
+}

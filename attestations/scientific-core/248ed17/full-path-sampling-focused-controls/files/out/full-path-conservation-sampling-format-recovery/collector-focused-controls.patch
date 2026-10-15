@@ -1,0 +1,150 @@
+--- collector-before-focused-controls.py
++++ out/preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('bd7820aad7d64c4dd65caa1b4bdbd7292a900115' if kind == 'full-path-sampling-build-format-stop' else '4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop', 'fp32-estimate-restoring-original-controls', 'fp32-estimate-restoring-original-benefit') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff' if kind == 'full-path-sampling-focused-controls' else 'bd7820aad7d64c4dd65caa1b4bdbd7292a900115' if kind == 'full-path-sampling-build-format-stop' else '4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop', 'fp32-estimate-restoring-original-controls', 'fp32-estimate-restoring-original-benefit') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,138 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'full-path-sampling-focused-controls':
++    import xml.etree.ElementTree as ET
++    work=root/'out/full-path-conservation-sampling-format-recovery';controls=work/'controls'
++    bundle=root/'attestations/scientific-core/248ed17/full-path-sampling-focused-controls'
++    tag='evidence/issue-53-full-path-sampling-focused-controls'
++    focused_load=lambda path:json.loads(Path(path).read_text())
++    focused_records={}
++    def focused_record(path):
++        path=Path(path);name=str(path)
++        if name not in focused_records:
++            focused_records[name]=dict(pin(path),resolved_path=str(path.resolve(strict=True)))
++        return focused_records[name]
++    result=focused_load(work/'focused-result.json')
++    independent=focused_load(work/'independent-terminal-review.json')
++    admission=focused_load(work/'root-terminal-admission.json')
++    assert result['schema']=='sirius-full-path-sampling-focused-result-v1'
++    assert result['passed'] is True and type(result['original_controls_passed']) is int and result['original_controls_passed']==4
++    assert independent['passed'] is True and admission['passed'] is True
++    assert result['source_revision']==independent['source_revision']==admission['source_revision']==parent
++    for key,name in [('focused_result','focused-result.json'),('independent_terminal_review','independent-terminal-review.json')]:
++        assert admission[key]==focused_record(work/name)
++    for path_name,count,key_name in [('source-freeze.json',44,'pins'),('postbuild-source-freeze.json',30,'pins'),('controls/source-freeze.json',1098,'files')]:
++        freeze=focused_load(work/path_name);assert len(freeze[key_name])==count
++        assert freeze.get('source_revision',freeze.get('revision'))==parent
++        for name,expected in freeze[key_name].items():assert focused_record(root/name)==expected,name
++    build_actions=focused_load(work/'actions.json');actions=focused_load(controls/'actions.json')
++    order=['quartic-event-fractions','quartic-volume-rollback','retained-dopri-sampler','near-extremal-conservation']
++    expected_names=['CpuTraceBoundary.RetainedQuarticEventsKeepOriginalFractionsAndExcludeLaterDisk',
++        'CpuTraceBoundary.RetainedQuarticVolumeFailurePublishesNothingAndRecovers',
++        'RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates',
++        'FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants']
++    seconds=dict(zip(order,[300,300,900,28800]));device_cases=set(order[2:])
++    assert set(actions)==set(order) and list(build_actions)==['configure','build-backend']
++    commands=focused_load(controls/'commands.json');assert commands['order']==order and commands['stop_first_failure'] is True
++    assert commands['commands']==[['/usr/bin/python3.12','-B',str(controls/'run_owned.py'),name] for name in order]
++    original=focused_load(work/'originals/actions-4498.json');readiness=focused_load(controls/'readiness.json')
++    assert readiness['source']=={'revision':parent,'status':''} and readiness['ready_for_root_review'] is True
++    assert readiness['alignment_receipt']['admitted_domains']==[] and readiness['alignment_receipt']['records']==[]
++    assert readiness['alignment_receipt']['source_revision']==parent and readiness['alignment_receipt']['source_tree_clean'] is True
++    assert readiness['strict_cache']['SIRIUS_ALIGNMENT_MODE']=='qualification' and readiness['strict_cache']['SIRIUS_ATTESTATION_ROOT']==''
++    assert readiness['strict_cache']['SIRIUS_CONTRACT_MODE']=='2' and readiness['strict_cache']['SIRIUS_MANDATORY_TESTS']=='ON'
++    assert readiness['strict_cache']['SIRIUS_WERROR']=='ON' and readiness['strict_cache']['SIRIUS_REQUIRE_VULKAN_RUNTIME']=='ON'
++    assert readiness['producer_object_count']==8 and readiness['retained_arrays']['main_count']==40 and readiness['retained_arrays']['owner_count']==2
++    embedded=focused_load(controls/'embedded-retained-arrays.json')
++    assert (embedded['main_count'],embedded['owner_count'],embedded['program_tables'])==(40,2,7)
++    assert len(embedded['actual_main_arrays'])==40 and len(embedded['actual_owner_arrays'])==2
++    assert len(readiness['resources'])==23
++    for row in readiness['resources']:
++        canonical=root/row['canonical'];staged=root/row['staged']
++        assert focused_record(staged)==row['identity'] and pin(canonical)==pin(staged)
++    owners={};whole_inputs={};input_rows=0;births=[]
++    phases=[(work,name,build_actions[name]) for name in ['configure','build-backend']]+[(controls,name,actions[name]) for name in order]
++    for base,name,action in phases:
++        folder=base/name;owner=focused_load(folder/'owner.json');is_control=base==controls
++        assert action['revision']==parent and type(action['expected_exit']) is int and action['expected_exit']==0
++        assert action['kind']==('test' if is_control else 'build')
++        if is_control:
++            index=order.index(name);test_name=expected_names[index]
++            assert action['argv']==readiness['actual_registration'][name]['command']==[str(root/'bin/linux-gcc/tests/backend/sirius_backend_tests'),'--gtest_filter='+test_name,'--gtest_also_run_disabled_tests']
++            assert action['disable_software_shader_cache'] is False and action['software_provider']==(name in device_cases)
++            assert action['limits']=={'seconds':seconds[name],'rss_kib':4194304,'reserve_kib':2097152}
++        else:
++            assert set(action)=={'revision','argv','kind','expected_exit','limits','frozen_inputs','scope','software_provider'}
++            assert action['argv']==original[name]['argv'] and action['limits']==original[name]['limits'] and action['software_provider'] is False
++        assert owner['status']=='terminal' and owner['passed'] is True and type(owner['child_exit']) is int and owner['child_exit']==0
++        assert owner['source']=={'revision':parent,'status':''} and owner['source_unchanged'] is True and owner['whole_inputs_unchanged'] is True
++        assert owner['argv']==action['argv'] and owner['limits']==action['limits']
++        assert owner['stop_reason'] is None and owner['cleanup_errors']==[] and owner['remaining_owned_processes']==[]
++        assert owner['peak_sampled_rss_kib']<=action['limits']['rss_kib'] and owner['minimum_sampled_available_kib']>=action['limits']['reserve_kib']
++        assert owner['wall_seconds']<action['limits']['seconds']
++        before_map=focused_load(folder/'inputs-before.json');assert before_map==focused_load(folder/'inputs-after.json') and before_map
++        for path_name,expected in before_map.items():
++            assert focused_record(root/path_name)==expected,path_name
++            if path_name in whole_inputs:assert whole_inputs[path_name]==expected
++            whole_inputs[path_name]=expected
++        input_rows+=len(before_map)
++        for path_name in action['frozen_inputs']:
++            path=root/path_name;key=str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
++            assert before_map[key]==focused_record(path)
++        assert owner['observed_births'] and owner['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip()
++        for birth in owner['observed_births']:
++            assert birth['absent'] is True and type(birth['pid']) is int
++            saved=birth['saved_start_ticks'];assert type(saved) is int or (type(saved) is str and saved.isdigit())
++            saved=int(saved);assert saved>=0
++            try:
++                stat=(Path('/proc')/str(birth['pid'])/'stat').read_text();current=int(stat[stat.rfind(')')+2:].split()[19])
++            except (FileNotFoundError,ProcessLookupError):current=None
++            assert current!=saved
++            births.append({'pid':birth['pid'],'saved_start_ticks':saved,'current_start_ticks':current,'same_birth_absent':True})
++        if is_control:
++            xml=ET.parse(folder/'gtest.xml').getroot();cases=xml.findall('.//testcase')
++            assert int(xml.get('tests','-1'))==1 and len(cases)==1
++            assert all(int(node.get(key,'0'))==0 for node in [xml,*xml.findall('.//testsuite')] for key in ['failures','errors','skipped','disabled'])
++            assert not any(xml.findall('.//'+tag) for tag in ['failure','error','skipped'])
++            assert cases[0].get('classname')+'.'+cases[0].get('name')==test_name and cases[0].get('status')=='run' and cases[0].get('result')=='completed'
++            expected_environment={'GTEST_OUTPUT':'xml:'+str(folder/'gtest.xml')}
++            if name in device_cases:
++                expected_environment.update(VK_DRIVER_FILES='/usr/share/vulkan/icd.d/lvp_icd.json',SIRIUS_VULKAN_DEVICE='0')
++                assert owner['provider_mappings'] and all(any('/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so' in line for line in row['maps']) for row in owner['provider_mappings'])
++            else:assert owner['provider_mappings']==[]
++            assert owner['declared_output_environment']==expected_environment
++        else:assert owner['declared_output_environment']=={'GTEST_OUTPUT':''} and owner['provider_mappings']==[]
++        owners[name]={'owner':focused_record(folder/'owner.json'),'before':focused_record(folder/'inputs-before.json'),'after':focused_record(folder/'inputs-after.json'),
++            'wall_seconds':owner['wall_seconds'],'peak_sampled_rss_kib':owner['peak_sampled_rss_kib'],
++            'rss_scope':'Sampled aggregate; zero for an instantaneous CPU case means no pre-exit sample, not zero memory usage.'}
++        if is_control:owners[name]['xml']=focused_record(folder/'gtest.xml')
++    collector=str(Path(__file__).resolve());assert collector not in whole_inputs and str(Path(collector).relative_to(root)) not in whole_inputs
++    for name in ['collector-before-focused-controls.py','collector-focused-controls.patch']:
++        assert str(work/name) not in whole_inputs and str((work/name).relative_to(root)) not in whole_inputs
++    correction=focused_load(work/'root-format-correction.json');prior=focused_load(work/'prior-format-stop.json')
++    assert correction['passed'] is True and correction['source_revision']==parent
++    assert correction['required_format_verification']['exit_code']==0 and correction['required_format_verification']['preceded_commit'] is True
++    assert prior['prior_builds_passed'] is True and prior['prior_format_passed'] is False and prior['prior_test_actions_admitted'] is False and prior['prior_test_executions']==0
++    # Byte-identical producer files are already remotely Git-backed by f4e6.
++    old_bundle=root/'attestations/scientific-core/bd7820a/full-path-sampling-build-format-stop';old_commit='f4e6bbd7d117622f99b4a872b83508cbbcc4e456'
++    old_manifest=focused_load(old_bundle/'manifest.json')['files'];producer_aliases={}
++    for current,member in [('bin/linux-gcc/tests/backend/sirius_backend_tests','producer/sirius_backend_tests'),('bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o','producer/full_path_acceptance_test.cpp.o')]:
++        saved=old_bundle/member;assert pin(root/current)==pin(saved)==old_manifest[member]
++        raw=subprocess.check_output(['git','show',old_commit+':'+str(saved.relative_to(root))]);assert len(raw)==pin(saved)['bytes'] and hashlib.sha256(raw).hexdigest()==pin(saved)['sha256']
++        producer_aliases[current]={'actual':focused_record(root/current),'archived':focused_record(saved),'archive_commit':old_commit,'Git_member':str(saved.relative_to(root))}
++    baseline=work/'collector-before-focused-controls.py'
++    assert pin(baseline)=={'bytes':392977,'sha256':'c5efcc315365d567b52da373ebc97cf0e2e5288608f606e7db7be546161b81f7'}
++    mapping=[(work,'files/out/'+work.name),(root/'tests/backend/full_path_acceptance_test.cpp','source/tests/backend/full_path_acceptance_test.cpp')]
++    summary={'schema':'sirius-full-path-sampling-focused-evidence-v1','passed':True,'source_revision':parent,
++        'focused_result':focused_record(work/'focused-result.json'),'independent_terminal_review':focused_record(work/'independent-terminal-review.json'),
++        'root_terminal_admission':focused_record(work/'root-terminal-admission.json'),'owners':owners,'actual_owners':6,'original_controls_passed':4,
++        'actual_before_map_rows':input_rows,'actual_unique_current_inputs':len(whole_inputs),'fresh_observed_birth_absences':births,
++        'static_build_pins':44,'static_postbuild_pins':30,'static_control_pins':1098,'embedded_arrays':{'main':40,'owner':2,'tables':7},'staged_resources':23,
++        'producer_archive_aliases':producer_aliases,'format_passed':True,'prior_format_failure_preserved':True,
++        'scientific_or_native_domain_or_release_qualification':False,
++        'scope':'Six actual strict build/control owners and four unchanged finite original controls only. Exact2CPU quartic/refusal controls, real retained sampler and near-extremal physical invariant witness. Diagnostic outer walls are not original per-test deadlines; executor submission cap remains0. Software owners observe actual LVP only; installed dependency bytes are separate. No frame/fullscience/domain/native/release/fullCI claim. ProducerELF/object bytes reused through explicit immutable Git aliases; no whole old bundle backup claim.'}
++    message='Preserve repaired full-path conservation observer and original focused controls (#53)\n'
+ elif kind == 'full-path-sampling-build-format-stop':
+     work=root/'out/full-path-conservation-sampling'
+     bundle=root/'attestations/scientific-core/bd7820a/full-path-sampling-build-format-stop'

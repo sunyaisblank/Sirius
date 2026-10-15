@@ -1,0 +1,198 @@
+{
+  "actual_controls": {
+    "near-extremal-conservation": {
+      "actual_root_command": {
+        "closed": true,
+        "executed_once": true,
+        "exit_code": 0,
+        "terminal_tool_chunk": "7e3328"
+      },
+      "input_rows": 1224,
+      "peak_sampled_rss_kib": 813436,
+      "root_case_check": {
+        "bytes": 5583,
+        "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-control-near-extremal-conservation.json",
+        "sha256": "c7c566439d8cab466af4306fe350c0605030f206985ed155ec4ef97ca436f7de"
+      },
+      "wall_seconds": 28.918009241999243
+    },
+    "quartic-event-fractions": {
+      "actual_root_command": {
+        "closed": true,
+        "executed_once": true,
+        "exit_code": 0,
+        "terminal_tool_chunk": "66de24"
+      },
+      "input_rows": 1212,
+      "peak_sampled_rss_kib": 0,
+      "root_case_check": {
+        "bytes": 2952,
+        "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-control-quartic-event-fractions.json",
+        "sha256": "90765f16fce7562ae3f67fc299ebee1b07286ab37be28b39977b6251ec8011b6"
+      },
+      "wall_seconds": 0.021932010000455193
+    },
+    "quartic-volume-rollback": {
+      "actual_root_command": {
+        "closed": true,
+        "executed_once": true,
+        "exit_code": 0,
+        "terminal_tool_chunk": "a9bae3"
+      },
+      "input_rows": 1216,
+      "peak_sampled_rss_kib": 0,
+      "root_case_check": {
+        "bytes": 2952,
+        "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-control-quartic-volume-rollback.json",
+        "sha256": "362d976ea361d84236540e9c6dfeb441da2c49bbe47ea31f5b5c2fab40f7ad8a"
+      },
+      "wall_seconds": 0.021811425001942553
+    },
+    "retained-dopri-sampler": {
+      "actual_root_command": {
+        "closed": true,
+        "executed_once": true,
+        "exit_code": 0,
+        "terminal_tool_chunk": "e587c7"
+      },
+      "input_rows": 1220,
+      "peak_sampled_rss_kib": 974244,
+      "root_case_check": {
+        "bytes": 2950,
+        "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-control-retained-dopri-sampler.json",
+        "sha256": "1e7418ebda970b272ebb41b7995007077b42e91268f337382941b5fcfbd72d80"
+      },
+      "wall_seconds": 40.66649165999843
+    }
+  },
+  "classification": "FOCUSED_SAMPLING_REPAIR_CONTROLS_PASSED",
+  "conservation_product_modes": {
+    "binary32": {
+      "E_initial": "-0.82560919882387818",
+      "Lz_initial": "8.2314984722104505",
+      "Q_initial": "26.369807586647333",
+      "accepted_intervals": "70",
+      "affine_per_mass": "56.205695544722872",
+      "max_E_relative": "1.6259330395444444e-11",
+      "max_Lz_relative": "7.8247978667605572e-12",
+      "max_Q_relative": "1.6624626517848814e-11",
+      "max_abs_gkk_over_sum_abs_terms": "6.6379015020989733e-15",
+      "min_abs_sin_theta": "0.87062634383166904",
+      "min_r_per_mass": "10.329210825759393",
+      "native_samples": "2",
+      "outgoing_samples": "70",
+      "products": "binary32",
+      "radial_turns": "1",
+      "rolled_back_candidates": "0",
+      "state": "expanded_binary32",
+      "successful_candidates": "70",
+      "terminal": "physical_escape"
+    },
+    "binary64": {
+      "E_initial": "-0.82560919882387818",
+      "Lz_initial": "8.2314984722104505",
+      "Q_initial": "26.369807586647333",
+      "accepted_intervals": "70",
+      "affine_per_mass": "56.205695544722872",
+      "max_E_relative": "1.6259330395444444e-11",
+      "max_Lz_relative": "7.8247978667605572e-12",
+      "max_Q_relative": "1.6624626517848814e-11",
+      "max_abs_gkk_over_sum_abs_terms": "6.6379015020989733e-15",
+      "min_abs_sin_theta": "0.87062634383166904",
+      "min_r_per_mass": "10.329210825759393",
+      "native_samples": "2",
+      "outgoing_samples": "70",
+      "products": "binary64",
+      "radial_turns": "1",
+      "rolled_back_candidates": "0",
+      "state": "expanded_binary32",
+      "successful_candidates": "70",
+      "terminal": "physical_escape"
+    }
+  },
+  "evidence": {
+    "current_format_receipt": {
+      "bytes": 2247,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-format-correction.json",
+      "sha256": "39d9014010fe66ab5eb831141e71cb11a308348e80ff480871566f4851971886"
+    },
+    "readiness": {
+      "bytes": 22665,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/controls/readiness.json",
+      "sha256": "daddeb021092b942f8d54f65514889c04d0785d93021d688a01b8fec5878d2d4"
+    },
+    "root_actual_postbuild_inputs": {
+      "bytes": 3243,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-postbuild-input-check.json",
+      "sha256": "65322375786fdd68b95637efdd6de02cdc778968cedcb99f103d971a94a53e82"
+    },
+    "root_actual_terminal_inputs": {
+      "bytes": 7036,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-terminal-input-check.json",
+      "sha256": "f23ac7be875409758d308e0641c174e60b725dce2ad849a88f7bf114a539e28c"
+    },
+    "root_build_terminal_admission": {
+      "bytes": 1375,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-build-terminal-admission.json",
+      "sha256": "d9e9f3a9ce20ac1c2820d10069fd1dc299f5d7f29291e047400f9a3f2b38668d"
+    },
+    "root_runtime_admission": {
+      "bytes": 1895,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling-format-recovery/root-runtime-admission.json",
+      "sha256": "acd8891107f477ee869113a994fd85ebac5e581d09e570abaaad20c332bd5065"
+    }
+  },
+  "independent_reference_properties": {
+    "kerr_0998_inner_turn_conservation_binary32_products_r0": "endpoint_per_mass=7.7515943663897247e-10;direction_angle_rad=9.5146898452447754e-12;finite_map_relative=6.3378316561251872e-12;infinity_map_relative=6.066052417714142e-12;beam_covariance_relative=2.3775108344337108e-08;reference_endpoint_gap=1.2806598316539297e-10;reference_map_gap=2.5372719146481228e-11;attempts=70;reference_steps=2421;radial_turns=1;polar_turns=0;reference_step_fraction=0.001;reference_angular_spacing=0.0001",
+    "kerr_0998_inner_turn_conservation_binary64_products_r0": "endpoint_per_mass=7.7515943663897247e-10;direction_angle_rad=9.5146898452447754e-12;finite_map_relative=6.3378316561251872e-12;infinity_map_relative=6.066052417714142e-12;beam_covariance_relative=2.3775108344337108e-08;reference_endpoint_gap=1.2806598316539297e-10;reference_map_gap=2.5372719146481228e-11;attempts=70;reference_steps=2421;radial_turns=1;polar_turns=0;reference_step_fraction=0.001;reference_angular_spacing=0.0001"
+  },
+  "metadata": {
+    "actual_embedded_main_arrays": 40,
+    "actual_embedded_owner_arrays": 2,
+    "actual_source_build_governance_passed": true,
+    "actual_strict_build_owners": 2,
+    "actual_test_owners": 4,
+    "cache": "Default/unset software shader cache; only selected LVP ICD/device0 overrides.",
+    "outer_walls": "CPU300s each; sampler900s; target28800s. Prospective diagnostics, not original per-test TIMEOUT. Retained executor original maximum_submission_ms remains0.",
+    "prior_failed_format_history_preserved": "f4e6bbd7d117622f99b4a872b83508cbbcc4e456",
+    "producer_objects": 8,
+    "producer_unique_dependencies": 513,
+    "program_tables": 7,
+    "provider": "Observed llvmpipe LVP birth/session/device/inode for both device cases. Installed loader/LLVM dependencies are separately pinned; no new three-image map or 55-feature enablement claim.",
+    "required_format_check_passed_before_commit": true,
+    "staged_resources": 23,
+    "static_control_pins": 1098
+  },
+  "original_controls_passed": 4,
+  "original_failure": {
+    "CI_run": 38577826600,
+    "filter": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+    "reported_failure": "CoupledStepFailure::Event / termination5; numerical_failure before physical escape.",
+    "source_contract_defect": "Decorator inherited base Sample nullopt while real retained executor owned required quartic samples; tracer refused absent original-fraction samples. Direct forwarding closes this decorator contract gap.",
+    "test_index": 702
+  },
+  "passed": true,
+  "qualification": {
+    "external_domains_admitted": 0,
+    "external_domains_required": 8,
+    "frame_or_physical_native_runtime_qualification": false,
+    "full_Mandatory_CI_pass": false,
+    "full_scientific_qualification": false,
+    "release_packaging_enabled": false
+  },
+  "schema": "sirius-full-path-sampling-focused-result-v1",
+  "scope": "Four unchanged finite original controls on exact corrected248ed source, including both product modes of one inward-turn-escape invariant witness. Target observes committed physical views and terminal, not unprojected stages or uniform domains. Sampler/CPU controls exercise their original sample/refusal/failure/recovery assertions. No full scientific/native/platform/frame/release qualification or optimization adoption.",
+  "source_change": {
+    "behavior": "ConservationObserver::Sample delegates trial, fraction, normal and optional result/refusal directly to its retained executor. Private sample requests do not alter committed conservation counters.",
+    "file": "tests/backend/full_path_acceptance_test.cpp",
+    "format_only_commit": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+    "identity": {
+      "bytes": 52196,
+      "resolved_path": "/home/astra/.project/Sirius/tests/backend/full_path_acceptance_test.cpp",
+      "sha256": "ba52920f31e0c5ff9135c2ccd8b6d43c4261b783f0c5544112daac927eb09dae"
+    },
+    "original_numerical_assertions_tolerances_fixtures_product_modes_unchanged": true,
+    "semantic_commit": "bd7820aad7d64c4dd65caa1b4bdbd7292a900115"
+  },
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff"
+}
