@@ -1,0 +1,223 @@
+{
+  "schema": "sirius-kerr-shared-loop-independent-native-preservation-review-v1",
+  "passed": true,
+  "preservation_audit_passed": true,
+  "verdict": "NAMED_LOCAL_GIT_AND_FILESYSTEM_PRESERVATION_ACCEPTABLE_FOR_ROOT_TAG_AND_PUSH",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "reviewer": "/root/divide_contract_review",
+  "reviewer_role": "Independent of native execution and preservation packing; author/reviewer of earlier source-copy candidates and related source/CI preservation. This receipt checks archival closure and reuses the separately accepted numerical review.",
+  "review_scope": "Passive stdlib file/hash/JSON and read-only Git only. No native numerical case reanalysis, project/helper/parser/provider/test/CI/network execution, signals, source edits, retirement or tag/push. Only this review receipt written.",
+  "bundle": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls",
+  "local_preservation_commit": "4767db8a07560ee3eea39aadc8b3490ade903f58",
+  "local_commit_parent": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "all191_named_Git_bundle_blobs_byte_exact": true,
+  "local_commit_changes_exactly_this_bundle": true,
+  "root_tag_and_push_still_required": true,
+  "remote_reference_queried_by_this_review": false,
+  "raw_packet_retirement_authorized_by_this_review": false,
+  "pins": {
+    "manifest": {
+      "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/manifest.json",
+      "bytes": 38331,
+      "sha256": "77ab572cb5aa77f7f93da1541778b51cbb3ad17386a5918cb4ae45a2b76409f4"
+    },
+    "preservation": {
+      "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/preservation.json",
+      "bytes": 76188,
+      "sha256": "05e705980504d0692c97fd0988b0d1d83b50f18becc55e1b31731ba4f736c136"
+    },
+    "static_archive_dependencies": {
+      "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/native-windows-kerr-shared-loop-cd99fd06/root-static-archive-dependencies.json",
+      "bytes": 451511,
+      "sha256": "6d357eebb23ffef0183e3b1bf0feaf20c7e98be18b90ceac277484471007c223"
+    },
+    "execution_bindings": {
+      "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/native-windows-kerr-shared-loop-cd99fd06/execution-bindings.json",
+      "bytes": 224128,
+      "sha256": "d69d3385cfb99dc66c5c73c025995272d918e811f653a614136824bc0420a855"
+    },
+    "source_freeze": {
+      "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/native-windows-kerr-shared-loop-cd99fd06/source-freeze.json",
+      "bytes": 192162,
+      "sha256": "1b263fad0616b3afd645c75d870e814dabe746281aa530f8e3e1d1e39c94c2c0"
+    },
+    "accepted_completed_result": {
+      "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/native-windows-kerr-shared-loop-cd99fd06/root-completed-results.json",
+      "original_path": "out/native-windows-kerr-shared-loop-cd99fd06/root-completed-results.json",
+      "bytes": 11968,
+      "sha256": "5553ad3449335bff9c5c057893caeaa3965fbde2a996f2b488b04b008fd59261"
+    },
+    "reused_independent_completed_numerical_review": {
+      "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/native-windows-kerr-shared-loop-cd99fd06/independent-completed-results-review.json",
+      "original_path": "out/native-windows-kerr-shared-loop-cd99fd06/independent-completed-results-review.json",
+      "bytes": 27846,
+      "sha256": "286ff5e40f6e0ad8f2e01ae5aa9d894d0e039df211d39c32b3c45108b3d8f691"
+    }
+  },
+  "counts": {
+    "actual_bundle_files": 191,
+    "manifest_members_excluding_self": 190,
+    "retained_payload": 189,
+    "complete_native_packet_files": 181,
+    "late_CI_preservation_followups": 4,
+    "late_software_preservation_followups": 4,
+    "static_input_map_rows": 1010,
+    "source_freeze_rows": 1009,
+    "already_preserved_CI_bytes": 436,
+    "current_native_packet_copy": 26,
+    "exact_source_blob": 538,
+    "external_host_input_hash_only": 5,
+    "omitted_verified_transport_container": 5,
+    "CI_original_packet_rows": 296,
+    "CI_explicit_byte_alias_rows": 140,
+    "source_and_CI_logical_Git_rows": 974,
+    "distinct_reused_Git_paths_checked": 837,
+    "distinct_reused_Git_blobs_hashed": 739,
+    "original_ZIP_member_maps": 5,
+    "exact_extracted_ZIP_members_Git_backed": 227,
+    "accepted_case_receipt_links_verified": 14
+  },
+  "checks": [
+    "Physical regular-file set is exactly manifest190 plus manifest itself; no bundle symlinks or unsafe relative member paths. Every member byte count/SHA256 matches, and all189 retained records have unique exact files/<original source path> destinations.",
+    "All181 current raw native packet files are present, with no missing or extra raw-file selection. All189 source-to-copy pairs, including eight late CI/software followups, match current original bytes. Preservation repeats the exact completed-result object and accepted independent-review pin.",
+    "Static archival map has exactly the1010 binding keys and byte identities. Source-freeze1009 is exactly the same map minus its own file; the binding's remaining row hashes the source-freeze itself. Five archival kinds partition1010 without invented input rows.",
+    "538 exact source rows independently resolve at named cd99 source commit;436 CI-backed rows resolve at named449a5ad7 commit. For every referenced regular Git blob, object identity, length and SHA256 were independently read and checked. CI296 original-role rows retain exact raw-to-preserved paths;140 explicitly scoped rows are byte aliases only.",
+    "All26 copied native input rows resolve directly to matching manifest members and current original bytes. The five external inputs were rehashed current and remain explicitly hash-only; no external binary reconstruction or archival claim follows.",
+    "All five omitted ZIP rows join the named CI preservation receipt, exact original container identity, API artifact digest/size/run38735683288/source cd99, and complete original member maps. Each227 safe member path joins its exact original extracted source path and named CI Git blob. No ZIP binary or equivalent-container reconstruction claim is made.",
+    "Both reused CI/software followup quartets are copied exactly. Their independent review pins agree with the corresponding root Git receipts; recorded tag refs equal named commits, whose manifest bytes are independently verified from Git. No network confirmation was attempted.",
+    "Accepted root completed-result and independent numerical-review records retain source cd99, seven passed controls, closed system/terminal sessions and exact scope. All14 accepted/root checkpoint file links resolve in both raw and preserved packets. Numerical assertions and provider execution were not re-run.",
+    "Local4767db8a commit has exact parent cd99 and only191 regular bundle files differ from that parent. Every191 named Git blob equals the checked local bundle, including manifest and preservation. Source HEAD/tracking/sole worktree remain unchanged and clean."
+  ],
+  "reused_prior_preservations": [
+    {
+      "kind": "ci",
+      "commit": "449a5ad7ad22e194bf60ce32dd19de40ff034929",
+      "tag": "evidence/issue-48-native-build-ci-cd99fd06",
+      "manifest": {
+        "bytes": 59997,
+        "sha256": "b676fc7f2775a3504c8326742cca583f97f79bb565ed116a290bac8598017b60"
+      },
+      "root_Git_receipt": {
+        "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/kerr-shared-loop-ci-preservation/root-git-preservation.json",
+        "original_path": "out/kerr-shared-loop-ci-preservation/root-git-preservation.json",
+        "bytes": 758,
+        "sha256": "49c912ee974141d4f54889caf6ea60375d3c927f1d3012747d2306f011af4c54"
+      },
+      "independent_preservation_review": {
+        "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/kerr-shared-loop-ci-preservation/independent-ci-preservation-review.json",
+        "original_path": "out/kerr-shared-loop-ci-preservation/independent-ci-preservation-review.json",
+        "bytes": 6674,
+        "sha256": "edae73c07aea7adb26f20f9e43d07dff2e3aaf2d45781cddd4e86f9cf133e7c9"
+      },
+      "recorded_remote_ref": {
+        "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/kerr-shared-loop-ci-preservation/remote-ref.txt",
+        "original_path": "out/kerr-shared-loop-ci-preservation/remote-ref.txt",
+        "bytes": 94,
+        "sha256": "2369e1ba309ce7c5c468ac34fa538b24d6ca7226096d922d4b5fc82c5f931ee3"
+      },
+      "remote_confirmation_scope": "Exact copied operator receipt/ref text checked; no fresh network query."
+    },
+    {
+      "kind": "software",
+      "commit": "b5c4f2a8247b55d91c274aaeb7bb41ca9dfabf8e",
+      "tag": "evidence/issue-53-kerr-shared-loop-software-controls-cd99fd06",
+      "manifest": {
+        "bytes": 24272,
+        "sha256": "5f131eaa83cbbb263931e82807a8b43f9df3778e95ac677182d4d18248f09c27"
+      },
+      "root_Git_receipt": {
+        "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/kerr-shared-loop-software-preservation/root-git-preservation.json",
+        "original_path": "out/kerr-shared-loop-software-preservation/root-git-preservation.json",
+        "bytes": 876,
+        "sha256": "94ee3a1abe43a7bb3166964226daa9ac15ccc42d07e8a383467bcac3bfc8fe98"
+      },
+      "independent_preservation_review": {
+        "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/kerr-shared-loop-software-preservation/independent-software-preservation-review.json",
+        "original_path": "out/kerr-shared-loop-software-preservation/independent-software-preservation-review.json",
+        "bytes": 3807,
+        "sha256": "9d2d894c1999e1657902e67d224dae0d8afd90c570c219429092b35f0a677108"
+      },
+      "recorded_remote_ref": {
+        "path": "attestations/scientific-core/cd99fd06/native-amd-kerr-shared-loop-controls/files/out/kerr-shared-loop-software-preservation/remote-ref.txt",
+        "original_path": "out/kerr-shared-loop-software-preservation/remote-ref.txt",
+        "bytes": 113,
+        "sha256": "8ddf82b3f934becae9e1c8a72498f624e11f06545a28dd981a986ddc6287c081"
+      },
+      "remote_confirmation_scope": "Exact copied operator receipt/ref text checked; no fresh network query."
+    }
+  ],
+  "transport_member_closure": [
+    {
+      "original_path": "out/kerr-shared-loop-ci-cd99fd06/macos-diagnostic-logs.zip",
+      "artifact_id": 11974571338,
+      "member_count": 4,
+      "identity_map": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/macos-diagnostic-logs-artifact-identity.json",
+      "all_exact_members_Git_backed": true,
+      "exact_ZIP_binary_archived": false
+    },
+    {
+      "original_path": "out/kerr-shared-loop-ci-cd99fd06/macos-native.zip",
+      "artifact_id": 11974606277,
+      "member_count": 40,
+      "identity_map": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/macos-artifact-identity.json",
+      "all_exact_members_Git_backed": true,
+      "exact_ZIP_binary_archived": false
+    },
+    {
+      "original_path": "out/kerr-shared-loop-ci-cd99fd06/windows-diagnostic-logs.zip",
+      "artifact_id": 11973269070,
+      "member_count": 4,
+      "identity_map": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/windows-diagnostic-logs-artifact-identity.json",
+      "all_exact_members_Git_backed": true,
+      "exact_ZIP_binary_archived": false
+    },
+    {
+      "original_path": "out/kerr-shared-loop-ci-cd99fd06/windows-diagnostic.zip",
+      "artifact_id": 11973223843,
+      "member_count": 139,
+      "identity_map": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/windows-diagnostic-artifact-identity.json",
+      "all_exact_members_Git_backed": true,
+      "exact_ZIP_binary_archived": false
+    },
+    {
+      "original_path": "out/kerr-shared-loop-ci-cd99fd06/windows-native.zip",
+      "artifact_id": 11973508947,
+      "member_count": 40,
+      "identity_map": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/windows-native-artifact-identity.json",
+      "all_exact_members_Git_backed": true,
+      "exact_ZIP_binary_archived": false
+    }
+  ],
+  "external_hash_only_paths": [
+    "/mnt/c/WINDOWS/System32/DriverStore/FileRepository/amdvlk.inf_amd64_914ba89eaaafdf60/amdvlk64.dll",
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "/mnt/c/Windows/System32/vulkan-1.dll",
+    "/usr/bin/git",
+    "/usr/bin/python3.12"
+  ],
+  "limits": {
+    "numerical_review_reused_not_repeated": true,
+    "all_seven_native_controls_newly_reaudited": false,
+    "external_host_binaries_archived": false,
+    "exact_transport_ZIP_binaries_archived": false,
+    "acceptance_scope": "Original five focused parity controls and64x64 image plus realFP32/FP64 comparison on exact nativeAMD same-child stagedSDK+AMD modules; original assertions/settings/physical1000ms guards unchanged. No fullP1/40field/forensicJulyidentity/retainedcold128/latency/UI/fullMandatory/fullscience/eightdomain/release acceptance. SampledchildWorkingSet guard4GiB, not aggregateWindows/bootstrap memory containment. Accessiblecensus hidden gaps remain explicit; no global/allconsumer absence.",
+    "transport_scope": "Five existingCI transportZIPs omitted only after their originalidentity/API/complete member maps and all exactmembers were preserved in reusedCI commit. No exactZIP reconstruction claim.",
+    "software_prior_outcome": "Seven finite software controls passed; eighth timed out without XML/numerical verdict. Its preservation followup is not an all-eight pass.",
+    "retirement": "This preservation review does not freshly census consumer absence or retire raw packets. Root must verify exact pushed reference and current closure/consumer conditions before removal.",
+    "qualification": "No full scientific, Mandatory, release, UI, latency, retained cold128 or performance/adoption conclusion."
+  },
+  "workspace": {
+    "head": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_changes": false,
+    "tracking_ahead": 0,
+    "tracking_behind": 0,
+    "worktree_count": 1,
+    "source_committed_and_pushed": true,
+    "new_evidence_commit_local": true,
+    "new_evidence_tag_created_at_review": false,
+    "new_evidence_pushed_at_review": false,
+    "CartDelta_candidate_applied": false
+  },
+  "blockers": []
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-independent-static-preservation-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "pins": {
+    "manifest": {
+      "path": "attestations/scientific-core/cd99fd06/kerr-cartdelta-rhs-static-screen/manifest.json",
+      "bytes": 13252,
+      "sha256": "61fd963feb2e6af26bbee0aa1173a17b4b85c17d5473e9b6c7575c4ad44ce74b"
+    },
+    "preservation": {
+      "path": "attestations/scientific-core/cd99fd06/kerr-cartdelta-rhs-static-screen/preservation.json",
+      "bytes": 22201,
+      "sha256": "af39ca287da8f0f58f2c25292ac572d66a0f31a3c4f97040a438bb0e7e5d0a13"
+    },
+    "source_review": {
+      "path": "attestations/scientific-core/cd99fd06/kerr-cartdelta-rhs-static-screen/files/out/kerr-cartdelta-rhs-loop/independent-source-review.json",
+      "bytes": 8711,
+      "sha256": "1fa7ecafaf05072d5c26932902144e3fcae3e19ea4ba4a6fb09d02f173aac835"
+    },
+    "three_rung_review": {
+      "path": "attestations/scientific-core/cd99fd06/kerr-cartdelta-rhs-static-screen/files/out/kerr-cartdelta-rhs-screen/independent-three-rung-footprint-review.json",
+      "bytes": 10391,
+      "sha256": "7568026d03271cddf19ddd59fa8f501cb42827ebe75e50db8dc1588dc26af4b6"
+    },
+    "count_correction": {
+      "path": "attestations/scientific-core/cd99fd06/kerr-cartdelta-rhs-static-screen/files/out/kerr-cartdelta-rhs-screen/independent-three-rung-footprint-count-correction.json",
+      "bytes": 3121,
+      "sha256": "0fb025a9dedcb0e36c80ef550a3749a3dfa8719782c80db9155914c530cef94b"
+    }
+  },
+  "verified": {
+    "bundle_regular_files": 72,
+    "manifest_leaves_including_preservation": 71,
+    "payload_files": 70,
+    "complete_current_payload_mapping": {
+      "source_candidate_K": 5,
+      "screen_S": 59,
+      "binary_SPVs": 6
+    },
+    "all_manifest_and_mapping_bytes_and_SHA256_exact": true,
+    "unexpected_missing_or_symlink_files": 0,
+    "original_source_pins_exact_named_Git_and_current": 31,
+    "final_private_source_copy": "Candidate gr_integrator is byte-exact to K candidate; other 30 modules match canonical named cd99 source. K original reconstructs the original phase.",
+    "artifact_and_disassembly_joins": {
+      "SPVs": 6,
+      "ASMs": 6,
+      "compile_validation_logs": 12,
+      "originals_byte_exact_current_canonical": 3
+    },
+    "result_byte_reductions_and_percentages_recomputed": true,
+    "phase_history": "Original/candidate switching history and earlier pending/admission records retained unchanged; final source copy is explicitly candidate.",
+    "count_correction": "Original review metric Function_variables means uninitialized-only for all three rungs. FP32 all-Function counts are 14457 to 13857 (600 reduction); omitted scalar bool initializers do not affect arrays. COMP/FP64 full totals remain unmeasured.",
+    "source_tree": "Clean cd99, tracking origin development/minimum-step-floor-2026-10-15, sole checkout worktree; candidate remains unapplied."
+  },
+  "scope": {
+    "preservation_and_previously_reviewed_source_static_footprint_only": true,
+    "recorded_six_compile_validation_disassembly_successes_preserved": "Operator records and accepted static review are bound; no tool was rerun by this reviewer.",
+    "compiler_tools_or_transitive_DSOs_bundled": false,
+    "semantic_numerical_or_bitwise_equivalence_admitted": false,
+    "provider_JIT_runtime_memory_cost_deadline_retained_cold_or_qualification_admitted": false,
+    "project_helpers_parsers_tools_providers_tests_or_network_executed": false,
+    "N_C_W_packets_read": false,
+    "source_or_existing_receipts_modified": false,
+    "Git_preservation_or_push_performed_by_reviewer": false
+  },
+  "blockers": []
+}
