@@ -1,0 +1,200 @@
+{
+  "schema": "sirius-native-qualification-portable-tools-independent-admission-v1",
+  "passed": true,
+  "tool_stage_provenance_admitted": true,
+  "full_Mandatory_ready": false,
+  "source_revision_at_review": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "reviewer_role": "Independent of root acquisition/extraction/native version-check operator. Passive saved metadata/ZIP/XML/hash/path/mode/PE inspection and read-only Git; no staged program, provider, authored helper/import/parser/test/tool command or API executed.",
+  "metadata_pins": {
+    "cmake-release.json": {
+      "path": "out/native-qualification-tooling/cmake-release.json",
+      "bytes": 29738,
+      "sha256": "dbed7d9756cc1c19c6e059f0730d57b60a4a7623477d721ce4c88eedbc8570de"
+    },
+    "cmake-3.31.6-SHA-256.txt": {
+      "path": "out/native-qualification-tooling/cmake-3.31.6-SHA-256.txt",
+      "bytes": 1646,
+      "sha256": "b1c5992a758cae17c8e13c7a31ae1297baa42fecddc646a2b37ab518ca70a82b"
+    },
+    "python-registration.json": {
+      "path": "out/native-qualification-tooling/python-registration.json",
+      "bytes": 696,
+      "sha256": "635c0ddb5f0c286778f0ec50c72974ca6c4357f603ae8c74f9ebe84b3c558dc1"
+    },
+    "python-catalog.json": {
+      "path": "out/native-qualification-tooling/python-catalog.json",
+      "bytes": 459187,
+      "sha256": "4e7c4ce3407b34eb602f8d00e3dd13724ab6ab595ac7266609b28bed5998c2e5"
+    },
+    "python.3.14.8.nuspec": {
+      "path": "out/native-qualification-tooling/python.3.14.8.nuspec",
+      "bytes": 825,
+      "sha256": "ea8a8c44ca7b1e9e4b38a51a430083e98a7f3134d11fa25e10086b7cdf5acda2"
+    },
+    "metadata-download.json": {
+      "path": "out/native-qualification-tooling/metadata-download.json",
+      "bytes": 1068,
+      "sha256": "04e0fe81ef56b046b0be1970f90be393338a8ed5dbe51c3f9fafc09bdea69044"
+    },
+    "packages-verified.json": {
+      "path": "out/native-qualification-tooling/packages-verified.json",
+      "bytes": 812,
+      "sha256": "035d8ccc2758ecf7927c59234ccb9c8db97b20e1e536e714e535593001b14398"
+    },
+    "package-inventories.json": {
+      "path": "out/native-qualification-tooling/package-inventories.json",
+      "bytes": 1858604,
+      "sha256": "456031462c430fed0d5d5e2cc5a1228d914674bfb3e5dcb69c42af55327aeca8"
+    },
+    "extracted-tools.json": {
+      "path": "out/native-qualification-tooling/extracted-tools.json",
+      "bytes": 3457088,
+      "sha256": "addbc35e9b3d92a090a882e641fe2e47e9525e5af37229818e07b820aa2ab238"
+    },
+    "native-tool-versions.json": {
+      "path": "out/native-qualification-tooling/native-tool-versions.json",
+      "bytes": 1172,
+      "sha256": "b115628d6fcbdedb975edfee084420dc515f41076f18521ed52e399a756a461b"
+    }
+  },
+  "packages": [
+    {
+      "archive": {
+        "path": "out/native-qualification-tooling/cmake-3.31.6-windows-x86_64.zip",
+        "bytes": 46473549,
+        "sha256": "d163cd3ab4959b0a53fa8988f2ddbd2e6c501658201e6a154386bad9dbe4f836"
+      },
+      "published_source": "https://github.com/Kitware/CMake/releases/tag/v3.31.6",
+      "asset_id": 232134997,
+      "checksum_asset_id": 232134939,
+      "published_SHA256_matches": true,
+      "API_asset_size_matches": true,
+      "API_asset_digest_field": null,
+      "authority": "Saved official Kitware release metadata plus published SHA-256 text, not an API digest claim.",
+      "ZIP_entries": 8146,
+      "regular_files": 8018,
+      "uncompressed_bytes": 120726417,
+      "target": "bin/windows-msvc/qualification-tools/cmake-3.31.6"
+    },
+    {
+      "archive": {
+        "path": "out/native-qualification-tooling/python.3.14.8.nupkg",
+        "bytes": 15554015,
+        "sha256": "ce85f674d9a63029f709cbff7a3da1c6bc5bfcfaefdd9999f98fa0290470c454"
+      },
+      "published_source": "https://api.nuget.org/v3/catalog0/data/2026.09.30.20.00.00/python.3.14.8.json",
+      "registration_source": "https://api.nuget.org/v3/registration5-semver1/python/3.14.8.json",
+      "id": "python",
+      "version": "3.14.8",
+      "authors": "Python Software Foundation",
+      "description": "Installs 64-bit Python for use in build scenarios.",
+      "published_SHA512": "6fda33fc2daa88b944ec5280a20cf7772893dfcbc55f777d2b622a868a0b66670bdc4f51109b20ae0dde5177931cb5d1cb9d2381f1c4a17d5bc77bbdd558de6b",
+      "published_SHA512_matches_whole_package": true,
+      "published_size_matches": true,
+      "Nuget_catalog_member_rows_checked": 1379,
+      "ZIP_entries": 1382,
+      "regular_files": 1382,
+      "uncompressed_bytes": 41662246,
+      "target": "bin/windows-msvc/qualification-tools/python-3.14.8",
+      "fetched_nuspec_and_packaged_nuspec_equal_after_UTF8_BOM_only": true,
+      "Nuget_direct_sha512_endpoint": "Saved request404; accepted published SHA512 is instead decoded from official catalog packageHash."
+    }
+  ],
+  "archive_and_stage_checks": {
+    "all_archive_whole_size_SHA256_match_saved_records": true,
+    "Python_whole_SHA512_matches_catalog_base64_hash": true,
+    "all_ZIP_names_unique_safe_relative_and_no_symlink_entries": true,
+    "all_saved_ZIP_inventory_rows_match_actual_central_directory": true,
+    "all_staged_regular_files": 9400,
+    "all_staged_member_sizes_hashes_and_whole_bytes_equal_raw_archive": true,
+    "staged_regular_file_sets_exact_no_additional_files": true,
+    "all_extracted_manifest_rows_match_actual_files": true,
+    "CMake_full_bin_share_tree_and_Python_Lib_DLLs_preserved": true,
+    "stage_scope": "Complete official package extraction inside ignored canonical bin/windows-msvc/qualification-tools; this proves byte provenance, not absence of every possible global system mutation."
+  },
+  "saved_root_native_version_receipts": [
+    {
+      "path": "bin/windows-msvc/qualification-tools/cmake-3.31.6/cmake-3.31.6-windows-x86_64/bin/cmake.exe",
+      "sha256": "3fe22eb02e1c6184ec207366ed21a6f2f9c3828c1e9f3324546befadfb362be3",
+      "argv": [
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "cmake version 3.31.6\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "stderr": "",
+      "elapsed_seconds": 0.6388809980126098,
+      "current_staged_file": {
+        "path": "bin/windows-msvc/qualification-tools/cmake-3.31.6/cmake-3.31.6-windows-x86_64/bin/cmake.exe",
+        "bytes": 12029392,
+        "sha256": "3fe22eb02e1c6184ec207366ed21a6f2f9c3828c1e9f3324546befadfb362be3"
+      },
+      "current_mode": "0o755",
+      "PE_machine": "AMD64/0x8664",
+      "archive_member_hash_join_passed": true
+    },
+    {
+      "path": "bin/windows-msvc/qualification-tools/cmake-3.31.6/cmake-3.31.6-windows-x86_64/bin/ctest.exe",
+      "sha256": "76d83c30be3899c2b446c73bff7aead58c47440c05062c5716e3162e588a6e2c",
+      "argv": [
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "ctest version 3.31.6\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "stderr": "",
+      "elapsed_seconds": 0.651505191999604,
+      "current_staged_file": {
+        "path": "bin/windows-msvc/qualification-tools/cmake-3.31.6/cmake-3.31.6-windows-x86_64/bin/ctest.exe",
+        "bytes": 12947920,
+        "sha256": "76d83c30be3899c2b446c73bff7aead58c47440c05062c5716e3162e588a6e2c"
+      },
+      "current_mode": "0o755",
+      "PE_machine": "AMD64/0x8664",
+      "archive_member_hash_join_passed": true
+    },
+    {
+      "path": "bin/windows-msvc/qualification-tools/python-3.14.8/tools/python.exe",
+      "sha256": "434b361fe0c5960d404974feed493db47f2603a1ace2574312104fbed0182c6f",
+      "argv": [
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "Python 3.14.8\n",
+      "stderr": "",
+      "elapsed_seconds": 0.42947602999629453,
+      "current_staged_file": {
+        "path": "bin/windows-msvc/qualification-tools/python-3.14.8/tools/python.exe",
+        "bytes": 106208,
+        "sha256": "434b361fe0c5960d404974feed493db47f2603a1ace2574312104fbed0182c6f"
+      },
+      "current_mode": "0o755",
+      "PE_machine": "AMD64/0x8664",
+      "archive_member_hash_join_passed": true
+    }
+  ],
+  "version_check_scope": "Saved root --version results all exit0 with empty stderr and elapsed<20seconds; this reviewer did not repeat them. Root reported an initial execute-permission precondition corrected with chmod+x only; all current program bytes remain exact archive bytes and modes are0755. No interpreter import/selftest, CTest estate, compiler, provider or scientific run is established by --version.",
+  "acquisition_scope": {
+    "authority": "Published checksums and saved metadata from official HTTPS endpoints; no fresh network verification by reviewer.",
+    "parent_documentation_reference": "https://docs.python.org/3.14/using/windows.html#the-nuget-org-packages",
+    "documentation_scope": "Root cited the official NuGet CI/build route; this passive review independently binds the actual catalog/registration/nuspec/package bytes, rather than claiming a newly fetched documentation snapshot.",
+    "Authenticode_verified": false,
+    "Nuget_signature_or_package_signature_verified": false,
+    "installer_or_global_PATH_registry_or_pip_activity_by_reviewer": false,
+    "root_reported_acquisition_method": "Portable archive extraction only; no installer/globalPATH/registry/pip."
+  },
+  "remaining_before_full_Mandatory": [
+    "Exact current executable/test/resource/native-build product authority and actual complete estate admission.",
+    "Relocated CTest registration and generated operational/install script tree, preserving original tests/deadlines/arguments and explicit owned-root/tool path aliases.",
+    "Current native CPython source imports/child-interpreter behavior and CMake/CTest install/runtime behavior need the original owned controls; --version alone does not prove them.",
+    "Git and native device/ownership/runtime proof remain separately required by the original gate; no MSVC rebuild is admitted or needed merely to consume these tools."
+  ],
+  "blockers_to_tool_provenance_admission": [],
+  "no_full_science_UI_performance_domain_release_or_Mandatory_claim": true,
+  "workspace": {
+    "tracked_source_clean": true,
+    "source_committed_and_pushed": true,
+    "ahead": 0,
+    "behind": 0,
+    "worktrees": 1,
+    "tool_packages_stages_and_review": "Ignored task artifacts; not committed/pushed by reviewer. Root retains preservation/cleanup/execution ownership."
+  }
+}

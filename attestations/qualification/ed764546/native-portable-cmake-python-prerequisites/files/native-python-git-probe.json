@@ -1,0 +1,44 @@
+{
+  "exit": 0,
+  "elapsed_seconds": 1.4600131890038028,
+  "stderr": "",
+  "result": {
+    "platform": "win32",
+    "python": "3.14.8 (tags/v3.14.8:8e6e75d, Sep 30 2026, 18:19:33) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\python-3.14.8\\tools\\python.exe",
+    "cwd": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+    "prefix": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\python-3.14.8\\tools",
+    "sys_path": [
+      "",
+      "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\python-3.14.8\\tools\\python314.zip",
+      "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\python-3.14.8\\tools\\DLLs",
+      "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\python-3.14.8\\tools\\Lib",
+      "\\\\?\\UNC\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\python-3.14.8\\tools",
+      "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\python-3.14.8\\tools",
+      "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\qualification-tools\\python-3.14.8\\tools\\Lib\\site-packages"
+    ],
+    "machine": "AMD64",
+    "git_executable": "C:\\Program Files\\Git\\cmd\\git.exe",
+    "git_read_only_probe": [
+      {
+        "args": [
+          "rev-parse",
+          "HEAD"
+        ],
+        "exit": 128,
+        "stdout": "",
+        "stderr": "fatal: detected dubious ownership in repository at '//wsl.localhost/Ubuntu/home/astra/.project/Sirius'\n'//wsl.localhost/Ubuntu/home/astra/.project/Sirius' may refer to a non-local directory\nTo add an exception for this directory, call:\n\n\tgit config --global --add safe.directory '%(prefix)///wsl.localhost/Ubuntu/home/astra/.project/Sirius'\n"
+      },
+      {
+        "args": [
+          "status",
+          "--porcelain",
+          "--untracked-files=normal"
+        ],
+        "exit": 128,
+        "stdout": "",
+        "stderr": "fatal: detected dubious ownership in repository at '//wsl.localhost/Ubuntu/home/astra/.project/Sirius'\n'//wsl.localhost/Ubuntu/home/astra/.project/Sirius' may refer to a non-local directory\nTo add an exception for this directory, call:\n\n\tgit config --global --add safe.directory '%(prefix)///wsl.localhost/Ubuntu/home/astra/.project/Sirius'\n"
+      }
+    ]
+  }
+}
