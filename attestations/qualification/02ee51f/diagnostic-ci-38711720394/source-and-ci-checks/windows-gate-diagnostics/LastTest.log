@@ -1,0 +1,175 @@
+Start testing: Oct 15 09:33 Coordinated Universal Time
+----------------------------------------------------------
+14/1150 Testing: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+14/1150 Test: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+Command: "C:/Program Files/CMake/bin/cmake.exe" "-DSIRIUS_TEST_CONFIG=Release" "-P" "D:/a/Sirius/Sirius/bin/windows-msvc/tests/evidence_governance.cmake"
+Directory: D:/a/Sirius/Sirius/bin/windows-msvc/tests
+"OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims" start time: Oct 15 09:33 Coordinated Universal Time
+Output:
+----------------------------------------------------------
+-- source registration, required P/E criteria, and repository structure are governed
+<end of output>
+Test time =   6.85 sec
+----------------------------------------------------------
+Test Passed.
+"OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims" end time: Oct 15 09:33 Coordinated Universal Time
+"OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims" time elapsed: 00:00:06
+----------------------------------------------------------
+
+15/1150 Testing: OperationalBuildPolicy.ReleaseCannotWeakenGates
+15/1150 Test: OperationalBuildPolicy.ReleaseCannotWeakenGates
+Command: "C:/hostedtoolcache/windows/Python/3.14.8/x64/python3.exe" "D:/a/Sirius/Sirius/scripts/verify-build-policy.py" "--self-test"
+Directory: D:/a/Sirius/Sirius/bin/windows-msvc/tests
+"OperationalBuildPolicy.ReleaseCannotWeakenGates" start time: Oct 15 09:33 Coordinated Universal Time
+Output:
+----------------------------------------------------------
+strict qualification/release policy rejected every weakened configuration and product
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"OperationalBuildPolicy.ReleaseCannotWeakenGates" end time: Oct 15 09:33 Coordinated Universal Time
+"OperationalBuildPolicy.ReleaseCannotWeakenGates" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/1150 Testing: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+17/1150 Test: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+Command: "C:/hostedtoolcache/windows/Python/3.14.8/x64/python3.exe" "D:/a/Sirius/Sirius/scripts/verify-build-gate.py" "--self-test"
+Directory: D:/a/Sirius/Sirius/bin/windows-msvc/tests
+"OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate" start time: Oct 15 09:33 Coordinated Universal Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =  10.00 sec
+----------------------------------------------------------
+Test Failed.
+"OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate" end time: Oct 15 09:33 Coordinated Universal Time
+"OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate" time elapsed: 00:00:10
+----------------------------------------------------------
+
+18/1150 Testing: OperationalAttestation.FalseExternalEvidenceIsRejected
+18/1150 Test: OperationalAttestation.FalseExternalEvidenceIsRejected
+Command: "C:/hostedtoolcache/windows/Python/3.14.8/x64/python3.exe" "D:/a/Sirius/Sirius/scripts/verify-attestation.py" "--self-test" "--render-test-executable" "D:/a/Sirius/Sirius/bin/windows-msvc/src/sirius/app/Release/sirius_render_tests.exe"
+Directory: D:/a/Sirius/Sirius/bin/windows-msvc/tests
+"OperationalAttestation.FalseExternalEvidenceIsRejected" start time: Oct 15 09:33 Coordinated Universal Time
+Output:
+----------------------------------------------------------
+live-consumer escaping-copy controls: filesystem symlinks
+attestation verifier rejected every false-evidence control
+<end of output>
+Test time =  33.67 sec
+----------------------------------------------------------
+Test Passed.
+"OperationalAttestation.FalseExternalEvidenceIsRejected" end time: Oct 15 09:34 Coordinated Universal Time
+"OperationalAttestation.FalseExternalEvidenceIsRejected" time elapsed: 00:00:33
+----------------------------------------------------------
+
+19/1150 Testing: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+19/1150 Test: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+Command: "C:/hostedtoolcache/windows/Python/3.14.8/x64/python3.exe" "D:/a/Sirius/Sirius/scripts/validate-native-runtime.py" "--self-test"
+Directory: D:/a/Sirius/Sirius/bin/windows-msvc/tests
+"OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice" start time: Oct 15 09:34 Coordinated Universal Time
+Output:
+----------------------------------------------------------
+attestation preflight and native runtime producer rejected wrong-host, false-device, stale-reuse, and promotion controls
+<end of output>
+Test time =   0.51 sec
+----------------------------------------------------------
+Test Passed.
+"OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice" end time: Oct 15 09:34 Coordinated Universal Time
+"OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/1150 Testing: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+20/1150 Test: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+Command: "C:/hostedtoolcache/windows/Python/3.14.8/x64/python3.exe" "D:/a/Sirius/Sirius/scripts/verify-alignment.py" "--self-test"
+Directory: D:/a/Sirius/Sirius/bin/windows-msvc/tests
+"OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected" start time: Oct 15 09:34 Coordinated Universal Time
+Output:
+----------------------------------------------------------
+alignment admission rejected incomplete, dirty, ambiguous, and model-drifted evidence
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected" end time: Oct 15 09:34 Coordinated Universal Time
+"OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/1150 Testing: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+21/1150 Test: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+Command: "C:/Program Files/CMake/bin/cmake.exe" "-DSIRIUS_BINARY=D:/a/Sirius/Sirius/bin/windows-msvc/src/sirius/app/Release/sirius.exe" "-DSIRIUS_RESOURCE_SOURCE=D:/a/Sirius/Sirius/bin/windows-msvc/src/sirius/app/Release/resources" "-P" "D:/a/Sirius/Sirius/bin/windows-msvc/tests/alignment_receipt_integrity.cmake"
+Directory: D:/a/Sirius/Sirius/bin/windows-msvc/tests
+"OperationalAlignment.InstalledReceiptTamperingBlocksReadiness" start time: Oct 15 09:34 Coordinated Universal Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.20 sec
+----------------------------------------------------------
+Test Passed.
+"OperationalAlignment.InstalledReceiptTamperingBlocksReadiness" end time: Oct 15 09:34 Coordinated Universal Time
+"OperationalAlignment.InstalledReceiptTamperingBlocksReadiness" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1054/1150 Testing: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+1054/1150 Test: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+Command: "D:/a/Sirius/Sirius/bin/windows-msvc/src/sirius/app/Release/sirius_app_tests.exe" "--gtest_filter=AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority" "--gtest_also_run_disabled_tests"
+Directory: D:/a/Sirius/Sirius/bin/windows-msvc/tests/app
+"AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority" start time: Oct 15 09:34 Coordinated Universal Time
+Output:
+----------------------------------------------------------
+Running main() from D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-src\googletest\src\gtest_main.cc
+Note: Google Test filter = AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from AlignmentAuthority
+[ RUN      ] AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+[       OK ] AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority (0 ms)
+[----------] 1 test from AlignmentAuthority (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority" end time: Oct 15 09:34 Coordinated Universal Time
+"AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1055/1150 Testing: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+1055/1150 Test: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+Command: "D:/a/Sirius/Sirius/bin/windows-msvc/src/sirius/app/Release/sirius_app_tests.exe" "--gtest_filter=BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation" "--gtest_also_run_disabled_tests"
+Directory: D:/a/Sirius/Sirius/bin/windows-msvc/tests/app
+"BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation" start time: Oct 15 09:34 Coordinated Universal Time
+Output:
+----------------------------------------------------------
+Running main() from D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-src\googletest\src\gtest_main.cc
+Note: Google Test filter = BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BuildGateAuthority
+[ RUN      ] BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+[       OK ] BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation (694 ms)
+[----------] 1 test from BuildGateAuthority (694 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (694 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.70 sec
+----------------------------------------------------------
+Test Passed.
+"BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation" end time: Oct 15 09:34 Coordinated Universal Time
+"BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 15 09:34 Coordinated Universal Time
+
+Correctness =   0.71 sec*proc
+
+Mandatory =  52.11 sec*proc
+
+Operational =  52.11 sec*proc
+

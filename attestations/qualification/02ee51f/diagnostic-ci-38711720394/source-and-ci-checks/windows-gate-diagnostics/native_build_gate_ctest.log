@@ -1,0 +1,37 @@
+command: C:\Program Files\CMake\bin\ctest.exe --test-dir D:\a\Sirius\Sirius\bin\windows-msvc --output-on-failure --no-tests=error -R ^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$ --output-junit D:\a\Sirius\Sirius\bin\windows-msvc\generated\sirius\native_build_gate_junit.xml -C Release
+output: combined stdout/stderr (running)
+Test project D:/a/Sirius/Sirius/bin/windows-msvc
+    Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+1/9 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    6.85 sec
+    Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2/9 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.07 sec
+    Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+3/9 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................***Timeout  10.00 sec
+
+    Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+4/9 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   33.67 sec
+    Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+5/9 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.51 sec
+    Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+6/9 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.10 sec
+    Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+7/9 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.20 sec
+    Start 1054: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+8/9 Test #1054: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.01 sec
+    Start 1055: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+9/9 Test #1055: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.70 sec
+
+89% tests passed, 1 tests failed out of 9
+
+Label Time Summary:
+Correctness    =   0.71 sec*proc (2 tests)
+Mandatory      =  52.11 sec*proc (9 tests)
+Operational    =  52.11 sec*proc (9 tests)
+
+Total Test time (real) =  52.18 sec
+
+The following tests FAILED:
+	 17 - OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate (Timeout) Mandatory Operational
+Errors while running CTest
+
+return_code: 8

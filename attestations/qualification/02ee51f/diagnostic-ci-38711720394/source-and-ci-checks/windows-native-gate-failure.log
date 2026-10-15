@@ -1,0 +1,86 @@
+﻿2026-10-15T09:32:54.7887662Z ##[group]Run cmake --build --preset windows-msvc --config Release --target RunNativeBuildEvidence -j2
+2026-10-15T09:32:54.7888518Z [36;1mcmake --build --preset windows-msvc --config Release --target RunNativeBuildEvidence -j2[0m
+2026-10-15T09:32:54.7929980Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T09:32:54.7930333Z env:
+2026-10-15T09:32:54.7930516Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T09:32:54.7930772Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T09:32:54.7930991Z ##[endgroup]
+2026-10-15T09:32:55.1329541Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T09:32:55.1646891Z 
+2026-10-15T09:32:55.3955653Z   Checking File Globs
+2026-10-15T09:32:55.5514546Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T09:32:55.7067862Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T09:32:55.7637482Z   1>Verifying test-label, operating-model, and repository-structure governance
+2026-10-15T09:32:56.9275305Z   CTest label file is up to date
+2026-10-15T09:32:58.1189338Z   operating model requires 10 P/E acceptance criteria across 1137 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-15T09:32:59.8639122Z   repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-15T09:32:59.9343773Z   strict qualification/release policy rejected every weakened configuration and product
+2026-10-15T09:33:08.7836721Z   escaping-copy controls: filesystem symlinks
+2026-10-15T09:33:08.7837487Z   build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-15T09:33:08.9914250Z   glfw.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\glfw\src\Release\glfw3.lib
+2026-10-15T09:33:09.0508849Z   screen.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-screen.lib
+2026-10-15T09:33:09.0575231Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T09:33:09.2390368Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T09:33:09.2742157Z   1>
+2026-10-15T09:33:09.3443772Z   dom.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-dom.lib
+2026-10-15T09:33:09.4375603Z   1>
+2026-10-15T09:33:09.4800567Z   1>
+2026-10-15T09:33:09.4817306Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T09:33:09.5377061Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T09:33:09.5888186Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T09:33:09.6379244Z   component.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-component.lib
+2026-10-15T09:33:09.7232063Z   1>Staging exact qualification inputs beside sirius_backend_tests
+2026-10-15T09:33:09.7963345Z   1>Staging exact qualification inputs beside sirius_render_tests
+2026-10-15T09:33:10.4743122Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T09:33:10.5711035Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T09:33:10.6774180Z   sirius_backend_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\Release\sirius_backend_tests.exe
+2026-10-15T09:33:10.7213702Z   sirius_core_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\core\Release\sirius_core_tests.exe
+2026-10-15T09:33:10.9808126Z   sirius_base_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\Release\sirius_base_tests.exe
+2026-10-15T09:33:11.0824013Z   sirius_oracle_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\oracle\Release\sirius_oracle_tests.exe
+2026-10-15T09:33:11.3821260Z   sirius_app_lib.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_lib.lib
+2026-10-15T09:33:11.4501863Z   sirius.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius.exe
+2026-10-15T09:33:11.4623854Z   Staging Sirius runtime resources beside the executable	Staging interactive-viewer shaders beside the executable	Staging Vulkan runtime kernels beside the executable
+2026-10-15T09:33:11.7383387Z   sirius_app_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_tests.exe
+2026-10-15T09:33:11.9108779Z   sirius_render_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_render_tests.exe
+2026-10-15T09:33:12.1159085Z   1>=== NATIVE BUILD NON-RENDER EVIDENCE GATE ===
+2026-10-15T09:34:04.9662566Z   command: C:\Program Files\CMake\bin\ctest.exe --test-dir D:\a\Sirius\Sirius\bin\windows-msvc --output-on-failure --no-tests=error -R ^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$ --output-junit D:\a\Sirius\Sirius\bin\windows-msvc\generated\sirius\native_build_gate_junit.xml -C Release
+2026-10-15T09:34:04.9668753Z   output: combined stdout/stderr (running)
+2026-10-15T09:34:04.9669132Z   Test project D:/a/Sirius/Sirius/bin/windows-msvc
+2026-10-15T09:34:04.9669617Z       Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+2026-10-15T09:34:04.9670361Z   1/9 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    6.85 sec
+2026-10-15T09:34:04.9671051Z       Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2026-10-15T09:34:04.9671663Z   2/9 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.07 sec
+2026-10-15T09:34:04.9672311Z       Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+2026-10-15T09:34:04.9672986Z   3/9 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................***Timeout  10.00 sec
+2026-10-15T09:34:04.9673506Z   
+2026-10-15T09:34:04.9673787Z       Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+2026-10-15T09:34:04.9674432Z   4/9 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   33.67 sec
+2026-10-15T09:34:04.9675149Z       Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+2026-10-15T09:34:04.9676245Z   5/9 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.51 sec
+2026-10-15T09:34:04.9676966Z       Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+2026-10-15T09:34:04.9677662Z   6/9 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.10 sec
+2026-10-15T09:34:04.9678353Z       Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+2026-10-15T09:34:04.9679023Z   7/9 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.20 sec
+2026-10-15T09:34:04.9679716Z       Start 1054: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+2026-10-15T09:34:04.9680438Z   8/9 Test #1054: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.01 sec
+2026-10-15T09:34:04.9681203Z       Start 1055: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+2026-10-15T09:34:04.9681986Z   9/9 Test #1055: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.70 sec
+2026-10-15T09:34:04.9683409Z   
+2026-10-15T09:34:04.9683616Z   89% tests passed, 1 tests failed out of 9
+2026-10-15T09:34:04.9683873Z   
+2026-10-15T09:34:04.9684039Z   Label Time Summary:
+2026-10-15T09:34:04.9684266Z   Correctness    =   0.71 sec*proc (2 tests)
+2026-10-15T09:34:04.9684552Z   Mandatory      =  52.11 sec*proc (9 tests)
+2026-10-15T09:34:04.9684822Z   Operational    =  52.11 sec*proc (9 tests)
+2026-10-15T09:34:04.9685060Z   
+2026-10-15T09:34:04.9685229Z   Total Test time (real) =  52.18 sec
+2026-10-15T09:34:04.9685469Z   
+2026-10-15T09:34:04.9685637Z   The following tests FAILED:
+2026-10-15T09:34:04.9686118Z   	 17 - OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate (Timeout) Mandatory Operational
+2026-10-15T09:34:04.9686633Z   Errors while running CTest
+2026-10-15T09:34:04.9686847Z   
+2026-10-15T09:34:04.9687017Z   return_code: 8
+2026-10-15T09:34:04.9687671Z   build gate: native build authority gate failed; no receipt was written; diagnostics retained at D:\a\Sirius\Sirius\bin\windows-msvc\generated\sirius\native_build_gate_ctest.log
+2026-10-15T09:34:04.9868200Z   The system cannot find the batch label specified - VCEnd
+2026-10-15T09:34:04.9888754Z C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(237,5): error MSB8066: Custom build for 'D:\a\Sirius\Sirius\bin\windows-msvc\CMakeFiles\1d631a3685518d0898ef5c591ee27510\RunNativeBuildEvidence.rule' exited with code 1. [D:\a\Sirius\Sirius\bin\windows-msvc\RunNativeBuildEvidence.vcxproj]
+2026-10-15T09:34:05.0984979Z ##[error]Process completed with exit code 1.

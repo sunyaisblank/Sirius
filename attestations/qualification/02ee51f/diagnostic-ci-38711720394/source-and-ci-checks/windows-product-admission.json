@@ -1,0 +1,504 @@
+{
+  "schema": "sirius-windows-diagnostic-payload-admission-v1",
+  "source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "run_id": 38711720394,
+  "artifact": {
+    "id": 11961403981,
+    "node_id": "MDg6QXJ0aWZhY3QxMTk2MTQwMzk4MQ==",
+    "name": "sirius-windows-diagnostic-build-products",
+    "size_in_bytes": 64206469,
+    "url": "https://api.github.com/repos/sunyaisblank/Sirius/actions/artifacts/11961403981",
+    "archive_download_url": "https://api.github.com/repos/sunyaisblank/Sirius/actions/artifacts/11961403981/zip",
+    "expired": false,
+    "digest": "sha256:9af629e64f268389a20e450b063c5d3aa33fd6b188d6de26609e08c02e4f7aab",
+    "created_at": "2026-10-15T09:32:54Z",
+    "updated_at": "2026-10-15T09:32:54Z",
+    "expires_at": "2027-01-13T09:16:24Z",
+    "workflow_run": {
+      "id": 38711720394,
+      "repository_id": 1133926607,
+      "head_repository_id": 1133926607,
+      "head_branch": "development/minimum-step-floor-2026-10-15",
+      "head_sha": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d"
+    }
+  },
+  "archive": {
+    "path": "out/trace-failure-context-checks/sirius-windows-diagnostic-build-products.zip",
+    "bytes": 64206469,
+    "sha256": "9af629e64f268389a20e450b063c5d3aa33fd6b188d6de26609e08c02e4f7aab"
+  },
+  "stage": "bin/windows-msvc/diagnostic-02ee51f",
+  "manifest_identity": {
+    "bytes": 16928,
+    "sha256": "03fe9af83a424b003965137d48cbfd0aa8276739836f4272298f87ceeff05864"
+  },
+  "manifest_files_checked": 74,
+  "total_stage_files": 75,
+  "original_zip_members_relative_to_preset_root": true,
+  "safe_regular_zip_members": {
+    "src/sirius/app/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "tests/backend/Release/vulkan-1.dll": {
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696"
+    },
+    "src/sirius/app/Release/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "src/sirius/app/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 6290916,
+      "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74"
+    },
+    "src/sirius/app/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "src/sirius/app/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "src/sirius/app/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "src/sirius/app/Release/msvcp140_2.dll": {
+      "bytes": 280200,
+      "sha256": "3ea06f0ee098b4823cb79599df3780e7f23cce52c19aac31d2a0d47efe33a5e9"
+    },
+    "src/sirius/app/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "tests/backend/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "src/sirius/app/Release/msvcp140_codecvt_ids.dll": {
+      "bytes": 31872,
+      "sha256": "f2069a52880ec885ee7f0511186100eb7fada0411a2b4948fafea7735b878a18"
+    },
+    "src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "tests/backend/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "src/sirius/app/Release/vcruntime140_1.dll": {
+      "bytes": 49792,
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f"
+    },
+    "tests/backend/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 6306768,
+      "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35"
+    },
+    "src/sirius/app/Release/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "tests/backend/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "src/sirius/app/Release/msvcp140_atomic_wait.dll": {
+      "bytes": 50304,
+      "sha256": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479"
+    },
+    "src/sirius/app/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "tests/backend/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "tests/backend/Release/vcruntime140.dll": {
+      "bytes": 124544,
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066"
+    },
+    "src/sirius/app/Release/resources/kernels/portability/trace.cu": {
+      "bytes": 649836,
+      "sha256": "4ce49ab0206ca3ab4e62ec0efd69a026f0cc13d4478b0e033fd4266c535aa52b"
+    },
+    "src/sirius/app/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916620,
+      "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+    },
+    "src/sirius/app/Release/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "generated/sirius/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "2befc45be435b643daea2968290f8ad3b51997787618c6e3b5d22598f282c5ef"
+    },
+    "src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "src/sirius/app/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041472,
+      "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+    },
+    "src/sirius/app/Release/sirius.exe": {
+      "bytes": 7889920,
+      "sha256": "2d87f636b52e8129a0f3c32d22acdd86fa071ac3cb67201523c9918c4d3e72a9"
+    },
+    "src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "tests/backend/Release/msvcp140_1.dll": {
+      "bytes": 35952,
+      "sha256": "bfad5aef4c63a669e3c140655cdfdf395b6c979b400a447bd5dcb65ed8826c3d"
+    },
+    "tests/backend/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "tests/backend/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041472,
+      "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+    },
+    "tests/backend/Release/msvcp140_2.dll": {
+      "bytes": 280200,
+      "sha256": "3ea06f0ee098b4823cb79599df3780e7f23cce52c19aac31d2a0d47efe33a5e9"
+    },
+    "src/sirius/app/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "tests/backend/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 6290916,
+      "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74"
+    },
+    "generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake": {
+      "bytes": 6407,
+      "sha256": "0d3430047398ee357bbf65db10906b7cf793a22dd8b02c6db6f6372d2a4db77f"
+    },
+    "CMakeCache.txt": {
+      "bytes": 28668,
+      "sha256": "3191c8040e161a1df1aacb397100b08f952526e5e2ab00ba0aeddc253731eef7"
+    },
+    "tests/backend/Release/msvcp140_codecvt_ids.dll": {
+      "bytes": 31872,
+      "sha256": "f2069a52880ec885ee7f0511186100eb7fada0411a2b4948fafea7735b878a18"
+    },
+    "tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "src/sirius/app/Release/resources/kernels/portability/trace.metal": {
+      "bytes": 358464,
+      "sha256": "b4f111f3f77058c9f0df2c0f4ae3fc538c266690a6d07bffb0f9befa0081ecfe"
+    },
+    "tests/backend/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "src/sirius/app/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "src/sirius/app/Release/vcruntime140.dll": {
+      "bytes": 124544,
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066"
+    },
+    "tests/backend/Release/resources/kernels/portability/trace.metal": {
+      "bytes": 358464,
+      "sha256": "b4f111f3f77058c9f0df2c0f4ae3fc538c266690a6d07bffb0f9befa0081ecfe"
+    },
+    "tests/backend/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "src/sirius/app/Release/msvcp140.dll": {
+      "bytes": 557728,
+      "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9"
+    },
+    "src/sirius/app/Release/msvcp140_1.dll": {
+      "bytes": 35952,
+      "sha256": "bfad5aef4c63a669e3c140655cdfdf395b6c979b400a447bd5dcb65ed8826c3d"
+    },
+    "src/sirius/app/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "src/sirius/app/Release/resources/kernels/trace.spv": {
+      "bytes": 4038148,
+      "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+    },
+    "tests/backend/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "src/sirius/app/Release/resources/model/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "2befc45be435b643daea2968290f8ad3b51997787618c6e3b5d22598f282c5ef"
+    },
+    "tests/backend/Release/concrt140.dll": {
+      "bytes": 324208,
+      "sha256": "2405355f0a58067b258f8df33c327e3a3d716eaac5a3a5aebb757842d85bd376"
+    },
+    "tests/backend/Release/sirius_backend_tests.exe": {
+      "bytes": 11091456,
+      "sha256": "474aff95445d2a1bae1c725417049db3eae87462790f43cfd9a5c0b8cdf06d0b"
+    },
+    "src/sirius/app/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "src/sirius/app/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "tests/backend/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "src/sirius/app/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 6306768,
+      "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35"
+    },
+    "tests/backend/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "tests/backend/Release/resources/kernels/portability/trace.cu": {
+      "bytes": 649836,
+      "sha256": "4ce49ab0206ca3ab4e62ec0efd69a026f0cc13d4478b0e033fd4266c535aa52b"
+    },
+    "tests/backend/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "tests/backend/Release/msvcp140_atomic_wait.dll": {
+      "bytes": 50304,
+      "sha256": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479"
+    },
+    "src/sirius/app/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 6302544,
+      "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f"
+    },
+    "tests/backend/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "tests/backend/Release/vcruntime140_1.dll": {
+      "bytes": 49792,
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f"
+    },
+    "src/sirius/app/Release/resources/model/operating_model.json": {
+      "bytes": 130611,
+      "sha256": "b1c00980837dbf22070353077cd0cc492c6cc582ae7bf9679571ab63602196e6"
+    },
+    "src/sirius/app/Release/vulkan-1.dll": {
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696"
+    },
+    "tests/backend/Release/msvcp140.dll": {
+      "bytes": 557728,
+      "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9"
+    },
+    "tests/backend/Release/resources/kernels/trace.spv": {
+      "bytes": 4038148,
+      "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+    },
+    "tests/backend/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916620,
+      "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+    },
+    "src/sirius/app/Release/concrt140.dll": {
+      "bytes": 324208,
+      "sha256": "2405355f0a58067b258f8df33c327e3a3d716eaac5a3a5aebb757842d85bd376"
+    },
+    "tests/backend/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "tests/backend/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 6302544,
+      "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f"
+    },
+    "generated/sirius/windows-diagnostic-build-products.json": {
+      "bytes": 16928,
+      "sha256": "03fe9af83a424b003965137d48cbfd0aa8276739836f4272298f87ceeff05864"
+    }
+  },
+  "unchanged_spirv_members_vs_23d": {
+    "src/sirius/app/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "src/sirius/app/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 6290916,
+      "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74"
+    },
+    "src/sirius/app/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "src/sirius/app/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "src/sirius/app/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "tests/backend/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "tests/backend/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "tests/backend/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 6306768,
+      "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35"
+    },
+    "tests/backend/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "src/sirius/app/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "tests/backend/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "src/sirius/app/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916620,
+      "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+    },
+    "src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "src/sirius/app/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041472,
+      "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+    },
+    "src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "tests/backend/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "tests/backend/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041472,
+      "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+    },
+    "src/sirius/app/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "tests/backend/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 6290916,
+      "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74"
+    },
+    "tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "src/sirius/app/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "tests/backend/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "src/sirius/app/Release/resources/kernels/trace.spv": {
+      "bytes": 4038148,
+      "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+    },
+    "tests/backend/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "src/sirius/app/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "src/sirius/app/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "src/sirius/app/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 6306768,
+      "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35"
+    },
+    "tests/backend/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "tests/backend/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "src/sirius/app/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 6302544,
+      "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f"
+    },
+    "tests/backend/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "tests/backend/Release/resources/kernels/trace.spv": {
+      "bytes": 4038148,
+      "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+    },
+    "tests/backend/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916620,
+      "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+    },
+    "tests/backend/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "tests/backend/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 6302544,
+      "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f"
+    }
+  },
+  "backend_executable": {
+    "bytes": 11091456,
+    "sha256": "474aff95445d2a1bae1c725417049db3eae87462790f43cfd9a5c0b8cdf06d0b"
+  },
+  "diagnostic_context_literal_present_in_backend": true,
+  "initial10controls_passed": true,
+  "later9nativegate": "FAILED timeout10s; no receipt/nativeattestation exists or is manufactured.",
+  "native_build_gate_authority_admitted": false,
+  "diagnostic_capture_provenance_only": true,
+  "runtime_scientific_release_qualified": false
+}

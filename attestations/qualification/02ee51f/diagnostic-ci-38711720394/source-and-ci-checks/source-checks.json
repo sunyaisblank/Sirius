@@ -1,0 +1,55 @@
+{
+  "schema": "sirius-trace-failure-context-source-checks-v1",
+  "source_parent": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "independent_source_review": "PASS by divide at author213f5dc...; exact inverse recovered23d",
+  "root_full_diff_read": true,
+  "format_semantics_unchanged": true,
+  "formatted_header": {
+    "bytes": 13798,
+    "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399"
+  },
+  "format_files": 278,
+  "format_returncode": 0,
+  "format_seconds": 5.148058882012265,
+  "build": "PASS",
+  "runtime_scientific_claimed": false,
+  "build_returncode": 0,
+  "build_command": [
+    "cmake",
+    "--build",
+    "--preset",
+    "linux-gcc",
+    "--target",
+    "sirius_backend_tests",
+    "SiriusSourceGovernance",
+    "-j2"
+  ],
+  "build_scope": "Strict source/build check on dirty23d + exact formatted header; not scientific/runtime/release qualification.",
+  "independent_review_author_identity": {
+    "bytes": 13728,
+    "sha256": "213f5dc82c5dc06b66ab6ba39cf378917b43451ad714349a9f8fd406a6a2cd64"
+  },
+  "formatted_file_semantics_equal_reviewed_author": true,
+  "check_outputs": {
+    "format.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build.stdout": {
+      "bytes": 1177,
+      "sha256": "e56412ec6a5b583306197dc3478558387a86f882a97528c634b201bec29d40f0"
+    },
+    "build.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "final.diff": {
+      "bytes": 3457,
+      "sha256": "34917feb0c37a69b71850c79293184fd12798aec5ba072b6f557cad6be4cf4f7"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+diff --git a/tests/support/trace_continuation_probe.h b/tests/support/trace_continuation_probe.h
+index 33a5a516..f534108c 100644
+--- a/tests/support/trace_continuation_probe.h
++++ b/tests/support/trace_continuation_probe.h
+@@ -12,6 +12,7 @@
+ #include <cmath>
+ #include <cstddef>
+ #include <cstdint>
++#include <format>
+ #include <limits>
+ #include <span>
+ #include <string>
+@@ -168,7 +169,47 @@ class TraceContinuationProbe {
+                 records_[index],
+                 action == render::TraceAction::Initialise ? nullptr : &previous[index], action,
+                 identity, maximum_attempts_);
+-            if (!checked) return std::unexpected(checked.error());
++            if (!checked) {
++                // Preserve the failed readback before the image helper destroys its probe.
++                const auto hex = [](std::span<const std::byte> bytes) {
++                    constexpr char digits[] = "0123456789abcdef";
++                    std::string result;
++                    result.reserve(bytes.size() * 2);
++                    for (const auto byte : bytes) {
++                        const auto value = std::to_integer<unsigned int>(byte);
++                        result.push_back(digits[value >> 4]);
++                        result.push_back(digits[value & 15]);
++                    }
++                    return result;
++                };
++                const std::string previous_hex =
++                    action == render::TraceAction::Initialise
++                        ? "null"
++                        : "\"" + hex(std::as_bytes(std::span(&previous[index], 1))) + "\"";
++                const auto& device_name = device_.Info().name;
++                const auto context = std::format(
++                    "{{\"schema\":\"sirius-trace-continuation-failure-v1\","
++                    "\"scalar_bytes\":{},\"packet_scalar_bytes\":{},\"record_bytes\":{},"
++                    "\"byte_order\":\"{}\",\"action\":{},\"row\":{},\"active\":{},"
++                    "\"active_rectangle\":[{},{},{},{}],\"expected_identity\":[{},{},{},{}],"
++                    "\"physical_submissions\":{},\"maximum_attempts\":{},\"packet_hex\":\"{}\","
++                    "\"previous_record_hex\":{},\"current_record_hex\":\"{}\","
++                    "\"device_name_bytes_hex\":\"{}\"}}",
++                    sizeof(Real), sizeof(float), sizeof(Record),
++                    std::endian::native == std::endian::little ? "little"
++                    : std::endian::native == std::endian::big  ? "big"
++                                                               : "mixed",
++                    static_cast<std::uint32_t>(action), index, active_,
++                    static_cast<std::uint32_t>(packet_[31]),
++                    static_cast<std::uint32_t>(packet_[32]), width, height, identity[0],
++                    identity[1], identity[2], identity[3], physical_submissions_, maximum_attempts_,
++                    hex(std::as_bytes(std::span(packet_))), previous_hex,
++                    hex(std::as_bytes(std::span(&records_[index], 1))),
++                    hex(std::as_bytes(std::span(device_name.data(), device_name.size()))));
++                const auto& error = checked.error();
++                return base::Fail(error.domain(), error.operation(),
++                                  error.detail() + "\n" + context);
++            }
+             terminal = terminal && *checked;
+         }
+         return terminal;
