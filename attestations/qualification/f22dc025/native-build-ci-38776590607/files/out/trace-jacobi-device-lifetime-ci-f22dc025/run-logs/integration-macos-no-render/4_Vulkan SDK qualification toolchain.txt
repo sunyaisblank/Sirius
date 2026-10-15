@@ -1,0 +1,26 @@
+﻿2026-10-15T17:21:48.8702460Z ##[group]Run jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+2026-10-15T17:21:48.8703040Z with:
+2026-10-15T17:21:48.8703300Z   vulkan_version: 1.4.357.0
+2026-10-15T17:21:48.8703540Z   cache: true
+2026-10-15T17:21:48.8706900Z   github_token: ***
+2026-10-15T17:21:48.8707200Z ##[endgroup]
+2026-10-15T17:21:49.0709760Z Using github_token to authenticate GitHub API requests.
+2026-10-15T17:21:49.2910600Z 🎯 [Cache] Cache for 'Vulkan SDK' not found.
+2026-10-15T17:21:49.2911300Z 🔽 Downloading Vulkan SDK 1.4.357.0
+2026-10-15T17:21:49.3971090Z ✔️ Http(200): The requested VULKAN_SDK 1.4.357.0 is downloadable.
+2026-10-15T17:21:49.3971890Z     URL: https://sdk.lunarg.com/sdk/download/1.4.357.0/mac/vulkansdk-macos-1.4.357.0.zip
+2026-10-15T17:21:59.5698860Z ✔️ Download completed successfully!
+2026-10-15T17:21:59.5700180Z    File: /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+2026-10-15T17:21:59.5701600Z    SHA HASH URL: https://sdk.lunarg.com/sdk/sha/1.4.357.0/mac/vulkansdk-macos-1.4.357.0.zip.json
+2026-10-15T17:22:00.4651040Z    SHA verified: /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+2026-10-15T17:22:00.4664690Z 📦 Extracting Vulkan SDK...
+2026-10-15T17:22:00.4811990Z [command]/usr/bin/unzip -o -q /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+2026-10-15T17:22:47.9979070Z    Installed into folder: /Users/runner/vulkan-sdk/1.4.357.0
+2026-10-15T17:22:48.2873520Z [command]/opt/homebrew/bin/gtar --posix -cf cache.tzst --exclude cache.tzst -P -C /Users/runner/work/Sirius/Sirius --files-from manifest.txt --delay-directory-restore --use-compress-program zstdmt
+2026-10-15T17:22:59.5461880Z ##[warning]Failed to save: Unable to reserve cache with key cache-mac-arm64-vulkan-sdk-1.4.357.0, another job may be creating this cache.
+2026-10-15T17:22:59.5494350Z ✔️ [PATH] Added path to Vulkan SDK to environment variable PATH.
+2026-10-15T17:22:59.5496190Z ✔️ [ENV] Set env variable VULKAN_SDK -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS".
+2026-10-15T17:22:59.5498800Z ✔️ [ENV] Set env variable VULKAN_VERSION -> "1.4.357.0".
+2026-10-15T17:22:59.5500890Z ✔️ [ENV] Set env variable VK_LAYER_PATH -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d".
+2026-10-15T17:22:59.5506410Z ✔️ [ENV] Set env variable DYLD_LIBRARY_PATH -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:".
+2026-10-15T17:22:59.5507620Z ✅ Done.

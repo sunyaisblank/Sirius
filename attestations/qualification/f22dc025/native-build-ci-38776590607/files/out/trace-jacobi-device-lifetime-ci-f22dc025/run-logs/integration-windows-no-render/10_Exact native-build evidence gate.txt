@@ -1,0 +1,47 @@
+﻿2026-10-15T17:37:44.4437897Z ##[group]Run cmake --build --preset windows-msvc --config Release --target RunNativeBuildEvidence -j2
+2026-10-15T17:37:44.4438746Z [36;1mcmake --build --preset windows-msvc --config Release --target RunNativeBuildEvidence -j2[0m
+2026-10-15T17:37:44.4480440Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T17:37:44.4480801Z env:
+2026-10-15T17:37:44.4480979Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T17:37:44.4481223Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:37:44.4481432Z ##[endgroup]
+2026-10-15T17:37:44.7955947Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-15T17:37:44.8279441Z 
+2026-10-15T17:37:45.0872969Z   Checking File Globs
+2026-10-15T17:37:45.2306968Z   1>Verifying revision-bound upstream/downstream alignment
+2026-10-15T17:37:45.3874294Z   alignment receipt is current: 0/8 domains admitted
+2026-10-15T17:37:45.4443398Z   1>Verifying test-label, operating-model, and repository-structure governance
+2026-10-15T17:37:46.6148421Z   CTest label file is up to date
+2026-10-15T17:37:47.8060741Z   operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-15T17:37:49.6579904Z   repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-15T17:37:49.7306260Z   strict qualification/release policy rejected every weakened configuration and product
+2026-10-15T17:37:58.0772893Z   escaping-copy controls: filesystem symlinks
+2026-10-15T17:37:58.0773525Z   build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-15T17:37:58.3015692Z   glfw.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\glfw\src\Release\glfw3.lib
+2026-10-15T17:37:58.3593531Z   screen.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-screen.lib
+2026-10-15T17:37:58.3663286Z   gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+2026-10-15T17:37:58.5305128Z   sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+2026-10-15T17:37:58.5770353Z   1>
+2026-10-15T17:37:58.6366647Z   dom.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-dom.lib
+2026-10-15T17:37:58.6742702Z   sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+2026-10-15T17:37:58.7289731Z   sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+2026-10-15T17:37:58.7884516Z   sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+2026-10-15T17:37:58.8361676Z   1>
+2026-10-15T17:37:58.8829882Z   1>
+2026-10-15T17:37:58.9879956Z   gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+2026-10-15T17:37:59.0420482Z   1>Staging exact qualification inputs beside sirius_backend_tests
+2026-10-15T17:37:59.0657512Z   1>Staging exact qualification inputs beside sirius_render_tests
+2026-10-15T17:37:59.8070111Z   component.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\_deps\ftxui-build\Release\ftxui-component.lib
+2026-10-15T17:37:59.8834978Z   sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+2026-10-15T17:37:59.9594959Z   sirius_oracle_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\oracle\Release\sirius_oracle_tests.exe
+2026-10-15T17:38:00.0309838Z   sirius_core_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\core\Release\sirius_core_tests.exe
+2026-10-15T17:38:00.1682289Z   sirius_backend_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\Release\sirius_backend_tests.exe
+2026-10-15T17:38:00.3347365Z   sirius_base_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\tests\Release\sirius_base_tests.exe
+2026-10-15T17:38:00.4514075Z   sirius_app_lib.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_lib.lib
+2026-10-15T17:38:00.6477254Z   sirius.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius.exe
+2026-10-15T17:38:00.6589764Z   Staging Sirius runtime resources beside the executable	Staging interactive-viewer shaders beside the executable	Staging Vulkan runtime kernels beside the executable
+2026-10-15T17:38:00.9518008Z   sirius_app_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_app_tests.exe
+2026-10-15T17:38:01.1157747Z   sirius_render_tests.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\app\Release\sirius_render_tests.exe
+2026-10-15T17:38:01.3314786Z   1>=== NATIVE BUILD NON-RENDER EVIDENCE GATE ===
+2026-10-15T17:38:53.3149663Z   native build gate bound 7 compiled executables and 9 products and 20 generated test inputs to 9 non-render controls
+2026-10-15T17:38:53.3565973Z   Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt

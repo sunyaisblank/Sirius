@@ -1,0 +1,32 @@
+﻿2026-10-15T17:39:02.0793126Z Post job cleanup.
+2026-10-15T17:39:02.2689622Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-10-15T17:39:02.2981388Z git version 2.56.0.windows.2
+2026-10-15T17:39:02.3042372Z Temporarily overriding HOME='D:\a\_temp\57138b83-0879-44cb-8fe2-f5b3b3189a30' before making global git config changes
+2026-10-15T17:39:02.3043693Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T17:39:02.3055407Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Sirius\Sirius
+2026-10-15T17:39:02.3420257Z Removing SSH command configuration
+2026-10-15T17:39:02.3431025Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T17:39:02.3737914Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-10-15T17:39:02.8205742Z Removing HTTP extra header
+2026-10-15T17:39:02.8215713Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T17:39:02.8526442Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-10-15T17:39:03.3372886Z Removing includeIf entries pointing to credentials config files
+2026-10-15T17:39:03.3383857Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T17:39:03.3661044Z includeif.gitdir:D:/a/Sirius/Sirius/.git.path
+2026-10-15T17:39:03.3661921Z includeif.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path
+2026-10-15T17:39:03.3662547Z includeif.gitdir:/github/workspace/.git.path
+2026-10-15T17:39:03.3663052Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-15T17:39:03.3698334Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/Sirius/Sirius/.git.path
+2026-10-15T17:39:03.3970070Z D:\a\_temp\git-credentials-d029dcae-1b29-445b-b43d-d80e32153fa5.config
+2026-10-15T17:39:03.4006791Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/Sirius/Sirius/.git.path D\:\\a\\_temp\\git\-credentials\-d029dcae\-1b29\-445b\-b43d\-d80e32153fa5\.config
+2026-10-15T17:39:03.4360124Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path
+2026-10-15T17:39:03.4629178Z D:\a\_temp\git-credentials-d029dcae-1b29-445b-b43d-d80e32153fa5.config
+2026-10-15T17:39:03.4664892Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-d029dcae\-1b29\-445b\-b43d\-d80e32153fa5\.config
+2026-10-15T17:39:03.4967894Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-15T17:39:03.5232297Z /github/runner_temp/git-credentials-d029dcae-1b29-445b-b43d-d80e32153fa5.config
+2026-10-15T17:39:03.5265855Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-d029dcae\-1b29\-445b\-b43d\-d80e32153fa5\.config
+2026-10-15T17:39:03.5569222Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-15T17:39:03.5833371Z /github/runner_temp/git-credentials-d029dcae-1b29-445b-b43d-d80e32153fa5.config
+2026-10-15T17:39:03.5870974Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-d029dcae\-1b29\-445b\-b43d\-d80e32153fa5\.config
+2026-10-15T17:39:03.6171441Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-15T17:39:04.1031732Z Removing credentials config 'D:\a\_temp\git-credentials-d029dcae-1b29-445b-b43d-d80e32153fa5.config'

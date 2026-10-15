@@ -1,0 +1,176 @@
+{
+  "schema": "sirius-E2-original-eleven-CPU-independent-preservation-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewed_utc": "2026-10-15T18:00:00.078870+00:00",
+  "blockers": [],
+  "bundle": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses",
+  "critical_pins": {
+    "manifest": {
+      "path": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/manifest.json",
+      "bytes": 35081,
+      "sha256": "bf1fc33fb4bae0d99c9917e816611cba39d556ee26462a42811c57352f2866a5"
+    },
+    "preservation": {
+      "path": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/preservation.json",
+      "bytes": 64381,
+      "sha256": "6fec3cc5fa138000f49db5d450c9629a6b78488d8b5ee28183cdb7c990f41aed"
+    },
+    "static_dependency_catalog": {
+      "path": "out/e2-original-cpu-witnesses-preservation/static-archive-dependencies.json",
+      "bytes": 695115,
+      "sha256": "d43cae7d2b477ac92d5da6fff14a901393124699b35fe07b26d6bb7d40287ef3"
+    },
+    "root_completed": {
+      "path": "out/e2-original-cpu-witnesses-pending/root-completed-results.json",
+      "bytes": 27501,
+      "sha256": "dc6e086c6a1e91f7bedf8d5b93a004c2f0490dc80e49a1192ee2b7926bb0cc29"
+    },
+    "independent_completion": {
+      "path": "out/e2-original-cpu-witnesses-pending/independent-completion-review.json",
+      "bytes": 30909,
+      "sha256": "bc1df9efd1c85130ae22c6ea499daa6e86e37cbddb5c806223de6b11f2e2451e"
+    }
+  },
+  "bundle_inventory": {
+    "actual_regular_files": 180,
+    "payload_manifest_members": 178,
+    "top_level_manifest_and_preservation": 2,
+    "all_actual_files_exact_manifest_members_or_two_metadata_files": true,
+    "all178_payload_records_current_and_bytes_exact": true,
+    "all178_original_to_bundle_copy_map_entries_exact": true,
+    "all148_completed_CPU_workspace_files_preserved": true,
+    "payload_groups": {
+      "out/e2-original-cpu-witnesses-pending": 148,
+      "out/trace-jacobi-device-lifetime": 7,
+      "out/trace-jacobi-device-lifetime-checks": 5,
+      "out/trace-jacobi-rss-stop-issue-followup": 4,
+      "out/kerr-cartdelta-rhs-retirement": 5,
+      "bin/linux-gcc": 8,
+      "out/e2-original-cpu-witnesses-preservation": 1
+    },
+    "all_payload_paths_safe_relative_and_regular_not_symlink": true,
+    "no_reencoding_or_foreign_artifact_alias": true,
+    "bundle_metadata_selfhash_cycle_absent": true
+  },
+  "actual_consumed_dependency_partition": {
+    "unique_actual_owner_input_union": 1297,
+    "catalog_pathset_exact_all11_before_after_union": true,
+    "all_catalog_actual_identities_equal_original_owned_maps_and_current_content_resolved_paths": true,
+    "partition": {
+      "tracked_source_Git": 538,
+      "hash_only_host_or_build_dependency": 663,
+      "actual_own_bundle_copy": 95,
+      "staged_asset_Git_byte_alias": 1
+    },
+    "tracked_source_Git": {
+      "commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "files": 538,
+      "all_paths_blob_ids_exact_git_ls_tree": true,
+      "all538_blob_fullbytes_checked_with_readonly_cat_file_batch": true,
+      "all_git_bytes_equal_current_source_and_actual_consumed_sha256": true
+    },
+    "actual_own_bundle_copy": {
+      "files": 95,
+      "every_catalog_copy_exact_copy_map_manifest_and_original_consumed_bytes": true
+    },
+    "staged_asset_Git_byte_alias": {
+      "files": 1,
+      "actual_consumer_path": "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_path": "assets/Starfield.png",
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c",
+      "exact_staged_current_bytes_equal_named_source_blob": true,
+      "boundary": "A content alias only. It does not turn the historical consumer-adjacent path, resolver or mutable future installation into a Git-preserved runtime volume."
+    },
+    "hash_only_host_or_build_dependency": {
+      "files": 663,
+      "all_actual_bytes_and_resolved_identities_current_checked": true,
+      "not_copied_or_backed_up_by_this_bundle": true,
+      "no_portable_or_complete_reproduction_claim": true,
+      "scope": "Host tools/libraries, generated third-party headers and build objects/archives are identified, not silently presented as recoverable payload."
+    }
+  },
+  "actual_Linux_test_executable_roles": {
+    "bin/linux-gcc/tests/backend/sirius_backend_tests": {
+      "bytes": 13502080,
+      "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567",
+      "copied_bundle_path": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/files/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "ELF_class": 64,
+      "byte_order": "little",
+      "machine": "x86_64",
+      "current_actual_linux_consumer_not_foreign_alias": true
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+      "copied_bundle_path": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/files/bin/linux-gcc/tests/core/sirius_core_tests",
+      "ELF_class": 64,
+      "byte_order": "little",
+      "machine": "x86_64",
+      "current_actual_linux_consumer_not_foreign_alias": true
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4",
+      "copied_bundle_path": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/files/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+      "ELF_class": 64,
+      "byte_order": "little",
+      "machine": "x86_64",
+      "current_actual_linux_consumer_not_foreign_alias": true
+    },
+    "bin/linux-gcc/src/sirius/app/sirius_app_tests": {
+      "bytes": 11397000,
+      "sha256": "753f08c883336261d15bbe069dc463ca1aba36ec6ce1a56b968715859a7c95b4",
+      "copied_bundle_path": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/files/bin/linux-gcc/src/sirius/app/sirius_app_tests",
+      "ELF_class": 64,
+      "byte_order": "little",
+      "machine": "x86_64",
+      "current_actual_linux_consumer_not_foreign_alias": true
+    },
+    "bin/linux-gcc/src/sirius/app/sirius_render_tests": {
+      "bytes": 12212608,
+      "sha256": "37fef0e35bea4abf28a075ba6b5cf1918cfde318a4988ae0255553f50689f18e",
+      "copied_bundle_path": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/files/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+      "ELF_class": 64,
+      "byte_order": "little",
+      "machine": "x86_64",
+      "current_actual_linux_consumer_not_foreign_alias": true
+    }
+  },
+  "prior_results_and_late_closures": {
+    "all11_original_completed_CPU_zero_FESD_result_and_independent_review_hashjoined": true,
+    "finite_original_scientific_witness_scope_unchanged": true,
+    "prior_P2_stop_issue_and_retirement_late_files_preserved_with_original_dated_scope": true,
+    "current_active_trace_result_not_read_or_inferred": true,
+    "three_fast_cases_zero_samples_not_observed_zero_or_continuous_peak_memory": true,
+    "no_GPU_native_P1_full_domain_Mandatory_UI_cold_performance_or_release_promotion": true
+  },
+  "publication_and_hold": {
+    "source_commit_clean_tracked_tree_and_upstream_0_0": true,
+    "bundle_Git_publication_still_pending": true,
+    "root_isolated_commit_tag_push_and_fresh_remote_verification_required": true,
+    "no_deletion_or_source_build_hold_release_admitted": true,
+    "independent_review_written_outside_bundle": true,
+    "shared_CPU_catalog_source_Cache_Ninja_products_current": true,
+    "no_active_trace_input_modified_by_reviewer": true
+  },
+  "method": "Passive standard-library JSON/hash/file bytes and read-only Git ls-tree/cat-file/status/tracking only. No authored helper or project import/tool, provider, test, process query, signal, network, source mutation, active trace case read or removal.",
+  "checkout": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "evidence_bundle_publication_pending": true,
+    "new_review_committed_or_pushed": false
+  },
+  "limitations": [
+    "Pass means the prepared finite bundle and stated dependency partition are truthful and byte-complete within their declared scope.",
+    "The663 hash-only dependencies are not a backup and this is not a complete portable replay environment.",
+    "No runtime, retirement or stronger scientific/release admission is issued."
+  ]
+}

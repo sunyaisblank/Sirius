@@ -1,0 +1,42 @@
+﻿2026-10-15T17:27:39.6625700Z ##[group]Run test ! -e bin/macos/generated/sirius/mandatory_gate.json
+2026-10-15T17:27:39.6626440Z [36;1mtest ! -e bin/macos/generated/sirius/mandatory_gate.json[0m
+2026-10-15T17:27:39.6627050Z [36;1mctest --test-dir bin/macos --output-on-failure --no-tests=error \[0m
+2026-10-15T17:27:39.6630000Z [36;1m  -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'[0m
+2026-10-15T17:27:39.6633130Z [36;1mtest ! -e bin/macos/generated/sirius/mandatory_gate.json[0m
+2026-10-15T17:27:39.6843190Z shell: /bin/bash -e {0}
+2026-10-15T17:27:39.6844160Z env:
+2026-10-15T17:27:39.6844530Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:27:39.6845240Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:27:39.6846170Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:27:39.6847600Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:27:39.6849370Z ##[endgroup]
+2026-10-15T17:27:40.5469870Z Test project /Users/runner/work/Sirius/Sirius/bin/macos
+2026-10-15T17:27:40.6101200Z       Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+2026-10-15T17:27:44.1154900Z  1/10 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    3.50 sec
+2026-10-15T17:27:44.1157370Z       Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2026-10-15T17:27:44.1745000Z  2/10 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.06 sec
+2026-10-15T17:27:44.1750500Z       Start   16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+2026-10-15T17:27:44.2644140Z  3/10 Test   #16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls ..........   Passed    0.09 sec
+2026-10-15T17:27:44.2647770Z       Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+2026-10-15T17:27:47.0259350Z  4/10 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................   Passed    2.76 sec
+2026-10-15T17:27:47.0261250Z       Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+2026-10-15T17:28:16.6697170Z  5/10 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   29.63 sec
+2026-10-15T17:28:16.6700710Z       Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+2026-10-15T17:28:17.1939240Z  6/10 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.52 sec
+2026-10-15T17:28:17.1942210Z       Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+2026-10-15T17:28:17.2874470Z  7/10 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.09 sec
+2026-10-15T17:28:17.2876820Z       Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+2026-10-15T17:28:17.6446190Z  8/10 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.36 sec
+2026-10-15T17:28:17.6455660Z       Start 1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+2026-10-15T17:28:17.6573720Z  9/10 Test #1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.01 sec
+2026-10-15T17:28:17.6576160Z       Start 1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+2026-10-15T17:28:18.5872890Z 10/10 Test #1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.93 sec
+2026-10-15T17:28:18.5877220Z 
+2026-10-15T17:28:18.5877740Z 100% tests passed out of 10
+2026-10-15T17:28:18.5878330Z 
+2026-10-15T17:28:18.5878510Z Label Time Summary:
+2026-10-15T17:28:18.5879650Z Correctness    =   0.94 sec*proc (2 tests)
+2026-10-15T17:28:18.5880480Z Mandatory      =  37.95 sec*proc (10 tests)
+2026-10-15T17:28:18.5882170Z Operational    =  37.95 sec*proc (10 tests)
+2026-10-15T17:28:18.5882850Z 
+2026-10-15T17:28:18.5883270Z Total Test time (real) =  38.02 sec

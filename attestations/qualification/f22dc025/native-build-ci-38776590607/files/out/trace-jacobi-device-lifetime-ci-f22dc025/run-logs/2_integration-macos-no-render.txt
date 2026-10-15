@@ -1,0 +1,747 @@
+﻿2026-10-15T17:21:41.2798100Z Current runner version: '2.337.0'
+2026-10-15T17:21:41.2817680Z ##[group]Runner Image Provisioner
+2026-10-15T17:21:41.2818270Z Hosted Compute Agent
+2026-10-15T17:21:41.2818680Z Version: 20260828.587
+2026-10-15T17:21:41.2819090Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-10-15T17:21:41.2819570Z Build Date: 2026-08-28T16:44:25Z
+2026-10-15T17:21:41.2820020Z Worker ID: {ed32796e-d2e5-43a7-bec0-9934477c0944}
+2026-10-15T17:21:41.2820470Z Azure Region: westus
+2026-10-15T17:21:41.2820840Z ##[endgroup]
+2026-10-15T17:21:41.2821850Z ##[group]Operating System
+2026-10-15T17:21:41.2822280Z macOS
+2026-10-15T17:21:41.2822650Z 15.7.9
+2026-10-15T17:21:41.2822970Z 24G830
+2026-10-15T17:21:41.2823300Z ##[endgroup]
+2026-10-15T17:21:41.2823640Z ##[group]Runner Image
+2026-10-15T17:21:41.2824000Z Image: macos-15-arm64
+2026-10-15T17:21:41.2824370Z Version: 20260907.0337.1
+2026-10-15T17:21:41.2825220Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20260907.0337/images/macos/macos-15-arm64-Readme.md
+2026-10-15T17:21:41.2826320Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20260907.0337
+2026-10-15T17:21:41.2827020Z ##[endgroup]
+2026-10-15T17:21:41.2828260Z ##[group]GITHUB_TOKEN Permissions
+2026-10-15T17:21:41.2829720Z Contents: read
+2026-10-15T17:21:41.2830080Z Metadata: read
+2026-10-15T17:21:41.2830420Z Packages: read
+2026-10-15T17:21:41.2830770Z ##[endgroup]
+2026-10-15T17:21:41.2832370Z Secret source: Actions
+2026-10-15T17:21:41.2832920Z Cache mode: write
+2026-10-15T17:21:41.2833390Z Prepare workflow directory
+2026-10-15T17:21:41.3248070Z Prepare all required actions
+2026-10-15T17:21:41.3328800Z Getting action download info
+2026-10-15T17:21:41.6535520Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-15T17:21:41.9956740Z Download action repository 'jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa' (SHA:37effcfa045411f8bfbbda26df2fd1b3bf3436fa)
+2026-10-15T17:21:42.5522110Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-10-15T17:21:42.7206510Z Complete job name: integration-macos-no-render
+2026-10-15T17:21:42.7856670Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-15T17:21:42.7857370Z with:
+2026-10-15T17:21:42.7857710Z   repository: sunyaisblank/Sirius
+2026-10-15T17:21:42.7860730Z   token: ***
+2026-10-15T17:21:42.7861050Z   ssh-strict: true
+2026-10-15T17:21:42.7861370Z   ssh-user: git
+2026-10-15T17:21:42.7861690Z   persist-credentials: true
+2026-10-15T17:21:42.7862050Z   clean: true
+2026-10-15T17:21:42.7862380Z   sparse-checkout-cone-mode: true
+2026-10-15T17:21:42.7862750Z   fetch-depth: 1
+2026-10-15T17:21:42.7863070Z   fetch-tags: false
+2026-10-15T17:21:42.7863400Z   show-progress: true
+2026-10-15T17:21:42.7863720Z   lfs: false
+2026-10-15T17:21:42.7864020Z   submodules: false
+2026-10-15T17:21:42.7864350Z   set-safe-directory: true
+2026-10-15T17:21:42.7864820Z   allow-unsafe-pr-checkout: false
+2026-10-15T17:21:42.7865410Z ##[endgroup]
+2026-10-15T17:21:43.3184300Z Syncing repository: sunyaisblank/Sirius
+2026-10-15T17:21:43.3186490Z ##[group]Getting Git version info
+2026-10-15T17:21:43.3187130Z Working directory is '/Users/runner/work/Sirius/Sirius'
+2026-10-15T17:21:43.3188050Z [command]/opt/homebrew/bin/git version
+2026-10-15T17:21:43.3769890Z git version 2.55.0
+2026-10-15T17:21:43.3788690Z ##[endgroup]
+2026-10-15T17:21:43.3796770Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/f3a0f1fb-65be-4729-a5aa-882dd2e617f1/.gitconfig'
+2026-10-15T17:21:43.3802100Z Temporarily overriding HOME='/Users/runner/work/_temp/f3a0f1fb-65be-4729-a5aa-882dd2e617f1' before making global git config changes
+2026-10-15T17:21:43.3805750Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T17:21:43.3810060Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Sirius/Sirius
+2026-10-15T17:21:43.4200720Z Deleting the contents of '/Users/runner/work/Sirius/Sirius'
+2026-10-15T17:21:43.4209400Z ##[group]Determining repository object format
+2026-10-15T17:21:43.4217690Z ##[endgroup]
+2026-10-15T17:21:43.4219070Z ##[group]Initializing the repository
+2026-10-15T17:21:43.4224040Z [command]/opt/homebrew/bin/git init /Users/runner/work/Sirius/Sirius
+2026-10-15T17:21:43.4396110Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-15T17:21:43.4397040Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-15T17:21:43.4401530Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-15T17:21:43.4403450Z hint: call:
+2026-10-15T17:21:43.4404730Z hint:
+2026-10-15T17:21:43.4405280Z hint: 	git config --global init.defaultBranch <name>
+2026-10-15T17:21:43.4405950Z hint:
+2026-10-15T17:21:43.4406490Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-15T17:21:43.4407400Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-15T17:21:43.4408040Z hint:
+2026-10-15T17:21:43.4408420Z hint: 	git branch -m <name>
+2026-10-15T17:21:43.4408850Z hint:
+2026-10-15T17:21:43.4409420Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-15T17:21:43.4410220Z Initialized empty Git repository in /Users/runner/work/Sirius/Sirius/.git/
+2026-10-15T17:21:43.4625330Z [command]/opt/homebrew/bin/git remote add origin https://github.com/sunyaisblank/Sirius
+2026-10-15T17:21:43.4628340Z ##[endgroup]
+2026-10-15T17:21:43.4629370Z ##[group]Disabling automatic garbage collection
+2026-10-15T17:21:43.4630310Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-10-15T17:21:43.4633120Z ##[endgroup]
+2026-10-15T17:21:43.4634200Z ##[group]Setting up auth
+2026-10-15T17:21:43.4634820Z Removing SSH command configuration
+2026-10-15T17:21:43.4635820Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T17:21:43.4641970Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T17:21:43.5989250Z Removing HTTP extra header
+2026-10-15T17:21:43.5990520Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T17:21:43.6088630Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-15T17:21:43.7168700Z Removing includeIf entries pointing to credentials config files
+2026-10-15T17:21:43.7172700Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T17:21:43.7275070Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-15T17:21:43.8565980Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-15T17:21:43.8612870Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Sirius/Sirius/.git.path /Users/runner/work/_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config
+2026-10-15T17:21:43.8684160Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config
+2026-10-15T17:21:43.8757160Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config
+2026-10-15T17:21:43.8834020Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config
+2026-10-15T17:21:43.8901040Z ##[endgroup]
+2026-10-15T17:21:43.8902910Z ##[group]Fetching the repository
+2026-10-15T17:21:43.8906670Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f22dc025d112c2d967356dead6b6e9caf8b42d67:refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T17:21:45.9365620Z From https://github.com/sunyaisblank/Sirius
+2026-10-15T17:21:45.9367690Z  * [new ref]         f22dc025d112c2d967356dead6b6e9caf8b42d67 -> origin/development/minimum-step-floor-2026-10-15
+2026-10-15T17:21:45.9375300Z [command]/opt/homebrew/bin/git branch --list --remote origin/development/minimum-step-floor-2026-10-15
+2026-10-15T17:21:45.9458650Z   origin/development/minimum-step-floor-2026-10-15
+2026-10-15T17:21:45.9469820Z [command]/opt/homebrew/bin/git rev-parse refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T17:21:45.9533440Z f22dc025d112c2d967356dead6b6e9caf8b42d67
+2026-10-15T17:21:45.9539460Z ##[endgroup]
+2026-10-15T17:21:45.9541970Z ##[group]Determining the checkout info
+2026-10-15T17:21:45.9544730Z ##[endgroup]
+2026-10-15T17:21:45.9546640Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-10-15T17:21:45.9631900Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-15T17:21:45.9724750Z ##[group]Checking out the ref
+2026-10-15T17:21:45.9729520Z [command]/opt/homebrew/bin/git checkout --progress --force -B development/minimum-step-floor-2026-10-15 refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T17:21:46.1852230Z Switched to a new branch 'development/minimum-step-floor-2026-10-15'
+2026-10-15T17:21:46.1884940Z branch 'development/minimum-step-floor-2026-10-15' set up to track 'origin/development/minimum-step-floor-2026-10-15'.
+2026-10-15T17:21:46.2049400Z ##[endgroup]
+2026-10-15T17:21:46.2152590Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-10-15T17:21:46.2255280Z f22dc025d112c2d967356dead6b6e9caf8b42d67
+2026-10-15T17:21:46.2571640Z ##[group]Run brew install ninja
+2026-10-15T17:21:46.2572030Z [36;1mbrew install ninja[0m
+2026-10-15T17:21:46.2638710Z shell: /bin/bash -e {0}
+2026-10-15T17:21:46.2639400Z ##[endgroup]
+2026-10-15T17:21:48.8593250Z [33mWarning:[0m ninja 1.13.2 is already installed and up-to-date.
+2026-10-15T17:21:48.8597000Z To reinstall 1.13.2, run:
+2026-10-15T17:21:48.8598580Z   brew reinstall ninja
+2026-10-15T17:21:48.8702590Z ##[group]Run jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+2026-10-15T17:21:48.8703040Z with:
+2026-10-15T17:21:48.8703300Z   vulkan_version: 1.4.357.0
+2026-10-15T17:21:48.8703540Z   cache: true
+2026-10-15T17:21:48.8706900Z   github_token: ***
+2026-10-15T17:21:48.8707210Z ##[endgroup]
+2026-10-15T17:21:49.0709820Z Using github_token to authenticate GitHub API requests.
+2026-10-15T17:21:49.2910630Z 🎯 [Cache] Cache for 'Vulkan SDK' not found.
+2026-10-15T17:21:49.2911310Z 🔽 Downloading Vulkan SDK 1.4.357.0
+2026-10-15T17:21:49.3971130Z ✔️ Http(200): The requested VULKAN_SDK 1.4.357.0 is downloadable.
+2026-10-15T17:21:49.3971890Z     URL: https://sdk.lunarg.com/sdk/download/1.4.357.0/mac/vulkansdk-macos-1.4.357.0.zip
+2026-10-15T17:21:59.5698920Z ✔️ Download completed successfully!
+2026-10-15T17:21:59.5700180Z    File: /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+2026-10-15T17:21:59.5702150Z    SHA HASH URL: https://sdk.lunarg.com/sdk/sha/1.4.357.0/mac/vulkansdk-macos-1.4.357.0.zip.json
+2026-10-15T17:22:00.4651090Z    SHA verified: /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+2026-10-15T17:22:00.4664710Z 📦 Extracting Vulkan SDK...
+2026-10-15T17:22:00.4812040Z [command]/usr/bin/unzip -o -q /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+2026-10-15T17:22:47.9979650Z    Installed into folder: /Users/runner/vulkan-sdk/1.4.357.0
+2026-10-15T17:22:48.2873570Z [command]/opt/homebrew/bin/gtar --posix -cf cache.tzst --exclude cache.tzst -P -C /Users/runner/work/Sirius/Sirius --files-from manifest.txt --delay-directory-restore --use-compress-program zstdmt
+2026-10-15T17:22:59.5461940Z ##[warning]Failed to save: Unable to reserve cache with key cache-mac-arm64-vulkan-sdk-1.4.357.0, another job may be creating this cache.
+2026-10-15T17:22:59.5494390Z ✔️ [PATH] Added path to Vulkan SDK to environment variable PATH.
+2026-10-15T17:22:59.5496640Z ✔️ [ENV] Set env variable VULKAN_SDK -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS".
+2026-10-15T17:22:59.5498810Z ✔️ [ENV] Set env variable VULKAN_VERSION -> "1.4.357.0".
+2026-10-15T17:22:59.5500910Z ✔️ [ENV] Set env variable VK_LAYER_PATH -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d".
+2026-10-15T17:22:59.5506420Z ✔️ [ENV] Set env variable DYLD_LIBRARY_PATH -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:".
+2026-10-15T17:22:59.5507620Z ✅ Done.
+2026-10-15T17:22:59.5782930Z ##[group]Run command -v slangc
+2026-10-15T17:22:59.5783670Z [36;1mcommand -v slangc[0m
+2026-10-15T17:22:59.5783970Z [36;1mcommand -v spirv-val[0m
+2026-10-15T17:22:59.6132760Z shell: /bin/bash -e {0}
+2026-10-15T17:22:59.6133190Z env:
+2026-10-15T17:22:59.6133480Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:22:59.6133880Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:22:59.6134240Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:22:59.6134990Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:22:59.6135600Z ##[endgroup]
+2026-10-15T17:22:59.9287370Z /Users/runner/vulkan-sdk/1.4.357.0/macOS/bin/slangc
+2026-10-15T17:22:59.9288880Z /Users/runner/vulkan-sdk/1.4.357.0/macOS/bin/spirv-val
+2026-10-15T17:22:59.9353730Z ##[group]Run cmake --preset macos -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
+2026-10-15T17:22:59.9355970Z [36;1mcmake --preset macos -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON[0m
+2026-10-15T17:22:59.9400020Z shell: /bin/bash -e {0}
+2026-10-15T17:22:59.9400450Z env:
+2026-10-15T17:22:59.9400720Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:22:59.9401120Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:22:59.9401650Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:22:59.9402330Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:22:59.9402940Z ##[endgroup]
+2026-10-15T17:23:04.2070140Z -- The CXX compiler identification is AppleClang 17.0.0.17000013
+2026-10-15T17:23:05.0252520Z -- The C compiler identification is AppleClang 17.0.0.17000013
+2026-10-15T17:23:05.0981010Z -- Detecting CXX compiler ABI info
+2026-10-15T17:23:05.3886000Z -- Detecting CXX compiler ABI info - done
+2026-10-15T17:23:05.4321500Z -- Check for working CXX compiler: /usr/bin/c++ - skipped
+2026-10-15T17:23:05.4364540Z -- Detecting CXX compile features
+2026-10-15T17:23:05.4374720Z -- Detecting CXX compile features - done
+2026-10-15T17:23:05.4492740Z -- Detecting C compiler ABI info
+2026-10-15T17:23:05.6931800Z -- Detecting C compiler ABI info - done
+2026-10-15T17:23:05.7384150Z -- Check for working C compiler: /usr/bin/cc - skipped
+2026-10-15T17:23:05.7385430Z -- Detecting C compile features
+2026-10-15T17:23:05.7388650Z -- Detecting C compile features - done
+2026-10-15T17:23:06.2863210Z -- Found Python3: /opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14 (found version "3.14.7") found components: Interpreter
+2026-10-15T17:23:11.6865970Z -- ┌─ FTXUI options ─────────────────────
+2026-10-15T17:23:11.6935990Z -- │ FTXUI_ENABLE_INSTALL     : OFF
+2026-10-15T17:23:11.6936930Z -- │ FTXUI_BUILD_EXAMPLES     : OFF
+2026-10-15T17:23:11.6937410Z -- │ FTXUI_QUIET              : OFF
+2026-10-15T17:23:11.6938040Z -- │ FTXUI_BUILD_DOCS         : OFF
+2026-10-15T17:23:11.6938520Z -- │ FTXUI_BUILD_TESTS        : OFF
+2026-10-15T17:23:11.7123960Z -- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+2026-10-15T17:23:11.7124420Z -- │ FTXUI_ENABLE_COVERAGE    : OFF
+2026-10-15T17:23:11.7124820Z -- │ FTXUI_DEV_WARNINGS       : OFF
+2026-10-15T17:23:11.7125380Z -- │ FTXUI_CLANG_TIDY         : OFF
+2026-10-15T17:23:11.7125800Z -- └─────────────────────────────────────
+2026-10-15T17:23:11.7147570Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+2026-10-15T17:23:12.0279810Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+2026-10-15T17:23:12.0324850Z -- Found Threads: TRUE
+2026-10-15T17:23:30.0690700Z -- Using the multi-header code from /Users/runner/work/Sirius/Sirius/bin/macos/_deps/json-src/include/
+2026-10-15T17:23:31.5238490Z -- alignment receipt generated: 0/8 domains admitted
+2026-10-15T17:23:33.7022240Z -- Including Cocoa support
+2026-10-15T17:23:33.9136650Z -- The OBJC compiler identification is AppleClang 17.0.0.17000013
+2026-10-15T17:23:33.9255940Z -- Detecting OBJC compiler ABI info
+2026-10-15T17:23:34.3514330Z -- Detecting OBJC compiler ABI info - done
+2026-10-15T17:23:34.4003020Z -- Check for working OBJC compiler: /usr/bin/clang - skipped
+2026-10-15T17:23:37.6297950Z -- Mandatory test gating: ENABLED
+2026-10-15T17:23:37.6321000Z -- Release packaging: DISABLED (configure SIRIUS_ALIGNMENT_MODE=release with the complete attestation set)
+2026-10-15T17:23:37.6335390Z -- Configuring done (37.4s)
+2026-10-15T17:23:38.4445090Z -- Generating done (0.8s)
+2026-10-15T17:23:38.4467890Z -- Build files have been written to: /Users/runner/work/Sirius/Sirius/bin/macos
+2026-10-15T17:23:38.4617340Z ##[group]Run cmake --build --preset macos --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j3
+2026-10-15T17:23:38.4618720Z [36;1mcmake --build --preset macos --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j3[0m
+2026-10-15T17:23:38.4656250Z shell: /bin/bash -e {0}
+2026-10-15T17:23:38.4656610Z env:
+2026-10-15T17:23:38.4656890Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:23:38.4657260Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:23:38.4657640Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:23:38.4658400Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:23:38.4659060Z ##[endgroup]
+2026-10-15T17:23:38.5560140Z [0/2] Re-checking globbed directories...
+2026-10-15T17:23:39.1173990Z [1/288] Building CXX object src/sirius/CMakeFiles/sirius_base.dir/base/contracts.cpp.o
+2026-10-15T17:23:39.8476330Z [2/288] Building CXX object src/sirius/core/CMakeFiles/sirius_core.dir/tensor.cpp.o
+2026-10-15T17:23:40.3347440Z [3/288] Building CXX object src/sirius/CMakeFiles/sirius_base.dir/base/resource_locator.cpp.o
+2026-10-15T17:23:40.9212080Z [4/288] Compiling camera_frame_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:41.6065020Z [5/288] Compiling camera_frame_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:42.1723120Z [6/288] Building CXX object src/sirius/core/CMakeFiles/sirius_core.dir/geodesic_integrator.cpp.o
+2026-10-15T17:23:42.5566060Z [7/288] Compiling camera_frame_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:42.8371860Z [8/288] Linking CXX static library src/sirius/libsirius_base.a
+2026-10-15T17:23:42.9682720Z [9/288] Linking CXX static library src/sirius/core/libsirius_core.a
+2026-10-15T17:23:43.4658740Z [10/288] Compiling infinity_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:43.4760540Z warning[E41018]: returning without initializing out parameter
+2026-10-15T17:23:43.4873900Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T17:23:43.4975720Z     |
+2026-10-15T17:23:43.5076880Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T17:23:43.5177390Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T17:23:43.5279340Z ----'
+2026-10-15T17:23:43.5381050Z warning[E41035]: possible use of uninitialized variable
+2026-10-15T17:23:43.5483510Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T17:23:43.5586940Z     |
+2026-10-15T17:23:43.5686960Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T17:23:43.5788680Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T17:23:43.5900320Z ----'
+2026-10-15T17:23:43.8010280Z [11/288] Compiling infinity_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:43.8111600Z warning[E41018]: returning without initializing out parameter
+2026-10-15T17:23:43.8213240Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T17:23:43.8314080Z     |
+2026-10-15T17:23:43.8416170Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T17:23:43.8515710Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T17:23:43.8616050Z ----'
+2026-10-15T17:23:43.8720740Z warning[E41035]: possible use of uninitialized variable
+2026-10-15T17:23:43.8818080Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T17:23:43.8920340Z     |
+2026-10-15T17:23:43.9032620Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T17:23:43.9133380Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T17:23:43.9234980Z ----'
+2026-10-15T17:23:44.1924460Z [12/288] Compiling infinity_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:44.2026000Z warning[E41018]: returning without initializing out parameter
+2026-10-15T17:23:44.2127530Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T17:23:44.2228860Z     |
+2026-10-15T17:23:44.2330240Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T17:23:44.2433070Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T17:23:44.2535120Z ----'
+2026-10-15T17:23:44.2636490Z warning[E41035]: possible use of uninitialized variable
+2026-10-15T17:23:44.2737890Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T17:23:44.2840380Z     |
+2026-10-15T17:23:44.2942990Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T17:23:44.3045140Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T17:23:44.3148350Z ----'
+2026-10-15T17:23:44.3786680Z [13/288] Compiling metric_consistency_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:44.6702250Z [14/288] Compiling metric_consistency_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:44.9171690Z [15/288] Compiling metric_consistency_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:48.6859320Z [16/288] Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:01.4634610Z [17/288] Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)
+2026-10-15T17:24:01.9707880Z [18/288] Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:02.8906730Z [19/288] Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)
+2026-10-15T17:24:03.3203840Z [20/288] Compiling Slang kernel smoke.slang -> SPIR-V (+spirv-val)
+2026-10-15T17:24:03.5031040Z [21/288] Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:03.6325840Z [22/288] Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)
+2026-10-15T17:24:12.1322860Z [23/288] Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:12.3697840Z [24/288] Compiling Slang kernel trace.slang -> SPIR-V (+spirv-val)
+2026-10-15T17:24:12.5191820Z [25/288] Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:12.5497710Z [26/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/box.cpp.o
+2026-10-15T17:24:12.9900900Z [27/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/color.cpp.o
+2026-10-15T17:24:13.0004720Z [28/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/color_info.cpp.o
+2026-10-15T17:24:13.5815690Z [29/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/terminal.cpp.o
+2026-10-15T17:24:14.1507050Z [30/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/string.cpp.o
+2026-10-15T17:24:14.3727510Z [31/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/screen.cpp.o
+2026-10-15T17:24:14.5141490Z [32/288] Linking CXX static library _deps/ftxui-build/libftxui-screen.a
+2026-10-15T17:24:14.9317700Z [33/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/automerge.cpp.o
+2026-10-15T17:24:15.3009300Z [34/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/blink.cpp.o
+2026-10-15T17:24:15.7078990Z [35/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/bold.cpp.o
+2026-10-15T17:24:16.0849810Z [36/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/hyperlink.cpp.o
+2026-10-15T17:24:16.7019600Z [37/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/box_helper.cpp.o
+2026-10-15T17:24:16.8618050Z [38/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/border.cpp.o
+2026-10-15T17:24:17.5846510Z [39/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/clear_under.cpp.o
+2026-10-15T17:24:18.4072580Z [40/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/color.cpp.o
+2026-10-15T17:24:19.0505020Z [41/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/composite_decorator.cpp.o
+2026-10-15T17:24:19.1156370Z [42/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/canvas.cpp.o
+2026-10-15T17:24:19.6742050Z [43/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/dbox.cpp.o
+2026-10-15T17:24:19.7584480Z [44/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/dim.cpp.o
+2026-10-15T17:24:20.3681490Z [45/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flex.cpp.o
+2026-10-15T17:24:20.4311280Z [46/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox_config.cpp.o
+2026-10-15T17:24:20.5216470Z [47/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox.cpp.o
+2026-10-15T17:24:21.3857100Z [48/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox_helper.cpp.o
+2026-10-15T17:24:21.4201520Z [49/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/focus.cpp.o
+2026-10-15T17:24:22.1392960Z [50/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/gauge.cpp.o
+2026-10-15T17:24:22.2545750Z [51/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/frame.cpp.o
+2026-10-15T17:24:22.7692030Z [52/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/graph.cpp.o
+2026-10-15T17:24:23.0138360Z [53/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/gridbox.cpp.o
+2026-10-15T17:24:23.4404150Z [54/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/hbox.cpp.o
+2026-10-15T17:24:23.6726920Z [55/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/inverted.cpp.o
+2026-10-15T17:24:24.4357230Z [56/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/node.cpp.o
+2026-10-15T17:24:25.1340640Z [57/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/linear_gradient.cpp.o
+2026-10-15T17:24:25.3720990Z [58/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/node_decorator.cpp.o
+2026-10-15T17:24:26.6351040Z [59/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/paragraph.cpp.o
+2026-10-15T17:24:26.8134630Z [60/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/reflect.cpp.o
+2026-10-15T17:24:27.9970020Z [61/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/scroll_indicator.cpp.o
+2026-10-15T17:24:28.1819830Z [62/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/separator.cpp.o
+2026-10-15T17:24:28.9080770Z [63/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/size.cpp.o
+2026-10-15T17:24:29.8298940Z [64/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/strikethrough.cpp.o
+2026-10-15T17:24:29.8930070Z [65/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/spinner.cpp.o
+2026-10-15T17:24:30.6732250Z [66/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/text.cpp.o
+2026-10-15T17:24:31.0089070Z [67/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/table.cpp.o
+2026-10-15T17:24:31.3910720Z [68/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/underlined.cpp.o
+2026-10-15T17:24:31.7273930Z [69/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/underlined_double.cpp.o
+2026-10-15T17:24:32.1944470Z [70/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/util.cpp.o
+2026-10-15T17:24:32.3889930Z [71/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/vbox.cpp.o
+2026-10-15T17:24:32.5847460Z [72/288] Verifying revision-bound upstream/downstream alignment
+2026-10-15T17:24:32.5882370Z alignment receipt is current: 0/8 domains admitted
+2026-10-15T17:24:32.7259730Z [73/288] Linking CXX static library _deps/ftxui-build/libftxui-dom.a
+2026-10-15T17:24:33.3921440Z [74/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/animation.cpp.o
+2026-10-15T17:24:34.6140650Z [75/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/button.cpp.o
+2026-10-15T17:24:35.2914540Z [76/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend_cpu.dir/cpu/geodesic_tracer.cpp.o
+2026-10-15T17:24:35.8432380Z [77/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/catch_event.cpp.o
+2026-10-15T17:24:36.2196080Z [78/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/checkbox.cpp.o
+2026-10-15T17:24:36.7566310Z [79/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/collapsible.cpp.o
+2026-10-15T17:24:37.0169650Z [80/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/component.cpp.o
+2026-10-15T17:24:37.9784810Z [81/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/container.cpp.o
+2026-10-15T17:24:38.6298660Z [82/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/component_options.cpp.o
+2026-10-15T17:24:39.0763160Z [83/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/dropdown.cpp.o
+2026-10-15T17:24:39.2299290Z [84/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/event.cpp.o
+2026-10-15T17:24:40.2943550Z [85/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/hoverable.cpp.o
+2026-10-15T17:24:40.4576950Z [86/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/input.cpp.o
+2026-10-15T17:24:41.0491520Z [87/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/loop.cpp.o
+2026-10-15T17:24:41.5205090Z [88/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/maybe.cpp.o
+2026-10-15T17:24:42.4857420Z [89/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/modal.cpp.o
+2026-10-15T17:24:42.7286490Z [90/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/menu.cpp.o
+2026-10-15T17:24:42.7387830Z [91/288] Building bounded retained camera and joint transport stages
+2026-10-15T17:24:42.7508560Z Camera 5292 instructions; 613 registers; [47720, 61048, 512324, 512324] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.7610590Z Transport optional FMA32: validated
+2026-10-15T17:24:42.7721120Z Transport 2587 instructions; 459 registers; [85364, 98008, 99740, 99740] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.7823940Z Endpoint optional FMA32: validated
+2026-10-15T17:24:42.7925850Z Endpoint 2205 instructions; 612 registers; [99300, 111960, 145344, 145344] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.8049270Z Dense 6345 instructions; 815 registers; [77952, 90628, 116204, 116204] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.8151200Z Initialize 1961 instructions; 362 registers; [57108, 70468, 77444, 77444] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.8226750Z RayCamera 6115 instructions; 660 registers; [45368, 58728, 475256, 475256] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.8343360Z DopriPhase 2088 instructions; 629 registers; [58740, 72100, 92844, 92844] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:43.4208940Z [92/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/radiobox.cpp.o
+2026-10-15T17:24:43.5381680Z [93/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/renderer.cpp.o
+2026-10-15T17:24:45.6939690Z [94/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_integrator.cpp.o
+2026-10-15T17:24:46.3192940Z [95/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o
+2026-10-15T17:24:47.1821820Z [96/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o
+2026-10-15T17:24:47.4681960Z [97/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/resizable_split.cpp.o
+2026-10-15T17:24:49.1939660Z [98/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/screen_interactive.cpp.o
+2026-10-15T17:24:49.3046390Z [99/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/slider.cpp.o
+2026-10-15T17:24:49.7126650Z [100/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_trace_executor.cpp.o
+2026-10-15T17:24:49.9594210Z [101/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/util.cpp.o
+2026-10-15T17:24:50.0788780Z [102/288] Linking CXX static library src/sirius/backend/libsirius_backend_cpu.a
+2026-10-15T17:24:50.2122740Z [103/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/terminal_input_parser.cpp.o
+2026-10-15T17:24:50.2634540Z [104/288] Linking CXX static library src/sirius/backend/libsirius_backend.a
+2026-10-15T17:24:50.7881270Z [105/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/window.cpp.o
+2026-10-15T17:24:50.9042500Z [106/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/png_writer.cpp.o
+2026-10-15T17:24:52.6900880Z [107/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/stb_impl.cpp.o
+2026-10-15T17:24:53.2506950Z [108/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/stb_write_impl.cpp.o
+2026-10-15T17:24:53.7279620Z [109/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/exr_writer.cpp.o
+2026-10-15T17:24:54.8757610Z [110/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/memory_governor.cpp.o
+2026-10-15T17:24:54.9291560Z [111/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/render_evidence.cpp.o
+2026-10-15T17:24:55.8078030Z [112/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/dispatch_governor.cpp.o
+2026-10-15T17:24:58.5498590Z [113/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/point_source_detector.cpp.o
+2026-10-15T17:24:58.8435890Z [114/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/pixel_shading.cpp.o
+2026-10-15T17:24:59.9046680Z [115/288] Building C object src/sirius/render/CMakeFiles/sirius_render.dir/__/__/__/lib/tinyexr/miniz.c.o
+2026-10-15T17:25:00.3289770Z [116/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/ray_work_queue.cpp.o
+2026-10-15T17:25:00.9580250Z [117/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/render_session.cpp.o
+2026-10-15T17:25:01.4889280Z [118/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/init.c.o
+2026-10-15T17:25:01.5224320Z [119/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/context.c.o
+2026-10-15T17:25:01.9318440Z [120/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/monitor.c.o
+2026-10-15T17:25:01.9933950Z [121/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/input.c.o
+2026-10-15T17:25:02.3207230Z [122/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/platform.c.o
+2026-10-15T17:25:02.3968290Z [123/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o
+2026-10-15T17:25:02.7196150Z [124/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/window.c.o
+2026-10-15T17:25:02.8116860Z [125/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o
+2026-10-15T17:25:03.0845260Z [126/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o
+2026-10-15T17:25:03.1850140Z [127/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_init.c.o
+2026-10-15T17:25:03.4153470Z [128/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o
+2026-10-15T17:25:03.5754170Z [129/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_window.c.o
+2026-10-15T17:25:03.7789440Z [130/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o
+2026-10-15T17:25:04.0189030Z [131/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o
+2026-10-15T17:25:04.1829450Z [132/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o
+2026-10-15T17:25:04.4419060Z [133/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o
+2026-10-15T17:25:05.0302300Z [134/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o
+2026-10-15T17:25:05.4431810Z [135/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o
+2026-10-15T17:25:05.4460590Z [136/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o
+2026-10-15T17:25:05.7293290Z [137/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o
+2026-10-15T17:25:05.8881030Z [138/288] Linking CXX static library _deps/ftxui-build/libftxui-component.a
+2026-10-15T17:25:06.0161870Z [139/288] Linking CXX static library src/sirius/render/libsirius_render.a
+2026-10-15T17:25:06.1392060Z [140/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o
+2026-10-15T17:25:06.2325660Z [141/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o
+2026-10-15T17:25:09.5675020Z [142/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/command_router.cpp.o
+2026-10-15T17:25:09.9720360Z [143/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/alignment_authority.cpp.o
+2026-10-15T17:25:11.0720230Z [144/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/render_command.cpp.o
+2026-10-15T17:25:13.6406740Z [145/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/cli_output.cpp.o
+2026-10-15T17:25:14.0572470Z [146/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/config_command.cpp.o
+2026-10-15T17:25:15.8437390Z [147/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/info_command.cpp.o
+2026-10-15T17:25:16.7259540Z [148/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/platform_paths.cpp.o
+2026-10-15T17:25:17.0266570Z [149/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/config/session_config_adapter.cpp.o
+2026-10-15T17:25:18.7028630Z [150/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/config/config_loader.cpp.o
+2026-10-15T17:25:19.3942860Z [151/288] Building C object src/sirius/app/CMakeFiles/sirius_app_lib.dir/__/__/__/lib/glad/src/glad.c.o
+2026-10-15T17:25:19.5418800Z [152/288] Linking C static library lib/glfw/src/libglfw3.a
+2026-10-15T17:25:20.6578270Z [153/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/viewer/interactive_viewer.cpp.o
+2026-10-15T17:25:21.1252320Z [154/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/view_command.cpp.o
+2026-10-15T17:25:21.2641620Z [155/288] Linking CXX static library src/sirius/app/libsirius_app_lib.a
+2026-10-15T17:25:21.6381950Z [156/288] Building CXX object src/sirius/app/CMakeFiles/sirius.dir/main.cpp.o
+2026-10-15T17:25:22.7252110Z [157/288] Building bounded retained camera program and independent witnesses
+2026-10-15T17:25:22.7354060Z program_camera_probe-fp32: compiled and validated
+2026-10-15T17:25:22.7474970Z program_camera_probe-fp32comp: compiled and validated
+2026-10-15T17:25:23.2654980Z [158/288] Linking CXX executable src/sirius/app/sirius; Staging Sirius runtime resources beside the executable; Staging interactive-viewer shaders beside the executable; Staging Vulkan runtime kernels beside the executable
+2026-10-15T17:25:23.3199960Z [159/288] Generating independent exact binary32 arithmetic expectations
+2026-10-15T17:25:23.3303680Z {"bytes": 4182444, "categories": {"primitive/declared-halfway-boundary": 24, "primitive/edge-cross": 38332, "primitive/raw-fixed-seed": 28672, "primitive/subnormal-fixed-seed": 28672, "primitive/unary-edge": 468, "primitive/unary-fixed-seed": 24576, "residual/analytic-selfcheck": 16, "residual/bounded-raw-fixed-seed": 16384, "residual/edge-cross": 4356, "residual/product-rounding-boundaries": 8192, "residual/scaled-mantissa-fixed-seed": 16384, "residual/subnormal-input-fixed-seed": 8192}, "fixture_sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e", "magic": "PB32", "negative_zero_residuals": 9635, "nonzero_rounded_residuals": 31239, "primitive_cases": 120744, "records": 174268, "residual_cases": 53524, "subnormal_residuals": 5517, "version": 1}
+2026-10-15T17:25:24.0489760Z [160/288] Staging exact qualification inputs beside sirius_backend_tests
+2026-10-15T17:25:24.1802780Z [161/288] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+2026-10-15T17:25:24.8472450Z [162/288] Staging exact qualification inputs beside sirius_render_tests
+2026-10-15T17:25:25.6500960Z [163/288] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/contracts_test.cpp.o
+2026-10-15T17:25:26.3828030Z [164/288] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+2026-10-15T17:25:26.5112470Z [165/288] Linking CXX static library lib/libgtest.a
+2026-10-15T17:25:26.6491510Z [166/288] Linking CXX static library lib/libgtest_main.a
+2026-10-15T17:25:27.2452670Z [167/288] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/error_test.cpp.o
+2026-10-15T17:25:27.4958330Z [168/288] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/sha256_test.cpp.o
+2026-10-15T17:25:28.1510350Z [169/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/autodiff_dual_test.cpp.o
+2026-10-15T17:25:29.2494370Z [170/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o
+2026-10-15T17:25:29.5534180Z [171/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/retained_arithmetic_test.cpp.o
+2026-10-15T17:25:30.0806810Z [172/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o
+2026-10-15T17:25:31.7680120Z [173/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o
+2026-10-15T17:25:31.7928700Z [174/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_test.cpp.o
+2026-10-15T17:25:32.0069170Z [175/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o
+2026-10-15T17:25:33.2470720Z [176/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o
+2026-10-15T17:25:34.5057160Z [177/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o
+2026-10-15T17:25:35.1085250Z [178/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o
+2026-10-15T17:25:35.6982880Z [179/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o
+2026-10-15T17:25:36.2018090Z [180/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o
+2026-10-15T17:25:37.5652200Z [181/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/coordinates_test.cpp.o
+2026-10-15T17:25:38.8253160Z [182/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o
+2026-10-15T17:25:39.0899250Z [183/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o
+2026-10-15T17:25:39.4400250Z [184/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_equation_test.cpp.o
+2026-10-15T17:25:41.3826510Z [185/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_naninf_test.cpp.o
+2026-10-15T17:25:41.6515030Z [186/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o
+2026-10-15T17:25:41.8652980Z [187/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o
+2026-10-15T17:25:42.7728610Z [188/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_stability_test.cpp.o
+2026-10-15T17:25:43.1235410Z [189/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/christoffel_test.cpp.o
+2026-10-15T17:25:44.2396350Z [190/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o
+2026-10-15T17:25:45.4134960Z [191/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o
+2026-10-15T17:25:45.6996490Z [192/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o
+2026-10-15T17:25:46.6323480Z [193/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/horizon_authority_test.cpp.o
+2026-10-15T17:25:47.7733290Z [194/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_test.cpp.o
+2026-10-15T17:25:48.3202360Z [195/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_derivative_test.cpp.o
+2026-10-15T17:25:49.6945010Z [196/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_loader_test.cpp.o
+2026-10-15T17:25:50.4172220Z [197/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_registry_test.cpp.o
+2026-10-15T17:25:51.0830390Z [198/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o
+2026-10-15T17:25:52.2339020Z [199/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/reissner_nordstrom_test.cpp.o
+2026-10-15T17:25:53.7245310Z [200/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/schwarzschild_test.cpp.o
+2026-10-15T17:25:53.8364990Z [201/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o
+2026-10-15T17:25:54.7653430Z [202/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/walker_penrose_test.cpp.o
+2026-10-15T17:25:55.5569210Z [203/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/stokes_test.cpp.o
+2026-10-15T17:25:55.7696680Z [204/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/warp_drive_test.cpp.o
+2026-10-15T17:25:56.8644860Z [205/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/tensor_inverse_test.cpp.o
+2026-10-15T17:25:57.3440650Z [206/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/turbulence_test.cpp.o
+2026-10-15T17:25:57.4437190Z [207/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/novikov_thorne_disk_test.cpp.o
+2026-10-15T17:25:58.3225090Z [208/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/volumetric_disk_test.cpp.o
+2026-10-15T17:25:58.9982660Z [209/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o
+2026-10-15T17:25:59.3753330Z [210/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/postprocess_test.cpp.o
+2026-10-15T17:25:59.8537670Z [211/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o
+2026-10-15T17:26:00.5528410Z [212/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o
+2026-10-15T17:26:02.5145990Z [213/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/starfield_test.cpp.o
+2026-10-15T17:26:02.7828790Z [214/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/point_source_transfer_test.cpp.o
+2026-10-15T17:26:03.3317430Z [215/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o
+2026-10-15T17:26:05.1687610Z [216/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_differential_test.cpp.o
+2026-10-15T17:26:05.5859720Z [217/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_map_test.cpp.o
+2026-10-15T17:26:06.1302030Z [218/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o
+2026-10-15T17:26:06.6294380Z [219/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/tensor_test.cpp.o
+2026-10-15T17:26:07.4121230Z [220/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o
+2026-10-15T17:26:08.4405320Z [221/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o
+2026-10-15T17:26:09.5765950Z [222/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o
+2026-10-15T17:26:09.9472870Z [223/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o
+2026-10-15T17:26:10.1735790Z [224/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o
+2026-10-15T17:26:11.9398670Z [225/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o
+2026-10-15T17:26:12.0046880Z [226/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o
+2026-10-15T17:26:12.3467010Z [227/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o
+2026-10-15T17:26:13.7062630Z [228/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/portable_binary32_test.cpp.o
+2026-10-15T17:26:14.8768070Z [229/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_jacobi_oracle_test.cpp.o
+2026-10-15T17:26:17.4794010Z [230/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_trace_boundary_test.cpp.o
+2026-10-15T17:26:17.6052360Z [231/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/coupled_transport_test.cpp.o
+2026-10-15T17:26:20.0825460Z [232/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_map_trace_test.cpp.o
+2026-10-15T17:26:20.5639530Z [233/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o
+2026-10-15T17:26:21.8206720Z [234/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/polarisation_acceptance_test.cpp.o
+2026-10-15T17:26:24.0344650Z [235/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_infinity_trace_test.cpp.o
+2026-10-15T17:26:25.9810100Z [236/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/volume_acceptance_test.cpp.o
+2026-10-15T17:26:27.9970560Z [237/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/vulkan_smoke_test.cpp.o
+2026-10-15T17:26:29.2786880Z [238/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_metric_consistency_test.cpp.o
+2026-10-15T17:26:31.6224540Z [239/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_camera_frame_test.cpp.o
+2026-10-15T17:26:32.1766860Z [240/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_camera_program_test.cpp.o
+2026-10-15T17:26:32.2308970Z [241/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o
+2026-10-15T17:26:37.6293500Z [242/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_infinity_test.cpp.o
+2026-10-15T17:26:39.5046930Z [243/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o
+2026-10-15T17:26:42.5661380Z [244/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o
+2026-10-15T17:26:42.8436150Z [245/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_beam_test.cpp.o
+2026-10-15T17:26:44.0215390Z [246/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_portability_test.cpp.o
+2026-10-15T17:26:46.9220420Z [247/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/alcubierre_acceptance_test.cpp.o
+2026-10-15T17:26:51.1063040Z [248/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o
+2026-10-15T17:26:51.5206980Z [249/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o
+2026-10-15T17:26:52.9367790Z [250/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o
+2026-10-15T17:26:53.1989040Z [251/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o
+2026-10-15T17:26:54.6750520Z [252/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o
+2026-10-15T17:26:54.7927590Z [253/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/film_pipeline_test.cpp.o
+2026-10-15T17:26:57.0468260Z [254/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/tile_scheduler_test.cpp.o
+2026-10-15T17:26:58.3197950Z [255/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o
+2026-10-15T17:26:58.7008300Z [256/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/progress_tracker_test.cpp.o
+2026-10-15T17:27:02.0516060Z [257/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/memory_governor_test.cpp.o
+2026-10-15T17:27:04.5469770Z [258/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/render_evidence_test.cpp.o
+2026-10-15T17:27:05.4176740Z [259/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o
+2026-10-15T17:27:08.1251550Z [260/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/ray_bundle_test.cpp.o
+2026-10-15T17:27:09.2018430Z [261/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o
+2026-10-15T17:27:11.3094740Z [262/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/starfield_point_test.cpp.o
+2026-10-15T17:27:13.0540840Z [263/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o
+2026-10-15T17:27:15.5618260Z [264/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/ray_work_queue_test.cpp.o
+2026-10-15T17:27:17.1645820Z [265/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_physics_test.cpp.o
+2026-10-15T17:27:17.2567870Z [266/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_test.cpp.o
+2026-10-15T17:27:18.0033900Z [267/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/doppler_toggle_test.cpp.o
+2026-10-15T17:27:18.9459460Z [268/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o
+2026-10-15T17:27:18.9561370Z [269/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/pixel_sampling_test.cpp.o
+2026-10-15T17:27:22.2171360Z [270/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/shadow_boundary_test.cpp.o
+2026-10-15T17:27:22.5532270Z [271/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/alignment_authority_test.cpp.o
+2026-10-15T17:27:23.1821090Z [272/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_validation_test.cpp.o
+2026-10-15T17:27:24.7889520Z [273/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_environment_test.cpp.o
+2026-10-15T17:27:26.9633870Z [274/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_schema_roundtrip_test.cpp.o
+2026-10-15T17:27:27.2088780Z [275/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/render_command_parse_test.cpp.o
+2026-10-15T17:27:28.5528280Z [276/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/platform_paths_test.cpp.o
+2026-10-15T17:27:30.9065800Z [277/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/session_config_adapter_test.cpp.o
+2026-10-15T17:27:31.6377420Z [278/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/command_router_test.cpp.o
+2026-10-15T17:27:32.4440820Z [279/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_loading_test.cpp.o
+2026-10-15T17:27:32.6182910Z [280/288] Linking CXX executable tests/sirius_base_tests
+2026-10-15T17:27:32.9965800Z [281/288] Linking CXX executable tests/core/sirius_core_tests
+2026-10-15T17:27:33.1793220Z [282/288] Linking CXX executable tests/oracle/sirius_oracle_tests
+2026-10-15T17:27:33.4436200Z [283/288] Linking CXX executable tests/backend/sirius_backend_tests
+2026-10-15T17:27:33.4537230Z ld: warning: ignoring duplicate libraries: 'src/sirius/backend/libsirius_backend.a', 'src/sirius/backend/libsirius_backend_cpu.a'
+2026-10-15T17:27:33.9418360Z [284/288] Linking CXX executable src/sirius/app/sirius_render_tests
+2026-10-15T17:27:33.9520520Z ld: warning: ignoring duplicate libraries: 'src/sirius/render/libsirius_render.a'
+2026-10-15T17:27:34.1537260Z [285/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/viewer_display_contract_test.cpp.o
+2026-10-15T17:27:34.5353670Z [286/288] Linking CXX executable src/sirius/app/sirius_app_tests
+2026-10-15T17:27:39.6255500Z [287/288] Verifying test-label, operating-model, and repository-structure governance
+2026-10-15T17:27:39.6256350Z CTest label file is up to date
+2026-10-15T17:27:39.6257160Z operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-15T17:27:39.6258290Z repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-15T17:27:39.6262100Z strict qualification/release policy rejected every weakened configuration and product
+2026-10-15T17:27:39.6262580Z escaping-copy controls: filesystem symlinks
+2026-10-15T17:27:39.6263120Z build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-15T17:27:39.6625720Z ##[group]Run test ! -e bin/macos/generated/sirius/mandatory_gate.json
+2026-10-15T17:27:39.6626450Z [36;1mtest ! -e bin/macos/generated/sirius/mandatory_gate.json[0m
+2026-10-15T17:27:39.6627050Z [36;1mctest --test-dir bin/macos --output-on-failure --no-tests=error \[0m
+2026-10-15T17:27:39.6630010Z [36;1m  -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'[0m
+2026-10-15T17:27:39.6633430Z [36;1mtest ! -e bin/macos/generated/sirius/mandatory_gate.json[0m
+2026-10-15T17:27:39.6843210Z shell: /bin/bash -e {0}
+2026-10-15T17:27:39.6844160Z env:
+2026-10-15T17:27:39.6844540Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:27:39.6845250Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:27:39.6846180Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:27:39.6847620Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:27:39.6849370Z ##[endgroup]
+2026-10-15T17:27:40.5469970Z Test project /Users/runner/work/Sirius/Sirius/bin/macos
+2026-10-15T17:27:40.6101240Z       Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+2026-10-15T17:27:44.1155230Z  1/10 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    3.50 sec
+2026-10-15T17:27:44.1157570Z       Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2026-10-15T17:27:44.1745040Z  2/10 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.06 sec
+2026-10-15T17:27:44.1750510Z       Start   16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+2026-10-15T17:27:44.2644190Z  3/10 Test   #16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls ..........   Passed    0.09 sec
+2026-10-15T17:27:44.2647780Z       Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+2026-10-15T17:27:47.0259410Z  4/10 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................   Passed    2.76 sec
+2026-10-15T17:27:47.0261260Z       Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+2026-10-15T17:28:16.6697400Z  5/10 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   29.63 sec
+2026-10-15T17:28:16.6701010Z       Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+2026-10-15T17:28:17.1939610Z  6/10 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.52 sec
+2026-10-15T17:28:17.1942230Z       Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+2026-10-15T17:28:17.2874810Z  7/10 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.09 sec
+2026-10-15T17:28:17.2876840Z       Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+2026-10-15T17:28:17.6446260Z  8/10 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.36 sec
+2026-10-15T17:28:17.6455680Z       Start 1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+2026-10-15T17:28:17.6573780Z  9/10 Test #1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.01 sec
+2026-10-15T17:28:17.6577450Z       Start 1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+2026-10-15T17:28:18.5872940Z 10/10 Test #1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.93 sec
+2026-10-15T17:28:18.5877230Z 
+2026-10-15T17:28:18.5877750Z 100% tests passed out of 10
+2026-10-15T17:28:18.5878340Z 
+2026-10-15T17:28:18.5878510Z Label Time Summary:
+2026-10-15T17:28:18.5879660Z Correctness    =   0.94 sec*proc (2 tests)
+2026-10-15T17:28:18.5880490Z Mandatory      =  37.95 sec*proc (10 tests)
+2026-10-15T17:28:18.5882190Z Operational    =  37.95 sec*proc (10 tests)
+2026-10-15T17:28:18.5882850Z 
+2026-10-15T17:28:18.5883280Z Total Test time (real) =  38.02 sec
+2026-10-15T17:28:18.6071180Z ##[group]Run cmake --build --preset macos --target RunNativeBuildEvidence -j3
+2026-10-15T17:28:18.6071710Z [36;1mcmake --build --preset macos --target RunNativeBuildEvidence -j3[0m
+2026-10-15T17:28:18.6325370Z shell: /bin/bash -e {0}
+2026-10-15T17:28:18.6325620Z env:
+2026-10-15T17:28:18.6326000Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:28:18.6326320Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:28:18.6326800Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:28:18.6327450Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:28:18.6328060Z ##[endgroup]
+2026-10-15T17:28:18.7356990Z [0/2] Re-checking globbed directories...
+2026-10-15T17:28:19.5982340Z [1/6] Verifying revision-bound upstream/downstream alignment
+2026-10-15T17:28:19.6036850Z alignment receipt is current: 0/8 domains admitted
+2026-10-15T17:28:20.1380080Z [2/6] Staging exact qualification inputs beside sirius_backend_tests
+2026-10-15T17:28:20.1409590Z [3/6] Staging exact qualification inputs beside sirius_render_tests
+2026-10-15T17:28:27.0982700Z [4/6] Verifying test-label, operating-model, and repository-structure governance
+2026-10-15T17:28:27.0983410Z CTest label file is up to date
+2026-10-15T17:28:27.0987700Z operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-15T17:28:27.0989180Z repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-15T17:28:27.0990020Z strict qualification/release policy rejected every weakened configuration and product
+2026-10-15T17:28:27.0990540Z escaping-copy controls: filesystem symlinks
+2026-10-15T17:28:27.0991290Z build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-15T17:29:06.9869870Z [5/6] === NATIVE BUILD NON-RENDER EVIDENCE GATE ===
+2026-10-15T17:29:06.9871420Z native build gate bound 7 compiled executables and 9 products and 20 generated test inputs to 9 non-render controls
+2026-10-15T17:29:07.0394400Z ##[group]Run python3 scripts/verify-attestation.py --record-build --domain macos-native-build --platform macos --source-revision f22dc025d112c2d967356dead6b6e9caf8b42d67 --source-root . --artifact bin/macos/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/macos/generated/sirius/alignment_receipt.json --native-build-gate bin/macos/generated/sirius/native_build_gate.json --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/macos/src/sirius/app/sirius --test-dir bin/macos --output attestations/macos-build.json
+2026-10-15T17:29:07.0398010Z [36;1mpython3 scripts/verify-attestation.py --record-build --domain macos-native-build --platform macos --source-revision f22dc025d112c2d967356dead6b6e9caf8b42d67 --source-root . --artifact bin/macos/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/macos/generated/sirius/alignment_receipt.json --native-build-gate bin/macos/generated/sirius/native_build_gate.json --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/macos/src/sirius/app/sirius --test-dir bin/macos --output attestations/macos-build.json[0m
+2026-10-15T17:29:07.0443520Z shell: /bin/bash -e {0}
+2026-10-15T17:29:07.0443700Z env:
+2026-10-15T17:29:07.0444010Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:29:07.0444320Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:29:07.0444700Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:29:07.0445320Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:29:07.0445920Z ##[endgroup]
+2026-10-15T17:29:08.0315910Z build attestation recorded and verified: attestations/macos-build.json
+2026-10-15T17:29:08.0603580Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-15T17:29:08.0604110Z with:
+2026-10-15T17:29:08.0604420Z   name: sirius-macos-native-attestation
+2026-10-15T17:29:08.0604700Z   path: attestations
+2026-10-15T17:29:08.0605010Z   if-no-files-found: warn
+2026-10-15T17:29:08.0605440Z   compression-level: 6
+2026-10-15T17:29:08.0605660Z   overwrite: false
+2026-10-15T17:29:08.0605840Z   include-hidden-files: false
+2026-10-15T17:29:08.0606030Z   archive: true
+2026-10-15T17:29:08.0606180Z env:
+2026-10-15T17:29:08.0606360Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:29:08.0606700Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:29:08.0607100Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:29:08.0607840Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:29:08.0608390Z ##[endgroup]
+2026-10-15T17:29:08.4824040Z With the provided path, there will be 40 files uploaded
+2026-10-15T17:29:08.4831760Z Artifact name is valid!
+2026-10-15T17:29:08.4832740Z Root directory input is valid!
+2026-10-15T17:29:08.8640590Z Uploading artifact: sirius-macos-native-attestation.zip
+2026-10-15T17:29:08.8641370Z Beginning upload of artifact content to blob storage
+2026-10-15T17:29:10.2308010Z Uploaded bytes 8388608
+2026-10-15T17:29:10.6398370Z Uploaded bytes 16777216
+2026-10-15T17:29:10.7828780Z Uploaded bytes 25165824
+2026-10-15T17:29:10.9281730Z Uploaded bytes 33554432
+2026-10-15T17:29:11.2847520Z Uploaded bytes 41943040
+2026-10-15T17:29:12.2464920Z Uploaded bytes 50331648
+2026-10-15T17:29:12.7336840Z Uploaded bytes 54880839
+2026-10-15T17:29:12.7839370Z Finished uploading artifact content to blob storage!
+2026-10-15T17:29:12.7939740Z SHA256 digest of uploaded artifact is 52b2a233ae57fde8b4888ade1f5aa57a55e3ab8b80fb6d6031434d998b928938
+2026-10-15T17:29:12.8041070Z Finalizing artifact upload
+2026-10-15T17:29:13.1128100Z Artifact sirius-macos-native-attestation successfully finalized. Artifact ID 11993284875
+2026-10-15T17:29:13.1130020Z Artifact sirius-macos-native-attestation has been successfully uploaded! Final size is 54880839 bytes. Artifact ID is 11993284875
+2026-10-15T17:29:13.1147320Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38776590607/artifacts/11993284875
+2026-10-15T17:29:13.1300450Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-15T17:29:13.1300850Z with:
+2026-10-15T17:29:13.1301070Z   name: sirius-gate-diagnostics-integration-macos-no-render
+2026-10-15T17:29:13.1301900Z   path: bin/**/generated/sirius/*gate*.json
+bin/**/generated/sirius/*gate*.xml
+bin/**/generated/sirius/*gate*.log
+bin/**/Testing/Temporary/LastTest.log
+bin/**/Testing/Temporary/LastTestsFailed.log
+linux-tests.xml
+windows-tests.xml
+macos-tests.xml
+
+2026-10-15T17:29:13.1303100Z   if-no-files-found: ignore
+2026-10-15T17:29:13.1303280Z   compression-level: 6
+2026-10-15T17:29:13.1303460Z   overwrite: false
+2026-10-15T17:29:13.1303670Z   include-hidden-files: false
+2026-10-15T17:29:13.1303870Z   archive: true
+2026-10-15T17:29:13.1304080Z env:
+2026-10-15T17:29:13.1304290Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:29:13.1304540Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:29:13.1304900Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:29:13.1305530Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:29:13.1306010Z ##[endgroup]
+2026-10-15T17:29:13.5471500Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-15T17:29:13.5474580Z The least common ancestor is /Users/runner/work/Sirius/Sirius. This will be the root directory of the artifact
+2026-10-15T17:29:13.5476120Z With the provided path, there will be 4 files uploaded
+2026-10-15T17:29:13.5477310Z Artifact name is valid!
+2026-10-15T17:29:13.5477830Z Root directory input is valid!
+2026-10-15T17:29:13.9082930Z Uploading artifact: sirius-gate-diagnostics-integration-macos-no-render.zip
+2026-10-15T17:29:13.9284620Z Beginning upload of artifact content to blob storage
+2026-10-15T17:29:14.0088900Z Uploaded bytes 5685
+2026-10-15T17:29:14.0542040Z Finished uploading artifact content to blob storage!
+2026-10-15T17:29:14.0643740Z SHA256 digest of uploaded artifact is 7196e0bc2eef9af18d665152904063ba9eb4b83f87bb19bbac342f38c39cbc29
+2026-10-15T17:29:14.0744270Z Finalizing artifact upload
+2026-10-15T17:29:14.3884950Z Artifact sirius-gate-diagnostics-integration-macos-no-render successfully finalized. Artifact ID 11995095142
+2026-10-15T17:29:14.3890410Z Artifact sirius-gate-diagnostics-integration-macos-no-render has been successfully uploaded! Final size is 5685 bytes. Artifact ID is 11995095142
+2026-10-15T17:29:14.3898270Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38776590607/artifacts/11995095142
+2026-10-15T17:29:14.4113180Z Post job cleanup.
+2026-10-15T17:29:14.5619580Z [command]/opt/homebrew/bin/git version
+2026-10-15T17:29:14.5761330Z git version 2.55.0
+2026-10-15T17:29:14.5783110Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/5ac9f780-f942-4274-9437-31af689bdf18/.gitconfig'
+2026-10-15T17:29:14.5795890Z Temporarily overriding HOME='/Users/runner/work/_temp/5ac9f780-f942-4274-9437-31af689bdf18' before making global git config changes
+2026-10-15T17:29:14.5797910Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T17:29:14.5799800Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Sirius/Sirius
+2026-10-15T17:29:14.5966100Z Removing SSH command configuration
+2026-10-15T17:29:14.5972560Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T17:29:14.6074770Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T17:29:14.8291030Z Removing HTTP extra header
+2026-10-15T17:29:14.8394360Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T17:29:14.8697370Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-15T17:29:15.1549360Z Removing includeIf entries pointing to credentials config files
+2026-10-15T17:29:15.1581940Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T17:29:15.1593510Z includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git.path
+2026-10-15T17:29:15.1602170Z includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path
+2026-10-15T17:29:15.1606020Z includeif.gitdir:/github/workspace/.git.path
+2026-10-15T17:29:15.1612200Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-15T17:29:15.1615440Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git.path
+2026-10-15T17:29:15.1618320Z /Users/runner/work/_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config
+2026-10-15T17:29:15.1664970Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git.path \/Users\/runner\/work\/_temp\/git\-credentials\-224323cf\-99b8\-4c84\-bc45\-39b19f7fecb0\.config
+2026-10-15T17:29:15.1667250Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path
+2026-10-15T17:29:15.1737420Z /Users/runner/work/_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config
+2026-10-15T17:29:15.1752260Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path \/Users\/runner\/work\/_temp\/git\-credentials\-224323cf\-99b8\-4c84\-bc45\-39b19f7fecb0\.config
+2026-10-15T17:29:15.1850150Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-15T17:29:15.1937080Z /github/runner_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config
+2026-10-15T17:29:15.1943160Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-224323cf\-99b8\-4c84\-bc45\-39b19f7fecb0\.config
+2026-10-15T17:29:15.2048010Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-15T17:29:15.2136720Z /github/runner_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config
+2026-10-15T17:29:15.2154450Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-224323cf\-99b8\-4c84\-bc45\-39b19f7fecb0\.config
+2026-10-15T17:29:15.2275070Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-15T17:29:15.4104260Z Removing credentials config '/Users/runner/work/_temp/git-credentials-224323cf-99b8-4c84-bc45-39b19f7fecb0.config'
+2026-10-15T17:29:15.4465160Z Cleaning up orphan processes

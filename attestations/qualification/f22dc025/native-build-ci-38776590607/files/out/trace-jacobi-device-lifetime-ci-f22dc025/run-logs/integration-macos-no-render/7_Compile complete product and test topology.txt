@@ -1,0 +1,354 @@
+﻿2026-10-15T17:23:38.4617320Z ##[group]Run cmake --build --preset macos --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j3
+2026-10-15T17:23:38.4618720Z [36;1mcmake --build --preset macos --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j3[0m
+2026-10-15T17:23:38.4656240Z shell: /bin/bash -e {0}
+2026-10-15T17:23:38.4656610Z env:
+2026-10-15T17:23:38.4656880Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:23:38.4657250Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:23:38.4657640Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:23:38.4658390Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:23:38.4658950Z ##[endgroup]
+2026-10-15T17:23:38.5559910Z [0/2] Re-checking globbed directories...
+2026-10-15T17:23:39.1173940Z [1/288] Building CXX object src/sirius/CMakeFiles/sirius_base.dir/base/contracts.cpp.o
+2026-10-15T17:23:39.8476290Z [2/288] Building CXX object src/sirius/core/CMakeFiles/sirius_core.dir/tensor.cpp.o
+2026-10-15T17:23:40.3347400Z [3/288] Building CXX object src/sirius/CMakeFiles/sirius_base.dir/base/resource_locator.cpp.o
+2026-10-15T17:23:40.9212030Z [4/288] Compiling camera_frame_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:41.6064980Z [5/288] Compiling camera_frame_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:42.1722620Z [6/288] Building CXX object src/sirius/core/CMakeFiles/sirius_core.dir/geodesic_integrator.cpp.o
+2026-10-15T17:23:42.5566010Z [7/288] Compiling camera_frame_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:42.8371660Z [8/288] Linking CXX static library src/sirius/libsirius_base.a
+2026-10-15T17:23:42.9682300Z [9/288] Linking CXX static library src/sirius/core/libsirius_core.a
+2026-10-15T17:23:43.4658680Z [10/288] Compiling infinity_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:43.4760510Z warning[E41018]: returning without initializing out parameter
+2026-10-15T17:23:43.4873870Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T17:23:43.4975670Z     |
+2026-10-15T17:23:43.5076840Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T17:23:43.5177360Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T17:23:43.5279280Z ----'
+2026-10-15T17:23:43.5381020Z warning[E41035]: possible use of uninitialized variable
+2026-10-15T17:23:43.5483450Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T17:23:43.5586870Z     |
+2026-10-15T17:23:43.5686910Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T17:23:43.5788660Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T17:23:43.5900290Z ----'
+2026-10-15T17:23:43.8010230Z [11/288] Compiling infinity_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:43.8111550Z warning[E41018]: returning without initializing out parameter
+2026-10-15T17:23:43.8213170Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T17:23:43.8314030Z     |
+2026-10-15T17:23:43.8416100Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T17:23:43.8515660Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T17:23:43.8615870Z ----'
+2026-10-15T17:23:43.8717890Z warning[E41035]: possible use of uninitialized variable
+2026-10-15T17:23:43.8818030Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T17:23:43.8920280Z     |
+2026-10-15T17:23:43.9032540Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T17:23:43.9133330Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T17:23:43.9234900Z ----'
+2026-10-15T17:23:44.1924410Z [12/288] Compiling infinity_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:44.2025970Z warning[E41018]: returning without initializing out parameter
+2026-10-15T17:23:44.2127490Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-15T17:23:44.2228810Z     |
+2026-10-15T17:23:44.2330210Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-15T17:23:44.2432940Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-15T17:23:44.2535070Z ----'
+2026-10-15T17:23:44.2636450Z warning[E41035]: possible use of uninitialized variable
+2026-10-15T17:23:44.2737870Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-15T17:23:44.2840300Z     |
+2026-10-15T17:23:44.2942930Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-15T17:23:44.3045080Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-15T17:23:44.3148270Z ----'
+2026-10-15T17:23:44.3786640Z [13/288] Compiling metric_consistency_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:44.6702180Z [14/288] Compiling metric_consistency_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:44.9171640Z [15/288] Compiling metric_consistency_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T17:23:48.6859250Z [16/288] Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:01.4633840Z [17/288] Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)
+2026-10-15T17:24:01.9707820Z [18/288] Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:02.8906650Z [19/288] Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)
+2026-10-15T17:24:03.3203800Z [20/288] Compiling Slang kernel smoke.slang -> SPIR-V (+spirv-val)
+2026-10-15T17:24:03.5030980Z [21/288] Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:03.6325770Z [22/288] Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)
+2026-10-15T17:24:12.1322480Z [23/288] Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:12.3697770Z [24/288] Compiling Slang kernel trace.slang -> SPIR-V (+spirv-val)
+2026-10-15T17:24:12.5191130Z [25/288] Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)
+2026-10-15T17:24:12.5497680Z [26/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/box.cpp.o
+2026-10-15T17:24:12.9900860Z [27/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/color.cpp.o
+2026-10-15T17:24:13.0004660Z [28/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/color_info.cpp.o
+2026-10-15T17:24:13.5815640Z [29/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/terminal.cpp.o
+2026-10-15T17:24:14.1507010Z [30/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/string.cpp.o
+2026-10-15T17:24:14.3727460Z [31/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/screen.cpp.o
+2026-10-15T17:24:14.5141420Z [32/288] Linking CXX static library _deps/ftxui-build/libftxui-screen.a
+2026-10-15T17:24:14.9304350Z [33/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/automerge.cpp.o
+2026-10-15T17:24:15.3009230Z [34/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/blink.cpp.o
+2026-10-15T17:24:15.7078910Z [35/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/bold.cpp.o
+2026-10-15T17:24:16.0849780Z [36/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/hyperlink.cpp.o
+2026-10-15T17:24:16.7019560Z [37/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/box_helper.cpp.o
+2026-10-15T17:24:16.8618010Z [38/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/border.cpp.o
+2026-10-15T17:24:17.5846460Z [39/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/clear_under.cpp.o
+2026-10-15T17:24:18.4072500Z [40/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/color.cpp.o
+2026-10-15T17:24:19.0504980Z [41/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/composite_decorator.cpp.o
+2026-10-15T17:24:19.1156110Z [42/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/canvas.cpp.o
+2026-10-15T17:24:19.6742010Z [43/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/dbox.cpp.o
+2026-10-15T17:24:19.7584410Z [44/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/dim.cpp.o
+2026-10-15T17:24:20.3681430Z [45/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flex.cpp.o
+2026-10-15T17:24:20.4311230Z [46/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox_config.cpp.o
+2026-10-15T17:24:20.5216410Z [47/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox.cpp.o
+2026-10-15T17:24:21.3856930Z [48/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox_helper.cpp.o
+2026-10-15T17:24:21.4201480Z [49/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/focus.cpp.o
+2026-10-15T17:24:22.1392870Z [50/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/gauge.cpp.o
+2026-10-15T17:24:22.2545720Z [51/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/frame.cpp.o
+2026-10-15T17:24:22.7691980Z [52/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/graph.cpp.o
+2026-10-15T17:24:23.0138290Z [53/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/gridbox.cpp.o
+2026-10-15T17:24:23.4404110Z [54/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/hbox.cpp.o
+2026-10-15T17:24:23.6726870Z [55/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/inverted.cpp.o
+2026-10-15T17:24:24.4357140Z [56/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/node.cpp.o
+2026-10-15T17:24:25.1340580Z [57/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/linear_gradient.cpp.o
+2026-10-15T17:24:25.3720900Z [58/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/node_decorator.cpp.o
+2026-10-15T17:24:26.6350950Z [59/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/paragraph.cpp.o
+2026-10-15T17:24:26.8134590Z [60/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/reflect.cpp.o
+2026-10-15T17:24:27.9969950Z [61/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/scroll_indicator.cpp.o
+2026-10-15T17:24:28.1819660Z [62/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/separator.cpp.o
+2026-10-15T17:24:28.9080690Z [63/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/size.cpp.o
+2026-10-15T17:24:29.8298400Z [64/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/strikethrough.cpp.o
+2026-10-15T17:24:29.8929890Z [65/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/spinner.cpp.o
+2026-10-15T17:24:30.6730640Z [66/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/text.cpp.o
+2026-10-15T17:24:31.0089030Z [67/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/table.cpp.o
+2026-10-15T17:24:31.3910640Z [68/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/underlined.cpp.o
+2026-10-15T17:24:31.7273860Z [69/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/underlined_double.cpp.o
+2026-10-15T17:24:32.1944420Z [70/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/util.cpp.o
+2026-10-15T17:24:32.3889890Z [71/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/vbox.cpp.o
+2026-10-15T17:24:32.5847390Z [72/288] Verifying revision-bound upstream/downstream alignment
+2026-10-15T17:24:32.5882330Z alignment receipt is current: 0/8 domains admitted
+2026-10-15T17:24:32.7259700Z [73/288] Linking CXX static library _deps/ftxui-build/libftxui-dom.a
+2026-10-15T17:24:33.3921370Z [74/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/animation.cpp.o
+2026-10-15T17:24:34.6140440Z [75/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/button.cpp.o
+2026-10-15T17:24:35.2914470Z [76/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend_cpu.dir/cpu/geodesic_tracer.cpp.o
+2026-10-15T17:24:35.8432330Z [77/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/catch_event.cpp.o
+2026-10-15T17:24:36.2196010Z [78/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/checkbox.cpp.o
+2026-10-15T17:24:36.7566250Z [79/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/collapsible.cpp.o
+2026-10-15T17:24:37.0169610Z [80/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/component.cpp.o
+2026-10-15T17:24:37.9784770Z [81/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/container.cpp.o
+2026-10-15T17:24:38.6298370Z [82/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/component_options.cpp.o
+2026-10-15T17:24:39.0763100Z [83/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/dropdown.cpp.o
+2026-10-15T17:24:39.2299240Z [84/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/event.cpp.o
+2026-10-15T17:24:40.2943410Z [85/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/hoverable.cpp.o
+2026-10-15T17:24:40.4576900Z [86/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/input.cpp.o
+2026-10-15T17:24:41.0491480Z [87/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/loop.cpp.o
+2026-10-15T17:24:41.5205020Z [88/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/maybe.cpp.o
+2026-10-15T17:24:42.4857280Z [89/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/modal.cpp.o
+2026-10-15T17:24:42.7286450Z [90/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/menu.cpp.o
+2026-10-15T17:24:42.7387800Z [91/288] Building bounded retained camera and joint transport stages
+2026-10-15T17:24:42.7508510Z Camera 5292 instructions; 613 registers; [47720, 61048, 512324, 512324] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.7610550Z Transport optional FMA32: validated
+2026-10-15T17:24:42.7721040Z Transport 2587 instructions; 459 registers; [85364, 98008, 99740, 99740] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.7823880Z Endpoint optional FMA32: validated
+2026-10-15T17:24:42.7925810Z Endpoint 2205 instructions; 612 registers; [99300, 111960, 145344, 145344] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.8049230Z Dense 6345 instructions; 815 registers; [77952, 90628, 116204, 116204] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.8150130Z Initialize 1961 instructions; 362 registers; [57108, 70468, 77444, 77444] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.8225620Z RayCamera 6115 instructions; 660 registers; [45368, 58728, 475256, 475256] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:42.8343320Z DopriPhase 2088 instructions; 629 registers; [58740, 72100, 92844, 92844] native/native-wide/portable/portable-wide shader bytes
+2026-10-15T17:24:43.4208890Z [92/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/radiobox.cpp.o
+2026-10-15T17:24:43.5381640Z [93/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/renderer.cpp.o
+2026-10-15T17:24:45.6939550Z [94/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_integrator.cpp.o
+2026-10-15T17:24:46.3192840Z [95/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o
+2026-10-15T17:24:47.1821700Z [96/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o
+2026-10-15T17:24:47.4681920Z [97/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/resizable_split.cpp.o
+2026-10-15T17:24:49.1939600Z [98/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/screen_interactive.cpp.o
+2026-10-15T17:24:49.3046330Z [99/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/slider.cpp.o
+2026-10-15T17:24:49.7126600Z [100/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_trace_executor.cpp.o
+2026-10-15T17:24:49.9594170Z [101/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/util.cpp.o
+2026-10-15T17:24:50.0788740Z [102/288] Linking CXX static library src/sirius/backend/libsirius_backend_cpu.a
+2026-10-15T17:24:50.2122550Z [103/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/terminal_input_parser.cpp.o
+2026-10-15T17:24:50.2634480Z [104/288] Linking CXX static library src/sirius/backend/libsirius_backend.a
+2026-10-15T17:24:50.7881230Z [105/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/window.cpp.o
+2026-10-15T17:24:50.9042460Z [106/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/png_writer.cpp.o
+2026-10-15T17:24:52.6900700Z [107/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/stb_impl.cpp.o
+2026-10-15T17:24:53.2506890Z [108/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/stb_write_impl.cpp.o
+2026-10-15T17:24:53.7279540Z [109/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/exr_writer.cpp.o
+2026-10-15T17:24:54.8757540Z [110/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/memory_governor.cpp.o
+2026-10-15T17:24:54.9291500Z [111/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/render_evidence.cpp.o
+2026-10-15T17:24:55.8077890Z [112/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/dispatch_governor.cpp.o
+2026-10-15T17:24:58.5498430Z [113/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/point_source_detector.cpp.o
+2026-10-15T17:24:58.8435850Z [114/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/pixel_shading.cpp.o
+2026-10-15T17:24:59.9046640Z [115/288] Building C object src/sirius/render/CMakeFiles/sirius_render.dir/__/__/__/lib/tinyexr/miniz.c.o
+2026-10-15T17:25:00.3289670Z [116/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/ray_work_queue.cpp.o
+2026-10-15T17:25:00.9580220Z [117/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/render_session.cpp.o
+2026-10-15T17:25:01.4889250Z [118/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/init.c.o
+2026-10-15T17:25:01.5224260Z [119/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/context.c.o
+2026-10-15T17:25:01.9316650Z [120/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/monitor.c.o
+2026-10-15T17:25:01.9933910Z [121/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/input.c.o
+2026-10-15T17:25:02.3207190Z [122/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/platform.c.o
+2026-10-15T17:25:02.3968210Z [123/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o
+2026-10-15T17:25:02.7196110Z [124/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/window.c.o
+2026-10-15T17:25:02.8116820Z [125/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o
+2026-10-15T17:25:03.0845220Z [126/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o
+2026-10-15T17:25:03.1850060Z [127/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_init.c.o
+2026-10-15T17:25:03.4153420Z [128/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o
+2026-10-15T17:25:03.5754100Z [129/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_window.c.o
+2026-10-15T17:25:03.7789110Z [130/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o
+2026-10-15T17:25:04.0188980Z [131/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o
+2026-10-15T17:25:04.1829410Z [132/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o
+2026-10-15T17:25:04.4418990Z [133/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o
+2026-10-15T17:25:05.0302190Z [134/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o
+2026-10-15T17:25:05.4431780Z [135/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o
+2026-10-15T17:25:05.4460570Z [136/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o
+2026-10-15T17:25:05.7293250Z [137/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o
+2026-10-15T17:25:05.8880980Z [138/288] Linking CXX static library _deps/ftxui-build/libftxui-component.a
+2026-10-15T17:25:06.0161750Z [139/288] Linking CXX static library src/sirius/render/libsirius_render.a
+2026-10-15T17:25:06.1391990Z [140/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o
+2026-10-15T17:25:06.2325620Z [141/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o
+2026-10-15T17:25:09.5674930Z [142/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/command_router.cpp.o
+2026-10-15T17:25:09.9720310Z [143/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/alignment_authority.cpp.o
+2026-10-15T17:25:11.0720190Z [144/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/render_command.cpp.o
+2026-10-15T17:25:13.6406700Z [145/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/cli_output.cpp.o
+2026-10-15T17:25:14.0572250Z [146/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/config_command.cpp.o
+2026-10-15T17:25:15.8437170Z [147/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/info_command.cpp.o
+2026-10-15T17:25:16.7259490Z [148/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/platform_paths.cpp.o
+2026-10-15T17:25:17.0266500Z [149/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/config/session_config_adapter.cpp.o
+2026-10-15T17:25:18.7028470Z [150/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/config/config_loader.cpp.o
+2026-10-15T17:25:19.3942830Z [151/288] Building C object src/sirius/app/CMakeFiles/sirius_app_lib.dir/__/__/__/lib/glad/src/glad.c.o
+2026-10-15T17:25:19.5418730Z [152/288] Linking C static library lib/glfw/src/libglfw3.a
+2026-10-15T17:25:20.6578230Z [153/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/viewer/interactive_viewer.cpp.o
+2026-10-15T17:25:21.1252250Z [154/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/view_command.cpp.o
+2026-10-15T17:25:21.2641580Z [155/288] Linking CXX static library src/sirius/app/libsirius_app_lib.a
+2026-10-15T17:25:21.6371930Z [156/288] Building CXX object src/sirius/app/CMakeFiles/sirius.dir/main.cpp.o
+2026-10-15T17:25:22.7252040Z [157/288] Building bounded retained camera program and independent witnesses
+2026-10-15T17:25:22.7354020Z program_camera_probe-fp32: compiled and validated
+2026-10-15T17:25:22.7474910Z program_camera_probe-fp32comp: compiled and validated
+2026-10-15T17:25:23.2654940Z [158/288] Linking CXX executable src/sirius/app/sirius; Staging Sirius runtime resources beside the executable; Staging interactive-viewer shaders beside the executable; Staging Vulkan runtime kernels beside the executable
+2026-10-15T17:25:23.3199910Z [159/288] Generating independent exact binary32 arithmetic expectations
+2026-10-15T17:25:23.3303600Z {"bytes": 4182444, "categories": {"primitive/declared-halfway-boundary": 24, "primitive/edge-cross": 38332, "primitive/raw-fixed-seed": 28672, "primitive/subnormal-fixed-seed": 28672, "primitive/unary-edge": 468, "primitive/unary-fixed-seed": 24576, "residual/analytic-selfcheck": 16, "residual/bounded-raw-fixed-seed": 16384, "residual/edge-cross": 4356, "residual/product-rounding-boundaries": 8192, "residual/scaled-mantissa-fixed-seed": 16384, "residual/subnormal-input-fixed-seed": 8192}, "fixture_sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e", "magic": "PB32", "negative_zero_residuals": 9635, "nonzero_rounded_residuals": 31239, "primitive_cases": 120744, "records": 174268, "residual_cases": 53524, "subnormal_residuals": 5517, "version": 1}
+2026-10-15T17:25:24.0489590Z [160/288] Staging exact qualification inputs beside sirius_backend_tests
+2026-10-15T17:25:24.1802740Z [161/288] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+2026-10-15T17:25:24.8472340Z [162/288] Staging exact qualification inputs beside sirius_render_tests
+2026-10-15T17:25:25.6500900Z [163/288] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/contracts_test.cpp.o
+2026-10-15T17:25:26.3827910Z [164/288] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+2026-10-15T17:25:26.5112430Z [165/288] Linking CXX static library lib/libgtest.a
+2026-10-15T17:25:26.6491440Z [166/288] Linking CXX static library lib/libgtest_main.a
+2026-10-15T17:25:27.2452590Z [167/288] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/error_test.cpp.o
+2026-10-15T17:25:27.4958280Z [168/288] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/sha256_test.cpp.o
+2026-10-15T17:25:28.1510290Z [169/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/autodiff_dual_test.cpp.o
+2026-10-15T17:25:29.2494190Z [170/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o
+2026-10-15T17:25:29.5534030Z [171/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/retained_arithmetic_test.cpp.o
+2026-10-15T17:25:30.0806730Z [172/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o
+2026-10-15T17:25:31.7679800Z [173/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o
+2026-10-15T17:25:31.7928650Z [174/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_test.cpp.o
+2026-10-15T17:25:32.0069110Z [175/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o
+2026-10-15T17:25:33.2470520Z [176/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o
+2026-10-15T17:25:34.5057120Z [177/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o
+2026-10-15T17:25:35.1085150Z [178/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o
+2026-10-15T17:25:35.6982820Z [179/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o
+2026-10-15T17:25:36.2012210Z [180/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o
+2026-10-15T17:25:37.5651990Z [181/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/coordinates_test.cpp.o
+2026-10-15T17:25:38.8253120Z [182/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o
+2026-10-15T17:25:39.0899170Z [183/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o
+2026-10-15T17:25:39.4400210Z [184/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_equation_test.cpp.o
+2026-10-15T17:25:41.3826450Z [185/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_naninf_test.cpp.o
+2026-10-15T17:25:41.6514990Z [186/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o
+2026-10-15T17:25:41.8652920Z [187/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o
+2026-10-15T17:25:42.7728240Z [188/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_stability_test.cpp.o
+2026-10-15T17:25:43.1235360Z [189/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/christoffel_test.cpp.o
+2026-10-15T17:25:44.2396300Z [190/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o
+2026-10-15T17:25:45.4134880Z [191/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o
+2026-10-15T17:25:45.6996450Z [192/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o
+2026-10-15T17:25:46.6323430Z [193/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/horizon_authority_test.cpp.o
+2026-10-15T17:25:47.7733210Z [194/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_test.cpp.o
+2026-10-15T17:25:48.3202260Z [195/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_derivative_test.cpp.o
+2026-10-15T17:25:49.6944820Z [196/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_loader_test.cpp.o
+2026-10-15T17:25:50.4172180Z [197/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_registry_test.cpp.o
+2026-10-15T17:25:51.0830340Z [198/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o
+2026-10-15T17:25:52.2338980Z [199/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/reissner_nordstrom_test.cpp.o
+2026-10-15T17:25:53.7245180Z [200/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/schwarzschild_test.cpp.o
+2026-10-15T17:25:53.8364920Z [201/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o
+2026-10-15T17:25:54.7653350Z [202/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/walker_penrose_test.cpp.o
+2026-10-15T17:25:55.5569160Z [203/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/stokes_test.cpp.o
+2026-10-15T17:25:55.7696410Z [204/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/warp_drive_test.cpp.o
+2026-10-15T17:25:56.8644810Z [205/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/tensor_inverse_test.cpp.o
+2026-10-15T17:25:57.3440530Z [206/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/turbulence_test.cpp.o
+2026-10-15T17:25:57.4437150Z [207/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/novikov_thorne_disk_test.cpp.o
+2026-10-15T17:25:58.3224850Z [208/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/volumetric_disk_test.cpp.o
+2026-10-15T17:25:58.9982610Z [209/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o
+2026-10-15T17:25:59.3753010Z [210/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/postprocess_test.cpp.o
+2026-10-15T17:25:59.8537630Z [211/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o
+2026-10-15T17:26:00.5527120Z [212/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o
+2026-10-15T17:26:02.5145820Z [213/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/starfield_test.cpp.o
+2026-10-15T17:26:02.7828740Z [214/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/point_source_transfer_test.cpp.o
+2026-10-15T17:26:03.3317380Z [215/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o
+2026-10-15T17:26:05.1687540Z [216/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_differential_test.cpp.o
+2026-10-15T17:26:05.5859660Z [217/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_map_test.cpp.o
+2026-10-15T17:26:06.1301990Z [218/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o
+2026-10-15T17:26:06.6294050Z [219/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/tensor_test.cpp.o
+2026-10-15T17:26:07.4121190Z [220/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o
+2026-10-15T17:26:08.4405270Z [221/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o
+2026-10-15T17:26:09.5765850Z [222/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o
+2026-10-15T17:26:09.9472790Z [223/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o
+2026-10-15T17:26:10.1735710Z [224/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o
+2026-10-15T17:26:11.9398620Z [225/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o
+2026-10-15T17:26:12.0046860Z [226/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o
+2026-10-15T17:26:12.3466540Z [227/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o
+2026-10-15T17:26:13.7062480Z [228/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/portable_binary32_test.cpp.o
+2026-10-15T17:26:14.8767960Z [229/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_jacobi_oracle_test.cpp.o
+2026-10-15T17:26:17.4793970Z [230/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_trace_boundary_test.cpp.o
+2026-10-15T17:26:17.6052320Z [231/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/coupled_transport_test.cpp.o
+2026-10-15T17:26:20.0825330Z [232/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_map_trace_test.cpp.o
+2026-10-15T17:26:20.5639460Z [233/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o
+2026-10-15T17:26:21.8206460Z [234/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/polarisation_acceptance_test.cpp.o
+2026-10-15T17:26:24.0344610Z [235/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_infinity_trace_test.cpp.o
+2026-10-15T17:26:25.9809530Z [236/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/volume_acceptance_test.cpp.o
+2026-10-15T17:26:27.9970520Z [237/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/vulkan_smoke_test.cpp.o
+2026-10-15T17:26:29.2786820Z [238/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_metric_consistency_test.cpp.o
+2026-10-15T17:26:31.6224400Z [239/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_camera_frame_test.cpp.o
+2026-10-15T17:26:32.1766790Z [240/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_camera_program_test.cpp.o
+2026-10-15T17:26:32.2308930Z [241/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o
+2026-10-15T17:26:37.6289320Z [242/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_infinity_test.cpp.o
+2026-10-15T17:26:39.5046870Z [243/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o
+2026-10-15T17:26:42.5661180Z [244/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o
+2026-10-15T17:26:42.8436100Z [245/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_beam_test.cpp.o
+2026-10-15T17:26:44.0215350Z [246/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_portability_test.cpp.o
+2026-10-15T17:26:46.9220390Z [247/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/alcubierre_acceptance_test.cpp.o
+2026-10-15T17:26:51.1062700Z [248/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o
+2026-10-15T17:26:51.5206430Z [249/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o
+2026-10-15T17:26:52.9367760Z [250/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o
+2026-10-15T17:26:53.1989000Z [251/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o
+2026-10-15T17:26:54.6750440Z [252/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o
+2026-10-15T17:26:54.7927550Z [253/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/film_pipeline_test.cpp.o
+2026-10-15T17:26:57.0468090Z [254/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/tile_scheduler_test.cpp.o
+2026-10-15T17:26:58.3197910Z [255/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o
+2026-10-15T17:26:58.7008260Z [256/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/progress_tracker_test.cpp.o
+2026-10-15T17:27:02.0515810Z [257/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/memory_governor_test.cpp.o
+2026-10-15T17:27:04.5469650Z [258/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/render_evidence_test.cpp.o
+2026-10-15T17:27:05.4176700Z [259/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o
+2026-10-15T17:27:08.1251410Z [260/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/ray_bundle_test.cpp.o
+2026-10-15T17:27:09.2018360Z [261/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o
+2026-10-15T17:27:11.3094690Z [262/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/starfield_point_test.cpp.o
+2026-10-15T17:27:13.0540800Z [263/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o
+2026-10-15T17:27:15.5617920Z [264/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/ray_work_queue_test.cpp.o
+2026-10-15T17:27:17.1645750Z [265/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_physics_test.cpp.o
+2026-10-15T17:27:17.2567810Z [266/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_test.cpp.o
+2026-10-15T17:27:18.0033800Z [267/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/doppler_toggle_test.cpp.o
+2026-10-15T17:27:18.9459410Z [268/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o
+2026-10-15T17:27:18.9561320Z [269/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/pixel_sampling_test.cpp.o
+2026-10-15T17:27:22.2171300Z [270/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/shadow_boundary_test.cpp.o
+2026-10-15T17:27:22.5532130Z [271/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/alignment_authority_test.cpp.o
+2026-10-15T17:27:23.1817350Z [272/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_validation_test.cpp.o
+2026-10-15T17:27:24.7889480Z [273/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_environment_test.cpp.o
+2026-10-15T17:27:26.9633780Z [274/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_schema_roundtrip_test.cpp.o
+2026-10-15T17:27:27.2088740Z [275/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/render_command_parse_test.cpp.o
+2026-10-15T17:27:28.5528220Z [276/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/platform_paths_test.cpp.o
+2026-10-15T17:27:30.9065280Z [277/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/session_config_adapter_test.cpp.o
+2026-10-15T17:27:31.6377360Z [278/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/command_router_test.cpp.o
+2026-10-15T17:27:32.4440760Z [279/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_loading_test.cpp.o
+2026-10-15T17:27:32.6182680Z [280/288] Linking CXX executable tests/sirius_base_tests
+2026-10-15T17:27:32.9965770Z [281/288] Linking CXX executable tests/core/sirius_core_tests
+2026-10-15T17:27:33.1793190Z [282/288] Linking CXX executable tests/oracle/sirius_oracle_tests
+2026-10-15T17:27:33.4436160Z [283/288] Linking CXX executable tests/backend/sirius_backend_tests
+2026-10-15T17:27:33.4537190Z ld: warning: ignoring duplicate libraries: 'src/sirius/backend/libsirius_backend.a', 'src/sirius/backend/libsirius_backend_cpu.a'
+2026-10-15T17:27:33.9418290Z [284/288] Linking CXX executable src/sirius/app/sirius_render_tests
+2026-10-15T17:27:33.9520470Z ld: warning: ignoring duplicate libraries: 'src/sirius/render/libsirius_render.a'
+2026-10-15T17:27:34.1537190Z [285/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/viewer_display_contract_test.cpp.o
+2026-10-15T17:27:34.5353640Z [286/288] Linking CXX executable src/sirius/app/sirius_app_tests
+2026-10-15T17:27:39.6254900Z [287/288] Verifying test-label, operating-model, and repository-structure governance
+2026-10-15T17:27:39.6256340Z CTest label file is up to date
+2026-10-15T17:27:39.6257160Z operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-15T17:27:39.6258290Z repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-15T17:27:39.6262090Z strict qualification/release policy rejected every weakened configuration and product
+2026-10-15T17:27:39.6262570Z escaping-copy controls: filesystem symlinks
+2026-10-15T17:27:39.6263110Z build-gate receipt rejected missing, stale, skipped, and tampered evidence

@@ -1,0 +1,37 @@
+﻿2026-10-15T17:29:13.1300430Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-15T17:29:13.1300850Z with:
+2026-10-15T17:29:13.1301070Z   name: sirius-gate-diagnostics-integration-macos-no-render
+2026-10-15T17:29:13.1301900Z   path: bin/**/generated/sirius/*gate*.json
+bin/**/generated/sirius/*gate*.xml
+bin/**/generated/sirius/*gate*.log
+bin/**/Testing/Temporary/LastTest.log
+bin/**/Testing/Temporary/LastTestsFailed.log
+linux-tests.xml
+windows-tests.xml
+macos-tests.xml
+
+2026-10-15T17:29:13.1303100Z   if-no-files-found: ignore
+2026-10-15T17:29:13.1303280Z   compression-level: 6
+2026-10-15T17:29:13.1303460Z   overwrite: false
+2026-10-15T17:29:13.1303670Z   include-hidden-files: false
+2026-10-15T17:29:13.1303870Z   archive: true
+2026-10-15T17:29:13.1304080Z env:
+2026-10-15T17:29:13.1304280Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T17:29:13.1304540Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T17:29:13.1304870Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T17:29:13.1305530Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T17:29:13.1306010Z ##[endgroup]
+2026-10-15T17:29:13.5471340Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-15T17:29:13.5474570Z The least common ancestor is /Users/runner/work/Sirius/Sirius. This will be the root directory of the artifact
+2026-10-15T17:29:13.5476110Z With the provided path, there will be 4 files uploaded
+2026-10-15T17:29:13.5477300Z Artifact name is valid!
+2026-10-15T17:29:13.5477830Z Root directory input is valid!
+2026-10-15T17:29:13.9082860Z Uploading artifact: sirius-gate-diagnostics-integration-macos-no-render.zip
+2026-10-15T17:29:13.9284550Z Beginning upload of artifact content to blob storage
+2026-10-15T17:29:14.0088840Z Uploaded bytes 5685
+2026-10-15T17:29:14.0541890Z Finished uploading artifact content to blob storage!
+2026-10-15T17:29:14.0643600Z SHA256 digest of uploaded artifact is 7196e0bc2eef9af18d665152904063ba9eb4b83f87bb19bbac342f38c39cbc29
+2026-10-15T17:29:14.0744200Z Finalizing artifact upload
+2026-10-15T17:29:14.3884920Z Artifact sirius-gate-diagnostics-integration-macos-no-render successfully finalized. Artifact ID 11995095142
+2026-10-15T17:29:14.3890400Z Artifact sirius-gate-diagnostics-integration-macos-no-render has been successfully uploaded! Final size is 5685 bytes. Artifact ID is 11995095142
+2026-10-15T17:29:14.3898260Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38776590607/artifacts/11995095142

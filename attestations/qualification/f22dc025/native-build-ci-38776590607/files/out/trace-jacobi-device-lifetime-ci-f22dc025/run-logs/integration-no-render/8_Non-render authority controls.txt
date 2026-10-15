@@ -1,0 +1,38 @@
+﻿2026-10-15T17:28:15.8784522Z ##[group]Run test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json
+2026-10-15T17:28:15.8785088Z [36;1mtest ! -e bin/linux-ci/generated/sirius/mandatory_gate.json[0m
+2026-10-15T17:28:15.8785604Z [36;1mctest --test-dir bin/linux-ci --output-on-failure --no-tests=error \[0m
+2026-10-15T17:28:15.8787845Z [36;1m  -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'[0m
+2026-10-15T17:28:15.8790280Z [36;1mtest ! -e bin/linux-ci/generated/sirius/mandatory_gate.json[0m
+2026-10-15T17:28:15.8827059Z shell: /usr/bin/bash -e {0}
+2026-10-15T17:28:15.8827437Z ##[endgroup]
+2026-10-15T17:28:16.3441623Z Internal ctest changing into directory: /home/runner/work/Sirius/Sirius/bin/linux-ci
+2026-10-15T17:28:16.3989458Z Test project /home/runner/work/Sirius/Sirius/bin/linux-ci
+2026-10-15T17:28:16.4902024Z       Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+2026-10-15T17:28:20.1659687Z  1/10 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    3.67 sec
+2026-10-15T17:28:20.1794962Z       Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2026-10-15T17:28:20.2037458Z  2/10 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.02 sec
+2026-10-15T17:28:20.2038794Z       Start   16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+2026-10-15T17:28:20.2556727Z  3/10 Test   #16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls ..........   Passed    0.05 sec
+2026-10-15T17:28:20.2557760Z       Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+2026-10-15T17:28:22.4682698Z  4/10 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................   Passed    2.21 sec
+2026-10-15T17:28:22.4685609Z       Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+2026-10-15T17:28:41.5352893Z  5/10 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   19.07 sec
+2026-10-15T17:28:41.5354168Z       Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+2026-10-15T17:28:41.8794214Z  6/10 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.34 sec
+2026-10-15T17:28:41.8795454Z       Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+2026-10-15T17:28:41.9246756Z  7/10 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.05 sec
+2026-10-15T17:28:41.9247798Z       Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+2026-10-15T17:28:42.3228280Z  8/10 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.40 sec
+2026-10-15T17:28:42.3229379Z       Start 1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+2026-10-15T17:28:42.3253040Z  9/10 Test #1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.00 sec
+2026-10-15T17:28:42.3254147Z       Start 1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+2026-10-15T17:28:42.8643261Z 10/10 Test #1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.54 sec
+2026-10-15T17:28:42.8644994Z 
+2026-10-15T17:28:42.8645200Z 100% tests passed, 0 tests failed out of 10
+2026-10-15T17:28:42.8645802Z 
+2026-10-15T17:28:42.8646086Z Label Time Summary:
+2026-10-15T17:28:42.8646427Z Correctness    =   0.54 sec*proc (2 tests)
+2026-10-15T17:28:42.8646778Z Mandatory      =  26.35 sec*proc (10 tests)
+2026-10-15T17:28:42.8647115Z Operational    =  26.35 sec*proc (10 tests)
+2026-10-15T17:28:42.8647319Z 
+2026-10-15T17:28:42.8647428Z Total Test time (real) =  26.47 sec

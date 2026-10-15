@@ -1,0 +1,316 @@
+{
+  "schema": "sirius-f22-independent-native-build-CI-review-v1",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T17:55:09.003269+00:00",
+  "blockers": [],
+  "scope": "Completed exact-source CI build/integration and finite native authority evidence only; no local or remote scientific/runtime qualification promoted by this review.",
+  "run": {
+    "id": 38776590607,
+    "attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "event": "workflow_dispatch",
+    "head_branch": "development/minimum-step-floor-2026-10-15",
+    "head_sha": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "requested_success": [
+      "integration-no-render",
+      "integration-windows-no-render",
+      "integration-macos-no-render"
+    ],
+    "unrequested_skipped": [
+      "macos-build",
+      "linux-sanitizers",
+      "windows-build",
+      "macos-retained-diagnostic",
+      "linux-gate"
+    ],
+    "dispatch_inputs": {
+      "full_qualification": "false",
+      "macos_retained_diagnostic": "false"
+    },
+    "current_workflow_bytes_match_named_source_Git": true,
+    "workflow": {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 44892,
+      "sha256": "c770c1d427cb24bd15051ab121d9ea08389a592cbcd1a7c36d048c0b790280f8"
+    },
+    "prior_matching_run_ids": [],
+    "additional_CI_requested_or_executed_by_reviewer": false
+  },
+  "critical_API_and_extraction_pins": {
+    "dispatch-request.json": {
+      "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/dispatch-request.json",
+      "bytes": 748,
+      "sha256": "1cecd4151b26b498a2e6efd7e102552cfe07ac36024f53c1391bc43dab24ac0c"
+    },
+    "run-completed.json": {
+      "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/run-completed.json",
+      "bytes": 12148,
+      "sha256": "da059c9c1f690b5266ae6b9d77f26be990e6270dcfa27005c19fc22bdc8c9b9e"
+    },
+    "jobs-latest.json": {
+      "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/jobs-latest.json",
+      "bytes": 14220,
+      "sha256": "230fec9fe858aef73c8193356a6bbb0ec0ed9741c8ee0023c13a3851ad4ec2e8"
+    },
+    "artifacts-completed.json": {
+      "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/artifacts-completed.json",
+      "bytes": 3761,
+      "sha256": "1b9ffdb6277160ae0899187661a8295f6aab51cc152c061780bb91c898ecd2a1"
+    },
+    "all-artifact-extraction.json": {
+      "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/all-artifact-extraction.json",
+      "bytes": 91677,
+      "sha256": "5aa815848f97936653257187ab27a252bc8743f06be2d279da4251b7d50fdb89"
+    },
+    "run-log-extraction.json": {
+      "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/run-log-extraction.json",
+      "bytes": 15516,
+      "sha256": "a5c3a8b12ffdedce29fda6fec340f131835d6807b5b6ec6e0e5bba23dc748d4f"
+    }
+  },
+  "transport": {
+    "archives": [
+      {
+        "id": 11995210338,
+        "name": "sirius-gate-diagnostics-integration-windows-no-render",
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/zips/11995210338.zip",
+        "bytes": 5848,
+        "sha256": "51fbcf94117ddb61873abaa240657d642b7fd2ebbd3c12d7c418d8b53a16f512",
+        "member_count": 4
+      },
+      {
+        "id": 11994538653,
+        "name": "sirius-windows-diagnostic-build-products",
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/zips/11994538653.zip",
+        "bytes": 57242917,
+        "sha256": "440ace8eea35a314160aaacef268b8266a779cc94d618e1745b744ddca53fac3",
+        "member_count": 139
+      },
+      {
+        "id": 11994228889,
+        "name": "sirius-windows-native-attestation",
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/zips/11994228889.zip",
+        "bytes": 53710264,
+        "sha256": "c4a87eea4f745ab1436fd3236ac790aeaac513eed0a4f7d7a909ca6f61e68b9d",
+        "member_count": 40
+      },
+      {
+        "id": 11995095142,
+        "name": "sirius-gate-diagnostics-integration-macos-no-render",
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/zips/11995095142.zip",
+        "bytes": 5685,
+        "sha256": "7196e0bc2eef9af18d665152904063ba9eb4b83f87bb19bbac342f38c39cbc29",
+        "member_count": 4
+      },
+      {
+        "id": 11993284875,
+        "name": "sirius-macos-native-attestation",
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/zips/11993284875.zip",
+        "bytes": 54880839,
+        "sha256": "52b2a233ae57fde8b4888ade1f5aa57a55e3ab8b80fb6d6031434d998b928938",
+        "member_count": 40
+      }
+    ],
+    "all5_API_ids_names_run_source_sizes_digests_match_whole_ZIP_bytes": true,
+    "all227_safe_unique_regular_member_bytes_and_extracted_copy_hashes_match": true,
+    "raw_logs_ZIP": {
+      "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/run-logs.zip",
+      "bytes": 144798,
+      "sha256": "801fe01521c2d9a94266063e9274a15c7fbf4d9e0f86d0f58673b43675d1bc9b"
+    },
+    "all46_safe_rawlog_members_match_saved_maps_and_current_bytes": true,
+    "original_container_bytes_retained_now": true
+  },
+  "native_authority": {
+    "windows": {
+      "receipt": {
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/artifacts/sirius-windows-native-attestation/windows-build.json",
+        "bytes": 9131,
+        "sha256": "2abc702ddaefe7e4fdf188363c9591623ad137a4adb1b31a8131e540a520983a"
+      },
+      "gate": {
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/artifacts/sirius-windows-native-attestation/native_build_gate.json",
+        "bytes": 10013,
+        "sha256": "ab134df62a4e2bea861e6b93f8dbe19317fef7fe597e1921564a28ead3cf2155"
+      },
+      "JUnit": {
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/artifacts/sirius-windows-native-attestation/native_build_gate_junit.xml",
+        "bytes": 5244,
+        "sha256": "ce051c9c765e5f3f22c925a846afc6d4396a75ca1c8633b6dca36954747989d2"
+      },
+      "verifier_log": {
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/windows-verifier.log",
+        "bytes": 130,
+        "sha256": "35af5f3dcec2ad8aae7fa9907f463679f516852b741f92ed79f4acc987de3227"
+      },
+      "root_reported_local_verifier_exit": 0,
+      "saved_verifier_stdout_verified_message": true,
+      "original_selected_cases": [
+        "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+        "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+        "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+        "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+        "OperationalAttestation.FalseExternalEvidenceIsRejected",
+        "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+        "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+        "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+        "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims"
+      ],
+      "registered": 1152,
+      "executed": 9,
+      "zero_failures_errors_skips_disabled": true,
+      "all39_receipt_declared_artifacts_match_current_bytes": true,
+      "all7_tested_9_product_20_input_roles_exact": true,
+      "source_clean_revision": {
+        "clean": true,
+        "revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67"
+      },
+      "qualification_alignment_admitted_domains": 0,
+      "qualification_alignment_required_domains": 8,
+      "runtime_ready": false,
+      "estate_scope": "native-build-non-render-authority",
+      "backend": {
+        "bytes": 11105280,
+        "path": "tests/backend/Release/sirius_backend_tests.exe",
+        "root": "build",
+        "sha256": "a06129e0ec93f2d5d55adb556ef6d69c1b11da4b0f765afbf80c9cfd95b3571f"
+      }
+    },
+    "macos": {
+      "receipt": {
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/artifacts/sirius-macos-native-attestation/macos-build.json",
+        "bytes": 8900,
+        "sha256": "2280710ab1dead95a5836b65d62fbd86057d3401a6778d5d5352430e9696d3d4"
+      },
+      "gate": {
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/artifacts/sirius-macos-native-attestation/native_build_gate.json",
+        "bytes": 9651,
+        "sha256": "63a7183360970c358812e6d027ee189bd784886545c636a5b33c123c553c5acf"
+      },
+      "JUnit": {
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/artifacts/sirius-macos-native-attestation/native_build_gate_junit.xml",
+        "bytes": 5161,
+        "sha256": "eef2d2a81ac50f2c026e1478a81d3b0e38873edf986d650bca9d2f49f8849088"
+      },
+      "verifier_log": {
+        "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/macos-verifier.log",
+        "bytes": 126,
+        "sha256": "a5a9192e1053ad837ead3d364cdd53c8ca8a91f105b6a45657dced0f150fcfa4"
+      },
+      "root_reported_local_verifier_exit": 0,
+      "saved_verifier_stdout_verified_message": true,
+      "original_selected_cases": [
+        "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+        "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+        "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+        "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+        "OperationalAttestation.FalseExternalEvidenceIsRejected",
+        "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+        "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+        "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+        "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims"
+      ],
+      "registered": 1152,
+      "executed": 9,
+      "zero_failures_errors_skips_disabled": true,
+      "all39_receipt_declared_artifacts_match_current_bytes": true,
+      "all7_tested_9_product_20_input_roles_exact": true,
+      "source_clean_revision": {
+        "clean": true,
+        "revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67"
+      },
+      "qualification_alignment_admitted_domains": 0,
+      "qualification_alignment_required_domains": 8,
+      "runtime_ready": false,
+      "estate_scope": "native-build-non-render-authority",
+      "backend": {
+        "bytes": 11602120,
+        "path": "tests/backend/sirius_backend_tests",
+        "root": "build",
+        "sha256": "572f3522001b1fb2e2138c329c36f9117a064a70e60c063455d679542d0ef151"
+      }
+    }
+  },
+  "inventory_source_metadata": {
+    "Windows_full_inventory_byte_exact_to_e0_d066": true,
+    "macOS_all1152_names_commands_labels_locks_deadlines_preserved": true,
+    "macOS_only_changed_property": {
+      "test": "KernelTrace.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs",
+      "property": "DEF_SOURCE_LINE",
+      "old": "tests/backend/kernel_trace_test.cpp:576",
+      "new": "tests/backend/kernel_trace_test.cpp:579"
+    },
+    "reason": "Exact f22 source adds three progress lines before this later test declaration; the current canonical inventory hash correctly binds this metadata.",
+    "digest_contract": "Native ctest.inventory_sha256 uses sorted compact canonical JSON, not raw pretty-printed file bytes, as existing verifier source specifies."
+  },
+  "windows_diagnostic": {
+    "manifest": {
+      "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/artifacts/sirius-windows-diagnostic-build-products/generated/sirius/windows-diagnostic-build-products.json",
+      "bytes": 32517,
+      "sha256": "78f8160f11af19cf85a6c804273cf7da898295ec00ad25f9b3cd6d6e99fdc525"
+    },
+    "all138_declared_files_current_and_exact_complete139file_tree_including_manifest": true,
+    "manifest_source_run_attempt_match": true,
+    "diagnostic_build_only": true,
+    "qualification_claimed": false,
+    "current_CLI_and_new_backend_exact_native_gate_aliases": true,
+    "backend_bytes": 11105280,
+    "backend_sha256": "a06129e0ec93f2d5d55adb556ef6d69c1b11da4b0f765afbf80c9cfd95b3571f",
+    "all20_test_inputs_and_three_trace_products_in_both_executable_adjacent_volumes_match_native_gate": true,
+    "generated_alignment_receipt_matches_native_archive": true,
+    "other_five_test_executables": "Bound by exact native-attestation archive bytes; not invented as members of the two-volume diagnostic manifest.",
+    "registration_metadata": {
+      "path": "out/trace-jacobi-device-lifetime-ci-f22dc025/artifacts/sirius-windows-diagnostic-build-products/generated/sirius/windows-mandatory-registration/registration-metadata.json",
+      "bytes": 28670,
+      "sha256": "1a2cb7a97996a34cfd549765ddfa796fb2981809c55bd5ec0995e0783f02c89a"
+    },
+    "registration_payload_files": 63,
+    "all_payload_hashes_paths_and_complete_export_tree_match": true,
+    "comparison_commit": "d0662d27ef039c2a83aa43f6e7df57cd89f9fe76",
+    "exact_old_payloads": 62,
+    "single_changed_payload": "bin/windows-msvc/verify_sirius_install.cmake",
+    "single_delta": "One40-byte source revision literal e0db7d5970d4878a1b5418c4dc058a435f2df8e9\u2192f22dc025d112c2d967356dead6b6e9caf8b42d67; inverse restores exact original bytes.",
+    "configured_roots_and_tools_equal_e0": true,
+    "configured_tools": {
+      "_Python3_EXECUTABLE": {
+        "bytes": 0,
+        "path": "C:\\hostedtoolcache\\windows\\Python\\3.14.8\\x64\\python3.exe",
+        "sha256": "434b361fe0c5960d404974feed493db47f2603a1ace2574312104fbed0182c6f"
+      },
+      "CMAKE_COMMAND": {
+        "bytes": 12029392,
+        "path": "C:\\Program Files\\CMake\\bin\\cmake.exe",
+        "sha256": "3fe22eb02e1c6184ec207366ed21a6f2f9c3828c1e9f3324546befadfb362be3"
+      },
+      "CMAKE_CTEST_COMMAND": {
+        "bytes": 12947920,
+        "path": "C:\\Program Files\\CMake\\bin\\ctest.exe",
+        "sha256": "76d83c30be3899c2b446c73bff7aead58c47440c05062c5716e3162e588a6e2c"
+      }
+    },
+    "zero_length_Python_alias_scope": "Configured python3.exe metadata length0 with target digest is not interpreter bytes, backup, relocation execution or tool-substitution admission.",
+    "configured_registration_or_install_recipes_executed_by_reviewer": false
+  },
+  "authority_boundaries": [
+    "Each native receipt binds seven tested executables, nine product artifacts and20test inputs; source-root products match actual named f22 Git bytes. Selected original9 are unchanged from accepted e0 gates.",
+    "Both current receipts explicitly scope test_estate_passed to native-build-non-render-authority and runtime_ready=false. Registered1152 does not mean all1152 Mandatory executed.",
+    "Current generated qualification alignment remains0of8 and release ideal unsatisfied. Build-only CI is not external-runtime/native-science/currentP2/coldframe/UI/fullscientific/release acceptance.",
+    "No local scientific test, artifact verifier or provider was executed by reviewer. No current live CPU/P2/native case outputs were read."
+  ],
+  "method": "Passive stdlib JSON/XML/ZIP/text/hash and read-only Git only. No project imports/helpers/parsers/verifier/compiler/provider/test/network/process operations or existing source/artifact mutations. Two overstrong passive expectations were corrected: inventory digest is canonicalJSON; macOS metadata has the exact source-line shift above. No workload or verifier repeated.",
+  "checkout": {
+    "head": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "this_ignored_review_committed_or_pushed": false
+  }
+}

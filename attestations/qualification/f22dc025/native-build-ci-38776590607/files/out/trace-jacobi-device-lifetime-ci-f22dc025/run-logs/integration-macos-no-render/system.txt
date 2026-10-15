@@ -1,0 +1,9 @@
+2026-10-15T17:21:05.0100000Z Evaluating integration-macos-no-render.if
+2026-10-15T17:21:05.0100000Z Evaluating: (success() && (((github.event_name == 'pull_request') || (((github.event_name == 'workflow_dispatch') && (inputs.macos_retained_diagnostic != true))))))
+2026-10-15T17:21:05.0100000Z Expanded: (true && (('workflow_dispatch' == 'pull_request') || (('workflow_dispatch' == 'workflow_dispatch') && (false != true))))
+2026-10-15T17:21:05.0100000Z Result: true
+2026-10-15T17:21:05.0130000Z Requested labels: macos-15
+2026-10-15T17:21:05.0130000Z Job defined at: sunyaisblank/Sirius/.github/workflows/ci.yml@refs/heads/development/minimum-step-floor-2026-10-15
+2026-10-15T17:21:05.0130000Z Waiting for a runner to pick up this job...
+2026-10-15T17:21:05.2300000Z Job is about to start running on the hosted runner: GitHub Actions 1000004686
+2026-10-15T17:21:05.2290000Z Job is waiting for a hosted runner to come online.

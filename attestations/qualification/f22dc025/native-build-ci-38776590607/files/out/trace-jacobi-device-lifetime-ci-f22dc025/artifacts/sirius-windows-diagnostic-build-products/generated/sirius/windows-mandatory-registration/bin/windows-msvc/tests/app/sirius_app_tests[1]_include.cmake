@@ -1,0 +1,5 @@
+if(EXISTS "D:/a/Sirius/Sirius/bin/windows-msvc/tests/app/sirius_app_tests[1]_tests.cmake")
+  include("D:/a/Sirius/Sirius/bin/windows-msvc/tests/app/sirius_app_tests[1]_tests.cmake")
+else()
+  add_test(sirius_app_tests_NOT_BUILT sirius_app_tests_NOT_BUILT)
+endif()
