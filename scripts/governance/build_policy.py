@@ -192,6 +192,83 @@ FULL_QUALIFICATION_CONDITION = (
 MACOS_RETAINED_DIAGNOSTIC_CONDITION = (
     "github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic == true"
 )
+# Dispatch-only build volumes are diagnostic inputs, separate from attestations.
+WINDOWS_DIAGNOSTIC_BUILD_STAGE = r"""      - name: Stage diagnostic Windows build products
+        if: github.event_name == 'workflow_dispatch'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $revision = (git rev-parse HEAD).Trim()
+          if ($LASTEXITCODE -ne 0 -or $revision -ne $env:GITHUB_SHA -or (git status --porcelain)) { throw "diagnostic source identity mismatch" }
+          $alignment = "bin/windows-msvc/generated/sirius/alignment_receipt.json"
+          if ((Get-Content -Raw $alignment | ConvertFrom-Json).source_revision -ne $revision) { throw "diagnostic alignment revision mismatch" }
+          $volumes = @("bin/windows-msvc/src/sirius/app/Release", "bin/windows-msvc/tests/backend/Release")
+          $executables = @("sirius.exe", "sirius_backend_tests.exe")
+          $loader = Get-Item -LiteralPath (Join-Path $env:VULKAN_SDK "runtime/x64/vulkan-1.dll")
+          $cache = Get-Content -Raw "bin/windows-msvc/CMakeCache.txt"
+          if ($cache -notmatch '(?m)^BUILD_SHARED_LIBS:BOOL=OFF\r?$') { throw "diagnostic volumes require the existing static-library topology" }
+          if ($cache -match '(?m)^GLFW_LIBRARY_TYPE:STRING=(?!STATIC\r?$)[^\r\n]+') { throw "diagnostic GLFW DLL topology is not represented" }
+          $instance = [regex]::Match($cache, '(?m)^CMAKE_GENERATOR_INSTANCE:[^=]+=(.+)$')
+          if (-not $instance.Success) { throw "selected Visual Studio instance is absent" }
+          $compiler = @(Get-ChildItem -Path "bin/windows-msvc/CMakeFiles/*/CMakeCXXCompiler.cmake" -File)
+          if ($compiler.Count -ne 1) { throw "selected C++ compiler metadata is ambiguous" }
+          $compilerVersion = [regex]::Match((Get-Content -Raw $compiler[0].FullName), 'set\(CMAKE_CXX_COMPILER_VERSION "(19\.(\d+)\.[^"]+)"\)')
+          if (-not $compilerVersion.Success) { throw "selected MSVC compiler version is absent" }
+          $redistVersionFile = Join-Path ($instance.Groups[1].Value.Trim()) "VC/Auxiliary/Build/Microsoft.VCRedistVersion.default.txt"
+          $redistVersion = (Get-Content -Raw $redistVersionFile).Trim()
+          if ($redistVersion -notmatch ('^14\.' + $compilerVersion.Groups[2].Value + '\.')) { throw "selected MSVC and release CRT versions do not match" }
+          $crtDirectory = Join-Path ($instance.Groups[1].Value.Trim()) "VC/Redist/MSVC/$redistVersion/x64/Microsoft.VC143.CRT"
+          $crtNames = @("concrt140.dll", "msvcp140.dll", "msvcp140_1.dll", "msvcp140_2.dll", "msvcp140_atomic_wait.dll", "msvcp140_codecvt_ids.dll", "vcruntime140.dll", "vcruntime140_1.dll", "Microsoft.VC143.CRT.manifest")
+          $crt = @($crtNames | ForEach-Object { $path = Join-Path $crtDirectory $_; if (Test-Path -LiteralPath $path -PathType Leaf) { Get-Item -LiteralPath $path } })
+          foreach ($name in @("msvcp140.dll", "vcruntime140.dll", "vcruntime140_1.dll")) {
+            if ($name -notin $crt.Name) { throw "selected release CRT missing: $name" }
+          }
+          $files = @{}
+          $origins = @{}
+          foreach ($dll in @($loader) + @($crt)) { $origins[$dll.Name] = $dll.FullName }
+          for ($index = 0; $index -lt $volumes.Count; $index++) {
+            $volume = $volumes[$index]
+            foreach ($dll in @($loader) + @($crt)) { Copy-Item -LiteralPath $dll.FullName -Destination $volume -Force }
+            $payload = @(Get-Item -LiteralPath (Join-Path $volume $executables[$index]))
+            $payload += @(Get-ChildItem -Path "$volume/*.dll", "$volume/*.manifest" -File -Force)
+            $payload += @(Get-ChildItem -LiteralPath "$volume/resources" -Recurse -File -Force)
+            foreach ($file in $payload) {
+              $relative = [IO.Path]::GetRelativePath($PWD.Path, $file.FullName).Replace('\', '/')
+              $files[$relative] = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant() }
+            }
+          }
+          $compilerCopy = "bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake"
+          Copy-Item -LiteralPath $compiler[0].FullName -Destination $compilerCopy
+          foreach ($path in @($alignment, "bin/windows-msvc/CMakeCache.txt", $compilerCopy)) {
+            $file = Get-Item -LiteralPath $path
+            $files[$path] = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant() }
+          }
+          $record = @{ schema = "sirius-windows-diagnostic-build-products-v1"; source_revision = $revision; repository = $env:GITHUB_REPOSITORY; run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT; msvc_version = $compilerVersion.Groups[1].Value; release_crt_version = $redistVersion; runtime_dll_origins = $origins; files = $files; diagnostic_build_only = $true; qualification_claimed = $false; scope = "Strict compiled CLI/backend-test volumes only; no native runtime, rendering, UI, scientific, release or native-build attestation claim. Windows OS/UCRT and the physical graphics driver remain host dependencies." }
+          $output = "bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json"
+          [IO.File]::WriteAllText((Join-Path $PWD.Path $output), ($record | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))
+"""
+WINDOWS_DIAGNOSTIC_BUILD_UPLOAD = r"""      - name: Preserve diagnostic Windows build products
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-windows-diagnostic-build-products
+          path: |
+            bin/windows-msvc/src/sirius/app/Release/sirius.exe
+            bin/windows-msvc/src/sirius/app/Release/*.dll
+            bin/windows-msvc/src/sirius/app/Release/*.manifest
+            bin/windows-msvc/src/sirius/app/Release/resources
+            bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe
+            bin/windows-msvc/tests/backend/Release/*.dll
+            bin/windows-msvc/tests/backend/Release/*.manifest
+            bin/windows-msvc/tests/backend/Release/resources
+            bin/windows-msvc/generated/sirius/alignment_receipt.json
+            bin/windows-msvc/CMakeCache.txt
+            bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake
+            bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json
+          include-hidden-files: true
+          if-no-files-found: error
+"""
+
 # This one-off diagnostic reuses an immutable native export. Keep its entire
 # job bounded: one provider build, four original controls and diagnostic upload.
 MACOS_RETAINED_DIAGNOSTIC_JOB = r"""    if: github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic == true
@@ -407,9 +484,24 @@ def integration_boundary_errors(workflow: str) -> list[str]:
             diagnostic_steps = [step for step in steps
                                 if workflow_step_field(step, "name")
                                 == ["Preserve gate diagnostics"]]
+            product_steps = [step for step in steps if workflow_step_field(step, "name") in
+                             (["Stage diagnostic Windows build products"],
+                              ["Preserve diagnostic Windows build products"])]
+            windows_products = name == "integration-windows-no-render"
+            if windows_products:
+                expected_products = [WINDOWS_DIAGNOSTIC_BUILD_STAGE, WINDOWS_DIAGNOSTIC_BUILD_UPLOAD]
+                if ([step.rstrip() for step in product_steps]
+                        != [step.rstrip() for step in expected_products]
+                        or not (integration.find("ctest ") < integration.find(WINDOWS_DIAGNOSTIC_BUILD_STAGE)
+                                < integration.find(WINDOWS_DIAGNOSTIC_BUILD_UPLOAD)
+                                < integration.find("RunNativeBuildEvidence"))):
+                    errors.append("Windows diagnostic products exceed their exact dispatch-only build scope")
+            elif product_steps:
+                errors.append("Windows diagnostic products escaped their Windows integration job")
             evidence_uploads = [step for step in steps
-                                if "upload-artifact@" in step and step not in diagnostic_steps]
-            if (records_build != 1 or uploads != 2 or len(evidence_uploads) != 1
+                                if "upload-artifact@" in step and step not in diagnostic_steps
+                                and step not in product_steps]
+            if (records_build != 1 or uploads != (3 if windows_products else 2) or len(evidence_uploads) != 1
                     or len(diagnostic_steps) != 1
                     or not gate_diagnostic_upload_valid(diagnostic_steps[0])):
                 errors.append(f"native integration lacks one build evidence producer: {name}")
@@ -614,6 +706,8 @@ def verify_integration_boundary_policy() -> None:
                 else ""
             )
             + integration_body
+            + (WINDOWS_DIAGNOSTIC_BUILD_STAGE + WINDOWS_DIAGNOSTIC_BUILD_UPLOAD
+               if name == "integration-windows-no-render" else "")
             + (
                 native_evidence_body.format(
                     domain=(
@@ -676,6 +770,22 @@ def verify_integration_boundary_policy() -> None:
         raise RuntimeError("integration-boundary policy accepted Windows driver execution")
 
     mutations = {
+        "Windows missing diagnostic staging": valid.replace(WINDOWS_DIAGNOSTIC_BUILD_STAGE, "", 1),
+        "Windows diagnostic upload before staging": valid.replace(
+            WINDOWS_DIAGNOSTIC_BUILD_STAGE + WINDOWS_DIAGNOSTIC_BUILD_UPLOAD,
+            WINDOWS_DIAGNOSTIC_BUILD_UPLOAD + WINDOWS_DIAGNOSTIC_BUILD_STAGE, 1),
+        "Windows diagnostic PR upload": valid.replace(WINDOWS_DIAGNOSTIC_BUILD_UPLOAD,
+            WINDOWS_DIAGNOSTIC_BUILD_UPLOAD.replace("        if: github.event_name == 'workflow_dispatch'\n", ""), 1),
+        "Windows diagnostic always upload": valid.replace(WINDOWS_DIAGNOSTIC_BUILD_UPLOAD,
+            WINDOWS_DIAGNOSTIC_BUILD_UPLOAD.replace("if: github.event_name == 'workflow_dispatch'", "if: always()"), 1),
+        "Windows diagnostic unbounded volume": valid.replace(WINDOWS_DIAGNOSTIC_BUILD_UPLOAD,
+            WINDOWS_DIAGNOSTIC_BUILD_UPLOAD.replace("bin/windows-msvc/tests/backend/Release/resources", "bin/windows-msvc/**"), 1),
+        "Windows diagnostic missing identity": valid.replace(WINDOWS_DIAGNOSTIC_BUILD_UPLOAD,
+            WINDOWS_DIAGNOSTIC_BUILD_UPLOAD.replace("            bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json\n", ""), 1),
+        "Windows diagnostic hidden files omitted": valid.replace(WINDOWS_DIAGNOSTIC_BUILD_UPLOAD,
+            WINDOWS_DIAGNOSTIC_BUILD_UPLOAD.replace("include-hidden-files: true", "include-hidden-files: false"), 1),
+        "Windows diagnostic product promotion": valid.replace(WINDOWS_DIAGNOSTIC_BUILD_UPLOAD,
+            WINDOWS_DIAGNOSTIC_BUILD_UPLOAD.replace("sirius-windows-diagnostic-build-products", "sirius-windows-native-attestation"), 1),
         "diagnostic attestation name": valid.replace(
             "name: sirius-gate-diagnostics-${{ github.job }}",
             "name: sirius-windows-native-attestation", 1),
