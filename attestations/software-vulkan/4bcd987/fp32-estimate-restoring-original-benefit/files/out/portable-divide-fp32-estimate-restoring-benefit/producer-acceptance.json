@@ -1,0 +1,885 @@
+{
+  "passed": true,
+  "compile_provenance": {
+    "compile-compute-sealed": {
+      "owner": {
+        "bytes": 1982,
+        "sha256": "a77ee1e89214b22ae9cc2b85a57f4ba1cb81ea71e1ee04bdf8815088f6cc3215"
+      },
+      "object": {
+        "bytes": 5750232,
+        "sha256": "5602568c7d882d41c2c20aa86f61c74c59dade3bf731a019fd4aa79d159ca42e"
+      },
+      "actual_dependencies": {
+        "src/sirius/backend/retained_compute.cpp": {
+          "bytes": 45570,
+          "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+        },
+        "src/sirius/backend/retained_compute.h": {
+          "bytes": 15862,
+          "sha256": "be59f256c881e47eed888e40fdc32dfd164bdb3eca83f09ffdab44d401b37ee1"
+        },
+        "src/sirius/backend/device.h": {
+          "bytes": 9669,
+          "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+        },
+        "src/sirius/base/error.h": {
+          "bytes": 2283,
+          "sha256": "6e66cba357b556ecbb0a112227bdfc64ce1fdecf3f6268c614dc8f7dee45ce4a"
+        },
+        "bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/headers/retained_kernels.h": {
+          "bytes": 7989602,
+          "sha256": "51b7dc520d793118257b8f290271e0ee8143ea292868c5d86025484dca41de01"
+        },
+        "bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/headers/retained_owner_kernels.h": {
+          "bytes": 432942,
+          "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+        },
+        "bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/headers/retained_owner_layout.h": {
+          "bytes": 88895,
+          "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75"
+        }
+      }
+    },
+    "compile-observer": {
+      "owner": {
+        "bytes": 2099,
+        "sha256": "a79fd2293745ce4ce81f3f1efdc45c563a5495aa12480e79d0cf3b723265f0e0"
+      },
+      "object": {
+        "bytes": 9333392,
+        "sha256": "cacf6329b093383145b63c87062f404b122f95d65d40c22bc160c89a3ee512ce"
+      },
+      "actual_dependencies": {
+        "out/portable-divide-fp32-estimate-restoring-controls-recovery/audited-observer.cpp": {
+          "bytes": 335033,
+          "sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3"
+        },
+        "tests/support/fail_on_skip.h": {
+          "bytes": 427,
+          "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+        },
+        "src/sirius/backend/retained_compute.h": {
+          "bytes": 15862,
+          "sha256": "be59f256c881e47eed888e40fdc32dfd164bdb3eca83f09ffdab44d401b37ee1"
+        },
+        "src/sirius/backend/device.h": {
+          "bytes": 9669,
+          "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+        },
+        "src/sirius/base/error.h": {
+          "bytes": 2283,
+          "sha256": "6e66cba357b556ecbb0a112227bdfc64ce1fdecf3f6268c614dc8f7dee45ce4a"
+        },
+        "src/sirius/backend/cpu/geodesic_tracer.h": {
+          "bytes": 33728,
+          "sha256": "9277719799f1af802459f451c060e5e04f3a5b811d3fa10a273bc71c3e4fbb85"
+        },
+        "src/sirius/backend/trace_step_executor.h": {
+          "bytes": 1579,
+          "sha256": "55c9e688cbb12b8ac1e72a98bdf3d95976cb8c9accefdb9a8a3f0d72adf1e4fe"
+        },
+        "src/sirius/core/camera_launch.h": {
+          "bytes": 8514,
+          "sha256": "1fd4d6167b35da64246a09fa03649490c4ec0d21f4a29862911a4f37006155df"
+        },
+        "src/sirius/core/camera.h": {
+          "bytes": 43067,
+          "sha256": "7aed8bc770a0b557d21c30a054c5a1f136d4891b48d817a0207876cb1fa00630"
+        },
+        "src/sirius/base/contracts.h": {
+          "bytes": 3989,
+          "sha256": "00eb498bf841042dc5a0f9f732a8eda0dc009f0113cbfec65ef639163936fcb0"
+        },
+        "src/sirius/core/celestial_tangent_basis.h": {
+          "bytes": 5440,
+          "sha256": "e02003f3d27f4411efd5ab7a551eb95a55fccadc91d1c7a378626cfba8039248"
+        },
+        "src/sirius/core/tensor.h": {
+          "bytes": 6421,
+          "sha256": "e281a7f6ed6c7ea6e52558173b2bdd2762f7828de716231adfc20b2fbdff99f7"
+        },
+        "src/sirius/core/dual_number.h": {
+          "bytes": 9490,
+          "sha256": "8843dad29ca3e2d6430917dc6c548841ae4b094884dc6b5c5bf0072b25062cb9"
+        },
+        "src/sirius/core/coordinates.h": {
+          "bytes": 19636,
+          "sha256": "b3a7e98429aa81dae973a6a3542919dbae6e330863d746655667c3f0d12db9b5"
+        },
+        "src/sirius/core/geodesic_integrator.h": {
+          "bytes": 11150,
+          "sha256": "f2cc9d749a65e99d2d3a7d912b2067ab35738799415d88c6bc16a05bec3e4f2c"
+        },
+        "src/sirius/core/dopri_segment.h": {
+          "bytes": 8455,
+          "sha256": "5159fdcf041909ec275f4c515b690c82dd0d3570324a8c0b0fa98bfa19c7e7e9"
+        },
+        "src/sirius/core/trace_boundary.h": {
+          "bytes": 17409,
+          "sha256": "d9f8d4e4f1827125bbda98fce3c4101608b93664743964155990103ae42ae78e"
+        },
+        "src/sirius/core/metrics/metric.h": {
+          "bytes": 10205,
+          "sha256": "563a7543e118a813c4a26a40763578bb9b930385abecbf6ae5c6bce1c29e742c"
+        },
+        "src/sirius/core/twofold.h": {
+          "bytes": 5685,
+          "sha256": "2ace9a10d430dbf4dab870602dbc8ca0545ada2c2e350ca6cd263dd8c92e93f1"
+        },
+        "src/sirius/core/observer_frame.h": {
+          "bytes": 13423,
+          "sha256": "c09d89c0a2a1ea07fc6dae36cd566bf73670e6a3c3802e7f41f88a5eb236a566"
+        },
+        "src/sirius/core/disk/novikov_thorne_disk.h": {
+          "bytes": 16284,
+          "sha256": "3614dd00a58a0caa65b6c72e6c42e2ba77e783e65d8b080214c67185db737a6f"
+        },
+        "src/sirius/core/constants.h": {
+          "bytes": 8558,
+          "sha256": "6c0c6451f479c9a2e2c99c3c5257fc0f9a9f34eebbe6b76e5cd7320e4c669f37"
+        },
+        "src/sirius/core/disk/disk_model.h": {
+          "bytes": 2876,
+          "sha256": "f59c6abeb86bc6dd8005cc5858d35de8e4c6ebbbe7d93a51fa4a4b73d185e5e6"
+        },
+        "src/sirius/core/kerr_orbits.h": {
+          "bytes": 3107,
+          "sha256": "f6e76c81e86bfa152ff8cd1da84e99730eec95aee9544bc2c901243f1fe8fafe"
+        },
+        "src/sirius/core/spectral/spectral_radiance.h": {
+          "bytes": 5757,
+          "sha256": "d80b1a697c57d60a2b9ff14e5b9da401834ad3e27a8180a31a7354dfa8ea6664"
+        },
+        "src/sirius/core/cie1931_observer.h": {
+          "bytes": 1858,
+          "sha256": "949a81ac1495400e219a8b55c68df4dd6fdec3b834bbf4351531316c84d74949"
+        },
+        "src/sirius/core/spectral/blackbody_laws.h": {
+          "bytes": 4322,
+          "sha256": "3846d9cdf8db6e034585ac3e4dcb14f2edb1c4e57a649a1c2ff8964d408bd0c0"
+        },
+        "src/sirius/core/disk/turbulence.h": {
+          "bytes": 6563,
+          "sha256": "c1eae7f91110b07bf64a866ce0bc1658bd68a7249b01e2ebb0d1a0f803c20531"
+        },
+        "src/sirius/core/disk/volumetric_disk.h": {
+          "bytes": 1993,
+          "sha256": "5643b4664bca7f2382ae1a9856c86ef1c506818c6b891bbfd04afcb744a43aaf"
+        },
+        "src/sirius/core/kerr_infinity.h": {
+          "bytes": 16594,
+          "sha256": "7d1789bc66a8cacac64a694cf4fa25f593b5cc2b659d8f6a98e67b5f9a28ec4c"
+        },
+        "src/sirius/core/source_sky_map.h": {
+          "bytes": 5397,
+          "sha256": "95210f38a40b3d46a213e2a4c696c126d56e177cc72d10336d050ddb0e221e44"
+        },
+        "src/sirius/core/metrics/outgoing_kerr_schild.h": {
+          "bytes": 9627,
+          "sha256": "e5244ad78be2aec7580c049ca39059e0879da699d3e4691296df7a0f5c51d34a"
+        },
+        "src/sirius/core/metrics/kerr_schild_family.h": {
+          "bytes": 33851,
+          "sha256": "58ff31cb3df07029072a222f291cf8880794594c8574e605020f21ba31c2459a"
+        },
+        "src/sirius/core/first_order_number.h": {
+          "bytes": 1854,
+          "sha256": "9ed51f93e11c2528546729c2ff190f66131c011ebab0c26cf51e38643c5b1ec7"
+        },
+        "src/sirius/core/metrics/registry.h": {
+          "bytes": 22072,
+          "sha256": "a6d8217e926874cf72b03f183f667110be83c7d7e37ee309de743aa1e5af8072"
+        },
+        "src/sirius/core/second_order_number.h": {
+          "bytes": 2404,
+          "sha256": "12f241e7068971ef4e6ec9cabf76010c71b72cf7ac6749be0b31f0f9dc99c6e5"
+        },
+        "src/sirius/core/polarisation/walker_penrose.h": {
+          "bytes": 9435,
+          "sha256": "c0f4d0eee391b5ac55b341a5534cd0f402b190608892b44babca5bef90527b3f"
+        },
+        "src/sirius/core/polarisation/stokes.h": {
+          "bytes": 10547,
+          "sha256": "220c618bee8754a5455bd4f2f8c2154bd5ae4c0c2547825395a2473de1a22e2f"
+        },
+        "src/sirius/core/relativistic_transfer.h": {
+          "bytes": 11498,
+          "sha256": "6a7cd5fe86a258e1d8febedd4921dc32ee5227210c3d7c142de3a79d66bc467f"
+        },
+        "src/sirius/core/spectral/colour_modes.h": {
+          "bytes": 9441,
+          "sha256": "97d1f488c79830682012b6ee073f45428ca83eb6bf32a16b6e377af73c70dd50"
+        },
+        "src/sirius/core/spectral/blackbody.h": {
+          "bytes": 6171,
+          "sha256": "b2a1c46e379254773ca2ab43b70f0091e81b511bf85dd74d71b340fbfbab3f9f"
+        },
+        "src/sirius/core/srgb_transfer.h": {
+          "bytes": 1743,
+          "sha256": "d8bf1764d4dcd55ba079d11bb0fde7cb0a89619e2d1f3a46f144fc46dfa02ba3"
+        },
+        "src/sirius/core/xyz_srgb.h": {
+          "bytes": 1439,
+          "sha256": "cfd862ab8bb36ce104c3108862ea4784cb2bdcb6a473b4f3a052a5017ad5ca48"
+        },
+        "src/sirius/backend/retained_integrator.h": {
+          "bytes": 5159,
+          "sha256": "798a3d35ec1b267adddcc146bd43181c6dc72a2bebd8e96ca13c71ef08386f04"
+        },
+        "src/sirius/backend/retained_trace_executor.h": {
+          "bytes": 8765,
+          "sha256": "ddb502e05c8f53cce27727bcbf7b986044ca1ad8430bdcad6c349d78590d3574"
+        },
+        "src/sirius/base/sha256.h": {
+          "bytes": 7309,
+          "sha256": "5049d3bc65c0135855755adfaf164daab6be721944dd00a3dd1b66a2b3b34632"
+        },
+        "bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/headers/retained_kernels.h": {
+          "bytes": 7989602,
+          "sha256": "51b7dc520d793118257b8f290271e0ee8143ea292868c5d86025484dca41de01"
+        },
+        "src/sirius/backend/vulkan/vulkan_device.h": {
+          "bytes": 9768,
+          "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de"
+        },
+        "bin/linux-gcc/tests/backend/retained_camera/program_fixture.h": {
+          "bytes": 416303,
+          "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+        },
+        "tests/support/cpu_critical/transport_reference.h": {
+          "bytes": 25983,
+          "sha256": "fcf51887cac8bff20305d50197e60f20bff15e2138f04154bcc64e42cce0341f"
+        },
+        "tests/support/retained_camera/continuous_reference.h": {
+          "bytes": 102180,
+          "sha256": "d921b1c3b371c79b96709bab3c33718a41482863c789e3d11fdbef0568722c61"
+        },
+        "tests/support/retained_camera/ray_reference.h": {
+          "bytes": 437279,
+          "sha256": "c98e7002355187ecf2da59bcae317c699a337b1e9c85a1c39855830bc489781b"
+        },
+        "tests/support/retained_transport/dense_reference.h": {
+          "bytes": 307331,
+          "sha256": "12d4ec8089fb281c81df3e40d9ce0d3ea35d7661bcba2b02d79c0c0742dcb9e3"
+        },
+        "tests/support/retained_transport/dopri_reference.h": {
+          "bytes": 720834,
+          "sha256": "ba28cb749e80fead9f8ca486175e895b5f2b43d7a67208d2fecd982783068270"
+        },
+        "tests/support/retained_transport/endpoint_factor_reference.h": {
+          "bytes": 206689,
+          "sha256": "1b0ce10fbf931e202bd19c636620e60281724691fa7c6fef34d31e90855b73d1"
+        },
+        "tests/support/retained_transport/endpoint_reference.h": {
+          "bytes": 91932,
+          "sha256": "57ff34f845f03da1d77fe17ac175d16443403fdba9515761ecfc7256db450ec7"
+        },
+        "tests/support/retained_transport/reference_cases.h": {
+          "bytes": 619673,
+          "sha256": "0380a637d02135bff7c20cbe5fdbd53dd30399cdd252429b50c3be786380ed1a"
+        },
+        "tests/support/retained_transport/schwarzschild_endpoint_reference.h": {
+          "bytes": 179998,
+          "sha256": "f675352b19360d6946ed63a14220c584477d81a827016def7b979d2aa50f12fb"
+        },
+        "tests/support/retained_transport/schwarzschild_reference_cases.h": {
+          "bytes": 679048,
+          "sha256": "8f9c1c7eed95c02ea7c17c7d130418b2030450e44d12aa74cc572f7ba900f05f"
+        }
+      }
+    }
+  },
+  "link_owner": {
+    "bytes": 2094,
+    "sha256": "dc6cde5b972c4d2baadc3f1289782202bc89e07c193635512e679bbf3b769d62"
+  },
+  "link_map": {
+    "bytes": 1199087,
+    "sha256": "7637a65aa7844f94694f3036af50bcca2282749482d3b54d6468bc2c621c190a"
+  },
+  "old_archive_compute_member_excluded": true,
+  "actual_ELF_owner_arrays": {
+    "baseline": {
+      "kTransportShader": {
+        "bytes": 113452,
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+        "address": 8087936,
+        "binding": 10
+      },
+      "kEndpointShader": {
+        "bytes": 161620,
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+        "address": 7926304,
+        "binding": 10
+      }
+    },
+    "candidate": {
+      "kTransportShader": {
+        "bytes": 113452,
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+        "address": 8137696,
+        "binding": 10
+      },
+      "kEndpointShader": {
+        "bytes": 161620,
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+        "address": 7976064,
+        "binding": 10
+      }
+    }
+  },
+  "actual_ELF_arrays": {
+    "baseline": {
+      "kCameraProgram": {
+        "bytes": 107364,
+        "sha256": "4e7ac6f05ee316d019ba9137ebcea0f5883e6dd66031e0839a4d72e6e5e39d49",
+        "address": 8407776,
+        "binding": 10
+      },
+      "kCameraShader": {
+        "bytes": 47720,
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+        "address": 7817280,
+        "binding": 10
+      },
+      "kCameraFp64Shader": {
+        "bytes": 61048,
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+        "address": 7756224,
+        "binding": 10
+      },
+      "kCameraPortableShader": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "address": 7243872,
+        "binding": 10
+      },
+      "kCameraPortableFp64Shader": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "address": 6731520,
+        "binding": 10
+      },
+      "kTransportProgram": {
+        "bytes": 63868,
+        "sha256": "8717c2b5cec0664aa7a2c8aeed122cb54b2092ffe8e3d3dd0901d19af7d47436",
+        "address": 6667648,
+        "binding": 10
+      },
+      "kTransportShader": {
+        "bytes": 85364,
+        "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1",
+        "address": 6582272,
+        "binding": 10
+      },
+      "kTransportFp64Shader": {
+        "bytes": 98008,
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+        "address": 6484256,
+        "binding": 10
+      },
+      "kTransportPortableShader": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "address": 6384512,
+        "binding": 10
+      },
+      "kTransportPortableFp64Shader": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "address": 6284768,
+        "binding": 10
+      },
+      "kTransportPortableNormalSumShader": {
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+        "address": 6180704,
+        "binding": 10
+      },
+      "kTransportFmaShader": {
+        "bytes": 83532,
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+        "address": 6097152,
+        "binding": 10
+      },
+      "kEndpointProgram": {
+        "bytes": 84572,
+        "sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+        "address": 6012576,
+        "binding": 10
+      },
+      "kEndpointShader": {
+        "bytes": 99300,
+        "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559",
+        "address": 5913248,
+        "binding": 10
+      },
+      "kEndpointFp64Shader": {
+        "bytes": 111960,
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+        "address": 5801280,
+        "binding": 10
+      },
+      "kEndpointPortableShader": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "address": 5655936,
+        "binding": 10
+      },
+      "kEndpointPortableFp64Shader": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "address": 5510592,
+        "binding": 10
+      },
+      "kEndpointPortableNormalSumShader": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+        "address": 5359168,
+        "binding": 10
+      },
+      "kEndpointFmaShader": {
+        "bytes": 97468,
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+        "address": 5261696,
+        "binding": 10
+      },
+      "kDenseProgram": {
+        "bytes": 127728,
+        "sha256": "ae332f9d2ef8756b381c7dc641fefae5972b69acc338329c60d13997dfc5c146",
+        "address": 5133952,
+        "binding": 10
+      },
+      "kDenseShader": {
+        "bytes": 77952,
+        "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab",
+        "address": 5056000,
+        "binding": 10
+      },
+      "kDenseFp64Shader": {
+        "bytes": 90628,
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+        "address": 4965344,
+        "binding": 10
+      },
+      "kDensePortableShader": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "address": 4849120,
+        "binding": 10
+      },
+      "kDensePortableFp64Shader": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "address": 4732896,
+        "binding": 10
+      },
+      "kInitializeProgram": {
+        "bytes": 39688,
+        "sha256": "a92cf01a58662e08e7d608143c757f58ae6f6b7df8913772c3ad9a4838f8f51e",
+        "address": 8368064,
+        "binding": 10
+      },
+      "kInitializeShader": {
+        "bytes": 57108,
+        "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a",
+        "address": 4675776,
+        "binding": 10
+      },
+      "kInitializeFp64Shader": {
+        "bytes": 70468,
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+        "address": 4605280,
+        "binding": 10
+      },
+      "kInitializePortableShader": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "address": 4527808,
+        "binding": 10
+      },
+      "kInitializePortableFp64Shader": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "address": 4450336,
+        "binding": 10
+      },
+      "kRayCameraProgram": {
+        "bytes": 123848,
+        "sha256": "0c0ce908c9956c51c222e2554de9bc9871a4eb868dad03d118ee64572236df17",
+        "address": 8244192,
+        "binding": 10
+      },
+      "kRayCameraShader": {
+        "bytes": 45368,
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+        "address": 4404960,
+        "binding": 10
+      },
+      "kRayCameraFp64Shader": {
+        "bytes": 58728,
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+        "address": 4346208,
+        "binding": 10
+      },
+      "kRayCameraPortableShader": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "address": 3870944,
+        "binding": 10
+      },
+      "kRayCameraPortableFp64Shader": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "address": 3395680,
+        "binding": 10
+      },
+      "kDopriPhaseProgram": {
+        "bytes": 42756,
+        "sha256": "1b299191be54909e432bafee906992ea15783a3bffe908d4ddd9a34619218b05",
+        "address": 8201408,
+        "binding": 10
+      },
+      "kDopriPhaseShader": {
+        "bytes": 58740,
+        "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895",
+        "address": 3336928,
+        "binding": 10
+      },
+      "kDopriPhaseFp64Shader": {
+        "bytes": 72100,
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+        "address": 3264800,
+        "binding": 10
+      },
+      "kDopriPhasePortableShader": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "address": 3171936,
+        "binding": 10
+      },
+      "kDopriPhasePortableFp64Shader": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "address": 3079072,
+        "binding": 10
+      },
+      "kDopriPhasePortableNormalSumShader": {
+        "bytes": 96752,
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+        "address": 2982304,
+        "binding": 10
+      }
+    },
+    "candidate": {
+      "kCameraProgram": {
+        "bytes": 107364,
+        "sha256": "4e7ac6f05ee316d019ba9137ebcea0f5883e6dd66031e0839a4d72e6e5e39d49",
+        "address": 8457536,
+        "binding": 10
+      },
+      "kCameraShader": {
+        "bytes": 47720,
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+        "address": 7886880,
+        "binding": 10
+      },
+      "kCameraFp64Shader": {
+        "bytes": 61048,
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+        "address": 7825824,
+        "binding": 10
+      },
+      "kCameraPortableShader": {
+        "bytes": 520824,
+        "sha256": "c7a7fce5e6c25ec0c89f29ca2b5cd962068f5252512d4a806e00af4a4d7fbeb7",
+        "address": 7304992,
+        "binding": 10
+      },
+      "kCameraPortableFp64Shader": {
+        "bytes": 520824,
+        "sha256": "c7a7fce5e6c25ec0c89f29ca2b5cd962068f5252512d4a806e00af4a4d7fbeb7",
+        "address": 6784160,
+        "binding": 10
+      },
+      "kTransportProgram": {
+        "bytes": 63868,
+        "sha256": "8717c2b5cec0664aa7a2c8aeed122cb54b2092ffe8e3d3dd0901d19af7d47436",
+        "address": 6720288,
+        "binding": 10
+      },
+      "kTransportShader": {
+        "bytes": 85364,
+        "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1",
+        "address": 6634912,
+        "binding": 10
+      },
+      "kTransportFp64Shader": {
+        "bytes": 98008,
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+        "address": 6536896,
+        "binding": 10
+      },
+      "kTransportPortableShader": {
+        "bytes": 102484,
+        "sha256": "4375795916cbfc857f782f9b1e04517baefc0787eba1ba4249bcca8cf948e733",
+        "address": 6434400,
+        "binding": 10
+      },
+      "kTransportPortableFp64Shader": {
+        "bytes": 102484,
+        "sha256": "4375795916cbfc857f782f9b1e04517baefc0787eba1ba4249bcca8cf948e733",
+        "address": 6331904,
+        "binding": 10
+      },
+      "kTransportPortableNormalSumShader": {
+        "bytes": 106772,
+        "sha256": "c20fe3252e68474ac658acc17465c4857eaa520995ec08d7e43f28b9680b8628",
+        "address": 6225120,
+        "binding": 10
+      },
+      "kTransportFmaShader": {
+        "bytes": 83532,
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+        "address": 6141568,
+        "binding": 10
+      },
+      "kEndpointProgram": {
+        "bytes": 84572,
+        "sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+        "address": 6056992,
+        "binding": 10
+      },
+      "kEndpointShader": {
+        "bytes": 99300,
+        "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559",
+        "address": 5957664,
+        "binding": 10
+      },
+      "kEndpointFp64Shader": {
+        "bytes": 111960,
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+        "address": 5845696,
+        "binding": 10
+      },
+      "kEndpointPortableShader": {
+        "bytes": 148056,
+        "sha256": "e46813f0cd16000f63e5e2e82d53809448c7d4537b92531f6b88ca02ec262d90",
+        "address": 5697632,
+        "binding": 10
+      },
+      "kEndpointPortableFp64Shader": {
+        "bytes": 148056,
+        "sha256": "e46813f0cd16000f63e5e2e82d53809448c7d4537b92531f6b88ca02ec262d90",
+        "address": 5549568,
+        "binding": 10
+      },
+      "kEndpointPortableNormalSumShader": {
+        "bytes": 154100,
+        "sha256": "93b2623d95fd98b68a60f254d3d9888cf884521f920396d7758ddfd9f922c40f",
+        "address": 5395456,
+        "binding": 10
+      },
+      "kEndpointFmaShader": {
+        "bytes": 97468,
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+        "address": 5297984,
+        "binding": 10
+      },
+      "kDenseProgram": {
+        "bytes": 127728,
+        "sha256": "ae332f9d2ef8756b381c7dc641fefae5972b69acc338329c60d13997dfc5c146",
+        "address": 5170240,
+        "binding": 10
+      },
+      "kDenseShader": {
+        "bytes": 77952,
+        "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab",
+        "address": 5092288,
+        "binding": 10
+      },
+      "kDenseFp64Shader": {
+        "bytes": 90628,
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+        "address": 5001632,
+        "binding": 10
+      },
+      "kDensePortableShader": {
+        "bytes": 118948,
+        "sha256": "8f696f22002cef1f5c026b230ecff62e96e52503ab3c10c2bf31af9705c028cd",
+        "address": 4882656,
+        "binding": 10
+      },
+      "kDensePortableFp64Shader": {
+        "bytes": 118948,
+        "sha256": "8f696f22002cef1f5c026b230ecff62e96e52503ab3c10c2bf31af9705c028cd",
+        "address": 4763680,
+        "binding": 10
+      },
+      "kInitializeProgram": {
+        "bytes": 39688,
+        "sha256": "a92cf01a58662e08e7d608143c757f58ae6f6b7df8913772c3ad9a4838f8f51e",
+        "address": 8417824,
+        "binding": 10
+      },
+      "kInitializeShader": {
+        "bytes": 57108,
+        "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a",
+        "address": 4706560,
+        "binding": 10
+      },
+      "kInitializeFp64Shader": {
+        "bytes": 70468,
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+        "address": 4636064,
+        "binding": 10
+      },
+      "kInitializePortableShader": {
+        "bytes": 80204,
+        "sha256": "d29aca833bc741045487a36a38b5f0653aa1c9c32db29e7f4a681dd2c84048cf",
+        "address": 4555840,
+        "binding": 10
+      },
+      "kInitializePortableFp64Shader": {
+        "bytes": 80204,
+        "sha256": "d29aca833bc741045487a36a38b5f0653aa1c9c32db29e7f4a681dd2c84048cf",
+        "address": 4475616,
+        "binding": 10
+      },
+      "kRayCameraProgram": {
+        "bytes": 123848,
+        "sha256": "0c0ce908c9956c51c222e2554de9bc9871a4eb868dad03d118ee64572236df17",
+        "address": 8293952,
+        "binding": 10
+      },
+      "kRayCameraShader": {
+        "bytes": 45368,
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+        "address": 4430240,
+        "binding": 10
+      },
+      "kRayCameraFp64Shader": {
+        "bytes": 58728,
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+        "address": 4371488,
+        "binding": 10
+      },
+      "kRayCameraPortableShader": {
+        "bytes": 483772,
+        "sha256": "914a653804e587f46a4ce0b1bb28992c5aeeb7699b5e1650b77d4a1b75b81c2e",
+        "address": 3887712,
+        "binding": 10
+      },
+      "kRayCameraPortableFp64Shader": {
+        "bytes": 483772,
+        "sha256": "914a653804e587f46a4ce0b1bb28992c5aeeb7699b5e1650b77d4a1b75b81c2e",
+        "address": 3403936,
+        "binding": 10
+      },
+      "kDopriPhaseProgram": {
+        "bytes": 42756,
+        "sha256": "1b299191be54909e432bafee906992ea15783a3bffe908d4ddd9a34619218b05",
+        "address": 8251168,
+        "binding": 10
+      },
+      "kDopriPhaseShader": {
+        "bytes": 58740,
+        "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895",
+        "address": 3345184,
+        "binding": 10
+      },
+      "kDopriPhaseFp64Shader": {
+        "bytes": 72100,
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+        "address": 3273056,
+        "binding": 10
+      },
+      "kDopriPhasePortableShader": {
+        "bytes": 95604,
+        "sha256": "bac43a8ac03f8bdb06cd7e29f1590d1174d0472ebef9b9e526c6a5b6287ecaf8",
+        "address": 3177440,
+        "binding": 10
+      },
+      "kDopriPhasePortableFp64Shader": {
+        "bytes": 95604,
+        "sha256": "bac43a8ac03f8bdb06cd7e29f1590d1174d0472ebef9b9e526c6a5b6287ecaf8",
+        "address": 3081824,
+        "binding": 10
+      },
+      "kDopriPhasePortableNormalSumShader": {
+        "bytes": 99484,
+        "sha256": "e1450e27e41ea2da01e5f79577f96a24b0abde447f5838193931b4139f9b2934",
+        "address": 2982336,
+        "binding": 10
+      }
+    }
+  },
+  "actual_create_selectors": {
+    "baseline": {
+      "symbol": "_ZN6sirius7backend15RetainedCompute6CreateERNS0_13ComputeDeviceEmbdb",
+      "address": 2068528,
+      "size": 14631,
+      "joined_arrays": [
+        "kTransportPortableNormalSumShader",
+        "kEndpointPortableNormalSumShader",
+        "kDopriPhasePortableNormalSumShader",
+        "kDensePortableShader",
+        "kEndpointPortableShader"
+      ],
+      "disassembly": {
+        "bytes": 221180,
+        "sha256": "9cfffa97d15457d2867dfef0c959ab2a9b65ef1dda985188ee0832a477039835"
+      }
+    },
+    "candidate": {
+      "symbol": "_ZN6sirius7backend15RetainedCompute6CreateERNS0_13ComputeDeviceEmbdb",
+      "address": 1556016,
+      "size": 14631,
+      "joined_arrays": [
+        "kTransportPortableNormalSumShader",
+        "kEndpointPortableNormalSumShader",
+        "kDopriPhasePortableNormalSumShader",
+        "kDensePortableShader",
+        "kEndpointPortableShader"
+      ],
+      "disassembly": {
+        "bytes": 221195,
+        "sha256": "a5604b63ed6c6bb4c1987dba0b71d487ff32a02fa5efeecf513d2459f7308b80"
+      }
+    }
+  },
+  "changed_arrays": [
+    "kCameraPortableShader",
+    "kCameraPortableFp64Shader",
+    "kTransportPortableShader",
+    "kTransportPortableFp64Shader",
+    "kTransportPortableNormalSumShader",
+    "kEndpointPortableShader",
+    "kEndpointPortableFp64Shader",
+    "kEndpointPortableNormalSumShader",
+    "kDensePortableShader",
+    "kDensePortableFp64Shader",
+    "kInitializePortableShader",
+    "kInitializePortableFp64Shader",
+    "kRayCameraPortableShader",
+    "kRayCameraPortableFp64Shader",
+    "kDopriPhasePortableShader",
+    "kDopriPhasePortableFp64Shader",
+    "kDopriPhasePortableNormalSumShader"
+  ],
+  "unchanged_array_count": 23,
+  "baseline_executable": {
+    "bytes": 10753968,
+    "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856"
+  },
+  "candidate_executable": {
+    "bytes": 10823600,
+    "sha256": "c65e9a20085d9ddb8c20a4f250c5b016fc8ac3ad82487e840f8b469ac72f2b99"
+  },
+  "original_reader": {
+    "bytes": 11264,
+    "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+  },
+  "scope": "Matched original control producer with canonical Vulkan device and actual linked array/selector evidence. All seventeen affected main arrays and both unchanged optional owner arrays are bound to actual ELF bytes; execution remains for root-owned original controls. No integrated execution or benefit verdict yet."
+}

@@ -1,0 +1,96 @@
+{
+  "admitted": true,
+  "apparatus": {
+    "actions.json": {
+      "bytes": 171951,
+      "sha256": "f215eb8720879a4786d7b01155423b9ae7c6073115a8363b70458cd123f5b52b"
+    },
+    "compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+    },
+    "expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "retention-gate-frozen.json": {
+      "bytes": 1879,
+      "sha256": "b2cb915d29db806d2d856f0143a1c4d80bcc3ed247d414a6cc0839156e436af5"
+    },
+    "run_limb_benefit_slot.py": {
+      "bytes": 664,
+      "sha256": "92ba25fa864aaa307207978f8846735a3728e26acb5938d5e15015d5423150cc"
+    },
+    "run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+    },
+    "software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    }
+  },
+  "archive": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-controls",
+  "arithmetic_archive": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic",
+  "arithmetic_commit": "539edbd263583eb3dfadbe2ea6c650b87eb573f8",
+  "arithmetic_inner_result_sha256": "a20e20d00856afac4a59e7e3603c414817c07d7b7d64f6bd33cbe21198940a76",
+  "arithmetic_manifest_sha256": "0279cee2867986ae9c39a6705a339f42d946f93a1a4de468727cd29df7665b6d",
+  "arithmetic_terminal_review_sha256": "e21c5887047253dd1bd9ed70f0bd21fbd76a5eda2f1532bfc7de4d8400b516e5",
+  "baseline_sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856",
+  "candidate_header": {
+    "bytes": 16103,
+    "sha256": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca"
+  },
+  "candidate_macro": "SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+  "candidate_sha256": "c65e9a20085d9ddb8c20a4f250c5b016fc8ac3ad82487e840f8b469ac72f2b99",
+  "changed_arrays": [
+    "kCameraPortableFp64Shader",
+    "kCameraPortableShader",
+    "kDensePortableFp64Shader",
+    "kDensePortableShader",
+    "kDopriPhasePortableFp64Shader",
+    "kDopriPhasePortableNormalSumShader",
+    "kDopriPhasePortableShader",
+    "kEndpointPortableFp64Shader",
+    "kEndpointPortableNormalSumShader",
+    "kEndpointPortableShader",
+    "kInitializePortableFp64Shader",
+    "kInitializePortableShader",
+    "kRayCameraPortableFp64Shader",
+    "kRayCameraPortableShader",
+    "kTransportPortableFp64Shader",
+    "kTransportPortableNormalSumShader",
+    "kTransportPortableShader"
+  ],
+  "compiler_commit": "45a83f5c2f6b019dab8f582dde5b452f5eb037f8",
+  "compiler_manifest_sha256": "845ac7406d30987ef570c6773065ce1bd51bf91214ed6a485ab47a2e44f4b321",
+  "controls_inner_bin": "bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery",
+  "controls_inner_work": "out/portable-divide-fp32-estimate-restoring-controls-recovery",
+  "controls_result_schema": "sirius-fp32-restoring-original-controls-result-v1",
+  "evidence_commit": "9979d990de483574d3de394b7e35b388b4940d35",
+  "evidence_tag": "evidence/issue-44-fp32-estimate-restoring-original-controls",
+  "execution_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "gate_sha256": "89a994c781b4fd40ad302fda4d5d6d1e628b0ef8e4ae813f73003cb76f2ffb58",
+  "historical_execution_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "manifest_sha256": "81b76746db58b4a5d6dd4bd2c9e4b6fcdbd132fb299be5763d37689fb4dd07f5",
+  "precontext_stop_commit": "795e3d871054211cbc667d520371858fb592e550",
+  "precontext_stop_manifest_sha256": "5607fccc95499fafa2488f4cc4f9f452f741c6ccd41f255b2cd6271f20286382",
+  "prerequisite_reader_sha256": "257ee3ead47a15387e6bb4f54090a95aab36e892e46c97f4a8d341d609dd3b4a",
+  "prerequisites_result_sha256": "c007c6c208d5d1bfe0476213f97836a5f21a19dd2d0adf31aeb9271a40e7fead",
+  "profile_acceptance_sha256": "e35149abf2ce8b7f725880e0f94958801a7c02471e740a068dba668bf39609fe",
+  "profile_archive_commit": "b207cd8a781eaef4ad4683e52245948c8ca152b0",
+  "profile_archive_manifest_sha256": "d24b803c4414585fcf3598061fe82a9ab124c41666dcce1307c571e00f19e76e",
+  "profile_terminal_review_sha256": "ea536c1c03a5f9149cbe2cd6e1c9147d12cb019f3afbe5f7946813800bb841c5",
+  "root_terminal_prerequisite_admission_sha256": "8802d0cdbb15399396a86b418dfdf0fa5c2a6445b8dc8be0fc7ed25966c33103",
+  "schema": "sirius-fp32-estimate-restoring-benefit-prerequisite-pin-v1",
+  "source_freeze_sha256": "84c16e2c52b4dd326a8eceb11a22063fde52b10983cd867435bded0d96752e26",
+  "terminal_prerequisite_review_sha256": "d5599dcb36b4c8bef208364c42b564a42d78575231eb3a50d1608289d92e1424"
+}

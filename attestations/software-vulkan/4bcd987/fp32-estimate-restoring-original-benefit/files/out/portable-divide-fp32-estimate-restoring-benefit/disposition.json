@@ -1,0 +1,257 @@
+{
+  "decision": "REJECT_GUARDED_FP32_RESTORING_COST",
+  "issue": 44,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "original_benefit_trial_completed": true,
+  "original_correctness_prerequisites_passed": true,
+  "production_adopted": false,
+  "interval_stage_passed": 10,
+  "interval_stage_required": 20,
+  "inclusive_API_passed": 1,
+  "inclusive_API_required": 2,
+  "complete_call_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        32.586738,
+        32.744765,
+        33.881549
+      ],
+      "candidate_samples_ms": [
+        97.904212,
+        75.396597,
+        40.115838
+      ],
+      "baseline_median_ms": 32.744765,
+      "candidate_median_ms": 75.396597,
+      "improvement_percent": -130.25542250799478,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        41.502507,
+        38.51257,
+        38.817333
+      ],
+      "candidate_samples_ms": [
+        39.723042,
+        40.583191,
+        38.804359
+      ],
+      "baseline_median_ms": 38.817333,
+      "candidate_median_ms": 39.723042,
+      "improvement_percent": -2.333259216958573,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        90.005066,
+        108.8541,
+        91.150798
+      ],
+      "candidate_samples_ms": [
+        35.098068,
+        32.224966,
+        36.128501
+      ],
+      "baseline_median_ms": 91.150798,
+      "candidate_median_ms": 35.098068,
+      "improvement_percent": 61.49450276891706,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        40.458933,
+        41.913445,
+        36.804112
+      ],
+      "candidate_samples_ms": [
+        43.640882999999995,
+        45.130281000000004,
+        43.838856
+      ],
+      "baseline_median_ms": 40.458933,
+      "candidate_median_ms": 43.838856,
+      "improvement_percent": -8.353959804130271,
+      "minimum_percent": 5,
+      "pass": false
+    }
+  ],
+  "inclusive_API_checks": [
+    {
+      "direction": "forward",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 11204.424565000001,
+      "candidate_ms": 16313.178939,
+      "improvement_percent": -45.595865672196595,
+      "minimum_percent": 0,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 19612.100376000002,
+      "candidate_ms": 10286.220395999999,
+      "improvement_percent": 47.551663519999124,
+      "minimum_percent": 0,
+      "pass": true
+    }
+  ],
+  "failed_stage_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.577443000000001,
+        4.526318,
+        5.251778
+      ],
+      "candidate_samples_ms": [
+        25.455281,
+        18.588600999999997,
+        10.597109
+      ],
+      "baseline_median_ms": 5.251778,
+      "candidate_median_ms": 18.588600999999997,
+      "improvement_percent": -253.94871984307025,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_samples_ms": [
+        6.205329,
+        6.729874,
+        6.640118
+      ],
+      "candidate_samples_ms": [
+        15.248672,
+        7.307649,
+        7.304937
+      ],
+      "baseline_median_ms": 6.640118,
+      "candidate_median_ms": 7.307649,
+      "improvement_percent": -10.05299905814926,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_samples_ms": [
+        19.550567,
+        20.355352,
+        20.59816
+      ],
+      "candidate_samples_ms": [
+        55.409858,
+        48.22721,
+        21.026748
+      ],
+      "baseline_median_ms": 20.355352,
+      "candidate_median_ms": 48.22721,
+      "improvement_percent": -136.92643585824504,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        9.620951999999999,
+        10.471875,
+        9.273446
+      ],
+      "candidate_samples_ms": [
+        10.473443,
+        11.792424,
+        9.86083
+      ],
+      "baseline_median_ms": 9.620951999999999,
+      "candidate_median_ms": 10.473443,
+      "improvement_percent": -8.860775939844629,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.1177,
+        5.861154,
+        5.4525559999999995
+      ],
+      "candidate_samples_ms": [
+        6.767335,
+        7.0021249999999995,
+        5.740009000000001
+      ],
+      "baseline_median_ms": 5.4525559999999995,
+      "candidate_median_ms": 6.767335,
+      "improvement_percent": -24.11307650943889,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        9.968197,
+        10.225234,
+        9.367102
+      ],
+      "candidate_samples_ms": [
+        10.370233,
+        11.575217,
+        12.196788
+      ],
+      "baseline_median_ms": 9.968197,
+      "candidate_median_ms": 11.575217,
+      "improvement_percent": -16.12147111458572,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        12.805105000000001,
+        11.873168,
+        11.37159
+      ],
+      "candidate_samples_ms": [
+        13.080875,
+        13.125352,
+        13.115495
+      ],
+      "baseline_median_ms": 11.873168,
+      "candidate_median_ms": 13.115495,
+      "improvement_percent": -10.463315266826845,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "policy": "One unchanged original A1/B1/B2/A2; no retries, pooling, cost subtraction or weakened gates. Source/compiler/arithmetic/eight-control prerequisites remain finite evidence. Full owned process wall retained; original device fixture SetUp remains outside original measured windows. Rendering/science/native/platform/release goal remains active."
+}

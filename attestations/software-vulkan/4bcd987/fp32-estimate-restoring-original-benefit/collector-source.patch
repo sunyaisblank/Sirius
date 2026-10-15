@@ -1,0 +1,182 @@
+--- preserve-finite-result-before-fp32-original-benefit.py
++++ preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop', 'fp32-estimate-restoring-original-controls') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop', 'fp32-estimate-restoring-original-controls', 'fp32-estimate-restoring-original-benefit') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,170 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'fp32-estimate-restoring-original-benefit':
++    import xml.etree.ElementTree as ET
++    work=root/'out/portable-divide-fp32-estimate-restoring-benefit'
++    products=root/'bin/linux-gcc/portable-divide-fp32-estimate-restoring-benefit';trial=work/'benefit'
++    bundle=root/'attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-benefit'
++    tag='evidence/issue-44-fp32-estimate-restoring-original-benefit'
++    load_benefit=lambda path:json.loads(Path(path).read_text())
++    # Both fixed rejection and all22PASS require complete actual terminal evidence.
++    acceptance=load_benefit(work/'trial-acceptance.json');disposition=load_benefit(work/'disposition.json')
++    independent=load_benefit(work/'independent-terminal-review.json');admission=load_benefit(work/'root-terminal-admission.json')
++    assert independent['passed'] is True and admission['passed'] is True
++    assert independent['source_revision']==admission['source_revision']==parent
++    records={}
++    def benefit_record(path):
++        path=Path(path);key=str(path)
++        if key not in records:records[key]=dict(pin(path),resolved_path=str(path.resolve(strict=True)))
++        return records[key]
++    source=load_benefit(work/'source-freeze.json');P=load_benefit(work/'prerequisite-pin.json')
++    assert pin(work/'source-freeze.json')=={'bytes':5465,'sha256':'92c476a99535ae27ecb86ec6e060add533492cab2c1694835db972d9822b0765'}
++    assert len(source['pins'])==22 and P['execution_revision']==parent and P['admitted'] is True
++    for name,expected in source['pins'].items():assert pin(Path(name))==expected,name
++    assert str(Path(__file__).resolve()) not in source['pins']
++    preparation=load_benefit(work/'preparation.json');reuse=load_benefit(work/'producer-reuse.json')
++    comparison=load_benefit(trial/'software-comparison.json');freeze=load_benefit(trial/'retention-gate-frozen.json')
++    sequence=load_benefit(trial/'software-sequence.json');actions=load_benefit(trial/'actions.json')
++    assert preparation['source_revision']==freeze['candidate_revision']==freeze['baseline_revision']==parent
++    assert acceptance['passed'] is True and acceptance['original_trial_complete'] is True and acceptance['source_revision']==parent
++    assert disposition['source_revision']==parent and disposition['original_benefit_trial_completed'] is True and disposition['original_correctness_prerequisites_passed'] is True
++    assert disposition['production_adopted'] is False
++    assert freeze['sequence']==sequence['labels']==['a1','b1','b2','a2'] and sequence['completed'] is True
++    assert set(actions)==set(sequence['labels']) and len(sequence['results'])==4
++    assert freeze['within_slot_repeats']==3 and freeze['all20_gates_required'] is True
++    assert (freeze['complete_call_minimum_improvement_percent'],freeze['every_inclusive_stage_minimum_improvement_percent'],freeze['observed_instance_api_minimum_improvement_percent'])==(5,-5,0)
++    assert len(comparison['checks'])==20 and len(comparison['accounting_checks'])==2
++    assert all(type(row['pass']) is bool for row in comparison['checks']+comparison['accounting_checks'])
++    complete=[row for row in comparison['checks'] if row['scope']=='complete_call_ms'];stages=[row for row in comparison['checks'] if row['scope']!='complete_call_ms']
++    assert len(complete)==4 and len(stages)==16
++    assert all(row['minimum_percent']==5 for row in complete) and all(row['minimum_percent']==-5 for row in stages)
++    assert all(row['minimum_percent']==0 for row in comparison['accounting_checks'])
++    assert comparison['readback_identity_module_and_completion_prerequisites_pass'] is True
++    performance=all(row['pass'] for row in comparison['checks']+comparison['accounting_checks'])
++    assert comparison['pass']==acceptance['performance_acceptance']==performance
++    assert disposition['decision']==('PROCEED_TO_PRODUCTION_IMPLEMENTATION' if performance else 'REJECT_GUARDED_FP32_RESTORING_COST')
++    counts={'interval_stage_passed':sum(row['pass'] for row in comparison['checks']),'interval_stage_required':20,
++            'inclusive_API_passed':sum(row['pass'] for row in comparison['accounting_checks']),'inclusive_API_required':2}
++    for key,value in counts.items():assert acceptance[key]==disposition[key]==value
++    assert disposition['complete_call_checks']==complete and disposition['inclusive_API_checks']==comparison['accounting_checks']
++    assert disposition['failed_stage_checks']==[row for row in stages if not row['pass']]
++    for name,expected in P['apparatus'].items():assert pin(work/'original-apparatus'/name)==expected
++    assert len(P['apparatus'])==9
++    for name in ['software_contracts.py','compare_software.py','run_sequence.py','expected-readback-layout.json','run_owned.py','owned_guard.py']:
++        assert (trial/name).read_bytes()==(work/'original-apparatus'/name).read_bytes()
++    wrapper=(work/'original-apparatus/run_limb_benefit_slot.py').read_text();prefix='bin/linux-gcc/computed-carry-exit-benefit/original_'
++    assert wrapper.count(prefix)==1
++    assert (trial/'run_limb_benefit_slot.py').read_text()==wrapper.replace(prefix,'bin/linux-gcc/portable-divide-fp32-estimate-restoring-benefit/original_')
++    assert 'resource.RLIMIT_CORE,(0,0)' in wrapper and 'resource.RLIMIT_FSIZE,(64*1024*1024,64*1024*1024)' in wrapper
++    for key,name in [('reader','software_contracts.py'),('comparator','compare_software.py'),('launcher','run_sequence.py')]:assert freeze[key+'_sha256']==pin(trial/name)['sha256']
++    assert freeze['actions_sha256']==pin(trial/'actions.json')['sha256'] and sequence['freeze_sha256']==pin(trial/'retention-gate-frozen.json')['sha256']
++    assert sequence['launcher_sha256']==pin(trial/'run_sequence.py')['sha256']
++    assert reuse['passed'] is True and reuse['same_accepted_pair_as_original_controls'] is True and reuse['owner_arrays_unchanged'] is True
++    assert reuse['changed_arrays']==preparation['changed_arrays']==P['changed_arrays'] and len(P['changed_arrays'])==17
++    assert preparation['prerequisite_evidence_commit']==P['evidence_commit']=='9979d990de483574d3de394b7e35b388b4940d35'
++    assert preparation['prior_manifest_sha256']==P['manifest_sha256']=='81b76746db58b4a5d6dd4bd2c9e4b6fcdbd132fb299be5763d37689fb4dd07f5'
++    proof=preparation['producer_prerequisites'];assert proof['original8controls_passed'] and len(proof['fifteen_fresh_terminal_owners'])==15
++    assert proof['actual40array_ELF_proof'] and proof['actual2owner_array_ELF_proof'] and proof['same_observer_CPP']
++    assert proof['private_Int64_or_Float64_device_requirement'] is False and proof['fresh_enabled55_argument_trace_claimed'] is False
++    assert proof['selected17_proposal_modules_add_no_Int64_or_Float64_requirement'] and proof['original_stock_host_unchanged']
++    inherited=proof['inherited_prerequisites'];assert inherited['original_reader_passed'] is False and inherited['original_reader_child_exit']==-15
++    assert inherited['prior_precontext_stop']['context_attempt_passed'] is False and inherited['prior_precontext_stop']['operator_context_accepted'] is False
++    assert proof['prerequisite_packet_relocation']['only_changed_field']=='recovery_work' and proof['prerequisite_packet_relocation']['raw_packet_unchanged']
++    for name,expected in preparation['current_byte_exact_dependency_joins'].items():assert pin(Path(name))==expected,name
++    for name,expected in preparation['preserved_archive_joins'].items():assert pin(Path(name))==expected,name
++    producer=load_benefit(work/'producer-acceptance.json')
++    for mode,item in preparation['executables'].items():
++        executable=root/item['path'];assert pin(executable)=={key:item[key] for key in ['bytes','sha256']}
++        assert pin(executable)['sha256']==P[mode+'_sha256'] and pin(executable)==producer[mode+'_executable']
++        assert freeze['executables'][mode]==item and reuse['executables'][mode]==item
++        assert len(reuse['actual_ELF_arrays'][mode])==40 and len(reuse['actual_ELF_owner_arrays'][mode])==2
++    assert len(list((products/'resources').rglob('*')))>0 and len([path for path in (products/'resources').rglob('*') if path.is_file()])==preparation['resources']==23
++    receipts={};all_inputs={};input_counts={};births={};provider_rows={};xml_records={}
++    lvp=Path('/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so');lvp_status=lvp.stat()
++    for index,label in enumerate(sequence['labels']):
++        folder=trial/label;owner=load_benefit(folder/'owner.json');action=actions[label]
++        assert set(action)=={'revision','kind','expected_exit','argv','limits','software_provider','frozen_inputs','scope'}
++        assert action['revision']==parent and action['kind']=='test' and type(action['expected_exit']) is int and action['expected_exit']==0 and action['software_provider'] is True
++        mode='baseline' if label.startswith('a') else 'candidate'
++        assert action['argv']==['python3','-B',str(trial/'run_limb_benefit_slot.py'),preparation['executables'][mode]['path'],'--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults']
++        assert owner['status']=='terminal' and owner['passed'] is True and owner['child_exit']==0
++        assert owner['source']=={'revision':parent,'status':''} and owner['source_unchanged'] and owner['whole_inputs_unchanged']
++        assert owner['stop_reason'] is None and owner['cleanup_errors']==[] and owner['remaining_owned_processes']==[]
++        assert owner['argv']==action['argv'] and owner['limits']==action['limits']=={'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++        assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
++        owner_births={(int(row['pid']),str(row['saved_start_ticks'])) for row in owner['observed_births']}
++        for row in owner['observed_births']:births[(int(row['pid']),str(row['saved_start_ticks']))]=row
++        assert (folder/'inputs-before.json').read_bytes()==(folder/'inputs-after.json').read_bytes()
++        before=load_benefit(folder/'inputs-before.json');input_counts[label]=len(before)
++        assert str(Path(__file__).resolve()) not in before and str(Path(__file__).resolve().relative_to(root)) not in before
++        for name,expected in before.items():
++            path=Path(name);path=root/path if not path.is_absolute() else path
++            assert set(expected)=={'bytes','sha256','resolved_path'} and benefit_record(path)==expected,(label,name)
++            if name in all_inputs:assert all_inputs[name]==expected
++            all_inputs[name]=expected
++        for name in action['frozen_inputs']:
++            path=Path(name);key=str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
++            assert before[key]==benefit_record(path),(label,name)
++        assert owner['provider_mappings']
++        for row in owner['provider_mappings']:
++            assert (int(row['pid']),str(row['start_ticks'])) in owner_births and row['owned_session']==owner['child_pid']
++            for line in row['maps']:
++                fields=line.split(None,5);assert fields[5]==str(lvp)
++                assert [int(value,16) for value in fields[3].split(':')]==[os.major(lvp_status.st_dev),os.minor(lvp_status.st_dev)] and int(fields[4])==lvp_status.st_ino
++        env=owner['declared_output_environment'];assert env['VK_DRIVER_FILES']=='/usr/share/vulkan/icd.d/lvp_icd.json' and env['SIRIUS_VULKAN_DEVICE']=='0' and env['MESA_SHADER_CACHE_DISABLE']=='true'
++        xml=ET.parse(folder/'gtest.xml').getroot();assert int(xml.get('tests','-1'))==1
++        assert not any(xml.findall('.//'+key) for key in ['failure','error','skipped'])
++        for node in [xml,*xml.findall('.//testsuite')]:assert all(int(node.get(key,'0'))==0 for key in ['failures','errors','skipped','disabled'])
++        cases=xml.findall('.//testcase');assert len(cases)==1 and cases[0].get('status')=='run' and cases[0].get('result')=='completed'
++        assert cases[0].get('classname')+'.'+cases[0].get('name')=='RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults'
++        assert sequence['results'][index]=={'label':label,'owner_sha256':pin(folder/'owner.json')['sha256'],'exit':0}
++        receipts[label]={'owner':benefit_record(folder/'owner.json'),'inputs_before':benefit_record(folder/'inputs-before.json'),'inputs_after':benefit_record(folder/'inputs-after.json'),'xml':benefit_record(folder/'gtest.xml')}
++        xml_records[label]=receipts[label]['xml'];provider_rows[label]=len(owner['provider_mappings'])
++        row=acceptance['slots'][index];assert row['label']==label and row['owner']==pin(folder/'owner.json') and row['xml']==pin(folder/'gtest.xml')
++    assert acceptance['declared_current_inputs_verified']==len(all_inputs) and len(acceptance['slots'])==4
++    protected=load_benefit(work/'protected-before.json');assert len(protected)==acceptance['protected_payloads_unchanged']==114
++    for name,expected in protected.items():assert pin(root/name)==expected,name
++    source_admission=load_benefit(work/'root-source-admission.json');runtime_admission=load_benefit(work/'root-runtime-admission.json')
++    assert source_admission['passed'] is True and runtime_admission['passed'] is True and source_admission['source_revision']==runtime_admission['source_revision']==parent
++    for key,name in [('source_freeze','source-freeze.json'),('independent_source_review','independent-source-review.json'),('prepare','prepare.py'),('prove_reuse','prove_reuse.py'),('finish_trial','finish_trial.py'),('prerequisite_pin','prerequisite-pin.json')]:assert source_admission[key]==benefit_record(work/name)
++    for key,path in [('source_freeze',work/'source-freeze.json'),('actions',trial/'actions.json'),('trial_freeze',trial/'retention-gate-frozen.json'),('preparation',work/'preparation.json'),('producer_reuse',work/'producer-reuse.json'),('root_source_admission',work/'root-source-admission.json')]:assert runtime_admission[key]==benefit_record(path)
++    assert pin(work/'independent-source-review.json')=={'bytes':9574,'sha256':'ca3558e64161aa298535e57eeac1eabe8a0747ae49048b0e624837c79aa78ee5'}
++    assert admission['decision']==disposition['decision'] and admission['performance_acceptance']==performance
++    links=[('independent_terminal_review',work/'independent-terminal-review.json'),('trial_acceptance',work/'trial-acceptance.json'),('disposition',work/'disposition.json'),
++           ('software_comparison',trial/'software-comparison.json'),('software_sequence',trial/'software-sequence.json'),('root_terminal_input_joins',work/'root-terminal-input-joins.json'),
++           ('source_admission',work/'root-source-admission.json'),('runtime_admission',work/'root-runtime-admission.json')]
++    for key,path in links:assert admission[key]==benefit_record(path)
++    joined_terminal=load_benefit(work/'root-terminal-input-joins.json');assert joined_terminal['passed'] is True and joined_terminal['source_revision']==parent
++    assert joined_terminal['decision']==disposition['decision'] and joined_terminal['performance_acceptance']==performance
++    assert joined_terminal['actual_unique_input_records_current']==len(all_inputs) and joined_terminal['actual_input_rows']==sum(input_counts.values())
++    assert joined_terminal['actual_input_counts']==input_counts
++    assert type(joined_terminal['all5_root_commands_once_closed_zero']) is dict and joined_terminal['all5_root_commands_once_closed_zero']=={'prepare':'bfeba0','prove_reuse':'dc0dcf','run_sequence':'12a2a0','compare_software':'9fb66b','finish_trial':'35f4a9'}
++    assert joined_terminal['original22_gate_counts']=={'whole_passed':sum(row['pass'] for row in complete),'stage_passed':sum(row['pass'] for row in stages),'API_passed':counts['inclusive_API_passed']}
++    assert joined_terminal['original22_arithmetic_and_thresholds_recomputed_from_saved_samples'] is True
++    fresh=[]
++    for (pid,saved_ticks) in sorted(births):
++        try:current_ticks=(Path('/proc')/str(pid)/'stat').read_text().rsplit(')',1)[1].split()[19]
++        except (FileNotFoundError,ProcessLookupError):current_ticks=None
++        assert current_ticks is None or str(current_ticks)!=saved_ticks
++        fresh.append({'pid':pid,'saved_start_ticks':saved_ticks,'current_start_ticks':current_ticks,'saved_birth_absent':True})
++    original=root/'out/preserve-finite-result-before-fp32-original-benefit.py'
++    assert pin(original)=={'bytes':361028,'sha256':'94a98ce6c0069b24e171e26b9d541bed1029df5d74eed3ffd2d9dd26ba2493fa'}
++    mapping=[(work,'files/out/'+work.name),(products,'files/bin/linux-gcc/'+products.name),
++             (original,'collector-baseline.py'),(root/'out/preserve-finite-result-fp32-original-benefit.patch','collector-source.patch')]
++    summary={'schema':'sirius-fp32-restoring-original-fixed-benefit-evidence-v1','passed':True,'source_revision':parent,
++        'decision':disposition['decision'],'performance_acceptance':performance,'acceptance':acceptance,'disposition':disposition,'comparison':comparison,
++        'owners':receipts,'actual_input_counts':input_counts,'actual_unique_inputs_current':len(all_inputs),'fresh_saved_birth_absence':fresh,
++        'actual_birth_session_LVP_provider_row_counts':provider_rows,'all4_XML_zero_failures_errors_skips_disabled':xml_records,
++        'complete_call_passed':sum(row['pass'] for row in complete),'complete_call_required':4,'stage_passed':sum(row['pass'] for row in stages),'stage_required':16,
++        **counts,'independent_terminal_review':benefit_record(work/'independent-terminal-review.json'),'root_terminal_admission':benefit_record(work/'root-terminal-admission.json'),
++        'root_terminal_input_joins':benefit_record(work/'root-terminal-input-joins.json'),'source_admission':benefit_record(work/'root-source-admission.json'),'runtime_admission':benefit_record(work/'root-runtime-admission.json'),
++        'prerequisite_evidence_commit':preparation['prerequisite_evidence_commit'],'prerequisite_manifest_sha256':preparation['prior_manifest_sha256'],
++        'timing_scope':'Original Create/all11 numerical API windows; fixture device negotiation excluded as original. Full owned process wall retained separately.',
++        'provider_scope':'Current benefit owner records actual LVP maps only. Loader/LLVM bytes are frozen; earlier controls3-library mapped provenance remains separate. No new55-enabled-feature trace.',
++        'production_adopted':False,'qualification_claimed':False,
++        'sole_trial_policy':'One fixed A1/B1/B2/A2 with3repeats/family/slot; all22gates. Preserve actual rejection or all22PASS equally; no unchanged retry, pooling, subtraction, resampling or hit-rate/physical cost-cause inference.'}
++    message='Preserve sole original guarded FP32 restoring ABBA benefit trial and fixed verdict (#44)\n'
+ elif kind == 'fp32-estimate-restoring-original-controls':
+     import xml.etree.ElementTree as ET
+     work=root/'out/portable-divide-fp32-estimate-restoring-controls-recovery'

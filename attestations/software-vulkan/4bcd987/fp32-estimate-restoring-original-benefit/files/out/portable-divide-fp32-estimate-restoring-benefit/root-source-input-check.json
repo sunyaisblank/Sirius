@@ -1,0 +1,27 @@
+{
+  "actual_P_schema_hash_scalar_and_literal_checks": true,
+  "all22_source_pins_current": true,
+  "collector_and_operational_reports_excluded": true,
+  "commands": [
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/prepare.py",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/prove_reuse.py",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/benefit/run_sequence.py",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/benefit/compare_software.py",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/finish_trial.py"
+  ],
+  "metadata_review": {
+    "bytes": 4737,
+    "sha256": "633cecf3aba0f03dd8d40b4ad25dd068a04a8ac73fbab77054b7f6f346992514"
+  },
+  "old_owned_roots_retired_future_outputs_absent": true,
+  "original22_protocol_unchanged": true,
+  "original9_apparatus_byte_exact": true,
+  "passed": true,
+  "schema": "sirius-fp32-restoring-benefit-root-source-input-check-v1",
+  "scope": "Passive source/metadata check only; no helper/parser/provider/trial execution. Full prior root source read and new9line archived-root-admission check apply. Independent review and root admission remain separate.",
+  "source_freeze": {
+    "bytes": 5465,
+    "sha256": "92c476a99535ae27ecb86ec6e060add533492cab2c1694835db972d9822b0765"
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+}

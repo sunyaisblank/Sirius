@@ -1,0 +1,244 @@
+--- originals/prepare.py
++++ prepare.py
+@@ -1,4 +1,4 @@
+-"""Restore the accepted guarded-FP64-estimate producer pair for the unchanged original trial."""
++"""Restore the accepted guarded-FP32-restoring producer pair for the unchanged original trial."""
+ from pathlib import Path
+ import ast, hashlib, json, re, shutil, subprocess
+ import xml.etree.ElementTree as ET
+@@ -6,7 +6,7 @@
+ R = Path.cwd().resolve()
+ Q = Path(__file__).resolve().parent
+ W = Q / 'benefit'
+-T = R / 'bin/linux-gcc/portable-divide-fp64-estimate-benefit'
++T = R / 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-benefit'
+ for name, pin in json.loads((Q / 'source-freeze.json').read_text())['pins'].items():
+     path = Path(name)
+     data = path.read_bytes()
+@@ -35,8 +35,8 @@
+ manifest_path = archive / 'manifest.json'
+ assert identity(manifest_path)['sha256'] == P['manifest_sha256']
+ manifest = json.loads(manifest_path.read_text())
+-old_work = 'out/portable-divide-fp64-estimate-controls-continuation/'
+-old_bin = 'bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation/'
++old_work = P['controls_inner_work'].rstrip('/')+'/'
++old_bin = P['controls_inner_bin'].rstrip('/')+'/'
+ old_stage = old_bin + 'controls/'
+ old_roots = [(R / name).resolve() for name in (old_work, old_bin)]
+ archive_inputs = {str(manifest_path): identity(manifest_path)}
+@@ -71,17 +71,18 @@
+ assert context['revision'] == P['historical_execution_revision']
+ assert identity(preserved(old_work + 'source-freeze.json'))['sha256'] == P['source_freeze_sha256']
+ assert identity(preserved(old_work + 'gate.py'))['sha256'] == P['gate_sha256']
+-for name, pin in json.loads(preserved(old_work + 'source-freeze.json').read_text())['pins'].items():
+-    joined(name, pin)
++# The archived source-freeze and terminal before/after maps are immutable
++# producer receipts. Do not replay their whole historical path sets as current.
+ assert packet['changed_arrays'] == P['changed_arrays'] and len(P['changed_arrays']) == 17
+-assert packet['candidate_macro'] == P['candidate_macro'] == 'SIRIUS_PB32_DIVIDE_FP64_ESTIMATE=1'
+-assert packet['arithmetic_commit'] == P['arithmetic_commit']
+-assert packet['arithmetic_manifest_sha256'] == P['arithmetic_manifest_sha256']
+-assert packet['arithmetic_inner_result_sha256'] == P['arithmetic_inner_result_sha256']
+-assert packet['arithmetic_terminal_review_sha256'] == P['arithmetic_terminal_review_sha256']
+-for key in ('compiler_stop_commit', 'compiler_stop_manifest_sha256', 'profile_archive_commit',
+-            'profile_archive_manifest_sha256', 'profile_acceptance_sha256', 'profile_terminal_review_sha256'):
+-    assert packet[key] == P[key]
++assert packet['candidate_macro'] == P['candidate_macro'] == 'SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1'
++assert packet['archives']['arithmetic']['commit']==P['arithmetic_commit']
++assert packet['archives']['arithmetic']['manifest']['sha256']==P['arithmetic_manifest_sha256']
++assert packet['archives']['compiled']['commit']==P['compiler_commit']
++assert packet['archives']['compiled']['manifest']['sha256']==P['compiler_manifest_sha256']
++assert packet['archives']['profile']['commit']==P['profile_archive_commit']
++assert packet['archives']['profile']['manifest']['sha256']==P['profile_archive_manifest_sha256']
++assert packet['archives']['precontext_stop']['commit']==P['precontext_stop_commit']
++assert packet['archives']['precontext_stop']['manifest']['sha256']==P['precontext_stop_manifest_sha256']
+ 
+ owners = {}
+ def accepted(label):
+@@ -96,8 +97,8 @@
+     assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
+     before_path = preserved(folder + 'inputs-before.json')
+     assert before_path.read_bytes() == preserved(folder + 'inputs-after.json').read_bytes()
+-    for name, pin in json.loads(before_path.read_text()).items():
+-        joined(name, pin)
++    # Bind this actual terminal owner and its unchanged raw input maps.
++    # Recheck only the actual reused artifacts/dependencies below.
+     expected = [arg.replace('{folder}', str(R / old_work / label)) for arg in actions[label]['argv']]
+     assert owner['argv'] == expected and owner['limits'] == actions[label]['limits']
+     owners[label] = identity(owner_path)
+@@ -121,30 +122,78 @@
+ result_path = preserved(old_work + 'prerequisites-result.json')
+ assert identity(result_path)['sha256'] == P['prerequisites_result_sha256']
+ result = json.loads(result_path.read_text())
+-assert result['schema'] == 'sirius-fp64-estimate-controls-continuation-result-v1'
++assert result['schema'] == P['controls_result_schema'] == 'sirius-fp32-restoring-original-controls-result-v1'
+ assert result['fresh_owner_count'] == 15 and result['fresh_producer_count'] == 5
+ terminal_path = preserved(old_work + 'independent-terminal-review.json')
+ assert identity(terminal_path)['sha256'] == P['terminal_prerequisite_review_sha256']
+ assert json.loads(terminal_path.read_text())['passed'] is True
++root_admission_path = preserved(old_work + 'root-terminal-admission.json')
++assert identity(root_admission_path)['sha256'] == P['root_terminal_prerequisite_admission_sha256']
++root_admission = json.loads(root_admission_path.read_text())
++assert root_admission['schema'] == 'sirius-fp32-restoring-original-controls-root-terminal-admission-v1'
++assert root_admission['passed'] is True and root_admission['source_revision'] == P['historical_execution_revision']
++assert root_admission['benefit_executed'] is False and root_admission['production_adopted'] is False
++assert root_admission['full_qualification_claimed'] is False
++assert joined(root_admission['independent_terminal_review']['resolved_path'], root_admission['independent_terminal_review']) == terminal_path
++assert joined(root_admission['prerequisites_result']['resolved_path'], root_admission['prerequisites_result']) == result_path
+ assert result['passed'] and result['original_eight_controls_passed']
+ assert result['production_adopted'] is False and result['benefit_executed'] is False
+ for key in ('profile', 'control_acceptance', 'endpoint_route_acceptance'):
+     joined(result[key]['resolved_path'], result[key])
+ for key in ('result', 'terminal_review', 'manifest'):
+     joined(result['arithmetic'][key]['resolved_path'], result['arithmetic'][key])
+-assert result['arithmetic']['all_original_static_and10owner_input_joins'] is True
+-# Reuse the accepted immutable receipt reader, without any new archive adapter.
++assert set(result['arithmetic'])=={'manifest','result','terminal_review','root_admission','scope'}
++joined(result['arithmetic']['root_admission']['resolved_path'],result['arithmetic']['root_admission'])
++# Reuse the accepted immutable reader unchanged with one declared owned-root relocation.
+ receipt_path = preserved(old_work + 'prerequisite_receipts.py')
+ assert identity(receipt_path)['sha256'] == P['prerequisite_reader_sha256']
+ receipt_tree = ast.parse(receipt_path.read_text())
+ receipt_definitions = ast.Module(body=[n for n in receipt_tree.body if isinstance(n, (ast.Import, ast.ImportFrom, ast.FunctionDef))], type_ignores=[])
+ receipt_reader = {}
+ exec(compile(receipt_definitions, 'sealed_accepted_prerequisite_reader', 'exec'), receipt_reader)
+-inherited = receipt_reader['verify'](packet, R)
++# The accepted reader uses only this owned-work field to read eight exact
++# historical preimages. Relocate that one regular-file root after retirement;
++# raw packet bytes and every historical recorded identity remain unchanged.
++relocated_packet=dict(packet)
++assert packet['recovery_work']==str(R/old_work)
++relocated_packet['recovery_work']=str(preserved(old_work+'packet.json').parent)
++assert {k for k in packet if packet[k]!=relocated_packet[k]}=={'recovery_work'}
++# Register exactly the accepted reader's declared immutable member closure,
++# not its historical whole source/input maps as current path obligations.
++for item in packet['archives'].values():
++    root=Path(item['path']);manifest_file=root/'manifest.json'
++    assert identity(manifest_file)==item['manifest']
++    archive_inputs[str(manifest_file)]=identity(manifest_file)
++    raw=json.loads(manifest_file.read_text())['files']
++    for member,pin in item['selected_members'].items():
++        path=root/member;assert not path.is_symlink() and identity(path)==raw[member]==pin
++        archive_inputs[str(path)]=pin
++for name in ('gate.py','prerequisite_receipts.py','verify_producer.py','packet.json','preparation.json','source-freeze.json','actions.unpinned.json','provenance.json'):
++    preserved(old_work+'originals/before-precontext-stop-'+name)
++for name,row in packet['source_base_rows'].items():
++    path=R/'src/sirius/kernels'/name;assert identity(path)==row['current_pin']
++    current_inputs[str(path)]=identity(path)
++for row in packet['reader_reference_aliases']:
++    for name in (row['original'],row['backed']):
++        path=Path(name);current_inputs[str(path)]=identity(path)
++# Preserve relevant runtime tool/library inputs, without replaying the
++# predecessor's headers/toolchains or retired lexical path set wholesale.
++recorded_static=json.loads(preserved(old_work+'source-freeze.json').read_text())['pins']
++for name,pin in recorded_static.items():
++    runtime=(name in ('/usr/bin/python3','/usr/bin/python3.12') or
++             (name.startswith(('/usr/lib/x86_64-linux-gnu/','/lib/x86_64-linux-gnu/','/lib64/','/usr/lib/python3.12/lib-dynload/')) and '.so' in Path(name).name))
++    if runtime:
++        joined(name,pin)
++inherited = receipt_reader['verify'](relocated_packet, R)
+ assert inherited == result['inherited_prerequisites']
+ assert inherited['arithmetic'] == result['arithmetic']
+-assert len(inherited['historical_three_producers']) == 3
+-assert inherited['original_failed_wrapper_passed'] is False and inherited['original_failed_wrapper_child_exit'] == 1
++assert inherited['original_reader_passed'] is False and inherited['original_reader_child_exit']==-15
++assert inherited['prior_precontext_stop']['context_attempt_passed'] is False
++assert inherited['prior_precontext_stop']['operator_context_accepted'] is False
++assert inherited['prior_precontext_stop']['tool_exit_code']==1
++profile_acceptance=json.loads(joined(inherited['full_profile_acceptance']['resolved_path'],inherited['full_profile_acceptance']).read_text())
++assert len(profile_acceptance['immutable_compiler_chain']['completed_owners'])==2
++assert set(profile_acceptance['immutable_compiler_chain']['completed_owners'])=={'reuse-stock','compile-candidate'}
+ controls = json.loads(preserved(old_work + 'control-acceptance.json').read_text())
+ routes = json.loads(preserved(old_work + 'endpoint-route-acceptance.json').read_text())
+ assert controls['passed'] and len(controls['original_controls']) == 8 and routes['passed']
+@@ -197,19 +246,24 @@
+     joined(runtime[key]['resolved_path'], runtime[key])
+ assert runtime['arithmetic'] == result['arithmetic']
+ assert runtime['inherited_full_profile'] == inherited
++for name,pin in packet['provider_identities'].items():
++    actual=Path(name);assert identity(actual)=={k:pin[k] for k in ('bytes','sha256')}
++    current_inputs[name]=identity(actual)
++current_inputs['/usr/share/vulkan/icd.d/lvp_icd.json']=identity('/usr/share/vulkan/icd.d/lvp_icd.json')
+ assert runtime['producer_output_seals'] == {label: dict(identity(preserved(old_work + label + '/output-seal.json')), resolved_path=str(R / old_work / label / 'output-seal.json')) for label in producer_labels}
+ 
+ arithmetic = R / P['arithmetic_archive']
+ assert identity(arithmetic / 'manifest.json')['sha256'] == P['arithmetic_manifest_sha256']
+ current_inputs[str(arithmetic / 'manifest.json')] = identity(arithmetic / 'manifest.json')
+ subprocess.run(['git', 'cat-file', '-e', P['arithmetic_commit'] + '^{commit}'], check=True)
+-arith_work = arithmetic / 'files/out/portable-divide-fp64-estimate-arithmetic'
++arith_work = arithmetic / 'files/out/portable-divide-fp32-estimate-restoring-arithmetic'
+ arith_result = arith_work / 'arithmetic-result.json'
+ assert identity(arith_result) == {k: result['arithmetic']['result'][k] for k in ('bytes', 'sha256')}
+ assert identity(arith_result)['sha256'] == P['arithmetic_inner_result_sha256']
+ assert identity(arithmetic / 'manifest.json') == {k: result['arithmetic']['manifest'][k] for k in ('bytes', 'sha256')}
+ ar = json.loads(arith_result.read_text())
+-assert ar['schema'] == 'sirius-fp64-estimate-original-arithmetic-result-v1'
++assert ar['schema'] == 'sirius-fp32-estimate-restoring-original-arithmetic-result-v1'
++assert len(ar['owners'])==12 and 'execute-host' in ar['owners'] and 'execute-gpu-candidate' in ar['owners']
+ assert ar['passed'] and ar['original_records'] == 174268 and ar['original_operation_count'] == 14
+ assert ar['complete_output_words_per_provider'] == 697072
+ assert ar['fresh_candidate_host_and_full_gpu_plus_reused_stock_equal_original_expected'] and ar['stock_result_reused']
+@@ -235,9 +289,18 @@
+     generated = Path(packet['candidate_products']).parent / directory
+     headers = {}
+     for name in ('retained_kernels.h', 'retained_owner_kernels.h', 'retained_owner_layout.h'):
+-        original_header = generated / name
+-        profile_pin = full_profile_result['completed_producers']['sealed78_products'][str(original_header)]
+-        saved_header = joined(original_header, profile_pin)
++        original_header=Path(packet['old_products'])/directory/name
++        compiler_work=Path(packet['compiled_work'])
++        compiler_label='reuse-stock' if mode=='baseline' else 'compile-candidate'
++        compiler_seal=json.loads((compiler_work/compiler_label/'output-seal.json').read_text())
++        archive_inputs[str(compiler_work/compiler_label/'output-seal.json')]=identity(compiler_work/compiler_label/'output-seal.json')
++        profile_pin=compiler_seal['outputs'][str(original_header)]
++        saved_header=generated/name
++        assert profile_pin['resolved_path']==str(original_header) and not saved_header.is_symlink()
++        assert identity(saved_header)=={k:profile_pin[k] for k in ('bytes','sha256')}
++        archive_inputs[str(saved_header)]=identity(saved_header)
++        if name in products['headers']:
++            assert identity(saved_header)=={k:products['headers'][name][directory][k] for k in ('bytes','sha256')}
+         actual_header = saved_header if mode == 'baseline' else preserved(old_stage + 'headers/' + name)
+         assert identity(actual_header) == identity(saved_header)
+         headers[name] = actual_header
+@@ -291,7 +354,7 @@
+ wrapper = (apparatus / 'run_limb_benefit_slot.py').read_text()
+ old_allowlist = 'bin/linux-gcc/computed-carry-exit-benefit/original_'
+ assert wrapper.count(old_allowlist) == 1
+-(W / 'run_limb_benefit_slot.py').write_text(wrapper.replace(old_allowlist, 'bin/linux-gcc/portable-divide-fp64-estimate-benefit/original_'))
++(W / 'run_limb_benefit_slot.py').write_text(wrapper.replace(old_allowlist, 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-benefit/original_'))
+ for mode, name in (('baseline', 'baseline.json'), ('candidate', 'build-and-arrays.json')):
+     write(W / name, {'arrays': producer['actual_ELF_arrays'][mode]})
+ shared = [*archive_inputs, *current_inputs, *resources]
+@@ -315,7 +378,7 @@
+ freeze = json.loads((apparatus / 'retention-gate-frozen.json').read_text())
+ freeze.update(candidate_revision=P['execution_revision'], baseline_revision=P['execution_revision'],
+               executables=executables, actions_sha256=identity(W / 'actions.json')['sha256'],
+-              scope='One original fixed guarded-FP64-estimate A1/B1/B2/A2 trial. Original stock host and accepted diagnostic Float64 host with historical unused Int64; candidate shaders require no Int64. Accepted17/23 plus2 unchanged owner arrays. Original measured windows, forced cacheoff and20+2 gates unchanged.')
++              scope='One original fixed guarded-FP32-restoring A1/B1/B2/A2 trial. Original stock host and same canonical-device candidate ELF from accepted controls; no private Int64/Float64 requirement or fresh enabled55 trace. Accepted17/23 plus2 unchanged owner arrays. Original measured windows, forced cacheoff and20+2 gates unchanged.')
+ assert freeze['sequence'] == ['a1', 'b1', 'b2', 'a2'] and freeze['within_slot_repeats'] == 3
+ assert (freeze['complete_call_minimum_improvement_percent'], freeze['every_inclusive_stage_minimum_improvement_percent'], freeze['observed_instance_api_minimum_improvement_percent']) == (5, -5, 0)
+ assert freeze['all20_gates_required']
+@@ -326,8 +389,10 @@
+     'producer_prerequisites': {'actual40array_ELF_proof': True, 'actual2owner_array_ELF_proof': True,
+         'same_observer_CPP': True, 'original8controls_passed': True, 'fifteen_fresh_terminal_owners': owners,
+         'inherited_prerequisites': inherited,
+-        'candidate_diagnostic_Float64_host_with_historical_unused_Int64': True,
+-        'candidate_shaders_require_no_Int64': True, 'original_stock_host_unchanged': True},
++        'prerequisite_packet_relocation':{'only_changed_field':'recovery_work','original_lexical_root':packet['recovery_work'],'actual_archived_root':relocated_packet['recovery_work'],'raw_packet_unchanged':True},
++        'canonical_device_and_base_reused': True,
++        'private_Int64_or_Float64_device_requirement': False, 'fresh_enabled55_argument_trace_claimed':False,
++        'selected17_proposal_modules_add_no_Int64_or_Float64_requirement': True, 'original_stock_host_unchanged': True},
+     'executables': executables, 'changed_arrays': P['changed_arrays'],
+     'current_byte_exact_dependency_joins': current_inputs, 'preserved_archive_joins': archive_inputs,
+     'unchanged_original_apparatus': P['apparatus'], 'resources': len(resources), 'sequence': freeze['sequence'],
+--- originals/finish_trial.py
++++ finish_trial.py
+@@ -77,7 +77,7 @@
+               'protected_payloads_unchanged': len(protected), **counts,
+               'performance_acceptance': comparison['pass'],
+               'scope': 'Original comparator and complete owner/XML/input/source closure. A rejected fixed benefit verdict is a valid experiment outcome, not full qualification.'}
+-disposition = {'decision': 'PROCEED_TO_PRODUCTION_IMPLEMENTATION' if comparison['pass'] else 'REJECT_GUARDED_FP64_ESTIMATE_COST',
++disposition = {'decision': 'PROCEED_TO_PRODUCTION_IMPLEMENTATION' if comparison['pass'] else 'REJECT_GUARDED_FP32_RESTORING_COST',
+                'issue': 44, 'source_revision': freeze['candidate_revision'],
+                'original_benefit_trial_completed': True, 'original_correctness_prerequisites_passed': True,
+                'production_adopted': False, **counts,

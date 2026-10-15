@@ -1,0 +1,1155 @@
+{
+  "acceptance": {
+    "declared_current_inputs_verified": 1243,
+    "inclusive_API_passed": 1,
+    "inclusive_API_required": 2,
+    "interval_stage_passed": 10,
+    "interval_stage_required": 20,
+    "original_trial_complete": true,
+    "passed": true,
+    "performance_acceptance": false,
+    "protected_payloads_unchanged": 114,
+    "scope": "Original comparator and complete owner/XML/input/source closure. A rejected fixed benefit verdict is a valid experiment outcome, not full qualification.",
+    "slots": [
+      {
+        "label": "a1",
+        "owner": {
+          "bytes": 2741,
+          "sha256": "878cb7033d19abb9d471754868fd963b1868bc26c134eb1db514734fed535d57"
+        },
+        "peak_sampled_rss_kib": 2327792,
+        "wall_seconds": 60.86018394200073,
+        "xml": {
+          "bytes": 40905,
+          "sha256": "a66a87ba6ac9c1eaa72bd282bf581a53a1ab869a21b1652d1466e342905e66e7"
+        }
+      },
+      {
+        "label": "b1",
+        "owner": {
+          "bytes": 2869,
+          "sha256": "5cf8d6510ceca02ee59101106e8fdae3d7acd8f99f3eee972c45099b26974554"
+        },
+        "peak_sampled_rss_kib": 2370672,
+        "wall_seconds": 91.27248472700012,
+        "xml": {
+          "bytes": 40872,
+          "sha256": "17fd6a15b26f3d9b42b6c1d588f0969898d880cdbc84ff51dbcb34915a531946"
+        }
+      },
+      {
+        "label": "b2",
+        "owner": {
+          "bytes": 2869,
+          "sha256": "2be0048e6f9d79384305e3bd7e25d920ef5410c36ad57b9c0071c12f79e32cce"
+        },
+        "peak_sampled_rss_kib": 2369452,
+        "wall_seconds": 65.23181901899807,
+        "xml": {
+          "bytes": 40826,
+          "sha256": "73e115163545310796696d796fab819f582ae45d7f3216f308e8f53cb92ca322"
+        }
+      },
+      {
+        "label": "a2",
+        "owner": {
+          "bytes": 2868,
+          "sha256": "6989a2d8f979fd3fd52a9bb659de00a217f0cc45f1b18d5c9f6a1321b714f97b"
+        },
+        "peak_sampled_rss_kib": 2329616,
+        "wall_seconds": 88.40056989699951,
+        "xml": {
+          "bytes": 40659,
+          "sha256": "0cbfdd03632bf56de6d7a4fea1fc9f7bf26c8ec89b3c2bacba4bb99a3fd65b4c"
+        }
+      }
+    ],
+    "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+  },
+  "actual_birth_session_LVP_provider_row_counts": {
+    "a1": 1,
+    "a2": 1,
+    "b1": 1,
+    "b2": 1
+  },
+  "actual_input_counts": {
+    "a1": 1242,
+    "a2": 1242,
+    "b1": 1242,
+    "b2": 1242
+  },
+  "actual_unique_inputs_current": 1243,
+  "all4_XML_zero_failures_errors_skips_disabled": {
+    "a1": {
+      "bytes": 40905,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a1/gtest.xml",
+      "sha256": "a66a87ba6ac9c1eaa72bd282bf581a53a1ab869a21b1652d1466e342905e66e7"
+    },
+    "a2": {
+      "bytes": 40659,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a2/gtest.xml",
+      "sha256": "0cbfdd03632bf56de6d7a4fea1fc9f7bf26c8ec89b3c2bacba4bb99a3fd65b4c"
+    },
+    "b1": {
+      "bytes": 40872,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b1/gtest.xml",
+      "sha256": "17fd6a15b26f3d9b42b6c1d588f0969898d880cdbc84ff51dbcb34915a531946"
+    },
+    "b2": {
+      "bytes": 40826,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b2/gtest.xml",
+      "sha256": "73e115163545310796696d796fab819f582ae45d7f3216f308e8f53cb92ca322"
+    }
+  },
+  "comparison": {
+    "accounting_checks": [
+      {
+        "baseline_ms": 11204.424565000001,
+        "candidate_ms": 16313.178939,
+        "direction": "forward",
+        "improvement_percent": -45.595865672196595,
+        "minimum_percent": 0,
+        "pass": false,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      },
+      {
+        "baseline_ms": 19612.100376000002,
+        "candidate_ms": 10286.220395999999,
+        "direction": "reverse",
+        "improvement_percent": 47.551663519999124,
+        "minimum_percent": 0,
+        "pass": true,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      }
+    ],
+    "baseline_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "candidate_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "checks": [
+      {
+        "baseline_median_ms": 32.744765,
+        "baseline_samples_ms": [
+          32.586738,
+          32.744765,
+          33.881549
+        ],
+        "candidate_median_ms": 75.396597,
+        "candidate_samples_ms": [
+          97.904212,
+          75.396597,
+          40.115838
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -130.25542250799478,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 5.251778,
+        "baseline_samples_ms": [
+          5.577443000000001,
+          4.526318,
+          5.251778
+        ],
+        "candidate_median_ms": 18.588600999999997,
+        "candidate_samples_ms": [
+          25.455281,
+          18.588600999999997,
+          10.597109
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -253.94871984307025,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 6.640118,
+        "baseline_samples_ms": [
+          6.205329,
+          6.729874,
+          6.640118
+        ],
+        "candidate_median_ms": 7.307649,
+        "candidate_samples_ms": [
+          15.248672,
+          7.307649,
+          7.304937
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -10.05299905814926,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint+dense inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 20.355352,
+        "baseline_samples_ms": [
+          19.550567,
+          20.355352,
+          20.59816
+        ],
+        "candidate_median_ms": 48.22721,
+        "candidate_samples_ms": [
+          55.409858,
+          48.22721,
+          21.026748
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -136.92643585824504,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 38.817333,
+        "baseline_samples_ms": [
+          41.502507,
+          38.51257,
+          38.817333
+        ],
+        "candidate_median_ms": 39.723042,
+        "candidate_samples_ms": [
+          39.723042,
+          40.583191,
+          38.804359
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -2.333259216958573,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 2.555586,
+        "baseline_samples_ms": [
+          2.555586,
+          2.372541,
+          3.111829
+        ],
+        "candidate_median_ms": 2.495863,
+        "candidate_samples_ms": [
+          2.495863,
+          2.563207,
+          2.25163
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": 2.3369591162261796,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 5.910056,
+        "baseline_samples_ms": [
+          6.149767,
+          5.910056,
+          5.477128
+        ],
+        "candidate_median_ms": 5.586603,
+        "candidate_samples_ms": [
+          5.447751,
+          5.658059,
+          5.586603
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": 5.472926144862245,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 5.831457,
+        "baseline_samples_ms": [
+          5.831457,
+          4.706160000000001,
+          6.572795
+        ],
+        "candidate_median_ms": 5.990173,
+        "candidate_samples_ms": [
+          6.270773,
+          5.311698,
+          5.990173
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -2.72172117534263,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 9.620951999999999,
+        "baseline_samples_ms": [
+          9.620951999999999,
+          10.471875,
+          9.273446
+        ],
+        "candidate_median_ms": 10.473443,
+        "candidate_samples_ms": [
+          10.473443,
+          11.792424,
+          9.86083
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -8.860775939844629,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 12.262074,
+        "baseline_samples_ms": [
+          14.159348000000001,
+          12.262074,
+          11.67248
+        ],
+        "candidate_median_ms": 12.009604,
+        "candidate_samples_ms": [
+          12.3382,
+          11.697329,
+          12.009604
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": 2.0589502232656614,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 91.150798,
+        "baseline_samples_ms": [
+          90.005066,
+          108.8541,
+          91.150798
+        ],
+        "candidate_median_ms": 35.098068,
+        "candidate_samples_ms": [
+          35.098068,
+          32.224966,
+          36.128501
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 61.49450276891706,
+        "minimum_percent": 5,
+        "pass": true,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 14.089819,
+        "baseline_samples_ms": [
+          16.363898,
+          11.608431,
+          14.089819
+        ],
+        "candidate_median_ms": 5.521262,
+        "candidate_samples_ms": [
+          5.963749,
+          5.521262,
+          5.486574
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 60.81381882904245,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 22.507702,
+        "baseline_samples_ms": [
+          16.562742,
+          30.78364,
+          22.507702
+        ],
+        "candidate_median_ms": 6.987023,
+        "candidate_samples_ms": [
+          6.987023,
+          6.569937,
+          7.852178
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 68.95719074297322,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint+dense inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 54.908809,
+        "baseline_samples_ms": [
+          54.908809,
+          65.148914,
+          53.105426
+        ],
+        "candidate_median_ms": 20.5025,
+        "candidate_samples_ms": [
+          20.5025,
+          19.124659,
+          21.302032
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 62.66081823045915,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "transport inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 40.458933,
+        "baseline_samples_ms": [
+          40.458933,
+          41.913445,
+          36.804112
+        ],
+        "candidate_median_ms": 43.838856,
+        "candidate_samples_ms": [
+          43.640882999999995,
+          45.130281000000004,
+          43.838856
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -8.353959804130271,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 3.634874,
+        "baseline_samples_ms": [
+          3.972812,
+          3.634874,
+          2.242307
+        ],
+        "candidate_median_ms": 2.997007,
+        "candidate_samples_ms": [
+          3.615655,
+          2.891886,
+          2.997007
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": 17.548531255828948,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 5.594129000000001,
+        "baseline_samples_ms": [
+          5.594129000000001,
+          5.778431,
+          5.546119
+        ],
+        "candidate_median_ms": 5.739041,
+        "candidate_samples_ms": [
+          5.648181,
+          5.739041,
+          5.890441
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -2.5904300741008957,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 5.4525559999999995,
+        "baseline_samples_ms": [
+          5.1177,
+          5.861154,
+          5.4525559999999995
+        ],
+        "candidate_median_ms": 6.767335,
+        "candidate_samples_ms": [
+          6.767335,
+          7.0021249999999995,
+          5.740009000000001
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -24.11307650943889,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 9.968197,
+        "baseline_samples_ms": [
+          9.968197,
+          10.225234,
+          9.367102
+        ],
+        "candidate_median_ms": 11.575217,
+        "candidate_samples_ms": [
+          10.370233,
+          11.575217,
+          12.196788
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -16.12147111458572,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 11.873168,
+        "baseline_samples_ms": [
+          12.805105000000001,
+          11.873168,
+          11.37159
+        ],
+        "candidate_median_ms": 13.115495,
+        "candidate_samples_ms": [
+          13.080875,
+          13.125352,
+          13.115495
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -10.463315266826845,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      }
+    ],
+    "failed_checks": [
+      {
+        "baseline_median_ms": 32.744765,
+        "baseline_samples_ms": [
+          32.586738,
+          32.744765,
+          33.881549
+        ],
+        "candidate_median_ms": 75.396597,
+        "candidate_samples_ms": [
+          97.904212,
+          75.396597,
+          40.115838
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -130.25542250799478,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 5.251778,
+        "baseline_samples_ms": [
+          5.577443000000001,
+          4.526318,
+          5.251778
+        ],
+        "candidate_median_ms": 18.588600999999997,
+        "candidate_samples_ms": [
+          25.455281,
+          18.588600999999997,
+          10.597109
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -253.94871984307025,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 6.640118,
+        "baseline_samples_ms": [
+          6.205329,
+          6.729874,
+          6.640118
+        ],
+        "candidate_median_ms": 7.307649,
+        "candidate_samples_ms": [
+          15.248672,
+          7.307649,
+          7.304937
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -10.05299905814926,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint+dense inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 20.355352,
+        "baseline_samples_ms": [
+          19.550567,
+          20.355352,
+          20.59816
+        ],
+        "candidate_median_ms": 48.22721,
+        "candidate_samples_ms": [
+          55.409858,
+          48.22721,
+          21.026748
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -136.92643585824504,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 38.817333,
+        "baseline_samples_ms": [
+          41.502507,
+          38.51257,
+          38.817333
+        ],
+        "candidate_median_ms": 39.723042,
+        "candidate_samples_ms": [
+          39.723042,
+          40.583191,
+          38.804359
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -2.333259216958573,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 9.620951999999999,
+        "baseline_samples_ms": [
+          9.620951999999999,
+          10.471875,
+          9.273446
+        ],
+        "candidate_median_ms": 10.473443,
+        "candidate_samples_ms": [
+          10.473443,
+          11.792424,
+          9.86083
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -8.860775939844629,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 40.458933,
+        "baseline_samples_ms": [
+          40.458933,
+          41.913445,
+          36.804112
+        ],
+        "candidate_median_ms": 43.838856,
+        "candidate_samples_ms": [
+          43.640882999999995,
+          45.130281000000004,
+          43.838856
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -8.353959804130271,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 5.4525559999999995,
+        "baseline_samples_ms": [
+          5.1177,
+          5.861154,
+          5.4525559999999995
+        ],
+        "candidate_median_ms": 6.767335,
+        "candidate_samples_ms": [
+          6.767335,
+          7.0021249999999995,
+          5.740009000000001
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -24.11307650943889,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 9.968197,
+        "baseline_samples_ms": [
+          9.968197,
+          10.225234,
+          9.367102
+        ],
+        "candidate_median_ms": 11.575217,
+        "candidate_samples_ms": [
+          10.370233,
+          11.575217,
+          12.196788
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -16.12147111458572,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 11.873168,
+        "baseline_samples_ms": [
+          12.805105000000001,
+          11.873168,
+          11.37159
+        ],
+        "candidate_median_ms": 13.115495,
+        "candidate_samples_ms": [
+          13.080875,
+          13.125352,
+          13.115495
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -10.463315266826845,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      }
+    ],
+    "original20_pass": false,
+    "pass": false,
+    "provisioning_accounting_pass": false,
+    "readback_identity_module_and_completion_prerequisites_pass": true,
+    "scope": "One fixed software default A1/B1/B2/A2 original complete observer. Four complete-call >=5% and sixteen stage >=-5% gates; no pooled orders/retries, frame, science or qualification claim."
+  },
+  "complete_call_passed": 1,
+  "complete_call_required": 4,
+  "decision": "REJECT_GUARDED_FP32_RESTORING_COST",
+  "disposition": {
+    "complete_call_checks": [
+      {
+        "baseline_median_ms": 32.744765,
+        "baseline_samples_ms": [
+          32.586738,
+          32.744765,
+          33.881549
+        ],
+        "candidate_median_ms": 75.396597,
+        "candidate_samples_ms": [
+          97.904212,
+          75.396597,
+          40.115838
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -130.25542250799478,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 38.817333,
+        "baseline_samples_ms": [
+          41.502507,
+          38.51257,
+          38.817333
+        ],
+        "candidate_median_ms": 39.723042,
+        "candidate_samples_ms": [
+          39.723042,
+          40.583191,
+          38.804359
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -2.333259216958573,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 91.150798,
+        "baseline_samples_ms": [
+          90.005066,
+          108.8541,
+          91.150798
+        ],
+        "candidate_median_ms": 35.098068,
+        "candidate_samples_ms": [
+          35.098068,
+          32.224966,
+          36.128501
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 61.49450276891706,
+        "minimum_percent": 5,
+        "pass": true,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 40.458933,
+        "baseline_samples_ms": [
+          40.458933,
+          41.913445,
+          36.804112
+        ],
+        "candidate_median_ms": 43.838856,
+        "candidate_samples_ms": [
+          43.640882999999995,
+          45.130281000000004,
+          43.838856
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -8.353959804130271,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      }
+    ],
+    "decision": "REJECT_GUARDED_FP32_RESTORING_COST",
+    "failed_stage_checks": [
+      {
+        "baseline_median_ms": 5.251778,
+        "baseline_samples_ms": [
+          5.577443000000001,
+          4.526318,
+          5.251778
+        ],
+        "candidate_median_ms": 18.588600999999997,
+        "candidate_samples_ms": [
+          25.455281,
+          18.588600999999997,
+          10.597109
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -253.94871984307025,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 6.640118,
+        "baseline_samples_ms": [
+          6.205329,
+          6.729874,
+          6.640118
+        ],
+        "candidate_median_ms": 7.307649,
+        "candidate_samples_ms": [
+          15.248672,
+          7.307649,
+          7.304937
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -10.05299905814926,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint+dense inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 20.355352,
+        "baseline_samples_ms": [
+          19.550567,
+          20.355352,
+          20.59816
+        ],
+        "candidate_median_ms": 48.22721,
+        "candidate_samples_ms": [
+          55.409858,
+          48.22721,
+          21.026748
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": -136.92643585824504,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 9.620951999999999,
+        "baseline_samples_ms": [
+          9.620951999999999,
+          10.471875,
+          9.273446
+        ],
+        "candidate_median_ms": 10.473443,
+        "candidate_samples_ms": [
+          10.473443,
+          11.792424,
+          9.86083
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -8.860775939844629,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 5.4525559999999995,
+        "baseline_samples_ms": [
+          5.1177,
+          5.861154,
+          5.4525559999999995
+        ],
+        "candidate_median_ms": 6.767335,
+        "candidate_samples_ms": [
+          6.767335,
+          7.0021249999999995,
+          5.740009000000001
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -24.11307650943889,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 9.968197,
+        "baseline_samples_ms": [
+          9.968197,
+          10.225234,
+          9.367102
+        ],
+        "candidate_median_ms": 11.575217,
+        "candidate_samples_ms": [
+          10.370233,
+          11.575217,
+          12.196788
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -16.12147111458572,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 11.873168,
+        "baseline_samples_ms": [
+          12.805105000000001,
+          11.873168,
+          11.37159
+        ],
+        "candidate_median_ms": 13.115495,
+        "candidate_samples_ms": [
+          13.080875,
+          13.125352,
+          13.115495
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": -10.463315266826845,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      }
+    ],
+    "inclusive_API_checks": [
+      {
+        "baseline_ms": 11204.424565000001,
+        "candidate_ms": 16313.178939,
+        "direction": "forward",
+        "improvement_percent": -45.595865672196595,
+        "minimum_percent": 0,
+        "pass": false,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      },
+      {
+        "baseline_ms": 19612.100376000002,
+        "candidate_ms": 10286.220395999999,
+        "direction": "reverse",
+        "improvement_percent": 47.551663519999124,
+        "minimum_percent": 0,
+        "pass": true,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      }
+    ],
+    "inclusive_API_passed": 1,
+    "inclusive_API_required": 2,
+    "interval_stage_passed": 10,
+    "interval_stage_required": 20,
+    "issue": 44,
+    "original_benefit_trial_completed": true,
+    "original_correctness_prerequisites_passed": true,
+    "policy": "One unchanged original A1/B1/B2/A2; no retries, pooling, cost subtraction or weakened gates. Source/compiler/arithmetic/eight-control prerequisites remain finite evidence. Full owned process wall retained; original device fixture SetUp remains outside original measured windows. Rendering/science/native/platform/release goal remains active.",
+    "production_adopted": false,
+    "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+  },
+  "fresh_saved_birth_absence": [
+    {
+      "current_start_ticks": null,
+      "pid": 494061,
+      "saved_birth_absent": true,
+      "saved_start_ticks": "9268672"
+    },
+    {
+      "current_start_ticks": null,
+      "pid": 494380,
+      "saved_birth_absent": true,
+      "saved_start_ticks": "9274928"
+    },
+    {
+      "current_start_ticks": null,
+      "pid": 496787,
+      "saved_birth_absent": true,
+      "saved_start_ticks": "9284225"
+    },
+    {
+      "current_start_ticks": null,
+      "pid": 498352,
+      "saved_birth_absent": true,
+      "saved_start_ticks": "9290935"
+    }
+  ],
+  "inclusive_API_passed": 1,
+  "inclusive_API_required": 2,
+  "independent_terminal_review": {
+    "bytes": 9148,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/independent-terminal-review.json",
+    "sha256": "0a945388e306bb0e0735668293631d2709619175ec70985b68c77b2570abe52c"
+  },
+  "interval_stage_passed": 10,
+  "interval_stage_required": 20,
+  "owners": {
+    "a1": {
+      "inputs_after": {
+        "bytes": 450651,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a1/inputs-after.json",
+        "sha256": "2ce4680dcdc8814c6f93df879bddb97cc05eeace82e63328e7a6490b16b644f6"
+      },
+      "inputs_before": {
+        "bytes": 450651,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a1/inputs-before.json",
+        "sha256": "2ce4680dcdc8814c6f93df879bddb97cc05eeace82e63328e7a6490b16b644f6"
+      },
+      "owner": {
+        "bytes": 2741,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a1/owner.json",
+        "sha256": "878cb7033d19abb9d471754868fd963b1868bc26c134eb1db514734fed535d57"
+      },
+      "xml": {
+        "bytes": 40905,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a1/gtest.xml",
+        "sha256": "a66a87ba6ac9c1eaa72bd282bf581a53a1ab869a21b1652d1466e342905e66e7"
+      }
+    },
+    "a2": {
+      "inputs_after": {
+        "bytes": 450651,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a2/inputs-after.json",
+        "sha256": "2ce4680dcdc8814c6f93df879bddb97cc05eeace82e63328e7a6490b16b644f6"
+      },
+      "inputs_before": {
+        "bytes": 450651,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a2/inputs-before.json",
+        "sha256": "2ce4680dcdc8814c6f93df879bddb97cc05eeace82e63328e7a6490b16b644f6"
+      },
+      "owner": {
+        "bytes": 2868,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a2/owner.json",
+        "sha256": "6989a2d8f979fd3fd52a9bb659de00a217f0cc45f1b18d5c9f6a1321b714f97b"
+      },
+      "xml": {
+        "bytes": 40659,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/a2/gtest.xml",
+        "sha256": "0cbfdd03632bf56de6d7a4fea1fc9f7bf26c8ec89b3c2bacba4bb99a3fd65b4c"
+      }
+    },
+    "b1": {
+      "inputs_after": {
+        "bytes": 450653,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b1/inputs-after.json",
+        "sha256": "ee51c347d22fdaaa5b38ae03c6d5a52ad487088106e9068b9d550f631a4c0686"
+      },
+      "inputs_before": {
+        "bytes": 450653,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b1/inputs-before.json",
+        "sha256": "ee51c347d22fdaaa5b38ae03c6d5a52ad487088106e9068b9d550f631a4c0686"
+      },
+      "owner": {
+        "bytes": 2869,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b1/owner.json",
+        "sha256": "5cf8d6510ceca02ee59101106e8fdae3d7acd8f99f3eee972c45099b26974554"
+      },
+      "xml": {
+        "bytes": 40872,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b1/gtest.xml",
+        "sha256": "17fd6a15b26f3d9b42b6c1d588f0969898d880cdbc84ff51dbcb34915a531946"
+      }
+    },
+    "b2": {
+      "inputs_after": {
+        "bytes": 450653,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b2/inputs-after.json",
+        "sha256": "ee51c347d22fdaaa5b38ae03c6d5a52ad487088106e9068b9d550f631a4c0686"
+      },
+      "inputs_before": {
+        "bytes": 450653,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b2/inputs-before.json",
+        "sha256": "ee51c347d22fdaaa5b38ae03c6d5a52ad487088106e9068b9d550f631a4c0686"
+      },
+      "owner": {
+        "bytes": 2869,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b2/owner.json",
+        "sha256": "2be0048e6f9d79384305e3bd7e25d920ef5410c36ad57b9c0071c12f79e32cce"
+      },
+      "xml": {
+        "bytes": 40826,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/b2/gtest.xml",
+        "sha256": "73e115163545310796696d796fab819f582ae45d7f3216f308e8f53cb92ca322"
+      }
+    }
+  },
+  "passed": true,
+  "performance_acceptance": false,
+  "prerequisite_evidence_commit": "9979d990de483574d3de394b7e35b388b4940d35",
+  "prerequisite_manifest_sha256": "81b76746db58b4a5d6dd4bd2c9e4b6fcdbd132fb299be5763d37689fb4dd07f5",
+  "production_adopted": false,
+  "provider_scope": "Current benefit owner records actual LVP maps only. Loader/LLVM bytes are frozen; earlier controls3-library mapped provenance remains separate. No new55-enabled-feature trace.",
+  "qualification_claimed": false,
+  "root_terminal_admission": {
+    "bytes": 4648,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/root-terminal-admission.json",
+    "sha256": "1167f0a90d69f5cc4c34da9210426bf60cfbb22057e1071ff31fa83776ac37b9"
+  },
+  "root_terminal_input_joins": {
+    "bytes": 12592,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/root-terminal-input-joins.json",
+    "sha256": "368cf0dd0eed9eb00dc129076a238da1f889594bc32874afcb18a5096d61f138"
+  },
+  "runtime_admission": {
+    "bytes": 4115,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/root-runtime-admission.json",
+    "sha256": "9f809671d52c355946ef3683818639b14ac8e22185ebf4f68da9d3a49edcfcf8"
+  },
+  "schema": "sirius-fp32-restoring-original-fixed-benefit-evidence-v1",
+  "sole_trial_policy": "One fixed A1/B1/B2/A2 with3repeats/family/slot; all22gates. Preserve actual rejection or all22PASS equally; no unchanged retry, pooling, subtraction, resampling or hit-rate/physical cost-cause inference.",
+  "source_admission": {
+    "bytes": 3355,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/root-source-admission.json",
+    "sha256": "7515786817998a24d97384f5732f0fd49de53e85d7ee4751a3e9de09adde790a"
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "stage_passed": 9,
+  "stage_required": 16,
+  "timing_scope": "Original Create/all11 numerical API windows; fixture device negotiation excluded as original. Full owned process wall retained separately."
+}

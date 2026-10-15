@@ -1,0 +1,13 @@
+{
+  "admitted": false,
+  "commands": [
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/prepare.py",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/prove_reuse.py",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/benefit/run_sequence.py",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/benefit/compare_software.py",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-benefit/finish_trial.py"
+  ],
+  "scope": "Five prospective commands only. Root independent source/runtime admission and exclusive execution remain required; no current trial result exists.",
+  "source_only": true,
+  "source_ready": true
+}

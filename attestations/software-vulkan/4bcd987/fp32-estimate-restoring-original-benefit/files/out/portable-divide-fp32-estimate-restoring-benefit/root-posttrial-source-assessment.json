@@ -1,0 +1,53 @@
+{
+  "conclusion": "No sufficiently grounded distinct source alternative found in the inspected evidence.",
+  "existing_ordinary_EndpointNormal_native_cost_review": {
+    "bytes": 45332,
+    "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-ordinary-jit-screen/files/out/portable-divide-fp32-estimate-restoring-jit/cost-review/cost-premise-review.json",
+    "sha256": "587a96ef97b1f28ecfa6041b433b96433e93d43d7e93a25b1fbf0577e4732f16"
+  },
+  "method": "Bounded passive source/previous executed-code evidence inspection only; no new helper/tool/provider/test or patch.",
+  "observations": {
+    "actual_acceptance_mixed_lane_fallback_frequencies_observed": false,
+    "directional_variation_cause_observed": false,
+    "fixed_original_gate_passes": {
+      "API": 1,
+      "required": [
+        4,
+        16,
+        2
+      ],
+      "stage": 9,
+      "whole": 1
+    },
+    "relative_to_prior_FP32_estimate_corrective_UDiv_removed": 6,
+    "relative_to_prior_FP32_estimate_native_DIV_removed": 34,
+    "relative_to_stock_static_added": {
+      "frame_bytes": 448,
+      "instructions": 1210,
+      "stack_bytes": 96,
+      "text_bytes": 7328
+    }
+  },
+  "prior_rejection_boundary": {
+    "FP64_estimate": "REJECT_GUARDED_FP64_ESTIMATE_COST",
+    "divide64": "REJECT_OPTIONAL64_DIVIDE_COST",
+    "integer_reciprocal": "REJECT_FOR_ADOPTION",
+    "low_high_product_duplicate_work": "Previously exercised by multiply64:56generic sites removed duplicate low product;15constant sites removed none. Original benefit rejected. High/residual product reuse also rejected in issue77.",
+    "multiply64": "REJECT_OPTIONAL64_MULTIPLY_COST",
+    "unchanged_retry_allowed": false
+  },
+  "reviewer": "/root/forensic_obligations",
+  "schema": "sirius-fp32-restoring-posttrial-bounded-source-assessment-v1",
+  "scope": "Concise source finding only. Static captured lowering is not a dynamic frequency, hardware performance, cause or frame bound. No5-to4 correction-bit tuning or recycled rejected mechanism is justified by this assessment. Ultimate latency and other qualification obligations remain unresolved; no new source change authorized by this record.",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "trial_comparison": {
+    "bytes": 15914,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/benefit/software-comparison.json",
+    "sha256": "ed1c0eba878b21318f3484334088b6ec40b505d3d3e244dc8812b8a8c337bc65"
+  },
+  "trial_disposition": {
+    "bytes": 6852,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-benefit/disposition.json",
+    "sha256": "aa4041d54d6aceb45bf748c385cfe46238569b64a7ede4e3587789651efb607b"
+  }
+}

@@ -1,0 +1,11 @@
+--- originals/finish_trial.py
++++ finish_trial.py
+@@ -77,7 +77,7 @@
+               'protected_payloads_unchanged': len(protected), **counts,
+               'performance_acceptance': comparison['pass'],
+               'scope': 'Original comparator and complete owner/XML/input/source closure. A rejected fixed benefit verdict is a valid experiment outcome, not full qualification.'}
+-disposition = {'decision': 'PROCEED_TO_PRODUCTION_IMPLEMENTATION' if comparison['pass'] else 'REJECT_GUARDED_FP64_ESTIMATE_COST',
++disposition = {'decision': 'PROCEED_TO_PRODUCTION_IMPLEMENTATION' if comparison['pass'] else 'REJECT_GUARDED_FP32_RESTORING_COST',
+                'issue': 44, 'source_revision': freeze['candidate_revision'],
+                'original_benefit_trial_completed': True, 'original_correctness_prerequisites_passed': True,
+                'production_adopted': False, **counts,

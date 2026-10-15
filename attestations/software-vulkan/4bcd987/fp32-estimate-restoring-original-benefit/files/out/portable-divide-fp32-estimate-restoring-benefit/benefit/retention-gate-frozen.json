@@ -1,0 +1,36 @@
+{
+  "actions_sha256": "23e205b1cbb0314d3788d9e9f87fdebef90294a2abd7c3994abf736dfbf6ac75",
+  "all20_gates_required": true,
+  "baseline_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "candidate_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "comparator_sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3",
+  "complete_call_minimum_improvement_percent": 5,
+  "every_inclusive_stage_minimum_improvement_percent": -5,
+  "executables": {
+    "baseline": {
+      "bytes": 10753968,
+      "observer_source_sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3",
+      "path": "bin/linux-gcc/portable-divide-fp32-estimate-restoring-benefit/original_baseline_controls",
+      "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856",
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    },
+    "candidate": {
+      "bytes": 10823600,
+      "observer_source_sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3",
+      "path": "bin/linux-gcc/portable-divide-fp32-estimate-restoring-benefit/original_candidate_controls",
+      "sha256": "c65e9a20085d9ddb8c20a4f250c5b016fc8ac3ad82487e840f8b469ac72f2b99",
+      "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+    }
+  },
+  "launcher_sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342",
+  "observed_instance_api_minimum_improvement_percent": 0,
+  "reader_sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9",
+  "scope": "One original fixed guarded-FP32-restoring A1/B1/B2/A2 trial. Original stock host and same canonical-device candidate ELF from accepted controls; no private Int64/Float64 requirement or fresh enabled55 trace. Accepted17/23 plus2 unchanged owner arrays. Original measured windows, forced cacheoff and20+2 gates unchanged.",
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "within_slot_repeats": 3
+}
