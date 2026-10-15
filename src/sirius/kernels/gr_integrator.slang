@@ -432,27 +432,44 @@ public bool AdaptiveAttemptAlreadyAtMinimumStep(Real attemptedStep, Real minimum
     return attemptedStep <= minimumStep;
 }
 
-// A fixed composition still covers the caller's complete policy interval.
-// Internal RK4 states are unprojected; any unrepresented substep rolls this
-// local result back to its input. No adaptive retry or affine commit occurs here.
-bool AdvanceCompositeGeodesicRK4(
-    GeodesicStateCart state, Real step, int substeps, bool isWarp, bool isWormhole,
+// The two fixed compositions independently cover the complete policy interval.
+// Share one RK4 call site without sharing either trial's evolving state. A failed
+// pass resets only its local result; the independent fine pass still executes.
+// Internal substeps are unprojected and never commit an affine interval.
+void AdvanceCompositeGeodesicRK4Pair(
+    GeodesicStateCart state, Real step, int coarseSubsteps, bool isWarp, bool isWormhole,
     float M, float a, float Q, float Lambda,
     float warpVs, float warpSigma, float warpR, float throatB0, int wormShape,
-    out GeodesicStateCart result) {
-    result = state;
-    if (substeps < 1 || substeps > 64) return false;
-    Real substep = step / Real(substeps);
-    [loop] for (int part = 0; part < substeps; ++part) {
-        GeodesicStateCart next;
-        if (!AdvanceGeodesicRK4(result, substep, isWarp, isWormhole,
-                M, a, Q, Lambda, warpVs, warpSigma, warpR, throatB0, wormShape, next)) {
-            result = state;
-            return false;
+    out GeodesicStateCart coarse, out GeodesicStateCart fine,
+    out bool coarseRepresented, out bool fineRepresented) {
+    coarse = state;
+    fine = state;
+    coarseRepresented = false;
+    fineRepresented = false;
+    if (coarseSubsteps < 1 || coarseSubsteps > 32) return;
+    [loop] for (int pass = 0; pass < 2; ++pass) {
+        int substeps = pass == 0 ? coarseSubsteps : coarseSubsteps * 2;
+        Real substep = step / Real(substeps);
+        GeodesicStateCart current = state;
+        bool represented = true;
+        [loop] for (int part = 0; part < substeps; ++part) {
+            GeodesicStateCart next;
+            if (!AdvanceGeodesicRK4(current, substep, isWarp, isWormhole,
+                    M, a, Q, Lambda, warpVs, warpSigma, warpR, throatB0, wormShape, next)) {
+                current = state;
+                represented = false;
+                break;
+            }
+            current = next;
         }
-        result = next;
+        if (pass == 0) {
+            coarse = current;
+            coarseRepresented = represented;
+        } else {
+            fine = current;
+            fineRepresented = represented;
+        }
     }
-    return true;
 }
 
 // Only the exact represented floor selects the finer fixed composition.
@@ -481,27 +498,14 @@ AdaptiveGeodesicStep AttemptAdaptiveGeodesicStepWithResolution(
     result.candidate = state;
     GeodesicStateCart fullStep = state;
     bool fullRepresented;
+    // The fine-pass flag covers every internal substep, including its first
+    // half. Retain this redundant term to leave the common failure tail exact.
     bool firstHalfRepresented = true;
     bool candidateRepresented;
-    if (coarseSubsteps == 1) {
-        fullRepresented = AdvanceGeodesicRK4(
-            state, step, isWarp, isWormhole, M, a, Q, Lambda,
-            warpVs, warpSigma, warpR, throatB0, wormShape, fullStep);
-        GeodesicStateCart firstHalf = state;
-        firstHalfRepresented = AdvanceGeodesicRK4(
-            state, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
-            warpVs, warpSigma, warpR, throatB0, wormShape, firstHalf);
-        candidateRepresented = firstHalfRepresented && AdvanceGeodesicRK4(
-            firstHalf, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
-            warpVs, warpSigma, warpR, throatB0, wormShape, result.candidate);
-    } else {
-        fullRepresented = AdvanceCompositeGeodesicRK4(
-            state, step, coarseSubsteps, isWarp, isWormhole, M, a, Q, Lambda,
-            warpVs, warpSigma, warpR, throatB0, wormShape, fullStep);
-        candidateRepresented = AdvanceCompositeGeodesicRK4(
-            state, step, coarseSubsteps * 2, isWarp, isWormhole, M, a, Q, Lambda,
-            warpVs, warpSigma, warpR, throatB0, wormShape, result.candidate);
-    }
+    AdvanceCompositeGeodesicRK4Pair(
+        state, step, coarseSubsteps, isWarp, isWormhole, M, a, Q, Lambda,
+        warpVs, warpSigma, warpR, throatB0, wormShape,
+        fullStep, result.candidate, fullRepresented, candidateRepresented);
     if (!fullRepresented || !firstHalfRepresented || !candidateRepresented) {
         result.candidate = state;
         result.errorRatio = Real(1.0e30f);
