@@ -1,0 +1,96 @@
+{
+  "compile-probe": {
+    "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-c",
+      "/home/astra/.project/Sirius/out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.o",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.d"
+    ],
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/CMakeCache.txt"
+    ],
+    "scope": "Compile original short-input compiler probe using current exact preset flags; no retained arithmetic or qualification verdict."
+  },
+  "link-probe": {
+    "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-pthread",
+      "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.map",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe"
+    ],
+    "frozen_inputs": [
+      "/usr/bin/g++-14",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "/home/astra/.project/Sirius/out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json",
+      "/home/astra/.project/Sirius/bin/linux-gcc/CMakeCache.txt",
+      "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.d"
+    ],
+    "scope": "Link current4b ABI-compatible stock adapter with one direct short-input probe; no embedded retained arrays/observer TU or numerical path."
+  }
+}

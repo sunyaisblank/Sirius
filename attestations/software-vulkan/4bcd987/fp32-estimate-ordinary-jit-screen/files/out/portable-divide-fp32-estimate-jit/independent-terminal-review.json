@@ -1,0 +1,494 @@
+{
+  "schema": "sirius-fp32-estimate-ordinary-jit-independent-terminal-review-v1",
+  "passed": true,
+  "reviewer": "/root/forensic_obligations",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "review_scope": "Independent passive consistency and provenance review of root's one completed candidate-only ordinary JIT capture and separate terminal reader. Independent of the packet author and actual operator; source admission was separately reviewed by /root/sanitizer_gate_contract.",
+  "method": "Read-only source and JSON inspection, standard-library byte hashes/struct field and relocation arithmetic, read-only Git historical blobs and targeted /proc birth checks. No authored helper, analyzer, ELF reader, parser/control, compiler, validator, GDB, canary, provider or API was executed or re-executed by this reviewer.",
+  "blockers": [],
+  "source_and_owner": {
+    "static_rich_pins": 933,
+    "actual_consumed_inputs": 939,
+    "all_static_and_before_after_current_rich_records_equal": true,
+    "lexical_ROOT_relative_keys_and_action_folder_expansion_joined": true,
+    "runtime_context_prep_freeze_actions_reuse_host_module_joined": true,
+    "owner_terminal_passed": true,
+    "child_exit": 0,
+    "source_unchanged": true,
+    "whole_inputs_unchanged": true,
+    "stop_reason": null,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "wall_seconds": 20.657936971998424,
+    "peak_sampled_rss_kib": 1733980,
+    "minimum_sampled_available_kib": 18485960,
+    "sample_rows": 806,
+    "sampled_peak_minimum_and_observed_birth_union_match_owner": true,
+    "fresh_same_boot_birth_checks": [
+      {
+        "current_start_ticks": null,
+        "pid": 440607,
+        "saved_birth_absent": true,
+        "saved_start_ticks": "7926034"
+      },
+      {
+        "current_start_ticks": null,
+        "pid": 440608,
+        "saved_birth_absent": true,
+        "saved_start_ticks": "7926037"
+      },
+      {
+        "current_start_ticks": null,
+        "pid": 440609,
+        "saved_birth_absent": true,
+        "saved_start_ticks": "7926041"
+      },
+      {
+        "current_start_ticks": null,
+        "pid": 440619,
+        "saved_birth_absent": true,
+        "saved_start_ticks": "7926048"
+      }
+    ],
+    "runtime_policy": "Original forced /usr/share/vulkan/icd.d/lvp_icd.json, device0, MESA_SHADER_CACHE_DISABLE=true; inherited core0/per-file64MiB. Full observed wall is diagnostic cost, not a retained arithmetic/performance result.",
+    "critical_receipts": {
+      "capture-acceptance.json": {
+        "bytes": 11251,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-acceptance.json",
+        "sha256": "dde011b73f3f7c3eac8d6090987ac7f6f429e4a48e506d3d451cca181e61bae5",
+        "symlink_target": null
+      },
+      "capture-actions.json": {
+        "bytes": 95371,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-actions.json",
+        "sha256": "73d04c6ea36d84b9f099ffa0c873299c8773e503bfdad2edc6bb641121ace861",
+        "symlink_target": null
+      },
+      "capture-candidate-endpoint-normal/inputs-after.json": {
+        "bytes": 277425,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inputs-after.json",
+        "sha256": "5e657f7dbffb2ec6f5a36fdae5624e12f2edbe00e7bf064ec006072fa2619299",
+        "symlink_target": null
+      },
+      "capture-candidate-endpoint-normal/inputs-before.json": {
+        "bytes": 277425,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inputs-before.json",
+        "sha256": "5e657f7dbffb2ec6f5a36fdae5624e12f2edbe00e7bf064ec006072fa2619299",
+        "symlink_target": null
+      },
+      "capture-candidate-endpoint-normal/owner.json": {
+        "bytes": 7614,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/owner.json",
+        "sha256": "ff6f1fe7212d9a78bed5ff080c45cbe80f6555ce00a583f1b3d881770a1f4c75",
+        "symlink_target": null
+      },
+      "preparation.json": {
+        "bytes": 2282,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/preparation.json",
+        "sha256": "df7f3108ef2be5a8ba927ee609843f458f7f1fe9652c09b9d8afb4ef93476e13",
+        "symlink_target": null
+      },
+      "reuse-acceptance.json": {
+        "bytes": 9383,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/reuse-acceptance.json",
+        "sha256": "66212124e142dd67d5bb8248eb08abde2eb15f3025fdecec0ab90f4b1a33897d",
+        "symlink_target": null
+      },
+      "runtime-context.json": {
+        "bytes": 1981,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/runtime-context.json",
+        "sha256": "f6c91c59c9d3ce85a37f4b7d410cee2605ccd3cea833026ba38aff5ff789c929",
+        "symlink_target": null
+      },
+      "source-freeze.json": {
+        "bytes": 355396,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/source-freeze.json",
+        "sha256": "1893fd48c06576c4d214ca80f139424c6ac600c825e63ab47324c3af552fcced",
+        "symlink_target": null
+      }
+    }
+  },
+  "producer_and_inherited_authorities": {
+    "copied_host": {
+      "bytes": 253224,
+      "sha256": "c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af",
+      "canonical_Int64_enablement_unmodified": true
+    },
+    "shader": {
+      "actual_span_matches_frozen_input": true,
+      "bytes": 152844,
+      "sha256": "0535c0f6a689d2d59896543882e1f5300fdd67fe70509b7dda0996f59ffd03d9",
+      "words": 38211
+    },
+    "raw_SPIRV_capabilities": [
+      1,
+      4467
+    ],
+    "raw_SPIRV_types": "32-bit unsigned/signed integer and float32 only; Float64/Int64 shader types absent.",
+    "original_compiler_owner": {
+      "passed": false,
+      "child_exit": 1,
+      "sha256": "2e99b40dd28f4f01ddb9a271b9ef2cc757ebdaafb4694c56ad72557616d826e4"
+    },
+    "separate_policy_owner": {
+      "passed": true,
+      "sha256": "38e64ec3f89a4727c7f2230f93b70c2882ff3cfb000602f59892233eb9908565"
+    },
+    "separate_graph_owner": {
+      "passed": true,
+      "sha256": "f6a946b6219eaf6ac76ec910dc5a17498b99caa3eb47e5e9fa3130bd457f75fc"
+    },
+    "graph_archive": {
+      "commit": "23619ee8a99ac792d6d76dbeb376356c4168dbc2",
+      "manifest_sha256": "ed4e368617b9d81f445f8abc29b2719cf6d46cec053c16a1759e5bdf01bc859a"
+    },
+    "separate_receipt_result_owner_seal_hash_joins_checked": true,
+    "stock_reuse": {
+      "Git_sources13": [
+        ".github/workflows/ci.yml",
+        "CMakePresets.json",
+        "README.md",
+        "scripts/governance/build_policy.py",
+        "scripts/validate-native-runtime.py",
+        "scripts/verify-operating-model.py",
+        "src/sirius/kernels/gr_ellis_topology.slang",
+        "src/sirius/kernels/gr_integrator.slang",
+        "src/sirius/kernels/parity_probe.slang",
+        "src/sirius/kernels/trace.slang",
+        "tests/backend/kernel_parity_test.cpp",
+        "tests/labels/CTestLabels.cmake",
+        "tests/operating_model.json"
+      ],
+      "all638_byte_and_explicit_historical_identity_joins": true,
+      "historical_distinct_input_versions": 638,
+      "historical_owner_sha256": {
+        "capture-stock-endpoint-normal": "09642035b4d77a71a51e584a016315a43430655badb824456466bd9abc3c266c",
+        "compile-probe": "6ca687511d6e31132dacf6da6a2c4a3a6a8f852267e799bd527fbb2875714c49",
+        "link-probe": "ea9d8b79eaf501649a12f7d9b262b90173986451203aa4b2421ec92b660b7a2d"
+      },
+      "historical_raw55_feature_pair_available": false,
+      "methods": {
+        "exact_current_identity": 609,
+        "exact_historical_Git_blob": 13,
+        "exact_original_input_recovery": 3,
+        "whole_byte_manifest_archived_owned_file": 13
+      },
+      "old_whole_remote_backup_claim": false,
+      "phase_rows": {
+        "capture-stock-endpoint-normal": 633,
+        "compile-probe": 545,
+        "link-probe": 547
+      }
+    },
+    "stock_manifested_frozen_members": 56,
+    "stock_raw_comparison_members": 33,
+    "historical_stock_full_durable_report_sha256": "3e940e57eda3be646422b9e6ae632dc56ef283b3f48d8c32e140a6107a74dbaa",
+    "stock_report_scope": "Root's separate accepted reader reproduces the complete durable stock report using full JSON persistence normalization (all fields, types, values and array order); this passive reviewer checked the frozen report identity and source normalization. No rejected int-key comparison reader or fresh stock recapture was used.",
+    "historical_authority_limit": "638 distinct input versions and 13 exact 4bcd Git source blobs have explicit byte and historical identity joins. Historical stock raw55 feature arguments are absent. This is not a claim that every older raw artifact is Git-preserved or remotely backed up."
+  },
+  "fresh_features_and_loaded_provider": {
+    "complete55_names_order_raw_words_hash_and_saved_reports_equal": true,
+    "actual_enabled_features_sha256": "75a133cfa9385f90b6be8f861c23a73c7d32326d920fff7a4ab43c744e65e4b3",
+    "shaderInt64": 0,
+    "shaderFloat64_enabled_but_unused": 1,
+    "all_other_enabled_core_features_zero": true,
+    "query_count": 2,
+    "exact_raw_VkDeviceCreateInfo_queue_and_shader_module_fields_joined": true,
+    "successful_device_handle_used_by_successful_full_shader_module": true,
+    "queue_family": 0,
+    "queue_count": 1,
+    "queue_priority": 1,
+    "enabled_extensions": [],
+    "feature_chain": [],
+    "provider_files": {
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+        "bytes": 143545784,
+        "device": [
+          8,
+          80
+        ],
+        "inode": 47452,
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+      },
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+        "bytes": 510592,
+        "device": [
+          8,
+          80
+        ],
+        "inode": 13100,
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+      },
+      "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+        "bytes": 11929384,
+        "device": [
+          8,
+          80
+        ],
+        "inode": 143595,
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      }
+    },
+    "map_joins": [
+      {
+        "at_actual_called_JIT": true,
+        "mapped_dev_inode": true,
+        "owned_session": 440607,
+        "path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "same_inferior_pid": 440619,
+        "saved_birth": "7926048"
+      },
+      {
+        "at_actual_called_JIT": true,
+        "mapped_dev_inode": true,
+        "owned_session": 440607,
+        "path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "same_inferior_pid": 440619,
+        "saved_birth": "7926048"
+      },
+      {
+        "at_actual_called_JIT": true,
+        "mapped_dev_inode": true,
+        "owned_session": 440607,
+        "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "same_inferior_pid": 440619,
+        "saved_birth": "7926048"
+      }
+    ],
+    "loader_public_boundary_pcs_in_executable_loader_maps": true,
+    "scope": "Fresh public queried support and actual enabled arguments, successful device and full shader-module creation, and birth/session/dev/inode/byte-bound loader/LVP/LLVM maps at the actual called JIT. No stock full55 comparison or new Float64 accuracy premise."
+  },
+  "actual_module_to_called_code": {
+    "one_completed_dispatch": {
+      "buffers": [
+        0,
+        1
+      ],
+      "captured_ns": 1792029865229152350,
+      "completed": true,
+      "groups_x": 1,
+      "host_thread": 1,
+      "id": 0,
+      "kernel": 0
+    },
+    "actual_entry": {
+      "actual_entry_pc": 131631286419456,
+      "buffers": [
+        0,
+        1
+      ],
+      "dispatch_id": 0,
+      "file": "jit-10.elf",
+      "function": {
+        "address": 131631286419456,
+        "bytes": 314,
+        "name": "cs_variant",
+        "offset": 0,
+        "section": 3
+      },
+      "kernel": 0,
+      "worker_thread": 33
+    },
+    "ordinary_pipelines": [
+      "default<O0>",
+      "sroa,early-cse,simplifycfg,reassociate,mem2reg,instsimplify,instcombine<no-verify-fixpoint>"
+    ],
+    "successful_pass_ids_module_generation_export_lookup_callable_joined": true,
+    "ordinary_IR_export": {
+      "bytes": 13316884,
+      "function": 131631218171000,
+      "module": 131631218167504,
+      "module_generation": 5,
+      "optimized_module_observed": true,
+      "path": "optimized-05.ll",
+      "sha256": "77b0a0206502ae3712c8287dd02545f1a065b76f6711042e9d0edb6b6db21c26",
+      "successful_optimizer_pass_ids": [
+        10,
+        11
+      ]
+    },
+    "preload_observer_sha256": "a1f8808cd8a3a793c59eeed10d78515a08d5aa09b1080ac47281c1a78c04fd68",
+    "saved_gdb_sources_hooks_and_original_observer_hash_joined": true,
+    "raw_ELF": {
+      "bytes": 1061080,
+      "sha256": "3ed7d02d11a37da582d907e46497a60f9b2accf930f13cdd67ce71bf0ae6f8b3"
+    },
+    "all14_section_headers_and4_defined_functions_equal": true,
+    "all6_allocated_live_sections_exact_after_defined_relocations_and_uncovered_bytes": true,
+    "linked_section_review": {
+      "file": "jit-10.elf",
+      "live_sections": [
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 931045,
+          "changed_bytes": 31384,
+          "name": ".ltext",
+          "relocation_field_bytes": 42408
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 96,
+          "changed_bytes": 0,
+          "name": ".rodata.cst32",
+          "relocation_field_bytes": 0
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 48,
+          "changed_bytes": 0,
+          "name": ".rodata.cst16",
+          "relocation_field_bytes": 0
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 468,
+          "changed_bytes": 0,
+          "name": ".rodata.cst4",
+          "relocation_field_bytes": 0
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 80,
+          "changed_bytes": 60,
+          "name": ".rodata",
+          "relocation_field_bytes": 80
+        },
+        {
+          "all_defined_relocations_and_uncovered_bytes_exact": true,
+          "bytes": 256,
+          "changed_bytes": 32,
+          "name": ".eh_frame",
+          "relocation_field_bytes": 32
+        }
+      ],
+      "relocation_counts": {
+        "1": 5311,
+        "24": 4
+      },
+      "undefined_callback_targets_consistent": {
+        "coro_free": 131631503535200,
+        "coro_malloc": 131631503535216
+      },
+      "undefined_callback_targets_independently_resolved": false,
+      "variant": "endpoint-normal"
+    },
+    "raw_files": {
+      "jit-10.elf": {
+        "bytes": 1061080,
+        "sha256": "3ed7d02d11a37da582d907e46497a60f9b2accf930f13cdd67ce71bf0ae6f8b3"
+      },
+      "jit-10.elf.live-11.bin": {
+        "bytes": 256,
+        "sha256": "279f2b310e08cb7c47fe3cbb3ed2592998c6378df01a5b9638cc3aefbd8d9d7f"
+      },
+      "jit-10.elf.live-3.bin": {
+        "bytes": 931045,
+        "sha256": "0bdff949c760fc22b5f10892ab0bd01bb9c2b3c53412770b41e4df81653a6a6c"
+      },
+      "jit-10.elf.live-5.bin": {
+        "bytes": 96,
+        "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf"
+      },
+      "jit-10.elf.live-6.bin": {
+        "bytes": 48,
+        "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+      },
+      "jit-10.elf.live-7.bin": {
+        "bytes": 468,
+        "sha256": "c97940092622908a94bc8edafaeebb44ab4912c5993744afebe003ddd4cc3b48"
+      },
+      "jit-10.elf.live-8.bin": {
+        "bytes": 80,
+        "sha256": "879d64257265aca37d752bfcad30987e271eaf5c1809537df833cb7e61e47287"
+      }
+    },
+    "report_and_raw_hashes": {
+      "actual-code-review.json": {
+        "bytes": 4352,
+        "sha256": "e61e1ca9555426f80a7c67711b4dfd45b2f0caf9777bfd4e805260f764739890"
+      },
+      "actual-loaded-module.json": {
+        "bytes": 154,
+        "sha256": "cc33435768198a5740295c291bf83e5d1700a6d565644d75be4820b77917cd52"
+      },
+      "bindings.json": {
+        "bytes": 59774,
+        "sha256": "65fc83a263adbfbc49d2830f7b08f565c5eb5349d110b6d80937277e4a5d4953"
+      },
+      "capture-inputs.json": {
+        "bytes": 871,
+        "sha256": "23462fab79abcd3a03a4efbfdae0faa647a97a633df140ebe66acd04f5d16854"
+      },
+      "device-features.json": {
+        "bytes": 108090,
+        "sha256": "9ac9eca95d749117a0fd7d13ebb5e2b396d3e741872c79cd2f0af0de23b79dca"
+      },
+      "feature-review.json": {
+        "bytes": 2161,
+        "sha256": "759cdfab0f7a6ae5474bab88db568c25313f9aa578c409b725eff29e09519b09"
+      },
+      "inferior-exit.json": {
+        "bytes": 17,
+        "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+      },
+      "inferior.json": {
+        "bytes": 16,
+        "sha256": "b3e830af2ab59dd65e3a6b72765782d7efe4f55b7dde77565e569944e22aeafd"
+      },
+      "samples.jsonl": {
+        "bytes": 385295,
+        "sha256": "52e54e5a0772e9f57a5a4d6d2c01ce252b2138ee562a47de221b7c94ba167170"
+      }
+    },
+    "undefined_callback_addresses_independently_resolved": false
+  },
+  "disposition": {
+    "ordinary_full_module_loaded_compiled_exported_looked_up_and_called_capture_consistency_passed": true,
+    "canary": "Exact original two4B-buffer/one1x1x1 dispatch/8MiB allocation host reports ni<329 refusal before retained arithmetic/output writes; stdout reports retained_numerical_path_executed=false and normal inferior exit.",
+    "native_cost_judgment": "UNJUDGED here; root performs a separate analysis.",
+    "retained_arithmetic_executed": false,
+    "arithmetic_admission": false,
+    "numerical_or_hitrate_result": false,
+    "benefit_or_adoption_or_qualification_claim": false,
+    "no_retry_or_new_runtime_requested": true,
+    "collector_source": "Pending root's separate cost-result schema; unchanged by this task."
+  },
+  "workspace": {
+    "head": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "review_json": "Ignored out/ diagnostic, not committed/pushed by this agent; root owns preservation."
+  },
+  "receipt_correction": {
+    "scope": "Receipt only; raw capture, frozen inputs, original reports and PASS scope unchanged.",
+    "reason": "The initial receipt composition passed the copied nanosecond timestamp through JavaScript Number and lost integer precision above 2^53.",
+    "prior_receipt_sha256": "f68037c6699ca39832bd1fe2a890d37713ac73e2b849254ab42096a97a50e527",
+    "corrected_field": "actual_module_to_called_code.one_completed_dispatch.captured_ns",
+    "previous_value_decimal": "1792029865229152300",
+    "raw_and_corrected_value_decimal": "1792029865229152350",
+    "method": "Python json.loads of the raw actual-code-review.json and direct dispatch-object copy followed by Python json.dumps; no JavaScript number roundtrip.",
+    "other_copied_timestamp_fields": "Recursively inspected the complete receipt; no other timestamp or *_ns field is present.",
+    "no_authored_helper_reader_tool_or_provider_rerun": true
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/g++-14",
+    "-DSIRIUS_CONTRACT_MODE=2",
+    "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+    "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+    "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+    "-I/home/astra/.project/Sirius/src/sirius/..",
+    "-O3",
+    "-DNDEBUG",
+    "-std=c++2c",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wno-missing-field-initializers",
+    "-Werror",
+    "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+    "-lvulkan",
+    "-ldl",
+    "-pthread",
+    "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.map",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe"
+  ],
+  "boot_id": "e864c8ea-8d20-4375-9dc8-60ed6ca8f555",
+  "case": "link-probe",
+  "child_exit": 0,
+  "child_pid": 3357682,
+  "child_start_ticks": "32705817",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 3357678,
+    "pid": 3357678,
+    "ppid": 2446,
+    "rss_kib": 20584,
+    "session": 3357678,
+    "start_ticks": "32705793",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Link current4b ABI-compatible stock adapter with one direct short-input probe; no embedded retained arrays/observer TU or numerical path.",
+  "minimum_sampled_available_kib": 18956116,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 3357682,
+      "saved_start_ticks": "32705817"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 3357683,
+      "saved_start_ticks": "32705817"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 25576,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Link current4b ABI-compatible stock adapter with one direct short-input probe; no embedded retained arrays/observer TU or numerical path.",
+  "source": {
+    "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.2785322479903698,
+  "whole_inputs_unchanged": true
+}

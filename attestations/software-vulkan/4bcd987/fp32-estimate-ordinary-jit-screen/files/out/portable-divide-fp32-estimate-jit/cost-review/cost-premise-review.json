@@ -1,0 +1,1812 @@
+{
+  "actual_called_object_join": {
+    "actual_entry": {
+      "actual_entry_pc": 131631286419456,
+      "buffers": [
+        0,
+        1
+      ],
+      "dispatch_id": 0,
+      "file": "jit-10.elf",
+      "function": {
+        "address": 131631286419456,
+        "bytes": 314,
+        "name": "cs_variant",
+        "offset": 0,
+        "section": 3
+      },
+      "kernel": 0,
+      "worker_thread": 33
+    },
+    "all_six_allocated_sections": [
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 931045,
+        "changed_bytes": 31384,
+        "name": ".ltext",
+        "relocation_field_bytes": 42408
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 96,
+        "changed_bytes": 0,
+        "name": ".rodata.cst32",
+        "relocation_field_bytes": 0
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 48,
+        "changed_bytes": 0,
+        "name": ".rodata.cst16",
+        "relocation_field_bytes": 0
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 468,
+        "changed_bytes": 0,
+        "name": ".rodata.cst4",
+        "relocation_field_bytes": 0
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 80,
+        "changed_bytes": 60,
+        "name": ".rodata",
+        "relocation_field_bytes": 80
+      },
+      {
+        "all_defined_relocations_and_uncovered_bytes_exact": true,
+        "bytes": 256,
+        "changed_bytes": 32,
+        "name": ".eh_frame",
+        "relocation_field_bytes": 32
+      }
+    ],
+    "called_object": {
+      "bytes": 1061080,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf",
+      "sha256": "3ed7d02d11a37da582d907e46497a60f9b2accf930f13cdd67ce71bf0ae6f8b3",
+      "symlink_target": null
+    },
+    "defined_relocations": {
+      "1": 5311,
+      "24": 4
+    },
+    "ordinary_pipelines": [
+      "default<O0>",
+      "sroa,early-cse,simplifycfg,reassociate,mem2reg,instsimplify,instcombine<no-verify-fixpoint>"
+    ],
+    "scope": "Called cs_variant PC binds actual ordinary whole-module object/allocated sections. These resume arithmetic blocks were compiled and inspected; short-input canary does not establish their execution.",
+    "undefined_callback_targets_independently_resolved": false
+  },
+  "all_six_Divide_clones": [
+    {
+      "IR": {
+        "corrective_udiv": {
+          "instruction": "  %25349 = udiv <8 x i32> %ssa_22931, %ssa_22889",
+          "line": 64638
+        },
+        "fallback_udiv": [
+          {
+            "instruction": "  %25404 = udiv <8 x i32> %ssa_23013, %ssa_22889",
+            "line": 64776
+          },
+          {
+            "instruction": "  %25406 = udiv <8 x i32> %ssa_23020, %ssa_22889",
+            "line": 64780
+          },
+          {
+            "instruction": "  %25408 = udiv <8 x i32> %ssa_23027, %ssa_22889",
+            "line": 64787
+          },
+          {
+            "instruction": "  %25410 = udiv <8 x i32> %ssa_23034, %ssa_22889",
+            "line": 64791
+          }
+        ],
+        "fdiv": "  %ssa_22916 = fdiv <8 x float> %25324, %25325",
+        "fdiv_line": 64584,
+        "range_and_exact_mask_rows": [
+          {
+            "instruction": "  br i1 %any_active15703.not, label %endif-block15704, label %if-true-block15705",
+            "line": 64594
+          },
+          {
+            "instruction": "  %ssa_22934 = icmp ult <8 x i32> %ssa_22928, %ssa_22925",
+            "line": 64609
+          },
+          {
+            "instruction": "  %ssa_22940 = icmp ult <8 x i32> %ssa_22931, %ssa_22939",
+            "line": 64614
+          },
+          {
+            "instruction": "  %ssa_22941 = and <8 x i1> %ssa_22940, %ssa_22938",
+            "line": 64615
+          },
+          {
+            "instruction": "  br i1 %any_active15708.not, label %endif-block15709, label %if-true-block15710",
+            "line": 64635
+          }
+        ],
+        "stock_four_digit_ancestor": [
+          {
+            "divisor": "%ssa_22871",
+            "id": "%25325",
+            "line": 64528
+          },
+          {
+            "divisor": "%ssa_22871",
+            "id": "%25327",
+            "line": 64532
+          },
+          {
+            "divisor": "%ssa_22871",
+            "id": "%25329",
+            "line": 64539
+          },
+          {
+            "divisor": "%ssa_22871",
+            "id": "%25331",
+            "line": 64543
+          }
+        ]
+      },
+      "IR_native_frame_slot_join": {
+        "GEP": "  %reg475.reload.addr = getelementptr inbounds nuw i8, ptr %0, i64 89424",
+        "GEP_line": 8324,
+        "flag_load": "  %25335 = load <8 x i8>, ptr %reg475.reload.addr, align 8",
+        "flag_load_line": 64616,
+        "frame_offset": 89424,
+        "native_flag_access": {
+          "instruction": "vmovq xmm2,QWORD PTR [rdi+0x15d50]",
+          "native_line": 59079,
+          "pc": "0x77b7cc15a5b8",
+          "resume_offset": "0x3c618"
+        }
+      },
+      "arithmetic_width": 8,
+      "conditional_cost_scope": "Static executable branch alternative only. For vectors any active accepted lane runs all8 corrective divs; any remaining active rejected lane runs all32 fallback divs. Output masks suppress results, not individual scalarized divides. No occurrence/hit-rate/latency observation.",
+      "native": {
+        "corrective_div_count": 8,
+        "corrective_divisions_first_last_loci": [
+          {
+            "instruction": "div ecx",
+            "native_line": 59100,
+            "pc": "0x77b7cc15a622",
+            "resume_offset": "0x3c682"
+          },
+          {
+            "instruction": "div ecx",
+            "native_line": 59138,
+            "pc": "0x77b7cc15a6c1",
+            "resume_offset": "0x3c721"
+          }
+        ],
+        "corrective_divisions_pcs": [
+          "0x77b7cc15a622",
+          "0x77b7cc15a62c",
+          "0x77b7cc15a64d",
+          "0x77b7cc15a664",
+          "0x77b7cc15a67b",
+          "0x77b7cc15a685",
+          "0x77b7cc15a6aa",
+          "0x77b7cc15a6c1"
+        ],
+        "exact_guard_reject": {
+          "instruction": "je 77b7cc15a866 <cs_co_variant.resume+0x3c8c6>",
+          "native_line": 59094,
+          "pc": "0x77b7cc15a601",
+          "resume_offset": "0x3c661"
+        },
+        "fallback_div_count": 32,
+        "fallback_divisions_first_last_loci": [
+          {
+            "instruction": "div r13d",
+            "native_line": 59251,
+            "pc": "0x77b7cc15a8ee",
+            "resume_offset": "0x3c94e"
+          },
+          {
+            "instruction": "div DWORD PTR [rsp+0x130]",
+            "native_line": 59424,
+            "pc": "0x77b7cc15abf8",
+            "resume_offset": "0x3cc58"
+          }
+        ],
+        "fallback_divisions_pcs": [
+          "0x77b7cc15a8ee",
+          "0x77b7cc15a8fe",
+          "0x77b7cc15a924",
+          "0x77b7cc15a93f",
+          "0x77b7cc15a95e",
+          "0x77b7cc15a972",
+          "0x77b7cc15a993",
+          "0x77b7cc15a9b2",
+          "0x77b7cc15a9e7",
+          "0x77b7cc15a9f7",
+          "0x77b7cc15aa06",
+          "0x77b7cc15aa1e",
+          "0x77b7cc15aa30",
+          "0x77b7cc15aa3f",
+          "0x77b7cc15aa52",
+          "0x77b7cc15aa6a",
+          "0x77b7cc15aaa2",
+          "0x77b7cc15aaad",
+          "0x77b7cc15aac1",
+          "0x77b7cc15aadd",
+          "0x77b7cc15aaee",
+          "0x77b7cc15aafd",
+          "0x77b7cc15ab10",
+          "0x77b7cc15ab28",
+          "0x77b7cc15ab59",
+          "0x77b7cc15ab68",
+          "0x77b7cc15ab78",
+          "0x77b7cc15ab9f",
+          "0x77b7cc15abb4",
+          "0x77b7cc15abc3",
+          "0x77b7cc15abd6",
+          "0x77b7cc15abf8"
+        ],
+        "fallback_entry_pc": "0x77b7cc15a8ee",
+        "fallback_exit_pc": "0x77b7cc15adb2",
+        "fallback_skip_when_no_active_unfinished_lane": {
+          "instruction": "je 77b7cc15adb2 <cs_co_variant.resume+0x3ce12>",
+          "native_line": 59243,
+          "pc": "0x77b7cc15a8bf",
+          "resume_offset": "0x3c91f"
+        },
+        "fdiv": {
+          "instruction": "vdivps ymm2,ymm2,ymm13",
+          "native_line": 59046,
+          "pc": "0x77b7cc15a4fb",
+          "resume_offset": "0x3c55b"
+        },
+        "no_per_lane_branch_inside_correction_or_fallback_div_packet": true,
+        "proposal_join_pc": "0x77b7cc15a866",
+        "range_reject": {
+          "instruction": "je 77b7cc15a866 <cs_co_variant.resume+0x3c8c6>",
+          "native_line": 59052,
+          "pc": "0x77b7cc15a51d",
+          "resume_offset": "0x3c57d"
+        },
+        "stock_fallback_packet": {
+          "division_count": 32,
+          "end_pc": "0x79ff245582ca",
+          "native_lines": [
+            58621,
+            58855
+          ],
+          "start_pc": "0x79ff24557e89"
+        }
+      },
+      "ordinal": 1,
+      "source_function": "PB32Divide in exact macro-on header; recognized bit-build/guess/product/borrow/correction/sticky pattern in this full-module inline clone."
+    },
+    {
+      "IR": {
+        "corrective_udiv": {
+          "instruction": "  %37364 = udiv <8 x i32> %ssa_33618, %ssa_33576",
+          "line": 92674
+        },
+        "fallback_udiv": [
+          {
+            "instruction": "  %37419 = udiv <8 x i32> %ssa_33704, %ssa_33576",
+            "line": 92811
+          },
+          {
+            "instruction": "  %37421 = udiv <8 x i32> %ssa_33711, %ssa_33576",
+            "line": 92815
+          },
+          {
+            "instruction": "  %37423 = udiv <8 x i32> %ssa_33718, %ssa_33576",
+            "line": 92822
+          },
+          {
+            "instruction": "  %37425 = udiv <8 x i32> %ssa_33725, %ssa_33576",
+            "line": 92826
+          }
+        ],
+        "fdiv": "  %ssa_33603 = fdiv <8 x float> %37339, %37340",
+        "fdiv_line": 92620,
+        "range_and_exact_mask_rows": [
+          {
+            "instruction": "  %37342 = and <8 x i1> %37332, %ssa_33606",
+            "line": 92624
+          },
+          {
+            "instruction": "  br i1 %any_active22283.not, label %endif-block22284, label %if-true-block22285",
+            "line": 92630
+          },
+          {
+            "instruction": "  %ssa_33621 = icmp ult <8 x i32> %ssa_33615, %ssa_33612",
+            "line": 92645
+          },
+          {
+            "instruction": "  %ssa_33627 = icmp ult <8 x i32> %ssa_33618, %ssa_33626",
+            "line": 92650
+          },
+          {
+            "instruction": "  %ssa_33628 = and <8 x i1> %ssa_33627, %ssa_33625",
+            "line": 92651
+          },
+          {
+            "instruction": "  %37357 = and <8 x i1> %ssa_33629, %37342",
+            "line": 92661
+          },
+          {
+            "instruction": "  br i1 %any_active22288.not, label %endif-block22289, label %if-true-block22290",
+            "line": 92671
+          },
+          {
+            "instruction": "  %37370 = and <8 x i1> %ssa_33639, %37357",
+            "line": 92686
+          }
+        ],
+        "stock_four_digit_ancestor": [
+          {
+            "divisor": "%ssa_33455",
+            "id": "%37250",
+            "line": 92354
+          },
+          {
+            "divisor": "%ssa_33455",
+            "id": "%37252",
+            "line": 92358
+          },
+          {
+            "divisor": "%ssa_33455",
+            "id": "%37254",
+            "line": 92365
+          },
+          {
+            "divisor": "%ssa_33455",
+            "id": "%37256",
+            "line": 92369
+          }
+        ]
+      },
+      "IR_native_frame_slot_join": {
+        "GEP": "  %reg716.reload.addr = getelementptr inbounds nuw i8, ptr %0, i64 89104",
+        "GEP_line": 8083,
+        "flag_load": "  %37350 = load <8 x i8>, ptr %reg716.reload.addr, align 8",
+        "flag_load_line": 92652,
+        "frame_offset": 89104,
+        "native_flag_access": {
+          "instruction": "vmovq xmm0,QWORD PTR [rdi+0x15c10]",
+          "native_line": 84985,
+          "pc": "0x77b7cc17871f",
+          "resume_offset": "0x5a77f"
+        }
+      },
+      "arithmetic_width": 8,
+      "conditional_cost_scope": "Static executable branch alternative only. For vectors any active accepted lane runs all8 corrective divs; any remaining active rejected lane runs all32 fallback divs. Output masks suppress results, not individual scalarized divides. No occurrence/hit-rate/latency observation.",
+      "native": {
+        "corrective_div_count": 8,
+        "corrective_divisions_first_last_loci": [
+          {
+            "instruction": "div ecx",
+            "native_line": 85006,
+            "pc": "0x77b7cc178783",
+            "resume_offset": "0x5a7e3"
+          },
+          {
+            "instruction": "div ecx",
+            "native_line": 85044,
+            "pc": "0x77b7cc17881b",
+            "resume_offset": "0x5a87b"
+          }
+        ],
+        "corrective_divisions_pcs": [
+          "0x77b7cc178783",
+          "0x77b7cc17878d",
+          "0x77b7cc1787ab",
+          "0x77b7cc1787c1",
+          "0x77b7cc1787d7",
+          "0x77b7cc1787e1",
+          "0x77b7cc178805",
+          "0x77b7cc17881b"
+        ],
+        "exact_guard_reject": {
+          "instruction": "je 77b7cc1789b7 <cs_co_variant.resume+0x5aa17>",
+          "native_line": 85000,
+          "pc": "0x77b7cc178765",
+          "resume_offset": "0x5a7c5"
+        },
+        "fallback_div_count": 32,
+        "fallback_divisions_first_last_loci": [
+          {
+            "instruction": "div r8d",
+            "native_line": 85156,
+            "pc": "0x77b7cc178a36",
+            "resume_offset": "0x5aa96"
+          },
+          {
+            "instruction": "div r8d",
+            "native_line": 85333,
+            "pc": "0x77b7cc178d20",
+            "resume_offset": "0x5ad80"
+          }
+        ],
+        "fallback_divisions_pcs": [
+          "0x77b7cc178a36",
+          "0x77b7cc178a41",
+          "0x77b7cc178a60",
+          "0x77b7cc178a7d",
+          "0x77b7cc178a9a",
+          "0x77b7cc178aa8",
+          "0x77b7cc178ac6",
+          "0x77b7cc178ae3",
+          "0x77b7cc178b15",
+          "0x77b7cc178b20",
+          "0x77b7cc178b33",
+          "0x77b7cc178b51",
+          "0x77b7cc178b69",
+          "0x77b7cc178b73",
+          "0x77b7cc178b83",
+          "0x77b7cc178b9b",
+          "0x77b7cc178bca",
+          "0x77b7cc178bd5",
+          "0x77b7cc178be4",
+          "0x77b7cc178bfa",
+          "0x77b7cc178c0b",
+          "0x77b7cc178c19",
+          "0x77b7cc178c2c",
+          "0x77b7cc178c4b",
+          "0x77b7cc178c7b",
+          "0x77b7cc178c8a",
+          "0x77b7cc178c99",
+          "0x77b7cc178cbf",
+          "0x77b7cc178cd8",
+          "0x77b7cc178ce7",
+          "0x77b7cc178cff",
+          "0x77b7cc178d20"
+        ],
+        "fallback_entry_pc": "0x77b7cc178a36",
+        "fallback_exit_pc": "0x77b7cc178ee0",
+        "fallback_skip_when_no_active_unfinished_lane": {
+          "instruction": "je 77b7cc178ee0 <cs_co_variant.resume+0x5af40>",
+          "native_line": 85147,
+          "pc": "0x77b7cc178a08",
+          "resume_offset": "0x5aa68"
+        },
+        "fdiv": {
+          "instruction": "vdivps ymm4,ymm3,ymm6",
+          "native_line": 84953,
+          "pc": "0x77b7cc178671",
+          "resume_offset": "0x5a6d1"
+        },
+        "no_per_lane_branch_inside_correction_or_fallback_div_packet": true,
+        "proposal_join_pc": "0x77b7cc1789b7",
+        "range_reject": {
+          "instruction": "je 77b7cc1789b7 <cs_co_variant.resume+0x5aa17>",
+          "native_line": 84958,
+          "pc": "0x77b7cc17868c",
+          "resume_offset": "0x5a6ec"
+        },
+        "stock_fallback_packet": {
+          "division_count": 32,
+          "end_pc": "0x79ff24575f66",
+          "native_lines": [
+            84249,
+            84471
+          ],
+          "start_pc": "0x79ff24575b9c"
+        }
+      },
+      "ordinal": 2,
+      "source_function": "PB32Divide in exact macro-on header; recognized bit-build/guess/product/borrow/correction/sticky pattern in this full-module inline clone."
+    },
+    {
+      "IR": {
+        "corrective_udiv": {
+          "instruction": "  %58880 = udiv i32 %ssa_47190, %ssa_47148",
+          "line": 136559
+        },
+        "fallback_udiv": [
+          {
+            "instruction": "  %58962 = udiv i32 %ssa_47273, %ssa_47148",
+            "line": 136737
+          },
+          {
+            "instruction": "  %58963 = udiv i32 %ssa_47280, %ssa_47148",
+            "line": 136741
+          },
+          {
+            "instruction": "  %58964 = udiv i32 %ssa_47287, %ssa_47148",
+            "line": 136745
+          },
+          {
+            "instruction": "  %58967 = udiv i32 %ssa_47294, %ssa_47148",
+            "line": 136753
+          }
+        ],
+        "fdiv": "  %ssa_47175 = fdiv float %58851, %58852",
+        "fdiv_line": 136501,
+        "range_and_exact_mask_rows": [
+          {
+            "instruction": "  %58856 = and <8 x i1> %58844, %58855",
+            "line": 136507
+          },
+          {
+            "instruction": "  br i1 %any_active37968.not, label %endif-block37969, label %if-true-block37970",
+            "line": 136513
+          },
+          {
+            "instruction": "  %ssa_47193 = icmp ult i32 %ssa_47187, %ssa_47184",
+            "line": 136528
+          },
+          {
+            "instruction": "  %ssa_47199 = icmp ult i32 %ssa_47190, %ssa_47198",
+            "line": 136533
+          },
+          {
+            "instruction": "  %ssa_47200 = and i1 %ssa_47199, %ssa_47197",
+            "line": 136534
+          },
+          {
+            "instruction": "  %58873 = and <8 x i1> %ssa_47201, %58856",
+            "line": 136546
+          },
+          {
+            "instruction": "  br i1 %any_active37973.not, label %endif-block37974, label %if-true-block37975",
+            "line": 136556
+          }
+        ],
+        "stock_four_digit_ancestor": [
+          {
+            "divisor": "%ssa_46920",
+            "id": "%58676",
+            "line": 136031
+          },
+          {
+            "divisor": "%ssa_46920",
+            "id": "%58677",
+            "line": 136035
+          },
+          {
+            "divisor": "%ssa_46920",
+            "id": "%58678",
+            "line": 136039
+          },
+          {
+            "divisor": "%ssa_46920",
+            "id": "%58681",
+            "line": 136047
+          }
+        ]
+      },
+      "IR_native_frame_slot_join": {
+        "GEP": "  %reg1021.reload.addr = getelementptr inbounds nuw i8, ptr %0, i64 88712",
+        "GEP_line": 7778,
+        "flag_load": "  %58866 = load <8 x i8>, ptr %reg1021.reload.addr, align 8",
+        "flag_load_line": 136537,
+        "frame_offset": 88712,
+        "native_flag_access": {
+          "instruction": "vmovq xmm0,QWORD PTR [rdi+0x15a88]",
+          "native_line": 125823,
+          "pc": "0x77b7cc1a3d70",
+          "resume_offset": "0x85dd0"
+        }
+      },
+      "arithmetic_width": 1,
+      "conditional_cost_scope": "Scalar i32 proposal/correction/fallback with vector execution masks and broadcast results. One corrective div versus four fallback divs; no actual dynamic frequency or arithmetic execution witnessed.",
+      "native": {
+        "corrective_div_count": 1,
+        "corrective_divisions_first_last_loci": [
+          {
+            "instruction": "div r10d",
+            "native_line": 125859,
+            "pc": "0x77b7cc1a3dfe",
+            "resume_offset": "0x85e5e"
+          },
+          {
+            "instruction": "div r10d",
+            "native_line": 125859,
+            "pc": "0x77b7cc1a3dfe",
+            "resume_offset": "0x85e5e"
+          }
+        ],
+        "corrective_divisions_pcs": [
+          "0x77b7cc1a3dfe"
+        ],
+        "exact_guard_reject": {
+          "instruction": "je 77b7cc1a3faf <cs_co_variant.resume+0x8600f>",
+          "native_line": 125856,
+          "pc": "0x77b7cc1a3df3",
+          "resume_offset": "0x85e53"
+        },
+        "fallback_div_count": 4,
+        "fallback_divisions_first_last_loci": [
+          {
+            "instruction": "div r10d",
+            "native_line": 126005,
+            "pc": "0x77b7cc1a4052",
+            "resume_offset": "0x860b2"
+          },
+          {
+            "instruction": "div r10d",
+            "native_line": 126031,
+            "pc": "0x77b7cc1a4095",
+            "resume_offset": "0x860f5"
+          }
+        ],
+        "fallback_divisions_pcs": [
+          "0x77b7cc1a4052",
+          "0x77b7cc1a4067",
+          "0x77b7cc1a4080",
+          "0x77b7cc1a4095"
+        ],
+        "fallback_entry_pc": "0x77b7cc1a4052",
+        "fallback_exit_pc": "0x77b7cc1a4247",
+        "fallback_skip_when_no_active_unfinished_lane": {
+          "instruction": "je 77b7cc1a4247 <cs_co_variant.resume+0x862a7>",
+          "native_line": 125999,
+          "pc": "0x77b7cc1a403e",
+          "resume_offset": "0x8609e"
+        },
+        "fdiv": {
+          "instruction": "vdivss xmm0,xmm0,xmm3",
+          "native_line": 125806,
+          "pc": "0x77b7cc1a3d2a",
+          "resume_offset": "0x85d8a"
+        },
+        "no_per_lane_branch_inside_correction_or_fallback_div_packet": true,
+        "proposal_join_pc": "0x77b7cc1a3faf",
+        "range_reject": {
+          "instruction": "je 77b7cc1a3faf <cs_co_variant.resume+0x8600f>",
+          "native_line": 125816,
+          "pc": "0x77b7cc1a3d56",
+          "resume_offset": "0x85db6"
+        },
+        "stock_fallback_packet": {
+          "division_count": 4,
+          "end_pc": "0x79ff245a0df6",
+          "native_lines": [
+            124823,
+            124902
+          ],
+          "start_pc": "0x79ff245a0cce"
+        }
+      },
+      "ordinal": 3,
+      "source_function": "PB32Divide in exact macro-on header; recognized bit-build/guess/product/borrow/correction/sticky pattern in this full-module inline clone."
+    },
+    {
+      "IR": {
+        "corrective_udiv": {
+          "instruction": "  %75451 = udiv i32 %ssa_56820, %ssa_56778",
+          "line": 169392
+        },
+        "fallback_udiv": [
+          {
+            "instruction": "  %75533 = udiv i32 %ssa_56903, %ssa_56778",
+            "line": 169570
+          },
+          {
+            "instruction": "  %75534 = udiv i32 %ssa_56910, %ssa_56778",
+            "line": 169574
+          },
+          {
+            "instruction": "  %75535 = udiv i32 %ssa_56917, %ssa_56778",
+            "line": 169578
+          },
+          {
+            "instruction": "  %75538 = udiv i32 %ssa_56924, %ssa_56778",
+            "line": 169586
+          }
+        ],
+        "fdiv": "  %ssa_56805 = fdiv float %75422, %75423",
+        "fdiv_line": 169334,
+        "range_and_exact_mask_rows": [
+          {
+            "instruction": "  %75427 = and <8 x i1> %75415, %75426",
+            "line": 169340
+          },
+          {
+            "instruction": "  br i1 %any_active51823.not, label %endif-block51824, label %if-true-block51825",
+            "line": 169346
+          },
+          {
+            "instruction": "  %ssa_56823 = icmp ult i32 %ssa_56817, %ssa_56814",
+            "line": 169361
+          },
+          {
+            "instruction": "  %ssa_56829 = icmp ult i32 %ssa_56820, %ssa_56828",
+            "line": 169366
+          },
+          {
+            "instruction": "  %ssa_56830 = and i1 %ssa_56829, %ssa_56827",
+            "line": 169367
+          },
+          {
+            "instruction": "  %75444 = and <8 x i1> %ssa_56831, %75427",
+            "line": 169379
+          },
+          {
+            "instruction": "  br i1 %any_active51828.not, label %endif-block51829, label %if-true-block51830",
+            "line": 169389
+          }
+        ],
+        "stock_four_digit_ancestor": [
+          {
+            "divisor": "%ssa_56446",
+            "id": "%75129",
+            "line": 168612
+          },
+          {
+            "divisor": "%ssa_56446",
+            "id": "%75130",
+            "line": 168616
+          },
+          {
+            "divisor": "%ssa_56446",
+            "id": "%75131",
+            "line": 168620
+          },
+          {
+            "divisor": "%ssa_56446",
+            "id": "%75134",
+            "line": 168628
+          }
+        ]
+      },
+      "IR_native_frame_slot_join": {
+        "GEP": "  %reg1236.reload.addr = getelementptr inbounds nuw i8, ptr %0, i64 88448",
+        "GEP_line": 7563,
+        "flag_load": "  %75437 = load <8 x i8>, ptr %reg1236.reload.addr, align 8",
+        "flag_load_line": 169370,
+        "frame_offset": 88448,
+        "native_flag_access": {
+          "instruction": "vmovq xmm0,QWORD PTR [rdi+0x15980]",
+          "native_line": 156069,
+          "pc": "0x77b7cc1c32f9",
+          "resume_offset": "0xa5359"
+        }
+      },
+      "arithmetic_width": 1,
+      "conditional_cost_scope": "Scalar i32 proposal/correction/fallback with vector execution masks and broadcast results. One corrective div versus four fallback divs; no actual dynamic frequency or arithmetic execution witnessed.",
+      "native": {
+        "corrective_div_count": 1,
+        "corrective_divisions_first_last_loci": [
+          {
+            "instruction": "div r10d",
+            "native_line": 156104,
+            "pc": "0x77b7cc1c3384",
+            "resume_offset": "0xa53e4"
+          },
+          {
+            "instruction": "div r10d",
+            "native_line": 156104,
+            "pc": "0x77b7cc1c3384",
+            "resume_offset": "0xa53e4"
+          }
+        ],
+        "corrective_divisions_pcs": [
+          "0x77b7cc1c3384"
+        ],
+        "exact_guard_reject": {
+          "instruction": "je 77b7cc1c3532 <cs_co_variant.resume+0xa5592>",
+          "native_line": 156101,
+          "pc": "0x77b7cc1c3379",
+          "resume_offset": "0xa53d9"
+        },
+        "fallback_div_count": 4,
+        "fallback_divisions_first_last_loci": [
+          {
+            "instruction": "div r10d",
+            "native_line": 156248,
+            "pc": "0x77b7cc1c35cf",
+            "resume_offset": "0xa562f"
+          },
+          {
+            "instruction": "div r10d",
+            "native_line": 156274,
+            "pc": "0x77b7cc1c3612",
+            "resume_offset": "0xa5672"
+          }
+        ],
+        "fallback_divisions_pcs": [
+          "0x77b7cc1c35cf",
+          "0x77b7cc1c35e4",
+          "0x77b7cc1c35fd",
+          "0x77b7cc1c3612"
+        ],
+        "fallback_entry_pc": "0x77b7cc1c35cf",
+        "fallback_exit_pc": "0x77b7cc1c37d0",
+        "fallback_skip_when_no_active_unfinished_lane": {
+          "instruction": "je 77b7cc1c37d0 <cs_co_variant.resume+0xa5830>",
+          "native_line": 156242,
+          "pc": "0x77b7cc1c35bb",
+          "resume_offset": "0xa561b"
+        },
+        "fdiv": {
+          "instruction": "vdivss xmm0,xmm0,xmm3",
+          "native_line": 156052,
+          "pc": "0x77b7cc1c32b3",
+          "resume_offset": "0xa5313"
+        },
+        "no_per_lane_branch_inside_correction_or_fallback_div_packet": true,
+        "proposal_join_pc": "0x77b7cc1c3532",
+        "range_reject": {
+          "instruction": "je 77b7cc1c3532 <cs_co_variant.resume+0xa5592>",
+          "native_line": 156062,
+          "pc": "0x77b7cc1c32df",
+          "resume_offset": "0xa533f"
+        },
+        "stock_fallback_packet": {
+          "division_count": 4,
+          "end_pc": "0x79ff245c022d",
+          "native_lines": [
+            154967,
+            155046
+          ],
+          "start_pc": "0x79ff245c0105"
+        }
+      },
+      "ordinal": 4,
+      "source_function": "PB32Divide in exact macro-on header; recognized bit-build/guess/product/borrow/correction/sticky pattern in this full-module inline clone."
+    },
+    {
+      "IR": {
+        "corrective_udiv": {
+          "instruction": "  %82854 = udiv <8 x i32> %ssa_61511, %ssa_61469",
+          "line": 184121
+        },
+        "fallback_udiv": [
+          {
+            "instruction": "  %82909 = udiv <8 x i32> %ssa_61593, %ssa_61469",
+            "line": 184259
+          },
+          {
+            "instruction": "  %82911 = udiv <8 x i32> %ssa_61600, %ssa_61469",
+            "line": 184263
+          },
+          {
+            "instruction": "  %82913 = udiv <8 x i32> %ssa_61607, %ssa_61469",
+            "line": 184270
+          },
+          {
+            "instruction": "  %82915 = udiv <8 x i32> %ssa_61614, %ssa_61469",
+            "line": 184274
+          }
+        ],
+        "fdiv": "  %ssa_61496 = fdiv <8 x float> %82829, %82830",
+        "fdiv_line": 184067,
+        "range_and_exact_mask_rows": [
+          {
+            "instruction": "  br i1 %any_active55135.not, label %endif-block55136, label %if-true-block55137",
+            "line": 184077
+          },
+          {
+            "instruction": "  %ssa_61514 = icmp ult <8 x i32> %ssa_61508, %ssa_61505",
+            "line": 184092
+          },
+          {
+            "instruction": "  %ssa_61520 = icmp ult <8 x i32> %ssa_61511, %ssa_61519",
+            "line": 184097
+          },
+          {
+            "instruction": "  %ssa_61521 = and <8 x i1> %ssa_61520, %ssa_61518",
+            "line": 184098
+          },
+          {
+            "instruction": "  br i1 %any_active55140.not, label %endif-block55141, label %if-true-block55142",
+            "line": 184118
+          }
+        ],
+        "stock_four_digit_ancestor": [
+          {
+            "divisor": "%ssa_61033",
+            "id": "%82419",
+            "line": 183093
+          },
+          {
+            "divisor": "%ssa_61033",
+            "id": "%82421",
+            "line": 183097
+          },
+          {
+            "divisor": "%ssa_61033",
+            "id": "%82423",
+            "line": 183104
+          },
+          {
+            "divisor": "%ssa_61033",
+            "id": "%82425",
+            "line": 183108
+          }
+        ]
+      },
+      "IR_native_frame_slot_join": {
+        "GEP": "  %reg1578.reload.addr = getelementptr inbounds nuw i8, ptr %0, i64 88312",
+        "GEP_line": 7221,
+        "flag_load": "  %82840 = load <8 x i8>, ptr %reg1578.reload.addr, align 8",
+        "flag_load_line": 184099,
+        "frame_offset": 88312,
+        "native_flag_access": {
+          "instruction": "vmovq xmm3,QWORD PTR [rdi+0x158f8]",
+          "native_line": 169098,
+          "pc": "0x77b7cc1d1b1b",
+          "resume_offset": "0xb3b7b"
+        }
+      },
+      "arithmetic_width": 8,
+      "conditional_cost_scope": "Static executable branch alternative only. For vectors any active accepted lane runs all8 corrective divs; any remaining active rejected lane runs all32 fallback divs. Output masks suppress results, not individual scalarized divides. No occurrence/hit-rate/latency observation.",
+      "native": {
+        "corrective_div_count": 8,
+        "corrective_divisions_first_last_loci": [
+          {
+            "instruction": "div ecx",
+            "native_line": 169119,
+            "pc": "0x77b7cc1d1b82",
+            "resume_offset": "0xb3be2"
+          },
+          {
+            "instruction": "div ecx",
+            "native_line": 169157,
+            "pc": "0x77b7cc1d1c1c",
+            "resume_offset": "0xb3c7c"
+          }
+        ],
+        "corrective_divisions_pcs": [
+          "0x77b7cc1d1b82",
+          "0x77b7cc1d1b8c",
+          "0x77b7cc1d1bab",
+          "0x77b7cc1d1bc2",
+          "0x77b7cc1d1bd8",
+          "0x77b7cc1d1be2",
+          "0x77b7cc1d1c06",
+          "0x77b7cc1d1c1c"
+        ],
+        "exact_guard_reject": {
+          "instruction": "je 77b7cc1d1dc4 <cs_co_variant.resume+0xb3e24>",
+          "native_line": 169113,
+          "pc": "0x77b7cc1d1b61",
+          "resume_offset": "0xb3bc1"
+        },
+        "fallback_div_count": 32,
+        "fallback_divisions_first_last_loci": [
+          {
+            "instruction": "div r13d",
+            "native_line": 169271,
+            "pc": "0x77b7cc1d1e49",
+            "resume_offset": "0xb3ea9"
+          },
+          {
+            "instruction": "div DWORD PTR [rsp+0xc0]",
+            "native_line": 169448,
+            "pc": "0x77b7cc1d2153",
+            "resume_offset": "0xb41b3"
+          }
+        ],
+        "fallback_divisions_pcs": [
+          "0x77b7cc1d1e49",
+          "0x77b7cc1d1e61",
+          "0x77b7cc1d1e89",
+          "0x77b7cc1d1ea4",
+          "0x77b7cc1d1ec1",
+          "0x77b7cc1d1ed0",
+          "0x77b7cc1d1ef2",
+          "0x77b7cc1d1f0f",
+          "0x77b7cc1d1f39",
+          "0x77b7cc1d1f4c",
+          "0x77b7cc1d1f5b",
+          "0x77b7cc1d1f7b",
+          "0x77b7cc1d1f8c",
+          "0x77b7cc1d1f9b",
+          "0x77b7cc1d1fab",
+          "0x77b7cc1d1fc6",
+          "0x77b7cc1d1ffb",
+          "0x77b7cc1d2007",
+          "0x77b7cc1d201e",
+          "0x77b7cc1d2035",
+          "0x77b7cc1d204e",
+          "0x77b7cc1d2059",
+          "0x77b7cc1d2069",
+          "0x77b7cc1d2084",
+          "0x77b7cc1d20b8",
+          "0x77b7cc1d20c4",
+          "0x77b7cc1d20d7",
+          "0x77b7cc1d20f3",
+          "0x77b7cc1d2109",
+          "0x77b7cc1d211e",
+          "0x77b7cc1d212e",
+          "0x77b7cc1d2153"
+        ],
+        "fallback_entry_pc": "0x77b7cc1d1e49",
+        "fallback_exit_pc": "0x77b7cc1d230e",
+        "fallback_skip_when_no_active_unfinished_lane": {
+          "instruction": "je 77b7cc1d230e <cs_co_variant.resume+0xb436e>",
+          "native_line": 169263,
+          "pc": "0x77b7cc1d1e1d",
+          "resume_offset": "0xb3e7d"
+        },
+        "fdiv": {
+          "instruction": "vdivps ymm3,ymm3,ymm0",
+          "native_line": 169063,
+          "pc": "0x77b7cc1d1a5b",
+          "resume_offset": "0xb3abb"
+        },
+        "no_per_lane_branch_inside_correction_or_fallback_div_packet": true,
+        "proposal_join_pc": "0x77b7cc1d1dc4",
+        "range_reject": {
+          "instruction": "je 77b7cc1d1dc4 <cs_co_variant.resume+0xb3e24>",
+          "native_line": 169069,
+          "pc": "0x77b7cc1d1a7c",
+          "resume_offset": "0xb3adc"
+        },
+        "stock_fallback_packet": {
+          "division_count": 32,
+          "end_pc": "0x79ff245ce89c",
+          "native_lines": [
+            167706,
+            167927
+          ],
+          "start_pc": "0x79ff245ce4b9"
+        }
+      },
+      "ordinal": 5,
+      "source_function": "PB32Divide in exact macro-on header; recognized bit-build/guess/product/borrow/correction/sticky pattern in this full-module inline clone."
+    },
+    {
+      "IR": {
+        "corrective_udiv": {
+          "instruction": "  %94868 = udiv <8 x i32> %ssa_72187, %ssa_72145",
+          "line": 212155
+        },
+        "fallback_udiv": [
+          {
+            "instruction": "  %94923 = udiv <8 x i32> %ssa_72273, %ssa_72145",
+            "line": 212292
+          },
+          {
+            "instruction": "  %94925 = udiv <8 x i32> %ssa_72280, %ssa_72145",
+            "line": 212296
+          },
+          {
+            "instruction": "  %94927 = udiv <8 x i32> %ssa_72287, %ssa_72145",
+            "line": 212303
+          },
+          {
+            "instruction": "  %94929 = udiv <8 x i32> %ssa_72294, %ssa_72145",
+            "line": 212307
+          }
+        ],
+        "fdiv": "  %ssa_72172 = fdiv <8 x float> %94843, %94844",
+        "fdiv_line": 212101,
+        "range_and_exact_mask_rows": [
+          {
+            "instruction": "  %94846 = and <8 x i1> %94836, %ssa_72175",
+            "line": 212105
+          },
+          {
+            "instruction": "  br i1 %any_active61715.not, label %endif-block61716, label %if-true-block61717",
+            "line": 212111
+          },
+          {
+            "instruction": "  %ssa_72190 = icmp ult <8 x i32> %ssa_72184, %ssa_72181",
+            "line": 212126
+          },
+          {
+            "instruction": "  %ssa_72196 = icmp ult <8 x i32> %ssa_72187, %ssa_72195",
+            "line": 212131
+          },
+          {
+            "instruction": "  %ssa_72197 = and <8 x i1> %ssa_72196, %ssa_72194",
+            "line": 212132
+          },
+          {
+            "instruction": "  %94861 = and <8 x i1> %ssa_72198, %94846",
+            "line": 212142
+          },
+          {
+            "instruction": "  br i1 %any_active61720.not, label %endif-block61721, label %if-true-block61722",
+            "line": 212152
+          },
+          {
+            "instruction": "  %94874 = and <8 x i1> %ssa_72208, %94861",
+            "line": 212167
+          }
+        ],
+        "stock_four_digit_ancestor": [
+          {
+            "divisor": "%ssa_71606",
+            "id": "%94343",
+            "line": 210917
+          },
+          {
+            "divisor": "%ssa_71606",
+            "id": "%94345",
+            "line": 210921
+          },
+          {
+            "divisor": "%ssa_71606",
+            "id": "%94347",
+            "line": 210928
+          },
+          {
+            "divisor": "%ssa_71606",
+            "id": "%94349",
+            "line": 210932
+          }
+        ]
+      },
+      "IR_native_frame_slot_join": {
+        "GEP": "  %reg1811.reload.addr = getelementptr inbounds nuw i8, ptr %0, i64 87992",
+        "GEP_line": 6988,
+        "flag_load": "  %94854 = load <8 x i8>, ptr %reg1811.reload.addr, align 8",
+        "flag_load_line": 212133,
+        "frame_offset": 87992,
+        "native_flag_access": {
+          "instruction": "vmovq xmm5,QWORD PTR [rdi+0x157b8]",
+          "native_line": 194961,
+          "pc": "0x77b7cc1efb77",
+          "resume_offset": "0xd1bd7"
+        }
+      },
+      "arithmetic_width": 8,
+      "conditional_cost_scope": "Static executable branch alternative only. For vectors any active accepted lane runs all8 corrective divs; any remaining active rejected lane runs all32 fallback divs. Output masks suppress results, not individual scalarized divides. No occurrence/hit-rate/latency observation.",
+      "native": {
+        "corrective_div_count": 8,
+        "corrective_divisions_first_last_loci": [
+          {
+            "instruction": "div ecx",
+            "native_line": 194981,
+            "pc": "0x77b7cc1efbdb",
+            "resume_offset": "0xd1c3b"
+          },
+          {
+            "instruction": "div ecx",
+            "native_line": 195019,
+            "pc": "0x77b7cc1efc7a",
+            "resume_offset": "0xd1cda"
+          }
+        ],
+        "corrective_divisions_pcs": [
+          "0x77b7cc1efbdb",
+          "0x77b7cc1efbe5",
+          "0x77b7cc1efc06",
+          "0x77b7cc1efc1d",
+          "0x77b7cc1efc34",
+          "0x77b7cc1efc3e",
+          "0x77b7cc1efc63",
+          "0x77b7cc1efc7a"
+        ],
+        "exact_guard_reject": {
+          "instruction": "je 77b7cc1efe25 <cs_co_variant.resume+0xd1e85>",
+          "native_line": 194975,
+          "pc": "0x77b7cc1efbba",
+          "resume_offset": "0xd1c1a"
+        },
+        "fallback_div_count": 32,
+        "fallback_divisions_first_last_loci": [
+          {
+            "instruction": "div r8d",
+            "native_line": 195134,
+            "pc": "0x77b7cc1efeb1",
+            "resume_offset": "0xd1f11"
+          },
+          {
+            "instruction": "div r13d",
+            "native_line": 195312,
+            "pc": "0x77b7cc1f01b3",
+            "resume_offset": "0xd2213"
+          }
+        ],
+        "fallback_divisions_pcs": [
+          "0x77b7cc1efeb1",
+          "0x77b7cc1efec0",
+          "0x77b7cc1efed4",
+          "0x77b7cc1efefe",
+          "0x77b7cc1eff0e",
+          "0x77b7cc1eff25",
+          "0x77b7cc1eff3a",
+          "0x77b7cc1eff62",
+          "0x77b7cc1eff93",
+          "0x77b7cc1eff9e",
+          "0x77b7cc1effae",
+          "0x77b7cc1effca",
+          "0x77b7cc1effdb",
+          "0x77b7cc1effe6",
+          "0x77b7cc1efff9",
+          "0x77b7cc1f000f",
+          "0x77b7cc1f0045",
+          "0x77b7cc1f0055",
+          "0x77b7cc1f0064",
+          "0x77b7cc1f007f",
+          "0x77b7cc1f0095",
+          "0x77b7cc1f00a7",
+          "0x77b7cc1f00b5",
+          "0x77b7cc1f00d5",
+          "0x77b7cc1f0107",
+          "0x77b7cc1f0113",
+          "0x77b7cc1f012c",
+          "0x77b7cc1f014e",
+          "0x77b7cc1f0164",
+          "0x77b7cc1f0179",
+          "0x77b7cc1f0191",
+          "0x77b7cc1f01b3"
+        ],
+        "fallback_entry_pc": "0x77b7cc1efeb1",
+        "fallback_exit_pc": "0x77b7cc1f0370",
+        "fallback_skip_when_no_active_unfinished_lane": {
+          "instruction": "je 77b7cc1f0370 <cs_co_variant.resume+0xd23d0>",
+          "native_line": 195124,
+          "pc": "0x77b7cc1efe77",
+          "resume_offset": "0xd1ed7"
+        },
+        "fdiv": {
+          "instruction": "vdivps ymm5,ymm5,ymm0",
+          "native_line": 194927,
+          "pc": "0x77b7cc1efab8",
+          "resume_offset": "0xd1b18"
+        },
+        "no_per_lane_branch_inside_correction_or_fallback_div_packet": true,
+        "proposal_join_pc": "0x77b7cc1efe25",
+        "range_reject": {
+          "instruction": "je 77b7cc1efe25 <cs_co_variant.resume+0xd1e85>",
+          "native_line": 194932,
+          "pc": "0x77b7cc1efad3",
+          "resume_offset": "0xd1b33"
+        },
+        "stock_fallback_packet": {
+          "division_count": 32,
+          "end_pc": "0x79ff245ec27b",
+          "native_lines": [
+            193128,
+            193353
+          ],
+          "start_pc": "0x79ff245ebe8f"
+        }
+      },
+      "ordinal": 6,
+      "source_function": "PB32Divide in exact macro-on header; recognized bit-build/guess/product/borrow/correction/sticky pattern in this full-module inline clone."
+    }
+  ],
+  "authorship": "Reviewer authored the candidate/preparation/capture packet. This is candid author source/data review, not independent source authorship; root alone operated capture and objdump. Separate independent terminal audit is outside this receipt.",
+  "call_closure": {
+    "LLVM_and_native_defined_functions": [
+      "cs_variant",
+      "cs_co_variant",
+      "cs_co_variant.resume",
+      "cs_co_variant.destroy"
+    ],
+    "defined_function_set_equal_stock": true,
+    "native_division_has_no_new_library_or_outlined_callee": true,
+    "resume_calls": 0,
+    "undefined_callbacks_consistency_only": [
+      "coro_malloc",
+      "coro_free"
+    ],
+    "whole_object_call_instructions": 5
+  },
+  "candidate_minus_stock": {
+    "alloca": 0,
+    "calls": 0,
+    "coroutine_frame_bytes": 448,
+    "executable_bytes": 8448,
+    "fixed_resume_stack_reservation_bytes": 192,
+    "imul": 6,
+    "instruction_count": 1176,
+    "instructions_with_explicit_rsp_or_rbp_memory_operand": 51,
+    "llvm_fdiv": 6,
+    "llvm_udiv": 6,
+    "native_div": 34,
+    "object_bytes": 11248,
+    "resume_bytes": 8290,
+    "resume_calls": 0,
+    "vpmulld": 8,
+    "vpmuludq": 8
+  },
+  "countercosts": [
+    "All191 original native integer divide instructions remain;34 corrective div instructions and six native float divides are added statically.",
+    "SIMD mixed accepted/rejected active groups can execute8 correction plus32 original fallback divides; inactive/result masks do not predicate individual scalar DIV instructions.",
+    "Proposal/exact verification adds low32 product plus widened high product, lane shuffles/permutation, subtraction/borrow, comparisons, mask state and selects. Low/high duplicate product formation is not removed.",
+    "Each vector product uses one vpmulld plus two vpmuludq/high-lane rearrangement operations; correction adds a low product. Scalar native uses both64-bit and32-bit imul then low correction product.",
+    "Text+8448B/object+11248B/resume+8290B/frame+448B/fixed stack+192B,1176more native instructions and51more static instructions with explicit rsp/rbp memory operands. Static operand counts are not measured dynamic traffic or classified compiler-spill counts.",
+    "Alloca2 and whole-object call5 counts unchanged; this does not establish unchanged register pressure or memory cost."
+  ],
+  "decision": "COST_PREMISE_SURVIVES_UNPROVEN",
+  "input_pins": {
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/candidate.patch": {
+      "bytes": 3247,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/candidate.patch",
+      "sha256": "66b69b265a0ecb712dd94b5e464478a5675a8f9da858599209f58355e7cab0af",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/candidate/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 14973,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/candidate/src/sirius/kernels/portable_binary32.h",
+      "sha256": "c21eb8259f2ed51bce2333ded7065c820dd782cf32ce5e46ea8976166503cdb5",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/source-contracts.json": {
+      "bytes": 5290,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/source-contracts.json",
+      "sha256": "99f49a7f76e3d093dc4bba6f5d947c7285828d24f9f62c8017986df246071736",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/stock/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 12797,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-compiler-policy-stop/files/out/portable-divide-fp32-estimate-screen/stock/src/sirius/kernels/portable_binary32.h",
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/graph-acceptance.json": {
+      "bytes": 8560,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/graph-acceptance.json",
+      "sha256": "532264f88b0f853848a46d68c064229af556e7d9180dde78cbe8d96cbc5a9b79",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/graph-result.json": {
+      "bytes": 17352,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/graph-result.json",
+      "sha256": "51e90df4f43dbdce9b9145be69014d28d123d67568a1dabf6d5f5dc9975a1ce2",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/independent-emitted-source-graph-review.json": {
+      "bytes": 18491,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/independent-emitted-source-graph-review.json",
+      "sha256": "f93b8b750697aa9bba0116a7472c69fdebf91793792b36d324ef8fdcc860dd6e",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/parser-control-result.json": {
+      "bytes": 4585,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/parser-control-result.json",
+      "sha256": "203a14d461e05e50eefcac24b9befbe37f5122c9b82643a3151e9a3b36e58f79",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/read-graph/output-seal.json": {
+      "bytes": 1798,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/read-graph/output-seal.json",
+      "sha256": "72be4e1337ca0bee7bff1b8b691f3ec1c9598bbf1093e0a9ea9c30d085532525",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/read-graph/owner.json": {
+      "bytes": 1711,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-graph-review/files/out/portable-divide-fp32-estimate-graph-review/read-graph/owner.json",
+      "sha256": "f6a946b6219eaf6ac76ec910dc5a17498b99caa3eb47e5e9fa3130bd457f75fc",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json": {
+      "bytes": 4344,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json",
+      "sha256": "3e940e57eda3be646422b9e6ae632dc56ef283b3f48d8c32e140a6107a74dbaa",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-loaded-module.json",
+      "sha256": "c7b40b07ab72a48cdd9e1da2356f36c601d20de0a2325149e2a9f2b762e76d61",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/bindings.json": {
+      "bytes": 59349,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/bindings.json",
+      "sha256": "d1d48b7a6d44420238baa92d68692252cc0b8e76481c17a1d47648a617d41a99",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-inputs.json": {
+      "bytes": 866,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-inputs.json",
+      "sha256": "e1b9641461ed774022fa0fbf8f9df111d52208b0445248edda59ce8b2fb29a0f",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-verification.json": {
+      "bytes": 1300,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-verification.json",
+      "sha256": "f8088801d508c84d714b388ed44a83c3f5414e2f3e2a6f8ca0c67a88ed4d10ff",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior-exit.json": {
+      "bytes": 17,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior-exit.json",
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior.json": {
+      "bytes": 17,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior.json",
+      "sha256": "1196a4a9f328b4b3bb54495cd9de924ee4f02200afefdd7c11cabdbaa77b70f4",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-after.json": {
+      "bytes": 150114,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-after.json",
+      "sha256": "d364cef7461e07dcacaa926d5043e704e02ee6ea3e4acb190efcc7ad75b562f8",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-before.json": {
+      "bytes": 150114,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-before.json",
+      "sha256": "d364cef7461e07dcacaa926d5043e704e02ee6ea3e4acb190efcc7ad75b562f8",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf": {
+      "bytes": 1049832,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf",
+      "sha256": "58c4804b40c66140fed74b37cbdb125fafd978f619dcc219317d33ebffc022bb",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-11.bin",
+      "sha256": "13d9dadffd2f17f2f02e6994f9bd29f0c89cda51781ccf83691713907b799bc1",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-3.bin": {
+      "bytes": 922597,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-3.bin",
+      "sha256": "0c2f9b9f60d28112a0f8745f9dcc9b01051df41fd156ccb3f5fe94668944b13c",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-5.bin",
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-6.bin",
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-7.bin": {
+      "bytes": 452,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-7.bin",
+      "sha256": "f92c3d7cb3ec41ede57d3661f360f4bc0bcf16b62bcac1295fadd6d2b91d8be2",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-8.bin": {
+      "bytes": 80,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-8.bin",
+      "sha256": "983e953e0abe32b097a9efd960af4c706f6a0b050ece3bc607604a8a2b3a6dcf",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll": {
+      "bytes": 13237373,
+      "mode": 384,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll",
+      "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/owner.json": {
+      "bytes": 3570,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/owner.json",
+      "sha256": "09642035b4d77a71a51e584a016315a43430655badb824456466bd9abc3c266c",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-acceptance.json": {
+      "bytes": 11251,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-acceptance.json",
+      "sha256": "dde011b73f3f7c3eac8d6090987ac7f6f429e4a48e506d3d451cca181e61bae5",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/actual-code-review.json": {
+      "bytes": 4352,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/actual-code-review.json",
+      "sha256": "e61e1ca9555426f80a7c67711b4dfd45b2f0caf9777bfd4e805260f764739890",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/actual-loaded-module.json",
+      "sha256": "cc33435768198a5740295c291bf83e5d1700a6d565644d75be4820b77917cd52",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/bindings.json": {
+      "bytes": 59774,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/bindings.json",
+      "sha256": "65fc83a263adbfbc49d2830f7b08f565c5eb5349d110b6d80937277e4a5d4953",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/capture-inputs.json": {
+      "bytes": 871,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/capture-inputs.json",
+      "sha256": "23462fab79abcd3a03a4efbfdae0faa647a97a633df140ebe66acd04f5d16854",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/capture-verification.json": {
+      "bytes": 1300,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/capture-verification.json",
+      "sha256": "34c338cde449e84d8a6acc67d5917f001f8b30f3b42cc64b25e41794947e70ca",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/device-features.json": {
+      "bytes": 108090,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/device-features.json",
+      "sha256": "9ac9eca95d749117a0fd7d13ebb5e2b396d3e741872c79cd2f0af0de23b79dca",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/feature-review.json": {
+      "bytes": 2161,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/feature-review.json",
+      "sha256": "759cdfab0f7a6ae5474bab88db568c25313f9aa578c409b725eff29e09519b09",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/feature-verification.json": {
+      "bytes": 2161,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/feature-verification.json",
+      "sha256": "6984700e634e0cfd4361c4f2016ab07db3abb87f55fc7ec275c9e005c536f54d",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inferior-exit.json": {
+      "bytes": 17,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inferior-exit.json",
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inferior.json": {
+      "bytes": 16,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inferior.json",
+      "sha256": "b3e830af2ab59dd65e3a6b72765782d7efe4f55b7dde77565e569944e22aeafd",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inputs-after.json": {
+      "bytes": 277425,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inputs-after.json",
+      "sha256": "5e657f7dbffb2ec6f5a36fdae5624e12f2edbe00e7bf064ec006072fa2619299",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inputs-before.json": {
+      "bytes": 277425,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/inputs-before.json",
+      "sha256": "5e657f7dbffb2ec6f5a36fdae5624e12f2edbe00e7bf064ec006072fa2619299",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf": {
+      "bytes": 1061080,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf",
+      "sha256": "3ed7d02d11a37da582d907e46497a60f9b2accf930f13cdd67ce71bf0ae6f8b3",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-11.bin",
+      "sha256": "279f2b310e08cb7c47fe3cbb3ed2592998c6378df01a5b9638cc3aefbd8d9d7f",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin": {
+      "bytes": 931045,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin",
+      "sha256": "0bdff949c760fc22b5f10892ab0bd01bb9c2b3c53412770b41e4df81653a6a6c",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin",
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin",
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin": {
+      "bytes": 468,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin",
+      "sha256": "c97940092622908a94bc8edafaeebb44ab4912c5993744afebe003ddd4cc3b48",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-8.bin": {
+      "bytes": 80,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf.live-8.bin",
+      "sha256": "879d64257265aca37d752bfcad30987e271eaf5c1809537df833cb7e61e47287",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/optimized-05.ll": {
+      "bytes": 13316884,
+      "mode": 384,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/optimized-05.ll",
+      "sha256": "77b0a0206502ae3712c8287dd02545f1a065b76f6711042e9d0edb6b6db21c26",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/owner.json": {
+      "bytes": 7614,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/owner.json",
+      "sha256": "ff6f1fe7212d9a78bed5ff080c45cbe80f6555ce00a583f1b3d881770a1f4c75",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/contracts.json": {
+      "bytes": 2701,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/contracts.json",
+      "sha256": "397c49a8f8db87ceefb5f7bfa56c5cb30b63c592b5f819205ae92b01d1390c30",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/cost-review/candidate-native.txt": {
+      "bytes": 11717208,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/cost-review/candidate-native.txt",
+      "sha256": "e3f4cb4b09135eb8eb9643d2a6eb44a5695eeb0ce3d94440bcff3e53881bbd76",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/cost-review/root-native-cost-inputs.json": {
+      "bytes": 6607,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/cost-review/root-native-cost-inputs.json",
+      "sha256": "ef88395ba39fd18675ecc233eb83a506b7a818ec478b3838b48b6a7dfd363470",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/cost-review/stock-native.txt": {
+      "bytes": 11619912,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/cost-review/stock-native.txt",
+      "sha256": "f9d4e5a008dbec517bbc592035c2b806eba981830087c11500638754c284bb97",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/inputs.json": {
+      "bytes": 2705,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/inputs.json",
+      "sha256": "8531519627bd18230af2a81eec6990d55ef049126d5d0bfa10f807e690ee1327",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/module-inputs/candidate-endpoint-normal.spv": {
+      "bytes": 152844,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/module-inputs/candidate-endpoint-normal.spv",
+      "sha256": "0535c0f6a689d2d59896543882e1f5300fdd67fe70509b7dda0996f59ffd03d9",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/reuse-acceptance.json": {
+      "bytes": 9383,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/reuse-acceptance.json",
+      "sha256": "66212124e142dd67d5bb8248eb08abde2eb15f3025fdecec0ab90f4b1a33897d",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/runtime-context.json": {
+      "bytes": 1981,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/runtime-context.json",
+      "sha256": "f6c91c59c9d3ce85a37f4b7d410cee2605ccd3cea833026ba38aff5ff789c929",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/source-freeze.json": {
+      "bytes": 355396,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/source-freeze.json",
+      "sha256": "1893fd48c06576c4d214ca80f139424c6ac600c825e63ab47324c3af552fcced",
+      "symlink_target": null
+    }
+  },
+  "mask_and_lowering_limits": [
+    "Each corrective/fallback packet is guarded by any-active reductions. All-active successful vector groups can skip fallback; no input frequency/hit-rate is observed.",
+    "LLVM exponent-only proposal mask0x7f800000 is a lowering of the accepted full sign+exponent guard for bit-built positive normal operands; no Float32 precision/RTE/hit-rate premise is inferred.",
+    "Source optional64 capabilities are absent and public32-bit layout/interface/modes/barriers remain accepted. LLVM internal i64 high products from existing UMulExtended are not shaderInt64 admission.",
+    "Actual fresh host enables canonical unused Float64 only; Int64 is disabled. No new public device-feature compatibility or platform qualification is established."
+  ],
+  "method": "Passive saved ordinary LLVM, saved root native disassembly, JSON, source and byte/hash reads only. No compiler/assembler/validator/LLVM/GDB/objdump/provider/test/authored capture or reader/helper executed during this review.",
+  "no_arithmetic_or_benefit_admission": true,
+  "passed": true,
+  "performance_or_coldness_or_hit_rate_claim": false,
+  "production_adopted": false,
+  "retained_arithmetic_executed_by_canary": false,
+  "reviewer": "/root/divide_contract_review",
+  "schema": "sirius-fp32-estimate-ordinary-actual-cost-premise-review-v1",
+  "smallest_next_action": "Root decision only. No arithmetic/control/benefit packet or new candidate implementation prepared by this review.",
+  "source_join": {
+    "all23_non_Divide_helpers_including_both_ShiftJam_clones_accepted": true,
+    "candidate_SPV": {
+      "bytes": 152844,
+      "sha256": "0535c0f6a689d2d59896543882e1f5300fdd67fe70509b7dda0996f59ffd03d9"
+    },
+    "candidate_header_sha256": "c21eb8259f2ed51bce2333ded7065c820dd782cf32ce5e46ea8976166503cdb5",
+    "graph_evidence_commit": "23619ee8a99ac792d6d76dbeb376356c4168dbc2",
+    "graph_original_prefix_and_complete_fallback_suffix_accepted": true,
+    "macro": "SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+    "old_compiler_false1_policy_PASS_graph_PASS_separate": true
+  },
+  "whole_module_metrics": {
+    "candidate": {
+      "alloca": 2,
+      "calls": 5,
+      "coroutine_frame_bytes": 90144,
+      "executable_bytes": 931045,
+      "fixed_resume_stack_reservation_bytes": 43168,
+      "imul": 108,
+      "instruction_count": 153801,
+      "instructions_with_explicit_rsp_or_rbp_memory_operand": 5423,
+      "llvm_fdiv": 6,
+      "llvm_udiv": 65,
+      "llvm_urem": 12,
+      "native_div": 225,
+      "native_float_div": 6,
+      "object_bytes": 1061080,
+      "resume_bytes": 906552,
+      "resume_calls": 0,
+      "resume_stack_prologue": {
+        "instruction": "sub rsp,0xa8a0",
+        "native_line": 5957,
+        "pc": "0x77b7cc11dfb5"
+      },
+      "stack_operand_count_scope": "Static text operand count, not dynamic memory traffic or a classified spill count.",
+      "vdivps": 4,
+      "vdivss": 2,
+      "vpmulld": 77,
+      "vpmuludq": 92
+    },
+    "stock": {
+      "alloca": 2,
+      "calls": 5,
+      "coroutine_frame_bytes": 89696,
+      "executable_bytes": 922597,
+      "fixed_resume_stack_reservation_bytes": 42976,
+      "imul": 102,
+      "instruction_count": 152625,
+      "instructions_with_explicit_rsp_or_rbp_memory_operand": 5372,
+      "llvm_fdiv": 0,
+      "llvm_udiv": 59,
+      "llvm_urem": 12,
+      "native_div": 191,
+      "native_float_div": 0,
+      "object_bytes": 1049832,
+      "resume_bytes": 898262,
+      "resume_calls": 0,
+      "resume_stack_prologue": {
+        "instruction": "sub rsp,0xa7e0",
+        "native_line": 5921,
+        "pc": "0x79ff2451bf15"
+      },
+      "stack_operand_count_scope": "Static text operand count, not dynamic memory traffic or a classified spill count.",
+      "vdivps": 0,
+      "vdivss": 0,
+      "vpmulld": 69,
+      "vpmuludq": 84
+    }
+  },
+  "why_premise_survives": "Actual native mask branches preserve a path from proposal/exact integer verification through8 corrective32-bit divides instead of the original32 per vector packet (one instead of four in scalar clones), and can bypass the complete original fallback when no relevant active lane remains unfinished. No unconditional fallback flattening, wide-division helper or new call defeats that limited work-removal premise."
+}

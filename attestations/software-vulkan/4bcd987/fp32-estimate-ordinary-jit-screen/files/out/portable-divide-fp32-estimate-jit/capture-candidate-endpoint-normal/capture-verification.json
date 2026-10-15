@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "actual_loaded_module": {
+    "words": 38211,
+    "bytes": 152844,
+    "sha256": "0535c0f6a689d2d59896543882e1f5300fdd67fe70509b7dda0996f59ffd03d9",
+    "actual_span_matches_frozen_input": true
+  },
+  "actual_entry": {
+    "file": "jit-10.elf",
+    "function": {
+      "name": "cs_variant",
+      "section": 3,
+      "offset": 0,
+      "bytes": 314,
+      "address": 131631286419456
+    },
+    "dispatch_id": 0,
+    "buffers": [
+      0,
+      1
+    ],
+    "kernel": 0,
+    "worker_thread": 33,
+    "actual_entry_pc": 131631286419456
+  },
+  "module_generation": 5,
+  "ordinary_ir_export": {
+    "module": 131631218167504,
+    "module_generation": 5,
+    "function": 131631218171000,
+    "successful_optimizer_pass_ids": [
+      10,
+      11
+    ],
+    "path": "optimized-05.ll",
+    "bytes": 13316884,
+    "sha256": "77b0a0206502ae3712c8287dd02545f1a065b76f6711042e9d0edb6b6db21c26",
+    "optimized_module_observed": true
+  },
+  "ordinary_pipelines": [
+    "default<O0>",
+    "sroa,early-cse,simplifycfg,reassociate,mem2reg,instsimplify,instcombine<no-verify-fixpoint>"
+  ],
+  "scope": "Short-input whole-module compilation/code observation; no retained arithmetic, timing, coldness, or qualification verdict.",
+  "complete_linked_section_and_relocation_review_pending": true
+}

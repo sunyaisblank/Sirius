@@ -1,0 +1,98 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/python3",
+    "/home/astra/.project/Sirius/out/guarded-product-high-runtime/run_capture.py",
+    "/home/astra/.project/Sirius/out/guarded-product-high-runtime/capture-stock-endpoint-normal",
+    "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv"
+  ],
+  "boot_id": "e864c8ea-8d20-4375-9dc8-60ed6ca8f555",
+  "case": "capture-stock-endpoint-normal",
+  "child_exit": 0,
+  "child_pid": 3359183,
+  "child_start_ticks": "32792505",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 3359179,
+    "pid": 3359179,
+    "ppid": 2446,
+    "rss_kib": 20672,
+    "session": 3359179,
+    "start_ticks": "32792452",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "",
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Complete-module short-input canary under the unchanged ordinary software Vulkan LLVM/JIT observer. Returns before retained arithmetic. No arithmetic, runtime-benefit, coldness or qualification verdict; complete linked-section and relocation review remains a separate check.",
+  "minimum_sampled_available_kib": 18411172,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 3359183,
+      "saved_start_ticks": "32792505"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 3359184,
+      "saved_start_ticks": "32792508"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 3359185,
+      "saved_start_ticks": "32792512"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 3359195,
+      "saved_start_ticks": "32792520"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 1718232,
+  "provider_mappings": [
+    {
+      "maps": [
+        "7d30c3548000-7d30c3551000 r--p 00005000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 3359183,
+      "pid": 3359185,
+      "start_ticks": "32792512"
+    },
+    {
+      "maps": [
+        "79ff33200000-79ff3325b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "79ff3325b000-79ff3366b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "79ff3366b000-79ff33cc6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "79ff33cc6000-79ff33d5c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "79ff33d5c000-79ff33d61000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 3359183,
+      "pid": 3359195,
+      "start_ticks": "32792520"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "Complete-module short-input canary under the unchanged ordinary software Vulkan LLVM/JIT observer. Returns before retained arithmetic. No arithmetic, runtime-benefit, coldness or qualification verdict; complete linked-section and relocation review remains a separate check.",
+  "source": {
+    "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 25.89474425901426,
+  "whole_inputs_unchanged": true
+}

@@ -1,0 +1,2600 @@
+{
+  "source_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "evidence_tag": "evidence/issue-98-guarded-product-high-jit-4bcd987",
+  "evidence_commit": "d79eaf1f16a06a1c3ef8dcc47334940250f471b9",
+  "roots": [
+    "out/guarded-product-high-runtime",
+    "bin/linux-gcc/guarded-product-high-runtime"
+  ],
+  "files": {
+    "out/guarded-product-high-runtime/actions.json": {
+      "bytes": 65065,
+      "sha256": "92c7c0e1a9c3c91691f30f019c2f0f9a46d842669e6d7b61395fc10b3a4f1c5a"
+    },
+    "out/guarded-product-high-runtime/analyze_capture.py": {
+      "bytes": 11150,
+      "sha256": "58d484832210971e160c836a98f33e22bb9767d1e2c7a6883a1332c6acecf708"
+    },
+    "out/guarded-product-high-runtime/archive_batch.py": {
+      "bytes": 4898,
+      "sha256": "47cb4c584e8762ced659fb4eea05d53a937525d6cb71f731182d755792089fec"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/actual-code-review.json": {
+      "bytes": 4335,
+      "sha256": "74a2b61245d918c9ca048ab699e78a09f35383663aaf49f20da81e9f72bf4f20"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "8c885a4c1e59fc928b991ebb194f092fb4aeb525dca5b50d70c9265ec56934ec"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/bindings.json": {
+      "bytes": 59041,
+      "sha256": "c911d79f7749d1c846e99005cab63cab6fdaee5c8c413a660da69a4b8377602f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/capture-inputs.json": {
+      "bytes": 865,
+      "sha256": "2437348fddcaaa37f43359068dbf442cfb8ccf6d8bc2ef90530aaabbd299a861"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/capture-verification.json": {
+      "bytes": 1299,
+      "sha256": "f5c807b181fa5e240d801b86cb8e3f1ab790e21fc220ced04ff2752322e8854b"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/capture.gdb": {
+      "bytes": 506,
+      "sha256": "3d62e3f5d3dcd920bb4150157521c4bce05943951b61ef0d060ddce54795078b"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/inferior.json": {
+      "bytes": 17,
+      "sha256": "4bb79d95d21a028821cb1558457b01a12f994aa94e68a67dc98e5d85804ac7f5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/inputs-after.json": {
+      "bytes": 150112,
+      "sha256": "2464cddd09a45aef96cbf7ff8552eee61417ce1bccd699a9bab324487752a65f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/inputs-before.json": {
+      "bytes": 150112,
+      "sha256": "2464cddd09a45aef96cbf7ff8552eee61417ce1bccd699a9bab324487752a65f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "922beaf9c48e6a9935b366f700eb43645c07e2b919af3562c1bcefecbd987c17"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "cced49019a1b27224dc2b934c9e138d76abaa66690320d59db7ac92c2cac6c00"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "80eca94fed4eb4adcc57da819f7604bcbc3125a114b822af314afdc6197993c6"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "21a70d944843993c9c755b607200c49d6187a83cdd03b5f85555cee70d87e562"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "4b48a13be1c5e580f207da0d4897f7269b79e54cd4fde5ea84c59dae6057bc6a"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf": {
+      "bytes": 596744,
+      "sha256": "3ec085a0a66dea40f33a508a9122d264a50fa2ecb2ed390dff827ff306cfb759"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "f233b72150fdba446d95f851d6675c5b7f50cddecf07d02e0a60d74eee580f9e"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-3.bin": {
+      "bytes": 549669,
+      "sha256": "0fbf4e58eec8c785c9f0d99d9d9111e1d2fb24f8a1e04c30259ba696b6ad7dcb"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "da5bfc123f8cee7e136733901c0e964742e36975411c601fb8c5e3ed73f210f5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-7.bin": {
+      "bytes": 332,
+      "sha256": "873cd43e0241fa45c24d7404081b48475cc8aaee190a02a7726d7583fa14c004"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-8.bin": {
+      "bytes": 32,
+      "sha256": "e901da4dd87d6ee9964b6adcdf34cdc0f0724e1cfdb16e7a99dc0df719bf789b"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-05.ll": {
+      "bytes": 8022510,
+      "sha256": "d403a90046240c757952163c555d79600546587135c8732a660a372624fcf6d1"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimizer-exports.tsv": {
+      "bytes": 217,
+      "sha256": "61c200e676d9d60ccfd5400b7f7c9588550ac6a35e0125920766707084ba7de0"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/owner.json": {
+      "bytes": 3190,
+      "sha256": "68e4091e1e7f58f1401bc33211ad592511e280d375d122fb8cb4896005a6b867"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/samples.jsonl": {
+      "bytes": 227174,
+      "sha256": "6aff3ad7260201f4dba0509f0670ee4e0e39b89111e3a1a0c63bdcc30d371834"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/stdout.log": {
+      "bytes": 793,
+      "sha256": "abbd363fc8d5ad52cf1433df74750547aad1e7ecc688729665ee838c8d10e3aa"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/actual-code-review.json": {
+      "bytes": 4359,
+      "sha256": "be94da1d05c1c64fdef0657bb1db75fd6d44fc794903bca71bb49b7df36baab6"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "445cdbe17a98b2a97a687e6df117f7d1a4e4f24b233bc35f7bedbcf29ac6a92d"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/bindings.json": {
+      "bytes": 59142,
+      "sha256": "ab29aa4d88e06ec47da10e735b61de2b189b2b3eaf4e90db7e5980903fb6727d"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/capture-inputs.json": {
+      "bytes": 873,
+      "sha256": "559dcc1287a75c350f18d76a08b6c372c6691ececeefdc7b30c970347d2e60a6"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/capture-verification.json": {
+      "bytes": 1299,
+      "sha256": "3e767ad5d35b9eb5f742560836013a8d7426941f711d1f26c51ae7cda7281b9e"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/capture.gdb": {
+      "bytes": 514,
+      "sha256": "f2a26055d55d22eee058868bfa162e07ce6c661a3fc8ddda47a358ef9cb8d224"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/inferior.json": {
+      "bytes": 17,
+      "sha256": "21b702144e2d004e692aee43abd51bc17e26729542b77778990d9f96d6bf2c55"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/inputs-after.json": {
+      "bytes": 150128,
+      "sha256": "f8cc9505593be1123a3811b824ec3a2ed02ea738716de37b0380caf0dd3353d3"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/inputs-before.json": {
+      "bytes": 150128,
+      "sha256": "f8cc9505593be1123a3811b824ec3a2ed02ea738716de37b0380caf0dd3353d3"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "093b8b7e1b266faffc193a5c9b6628793f448b2b1bc41213843fe752599692ee"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "a489327d4e7891a09b3aae95c855304277558a7d9708a010f712ff9dc9ca7243"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "58e9d74e2eb7d6cedb6ca2973d8a04034b0457a1999b60750acef5c2dd5b52fc"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "ad985717ae1a7540b399f541f67ef529b5917684255cb23af40a17884699e8b7"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "65a4039f338ee1a848fd372b3956980226fa25626db455d1fb6c6a362b380234"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf": {
+      "bytes": 608328,
+      "sha256": "f9e77a660b11664635aecaf76738e4ed343b1a8c9cd08c54b5e5a857ae7196d4"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "f6ac512dbbc55fa64ff5b339f20866278bb912c31a72bc5319f59634e79e6e38"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-3.bin": {
+      "bytes": 511493,
+      "sha256": "18437a196d07012ee13679ff488a36c6b60655b60a0555416bf99251a8e689f8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "da5bfc123f8cee7e136733901c0e964742e36975411c601fb8c5e3ed73f210f5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-7.bin": {
+      "bytes": 352,
+      "sha256": "c35c9de2ad50bc29a3b48999ff3e6961f7588b427f9236c579ee88d0d4a735aa"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-8.bin": {
+      "bytes": 48,
+      "sha256": "813358f6ced22f9613c8e81e8ba269a49791b2b53998a158a9329ded7aeb3325"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-05.ll": {
+      "bytes": 7198459,
+      "sha256": "348f8db051fcfa9f99dbcf8c4e459a8c68a126c21a352902fc0aba3bb611b75a"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimizer-exports.tsv": {
+      "bytes": 217,
+      "sha256": "e3ea1dea5fc2202ef8c67e407efe645bb3ce2a1996d9331aa36a4fb59c8b1854"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/owner.json": {
+      "bytes": 3215,
+      "sha256": "e83e30d56ed6237549035b5d05286259c0ffcd69b6d1e20093beac31fd8c8cb8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/samples.jsonl": {
+      "bytes": 221972,
+      "sha256": "eccd7dd78a4d03773f48a8ddcdd158cedc0b3798c88ce6c32442cec7ff3d8924"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/stdout.log": {
+      "bytes": 793,
+      "sha256": "3ca4985a0b3a124ebbe325caf3f31825c715446443fae5c8855b925aeefa47fc"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/actual-code-review.json": {
+      "bytes": 4346,
+      "sha256": "c0032607641b566c8055671c71d6f005fdbd7f1f66f62d8df923b360c2a61e6c"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "487e3cb750df322735a1f67bddde55da599193aae906d87eac09a438f152491a"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/bindings.json": {
+      "bytes": 59249,
+      "sha256": "8216066bc98701152fbb066a06276e55fea72802df2383bc635061cb2261290b"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/capture-inputs.json": {
+      "bytes": 868,
+      "sha256": "b4ccb59a61d6784bd934590559570647b7d9cb6525b943c86352e252741c204f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/capture-verification.json": {
+      "bytes": 1300,
+      "sha256": "9d78de1851bb593ca604437940ea8a4477fe9273b58d1e45bab274acf4f1d1c5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/capture.gdb": {
+      "bytes": 509,
+      "sha256": "df3ca6d20aa90c189703a6fd36360631a12e7d7f8269b1f6d247839ee9c605d4"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/inferior.json": {
+      "bytes": 17,
+      "sha256": "25c4bc8e3531e883d4e88f031fa2bf170ba7a5557b1ec2250405db1667d1e7ca"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/inputs-after.json": {
+      "bytes": 150118,
+      "sha256": "00dfa3060b73b2fe2b021249e6165fd30a4541d27c9ea7477f7bb98dce1d0856"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/inputs-before.json": {
+      "bytes": 150118,
+      "sha256": "00dfa3060b73b2fe2b021249e6165fd30a4541d27c9ea7477f7bb98dce1d0856"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "2e11ebe8c4adeeb7b2eb262c9f9b2289f117efc82b317416f04f9380dfb7495a"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "30900dea0e85d90d0d5a62583dadddedef35cf7d18f577bfd38a5df1802204bd"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "e67e78289690d48016f047173ca49fcc1d251f7fcdc45f71f22aefb3070c7e42"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "dfe4a144b53fe75d09b71007fa62e0497e4deeba04edb1a38c14fc42fbeca753"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "062a3dfe6358893540d8d13cbc041a7e5fe9ab13f03bbc3710c8664cc1e28ff8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf": {
+      "bytes": 1041832,
+      "sha256": "6000a086bcc1beeab0d3ff29b889cc995126f4d4277c24f3c14d47a7fffcf12d"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "fa2c6fa67ee13734a960b31bee297e849e9b840b319ee7e9f6d77d1fd7f87da9"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-3.bin": {
+      "bytes": 915477,
+      "sha256": "e419f31ec16425b46fa36b2ca624314b7034c96f97b04cf27a6bd47d706dcbc4"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-7.bin": {
+      "bytes": 428,
+      "sha256": "67fcd3cc2a7d950da47db2a8a6c2ed7ee0b6fb9712bd11f12d9132422ce64f97"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-8.bin": {
+      "bytes": 80,
+      "sha256": "d1191e08cfc91023a52795a35dab608d4df7952bab6cfc32d7ea19df65a9461d"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-05.ll": {
+      "bytes": 13099799,
+      "sha256": "3e8ce0abbaf1268efb06433e1b71df2a787415be03d987f4a9562127c0bd4368"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "5ed7d3e483232c529525ecbc4ce073327cf45d7f617a78168384bd3f56df4f47"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/owner.json": {
+      "bytes": 3200,
+      "sha256": "0ed5be509f912a4729f1cbe7b5e19ada51d849c9ea0ba15aa270073e15d4ada0"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/samples.jsonl": {
+      "bytes": 488696,
+      "sha256": "34199b5f88852927bce0fe49ea38fa912a027e0d8d6fe6ce7201785093dd0e87"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/stdout.log": {
+      "bytes": 793,
+      "sha256": "fea45f3c1f807ac2eeae1f2972b5f1dba93d22013dfd537b10d0a3f55eb035f3"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/actual-code-review.json": {
+      "bytes": 4352,
+      "sha256": "9876b9bb897204c7100e33d3907a0100959f7d274639f78f614d9147f043d063"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "e3e4aed90948c93a636fd2ca0d38abdf4d8c7fed06ae809132082bfbca776a32"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/bindings.json": {
+      "bytes": 59299,
+      "sha256": "1b6f7c0ea2db35b806b1001ef7a86c8e1a56f39c2a69e1d50c7202087bc2cc9d"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/capture-inputs.json": {
+      "bytes": 870,
+      "sha256": "4977cb46c3425039d74c14ed72f10177edb22f1a7b56af10b987afc65207f7c7"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/capture-verification.json": {
+      "bytes": 1300,
+      "sha256": "26b523740ddfda5522076a2d24dd835656b5eea6991046122ace1dc543312a08"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/capture.gdb": {
+      "bytes": 511,
+      "sha256": "58131e2fe38e3f45ed7392291197bdf44c43f0f05968c19a4e709eeedc8e003b"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/inferior.json": {
+      "bytes": 17,
+      "sha256": "847fc64b0a58a870939de98085b021b91a94dd3d7864ad1a93e3040c848bf878"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/inputs-after.json": {
+      "bytes": 150122,
+      "sha256": "06871d23325d6789739fd3ed20dbc5187f9c6172c35e114f3aafcba5150240ea"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/inputs-before.json": {
+      "bytes": 150122,
+      "sha256": "06871d23325d6789739fd3ed20dbc5187f9c6172c35e114f3aafcba5150240ea"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "09e6bd63b6e8580e8c8aa5728bb46205545cbf77481880268d1b8020d5444fef"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "d77202803835119108f5b230e017ff643e0eb1037454628ec1f6c9f5680977bc"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "6b92d5ef2fcafc38682017ea2ab7ac7bae3f339b94f1f1044de9564a45b6ceb5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "daf9373be45b48c5e41396a508d9254888b5d8dc422117503899670fa27cf5a8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "f36e8b4b863ed28aa7f2684ef714b0bc8076cf8ad7c09efeda484b1dd4636982"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf": {
+      "bytes": 1091656,
+      "sha256": "4475121528fb2112b0de1aeba59ccd3129bed60e018c69aefb7cb7dd7778008e"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "2d2e1f3288856cd14fb0a41d8723a05d4b286084de4d13476822ee307c560f17"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin": {
+      "bytes": 963269,
+      "sha256": "f33e816e16137b8dc154c442c034e1f9d25708a0f4db2c76bd228e1d999bb574"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin": {
+      "bytes": 456,
+      "sha256": "f58f4797c1f9805bd54ed47acc10d8fca41d999074136579a0dd852e3cb12b4b"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-8.bin": {
+      "bytes": 80,
+      "sha256": "1e80fc0fe2a5f4b1693edb1d6a69fc4cbf081e9f674695da4681823e4e09c095"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-05.ll": {
+      "bytes": 13838739,
+      "sha256": "ae4e0bcaa08c963dc324c87535629a2d7aca03db3ce22b72e52702a517d90e33"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "5e370a2241c8eb51528c7bc65a431877bcf7affae61e6c6603bc468131530029"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/owner.json": {
+      "bytes": 3583,
+      "sha256": "dce1d2b1e328ed5cc5d6124f28f1fd67f88c980ad3446ed1c8cb360edbf12fda"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/samples.jsonl": {
+      "bytes": 465601,
+      "sha256": "3b0f8e2fe678730ff22efd3bbf05d7253018e702df3091bb2149d182029c036a"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/stdout.log": {
+      "bytes": 793,
+      "sha256": "3a2264b27dfe1f14fa747f640342227f97c42ebb169855f97a8e194894588ed0"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/actual-code-review.json": {
+      "bytes": 4357,
+      "sha256": "e746e4594807681c7ea4e155b4f4e02f87608e2f23fb79f3db1a18842c1697f6"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "0c693ea946cb4d9c53aa7666afd665657ac51c01c4977d367e4c336e2336e5d9"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/bindings.json": {
+      "bytes": 59852,
+      "sha256": "7ad97c1993c53fb0145670b00f614c7938287865970bcf2ef4cf50a1d087caa8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/capture-inputs.json": {
+      "bytes": 871,
+      "sha256": "fdca145f242f459c04a776bd813ef491c06a266d539c4610b808ed29f2dc9ea2"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/capture-verification.json": {
+      "bytes": 1300,
+      "sha256": "dee46245e32f3abc12b20e52783d48b89be7610668e6b574373f003b22838fb2"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/capture.gdb": {
+      "bytes": 512,
+      "sha256": "620de602721d7a1b5975b36db4961a6e1bd2511f9a27fe23f10877d5a7dc3302"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/inferior.json": {
+      "bytes": 17,
+      "sha256": "80588dd0391b437ccae7f812f7f9e20cf0ae439c01479de89293c45031bc4e17"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/inputs-after.json": {
+      "bytes": 150124,
+      "sha256": "725ebe2b3a4fa9b3b6b22098bcf82ba7758122c3f7a1b28c16b469da0d1cac0f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/inputs-before.json": {
+      "bytes": 150124,
+      "sha256": "725ebe2b3a4fa9b3b6b22098bcf82ba7758122c3f7a1b28c16b469da0d1cac0f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "39dfeb6a7573087cc85dd140989c7a98cd01926a216a99c33bc59ba97f36b215"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "0f252fb9d0b6322a745ec16421d3c9537e2e83abf58f535520ad78d89a4ab0d1"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "277c53feb9e67d51cdcf947b11187514fd136713ec334bd733bd37c6083b01a9"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "133a85ea742e6fda0edfea8d7750a1c71fe604eb54a86ba0ddbce6e0f86b5720"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "170aff030fba2e41d7fb6466a7925d0c32e8657cc4df4ddaeaab037812098696"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf": {
+      "bytes": 1093424,
+      "sha256": "b7e86d9cdc1d5b18576ffbd9cfa56cf69648f3eab820d16014c810833fdc58fc"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "7851ab838e7cc27813f27a637a710159c19b8d46cba67c0a3750fe148b920fe7"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-3.bin": {
+      "bytes": 928845,
+      "sha256": "37d133e109f86557f04c730602cd33e758e9d4b6624fed67a31f13aca6300ce0"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-5.bin": {
+      "bytes": 128,
+      "sha256": "7d5648bc64d313b83a31f4e86598d8a6bf5106f947112476a0a2c2b894a3a8f3"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-7.bin": {
+      "bytes": 920,
+      "sha256": "2e74bc2cb28ce0afccb9d1edc31fec6b9084c1b8dbef5c188751664ce5db7199"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-8.bin": {
+      "bytes": 72,
+      "sha256": "1ab753b7f9d8a4a3f35b58a8435ffeaafa9497ba6f9d3f137ff992ad7b946a7a"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-05.ll": {
+      "bytes": 13580542,
+      "sha256": "8f434563fd8155426386c0b59b6cf2e3b02a37ced2f2b95a97c164f38705fda5"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "e0fd5a43f1172ba836db67ebaf6c893649a9f8bbdf6bcd019b7e7bf4572e272f"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/owner.json": {
+      "bytes": 3209,
+      "sha256": "268bdb8337ccec98945fd438960c5086fa96d4ccc4b0b63fadb26746b712a923"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/samples.jsonl": {
+      "bytes": 412283,
+      "sha256": "b2da5eda8d9193bb04a88fff3e675b6031684d97b5713e7be10d04a3ed2390eb"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/stdout.log": {
+      "bytes": 793,
+      "sha256": "d82601aabdce0c00153fdb19b9e24ae26de243090dfb5839871230dd0a270c1a"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/actual-code-review.json": {
+      "bytes": 4327,
+      "sha256": "37625bff5ad6dae6e6ac6a6c0b136783ef225f5235c7f3a59b4babf71c0fb5c6"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "5f101db4d57c3e63ca772a4760ef3f5715cff065478e19faab818d4325fb8f8b"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/bindings.json": {
+      "bytes": 59241,
+      "sha256": "f00e05d4864ad3c198165812fde273fdacce09efcc4e6a466980789dee538899"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/capture-inputs.json": {
+      "bytes": 861,
+      "sha256": "3fb1001c3e80c2f99164ff196d9963f40784d10b260af0e87476cc5f7fbc1f34"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/capture-verification.json": {
+      "bytes": 1299,
+      "sha256": "44eeceb914b1006d7c53a8f40c8317c61624d0d9a75c9ae88b0e158c48af1497"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/capture.gdb": {
+      "bytes": 502,
+      "sha256": "026bc291d30d930c0dc30f00fd0fc01103af8adcdd4c520858dfe80777af6c1d"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/inferior.json": {
+      "bytes": 17,
+      "sha256": "fdb44f8bddb36ccf24dece3675e7a452b3a5b293740f75d9d601e7edb0d732e7"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/inputs-after.json": {
+      "bytes": 150104,
+      "sha256": "314b541bfddf3711840591ffbde35f86d98469c5acaad8f681cd8199a98408af"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/inputs-before.json": {
+      "bytes": 150104,
+      "sha256": "314b541bfddf3711840591ffbde35f86d98469c5acaad8f681cd8199a98408af"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "590b66c242a4f709c1f47b3417c26e8258ce6b3cfc588995d11521e7a13b81a3"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "f96f93d6eb2e38b16db0ec7adcee623ca7dd2f043bc98229bfe3cf60f45f3248"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "559f97cc6620b26bcd351b1301897a2aef34c47f8f4faa791969a224acacfa81"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "1442e7346f7b8015f7f313ac22762c7ad2ef25e6b1641240f6b74de4dd5ee385"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "8badec99f34686f468cfc56ac5fbaa621736855536f30925e59aeda2568280ec"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf": {
+      "bytes": 581264,
+      "sha256": "a898f02535ae1c40157a53ad013e98e5915b3f48a413c81d1b718881ae976d01"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "3e6c6c737a9223f6a16ff262c000294bd454722f65e16ea316d5b04a0b6b764e"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-3.bin": {
+      "bytes": 535781,
+      "sha256": "73f92f893897684a8d6f9570e3a195a17531949786ac55f6e34ab2c72a8d1f3c"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "da5bfc123f8cee7e136733901c0e964742e36975411c601fb8c5e3ed73f210f5"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-7.bin": {
+      "bytes": 328,
+      "sha256": "28c7a23d8ff96028766e1317780d88d09bc7bb406669d3ef6330532e8565bc9c"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-8.bin": {
+      "bytes": 32,
+      "sha256": "edf19c7358a9fb1d3d8dd69e9153121ad5d84b629a126a25429f32f2aaa6b318"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-05.ll": {
+      "bytes": 7826274,
+      "sha256": "2a893bbd2431a1511419b8d7b8993ab2a6a5af0c6bb5a67b99e5f88b893e2d8a"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimizer-exports.tsv": {
+      "bytes": 217,
+      "sha256": "f75a96bc1abe3058d6c77d496761d11df4e16e0e94486c2700e41b6b69cbd1c8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/owner.json": {
+      "bytes": 3177,
+      "sha256": "979bb706a6e49c445e04350ffffb35f55437b36e37148ac9cade118fbfc2dcb6"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/samples.jsonl": {
+      "bytes": 238882,
+      "sha256": "dc18b272dc8ab41fc7c7c00b3bb7937c34c468bc4a8a898066596f36f48960ad"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core/stdout.log": {
+      "bytes": 793,
+      "sha256": "eeef04ab939da5c4ed47ea50e7dc20e1e24fb5a6080567098851d2c15e4ccc3b"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/actual-code-review.json": {
+      "bytes": 4350,
+      "sha256": "767e61ce8324ec40d17a9ed8177f77cbd704d111833a596430728bce8a176858"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/actual-loaded-module.json": {
+      "bytes": 153,
+      "sha256": "3ed8ba7bb7adf241df839667bf8f8acf8a6979e6946882fb20e9740ec4b1225c"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/bindings.json": {
+      "bytes": 59192,
+      "sha256": "c3cc5d6aa64105a4923605e6dd7faa8538a7ccbec777e85b7437ef55c9a48e54"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/capture-inputs.json": {
+      "bytes": 869,
+      "sha256": "71a5f0292899a9af0c8dd9aeb50c3b595f6d3018a273deeb5516aa083d0600b2"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/capture-verification.json": {
+      "bytes": 1298,
+      "sha256": "29f0132980535f00c46131e8dbc837f8636edbe03f6834798ba4507d951eebae"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/capture.gdb": {
+      "bytes": 510,
+      "sha256": "fe05d9c1e145b82447c8ed60bc6f434d4366a834079be79a4e450ace9aaf5906"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/inferior.json": {
+      "bytes": 17,
+      "sha256": "d039230fb32202de3ca6ef45f262fe9e1337b8cb82534491b1f78f44654545fa"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/inputs-after.json": {
+      "bytes": 150119,
+      "sha256": "544cb7f9f1c2f6905063118b83f3c28e1dcbb359be587f603f9eb8be06fc868c"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/inputs-before.json": {
+      "bytes": 150119,
+      "sha256": "544cb7f9f1c2f6905063118b83f3c28e1dcbb359be587f603f9eb8be06fc868c"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "4130651f71231c7022c4f293b630d72eab66972a8ffb35e5209773814857039c"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "2dd30f3d2df6d72ee0de2bdc8f44bd1be1708d0571a5d42cc0ffbe7ca0a3a530"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "b2461988c09bfafe7d1233dcec2da77d7cd1b73d6c95f853a3e3a0c2d7005838"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "8043eabaad62e1d934f7db8bc053eb5f2ab44cba6504b9ec68147bacb876e252"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "558736b61b3973476cc210c0468a15a227bc4242ff55f899d15f50968432bdb0"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf": {
+      "bytes": 583720,
+      "sha256": "616db7351847679bbeca8e0e25c1aec8b068b685854bd982baa2bbcc033e4a74"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "e4b5c44673f49edec5c7f997d8db3b5997d5b3d7db5e4abdc51c29f800a9b5fa"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-3.bin": {
+      "bytes": 492565,
+      "sha256": "1c6efe67a0c14435aacfc263b0c48e775ac37845d738481a99984c7ab663fa34"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "da5bfc123f8cee7e136733901c0e964742e36975411c601fb8c5e3ed73f210f5"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-7.bin": {
+      "bytes": 348,
+      "sha256": "43b00a4ee53b109dfe590ddfdfbfefb4ac1cdb75f03ff0e2fbc7a006bd682ded"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-8.bin": {
+      "bytes": 48,
+      "sha256": "17d9064267acf783c56a80486729798d940e5ca82afaadea5587bdb9a49b9cda"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-05.ll": {
+      "bytes": 6924853,
+      "sha256": "4e7d95605b24313bbf1c843a26f830603d6da3a9703bbbd9c448f3eac8e48687"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimizer-exports.tsv": {
+      "bytes": 217,
+      "sha256": "33e439e61372103d76d33be27dc2c83c43a7cd4369e6d96206166f6e5f74bfb6"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/owner.json": {
+      "bytes": 3330,
+      "sha256": "897b97b32d9f7d72a4d99c86d18b76a98a2d9fc8c57f42c3a9d964516f4fb65f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/samples.jsonl": {
+      "bytes": 223192,
+      "sha256": "db4ac80fab4a4afecb193dde2b1943c95f7eecc7e58f27a34b72a7d49ff94a03"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/stdout.log": {
+      "bytes": 793,
+      "sha256": "e34318292bdc8ee31038220f0021b9c151ce60a7777b1d5bec2a8d1959a8dbbb"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/actual-code-review.json": {
+      "bytes": 4338,
+      "sha256": "52cbc6a57bc3497857d71706db839c44ac639577a5391c9c6ecc34a28dc883ab"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "3b7210cac0e4ec7dd3d749a69dac070afca67b6e3587f0a449f900dcbc2e5e2b"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/bindings.json": {
+      "bytes": 59599,
+      "sha256": "524957df9a835b178ddc018c4655c4524106cc17631a58aff64af4f245cd8e0b"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/capture-inputs.json": {
+      "bytes": 864,
+      "sha256": "3d7ace714eb2624551ba2cb9cc8d69a125f0fc9499d7a985e55f66d7018d7b74"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/capture-verification.json": {
+      "bytes": 1300,
+      "sha256": "ac8b1a598207fc5b201e6854ad30081bd7f3a4c21e55af8badfcb188e3f0d8f7"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/capture.gdb": {
+      "bytes": 505,
+      "sha256": "eabec3d9909b7b41464cb42fced0627cbbd7ba585e8a8de6c6964f64ee3fa06d"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/inferior.json": {
+      "bytes": 17,
+      "sha256": "2aa6a1f84d4f5ef89dabc98c19f0414e1c5393ecedd5cee9d311475a994af4a5"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/inputs-after.json": {
+      "bytes": 150110,
+      "sha256": "0d0fb486ea9ba15cd9fe1d03edb94dc2aecd822f8786237aa43cbf0972b4248f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/inputs-before.json": {
+      "bytes": 150110,
+      "sha256": "0d0fb486ea9ba15cd9fe1d03edb94dc2aecd822f8786237aa43cbf0972b4248f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "9bca45c107a306a639b043ba1db07801f7e0a82c3f1af62c049ce562da5b4515"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "06d00d750e02761a5a02e2f333e9a97ac509d2c55973888ca4c1dc7c4ac0c765"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "25e95060217b30d23bf6ec1db67e58a4a89adc54984fac10a7e4297dac7396ec"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "d6aa6d8e541279db41e7ff7bcc71e6b5f36c7cf5115cfd68fa89277c131f894e"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "721720c64e9fdda974b35e772a66b3d36f974e14649c8ae5f9f447a8e7c19906"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf": {
+      "bytes": 1016736,
+      "sha256": "4b64ce065cbd0a66702b932efa2884f2373f69d79d9cb488efd35bd53febd3c0"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "6c82bdc006a92b681395b0b988df1025c837a7e960ef491341fd5413d11ed512"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-3.bin": {
+      "bytes": 880293,
+      "sha256": "f3810abac555a4b67603823d57328ac997ff7a52bf117e2f233bccc6a4d450b1"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-7.bin": {
+      "bytes": 424,
+      "sha256": "10b01f8548de4f34c4f29626917d58fa619c855b0674310a08fd60c8409503bb"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-8.bin": {
+      "bytes": 80,
+      "sha256": "81b355a6475ee769f71a9242d724d789459b110d63f63444ec7c2b548d915d50"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-05.ll": {
+      "bytes": 12502160,
+      "sha256": "16842705eaef361519a915bf770801e1dfd7a2ea079c47db6481a4ef9ac3c21d"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "2626880bad2a28a47b2e05129b0c79a4fb81540e431623b77467e3b26cd504b8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/owner.json": {
+      "bytes": 3565,
+      "sha256": "c55df701b5584121a499a900a3532d132fdf411fd3fd2bddee9901f24cd62e9b"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/samples.jsonl": {
+      "bytes": 442708,
+      "sha256": "3cc80b1977228c8c44f850fd3a8e1fc1a45b6da14535ab5ab1047fc10b17eb1e"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/stdout.log": {
+      "bytes": 793,
+      "sha256": "2318e2523981181335e1c660cc80f8fb23e166c34c8829205ef3ff61a9bbf816"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json": {
+      "bytes": 4344,
+      "sha256": "3e940e57eda3be646422b9e6ae632dc56ef283b3f48d8c32e140a6107a74dbaa"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "c7b40b07ab72a48cdd9e1da2356f36c601d20de0a2325149e2a9f2b762e76d61"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/bindings.json": {
+      "bytes": 59349,
+      "sha256": "d1d48b7a6d44420238baa92d68692252cc0b8e76481c17a1d47648a617d41a99"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-inputs.json": {
+      "bytes": 866,
+      "sha256": "e1b9641461ed774022fa0fbf8f9df111d52208b0445248edda59ce8b2fb29a0f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-verification.json": {
+      "bytes": 1300,
+      "sha256": "f8088801d508c84d714b388ed44a83c3f5414e2f3e2a6f8ca0c67a88ed4d10ff"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture.gdb": {
+      "bytes": 507,
+      "sha256": "4fe141c9937c6542125d95cbe55440d5ebf722afa614b369f2317985b6ab8324"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior.json": {
+      "bytes": 17,
+      "sha256": "1196a4a9f328b4b3bb54495cd9de924ee4f02200afefdd7c11cabdbaa77b70f4"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-after.json": {
+      "bytes": 150114,
+      "sha256": "d364cef7461e07dcacaa926d5043e704e02ee6ea3e4acb190efcc7ad75b562f8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-before.json": {
+      "bytes": 150114,
+      "sha256": "d364cef7461e07dcacaa926d5043e704e02ee6ea3e4acb190efcc7ad75b562f8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "91774225911f9851791eef880f86fe09d9ff11dc743fde41052596b1567f5e52"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "1f443ccea1ff7d0db4721622609a7f5d1116ba6a1b5a9674ad8968952aa13f78"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "d6eaad653624aeab0f6f4a1870151eef69e735b970682464c79a6266e5182ffd"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "4c4f0e3dea70d37762afb12a98c297a83bcf3248adc28621c8ca7ecedd7eebdd"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "9d41240cf154ea51602cd2f60f38020f04baec9bb4f41f028be3982ea3a47288"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf": {
+      "bytes": 1049832,
+      "sha256": "58c4804b40c66140fed74b37cbdb125fafd978f619dcc219317d33ebffc022bb"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "13d9dadffd2f17f2f02e6994f9bd29f0c89cda51781ccf83691713907b799bc1"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-3.bin": {
+      "bytes": 922597,
+      "sha256": "0c2f9b9f60d28112a0f8745f9dcc9b01051df41fd156ccb3f5fe94668944b13c"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-7.bin": {
+      "bytes": 452,
+      "sha256": "f92c3d7cb3ec41ede57d3661f360f4bc0bcf16b62bcac1295fadd6d2b91d8be2"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-8.bin": {
+      "bytes": 80,
+      "sha256": "983e953e0abe32b097a9efd960af4c706f6a0b050ece3bc607604a8a2b3a6dcf"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll": {
+      "bytes": 13237373,
+      "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "679073e2cfe728fd2c217a75f5bf10bbf66ccecac7de673ad0a0561fc82c7767"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/owner.json": {
+      "bytes": 3570,
+      "sha256": "09642035b4d77a71a51e584a016315a43430655badb824456466bd9abc3c266c"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/samples.jsonl": {
+      "bytes": 499502,
+      "sha256": "8e8d1460bbdd69e782b158ad2cada01d21c2094b7051d329d9c994477e73cfb1"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/stdout.log": {
+      "bytes": 793,
+      "sha256": "e46e4cc049bc1310dd2ffacb475c41dceab9c3cd8badee20fa98261d9b345644"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/actual-code-review.json": {
+      "bytes": 4349,
+      "sha256": "c1705d9095291242ceab4445fb59f910cae852ade284c09fba3fef17b3f9979d"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "6dbf7be457d5ba94de21298b031fe3ea8c0b22f4a6d54eaa11b71e18255e3a04"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/bindings.json": {
+      "bytes": 59302,
+      "sha256": "79d168479eccb6cca74627686ec76d6e27be83c2b85b226b82063d9cc9e10c40"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/capture-inputs.json": {
+      "bytes": 867,
+      "sha256": "48d320fc26726a609ac78bfade0264d59c7bd80cea223dc2f84f980e6f5f169b"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/capture-verification.json": {
+      "bytes": 1300,
+      "sha256": "e5336d9af9fea4142fe4df4c9c1c2f45c67faba0604baf9399382ec19b4285e3"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/capture.gdb": {
+      "bytes": 508,
+      "sha256": "0717b9a00b81b39d07abbed9c22ece92fc2b9e5cbcbaf18b419e1eaa6b216fed"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/inferior.json": {
+      "bytes": 17,
+      "sha256": "f9828b6315b6f45d37ac6e282b6f74d88261acb764684bbfca3a5749c4797ec3"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/inputs-after.json": {
+      "bytes": 150116,
+      "sha256": "0677ba665c076f2de05561d102db54bb894c733132dee4e32a3612c4462ee4e7"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/inputs-before.json": {
+      "bytes": 150116,
+      "sha256": "0677ba665c076f2de05561d102db54bb894c733132dee4e32a3612c4462ee4e7"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "c332d3f1c829671f6b5583d1238e437c4546ac836fa8f11457b6312e050f38e3"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "8ffd637f294324d47a29e8462523400171a1024842940f6ba06cdf22d7ac47fc"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "ccbd2374950923b0b1b9465072ce3566ad4d65e317b317e50830294dd74cdedb"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "40c2155fc65f27b8a20606f1cc6fa0b6a843029e1f80c6e63d4b1d3a1402c58c"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "123c7b9b6b371f5e45bd8d20c47c1ffe0ce6a190070de8bfb63a3372325b6855"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf": {
+      "bytes": 1033840,
+      "sha256": "2d1b52f2b0541fc036d53ddddbc49542533c517e51631c246e4b13321363f078"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "17c9b8f8c29bf117cf1b509868eec62bb9d1a944900c6b1e2cb44af3a858f604"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-3.bin": {
+      "bytes": 879837,
+      "sha256": "266cb88bc4b9857291c1d64e02e8adbda69a854336b1e4a304729aa1f801728f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-5.bin": {
+      "bytes": 128,
+      "sha256": "7d5648bc64d313b83a31f4e86598d8a6bf5106f947112476a0a2c2b894a3a8f3"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-7.bin": {
+      "bytes": 916,
+      "sha256": "60607051bfaac2585bc1aa771b4e38c40f2b7b52a71fa766345fa9b3034a59a0"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-8.bin": {
+      "bytes": 72,
+      "sha256": "e9efd62ea71b51afd5a4d7a68db316c926b55bbd73baa569938e64d6f90c4a93"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-05.ll": {
+      "bytes": 12911571,
+      "sha256": "4097dba5bfa2fd7b7ad442a979b8468146b8b5f211f61b1789e8aec32cdc7ac8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "dea8b26e800348cf07be9cf741a43735a5a7fd9d588641acca993ab6793a56bd"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/owner.json": {
+      "bytes": 3197,
+      "sha256": "76bfe9ba8a6c44532af828a44abf52044cd4b677333fe4af1ea7aa14dd4ca4e8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/samples.jsonl": {
+      "bytes": 399590,
+      "sha256": "988bc167ffa85d968a72183586160895c8ca313671cb4cc18ab48762fd46dfe5"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/stderr.log": {
+      "bytes": 155,
+      "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8"
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/stdout.log": {
+      "bytes": 793,
+      "sha256": "eb0ce758f424a39b47a1c65f80f09dfd5478d84e036c457603847cd1a20bdd78"
+    },
+    "out/guarded-product-high-runtime/capture_jit.py": {
+      "bytes": 15844,
+      "sha256": "eca9d075648629256e2b78242676cd2506e0e9180a441aab6efaae00d37ded5d"
+    },
+    "out/guarded-product-high-runtime/cleanup.py": {
+      "bytes": 7404,
+      "sha256": "ab66e2701c728619dac379f294c2188b403ce447812d205f4b35b903429c0e05"
+    },
+    "out/guarded-product-high-runtime/compile-probe/inputs-after.json": {
+      "bytes": 130086,
+      "sha256": "05a8671505b1bb0404a3cb0daf89c921b0a4b2c658d9cc648f57f6fd1f5f17f9"
+    },
+    "out/guarded-product-high-runtime/compile-probe/inputs-before.json": {
+      "bytes": 130086,
+      "sha256": "05a8671505b1bb0404a3cb0daf89c921b0a4b2c658d9cc648f57f6fd1f5f17f9"
+    },
+    "out/guarded-product-high-runtime/compile-probe/owner.json": {
+      "bytes": 2256,
+      "sha256": "6ca687511d6e31132dacf6da6a2c4a3a6a8f852267e799bd527fbb2875714c49"
+    },
+    "out/guarded-product-high-runtime/compile-probe/samples.jsonl": {
+      "bytes": 4193,
+      "sha256": "f7fcd926e0e30d9201eb28daf3a593b55a82593b1ed53f24360ca3d825d550c4"
+    },
+    "out/guarded-product-high-runtime/compile-probe/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/guarded-product-high-runtime/compile-probe/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/guarded-product-high-runtime/disposition.json": {
+      "bytes": 1228,
+      "sha256": "0bddb8c639a03ed361335cc803788577417632259eef653c015f03b3f7ef134d"
+    },
+    "out/guarded-product-high-runtime/independent-lowering-review.json": {
+      "bytes": 2070,
+      "sha256": "ab4c91a54ba607575827ae3670c284c5342362df3422b09a69ebad32e55850cb"
+    },
+    "out/guarded-product-high-runtime/independent-prelaunch-review.json": {
+      "bytes": 2939,
+      "sha256": "775eff7b3e8954f362cea0f21870e8e018d60c3d7a1f33b285d7574faebd083e"
+    },
+    "out/guarded-product-high-runtime/independent-retirement-preflight.json": {
+      "bytes": 624,
+      "sha256": "b00987087fb732716728fbc57c9a7535e4a7ac2e8c2057b115f14dcd553717d0"
+    },
+    "out/guarded-product-high-runtime/input-recovery.json": {
+      "bytes": 51359,
+      "sha256": "9cde63a87586ce6e3753671c6e3b99acb16caf269766dd41db75daf1b6b3b874"
+    },
+    "out/guarded-product-high-runtime/input-versions/00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153": {
+      "bytes": 47672,
+      "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+    },
+    "out/guarded-product-high-runtime/input-versions/022943b3b11c860b049bce41342f1c2594941b7b401d95dfdf235521099fee08": {
+      "bytes": 18504,
+      "sha256": "022943b3b11c860b049bce41342f1c2594941b7b401d95dfdf235521099fee08"
+    },
+    "out/guarded-product-high-runtime/input-versions/056315299aa96626cae63b4f048012a60cef8b3a65856e2efaae5c330af9745f": {
+      "bytes": 210344,
+      "sha256": "056315299aa96626cae63b4f048012a60cef8b3a65856e2efaae5c330af9745f"
+    },
+    "out/guarded-product-high-runtime/input-versions/0a079f958147699f7bb5bf228406a5d878dc2387fe9cdc5cce6f3e35e20380fc": {
+      "bytes": 344096,
+      "sha256": "0a079f958147699f7bb5bf228406a5d878dc2387fe9cdc5cce6f3e35e20380fc"
+    },
+    "out/guarded-product-high-runtime/input-versions/0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb": {
+      "bytes": 755864,
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+    },
+    "out/guarded-product-high-runtime/input-versions/0a80d27fe78198dd45ff51d42656a70231c6f54f912bd1607bbe5cd6c9af21e4": {
+      "bytes": 160543,
+      "sha256": "0a80d27fe78198dd45ff51d42656a70231c6f54f912bd1607bbe5cd6c9af21e4"
+    },
+    "out/guarded-product-high-runtime/input-versions/0ccdfb6d6f5c039465f6d002cf7e4c072d48ac6a2cffc8dd6c748dec31592804": {
+      "bytes": 534896,
+      "sha256": "0ccdfb6d6f5c039465f6d002cf7e4c072d48ac6a2cffc8dd6c748dec31592804"
+    },
+    "out/guarded-product-high-runtime/input-versions/1021f236227334ded6d1bbbc4bb6f5d933f793d8397c969896cfbdf03ce96223": {
+      "bytes": 9061000,
+      "sha256": "1021f236227334ded6d1bbbc4bb6f5d933f793d8397c969896cfbdf03ce96223"
+    },
+    "out/guarded-product-high-runtime/input-versions/15a2a75e8c437b9c99971b5ee10278ab110beef1a56d1d9e5d6759ea140e98ac": {
+      "bytes": 121848,
+      "sha256": "15a2a75e8c437b9c99971b5ee10278ab110beef1a56d1d9e5d6759ea140e98ac"
+    },
+    "out/guarded-product-high-runtime/input-versions/181071b73bc05e54ea60116f654aa6f45c61451a0e422357c638ed1b105131be": {
+      "bytes": 291264,
+      "sha256": "181071b73bc05e54ea60116f654aa6f45c61451a0e422357c638ed1b105131be"
+    },
+    "out/guarded-product-high-runtime/input-versions/195c607216f8581dbf516346ed38f4c73500cac4b84e18eb0a4fd49931e4cd56": {
+      "bytes": 220472,
+      "sha256": "195c607216f8581dbf516346ed38f4c73500cac4b84e18eb0a4fd49931e4cd56"
+    },
+    "out/guarded-product-high-runtime/input-versions/1c22abb422953442aa12822ea51ac76d1c8be92ed143e0159e0f830776cde2b2": {
+      "bytes": 64776,
+      "sha256": "1c22abb422953442aa12822ea51ac76d1c8be92ed143e0159e0f830776cde2b2"
+    },
+    "out/guarded-product-high-runtime/input-versions/1d730ea434da5a5595bc6a961d7a9ace83e03703205df9644044b3dca79c362f": {
+      "bytes": 64008,
+      "sha256": "1d730ea434da5a5595bc6a961d7a9ace83e03703205df9644044b3dca79c362f"
+    },
+    "out/guarded-product-high-runtime/input-versions/1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76": {
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    },
+    "out/guarded-product-high-runtime/input-versions/1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11": {
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "out/guarded-product-high-runtime/input-versions/209e941be9eb2eb9ab36caaa0b81d1c6b36c8f5d7268c24f19e81039137e6485": {
+      "bytes": 1967424,
+      "sha256": "209e941be9eb2eb9ab36caaa0b81d1c6b36c8f5d7268c24f19e81039137e6485"
+    },
+    "out/guarded-product-high-runtime/input-versions/2156351fa3dedd04a7381c6ac7a8a26efa2d6fb08b80f8a2d644ccdd653710ae": {
+      "bytes": 760464,
+      "sha256": "2156351fa3dedd04a7381c6ac7a8a26efa2d6fb08b80f8a2d644ccdd653710ae"
+    },
+    "out/guarded-product-high-runtime/input-versions/236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285": {
+      "bytes": 4033,
+      "sha256": "236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285"
+    },
+    "out/guarded-product-high-runtime/input-versions/248c989360783cdc52f3659921de852c2efcc2097253ce58e34443f856412814": {
+      "bytes": 121560,
+      "sha256": "248c989360783cdc52f3659921de852c2efcc2097253ce58e34443f856412814"
+    },
+    "out/guarded-product-high-runtime/input-versions/27c2d6dddde34146904c3c64cfcc885a14a351636d6611877368a48e29355c39": {
+      "bytes": 35032,
+      "sha256": "27c2d6dddde34146904c3c64cfcc885a14a351636d6611877368a48e29355c39"
+    },
+    "out/guarded-product-high-runtime/input-versions/286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d": {
+      "bytes": 186624,
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+    },
+    "out/guarded-product-high-runtime/input-versions/36be8f5beb139bcae2335d44227fa0712d89ff55c52ef7e33ca5409054e555b6": {
+      "bytes": 109336,
+      "sha256": "36be8f5beb139bcae2335d44227fa0712d89ff55c52ef7e33ca5409054e555b6"
+    },
+    "out/guarded-product-high-runtime/input-versions/3832cc070ae1716e322105d3b39fb398695e5f031c9d39224cf227a8c2b889f6": {
+      "bytes": 8920528,
+      "sha256": "3832cc070ae1716e322105d3b39fb398695e5f031c9d39224cf227a8c2b889f6"
+    },
+    "out/guarded-product-high-runtime/input-versions/3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf": {
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "out/guarded-product-high-runtime/input-versions/3a5cdc2757ea8797747c131838debd0a5c49e0e50eda1b5ee015848d4b842c8f": {
+      "bytes": 21913,
+      "sha256": "3a5cdc2757ea8797747c131838debd0a5c49e0e50eda1b5ee015848d4b842c8f"
+    },
+    "out/guarded-product-high-runtime/input-versions/3cc21c80ad9aae9dffa0c3f39948005f4526e83eeff0e3914c0f0f4cd30ebeb3": {
+      "bytes": 158176,
+      "sha256": "3cc21c80ad9aae9dffa0c3f39948005f4526e83eeff0e3914c0f0f4cd30ebeb3"
+    },
+    "out/guarded-product-high-runtime/input-versions/423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef": {
+      "bytes": 55536,
+      "sha256": "423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef"
+    },
+    "out/guarded-product-high-runtime/input-versions/434262395eb82a728bed6e104588e21048efdc03fd8da1ee7f5bd4721fa587d7": {
+      "bytes": 4185,
+      "sha256": "434262395eb82a728bed6e104588e21048efdc03fd8da1ee7f5bd4721fa587d7"
+    },
+    "out/guarded-product-high-runtime/input-versions/46764ab5b6ca7e353a322054f0bee45d9158a27f3e6a82a2fa4447f2ba9ba268": {
+      "bytes": 170352,
+      "sha256": "46764ab5b6ca7e353a322054f0bee45d9158a27f3e6a82a2fa4447f2ba9ba268"
+    },
+    "out/guarded-product-high-runtime/input-versions/4763f3f4e0c4f776ec0d6bda54374c0d86bab570259501e50bc492a4fe9cf978": {
+      "bytes": 110176,
+      "sha256": "4763f3f4e0c4f776ec0d6bda54374c0d86bab570259501e50bc492a4fe9cf978"
+    },
+    "out/guarded-product-high-runtime/input-versions/4a0664ab6a8a66c685e78d5604b79df330f5710f0c5e2c382536a8325dc4c2a4": {
+      "bytes": 372400,
+      "sha256": "4a0664ab6a8a66c685e78d5604b79df330f5710f0c5e2c382536a8325dc4c2a4"
+    },
+    "out/guarded-product-high-runtime/input-versions/4ad10555621b54a308530b12c04b5bda7a94453399935d46a0cad2b6267086c9": {
+      "bytes": 4177,
+      "sha256": "4ad10555621b54a308530b12c04b5bda7a94453399935d46a0cad2b6267086c9"
+    },
+    "out/guarded-product-high-runtime/input-versions/4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a": {
+      "bytes": 143545784,
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+    },
+    "out/guarded-product-high-runtime/input-versions/4dc5188cf7957469a50f60c601ba2fc83afb443c8bba89a5887f5e322319b0b7": {
+      "bytes": 102048,
+      "sha256": "4dc5188cf7957469a50f60c601ba2fc83afb443c8bba89a5887f5e322319b0b7"
+    },
+    "out/guarded-product-high-runtime/input-versions/52fda0dfd1df95d8d9370c39de67e08b6e37dcfe25a2ef977f8451521159e834": {
+      "bytes": 36622952,
+      "sha256": "52fda0dfd1df95d8d9370c39de67e08b6e37dcfe25a2ef977f8451521159e834"
+    },
+    "out/guarded-product-high-runtime/input-versions/59994414d0cdec4f678ef91eaaafc44b26b00bca507e4cc7978caaf79f584173": {
+      "bytes": 88216,
+      "sha256": "59994414d0cdec4f678ef91eaaafc44b26b00bca507e4cc7978caaf79f584173"
+    },
+    "out/guarded-product-high-runtime/input-versions/5bf46ff3e0fb33f25ff7cd98c877a45dbaf423242904a7eb485173f3fed91ca6": {
+      "bytes": 55520,
+      "sha256": "5bf46ff3e0fb33f25ff7cd98c877a45dbaf423242904a7eb485173f3fed91ca6"
+    },
+    "out/guarded-product-high-runtime/input-versions/5cf2f82da0bfea84e6d43b9be9c342cb14d5391096bb951518b7223f0de501bf": {
+      "bytes": 4171,
+      "sha256": "5cf2f82da0bfea84e6d43b9be9c342cb14d5391096bb951518b7223f0de501bf"
+    },
+    "out/guarded-product-high-runtime/input-versions/64d8a5019d4c294b89fde1193343ea324bbd8603652554e5545f0a01595fa2c5": {
+      "bytes": 51512,
+      "sha256": "64d8a5019d4c294b89fde1193343ea324bbd8603652554e5545f0a01595fa2c5"
+    },
+    "out/guarded-product-high-runtime/input-versions/6662f9feb1418c9098ce9d83ec34f0a36b73d86aa266e5cc3fbc079a842145c6": {
+      "bytes": 152132,
+      "sha256": "6662f9feb1418c9098ce9d83ec34f0a36b73d86aa266e5cc3fbc079a842145c6"
+    },
+    "out/guarded-product-high-runtime/input-versions/667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0": {
+      "bytes": 26776,
+      "sha256": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0"
+    },
+    "out/guarded-product-high-runtime/input-versions/683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+    },
+    "out/guarded-product-high-runtime/input-versions/6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a": {
+      "bytes": 5309400,
+      "sha256": "6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a"
+    },
+    "out/guarded-product-high-runtime/input-versions/696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb": {
+      "bytes": 202904,
+      "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+    },
+    "out/guarded-product-high-runtime/input-versions/6e632fd9a3125db60bbc623719bbc17b0470330321c5b1c57f1ff7190e5551ad": {
+      "bytes": 133192,
+      "sha256": "6e632fd9a3125db60bbc623719bbc17b0470330321c5b1c57f1ff7190e5551ad"
+    },
+    "out/guarded-product-high-runtime/input-versions/6f6935b26c962d5b51ef2011332472cfd96ff244a4edc9d47120be6faa70e602": {
+      "bytes": 59888,
+      "sha256": "6f6935b26c962d5b51ef2011332472cfd96ff244a4edc9d47120be6faa70e602"
+    },
+    "out/guarded-product-high-runtime/input-versions/70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398": {
+      "bytes": 135,
+      "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+    },
+    "out/guarded-product-high-runtime/input-versions/747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "out/guarded-product-high-runtime/input-versions/7560aadde38e5f4237a47a1ddd5891f9b36768a77a60faae30beee003ac01901": {
+      "bytes": 2140336,
+      "sha256": "7560aadde38e5f4237a47a1ddd5891f9b36768a77a60faae30beee003ac01901"
+    },
+    "out/guarded-product-high-runtime/input-versions/78d7f4d6f27b7dffc1c84dfe2f83e84aefa6f6ceeffc6ac4bc41f9fbc61cb84e": {
+      "bytes": 35032,
+      "sha256": "78d7f4d6f27b7dffc1c84dfe2f83e84aefa6f6ceeffc6ac4bc41f9fbc61cb84e"
+    },
+    "out/guarded-product-high-runtime/input-versions/7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440": {
+      "bytes": 162392,
+      "sha256": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440"
+    },
+    "out/guarded-product-high-runtime/input-versions/7a73ccfb5cb9fe03ffa3710cf6fcae518af48fb71696957f5a334c802e8f42a5": {
+      "bytes": 742712,
+      "sha256": "7a73ccfb5cb9fe03ffa3710cf6fcae518af48fb71696957f5a334c802e8f42a5"
+    },
+    "out/guarded-product-high-runtime/input-versions/7bcf825cd449892db5105ad2aed91dcf94a27b796426600c765720c584c54dd1": {
+      "bytes": 1755312,
+      "sha256": "7bcf825cd449892db5105ad2aed91dcf94a27b796426600c765720c584c54dd1"
+    },
+    "out/guarded-product-high-runtime/input-versions/7d40b02b27d449b6b26cea10ea10aafd0cce5a1e2d7859ea57f34b29fe88923f": {
+      "bytes": 14480,
+      "sha256": "7d40b02b27d449b6b26cea10ea10aafd0cce5a1e2d7859ea57f34b29fe88923f"
+    },
+    "out/guarded-product-high-runtime/input-versions/8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a": {
+      "bytes": 18696,
+      "sha256": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a"
+    },
+    "out/guarded-product-high-runtime/input-versions/81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+    },
+    "out/guarded-product-high-runtime/input-versions/82073f2f958e8b5a53324a3a87f1ada7baf2610d0a9810d4c03de0f72fa5737a": {
+      "bytes": 2547,
+      "sha256": "82073f2f958e8b5a53324a3a87f1ada7baf2610d0a9810d4c03de0f72fa5737a"
+    },
+    "out/guarded-product-high-runtime/input-versions/8253bcdf7f39fcf8f25e797757808e671d777efc00b0cd1fbbcd9da61b0e98f7": {
+      "bytes": 47904,
+      "sha256": "8253bcdf7f39fcf8f25e797757808e671d777efc00b0cd1fbbcd9da61b0e98f7"
+    },
+    "out/guarded-product-high-runtime/input-versions/853c361fa68e8afd3c532cf7cf5847837f1620cc047bd773a39d0955695241d7": {
+      "bytes": 4212,
+      "sha256": "853c361fa68e8afd3c532cf7cf5847837f1620cc047bd773a39d0955695241d7"
+    },
+    "out/guarded-product-high-runtime/input-versions/86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892": {
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "out/guarded-product-high-runtime/input-versions/8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e": {
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "out/guarded-product-high-runtime/input-versions/8cd11f2aa69efdac7c040a2794f8bf1a737405abff53908b737c721d1c4ba65d": {
+      "bytes": 823488,
+      "sha256": "8cd11f2aa69efdac7c040a2794f8bf1a737405abff53908b737c721d1c4ba65d"
+    },
+    "out/guarded-product-high-runtime/input-versions/8d0b00978cde2a5a9ec76bee1e16a80efd502bc4db8647174a00a61c9d90f989": {
+      "bytes": 338696,
+      "sha256": "8d0b00978cde2a5a9ec76bee1e16a80efd502bc4db8647174a00a61c9d90f989"
+    },
+    "out/guarded-product-high-runtime/input-versions/910ad8a63896f722374fdf22951d2a436c74e3ac9677511cc56378296bdf86cc": {
+      "bytes": 44544,
+      "sha256": "910ad8a63896f722374fdf22951d2a436c74e3ac9677511cc56378296bdf86cc"
+    },
+    "out/guarded-product-high-runtime/input-versions/916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84": {
+      "bytes": 1186944,
+      "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+    },
+    "out/guarded-product-high-runtime/input-versions/92c7c0e1a9c3c91691f30f019c2f0f9a46d842669e6d7b61395fc10b3a4f1c5a": {
+      "bytes": 65065,
+      "sha256": "92c7c0e1a9c3c91691f30f019c2f0f9a46d842669e6d7b61395fc10b3a4f1c5a"
+    },
+    "out/guarded-product-high-runtime/input-versions/966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7": {
+      "bytes": 14024,
+      "sha256": "966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7"
+    },
+    "out/guarded-product-high-runtime/input-versions/96ef9163aee942bdc09e6f4a1acd2fd6b178c03af824c569741440d63ac9f4f4": {
+      "bytes": 1343056,
+      "sha256": "96ef9163aee942bdc09e6f4a1acd2fd6b178c03af824c569741440d63ac9f4f4"
+    },
+    "out/guarded-product-high-runtime/input-versions/981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    },
+    "out/guarded-product-high-runtime/input-versions/9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139": {
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    },
+    "out/guarded-product-high-runtime/input-versions/9fa6b0ec4af163a86bc9a9ded3309a5979155fb5ef2d311fdda7fff0e9eee01a": {
+      "bytes": 67784,
+      "sha256": "9fa6b0ec4af163a86bc9a9ded3309a5979155fb5ef2d311fdda7fff0e9eee01a"
+    },
+    "out/guarded-product-high-runtime/input-versions/a03c6db64a7b078b47079de2e234fb9f07e71108742f5087da4ccd4c92d770ec": {
+      "bytes": 434560,
+      "sha256": "a03c6db64a7b078b47079de2e234fb9f07e71108742f5087da4ccd4c92d770ec"
+    },
+    "out/guarded-product-high-runtime/input-versions/a0f410ad093236856eee59c4ff2838dc04d932ea0993400f23ed77d67d85af34": {
+      "bytes": 101200,
+      "sha256": "a0f410ad093236856eee59c4ff2838dc04d932ea0993400f23ed77d67d85af34"
+    },
+    "out/guarded-product-high-runtime/input-versions/a1f8808cd8a3a793c59eeed10d78515a08d5aa09b1080ac47281c1a78c04fd68": {
+      "bytes": 16376,
+      "sha256": "a1f8808cd8a3a793c59eeed10d78515a08d5aa09b1080ac47281c1a78c04fd68"
+    },
+    "out/guarded-product-high-runtime/input-versions/a245ed916229583d6fe0b07657b3ed945bc148c28cc08b5266295f620d2b91cc": {
+      "bytes": 342280,
+      "sha256": "a245ed916229583d6fe0b07657b3ed945bc148c28cc08b5266295f620d2b91cc"
+    },
+    "out/guarded-product-high-runtime/input-versions/a43c43c2fbb643f42572577b6c2514905804f963d186d4d630e184c4015e68a7": {
+      "bytes": 71752,
+      "sha256": "a43c43c2fbb643f42572577b6c2514905804f963d186d4d630e184c4015e68a7"
+    },
+    "out/guarded-product-high-runtime/input-versions/a59efd4792d3343dedea1d26a28f5597abfe3369082deb504c4802a31b014897": {
+      "bytes": 1714008,
+      "sha256": "a59efd4792d3343dedea1d26a28f5597abfe3369082deb504c4802a31b014897"
+    },
+    "out/guarded-product-high-runtime/input-versions/a919146693e71897484c2996beb837273a7a278d1a2afe477bc072f10681f3b0": {
+      "bytes": 22744,
+      "sha256": "a919146693e71897484c2996beb837273a7a278d1a2afe477bc072f10681f3b0"
+    },
+    "out/guarded-product-high-runtime/input-versions/a91ead095d2c80520c55a89057bbe10b031a075340442e63f44b310f93883a1b": {
+      "bytes": 141640,
+      "sha256": "a91ead095d2c80520c55a89057bbe10b031a075340442e63f44b310f93883a1b"
+    },
+    "out/guarded-product-high-runtime/input-versions/ad78a7b22409685ca82e54346c2b9465d697f303e69e74a9c1693bb206e319df": {
+      "bytes": 14552,
+      "sha256": "ad78a7b22409685ca82e54346c2b9465d697f303e69e74a9c1693bb206e319df"
+    },
+    "out/guarded-product-high-runtime/input-versions/ada59231b9ce983951fdd3425ebb4c138fa473b7470d5bc9d9285a3f8687f801": {
+      "bytes": 35624,
+      "sha256": "ada59231b9ce983951fdd3425ebb4c138fa473b7470d5bc9d9285a3f8687f801"
+    },
+    "out/guarded-product-high-runtime/input-versions/ae6c5a9aecc249fc66e03c16ec6c4385d09d7e12e0ea7694bb831ab4fee8133c": {
+      "bytes": 75768,
+      "sha256": "ae6c5a9aecc249fc66e03c16ec6c4385d09d7e12e0ea7694bb831ab4fee8133c"
+    },
+    "out/guarded-product-high-runtime/input-versions/b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "out/guarded-product-high-runtime/input-versions/b552c698f9f5c7ff8a6f7c11d8595a0d3e6dc3eaf483843895ec76f418080dfb": {
+      "bytes": 239848,
+      "sha256": "b552c698f9f5c7ff8a6f7c11d8595a0d3e6dc3eaf483843895ec76f418080dfb"
+    },
+    "out/guarded-product-high-runtime/input-versions/b82bd54edb908605b8142be1a6d242df65501af0e9bb7581cc36ebf4d8a5ecfd": {
+      "bytes": 462360,
+      "sha256": "b82bd54edb908605b8142be1a6d242df65501af0e9bb7581cc36ebf4d8a5ecfd"
+    },
+    "out/guarded-product-high-runtime/input-versions/b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    "out/guarded-product-high-runtime/input-versions/bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+    },
+    "out/guarded-product-high-runtime/input-versions/c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da": {
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "out/guarded-product-high-runtime/input-versions/c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af": {
+      "bytes": 253224,
+      "sha256": "c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af"
+    },
+    "out/guarded-product-high-runtime/input-versions/c309aa1e6faa2d8ad11c85fc4983d052ced3cb996f5a0ba86b11686d189b8529": {
+      "bytes": 304,
+      "sha256": "c309aa1e6faa2d8ad11c85fc4983d052ced3cb996f5a0ba86b11686d189b8529"
+    },
+    "out/guarded-product-high-runtime/input-versions/c3c606139d4f7776efa4dbd4a6b62e30c916b07a0cafd8c3ef173d6f093607e3": {
+      "bytes": 288920,
+      "sha256": "c3c606139d4f7776efa4dbd4a6b62e30c916b07a0cafd8c3ef173d6f093607e3"
+    },
+    "out/guarded-product-high-runtime/input-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02": {
+      "bytes": 60385,
+      "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02"
+    },
+    "out/guarded-product-high-runtime/input-versions/d04ccee993de5f87dfadb2c27d58b7117645ceba7f11dc9916999fcaf17d2e55": {
+      "bytes": 765856,
+      "sha256": "d04ccee993de5f87dfadb2c27d58b7117645ceba7f11dc9916999fcaf17d2e55"
+    },
+    "out/guarded-product-high-runtime/input-versions/d06d982abe6e9202aecd22322166be8ba49e68e05889fb6c6faec0daa88530a4": {
+      "bytes": 14536,
+      "sha256": "d06d982abe6e9202aecd22322166be8ba49e68e05889fb6c6faec0daa88530a4"
+    },
+    "out/guarded-product-high-runtime/input-versions/d2e00d05f3713bb0d5eb9f1a212cca2b34cd789a0c4cc0c529ee77827237383f": {
+      "bytes": 35168,
+      "sha256": "d2e00d05f3713bb0d5eb9f1a212cca2b34cd789a0c4cc0c529ee77827237383f"
+    },
+    "out/guarded-product-high-runtime/input-versions/d5a30761bb7e8eadc3345ce3cfbb7567df86159b93e8e1700fd6d34505ad2e20": {
+      "bytes": 301936,
+      "sha256": "d5a30761bb7e8eadc3345ce3cfbb7567df86159b93e8e1700fd6d34505ad2e20"
+    },
+    "out/guarded-product-high-runtime/input-versions/d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb": {
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "out/guarded-product-high-runtime/input-versions/dd8b93b95adf53a638772061dbe81dc0252d2d8857ae1df774aed78c6a79e0c0": {
+      "bytes": 178648,
+      "sha256": "dd8b93b95adf53a638772061dbe81dc0252d2d8857ae1df774aed78c6a79e0c0"
+    },
+    "out/guarded-product-high-runtime/input-versions/ddbae2995750875c07bc218d12a062d73f8250678f54dedda7e9be5068781c98": {
+      "bytes": 2065824,
+      "sha256": "ddbae2995750875c07bc218d12a062d73f8250678f54dedda7e9be5068781c98"
+    },
+    "out/guarded-product-high-runtime/input-versions/ddbb3718b8bd9cbd780e5ab08b4503c30a6c4fa0706ebe5d074ed6b596c1714e": {
+      "bytes": 30795392,
+      "sha256": "ddbb3718b8bd9cbd780e5ab08b4503c30a6c4fa0706ebe5d074ed6b596c1714e"
+    },
+    "out/guarded-product-high-runtime/input-versions/df0f5b36f865f767934dde69ce3c3113e0bc4be31f14d3bcc618fae21f1d3878": {
+      "bytes": 25605,
+      "sha256": "df0f5b36f865f767934dde69ce3c3113e0bc4be31f14d3bcc618fae21f1d3878"
+    },
+    "out/guarded-product-high-runtime/input-versions/e00576d71d81d3ba0cfa4903c835a44a8723aac96f72f79ff75200b4cff9071b": {
+      "bytes": 625344,
+      "sha256": "e00576d71d81d3ba0cfa4903c835a44a8723aac96f72f79ff75200b4cff9071b"
+    },
+    "out/guarded-product-high-runtime/input-versions/e46a122cc3a29feba3b1d0fc2a274b6e46538be016ebe381370c0801bb98b0b8": {
+      "bytes": 1359128,
+      "sha256": "e46a122cc3a29feba3b1d0fc2a274b6e46538be016ebe381370c0801bb98b0b8"
+    },
+    "out/guarded-product-high-runtime/input-versions/e504b7cc37643860c3d093f553afe578d11cfeb908ff26c3b2c44de1b83706cb": {
+      "bytes": 122992,
+      "sha256": "e504b7cc37643860c3d093f553afe578d11cfeb908ff26c3b2c44de1b83706cb"
+    },
+    "out/guarded-product-high-runtime/input-versions/e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f": {
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "out/guarded-product-high-runtime/input-versions/e59ef497333a6ede2096a0bd9eeb6ec4023374c16d3a8d7511d1251fb7f9b9df": {
+      "bytes": 35016,
+      "sha256": "e59ef497333a6ede2096a0bd9eeb6ec4023374c16d3a8d7511d1251fb7f9b9df"
+    },
+    "out/guarded-product-high-runtime/input-versions/e6089d7bb95eee5b545f3770dd69095b0bca47d26701cad145af429561d16306": {
+      "bytes": 208328,
+      "sha256": "e6089d7bb95eee5b545f3770dd69095b0bca47d26701cad145af429561d16306"
+    },
+    "out/guarded-product-high-runtime/input-versions/e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e": {
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "out/guarded-product-high-runtime/input-versions/e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb": {
+      "bytes": 80888,
+      "sha256": "e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb"
+    },
+    "out/guarded-product-high-runtime/input-versions/ebc848ba868fad953537e133d5dfe670d3487f15f3f3b5bca5b70fca0d1c5f63": {
+      "bytes": 5184,
+      "sha256": "ebc848ba868fad953537e133d5dfe670d3487f15f3f3b5bca5b70fca0d1c5f63"
+    },
+    "out/guarded-product-high-runtime/input-versions/eca9d075648629256e2b78242676cd2506e0e9180a441aab6efaae00d37ded5d": {
+      "bytes": 15844,
+      "sha256": "eca9d075648629256e2b78242676cd2506e0e9180a441aab6efaae00d37ded5d"
+    },
+    "out/guarded-product-high-runtime/input-versions/edbfd18bfc133c0d77bab7470601e83bd88ed3e578bedce368042f888034e68e": {
+      "bytes": 1479888,
+      "sha256": "edbfd18bfc133c0d77bab7470601e83bd88ed3e578bedce368042f888034e68e"
+    },
+    "out/guarded-product-high-runtime/input-versions/f48214417757f18793ed6e180cc14ee1d6f04252a518fc7270e8ca1d0b4260fe": {
+      "bytes": 22600,
+      "sha256": "f48214417757f18793ed6e180cc14ee1d6f04252a518fc7270e8ca1d0b4260fe"
+    },
+    "out/guarded-product-high-runtime/input-versions/fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0": {
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "out/guarded-product-high-runtime/input-versions/ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67": {
+      "bytes": 92760,
+      "sha256": "ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67"
+    },
+    "out/guarded-product-high-runtime/issue44-jit-comment-response.json": {
+      "bytes": 1273,
+      "sha256": "c205ceee23ce3068c5bded9b9f2151d10c1e855da02e1f25ec4d7acf9b05325c"
+    },
+    "out/guarded-product-high-runtime/issue44-jit-comment.md": {
+      "bytes": 1158,
+      "sha256": "d5d9a81f394bfcfca52e7684bac7672f1e97d8fef29ecbb7205d8946c768da3c"
+    },
+    "out/guarded-product-high-runtime/issue98-after-jit-body.md": {
+      "bytes": 7093,
+      "sha256": "829f474b73d7122411238f03ed19727cf3603f3427256c08e7d19a306a4a80bd"
+    },
+    "out/guarded-product-high-runtime/issue98-after-jit.json": {
+      "bytes": 7380,
+      "sha256": "e86903a442b8dc6c15ee3d82e720fe216fe1218cc622c1c5cd5165cd26bb8a38"
+    },
+    "out/guarded-product-high-runtime/issue98-before-jit.json": {
+      "bytes": 4960,
+      "sha256": "afcf6373c7177c295ba8989911de73f7a620a4d022e5bc112aba7c975f51407d"
+    },
+    "out/guarded-product-high-runtime/jit-comparison.json": {
+      "bytes": 14616,
+      "sha256": "03f9423540b083a90eda1010b5336344a206cdcb1033716f61a0f681c456bb03"
+    },
+    "out/guarded-product-high-runtime/link-probe/inputs-after.json": {
+      "bytes": 130619,
+      "sha256": "a8e462445327a67f6352abbd47d9d2ad87c49613b0ea770be8594c9636d11709"
+    },
+    "out/guarded-product-high-runtime/link-probe/inputs-before.json": {
+      "bytes": 130619,
+      "sha256": "a8e462445327a67f6352abbd47d9d2ad87c49613b0ea770be8594c9636d11709"
+    },
+    "out/guarded-product-high-runtime/link-probe/owner.json": {
+      "bytes": 2504,
+      "sha256": "ea9d8b79eaf501649a12f7d9b262b90173986451203aa4b2421ec92b660b7a2d"
+    },
+    "out/guarded-product-high-runtime/link-probe/samples.jsonl": {
+      "bytes": 360,
+      "sha256": "5cd2607829240a66b81cd4c2e40ffa4ca9c27d6f8ff1f7b824ff3ae164fade42"
+    },
+    "out/guarded-product-high-runtime/link-probe/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/guarded-product-high-runtime/link-probe/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/guarded-product-high-runtime/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "out/guarded-product-high-runtime/preparation.json": {
+      "bytes": 25605,
+      "sha256": "df0f5b36f865f767934dde69ce3c3113e0bc4be31f14d3bcc618fae21f1d3878"
+    },
+    "out/guarded-product-high-runtime/preserve_source.py": {
+      "bytes": 2656,
+      "sha256": "f8e092dc634e0408cf715311229c61dae8499f221ce5bcd17d906d9f189a12ad"
+    },
+    "out/guarded-product-high-runtime/preserved-source.json": {
+      "bytes": 3839,
+      "sha256": "d2b306aa3f1612d456b2b786b8a2fa93b89f7c40125e55f0b235b1273c6ab6fd"
+    },
+    "out/guarded-product-high-runtime/protected-before.json": {
+      "bytes": 21913,
+      "sha256": "3a5cdc2757ea8797747c131838debd0a5c49e0e50eda1b5ee015848d4b842c8f"
+    },
+    "out/guarded-product-high-runtime/recover_inputs.py": {
+      "bytes": 2830,
+      "sha256": "2d31d327376dc34d494a63301081b1df8949600105613de5a65f6c7fa9400bd9"
+    },
+    "out/guarded-product-high-runtime/run_capture.py": {
+      "bytes": 5184,
+      "sha256": "ebc848ba868fad953537e133d5dfe670d3487f15f3f3b5bca5b70fca0d1c5f63"
+    },
+    "out/guarded-product-high-runtime/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "out/guarded-product-high-runtime/short_input_jit_probe.cpp": {
+      "bytes": 4212,
+      "sha256": "853c361fa68e8afd3c532cf7cf5847837f1620cc047bd773a39d0955695241d7"
+    },
+    "out/guarded-product-high-runtime/summarize_jit.py": {
+      "bytes": 4212,
+      "sha256": "df5b708a40136510bef400fe6fb78448cb307902b4557f9104f500e61852fc2d"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-dense-core.spv": {
+      "bytes": 122992,
+      "sha256": "e504b7cc37643860c3d093f553afe578d11cfeb908ff26c3b2c44de1b83706cb"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-dopri_phase-normal.spv": {
+      "bytes": 102048,
+      "sha256": "4dc5188cf7957469a50f60c601ba2fc83afb443c8bba89a5887f5e322319b0b7"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-endpoint-core.spv": {
+      "bytes": 152132,
+      "sha256": "6662f9feb1418c9098ce9d83ec34f0a36b73d86aa266e5cc3fbc079a842145c6"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-endpoint-normal.spv": {
+      "bytes": 158176,
+      "sha256": "3cc21c80ad9aae9dffa0c3f39948005f4526e83eeff0e3914c0f0f4cd30ebeb3"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-transport-normal.spv": {
+      "bytes": 109336,
+      "sha256": "36be8f5beb139bcae2335d44227fa0712d89ff55c52ef7e33ca5409054e555b6"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-dense-core.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-dopri_phase-normal.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-core.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-transport-normal.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/probe.d": {
+      "bytes": 304,
+      "sha256": "c309aa1e6faa2d8ad11c85fc4983d052ced3cb996f5a0ba86b11686d189b8529"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/probe.map": {
+      "bytes": 160543,
+      "sha256": "0a80d27fe78198dd45ff51d42656a70231c6f54f912bd1607bbe5cd6c9af21e4"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/probe.o": {
+      "bytes": 210344,
+      "sha256": "056315299aa96626cae63b4f048012a60cef8b3a65856e2efaae5c330af9745f"
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe": {
+      "bytes": 253224,
+      "sha256": "c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af"
+    }
+  },
+  "preserved_file_modes": {
+    "out/guarded-product-high-runtime/actions.json": "0o644",
+    "out/guarded-product-high-runtime/analyze_capture.py": "0o644",
+    "out/guarded-product-high-runtime/archive_batch.py": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/actual-code-review.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/actual-loaded-module.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/bindings.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/capture-inputs.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/capture-verification.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/capture.gdb": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/inferior-exit.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/inferior.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-00.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-02.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-04.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-06.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-08.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-11.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-3.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-5.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-6.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-7.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/jit-10.elf.live-8.bin": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-00.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-01.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-02.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-03.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-04.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimized-05.ll": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/optimizer-exports.tsv": "0o600",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/owner.json": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/capture_jit.py": "0o644",
+    "out/guarded-product-high-runtime/cleanup.py": "0o644",
+    "out/guarded-product-high-runtime/compile-probe/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/compile-probe/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/compile-probe/owner.json": "0o644",
+    "out/guarded-product-high-runtime/compile-probe/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/compile-probe/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/compile-probe/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/disposition.json": "0o644",
+    "out/guarded-product-high-runtime/independent-lowering-review.json": "0o644",
+    "out/guarded-product-high-runtime/independent-prelaunch-review.json": "0o644",
+    "out/guarded-product-high-runtime/independent-retirement-preflight.json": "0o644",
+    "out/guarded-product-high-runtime/input-recovery.json": "0o644",
+    "out/guarded-product-high-runtime/input-versions/00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153": "0o644",
+    "out/guarded-product-high-runtime/input-versions/022943b3b11c860b049bce41342f1c2594941b7b401d95dfdf235521099fee08": "0o644",
+    "out/guarded-product-high-runtime/input-versions/056315299aa96626cae63b4f048012a60cef8b3a65856e2efaae5c330af9745f": "0o644",
+    "out/guarded-product-high-runtime/input-versions/0a079f958147699f7bb5bf228406a5d878dc2387fe9cdc5cce6f3e35e20380fc": "0o644",
+    "out/guarded-product-high-runtime/input-versions/0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb": "0o644",
+    "out/guarded-product-high-runtime/input-versions/0a80d27fe78198dd45ff51d42656a70231c6f54f912bd1607bbe5cd6c9af21e4": "0o644",
+    "out/guarded-product-high-runtime/input-versions/0ccdfb6d6f5c039465f6d002cf7e4c072d48ac6a2cffc8dd6c748dec31592804": "0o644",
+    "out/guarded-product-high-runtime/input-versions/1021f236227334ded6d1bbbc4bb6f5d933f793d8397c969896cfbdf03ce96223": "0o644",
+    "out/guarded-product-high-runtime/input-versions/15a2a75e8c437b9c99971b5ee10278ab110beef1a56d1d9e5d6759ea140e98ac": "0o644",
+    "out/guarded-product-high-runtime/input-versions/181071b73bc05e54ea60116f654aa6f45c61451a0e422357c638ed1b105131be": "0o644",
+    "out/guarded-product-high-runtime/input-versions/195c607216f8581dbf516346ed38f4c73500cac4b84e18eb0a4fd49931e4cd56": "0o644",
+    "out/guarded-product-high-runtime/input-versions/1c22abb422953442aa12822ea51ac76d1c8be92ed143e0159e0f830776cde2b2": "0o644",
+    "out/guarded-product-high-runtime/input-versions/1d730ea434da5a5595bc6a961d7a9ace83e03703205df9644044b3dca79c362f": "0o644",
+    "out/guarded-product-high-runtime/input-versions/1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76": "0o644",
+    "out/guarded-product-high-runtime/input-versions/1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11": "0o644",
+    "out/guarded-product-high-runtime/input-versions/209e941be9eb2eb9ab36caaa0b81d1c6b36c8f5d7268c24f19e81039137e6485": "0o644",
+    "out/guarded-product-high-runtime/input-versions/2156351fa3dedd04a7381c6ac7a8a26efa2d6fb08b80f8a2d644ccdd653710ae": "0o644",
+    "out/guarded-product-high-runtime/input-versions/236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285": "0o644",
+    "out/guarded-product-high-runtime/input-versions/248c989360783cdc52f3659921de852c2efcc2097253ce58e34443f856412814": "0o644",
+    "out/guarded-product-high-runtime/input-versions/27c2d6dddde34146904c3c64cfcc885a14a351636d6611877368a48e29355c39": "0o644",
+    "out/guarded-product-high-runtime/input-versions/286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d": "0o644",
+    "out/guarded-product-high-runtime/input-versions/36be8f5beb139bcae2335d44227fa0712d89ff55c52ef7e33ca5409054e555b6": "0o644",
+    "out/guarded-product-high-runtime/input-versions/3832cc070ae1716e322105d3b39fb398695e5f031c9d39224cf227a8c2b889f6": "0o755",
+    "out/guarded-product-high-runtime/input-versions/3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf": "0o755",
+    "out/guarded-product-high-runtime/input-versions/3a5cdc2757ea8797747c131838debd0a5c49e0e50eda1b5ee015848d4b842c8f": "0o644",
+    "out/guarded-product-high-runtime/input-versions/3cc21c80ad9aae9dffa0c3f39948005f4526e83eeff0e3914c0f0f4cd30ebeb3": "0o644",
+    "out/guarded-product-high-runtime/input-versions/423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef": "0o644",
+    "out/guarded-product-high-runtime/input-versions/434262395eb82a728bed6e104588e21048efdc03fd8da1ee7f5bd4721fa587d7": "0o644",
+    "out/guarded-product-high-runtime/input-versions/46764ab5b6ca7e353a322054f0bee45d9158a27f3e6a82a2fa4447f2ba9ba268": "0o644",
+    "out/guarded-product-high-runtime/input-versions/4763f3f4e0c4f776ec0d6bda54374c0d86bab570259501e50bc492a4fe9cf978": "0o644",
+    "out/guarded-product-high-runtime/input-versions/4a0664ab6a8a66c685e78d5604b79df330f5710f0c5e2c382536a8325dc4c2a4": "0o644",
+    "out/guarded-product-high-runtime/input-versions/4ad10555621b54a308530b12c04b5bda7a94453399935d46a0cad2b6267086c9": "0o644",
+    "out/guarded-product-high-runtime/input-versions/4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a": "0o644",
+    "out/guarded-product-high-runtime/input-versions/4dc5188cf7957469a50f60c601ba2fc83afb443c8bba89a5887f5e322319b0b7": "0o644",
+    "out/guarded-product-high-runtime/input-versions/52fda0dfd1df95d8d9370c39de67e08b6e37dcfe25a2ef977f8451521159e834": "0o755",
+    "out/guarded-product-high-runtime/input-versions/59994414d0cdec4f678ef91eaaafc44b26b00bca507e4cc7978caaf79f584173": "0o644",
+    "out/guarded-product-high-runtime/input-versions/5bf46ff3e0fb33f25ff7cd98c877a45dbaf423242904a7eb485173f3fed91ca6": "0o644",
+    "out/guarded-product-high-runtime/input-versions/5cf2f82da0bfea84e6d43b9be9c342cb14d5391096bb951518b7223f0de501bf": "0o644",
+    "out/guarded-product-high-runtime/input-versions/64d8a5019d4c294b89fde1193343ea324bbd8603652554e5545f0a01595fa2c5": "0o644",
+    "out/guarded-product-high-runtime/input-versions/6662f9feb1418c9098ce9d83ec34f0a36b73d86aa266e5cc3fbc079a842145c6": "0o644",
+    "out/guarded-product-high-runtime/input-versions/667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0": "0o644",
+    "out/guarded-product-high-runtime/input-versions/683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2": "0o644",
+    "out/guarded-product-high-runtime/input-versions/6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a": "0o644",
+    "out/guarded-product-high-runtime/input-versions/696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb": "0o644",
+    "out/guarded-product-high-runtime/input-versions/6e632fd9a3125db60bbc623719bbc17b0470330321c5b1c57f1ff7190e5551ad": "0o644",
+    "out/guarded-product-high-runtime/input-versions/6f6935b26c962d5b51ef2011332472cfd96ff244a4edc9d47120be6faa70e602": "0o644",
+    "out/guarded-product-high-runtime/input-versions/70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398": "0o644",
+    "out/guarded-product-high-runtime/input-versions/747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056": "0o644",
+    "out/guarded-product-high-runtime/input-versions/7560aadde38e5f4237a47a1ddd5891f9b36768a77a60faae30beee003ac01901": "0o644",
+    "out/guarded-product-high-runtime/input-versions/78d7f4d6f27b7dffc1c84dfe2f83e84aefa6f6ceeffc6ac4bc41f9fbc61cb84e": "0o644",
+    "out/guarded-product-high-runtime/input-versions/7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440": "0o644",
+    "out/guarded-product-high-runtime/input-versions/7a73ccfb5cb9fe03ffa3710cf6fcae518af48fb71696957f5a334c802e8f42a5": "0o644",
+    "out/guarded-product-high-runtime/input-versions/7bcf825cd449892db5105ad2aed91dcf94a27b796426600c765720c584c54dd1": "0o644",
+    "out/guarded-product-high-runtime/input-versions/7d40b02b27d449b6b26cea10ea10aafd0cce5a1e2d7859ea57f34b29fe88923f": "0o644",
+    "out/guarded-product-high-runtime/input-versions/8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a": "0o644",
+    "out/guarded-product-high-runtime/input-versions/81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8": "0o644",
+    "out/guarded-product-high-runtime/input-versions/82073f2f958e8b5a53324a3a87f1ada7baf2610d0a9810d4c03de0f72fa5737a": "0o644",
+    "out/guarded-product-high-runtime/input-versions/8253bcdf7f39fcf8f25e797757808e671d777efc00b0cd1fbbcd9da61b0e98f7": "0o644",
+    "out/guarded-product-high-runtime/input-versions/853c361fa68e8afd3c532cf7cf5847837f1620cc047bd773a39d0955695241d7": "0o644",
+    "out/guarded-product-high-runtime/input-versions/86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892": "0o644",
+    "out/guarded-product-high-runtime/input-versions/8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e": "0o644",
+    "out/guarded-product-high-runtime/input-versions/8cd11f2aa69efdac7c040a2794f8bf1a737405abff53908b737c721d1c4ba65d": "0o644",
+    "out/guarded-product-high-runtime/input-versions/8d0b00978cde2a5a9ec76bee1e16a80efd502bc4db8647174a00a61c9d90f989": "0o644",
+    "out/guarded-product-high-runtime/input-versions/910ad8a63896f722374fdf22951d2a436c74e3ac9677511cc56378296bdf86cc": "0o755",
+    "out/guarded-product-high-runtime/input-versions/916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84": "0o755",
+    "out/guarded-product-high-runtime/input-versions/92c7c0e1a9c3c91691f30f019c2f0f9a46d842669e6d7b61395fc10b3a4f1c5a": "0o644",
+    "out/guarded-product-high-runtime/input-versions/966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7": "0o644",
+    "out/guarded-product-high-runtime/input-versions/96ef9163aee942bdc09e6f4a1acd2fd6b178c03af824c569741440d63ac9f4f4": "0o644",
+    "out/guarded-product-high-runtime/input-versions/981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede": "0o644",
+    "out/guarded-product-high-runtime/input-versions/9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139": "0o644",
+    "out/guarded-product-high-runtime/input-versions/9fa6b0ec4af163a86bc9a9ded3309a5979155fb5ef2d311fdda7fff0e9eee01a": "0o644",
+    "out/guarded-product-high-runtime/input-versions/a03c6db64a7b078b47079de2e234fb9f07e71108742f5087da4ccd4c92d770ec": "0o755",
+    "out/guarded-product-high-runtime/input-versions/a0f410ad093236856eee59c4ff2838dc04d932ea0993400f23ed77d67d85af34": "0o644",
+    "out/guarded-product-high-runtime/input-versions/a1f8808cd8a3a793c59eeed10d78515a08d5aa09b1080ac47281c1a78c04fd68": "0o644",
+    "out/guarded-product-high-runtime/input-versions/a245ed916229583d6fe0b07657b3ed945bc148c28cc08b5266295f620d2b91cc": "0o644",
+    "out/guarded-product-high-runtime/input-versions/a43c43c2fbb643f42572577b6c2514905804f963d186d4d630e184c4015e68a7": "0o644",
+    "out/guarded-product-high-runtime/input-versions/a59efd4792d3343dedea1d26a28f5597abfe3369082deb504c4802a31b014897": "0o644",
+    "out/guarded-product-high-runtime/input-versions/a919146693e71897484c2996beb837273a7a278d1a2afe477bc072f10681f3b0": "0o644",
+    "out/guarded-product-high-runtime/input-versions/a91ead095d2c80520c55a89057bbe10b031a075340442e63f44b310f93883a1b": "0o644",
+    "out/guarded-product-high-runtime/input-versions/ad78a7b22409685ca82e54346c2b9465d697f303e69e74a9c1693bb206e319df": "0o644",
+    "out/guarded-product-high-runtime/input-versions/ada59231b9ce983951fdd3425ebb4c138fa473b7470d5bc9d9285a3f8687f801": "0o644",
+    "out/guarded-product-high-runtime/input-versions/ae6c5a9aecc249fc66e03c16ec6c4385d09d7e12e0ea7694bb831ab4fee8133c": "0o644",
+    "out/guarded-product-high-runtime/input-versions/b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d": "0o644",
+    "out/guarded-product-high-runtime/input-versions/b552c698f9f5c7ff8a6f7c11d8595a0d3e6dc3eaf483843895ec76f418080dfb": "0o644",
+    "out/guarded-product-high-runtime/input-versions/b82bd54edb908605b8142be1a6d242df65501af0e9bb7581cc36ebf4d8a5ecfd": "0o644",
+    "out/guarded-product-high-runtime/input-versions/b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc": "0o644",
+    "out/guarded-product-high-runtime/input-versions/bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0": "0o644",
+    "out/guarded-product-high-runtime/input-versions/c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da": "0o755",
+    "out/guarded-product-high-runtime/input-versions/c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af": "0o755",
+    "out/guarded-product-high-runtime/input-versions/c309aa1e6faa2d8ad11c85fc4983d052ced3cb996f5a0ba86b11686d189b8529": "0o644",
+    "out/guarded-product-high-runtime/input-versions/c3c606139d4f7776efa4dbd4a6b62e30c916b07a0cafd8c3ef173d6f093607e3": "0o644",
+    "out/guarded-product-high-runtime/input-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02": "0o644",
+    "out/guarded-product-high-runtime/input-versions/d04ccee993de5f87dfadb2c27d58b7117645ceba7f11dc9916999fcaf17d2e55": "0o644",
+    "out/guarded-product-high-runtime/input-versions/d06d982abe6e9202aecd22322166be8ba49e68e05889fb6c6faec0daa88530a4": "0o644",
+    "out/guarded-product-high-runtime/input-versions/d2e00d05f3713bb0d5eb9f1a212cca2b34cd789a0c4cc0c529ee77827237383f": "0o644",
+    "out/guarded-product-high-runtime/input-versions/d5a30761bb7e8eadc3345ce3cfbb7567df86159b93e8e1700fd6d34505ad2e20": "0o644",
+    "out/guarded-product-high-runtime/input-versions/d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb": "0o644",
+    "out/guarded-product-high-runtime/input-versions/dd8b93b95adf53a638772061dbe81dc0252d2d8857ae1df774aed78c6a79e0c0": "0o644",
+    "out/guarded-product-high-runtime/input-versions/ddbae2995750875c07bc218d12a062d73f8250678f54dedda7e9be5068781c98": "0o644",
+    "out/guarded-product-high-runtime/input-versions/ddbb3718b8bd9cbd780e5ab08b4503c30a6c4fa0706ebe5d074ed6b596c1714e": "0o644",
+    "out/guarded-product-high-runtime/input-versions/df0f5b36f865f767934dde69ce3c3113e0bc4be31f14d3bcc618fae21f1d3878": "0o644",
+    "out/guarded-product-high-runtime/input-versions/e00576d71d81d3ba0cfa4903c835a44a8723aac96f72f79ff75200b4cff9071b": "0o644",
+    "out/guarded-product-high-runtime/input-versions/e46a122cc3a29feba3b1d0fc2a274b6e46538be016ebe381370c0801bb98b0b8": "0o755",
+    "out/guarded-product-high-runtime/input-versions/e504b7cc37643860c3d093f553afe578d11cfeb908ff26c3b2c44de1b83706cb": "0o644",
+    "out/guarded-product-high-runtime/input-versions/e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f": "0o755",
+    "out/guarded-product-high-runtime/input-versions/e59ef497333a6ede2096a0bd9eeb6ec4023374c16d3a8d7511d1251fb7f9b9df": "0o644",
+    "out/guarded-product-high-runtime/input-versions/e6089d7bb95eee5b545f3770dd69095b0bca47d26701cad145af429561d16306": "0o644",
+    "out/guarded-product-high-runtime/input-versions/e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e": "0o644",
+    "out/guarded-product-high-runtime/input-versions/e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb": "0o644",
+    "out/guarded-product-high-runtime/input-versions/ebc848ba868fad953537e133d5dfe670d3487f15f3f3b5bca5b70fca0d1c5f63": "0o644",
+    "out/guarded-product-high-runtime/input-versions/eca9d075648629256e2b78242676cd2506e0e9180a441aab6efaae00d37ded5d": "0o644",
+    "out/guarded-product-high-runtime/input-versions/edbfd18bfc133c0d77bab7470601e83bd88ed3e578bedce368042f888034e68e": "0o644",
+    "out/guarded-product-high-runtime/input-versions/f48214417757f18793ed6e180cc14ee1d6f04252a518fc7270e8ca1d0b4260fe": "0o644",
+    "out/guarded-product-high-runtime/input-versions/fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0": "0o644",
+    "out/guarded-product-high-runtime/input-versions/ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67": "0o644",
+    "out/guarded-product-high-runtime/issue44-jit-comment-response.json": "0o644",
+    "out/guarded-product-high-runtime/issue44-jit-comment.md": "0o644",
+    "out/guarded-product-high-runtime/issue98-after-jit-body.md": "0o644",
+    "out/guarded-product-high-runtime/issue98-after-jit.json": "0o644",
+    "out/guarded-product-high-runtime/issue98-before-jit.json": "0o644",
+    "out/guarded-product-high-runtime/jit-comparison.json": "0o644",
+    "out/guarded-product-high-runtime/link-probe/inputs-after.json": "0o644",
+    "out/guarded-product-high-runtime/link-probe/inputs-before.json": "0o644",
+    "out/guarded-product-high-runtime/link-probe/owner.json": "0o644",
+    "out/guarded-product-high-runtime/link-probe/samples.jsonl": "0o644",
+    "out/guarded-product-high-runtime/link-probe/stderr.log": "0o644",
+    "out/guarded-product-high-runtime/link-probe/stdout.log": "0o644",
+    "out/guarded-product-high-runtime/owned_guard.py": "0o644",
+    "out/guarded-product-high-runtime/preparation.json": "0o644",
+    "out/guarded-product-high-runtime/preserve_source.py": "0o644",
+    "out/guarded-product-high-runtime/preserved-source.json": "0o644",
+    "out/guarded-product-high-runtime/protected-before.json": "0o644",
+    "out/guarded-product-high-runtime/recover_inputs.py": "0o644",
+    "out/guarded-product-high-runtime/run_capture.py": "0o644",
+    "out/guarded-product-high-runtime/run_owned.py": "0o644",
+    "out/guarded-product-high-runtime/short_input_jit_probe.cpp": "0o644",
+    "out/guarded-product-high-runtime/summarize_jit.py": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-dense-core.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-dopri_phase-normal.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-endpoint-core.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-endpoint-normal.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/candidate-transport-normal.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-dense-core.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-dopri_phase-normal.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-core.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/modules/stock-transport-normal.spv": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/probe.d": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/probe.map": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/probe.o": "0o644",
+    "bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe": "0o755"
+  },
+  "file_count": 497,
+  "preserved_directories": {
+    "out/guarded-product-high-runtime": "0o755",
+    "out/guarded-product-high-runtime/capture-candidate-dense-core": "0o755",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal": "0o755",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core": "0o755",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal": "0o755",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal": "0o755",
+    "out/guarded-product-high-runtime/capture-stock-dense-core": "0o755",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal": "0o755",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core": "0o755",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal": "0o755",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal": "0o755",
+    "out/guarded-product-high-runtime/compile-probe": "0o755",
+    "out/guarded-product-high-runtime/input-versions": "0o755",
+    "out/guarded-product-high-runtime/link-probe": "0o755",
+    "bin/linux-gcc/guarded-product-high-runtime": "0o755",
+    "bin/linux-gcc/guarded-product-high-runtime/modules": "0o755"
+  },
+  "live_directory_identities": {
+    "out/guarded-product-high-runtime": {
+      "device": 2128,
+      "inode": 1647316
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dense-core": {
+      "device": 2128,
+      "inode": 1715750
+    },
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal": {
+      "device": 2128,
+      "inode": 1707110
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core": {
+      "device": 2128,
+      "inode": 1648357
+    },
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal": {
+      "device": 2128,
+      "inode": 1688278
+    },
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal": {
+      "device": 2128,
+      "inode": 1695581
+    },
+    "out/guarded-product-high-runtime/capture-stock-dense-core": {
+      "device": 2128,
+      "inode": 1706990
+    },
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal": {
+      "device": 2128,
+      "inode": 1699793
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core": {
+      "device": 2128,
+      "inode": 1399714
+    },
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal": {
+      "device": 2128,
+      "inode": 1674664
+    },
+    "out/guarded-product-high-runtime/capture-stock-transport-normal": {
+      "device": 2128,
+      "inode": 1700898
+    },
+    "out/guarded-product-high-runtime/compile-probe": {
+      "device": 2128,
+      "inode": 1683505
+    },
+    "out/guarded-product-high-runtime/input-versions": {
+      "device": 2128,
+      "inode": 1642084
+    },
+    "out/guarded-product-high-runtime/link-probe": {
+      "device": 2128,
+      "inode": 1722621
+    },
+    "bin/linux-gcc/guarded-product-high-runtime": {
+      "device": 2128,
+      "inode": 1682636
+    },
+    "bin/linux-gcc/guarded-product-high-runtime/modules": {
+      "device": 2128,
+      "inode": 1682640
+    }
+  },
+  "total_bytes": 425702322,
+  "terminal_owner_receipts": [
+    "out/guarded-product-high-runtime/capture-candidate-dense-core/owner.json",
+    "out/guarded-product-high-runtime/capture-candidate-dopri_phase-normal/owner.json",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-core/owner.json",
+    "out/guarded-product-high-runtime/capture-candidate-endpoint-normal/owner.json",
+    "out/guarded-product-high-runtime/capture-candidate-transport-normal/owner.json",
+    "out/guarded-product-high-runtime/capture-stock-dense-core/owner.json",
+    "out/guarded-product-high-runtime/capture-stock-dopri_phase-normal/owner.json",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-core/owner.json",
+    "out/guarded-product-high-runtime/capture-stock-endpoint-normal/owner.json",
+    "out/guarded-product-high-runtime/capture-stock-transport-normal/owner.json",
+    "out/guarded-product-high-runtime/compile-probe/owner.json",
+    "out/guarded-product-high-runtime/link-probe/owner.json"
+  ],
+  "protected_payloads_unchanged": 114,
+  "scope": "Exact local raw ordinary software-driver compiler/JIT recovery. No retained arithmetic, runtime-benefit, full qualification, production adoption or remote binary backup claim."
+}

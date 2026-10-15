@@ -1,0 +1,79 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/g++-14",
+    "-DSIRIUS_CONTRACT_MODE=2",
+    "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+    "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+    "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+    "-I/home/astra/.project/Sirius/src/sirius/..",
+    "-O3",
+    "-DNDEBUG",
+    "-std=c++2c",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wno-missing-field-initializers",
+    "-Werror",
+    "-c",
+    "/home/astra/.project/Sirius/out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.o",
+    "-MMD",
+    "-MF",
+    "/home/astra/.project/Sirius/bin/linux-gcc/guarded-product-high-runtime/probe.d"
+  ],
+  "boot_id": "e864c8ea-8d20-4375-9dc8-60ed6ca8f555",
+  "case": "compile-probe",
+  "child_exit": 0,
+  "child_pid": 3357422,
+  "child_start_ticks": "32697937",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 3357418,
+    "pid": 3357418,
+    "ppid": 2446,
+    "rss_kib": 20712,
+    "session": 3357418,
+    "start_ticks": "32697911",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "Compile original short-input compiler probe using current exact preset flags; no retained arithmetic or qualification verdict.",
+  "minimum_sampled_available_kib": 19951852,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 3357422,
+      "saved_start_ticks": "32697937"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 3357423,
+      "saved_start_ticks": "32697937"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 265112,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Compile original short-input compiler probe using current exact preset flags; no retained arithmetic or qualification verdict.",
+  "source": {
+    "revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 3.0796611909754574,
+  "whole_inputs_unchanged": true
+}

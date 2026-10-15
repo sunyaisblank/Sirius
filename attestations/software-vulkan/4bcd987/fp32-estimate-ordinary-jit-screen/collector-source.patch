@@ -1,0 +1,199 @@
+--- a/out/preserve-finite-result.py
++++ b/out/preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,187 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'divide-fp32-estimate-ordinary-jit-screen':
++    import stat
++    work = root / 'out/portable-divide-fp32-estimate-jit'
++    products = root / 'bin/linux-gcc/portable-divide-fp32-estimate-jit'
++    bundle = root / 'attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen'
++    tag = 'evidence/issue-44-fp32-estimate-ordinary-jit-screen'
++    load = lambda path: json.loads(path.read_text())
++    def jit_record(path):
++        return dict(pin(path), resolved_path=str(path.resolve(strict=True)),
++                    mode=stat.S_IMODE(path.stat().st_mode),
++                    symlink_target=os.readlink(path) if path.is_symlink() else None)
++    def jit_matches(path, expected):
++        actual = jit_record(path)
++        assert {key:actual[key] for key in expected if key in actual} == expected, str(path)
++    inputs = load(work/'inputs.json')
++    acceptance = load(work/'capture-acceptance.json')
++    independent = load(work/'independent-terminal-review.json')
++    assert inputs['operator_revision'] == independent['source_revision'] == parent
++    assert acceptance['passed'] is True and independent['passed'] is True
++    reviews = {}
++    for name in ('independent-source-review.json','root-source-admission.json',
++                 'independent-terminal-review.json','root-terminal-admission.json',
++                 'root-cost-premise-admission.json'):
++        assert load(work/name)['passed'] is True, name
++        reviews[name] = pin(work/name)
++    assert reviews['independent-terminal-review.json'] == {'bytes':20099,'sha256':'b20dfa1e1ff2c7f6234f5bb368e6c258995ca4d0a8986ad650228bafc39f23b9'}
++    assert reviews['root-terminal-admission.json'] == {'bytes':1933,'sha256':'bdef09dfd62c0d768c57da9eeff77aa3792dc963b2dcc5d1a264e812124a13b3'}
++    assert reviews['root-cost-premise-admission.json'] == {'bytes':2351,'sha256':'641a304f3f3d0b8e7c40d00cbf24b4a967eb0eebb061a8ed3f49740bde429c40'}
++    folder = work/'capture-candidate-endpoint-normal'
++    owner = load(folder/'owner.json')
++    actions = load(work/'capture-actions.json')
++    assert list(actions) == ['capture-candidate-endpoint-normal']
++    action = actions['capture-candidate-endpoint-normal']
++    assert owner['status'] == 'terminal' and owner['passed'] is True and owner['child_exit'] == 0
++    assert owner['source'] == {'revision':parent,'status':''} and action['revision'] == parent
++    assert owner['source_unchanged'] and owner['whole_inputs_unchanged']
++    assert owner['stop_reason'] is None and not owner['cleanup_errors'] and not owner['remaining_owned_processes']
++    assert len(owner['observed_births']) == 4 and all(row['absent'] for row in owner['observed_births'])
++    assert owner['argv'] == [value.replace('{folder}',str(folder)) for value in action['argv']]
++    assert owner['limits'] == action['limits'] == inputs['limits'] == {'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++    assert owner['wall_seconds'] < 300 and owner['peak_sampled_rss_kib'] <= 4194304 and owner['minimum_sampled_available_kib'] >= 2097152
++    before = load(folder/'inputs-before.json')
++    assert before == load(folder/'inputs-after.json') and len(before) == 939
++    assert {str(root/name) for name in before} == set(action['frozen_inputs'])
++    for name, expected in before.items(): jit_matches(root/name,expected)
++    frozen = load(work/'source-freeze.json')['pins']
++    assert len(frozen) == 933
++    for name, expected in frozen.items(): jit_matches(Path(name),expected)
++    context = load(work/'runtime-context.json')
++    assert context['revision'] == parent
++    for key, name in [('source_freeze','source-freeze.json'),('preparation','preparation.json'),
++                      ('capture_actions','capture-actions.json'),('reuse_acceptance','reuse-acceptance.json')]:
++        assert context[key] == jit_record(work/name)
++    assert load(work/'capture-actions.unpinned.json')['capture-candidate-endpoint-normal']['revision'] == 'PENDING_OPERATOR_CLEAN_CONTEXT'
++    assert json.dumps(load(work/'capture-actions.unpinned.json')).replace('PENDING_OPERATOR_CLEAN_CONTEXT',parent) == json.dumps(actions)
++    assert list(products.iterdir()) == [products/'short_input_jit_probe']
++    assert context['host'] == jit_record(products/'short_input_jit_probe')
++    assert pin(products/'short_input_jit_probe') == inputs['canary_identity'] == {'bytes':253224,'sha256':'c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af'}
++    assert context['modules']['candidate'] == jit_record(work/'module-inputs/candidate-endpoint-normal.spv')
++    assert pin(work/'module-inputs/candidate-endpoint-normal.spv') == inputs['candidate_module'] == {'bytes':152844,'sha256':'0535c0f6a689d2d59896543882e1f5300fdd67fe70509b7dda0996f59ffd03d9'}
++    for key, name in [('candidate_owner','owner.json'),('candidate_code_review','actual-code-review.json'),('candidate_feature_review','feature-review.json')]:
++        assert acceptance[key] == jit_record(folder/name)
++    code = load(folder/'actual-code-review.json')
++    assert independent['actual_module_to_called_code']['one_completed_dispatch'] == code['single_completed_dispatch']
++    assert code['single_completed_dispatch']['captured_ns'] == 1792029865229152350
++    assert code['actual_loaded_module'] == load(folder/'actual-loaded-module.json')
++    assert {key:code['actual_loaded_module'][key] for key in ('bytes','sha256')} == inputs['candidate_module']
++    assert code['ordinary_pipelines'] == inputs['ordinary_pipelines']
++    assert pin(folder/code['ordinary_ir_export']['path']) == {key:code['ordinary_ir_export'][key] for key in ('bytes','sha256')}
++    assert len(code['linked_section_review']['live_sections']) == 6
++    assert all(row['all_defined_relocations_and_uncovered_bytes_exact'] for row in code['linked_section_review']['live_sections'])
++    bindings = load(folder/'bindings.json')
++    events = [row for row in bindings['jit_events'] if row.get('file') == code['actual_entry']['file']]
++    assert len(events) == 1
++    event = events[0]
++    assert pin(folder/event['file']) == {'bytes':event['object_bytes'],'sha256':event['sha256']}
++    for row in event['live_sections_after_pointer_lookup']:
++        assert pin(folder/row['path']) == {key:row[key] for key in ('bytes','sha256')}
++    features = load(folder/'feature-review.json')
++    assert features == load(folder/'feature-verification.json') and len(features['features']) == 55
++    assert features['features']['shaderFloat64'] == 1 and features['features']['shaderInt64'] == 0
++    assert all(value == 0 for name,value in features['features'].items() if name != 'shaderFloat64')
++    assert features['successful_logical_device_used_for_actual_complete_shader']
++    assert features['queue_family'] == 0 and features['enabled_extensions'] == [] and features['feature_chain_values'] == []
++    assert acceptance['fresh_complete55_feature_queue_extension_order_and_chain_recorded']
++    assert acceptance['fresh_inferior_and_called_JIT_maps_join_all_three_provider_files']
++    assert acceptance['canonical_stock_raw_feature_arguments_available'] is False
++    reuse = load(work/'reuse-acceptance.json')
++    assert reuse['passed'] and reuse['stock'] == acceptance['stock_receipt'] and reuse['graph'] == acceptance['graph_receipt']
++    chain = acceptance['graph_receipt']
++    assert chain['original_failed_passed'] is False and chain['original_failed_child_exit'] == 1
++    assert chain['graph_passed'] and chain['policy_passed'] and chain['arithmetic_execution'] is False
++    for key in ('original_failed_owner','policy_owner','policy_result','policy_acceptance',
++                'graph_owner','graph_result','graph_acceptance','graph_output_seal','graph_terminal_review'):
++        jit_matches(Path(chain[key]['resolved_path']),chain[key])
++    assert load(Path(chain['original_failed_owner']['resolved_path']))['passed'] is False
++    assert load(Path(chain['original_failed_owner']['resolved_path']))['child_exit'] == 1
++    cost_path = work/'cost-review/cost-premise-review.json'
++    assert pin(cost_path) == {'bytes':76283,'sha256':'d1ada19a47e5f8ac4859f6a90718af23733e3e70d84de39aa36bbcfcc1b0d6ca'}
++    cost = load(cost_path)
++    assert cost['schema'] == 'sirius-fp32-estimate-ordinary-actual-cost-premise-review-v1'
++    assert cost['passed'] and cost['decision'] == 'COST_PREMISE_SURVIVES_UNPROVEN'
++    assert cost['no_arithmetic_or_benefit_admission'] and not cost['production_adopted']
++    assert not cost['performance_or_coldness_or_hit_rate_claim'] and not cost['retained_arithmetic_executed_by_canary']
++    assert len(cost['input_pins']) == 59 and len(cost['all_six_Divide_clones']) == 6
++    for name, expected in cost['input_pins'].items(): jit_matches(Path(name),expected)
++    assert cost['actual_called_object_join']['actual_entry'] == code['actual_entry']
++    assert cost['actual_called_object_join']['called_object'] == jit_record(folder/event['file'])
++    assert cost['actual_called_object_join']['ordinary_pipelines'] == code['ordinary_pipelines']
++    stock = load(work/'stock-reuse-inputs.json')
++    archive = Path(stock['archive'])
++    manifest_path = archive/stock['manifest_name']
++    assert pin(manifest_path)['sha256'] == stock['manifest_sha256']
++    manifest = load(manifest_path)
++    assert manifest['source_revision'] == inputs['product_revision']
++    assert manifest['evidence_commit'] == stock['evidence_commit'] and manifest['evidence_tag'] == stock['evidence_tag']
++    prefix = str(archive/'files') + '/'
++    selected = {name[len(prefix):] for name in frozen if name.startswith(prefix) and name[len(prefix):] in manifest['files']}
++    history = Path(stock['historical_work'])
++    raw_prefix = str((history/'capture-stock-endpoint-normal').relative_to(archive/'files')) + '/'
++    assert len(selected) == acceptance['stock_receipt']['selected_manifest_members'] == 56
++    assert len([name for name in selected if name.startswith(raw_prefix)]) == 33
++    assert {str(path.relative_to(archive/'files')) for path in (history/'capture-stock-endpoint-normal').iterdir() if path.is_file()} == {name for name in selected if name.startswith(raw_prefix)}
++    lookup = {(row['original_key'],row['pin']['sha256']):row for row in stock['joins']}
++    assert len(lookup) == len(stock['joins']) == acceptance['stock_receipt']['matched_historical_input_versions'] == 638
++    for phase,count in [('compile-probe',545),('link-probe',547),('capture-stock-endpoint-normal',633)]:
++        old = load(history/phase/'owner.json')
++        assert old['passed'] and old['child_exit'] == 0 and old['whole_inputs_unchanged'] and old['source_unchanged']
++        assert not old['cleanup_errors'] and not old['remaining_owned_processes']
++        old_before = load(history/phase/'inputs-before.json')
++        assert old_before == load(history/phase/'inputs-after.json') and len(old_before) == count
++        for name, expected in old_before.items():
++            row = lookup[(name,expected['sha256'])]
++            assert row['pin'] == expected and phase in row['phases']
++            assert pin(Path(row['actual'])) == {key:expected[key] for key in ('bytes','sha256')}
++    required = {str((history/name).relative_to(archive/'files')) for name in ('input-recovery.json','preparation.json','short_input_jit_probe.cpp')}
++    for phase in stock['phases']:
++        required.update(str((history/phase/name).relative_to(archive/'files')) for name in ('owner.json','inputs-before.json','inputs-after.json'))
++    required.update(row['manifest_member'] for row in stock['joins'] if row['method'] in ('whole_byte_manifest_archived_owned_file','exact_original_input_recovery'))
++    assert required <= selected
++    mapping = [(work,'files/out/'+work.name),(products/'short_input_jit_probe','files/bin/linux-gcc/'+products.name+'/short_input_jit_probe')]
++    selected_records = []
++    for name in sorted(selected):
++        path = archive/'files'/name
++        assert not path.is_symlink() and pin(path) == manifest['files'][name]
++        relative = 'stock-comparison/files/' + name
++        mapping.append((path,relative))
++        selected_records.append({'archive_member':name,'source':str(path),'preserved_relative':relative,**jit_record(path)})
++    mapping.append((manifest_path,'stock-comparison/'+stock['manifest_name']))
++    canonical_records = []
++    old_link = load(history/'link-probe/inputs-before.json')
++    for name in ('bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o','bin/linux-gcc/src/sirius/libsirius_base.a'):
++        row = lookup[(name,old_link[name]['sha256'])]
++        path = Path(row['actual'])
++        assert pin(path) == {key:old_link[name][key] for key in ('bytes','sha256')}
++        relative = 'stock-comparison/canonical-producer/' + Path(name).name
++        if not any(source == path for source,_ in mapping): mapping.append((path,relative))
++        else: relative = next(destination for source,destination in mapping if source == path)
++        canonical_records.append({'original_input':name,'source':str(path),'preserved_relative':relative,**jit_record(path)})
++    assert canonical_records[0]['sha256'] == acceptance['stock_receipt']['canonical_device_object']['sha256']
++    mapping.append((root/'out/preserve-finite-result-fp32-jit-screen.patch','collector-source.patch'))
++    summary = {'schema':'sirius-fp32-estimate-ordinary-called-jit-screen-evidence-v1','passed':True,
++        'source_revision':parent,'product_revision':inputs['product_revision'],
++        'capture_acceptance':pin(work/'capture-acceptance.json'),'owner':pin(folder/'owner.json'),'reviews':reviews,
++        'static_inputs_verified':933,'whole_owned_inputs_verified':939,'stock_distinct_input_versions':638,
++        'candidate_host':context['host'],'candidate_module':context['modules']['candidate'],
++        'actual_code_review':pin(folder/'actual-code-review.json'),'feature_review':pin(folder/'feature-review.json'),
++        'ordinary_cost_review':{'receipt':pin(cost_path),'schema':cost['schema'],'decision':cost['decision'],
++            'six_source_IR_native_loci':6,'input_pins':59,'premise_survives':True,'benefit_hypothesis_proven':False},
++        'selected_stock_closure':{'original_archive':str(archive),'original_commit':stock['evidence_commit'],
++            'original_tag':stock['evidence_tag'],'original_manifest':jit_record(manifest_path),
++            'manifested_files':selected_records,'canonical_producer_files':canonical_records,
++            'manifested_member_count':56,'stock_raw_member_count':33,
++            'scope':'Only these selected stock raw comparison, compile/link/capture ownership, producer and recovery bytes enter this new Git evidence tree. Modes record the actual preserved raw files; generic Git100644 is not original executable-mode provenance. Remote availability requires root push/tag verification. No whole older multicapture archive or current toolchain-library backup claim.'},
++        'original_failed_compiler_owner_passed':False,'original_failed_child_exit':1,
++        'separate_policy_passed':True,'separate_graph_passed':True,'stock_recaptured':False,'host_recompiled':False,
++        'timestamp_correction':independent['receipt_correction'],
++        'retained_arithmetic_executed':False,'benefit_trial_executed':False,'benefit_trial_failed':False,
++        'performance_or_hitrate_or_production_adoption_claimed':False,'qualification_claimed':False,
++        'scope':'One candidate-only original short-input ordinary compiler/callable capture. Actual full32-only shader, fresh55features/Int64zero/unusedFloat64, original pipelines/export/lookup/called entry, all6allocatedsections/definedrelocs/uncoveredbytes and three-provider birth/session/dev/inode maps accepted. Undefined callbacks consistency only; old stock raw55 capture absent. Cost premise survives unproven, with countercosts preserved; next action is root source decision, not current arithmetic or benefit admission.'}
++    message = 'Preserve FP32 estimate ordinary called-code capture, surviving unproven cost premise and selected recoverable stock closure (#44)\n'
+ elif kind == 'divide-fp32-estimate-graph-review':
+     import stat
+     work = root / 'out/portable-divide-fp32-estimate-graph-review'

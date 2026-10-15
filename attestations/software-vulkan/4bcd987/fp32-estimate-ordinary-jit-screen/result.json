@@ -1,0 +1,695 @@
+{
+  "actual_code_review": {
+    "bytes": 4352,
+    "sha256": "e61e1ca9555426f80a7c67711b4dfd45b2f0caf9777bfd4e805260f764739890"
+  },
+  "benefit_trial_executed": false,
+  "benefit_trial_failed": false,
+  "candidate_host": {
+    "bytes": 253224,
+    "mode": 493,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-jit/short_input_jit_probe",
+    "sha256": "c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af",
+    "symlink_target": null
+  },
+  "candidate_module": {
+    "bytes": 152844,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/module-inputs/candidate-endpoint-normal.spv",
+    "sha256": "0535c0f6a689d2d59896543882e1f5300fdd67fe70509b7dda0996f59ffd03d9",
+    "symlink_target": null
+  },
+  "capture_acceptance": {
+    "bytes": 11251,
+    "sha256": "dde011b73f3f7c3eac8d6090987ac7f6f429e4a48e506d3d451cca181e61bae5"
+  },
+  "feature_review": {
+    "bytes": 2161,
+    "sha256": "759cdfab0f7a6ae5474bab88db568c25313f9aa578c409b725eff29e09519b09"
+  },
+  "host_recompiled": false,
+  "ordinary_cost_review": {
+    "benefit_hypothesis_proven": false,
+    "decision": "COST_PREMISE_SURVIVES_UNPROVEN",
+    "input_pins": 59,
+    "premise_survives": true,
+    "receipt": {
+      "bytes": 76283,
+      "sha256": "d1ada19a47e5f8ac4859f6a90718af23733e3e70d84de39aa36bbcfcc1b0d6ca"
+    },
+    "schema": "sirius-fp32-estimate-ordinary-actual-cost-premise-review-v1",
+    "six_source_IR_native_loci": 6
+  },
+  "original_failed_child_exit": 1,
+  "original_failed_compiler_owner_passed": false,
+  "owner": {
+    "bytes": 7614,
+    "sha256": "ff6f1fe7212d9a78bed5ff080c45cbe80f6555ce00a583f1b3d881770a1f4c75"
+  },
+  "passed": true,
+  "performance_or_hitrate_or_production_adoption_claimed": false,
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false,
+  "retained_arithmetic_executed": false,
+  "reviews": {
+    "independent-source-review.json": {
+      "bytes": 9926,
+      "sha256": "97c305faa50059c8761028d7088d7d0ee1e9eca6ff0b067cc2a159293f7a2691"
+    },
+    "independent-terminal-review.json": {
+      "bytes": 20099,
+      "sha256": "b20dfa1e1ff2c7f6234f5bb368e6c258995ca4d0a8986ad650228bafc39f23b9"
+    },
+    "root-cost-premise-admission.json": {
+      "bytes": 2351,
+      "sha256": "641a304f3f3d0b8e7c40d00cbf24b4a967eb0eebb061a8ed3f49740bde429c40"
+    },
+    "root-source-admission.json": {
+      "bytes": 2214,
+      "sha256": "99ab6a0d0b4fe7717d8424dcb5d2d59e450e1f7135b66df4c644c385d2c647f0"
+    },
+    "root-terminal-admission.json": {
+      "bytes": 1933,
+      "sha256": "bdef09dfd62c0d768c57da9eeff77aa3792dc963b2dcc5d1a264e812124a13b3"
+    }
+  },
+  "schema": "sirius-fp32-estimate-ordinary-called-jit-screen-evidence-v1",
+  "scope": "One candidate-only original short-input ordinary compiler/callable capture. Actual full32-only shader, fresh55features/Int64zero/unusedFloat64, original pipelines/export/lookup/called entry, all6allocatedsections/definedrelocs/uncoveredbytes and three-provider birth/session/dev/inode maps accepted. Undefined callbacks consistency only; old stock raw55 capture absent. Cost premise survives unproven, with countercosts preserved; next action is root source decision, not current arithmetic or benefit admission.",
+  "selected_stock_closure": {
+    "canonical_producer_files": [
+      {
+        "bytes": 291264,
+        "mode": 420,
+        "original_input": "bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+        "preserved_relative": "stock-comparison/canonical-producer/vulkan_device.cpp.o",
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+        "sha256": "181071b73bc05e54ea60116f654aa6f45c61451a0e422357c638ed1b105131be",
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+        "symlink_target": null
+      },
+      {
+        "bytes": 35862,
+        "mode": 420,
+        "original_input": "bin/linux-gcc/src/sirius/libsirius_base.a",
+        "preserved_relative": "stock-comparison/canonical-producer/libsirius_base.a",
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+        "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76",
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+        "symlink_target": null
+      }
+    ],
+    "manifested_files": [
+      {
+        "archive_member": "bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv",
+        "bytes": 151400,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv",
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/modules/stock-endpoint-normal.spv",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "bin/linux-gcc/guarded-product-high-runtime/probe.d",
+        "bytes": 304,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/probe.d",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/probe.d",
+        "sha256": "c309aa1e6faa2d8ad11c85fc4983d052ced3cb996f5a0ba86b11686d189b8529",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/probe.d",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "bin/linux-gcc/guarded-product-high-runtime/probe.map",
+        "bytes": 160543,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/probe.map",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/probe.map",
+        "sha256": "0a80d27fe78198dd45ff51d42656a70231c6f54f912bd1607bbe5cd6c9af21e4",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/probe.map",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "bin/linux-gcc/guarded-product-high-runtime/probe.o",
+        "bytes": 210344,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/probe.o",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/probe.o",
+        "sha256": "056315299aa96626cae63b4f048012a60cef8b3a65856e2efaae5c330af9745f",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/probe.o",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe",
+        "bytes": 253224,
+        "mode": 493,
+        "preserved_relative": "stock-comparison/files/bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe",
+        "sha256": "c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/bin/linux-gcc/guarded-product-high-runtime/short_input_jit_probe",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/actions.json",
+        "bytes": 65065,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/actions.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/actions.json",
+        "sha256": "92c7c0e1a9c3c91691f30f019c2f0f9a46d842669e6d7b61395fc10b3a4f1c5a",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/actions.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json",
+        "bytes": 4344,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json",
+        "sha256": "3e940e57eda3be646422b9e6ae632dc56ef283b3f48d8c32e140a6107a74dbaa",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-loaded-module.json",
+        "bytes": 154,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-loaded-module.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-loaded-module.json",
+        "sha256": "c7b40b07ab72a48cdd9e1da2356f36c601d20de0a2325149e2a9f2b762e76d61",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-loaded-module.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/bindings.json",
+        "bytes": 59349,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/bindings.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/bindings.json",
+        "sha256": "d1d48b7a6d44420238baa92d68692252cc0b8e76481c17a1d47648a617d41a99",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/bindings.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-inputs.json",
+        "bytes": 866,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-inputs.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-inputs.json",
+        "sha256": "e1b9641461ed774022fa0fbf8f9df111d52208b0445248edda59ce8b2fb29a0f",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-inputs.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-verification.json",
+        "bytes": 1300,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-verification.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-verification.json",
+        "sha256": "f8088801d508c84d714b388ed44a83c3f5414e2f3e2a6f8ca0c67a88ed4d10ff",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture-verification.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture.gdb",
+        "bytes": 507,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture.gdb",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture.gdb",
+        "sha256": "4fe141c9937c6542125d95cbe55440d5ebf722afa614b369f2317985b6ab8324",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/capture.gdb",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior-exit.json",
+        "bytes": 17,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior-exit.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior-exit.json",
+        "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior-exit.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior.json",
+        "bytes": 17,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior.json",
+        "sha256": "1196a4a9f328b4b3bb54495cd9de924ee4f02200afefdd7c11cabdbaa77b70f4",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inferior.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-after.json",
+        "bytes": 150114,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-after.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-after.json",
+        "sha256": "d364cef7461e07dcacaa926d5043e704e02ee6ea3e4acb190efcc7ad75b562f8",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-after.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-before.json",
+        "bytes": 150114,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-before.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-before.json",
+        "sha256": "d364cef7461e07dcacaa926d5043e704e02ee6ea3e4acb190efcc7ad75b562f8",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/inputs-before.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-00.elf",
+        "bytes": 904,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-00.elf",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-00.elf",
+        "sha256": "91774225911f9851791eef880f86fe09d9ff11dc743fde41052596b1567f5e52",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-00.elf",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-02.elf",
+        "bytes": 888,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-02.elf",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-02.elf",
+        "sha256": "1f443ccea1ff7d0db4721622609a7f5d1116ba6a1b5a9674ad8968952aa13f78",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-02.elf",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-04.elf",
+        "bytes": 1064,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-04.elf",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-04.elf",
+        "sha256": "d6eaad653624aeab0f6f4a1870151eef69e735b970682464c79a6266e5182ffd",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-04.elf",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-06.elf",
+        "bytes": 1064,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-06.elf",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-06.elf",
+        "sha256": "4c4f0e3dea70d37762afb12a98c297a83bcf3248adc28621c8ca7ecedd7eebdd",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-06.elf",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-08.elf",
+        "bytes": 1064,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-08.elf",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-08.elf",
+        "sha256": "9d41240cf154ea51602cd2f60f38020f04baec9bb4f41f028be3982ea3a47288",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-08.elf",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf",
+        "bytes": 1049832,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf",
+        "sha256": "58c4804b40c66140fed74b37cbdb125fafd978f619dcc219317d33ebffc022bb",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-11.bin",
+        "bytes": 256,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-11.bin",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-11.bin",
+        "sha256": "13d9dadffd2f17f2f02e6994f9bd29f0c89cda51781ccf83691713907b799bc1",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-11.bin",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-3.bin",
+        "bytes": 922597,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-3.bin",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-3.bin",
+        "sha256": "0c2f9b9f60d28112a0f8745f9dcc9b01051df41fd156ccb3f5fe94668944b13c",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-3.bin",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-5.bin",
+        "bytes": 96,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-5.bin",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-5.bin",
+        "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-5.bin",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-6.bin",
+        "bytes": 48,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-6.bin",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-6.bin",
+        "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-6.bin",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-7.bin",
+        "bytes": 452,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-7.bin",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-7.bin",
+        "sha256": "f92c3d7cb3ec41ede57d3661f360f4bc0bcf16b62bcac1295fadd6d2b91d8be2",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-7.bin",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-8.bin",
+        "bytes": 80,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-8.bin",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-8.bin",
+        "sha256": "983e953e0abe32b097a9efd960af4c706f6a0b050ece3bc607604a8a2b3a6dcf",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf.live-8.bin",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-00.ll",
+        "bytes": 808,
+        "mode": 384,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-00.ll",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-00.ll",
+        "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-00.ll",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-01.ll",
+        "bytes": 778,
+        "mode": 384,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-01.ll",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-01.ll",
+        "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-01.ll",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-02.ll",
+        "bytes": 1038,
+        "mode": 384,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-02.ll",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-02.ll",
+        "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-02.ll",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-03.ll",
+        "bytes": 1008,
+        "mode": 384,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-03.ll",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-03.ll",
+        "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-03.ll",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-04.ll",
+        "bytes": 1010,
+        "mode": 384,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-04.ll",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-04.ll",
+        "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-04.ll",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll",
+        "bytes": 13237373,
+        "mode": 384,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll",
+        "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimizer-exports.tsv",
+        "bytes": 218,
+        "mode": 384,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimizer-exports.tsv",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimizer-exports.tsv",
+        "sha256": "679073e2cfe728fd2c217a75f5bf10bbf66ccecac7de673ad0a0561fc82c7767",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimizer-exports.tsv",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/owner.json",
+        "bytes": 3570,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/owner.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/owner.json",
+        "sha256": "09642035b4d77a71a51e584a016315a43430655badb824456466bd9abc3c266c",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/owner.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/samples.jsonl",
+        "bytes": 499502,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/samples.jsonl",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/samples.jsonl",
+        "sha256": "8e8d1460bbdd69e782b158ad2cada01d21c2094b7051d329d9c994477e73cfb1",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/samples.jsonl",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/stderr.log",
+        "bytes": 155,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/stderr.log",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/stderr.log",
+        "sha256": "957de6e555a33d5a0046795b46cebd743470107e012fb5f3ac7ab5d09ba1acf8",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/stderr.log",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture-stock-endpoint-normal/stdout.log",
+        "bytes": 793,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/stdout.log",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/stdout.log",
+        "sha256": "e46e4cc049bc1310dd2ffacb475c41dceab9c3cd8badee20fa98261d9b345644",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/stdout.log",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/capture_jit.py",
+        "bytes": 15844,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/capture_jit.py",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture_jit.py",
+        "sha256": "eca9d075648629256e2b78242676cd2506e0e9180a441aab6efaae00d37ded5d",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture_jit.py",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/compile-probe/inputs-after.json",
+        "bytes": 130086,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/compile-probe/inputs-after.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/compile-probe/inputs-after.json",
+        "sha256": "05a8671505b1bb0404a3cb0daf89c921b0a4b2c658d9cc648f57f6fd1f5f17f9",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/compile-probe/inputs-after.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/compile-probe/inputs-before.json",
+        "bytes": 130086,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/compile-probe/inputs-before.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/compile-probe/inputs-before.json",
+        "sha256": "05a8671505b1bb0404a3cb0daf89c921b0a4b2c658d9cc648f57f6fd1f5f17f9",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/compile-probe/inputs-before.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/compile-probe/owner.json",
+        "bytes": 2256,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/compile-probe/owner.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/compile-probe/owner.json",
+        "sha256": "6ca687511d6e31132dacf6da6a2c4a3a6a8f852267e799bd527fbb2875714c49",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/compile-probe/owner.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/input-recovery.json",
+        "bytes": 51359,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/input-recovery.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-recovery.json",
+        "sha256": "9cde63a87586ce6e3753671c6e3b99acb16caf269766dd41db75daf1b6b3b874",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-recovery.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/input-versions/236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285",
+        "bytes": 4033,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/input-versions/236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-versions/236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285",
+        "sha256": "236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-versions/236c797664706159ce3a0ee86521bb007afd9b059dd38fea9dfc11e8815c0285",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/input-versions/966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7",
+        "bytes": 14024,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/input-versions/966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-versions/966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7",
+        "sha256": "966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-versions/966fc171a949852a606efdf44d255f6f91b35c16328f5405c1b24743b6708ea7",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/input-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
+        "bytes": 60385,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/input-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
+        "sha256": "c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/input-versions/c7d8e854b5219e3df5d0da448d90a5d8e6f07a6cf11f216614085fc3d460de02",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/link-probe/inputs-after.json",
+        "bytes": 130619,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/link-probe/inputs-after.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/link-probe/inputs-after.json",
+        "sha256": "a8e462445327a67f6352abbd47d9d2ad87c49613b0ea770be8594c9636d11709",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/link-probe/inputs-after.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/link-probe/inputs-before.json",
+        "bytes": 130619,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/link-probe/inputs-before.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/link-probe/inputs-before.json",
+        "sha256": "a8e462445327a67f6352abbd47d9d2ad87c49613b0ea770be8594c9636d11709",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/link-probe/inputs-before.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/link-probe/owner.json",
+        "bytes": 2504,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/link-probe/owner.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/link-probe/owner.json",
+        "sha256": "ea9d8b79eaf501649a12f7d9b262b90173986451203aa4b2421ec92b660b7a2d",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/link-probe/owner.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/owned_guard.py",
+        "bytes": 20791,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/owned_guard.py",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/owned_guard.py",
+        "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/owned_guard.py",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/preparation.json",
+        "bytes": 25605,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/preparation.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/preparation.json",
+        "sha256": "df0f5b36f865f767934dde69ce3c3113e0bc4be31f14d3bcc618fae21f1d3878",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/preparation.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/protected-before.json",
+        "bytes": 21913,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/protected-before.json",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/protected-before.json",
+        "sha256": "3a5cdc2757ea8797747c131838debd0a5c49e0e50eda1b5ee015848d4b842c8f",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/protected-before.json",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/run_capture.py",
+        "bytes": 5184,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/run_capture.py",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/run_capture.py",
+        "sha256": "ebc848ba868fad953537e133d5dfe670d3487f15f3f3b5bca5b70fca0d1c5f63",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/run_capture.py",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/run_owned.py",
+        "bytes": 12451,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/run_owned.py",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/run_owned.py",
+        "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/run_owned.py",
+        "symlink_target": null
+      },
+      {
+        "archive_member": "out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+        "bytes": 4212,
+        "mode": 420,
+        "preserved_relative": "stock-comparison/files/out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+        "sha256": "853c361fa68e8afd3c532cf7cf5847837f1620cc047bd773a39d0955695241d7",
+        "source": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/short_input_jit_probe.cpp",
+        "symlink_target": null
+      }
+    ],
+    "manifested_member_count": 56,
+    "original_archive": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit",
+    "original_commit": "d79eaf1f16a06a1c3ef8dcc47334940250f471b9",
+    "original_manifest": {
+      "bytes": 158363,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/whole-byte-manifest.json",
+      "sha256": "7b37e0db3bd213049cf8b0ada2a60f72d9b83af5a5c6bbde26faeae4b003867c",
+      "symlink_target": null
+    },
+    "original_tag": "evidence/issue-98-guarded-product-high-jit-4bcd987",
+    "scope": "Only these selected stock raw comparison, compile/link/capture ownership, producer and recovery bytes enter this new Git evidence tree. Modes record the actual preserved raw files; generic Git100644 is not original executable-mode provenance. Remote availability requires root push/tag verification. No whole older multicapture archive or current toolchain-library backup claim.",
+    "stock_raw_member_count": 33
+  },
+  "separate_graph_passed": true,
+  "separate_policy_passed": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "static_inputs_verified": 933,
+  "stock_distinct_input_versions": 638,
+  "stock_recaptured": false,
+  "timestamp_correction": {
+    "corrected_field": "actual_module_to_called_code.one_completed_dispatch.captured_ns",
+    "method": "Python json.loads of the raw actual-code-review.json and direct dispatch-object copy followed by Python json.dumps; no JavaScript number roundtrip.",
+    "no_authored_helper_reader_tool_or_provider_rerun": true,
+    "other_copied_timestamp_fields": "Recursively inspected the complete receipt; no other timestamp or *_ns field is present.",
+    "previous_value_decimal": "1792029865229152300",
+    "prior_receipt_sha256": "f68037c6699ca39832bd1fe2a890d37713ac73e2b849254ab42096a97a50e527",
+    "raw_and_corrected_value_decimal": "1792029865229152350",
+    "reason": "The initial receipt composition passed the copied nanosecond timestamp through JavaScript Number and lost integer precision above 2^53.",
+    "scope": "Receipt only; raw capture, frozen inputs, original reports and PASS scope unchanged."
+  },
+  "whole_owned_inputs_verified": 939
+}

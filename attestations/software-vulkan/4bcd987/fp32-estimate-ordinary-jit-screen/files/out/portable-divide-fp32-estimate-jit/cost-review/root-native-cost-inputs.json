@@ -1,0 +1,192 @@
+{
+  "cases": {
+    "candidate": {
+      "code_review": {
+        "bytes": 4352,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/actual-code-review.json",
+        "sha256": "e61e1ca9555426f80a7c67711b4dfd45b2f0caf9777bfd4e805260f764739890",
+        "symlink_target": null
+      },
+      "coroutine_allocator_constant_bytes": [],
+      "defined_functions": [
+        {
+          "address": 131631286443936,
+          "bytes": 906552,
+          "name": "cs_co_variant.resume",
+          "offset": 24480,
+          "section": 3
+        },
+        {
+          "address": 131631287350496,
+          "bytes": 5,
+          "name": "cs_co_variant.destroy",
+          "offset": 931040,
+          "section": 3
+        },
+        {
+          "address": 131631286419456,
+          "bytes": 314,
+          "name": "cs_variant",
+          "offset": 0,
+          "section": 3
+        },
+        {
+          "address": 131631286419776,
+          "bytes": 24157,
+          "name": "cs_co_variant",
+          "offset": 320,
+          "section": 3
+        }
+      ],
+      "executable_section_bytes": 931045,
+      "folder": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal",
+      "llvm_operation_counts": {
+        "alloca": 2,
+        "fdiv": 6,
+        "udiv": 65,
+        "urem": 12
+      },
+      "native_disassembly": {
+        "bytes": 11717208,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/cost-review/candidate-native.txt",
+        "sha256": "e3f4cb4b09135eb8eb9643d2a6eb44a5695eeb0ce3d94440bcff3e53881bbd76",
+        "symlink_target": null
+      },
+      "native_selected_function_counts": {
+        "cs_co_variant": {
+          "call": 1,
+          "div": 26,
+          "vpmulld": 1
+        },
+        "cs_co_variant.destroy": {},
+        "cs_co_variant.resume": {
+          "div": 199,
+          "vdivps": 4,
+          "vdivss": 2,
+          "vpmulld": 76,
+          "vpmuludq": 92
+        },
+        "cs_variant": {
+          "call": 4
+        }
+      },
+      "object": {
+        "bytes": 1061080,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/jit-10.elf",
+        "sha256": "3ed7d02d11a37da582d907e46497a60f9b2accf930f13cdd67ce71bf0ae6f8b3",
+        "symlink_target": null
+      },
+      "ordinary_ir": {
+        "bytes": 13316884,
+        "mode": 384,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/capture-candidate-endpoint-normal/optimized-05.ll",
+        "sha256": "77b0a0206502ae3712c8287dd02545f1a065b76f6711042e9d0edb6b6db21c26",
+        "symlink_target": null
+      },
+      "resume_frame_dereferenceable_bytes": [
+        90144
+      ]
+    },
+    "stock": {
+      "code_review": {
+        "bytes": 4344,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/actual-code-review.json",
+        "sha256": "3e940e57eda3be646422b9e6ae632dc56ef283b3f48d8c32e140a6107a74dbaa",
+        "symlink_target": null
+      },
+      "coroutine_allocator_constant_bytes": [],
+      "defined_functions": [
+        {
+          "address": 134136732958464,
+          "bytes": 898262,
+          "name": "cs_co_variant.resume",
+          "offset": 24320,
+          "section": 3
+        },
+        {
+          "address": 134136733856736,
+          "bytes": 5,
+          "name": "cs_co_variant.destroy",
+          "offset": 922592,
+          "section": 3
+        },
+        {
+          "address": 134136732934144,
+          "bytes": 314,
+          "name": "cs_variant",
+          "offset": 0,
+          "section": 3
+        },
+        {
+          "address": 134136732934464,
+          "bytes": 23997,
+          "name": "cs_co_variant",
+          "offset": 320,
+          "section": 3
+        }
+      ],
+      "executable_section_bytes": 922597,
+      "folder": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal",
+      "llvm_operation_counts": {
+        "alloca": 2,
+        "udiv": 59,
+        "urem": 12
+      },
+      "native_disassembly": {
+        "bytes": 11619912,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/cost-review/stock-native.txt",
+        "sha256": "f9d4e5a008dbec517bbc592035c2b806eba981830087c11500638754c284bb97",
+        "symlink_target": null
+      },
+      "native_selected_function_counts": {
+        "cs_co_variant": {
+          "call": 1,
+          "div": 26,
+          "vpmulld": 1
+        },
+        "cs_co_variant.destroy": {},
+        "cs_co_variant.resume": {
+          "div": 165,
+          "vpmulld": 68,
+          "vpmuludq": 84
+        },
+        "cs_variant": {
+          "call": 4
+        }
+      },
+      "object": {
+        "bytes": 1049832,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/jit-10.elf",
+        "sha256": "58c4804b40c66140fed74b37cbdb125fafd978f619dcc219317d33ebffc022bb",
+        "symlink_target": null
+      },
+      "ordinary_ir": {
+        "bytes": 13237373,
+        "mode": 384,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/guarded-product-high-jit/files/out/guarded-product-high-runtime/capture-stock-endpoint-normal/optimized-05.ll",
+        "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7",
+        "symlink_target": null
+      },
+      "resume_frame_dereferenceable_bytes": [
+        89696
+      ]
+    }
+  },
+  "objdump": {
+    "bytes": 390848,
+    "mode": 493,
+    "resolved_path": "/usr/bin/x86_64-linux-gnu-objdump",
+    "sha256": "d0041e7511460b9ebfd95ce4f9d93c7ffea398ffc1cb2c316a220dd8e533db3d",
+    "symlink_target": "x86_64-linux-gnu-objdump"
+  },
+  "passed": true,
+  "schema": "sirius-fp32-estimate-root-native-cost-inputs-v1",
+  "scope": "Static complete ordinary IR/native-object counts and source for passive branch/mask/countercost review. Linked-section/callable integrity accepted separately. No retained arithmetic or executed path/frequency/cycles/performance inference.",
+  "utc": "2026-10-15T02:05:36.745430+00:00"
+}

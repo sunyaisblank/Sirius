@@ -1,0 +1,33 @@
+{
+  "cost_review": {
+    "bytes": 76283,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/cost-review/cost-premise-review.json",
+    "sha256": "d1ada19a47e5f8ac4859f6a90718af23733e3e70d84de39aa36bbcfcc1b0d6ca",
+    "symlink_target": null
+  },
+  "decision": "COST_PREMISE_SURVIVES_UNPROVEN",
+  "independent_terminal_review": {
+    "bytes": 20099,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/independent-terminal-review.json",
+    "sha256": "b20dfa1e1ff2c7f6234f5bb368e6c258995ca4d0a8986ad650228bafc39f23b9",
+    "symlink_target": null
+  },
+  "native_instruction_loci_checked": 54,
+  "new_correction_contract": "For s=4,3,2,1,0, invariant 0<=r<d*2^(s+1). Select mask all1 iff r>=d*2^s, subtract that threshold, collect bit2^s. Each result0<=r<d*2^s; final r<d and digit=floor(R/d)<32. Thresholds<2^28; uint32 arithmetic. q=guess+digit and originalsticky jam/round unchanged. Native cost/lowering requires a fresh source-reviewed screen; no improvement assumed.",
+  "next_action": "Source preparation of a materially different five-bit restoring correction under the same exact residual<32d guard before further expensive numerical/integrated/benefit qualification. Current candidate remains screened structurally, with COST_PREMISE_SURVIVES_UNPROVEN; no benefit gate was run or failed.",
+  "passed": true,
+  "raw_cost_pins": 59,
+  "retained_arithmetic_or_performance_or_hitrate_or_adoption_or_qualification_admitted": false,
+  "root_review": "Fully read all6 IR/native/frame-slot/control-mask clone findings, full countercosts/metrics and independent terminal review; passively matched all59 raw/source pins, every reported IR locus and native instruction locus, all corrective/fallback DIV PCs, no branch/call within packets, all6 actual guard/skip destinations and stock packet counts. No helper or provider rerun.",
+  "root_terminal_input_joins": {
+    "bytes": 2400,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-jit/root-terminal-input-joins.json",
+    "sha256": "d85027d417a2ccb778c3aa754f7310513cda1bf81c6ce74868a08f906871f6f6",
+    "symlink_target": null
+  },
+  "schema": "sirius-fp32-estimate-root-cost-premise-admission-v1",
+  "utc": "2026-10-15T02:16:39.583027+00:00"
+}

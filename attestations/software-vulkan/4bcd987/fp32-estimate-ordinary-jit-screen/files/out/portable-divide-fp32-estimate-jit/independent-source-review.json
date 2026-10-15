@@ -1,0 +1,173 @@
+{
+  "blockers": [],
+  "canonical_stock": {
+    "all33_stock_raw_files_manifest_pinned": true,
+    "all_versions_actual_bytes_and_phase_receipts_joined": true,
+    "backup_scope": "Complete matching local raw bytes plus original producer/recovery and named Git-source joins. No assertion all historical raw binaries are tracked or remotely backed up; no stock raw55-argument trace exists.",
+    "historical_Git_blobs": {
+      ".github/workflows/ci.yml": "afe033c3a1c50b5cbc5ba1897fd9ba883d57db83",
+      "CMakePresets.json": "2b5cdbc32533a4054d23822c77151935596235e5",
+      "README.md": "320ed499d0c0d5e6dd8aa126bd92754cf163cb1f",
+      "scripts/governance/build_policy.py": "d3019e9b55fc809bfee8642572cc198dce4ac769",
+      "scripts/validate-native-runtime.py": "3669bbea660a0fca6a94c0de444e2405c57cac2e",
+      "scripts/verify-operating-model.py": "11993915e29d3b2e1fd7f33b70b1d9b39675049a",
+      "src/sirius/kernels/gr_ellis_topology.slang": "d5bd69f2ee71b5363bb357a7aeacc1d8a2ee6923",
+      "src/sirius/kernels/gr_integrator.slang": "9a672b9beb8b94d8f60c2b748e436facab8909b8",
+      "src/sirius/kernels/parity_probe.slang": "4e15441dccc63f06e652cb5a88bdf2bad8e88ab3",
+      "src/sirius/kernels/trace.slang": "0dff395c71bedabe9e77fdd1290942e4db388e87",
+      "tests/backend/kernel_parity_test.cpp": "f02e6510afc32bf447f110d74164f450710a893f",
+      "tests/labels/CTestLabels.cmake": "4a46acc67b79360bd940e60d46e0d7cd6eef48d7",
+      "tests/operating_model.json": "b3589f04238e20b6aa82d9a30340a45b4a65af95"
+    },
+    "historical_Git_check": "Every following blob independently resolved with git rev-parse product_revision:path and git show, then compared to exported bytes and original SHA256/length; not merely a declared blob self-hash.",
+    "host": {
+      "bytes": 253224,
+      "sha256": "c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af"
+    },
+    "input_versions": 638,
+    "join_methods": {
+      "archived_owned": 13,
+      "exact_current": 609,
+      "historical_Git": 13,
+      "original_input_recovery": 3
+    },
+    "phase_inputs": {
+      "compile": 545,
+      "link": 547,
+      "stock_capture": 633
+    },
+    "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+    "source_and_link": "4212B probe853c361f\u20265241d7; original O3/MMD compile and direct canonical Vulkan object181071b7\u2026131be + base1fb43165\u202614d76 link, no libsirius_backend archive. Canonical vulkan_device.cpp/device.h match current source and original consumed identities.",
+    "stock_module": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    },
+    "whole_byte_manifest_sha256": "7b37e0db3bd213049cf8b0ada2a60f72d9b83af5a5c6bbde26faeae4b003867c"
+  },
+  "claim_limits": {
+    "cost": "Unjudged. New accepted path still has corrective UDiv; four serial fallback divisions and mixed-lane cost remain. Actual scalar/SIMD clones, calls, code/frame/stack/spills/register/memory costs require separate review; no assumed8 calls, hit rate or elimination success.",
+    "full_scientific_or_release_qualification": false,
+    "no_retained_arithmetic": "Original one-word input fails ni<329 before arithmetic/output writes; two4B buffers, one1x1x1 dispatch,8MiB allocation ceiling and unchanged sentinel. No numerical canary claim.",
+    "numerical_driver_performance_or_adoption_admitted": false,
+    "repeated_compiler_policy_graph_or_stock_capture": false
+  },
+  "closure": {
+    "all_local_Python_AST_parsed_without_import_or_execution": true,
+    "all_runtime_outputs_context_private_bin_absent": true,
+    "declared_unique_future_inputs_exact": 939,
+    "dynamic_imports": "Archived graph proof only, prior.R explicitly rebound to current ROOT before completed(); its archived recover completed definition and full transitive dynamic input closure are pinned. No graph/control/policy algorithms rerun.",
+    "equation": "933 static plus copied host, copied candidate module, capture-actions, reuse-acceptance, runtime-context and source-freeze",
+    "graph": {
+      "all_namespace_manifest_and_Git_files_exact": 44,
+      "commit": "23619ee8a99ac792d6d76dbeb376356c4168dbc2",
+      "manifest": {
+        "bytes": 8135,
+        "sha256": "ed4e368617b9d81f445f8abc29b2719cf6d46cec053c16a1759e5bdf01bc859a"
+      },
+      "relocated_actual_inputs": 711,
+      "relocated_static_inputs": 708
+    },
+    "old_compiler_policy_graph_scratch_roots_absent": true,
+    "rich_static_pins_exact": 933,
+    "root_operational_receipts_and_this_review_outside_freeze": true
+  },
+  "operation": {
+    "commands": [
+      "python3 -B out/portable-divide-fp32-estimate-jit/host.py pin-runtime",
+      "python3 -B out/portable-divide-fp32-estimate-jit/run_capture_owned.py capture-candidate-endpoint-normal",
+      "python3 -B out/portable-divide-fp32-estimate-jit/host.py review"
+    ],
+    "core_bytes": 0,
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "ordinary_pipelines": [
+      "default<O0>",
+      "sroa,early-cse,simplifycfg,reassociate,mem2reg,instsimplify,instcombine<no-verify-fixpoint>"
+    ],
+    "ownership": "Unchanged mature own-session/subreaper aggregate RSS/reserve/deadline guard, birth-based bounded cleanup, source/whole-input stability, retired births and expected exit0; post-terminal root review rechecks inputs and all original code/feature readers before capture-acceptance.",
+    "per_file_bytes": 67108864,
+    "prelaunch": "Root only/exclusive scheduling; exact933/939 pins and clean4498; resolved/usr/bin/python3 assertions enabled, no relevant environment overrides (observed optimize0/empty). Stop and preserve first failure; no unchanged retry.",
+    "provider_environment": {
+      "MESA_SHADER_CACHE_DISABLE": "true",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+    }
+  },
+  "passed": true,
+  "pins": {
+    "capture-actions.unpinned.json": {
+      "bytes": 95361,
+      "sha256": "a83241ab36277c29d008f9aeca46c765d750cdd358a62db615366bd1fa369a56"
+    },
+    "host.py": {
+      "bytes": 9680,
+      "sha256": "507dc04369412c8278e60660c24bdd461e0c2ef8afb18513041c3128fe575643"
+    },
+    "inputs.json": {
+      "bytes": 2705,
+      "sha256": "8531519627bd18230af2a81eec6990d55ef049126d5d0bfa10f807e690ee1327"
+    },
+    "preparation.json": {
+      "bytes": 2282,
+      "sha256": "df7f3108ef2be5a8ba927ee609843f458f7f1fe9652c09b9d8afb4ef93476e13"
+    },
+    "prerequisites.py": {
+      "bytes": 13699,
+      "sha256": "d00aee3248c846f5147f29a44dd7ef33a38bbe6daccb7cc5676233437424dbca"
+    },
+    "read_features.py": {
+      "bytes": 2624,
+      "sha256": "7942a803919ea11e57d49e7e09d15172415990f445fd581e9663650a6434af7f"
+    },
+    "run_capture.py": {
+      "bytes": 6272,
+      "sha256": "91f6f2b475e03e57a902a2a86f2cba750fdf33807f17588b92a0ad14210940d5"
+    },
+    "source-freeze.json": {
+      "bytes": 355396,
+      "sha256": "1893fd48c06576c4d214ca80f139424c6ac600c825e63ab47324c3af552fcced"
+    },
+    "stock-reuse-inputs.json": {
+      "bytes": 400382,
+      "sha256": "772e226e1e66c356fa0c4eb9a937feb213e9975242e4f3b36b42c48073e9cb24"
+    }
+  },
+  "required_actual_joins": [
+    "Exact copied candidate152844B/0535c0f6a689d2d59896543882e1f5300fdd67fe70509b7dda0996f59ffd03d9 and canonical host253224B/c2b9093df67b85608ec3ca530ec910fe206bede457ac4224059ebc36c66364af; frozen context/actions allow only clean revision substitution.",
+    "Public loader boundary captures actual enabled55 fields, physical query values, queue/extension order/pNext and successful logical-device/shader handle join; host review requires Int64=0, Float64=1 unused by32-only shader.",
+    "Actual loaded SPV span -> successful exact ordinary passes -> exported IR/module generation -> pointer lookup -> called cs_variant address. Hooks capture all allocated live sections before inserting entry breakpoint.",
+    "Original analyzer checks complete ELF64 x86_64 allocated-section bytes, supported defined relocations and uncovered bytes; undefined callbacks consistency only. Reused complete durable stock report must reproduce exactly after JSON persistence normalization.",
+    "Loader/LVP/LLVM current bytes+device/inode and same owned inferior birth/session maps, plus all3 mappings at actual called-JIT event. Every inherited false compiler/accepted finisher/accepted graph receipt remains separately joined."
+  ],
+  "reviewer": "/root/sanitizer_gate_contract",
+  "schema": "sirius-fp32-estimate-ordinary-jit-independent-source-review-v1",
+  "scope": "SOURCE admission only: one candidate full normal Endpoint ordinary JIT canary and pure post-terminal code/feature reader. No helper, policy, parser, control, compiler, GDB, provider or canary executed by reviewer.",
+  "source_delta": {
+    "ABI": "Passive header fields/hash equal preserved layout:55 VkBool32 fields/220B, Float64 index39/Int64 index40; header used as review authority, not read by runtime helper.",
+    "feature_reader": "Canonical shaderInt64=0; other core fields zero except supported shaderFloat64. Removed unused Int64 support requirement; original raw220B/55-field/query/queue/extension-order/pNext/shader-handle/module joins retained.",
+    "mature_commit": "91c27164ad67c469cfd98cc897dc1db4623ced66",
+    "runner": "Only private bin namespace changed.",
+    "six_files_exact_to_archive_and_immutable_Git": [
+      "capture_jit.py",
+      "capture_features.py",
+      "feature-layout.json",
+      "analyze_capture.py",
+      "run_capture_owned.py",
+      "owned_guard.py"
+    ]
+  },
+  "utc": "2026-10-15T02:03:44.362699+00:00",
+  "workspace": {
+    "HEAD": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "ahead": 0,
+    "behind": 0,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "canonical_committed_pushed": true,
+    "review": "ignored scratch, not committed or pushed",
+    "tracked_status": "",
+    "worktrees": 1
+  }
+}
