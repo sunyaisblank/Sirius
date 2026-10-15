@@ -1,0 +1,148 @@
+--- a/out/preserve-finite-result.py
++++ b/out/preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop', 'fp32-estimate-restoring-original-controls', 'fp32-estimate-restoring-original-benefit') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('bd7820aad7d64c4dd65caa1b4bdbd7292a900115' if kind == 'full-path-sampling-build-format-stop' else '4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop', 'fp32-estimate-restoring-original-controls', 'fp32-estimate-restoring-original-benefit') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,136 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'full-path-sampling-build-format-stop':
++    work=root/'out/full-path-conservation-sampling'
++    bundle=root/'attestations/scientific-core/bd7820a/full-path-sampling-build-format-stop'
++    tag='evidence/issue-53-full-path-sampling-build-format-stop'
++    format_load=lambda path:json.loads(Path(path).read_text())
++    format_records={}
++    def format_record(path):
++        path=Path(path);key=str(path)
++        if key not in format_records:
++            format_records[key]=dict(pin(path),resolved_path=str(path.resolve(strict=True)))
++        return format_records[key]
++    freeze=format_load(work/'source-freeze.json');actions=format_load(work/'actions.json')
++    assert pin(work/'source-freeze.json')=={'bytes':12905,'sha256':'dde25d0d2bd080f91d3110e31addf0441405430bb5dfd2612ce74b10bd77773b'}
++    assert freeze['source_revision']==parent and len(freeze['pins'])==37
++    assert set(actions)=={'configure','build-backend'}
++    for name,expected in freeze['pins'].items():
++        assert format_record(name)==expected,name
++    commands=format_load(work/'commands.json');specification=format_load(work/'controls-specification.json')
++    assert commands['source_revision']==specification['source_revision']==parent
++    assert commands['test_commands_emitted'] is False and specification['actual_test_actions_emitted'] is False
++    assert specification['postbuild_admitted'] is False
++    assert commands['build_commands']==['/usr/bin/python3.12 -B out/full-path-conservation-sampling/run_owned.py '+name for name in ['configure','build-backend']]
++    original=format_load(work/'originals/actions-4498.json')
++    required={'kind','revision','argv','frozen_inputs','limits','scope','expected_exit','software_provider'}
++    owners={};actual_inputs={};actual_rows=0;samples=0;births=[]
++    for name in ['configure','build-backend']:
++        action=actions[name];folder=work/name;owner=format_load(folder/'owner.json')
++        assert set(action)==required and action['revision']==parent and action['kind']=='build'
++        assert type(action['expected_exit']) is int and action['expected_exit']==0 and action['software_provider'] is False
++        assert action['argv']==original[name]['argv'] and action['limits']==original[name]['limits']
++        assert action['limits']=={'seconds':300 if name=='configure' else 900,'rss_kib':4194304,'reserve_kib':2097152}
++        assert owner['passed'] is True and owner['status']=='terminal' and owner['child_exit']==0
++        assert owner['source']=={'revision':parent,'status':''} and owner['source_unchanged'] is True and owner['whole_inputs_unchanged'] is True
++        assert owner['argv']==action['argv'] and owner['limits']==action['limits']
++        assert owner['stop_reason'] is None and owner['cleanup_errors']==[] and owner['remaining_owned_processes']==[]
++        assert owner['provider_mappings']==[] and owner['declared_output_environment']=={'GTEST_OUTPUT':''}
++        assert owner['peak_sampled_rss_kib']<=action['limits']['rss_kib'] and owner['minimum_sampled_available_kib']>=action['limits']['reserve_kib']
++        before=format_load(folder/'inputs-before.json');after=format_load(folder/'inputs-after.json')
++        assert before==after and before
++        for path_name,expected in before.items():
++            path=root/path_name
++            assert format_record(path)==expected,path_name
++            if path_name in actual_inputs:assert actual_inputs[path_name]==expected
++            actual_inputs[path_name]=expected
++        for path_name in action['frozen_inputs']:
++            path=Path(path_name);key=str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
++            assert key in before and before[key]==format_record(path)
++        assert owner['observed_births']
++        for birth in owner['observed_births']:
++            assert birth['absent'] is True
++            saved=str(birth['saved_start_ticks']);node=Path('/proc')/str(birth['pid'])/'stat'
++            try:
++                raw=node.read_text();current=raw[raw.rfind(')')+2:].split()[19]
++            except (FileNotFoundError,ProcessLookupError):current=None
++            assert current is None or str(current)!=saved
++            births.append({'pid':birth['pid'],'saved_start_ticks':saved,'current_start_ticks':current,'absent':True})
++        sample_rows=[json.loads(line) for line in (folder/'samples.jsonl').read_text().splitlines() if line]
++        assert sample_rows and all(row['rss_kib']<=action['limits']['rss_kib'] and row['available_kib']>=action['limits']['reserve_kib'] for row in sample_rows)
++        samples+=len(sample_rows);actual_rows+=len(before)
++        owners[name]={'owner':format_record(folder/'owner.json'),'inputs_before':format_record(folder/'inputs-before.json'),'inputs_after':format_record(folder/'inputs-after.json'),
++            'stdout':format_record(folder/'stdout.log'),'stderr':format_record(folder/'stderr.log'),'samples':format_record(folder/'samples.jsonl'),
++            'wall_seconds':owner['wall_seconds'],'peak_sampled_rss_kib':owner['peak_sampled_rss_kib'],'observed_births':len(owner['observed_births'])}
++    collector_key=str(Path(__file__).resolve().relative_to(root))
++    assert collector_key not in actual_inputs and str(Path(__file__).resolve()) not in actual_inputs
++    assert str(Path(__file__).resolve()) not in freeze['pins']
++    assert not (work/'controls').exists()
++    assert not any((work/test['label']).exists() for test in specification['tests'])
++    assert not any(work.rglob('gtest.xml'))
++    terminal=format_load(work/'root-build-terminal-input-check.json')
++    assert terminal['passed'] is True and terminal['source_revision']==parent and terminal['test_actions_admitted'] is False
++    assert terminal['all37_static_pins_current'] is True and terminal['actual_raw_input_rows']==actual_rows and terminal['actual_unique_inputs_current']==len(actual_inputs)
++    assert terminal['samples_checked']==samples and terminal['root_build_operator_once_closed_zero']=='cd9534'
++    for name,receipts in owners.items():
++        assert terminal['owners'][name]['owner']==receipts['owner'] and terminal['owners'][name]['inputs_before']==receipts['inputs_before'] and terminal['owners'][name]['inputs_after']==receipts['inputs_after']
++    executable=root/'bin/linux-gcc/tests/backend/sirius_backend_tests'
++    changed_object=root/'bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o'
++    test_source=root/'tests/backend/full_path_acceptance_test.cpp'
++    assert terminal['rebuilt_backend_ELF']==format_record(executable) and terminal['changed_test_object']==format_record(changed_object)
++    assert executable.read_bytes()[:4]==changed_object.read_bytes()[:4]==b'\x7fELF'
++    source_admission=format_load(work/'root-build-source-admission.json');source_review=format_load(work/'independent-build-source-review.json')
++    assert source_admission['passed'] is True and source_review['passed'] is True and source_admission['source_revision']==source_review['source_revision']==parent
++    assert source_admission['independent_build_source_review']==format_record(work/'independent-build-source-review.json')
++    independent=format_load(work/'independent-build-terminal-review.json')
++    stop=format_load(work/'root-format-stop.json');admission=format_load(work/'root-format-stop-admission.json')
++    assert independent['passed'] is True and admission['passed'] is True
++    assert independent['source_revision']==stop['source_revision']==admission['source_revision']==parent
++    assert independent['schema']=='sirius-full-path-sampling-independent-build-terminal-review-v1'
++    assert independent['decision']=='BUILD_TERMINAL_PASS_WITH_SEPARATE_SOURCE_FORMAT_STOP' and independent['builds_passed'] is True and independent['format_gate_passed'] is False
++    assert independent['test_actions_admitted'] is False and type(independent['test_executions']) is int and independent['test_executions']==0
++    for name,expected in independent['bindings'].items():assert pin(work/name)==expected,name
++    assert independent['actual_build']['actual_input_rows']==actual_rows and independent['actual_build']['actual_unique_current_inputs']==len(actual_inputs)
++    assert independent['actual_build']['fresh_births_absent']==len(births) and independent['actual_build']['all37_rich_pins_equal_current'] is True
++    for key,name in [('independent_build_terminal_review','independent-build-terminal-review.json'),('root_format_stop','root-format-stop.json'),('root_build_terminal_input_check','root-build-terminal-input-check.json')]:
++        assert admission[key]==format_record(work/name)
++    # The stop receipt is root-operated format failure evidence, never a failed build or numerical result.
++    assert stop['schema']=='sirius-full-path-sampling-root-format-stop-v1' and stop['classification']=='SOURCE_FORMAT_GATE_STOP_BEFORE_TEST_ADMISSION'
++    assert stop['passed'] is False and stop['builds_passed'] is True and stop['format_gate_passed'] is False
++    command=stop['format_command']
++    assert command['argv']==['clang-format-18','--dry-run','--Werror','tests/backend/full_path_acceptance_test.cpp']
++    assert type(command['exit_code']) is int and command['exit_code']==1 and command['tool_chunk']=='7d0e8b'
++    assert command['closed'] is True and command['executed_once'] is True
++    assert command['diagnostic']=='tests/backend/full_path_acceptance_test.cpp:542:84: error: code should be clang-formatted [-Wclang-format-violations]'
++    assert 'post-execution operator receipt' in command['output_origin'] and 'not a separately captured raw stderr file' in command['output_origin']
++    assert command['formatter']==format_record('/usr/bin/clang-format-18')
++    assert stop['original_source_unchanged'] is True and stop['all37_static_inputs_still_current'] is True
++    assert type(stop['test_executions']) is int and stop['test_executions']==0 and stop['test_actions_admitted'] is False and stop['test_actions_emitted'] is False
++    assert stop['strict_build_operator_once_closed_zero']=='cd9534'
++    for key,name in [('source_file',test_source),('source_freeze',work/'source-freeze.json'),('root_build_terminal_input_check',work/'root-build-terminal-input-check.json'),
++                     ('root_build_source_admission',work/'root-build-source-admission.json'),('independent_build_source_review',work/'independent-build-source-review.json')]:
++        assert stop[key]==format_record(name)
++    assert stop['build_owners']=={name:receipts['owner'] for name,receipts in owners.items()}
++    assert stop['postbuild_context_absent']==[str(work/'controls'),str(work/'postbuild-source-freeze.json')]
++    assert all(not Path(name).exists() for name in stop['postbuild_context_absent'])
++    preparer=stop['postbuild_preparer']
++    assert preparer['ready'] is False and preparer['executed'] is False and preparer['draft_incomplete'] is True
++    assert preparer['draft']==format_record(work/'prepare_controls.py') and preparer['original_preimage']==format_record(work/'originals/prepare-controls-4498.py')
++    baseline=root/'out/preserve-finite-result-before-full-path-build-format-stop.py'
++    assert pin(baseline)=={'bytes':379749,'sha256':'07ad5ff2b06005e7855065079f8a813e2a1d0ae4335a158c664292e8daa79787'}
++    mapping=[(work,'files/out/'+work.name),(executable,'producer/sirius_backend_tests'),(changed_object,'producer/full_path_acceptance_test.cpp.o'),
++             (test_source,'source/tests/backend/full_path_acceptance_test.cpp'),(baseline,'collector-baseline.py'),
++             (root/'out/preserve-finite-result-full-path-build-format-stop.patch','collector-source.patch')]
++    summary={'schema':'sirius-full-path-sampling-build-format-stop-evidence-v1','passed':True,'source_revision':parent,
++        'classification':'SOURCE_FORMAT_GATE_STOP_BEFORE_TEST_ADMISSION','strict_build_owners':owners,'static_input_count':37,
++        'actual_raw_input_rows':actual_rows,'actual_unique_inputs_current':len(actual_inputs),'samples_checked':samples,'fresh_observed_births_absent':births,
++        'root_format_stop':format_record(work/'root-format-stop.json'),'independent_build_terminal_review':format_record(work/'independent-build-terminal-review.json'),
++        'root_format_stop_admission':format_record(work/'root-format-stop-admission.json'),'root_build_terminal_input_check':format_record(work/'root-build-terminal-input-check.json'),
++        'source':format_record(test_source),'producer':format_record(executable),'changed_test_object':format_record(changed_object),
++        'format_check_passed':False,'test_actions_admitted':False,'numerical_tests_executed':0,'scientific_or_release_qualification':False,
++        'scope':'Two unchanged strict configure/build owners passed. Required CI clang-format dry-run then failed before original numerical controls. Earlier manual/source admissions remain historical and did not establish formatter acceptance. Preserve exact pre-format source/build objects and unreleased postbuild drafts; no numerical or performance verdict and no original per-test deadline claim.'}
++    message='Preserve full-path observer strict build and required CI format pretest stop (#53)\n'
+ elif kind == 'fp32-estimate-restoring-original-benefit':
+     import xml.etree.ElementTree as ET
+     work=root/'out/portable-divide-fp32-estimate-restoring-benefit'

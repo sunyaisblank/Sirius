@@ -1,0 +1,122 @@
+{
+  "author": "/root/forensic_obligations",
+  "checks": {
+    "actions": 2,
+    "all_current_static_rich_pins": 37,
+    "current_alias_rows": 24,
+    "exact_immutable_regular_file_relocations": [
+      "out/minimum-step-floor-registration/source-freeze.json",
+      "out/minimum-step-floor-registration/independent-review.json",
+      "out/minimum-step-floor-registration/source-contracts.json",
+      "out/minimum-step-floor-registration/registration.patch",
+      "out/minimum-step-ellis-floor/ellis-floor.patch",
+      "out/minimum-step-ellis-floor/gr_ellis_topology.slang",
+      "out/minimum-step-ellis-floor/root-source-review.json"
+    ],
+    "frozen_inputs_per_action": 36,
+    "historical_evidence_rows": 11,
+    "mutable_build_outputs_not_frozen": true,
+    "new_owner_tmp_log_controls_paths_absent": true,
+    "old_whole_input_map_replayed": false,
+    "original_configure_build_argv_limits_equal": true,
+    "required_typed_action_fields": [
+      "argv",
+      "expected_exit",
+      "frozen_inputs",
+      "kind",
+      "limits",
+      "revision",
+      "scope",
+      "software_provider"
+    ],
+    "review_outside_all_declared_inputs": true,
+    "source_identity": "clean exact committed bd7820aad7d64c4dd65caa1b4bdbd7292a900115; upstream0:0 and sole checkout from passive Git checks",
+    "test_actions_emitted": false,
+    "three_mature_helpers_exact_named_1dd_Git_bytes": true,
+    "tools_or_tool_binaries": 13
+  },
+  "commands": [
+    "/usr/bin/python3.12 -B out/full-path-conservation-sampling/run_owned.py configure",
+    "/usr/bin/python3.12 -B out/full-path-conservation-sampling/run_owned.py build-backend"
+  ],
+  "equivalent_root_operator": "/usr/bin/python3.12 -B out/full-path-conservation-sampling/root_build.py",
+  "findings": [],
+  "limits": {
+    "build_seconds": 900,
+    "configure_seconds": 300,
+    "meaning": "External diagnostic bounds for ordinary build only; not a test scientific deadline.",
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304
+  },
+  "nonadmission": {
+    "actual_configure_or_build_pass": false,
+    "actual_test_pass": false,
+    "precision_or_optimization_experiment_adoption": false,
+    "scientific_domain_or_release_qualification": false
+  },
+  "operator": "/root",
+  "passed": true,
+  "postbuild_hold": {
+    "actual_rebuilt_elf_resources_dependencies_compiler_recipes_and_registrations_must_be_bound": true,
+    "claim_original_test_deadline": false,
+    "original_four_controls_held": true,
+    "prospective_control_walls": [
+      28800,
+      900,
+      300,
+      300
+    ],
+    "vulkan_cache": "DEFAULT; explicitly disable_software_shader_cache=false, no inherited override authorized"
+  },
+  "release": {
+    "actions.json": {
+      "bytes": 9085,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/actions.json",
+      "sha256": "c568637af58488a394736cf079955e15891ab5d2102f809ca981a60e8cfd8390"
+    },
+    "build-inputs.json": {
+      "bytes": 20624,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/build-inputs.json",
+      "sha256": "9e00e5d62ce629e5eaaf0ee28471087635165f61cedeed92ecd36f60bfa85a3c"
+    },
+    "commands.json": {
+      "bytes": 702,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/commands.json",
+      "sha256": "df1dbf4415610672a51885024729fc3e045f30b54effadc6af6c482cac312e59"
+    },
+    "controls-specification.json": {
+      "bytes": 2976,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/controls-specification.json",
+      "sha256": "e5da2e9671552dd0f342151cdfe0bfe879a1231a0f26ca190c2cb63db48f2a6f"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/owned_guard.py",
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_build.py": {
+      "bytes": 711,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/root_build.py",
+      "sha256": "860897ae68f7e88c8c9cdd1fe5c67a4541bd9cb1bab14862a4586e74b2b0acc7"
+    },
+    "run_owned.py": {
+      "bytes": 12518,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/run_owned.py",
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "source-contracts.json": {
+      "bytes": 2917,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/source-contracts.json",
+      "sha256": "60bdaafa18c7bd1a50397340aec80b20f54aacbcb73d645d45ba12a1c55b020f"
+    },
+    "source-freeze.json": {
+      "bytes": 12905,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/source-freeze.json",
+      "sha256": "dde25d0d2bd080f91d3110e31addf0441405430bb5dfd2612ce74b10bd77773b"
+    }
+  },
+  "reviewer": "/root/divide_contract_review",
+  "schema": "sirius-full-path-conservation-sampling-independent-build-source-review-v1",
+  "scope": "Independent passive source/data admission for exactly the two ordinary configure/build actions. No authored helper imported or run; no compiler, build, provider or test executed by reviewer. Original four-line source fix previously independently reviewed.",
+  "source_revision": "bd7820aad7d64c4dd65caa1b4bdbd7292a900115"
+}

@@ -1,0 +1,12 @@
+{
+  "build_commands": [
+    "/usr/bin/python3.12 -B out/full-path-conservation-sampling/run_owned.py configure",
+    "/usr/bin/python3.12 -B out/full-path-conservation-sampling/run_owned.py build-backend"
+  ],
+  "equivalent_exact_prior_build_operator": "/usr/bin/python3.12 -B out/full-path-conservation-sampling/root_build.py",
+  "postbuild_phase": "HOLD; root binds actual rebuilt producer/resources/registrations/compiler authority, then separately freezes four exact existing controls.",
+  "root_push_and_source_admission_required": true,
+  "schema": "sirius-full-path-sampling-build-commands-v1",
+  "source_revision": "bd7820aad7d64c4dd65caa1b4bdbd7292a900115",
+  "test_commands_emitted": false
+}

@@ -1,0 +1,62 @@
+{
+  "acceptance_preserved": [
+    "all40physical fields",
+    "all4variation columns",
+    "all7RHS stages",
+    "all3RK comparisons",
+    "all4quartic trials",
+    "alloriginal numerical assertions/tolerances/refusals/ABI/modes",
+    "original FullPath per-mode scope and required terminal outcome"
+  ],
+  "build_input_count": 24,
+  "build_only_admission": true,
+  "cache_policy": "DEFAULT: explicitly disable_software_shader_cache=false for both Vulkan tests; no cache override for CPU controls.",
+  "controls": 4,
+  "helpers_exact_prior": {
+    "owned_guard.py": {
+      "bytes": 20791,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/owned_guard.py",
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_build.py": {
+      "bytes": 711,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/root_build.py",
+      "sha256": "860897ae68f7e88c8c9cdd1fe5c67a4541bd9cb1bab14862a4586e74b2b0acc7"
+    },
+    "run_owned.py": {
+      "bytes": 12518,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/run_owned.py",
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    }
+  },
+  "new_test_helper_code": false,
+  "outside_all_inputs": [
+    "independent-source-review.json",
+    "root-source-admission.json",
+    "root-runtime-admission.json",
+    "independent-terminal-review.json",
+    "root-terminal-admission.json",
+    "root-prerequisite-retirement.json",
+    "root-issue-receipt.json",
+    "root-build-input-check.json",
+    "root-postbuild-input-check.json",
+    "root-build-operator.log",
+    "tmp/",
+    "controls/"
+  ],
+  "prospective_build_limits": {
+    "build_seconds": 900,
+    "configure_seconds": 300,
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304
+  },
+  "qualification_scope": "Finite repaired test-wrapper source/build/control evidence only. Zero selected native attestation records is explicit missing qualification, not scientific/domain/release admission.",
+  "schema": "sirius-full-path-conservation-sampling-source-v1",
+  "source_change_scope": "Only ConservationObserver::Sample directly forwards trial/fraction/normal and optional/refusal unchanged to executor_.Sample; no Observe/counter/physics/acceptance changes.",
+  "source_mutation_during_owned_actions_forbidden": true,
+  "source_push_confirmation": "Root supplied successful push0f03bd and fresh remote dee644 exactbd7820aad7d64c4dd65caa1b4bdbd7292a900115 before final source release. Current independent/root source admission still required.",
+  "source_revision": "bd7820aad7d64c4dd65caa1b4bdbd7292a900115",
+  "source_root_push_confirmation_pending": false,
+  "test_bound_scope": "External diagnostic bounds only: target28800,sampler900,CPU300. No declared target per-test deadline or submission guard is added.",
+  "tests_admitted": false
+}

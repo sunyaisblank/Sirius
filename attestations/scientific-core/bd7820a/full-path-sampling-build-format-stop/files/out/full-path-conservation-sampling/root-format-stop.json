@@ -1,0 +1,93 @@
+{
+  "all37_static_inputs_still_current": true,
+  "build_owners": {
+    "build-backend": {
+      "bytes": 4478,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/build-backend/owner.json",
+      "sha256": "fefdf24daf6ae339f4632c67b372db8369669b73e348bab7d1eb1f2e60fb08ab"
+    },
+    "configure": {
+      "bytes": 3315,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/configure/owner.json",
+      "sha256": "65f48c6bb5eb3ba37c6c3a77ee5f2ec0587384c62922926de280490fb7234bf8"
+    }
+  },
+  "builds_passed": true,
+  "classification": "SOURCE_FORMAT_GATE_STOP_BEFORE_TEST_ADMISSION",
+  "format_command": {
+    "argv": [
+      "clang-format-18",
+      "--dry-run",
+      "--Werror",
+      "tests/backend/full_path_acceptance_test.cpp"
+    ],
+    "closed": true,
+    "diagnostic": "tests/backend/full_path_acceptance_test.cpp:542:84: error: code should be clang-formatted [-Wclang-format-violations]",
+    "executed_once": true,
+    "exit_code": 1,
+    "formatter": {
+      "bytes": 97544,
+      "resolved_path": "/usr/lib/llvm-18/bin/clang-format",
+      "sha256": "55cc4a84a64347d12bbcc3fbe9c16599c57a75fda70703d1b91fc95ce1958d84"
+    },
+    "output_origin": "Exact command, exit and diagnostic recorded from root exec_command tool result7d0e8b. This JSON is a post-execution operator receipt, not a separately captured raw stderr file. No formatter re-execution.",
+    "tool_chunk": "7d0e8b"
+  },
+  "format_gate_passed": false,
+  "independent_build_source_review": {
+    "bytes": 5355,
+    "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/independent-build-source-review.json",
+    "sha256": "09ed713fdecf4d58213edee9d227a77a86d0d0e0197a2538c0bc2f99ee0d75f4"
+  },
+  "original_source_unchanged": true,
+  "passed": false,
+  "postbuild_context_absent": [
+    "/home/astra/.project/Sirius/out/full-path-conservation-sampling/controls",
+    "/home/astra/.project/Sirius/out/full-path-conservation-sampling/postbuild-source-freeze.json"
+  ],
+  "postbuild_preparer": {
+    "draft": {
+      "bytes": 25103,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/prepare_controls.py",
+      "sha256": "c221e45cce25e03633f23b52f08177e9a196e97fa3f73b678fea73b2e1560623"
+    },
+    "draft_incomplete": true,
+    "executed": false,
+    "meaning": "Unexecuted incomplete source-only draft preserved candidly; no control source freeze or test output exists.",
+    "original_preimage": {
+      "bytes": 19834,
+      "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/originals/prepare-controls-4498.py",
+      "sha256": "e49960ea6b47f2651ee403f3930c1ccf5bfed66fc51de88339c2ab89835fcb72"
+    },
+    "ready": false
+  },
+  "recovery": "Preserve/push the exact bd782 successful build and formatting stop first; then correct only formatter wrapping in a new committed revision and use a fresh owned namespace. No numerical tolerance/assertion/controller/source physics change or unchanged failed test retry.",
+  "review_history": "Earlier semantic/source/data admissions and both actual strict build PASS records remain unchanged. Root omitted the required formatting check before committing; actual formatter failure stops test admission. No source correction, compiler retry or numerical test has occurred after this stop.",
+  "root_build_source_admission": {
+    "bytes": 3019,
+    "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/root-build-source-admission.json",
+    "sha256": "d3869f0576aeb468613c86cbcd1d2bd85c3256bccc4c7d73cbe1268ca7ca1da4"
+  },
+  "root_build_terminal_input_check": {
+    "bytes": 8417,
+    "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/root-build-terminal-input-check.json",
+    "sha256": "3ab02ff19e3725c3997f19e7d0d2935a3fad8b0c6bcd74056eeba0952d80046b"
+  },
+  "schema": "sirius-full-path-sampling-root-format-stop-v1",
+  "scope": "Source-format stop before any scientific witness execution. No build failure or numerical/physical/frame/domain/production/release verdict.",
+  "source_file": {
+    "bytes": 52195,
+    "resolved_path": "/home/astra/.project/Sirius/tests/backend/full_path_acceptance_test.cpp",
+    "sha256": "27735b74cf5967c377eb78b0f1f7fe6c69de4e209b9cc8b012c9748119db1222"
+  },
+  "source_freeze": {
+    "bytes": 12905,
+    "resolved_path": "/home/astra/.project/Sirius/out/full-path-conservation-sampling/source-freeze.json",
+    "sha256": "dde25d0d2bd080f91d3110e31addf0441405430bb5dfd2612ce74b10bd77773b"
+  },
+  "source_revision": "bd7820aad7d64c4dd65caa1b4bdbd7292a900115",
+  "strict_build_operator_once_closed_zero": "cd9534",
+  "test_actions_admitted": false,
+  "test_actions_emitted": false,
+  "test_executions": 0
+}
