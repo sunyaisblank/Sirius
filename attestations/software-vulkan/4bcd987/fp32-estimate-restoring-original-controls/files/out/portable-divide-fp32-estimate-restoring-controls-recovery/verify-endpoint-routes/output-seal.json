@@ -1,0 +1,32 @@
+{
+  "inputs_before": {
+    "bytes": 521561,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify-endpoint-routes/inputs-before.json",
+    "sha256": "02a8bf17a8db8b3c8c4312ea44673e3f002734c558b55c2bfc69264b39492e3e"
+  },
+  "label": "verify-endpoint-routes",
+  "operator_context": {
+    "bytes": 828,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/operator-context.json",
+    "sha256": "e676fb7c2a6ce172e4740c04056f793ddb199192594c718daec720f987a43691"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/endpoint-route-acceptance.json": {
+      "bytes": 16396,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/endpoint-route-acceptance.json",
+      "sha256": "473e5ab1bb5963396291abcb797d97896f4b61704c3685a8a9fb5b523cb30354"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify_control_routes.py"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 403343,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/source-freeze.json",
+    "sha256": "84c16e2c52b4dd326a8eceb11a22063fde52b10983cd867435bded0d96752e26"
+  }
+}

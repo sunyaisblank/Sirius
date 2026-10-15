@@ -1,0 +1,56 @@
+{
+  "inputs_before": {
+    "bytes": 495214,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-compute-sealed/inputs-before.json",
+    "sha256": "186fedf63e9a105df61197dacb6d19254e79bcc58d14afb8c6b07c85b0968fbb"
+  },
+  "label": "compile-compute-sealed",
+  "operator_context": {
+    "bytes": 828,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/operator-context.json",
+    "sha256": "e676fb7c2a6ce172e4740c04056f793ddb199192594c718daec720f987a43691"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/compute-sealed.d": {
+      "bytes": 839,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/compute-sealed.d",
+      "sha256": "ff88e17b4f2426af074e0d02ca4988c4955587e29bd40a871ff48724e126788a"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/compute-sealed.o": {
+      "bytes": 5750232,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/compute-sealed.o",
+      "sha256": "5602568c7d882d41c2c20aa86f61c74c59dade3bf731a019fd4aa79d159ca42e"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/headers",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/compute-sealed.o",
+      "-c",
+      "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/compute-sealed.d"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 403343,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/source-freeze.json",
+    "sha256": "84c16e2c52b4dd326a8eceb11a22063fde52b10983cd867435bded0d96752e26"
+  }
+}

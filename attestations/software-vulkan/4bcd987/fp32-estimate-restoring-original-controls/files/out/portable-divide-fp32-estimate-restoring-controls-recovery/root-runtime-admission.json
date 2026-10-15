@@ -1,0 +1,201 @@
+{
+  "actual_compile_dependencies": {
+    "compile-compute-sealed": 7,
+    "compile-observer": 59
+  },
+  "all_current_input_records_equal": true,
+  "baseline_executable": {
+    "bytes": 10753968,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/original_baseline_controls",
+    "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856"
+  },
+  "candidate_executable": {
+    "bytes": 10823600,
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/original_candidate_controls",
+    "sha256": "c65e9a20085d9ddb8c20a4f250c5b016fc8ac3ad82487e840f8b469ac72f2b99"
+  },
+  "distinct_actual_input_count": 1619,
+  "fresh_observed_births_absent": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 476977,
+      "saved_start_ticks": "9031626"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 476990,
+      "saved_start_ticks": "9032523"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 476994,
+      "saved_start_ticks": "9032637"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 476995,
+      "saved_start_ticks": "9032637"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477007,
+      "saved_start_ticks": "9033589"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477030,
+      "saved_start_ticks": "9033703"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477031,
+      "saved_start_ticks": "9033703"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477164,
+      "saved_start_ticks": "9038110"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477174,
+      "saved_start_ticks": "9038634"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477182,
+      "saved_start_ticks": "9038866"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477183,
+      "saved_start_ticks": "9038867"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477184,
+      "saved_start_ticks": "9038877"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477194,
+      "saved_start_ticks": "9039808"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477197,
+      "saved_start_ticks": "9040102"
+    }
+  ],
+  "passed": true,
+  "producer_acceptance": {
+    "bytes": 32569,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/producer-acceptance.json",
+    "sha256": "87999328160c45705ad2c556054b4d1ab4684a7b879231a2358081f281c76e3f"
+  },
+  "producer_feature_acceptance": {
+    "bytes": 182904,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/producer-feature-acceptance.json",
+    "sha256": "805207e2336c1537f523076a5b414be95138fb3087ddc3abd1a8190dbcc4ab75"
+  },
+  "producer_receipts": {
+    "compile-compute-sealed": {
+      "actual_inputs": 1601,
+      "output_seal": {
+        "bytes": 2661,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-compute-sealed/output-seal.json",
+        "sha256": "469a84b5516dccf5b547a74b6d85b0142900f9823f5ca04c6cfd69f1df01b1a8"
+      },
+      "owner": {
+        "bytes": 1982,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-compute-sealed/owner.json",
+        "sha256": "a77ee1e89214b22ae9cc2b85a57f4ba1cb81ea71e1ee04bdf8815088f6cc3215"
+      },
+      "peak_sampled_rss_kib": 566192,
+      "wall_seconds": 6.443064781007706
+    },
+    "compile-observer": {
+      "actual_inputs": 1601,
+      "output_seal": {
+        "bytes": 3247,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-observer/output-seal.json",
+        "sha256": "f5e2fa0f63c423fb975a0764ea9d6b5863314ae87ebd3775b28147d1ad9d00c8"
+      },
+      "owner": {
+        "bytes": 2099,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-observer/owner.json",
+        "sha256": "a79fd2293745ce4ce81f3f1efdc45c563a5495aa12480e79d0cf3b723265f0e0"
+      },
+      "peak_sampled_rss_kib": 1270852,
+      "wall_seconds": 45.96549471600156
+    },
+    "link-candidate": {
+      "actual_inputs": 1613,
+      "output_seal": {
+        "bytes": 3529,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/link-candidate/output-seal.json",
+        "sha256": "1a22a1e273f658c129c670962c52c580eecb2ea37b23afdd1adf4816a640aee7"
+      },
+      "owner": {
+        "bytes": 2094,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/link-candidate/owner.json",
+        "sha256": "dc6cde5b972c4d2baadc3f1289782202bc89e07c193635512e679bbf3b769d62"
+      },
+      "peak_sampled_rss_kib": 86960,
+      "wall_seconds": 2.8416447920026258
+    },
+    "prepare-producer": {
+      "actual_inputs": 1570,
+      "output_seal": {
+        "bytes": 13075,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/prepare-producer/output-seal.json",
+        "sha256": "40fa7d57825ab95c6e19d575c0a92cf28643fe1a3b0162090c97edfcc6de3384"
+      },
+      "owner": {
+        "bytes": 1713,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/prepare-producer/owner.json",
+        "sha256": "34b62df0a8fce98826319297a604a3c156b45dd733ca168c00a7c788ee62e23c"
+      },
+      "peak_sampled_rss_kib": 56572,
+      "wall_seconds": 1.564990039987606
+    },
+    "verify-producer": {
+      "actual_inputs": 1619,
+      "output_seal": {
+        "bytes": 3341,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify-producer/output-seal.json",
+        "sha256": "568ee971592571a892d5f9c58f2717ab33b2ecf936665f02a55f06d715f4d79c"
+      },
+      "owner": {
+        "bytes": 1840,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify-producer/owner.json",
+        "sha256": "349532e6eec820e9b964798a5787dcb425798579a83ef265c217ae245df3913d"
+      },
+      "peak_sampled_rss_kib": 119148,
+      "wall_seconds": 4.389918590008165
+    }
+  },
+  "root_review": "Root inspected actual producer/feature results,40main+2owner counts/17changed23same, newobjectdependencies consumingsealedheaders,28strongdefs/defaultlink exclusions/23resources,all5beforeafter/current maps and seals,source1120 andfreshsavedbirths. Rootclosedall5 commands0 once, no priorcontextpromotion.",
+  "schema": "sirius-fp32-restoring-controls-root-runtime-admission-v1",
+  "scope": "Accept actual new producer and authorize original8controls/2readers under frozenlimits only. No numerical integrated, benefit, adoption or qualification verdict; canonicalfeature scope source/provenance, no fresh55trace.",
+  "source_freeze": {
+    "bytes": 403343,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/source-freeze.json",
+    "sha256": "84c16e2c52b4dd326a8eceb11a22063fde52b10983cd867435bded0d96752e26"
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+}

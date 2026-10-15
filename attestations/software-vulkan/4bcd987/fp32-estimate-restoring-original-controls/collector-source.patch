@@ -1,0 +1,182 @@
+--- preserve-finite-result-before-fp32-original-controls.py
++++ preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-policy-stop', 'divide-fp32-estimate-policy-recovery', 'divide-fp32-estimate-graph-review', 'divide-fp32-estimate-ordinary-jit-screen', 'divide-fp32-estimate-restoring-compiler', 'divide-fp32-estimate-restoring-graph-review', 'divide-fp32-estimate-restoring-ordinary-jit-screen', 'fp32-estimate-restoring-original-arithmetic', 'fp32-estimate-restoring-profile-owner-stop', 'fp32-estimate-restoring-profile-reader-rss-stop', 'fp32-estimate-restoring-profile-reader-recovery', 'fp32-estimate-restoring-controls-context-stop', 'fp32-estimate-restoring-original-controls') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,170 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'fp32-estimate-restoring-original-controls':
++    import xml.etree.ElementTree as ET
++    work=root/'out/portable-divide-fp32-estimate-restoring-controls-recovery'
++    products=root/'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery'
++    bundle=root/'attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-controls'
++    tag='evidence/issue-44-fp32-estimate-restoring-original-controls'
++    # Terminal result/reviews are prerequisites, never a prospective PASS.
++    def controls_load(name):return json.loads((work/name).read_text())
++    result=controls_load('prerequisites-result.json')
++    independent=controls_load('independent-terminal-review.json');admission=controls_load('root-terminal-admission.json')
++    assert result['schema']=='sirius-fp32-restoring-original-controls-result-v1'
++    assert result['passed'] is True and result['original_eight_controls_passed'] is True
++    assert result['production_adopted'] is False and result['benefit_executed'] is False
++    assert result['fresh_owner_count']==15 and result['fresh_producer_count']==5
++    assert independent['passed'] is True and admission['passed'] is True
++    assert independent['source_revision']==admission['source_revision']==parent
++    current_records={}
++    def controls_record(path):
++        path=Path(path);key=str(path)
++        if key not in current_records:current_records[key]=dict(pin(path),resolved_path=str(path.resolve(strict=True)))
++        return current_records[key]
++    frozen=controls_load('source-freeze.json')['pins'];assert len(frozen)==1120
++    assert pin(work/'source-freeze.json')=={'bytes':403343,'sha256':'84c16e2c52b4dd326a8eceb11a22063fde52b10983cd867435bded0d96752e26'}
++    for name,expected in frozen.items():assert controls_record(name)==expected,name
++    packet=controls_load('packet.json');actions=controls_load('actions.json');context=controls_load('operator-context.json')
++    assert packet['runner_preparation_revision']==context['revision']==parent
++    assert (work/'actions.json').read_bytes()==(work/'actions.unpinned.json').read_bytes()
++    for key,name in [('source_freeze','source-freeze.json'),('actions','actions.json'),('preparation','preparation.json')]:
++        assert context[key]==controls_record(work/name)
++    producers=['prepare-producer','compile-compute-sealed','compile-observer','link-candidate','verify-producer']
++    labels=[*producers,*[f'control-{i}' for i in range(1,9)],'verify-controls','verify-endpoint-routes']
++    assert packet['producer_labels']==producers and set(actions)==set(labels) and len(labels)==15
++    seals={};receipts={};owners={};input_counts={};all_inputs={};births={};provider_receipts={};xml_receipts={}
++    for label in labels:
++        folder=work/label;owner=controls_load(label+'/owner.json');action=actions[label];test=label.startswith('control-')
++        assert owner['status']=='terminal' and owner['passed'] is True and owner['child_exit']==0
++        assert owner['source']=={'revision':parent,'status':''} and owner['source_unchanged'] and owner['whole_inputs_unchanged']
++        assert owner['stop_reason'] is None and owner['cleanup_errors']==[] and owner['remaining_owned_processes']==[]
++        assert owner['limits']==action['limits']=={'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++        assert type(action['expected_exit']) is int and action['expected_exit']==0 and action['software_provider'] is test
++        assert owner['argv']==[arg.replace('{folder}',str(folder)) for arg in action['argv']]
++        assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
++        owner_births={(int(row['pid']),str(row['saved_start_ticks'])) for row in owner['observed_births']}
++        for row in owner['observed_births']:births[(int(row['pid']),str(row['saved_start_ticks']))]=row
++        assert (folder/'inputs-before.json').read_bytes()==(folder/'inputs-after.json').read_bytes()
++        before=controls_load(label+'/inputs-before.json');input_counts[label]=len(before)
++        for name,expected in before.items():
++            path=Path(name);path=root/path if not path.is_absolute() else path
++            assert set(expected)=={'bytes','sha256','resolved_path'} and controls_record(path)==expected,(label,name)
++            if name in all_inputs:assert all_inputs[name]==expected
++            all_inputs[name]=expected
++        for name in action['frozen_inputs']:
++            path=Path(name);key=str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
++            assert before[key]==controls_record(path),(label,name)
++        receipts[label]={'owner':controls_record(folder/'owner.json'),'inputs_before':controls_record(folder/'inputs-before.json'),
++                         'inputs_after':controls_record(folder/'inputs-after.json')};owners[label]=owner
++        if label in packet['outputs']:
++            seal=controls_load(label+'/output-seal.json')
++            assert seal['label']==label and seal['recipe']==packet['recipes'][label]
++            for key,path in [('source_freeze',work/'source-freeze.json'),('operator_context',work/'operator-context.json'),('inputs_before',folder/'inputs-before.json')]:
++                assert seal[key]==controls_record(path)
++            assert seal['outputs']=={name:controls_record(name) for name in packet['outputs'][label]}
++            seals[label]=controls_record(folder/'output-seal.json');receipts[label]['output_seal']=seals[label]
++        if test:
++            observed=set()
++            for row in owner['provider_mappings']:
++                assert (int(row['pid']),str(row['start_ticks'])) in owner_births and row['owned_session']==owner['child_pid']
++                for line in row['maps']:
++                    fields=line.split(None,5);identity=packet['provider_identities'][fields[5]]
++                    assert [int(v,16) for v in fields[3].split(':')]==identity['device'] and int(fields[4])==identity['inode']
++                    observed.add(fields[5])
++            assert observed==set(packet['provider_identities']) and len(observed)==3
++            env=owner['declared_output_environment']
++            assert env['VK_DRIVER_FILES']=='/usr/share/vulkan/icd.d/lvp_icd.json' and env['SIRIUS_VULKAN_DEVICE']=='0' and env['MESA_SHADER_CACHE_DISABLE']=='true'
++            xml=ET.parse(folder/'gtest.xml').getroot();assert int(xml.get('tests','-1'))==1
++            assert not any(xml.findall('.//'+tag0) for tag0 in ['failure','error','skipped'])
++            for node in [xml,*xml.findall('.//testsuite')]:
++                assert all(int(node.get(key,'0'))==0 for key in ['failures','errors','skipped','disabled'])
++            cases=xml.findall('.//testcase');assert len(cases)==1 and cases[0].get('status')=='run' and cases[0].get('result')=='completed'
++            assert owner['argv'][1]=='--gtest_filter='+cases[0].get('classname')+'.'+cases[0].get('name')
++            xml_receipts[label]=controls_record(folder/'gtest.xml');provider_receipts[label]=owner['provider_mappings']
++        else:assert owner['provider_mappings']==[]
++    assert len(seals)==7 and set(seals)==set(packet['outputs'])
++    for name,identity in packet['provider_identities'].items():
++        status=Path(name).stat();assert [os.major(status.st_dev),os.minor(status.st_dev)]==identity['device'] and status.st_ino==identity['inode']
++    runtime=controls_load('runtime-context.json');prerequisites=result['inherited_prerequisites']
++    assert runtime['inherited_full_profile']==prerequisites and runtime['arithmetic']==result['arithmetic']==prerequisites['arithmetic']
++    assert prerequisites['prior_precontext_stop']['context_attempt_passed'] is False and prerequisites['prior_precontext_stop']['operator_context_accepted'] is False
++    assert prerequisites['prior_precontext_stop']['tool_exit_code']==1 and prerequisites['prior_precontext_stop']['old1095_paths_replayed_as_current'] is False
++    assert prerequisites['original_reader_passed'] is False and prerequisites['original_reader_child_exit']==-15
++    assert runtime['producer_output_seals']=={label:seals[label] for label in producers}
++    for key,name in [('profile','profile.json'),('producer','producer-acceptance.json'),('feature','producer-feature-acceptance.json')]:
++        assert runtime[key]==controls_record(work/name)
++    executable=products/'controls/original_candidate_controls';baseline=products/'controls/original_baseline_controls'
++    assert runtime['executable']==controls_record(executable)
++    assert pin(executable)=={'bytes':10823600,'sha256':'c65e9a20085d9ddb8c20a4f250c5b016fc8ac3ad82487e840f8b469ac72f2b99'}
++    assert pin(baseline)=={'bytes':10753968,'sha256':'41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856'}
++    producer=controls_load('producer-acceptance.json');feature=controls_load('producer-feature-acceptance.json')
++    assert producer['passed'] and feature['passed'] and producer['candidate_executable']==pin(executable) and producer['baseline_executable']==pin(baseline)
++    arrays=producer['actual_ELF_arrays'];assert all(len(arrays[mode])==40 for mode in ['baseline','candidate'])
++    changed=sorted(name for name in arrays['baseline'] if arrays['baseline'][name]['sha256']!=arrays['candidate'][name]['sha256'])
++    assert changed==sorted(producer['changed_arrays'])==packet['changed_arrays'] and len(changed)==17 and producer['unchanged_array_count']==23
++    owner_arrays=producer['actual_ELF_owner_arrays']
++    assert all(set(owner_arrays[mode])=={'kTransportShader','kEndpointShader'} for mode in ['baseline','candidate'])
++    assert all(owner_arrays['baseline'][name]['sha256']==owner_arrays['candidate'][name]['sha256'] for name in owner_arrays['baseline'])
++    assert feature['all28device_definitions_in_object_and_actual_candidate'] and feature['old_vulkan_and_compute_archive_members_absent'] and feature['link_uses_default_archive_extraction']
++    assert feature['feature_host']['private_Int64_or_Float64_object_required'] is False and feature['feature_host']['fresh_enabled55_argument_capture_claimed'] is False
++    assert feature['feature_host']['device_object']==controls_record(packet['device_object']) and feature['feature_host']['base_archive']==controls_record(packet['base_archive'])
++    for name in ['retained_kernels.h','retained_owner_kernels.h','retained_owner_layout.h']:
++        assert pin(products/'controls/headers'/name)==pin(Path(packet['candidate_products'])/name)
++    assert len(packet['resource_sources'])==23
++    for relative,origin in packet['resource_sources'].items():assert pin(products/'controls/resources'/relative)==pin(Path(origin))
++    controls=controls_load('control-acceptance.json');routes=controls_load('endpoint-route-acceptance.json')
++    assert controls['passed'] and routes['passed'] and len(controls['original_controls'])==8
++    assert (controls['timestamp_schema']['complete_readbacks'],controls['timestamp_schema']['ordered_markers'],controls['timestamp_schema']['actual_module_command_joins'])==(32,51,54)
++    assert routes['complete_readbacks']==56 and len(routes['routes'])==4 and routes['complete_readbacks_exact_to_prior_original_control']
++    for row in controls['original_controls']:
++        label=row['label'];assert label in xml_receipts and row['owner']==pin(work/label/'owner.json') and row['xml']==pin(work/label/'gtest.xml')
++    for key,name in [('profile','profile.json'),('control_acceptance','control-acceptance.json'),('endpoint_route_acceptance','endpoint-route-acceptance.json')]:assert result[key]==controls_record(work/name)
++    profile=json.loads(Path(prerequisites['profile_result']['resolved_path']).read_text())['profile']
++    assert profile['passed'] and len(profile['modules'])==35 and (profile['changed_modules'],profile['unchanged_modules'])==(17,18)
++    assert (profile['main_arrays_changed'],profile['main_arrays_unchanged'],profile['owner_arrays_unchanged'])==(17,23,2) and profile['all_seven_tables_and_nonarray_ABI_constants_equal']
++    footprints=[row['divide_footprint'] for row in profile['modules'] if row['changed']]
++    assert sum(row['inlined_camera'] is False for row in footprints)==13 and sum(row['inlined_camera'] is True for row in footprints)==4
++    assert len(packet['source_base_rows'])==33 and len(packet['retained_source_closure'])==14
++    assert sorted(packet['known_outside_retained_source_deltas'])==['gr_ellis_topology.slang','gr_integrator.slang','parity_probe.slang','trace.slang']
++    source_admission=controls_load('root-source-admission.json');runtime_admission=controls_load('root-runtime-admission.json')
++    assert source_admission['passed'] and runtime_admission['passed'] and source_admission['source_revision']==runtime_admission['source_revision']==parent
++    assert pin(work/'independent-source-review.json')=={'bytes':8595,'sha256':'8d702b416cb8853aeff239d8d331161b6eac40cddee8bd859aebb48e58b7806d'}
++    for key,name in [('source_freeze','source-freeze.json'),('actions','actions.json'),('preparation','preparation.json'),('independent_source_review','independent-source-review.json')]:assert source_admission[key]==controls_record(work/name)
++    for key,name in [('source_freeze','source-freeze.json'),('producer_acceptance','producer-acceptance.json'),('producer_feature_acceptance','producer-feature-acceptance.json')]:assert runtime_admission[key]==controls_record(work/name)
++    assert runtime_admission['candidate_executable']==controls_record(executable) and runtime_admission['baseline_executable']==controls_record(baseline)
++    for label in producers:
++        assert runtime_admission['producer_receipts'][label]['owner']==receipts[label]['owner']
++        assert runtime_admission['producer_receipts'][label]['output_seal']==seals[label]
++    terminal_links=[('independent_terminal_review','independent-terminal-review.json'),('prerequisites_result','prerequisites-result.json'),
++        ('runtime_context','runtime-context.json'),('producer_acceptance','producer-acceptance.json'),('producer_feature_acceptance','producer-feature-acceptance.json'),
++        ('control_acceptance','control-acceptance.json'),('endpoint_route_acceptance','endpoint-route-acceptance.json'),('root_terminal_input_check','root-terminal-input-check.json')]
++    for key,name in terminal_links:assert admission[key]==controls_record(work/name)
++    assert controls_load('root-terminal-input-check.json')['passed']
++    fresh=[]
++    for (pid,saved_ticks) in sorted(births):
++        try:current_ticks=(Path('/proc')/str(pid)/'stat').read_text().rsplit(')',1)[1].split()[19]
++        except (FileNotFoundError,ProcessLookupError):current_ticks=None
++        assert current_ticks is None or str(current_ticks)!=saved_ticks
++        fresh.append({'pid':pid,'saved_start_ticks':saved_ticks,'current_start_ticks':current_ticks,'saved_birth_absent':True})
++    original=root/'out/preserve-finite-result-before-fp32-original-controls.py'
++    assert pin(original)=={'bytes':343575,'sha256':'4d1034b60b97b5e17c6146fef612b6ae22a21c0f4abb9304c71703ce0ed587cf'}
++    mapping=[(work,'files/out/'+work.name),(products,'files/bin/linux-gcc/'+products.name),
++        (original,'collector-baseline.py'),(root/'out/preserve-finite-result-fp32-original-controls.patch','collector-source.patch')]
++    summary={'schema':'sirius-fp32-restoring-original-controls-evidence-v1','passed':True,'source_revision':parent,
++        'prerequisites_result':controls_record(work/'prerequisites-result.json'),'independent_terminal_review':controls_record(work/'independent-terminal-review.json'),
++        'root_terminal_admission':controls_record(work/'root-terminal-admission.json'),'root_terminal_input_check':controls_record(work/'root-terminal-input-check.json'),
++        'fresh15_owners':receipts,'all7_output_seals':seals,'actual_input_record_counts':input_counts,'actual_input_record_rows':sum(input_counts.values()),
++        'actual_unique_input_records_current':len(all_inputs),'all1120_frozen_inputs_current':True,'fresh_unique_saved_birth_absence':fresh,
++        'candidate_executable':controls_record(executable),'original_stock_executable':controls_record(baseline),
++        'actual8_provider_inode_birth_session_joins':{label:len(rows) for label,rows in provider_receipts.items()},
++        'all8_XML_zero_failures_errors_skips_disabled':xml_receipts,'original32_readbacks51markers54_module_command_joins_4routes56_readbacks':True,
++        'actual40plus2_ELF_arrays_17changed23same_7tables_and_original_modes':True,'old_context_and_RSS_reader_promoted':False,
++        'topology':'2historical producer receipts+1separateacceptedprofile,old795contextfalse/old45aRSSreaderfalse;5freshproducer+8originalcontrols+2fullreaders allpass.',
++        'benefit_executed':False,'production_adopted':False,'qualification_claimed':False,
++        'scope':'Finite original integrated prerequisites only. Dynamic owner/map/birth totals derive actual terminal records. Original source/assertions/governors/readers and exact primitive/profile/canonical-host joins remain bound. No new native55-field argument capture, hit-rate/speed benefit, complete inlined camera proof, global process absence or fullscience/domain/frame/platform/release qualification is claimed.',
++        'next_dependency':'Sole original fixed ABBA/three repeats with all4whole+16stage+2inclusiveAPI gates unchanged; source-only preparation/admission remains separate.'}
++    message='Preserve guarded FP32 restoring matched producer and original eight integrated controls (#44)\n'
+ elif kind == 'fp32-estimate-restoring-controls-context-stop':
+     work=root/'out/portable-divide-fp32-estimate-restoring-controls'
+     products=root/'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls'

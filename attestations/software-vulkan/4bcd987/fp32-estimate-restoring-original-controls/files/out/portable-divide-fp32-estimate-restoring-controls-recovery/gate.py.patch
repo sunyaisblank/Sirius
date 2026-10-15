@@ -1,0 +1,150 @@
+--- dfa/gate.py
++++ restoring-controls/gate.py
+@@ -4,7 +4,7 @@
+ sys.dont_write_bytecode = True
+ W = Path(__file__).resolve().parent
+ R = W.parents[1]
+-T = R / 'bin/linux-gcc/portable-divide-fp64-estimate-controls-continuation'
++T = R / 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls'
+ P = json.loads((W / 'packet.json').read_text())
+ 
+ def canonical_json(value):
+@@ -44,38 +44,12 @@
+ def accepted(label):
+     return accepted_folder(W / label)
+ 
+-def relocated(path):
+-    return Path(P['historical_host_archive']) / 'files' / Path(path).relative_to(R)
+-
+ def verify_host_reuse():
+-    history = Path(P['historical_host_root'])
+-    accepted_folder(history / 'compile-device')
+-    seal = json.loads((history / 'compile-device/output-seal.json').read_text())
+-    for key, relative in [('source_freeze', 'source-freeze.json'),
+-                          ('operator_context', 'operator-context.json'),
+-                          ('inputs_before', 'compile-device/inputs-before.json')]:
+-        assert content(history / relative) == {k: seal[key][k] for k in ('bytes', 'sha256')}
+-    for original, pin in seal['outputs'].items():
+-        assert content(relocated(original)) == {k: pin[k] for k in ('bytes', 'sha256')}
+-    assert str(P['device_object']) in [str(relocated(name)) for name in seal['outputs']]
+-    pair = json.loads(Path(P['historical_pair_review']).read_text())
+-    assert pair['passed'] and pair['complete_55_enabled_fields_queue_extensions_order_and_feature_chain_equal']
+-    features = []
+-    for name in ('stock', 'candidate'):
+-        folder = history / ('capture-' + name + '-endpoint-normal')
+-        accepted_folder(folder)
+-        features.append(json.loads((folder / 'feature-review.json').read_text()))
+-        assert features[-1]['actual_public_create_arguments_enable_shaderInt64']
+-        assert features[-1]['successful_logical_device_used_for_actual_complete_shader']
+-    assert features[0] == features[1] == pair['normalized_feature_report']
+-    assert len(features[0]['features']) == 55 and features[0]['features']['shaderInt64'] == 1
+-    assert features[0]['features']['shaderFloat64'] == 1
+-    return {'device_object': record(P['device_object']), 'original_output_seal': record(history / 'compile-device/output-seal.json'),
+-            'historical_pair_review': record(P['historical_pair_review']),
+-            'scope': 'Exact accepted compiled Int64 device object/source and historical public-argument witness reused. No fresh numeric-process argument capture is claimed.'}
++    from prerequisite_receipts import verify_canonical_producer
++    return verify_canonical_producer(P,R)
+ 
+ def verify_output_seal(label):
+-    accepted(label)
++    owner=accepted(label); join_runtime_inputs(label,owner)
+     seal = json.loads((W / label / 'output-seal.json').read_text())
+     assert seal['label'] == label and seal['recipe'] == P['recipes'][label]
+     assert seal['source_freeze'] == record(W / 'source-freeze.json')
+@@ -99,8 +73,30 @@
+     return verify(P,R)
+ 
+ 
++def validate_actions():
++    actions=json.loads((W/'actions.json').read_text())
++    expected=[*P['producer_labels'],*[f'control-{i}' for i in range(1,9)],'verify-controls','verify-endpoint-routes']
++    assert set(actions)==set(expected) and len(expected)==15
++    required={'kind','revision','argv','frozen_inputs','limits','scope','expected_exit','software_provider'}
++    outputs={name for names in P['outputs'].values() for name in names}
++    for label in expected:
++        a=actions[label];test=label.startswith('control-')
++        assert set(a)==required and type(a['expected_exit']) is int and a['expected_exit']==0,label
++        assert a['revision']==P['runner_preparation_revision'] and a['kind']==('test' if test else 'diagnostic')
++        assert a['software_provider'] is test and isinstance(a['scope'],str) and a['scope']
++        assert a['limits']=={'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++        assert all(type(v) is int for v in a['limits'].values())
++        assert a['argv']==(P['control_argv'][label] if test else ['/usr/bin/python3','-B',str(W/'gate.py'),'phase',label])
++        files=a['frozen_inputs'];assert isinstance(files,list) and all(isinstance(n,str) and Path(n).is_absolute() for n in files)
++        assert len(files)==len(set(files))
++        assert not set(files)&set(P['outputs'].get(label,[]))
++        assert not {str(W/label/n) for n in ['owner.json','inputs-before.json','inputs-after.json','output-seal.json']}&set(files)
++        assert not {str(W/n) for n in P['outside_inputs']}&set(files)
++    assert (W/'actions.json').read_bytes()==(W/'actions.unpinned.json').read_bytes()
++    return actions
++
+ def pin_context():
+-    verify_static(); verify_host_reuse(); verify_prerequisites()
++    validate_actions(); verify_static(); verify_host_reuse(); verify_prerequisites()
+     assert not T.exists() and not (W / 'operator-context.json').exists()
+     assert not subprocess.check_output(['git', 'status', '--porcelain=v1'], cwd=R)
+     revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=R, text=True).strip()
+@@ -110,7 +106,7 @@
+     assert all(action['revision'] == revision for action in actions.values())
+     write(W / 'operator-context.json', {'revision': revision, 'actions': record(W / 'actions.json'),
+           'source_freeze': record(W / 'source-freeze.json'), 'preparation': record(W / 'preparation.json')})
+-    print('Pinned original Float64-estimate profile; no compiler/provider launched.', flush=True)
++    print('Pinned restoring-FP32 controls source; no compiler/provider launched.', flush=True)
+ 
+ def prepare_producer():
+     verify_prerequisites(); verify_host_reuse()
+@@ -149,7 +145,7 @@
+     return {'passed': True, 'all28device_definitions_in_object_and_actual_candidate': True,
+             'old_vulkan_and_compute_archive_members_absent': True, 'link_uses_default_archive_extraction': True,
+             'feature_host': verify_host_reuse(), 'nm_outputs': symbols,
+-            'scope': 'Candidate linked to identical admitted diagnostic device object. Prior public Float64 arguments remain historical; the reused diagnostic object also enables unused Int64. Candidate shaders require noInt64. Original baseline ELF remains unchanged; public optional-provider fallback/admission is not established.'}
++            'scope': 'Actual candidate linked to exact accepted canonical Vulkan object/base. No private Int64/Float64 device TU or paired55-feature requirement and no fresh numerical feature-argument trace is claimed. Original baseline ELF remains unchanged; no production adoption or qualification.'}
+ 
+ def ancestor_labels(label):
+     ordered = []
+@@ -162,7 +158,7 @@
+     return ordered
+ 
+ def phase(label):
+-    verify_static()
++    validate_actions(); verify_static()
+     context = json.loads((W / 'operator-context.json').read_text())
+     assert context['actions'] == record(W / 'actions.json') and context['preparation'] == record(W / 'preparation.json')
+     assert context['source_freeze'] == record(W / 'source-freeze.json')
+@@ -178,7 +174,7 @@
+           'outputs': {name: record(name) for name in P['outputs'][label]}})
+ 
+ def pin_runtime():
+-    verify_static(); prerequisites=verify_prerequisites(); verify_host_reuse()
++    validate_actions(); verify_static(); prerequisites=verify_prerequisites(); verify_host_reuse()
+     assert not (W / 'runtime-context.json').exists()
+     for label in P['producer_labels']: verify_output_seal(label)
+     assert json.loads((W / 'producer-acceptance.json').read_text())['passed']
+@@ -188,11 +184,11 @@
+           'inherited_full_profile': prerequisites, 'arithmetic': prerequisites['arithmetic'],
+           'producer_output_seals': {label: verify_output_seal(label) for label in P['producer_labels']},
+           'executable': record(T / 'controls/original_candidate_controls'),
+-          'scope': 'Original eight controls only, following5fresh producer owners and explicit historical3+separate1profile receipts. All original filters/assertions/limits/provider/cache policy retained.'})
++          'scope': 'Original eight controls only, following5fresh producer owners and immutable2producer+1separateprofile receipts. All original filters/assertions/limits/provider/cache policy retained.'})
+     print('Original eight controls admitted behind terminal compiler/profile/producer acceptance.', flush=True)
+ 
+ def review():
+-    verify_static(); prerequisites=verify_prerequisites(); verify_host_reuse()
++    validate_actions(); verify_static(); prerequisites=verify_prerequisites(); verify_host_reuse()
+     runtime = json.loads((W / 'runtime-context.json').read_text())
+     assert runtime['inherited_full_profile'] == prerequisites
+     assert runtime['producer_output_seals'] == {label: verify_output_seal(label) for label in P['producer_labels']}
+@@ -217,12 +213,12 @@
+     assert controls['timestamp_schema']['complete_readbacks'] == 32 and controls['timestamp_schema']['ordered_markers'] == 51
+     assert controls['timestamp_schema']['actual_module_command_joins'] == 54
+     assert routes['complete_readbacks'] == 56 and len(routes['routes']) == 4
+-    write(W / 'prerequisites-result.json', {'schema':'sirius-fp64-estimate-controls-continuation-result-v1','passed': True, 'original_eight_controls_passed': True,
++    write(W / 'prerequisites-result.json', {'schema':'sirius-fp32-restoring-original-controls-result-v1','passed': True, 'original_eight_controls_passed': True,
+           'profile': record(W / 'profile.json'), 'arithmetic': prerequisites['arithmetic'],
+           'control_acceptance': record(W / 'control-acceptance.json'), 'endpoint_route_acceptance': record(W / 'endpoint-route-acceptance.json'),
+           'production_adopted': False, 'benefit_executed': False,
+           'fresh_owner_count':15,'fresh_producer_count':5,'inherited_prerequisites':prerequisites,
+-          'scope': 'Original primitive arithmetic and eight integrated prerequisites for explicit17-module exact-verified Float64 estimate diagnostic profile. Original20+2 adoption gates remain unexecuted; no full-science/frame/release qualification.'})
++          'scope': 'Original primitive arithmetic and eight integrated prerequisites for explicit17-module guarded FP32 restoring diagnostic profile. Original20+2 adoption gates remain unexecuted; no full-science/frame/release qualification.'})
+     print('Original eight controls and complete route/readback joins accepted; no benefit verdict.', flush=True)
+ 
+ if __name__ == '__main__':

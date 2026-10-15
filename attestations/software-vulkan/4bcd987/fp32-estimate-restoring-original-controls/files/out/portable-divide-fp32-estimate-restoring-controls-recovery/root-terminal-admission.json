@@ -1,0 +1,78 @@
+{
+  "actual_closure": {
+    "all_original8_and_both_readers_passed": true,
+    "input_rows": 24400,
+    "observed_births_absent": 26,
+    "owners": 15,
+    "seals": 7,
+    "unique_inputs": 1678
+  },
+  "benefit_executed": false,
+  "collector_source_review": {
+    "AST_and_exact_inverse_patch_checked": true,
+    "baseline": {
+      "bytes": 343575,
+      "resolved_path": "/home/astra/.project/Sirius/out/preserve-finite-result-before-fp32-original-controls.py",
+      "sha256": "4d1034b60b97b5e17c6146fef612b6ae22a21c0f4abb9304c71703ce0ed587cf"
+    },
+    "collector": {
+      "bytes": 361028,
+      "resolved_path": "/home/astra/.project/Sirius/out/preserve-finite-result.py",
+      "sha256": "94a98ce6c0069b24e171e26b9d541bed1029df5d74eed3ffd2d9dd26ba2493fa"
+    },
+    "exact_source_patch": {
+      "bytes": 22627,
+      "resolved_path": "/home/astra/.project/Sirius/out/preserve-finite-result-fp32-original-controls.patch",
+      "sha256": "4f933d2268d55cd049d88f53e7f35623ddaa2c8f08c4891f993706f64c601e81"
+    },
+    "prior_root_check_chunk": "2cd930",
+    "root_full_branch_and_common_tail_reviewed": true,
+    "scope": "Conditional terminal collection branch only; runtime frozen/owner inputs exclude this collector. Admission created after all18 actual commands CLOSED0 and full independent terminal review read."
+  },
+  "control_acceptance": {
+    "bytes": 6379,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-acceptance.json",
+    "sha256": "dad2785fa1ecc5c080e9f76fefab4471afa536a7c975cec65d6c7f7efa4c9ea4"
+  },
+  "endpoint_route_acceptance": {
+    "bytes": 16396,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/endpoint-route-acceptance.json",
+    "sha256": "473e5ab1bb5963396291abcb797d97896f4b61704c3685a8a9fb5b523cb30354"
+  },
+  "full_qualification_claimed": false,
+  "independent_terminal_review": {
+    "bytes": 10147,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/independent-terminal-review.json",
+    "sha256": "d5599dcb36b4c8bef208364c42b564a42d78575231eb3a50d1608289d92e1424"
+  },
+  "passed": true,
+  "prerequisites_result": {
+    "bytes": 9651,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/prerequisites-result.json",
+    "sha256": "c007c6c208d5d1bfe0476213f97836a5f21a19dd2d0adf31aeb9271a40e7fead"
+  },
+  "producer_acceptance": {
+    "bytes": 32569,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/producer-acceptance.json",
+    "sha256": "87999328160c45705ad2c556054b4d1ab4684a7b879231a2358081f281c76e3f"
+  },
+  "producer_feature_acceptance": {
+    "bytes": 182904,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/producer-feature-acceptance.json",
+    "sha256": "805207e2336c1537f523076a5b414be95138fb3087ddc3abd1a8190dbcc4ab75"
+  },
+  "production_adopted": false,
+  "root_terminal_input_check": {
+    "bytes": 31614,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/root-terminal-input-check.json",
+    "sha256": "46667426c25a4a2e595e46ca7bafdb1f200de2ab8d556c06b311f41b765ac14d"
+  },
+  "runtime_context": {
+    "bytes": 11110,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/runtime-context.json",
+    "sha256": "d115fd9a1812078505465b4097a4932dff1044c26a73bb014c517bfd742e2874"
+  },
+  "schema": "sirius-fp32-restoring-original-controls-root-terminal-admission-v1",
+  "scope": "Finite matched original8controls+both fullreaders and5producer closure only. Actual recordedbirths absent, no globalprocessabsenceclaim. Camera fullnormalization/Round/fallback additionally source/O1 scoped; no benefit/hitrate/adoption/fullscience/frame/domain/platform/release qualification.",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+}

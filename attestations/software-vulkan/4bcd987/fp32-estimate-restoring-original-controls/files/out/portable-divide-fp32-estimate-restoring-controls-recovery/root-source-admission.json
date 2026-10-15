@@ -1,0 +1,66 @@
+{
+  "actions": {
+    "bytes": 2078361,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/actions.json",
+    "sha256": "84722c8d89725f172675c3e33285b969f85d982f6eb35b8b36c399abb11fd549"
+  },
+  "actual_producer_review_required_before_runtime": true,
+  "author_metadata_review": {
+    "bytes": 52223,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/prerequisite-metadata-review.json",
+    "sha256": "2a664de77d8ad0863bc87a217afee515856b08e88e41f303f13d4238594465ff"
+  },
+  "causal_change": "Correct actual539schema literal; explicit newnamespace/priorstop provenance adapters only. All original numerical/reader/fixture/limits unchanged.",
+  "commands_authorized": [
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/gate.py pin-context",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py prepare-producer",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py compile-compute-sealed",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py compile-observer",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py link-candidate",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py verify-producer",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/gate.py pin-runtime",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py control-1",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py control-2",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py control-3",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py control-4",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py control-5",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py control-6",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py control-7",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py control-8",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py verify-controls",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/run_owned.py verify-endpoint-routes",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-controls-recovery/gate.py review"
+  ],
+  "fresh_topology": {
+    "original_controls": 8,
+    "original_readers": 2,
+    "producer": 5
+  },
+  "independent_source_review": {
+    "bytes": 8595,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/independent-source-review.json",
+    "sha256": "8d702b416cb8853aeff239d8d331161b6eac40cddee8bd859aebb48e58b7806d"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "passed": true,
+  "preparation": {
+    "bytes": 14251,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/preparation.json",
+    "sha256": "88811c19c71a760890cbf75c5190ab55600d639b005baae69f87388d6ac20893"
+  },
+  "prior_context_attempt_passed": false,
+  "prior_stop_commit": "795e3d871054211cbc667d520371858fb592e550",
+  "root_review": "Root fully read corrected helper delta/prior795stop adapter and independent8595B source review; entire gate/prerequisite/producer source previously read. Rootf0b025 CLOSED0 verified1120current3fieldpins,15typed8keyactions/expectedint0/limits/argv,1123-1231futureclosures/exclusions,18exactnewnamespacecommands/41outputs and allcontexts/bin/owners absent,AST/env/clean4498. c4c8bf +f0b025 checked final78sourceassert ASTinventory/107typedrepresentativerows and finalhelperpin of author1788aggregatecomparison report. Prior312selected/317Git/dependencyproof reused; actualnew795joins checked, no retired1095current replay.",
+  "schema": "sirius-fp32-restoring-controls-recovery-root-source-admission-v1",
+  "scope": "Source admission only. Rootsoleactual operator; prospectivecontext then5producer/8controls/2readers. Prior539arith/b207profile/45acompiler reuse and originalfalseRSS/precontext history explicit. No benefit/adoption/qualification.",
+  "source_freeze": {
+    "bytes": 403343,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/source-freeze.json",
+    "sha256": "84c16e2c52b4dd326a8eceb11a22063fde52b10983cd867435bded0d96752e26"
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf"
+}

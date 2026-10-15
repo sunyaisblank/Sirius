@@ -1,0 +1,624 @@
+{
+  "XML_zero_fail_error_skip_disabled": {
+    "control-1": {
+      "bytes": 10047,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-1/gtest.xml",
+      "sha256": "68eee550cf9cebbf1e0e09c8b360ff4376dc0aaf2683bfaf9a4091a6a4c9825a"
+    },
+    "control-2": {
+      "bytes": 667,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-2/gtest.xml",
+      "sha256": "c78e664b78acfe1e98f45f98f0678cdb3b3b3a8f4bbe53abc0988dd26a963346"
+    },
+    "control-3": {
+      "bytes": 1009,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-3/gtest.xml",
+      "sha256": "5466cb577795d10db5645b619233c9c265ffcaaa0b31a1c529cd7b2b65463034"
+    },
+    "control-4": {
+      "bytes": 606,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-4/gtest.xml",
+      "sha256": "cd1af63ba5f7bfec729e3ecaf6cffcf61f1d4c950e451844eb8ecdc56e603cc7"
+    },
+    "control-5": {
+      "bytes": 619,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-5/gtest.xml",
+      "sha256": "9c17406dfbf2ee95bc931bb137c883fa5df35b420011e30512d48680419ba274"
+    },
+    "control-6": {
+      "bytes": 625,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-6/gtest.xml",
+      "sha256": "c5a39b1edaed6e4df2962a7b45207971704028587676b7a7e88336381fd6b06b"
+    },
+    "control-7": {
+      "bytes": 44885,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-7/gtest.xml",
+      "sha256": "dedc02a02cf84f0eac0cfc21a3d4e62c19e9d6b52b60abb1fa99bf8d5440873e"
+    },
+    "control-8": {
+      "bytes": 40950,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-8/gtest.xml",
+      "sha256": "52434a81c74476dd39b569e593623517624c348026689d1a893ee831137f3b82"
+    }
+  },
+  "actual_input_counts": {
+    "compile-compute-sealed": 1601,
+    "compile-observer": 1601,
+    "control-1": 1630,
+    "control-2": 1630,
+    "control-3": 1630,
+    "control-4": 1630,
+    "control-5": 1630,
+    "control-6": 1630,
+    "control-7": 1630,
+    "control-8": 1630,
+    "link-candidate": 1613,
+    "prepare-producer": 1570,
+    "verify-controls": 1678,
+    "verify-endpoint-routes": 1678,
+    "verify-producer": 1619
+  },
+  "actual_input_rows": 24400,
+  "actual_provider_map_joins": {
+    "control-1": [
+      {
+        "maps": [
+          "769908200000-769910408000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "769910408000-769910409000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "769910409000-769910ae6000 rw-p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "769910c00000-769910c5b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "769910c5b000-76991106b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "76991106b000-7699116c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7699116c6000-769911761000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "769911f06000-769911f0c000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "769911f0c000-769911f58000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "769911f58000-769911f82000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "769911f82000-769911f83000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "769911f83000-769911f84000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        ],
+        "owned_session": 477394,
+        "pid": 477394,
+        "start_ticks": "9050483"
+      }
+    ],
+    "control-2": [
+      {
+        "maps": [
+          "7d579d800000-7d57a5a08000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7d57a5a08000-7d57a5a09000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7d57a5a09000-7d57a60e6000 rw-p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7d57a6200000-7d57a625b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7d57a625b000-7d57a666b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7d57a666b000-7d57a6cc6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7d57a6cc6000-7d57a6d61000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7d57a761d000-7d57a7623000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7d57a7623000-7d57a766f000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7d57a766f000-7d57a7699000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7d57a7699000-7d57a769a000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7d57a769a000-7d57a769b000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        ],
+        "owned_session": 477848,
+        "pid": 477848,
+        "start_ticks": "9060637"
+      }
+    ],
+    "control-3": [
+      {
+        "maps": [
+          "78e3ea800000-78e3f2a08000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "78e3f2a08000-78e3f2a09000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "78e3f2a09000-78e3f30e6000 rw-p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "78e3f3200000-78e3f325b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "78e3f325b000-78e3f366b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "78e3f366b000-78e3f3cc6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "78e3f3cc6000-78e3f3d61000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "78e3f44f3000-78e3f44f9000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "78e3f44f9000-78e3f4545000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "78e3f4545000-78e3f456f000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "78e3f456f000-78e3f4570000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "78e3f4570000-78e3f4571000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        ],
+        "owned_session": 478158,
+        "pid": 478158,
+        "start_ticks": "9069170"
+      }
+    ],
+    "control-4": [
+      {
+        "maps": [
+          "7c58ea600000-7c58f2808000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7c58f2808000-7c58f2809000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7c58f2809000-7c58f2ee6000 rw-p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7c58f3000000-7c58f305b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7c58f305b000-7c58f346b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7c58f346b000-7c58f3ac6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7c58f3ac6000-7c58f3b61000 rw-p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7c58f432a000-7c58f4330000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7c58f4330000-7c58f437c000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7c58f437c000-7c58f43a6000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7c58f43a6000-7c58f43a7000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7c58f43a7000-7c58f43a8000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        ],
+        "owned_session": 479171,
+        "pid": 479171,
+        "start_ticks": "9087039"
+      }
+    ],
+    "control-5": [
+      {
+        "maps": [
+          "712453600000-71245b808000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "71245b808000-71245b809000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "71245b809000-71245be9e000 r--p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "71245be9e000-71245bee6000 rw-p 0889d000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "71245c000000-71245c05b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "71245c05b000-71245c46b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "71245c46b000-71245cac6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "71245cac6000-71245cb5c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "71245cb5c000-71245cb61000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "71245d468000-71245d46e000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "71245d46e000-71245d4ba000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "71245d4ba000-71245d4e4000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "71245d4e4000-71245d4e5000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "71245d4e5000-71245d4e6000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        ],
+        "owned_session": 479485,
+        "pid": 479485,
+        "start_ticks": "9100198"
+      }
+    ],
+    "control-6": [
+      {
+        "maps": [
+          "731e9d800000-731ea5a08000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "731ea5a08000-731ea5a09000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "731ea5a09000-731ea609e000 r--p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "731ea609e000-731ea60e6000 rw-p 0889d000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "731ea6200000-731ea625b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "731ea625b000-731ea666b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "731ea666b000-731ea6cc6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "731ea6cc6000-731ea6d5c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "731ea6d5c000-731ea6d61000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "731ea762e000-731ea7634000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "731ea7634000-731ea7680000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "731ea7680000-731ea76aa000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "731ea76aa000-731ea76ab000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "731ea76ab000-731ea76ac000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        ],
+        "owned_session": 479847,
+        "pid": 479847,
+        "start_ticks": "9121263"
+      }
+    ],
+    "control-7": [
+      {
+        "maps": [
+          "7af13c800000-7af144a08000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7af144a08000-7af144a09000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7af144a09000-7af14509e000 r--p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7af14509e000-7af1450e6000 rw-p 0889d000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "7af145200000-7af14525b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7af14525b000-7af14566b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7af14566b000-7af145cc6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7af145cc6000-7af145d5c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7af145d5c000-7af145d61000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "7af146626000-7af14662c000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7af14662c000-7af146678000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7af146678000-7af1466a2000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7af1466a2000-7af1466a3000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "7af1466a3000-7af1466a4000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        ],
+        "owned_session": 481209,
+        "pid": 481209,
+        "start_ticks": "9141424"
+      }
+    ],
+    "control-8": [
+      {
+        "maps": [
+          "77a046e00000-77a04f008000 r-xp 00000000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "77a04f008000-77a04f009000 ---p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "77a04f009000-77a04f69e000 r--p 08208000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "77a04f69e000-77a04f6e6000 rw-p 0889d000 08:50 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+          "77a04f800000-77a04f85b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "77a04f85b000-77a04fc6b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "77a04fc6b000-77a0502c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "77a0502c6000-77a05035c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "77a05035c000-77a050361000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "77a050c4b000-77a050c51000 r--p 00000000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "77a050c51000-77a050c9d000 r-xp 00006000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "77a050c9d000-77a050cc7000 r--p 00052000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "77a050cc7000-77a050cc8000 r--p 0007b000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+          "77a050cc8000-77a050cc9000 rw-p 0007c000 08:50 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+        ],
+        "owned_session": 481564,
+        "pid": 481564,
+        "start_ticks": "9147995"
+      }
+    ]
+  },
+  "actual_unique_inputs": 1678,
+  "all18_root_commands_closed_zero_once": true,
+  "all_inputs_current": true,
+  "control_acceptance": {
+    "bytes": 6379,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-acceptance.json",
+    "sha256": "dad2785fa1ecc5c080e9f76fefab4471afa536a7c975cec65d6c7f7efa4c9ea4"
+  },
+  "control_wall_seconds_sum": 847.1585876460304,
+  "endpoint_route_acceptance": {
+    "bytes": 16396,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/endpoint-route-acceptance.json",
+    "sha256": "473e5ab1bb5963396291abcb797d97896f4b61704c3685a8a9fb5b523cb30354"
+  },
+  "fresh_observed_births_absent": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 476977,
+      "saved_start_ticks": "9031626"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 476990,
+      "saved_start_ticks": "9032523"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 476994,
+      "saved_start_ticks": "9032637"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 476995,
+      "saved_start_ticks": "9032637"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477007,
+      "saved_start_ticks": "9033589"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477030,
+      "saved_start_ticks": "9033703"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477031,
+      "saved_start_ticks": "9033703"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477164,
+      "saved_start_ticks": "9038110"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477174,
+      "saved_start_ticks": "9038634"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477182,
+      "saved_start_ticks": "9038866"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477183,
+      "saved_start_ticks": "9038867"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477184,
+      "saved_start_ticks": "9038877"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477194,
+      "saved_start_ticks": "9039808"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477197,
+      "saved_start_ticks": "9040102"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477394,
+      "saved_start_ticks": "9050483"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 477848,
+      "saved_start_ticks": "9060637"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 478158,
+      "saved_start_ticks": "9069170"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 479171,
+      "saved_start_ticks": "9087039"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 479485,
+      "saved_start_ticks": "9100198"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 479847,
+      "saved_start_ticks": "9121263"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 481209,
+      "saved_start_ticks": "9141424"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 481564,
+      "saved_start_ticks": "9147995"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 481987,
+      "saved_start_ticks": "9157303"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 481995,
+      "saved_start_ticks": "9157638"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 482097,
+      "saved_start_ticks": "9159639"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 482098,
+      "saved_start_ticks": "9159974"
+    }
+  ],
+  "old_context_and_RSS_reader_promoted": false,
+  "original32readbacks51markers54joins4routes56readbacks": true,
+  "output_seals": {
+    "compile-compute-sealed": {
+      "bytes": 2661,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-compute-sealed/output-seal.json",
+      "sha256": "469a84b5516dccf5b547a74b6d85b0142900f9823f5ca04c6cfd69f1df01b1a8"
+    },
+    "compile-observer": {
+      "bytes": 3247,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-observer/output-seal.json",
+      "sha256": "f5e2fa0f63c423fb975a0764ea9d6b5863314ae87ebd3775b28147d1ad9d00c8"
+    },
+    "link-candidate": {
+      "bytes": 3529,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/link-candidate/output-seal.json",
+      "sha256": "1a22a1e273f658c129c670962c52c580eecb2ea37b23afdd1adf4816a640aee7"
+    },
+    "prepare-producer": {
+      "bytes": 13075,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/prepare-producer/output-seal.json",
+      "sha256": "40fa7d57825ab95c6e19d575c0a92cf28643fe1a3b0162090c97edfcc6de3384"
+    },
+    "verify-controls": {
+      "bytes": 1413,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify-controls/output-seal.json",
+      "sha256": "ac868dc78e3d12e0d8646dfff4cac7bdb41a5c844adfdfdf2f9c7e0873da539c"
+    },
+    "verify-endpoint-routes": {
+      "bytes": 1449,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify-endpoint-routes/output-seal.json",
+      "sha256": "9efc4ff45d91a37fc0e1c1fe7fbfe573c31c3cfd6bfda4b26ca86108bd32741a"
+    },
+    "verify-producer": {
+      "bytes": 3341,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify-producer/output-seal.json",
+      "sha256": "568ee971592571a892d5f9c58f2717ab33b2ecf936665f02a55f06d715f4d79c"
+    }
+  },
+  "owner_wall_seconds_sum": 920.9955855400476,
+  "owners": {
+    "compile-compute-sealed": {
+      "minimum_sampled_available_kib": 18482436,
+      "owner": {
+        "bytes": 1982,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-compute-sealed/owner.json",
+        "sha256": "a77ee1e89214b22ae9cc2b85a57f4ba1cb81ea71e1ee04bdf8815088f6cc3215"
+      },
+      "peak_sampled_rss_kib": 566192,
+      "wall_seconds": 6.443064781007706
+    },
+    "compile-observer": {
+      "minimum_sampled_available_kib": 17599584,
+      "owner": {
+        "bytes": 2099,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-observer/owner.json",
+        "sha256": "a79fd2293745ce4ce81f3f1efdc45c563a5495aa12480e79d0cf3b723265f0e0"
+      },
+      "peak_sampled_rss_kib": 1270852,
+      "wall_seconds": 45.96549471600156
+    },
+    "control-1": {
+      "minimum_sampled_available_kib": 16120304,
+      "owner": {
+        "bytes": 3625,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-1/owner.json",
+        "sha256": "0597f0b7efbd9b616dd906bc841fca8a17b7148dc0a65a34cd3673a42ae22234"
+      },
+      "peak_sampled_rss_kib": 2296800,
+      "wall_seconds": 88.94844825500331
+    },
+    "control-2": {
+      "minimum_sampled_available_kib": 16271320,
+      "owner": {
+        "bytes": 3618,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-2/owner.json",
+        "sha256": "dd55ea01f83c36cd11932d0876c609addea35da99b1a727b7c9c176388085568"
+      },
+      "peak_sampled_rss_kib": 1903720,
+      "wall_seconds": 76.83380564299296
+    },
+    "control-3": {
+      "minimum_sampled_available_kib": 14707932,
+      "owner": {
+        "bytes": 3624,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-3/owner.json",
+        "sha256": "a4262507e518f46bf2a9947d93de2e1dd9b286d7d0e8782ed3d16fe93efefb5b"
+      },
+      "peak_sampled_rss_kib": 3500928,
+      "wall_seconds": 157.4574142870115
+    },
+    "control-4": {
+      "minimum_sampled_available_kib": 14916616,
+      "owner": {
+        "bytes": 3606,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-4/owner.json",
+        "sha256": "280af0d9e961ca88adc1c9ef4029357b992ac1a0a4375257e422b06415c01b70"
+      },
+      "peak_sampled_rss_kib": 3029028,
+      "wall_seconds": 108.11190086699207
+    },
+    "control-5": {
+      "minimum_sampled_available_kib": 14809688,
+      "owner": {
+        "bytes": 3869,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-5/owner.json",
+        "sha256": "70192d581180247456f82734f3d085a8862785b23dbd40a255072cf3e842d10c"
+      },
+      "peak_sampled_rss_kib": 3038412,
+      "wall_seconds": 133.79296362301102
+    },
+    "control-6": {
+      "minimum_sampled_available_kib": 15576648,
+      "owner": {
+        "bytes": 3874,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-6/owner.json",
+        "sha256": "34ec8ff75c462a27ac1a3cf24cf4cfded8cf943a30a2eeb359bd6653fadf03f2"
+      },
+      "peak_sampled_rss_kib": 3220424,
+      "wall_seconds": 158.42575733001286
+    },
+    "control-7": {
+      "minimum_sampled_available_kib": 16057872,
+      "owner": {
+        "bytes": 3876,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-7/owner.json",
+        "sha256": "6aee08751e573808514eaed6e85b0745a00852a2ec31e7a1f0eb6f50dc6ba770"
+      },
+      "peak_sampled_rss_kib": 2343820,
+      "wall_seconds": 58.12129640800413
+    },
+    "control-8": {
+      "minimum_sampled_available_kib": 15957912,
+      "owner": {
+        "bytes": 3864,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/control-8/owner.json",
+        "sha256": "8b0b2d817e0841ca19b51321ca61d2eb07c2a4747968cd221ea9ab5011f27784"
+      },
+      "peak_sampled_rss_kib": 2358916,
+      "wall_seconds": 65.46700123300252
+    },
+    "link-candidate": {
+      "minimum_sampled_available_kib": 18886440,
+      "owner": {
+        "bytes": 2094,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/link-candidate/owner.json",
+        "sha256": "dc6cde5b972c4d2baadc3f1289782202bc89e07c193635512e679bbf3b769d62"
+      },
+      "peak_sampled_rss_kib": 86960,
+      "wall_seconds": 2.8416447920026258
+    },
+    "prepare-producer": {
+      "minimum_sampled_available_kib": 18483376,
+      "owner": {
+        "bytes": 1713,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/prepare-producer/owner.json",
+        "sha256": "34b62df0a8fce98826319297a604a3c156b45dd733ca168c00a7c788ee62e23c"
+      },
+      "peak_sampled_rss_kib": 56572,
+      "wall_seconds": 1.564990039987606
+    },
+    "verify-controls": {
+      "minimum_sampled_available_kib": 18063212,
+      "owner": {
+        "bytes": 1839,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify-controls/owner.json",
+        "sha256": "f8d6db752bd4424f420caecb9b4026c4cb53be50c2aa7a0bbdbd2ee74605ddd3"
+      },
+      "peak_sampled_rss_kib": 242544,
+      "wall_seconds": 9.01568954900722
+    },
+    "verify-endpoint-routes": {
+      "minimum_sampled_available_kib": 18418340,
+      "owner": {
+        "bytes": 1854,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify-endpoint-routes/owner.json",
+        "sha256": "b37841dd758cf8a42340316a6631747c3e698d64f3a452d8a5de50aaf2073440"
+      },
+      "peak_sampled_rss_kib": 58312,
+      "wall_seconds": 3.6161954260023776
+    },
+    "verify-producer": {
+      "minimum_sampled_available_kib": 19019328,
+      "owner": {
+        "bytes": 1840,
+        "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/verify-producer/owner.json",
+        "sha256": "349532e6eec820e9b964798a5787dcb425798579a83ef265c217ae245df3913d"
+      },
+      "peak_sampled_rss_kib": 119148,
+      "wall_seconds": 4.389918590008165
+    }
+  },
+  "passed": true,
+  "prerequisites_result": {
+    "bytes": 9651,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/prerequisites-result.json",
+    "sha256": "c007c6c208d5d1bfe0476213f97836a5f21a19dd2d0adf31aeb9271a40e7fead"
+  },
+  "runtime_context": {
+    "bytes": 11110,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/runtime-context.json",
+    "sha256": "d115fd9a1812078505465b4097a4932dff1044c26a73bb014c517bfd742e2874"
+  },
+  "schema": "sirius-fp32-restoring-original-controls-root-terminal-input-check-v1",
+  "scope": "Finite matched original8controls+both fullreaders and5producer closure only. Actual recordedbirths absent, no globalprocessabsenceclaim. Camera fullnormalization/Round/fallback additionally source/O1 scoped; no benefit/hitrate/adoption/fullscience/frame/domain/platform/release qualification.",
+  "source_freeze": {
+    "bytes": 403343,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/source-freeze.json",
+    "sha256": "84c16e2c52b4dd326a8eceb11a22063fde52b10983cd867435bded0d96752e26"
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "static_inputs": 1120
+}

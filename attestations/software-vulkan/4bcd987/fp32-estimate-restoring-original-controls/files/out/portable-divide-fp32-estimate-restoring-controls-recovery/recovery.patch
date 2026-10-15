@@ -1,0 +1,103 @@
+--- 795e/gate.py
++++ recovery/gate.py
+@@ -4,7 +4,7 @@
+ sys.dont_write_bytecode = True
+ W = Path(__file__).resolve().parent
+ R = W.parents[1]
+-T = R / 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls'
++T = R / 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery'
+ P = json.loads((W / 'packet.json').read_text())
+ 
+ def canonical_json(value):
+--- 795e/verify_producer.py
++++ recovery/verify_producer.py
+@@ -5,7 +5,7 @@
+ R = Path.cwd().resolve()
+ W = Path(__file__).resolve().parent
+ B = R / 'bin/linux-gcc'
+-T = B / 'portable-divide-fp32-estimate-restoring-controls/controls'
++T = B / 'portable-divide-fp32-estimate-restoring-controls-recovery/controls'
+ def identity(path):
+     data = path.read_bytes()
+     return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+@@ -73,10 +73,10 @@
+         pin = {key: normalized[str(path)][key] for key in ['bytes', 'sha256']}
+         assert identity(path) == pin, dependency
+         records[str(path.relative_to(R))] = pin
+-    assert 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls/controls/headers/retained_kernels.h' in records
++    assert 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/headers/retained_kernels.h' in records
+     if label == 'compile-compute-sealed':
+         for header in ['retained_owner_kernels.h', 'retained_owner_layout.h']:
+-            assert 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls/controls/headers/' + header in records
++            assert 'bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/headers/' + header in records
+     assert 'src/sirius/backend/vulkan/vulkan_device.h' not in records or records['src/sirius/backend/vulkan/vulkan_device.h']['sha256'] == '604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de'
+     compile_records[label] = {'owner': identity(W / label / 'owner.json'), 'object': identity(T / (name + '.o')),
+                               'actual_dependencies': records}
+--- 795e/prerequisite_receipts.py
++++ recovery/prerequisite_receipts.py
+@@ -69,13 +69,55 @@
+             'manifests':manifests,
+             'scope':'Exact canonical Vulkan object/base and unchanged integrated test objects/libraries/source dependencies. Canonical feature enablement remains source/accepted producer evidence; new numerical owners must observe actual three provider maps. No fresh55-field argument equivalence claim.'}
+ 
++def prior_precontext_stop(P,R):
++    row=P['archives']['precontext_stop'];manifest=archive(row)
++    work=Path(P['precontext_stop_work']);old=R/'out/portable-divide-fp32-estimate-restoring-controls'
++    first=json.loads((work/'root-first-stop.json').read_text())
++    independent=json.loads((work/'independent-stop-review.json').read_text())
++    root=json.loads((work/'root-context-stop-admission.json').read_text())
++    assert first['schema']=='sirius-fp32-restoring-controls-root-precontext-stop-v1'
++    assert root['schema']=='sirius-fp32-restoring-controls-root-context-stop-admission-v1'
++    assert first['passed'] is True and independent['passed'] is True and root['passed'] is True
++    assert first['source_revision']==independent['source_revision']==root['source_revision']==P['runner_preparation_revision']
++    assert first['classification']==root['classification']==independent['actual_stop']['classification']=='PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP'
++    for value in (first,root,independent['actual_stop']):
++        assert value['context_attempt_passed'] is False and value['operator_context_accepted'] is False
++    assert first['tool_exit_code']==1 and first['tool_session_terminal'] is True
++    assert first['producer_compiler_provider_control_or_reader_workloads_launched']==0
++    assert first['prospective_actions_unconsumed']==15 and first['prospective_commands_unexecuted_after_first']==17
++    assert first['frozen_source_current'] is True and first['source_freeze_count_current']==1095
++    assert first['all_absent'] and all(value is True for value in first['all_absent'].values())
++    assert first['actual_arithmetic_schema']=='sirius-fp32-estimate-restoring-original-arithmetic-result-v1'
++    assert first['expected_schema_literal']=='sirius-fp32-restoring-original-arithmetic-result-v1'
++    assert first['accepted_arithmetic_passed'] is True
++    assert record(Path(P['arithmetic_work'])/'arithmetic-result.json')==first['accepted_arithmetic_result']
++    for key,name in [('root_first_stop','root-first-stop.json'),('independent_stop_review','independent-stop-review.json')]:
++        archived(root[key],work/name,old/name)
++    for key,name in [('source_freeze','source-freeze.json'),('actions','actions.json'),('packet','packet.json'),('preparation','preparation.json')]:
++        archived(first[key],work/name,old/name)
++    for pin in first['historical_source_admissions']:
++        original=Path(pin['resolved_path']);assert original.parent==old
++        archived(pin,work/original.name,original)
++        assert json.loads((work/original.name).read_text())['passed'] is True
++    # Bind the exact immediately consumed source/preimages, not old1095 current
++    # paths. The original SOURCE reports stay unchanged despite the actual stop.
++    for name in ('gate.py','prerequisite_receipts.py','verify_producer.py','packet.json','preparation.json','source-freeze.json','actions.unpinned.json','provenance.json'):
++        assert (Path(P['recovery_work'])/'originals'/('before-precontext-stop-'+name)).read_bytes()==(work/name).read_bytes()
++    return {'manifest':manifest,'root_first_stop':record(work/'root-first-stop.json'),
++            'independent_stop_review':record(work/'independent-stop-review.json'),
++            'root_stop_admission':record(work/'root-context-stop-admission.json'),
++            'context_attempt_passed':False,'operator_context_accepted':False,'tool_exit_code':1,
++            'source_admissions_preserved':True,'old1095_paths_replayed_as_current':False,
++            'scope':'Accepted stop evidence only. Actual pin-context refused before context/owner/build/provider/test. Separate corrected schema/new namespace changes no original numerical or governor gate.'}
++
+ def verify(P,R):
++    prior_stop=prior_precontext_stop(P,R)
+     manifests={key:archive(row) for key,row in P['archives'].items()}
+     for row in P['reader_reference_aliases']:
+         assert content(row['original'])==content(row['backed'])
+     arith=Path(P['arithmetic_work']);load=lambda n:json.loads((arith/n).read_text())
+     ar=load('arithmetic-result.json')
+-    assert ar['passed'] and ar['schema']=='sirius-fp32-restoring-original-arithmetic-result-v1'
++    assert ar['passed'] and ar['schema']=='sirius-fp32-estimate-restoring-original-arithmetic-result-v1'
+     assert ar['candidate_macro']==P['candidate_macro']=='SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1'
+     assert ar['original_records']==174268 and ar['original_operation_count']==14 and ar['complete_output_words_per_provider']==697072
+     assert ar['fresh_candidate_host_and_full_gpu_plus_reused_stock_equal_original_expected'] and ar['stock_result_reused']
+@@ -152,7 +194,7 @@
+         else:assert content(private)==content(oldheader)
+         if name in P['retained_source_closure']:assert current.read_bytes()==original.read_bytes()
+     assert sorted(source_deltas)==sorted(P['known_outside_retained_source_deltas']) and len(source_deltas)==4 and len(P['source_base_rows'])==33 and len(P['retained_source_closure'])==14
+-    return {'arithmetic':arithmetic,'full_profile_manifest':manifests['profile'],'full_profile_acceptance':record(work/'profile-acceptance.json'),
++    return {'prior_precontext_stop':prior_stop,'arithmetic':arithmetic,'full_profile_manifest':manifests['profile'],'full_profile_acceptance':record(work/'profile-acceptance.json'),
+             'profile_result':record(work/'profile-result.json'),'profile_terminal_review':record(work/'independent-terminal-review.json'),
+             'profile_root_admission':record(work/'root-terminal-admission.json'),'compiled_manifest':manifests['compiled'],
+             'original_failed_reader':record(compiled/'read-profile/owner.json'),'original_reader_passed':False,'original_reader_child_exit':-15,

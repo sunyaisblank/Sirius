@@ -1,0 +1,1557 @@
+{
+  "all_comparison_rows_sha256": "2e98ac817f2408f72206465bd7b8a493aab191c19fc8af744a9d9f0af043c798",
+  "assertion_inventory": [
+    {
+      "expression": "owner['status'] == 'terminal' and owner['passed'] is True and (owner['child_exit'] == 0)",
+      "line": 18
+    },
+    {
+      "expression": "owner['source'] == {'revision': revision, 'status': ''} and owner['source_unchanged'] and owner['whole_inputs_unchanged']",
+      "line": 19
+    },
+    {
+      "expression": "owner['stop_reason'] is None and owner['cleanup_errors'] == [] and (owner['remaining_owned_processes'] == [])",
+      "line": 20
+    },
+    {
+      "expression": "owner['observed_births'] and all((row['absent'] for row in owner['observed_births']))",
+      "line": 21
+    },
+    {
+      "expression": "(folder / 'inputs-before.json').read_bytes() == (folder / 'inputs-after.json').read_bytes()",
+      "line": 22
+    },
+    {
+      "expression": "path.is_file() and (not path.is_symlink())",
+      "line": 26
+    },
+    {
+      "expression": "content(path) == {k: pin[k] for k in ('bytes', 'sha256')}",
+      "line": 27
+    },
+    {
+      "expression": "re.fullmatch('[0-9a-f]{40}', row['commit'])",
+      "line": 33
+    },
+    {
+      "expression": "content(root / 'manifest.json') == row['manifest']",
+      "line": 34
+    },
+    {
+      "expression": "build['passed'] and build['private_Int64_or_Float64_device_object_used'] is False",
+      "line": 44
+    },
+    {
+      "expression": "record(P['device_object']) == proof['canonical_device_object']",
+      "line": 45
+    },
+    {
+      "expression": "record(P['base_archive']) == proof['canonical_base']",
+      "line": 46
+    },
+    {
+      "expression": "record(prior / 'owner.json') == proof['canonical_prior_link_owner']",
+      "line": 48
+    },
+    {
+      "expression": "first['schema'] == 'sirius-fp32-restoring-controls-root-precontext-stop-v1'",
+      "line": 78
+    },
+    {
+      "expression": "root['schema'] == 'sirius-fp32-restoring-controls-root-context-stop-admission-v1'",
+      "line": 79
+    },
+    {
+      "expression": "first['passed'] is True and independent['passed'] is True and (root['passed'] is True)",
+      "line": 80
+    },
+    {
+      "expression": "first['source_revision'] == independent['source_revision'] == root['source_revision'] == P['runner_preparation_revision']",
+      "line": 81
+    },
+    {
+      "expression": "first['classification'] == root['classification'] == independent['actual_stop']['classification'] == 'PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP'",
+      "line": 82
+    },
+    {
+      "expression": "first['tool_exit_code'] == 1 and first['tool_session_terminal'] is True",
+      "line": 85
+    },
+    {
+      "expression": "first['producer_compiler_provider_control_or_reader_workloads_launched'] == 0",
+      "line": 86
+    },
+    {
+      "expression": "first['prospective_actions_unconsumed'] == 15 and first['prospective_commands_unexecuted_after_first'] == 17",
+      "line": 87
+    },
+    {
+      "expression": "first['frozen_source_current'] is True and first['source_freeze_count_current'] == 1095",
+      "line": 88
+    },
+    {
+      "expression": "first['all_absent'] and all((value is True for value in first['all_absent'].values()))",
+      "line": 89
+    },
+    {
+      "expression": "first['actual_arithmetic_schema'] == 'sirius-fp32-estimate-restoring-original-arithmetic-result-v1'",
+      "line": 90
+    },
+    {
+      "expression": "first['expected_schema_literal'] == 'sirius-fp32-restoring-original-arithmetic-result-v1'",
+      "line": 91
+    },
+    {
+      "expression": "first['accepted_arithmetic_passed'] is True",
+      "line": 92
+    },
+    {
+      "expression": "record(Path(P['arithmetic_work']) / 'arithmetic-result.json') == first['accepted_arithmetic_result']",
+      "line": 93
+    },
+    {
+      "expression": "ar['passed'] and ar['schema'] == 'sirius-fp32-estimate-restoring-original-arithmetic-result-v1'",
+      "line": 120
+    },
+    {
+      "expression": "ar['candidate_macro'] == P['candidate_macro'] == 'SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1'",
+      "line": 121
+    },
+    {
+      "expression": "ar['original_records'] == 174268 and ar['original_operation_count'] == 14 and (ar['complete_output_words_per_provider'] == 697072)",
+      "line": 122
+    },
+    {
+      "expression": "ar['fresh_candidate_host_and_full_gpu_plus_reused_stock_equal_original_expected'] and ar['stock_result_reused']",
+      "line": 123
+    },
+    {
+      "expression": "result['passed'] and approval['passed'] and (approval['schema'] == 'sirius-fp32-restoring-linear-memory-full-profile-acceptance-v1')",
+      "line": 134
+    },
+    {
+      "expression": "approval['original_reader_passed'] is False and approval['original_reader_child_exit'] == -15 and (approval['original_reader_promoted'] is False)",
+      "line": 135
+    },
+    {
+      "expression": "approval['all35_modules_40main_2owner_arrays_7tables_accepted'] and approval['named_graphs'] == 13 and (approval['inlined_camera_footprints'] == 4)",
+      "line": 136
+    },
+    {
+      "expression": "approval['new_disassembly_count'] == 16 and approval['reused_disassembly_count'] == 54",
+      "line": 137
+    },
+    {
+      "expression": "approval['arithmetic_or_integrated_or_benefit_or_adoption_admitted'] is False",
+      "line": 138
+    },
+    {
+      "expression": "result['original_failed_reader_promoted'] is False",
+      "line": 139
+    },
+    {
+      "expression": "owner['limits'] == P['limits']",
+      "line": 145
+    },
+    {
+      "expression": "profile['passed'] and profile['changed_modules'] == 17 and (profile['unchanged_modules'] == 18)",
+      "line": 152
+    },
+    {
+      "expression": "profile['main_arrays_changed'] == 17 and profile['main_arrays_unchanged'] == 23 and (profile['owner_arrays_unchanged'] == 2)",
+      "line": 153
+    },
+    {
+      "expression": "profile['all_seven_tables_and_nonarray_ABI_constants_equal'] and len(profile['modules']) == 35",
+      "line": 154
+    },
+    {
+      "expression": "sorted((row['module'] for row in profile['modules'] if row['changed'])) == P['changed_modules']",
+      "line": 155
+    },
+    {
+      "expression": "set(profile['headers']['retained_kernels.h']['changed_arrays']) == set(P['changed_arrays'])",
+      "line": 156
+    },
+    {
+      "expression": "chain == approval['immutable_compiler_chain']",
+      "line": 162
+    },
+    {
+      "expression": "chain['accepted_candidate_products'] == 90 and chain['accepted_stock_products'] == 39",
+      "line": 163
+    },
+    {
+      "expression": "chain['original_reader_passed'] is False and chain['original_reader_child_exit'] == -15",
+      "line": 164
+    },
+    {
+      "expression": "chain['original_reader_stop_reason'] == 'diagnostic_sampled_rss_guard'",
+      "line": 165
+    },
+    {
+      "expression": "chain['historical467_source_and1113_maps_replayed_as_current'] is False",
+      "line": 166
+    },
+    {
+      "expression": "failed['passed'] is False and failed['child_exit'] == -15 and (failed['stop_reason'] == 'diagnostic_sampled_rss_guard')",
+      "line": 173
+    },
+    {
+      "expression": "content(compiled / 'read-profile/owner.json') == {k: chain['original_failed_reader']['owner'][k] for k in ('bytes', 'sha256')}",
+      "line": 174
+    },
+    {
+      "expression": "content(oldheader) == {k: ar['candidate_header'][k] for k in ('bytes', 'sha256')}",
+      "line": 184
+    },
+    {
+      "expression": "sorted(source_deltas) == sorted(P['known_outside_retained_source_deltas']) and len(source_deltas) == 4 and (len(P['source_base_rows']) == 33) and (len(P['retained_source_closure']) == 14)",
+      "line": 196
+    },
+    {
+      "expression": "pin['resolved_path'] == str(original)",
+      "line": 28
+    },
+    {
+      "expression": "stat.S_IMODE(path.stat().st_mode) == pin['mode']",
+      "line": 29
+    },
+    {
+      "expression": "pin['symlink_target'] is None",
+      "line": 30
+    },
+    {
+      "expression": "not path.is_symlink() and content(path) == files[name] == pin",
+      "line": 37
+    },
+    {
+      "expression": "content(row['actual']) == content(row['canonical_current']) == {k: pin[k] for k in ('bytes', 'sha256')}",
+      "line": 52
+    },
+    {
+      "expression": "current[row['original_input_key']] == row['original_pin']",
+      "line": 56
+    },
+    {
+      "expression": "content(row['path']) == {k: row['original_pin'][k] for k in ('bytes', 'sha256')}",
+      "line": 57
+    },
+    {
+      "expression": "before[row['original_input_key']] == row['original_pin']",
+      "line": 63
+    },
+    {
+      "expression": "content(row['actual']) == {k: row['original_pin'][k] for k in ('bytes', 'sha256')}",
+      "line": 64
+    },
+    {
+      "expression": "value['context_attempt_passed'] is False and value['operator_context_accepted'] is False",
+      "line": 84
+    },
+    {
+      "expression": "original.parent == old",
+      "line": 99
+    },
+    {
+      "expression": "json.loads((work / original.name).read_text())['passed'] is True",
+      "line": 101
+    },
+    {
+      "expression": "(Path(P['recovery_work']) / 'originals' / ('before-precontext-stop-' + name)).read_bytes() == (work / name).read_bytes()",
+      "line": 105
+    },
+    {
+      "expression": "content(row['original']) == content(row['backed'])",
+      "line": 117
+    },
+    {
+      "expression": "load(n)['passed'] and load(n)['source_revision'] == P['runner_preparation_revision']",
+      "line": 124
+    },
+    {
+      "expression": "v['passed'] and v['source_revision'] == P['runner_preparation_revision']",
+      "line": 141
+    },
+    {
+      "expression": "original.is_relative_to(original_work)",
+      "line": 150
+    },
+    {
+      "expression": "content(current) == row['current_pin']",
+      "line": 188
+    },
+    {
+      "expression": "record(products / mode / row['module']) == row[mode]",
+      "line": 159
+    },
+    {
+      "expression": "record(products / mode / name) == row[mode]",
+      "line": 161
+    },
+    {
+      "expression": "record(compiled / label / relative) == {k: rows[key][k] for k in ('bytes', 'sha256', 'resolved_path')}",
+      "line": 171
+    },
+    {
+      "expression": "content(current) == known['canonical4498'] and content(private) == known['original_private']",
+      "line": 192
+    },
+    {
+      "expression": "original.read_bytes() == private.read_bytes()",
+      "line": 193
+    },
+    {
+      "expression": "content(private) == content(oldheader)",
+      "line": 194
+    },
+    {
+      "expression": "current.read_bytes() == original.read_bytes()",
+      "line": 195
+    },
+    {
+      "expression": "original.is_relative_to(old_compiled)",
+      "line": 181
+    }
+  ],
+  "authored_helper_import_or_execution": false,
+  "checks": [
+    {
+      "actual": true,
+      "expected": true,
+      "field": "arithmetic.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "sirius-fp32-estimate-restoring-original-arithmetic-result-v1",
+      "expected": "sirius-fp32-estimate-restoring-original-arithmetic-result-v1",
+      "field": "arithmetic.schema",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": "SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+      "expected": "SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+      "field": "arithmetic.candidate_macro",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": 174268,
+      "expected": 174268,
+      "field": "arithmetic.original_records",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 14,
+      "expected": 14,
+      "field": "arithmetic.original_operation_count",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 697072,
+      "expected": 697072,
+      "field": "arithmetic.complete_output_words_per_provider",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "arithmetic.fresh_candidate_host_and_full_gpu_plus_reused_stock_equal_original_expected",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "arithmetic.stock_result_reused",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "arithmetic.independent-terminal-review.json.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "expected": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "field": "arithmetic.independent-terminal-review.json.source_revision",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "arithmetic.root-terminal-admission.json.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "expected": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "field": "arithmetic.root-terminal-admission.json.source_revision",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": "terminal",
+      "expected": "terminal",
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-host.status",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-host.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-host.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-host.stop_reason",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-host.all_recorded_births_absent",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "terminal",
+      "expected": "terminal",
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-gpu-candidate.status",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-gpu-candidate.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-gpu-candidate.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-gpu-candidate.stop_reason",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-gpu-candidate.all_recorded_births_absent",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/build-review.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/build-review.json",
+      "field": "arithmetic.build_review.historical_resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/runtime-context.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-arithmetic/runtime-context.json",
+      "field": "arithmetic.runtime_context.historical_resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "build.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "build.private_Int64_or_Float64_device_object_used",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "terminal",
+      "expected": "terminal",
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/link-probe.status",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/link-probe.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/link-probe.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/link-probe.stop_reason",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/link-probe.all_recorded_births_absent",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "terminal",
+      "expected": "terminal",
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate.status",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate.stop_reason",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate.all_recorded_births_absent",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "terminal",
+      "expected": "terminal",
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed.status",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed.stop_reason",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed.all_recorded_births_absent",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "terminal",
+      "expected": "terminal",
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer.status",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer.stop_reason",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer.all_recorded_births_absent",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "profile_result.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "profile_result.original_failed_reader_promoted",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "profile_acceptance.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "sirius-fp32-restoring-linear-memory-full-profile-acceptance-v1",
+      "expected": "sirius-fp32-restoring-linear-memory-full-profile-acceptance-v1",
+      "field": "profile_acceptance.schema",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "profile_acceptance.original_reader_passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": -15,
+      "expected": -15,
+      "field": "profile_acceptance.original_reader_child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "profile_acceptance.original_reader_promoted",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "profile_acceptance.all35_modules_40main_2owner_arrays_7tables_accepted",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 13,
+      "expected": 13,
+      "field": "profile_acceptance.named_graphs",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 4,
+      "expected": 4,
+      "field": "profile_acceptance.inlined_camera_footprints",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 16,
+      "expected": 16,
+      "field": "profile_acceptance.new_disassembly_count",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 54,
+      "expected": 54,
+      "field": "profile_acceptance.reused_disassembly_count",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "profile_acceptance.arithmetic_or_integrated_or_benefit_or_adoption_admitted",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "profile.independent-terminal-review.json.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "expected": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "field": "profile.independent-terminal-review.json.source_revision",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "profile.root-terminal-admission.json.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "expected": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "field": "profile.root-terminal-admission.json.source_revision",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/profile-result.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/profile-result.json",
+      "field": "profile_acceptance.profile_result.historical_resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": 420,
+      "expected": 420,
+      "field": "profile_acceptance.profile_result.mode",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "profile_acceptance.profile_result.symlink_target",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile/owner.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile/owner.json",
+      "field": "profile_acceptance.reader_owner.historical_resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": 420,
+      "expected": 420,
+      "field": "profile_acceptance.reader_owner.mode",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "profile_acceptance.reader_owner.symlink_target",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile/output-seal.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile/output-seal.json",
+      "field": "profile_acceptance.output_seal.historical_resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": 420,
+      "expected": 420,
+      "field": "profile_acceptance.output_seal.mode",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "profile_acceptance.output_seal.symlink_target",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": "terminal",
+      "expected": "terminal",
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-recovery/files/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile.status",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-recovery/files/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-recovery/files/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-recovery/files/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile.stop_reason",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-recovery/files/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile.all_recorded_births_absent",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "profile.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 17,
+      "expected": 17,
+      "field": "profile.changed_modules",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 18,
+      "expected": 18,
+      "field": "profile.unchanged_modules",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 17,
+      "expected": 17,
+      "field": "profile.main_arrays_changed",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 23,
+      "expected": 23,
+      "field": "profile.main_arrays_unchanged",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 2,
+      "expected": 2,
+      "field": "profile.owner_arrays_unchanged",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "profile.all_seven_tables_and_nonarray_ABI_constants_equal",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 35,
+      "expected": 35,
+      "field": "profile.module_count",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 90,
+      "expected": 90,
+      "field": "compiler_chain.accepted_candidate_products",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 39,
+      "expected": 39,
+      "field": "compiler_chain.accepted_stock_products",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "compiler_chain.original_reader_passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": -15,
+      "expected": -15,
+      "field": "compiler_chain.original_reader_child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": "diagnostic_sampled_rss_guard",
+      "expected": "diagnostic_sampled_rss_guard",
+      "field": "compiler_chain.original_reader_stop_reason",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "compiler_chain.historical467_source_and1113_maps_replayed_as_current",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "terminal",
+      "expected": "terminal",
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/compile-candidate.status",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/compile-candidate.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/compile-candidate.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/compile-candidate.stop_reason",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/compile-candidate.all_recorded_births_absent",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "terminal",
+      "expected": "terminal",
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/reuse-stock.status",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/reuse-stock.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/reuse-stock.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": null,
+      "expected": null,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/reuse-stock.stop_reason",
+      "passed": true,
+      "type": "NoneType"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/reuse-stock.all_recorded_births_absent",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "old_failed_reader.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": -15,
+      "expected": -15,
+      "field": "old_failed_reader.child_exit",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": "diagnostic_sampled_rss_guard",
+      "expected": "diagnostic_sampled_rss_guard",
+      "field": "old_failed_reader.stop_reason",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": 4,
+      "expected": 4,
+      "field": "source.delta_count",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 33,
+      "expected": 33,
+      "field": "source.total_count",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 14,
+      "expected": 14,
+      "field": "source.closure_count",
+      "passed": true,
+      "type": "int"
+    }
+  ],
+  "comparison_category_counts": {
+    "apparatus": 1,
+    "arithmetic": 17,
+    "attestations/software-vulkan/4bcd987/fp32-estimate-ordinary-jit-screen/stock-comparison/files/out/guarded-product-high-runtime/link-probe": 11,
+    "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-gpu-candidate": 11,
+    "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/execute-host": 11,
+    "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-recovery/files/out/portable-divide-fp32-estimate-restoring-profile-reader-recovery/read-full-profile": 11,
+    "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/compile-candidate": 11,
+    "attestations/software-vulkan/4bcd987/fp32-estimate-restoring-profile-reader-rss-stop/files/out/portable-divide-fp32-estimate-restoring-profile-recovery/reuse-stock": 11,
+    "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-compute-sealed": 11,
+    "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/compile-observer": 11,
+    "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls/files/out/portable-divide-fp64-estimate-controls-continuation/link-candidate": 11,
+    "build": 2,
+    "candidate_header": 1,
+    "canonical": 14,
+    "compile": 124,
+    "compiled": 1,
+    "compiler": 8,
+    "compiler_chain": 7,
+    "link": 18,
+    "old_failed_reader": 4,
+    "packet": 1,
+    "profile": 19,
+    "profile_acceptance": 23,
+    "profile_owner": 1,
+    "profile_result": 2,
+    "profile_seal": 80,
+    "reader_alias0": 1,
+    "reader_alias1": 1,
+    "reader_alias2": 1,
+    "source": 60
+  },
+  "corrected_schema": {
+    "actual": "sirius-fp32-estimate-restoring-original-arithmetic-result-v1",
+    "old_wrong_expected": "sirius-fp32-restoring-original-arithmetic-result-v1",
+    "source": {
+      "bytes": 32932,
+      "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/arithmetic-result.json",
+      "sha256": "a20e20d00856afac4a59e7e3603c414817c07d7b7d64f6bd33cbe21198940a76"
+    }
+  },
+  "exact_source_inverse": {
+    "gate.py": true,
+    "prerequisite_receipts.py": true,
+    "verify_producer.py": true
+  },
+  "new_stop_metadata_checks": [
+    {
+      "actual": "sirius-fp32-restoring-controls-root-precontext-stop-v1",
+      "expected": "sirius-fp32-restoring-controls-root-precontext-stop-v1",
+      "field": "prior_stop.first.schema",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.first.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "expected": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "field": "prior_stop.first.source_revision",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": "PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP",
+      "expected": "PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP",
+      "field": "prior_stop.first.classification",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "prior_stop.first.context_attempt_passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "prior_stop.first.operator_context_accepted",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 1,
+      "expected": 1,
+      "field": "prior_stop.first.tool_exit_code",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.first.tool_session_terminal",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "field": "prior_stop.first.producer_compiler_provider_control_or_reader_workloads_launched",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 15,
+      "expected": 15,
+      "field": "prior_stop.first.prospective_actions_unconsumed",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": 17,
+      "expected": 17,
+      "field": "prior_stop.first.prospective_commands_unexecuted_after_first",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.first.frozen_source_current",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": 1095,
+      "expected": 1095,
+      "field": "prior_stop.first.source_freeze_count_current",
+      "passed": true,
+      "type": "int"
+    },
+    {
+      "actual": "sirius-fp32-estimate-restoring-original-arithmetic-result-v1",
+      "expected": "sirius-fp32-estimate-restoring-original-arithmetic-result-v1",
+      "field": "prior_stop.first.actual_arithmetic_schema",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": "sirius-fp32-restoring-original-arithmetic-result-v1",
+      "expected": "sirius-fp32-restoring-original-arithmetic-result-v1",
+      "field": "prior_stop.first.expected_schema_literal",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.first.accepted_arithmetic_passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "sirius-fp32-restoring-controls-root-context-stop-admission-v1",
+      "expected": "sirius-fp32-restoring-controls-root-context-stop-admission-v1",
+      "field": "prior_stop.root.schema",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.root.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "expected": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "field": "prior_stop.root.source_revision",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": "PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP",
+      "expected": "PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP",
+      "field": "prior_stop.root.classification",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "prior_stop.root.context_attempt_passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "prior_stop.root.operator_context_accepted",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.independent.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "expected": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "field": "prior_stop.independent.source_revision",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": "PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP",
+      "expected": "PREREQUISITE_SCHEMA_MISMATCH_PRECONTEXT_STOP",
+      "field": "prior_stop.independent.actual_stop.classification",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "prior_stop.independent.actual_stop.context_attempt_passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "field": "prior_stop.independent.actual_stop.operator_context_accepted",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.all_absent_values",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": {
+        "bytes": 32932,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/arithmetic-result.json",
+        "sha256": "a20e20d00856afac4a59e7e3603c414817c07d7b7d64f6bd33cbe21198940a76"
+      },
+      "expected": {
+        "bytes": 32932,
+        "resolved_path": "/home/astra/.project/Sirius/attestations/software-vulkan/4bcd987/fp32-estimate-restoring-original-arithmetic/files/out/portable-divide-fp32-estimate-restoring-arithmetic/arithmetic-result.json",
+        "sha256": "a20e20d00856afac4a59e7e3603c414817c07d7b7d64f6bd33cbe21198940a76"
+      },
+      "field": "prior_stop.arithmetic_result",
+      "passed": true,
+      "type": "dict"
+    },
+    {
+      "actual": {
+        "bytes": 12807,
+        "sha256": "dd0d1dce080119e131623e58ac7d3215a6be6bf2586afb721eb8348fe902c5f1"
+      },
+      "expected": {
+        "bytes": 12807,
+        "sha256": "dd0d1dce080119e131623e58ac7d3215a6be6bf2586afb721eb8348fe902c5f1"
+      },
+      "field": "prior_stop.root_first_stop.content",
+      "passed": true,
+      "type": "dict"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/root-first-stop.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/root-first-stop.json",
+      "field": "prior_stop.root_first_stop.resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": {
+        "bytes": 7277,
+        "sha256": "85250d1f19b9bc89b78df6999d7f539fa1981aa63b1d47f13e11898b77114072"
+      },
+      "expected": {
+        "bytes": 7277,
+        "sha256": "85250d1f19b9bc89b78df6999d7f539fa1981aa63b1d47f13e11898b77114072"
+      },
+      "field": "prior_stop.independent_stop_review.content",
+      "passed": true,
+      "type": "dict"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/independent-stop-review.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/independent-stop-review.json",
+      "field": "prior_stop.independent_stop_review.resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": {
+        "bytes": 390928,
+        "sha256": "d6a2239ecef80e34c9891efb0811230aef988d87bacc98e31a31b3c7ea0d3dbb"
+      },
+      "expected": {
+        "bytes": 390928,
+        "sha256": "d6a2239ecef80e34c9891efb0811230aef988d87bacc98e31a31b3c7ea0d3dbb"
+      },
+      "field": "prior_stop.source_freeze.content",
+      "passed": true,
+      "type": "dict"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/source-freeze.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/source-freeze.json",
+      "field": "prior_stop.source_freeze.resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": {
+        "bytes": 2001306,
+        "sha256": "41d2e9f2182e08ad7a429c6a510986f2b44c46bd9586730d5fb6cc878e677717"
+      },
+      "expected": {
+        "bytes": 2001306,
+        "sha256": "41d2e9f2182e08ad7a429c6a510986f2b44c46bd9586730d5fb6cc878e677717"
+      },
+      "field": "prior_stop.actions.content",
+      "passed": true,
+      "type": "dict"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/actions.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/actions.json",
+      "field": "prior_stop.actions.resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": {
+        "bytes": 176007,
+        "sha256": "17e0ad323ff08b89a5c8e9c0641f0292a4dde54d80f0f9a600067789d1297988"
+      },
+      "expected": {
+        "bytes": 176007,
+        "sha256": "17e0ad323ff08b89a5c8e9c0641f0292a4dde54d80f0f9a600067789d1297988"
+      },
+      "field": "prior_stop.packet.content",
+      "passed": true,
+      "type": "dict"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/packet.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/packet.json",
+      "field": "prior_stop.packet.resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": {
+        "bytes": 13210,
+        "sha256": "bbbe24265795b4085ab2fb8d0b46f53c152470c9ad943341df1a34fcfdf9949a"
+      },
+      "expected": {
+        "bytes": 13210,
+        "sha256": "bbbe24265795b4085ab2fb8d0b46f53c152470c9ad943341df1a34fcfdf9949a"
+      },
+      "field": "prior_stop.preparation.content",
+      "passed": true,
+      "type": "dict"
+    },
+    {
+      "actual": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/preparation.json",
+      "expected": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls/preparation.json",
+      "field": "prior_stop.preparation.resolved_path",
+      "passed": true,
+      "type": "str"
+    },
+    {
+      "actual": {
+        "bytes": 8986,
+        "sha256": "8b4432a64e8d24a2394a7d911d0da82fab09477011126579c55371ebb231ab97"
+      },
+      "expected": {
+        "bytes": 8986,
+        "sha256": "8b4432a64e8d24a2394a7d911d0da82fab09477011126579c55371ebb231ab97"
+      },
+      "field": "prior_stop.source_history.0.content",
+      "passed": true,
+      "type": "dict"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.source_history.0.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": {
+        "bytes": 4177,
+        "sha256": "8a181ec50bdc76fdcfe768bbab131d6983895ea8b4cfb7f6234c4f3b37321d38"
+      },
+      "expected": {
+        "bytes": 4177,
+        "sha256": "8a181ec50bdc76fdcfe768bbab131d6983895ea8b4cfb7f6234c4f3b37321d38"
+      },
+      "field": "prior_stop.source_history.1.content",
+      "passed": true,
+      "type": "dict"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.source_history.1.passed",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.preimage.gate.py",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.preimage.prerequisite_receipts.py",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.preimage.verify_producer.py",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.preimage.packet.json",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.preimage.preparation.json",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.preimage.source-freeze.json",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.preimage.actions.unpinned.json",
+      "passed": true,
+      "type": "bool"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "prior_stop.preimage.provenance.json",
+      "passed": true,
+      "type": "bool"
+    }
+  ],
+  "passed": true,
+  "phase": "FINAL_EXISTING_PREREQUISITES_PLUS_ACTUAL_IMMUTABLE_PRECONTEXT_STOP_METADATA_CHECKED",
+  "prerequisite_reader": {
+    "bytes": 17246,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/prerequisite_receipts.py",
+    "sha256": "257ee3ead47a15387e6bb4f54090a95aab36e892e46c97f4a8d341d609dd3b4a"
+  },
+  "reviewer_role": "Packet preparer; passive metadata audit for independent/root review, not independent admission.",
+  "schema": "sirius-fp32-restoring-controls-recovery-prerequisite-metadata-review-v1",
+  "scope": "Every scalar/container metadata assertion and referenced identity/output/header/source row in the prerequisite reader was checked against actual immutable JSON and bytes, using standard-library metadata operations only. No old1095 current-path replay, helper/parser/producer/test/provider execution or scientific result claimed.",
+  "source_only": true,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "typed_comparison_count": 1788
+}

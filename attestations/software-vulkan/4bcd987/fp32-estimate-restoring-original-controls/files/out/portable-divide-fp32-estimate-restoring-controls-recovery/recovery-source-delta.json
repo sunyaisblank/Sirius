@@ -1,0 +1,24 @@
+{
+  "corrected_literal": [
+    "sirius-fp32-restoring-original-arithmetic-result-v1",
+    "sirius-fp32-estimate-restoring-original-arithmetic-result-v1"
+  ],
+  "exact_inverse_checks": {
+    "gate.py": true,
+    "prerequisite_receipts.py": true,
+    "verify_producer.py": true
+  },
+  "namespace_from": "portable-divide-fp32-estimate-restoring-controls",
+  "namespace_to": "portable-divide-fp32-estimate-restoring-controls-recovery",
+  "old_source_freeze": {
+    "bytes": 390928,
+    "sha256": "d6a2239ecef80e34c9891efb0811230aef988d87bacc98e31a31b3c7ea0d3dbb"
+  },
+  "old_stop_commit": "795e3d871054211cbc667d520371858fb592e550",
+  "only_new_runtime_adapter": "Prior immutable precontext-stop audit/source history, retaining false context attempt and zero launched owners; no old1095 current-path replay.",
+  "patch": {
+    "bytes": 8255,
+    "sha256": "76260c39f93bd731d7e7095f4c59ebcc187ec6371179bab8b3cb4f387b3c9937"
+  },
+  "schema": "sirius-fp32-restoring-controls-precontext-recovery-source-delta-v1"
+}

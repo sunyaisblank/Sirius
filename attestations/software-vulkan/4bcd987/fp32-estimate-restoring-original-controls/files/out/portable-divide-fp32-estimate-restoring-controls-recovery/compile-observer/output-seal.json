@@ -1,0 +1,67 @@
+{
+  "inputs_before": {
+    "bytes": 495214,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/compile-observer/inputs-before.json",
+    "sha256": "186fedf63e9a105df61197dacb6d19254e79bcc58d14afb8c6b07c85b0968fbb"
+  },
+  "label": "compile-observer",
+  "operator_context": {
+    "bytes": 828,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/operator-context.json",
+    "sha256": "e676fb7c2a6ce172e4740c04056f793ddb199192594c718daec720f987a43691"
+  },
+  "outputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/observer.d": {
+      "bytes": 4820,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/observer.d",
+      "sha256": "2515798b3301e9a259cde28cdda06fa69828ef8995c5efbc7ade3b897229cbed"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/observer.o": {
+      "bytes": 9333392,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/observer.o",
+      "sha256": "cacf6329b093383145b63c87062f404b122f95d65d40c22bc160c89a3ee512ce"
+    }
+  },
+  "recipe": [
+    [
+      "/usr/bin/g++-14",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/headers",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-DSIRIUS_TEST_HAS_KERNELS=1",
+      "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+      "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+      "-I/home/astra/.project/Sirius/tests",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+      "-isystem",
+      "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+      "-O3",
+      "-DNDEBUG",
+      "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/observer.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/audited-observer.cpp",
+      "-MMD",
+      "-MF",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-controls-recovery/controls/observer.d"
+    ]
+  ],
+  "source_freeze": {
+    "bytes": 403343,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-controls-recovery/source-freeze.json",
+    "sha256": "84c16e2c52b4dd326a8eceb11a22063fde52b10983cd867435bded0d96752e26"
+  }
+}
