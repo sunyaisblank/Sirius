@@ -1,0 +1,70 @@
+{
+  "schema": "sirius-private-pair-loop-root-live-mutable-cache-interpretation-v1",
+  "created_utc": "2026-10-15T19:47:21.571178+00:00",
+  "original_live_record": {
+    "bytes": 63828,
+    "sha256": "5bc5a05bc30d79b92815b76f38b6f32f30fd7f74781c98d45c2fd9023eb81294"
+  },
+  "original_false_all_regular_claim_and_unbound_row_preserved_unchanged": true,
+  "actual_same_birth_cache_environment": {
+    "controller": {
+      "saved_birth_checked_before_after": {
+        "pid": 1133723,
+        "start_ticks": "14277412",
+        "session": 1133722
+      },
+      "actual_selected_cache_environment": {
+        "HOME": "/home/astra",
+        "XDG_CACHE_HOME": null,
+        "MESA_SHADER_CACHE_DIR": null,
+        "MESA_SHADER_CACHE_DISABLE": null,
+        "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+      }
+    },
+    "child": {
+      "saved_birth_checked_before_after": {
+        "pid": 1133727,
+        "start_ticks": "14277471",
+        "session": 1133727
+      },
+      "actual_selected_cache_environment": {
+        "HOME": "/home/astra",
+        "XDG_CACHE_HOME": null,
+        "MESA_SHADER_CACHE_DIR": null,
+        "MESA_SHADER_CACHE_DISABLE": null,
+        "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+      }
+    }
+  },
+  "sole_unbound_map": {
+    "role": "child",
+    "identity": {
+      "resolved_path": "/home/astra/.cache/mesa_shader_cache/index",
+      "bytes": 1310728,
+      "sha256": "4393f06db0239ad0b1f1626c1726539bfd4973779730968820207f8973049899"
+    }
+  },
+  "actual_saved_cache_map_line": "707019814000-707019955000 rw-s 00000000 08:50 73478                      /home/astra/.cache/mesa_shader_cache/index",
+  "actual_cache_dev_inode": {
+    "major": 8,
+    "minor": 80,
+    "inode": 73478
+  },
+  "actual_later_cache_hash_observation": {
+    "bytes": 1310728,
+    "sha256": "4393f06db0239ad0b1f1626c1726539bfd4973779730968820207f8973049899"
+  },
+  "cache_hash_scope": "Two non-atomic observational reads only. Mutable provider cache can change during normal operation; no frozen/prelaunch/cold snapshot or stable-digest claim. No cache bytes preserved or reconstruction claim.",
+  "classification": "Existing default mutable provider shader-cache index. It is generated runtime cache state with shared writable mapping, distinct from immutable executable/provider/library/module/source/build/protocol inputs. It must remain enabled/unchanged under original default-cache protocol; no freezing, deletion, relocation or reset performed.",
+  "immutable_mapped_files": "All other observed actual regular external mapped-file identities already match prelaunch pf, as checked in preserved live record production; independent review pending.",
+  "runtime_memory": "Eight observed Vulkan runtime memfd allocation maps retained separately as generated memory, covered by unchanged aggregate sampled-RSS guard rather than filesystem input hashes.",
+  "official_Mesa_default_directory_reference": {
+    "url": "https://docs.mesa3d.org/envvars.html#mesa-shader-cache-dir",
+    "consulted_utc": "2026-10-15",
+    "scope": "Official environment documentation describes the default cache directory under the user home when MESA_SHADER_CACHE_DIR and XDG_CACHE_HOME are unset. Exact installed index role follows actual observed path/rw-shared mapping and original cache policy; latest docs do not prove installed cache implementation details."
+  },
+  "source_test_helper_guards_or_policy_changed": false,
+  "relaunch_performed": false,
+  "no_numerical_or_JIT_RSS_performance_cold_claim": true,
+  "scope": "Correct a too-broad root observational file classifier without changing original acceptance. Preserve generated cache/memory observations candidly and require unchanged original runtime/XML/markers/ownership guards separately."
+}

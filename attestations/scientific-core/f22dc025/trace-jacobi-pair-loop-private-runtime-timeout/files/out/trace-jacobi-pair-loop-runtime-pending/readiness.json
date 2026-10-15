@@ -1,0 +1,287 @@
+{
+  "schema": "sirius-private-jacobi-pair-loop-concrete-runtime-readiness-v1",
+  "created_utc": "2026-10-15T19:40:18.821797+00:00",
+  "admitted": true,
+  "runtime_release_pending": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "clean_committed_pushed": true,
+  "host_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "shader_source_identity": "Unapplied private63512B8f9d6217 candidate. Host f22 qualification is not shader-source adoption.",
+  "actual_stage": {
+    "schema": "sirius-private-jacobi-pair-loop-root-stage-materialization-v1",
+    "created_utc": "2026-10-15T19:36:29.132370+00:00",
+    "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "root_FULLREAD_source_and_independent_source_review": true,
+    "compiler213_published_commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+    "compiler_publication_closed0_postclosure_remote_exact": true,
+    "source_and_emitted_proofs_reused_at_exact_pins": {
+      "out/trace-jacobi-pair-loop-runtime-pending/source-contracts.json": {
+        "bytes": 24099,
+        "sha256": "f3f669bd92e41ff78900dd1e22ab146ccd42de1b1fdadf966f03dcb498201b8e"
+      },
+      "out/trace-jacobi-pair-loop-runtime-pending/independent-source-review.json": {
+        "bytes": 11805,
+        "sha256": "d5215a1b6aadd0f3b82ed1e5ae072c43ffab77bd0113507c3a2d022db42ec55b"
+      },
+      "out/trace-jacobi-pair-loop-screen/root-emitted-observation.json": {
+        "bytes": 53264,
+        "sha256": "33799af8a452fdba53b47644c611f925cecd3e7bb2577cf3bb24bb7393c529dd"
+      },
+      "out/trace-jacobi-pair-loop-screen/independent-emitted-review.json": {
+        "bytes": 28041,
+        "sha256": "e055e17080b4c1a2961032b71843408d8a9dd80d27f5b3f73f539244e1a83444"
+      },
+      "out/trace-jacobi-pair-loop-screen-preservation/root-git-preservation.json": {
+        "bytes": 1446,
+        "sha256": "7d7f363fcfdf8ad94f20391e8673747889ffedc5d0f3bbd66d85a65654e0ba97"
+      }
+    },
+    "root_release_scope": "Private stage construction and actual metadata derivation only; independent concrete runtime review/root launch release still required.",
+    "copies": [
+      {
+        "source": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "destination": "out/trace-jacobi-pair-loop-runtime-pending/stage/sirius_backend_tests",
+        "identity": {
+          "bytes": 13502080,
+          "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+        },
+        "original_bytes_Git": {
+          "commit": "34a94cd5b367dfdb9b62f71be693bf1e80bf7781",
+          "path": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/files/bin/linux-gcc/tests/backend/sirius_backend_tests"
+        },
+        "actual_Git_fullbytes_checked": true,
+        "regular_real_copy": true,
+        "mode": "0o755"
+      },
+      {
+        "source": "out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+        "destination": "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace.spv",
+        "identity": {
+          "bytes": 2620748,
+          "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+        },
+        "original_bytes_Git": {
+          "commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+          "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/files/out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv"
+        },
+        "actual_Git_fullbytes_checked": true,
+        "regular_real_copy": true,
+        "mode": "0o644"
+      },
+      {
+        "source": "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv",
+        "destination": "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace_fp32comp.spv",
+        "identity": {
+          "bytes": 2624072,
+          "sha256": "e6518b3bfc9c3bb63f0ff61dedb571b0824e6966dd390b358c853b61805bf222"
+        },
+        "original_bytes_Git": {
+          "commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+          "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/files/out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv"
+        },
+        "actual_Git_fullbytes_checked": true,
+        "regular_real_copy": true,
+        "mode": "0o644"
+      },
+      {
+        "source": "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv",
+        "destination": "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace_fp64.spv",
+        "identity": {
+          "bytes": 2553336,
+          "sha256": "31212e0875bf702f837f512fd5499fdcb9feb2470653453dd66a2ed6484206ac"
+        },
+        "original_bytes_Git": {
+          "commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+          "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/files/out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv"
+        },
+        "actual_Git_fullbytes_checked": true,
+        "regular_real_copy": true,
+        "mode": "0o644"
+      }
+    ],
+    "actual_stage_regular_files": 4,
+    "host_identity": "Genuine current f22 Linux backend ELF; exact CPU34a Git bytes.",
+    "shader_identity": "Unapplied63512B Jacobi pair-loop source8f9d6217, actual candidate compiler products. Not canonical f22 shader qualification.",
+    "canonical_source_build_products_unchanged": true,
+    "source_build_hold_release": false,
+    "runtime_admitted": false,
+    "provider_or_test_executed": false,
+    "scope": "Changed-shader private diagnostic preparation only. No runtime/numerical/JIT/RSS/performance/source-adoption/fullscience/Mandatory/release qualification."
+  },
+  "metadata_observation": {
+    "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-runtime-pending/root-runtime-observation.json",
+    "bytes": 307994,
+    "sha256": "dfe1e3e83155f50fced9a81ffe8868685913b1af13ad2210aea7d3c3802537dc"
+  },
+  "optional_layer_observation": {
+    "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-runtime-pending/root-optional-layer-observation.json",
+    "bytes": 3868,
+    "sha256": "91297c3795ebd8f2cf95547ae417e83a450f1eb12b6770c0f948e8fc232755d4"
+  },
+  "live_registered": 1152,
+  "selected_registration": {
+    "command": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "--gtest_filter=KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "name": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+    "properties": [
+      {
+        "name": "SKIP_REGULAR_EXPRESSION",
+        "value": [
+          "\\[  SKIPPED \\]"
+        ]
+      },
+      {
+        "name": "LABELS",
+        "value": [
+          "Correctness",
+          "Mandatory",
+          "Operational",
+          "Rendering"
+        ]
+      },
+      {
+        "name": "RESOURCE_LOCK",
+        "value": [
+          "sirius_vulkan_device"
+        ]
+      },
+      {
+        "name": "WORKING_DIRECTORY",
+        "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+      }
+    ]
+  },
+  "argv_delta": "Private real executable copy; same original active filter. Mature direct command omits registration-only --gtest_also_run_disabled_tests; no disabled testcase is selected.",
+  "strict_build_reused_only_after_all788_current_input_and_ELF_source_checks": true,
+  "actual_DT_NEEDED_union": {
+    "stage": [
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+    ],
+    "provider": [
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+      "/usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0",
+      "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+      "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+      "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+      "/usr/lib/x86_64-linux-gnu/libedit.so.2.0.72",
+      "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "/usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+      "/usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+      "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.4",
+      "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+      "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+      "/usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0",
+      "/usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0",
+      "/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0",
+      "/usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0",
+      "/usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0",
+      "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+      "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+      "/usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0",
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5"
+    ],
+    "python": [
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.3"
+    ],
+    "git": [
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2",
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.3"
+    ]
+  },
+  "optional_implicit_layer_DT_NEEDED_count": 11,
+  "Python_import_file_binding_scope": "130 conservative current root standard-module source/cache/extension files and actual root mapped files, not actual future child maps.",
+  "actual_root_inherited_protected_environment": {},
+  "per_launch_external_environment": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+  },
+  "owner_child_environment": {
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "MESA_SHADER_CACHE_DISABLE": null
+  },
+  "default_cache": true,
+  "limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "actions": {
+    "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-runtime-pending/actions.json",
+    "bytes": 76944,
+    "sha256": "6df597db09b0e984a3e79b5080b1387c542647d5611f93293674160962f3cdd1"
+  },
+  "all124_pending_selectors_retained_inorder": true,
+  "approved_input_strengthening_count": 1097,
+  "compiler_Git_publication": {
+    "schema": "sirius-f22-jacobi-pair-loop-compiler-root-Git-publication-v1",
+    "created_utc": "2026-10-15T19:35:51.398412+00:00",
+    "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "evidence_commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+    "tag": "evidence/issue-53-jacobi-pair-loop-compiler-screen-f22dc025",
+    "source_HEAD_unchanged_clean_committed_pushed": true,
+    "evidence_committed_and_pushed": true,
+    "actual_push_observed_closed_exit": 0,
+    "fresh_remote_after_actual_push_closure_exit": 0,
+    "fresh_remote_exact_tag_commit": true,
+    "actual213Gitblobs_byte_exact_in_root_preservation_operation": true,
+    "pins": {
+      "root-preservation-check.json": {
+        "bytes": 1225,
+        "sha256": "16b27459000d2615c6e1b679e32463734ce0531d9067b657b7b4878e6ce507aa"
+      },
+      "independent-preservation-review.json": {
+        "bytes": 8503,
+        "sha256": "a5bab0283b7c0722ca95f2a32d5a8a403db9f61e8f5a395e5ca28260f546425a"
+      },
+      "push.log": {
+        "bytes": 192,
+        "sha256": "cbf0c9fb648bb0eff5c51eb2d11d09f30225ca9a4c55a0fcf3569c0d43374ba5"
+      },
+      "remote-ref.txt": {
+        "bytes": 111,
+        "sha256": "6c1891b97870df8240a24a019992943029c126999611d7cfb671687454b78666"
+      }
+    },
+    "source_build_hold_release": false,
+    "scope": "Published private offline compiler and bounded static ABI/CFG/footprint only; no provider/numerical/JIT/RSS/performance/adoption/fullscience/Mandatory/release qualification."
+  },
+  "strict_fp64_PROPERTY_NAME_absence_required": true,
+  "required_stdout_markers_inorder": [
+    "[TraceJacobiRung] module=trace.spv phase=begin",
+    "[TraceJacobiRung] module=trace.spv phase=prepared",
+    "[TraceJacobiRung] module=trace.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+  ],
+  "markers_are_PASS": false,
+  "root_samebirth_external_env_all_mapped_file_ownership_and_exact_XML_postcheck_required": true,
+  "scope": "Concrete metadata admission pending independent runtime review/root sole launch release. Original selected three-rung test and original300s/4GiB/2GiB/defaultcache/LVP0/1000ms assertions. No canonical shader/source adoption or numerical/JIT/RSS/performance/fullscience/Mandatory/release result."
+}

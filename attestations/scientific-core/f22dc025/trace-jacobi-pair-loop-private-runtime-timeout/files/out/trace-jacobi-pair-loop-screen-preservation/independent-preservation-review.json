@@ -1,0 +1,149 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-compiler-independent-preservation-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T19:34:04.792417+00:00",
+  "blockers": [],
+  "bundle": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen",
+  "critical_pins": {
+    "manifest": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/manifest.json",
+      "bytes": 40647,
+      "sha256": "5214100053642e3a44aea48b273c24c39d62dfd9210fc3ad122b03f2b622e6b9"
+    },
+    "preservation": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/preservation.json",
+      "bytes": 76349,
+      "sha256": "708d861b752c4c718ceb74237202be3198cf7ae0b45c100da095cc7035231da1"
+    },
+    "static_catalog": {
+      "path": "out/trace-jacobi-pair-loop-screen-preservation/static-archive-dependencies.json",
+      "bytes": 2892928,
+      "sha256": "30ad2dae93b2c6e33107e3c4de2ee543ea677369ef39def97228e860247cd113"
+    },
+    "root_completed": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-completed-operations.json",
+      "bytes": 41678,
+      "sha256": "fff3421ee0fd84044b2f041a1d6dd39eebdfcaf9d8365b7ad592652a62a138ba"
+    },
+    "independent_completion": {
+      "path": "out/trace-jacobi-pair-loop-screen/independent-completion-review.json",
+      "bytes": 16774,
+      "sha256": "78ba5cda5662492c9d48fd4fe6366b337347133363eda2859d5ec4e57bee6298"
+    },
+    "root_emitted": {
+      "path": "out/trace-jacobi-pair-loop-screen/root-emitted-observation.json",
+      "bytes": 53264,
+      "sha256": "33799af8a452fdba53b47644c611f925cecd3e7bb2577cf3bb24bb7393c529dd"
+    },
+    "independent_emitted": {
+      "path": "out/trace-jacobi-pair-loop-screen/independent-emitted-review.json",
+      "bytes": 28041,
+      "sha256": "e055e17080b4c1a2961032b71843408d8a9dd80d27f5b3f73f539244e1a83444"
+    },
+    "late_SCI15_publication": {
+      "path": "out/science-original-cpu-gap-witnesses-preservation/root-git-preservation.json",
+      "bytes": 1410,
+      "sha256": "9c025f5494f09c96157f8ccc5623d92bdb957315d6ed8db2f7be41874882b072"
+    },
+    "issue_followup": {
+      "path": "out/trace-jacobi-f22-current-issue-followup/root-followup-verification.json",
+      "bytes": 2212,
+      "sha256": "b533d41161d61823093f0144a2503f75183c47a25c728ffe49c490f34d711280"
+    }
+  },
+  "complete_payload_and_metadata": {
+    "actual_bundle_files": 213,
+    "manifest_payloads_and_exact_copy_pairs": 211,
+    "composition": {
+      "entire_current_compiler_raw": 197,
+      "late_SCI15_publication": 5,
+      "current_issue48_53_followup": 8,
+      "catalogue": 1,
+      "manifest_and_preservation": 2
+    },
+    "exact_manifest_tree_all_hashes_and_every_raw_to_bundle_copy": true,
+    "all_raw_files_included": true,
+    "no_bundle_symlinks": true,
+    "metadata": "Manifest lists211 payloads. Preservation pins that manifest and catalogue; all destination paths are inside this bundle and cover the exact manifest set without a self-hash cycle."
+  },
+  "actual_consumed_input_provenance": {
+    "catalogue_and_actual_union": 4378,
+    "partition": {
+      "tracked_source_Git": 538,
+      "hash_only_host_compiler_or_build_dependency": 3718,
+      "prior_published_exact_actual_bytes_Git": 16,
+      "baseline_or_staged_shader_byte_alias_own_control": 8,
+      "actual_own_bundle_copy": 98
+    },
+    "all_rich_resolved_path_size_hash_identities_match_actual_before_after_and_current": true,
+    "actual_before_after_rows": 86930,
+    "rows_per_owner": [
+      4315,
+      4322,
+      4329,
+      4336,
+      4343,
+      4350,
+      4357,
+      4364,
+      4371,
+      4378
+    ],
+    "all554_named_commit_path_blob_records_checked_against_actual_Git_full_bytes": true,
+    "all98_own_static_copies_equal_exact_bundle_copies": true,
+    "all8_nonexecutable_control_or_staged_byte_aliases_equal_exact_own_control_copies": true,
+    "source_role": "538 exact named f22 tracked blobs.",
+    "prior_role": "16 exact named bytes from34a Linux build/recipe provenance, def305 original/candidate/source proofs, and031ef445 SCI15 publication/completion. No role is elevated to a new producer or runtime execution.",
+    "alias_boundary": "Five baseline products and three previously staged SPVs equal retained own control bytes. These are module/generated-source byte aliases, not foreign executable, device result or new runtime authority.",
+    "hash_only_boundary": "3718 host/compiler/build identities remain explicit hash-only. Installed compiler/optional resources and dependencies are not retained byte backups or a complete restorable toolchain."
+  },
+  "preserved_operations_and_emitted_limits": {
+    "all10_actual_owned_Slang_operations_and_root_acceptances_PASS": true,
+    "all5_controls_byte_equal_original_baseline": true,
+    "all6_SPIRV_products_original_validation_and_ordinary_disassembly_saved_actual0": true,
+    "exact10_products_and6_ASM_still_match_independent_emitted_review_pins": true,
+    "root_and_independent_completion_and_emitted_receipt_pins_match_preservation": true,
+    "emitted_scope": "Reuses the exact pinned independent typed-loop/CFG/ABI review and root FULLREAD observation: three bounded two-pair loops, continuation272/480 and seven storage bindings; no re-run of parser/tools or new numerical equivalence proof.",
+    "raw_SPIRV_percent_smaller": {
+      "fp32": 12.479879457075953,
+      "fp32comp": 12.466041492092804,
+      "fp64": 10.315613777755297
+    },
+    "limits": "Static SPV size changes only. CUDA/MSL generated source is slightly larger and never passed a native CUDA/Metal compiler/runtime. Both physical pair updates remain. No driver/JIT/RSS/time/numerical/performance gain or source adoption follows.",
+    "guard_boundary": "Original Slang300s/aggregate4GiB/reserve2GiB ownership remains distinct from separate root GNUtimeout300s/kill10s validation/disassembly, which has no aggregateRSS/session-census certification.",
+    "dated_corrections": "The final emitted receipt retains its pre-release Switch/range-check correction; root observation retains its broad-declaration-versus-recursive44 selector correction. Earlier pending fields remain dated history, not edited execution proof."
+  },
+  "late_publication_and_issue_joins": {
+    "SCI15_commit": "031ef445c036fb5bcbce91da4c8ca8c45ccc9c56",
+    "SCI15_tag": "evidence/issue-53-original-fifteen-cpu-science-f22dc025",
+    "SCI15_checks": "Five late records copied exactly; all publication pins, actual push0 and fresh remote-after-closure0 records, saved/local tag commit agree. Named published SCI15 manifest/preservation/completion bytes are part of the554 exact Git joins.",
+    "issue48_comment": 6191250098,
+    "issue53_comment": 6189673442,
+    "saved_issue_request_equals_returned_body_and_prior_body_verbatim_suffix": true,
+    "issue53_before_equals_fresh_before": true,
+    "all7_followup_file_pins_and_recorded_PATCH_exit0_exact": true,
+    "dated_scope": "Issue updates precede completed codegen and truthfully retain the screen-being-admitted statement at that timestamp. Build-only CI/0of8, finite CPU passes and incomplete first-begin-only RSS stop remain distinct; no original July identity or full-domain promotion."
+  },
+  "disposition": {
+    "source_candidate_applied": false,
+    "provider_or_test_executed_in_this_screen": false,
+    "driver_JIT_RSS_time_numerical_or_performance_benefit_established": false,
+    "source_build_hold_released": false,
+    "cleanup_or_retirement_authorized": false,
+    "new213_bundle_Git_publication_pending_root_operation": true
+  },
+  "method": "Passive standard-library file/hash/JSON/text and read-only Git only. No helper/project import/parser/compiler/SPV tool/provider/test/network/process query, source/build mutation, deletion or write outside this new receipt.",
+  "checkout": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "new_review_committed_or_pushed": false
+  },
+  "scope": "Preservation PASS for exact private offline compiler and bounded static evidence only. No runtime/source application/hold release, full scientific/P1-P6/E1-E4/Mandatory/native/UI/cold/performance/eight-domain/release qualification or cleanup admission."
+}

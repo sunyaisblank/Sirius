@@ -1,0 +1,84 @@
+{
+  "schema": "sirius-private-pair-loop-optional-layer-DT_NEEDED-observation-v1",
+  "created_utc": "2026-10-15T19:39:21.923889+00:00",
+  "argv": [
+    "/usr/bin/ldd",
+    "/usr/lib/x86_64-linux-gnu/libVkLayer_MESA_device_select.so"
+  ],
+  "actual_exit": 0,
+  "library": {
+    "resolved_path": "/usr/lib/x86_64-linux-gnu/libVkLayer_MESA_device_select.so",
+    "bytes": 97744,
+    "sha256": "78864ea761293a5f2e24b1b92dee83f4ce05ecd7d65547a3576c28a2d0f3bcd7"
+  },
+  "resolved_DT_NEEDED": {
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+      "bytes": 18696,
+      "sha256": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+      "bytes": 26776,
+      "sha256": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+      "bytes": 80888,
+      "sha256": "e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+      "bytes": 92760,
+      "sha256": "ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67"
+    },
+    "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+      "bytes": 47672,
+      "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+    },
+    "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+      "bytes": 55536,
+      "sha256": "423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef"
+    },
+    "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+      "bytes": 64776,
+      "sha256": "1c22abb422953442aa12822ea51ac76d1c8be92ed143e0159e0f830776cde2b2"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+      "bytes": 22744,
+      "sha256": "a919146693e71897484c2996beb837273a7a278d1a2afe477bc072f10681f3b0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+      "bytes": 162392,
+      "sha256": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440"
+    }
+  },
+  "raw_streams": {
+    "out/trace-jacobi-pair-loop-runtime-pending/ldd-optional-layer.stdout": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-runtime-pending/ldd-optional-layer.stdout",
+      "bytes": 828,
+      "sha256": "463b3e1372777c2374c0a6e60c680ebbd2f28a55a015256b1f2abab5c287ec42"
+    },
+    "out/trace-jacobi-pair-loop-runtime-pending/ldd-optional-layer.stderr": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-runtime-pending/ldd-optional-layer.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "scope": "Conservative closure for the pre-existing implicit Mesa device-selection layer. No actual loaded-layer/provider/test execution claim."
+}

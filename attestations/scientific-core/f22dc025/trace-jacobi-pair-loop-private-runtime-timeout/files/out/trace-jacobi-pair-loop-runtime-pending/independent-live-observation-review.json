@@ -1,0 +1,220 @@
+{
+  "schema": "sirius-private-jacobi-pair-loop-independent-live-observation-interpretation-review-v1",
+  "created_utc": "2026-10-15T19:47:48.853437+00:00",
+  "passed": true,
+  "interpretation_only": true,
+  "runtime_or_numerical_success_admitted": false,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewed_saved_observation": {
+    "path": "out/trace-jacobi-pair-loop-runtime-pending/root-live-provider-environment.json",
+    "bytes": 63828,
+    "sha256": "5bc5a05bc30d79b92815b76f38b6f32f30fd7f74781c98d45c2fd9023eb81294"
+  },
+  "cache_contract_pins": {
+    "source-contracts.json": {
+      "bytes": 24099,
+      "sha256": "f3f669bd92e41ff78900dd1e22ab146ccd42de1b1fdadf966f03dcb498201b8e"
+    },
+    "actions.json": {
+      "bytes": 76944,
+      "sha256": "6df597db09b0e984a3e79b5080b1387c542647d5611f93293674160962f3cdd1"
+    },
+    "readiness.json": {
+      "bytes": 13503,
+      "sha256": "2832f4490c4131d3e400f13d859f63821cf480fd9c3a1d6f2bc2b1df94a06503"
+    },
+    "root-preflight.json": {
+      "bytes": 429855,
+      "sha256": "54c1f1381b2364abe2456ab92bd208b31325aa8bbc4ef59d926883e45e4538c8"
+    },
+    "run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "independent-runtime-review.json": {
+      "bytes": 14489,
+      "sha256": "028206ff2d35cb192ba7286e017320de7c391df1d948e4bec48a29335c485916"
+    }
+  },
+  "original_raw_observation_preserved": {
+    "unchanged": true,
+    "all_regular_external_actual_mapped_files_match_prelaunch_frozen_identities": false,
+    "unbound_regular_external_mapped_files": [
+      {
+        "role": "child",
+        "identity": {
+          "resolved_path": "/home/astra/.cache/mesa_shader_cache/index",
+          "bytes": 1310728,
+          "sha256": "4393f06db0239ad0b1f1626c1726539bfd4973779730968820207f8973049899"
+        }
+      }
+    ],
+    "original_false_flag_must_not_be_relabelled": true
+  },
+  "saved_same_birth_observation": {
+    "roles": {
+      "controller": {
+        "regular_mapped_file_snapshots": 17,
+        "immutable_bound_regular_mapped_files": 17,
+        "runtime_memfd_map_lines": 0,
+        "same_birth": {
+          "pid": 1133723,
+          "start_ticks": "14277412",
+          "session": 1133722
+        },
+        "selected_environment": {
+          "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+        }
+      },
+      "child": {
+        "regular_mapped_file_snapshots": 36,
+        "immutable_bound_regular_mapped_files": 35,
+        "runtime_memfd_map_lines": 8,
+        "same_birth": {
+          "pid": 1133727,
+          "start_ticks": "14277471",
+          "session": 1133727
+        },
+        "selected_environment": {
+          "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+          "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+          "SIRIUS_VULKAN_DEVICE": "0",
+          "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-runtime-pending/trace-jacobi-all-rungs/gtest.xml"
+        }
+      }
+    },
+    "immutable_regular_snapshot_rows_matched_to_preflight_and_current_bytes": 52,
+    "unique_immutable_regular_paths": 45,
+    "only_unbound_regular_path": "/home/astra/.cache/mesa_shader_cache/index",
+    "actual_LVP": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+      "device_major": 8,
+      "device_minor": 80,
+      "inode": 143595
+    },
+    "same_child_LVP_map_lines": [
+      "707022600000-70702265b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "70702265b000-707022a6b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "707022a6b000-7070230c6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "7070230c6000-70702315c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "70702315c000-707023161000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+    ],
+    "scope": "Single saved root live observation with birth/session checked before and after; reviewer made no process query. No continuous/global mapping completeness claim."
+  },
+  "mutable_default_cache_classification": {
+    "saved_cache_snapshot": {
+      "role": "child",
+      "identity_snapshot": {
+        "resolved_path": "/home/astra/.cache/mesa_shader_cache/index",
+        "bytes": 1310728,
+        "sha256": "4393f06db0239ad0b1f1626c1726539bfd4973779730968820207f8973049899"
+      },
+      "map_line": "707019814000-707019955000 rw-s 00000000 08:50 73478                      /home/astra/.cache/mesa_shader_cache/index",
+      "permissions": "rw-s",
+      "device": "08:50",
+      "inode": "73478"
+    },
+    "compatible_with_unchanged_default_cache_contract": true,
+    "reason": "Original disable_software_shader_cache=false leaves Mesa default provider cache active. The observed Mesa cache/index is writable/shared provider-managed mutable runtime state; it is not a declared immutable source, shader module, executable, library or build input. Its presence is consistent with the selected default-cache execution.",
+    "handling": "Retain its exact saved path/dev/inode/size/hash/map snapshot and classify separately. Do not mutate the original false/unbound receipt, freeze the index after launch, demand its before/after SHA equality, delete/disable it, relaunch, or silently assert that every regular mapping was prelaunch-bound.",
+    "limits": "Snapshot does not establish index creation time, prior contents, warm/cold state, cache hit/miss, cache correctness, compiled-cache payload identities or a JIT/performance benefit. Cache may affect code generation/setup behavior; no deterministic/cold comparison is claimed. Reviewer did not read or hash the live mutable cache."
+  },
+  "runtime_generated_memory": {
+    "saved_memfd_map_count": 8,
+    "saved_memfd_map_lines": [
+      "707000778000-7070007f9000 rw-s 00005000 00:01 151260                     /memfd:allocation fd (deleted)",
+      "70701980f000-707019814000 rw-s 00087000 00:01 151260                     /memfd:allocation fd (deleted)",
+      "707022590000-707022591000 rw-s 0008c000 00:01 151260                     /memfd:allocation fd (deleted)",
+      "707022591000-707022592000 rw-s 00086000 00:01 151260                     /memfd:allocation fd (deleted)",
+      "70702387e000-70702387f000 rw-s 00004000 00:01 151260                     /memfd:allocation fd (deleted)",
+      "70702387f000-707023880000 rw-s 00003000 00:01 151260                     /memfd:allocation fd (deleted)",
+      "707023880000-707023881000 rw-s 00002000 00:01 151260                     /memfd:allocation fd (deleted)",
+      "707023881000-707023882000 rw-s 00001000 00:01 151260                     /memfd:allocation fd (deleted)"
+    ],
+    "classification": "Shared deleted memfd allocation mappings are generated runtime memory, not persistent external filesystem program inputs. Preserve observed map identities; no nonexistent filesystem pin or prior whole-input SHA equality is appropriate.",
+    "limits": "No GPU-object/RSS allocation attribution from these rows; no permission to exempt arbitrary unbound files or executable mappings. Anonymous/JIT/runtime allocation contents are not authenticated as static code by this saved file-map check."
+  },
+  "corrected_root_interpretation_contract": {
+    "acceptable_narrow_statement": "All saved immutable external code/library/input regular mapping snapshots join existing preflight identities; exactly one saved mutable Mesa default-cache index and eight generated memfd mappings are separately disclosed. This is narrower than all regular mappings prelaunch-bound.",
+    "required_contents": [
+      "Pin the original saved false observation and its two pre-write observer corrections.",
+      "Record cache map path08:50/inode73478/rw-s and the saved1310728-byte SHA snapshot without claiming current/unchanged cache contents.",
+      "Disclose runtime memfd allocations separately and preserve actual same-birth environment/LVP identity.",
+      "Retain original source,300s/4GiB/2GiB/defaultcache/LVP0 guards; no test relaunch, cache policy change or numerical admission.",
+      "Any additional unbound immutable code/library/input mapping remains a real unresolved admission failure; this classification is specific to the exact saved cache index."
+    ]
+  },
+  "observer_corrections": "Two earlier root observer commands stopped before any receipt writes: int/string start_ticks comparison, then attempting a filesystem pin for an actual Vulkan runtime /memfd:allocation fd (deleted). Current observation normalizes saved string birth identity, compares stable birth/session fields and retains runtime memfd maps separately from external file inputs. No test/helper/configuration mutation or relaunch.",
+  "remaining_terminal_requirements": [
+    "Actual owner terminal status and original deadline/RSS/reserve/cleanup/source/whole-input closure.",
+    "Strict fp64_evidence PROPERTY NAME absence, all9 ordered progress markers, original one completed zero-FESD XML and three module/source joins before finite witness success.",
+    "Root actual saved controller/child birth teardown and final ownership checks."
+  ],
+  "claims_not_made": [
+    "Runtime positive or all-rung completion",
+    "Cold cache, cache-hit attribution, JIT/RSS/performance improvement",
+    "Static authentication of generated memory or entire mutable cache",
+    "Canonical candidate adoption, source/build hold release, full scientific/Mandatory/release qualification"
+  ],
+  "reviewer_actions": "Read saved JSON and immutable source/contracts/preflight; hash only saved receipt and immutable mapped files; read-only Git source status. No live process or runtime output queries, no cache read, helper/provider/test/network execution or input mutation.",
+  "working_tree": {
+    "tracked_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "review_sidecar_awaits_preservation": true
+  },
+  "verdict": "PASS for this narrow saved-observation classification under the unchanged DEFAULT cache contract. Original observation remains false for the broader all-regular-files prelaunch-bound assertion; no runtime success or guard waiver.",
+  "supplemental_root_record_review": {
+    "reviewed_utc": "2026-10-15T19:48:16.607864+00:00",
+    "record": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/root-live-default-cache-interpretation.json",
+      "bytes": 3719,
+      "sha256": "f1e9d2d3c4007eb9073e8a7fe13909d43759ed07cdff1d1bde9eb7a83d9f8cde"
+    },
+    "prior_review_before_this_requested_supplement": {
+      "bytes": 10470,
+      "sha256": "c626cb3341dffaea53c8aff4f520f2d58caed85d8da7e28280db88f2ab671298"
+    },
+    "same_saved_controller_child_births_match_original_observation": true,
+    "saved_actual_HOME_defaultcache_environment": {
+      "controller": {
+        "saved_birth_checked_before_after": {
+          "pid": 1133723,
+          "start_ticks": "14277412",
+          "session": 1133722
+        },
+        "actual_selected_cache_environment": {
+          "HOME": "/home/astra",
+          "XDG_CACHE_HOME": null,
+          "MESA_SHADER_CACHE_DIR": null,
+          "MESA_SHADER_CACHE_DISABLE": null,
+          "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+        }
+      },
+      "child": {
+        "saved_birth_checked_before_after": {
+          "pid": 1133727,
+          "start_ticks": "14277471",
+          "session": 1133727
+        },
+        "actual_selected_cache_environment": {
+          "HOME": "/home/astra",
+          "XDG_CACHE_HOME": null,
+          "MESA_SHADER_CACHE_DIR": null,
+          "MESA_SHADER_CACHE_DISABLE": null,
+          "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+        }
+      }
+    },
+    "cache_path_dev_inode_shared_mapping_and_saved_hash_join": true,
+    "later_same_digest_scope": "Two non-atomic root observational reads only. No guarantee of cache stability, cache coldness, preserved bytes, absence of concurrent changes or reconstruction. Reviewer made no cache or process query.",
+    "official_Mesa_docs_scope": "Root-consulted official reference only; no reviewer network access. Latest documentation is background default-directory context, not proof of installed implementation. Actual saved path, shared-writable map and cache-variable absence support the narrow classification.",
+    "no_policy_source_test_guard_cache_mutation_or_relaunch": true,
+    "verdict": "Supplement composes with the accepted narrow classifier correction, preserves the original false broad assertion and does not establish a runtime result."
+  }
+}

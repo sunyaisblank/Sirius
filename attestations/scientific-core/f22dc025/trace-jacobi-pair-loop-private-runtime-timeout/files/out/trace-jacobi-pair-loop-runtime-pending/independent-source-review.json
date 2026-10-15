@@ -1,0 +1,186 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-private-stage-independent-source-review-v1",
+  "created_utc": "2026-10-15T19:26:23.656720+00:00",
+  "passed": true,
+  "source_only": true,
+  "runtime_admitted": false,
+  "observed_source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "role": "Independent passive source reviewer; reused previously accepted original P2/helper and candidate source reviews. No authored helper/project import/compiler/parser/provider/test/network/process query executed.",
+  "release_pins": {
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/source-contracts.json",
+      "bytes": 24099,
+      "sha256": "f3f669bd92e41ff78900dd1e22ab146ccd42de1b1fdadf966f03dcb498201b8e"
+    },
+    "actions.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/actions.pending.json",
+      "bytes": 9946,
+      "sha256": "b27eabf9f6d206b3c0b179c92b222557494ca8dcfc87dc986b0f484a7bb86241"
+    },
+    "commands.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/commands.pending.json",
+      "bytes": 2369,
+      "sha256": "9f629eec6affd26c6712f47f293a665c022d8669d0e6ce0e9e6ec908031eba4b"
+    },
+    "run_owned.py": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/root_acceptance.py",
+      "bytes": 3768,
+      "sha256": "855e6d80afbf1a3c67b2bb243d523f140d094547c1a00dc2baf24d60ff0f05f2"
+    },
+    "collector-namespace.patch": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/collector-namespace.patch",
+      "bytes": 472,
+      "sha256": "256c64d251e7f66e615b152bb993c60920e067482efac98165e572287506034c"
+    },
+    "originals/actions.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/originals/actions.pending.json",
+      "bytes": 6972,
+      "sha256": "468449bca9fa3fed03fd3afcac54d4cf516ebc729b67d85737d985deacfd8599"
+    },
+    "originals/commands.pending.json": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/originals/commands.pending.json",
+      "bytes": 1714,
+      "sha256": "6e4667649655e922dec1e79144913c1400b982cd01a8fc1299cab5991ebd655a"
+    },
+    "originals/root_acceptance.py": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/originals/root_acceptance.py",
+      "bytes": 3776,
+      "sha256": "b95f96ea12d20981f86ade54cf3317d0249e615bcb7044e88d9c6d1ded53aa97"
+    }
+  },
+  "preparation_integrity": {
+    "originals_byte_equal_current_preserved_P2_apparatus": true,
+    "mature_owner_and_guard_exact": true,
+    "collector_delta": "Exactly one workdirectory literal; generated unified diff and mechanical inverse equal the supplied patch/preimage. All generic predicates remain.",
+    "AST_syntax_only_three_authored_python_sources": true,
+    "pending_action_changed_fields": [
+      "revision",
+      "argv",
+      "frozen_inputs",
+      "scope"
+    ],
+    "prospective_unique_selectors": 124,
+    "compiler_raw_selectors": 60,
+    "compiler_product_selectors": 10,
+    "unchanged_test_guard_and_XML_fields_equal_original": true,
+    "stage_actualactions_readiness_inventory_preflight_case_absent": true,
+    "pending_revision_stage_metadata_are_not_actual_admission": true
+  },
+  "original_case": {
+    "name": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+    "active_original_filter": "Same active test selection as original apparatus; no exact registered full-argv byte-equivalence claim before fresh root inventory.",
+    "source_refs": [
+      "tests/backend/kernel_trace_test.cpp:379",
+      "tests/backend/kernel_trace_test.cpp:424",
+      "tests/support/trace_continuation_probe.h:32",
+      "tests/support/trace_continuation_probe.h:65",
+      "tests/support/trace_continuation_probe.h:149",
+      "src/sirius/render/trace_continuation.h:33"
+    ],
+    "unchanged_three_rung_order": [
+      "trace.spv",
+      "trace_fp32comp.spv",
+      "trace_fp64.spv"
+    ],
+    "logical_device_lifetime": "One selected-device creation inside each rung; original within-rung failure/recovery continuity preserved.",
+    "mathematical_assertions": "Independent Minkowski four-column X/V solutions; labelled direction/position columns and tolerances unchanged; large/small step event clipping at affine2, translated affine1 and surface affine0; beam/parallel alpha and all finite output assertions unchanged.",
+    "negative_and_recovery_assertions": "Outward unrepresented event fails with Terminal/UnrepresentedEvent; no radiance publication; manual Finalize retains control/identity/physical/source/volume and radiance; later samples1/2 refuse without submission; sample-zero reset recovers and sample1 submits/averages normally.",
+    "limits": {
+      "external_operator_seconds": 300,
+      "sampled_aggregate_RSS_KiB": 4194304,
+      "reserve_KiB": 2097152,
+      "original_registered_TIMEOUT": null,
+      "maximum_attempts": 128,
+      "physical_active_submit_wait_ms_maximum": 1000,
+      "software_zeroactive_prepare_separate_from_active_phase_cap": true
+    },
+    "ABI": {
+      "active_pixels": 1,
+      "allocated_rows": 64,
+      "bindings": 7,
+      "packet_float32_words": 70,
+      "record_bytes": {
+        "float": 272,
+        "double": 480
+      },
+      "requested_payload_bytes": {
+        "float": 543044,
+        "double": 556356
+      },
+      "payload_not_driver_RSS": true
+    }
+  },
+  "private_stage_and_source_identity": {
+    "host": "Future genuine regular executable copy of actual current f22 backend ELF; fresh full hash/mode/producer/compile-definition proof required. No host rebuild or metadata output created here.",
+    "shaders": "Three actual accepted offline candidate SPIRV products compiled from unapplied63512B source 8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9. Canonical f22 trace remains63460B/041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9.",
+    "module_origins": {
+      "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace.spv": "out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+      "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace_fp32comp.spv": "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv",
+      "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace_fp64.spv": "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv"
+    },
+    "resource_proof": "GTest gtest_main; no selected fixture/global setup. Exact body loads only kernels/trace.spv,trace_fp32comp.spv,trace_fp64.spv. ResourcePath uses actual ExecutableDirectory via Linux/proc/self/exe and ResolveResourceFromRoot containment, so a real copied executable anchors the new resources directory; symlink host would not supply that identity.",
+    "GPU_inputs": "Probe creates and zeros all seven bindings in memory, including empty starfield/pointstar/CSR buffers. Generated flat scene needs no external scene/catalogue asset for this filter.",
+    "complete_runtime_closure_still_required": "Stage4 is only executable/resource subset. Root must derive actual stage executable/Python/Git/loader/LVP DT_NEEDED, ELF RUNPATH implications, provider and all consumed source/producer/metadata bytes before concrete admission; no old whole-map current replay."
+  },
+  "generic_collector_and_root_composition": {
+    "generic_property": "Inherited properties.get(fp64_evidence)==None rejects nonnull unsupported decline, but can also accept malformed missing-value property. It does not enforce strict NAME absence, marker order, actual source/product coverage or external LVP0.",
+    "mandatory_root_checks": [
+      "Property NAME fp64_evidence absent, not merely a null lookup.",
+      "All nine exact module begin/prepared/exercised lines in order; nonfatal EXPECT failure can still print exercised, so completed one-case zero-FESD/no-skip XML remains mandatory.",
+      "Full unchanged three-rung source, double branch, all3 actually loaded candidate module joins. Unsupported FP64 decline omits prepared/exercised and sets property; reject it.",
+      "External actual LVP_JIT_OPTIMIZATION_LEVEL=0 with default Mesa cache/no inherited unsupported override, selected ICD/device0 and actual same-birth/session/dev-inode LVP maps.",
+      "All before/after/current source/input pins, exact original argv/typed integer0 and limits; fresh saved controller/child/observed birth absence, empty cleanup/remainers and original active-phase assertions."
+    ],
+    "required_marker_lines": [
+      "[TraceJacobiRung] module=trace.spv phase=begin",
+      "[TraceJacobiRung] module=trace.spv phase=prepared",
+      "[TraceJacobiRung] module=trace.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+    ],
+    "Hoare_precondition": "Compiler source/emitted acceptance and immutable Git publication/root release first; then root stages actual4 products and freshly materializes complete real runtime closure with no mutable own outputs or selfhash cycle.",
+    "Hoare_postcondition": "Only original completed zero-FESD assertion success plus strict root checks can accept this finite private-candidate diagnostic. Any guard/noXML has no numerical verdict; preserve first nonpass without retry or raised guards."
+  },
+  "pending_before_any_execution": [
+    "Compiler whole raw/product/review proof Git preservation/publication and root release.",
+    "Actual complete host/stage SPV identities, executable modes/resource location, current registration/compile definitions and strict producer proof.",
+    "Final actual revision/actions/readiness/inventory/preflight; all current runtime/provider/tool/source/library/preserved evidence and this source review explicitly bound. Any retired compiler selectors require named immutable aliases with lexical/content joins, not live-map replay.",
+    "Independent concrete metadata admission and separate root sole-operator launch decision; no action executes from this source verdict."
+  ],
+  "limits_and_history": {
+    "prior_unchanged_e0_and_changed_f22_stops": "Historical sampled RSS stops/noXML/no numerical verdict. f22 begin-only output does not identify allocating/JIT host call or driver-memory cause.",
+    "candidate_distinction": "Only Jacobi-pair static callsite structure changed; mathematical order/dynamic work/ABI claims are separately source/emitted-reviewed. No guaranteed memory cure or first-rung completion.",
+    "not_admitted": [
+      "Canonical f22 shader qualification or tracked source adoption",
+      "Strong-field Kerr/compositefloor/fullP1-P6/E1-E4 science",
+      "Driver JIT/RSS/performance/coldframe/#44 improvement",
+      "Native/device/fullMandatory/release qualification"
+    ]
+  },
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_clean": true,
+    "committed_and_pushed": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "new_sidecar_not_yet_Git_preserved": true
+  },
+  "verdict": "SOURCE PASS for the pending private-stage original P2 diagnostic protocol. No runtime or launch admission."
+}
