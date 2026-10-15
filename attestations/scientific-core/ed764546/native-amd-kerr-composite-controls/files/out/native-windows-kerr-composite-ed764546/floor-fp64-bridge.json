@@ -1,0 +1,159 @@
+{
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "runner_source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "kind": "floor-fp64",
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\run_native_control.ps1",
+    "-Stage",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546\\tests\\backend\\Release",
+    "-Output",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\native\\floor-fp64",
+    "-Filter",
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+    "-Seconds",
+    "900",
+    "-RssBytes",
+    "4294967296",
+    "-TemporaryDirectory",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\temp\\floor-fp64",
+    "-BuildRoot",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546",
+    "-ExpectedGateSha256",
+    "12d1675b6a38b812f3104d497a2b1720a36ee938675852028bd1731651a40a9c",
+    "-LiveRevision",
+    "ed76454617063f2463a75423b2756e8c957ce6c2",
+    "-ExecutableName",
+    "sirius_backend_tests.exe",
+    "-InvocationKind",
+    "Control"
+  ],
+  "binding_sha256": "c29e68f40dbb26cff0a77b3c80c2f9703225fd2dbaa64c9aa02388925062bb26",
+  "linux_controller_pid": 703745,
+  "linux_controller_birth": "11446581",
+  "predecessor_inputs": {
+    "out/native-windows-kerr-composite-ed764546/floor-fp32-bridge.json": {
+      "bytes": 2826,
+      "sha256": "b35ec36a39c45945c4c0952280cc22fc1c160ed115a47f44d21dfc02017e5334"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32/owner.json": {
+      "bytes": 3236,
+      "sha256": "65e2b475d4490687e052438ffa9b744f85e8779914c12f0c75991cf840b86838"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32/stdout.log": {
+      "bytes": 870,
+      "sha256": "40f04f03c67accd184c3728587057e132c2ea96712308f79f9b67289415ed0c0"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32/memory.json": {
+      "bytes": 57461,
+      "sha256": "fe96bbda1003627e34671dc852046d903d43f787b4c124797c9d03fbc74c23fb"
+    },
+    "out/native-windows-kerr-composite-ed764546/floor-fp32-inputs-before.json": {
+      "bytes": 24214,
+      "sha256": "06ba8e042042e7ce772570d55ce988af3b42893870d34835299185343cb4dfdd"
+    },
+    "out/native-windows-kerr-composite-ed764546/floor-fp32-inputs-after.json": {
+      "bytes": 24214,
+      "sha256": "06ba8e042042e7ce772570d55ce988af3b42893870d34835299185343cb4dfdd"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32/gtest.xml": {
+      "bytes": 1045,
+      "sha256": "6609c8a548b47e5751245d0374027c80eb66674ca53b0a47c6d03e3d6abf318a"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32/driver-modules.json": {
+      "bytes": 685,
+      "sha256": "aed78cd0d808474cc7541b55eab7eb3fe8967d2b5c02771e176b2e64ab40bad0"
+    },
+    "out/native-windows-kerr-composite-ed764546/terminal-floor-fp32.json": {
+      "bytes": 4053,
+      "sha256": "b344a523059b3c64950a792ff2131f68a3ae7181a1a49be368f13ede2626ae5f"
+    },
+    "out/native-windows-kerr-composite-ed764546/terminal-floor-fp32-bridge.json": {
+      "bytes": 2390,
+      "sha256": "245b5df5621a231ff7b5d5f8b5719d33ccde602b8b49178acfaf930614e60594"
+    },
+    "out/native-windows-kerr-composite-ed764546/terminal-floor-fp32-accepted.json": {
+      "bytes": 8492,
+      "sha256": "ed475cc24ed37d2dc93daf5a5756e7f64ad4acc586bd3c11c4e47ff195122138"
+    },
+    "out/native-windows-kerr-composite-ed764546/floor-fp32comp-bridge.json": {
+      "bytes": 5158,
+      "sha256": "035b3a9428b507a41bffbb4768c34f3a16b38e3739381fb14ed8651825123430"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32comp/owner.json": {
+      "bytes": 3256,
+      "sha256": "b02a5c9279675d92b7597e2a821962f0a9314c8b6955f4c35a5eb7796c5ae0ed"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32comp/stdout.log": {
+      "bytes": 882,
+      "sha256": "bc2acc580a978efbbde52abda0029ca347bf10d9b5fd89acb5f39e26a2286b70"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32comp/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32comp/memory.json": {
+      "bytes": 56812,
+      "sha256": "3d4a3ad09daeda170d6d520c9c698896802901a7975e085e4e40d18e42201458"
+    },
+    "out/native-windows-kerr-composite-ed764546/floor-fp32comp-inputs-before.json": {
+      "bytes": 26428,
+      "sha256": "2ad8c9d3c45a3c17bb3c48370e18120bfa4c090e77748e77af873ca5bc225966"
+    },
+    "out/native-windows-kerr-composite-ed764546/floor-fp32comp-inputs-after.json": {
+      "bytes": 26428,
+      "sha256": "2ad8c9d3c45a3c17bb3c48370e18120bfa4c090e77748e77af873ca5bc225966"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32comp/gtest.xml": {
+      "bytes": 1054,
+      "sha256": "d5f65ca6b9968641690a58eeb124263ccf4c525e9a9c7ecb4ec8996ad6193eb0"
+    },
+    "out/native-windows-kerr-composite-ed764546/native/floor-fp32comp/driver-modules.json": {
+      "bytes": 685,
+      "sha256": "aed78cd0d808474cc7541b55eab7eb3fe8967d2b5c02771e176b2e64ab40bad0"
+    },
+    "out/native-windows-kerr-composite-ed764546/terminal-floor-fp32comp.json": {
+      "bytes": 4057,
+      "sha256": "25e300547b34c1d249b1f135a63d92ad56289b1c6e46d991e77ad0426e876fd2"
+    },
+    "out/native-windows-kerr-composite-ed764546/terminal-floor-fp32comp-bridge.json": {
+      "bytes": 2411,
+      "sha256": "931c176c3f68570f692d87a71ced42de54bea812a0625b2ee0de6e844cd46059"
+    },
+    "out/native-windows-kerr-composite-ed764546/terminal-floor-fp32comp-accepted.json": {
+      "bytes": 11088,
+      "sha256": "ce3ffc95bdab1f8506ed27f6194005639d6a03c4af1851caf09a15d39ea7d66f"
+    }
+  },
+  "bridge_outer_seconds": 1380,
+  "windows_owner_seconds": 900,
+  "minimum_wsl_available_kib": 2097152,
+  "resource_scope": "Unchanged held-handle Windows owner samples child WorkingSet64/PrivateMemorySize64 under4GiB. WSL sampled MemAvailable reserve2GiB; Linux bridge owner+480seconds; separate terminal60seconds. Original trace/P1 physical1000ms assertions unchanged; outer900/28800 bounds are prospective external diagnostics, not original whole-test deadlines or aggregate Windows/bootstrap memory guarantees. Default AMD cache and inherited override refusal unchanged.",
+  "accepted_owner_execution": true,
+  "completed": true,
+  "cleanup_errors": [],
+  "full_qualification_claimed": false,
+  "minimum_sampled_wsl_available_kib": 14144924,
+  "linux_child_pid": 703797,
+  "linux_child_birth": "11447059",
+  "returncode": 0,
+  "linux_child_birth_absent": true,
+  "native_build_gate_authority_used": true,
+  "mandatory_or_full_runtime_admitted": false,
+  "required_evidence_property": {
+    "fp64_evidence": "real_adaptive_minimum_retry_controls_executed"
+  },
+  "loaded_provider_evidence_complete": true,
+  "whole_inputs_unchanged": true,
+  "elapsed_seconds": 443.7838175319921,
+  "signals": []
+}

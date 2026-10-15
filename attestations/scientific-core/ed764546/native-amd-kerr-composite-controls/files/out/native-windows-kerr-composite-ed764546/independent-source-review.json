@@ -1,0 +1,162 @@
+{
+  "schema": "sirius-native-windows-kerr-composite-independent-source-review-v1",
+  "passed": true,
+  "source_copy_review_passed": true,
+  "runtime_admitted": false,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "reviewer_role": "Independent of native packet adaptation author and root operator. Prior roles included original39f apparatus source preparation and current composite shader source/integration review; this review separately checks the new two-wrapper delta.",
+  "critical_pins": {
+    "source-contracts.json": {
+      "path": "out/native-windows-kerr-composite-ed764546/source-contracts.json",
+      "bytes": 5274,
+      "sha256": "d729904cfb1627d73fd5f82d1f0e6c45e6a9c765d6a75593813bad5face9aecf"
+    },
+    "preparation.json": {
+      "path": "out/native-windows-kerr-composite-ed764546/preparation.json",
+      "bytes": 3789,
+      "sha256": "63a2169d74ec4b5ef998cb04014066f4ea04d263bceb680a71e910b126228f22"
+    },
+    "native-composite-adaptation.patch": {
+      "path": "out/native-windows-kerr-composite-ed764546/native-composite-adaptation.patch",
+      "bytes": 30839,
+      "sha256": "a97c0eca820800bf3775e3b8eafcea1d168df3b6a69d4f86be2aec397f6f0633"
+    },
+    "run_system.py": {
+      "path": "out/native-windows-kerr-composite-ed764546/run_system.py",
+      "bytes": 19322,
+      "sha256": "5fc687965dc4222713f904a33a3a90265f638533f362c3c0758f542368d97ee0"
+    },
+    "run_terminal.py": {
+      "path": "out/native-windows-kerr-composite-ed764546/run_terminal.py",
+      "bytes": 18548,
+      "sha256": "af25ae66a3049dfa40f425fab95f5a2347d593ec5483104c499abf84a3216a5c"
+    },
+    "run_native_control.ps1": {
+      "path": "out/native-windows-kerr-composite-ed764546/run_native_control.ps1",
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "path": "out/native-windows-kerr-composite-ed764546/terminal-audit.ps1",
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "path": "out/native-windows-kerr-composite-ed764546/emergency_native_cleanup.ps1",
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "plan.pending.json": {
+      "path": "out/native-windows-kerr-composite-ed764546/plan.pending.json",
+      "bytes": 2233,
+      "sha256": "880ddcb0cf148431f1849a102ca0fe27e62aff15ae1a36a00159cfea182bb5b1"
+    },
+    "plan.regressions.pending.json": {
+      "path": "out/native-windows-kerr-composite-ed764546/plan.regressions.pending.json",
+      "bytes": 4363,
+      "sha256": "d4cb7f22c9a26e606a3c22c9ba1670f9edd3040f826efe45b85bd39f824d6670"
+    },
+    "execution-bindings.pending.json": {
+      "path": "out/native-windows-kerr-composite-ed764546/execution-bindings.pending.json",
+      "bytes": 2143,
+      "sha256": "06de4f1d122d22a73398c2ba64a1525828551b2f674a2f5c6e5f063165d1947d"
+    }
+  },
+  "original_provenance": {
+    "commit": "39f843af203e824693391e2cf47f8821e923f801",
+    "work": "attestations/scientific-core/23d406b/native-amd-original-controls/files/out/native-windows-science-controls-23d406b",
+    "all_five_original_files_equal_actual_named_Git_blob_bytes": true,
+    "three_PS_files_exact_originals_and_unchanged": true,
+    "patch_exact_regenerated_two_wrapper_diff": true,
+    "all_contract_and_preparation_source_pins_match": true
+  },
+  "historical_boundary": {
+    "failure_commit": "2b654bb1c05df655db6d960a908e9ed7e1bf8a91",
+    "result": {
+      "bytes": 5936,
+      "sha256": "ff10fbb1a4c593fe0fafe25f1edc54e9b0854a56a2ef9bff6c03b54743c165ad"
+    },
+    "actual_result_member": "result.json",
+    "result_actual_named_Git_bytes_verified": true,
+    "scope": "Historical02ee failure motivation only. Removed23d inventory/smoke prerequisite is not replayed against retired paths and is not represented as fresh current-source evidence."
+  },
+  "plan_and_pending_checks": {
+    "schemas_and_revision_exact": true,
+    "selected_stage": "bin/windows-msvc/diagnostic-ed764546",
+    "UNC_checkout": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+    "profiles": {
+      "original-kerr-only": [
+        "kerr-image",
+        "kerr-precision"
+      ],
+      "floor-regressions-then-original-kerr": [
+        "floor-fp32",
+        "floor-fp32comp",
+        "floor-fp64",
+        "captured-fp32",
+        "captured-fp32comp",
+        "kerr-image",
+        "kerr-precision"
+      ]
+    },
+    "both_plan_templates_admitted_false": true,
+    "binding_template_admitted_false": true,
+    "actual_artifact_manifest_gate_AMD_files_argv_bindings_null": true,
+    "all_actions_exact_five_keys_typed_expected_exit_int0": true,
+    "source_and_runner_same_revision": true,
+    "physical_parameter_assertion_and_1000ms_limits_unchanged": true,
+    "owner_seconds": {
+      "parity": 900,
+      "image_and_precision": 28800
+    },
+    "bridge_seconds": "selected owner+480",
+    "Windows_child_RSS_bytes": 4294967296,
+    "WSL_minimum_available_kib": 2097152,
+    "terminal_seconds": 60,
+    "limits_scope": "Prospective external diagnostics. Windows guard samples child WorkingSet64 with private bytes recorded; neither aggregate Windows/bootstrap RSS nor original whole-test deadlines are invented.",
+    "actual_plan_binding_native_temp_and_new_stage_absent_at_review": true
+  },
+  "authority_checks": [
+    "Runtime wrappers require actual plan.json/execution-bindings.json admittedtrue, exact supported schema/profile/source/stage and complete per-profile argv sets; pending templates cannot execute.",
+    "Current diagnostic manifest must have exact repository/run38724081383/attempt1/source, diagnostic-only flags and safe canonical original path selectors mapped into selected stage. All physical manifest rows must match binding.files; initial/final verify hashes every declared row.",
+    "Native build gate must exist at selected generated path with exact bound full hash/size, clean same-source identity and exact CLI/backend tested_artifact path/byte joins to diagnostic manifest. No diagnostic-M-only fallback exists.",
+    "Full positive native-gate schema/selection/JUnit/attestation/API-ZIP provenance validation is a future root CI admission requirement; these wrappers do not themselves rerun the repository gate/attestation validator.",
+    "Alignment is same-source clean qualification; this is not full external-domain or release admission.",
+    "Fresh per-control child Modules observations must contain exactly stagedSDKloader plus expectedAMD row. Both wrappers enforce stagedloader path/size/hash and exact same-host AMD row; installed files alone are not accepted as loaded-module evidence."
+  ],
+  "ownership_and_chain_checks": [
+    "Three unchanged PS scripts preserve held process handles, native child exit source, owner/child births, RSS/deadline guard, override refusal, default cache, bounded cleanup and terminal accessible census.",
+    "Image/optional earlier phases must have accepted terminal receipts before the next control. Prior owner must equal saved accepted owner; terminal and bridge hashes match accepted seals; every prior whole_inputs row is compared to its accepted size/hash before a fresh snapshot.",
+    "Every new phase freezes accepted predecessor rawstdout/stderr/memory/XML/module/owner/bridge/inputmaps and terminal receipts rather than merely snapshotting current unaccepted files.",
+    "Success requires exactly one original case, run/completed, zero failure/error/skip/disabled and unchanged source/input seals. Precision additionally requires fp64_evidence=native_comparison_executed. Floor witnesses require their actual-rung execution properties; an unsupported FP64 refusal cannot complete the positive batch.",
+    "New captured cases retain their compiled assertion-based executed/input-bit/endpoint checks. Exact source revision and case XML are required; no shader/test/settings change is part of this packet."
+  ],
+  "first_nonpass_handling_limit": {
+    "accepted_chain_published_on_failure": false,
+    "precision_can_follow_failed_image": false,
+    "success_terminal_wrapper_can_audit_failed_case": false,
+    "reason": "run_terminal.read_case checks successful owner/bridge/XML before launching terminal-audit.ps1. A first numerical, guard or owner failure therefore needs a separate root-owned teardown/birth/accessibility audit; the failure must remain false.",
+    "native_owner_raw_failure_receipts_retained": true,
+    "global_process_absence_claim": false
+  },
+  "remaining_before_any_execution": [
+    "Actual currentCI ZIP/API/manifest/nativegate/product/registration validation and root acceptance.",
+    "Explicit selected profile, complete physical input map including current5helpers/metadata, exact argv/cleanup bindings, actual expectedAMD row and stagedSDKloader joins.",
+    "Actual final freeze plus independent/root runtime admission; no stale historical whole-map replay."
+  ],
+  "blockers_to_source_copy_review": [],
+  "execution_by_reviewer": "Passive source/JSON/hash/byte comparisons and read-only Git only. No authored helper/import/parser, native/PowerShell/tool/provider/compiler/test/API or CI execution.",
+  "scope_limits": [
+    "No current native-runtime/scientific/image/precision success is claimed.",
+    "No fullMandatory/UI/domain/horizon/accuracy/performance/release qualification.",
+    "LoadedSDKloader+AMD proves only the stated selected-process observations; current device inventory or full module tracing is not fabricated."
+  ],
+  "workspace": {
+    "tracked_source_clean": true,
+    "source_committed_and_pushed": true,
+    "ahead": 0,
+    "behind": 0,
+    "worktrees": 1,
+    "packet": "Ignored source-only draft, not committed/pushed by reviewer."
+  }
+}

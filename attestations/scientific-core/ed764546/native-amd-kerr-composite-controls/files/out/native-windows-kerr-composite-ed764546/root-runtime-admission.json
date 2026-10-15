@@ -1,0 +1,46 @@
+{
+  "schema": "sirius-native-windows-kerr-composite-root-runtime-admission-v1",
+  "admitted": true,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "source_clean_committed_pushed": true,
+  "json_preparation_once_closed_exit": 0,
+  "operator_session": 41539,
+  "all124_current_input_bytes_exact": true,
+  "plan": {
+    "bytes": 4362,
+    "sha256": "81d5b9ea02143a6fa2ee083759d13745bc6c47bd2c56bad267b97921ee6499a3"
+  },
+  "bindings": {
+    "bytes": 56761,
+    "sha256": "c29e68f40dbb26cff0a77b3c80c2f9703225fd2dbaa64c9aa02388925062bb26"
+  },
+  "source_freeze": {
+    "bytes": 24994,
+    "sha256": "aea2f903973a2b29599dcc5e7c96d6cc67cf72c9ff176c0bd95bb1938bcf10d4"
+  },
+  "independent_runtime_admission": {
+    "bytes": 2983,
+    "sha256": "5b0c5b586770a8d7096f9f1692aee41fd907f279e526d2486eaa2bdf02b96d5d"
+  },
+  "root_full_source_and_all7_native_terminal_cleanup_argv_read": true,
+  "root_current_CI_product_and_independent_CI_proof_read": true,
+  "next_command": [
+    "python3",
+    "-B",
+    "out/native-windows-kerr-composite-ed764546/run_system.py",
+    "floor-fp32"
+  ],
+  "selected_order": [
+    "floor-fp32",
+    "floor-fp32comp",
+    "floor-fp64",
+    "captured-fp32",
+    "captured-fp32comp",
+    "kerr-image",
+    "kerr-precision"
+  ],
+  "stop_first_nonpass": true,
+  "successor_requires_actual_success_terminal_receipt": true,
+  "separate_failure_teardown_audit_required": true,
+  "native_runtime_full_Mandatory_scientific_release_claimed": false
+}

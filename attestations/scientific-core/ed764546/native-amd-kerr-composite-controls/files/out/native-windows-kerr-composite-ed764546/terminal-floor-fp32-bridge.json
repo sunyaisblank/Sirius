@@ -1,0 +1,39 @@
+{
+  "mode": "native-kerr-composite",
+  "label": "floor-fp32",
+  "case": "floor-fp32",
+  "read_case_pass": true,
+  "observer_sha256": "af25ae66a3049dfa40f425fab95f5a2347d593ec5483104c499abf84a3216a5c",
+  "audit_script_sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+  "arguments": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only terminal auditor bootstrap, no Add-Type or scientific launch'}|ConvertTo-Json|Set-Content -LiteralPath '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\temp\\terminal-floor-fp32\\bootstrap.json' -Encoding UTF8;& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\terminal-audit.ps1' -Workspace '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546' -RunName 'native/floor-fp32' -Receipt 'terminal-floor-fp32.json' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546'"
+  ],
+  "deadline_seconds": 60,
+  "outer_stop": false,
+  "errors": [],
+  "started_epoch": 1792064337.9614594,
+  "qualification_claimed": false,
+  "scope": "Selected original native-AMD Kerr/parity control and current source/product/input identities; bounded Windows birth/provider/accessible-consumer audit. No hidden/global/unconditional compiler-descendant absence or full qualification claim.",
+  "linux_child_pid": 681470,
+  "linux_child_birth": "11371759",
+  "controller_signals": [],
+  "returncode": 0,
+  "elapsed_seconds": 24.091105544997845,
+  "linux_child_birth_absent": true,
+  "accepted": true,
+  "loaded_provider_evidence_complete": true,
+  "terminal_receipt_sha256": "b344a523059b3c64950a792ff2131f68a3ae7181a1a49be368f13ede2626ae5f",
+  "bootstrap": {
+    "owner_start_time_utc": "2026-10-15T11:38:57.9781810Z",
+    "scope": "Read-only terminal auditor bootstrap, no Add-Type or scientific launch",
+    "owner_pid": 7772,
+    "expected_test_executable": ""
+  },
+  "source_binding_owner_bridge_action_post_sealed": true
+}

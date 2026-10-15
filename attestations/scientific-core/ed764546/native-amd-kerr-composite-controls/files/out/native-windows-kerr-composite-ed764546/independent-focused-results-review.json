@@ -1,0 +1,181 @@
+{
+  "schema": "sirius-native-windows-kerr-composite-independent-focused-results-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "focused_controls_passed": 5,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "scope": "Five completed parity controls only. Independent of root operation/current packet adaptation; prior preparer/runtime source reviewer. Live kerr-image outputs not read; no image/precision/fullMandatory/fullscience/performance/release verdict.",
+  "inputs": {
+    "binding": {
+      "bytes": 56761,
+      "sha256": "c29e68f40dbb26cff0a77b3c80c2f9703225fd2dbaa64c9aa02388925062bb26"
+    },
+    "freeze": {
+      "bytes": 24994,
+      "sha256": "aea2f903973a2b29599dcc5e7c96d6cc67cf72c9ff176c0bd95bb1938bcf10d4"
+    },
+    "prior_runtime_admission": {
+      "bytes": 2983,
+      "sha256": "5b0c5b586770a8d7096f9f1692aee41fd907f279e526d2486eaa2bdf02b96d5d"
+    },
+    "tracked_test_source": {
+      "bytes": 129641,
+      "sha256": "4bf064bb7902dcad59050d4374051a44b9b3cdc619ec9fbb97686e222345b563"
+    },
+    "native_executable": {
+      "bytes": 11103744,
+      "sha256": "f6e1881e48dc79b580d0205f283a4d70db57bd8e1b7dd0129b2d42c188912a46"
+    },
+    "whole_before_after_rows": 1490,
+    "unique_current_static_and_closed_case_files_checked": 185,
+    "per_case_keys": [
+      125,
+      137,
+      149,
+      161,
+      173
+    ],
+    "prior_chain_keys": [
+      0,
+      12,
+      24,
+      36,
+      48
+    ]
+  },
+  "results": [
+    {
+      "case": "floor-fp32",
+      "passed": true,
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "owner_seconds": 423.3189045,
+      "test_seconds": 420.879,
+      "native_peak_sampled_RSS_bytes": 1719119872,
+      "memory_samples": 413,
+      "minimum_WSL_available_KiB": 15262732,
+      "actual_submit_ms": 17.6904,
+      "reported_pipeline_setup_ms": 417600.0,
+      "completed_records": 4,
+      "before_after_keys": 125,
+      "predecessor_keys": 0,
+      "evidence_property": "real_adaptive_minimum_retry_controls_executed",
+      "accessible_scan_hidden_records": 176
+    },
+    {
+      "case": "floor-fp32comp",
+      "passed": true,
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "owner_seconds": 417.0335871,
+      "test_seconds": 413.122,
+      "native_peak_sampled_RSS_bytes": 1671397376,
+      "memory_samples": 409,
+      "minimum_WSL_available_KiB": 15680388,
+      "actual_submit_ms": 16.6952,
+      "reported_pipeline_setup_ms": 404075.0,
+      "completed_records": 4,
+      "before_after_keys": 137,
+      "predecessor_keys": 12,
+      "evidence_property": "real_adaptive_minimum_retry_controls_executed",
+      "accessible_scan_hidden_records": 175
+    },
+    {
+      "case": "floor-fp64",
+      "passed": true,
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "owner_seconds": 410.42106179999996,
+      "test_seconds": 408.309,
+      "native_peak_sampled_RSS_bytes": 1843486720,
+      "memory_samples": 401,
+      "minimum_WSL_available_KiB": 14144924,
+      "actual_submit_ms": 20.4202,
+      "reported_pipeline_setup_ms": 406171.0,
+      "completed_records": 4,
+      "before_after_keys": 149,
+      "predecessor_keys": 24,
+      "evidence_property": "real_adaptive_minimum_retry_controls_executed",
+      "accessible_scan_hidden_records": 175
+    },
+    {
+      "case": "captured-fp32",
+      "passed": true,
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "owner_seconds": 5.248094399999999,
+      "test_seconds": 4.238,
+      "native_peak_sampled_RSS_bytes": 50601984,
+      "memory_samples": 8,
+      "minimum_WSL_available_KiB": 17605432,
+      "actual_submit_ms": 20.4,
+      "reported_pipeline_setup_ms": 4.558,
+      "completed_records": 1,
+      "before_after_keys": 161,
+      "predecessor_keys": 36,
+      "evidence_property": null,
+      "accessible_scan_hidden_records": 176
+    },
+    {
+      "case": "captured-fp32comp",
+      "passed": true,
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "owner_seconds": 2.0312818999999998,
+      "test_seconds": 0.985,
+      "native_peak_sampled_RSS_bytes": 50618368,
+      "memory_samples": 3,
+      "minimum_WSL_available_KiB": 14669264,
+      "actual_submit_ms": 16.5118,
+      "reported_pipeline_setup_ms": 3.3003,
+      "completed_records": 1,
+      "before_after_keys": 173,
+      "predecessor_keys": 48,
+      "evidence_property": null,
+      "accessible_scan_hidden_records": 178
+    }
+  ],
+  "case_receipt_pins": {
+    "floor-fp32": {
+      "bytes": 8492,
+      "sha256": "ed475cc24ed37d2dc93daf5a5756e7f64ad4acc586bd3c11c4e47ff195122138"
+    },
+    "floor-fp32comp": {
+      "bytes": 11088,
+      "sha256": "ce3ffc95bdab1f8506ed27f6194005639d6a03c4af1851caf09a15d39ea7d66f"
+    },
+    "floor-fp64": {
+      "bytes": 13558,
+      "sha256": "45a3ad63a48ef62d7ba8f226529f85d9de1c33688fd91f5d53384fbec42e480f"
+    },
+    "captured-fp32": {
+      "bytes": 16032,
+      "sha256": "54c8ac7e4bfe021ad4c26d5b7209e51e0bd20918e4199d6cda834a76e755a22b"
+    },
+    "captured-fp32comp": {
+      "bytes": 18655,
+      "sha256": "7e9e81abca521db75c6764b5b94b76a68db10790235cec5ea928c190210c31f5"
+    }
+  },
+  "verified": [
+    "Each root-operated system+terminal pair completed0, native held-handle return0/owned birth retired, one exact completed XML case/zeroFESD; original assertions remain authoritative. Accepted snapshots equal actual owner/bridge/stdout/raw9 receipts; each predecessor12-file seal is frozen by later cases. All185unique current files match, shared large input hashes checked once.",
+    "All five actual same-child module capture rows contain stagedSDKloader cd862090...a8696 and AMD5c056196...a8650/version9.2.10.395; owner process.Modules source targets that held test process. Terminal byte post-seals match. InstalledOSloader record is not mapped-loader evidence.",
+    "ActualFP64 property is real_adaptive_minimum_retry_controls_executed, not unsupported decline. Original opcode25 four real rejected/accepted boundary records completed on each rung.",
+    "CapturedFP32/comp actual opcode8 one record completed and test original assertions passed: eight exact input bit patterns,2/4composite,unchanged2e-5f normalized endpoint comparison against both independent canonical128 epsilon references,5e-4f null tolerances; no extra projection allowance. Endpoints are asserted by test, not dumped as new raw numeric vectors.",
+    "All five child RSS samples remained under4GiB, WSL reserve above2GiB,900s native/1380s bridge limits not stopped. Nativechild RSS is not aggregate Windows/bootstrap memory. Defaultcache/inherited execution-override refusals unchanged.",
+    "Saved terminal audits show ten recorded nativeowner/test births absent and current passive /proc checks show ten recorded Linuxinterop child births absent. Accessible process scans had no matches or accessible compilers; hidden-field gaps remain, no global-consumer/handle/descendant absence claim."
+  ],
+  "limits": [
+    "First three stdout pipeline_setup_ms417600/404075/406171 are reported setup attribution only; no cause, compilerphase, cache-benefit or across-case timing inference. Later captured-case timings are not comparative performance evidence.",
+    "optional-live-query-failure.json is retained: one optional20s query supplied no data, unrecorded nativeobserver birth, no nativeobserver-absence claim; it did not change scientific inputs or replace mature terminal audit. No retry.",
+    "Five finite passes do not settle live original Kerr image/precision, full trace/radiance behavior, every adaptive field, horizon domain or qualification. No numerical/provider/helper/tool/test execution by reviewer."
+  ],
+  "optional_query_failure_pin": {
+    "bytes": 729,
+    "sha256": "4295291f490c54bd97b98bde64bb19400e2657c34358ea1106afe3f150198ccc"
+  },
+  "live_image_outputs_read": false,
+  "authored_or_native_program_executed_by_reviewer": false,
+  "blockers": [],
+  "ownership_counts": {
+    "native_owner_test_births_absent_in_closed_terminal_audits": 10,
+    "recorded_Linux_interop_births_freshly_checked_absent": 10,
+    "native_observer_global_absence_claimed": false
+  }
+}

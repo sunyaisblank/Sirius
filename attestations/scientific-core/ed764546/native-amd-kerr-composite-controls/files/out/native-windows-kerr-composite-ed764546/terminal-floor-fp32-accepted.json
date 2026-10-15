@@ -1,0 +1,171 @@
+{
+  "pass": true,
+  "case": "floor-fp32",
+  "mode": "native-kerr-composite",
+  "label": "floor-fp32",
+  "record": {
+    "owner": {
+      "schema_version": 1,
+      "kind": "bounded-native-Windows-control",
+      "start_utc": "2026-10-15T11:30:40.7362432Z",
+      "owner_pid": 8240,
+      "owner_start_time_utc": "2026-10-15T11:30:11.2799456Z",
+      "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546\\tests\\backend\\Release\\sirius_backend_tests.exe",
+      "test_executable_sha256": "f6e1881e48dc79b580d0205f283a4d70db57bd8e1b7dd0129b2d42c188912a46",
+      "arguments": [
+        "--gtest_filter=KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+        "--gtest_color=no",
+        "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\native\\floor-fp32\\gtest.xml\""
+      ],
+      "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546\\tests\\backend\\Release",
+      "outer_guard_seconds": 900,
+      "rss_guard_bytes": 4294967296,
+      "outer_stop": false,
+      "status": "completed",
+      "numerical_control_passed": true,
+      "expected_cases": [
+        "KernelParity.RejectedNeighbourRetriesExactMinimumFp32"
+      ],
+      "qualification_claimed": false,
+      "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+      "invocation_kind": "Control",
+      "system_inventory_passed": false,
+      "environment": {
+        "VK_DRIVER_FILES": null,
+        "VK_ICD_FILENAMES": null,
+        "VK_ADD_DRIVER_FILES": null,
+        "SIRIUS_VULKAN_DEVICE": null,
+        "SIRIUS_PRECISION": null,
+        "SIRIUS_MEMORY_BUDGET_MB": null,
+        "SIRIUS_DISPATCH_TARGET_MS": null,
+        "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\temp\\floor-fp32",
+        "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\temp\\floor-fp32",
+        "TMPDIR": null
+      },
+      "test_pid": 10968,
+      "test_start_time_utc": "2026-10-15T11:30:42.5670891Z",
+      "returncode": 0,
+      "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+      "owned_process_absent": true,
+      "end_utc": "2026-10-15T11:37:44.0657220Z",
+      "elapsed_seconds": 423.3189045,
+      "peak_sampled_rss_bytes": 1719119872,
+      "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+      "live_source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+      "source_build_gate_sha256": "12d1675b6a38b812f3104d497a2b1720a36ee938675852028bd1731651a40a9c",
+      "source_build_gate_unchanged": true,
+      "loaded_driver_modules_recorded": true,
+      "test_executable_unchanged": true,
+      "cleanup_errors": []
+    },
+    "bridge": {
+      "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+      "runner_source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+      "kind": "floor-fp32",
+      "argv": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\run_native_control.ps1",
+        "-Stage",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546\\tests\\backend\\Release",
+        "-Output",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\native\\floor-fp32",
+        "-Filter",
+        "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+        "-Seconds",
+        "900",
+        "-RssBytes",
+        "4294967296",
+        "-TemporaryDirectory",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\temp\\floor-fp32",
+        "-BuildRoot",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546",
+        "-ExpectedGateSha256",
+        "12d1675b6a38b812f3104d497a2b1720a36ee938675852028bd1731651a40a9c",
+        "-LiveRevision",
+        "ed76454617063f2463a75423b2756e8c957ce6c2",
+        "-ExecutableName",
+        "sirius_backend_tests.exe",
+        "-InvocationKind",
+        "Control"
+      ],
+      "binding_sha256": "c29e68f40dbb26cff0a77b3c80c2f9703225fd2dbaa64c9aa02388925062bb26",
+      "linux_controller_pid": 667650,
+      "linux_controller_birth": "11318950",
+      "predecessor_inputs": {},
+      "bridge_outer_seconds": 1380,
+      "windows_owner_seconds": 900,
+      "minimum_wsl_available_kib": 2097152,
+      "resource_scope": "Unchanged held-handle Windows owner samples child WorkingSet64/PrivateMemorySize64 under4GiB. WSL sampled MemAvailable reserve2GiB; Linux bridge owner+480seconds; separate terminal60seconds. Original trace/P1 physical1000ms assertions unchanged; outer900/28800 bounds are prospective external diagnostics, not original whole-test deadlines or aggregate Windows/bootstrap memory guarantees. Default AMD cache and inherited override refusal unchanged.",
+      "accepted_owner_execution": true,
+      "completed": true,
+      "cleanup_errors": [],
+      "full_qualification_claimed": false,
+      "minimum_sampled_wsl_available_kib": 15262732,
+      "linux_child_pid": 667701,
+      "linux_child_birth": "11319118",
+      "returncode": 0,
+      "linux_child_birth_absent": true,
+      "native_build_gate_authority_used": true,
+      "mandatory_or_full_runtime_admitted": false,
+      "required_evidence_property": {
+        "fp32_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "loaded_provider_evidence_complete": true,
+      "whole_inputs_unchanged": true,
+      "elapsed_seconds": 456.8858688509936,
+      "signals": []
+    },
+    "stdout_sha256": "40f04f03c67accd184c3728587057e132c2ea96712308f79f9b67289415ed0c0",
+    "whole_inputs": {
+      "floor-fp32-bridge.json": {
+        "bytes": 2826,
+        "sha256": "b35ec36a39c45945c4c0952280cc22fc1c160ed115a47f44d21dfc02017e5334"
+      },
+      "native/floor-fp32/owner.json": {
+        "bytes": 3236,
+        "sha256": "65e2b475d4490687e052438ffa9b744f85e8779914c12f0c75991cf840b86838"
+      },
+      "native/floor-fp32/stdout.log": {
+        "bytes": 870,
+        "sha256": "40f04f03c67accd184c3728587057e132c2ea96712308f79f9b67289415ed0c0"
+      },
+      "native/floor-fp32/stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/floor-fp32/memory.json": {
+        "bytes": 57461,
+        "sha256": "fe96bbda1003627e34671dc852046d903d43f787b4c124797c9d03fbc74c23fb"
+      },
+      "floor-fp32-inputs-before.json": {
+        "bytes": 24214,
+        "sha256": "06ba8e042042e7ce772570d55ce988af3b42893870d34835299185343cb4dfdd"
+      },
+      "floor-fp32-inputs-after.json": {
+        "bytes": 24214,
+        "sha256": "06ba8e042042e7ce772570d55ce988af3b42893870d34835299185343cb4dfdd"
+      },
+      "native/floor-fp32/gtest.xml": {
+        "bytes": 1045,
+        "sha256": "6609c8a548b47e5751245d0374027c80eb66674ca53b0a47c6d03e3d6abf318a"
+      },
+      "native/floor-fp32/driver-modules.json": {
+        "bytes": 685,
+        "sha256": "aed78cd0d808474cc7541b55eab7eb3fe8967d2b5c02771e176b2e64ab40bad0"
+      }
+    }
+  },
+  "terminal_receipt": "out/native-windows-kerr-composite-ed764546/terminal-floor-fp32.json",
+  "terminal_receipt_sha256": "b344a523059b3c64950a792ff2131f68a3ae7181a1a49be368f13ede2626ae5f",
+  "terminal_bridge_sha256": "245b5df5621a231ff7b5d5f8b5719d33ccde602b8b49178acfaf930614e60594",
+  "loaded_provider_evidence_complete": true,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "native_build_gate_authority_used": true,
+  "mandatory_or_full_runtime_admitted": false,
+  "scope": "One selected original native-AMD Kerr/parity control only, with actual stagedSDKloader+AMD and original assertions. Precision requires actual native comparison; floor controls require actual rung execution. Limited accessible census; no saved image buffer, UI/fullMandatory/fullscience/domain/release qualification claim."
+}

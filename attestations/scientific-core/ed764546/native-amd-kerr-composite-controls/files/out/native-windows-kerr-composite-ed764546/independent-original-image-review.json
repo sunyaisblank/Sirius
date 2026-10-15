@@ -1,0 +1,195 @@
+{
+  "schema": "sirius-native-windows-kerr-composite-independent-original-image-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "case": "kerr-image",
+  "exact_original_image_test_passed": true,
+  "reviewer_role": "Independent of root execution/current native packet adaptation; prior current shader/source/integration reviewer. Priorfive source/numerical audit is reused via pinned independent-focused receipt.",
+  "pins": {
+    "independent-focused-results-review.json": {
+      "bytes": 8273,
+      "sha256": "acc1c94c6edb119aa644037a5465150cb83261edef3c3ae2b62b4f029d54da91"
+    },
+    "execution-bindings.json": {
+      "bytes": 56761,
+      "sha256": "c29e68f40dbb26cff0a77b3c80c2f9703225fd2dbaa64c9aa02388925062bb26"
+    },
+    "source-freeze.json": {
+      "bytes": 24994,
+      "sha256": "aea2f903973a2b29599dcc5e7c96d6cc67cf72c9ff176c0bd95bb1938bcf10d4"
+    },
+    "kerr-image-bridge.json": {
+      "bytes": 14448,
+      "sha256": "d55a0b97dc052c4ec3acfd9b196d43c34752c485bfa9a651777c5d36d6ad5db5"
+    },
+    "kerr-image-inputs-before.json": {
+      "bytes": 35452,
+      "sha256": "aa59165eeadfffde9a1afb65ae2009dae4f5c0a2d500b965231a417182ba1057"
+    },
+    "kerr-image-inputs-after.json": {
+      "bytes": 35452,
+      "sha256": "aa59165eeadfffde9a1afb65ae2009dae4f5c0a2d500b965231a417182ba1057"
+    },
+    "native/kerr-image/owner.json": {
+      "bytes": 3255,
+      "sha256": "367a79bf12bde906b46917d5eca8c3d04e85421a66caeaedefdbe4e453ccdf69"
+    },
+    "native/kerr-image/gtest.xml": {
+      "bytes": 594,
+      "sha256": "9935d3d5f1b1b9110275c52396c105edc349b148584ccbcbe08e0d8aa65ddf35"
+    },
+    "native/kerr-image/stdout.log": {
+      "bytes": 743,
+      "sha256": "08172a738c214a348658b068907c8f6a93557428cd9fc258a349b114499f4750"
+    },
+    "native/kerr-image/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "native/kerr-image/memory.json": {
+      "bytes": 43380,
+      "sha256": "10b9fc68cc991e9825b93a7a29861b326aeb376fcfbe82f6d4140e24ff354d2a"
+    },
+    "native/kerr-image/driver-modules.json": {
+      "bytes": 685,
+      "sha256": "aed78cd0d808474cc7541b55eab7eb3fe8967d2b5c02771e176b2e64ab40bad0"
+    },
+    "terminal-kerr-image.json": {
+      "bytes": 4053,
+      "sha256": "9eb4a11b585e6076974393db83e02c4bae62bef148e49b16b2b4fdc5f08f71d3"
+    },
+    "terminal-kerr-image-bridge.json": {
+      "bytes": 2390,
+      "sha256": "67d7a0ffd35407296110ae828910fc772244dd88715776169ff24333988235f0"
+    },
+    "terminal-kerr-image-accepted.json": {
+      "bytes": 21085,
+      "sha256": "8eb9a1e26310eeb8663dada4d38dc88de86bca61d706bb1f3cdbb43558457485"
+    }
+  },
+  "input_and_source_joins": {
+    "binding_static_files": 124,
+    "source_freeze_rows": 123,
+    "actual_before_after_keys": 185,
+    "before_after_rows": 370,
+    "accepted_predecessor_files": 60,
+    "all_before_after_current_bytepins_match": true,
+    "all5_prior_accepted_receipt_pins_and_whole_input_chain_preserved": true,
+    "new_accepted_whole_input_files": 9,
+    "original_test_and_probe_byte_exact_parent69_and_currented": true,
+    "backend_executable": {
+      "bytes": 11103744,
+      "sha256": "f6e1881e48dc79b580d0205f283a4d70db57bd8e1b7dd0129b2d42c188912a46"
+    },
+    "trace_SPV": {
+      "bytes": 4990064,
+      "sha256": "95a9fe0544821152e80fb022f2cd56866185be2d0944f170bdfe13d6738a4e3b"
+    },
+    "future_sidecar_not_runtime_input": true
+  },
+  "actual_result": {
+    "XML_case": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+    "XML_tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "disabled": 0,
+    "status": "run",
+    "result": "completed",
+    "case_seconds": "317.276",
+    "reported_shadow_fraction": "0.109375",
+    "reported_luminance_range": [
+      "0",
+      "0.874792"
+    ],
+    "metrics_scope": "Reported stdout aggregates and original test assertions; no independent remeasurement from a saved framebuffer."
+  },
+  "original_acceptance_preserved": [
+    "64x64 Kerr M1/a.9 scene,original full70-parameter settings,min_step.02,max_steps2000,captureFactor1.12,disabled disk/starfield and analytic background.",
+    "64-active-pixel row-strip continuation,original per-phase positive finite timing and1000ms guard,all records validated before accepted radiance.",
+    "All returned radiance channels finite; luminance range>1e-3; original shadow fraction[.005,.30].",
+    "No source,shader,fixture,threshold,deadline or outputpublication edit during this run."
+  ],
+  "owner_and_resources": {
+    "held_handle_exit": 0,
+    "owner_status": "completed",
+    "owner_seconds": 318.64787459999997,
+    "bridge_seconds": 347.8735076610028,
+    "terminal_bridge_seconds": 23.741187046005507,
+    "native_peak_sampled_child_RSS_bytes": 1402679296,
+    "memory_samples": 313,
+    "Windows_child_RSS_limit_bytes": 4294967296,
+    "minimum_sampled_WSL_available_KiB": 15383156,
+    "WSL_reserve_KiB": 2097152,
+    "owner_outer_seconds": 28800,
+    "bridge_outer_seconds": 29280,
+    "terminal_outer_seconds": 60,
+    "stop_or_cleanup_error": false,
+    "source_gate_executable_and_whole_inputs_unchanged": true,
+    "default_native_cache_and_override_refusals_preserved": true,
+    "scope": "Child WorkingSet64 guard,not aggregate Windows/bootstrap memory; outerdiagnostic bounds,not an original whole-test deadline or performance comparison."
+  },
+  "provider_and_terminal": {
+    "actual_same_child_module_rows": [
+      {
+        "name": "vulkan-1.dll",
+        "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546\\tests\\backend\\Release\\vulkan-1.dll",
+        "bytes": 1685432,
+        "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+        "version": "1.4.357.0"
+      },
+      {
+        "name": "amdvlk64.dll",
+        "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+        "bytes": 103213064,
+        "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+        "version": "9.2.10.395"
+      }
+    ],
+    "source_mechanism": "Unchanged mature PS owner reads Modules from its held test process while live; Python binds exact stagedSDKloader and expectedAMD rows.",
+    "both_post_seals_exact": true,
+    "installed_System32_loader_is_input_only": true,
+    "saved_native_owner_and_test_births_absent": [
+      {
+        "kind": "owner",
+        "pid": 21664,
+        "recorded_start_utc": "2026-10-15T12:04:33.6131758Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      },
+      {
+        "kind": "test",
+        "pid": 2804,
+        "recorded_start_utc": "2026-10-15T12:05:00.3371619Z",
+        "pid_currently_live": false,
+        "owned_birth_absent": true
+      }
+    ],
+    "accessible_scan": {
+      "processes": 284,
+      "hidden_field_records": 176,
+      "matches": [],
+      "accessible_compilers": []
+    },
+    "scope": "Saved post-image terminal snapshot before precision. No fresh native query/globalabsence/handle census or unconditional compiler-descendant containment claim."
+  },
+  "not_reviewed": [
+    "Any live kerr-precision outputs.",
+    "Raw framebuffer/image bytes,which were not saved."
+  ],
+  "limits": [
+    "This exact64x64 behavioural image case only; no1080pBardeen/300s128software/UI/fullscience/fullMandatory/release or true-horizon-domain claim.",
+    "Passing assertions are evidenced by exact XML/source; no new raw all-field numeric/readback values or measured maximum physical phase are invented.",
+    "Shared-loop and registration-export candidates remain unapplied; their source reviews are not numerical/performance results.",
+    "No helper/import/parser,compiler,PowerShell/native/provider/test/API/program executed by reviewer."
+  ],
+  "blockers": [],
+  "workspace": {
+    "tracked_source_clean": true,
+    "committed_and_pushed": true,
+    "ahead": 0,
+    "behind": 0,
+    "sidecar": "Ignored outside frozeninputs; root retains preservation and execution ownership."
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "schema": "sirius-native-windows-kerr-composite-source-preparation-v1",
+  "source_only": true,
+  "admitted": false,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "helpers": {
+    "run_system.py": {
+      "bytes": 19322,
+      "sha256": "5fc687965dc4222713f904a33a3a90265f638533f362c3c0758f542368d97ee0"
+    },
+    "run_terminal.py": {
+      "bytes": 18548,
+      "sha256": "af25ae66a3049dfa40f425fab95f5a2347d593ec5483104c499abf84a3216a5c"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "prepare_bindings.py": {
+      "bytes": 12262,
+      "sha256": "003d4354a82f9d345f6f10b4e6b7b6c6c1d1c9e6fed1383dd69e208f83be83f7"
+    }
+  },
+  "source_contracts": {
+    "bytes": 8317,
+    "sha256": "119480686b367b54e3d6c0f0814afbc6b92b05d0b202fea2ae84fc3cf45ed00a"
+  },
+  "patch": {
+    "bytes": 30839,
+    "sha256": "a97c0eca820800bf3775e3b8eafcea1d168df3b6a69d4f86be2aec397f6f0633"
+  },
+  "default_commands": [
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-image",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-image",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-precision",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-precision"
+  ],
+  "optional_commands": [
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py floor-fp32",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py floor-fp32",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py floor-fp64",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py floor-fp64",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py captured-fp32",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py captured-fp32",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-image",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-image",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-precision",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-precision"
+  ],
+  "final_freeze_pending_actual_CI": true,
+  "actual_files_required_absent": [
+    "plan.json",
+    "execution-bindings.json",
+    "source-freeze.json",
+    "native",
+    "temp"
+  ],
+  "pending_fields": [
+    "Actual completed CI source/product/registration validation; positive native gate receipt and tested executable joins required, never presumed from exported diagnostic M.",
+    "Actual artifact ID/ZIP/current diagnostic M/native gate identities, complete installed manifest member set and whole physical input map.",
+    "Actual samehost AMD module row and exact stagedSDKloader path/hash; no installed-file-as-mapping inference.",
+    "Exactly selected plan/profile and all native/terminal argv+cleanup pairs. Optional five parity phases require explicit root selection and prospective900second guards review.",
+    "Actual current source/helpers/plan/metadata/static freeze and independent/root runtime admission; actualplan/bindings/native/temp must stay absent until then."
+  ],
+  "selected_control_profile": "floor-regressions-then-original-kerr",
+  "selected_commands": [
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py floor-fp32",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py floor-fp32",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py floor-fp64",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py floor-fp64",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py captured-fp32",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py captured-fp32",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-image",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-image",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-precision",
+    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-precision"
+  ],
+  "binding_preparation_command": "python3 -B out/native-windows-kerr-composite-ed764546/prepare_bindings.py",
+  "binding_preparation_requires_actual_CI_admission": true,
+  "binding_preparation_executed": false
+}

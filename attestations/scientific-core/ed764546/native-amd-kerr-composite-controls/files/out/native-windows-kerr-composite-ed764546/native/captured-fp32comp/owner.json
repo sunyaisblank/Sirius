@@ -1,0 +1,56 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "bounded-native-Windows-control",
+    "start_utc":  "2026-10-15T12:03:03.1434120Z",
+    "owner_pid":  14888,
+    "owner_start_time_utc":  "2026-10-15T12:02:26.3867235Z",
+    "test_executable":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546\\tests\\backend\\Release\\sirius_backend_tests.exe",
+    "test_executable_sha256":  "f6e1881e48dc79b580d0205f283a4d70db57bd8e1b7dd0129b2d42c188912a46",
+    "arguments":  [
+                      "--gtest_filter=KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+                      "--gtest_color=no",
+                      "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\native\\captured-fp32comp\\gtest.xml\""
+                  ],
+    "working_directory":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-ed764546\\tests\\backend\\Release",
+    "outer_guard_seconds":  900,
+    "rss_guard_bytes":  4294967296,
+    "outer_stop":  false,
+    "status":  "completed",
+    "numerical_control_passed":  true,
+    "expected_cases":  [
+                           "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp"
+                       ],
+    "qualification_claimed":  false,
+    "scope":  "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind":  "Control",
+    "system_inventory_passed":  false,
+    "environment":  {
+                        "VK_DRIVER_FILES":  null,
+                        "VK_ICD_FILENAMES":  null,
+                        "VK_ADD_DRIVER_FILES":  null,
+                        "SIRIUS_VULKAN_DEVICE":  null,
+                        "SIRIUS_PRECISION":  null,
+                        "SIRIUS_MEMORY_BUDGET_MB":  null,
+                        "SIRIUS_DISPATCH_TARGET_MS":  null,
+                        "TEMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\temp\\captured-fp32comp",
+                        "TMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-composite-ed764546\\temp\\captured-fp32comp",
+                        "TMPDIR":  null
+                    },
+    "test_pid":  24100,
+    "test_start_time_utc":  "2026-10-15T12:03:03.6489545Z",
+    "returncode":  0,
+    "exit_code_source":  "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent":  true,
+    "end_utc":  "2026-10-15T12:03:05.1867677Z",
+    "elapsed_seconds":  2.0312818999999998,
+    "peak_sampled_rss_bytes":  50618368,
+    "source_revision":  "ed76454617063f2463a75423b2756e8c957ce6c2",
+    "live_source_revision":  "ed76454617063f2463a75423b2756e8c957ce6c2",
+    "source_build_gate_sha256":  "12d1675b6a38b812f3104d497a2b1720a36ee938675852028bd1731651a40a9c",
+    "source_build_gate_unchanged":  true,
+    "loaded_driver_modules_recorded":  true,
+    "test_executable_unchanged":  true,
+    "cleanup_errors":  [
+
+                       ]
+}

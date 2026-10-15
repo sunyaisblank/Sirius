@@ -1,0 +1,104 @@
+{
+  "schema": "sirius-native-windows-kerr-composite-independent-completed-batch-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "all_selected_original_controls_passed": 7,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewer_role": "Independent of root operator/current native packet author; preparer/runtime-source reviewer and focused-five terminal reviewer. Reuses separately pinned original-image review; no program rerun.",
+  "pins": {
+    "independent-focused-results-review.json": {
+      "bytes": 8273,
+      "sha256": "acc1c94c6edb119aa644037a5465150cb83261edef3c3ae2b62b4f029d54da91"
+    },
+    "independent-original-image-review.json": {
+      "bytes": 8142,
+      "sha256": "a8f7dd75322fd7774decf4e606d87567c22c50ce5eac7b0e70eeb777f8615754"
+    },
+    "execution-bindings.json": {
+      "bytes": 56761,
+      "sha256": "c29e68f40dbb26cff0a77b3c80c2f9703225fd2dbaa64c9aa02388925062bb26"
+    },
+    "source-freeze.json": {
+      "bytes": 24994,
+      "sha256": "aea2f903973a2b29599dcc5e7c96d6cc67cf72c9ff176c0bd95bb1938bcf10d4"
+    },
+    "terminal-kerr-precision-accepted.json": {
+      "bytes": 23765,
+      "sha256": "a13db64df76d3e9aef309a51b2278e27323bca4cea2f792f50a168f0a0bfd487"
+    },
+    "terminal-kerr-precision.json": {
+      "bytes": 4057,
+      "sha256": "5a390581f3cda2a6dd36dd8f5fd70b2bcdfbc513dd112f8f22fd442b11125514"
+    },
+    "native/kerr-precision/gtest.xml": {
+      "bytes": 715,
+      "sha256": "7f58393b4088c4d434cd796f0a4a428645f33ba089432cf65a5af1ae37bdc630"
+    },
+    "root-static-archive-dependencies.json": {
+      "bytes": 70694,
+      "sha256": "61271d8b3ed9bd7346f7259f92bd2d737632083acd52d6420df69f815511a9ec"
+    }
+  },
+  "case_verdicts": {
+    "floor-fp32": "PASS",
+    "floor-fp32comp": "PASS",
+    "floor-fp64": "PASS",
+    "captured-fp32": "PASS",
+    "captured-fp32comp": "PASS",
+    "kerr-image": "PASS",
+    "kerr-precision": "PASS"
+  },
+  "last_case": {
+    "test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+    "XML_cases": 1,
+    "zero_failures_errors_skipped_disabled": true,
+    "XML_status_result": "run/completed",
+    "fp64_evidence": "native_comparison_executed",
+    "case_seconds": "440.958",
+    "reported_mean_absolute_difference": "1.65563e-07",
+    "reported_max_absolute_difference": "1.07288e-05",
+    "reported_range64": [
+      "0",
+      "1"
+    ],
+    "reported_black32": 448,
+    "reported_black64": 448,
+    "owner_seconds": 442.5741519,
+    "peak_sampled_native_child_RSS_bytes": 1594896384,
+    "memory_samples": 436,
+    "minimum_sampled_WSL_available_KiB": 16470036
+  },
+  "checks": [
+    "Last197before/after keys identical,124static+binding itself+72predecessor seals exact; all197 current canonical bytepins and last9raw whole-input receipts match. Six prior accepted control records and all72sealed raw/terminal files remain unchanged.",
+    "Last native held-handle exit0/noouterstop/cleanup errors, exact source/gate/backend/argv; actualSDKloader+AMD capture and terminal post-seals agree. Saved owner/test birth-scoped teardown accepted; two Linuxinterop births freshly absent. Accessible census has no matches/accessible compilers, permission gaps retained.",
+    "Reuse five-control PASS and exact original64x64 Kerr image PASS by their current report/receipt pins. Last original comparison dispatches realFP32 andFP64 scene paths; one XML case zeroFESD and native_comparison_executed excludes unsupported-decline acceptance. Original finiteness/nonconstancy/mean<.01,max<2,shadow-count2percent assertions passed.",
+    "Archive dependency map exactly covers124static:9source+88CI rows independently checked against97exact named Git commit:path blob bytes;22current packet copies match future preserve_as paths;5external host inputs are hash-only, no binary backup claim. Identical-byte cross-platform aliases preserve bytes only; live logical producer role remains manifest/gate-bound."
+  ],
+  "ownership_limits": {
+    "last_native_owner_pid": 7360,
+    "last_native_test_pid": 22140,
+    "last_terminal_hidden_field_records": 175,
+    "native_child_RSS_limit_bytes": 4294967296,
+    "WSL_reserve_KiB": 2097152,
+    "outer_native_seconds": 28800,
+    "bridge_seconds": 29280,
+    "terminal_seconds": 60,
+    "global_absence_claimed": false
+  },
+  "limits": [
+    "Original64x64 image/comparison and five selected parity witnesses only; no raw framebuffer saved or independent image-metric remeasurement. Raw stdout aggregates and unchanged source assertions are authoritative within this finite scope.",
+    "No current software300s cold128frame, fullMandatory, P1all-rung/scientific-estate, fullruntime/UI/horizon-domain, performance/cache-benefit or release qualification claim. No unchanged retry, deadline/tolerance/algorithm weakening.",
+    "Optional-live-query-failure remains candidly preserved via focused review; no unrecorded-native-observer absence inference. No retirement/deletion or archive-completion claim; root still owns preservation."
+  ],
+  "workspace": {
+    "clean": true,
+    "committed_and_pushed": true,
+    "ahead": 0,
+    "behind": 0,
+    "worktrees": 1,
+    "review_sidecar_outside_all_frozen_inputs": true
+  },
+  "authored_or_native_program_executed_by_reviewer": false,
+  "blockers": []
+}

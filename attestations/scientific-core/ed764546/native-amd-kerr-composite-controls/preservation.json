@@ -1,0 +1,164 @@
+{
+  "schema": "sirius-native-amd-kerr-composite-controls-preservation-v1",
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "all_selected_controls_passed": 7,
+  "root_result": {
+    "schema": "sirius-native-composite-root-completed-results-v1",
+    "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+    "cases_passed": 7,
+    "rows": [
+      {
+        "case": "floor-fp32",
+        "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+        "test_seconds": "420.879",
+        "owner_seconds": 423.3189045,
+        "bridge_seconds": 456.8858688509936,
+        "peak_sampled_native_child_RSS_bytes": 1719119872,
+        "terminal_accepted": true,
+        "accepted_receipt": {
+          "path": "out/native-windows-kerr-composite-ed764546/terminal-floor-fp32-accepted.json",
+          "bytes": 8492,
+          "sha256": "ed475cc24ed37d2dc93daf5a5756e7f64ad4acc586bd3c11c4e47ff195122138"
+        }
+      },
+      {
+        "case": "floor-fp32comp",
+        "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+        "test_seconds": "413.122",
+        "owner_seconds": 417.0335871,
+        "bridge_seconds": 452.5105006789963,
+        "peak_sampled_native_child_RSS_bytes": 1671397376,
+        "terminal_accepted": true,
+        "accepted_receipt": {
+          "path": "out/native-windows-kerr-composite-ed764546/terminal-floor-fp32comp-accepted.json",
+          "bytes": 11088,
+          "sha256": "ce3ffc95bdab1f8506ed27f6194005639d6a03c4af1851caf09a15d39ea7d66f"
+        }
+      },
+      {
+        "case": "floor-fp64",
+        "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+        "test_seconds": "408.309",
+        "owner_seconds": 410.42106179999996,
+        "bridge_seconds": 443.7838175319921,
+        "peak_sampled_native_child_RSS_bytes": 1843486720,
+        "terminal_accepted": true,
+        "accepted_receipt": {
+          "path": "out/native-windows-kerr-composite-ed764546/terminal-floor-fp64-accepted.json",
+          "bytes": 13558,
+          "sha256": "45a3ad63a48ef62d7ba8f226529f85d9de1c33688fd91f5d53384fbec42e480f"
+        }
+      },
+      {
+        "case": "captured-fp32",
+        "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+        "test_seconds": "4.238",
+        "owner_seconds": 5.248094399999999,
+        "bridge_seconds": 47.21240599299199,
+        "peak_sampled_native_child_RSS_bytes": 50601984,
+        "terminal_accepted": true,
+        "accepted_receipt": {
+          "path": "out/native-windows-kerr-composite-ed764546/terminal-captured-fp32-accepted.json",
+          "bytes": 16032,
+          "sha256": "54c8ac7e4bfe021ad4c26d5b7209e51e0bd20918e4199d6cda834a76e755a22b"
+        }
+      },
+      {
+        "case": "captured-fp32comp",
+        "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+        "test_seconds": "0.985",
+        "owner_seconds": 2.0312818999999998,
+        "bridge_seconds": 42.31116519100033,
+        "peak_sampled_native_child_RSS_bytes": 50618368,
+        "terminal_accepted": true,
+        "accepted_receipt": {
+          "path": "out/native-windows-kerr-composite-ed764546/terminal-captured-fp32comp-accepted.json",
+          "bytes": 18655,
+          "sha256": "7e9e81abca521db75c6764b5b94b76a68db10790235cec5ea928c190210c31f5"
+        }
+      },
+      {
+        "case": "kerr-image",
+        "test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+        "test_seconds": "317.276",
+        "owner_seconds": 318.64787459999997,
+        "bridge_seconds": 347.8735076610028,
+        "peak_sampled_native_child_RSS_bytes": 1402679296,
+        "terminal_accepted": true,
+        "accepted_receipt": {
+          "path": "out/native-windows-kerr-composite-ed764546/terminal-kerr-image-accepted.json",
+          "bytes": 21085,
+          "sha256": "8eb9a1e26310eeb8663dada4d38dc88de86bca61d706bb1f3cdbb43558457485"
+        }
+      },
+      {
+        "case": "kerr-precision",
+        "test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+        "test_seconds": "440.958",
+        "owner_seconds": 442.5741519,
+        "bridge_seconds": 483.06845143600367,
+        "peak_sampled_native_child_RSS_bytes": 1594896384,
+        "terminal_accepted": true,
+        "accepted_receipt": {
+          "path": "out/native-windows-kerr-composite-ed764546/terminal-kerr-precision-accepted.json",
+          "bytes": 23765,
+          "sha256": "a13db64df76d3e9aef309a51b2278e27323bca4cea2f792f50a168f0a0bfd487"
+        }
+      }
+    ],
+    "image_reported_metrics": {
+      "shadow_fraction": "0.109375",
+      "luminance_range": [
+        "0",
+        "0.874792"
+      ]
+    },
+    "precision_reported_metrics": {
+      "mean_absolute_difference": "1.65563e-07",
+      "maximum_absolute_difference": "1.07288e-05",
+      "fp64_range": [
+        "0",
+        "1"
+      ],
+      "black32": 448,
+      "black64": 448
+    },
+    "scope": "Original assertions, exact finite inputs, native AMD provider and owned teardown only; reported metrics not independent raw-framebuffer remeasurement. No fullscience/allP1/300s128software/fullMandatory/UI/native-domain/release acceptance. All7 actual system and terminal root exec sessions closed0. Shared-loop and export candidates remain unapplied.",
+    "optional_query_failure_retained": true
+  },
+  "independent_completed_review": {
+    "bytes": 5301,
+    "sha256": "6096b0ba797dacc98f9da4efcf88408e448b3ee491a357a1144d6c177a52c3b9"
+  },
+  "static_inputs_archival_map": {
+    "bytes": 70694,
+    "sha256": "61271d8b3ed9bd7346f7259f92bd2d737632083acd52d6420df69f815511a9ec"
+  },
+  "raw_native_packet_files": 173,
+  "additional_completed_CI_sidecars": 2,
+  "reused_CI_commit": "86c368e55380247a7854493cb86a721259a7ce53",
+  "external_host_binaries_archived": false,
+  "provider_and_teardown_scope": "Same-child staged SDK and AMD maps and byte postseals plus recorded birth/accessible census checks; no global absence claim. Optional timed-out read-only query remains explicitly recorded with no native-observer absence claim.",
+  "acceptance_scope": "Five finite floor/captured-state parity cases plus exact original64x64 Kerr image and realFP32/FP64 image comparison, unchanged assertions and physical1000ms guards. No raw framebuffer was saved. No fullscience/allP1/300s128software/fullMandatory/UI/fullnative-domain/latency/release qualification. Shared-loop and recipe export candidates remain unapplied.",
+  "CI_omitted_containers": [
+    {
+      "name": "macos-native.zip",
+      "bytes": 63031155,
+      "sha256": "30825e43c58cd13bc200ef8b2840f3d3dff39ab1fba857816ed817eec3d3a91d",
+      "all_uncompressed_members_kept": true
+    },
+    {
+      "name": "windows-diagnostic.zip",
+      "bytes": 73396376,
+      "sha256": "a4cc6b58953f18812fbc2c3741e4b44cfab33ae22222c6066d0017f81285a47f",
+      "all_uncompressed_members_kept": true
+    },
+    {
+      "name": "windows-native.zip",
+      "bytes": 61860080,
+      "sha256": "246eecdd06d47053b770e14a3e7f740283e19260f3ad41ea3fe987429a4b4196",
+      "all_uncompressed_members_kept": true
+    }
+  ],
+  "retirement": "All scientific and terminal consumers are now closed. Raw packets may be retired only after named Git/local bytes and pushed remote reference are verified."
+}

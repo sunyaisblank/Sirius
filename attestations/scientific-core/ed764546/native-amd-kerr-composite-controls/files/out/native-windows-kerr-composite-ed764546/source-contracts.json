@@ -1,0 +1,171 @@
+{
+  "schema": "sirius-native-windows-kerr-composite-source-contracts-v1",
+  "source_only": true,
+  "admitted": false,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "apparatus_origin": {
+    "commit": "39f843af203e824693391e2cf47f8821e923f801",
+    "work": "attestations/scientific-core/23d406b/native-amd-original-controls/files/out/native-windows-science-controls-23d406b",
+    "scope": "Exact original positive science ownership apparatus; only the two Python wrappers adapt. All three PS sources are byte-exact."
+  },
+  "historical_failure_context": {
+    "commit": "2b654bb1c05df655db6d960a908e9ed7e1bf8a91",
+    "bundle": "attestations/scientific-core/02ee51f/native-amd-kerr-failure-context",
+    "result": {
+      "bytes": 5936,
+      "sha256": "ff10fbb1a4c593fe0fafe25f1edc54e9b0854a56a2ef9bff6c03b54743c165ad"
+    },
+    "scope": "Original image numerical failure and exact committed state; no current product admission or replay of retired runtime paths."
+  },
+  "protocol": {
+    "default_order": [
+      "kerr-image",
+      "kerr-precision"
+    ],
+    "optional_order": [
+      "floor-fp32",
+      "floor-fp32comp",
+      "floor-fp64",
+      "captured-fp32",
+      "captured-fp32comp",
+      "kerr-image",
+      "kerr-precision"
+    ],
+    "precision_requires_passed_image_terminal": true,
+    "optional_regressions_require_all_prior_passed_terminal": true,
+    "required_exit": 0,
+    "required_one_XML_case": "run/completed, exact name, zero failure/error/skip/disabled",
+    "precision_property": "fp64_evidence=native_comparison_executed",
+    "fp64_floor_property": "fp64_evidence=real_adaptive_minimum_retry_controls_executed",
+    "FP64_unsupported_decline_is_not_full_precision_pass": true,
+    "source_product_authority": "Fresh same-source accepted native_build_gate plus current diagnostic manifest/executable identity. Missing gate blocks execution; no diagnostic-M-only fallback is silently enabled.",
+    "failure_capture": "Raw owner/stdout/stderr/XML are retained by mature owner on any nonpass. No accepted terminal chain is published and precision cannot proceed. Root may separately audit the failed birth; no expected-failure success path is added.",
+    "root_selected_order": [
+      "floor-fp32",
+      "floor-fp32comp",
+      "floor-fp64",
+      "captured-fp32",
+      "captured-fp32comp",
+      "kerr-image",
+      "kerr-precision"
+    ],
+    "optional_regressions_selected_by_root": true
+  },
+  "preserved_contracts": [
+    "held native process handle/exit code and birth identity",
+    "native child sampled RSS4GiB",
+    "sampled WSL available reserve2GiB",
+    "bridge+480seconds and terminal60seconds",
+    "same selected AMD device plus fresh actual stagedSDKloader/AMD map checks",
+    "default cache and all inherited execution override refusals",
+    "original physical1000ms checks and numerical scene/tolerances/attempt caps",
+    "accepted predecessor whole_inputs checked against saved pins before fresh snapshot",
+    "terminal accessible census scope and no global process absence claim"
+  ],
+  "no_live_historical_dependency": true,
+  "no_native_stage_or_outputs_created": true,
+  "schema_metadata_or_native_helpers_executed": false,
+  "patch": {
+    "bytes": 30839,
+    "sha256": "a97c0eca820800bf3775e3b8eafcea1d168df3b6a69d4f86be2aec397f6f0633"
+  },
+  "helpers": {
+    "run_system.py": {
+      "bytes": 19322,
+      "sha256": "5fc687965dc4222713f904a33a3a90265f638533f362c3c0758f542368d97ee0"
+    },
+    "run_terminal.py": {
+      "bytes": 18548,
+      "sha256": "af25ae66a3049dfa40f425fab95f5a2347d593ec5483104c499abf84a3216a5c"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "prepare_bindings.py": {
+      "bytes": 12262,
+      "sha256": "003d4354a82f9d345f6f10b4e6b7b6c6c1d1c9e6fed1383dd69e208f83be83f7"
+    }
+  },
+  "originals": {
+    "run_system.py": {
+      "bytes": 24104,
+      "sha256": "436b8d1fda6d4a2e2859ad448de5eab6f14702667485bab6a2e07d5bc2891af7"
+    },
+    "run_terminal.py": {
+      "bytes": 23474,
+      "sha256": "a41fc4374313060184d7b6becd2bdd8db97158cfee96a6bccb78bceda8ad1a23"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    }
+  },
+  "pending_templates": {
+    "plan.pending.json": {
+      "bytes": 2233,
+      "sha256": "880ddcb0cf148431f1849a102ca0fe27e62aff15ae1a36a00159cfea182bb5b1"
+    },
+    "plan.regressions.pending.json": {
+      "bytes": 4363,
+      "sha256": "d4cb7f22c9a26e606a3c22c9ba1670f9edd3040f826efe45b85bd39f824d6670"
+    },
+    "execution-bindings.pending.json": {
+      "bytes": 2143,
+      "sha256": "06de4f1d122d22a73398c2ba64a1525828551b2f674a2f5c6e5f063165d1947d"
+    }
+  },
+  "scope": "Unconsumed source-copy proposal only. Actual CI product authority, profile selection, current bindings, static freeze and runtime admission remain future. No actual provider/runtime success, all-mode accuracy, past-horizon cure, performance or release claim.",
+  "binding_preparer": {
+    "path": "prepare_bindings.py",
+    "bytes": 12262,
+    "sha256": "003d4354a82f9d345f6f10b4e6b7b6c6c1d1c9e6fed1383dd69e208f83be83f7",
+    "source_only": true,
+    "executed": false,
+    "line_count": 124,
+    "selected_control_profile": "floor-regressions-then-original-kerr",
+    "input": "root-ci-stage-admission.json",
+    "required_admission_fields": {
+      "passed": "literal true",
+      "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+      "stage": "bin/windows-msvc/diagnostic-ed764546",
+      "artifact": "actual id/repository/run_id/run_attempt/name/zip_identity",
+      "manifest_identity": "actual bytes/sha256",
+      "native_gate_identity": "actual bytes/sha256",
+      "expected_amd_module": "actual current row including name/path/bytes/sha256/version",
+      "files": "root-selected existing physical files mapped to bytes/sha256; admission file itself and future outputs excluded"
+    },
+    "actual_checks": [
+      "Every declared current physical pin; no source/helper/provider execution.",
+      "Actual M schema/source/repository/current run; every safe staged manifest member; complete stage member set equals M rows+M+accepted native gate.",
+      "Actual passed schema-v2 native gate, source clean/current, nine zero-failure/error/skip cases, both tested executable byte identities joined to M.",
+      "Both staged SDK loader rows, current alignment source/mode, external PowerShell pin and current external AMD DLL pin matching expected module row. Installed bytes do not establish loaded module proof.",
+      "Exactly seven selected case names/actions/int-zero exits/outer limits; native and terminal argv+cleanup expressions copied from mature wrappers.",
+      "Admission file is hashbound from its read bytes, actual plan is generated exclusively and included, complete physical freeze excludes itself while bindings include its pin. Binding file is self-excluded and whole-byte-pinned by each wrapper at entry.",
+      "All inputs rechecked before binding publication; actual plan/bindings/freeze/native/temp must initially be absent."
+    ],
+    "outputs": [
+      "plan.json",
+      "source-freeze.json",
+      "execution-bindings.json"
+    ],
+    "runtime_authority": "Preparation of concrete bindings is separate from root sole runtime admission and actual owned controls; no native invocation, helper import, PowerShell, query, compiler, validator or test is launched.",
+    "prior_source_pin_scope": "The five source wrappers and their historical originals retain previously reviewed bytes; this is a new small preparation helper, not an attributed historical script."
+  }
+}
