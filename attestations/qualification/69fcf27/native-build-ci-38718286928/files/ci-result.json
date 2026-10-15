@@ -1,0 +1,135 @@
+{
+  "schema": "sirius-build-gate-root-resolution-ci-result-v1",
+  "source_revision": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+  "source_tree_clean": true,
+  "branch": "development/minimum-step-floor-2026-10-15",
+  "source_change": "scripts/verify-build-gate.py resolves canonical roots once per artifact map; fresh artifact resolution/stat/hash and every fixture/deadline remain unchanged.",
+  "local_self_test": {
+    "command": [
+      "python3",
+      "-B",
+      "scripts/verify-build-gate.py",
+      "--self-test"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 3.4752902800100856,
+    "timeout_seconds": 10,
+    "candidate_sha256": "8d51cc2a5c78470cb74af37a12640b557ab235151fd83f4d60503ebfd82f1ed1",
+    "native_windows_timing_measured": false,
+    "scope": "Existing selftest under unchanged10s deadline on Linux only; no native CI timeout cause or qualification claim."
+  },
+  "local_source_governance_passed": true,
+  "ci": {
+    "run_id": 38718286928,
+    "url": "https://github.com/sunyaisblank/Sirius/actions/runs/38718286928",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 116366269222,
+        "name": "integration-windows-no-render",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 116366269444,
+        "name": "integration-no-render",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 116366269560,
+        "name": "integration-macos-no-render",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 116366270845,
+        "name": "macos-build",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 116366270904,
+        "name": "macos-retained-diagnostic",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 116366271281,
+        "name": "windows-build",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 116366271986,
+        "name": "linux-sanitizers",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 116366272582,
+        "name": "linux-gate",
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "native_build_records": {
+    "windows": {
+      "native_gate": {
+        "bytes": 10013,
+        "sha256": "14831933930a2370ea7580fe07dd2285af201000af09398fe3d01dc0987d78ba"
+      },
+      "registered": 1150,
+      "selected_and_executed": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "self_test_seconds": 8.54382,
+      "self_test_deadline_seconds": 10,
+      "existing_attestation_verifier_returncode": 0,
+      "available_native_build_record": "windows-build.json",
+      "compiled_domain_admission": 0
+    },
+    "macos": {
+      "native_gate": {
+        "bytes": 9651,
+        "sha256": "2bf3d5798f03c322d9b8df8312a4373334c0a4a1f5919fc0e33c65f7b258bf63"
+      },
+      "registered": 1150,
+      "selected_and_executed": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "self_test_seconds": 3.01896,
+      "self_test_deadline_seconds": 10,
+      "existing_attestation_verifier_returncode": 0,
+      "available_native_build_record": "macos-build.json",
+      "compiled_domain_admission": 0
+    }
+  },
+  "initial_windows_controls": {
+    "passed": 10,
+    "total": 10,
+    "self_test_reported_seconds": 8.65,
+    "self_test_deadline_seconds": 10
+  },
+  "artifact_validation": {
+    "macos_native_members": 40,
+    "windows_native_members": 40,
+    "windows_diagnostic_members": 75,
+    "all_api_zip_digests_match": true,
+    "all_74_diagnostic_manifest_rows_match": true,
+    "native_and_diagnostic_CLI_backend_bytes_match": true,
+    "all_38_shader_members_equal_prior_02ee_named_git": true
+  },
+  "timeout_cause_established": false,
+  "timing_repeatability_or_benefit_established": false,
+  "compiled_alignment_domains_admitted": 0,
+  "compiled_alignment_domains_required": 8,
+  "full_mandatory_passed": false,
+  "sanitizer_jobs_executed": false,
+  "kerr_original_numerical_failure_remains_open": true,
+  "scope": "Source/build controls and exact native Windows/macOS build records only. Full qualification jobs intentionally skipped; no new rendering/provider/UI/science/performance/release qualification. Native selftest fits its unchanged10s deadline in this execution, without a timeout-causality or future-margin claim."
+}

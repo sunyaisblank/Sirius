@@ -1,0 +1,27 @@
+{
+  "schema": "sirius-build-gate-root-resolution-source-checks-v1",
+  "source_revision": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+  "parent": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "only_source": "scripts/verify-build-gate.py",
+  "source_sha256": "8d51cc2a5c78470cb74af37a12640b557ab235151fd83f4d60503ebfd82f1ed1",
+  "root_and_independent_source_review_passed": true,
+  "self_test": {
+    "command": [
+      "python3",
+      "-B",
+      "scripts/verify-build-gate.py",
+      "--self-test"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 3.4752902800100856,
+    "timeout_seconds": 10,
+    "candidate_sha256": "8d51cc2a5c78470cb74af37a12640b557ab235151fd83f4d60503ebfd82f1ed1",
+    "native_windows_timing_measured": false,
+    "scope": "Existing selftest under unchanged10s deadline on Linux only; no native CI timeout cause or qualification claim."
+  },
+  "existing_source_governance_target_passed": true,
+  "fixtures_or_deadlines_changed": false,
+  "ci_native_gate_passed": false,
+  "timeout_cause_established": false,
+  "scope": "Local source/build controls only; native qualification pending."
+}

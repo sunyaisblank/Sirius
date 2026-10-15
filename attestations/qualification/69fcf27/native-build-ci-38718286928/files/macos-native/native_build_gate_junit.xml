@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="9"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="39"
+	timestamp="2026-10-15T10:15:34"
+	>
+	<testcase name="OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims" classname="OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims" time="4.0355" status="run">
+		<properties>
+			<property name="cmake_labels" value="Mandatory;Operational"/>
+		</properties>
+		<system-out>-- source registration, required P/E criteria, and repository structure are governed
+</system-out>
+	</testcase>
+	<testcase name="OperationalBuildPolicy.ReleaseCannotWeakenGates" classname="OperationalBuildPolicy.ReleaseCannotWeakenGates" time="0.0587767" status="run">
+		<properties>
+			<property name="cmake_labels" value="Mandatory;Operational"/>
+		</properties>
+		<system-out>strict qualification/release policy rejected every weakened configuration and product
+</system-out>
+	</testcase>
+	<testcase name="OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate" classname="OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate" time="3.01896" status="run">
+		<properties>
+			<property name="cmake_labels" value="Mandatory;Operational"/>
+		</properties>
+		<system-out>escaping-copy controls: filesystem symlinks
+build-gate receipt rejected missing, stale, skipped, and tampered evidence
+</system-out>
+	</testcase>
+	<testcase name="OperationalAttestation.FalseExternalEvidenceIsRejected" classname="OperationalAttestation.FalseExternalEvidenceIsRejected" time="30.692" status="run">
+		<properties>
+			<property name="cmake_labels" value="Mandatory;Operational"/>
+		</properties>
+		<system-out>live-consumer escaping-copy controls: filesystem symlinks
+attestation verifier rejected every false-evidence control
+</system-out>
+	</testcase>
+	<testcase name="OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice" classname="OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice" time="0.465121" status="run">
+		<properties>
+			<property name="cmake_labels" value="Mandatory;Operational"/>
+		</properties>
+		<system-out>attestation preflight and native runtime producer rejected wrong-host, false-device, stale-reuse, and promotion controls
+</system-out>
+	</testcase>
+	<testcase name="OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected" classname="OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected" time="0.0757942" status="run">
+		<properties>
+			<property name="cmake_labels" value="Mandatory;Operational"/>
+		</properties>
+		<system-out>alignment admission rejected incomplete, dirty, ambiguous, and model-drifted evidence
+</system-out>
+	</testcase>
+	<testcase name="OperationalAlignment.InstalledReceiptTamperingBlocksReadiness" classname="OperationalAlignment.InstalledReceiptTamperingBlocksReadiness" time="0.0783541" status="run">
+		<properties>
+			<property name="cmake_labels" value="Mandatory;Operational"/>
+		</properties>
+		<system-out></system-out>
+	</testcase>
+	<testcase name="AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority" classname="AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority" time="0.0112659" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory;Operational"/>
+		</properties>
+		<system-out>Running main() from /Users/runner/work/Sirius/Sirius/bin/macos/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from AlignmentAuthority
+[ RUN      ] AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+[       OK ] AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority (0 ms)
+[----------] 1 test from AlignmentAuthority (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+	<testcase name="BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation" classname="BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation" time="0.850237" status="run">
+		<properties>
+			<property name="cmake_labels" value="Correctness;Mandatory;Operational"/>
+		</properties>
+		<system-out>Running main() from /Users/runner/work/Sirius/Sirius/bin/macos/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BuildGateAuthority
+[ RUN      ] BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+[       OK ] BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation (840 ms)
+[----------] 1 test from BuildGateAuthority (840 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (840 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+</testsuite>

@@ -1,0 +1,41 @@
+﻿2026-10-15T10:25:43.9928992Z ##[group]Run if (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "unexpected promotion receipt before integration controls" }
+2026-10-15T10:25:43.9930387Z [36;1mif (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "unexpected promotion receipt before integration controls" }[0m
+2026-10-15T10:25:43.9931273Z [36;1mctest --test-dir bin/windows-msvc -C Release --output-on-failure --no-tests=error `[0m
+2026-10-15T10:25:43.9934259Z [36;1m  -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'[0m
+2026-10-15T10:25:43.9937528Z [36;1mif (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "integration controls created a promotion receipt" }[0m
+2026-10-15T10:25:43.9980312Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T10:25:43.9980725Z env:
+2026-10-15T10:25:43.9980966Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T10:25:43.9981270Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T10:25:43.9981535Z ##[endgroup]
+2026-10-15T10:25:44.7950123Z Internal ctest changing into directory: D:/a/Sirius/Sirius/bin/windows-msvc
+2026-10-15T10:25:44.9094141Z Test project D:/a/Sirius/Sirius/bin/windows-msvc
+2026-10-15T10:25:45.0228578Z       Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+2026-10-15T10:25:51.9854849Z  1/10 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    6.96 sec
+2026-10-15T10:25:51.9866506Z       Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2026-10-15T10:25:52.0595528Z  2/10 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.07 sec
+2026-10-15T10:25:52.0598358Z       Start   16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+2026-10-15T10:25:52.1690336Z  3/10 Test   #16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls ..........   Passed    0.11 sec
+2026-10-15T10:25:52.1692973Z       Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+2026-10-15T10:26:00.8175972Z  4/10 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................   Passed    8.65 sec
+2026-10-15T10:26:00.8180002Z       Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+2026-10-15T10:26:35.3710109Z  5/10 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   34.55 sec
+2026-10-15T10:26:35.3713842Z       Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+2026-10-15T10:26:35.9528857Z  6/10 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.58 sec
+2026-10-15T10:26:35.9531209Z       Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+2026-10-15T10:26:36.0601430Z  7/10 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.11 sec
+2026-10-15T10:26:36.0604661Z       Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+2026-10-15T10:26:36.2667994Z  8/10 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.21 sec
+2026-10-15T10:26:36.2671310Z       Start 1054: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+2026-10-15T10:26:36.2778457Z  9/10 Test #1054: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.01 sec
+2026-10-15T10:26:36.2782242Z       Start 1055: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+2026-10-15T10:26:36.9959316Z 10/10 Test #1055: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.72 sec
+2026-10-15T10:26:36.9965997Z 
+2026-10-15T10:26:36.9966447Z 100% tests passed, 0 tests failed out of 10
+2026-10-15T10:26:36.9966879Z 
+2026-10-15T10:26:36.9967057Z Label Time Summary:
+2026-10-15T10:26:36.9967543Z Correctness    =   0.73 sec*proc (2 tests)
+2026-10-15T10:26:36.9968154Z Mandatory      =  51.96 sec*proc (10 tests)
+2026-10-15T10:26:36.9968811Z Operational    =  51.96 sec*proc (10 tests)
+2026-10-15T10:26:36.9969144Z 
+2026-10-15T10:26:36.9969345Z Total Test time (real) =  52.09 sec

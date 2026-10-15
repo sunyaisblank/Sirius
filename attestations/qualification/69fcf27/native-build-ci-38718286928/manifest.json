@@ -1,0 +1,758 @@
+{
+  "schema": "sirius-finite-evidence-manifest-v1",
+  "source_revision": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+  "scope": "Exact CI build/integration and native Windows/macOS build records; no fullMandatory, runtime, science, UI, release or performance qualification.",
+  "omitted_product_zip_containers": {
+    "macos-native.zip": {
+      "bytes": 58432403,
+      "sha256": "458cd8e2cc6e8254323ef625bbe772dd61a7def1be83340b2a3226e7427a6d1d"
+    },
+    "windows-diagnostic.zip": {
+      "bytes": 64206435,
+      "sha256": "c9942c7f4f1a82b6cb1a2406bf635936392735c9ffa959ecee9d1693fefee449"
+    },
+    "windows-native.zip": {
+      "bytes": 57262960,
+      "sha256": "b6adcf63a75d8e79657a8292526010c5204438a7a24debfd3d670ae224b05555"
+    }
+  },
+  "omission_basis": "All155 uncompressed payload members and exact API ZIP identities/member maps retained; every member will be checked against named Git before removal. Raw original run-log ZIP retained.",
+  "files": {
+    "files/ci-artifacts-final.json": {
+      "bytes": 3761,
+      "sha256": "3328f44138631b84e38cf70387e7912c5949ede672848566c268bdd3238f7b10"
+    },
+    "files/ci-artifacts-progress.json": {
+      "bytes": 1521,
+      "sha256": "cd6c3cdb316f84d5f32f4698c6c9ab60b7ecc61bdd907dfd378dab2d7e0863fd"
+    },
+    "files/ci-dispatch-request.json": {
+      "bytes": 453,
+      "sha256": "3e9e859c7256a95221b0749e5bc56bb78d6254bac465384441814dba8ccd9f88"
+    },
+    "files/ci-dispatch.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/ci-dispatch.stdout": {
+      "bytes": 64,
+      "sha256": "c9cc42889ab6147c200ef3f9b65f7e06154b27dbb4c97b3af5f788651757f5f0"
+    },
+    "files/ci-jobs-latest.json": {
+      "bytes": 14220,
+      "sha256": "6005c0be5eb197902b52c6022bcb556a1dd07a48715a368460802027cc6514dd"
+    },
+    "files/ci-progress-latest.json": {
+      "bytes": 730,
+      "sha256": "a806caee3b1cedcc767bb2b4efebba38e67d2f291279e003fca849127679c113"
+    },
+    "files/ci-result.json": {
+      "bytes": 4481,
+      "sha256": "564071d975306b9878fe2a4dc4b14104a01bcebb8023e85a8ab817a547a70c87"
+    },
+    "files/ci-run-discovery.json": {
+      "bytes": 228,
+      "sha256": "0e28a260319b4ff1aad4142df21f85acc089780c571a8065b952dfe52cfdab8b"
+    },
+    "files/ci-run-latest.json": {
+      "bytes": 12141,
+      "sha256": "2773d619548d11f38042f5943d774a541920df21b6705dec3b42b037fe39795e"
+    },
+    "files/ci-run-logs.zip": {
+      "bytes": 143232,
+      "sha256": "e247ecb4178b79b6b6c29baf29b7e3593cf89735eca67f73e7364e7293ef00c1"
+    },
+    "files/independent-ci-review.json": {
+      "bytes": 13201,
+      "sha256": "37e14e4fbfc4ca13615c4815eaba39da8a73bcbd32bd1ece195f4deaf10c2841"
+    },
+    "files/independent-source-review.json": {
+      "bytes": 4428,
+      "sha256": "ce8604bb1ccb9f6514b82726a698f35a9b82f36363d5f6d5d816fa9bafb4196e"
+    },
+    "files/macos-artifact-identity.json": {
+      "bytes": 7254,
+      "sha256": "0fd11f4890be43771bb2c94f2a58552d7bd09b66df7eadc2dd71312a9f606af3"
+    },
+    "files/macos-native/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "b6db074ba85bdede7cecb6469abf87b48889534e5e12948fafee3e54b645cf0c"
+    },
+    "files/macos-native/ctest-inventory.json": {
+      "bytes": 1196362,
+      "sha256": "3cd0e1714c43d9ea7084e956fabaeef542703564976a0bfa08a46b123e03797b"
+    },
+    "files/macos-native/macos-build.json": {
+      "bytes": 8900,
+      "sha256": "69c6f691387a77f7f598f5c98ead23a8c587d73061a30e3b590ae372817e8231"
+    },
+    "files/macos-native/native-build-gate-log": {
+      "bytes": 2923,
+      "sha256": "dfea0bae90169006311fc660ba458788b069bc1aa929c8ded8539a1ae76bd472"
+    },
+    "files/macos-native/native-build-tested-sirius_app_tests": {
+      "bytes": 9623824,
+      "sha256": "e5331ae21b38aef4ab1fa0f94a094021c9427610d49c1fe037f4727e71a8cd0e"
+    },
+    "files/macos-native/native-build-tested-sirius_backend_tests": {
+      "bytes": 11581976,
+      "sha256": "290f5af7379d848e9812cf709dd3bfd29ef9b54542ca08a1074d9346ebbb1546"
+    },
+    "files/macos-native/native-build-tested-sirius_base_tests": {
+      "bytes": 641344,
+      "sha256": "458c5034879d2b770850f8f5e915a51a339c128aa23c4303ef1f28cc1e0d7324"
+    },
+    "files/macos-native/native-build-tested-sirius_core_tests": {
+      "bytes": 3359360,
+      "sha256": "ba996721d16302ce4cdf785630f519ad2b8f5a741c940682b09a08d282360d00"
+    },
+    "files/macos-native/native-build-tested-sirius_oracle_tests": {
+      "bytes": 1168928,
+      "sha256": "47717392648b6a1fb37fa41f1f4dc92dcf45830fe40ca1b357cb138fab0dffdc"
+    },
+    "files/macos-native/native-build-tested-sirius_render_tests": {
+      "bytes": 10531504,
+      "sha256": "c48d776d7e83306000077920639c95a0b2224e8f25f2cc7b298f74a2335b0d6f"
+    },
+    "files/macos-native/native_build_gate.json": {
+      "bytes": 9651,
+      "sha256": "2bf3d5798f03c322d9b8df8312a4373334c0a4a1f5919fc0e33c65f7b258bf63"
+    },
+    "files/macos-native/native_build_gate_junit.xml": {
+      "bytes": 5161,
+      "sha256": "94bc40747a72136ffaf98004b078973c496a3454b0158afa55c49690118903a9"
+    },
+    "files/macos-native/qualification-product-operating_model": {
+      "bytes": 130611,
+      "sha256": "b1c00980837dbf22070353077cd0cc492c6cc582ae7bf9679571ab63602196e6"
+    },
+    "files/macos-native/qualification-product-starfield": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "files/macos-native/qualification-product-trace_fp32comp_spv": {
+      "bytes": 4041472,
+      "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+    },
+    "files/macos-native/qualification-product-trace_fp64_spv": {
+      "bytes": 3916620,
+      "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+    },
+    "files/macos-native/qualification-product-trace_spv": {
+      "bytes": 4038148,
+      "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+    },
+    "files/macos-native/qualification-product-viewer_rdsd003a_fragment": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "files/macos-native/qualification-product-viewer_rdsd003a_vertex": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "files/macos-native/qualification-sirius.bin": {
+      "bytes": 8356520,
+      "sha256": "f55cda4183d79167e0b8aa06e254ed0bb64ae2f60ab41926d0d5a68c5a066a17"
+    },
+    "files/macos-native/test-input-camera_frame_probe_fp32comp_spv": {
+      "bytes": 36660,
+      "sha256": "62fea5c064210321cdfaac002298a9fd318c699cd0dc7bda0bf2aef0cc36a046"
+    },
+    "files/macos-native/test-input-camera_frame_probe_fp64_spv": {
+      "bytes": 37728,
+      "sha256": "a2c6b90faf3ccf00d2d51b4532a95e3015c6dc320220f5209949740c22707936"
+    },
+    "files/macos-native/test-input-camera_frame_probe_spv": {
+      "bytes": 36660,
+      "sha256": "62fea5c064210321cdfaac002298a9fd318c699cd0dc7bda0bf2aef0cc36a046"
+    },
+    "files/macos-native/test-input-coupled_probe_fp64_spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "files/macos-native/test-input-infinity_probe_fp32comp_spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "files/macos-native/test-input-infinity_probe_fp64_spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "files/macos-native/test-input-infinity_probe_spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "files/macos-native/test-input-metric_consistency_probe_fp32comp_spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/macos-native/test-input-metric_consistency_probe_fp64_spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "files/macos-native/test-input-metric_consistency_probe_spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/macos-native/test-input-parity_probe_fp32comp_spv": {
+      "bytes": 6306768,
+      "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35"
+    },
+    "files/macos-native/test-input-parity_probe_fp64_spv": {
+      "bytes": 6290916,
+      "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74"
+    },
+    "files/macos-native/test-input-parity_probe_spv": {
+      "bytes": 6302544,
+      "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f"
+    },
+    "files/macos-native/test-input-portable_binary32_reference": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/macos-native/test-input-retained_camera_fixture": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+    },
+    "files/macos-native/test-input-retained_camera_fp32_spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "files/macos-native/test-input-retained_camera_fp32comp_spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "files/macos-native/test-input-smoke_spv": {
+      "bytes": 1404,
+      "sha256": "55f47c5adda0ecacec02331e95ce3dde3c7dbfc2cbdb171ed68f2c6d7a37e273"
+    },
+    "files/macos-native/test-input-trace_cuda": {
+      "bytes": 623756,
+      "sha256": "4c7d93bae9aa2d7c60162b1f884f7e4b805910069e3285c0cefbd7a15680a390"
+    },
+    "files/macos-native/test-input-trace_metal": {
+      "bytes": 340035,
+      "sha256": "b6d4a5a435b944c2b80a4d8219b65a9f28c4cbc480d308246d6a17a3fc586bf2"
+    },
+    "files/macos-native-verification.log": {
+      "bytes": 90,
+      "sha256": "ba992e2a8ae3cb4a8eb1de954666c3b813a5f2111dc17002c5706004cfd2ba08"
+    },
+    "files/native-git-candidate.json": {
+      "bytes": 477,
+      "sha256": "0bfde6427b03bcc50149eedc2755a789085517a5918c0ed4219f466a9734a0a4"
+    },
+    "files/root-resolution.patch": {
+      "bytes": 1413,
+      "sha256": "fab898464001f7d9bbfa396ef98a5bbbc33f9d1dc62bb92bd88c9de9dcd1e79f"
+    },
+    "files/self-test.json": {
+      "bytes": 446,
+      "sha256": "406f6ed309ce5b508e3c89ea3dc436bc41e1f2babc8a6643e5b5f45ff7cde7c3"
+    },
+    "files/self-test.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/self-test.stdout": {
+      "bytes": 119,
+      "sha256": "5e7c297785f76841a7ccfdeac362f8d70242a8227067a86f3602af0c6b3840a1"
+    },
+    "files/shader-identity-comparison.json": {
+      "bytes": 17723,
+      "sha256": "e933bac8c13aeffb959377fde8ddc2ed44efc07960e61f0ba6441af32a52877d"
+    },
+    "files/source-checks.json": {
+      "bytes": 1111,
+      "sha256": "5907752fc109fbbf1d096a6bcd112629ea235bb1611ff48fbe8c6ea3980aa212"
+    },
+    "files/source-governance.log": {
+      "bytes": 744,
+      "sha256": "19c2aaba27a2a9c184e27c1ca2dab2edc5f695847a9633cc418cf3c05dafe186"
+    },
+    "files/verify-build-gate.candidate.py": {
+      "bytes": 78883,
+      "sha256": "8d51cc2a5c78470cb74af37a12640b557ab235151fd83f4d60503ebfd82f1ed1"
+    },
+    "files/verify-build-gate.original.py": {
+      "bytes": 78609,
+      "sha256": "70e2decb19266fe7317f28dc5c3e2ee861af4bce7d86dbb7d0ac249b92d6f1c8"
+    },
+    "files/windows-artifact-identities.json": {
+      "bytes": 22860,
+      "sha256": "9e841d256a1f374a903bdbf306b9001c1d91682d409067260707caffa86d1459"
+    },
+    "files/windows-diagnostic/CMakeCache.txt": {
+      "bytes": 28668,
+      "sha256": "3191c8040e161a1df1aacb397100b08f952526e5e2ab00ba0aeddc253731eef7"
+    },
+    "files/windows-diagnostic/generated/sirius/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "b6db074ba85bdede7cecb6469abf87b48889534e5e12948fafee3e54b645cf0c"
+    },
+    "files/windows-diagnostic/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake": {
+      "bytes": 6407,
+      "sha256": "0d3430047398ee357bbf65db10906b7cf793a22dd8b02c6db6f6372d2a4db77f"
+    },
+    "files/windows-diagnostic/generated/sirius/windows-diagnostic-build-products.json": {
+      "bytes": 16928,
+      "sha256": "a2389255a770155d3c7edfe5a17e67dd2a2f9f72655fc7a8adfa2ada15ba552d"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/concrt140.dll": {
+      "bytes": 324208,
+      "sha256": "2405355f0a58067b258f8df33c327e3a3d716eaac5a3a5aebb757842d85bd376"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/msvcp140.dll": {
+      "bytes": 557728,
+      "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/msvcp140_1.dll": {
+      "bytes": 35952,
+      "sha256": "bfad5aef4c63a669e3c140655cdfdf395b6c979b400a447bd5dcb65ed8826c3d"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/msvcp140_2.dll": {
+      "bytes": 280200,
+      "sha256": "3ea06f0ee098b4823cb79599df3780e7f23cce52c19aac31d2a0d47efe33a5e9"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/msvcp140_atomic_wait.dll": {
+      "bytes": 50304,
+      "sha256": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/msvcp140_codecvt_ids.dll": {
+      "bytes": 31872,
+      "sha256": "f2069a52880ec885ee7f0511186100eb7fada0411a2b4948fafea7735b878a18"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 6302544,
+      "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 6306768,
+      "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 6290916,
+      "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/portability/trace.cu": {
+      "bytes": 649836,
+      "sha256": "4ce49ab0206ca3ab4e62ec0efd69a026f0cc13d4478b0e033fd4266c535aa52b"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/portability/trace.metal": {
+      "bytes": 358464,
+      "sha256": "b4f111f3f77058c9f0df2c0f4ae3fc538c266690a6d07bffb0f9befa0081ecfe"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/trace.spv": {
+      "bytes": 4038148,
+      "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041472,
+      "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916620,
+      "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/model/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "b6db074ba85bdede7cecb6469abf87b48889534e5e12948fafee3e54b645cf0c"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/model/operating_model.json": {
+      "bytes": 130611,
+      "sha256": "b1c00980837dbf22070353077cd0cc492c6cc582ae7bf9679571ab63602196e6"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/sirius.exe": {
+      "bytes": 7889920,
+      "sha256": "be6d10d1ac19897040c62c12a47f0b769e96ce4f22fd34ad0745b57aba821111"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/vcruntime140.dll": {
+      "bytes": 124544,
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/vcruntime140_1.dll": {
+      "bytes": 49792,
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f"
+    },
+    "files/windows-diagnostic/src/sirius/app/Release/vulkan-1.dll": {
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696"
+    },
+    "files/windows-diagnostic/tests/backend/Release/concrt140.dll": {
+      "bytes": 324208,
+      "sha256": "2405355f0a58067b258f8df33c327e3a3d716eaac5a3a5aebb757842d85bd376"
+    },
+    "files/windows-diagnostic/tests/backend/Release/msvcp140.dll": {
+      "bytes": 557728,
+      "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9"
+    },
+    "files/windows-diagnostic/tests/backend/Release/msvcp140_1.dll": {
+      "bytes": 35952,
+      "sha256": "bfad5aef4c63a669e3c140655cdfdf395b6c979b400a447bd5dcb65ed8826c3d"
+    },
+    "files/windows-diagnostic/tests/backend/Release/msvcp140_2.dll": {
+      "bytes": 280200,
+      "sha256": "3ea06f0ee098b4823cb79599df3780e7f23cce52c19aac31d2a0d47efe33a5e9"
+    },
+    "files/windows-diagnostic/tests/backend/Release/msvcp140_atomic_wait.dll": {
+      "bytes": 50304,
+      "sha256": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479"
+    },
+    "files/windows-diagnostic/tests/backend/Release/msvcp140_codecvt_ids.dll": {
+      "bytes": 31872,
+      "sha256": "f2069a52880ec885ee7f0511186100eb7fada0411a2b4948fafea7735b878a18"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 6302544,
+      "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 6306768,
+      "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 6290916,
+      "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/portability/trace.cu": {
+      "bytes": 649836,
+      "sha256": "4ce49ab0206ca3ab4e62ec0efd69a026f0cc13d4478b0e033fd4266c535aa52b"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/portability/trace.metal": {
+      "bytes": 358464,
+      "sha256": "b4f111f3f77058c9f0df2c0f4ae3fc538c266690a6d07bffb0f9befa0081ecfe"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/trace.spv": {
+      "bytes": 4038148,
+      "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041472,
+      "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916620,
+      "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "files/windows-diagnostic/tests/backend/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "files/windows-diagnostic/tests/backend/Release/sirius_backend_tests.exe": {
+      "bytes": 11091456,
+      "sha256": "217c9a36ee4da60d6ad302a32f9a7747181e279af3a8b596fe7c2ba773241eca"
+    },
+    "files/windows-diagnostic/tests/backend/Release/vcruntime140.dll": {
+      "bytes": 124544,
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066"
+    },
+    "files/windows-diagnostic/tests/backend/Release/vcruntime140_1.dll": {
+      "bytes": 49792,
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f"
+    },
+    "files/windows-diagnostic/tests/backend/Release/vulkan-1.dll": {
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696"
+    },
+    "files/windows-native/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "b6db074ba85bdede7cecb6469abf87b48889534e5e12948fafee3e54b645cf0c"
+    },
+    "files/windows-native/ctest-inventory.json": {
+      "bytes": 1057433,
+      "sha256": "a226fe7876ecdff55c603f0d7296bd22d1914b369311102db363d535dbec2293"
+    },
+    "files/windows-native/native-build-gate-log": {
+      "bytes": 2931,
+      "sha256": "a9cb2b4930e0b384372f031b44ae6f06854364fe7e4869ce15d7797fb4fef747"
+    },
+    "files/windows-native/native-build-tested-sirius_app_tests": {
+      "bytes": 8708096,
+      "sha256": "7cbb0b265ce8eed455ebaa1f439f041e311d18b2d57bc55c7a323d5654664545"
+    },
+    "files/windows-native/native-build-tested-sirius_backend_tests": {
+      "bytes": 11091456,
+      "sha256": "217c9a36ee4da60d6ad302a32f9a7747181e279af3a8b596fe7c2ba773241eca"
+    },
+    "files/windows-native/native-build-tested-sirius_base_tests": {
+      "bytes": 583680,
+      "sha256": "90aa326b14577fbbf63d793d1003040e4442a2d778d494521812239e9eb7bc32"
+    },
+    "files/windows-native/native-build-tested-sirius_core_tests": {
+      "bytes": 2473472,
+      "sha256": "7ef5c37b2e4ffa4c088ec67ec6c30c8759e9c114f8356432393a4a146bbe2b40"
+    },
+    "files/windows-native/native-build-tested-sirius_oracle_tests": {
+      "bytes": 838656,
+      "sha256": "0f01a4f16ff3206904e6eed5810499c7c008c2091a0ee20fe17daa76e6846996"
+    },
+    "files/windows-native/native-build-tested-sirius_render_tests": {
+      "bytes": 9195520,
+      "sha256": "0961c060ea5a556e40e40342abeeb54b7b1f9fb8c0acb5ffcf96a26ed19b1211"
+    },
+    "files/windows-native/native_build_gate.json": {
+      "bytes": 10013,
+      "sha256": "14831933930a2370ea7580fe07dd2285af201000af09398fe3d01dc0987d78ba"
+    },
+    "files/windows-native/native_build_gate_junit.xml": {
+      "bytes": 5243,
+      "sha256": "61ab2e5ba0a816ddf1043d07cad471a4b6f714dec98d7f62b068fb61d16042ae"
+    },
+    "files/windows-native/qualification-product-operating_model": {
+      "bytes": 130611,
+      "sha256": "b1c00980837dbf22070353077cd0cc492c6cc582ae7bf9679571ab63602196e6"
+    },
+    "files/windows-native/qualification-product-starfield": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "files/windows-native/qualification-product-trace_fp32comp_spv": {
+      "bytes": 4041472,
+      "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca"
+    },
+    "files/windows-native/qualification-product-trace_fp64_spv": {
+      "bytes": 3916620,
+      "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9"
+    },
+    "files/windows-native/qualification-product-trace_spv": {
+      "bytes": 4038148,
+      "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b"
+    },
+    "files/windows-native/qualification-product-viewer_rdsd003a_fragment": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "files/windows-native/qualification-product-viewer_rdsd003a_vertex": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "files/windows-native/qualification-sirius.bin": {
+      "bytes": 7889920,
+      "sha256": "be6d10d1ac19897040c62c12a47f0b769e96ce4f22fd34ad0745b57aba821111"
+    },
+    "files/windows-native/test-input-camera_frame_probe_fp32comp_spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/windows-native/test-input-camera_frame_probe_fp64_spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "files/windows-native/test-input-camera_frame_probe_spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/windows-native/test-input-coupled_probe_fp64_spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "files/windows-native/test-input-infinity_probe_fp32comp_spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "files/windows-native/test-input-infinity_probe_fp64_spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "files/windows-native/test-input-infinity_probe_spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "files/windows-native/test-input-metric_consistency_probe_fp32comp_spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/windows-native/test-input-metric_consistency_probe_fp64_spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "files/windows-native/test-input-metric_consistency_probe_spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/windows-native/test-input-parity_probe_fp32comp_spv": {
+      "bytes": 6306768,
+      "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35"
+    },
+    "files/windows-native/test-input-parity_probe_fp64_spv": {
+      "bytes": 6290916,
+      "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74"
+    },
+    "files/windows-native/test-input-parity_probe_spv": {
+      "bytes": 6302544,
+      "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f"
+    },
+    "files/windows-native/test-input-portable_binary32_reference": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/windows-native/test-input-retained_camera_fixture": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "files/windows-native/test-input-retained_camera_fp32_spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "files/windows-native/test-input-retained_camera_fp32comp_spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "files/windows-native/test-input-smoke_spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "files/windows-native/test-input-trace_cuda": {
+      "bytes": 649836,
+      "sha256": "4ce49ab0206ca3ab4e62ec0efd69a026f0cc13d4478b0e033fd4266c535aa52b"
+    },
+    "files/windows-native/test-input-trace_metal": {
+      "bytes": 358464,
+      "sha256": "b4f111f3f77058c9f0df2c0f4ae3fc538c266690a6d07bffb0f9befa0081ecfe"
+    },
+    "files/windows-native/windows-build.json": {
+      "bytes": 9131,
+      "sha256": "25170b9e7fbb6b5201add57a1b034fc6427f434e1accab5962ad919e2b8da6e7"
+    },
+    "files/windows-native-gate.log": {
+      "bytes": 5147,
+      "sha256": "3cd60b070bec2472eb8a560827e0a8cabdb29ee1bfd0abac10645600a0c6f5cf"
+    },
+    "files/windows-native-verification.log": {
+      "bytes": 94,
+      "sha256": "186c62a9806113c6cb324e165d5b74122f045d0acea131c71da1aca051e6df80"
+    },
+    "files/windows-nonrender-controls.log": {
+      "bytes": 4966,
+      "sha256": "18e7ad272adb8c04bae66acc2086c89092ff5b07f0814959ddb0fe849c780343"
+    }
+  }
+}
