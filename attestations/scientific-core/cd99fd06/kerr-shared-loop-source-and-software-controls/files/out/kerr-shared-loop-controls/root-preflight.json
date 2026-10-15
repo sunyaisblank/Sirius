@@ -1,0 +1,274 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-preflight-v1",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "root_preflight_passed": true,
+  "scientific_execution_held_for_final_independent_review": true,
+  "ordered_actions": [
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "all_expected_output_directories_absent": true,
+  "live_registered": 1152,
+  "selected_Mandatory": 8,
+  "resolved_runtime_DSO_union": 32,
+  "static_current_rows": 60,
+  "files": {
+    "bin/linux-gcc/generated/sirius/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "62f7ed900df0202180c681edd24ae77472f1d3a76e8f3758bb8276fedde73ce8"
+    },
+    "bin/linux-gcc/kernels/parity_probe.spv": {
+      "bytes": 4293556,
+      "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+    },
+    "bin/linux-gcc/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 4297780,
+      "sha256": "748c5aae46d240a22fefc868fc227b5e3db7d13223495945d3ea25117f97abaf"
+    },
+    "bin/linux-gcc/kernels/parity_probe_fp64.spv": {
+      "bytes": 4213296,
+      "sha256": "c637ef03554c751ac7c8ddc5a29f5732aec2e22c128bd51d6206e138f34931b4"
+    },
+    "bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv": {
+      "bytes": 4293556,
+      "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+    },
+    "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 4297780,
+      "sha256": "748c5aae46d240a22fefc868fc227b5e3db7d13223495945d3ea25117f97abaf"
+    },
+    "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 4213296,
+      "sha256": "c637ef03554c751ac7c8ddc5a29f5732aec2e22c128bd51d6206e138f34931b4"
+    },
+    "bin/linux-gcc/tests/backend/sirius_backend_tests": {
+      "bytes": 13502112,
+      "sha256": "a34ab6c95b69f7b6667842690409e634cf9b0c7381409e1e336e27da4f5d0be6"
+    },
+    "out/kerr-composite-shared-loop-checks/strict-gcc-build.log": {
+      "bytes": 4610,
+      "sha256": "20d728b5b8b1a98d71824977cd422f98663b1814ef23d2850e8119d2c70d0105"
+    },
+    "out/kerr-composite-shared-loop-checks/strict-gcc-configure-refresh.log": {
+      "bytes": 1277,
+      "sha256": "cd08e054e4ea5cc8c3f26108591b1bf7784ef97bc286acb7260275fb335b61ab"
+    },
+    "out/kerr-composite-shared-loop-checks/strict-gcc-restage.log": {
+      "bytes": 813,
+      "sha256": "3698afb1370874e37743b4e15a72703c4a6152195432bdc19edaf0ccd36bf3e1"
+    },
+    "out/kerr-shared-loop-controls/actions.json": {
+      "bytes": 39135,
+      "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+    },
+    "out/kerr-shared-loop-controls/actions.pending.json": {
+      "bytes": 39135,
+      "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+    },
+    "out/kerr-shared-loop-controls/compiled-size-observation.json": {
+      "bytes": 3804,
+      "sha256": "cc4465a5caf447a52ba32a6d68bba03a8fe0b8734f4eb66f5575ff777857fa6f"
+    },
+    "out/kerr-shared-loop-controls/independent-source-review.json": {
+      "bytes": 12806,
+      "sha256": "9a99400d9b5c13c91e808a00c333aae1807c868bd898ef33833cc4ed0b2642c1"
+    },
+    "out/kerr-shared-loop-controls/inventory.json": {
+      "bytes": 986718,
+      "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+    },
+    "out/kerr-shared-loop-controls/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "out/kerr-shared-loop-controls/plan.json": {
+      "bytes": 2569,
+      "sha256": "838c5fd8685f396f5c5e0a697b8d15f1e9917aa48e2204c3dd4da1467a7f9632"
+    },
+    "out/kerr-shared-loop-controls/plan.pending.json": {
+      "bytes": 2264,
+      "sha256": "626ef36cebc0f32628865644657074040e3e11228462f4dbfd1e4f02f99ce674"
+    },
+    "out/kerr-shared-loop-controls/preparation.json": {
+      "bytes": 2365,
+      "sha256": "04a5876d59eaeee8f072d0bdef7b8506f0dd6ab584f9f0fa509a67d89d015f6a"
+    },
+    "out/kerr-shared-loop-controls/readiness.json": {
+      "bytes": 26673,
+      "sha256": "2541882d7a1383339fe136de7d512196c3074f1000ebe84a8e5410b73bcb03b9"
+    },
+    "out/kerr-shared-loop-controls/readiness.pending.json": {
+      "bytes": 25815,
+      "sha256": "8b8696fc200b75daa7c5580a7e8ed83cb34e5c79bb1a49a2ba08e60eb6d00362"
+    },
+    "out/kerr-shared-loop-controls/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "out/kerr-shared-loop-controls/source-contracts.json": {
+      "bytes": 11657,
+      "sha256": "d7b2ee48bc6430826deb5a0cf52b89744b0b415c5c4e357f2f1605c6368171bf"
+    },
+    "/usr/bin/git": {
+      "bytes": 4066232,
+      "sha256": "2a8c18fbf43da9f692d75474c72bea9dfd796c260b0f3dfe456376abc3bbd668"
+    },
+    "/usr/bin/python3.12": {
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+      "bytes": 143545784,
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0": {
+      "bytes": 14024,
+      "sha256": "941ab0ca78131e168817049d4c9935bb0e29b584cf05b58c47e3071f1fa81cf8"
+    },
+    "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": {
+      "bytes": 18696,
+      "sha256": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": {
+      "bytes": 26776,
+      "sha256": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1": {
+      "bytes": 80888,
+      "sha256": "e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0": {
+      "bytes": 92760,
+      "sha256": "ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67"
+    },
+    "/usr/lib/x86_64-linux-gnu/libedit.so.2.0.72": {
+      "bytes": 220472,
+      "sha256": "195c607216f8581dbf516346ed38f4c73500cac4b84e18eb0a4fd49931e4cd56"
+    },
+    "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": {
+      "bytes": 186624,
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+    },
+    "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4": {
+      "bytes": 47672,
+      "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libicudata.so.74.2": {
+      "bytes": 30795392,
+      "sha256": "ddbb3718b8bd9cbd780e5ab08b4503c30a6c4fa0706ebe5d074ed6b596c1714e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libicuuc.so.74.2": {
+      "bytes": 2140336,
+      "sha256": "7560aadde38e5f4237a47a1ddd5891f9b36768a77a60faae30beee003ac01901"
+    },
+    "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5": {
+      "bytes": 202904,
+      "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0": {
+      "bytes": 55536,
+      "sha256": "423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef"
+    },
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.4": {
+      "bytes": 208328,
+      "sha256": "e6089d7bb95eee5b545f3770dd69095b0bca47d26701cad145af429561d16306"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    },
+    "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0": {
+      "bytes": 64776,
+      "sha256": "1c22abb422953442aa12822ea51ac76d1c8be92ed143e0159e0f830776cde2b2"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0": {
+      "bytes": 22744,
+      "sha256": "a919146693e71897484c2996beb837273a7a278d1a2afe477bc072f10681f3b0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0": {
+      "bytes": 14536,
+      "sha256": "d06d982abe6e9202aecd22322166be8ba49e68e05889fb6c6faec0daa88530a4"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0": {
+      "bytes": 67784,
+      "sha256": "9fa6b0ec4af163a86bc9a9ded3309a5979155fb5ef2d311fdda7fff0e9eee01a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0": {
+      "bytes": 14552,
+      "sha256": "ad78a7b22409685ca82e54346c2b9465d697f303e69e74a9c1693bb206e319df"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0": {
+      "bytes": 35032,
+      "sha256": "27c2d6dddde34146904c3c64cfcc885a14a351636d6611877368a48e29355c39"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0": {
+      "bytes": 35016,
+      "sha256": "e59ef497333a6ede2096a0bd9eeb6ec4023374c16d3a8d7511d1251fb7f9b9df"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": {
+      "bytes": 162392,
+      "sha256": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14": {
+      "bytes": 1967424,
+      "sha256": "209e941be9eb2eb9ab36caaa0b81d1c6b36c8f5d7268c24f19e81039137e6485"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0": {
+      "bytes": 14480,
+      "sha256": "7d40b02b27d449b6b26cea10ea10aafd0cce5a1e2d7859ea57f34b29fe88923f"
+    },
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5": {
+      "bytes": 755864,
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+    },
+    "/usr/share/vulkan/icd.d/lvp_icd.json": {
+      "bytes": 135,
+      "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+    }
+  },
+  "actual_build_configure_restage_exits": {
+    "56084": 0,
+    "52172": 0,
+    "59120": 0
+  },
+  "launch_environment": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+  },
+  "inherited_execution_override_names": [],
+  "before_each_later_action": "Root must verify saved accepted receipt pins unchanged, accept owner/one zero-FESD XML/required property and provider/source/input/birth retirement; stop first nonpass.",
+  "scope": "Focused software parity controls only; no current scientific result, fullscience/Mandatory/cold128300s/UI/performance/release acceptance."
+}

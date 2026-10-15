@@ -1,0 +1,58 @@
+{
+  "schema": "sirius-kerr-shared-loop-focused-source-preparation-v1",
+  "source_only": true,
+  "admitted": false,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "helpers": {
+    "run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    }
+  },
+  "templates": {
+    "actions.pending.json": {
+      "bytes": 39135,
+      "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+    },
+    "plan.pending.json": {
+      "bytes": 2264,
+      "sha256": "626ef36cebc0f32628865644657074040e3e11228462f4dbfd1e4f02f99ce674"
+    },
+    "readiness.pending.json": {
+      "bytes": 25815,
+      "sha256": "8b8696fc200b75daa7c5580a7e8ed83cb34e5c79bb1a49a2ba08e60eb6d00362"
+    }
+  },
+  "source_contracts": {
+    "bytes": 11657,
+    "sha256": "d7b2ee48bc6430826deb5a0cf52b89744b0b415c5c4e357f2f1605c6368171bf"
+  },
+  "commands": [
+    "python3 -B out/kerr-shared-loop-controls/run_owned.py captured-fp32",
+    "python3 -B out/kerr-shared-loop-controls/run_owned.py captured-fp32comp",
+    "python3 -B out/kerr-shared-loop-controls/run_owned.py retry-fp32",
+    "python3 -B out/kerr-shared-loop-controls/run_owned.py retry-fp32comp",
+    "python3 -B out/kerr-shared-loop-controls/run_owned.py retry-fp64",
+    "python3 -B out/kerr-shared-loop-controls/run_owned.py unrepresented-stage",
+    "python3 -B out/kerr-shared-loop-controls/run_owned.py null-projection",
+    "python3 -B out/kerr-shared-loop-controls/run_owned.py precision-invariants"
+  ],
+  "root_fresh_preflight_required": true,
+  "actual_preflight_or_test_executed": false,
+  "source_and_output_namespace": "out/kerr-shared-loop-controls",
+  "runtime_dependencies_on_retired_software_packet": false,
+  "module_size_observations": {
+    "bytes": 3804,
+    "sha256": "cc4465a5caf447a52ba32a6d68bba03a8fe0b8734f4eb66f5575ff777857fa6f"
+  },
+  "current_products_observed_after_root_restage": true,
+  "fresh_root_inventory": {
+    "bytes": 986718,
+    "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+  },
+  "author_role": "Source-only adaptation and passive read/hash joins to root-produced current preflight outputs; not independent raw producer."
+}

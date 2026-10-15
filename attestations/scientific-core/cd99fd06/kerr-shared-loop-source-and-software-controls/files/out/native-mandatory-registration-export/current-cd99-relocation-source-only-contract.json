@@ -1,0 +1,120 @@
+{
+  "schema": "sirius-current-windows-mandatory-relocation-source-only-contract-v1",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "status": "CONDITIONALLY_FEASIBLE_NOT_STAGED_OR_ADMITTED",
+  "runtime_or_qualification_admitted": false,
+  "pins": {
+    "out/kerr-shared-loop-ci-cd99fd06/windows-diagnostic/generated/sirius/windows-mandatory-registration/registration-metadata.json": {
+      "bytes": 28670,
+      "sha256": "9713b995c3ae16f8af607a5085c4cafeb042884f45126adef66bcc3edc99e871"
+    },
+    "out/kerr-shared-loop-ci-cd99fd06/windows-native/native_build_gate.json": {
+      "bytes": 10013,
+      "sha256": "6ccf44f2e148462a2d6c729017c89aa41592c27dc1dfaea7824eb0910e275e27"
+    },
+    "out/kerr-shared-loop-ci-cd99fd06/windows-native/ctest-inventory.json": {
+      "bytes": 1059497,
+      "sha256": "f9088fb42a6980444808e754b29cd0104137b31e89482314788ad4e9dfe14470"
+    },
+    "scripts/verify-build-gate.py": {
+      "bytes": 78883,
+      "sha256": "8d51cc2a5c78470cb74af37a12640b557ab235151fd83f4d60503ebfd82f1ed1"
+    }
+  },
+  "actual_export": {
+    "members": 63,
+    "CMake_recipes": 62,
+    "recipe_kinds": {
+      "CTestTestfile": 18,
+      "cmake_install": 25,
+      "discovery_include": 6,
+      "operational_or_verify": 7,
+      "discovery_tests": 6
+    },
+    "saved_inventory_equals_native_inventory": true,
+    "ordered_registered_tests": 1152,
+    "all_Mandatory": true,
+    "property_counts": {
+      "SKIP_REGULAR_EXPRESSION": 1139,
+      "LABELS": 1152,
+      "WORKING_DIRECTORY": 1152,
+      "TIMEOUT": 13,
+      "RUN_SERIAL": 3,
+      "RESOURCE_LOCK": 398
+    },
+    "CI_canonical_inventory_SHA256": "2eb6fc5e7abac2685b4825eca4c12ee1eddbd4060f2ab5548025d3cac276af39",
+    "payload_records_checked": {
+      "tested_executables": 7,
+      "products": 9,
+      "generated_inputs": 20
+    },
+    "no_missing_configured_recipe_identified": "Source-label includes come from exact source Git; two root subdirs ftxui/json legitimately have no CTestTestfile (no tests). Preserve existing graph/directories; do not invent testfiles."
+  },
+  "mapping": {
+    "old_source": "D:/a/Sirius/Sirius",
+    "candidate_source": "//wsl.localhost/Ubuntu/home/astra/.project/Sirius",
+    "old_build": [
+      "D:/a/Sirius/Sirius/bin/windows-msvc",
+      "d:/a/Sirius/Sirius/bin/windows-msvc"
+    ],
+    "candidate_build": "ROOT_TO_SELECT_OWNED_VOLUME_UNDER_EXISTING_bin/windows-msvc; no directory created or selected here",
+    "tools": {
+      "CMAKE_COMMAND": {
+        "candidate_Windows_path": "//wsl.localhost/Ubuntu/home/astra/.project/Sirius/bin/windows-msvc/qualification-tools/cmake-3.31.6/cmake-3.31.6-windows-x86_64/bin/cmake.exe",
+        "actual_identity": {
+          "bytes": 12029392,
+          "sha256": "3fe22eb02e1c6184ec207366ed21a6f2f9c3828c1e9f3324546befadfb362be3"
+        }
+      },
+      "CMAKE_CTEST_COMMAND": {
+        "candidate_Windows_path": "//wsl.localhost/Ubuntu/home/astra/.project/Sirius/bin/windows-msvc/qualification-tools/cmake-3.31.6/cmake-3.31.6-windows-x86_64/bin/ctest.exe",
+        "actual_identity": {
+          "bytes": 12947920,
+          "sha256": "76d83c30be3899c2b446c73bff7aead58c47440c05062c5716e3162e588a6e2c"
+        }
+      },
+      "_Python3_EXECUTABLE": {
+        "candidate_Windows_path": "//wsl.localhost/Ubuntu/home/astra/.project/Sirius/bin/windows-msvc/qualification-tools/python-3.14.8/tools/python.exe",
+        "actual_identity": {
+          "bytes": 106208,
+          "sha256": "434b361fe0c5960d404974feed493db47f2603a1ace2574312104fbed0182c6f"
+        }
+      }
+    },
+    "CMake_module_root": "C:/Program Files/CMake/share/cmake-3.31 -> portable cmake-3.31.6-windows-x86_64/share/cmake-3.31; preserve complete accepted package",
+    "rule": "Exact literal root/tool substitutions only, longest child/tool roots before source-parent root. Reverse longest target roots before parent; retain raw BOM/newline bytes. Do not change source revision, script bodies, filters, conditions, options or numeric values.",
+    "Python_alias_discrepancy": "CIpython3.exe Length0 but SHA434b...; realNuGetpython.exe106208B sameSHA. Requires explicit effective-binary/alias admission; original metadata remains immutable."
+  },
+  "inverse_evidence": {
+    "all_62_original_recipe_pins_match_export_metadata": true,
+    "symbolic_substitution_and_inverse_recovered_all_original_bytes": true,
+    "nonoverlapping_placeholder_proof_only": "Calculated in memory, no transformed recipe written. Final selected real target strings require their own collision check, per-file hashes and exact byte inverse before root admission.",
+    "original_recipe_pinmap_SHA256": "3c88737bba560244a275120be8338df4b10a4d318584bb22a3c55fbebd03fbfa",
+    "symbolic_transformed_pinmap_SHA256": "0fd3c591c8606dc09d17d0d0bb48d6df1ca60af6a52bbe6b1ea2630e1ff556f9",
+    "effective_literal_replacement_counts": {
+      "D:/a/Sirius/Sirius/bin/windows-msvc": 2402,
+      "d:/a/Sirius/Sirius/bin/windows-msvc": 0,
+      "D:/a/Sirius/Sirius": 83,
+      "C:/Program Files/CMake/bin/cmake.exe": 13,
+      "C:/Program Files/CMake/bin/ctest.exe": 2,
+      "C:/hostedtoolcache/windows/Python/3.14.8/x64/python3.exe": 12
+    }
+  },
+  "required_before_original_gate": [
+    "Root schedules only after focused8software/new7native outcomes. This source-only inspection admits no execution or substitution.",
+    "Reconstruct7exe/9products/20canonical inputs at native-gate relative selectors. Backend/render each need23exact consumed copies (20+3trace). Preserve complete CLI/backend exported resource volumes; app/render share CLI directory. Source-root resources/labels/scripts/support remain exact clean cd99 Git.",
+    "Retain62raw recipes and original cache/compiler metadata. Only explicit longest-first source/build/tool path substitutions; exact byte inverse with selected final targets, including BOM/newlines, per-file hashes and symlink containment. No configure, discovery regeneration, MSVC rebuild or executable patch.",
+    "Admit Python alias discrepancy, complete PythonDLL/stdlib and CMake module packages; nativeGit/PATH and scoped UNC Git settings must preserve actual clean source identity. Admit CRT/SDK/OSloader/driver bytes and real mapping context. Original relocated children copy no DLLs, so normal hostCRT/UCRT/loader resolution is a true input; do not alter original install commands.",
+    "Later root-only CTest show-only json-v1 -C Release reads existing POST_BUILD scripts, never rediscoversgtest. Compare entire ordered1152test array, argv/config/properties and backtraceGraph to immutable CI inventory after only mapped roots/tools. Missing *_tests.cmake/NOT_BUILT fallback is not admissible.",
+    "Preserve1152labels/workdirs,1139skipregex,398device locks,13timeouts,3RUN_SERIAL. Operational deadlines30/10/10/10/120/30/30/30/600/30/30/300/28800, coldcacheoff,burn-inrepeat3,originalfixtures/assertions/physical1000ms unchanged.",
+    "Use original cmake/sirius_testing.cmake RunMandatoryTests semantics: stale receipt removal, actual runtime_identity, existing verify-build-gate.py --action run, all7tested/9products/20inputs, qualification/clean cd99/Release, full -L Mandatory/no-tests=error, no subsetfilter. Real all1152zeroFESD JUnit identities must equal inventory; source/artifacts/consumedcopies and fullinventory rechecked before atomic stamp, then onlycopy realpassed stamp to runtimevolume.",
+    "Relocated liveinventory digest differs from immutable CI path-bearing digest; preserve old nativeGate as producer evidence, never rewrite it. Gate checks newly captured complete pre/post digest.9native-build cases are not1152Mandatory.",
+    "Original recursive cmake --install/configRelease/prefix/verify_sirius_install authority remains: pre-gate OperationalVolume expects refusal, later install binds realreceipt+bytes+runtimeinitialisation. No fakebootstrap/stamp."
+  ],
+  "scope": "Passive source/data feasibility only, not implementation/admission. No live W/L read/modified, no helper/projectparser/native/provider/test/CTest/discovery/build/CI/network execution. Only stdlib source/JSON/hash/in-memory symbolic mapping and read-only Git; no stage/product/admission created.",
+  "workspace": {
+    "tracked_source_clean": true,
+    "committed_and_pushed_source": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+    "contract_ignored_out_only": true
+  }
+}

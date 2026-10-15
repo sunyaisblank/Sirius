@@ -1,0 +1,109 @@
+{
+  "schema": "sirius-shared-adaptive-rk4-compiled-size-observation-v1",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "parent_numerical_source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "strict_gcc_build_and_source_governance_exit": 0,
+  "source_changes": [
+    "2904edbf8e454cf1498bdc72c7ebe11a7aaf7916",
+    "cd99fd06627cf1f2e1ece74fcf90abf129178940"
+  ],
+  "modules": [
+    {
+      "module": "trace.spv",
+      "before": {
+        "bytes": 4990064,
+        "sha256": "95a9fe0544821152e80fb022f2cd56866185be2d0944f170bdfe13d6738a4e3b",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 393676
+      },
+      "after": {
+        "bytes": 3101296,
+        "sha256": "97a2d15a61497307376d4bb8c029f6610846d8d1360bd5a83d046ae7f9e6a6d3"
+      },
+      "size_change_bytes": -1888768,
+      "size_reduction_percent": 37.85057666595058
+    },
+    {
+      "module": "trace_fp32comp.spv",
+      "before": {
+        "bytes": 4993388,
+        "sha256": "0b67bb7351299c19957ebce591528f70bc3af09b874f33d165a04b9fe6fe69a8",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 394943
+      },
+      "after": {
+        "bytes": 3104620,
+        "sha256": "340bb145b6b4b75758fadb4f14b7ce23f511f25bd24a25bde9fef3007b5dfba7"
+      },
+      "size_change_bytes": -1888768,
+      "size_reduction_percent": 37.82538028288609
+    },
+    {
+      "module": "trace_fp64.spv",
+      "before": {
+        "bytes": 4890080,
+        "sha256": "68466bf4a13a38e998a19b55724e244b71676860312a1021efbeae611ba9df12",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 386622
+      },
+      "after": {
+        "bytes": 2958224,
+        "sha256": "9ee6bd205c5d75f934ad08b0221ec4a41b32f7c5fc8346775c0ef470960bc6eb"
+      },
+      "size_change_bytes": -1931856,
+      "size_reduction_percent": 39.505611360141344
+    },
+    {
+      "module": "parity_probe.spv",
+      "before": {
+        "bytes": 9827140,
+        "sha256": "3dcf4d75f132dcbb99a7d207c430aea8ff4e482b11fc93298d0d333866069b2d",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 842314
+      },
+      "after": {
+        "bytes": 4293556,
+        "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+      },
+      "size_change_bytes": -5533584,
+      "size_reduction_percent": 56.30920084582086
+    },
+    {
+      "module": "parity_probe_fp32comp.spv",
+      "before": {
+        "bytes": 9831364,
+        "sha256": "062e03dc1f5f5d3ad40a8734bcb8a6aee7026b7532f58f2096fb376d0e3264a3",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 843625
+      },
+      "after": {
+        "bytes": 4297780,
+        "sha256": "748c5aae46d240a22fefc868fc227b5e3db7d13223495945d3ea25117f97abaf"
+      },
+      "size_change_bytes": -5533584,
+      "size_reduction_percent": 56.28500785852299
+    },
+    {
+      "module": "parity_probe_fp64.spv",
+      "before": {
+        "bytes": 9918432,
+        "sha256": "15871ff7b8e368728b0d75d09ae6f4300b646f00603a6a3a711dbe2ebd21ced3",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 835963
+      },
+      "after": {
+        "bytes": 4213296,
+        "sha256": "c637ef03554c751ac7c8ddc5a29f5732aec2e22c128bd51d6206e138f34931b4"
+      },
+      "size_change_bytes": -5705136,
+      "size_reduction_percent": 57.520543569790064
+    }
+  ],
+  "scope": "Actual existing CMake preset build and its spirv-val checks; passive module-size/byte-alias comparison only. No driverJIT/RSS/latency, numerical equivalence, focused runtime or scientific qualification follows from code-size change. Existing unrelated infinity-probe warnings remain in raw build log."
+}

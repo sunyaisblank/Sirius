@@ -1,0 +1,15 @@
+Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.NullProjectionPreservesConeBranchAndFailsClosed
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.NullProjectionPreservesConeBranchAndFailsClosed
+[ParityProbe] phase=initialization opcode=10 offset=0 count=0 submit_wait_ms=33.9422 pipeline_setup_ms=164055 total_ms=164090 success=1
+[ParityProbe] phase=actual opcode=10 offset=0 count=8 submit_wait_ms=0.704464 pipeline_setup_ms=0.00136 total_ms=0.753632 success=1
+[ParityProbe] completed opcode=10 records=8 submissions=1 allocated_bytes=2576
+[       OK ] KernelParity.NullProjectionPreservesConeBranchAndFailsClosed (164170 ms)
+[----------] 1 test from KernelParity (164170 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (164170 ms total)
+[  PASSED  ] 1 test.

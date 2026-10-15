@@ -1,0 +1,145 @@
+{
+  "schema": "sirius-kerr-shared-loop-controls-independent-runtime-admission-v1",
+  "passed": true,
+  "verdict": "FINITE_EIGHT_CONTROL_PACKET_ACCEPTABLE_FOR_ROOT_OWNED_EXECUTION",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "blockers": [],
+  "scope": "Independent passive review of final concrete bytes and read-only Git. No authored helper/import, project program, ldd/query, compiler, parser, provider or test executed by reviewer. Root retains sole execution and per-case acceptance responsibility.",
+  "pins": {
+    "actions.json": {
+      "path": "out/kerr-shared-loop-controls/actions.json",
+      "bytes": 39135,
+      "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+    },
+    "readiness.json": {
+      "path": "out/kerr-shared-loop-controls/readiness.json",
+      "bytes": 26673,
+      "sha256": "2541882d7a1383339fe136de7d512196c3074f1000ebe84a8e5410b73bcb03b9"
+    },
+    "plan.json": {
+      "path": "out/kerr-shared-loop-controls/plan.json",
+      "bytes": 2569,
+      "sha256": "838c5fd8685f396f5c5e0a697b8d15f1e9917aa48e2204c3dd4da1467a7f9632"
+    },
+    "root-preflight.json": {
+      "path": "out/kerr-shared-loop-controls/root-preflight.json",
+      "bytes": 11268,
+      "sha256": "79bfe126334758c8f519deb10407556b5af3002987457612f34d43cd5fe52594"
+    },
+    "root-preflight-input-order-observation.json": {
+      "path": "out/kerr-shared-loop-controls/root-preflight-input-order-observation.json",
+      "bytes": 2008,
+      "sha256": "83656a60593dbd8c7c43f9dfd8c0e3f8b63bd73eff1713911fdbce4ff4518aaa"
+    },
+    "independent-source-review.json": {
+      "path": "out/kerr-shared-loop-controls/independent-source-review.json",
+      "bytes": 12806,
+      "sha256": "9a99400d9b5c13c91e808a00c333aae1807c868bd898ef33833cc4ed0b2642c1"
+    },
+    "source-contracts.json": {
+      "path": "out/kerr-shared-loop-controls/source-contracts.json",
+      "bytes": 11657,
+      "sha256": "d7b2ee48bc6430826deb5a0cf52b89744b0b415c5c4e357f2f1605c6368171bf"
+    },
+    "run_owned.py": {
+      "path": "out/kerr-shared-loop-controls/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/kerr-shared-loop-controls/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    }
+  },
+  "concrete_byte_checks": {
+    "root_preflight_current_file_pins": 60,
+    "all_current_bytes_and_SHA256_match": true,
+    "actions_byte_exact_reviewed_pending": true,
+    "readiness_only_changed_fields": [
+      "admitted",
+      "gcc_build_log",
+      "actions",
+      "root_launch_environment",
+      "gate_state"
+    ],
+    "three_saved_build_configure_restage_logs_match_declared_pins": true,
+    "root_reported_actual_three_exits": {
+      "56084": 0,
+      "52172": 0,
+      "59120": 0
+    },
+    "plan_only_changed_fields": [
+      "admitted",
+      "commands",
+      "root_launch_environment"
+    ],
+    "all_eight_command_prefixes": "LVP_JIT_OPTIMIZATION_LEVEL=0",
+    "ordered_actions": [
+      "captured-fp32",
+      "captured-fp32comp",
+      "retry-fp32",
+      "retry-fp32comp",
+      "retry-fp64",
+      "unrepresented-stage",
+      "null-projection",
+      "precision-invariants"
+    ],
+    "all_ancestor_input_counts": [
+      47,
+      51,
+      55,
+      59,
+      63,
+      67,
+      71,
+      75
+    ],
+    "each_exact47_base_plus4_files_for_every_previous_ancestor_duplicate_free": true,
+    "all_current_base_inputs_exist": true,
+    "all_eight_output_directories_absent": true,
+    "generated_alignment_source_current_clean": true,
+    "alignment_scope": "qualification records0/admitted0/pending8; no ultimate-ideal or release acceptance",
+    "root_operational_and_independent_reviews_not_action_inputs": true
+  },
+  "preflight_correction": {
+    "actual_initial_exit": 1,
+    "scientific_tests_executed": 0,
+    "actual_action_readiness_materialized_at_that_stop": false,
+    "cause": "Incorrect root validation assumed input lists were base-then-ancestors. Actual lists retain original order and insert ancestors before appended current-closure rows.",
+    "independently_verified": "Exact duplicate-free path sets for all8 (47+4n), all ancestor contents required, exact ordered commands preserved.",
+    "no_helper_guard_action_data_or_governor_change": true,
+    "not_a_scientific_workload_failure": true
+  },
+  "required_execution_contract": {
+    "root_launch": "LVP_JIT_OPTIMIZATION_LEVEL=0 /usr/bin/python3 -B out/kerr-shared-loop-controls/run_owned.py <ordered-label>",
+    "external_JIT_assignment_not_enforced_by_unchanged_runner": true,
+    "provider": {
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "SIRIUS_VULKAN_DEVICE": "0"
+    },
+    "cache": "Default; disable_software_shader_cache false, no MESA_SHADER_CACHE_DISABLE override.",
+    "each_action_limits": {
+      "seconds": 300,
+      "aggregate_rss_kib": 4194304,
+      "host_reserve_kib": 2097152
+    },
+    "original_actual_submit_assertion_ms": 1000,
+    "before_every_later_action": "Root first verifies all saved accepted receipt pins unchanged, previous owner child0/no stop/no cleanup errors/source and whole inputs stable/owned births absent/same-birth-session LVP mapping, then exact one XML run-completed case, zero failures/errors/skips/disabled and required positive execution property. Stop first nonpass.",
+    "runner_boundary": "The mature runner freezes all ancestor files and verifies their stability; it does not interpret readiness.admitted or root_required_xml or positively evaluate ancestor contents. Root acceptance is required, including executed FP64 evidence rather than unsupported decline.",
+    "no_skipped_ancestor_bypass": true
+  },
+  "prior_and_current_outcome_scope": {
+    "prior_4a7_software_attempt": "RSS guard, no XML and no numerical verdict; historical failure remains unchanged.",
+    "current_program_changed": "Shared one-static-call-site evaluator; current compiled parity modules are smaller, which justifies a distinct guarded attempt but proves no JIT-memory, latency or numerical outcome.",
+    "current_scientific_tests_run_at_review": 0,
+    "no_full_trace_image_P1_Mandatory_science_UI_performance_release_claim": true
+  },
+  "workspace": {
+    "tracked_source_clean": true,
+    "committed_pushed": "0 ahead / 0 behind",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "sole_worktree": true,
+    "review_sidecar_uncommitted_pending_root_preservation": true
+  }
+}

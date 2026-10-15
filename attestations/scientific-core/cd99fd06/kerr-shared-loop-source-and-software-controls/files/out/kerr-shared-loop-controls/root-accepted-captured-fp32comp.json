@@ -1,0 +1,48 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-accepted-control-v1",
+  "passed": true,
+  "case": "captured-fp32comp",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "exact_one_completed_XML_zero_FESD": true,
+  "required_positive_property": {
+    "name": "parity_opcode_8_completed_records",
+    "value": "1"
+  },
+  "test_seconds": "265.815",
+  "owner_seconds": 266.1128542630031,
+  "peak_sampled_aggregate_RSS_KiB": 3103448,
+  "fresh_whole_input_rows": 592,
+  "owned_child_and_controller_births_absent": true,
+  "source_and_inputs_unchanged": true,
+  "files": {
+    "out/kerr-shared-loop-controls/captured-fp32comp/gtest.xml": {
+      "bytes": 956,
+      "sha256": "86c59fdf31c8e8e0bb3c785257f94160dee76f529ff9fa530e4f194bab709078"
+    },
+    "out/kerr-shared-loop-controls/captured-fp32comp/inputs-after.json": {
+      "bytes": 141189,
+      "sha256": "d05084bd757892ec2dd3b07d09efbb3c57b57cde052c6bb789269684c34ad90c"
+    },
+    "out/kerr-shared-loop-controls/captured-fp32comp/inputs-before.json": {
+      "bytes": 141189,
+      "sha256": "d05084bd757892ec2dd3b07d09efbb3c57b57cde052c6bb789269684c34ad90c"
+    },
+    "out/kerr-shared-loop-controls/captured-fp32comp/owner.json": {
+      "bytes": 3196,
+      "sha256": "c292d2992b7d9d7077f60a7ba44a95f8e5e31bbd023183f75a772712814f697e"
+    },
+    "out/kerr-shared-loop-controls/captured-fp32comp/samples.jsonl": {
+      "bytes": 2240459,
+      "sha256": "542c5092889336d569a3d455cb4f76132d36b340730ed93d320711ff1556e8e1"
+    },
+    "out/kerr-shared-loop-controls/captured-fp32comp/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-shared-loop-controls/captured-fp32comp/stdout.log": {
+      "bytes": 1049,
+      "sha256": "909cb5a32ea79a06146e8ef257880da2488e0cf4cd9c97b28b74106fe8caab93"
+    }
+  },
+  "scope": "One exact focused parity control with original assertions and guards; no fullimage/allP1/Mandatory/latency/release qualification."
+}

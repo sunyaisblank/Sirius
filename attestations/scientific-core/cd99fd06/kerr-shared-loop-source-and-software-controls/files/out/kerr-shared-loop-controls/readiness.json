@@ -1,0 +1,615 @@
+{
+  "schema": "sirius-kerr-shared-loop-focused-root-readiness-v1",
+  "admitted": true,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "clean_committed_pushed": true,
+  "strict_configure_revision_refreshed": true,
+  "gcc_build_exit": 0,
+  "gcc_build_log": {
+    "all_three_actual_root_exec_exits": 0,
+    "files": {
+      "out/kerr-composite-shared-loop-checks/strict-gcc-build.log": {
+        "bytes": 4610,
+        "sha256": "20d728b5b8b1a98d71824977cd422f98663b1814ef23d2850e8119d2c70d0105"
+      },
+      "out/kerr-composite-shared-loop-checks/strict-gcc-configure-refresh.log": {
+        "bytes": 1277,
+        "sha256": "cd08e054e4ea5cc8c3f26108591b1bf7784ef97bc286acb7260275fb335b61ab"
+      },
+      "out/kerr-composite-shared-loop-checks/strict-gcc-restage.log": {
+        "bytes": 813,
+        "sha256": "3698afb1370874e37743b4e15a72703c4a6152195432bdc19edaf0ccd36bf3e1"
+      }
+    }
+  },
+  "governance_passed": true,
+  "inventory": {
+    "resolved_path": "/home/astra/.project/Sirius/out/kerr-shared-loop-controls/inventory.json",
+    "bytes": 986718,
+    "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+  },
+  "live_registered": 1152,
+  "all_eight_control_names_Mandatory": true,
+  "strict_build_not_full_qualification": true,
+  "resource_copies": [
+    {
+      "compiled": "bin/linux-gcc/kernels/parity_probe.spv",
+      "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv",
+      "bytes": 4293556,
+      "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+    },
+    {
+      "compiled": "bin/linux-gcc/kernels/parity_probe_fp32comp.spv",
+      "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv",
+      "bytes": 4297780,
+      "sha256": "748c5aae46d240a22fefc868fc227b5e3db7d13223495945d3ea25117f97abaf"
+    },
+    {
+      "compiled": "bin/linux-gcc/kernels/parity_probe_fp64.spv",
+      "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv",
+      "bytes": 4213296,
+      "sha256": "c637ef03554c751ac7c8ddc5a29f5732aec2e22c128bd51d6206e138f34931b4"
+    }
+  ],
+  "module_size_observations": {
+    "path": "out/kerr-shared-loop-controls/compiled-size-observation.json",
+    "bytes": 3804,
+    "sha256": "cc4465a5caf447a52ba32a6d68bba03a8fe0b8734f4eb66f5575ff777857fa6f"
+  },
+  "ldd_actual_stdout": {
+    "bin/linux-gcc/tests/backend/sirius_backend_tests": "\tlinux-vdso.so.1 (0x00007fff5138d000)\n\tlibvulkan.so.1 => /lib/x86_64-linux-gnu/libvulkan.so.1 (0x000074358e33b000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000074358d200000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000074358e252000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000074358e224000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000074358ce00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000074358e3c5000)\n",
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": "\tlinux-vdso.so.1 (0x00007ffc6dbfa000)\n\tlibLLVM.so.20.1 => /lib/x86_64-linux-gnu/libLLVM.so.20.1 (0x000073a087000000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000073a0906d5000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x000073a09061b000)\n\tlibdrm.so.2 => /lib/x86_64-linux-gnu/libdrm.so.2 (0x000073a090604000)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0x000073a0905d6000)\n\tlibxcb.so.1 => /lib/x86_64-linux-gnu/libxcb.so.1 (0x000073a0905ab000)\n\tlibxcb-randr.so.0 => /lib/x86_64-linux-gnu/libxcb-randr.so.0 (0x000073a09059a000)\n\tlibX11-xcb.so.1 => /lib/x86_64-linux-gnu/libX11-xcb.so.1 (0x000073a090595000)\n\tlibxcb-dri3.so.0 => /lib/x86_64-linux-gnu/libxcb-dri3.so.0 (0x000073a09058e000)\n\tlibxcb-present.so.0 => /lib/x86_64-linux-gnu/libxcb-present.so.0 (0x000073a08f9fb000)\n\tlibxcb-xfixes.so.0 => /lib/x86_64-linux-gnu/libxcb-xfixes.so.0 (0x000073a08f9f1000)\n\tlibxcb-sync.so.1 => /lib/x86_64-linux-gnu/libxcb-sync.so.1 (0x000073a08f9e6000)\n\tlibxcb-shm.so.0 => /lib/x86_64-linux-gnu/libxcb-shm.so.0 (0x000073a08f9e1000)\n\tlibxshmfence.so.1 => /lib/x86_64-linux-gnu/libxshmfence.so.1 (0x000073a08f9dc000)\n\tlibwayland-client.so.0 => /lib/x86_64-linux-gnu/libwayland-client.so.0 (0x000073a08f9cc000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000073a086c00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000073a086f17000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000073a08f99c000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000073a086800000)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0x000073a08f990000)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0x000073a086edd000)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0x000073a086a1e000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000073a0906fd000)\n\tlibXau.so.6 => /lib/x86_64-linux-gnu/libXau.so.6 (0x000073a086ed7000)\n\tlibXdmcp.so.6 => /lib/x86_64-linux-gnu/libXdmcp.so.6 (0x000073a086ecf000)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x000073a086e9b000)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0x000073a086e85000)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0x000073a086400000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x000073a0867ce000)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0x000073a0867bf000)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0x000073a084600000)\n",
+    "/usr/bin/python3": "\tlinux-vdso.so.1 (0x00007ffde21f4000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000075aa4e849000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000075aa4e82d000)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0x000075aa4e7ff000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000075aa4e400000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000075aa4e93e000)\n"
+  },
+  "all_current_dynamic_dependencies_in_frozen_inputs": true,
+  "runtime_inputs": {
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+      "bytes": 143545784,
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0",
+      "bytes": 14024,
+      "sha256": "941ab0ca78131e168817049d4c9935bb0e29b584cf05b58c47e3071f1fa81cf8"
+    },
+    "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+      "bytes": 18696,
+      "sha256": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+      "bytes": 26776,
+      "sha256": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+      "bytes": 80888,
+      "sha256": "e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+      "bytes": 92760,
+      "sha256": "ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67"
+    },
+    "/usr/lib/x86_64-linux-gnu/libedit.so.2.0.72": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libedit.so.2.0.72",
+      "bytes": 220472,
+      "sha256": "195c607216f8581dbf516346ed38f4c73500cac4b84e18eb0a4fd49931e4cd56"
+    },
+    "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "bytes": 186624,
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+    },
+    "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+      "bytes": 47672,
+      "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libicudata.so.74.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+      "bytes": 30795392,
+      "sha256": "ddbb3718b8bd9cbd780e5ab08b4503c30a6c4fa0706ebe5d074ed6b596c1714e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libicuuc.so.74.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+      "bytes": 2140336,
+      "sha256": "7560aadde38e5f4237a47a1ddd5891f9b36768a77a60faae30beee003ac01901"
+    },
+    "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+      "bytes": 202904,
+      "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+      "bytes": 55536,
+      "sha256": "423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef"
+    },
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.4": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.4",
+      "bytes": 208328,
+      "sha256": "e6089d7bb95eee5b545f3770dd69095b0bca47d26701cad145af429561d16306"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+      "bytes": 64776,
+      "sha256": "1c22abb422953442aa12822ea51ac76d1c8be92ed143e0159e0f830776cde2b2"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+      "bytes": 22744,
+      "sha256": "a919146693e71897484c2996beb837273a7a278d1a2afe477bc072f10681f3b0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0",
+      "bytes": 14536,
+      "sha256": "d06d982abe6e9202aecd22322166be8ba49e68e05889fb6c6faec0daa88530a4"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0",
+      "bytes": 67784,
+      "sha256": "9fa6b0ec4af163a86bc9a9ded3309a5979155fb5ef2d311fdda7fff0e9eee01a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0",
+      "bytes": 14552,
+      "sha256": "ad78a7b22409685ca82e54346c2b9465d697f303e69e74a9c1693bb206e319df"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0",
+      "bytes": 35032,
+      "sha256": "27c2d6dddde34146904c3c64cfcc885a14a351636d6611877368a48e29355c39"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0",
+      "bytes": 35016,
+      "sha256": "e59ef497333a6ede2096a0bd9eeb6ec4023374c16d3a8d7511d1251fb7f9b9df"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+      "bytes": 162392,
+      "sha256": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+      "bytes": 1967424,
+      "sha256": "209e941be9eb2eb9ab36caaa0b81d1c6b36c8f5d7268c24f19e81039137e6485"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0",
+      "bytes": 14480,
+      "sha256": "7d40b02b27d449b6b26cea10ea10aafd0cce5a1e2d7859ea57f34b29fe88923f"
+    },
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+      "bytes": 755864,
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+    }
+  },
+  "helpers_reviewed_exact_prior_accepted": {
+    "run_owned.py": {
+      "resolved_path": "/home/astra/.project/Sirius/out/kerr-shared-loop-controls/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "resolved_path": "/home/astra/.project/Sirius/out/kerr-shared-loop-controls/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    }
+  },
+  "actions": {
+    "path": "out/kerr-shared-loop-controls/actions.json",
+    "bytes": 39135,
+    "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+  },
+  "limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "physical_assertion_1000ms_unchanged": true,
+  "actual_provider_mapping_required_by_owner": true,
+  "test_order": [
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "root_acceptance_required_after_each_action": "exact1 XML/zero failures/errors/skips/disabled and expected positive execution property; no following launch on nonpass",
+  "prior_software_stop": {
+    "commit": "4a7cb7f3f74b9ead89b42ae2c4eeebd8535ca014",
+    "result_path": "attestations/scientific-core/ed764546/kerr-floor-composite-source-and-software-rss-stop/files/out/kerr-floor-composite-controls/finite-result.json",
+    "completed_numerical_tests": 0,
+    "stop_reason": "diagnostic_sampled_rss_guard",
+    "XML_produced": false,
+    "numerical_verdict": null,
+    "no_unchanged_retry": true,
+    "changed_source_evaluator": "2904edbf8e454cf1498bdc72c7ebe11a7aaf7916 plus current cd99fd06 registration export; shared two-pass evaluator contains one static RK4 call site. No program size/JIT improvement inferred before actual observations."
+  },
+  "backend_executable": {
+    "path": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "bytes": 13502112,
+    "sha256": "a34ab6c95b69f7b6667842690409e634cf9b0c7381409e1e336e27da4f5d0be6"
+  },
+  "generated_alignment_receipt_current": true,
+  "generated_alignment_receipt": {
+    "path": "bin/linux-gcc/generated/sirius/alignment_receipt.json",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/generated/sirius/alignment_receipt.json",
+    "bytes": 1240,
+    "sha256": "62f7ed900df0202180c681edd24ae77472f1d3a76e8f3758bb8276fedde73ce8"
+  },
+  "build_observation_origin": {
+    "source": "root actual terminal notices, not author execution",
+    "initial_build_chunk_or_session": "56084",
+    "current_configure": "52172",
+    "strict_restage": "59120",
+    "all_closed_zero": true
+  },
+  "alignment_scope": "Generated receipt is current-source/build evidence only,qualification0/8. Backend has no staged model receipt; unused stale CLI staged receipt is outside this focused consumer closure. No CLI/render/init/readiness admission follows.",
+  "selected_registration": {
+    "captured-fp32": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    },
+    "captured-fp32comp": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    },
+    "retry-fp32": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    },
+    "retry-fp32comp": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    },
+    "retry-fp64": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    },
+    "unrepresented-stage": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    },
+    "null-projection": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    },
+    "precision-invariants": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    }
+  },
+  "ldd_output_pins": {
+    "fresh-backend-ldd.log": {
+      "resolved_path": "/home/astra/.project/Sirius/out/kerr-composite-shared-loop-checks/fresh-backend-ldd.log",
+      "bytes": 451,
+      "sha256": "830e39abfe4cac1f0dd09eb4758aeffa28ab3075c35b17647a9172cb48d71cb9"
+    },
+    "fresh-lvp-ldd.log": {
+      "resolved_path": "/home/astra/.project/Sirius/out/kerr-composite-shared-loop-checks/fresh-lvp-ldd.log",
+      "bytes": 2370,
+      "sha256": "5496d34b07cacde520f322578b2c291f16c0f8340380f43ec214515d5c587c69"
+    },
+    "fresh-python-ldd.log": {
+      "resolved_path": "/home/astra/.project/Sirius/out/kerr-composite-shared-loop-checks/fresh-python-ldd.log",
+      "bytes": 364,
+      "sha256": "8671f964f3500bf487e006de81c6607f2d1b93f4055d496bd2b29869f2c12fb9"
+    }
+  },
+  "runtime_direct_inputs": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests": {
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bytes": 13502112,
+      "sha256": "a34ab6c95b69f7b6667842690409e634cf9b0c7381409e1e336e27da4f5d0be6"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    },
+    "/usr/bin/python3.12": {
+      "resolved_path": "/usr/bin/python3.12",
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "/usr/bin/git": {
+      "resolved_path": "/usr/bin/git",
+      "bytes": 4066232,
+      "sha256": "2a8c18fbf43da9f692d75474c72bea9dfd796c260b0f3dfe456376abc3bbd668"
+    },
+    "/usr/share/vulkan/icd.d/lvp_icd.json": {
+      "resolved_path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "bytes": 135,
+      "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+    }
+  },
+  "gate_state": "ROOT PREFLIGHT PASSED; scientific execution remains held until independent final concrete-byte review. Original owner/XML/property acceptance is required after every action.",
+  "actions_pending": {
+    "resolved_path": "/home/astra/.project/Sirius/out/kerr-shared-loop-controls/actions.pending.json",
+    "bytes": 39135,
+    "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+  },
+  "root_launch_environment": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-runtime-release-v1",
+  "admitted": true,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "preflight": {
+    "bytes": 11268,
+    "sha256": "79bfe126334758c8f519deb10407556b5af3002987457612f34d43cd5fe52594"
+  },
+  "independent_runtime_admission": {
+    "bytes": 6574,
+    "sha256": "495f47f80ad45973fa1d025abcc90835df94c72faba339f542c31f4ce640a0ac"
+  },
+  "all60_current_input_pins_rechecked": true,
+  "launch_environment": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+  },
+  "root_launch_template": "LVP_JIT_OPTIMIZATION_LEVEL=0 /usr/bin/python3 -B out/kerr-shared-loop-controls/run_owned.py <ordered-label>",
+  "order": [
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "mandatory_root_acceptance_after_each_action": true,
+  "scope": "Eight finite software parity controls only, stop first nonpass; no numerical result is claimed by this release."
+}

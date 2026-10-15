@@ -1,0 +1,295 @@
+{
+  "schema": "sirius-kerr-shared-loop-controls-independent-source-review-v1",
+  "passed": true,
+  "verdict": "SOURCE_PACKET_ACCEPTABLE_PENDING_ROOT_RUNTIME_ADMISSION",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "runtime_admitted": false,
+  "tests_executed_by_reviewer": 0,
+  "blockers": [],
+  "review_scope": "Independent passive source/JSON/hash/AST and read-only Git review only; no project helper/import, compiler, ldd, CTest query, provider or test execution. Prior unchanged mature-owner reviews reused with byte-exact named Git verification.",
+  "release_pins": {
+    "source-contracts.json": {
+      "path": "out/kerr-shared-loop-controls/source-contracts.json",
+      "bytes": 11657,
+      "sha256": "d7b2ee48bc6430826deb5a0cf52b89744b0b415c5c4e357f2f1605c6368171bf"
+    },
+    "actions.pending.json": {
+      "path": "out/kerr-shared-loop-controls/actions.pending.json",
+      "bytes": 39135,
+      "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+    },
+    "readiness.pending.json": {
+      "path": "out/kerr-shared-loop-controls/readiness.pending.json",
+      "bytes": 25815,
+      "sha256": "8b8696fc200b75daa7c5580a7e8ed83cb34e5c79bb1a49a2ba08e60eb6d00362"
+    },
+    "preparation.json": {
+      "path": "out/kerr-shared-loop-controls/preparation.json",
+      "bytes": 2365,
+      "sha256": "04a5876d59eaeee8f072d0bdef7b8506f0dd6ab584f9f0fa509a67d89d015f6a"
+    },
+    "plan.pending.json": {
+      "path": "out/kerr-shared-loop-controls/plan.pending.json",
+      "bytes": 2264,
+      "sha256": "626ef36cebc0f32628865644657074040e3e11228462f4dbfd1e4f02f99ce674"
+    },
+    "compiled-size-observation.json": {
+      "path": "out/kerr-shared-loop-controls/compiled-size-observation.json",
+      "bytes": 3804,
+      "sha256": "cc4465a5caf447a52ba32a6d68bba03a8fe0b8734f4eb66f5575ff777857fa6f"
+    },
+    "inventory.json": {
+      "path": "out/kerr-shared-loop-controls/inventory.json",
+      "bytes": 986718,
+      "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+    },
+    "run_owned.py": {
+      "path": "out/kerr-shared-loop-controls/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/kerr-shared-loop-controls/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "originals/actions.json": {
+      "path": "out/kerr-shared-loop-controls/originals/actions.json",
+      "bytes": 36863,
+      "sha256": "2155cf0472b1054b4dade4e969eae16c25e473c9d9820c28c575fefb3b346f53"
+    },
+    "originals/readiness.json": {
+      "path": "out/kerr-shared-loop-controls/originals/readiness.json",
+      "bytes": 14423,
+      "sha256": "477a46e96a8b4efcd254ba8dccc5febe35e7b4247c9882f7358952d9f66fe532"
+    }
+  },
+  "helper_origin": {
+    "commit": "4a7cb7f3f74b9ead89b42ae2c4eeebd8535ca014",
+    "Git_directory": "attestations/scientific-core/ed764546/kerr-floor-composite-source-and-software-rss-stop/files/out/kerr-floor-composite-controls",
+    "both_helpers_byte_exact_named_Git": true,
+    "both_original_metadata_preimages_byte_exact_named_Git": true,
+    "runner_fully_read": true,
+    "guard_exact_reviewed_mature_bytes": true
+  },
+  "actions": {
+    "ordered_labels": [
+      "captured-fp32",
+      "captured-fp32comp",
+      "retry-fp32",
+      "retry-fp32comp",
+      "retry-fp64",
+      "unrepresented-stage",
+      "null-projection",
+      "precision-invariants"
+    ],
+    "count": 8,
+    "all_original_fields_preserved": [
+      "argv",
+      "kind",
+      "software_provider",
+      "disable_software_shader_cache",
+      "expected_exit",
+      "limits",
+      "root_required_xml"
+    ],
+    "only_changed_fields": [
+      "revision",
+      "frozen_inputs",
+      "scope"
+    ],
+    "expected_exit_integer": 0,
+    "kind": "test",
+    "software_provider": true,
+    "disable_software_shader_cache": false,
+    "provider_selection": {
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "cache": "default; inherited cache overrides refused",
+      "LVP_JIT_OPTIMIZATION_LEVEL": {
+        "required_external_value": "0",
+        "enforced_by_unchanged_helper": false,
+        "pending_commands_have_assignment": false,
+        "root_must_bind_final_readiness_and_actual_each_action_command": true
+      }
+    },
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "frozen_input_counts": [
+      47,
+      51,
+      55,
+      59,
+      63,
+      67,
+      71,
+      75
+    ],
+    "all_ancestors": {
+      "records_per_ancestor": 4,
+      "names": [
+        "owner.json",
+        "inputs-before.json",
+        "inputs-after.json",
+        "gtest.xml"
+      ],
+      "all_previous_ancestors_required": true,
+      "no_skipped_or_own_future_ancestor": true
+    },
+    "exact_eight_commands_match_plan_and_preparation": true
+  },
+  "xml_and_assertions": {
+    "each_exact_case_run_completed_tests1_zero_FESD": true,
+    "positive_properties": {
+      "captured-fp32": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      },
+      "captured-fp32comp": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      },
+      "retry-fp32": {
+        "name": "fp32_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "retry-fp32comp": {
+        "name": "fp32comp_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "retry-fp64": {
+        "name": "fp64_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "unrepresented-stage": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      },
+      "null-projection": {
+        "name": "parity_opcode_10_completed_records",
+        "value": "8"
+      },
+      "precision-invariants": {
+        "name": "fp64_evidence",
+        "value": "native_invariants_executed"
+      }
+    },
+    "fp64_unsupported_decline_is_not_execution_acceptance": true,
+    "kernel_parity_source_current_byte_exact_historical4a7": true,
+    "source_pin": {
+      "path": "tests/backend/kernel_parity_test.cpp",
+      "bytes": 129641,
+      "sha256": "4bf064bb7902dcad59050d4374051a44b9b3cdc619ec9fbb97686e222345b563"
+    },
+    "original_RunProbe_actual_submit_limit_1000ms_and_all_numerical_assertions_unchanged": true,
+    "software_zero_active_initialization_separate_from_actual_1000ms_samples": true,
+    "CTest_registered_argv_has_extra_also_run_disabled_flag": true,
+    "selected_cases_are_active_original_tests": true
+  },
+  "current_passive_joins": {
+    "pin_rows_checked": 64,
+    "unique_current_pin_paths_checked": 59,
+    "three_saved_ldd_outputs_exact_readiness_text_and_pins": true,
+    "resolved_DSO_union_count": 32,
+    "DSO_union_exact_runtime_inputs_and_all_actions": true,
+    "runtime_direct_inputs_and_helper_pins_current": true,
+    "compiled_staged_parity_pairs": 3,
+    "pairs_complete_byte_equal_and_declared_in_each_action": true,
+    "backend": {
+      "path": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bytes": 13502112,
+      "sha256": "a34ab6c95b69f7b6667842690409e634cf9b0c7381409e1e336e27da4f5d0be6"
+    },
+    "parity_pairs": [
+      {
+        "compiled": "bin/linux-gcc/kernels/parity_probe.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv",
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv",
+        "bytes": 4293556,
+        "sha256": "cc578f38f10e1ed0fc74a3738bc8d08bcd624582f5905b450d581f576708350b"
+      },
+      {
+        "compiled": "bin/linux-gcc/kernels/parity_probe_fp32comp.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv",
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv",
+        "bytes": 4297780,
+        "sha256": "748c5aae46d240a22fefc868fc227b5e3db7d13223495945d3ea25117f97abaf"
+      },
+      {
+        "compiled": "bin/linux-gcc/kernels/parity_probe_fp64.spv",
+        "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv",
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv",
+        "bytes": 4213296,
+        "sha256": "c637ef03554c751ac7c8ddc5a29f5732aec2e22c128bd51d6206e138f34931b4"
+      }
+    ],
+    "registration": {
+      "total": 1152,
+      "selected": 8,
+      "all_Mandatory": true,
+      "exact_inventory_selected_rows_match": true,
+      "original_resource_lock_and_working_directory_retained": true,
+      "no_CTest_TIMEOUT_for_selected_rows": true
+    },
+    "alignment": {
+      "current_revision": true,
+      "source_tree_clean": true,
+      "admitted_domains": 0,
+      "pending_domains": 8,
+      "ultimate_ideal_satisfied": false
+    },
+    "unused_CLI_staged_receipt_excluded": true,
+    "no_retired_live_runtime_paths": true
+  },
+  "Hoare_contract": {
+    "preconditions": [
+      "Root independently verifies completed current strict configure/build/source-governance records and final product provenance. Pending readiness build flags and owner IDs are source metadata, not independent proof of those executions.",
+      "Root materializes fresh final actions/readiness, pins their actual bytes, rechecks all current inputs and clean pushed source, and separately admits runtime. Actual actions/readiness and all eight output directories are currently absent.",
+      "Before each later launch root accepts every prior owner, exact zero-FESD XML and required positive execution property, source/input stability, owned-birth retirement and actual same-birth/session LVP observation.",
+      "Root explicitly launches each action with LVP_JIT_OPTIMIZATION_LEVEL=0 and binds that external assignment in final readiness/runtime admission; pending commands and unchanged helper do not set or enforce it. Cache remains MESA_SHADER_CACHE_DISABLE unset/default."
+    ],
+    "owner_postconditions": [
+      "Expected child0 with no stop/observer/cleanup errors, source and whole inputs unchanged, no remaining owned session members, observed saved births absent and actual LVP mapping observed."
+    ],
+    "external_acceptance_boundary": "Unchanged run_owned.py does not interpret readiness.admitted or root_required_xml and does not reject a present failed ancestor by content; receipt freezing ensures existence/stability, while root must enforce positive XML/property and stop-first-nonpass acceptance. No autonomous dispatcher or bypass claim is made.",
+    "failure": "Stop on first nonpass and preserve incomplete evidence; retain guard/deadline/pre-XML failures without numerical verdict or unchanged retry."
+  },
+  "historical_and_causal_scope": {
+    "prior_stop_commit": "4a7cb7f3f74b9ead89b42ae2c4eeebd8535ca014",
+    "prior_result_pin": {
+      "path": "attestations/scientific-core/ed764546/kerr-floor-composite-source-and-software-rss-stop/files/out/kerr-floor-composite-controls/finite-result.json",
+      "bytes": 2379,
+      "sha256": "3d1f67ca53566669a0fba9aca92e753047a5c6050f9c39963619f9ef5346a344"
+    },
+    "prior_result_exact_named_Git": true,
+    "prior_completed_numerical_tests": 0,
+    "prior_XML_produced": false,
+    "prior_reason": "diagnostic_sampled_rss_guard",
+    "prior_numerical_verdict": null,
+    "current_changed_evaluator": "Shared two-pass evaluator with one static RK4 call site, rather than unchanged failed software program.",
+    "observed_parity_module_size_reductions_percent": [
+      56.30920084582086,
+      56.28500785852299,
+      57.520543569790064
+    ],
+    "size_reduction_is_not_JIT_memory_latency_or_numerical_evidence": true
+  },
+  "limitations": [
+    "All eight current scientific outcomes remain unexecuted and unjudged.",
+    "This is a finite parity-probe source admission, not full trace/image, horizon, P1/Mandatory, science, UI, performance or release qualification.",
+    "No current provider mapping, fresh process retirement or GPU readback is inferred from source preparation.",
+    "The stage/build observations are current byte joins to root-saved records; final root runtime admission remains separate."
+  ],
+  "workspace": {
+    "tracked_tree_clean": true,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracking": "0 ahead / 0 behind",
+    "sole_worktree": true,
+    "review_sidecar_outside_pending_runtime_inputs": true,
+    "review_uncommitted_pending_root_preservation": true
+  }
+}

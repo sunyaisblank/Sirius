@@ -1,0 +1,48 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-accepted-control-v1",
+  "passed": true,
+  "case": "retry-fp32comp",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "exact_one_completed_XML_zero_FESD": true,
+  "required_positive_property": {
+    "name": "fp32comp_evidence",
+    "value": "real_adaptive_minimum_retry_controls_executed"
+  },
+  "test_seconds": "143.819",
+  "owner_seconds": 144.07525166000414,
+  "peak_sampled_aggregate_RSS_KiB": 1113020,
+  "fresh_whole_input_rows": 600,
+  "owned_child_and_controller_births_absent": true,
+  "source_and_inputs_unchanged": true,
+  "files": {
+    "out/kerr-shared-loop-controls/retry-fp32comp/gtest.xml": {
+      "bytes": 1048,
+      "sha256": "26086ef256b33f144e64d3c51c02c83bb3ea683178aac09d0f4b0cf76ee228b3"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32comp/inputs-after.json": {
+      "bytes": 143452,
+      "sha256": "de7f549f402493db361deb59e093359639b0678aacf6c7222fe5a995ee73f57e"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32comp/inputs-before.json": {
+      "bytes": 143452,
+      "sha256": "de7f549f402493db361deb59e093359639b0678aacf6c7222fe5a995ee73f57e"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32comp/owner.json": {
+      "bytes": 3050,
+      "sha256": "681a935f43b640da4388f427572e478378a6b6c0b7404460883f784d6e504fad"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32comp/samples.jsonl": {
+      "bytes": 1034808,
+      "sha256": "158dc983d62b644297ee63b183edccb8238d52ab4f6057223820baa5a7d5657b"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32comp/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32comp/stdout.log": {
+      "bytes": 1014,
+      "sha256": "0186165158a43802937feae6686a5357944ede591830e6405a89a55be13ef39d"
+    }
+  },
+  "scope": "One exact focused parity control with original assertions and guards; no fullimage/allP1/Mandatory/latency/release qualification."
+}

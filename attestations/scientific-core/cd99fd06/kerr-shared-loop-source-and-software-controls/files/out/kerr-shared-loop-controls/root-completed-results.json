@@ -1,0 +1,362 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-completed-results-v1",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "completed_utc": "2026-10-15T13:31:11.125795+00:00",
+  "sequence_terminal": true,
+  "all8_passed": false,
+  "passed_cases": 7,
+  "incomplete_cases": 1,
+  "all_saved_births_and_controllers_fresh_absent": true,
+  "all_source_and_input_pins_unchanged": true,
+  "last_final_input_rows_fresh": 616,
+  "root_preflight_file_pins_fresh": 60,
+  "cases": [
+    {
+      "case": "captured-fp32",
+      "verdict": "PASS",
+      "root_accepted": {
+        "bytes": 1969,
+        "sha256": "5113a5816a6454f02c5d9a10eb85531c19f3a794a94d5dd84a215335a5646f6d"
+      },
+      "test_seconds": "268.673",
+      "owner_seconds": 268.9656455619988,
+      "peak_sampled_aggregate_rss_kib": 3117500,
+      "minimum_sampled_available_kib": 14987836,
+      "sample_rows": 9106,
+      "before_after_input_count": 588,
+      "raw_files": {
+        "out/kerr-shared-loop-controls/captured-fp32/gtest.xml": {
+          "bytes": 954,
+          "sha256": "8ea50e7e0d266a14afa0f33f77136ac88e62b9291ac6ddb6bac5a9275cb0a61b"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32/inputs-after.json": {
+          "bytes": 140062,
+          "sha256": "e3278b671ce09e4abf8d63f7f686d9ac24d5be0900932aea94b992dce9fd0eed"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32/inputs-before.json": {
+          "bytes": 140062,
+          "sha256": "e3278b671ce09e4abf8d63f7f686d9ac24d5be0900932aea94b992dce9fd0eed"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32/owner.json": {
+          "bytes": 3057,
+          "sha256": "756784dc9a9cf54b168f73fd84f46bd6509b29ec1f602104a32fb8b4bb2c3255"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32/samples.jsonl": {
+          "bytes": 2071438,
+          "sha256": "33b4847c4da0e25e689450a3cecfa5ceacab408c200ccd560264e99ed97284de"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32/stdout.log": {
+          "bytes": 1038,
+          "sha256": "72e2c37db5e9a17c14832295c343184ac26204f35fd6186496c7cd060c97a68a"
+        }
+      }
+    },
+    {
+      "case": "captured-fp32comp",
+      "verdict": "PASS",
+      "root_accepted": {
+        "bytes": 2001,
+        "sha256": "f6798289c161f7b5fcdabc159c5b1ff97e45ddade4b05d9550e358f888c5bec3"
+      },
+      "test_seconds": "265.815",
+      "owner_seconds": 266.1128542630031,
+      "peak_sampled_aggregate_rss_kib": 3103448,
+      "minimum_sampled_available_kib": 14743320,
+      "sample_rows": 9849,
+      "before_after_input_count": 592,
+      "raw_files": {
+        "out/kerr-shared-loop-controls/captured-fp32comp/gtest.xml": {
+          "bytes": 956,
+          "sha256": "86c59fdf31c8e8e0bb3c785257f94160dee76f529ff9fa530e4f194bab709078"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32comp/inputs-after.json": {
+          "bytes": 141189,
+          "sha256": "d05084bd757892ec2dd3b07d09efbb3c57b57cde052c6bb789269684c34ad90c"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32comp/inputs-before.json": {
+          "bytes": 141189,
+          "sha256": "d05084bd757892ec2dd3b07d09efbb3c57b57cde052c6bb789269684c34ad90c"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32comp/owner.json": {
+          "bytes": 3196,
+          "sha256": "c292d2992b7d9d7077f60a7ba44a95f8e5e31bbd023183f75a772712814f697e"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32comp/samples.jsonl": {
+          "bytes": 2240459,
+          "sha256": "542c5092889336d569a3d455cb4f76132d36b340730ed93d320711ff1556e8e1"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32comp/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/kerr-shared-loop-controls/captured-fp32comp/stdout.log": {
+          "bytes": 1049,
+          "sha256": "909cb5a32ea79a06146e8ef257880da2488e0cf4cd9c97b28b74106fe8caab93"
+        }
+      }
+    },
+    {
+      "case": "retry-fp32",
+      "verdict": "PASS",
+      "root_accepted": {
+        "bytes": 1970,
+        "sha256": "35d031c9e852ee59c479b88cd8e61f7d0a3729c960875d7114cae16e6236275e"
+      },
+      "test_seconds": "162.873",
+      "owner_seconds": 163.2118447499961,
+      "peak_sampled_aggregate_rss_kib": 1111272,
+      "minimum_sampled_available_kib": 14982664,
+      "sample_rows": 4837,
+      "before_after_input_count": 596,
+      "raw_files": {
+        "out/kerr-shared-loop-controls/retry-fp32/gtest.xml": {
+          "bytes": 1040,
+          "sha256": "e89d907c89e4fb9cb1aeda9f1cedb61682c657c5899286beceb906cc8283dd7f"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32/inputs-after.json": {
+          "bytes": 142348,
+          "sha256": "54f37f8b75b82d6f11749ddfe4b7248f024f304b533f4f1b966d24e3e3d05163"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32/inputs-before.json": {
+          "bytes": 142348,
+          "sha256": "54f37f8b75b82d6f11749ddfe4b7248f024f304b533f4f1b966d24e3e3d05163"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32/owner.json": {
+          "bytes": 3164,
+          "sha256": "10f89dc5fe415b1dc2f58965adc0bd1d72b63ef9d9b30e8a589e3f488b8d866d"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32/samples.jsonl": {
+          "bytes": 1095958,
+          "sha256": "fde15ea5e238efef0f7f7b7688a4bc44a60c8ab1d5b3c2419e1cb674e9fae0dd"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32/stdout.log": {
+          "bytes": 1000,
+          "sha256": "bc219ccc52f7866ff9a327b5b56a6b7642414878cf543bec8adac53cc4bf539a"
+        }
+      }
+    },
+    {
+      "case": "retry-fp32comp",
+      "verdict": "PASS",
+      "root_accepted": {
+        "bytes": 2007,
+        "sha256": "961387aee9dea1017de496677d60076f866b84e840977e83ce26f476ba5f04ed"
+      },
+      "test_seconds": "143.819",
+      "owner_seconds": 144.07525166000414,
+      "peak_sampled_aggregate_rss_kib": 1113020,
+      "minimum_sampled_available_kib": 16005044,
+      "sample_rows": 4569,
+      "before_after_input_count": 600,
+      "raw_files": {
+        "out/kerr-shared-loop-controls/retry-fp32comp/gtest.xml": {
+          "bytes": 1048,
+          "sha256": "26086ef256b33f144e64d3c51c02c83bb3ea683178aac09d0f4b0cf76ee228b3"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32comp/inputs-after.json": {
+          "bytes": 143452,
+          "sha256": "de7f549f402493db361deb59e093359639b0678aacf6c7222fe5a995ee73f57e"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32comp/inputs-before.json": {
+          "bytes": 143452,
+          "sha256": "de7f549f402493db361deb59e093359639b0678aacf6c7222fe5a995ee73f57e"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32comp/owner.json": {
+          "bytes": 3050,
+          "sha256": "681a935f43b640da4388f427572e478378a6b6c0b7404460883f784d6e504fad"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32comp/samples.jsonl": {
+          "bytes": 1034808,
+          "sha256": "158dc983d62b644297ee63b183edccb8238d52ab4f6057223820baa5a7d5657b"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32comp/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/kerr-shared-loop-controls/retry-fp32comp/stdout.log": {
+          "bytes": 1014,
+          "sha256": "0186165158a43802937feae6686a5357944ede591830e6405a89a55be13ef39d"
+        }
+      }
+    },
+    {
+      "case": "retry-fp64",
+      "verdict": "PASS",
+      "root_accepted": {
+        "bytes": 1970,
+        "sha256": "3cb6beacbdb6618c9fdf69e717345ee91d5079b3a207f0d7511172ad62b0cba9"
+      },
+      "test_seconds": "191.79",
+      "owner_seconds": 192.08086213399656,
+      "peak_sampled_aggregate_rss_kib": 2052516,
+      "minimum_sampled_available_kib": 15677432,
+      "sample_rows": 6906,
+      "before_after_input_count": 604,
+      "raw_files": {
+        "out/kerr-shared-loop-controls/retry-fp64/gtest.xml": {
+          "bytes": 1037,
+          "sha256": "43efce3b7b17d211d6c5bd7e1ba11251efb245d230bf6658dd90f2f8183c4ef4"
+        },
+        "out/kerr-shared-loop-controls/retry-fp64/inputs-after.json": {
+          "bytes": 144588,
+          "sha256": "84874b48d004f74a298a6e1b7391d90c59ccaa14b7afd9ef9be028f38e0c166a"
+        },
+        "out/kerr-shared-loop-controls/retry-fp64/inputs-before.json": {
+          "bytes": 144588,
+          "sha256": "84874b48d004f74a298a6e1b7391d90c59ccaa14b7afd9ef9be028f38e0c166a"
+        },
+        "out/kerr-shared-loop-controls/retry-fp64/owner.json": {
+          "bytes": 3038,
+          "sha256": "776e91ffde0d1b97a7f4bb366dd128e72943651c878dafad4bfe2a103b0c227f"
+        },
+        "out/kerr-shared-loop-controls/retry-fp64/samples.jsonl": {
+          "bytes": 1569761,
+          "sha256": "a64344741313dd2117f574da39cfdce1078d42675bc8aaacd7bb248ed2e78091"
+        },
+        "out/kerr-shared-loop-controls/retry-fp64/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/kerr-shared-loop-controls/retry-fp64/stdout.log": {
+          "bytes": 1003,
+          "sha256": "a17217c8073fc10c0aaefb3a1a305a195879ab518efd82575832fab178a01748"
+        }
+      }
+    },
+    {
+      "case": "unrepresented-stage",
+      "verdict": "PASS",
+      "root_accepted": {
+        "bytes": 2018,
+        "sha256": "4b40d0ff53c38a177e2ff0289860c06c0dbc4fafeaeb6b165647e5c6b6616a5b"
+      },
+      "test_seconds": "120.317",
+      "owner_seconds": 120.52642248099437,
+      "peak_sampled_aggregate_rss_kib": 1108140,
+      "minimum_sampled_available_kib": 17613988,
+      "sample_rows": 4653,
+      "before_after_input_count": 608,
+      "raw_files": {
+        "out/kerr-shared-loop-controls/unrepresented-stage/gtest.xml": {
+          "bytes": 951,
+          "sha256": "14c16cbd9884ea82c2c6d1739d9f10f3f2f7e3205c42298adaf8fa0fc1e9bbf6"
+        },
+        "out/kerr-shared-loop-controls/unrepresented-stage/inputs-after.json": {
+          "bytes": 145692,
+          "sha256": "e5f971ea14c8df8bf240732afff4fbc4cafb6541e2a07a7298b6d01d2a86d6e8"
+        },
+        "out/kerr-shared-loop-controls/unrepresented-stage/inputs-before.json": {
+          "bytes": 145692,
+          "sha256": "e5f971ea14c8df8bf240732afff4fbc4cafb6541e2a07a7298b6d01d2a86d6e8"
+        },
+        "out/kerr-shared-loop-controls/unrepresented-stage/owner.json": {
+          "bytes": 3067,
+          "sha256": "4bb719c88efc77c04b05e0ada08007771115dfadb2fb3067648445d1128f5502"
+        },
+        "out/kerr-shared-loop-controls/unrepresented-stage/samples.jsonl": {
+          "bytes": 1053589,
+          "sha256": "e179ac33d6c845374a6716de35bd1da56c2377cf87c3f87824d72bca57395ee9"
+        },
+        "out/kerr-shared-loop-controls/unrepresented-stage/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/kerr-shared-loop-controls/unrepresented-stage/stdout.log": {
+          "bytes": 1031,
+          "sha256": "12029583a9ad9fafa3a2138b14b59d0355970e35c4bcaeb274bbfa745d082f16"
+        }
+      }
+    },
+    {
+      "case": "null-projection",
+      "verdict": "PASS",
+      "root_accepted": {
+        "bytes": 1986,
+        "sha256": "0d5f8ec7c76d542edbc34558355c218314981504bd07a4f0e0bd56ec9ba3952a"
+      },
+      "test_seconds": "164.17",
+      "owner_seconds": 164.38966149098997,
+      "peak_sampled_aggregate_rss_kib": 1111440,
+      "minimum_sampled_available_kib": 15771564,
+      "sample_rows": 5491,
+      "before_after_input_count": 612,
+      "raw_files": {
+        "out/kerr-shared-loop-controls/null-projection/gtest.xml": {
+          "bytes": 949,
+          "sha256": "4232d484e09483d3b249202228431f8eef136a14a42b8cd8ddc5db5b42140569"
+        },
+        "out/kerr-shared-loop-controls/null-projection/inputs-after.json": {
+          "bytes": 146867,
+          "sha256": "0fedb1fa643dcdc6a4192cbc6306a5c8b0cd57142e7dfa71d06cf893bcd78067"
+        },
+        "out/kerr-shared-loop-controls/null-projection/inputs-before.json": {
+          "bytes": 146867,
+          "sha256": "0fedb1fa643dcdc6a4192cbc6306a5c8b0cd57142e7dfa71d06cf893bcd78067"
+        },
+        "out/kerr-shared-loop-controls/null-projection/owner.json": {
+          "bytes": 3055,
+          "sha256": "b6c48ae1ffb917f99818fe0acf0464ffc762aa93f3d04dd0979c5574e014554d"
+        },
+        "out/kerr-shared-loop-controls/null-projection/samples.jsonl": {
+          "bytes": 1243899,
+          "sha256": "70fd1ccd58b63210b1bc15cd22fb7330745f79fd8773b22dcc8bfd01bd7753a9"
+        },
+        "out/kerr-shared-loop-controls/null-projection/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/kerr-shared-loop-controls/null-projection/stdout.log": {
+          "bytes": 1023,
+          "sha256": "ca2c69f5a4cd0a97d2292e05d81dfc2083a02503fad0bd61c6137d0b04d23d3b"
+        }
+      }
+    },
+    {
+      "case": "precision-invariants",
+      "verdict": "INCOMPLETE_DIAGNOSTIC_TIMEOUT",
+      "final_XML_exists": false,
+      "numerical_verdict": null,
+      "unchanged_retry_authorized": false,
+      "owner_seconds": 300.34497024299344,
+      "peak_sampled_aggregate_rss_kib": 1340860,
+      "minimum_sampled_available_kib": 14896272,
+      "sample_rows": 11203,
+      "before_after_input_count": 616,
+      "raw_files": {
+        "out/kerr-shared-loop-controls/precision-invariants/inputs-after.json": {
+          "bytes": 148010,
+          "sha256": "d24374e76776e681211e37530192fec0dc22f95ede40ddea6bb213523049a5c4"
+        },
+        "out/kerr-shared-loop-controls/precision-invariants/inputs-before.json": {
+          "bytes": 148010,
+          "sha256": "d24374e76776e681211e37530192fec0dc22f95ede40ddea6bb213523049a5c4"
+        },
+        "out/kerr-shared-loop-controls/precision-invariants/owner.json": {
+          "bytes": 2620,
+          "sha256": "c4a90a45ac35a4d082b13954cb696c79a767c4a971da6e2ec763844279653813"
+        },
+        "out/kerr-shared-loop-controls/precision-invariants/samples.jsonl": {
+          "bytes": 2549858,
+          "sha256": "a25fe7122744fdbfd7b150fc0284e9dec1edb4812a165305ebe52582768f1b9b"
+        },
+        "out/kerr-shared-loop-controls/precision-invariants/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/kerr-shared-loop-controls/precision-invariants/stdout.log": {
+          "bytes": 1112,
+          "sha256": "0a2f4db3a5d8f141abd98148822ad6d62c0f7417ec5c248d0a8625eac810944e"
+        }
+      }
+    }
+  ],
+  "scope": "Seven exact finite software parity controls PASS with original assertions/default cache/JIT0 and original diagnosticguards. Last precision invariants incomplete after300s diagnostic stop, no finalXML/numericalverdict. No all8/P1all/image/fullMandatory/coldframe/performance/fullscience/release claim."
+}

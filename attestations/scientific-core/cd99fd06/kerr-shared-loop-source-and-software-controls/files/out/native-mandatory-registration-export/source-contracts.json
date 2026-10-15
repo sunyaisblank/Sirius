@@ -1,0 +1,158 @@
+{
+  "schema": "sirius-windows-mandatory-registration-export-source-contract-v1",
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "status": "SOURCE_COPY_CANDIDATE_ONLY_UNAPPLIED_UNEXECUTED",
+  "scope": "Extend the existing Windows dispatch-only diagnostic artifact; no new job, configure, build, test discovery invocation, test run, qualification producer, promotion or compiler pipeline.",
+  "source_pins": {
+    ".github/workflows/ci.yml": {
+      "bytes": 40264,
+      "sha256": "441ce5a09b5a990f8d77f0bfbe1e807aeb7c1b3c9baf15951af4311eb9743a7d"
+    },
+    "scripts/governance/build_policy.py": {
+      "bytes": 81100,
+      "sha256": "ef9af204253e834eff84e868f2abc3523b9e4d5a3a4af5208ec9008ca018258a"
+    },
+    "tests/CMakeLists.txt": {
+      "bytes": 10200,
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    "cmake/sirius_testing.cmake": {
+      "bytes": 12349,
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    "cmake/sirius_install.cmake": {
+      "bytes": 1765,
+      "sha256": "f9a1f712b6fde76a9a7720f11c1a4b30883134d2dab1acf36d044360cf7f1b3c"
+    },
+    "cmake/verify_sirius_install.cmake.in": {
+      "bytes": 4778,
+      "sha256": "d848bbf7caf79b8bdd4bf3bb62bd36a84094a9b8b944fbc38ef363622bdcaaa4"
+    },
+    "scripts/verify-attestation.py": {
+      "bytes": 170199,
+      "sha256": "5e2e70c6f6e15645e91090a300de0c7c77dab60f6390a7b871cfc91c9973be01"
+    },
+    "CMakePresets.json": {
+      "bytes": 5002,
+      "sha256": "605044b054a91099cd71975fa73f4789922759c778f28ef18667aec9c9747270"
+    },
+    "tests/labels/CTestLabels.cmake": {
+      "bytes": 78632,
+      "sha256": "5e990df5d32d5c1d7a1c02f273fdda3c39eb184347c0e04889b1c1692429416b"
+    },
+    "tests/operational/evidence_governance.cmake.in": {
+      "bytes": 2619,
+      "sha256": "300452fb4e3497e3b35034038ba6d089243d0259ddad74e7f9649b9b1fc07bab"
+    },
+    "tests/operational/alignment_receipt_integrity.cmake.in": {
+      "bytes": 9978,
+      "sha256": "8d71cc2ef4e291d40686436eb4fdc1803eda0108c3767ae70269b4a37e598df5"
+    },
+    "tests/operational/volume_initialization.cmake.in": {
+      "bytes": 11883,
+      "sha256": "8ae4df3626a57f2cf2bf8990ac00301055c60c9432d1a6af74de0a97fc576a4f"
+    },
+    "tests/operational/required_skip_rejection.cmake": {
+      "bytes": 1412,
+      "sha256": "95a27885c9c82e42ba76ac6fdebb6c8476c3295d8ba866b046bbb09f1bfbb611"
+    },
+    "tests/operational/vulkan_runtime_profile.cmake": {
+      "bytes": 990,
+      "sha256": "e39e8aee8f82b4f1934a42542cd5b743822bed02f6ed15e1a3eaa6185bc0f8ea"
+    },
+    "tests/operational/p1_burn_in.cmake": {
+      "bytes": 1163,
+      "sha256": "a76ea8ea059ede93a7be103d6b066cecaa60c5af2069ee39a9a0939036158d0f"
+    }
+  },
+  "candidate_pins": {
+    "candidate/.github/workflows/ci.yml": {
+      "bytes": 44892,
+      "sha256": "c770c1d427cb24bd15051ab121d9ea08389a592cbcd1a7c36d048c0b790280f8"
+    },
+    "candidate/scripts/governance/build_policy.py": {
+      "bytes": 85728,
+      "sha256": "3aceaf678f680bc8698af4b4d2713d64491f895b98d93ea4b474c2c258f262b3"
+    },
+    "candidate.patch": {
+      "bytes": 13716,
+      "sha256": "d7d1852366ceb64be0c45cc69cfce69fa49cc7215cb610c9ebc1c18567a0b86a"
+    }
+  },
+  "existing_native_product_export": {
+    "source": "scripts/verify-attestation.py:record_build",
+    "reused": "7 executables,9 qualification product/alignment records,20 test inputs and existing native inventory/gate receipts; no modification or synthetic gate",
+    "scope": "Actual final native-build artifact remains separately required; diagnostic export alone cannot establish its acceptance."
+  },
+  "new_artifact_closure": {
+    "recursive_build_tree_names": [
+      "CTestTestfile.cmake",
+      "*_tests.cmake",
+      "*_include.cmake",
+      "*_tests-<config>.cmake",
+      "*_include-<config>.cmake",
+      "cmake_install.cmake"
+    ],
+    "configured_scripts": [
+      "bin/windows-msvc/tests/evidence_governance.cmake",
+      "bin/windows-msvc/tests/alignment_receipt_integrity.cmake",
+      "bin/windows-msvc/tests/volume_initialization.cmake",
+      "bin/windows-msvc/verify_sirius_install.cmake"
+    ],
+    "source_scripts": [
+      "tests/operational/required_skip_rejection.cmake",
+      "tests/operational/vulkan_runtime_profile.cmake",
+      "tests/operational/p1_burn_in.cmake"
+    ],
+    "saved_inventory": "bin/windows-msvc/tests/source-governance-ctest.json",
+    "already_exported": "CMakeCache.txt,compiler metadata,alignment receipt,CLI/backend staged resources",
+    "metadata": "Absolute original source/build/CMake module roots and actual CMake/CTest/Python executable path,bytes,SHA256; exact source-relative\u2192artifact copy manifest and original absolute source paths."
+  },
+  "static_checks": {
+    "workflow_inverse_exact": true,
+    "policy_AST_unchanged_except_two_exact_export_constants": true,
+    "workflow_and_policy_step_literals_equal": true,
+    "new_step_count": 0,
+    "registration_or_timeout_source_changed": false,
+    "policy_predicate_or_negative_fixture_changed": false
+  },
+  "required_later_admission": [
+    "Root integrates only after current native workload/evidence is terminal; tracked source and active experiment inputs remain unchanged now.",
+    "Existing SourceGovernance/build-policy self-tests must pass on the integrated source, including unchanged negative export fixtures; this source preparation did not execute them.",
+    "Actual CI export must have source/build/compiler/native-product provenance matching that run. Copy hashes and source revision must agree with native-build product receipts; no diagnostic-to-native-gate promotion.",
+    "Use the exact committed source checkout and existing exported7exe/9products/20test inputs and staged resources. Do not rerun configure, generate replacement registrations, rediscover tests, or rebuild MSVC to fill missing files.",
+    "For relocation, admit only explicit old\u2192new absolute source/build/tool root substitutions, with per-file preimage hashes and inverse restoration; copy all reachable CTest and cmake_install include/subdirs recipes. Fail on missing or unclassified absolute paths.",
+    "Compare the entire actual configured test inventory (currently1152names) and ordered commands/working directories/properties/labels/resource locks/timeouts after only those root substitutions; preserve original filters, skip refusal, RUN_SERIAL, physical1000ms assertions, CTest300/600/28800s deadlines, and original install script commands.",
+    "CMakeCache and exported metadata record the original tool locations. Portable b0f1abe tool packages are available separately; path substitution requires explicit compatible-tool admission, not inferred identical binaries or reproduction.",
+    "Strict qualification install still requires a real matching completed Mandatory receipt; preserve its pre-gate expected refusal and independent verifier/runtime initialisation. No fake receipt or source revision rewrite."
+  ],
+  "known_limits": [
+    "No Windows export has executed for this candidate. Actual recursive file count/root values are future CI outputs; local Linux generated trees were inspected only to ground CMake include/install structure.",
+    "Export metadata is prerequisite evidence, not a relocation implementation or completeness/runtime admission. Compiler, CMake/CTest/Python tools, physical provider and Mandatory outcomes remain independently bound."
+  ],
+  "executed": {
+    "authored_helper": false,
+    "policy_parser": false,
+    "configure": false,
+    "build": false,
+    "compiler": false,
+    "ctest": false,
+    "native_provider": false,
+    "CI_or_API": false
+  },
+  "CMake_primary_authority": {
+    "archive_commit": "b0f1abe12382200cc627739f4de7ffc940b93421",
+    "member": "cmake-3.31.6-windows-x86_64/share/cmake-3.31/Modules/GoogleTest.cmake",
+    "bytes": 32090,
+    "sha256": "05a3bef3310dd23877be04b8b89b729501b74bee3c403d9945422418b1b9d79c",
+    "loci": "GoogleTest.cmake:601-604,661-692 actual POST_BUILD discovery include/tests naming; PRE_TEST config variants preserved by export selector but not newly enabled.",
+    "scope": "Read existing preserved ZIP member only; no tool/native/PowerShell execution."
+  },
+  "source_loci": {
+    "registration": "tests/CMakeLists.txt:33-53,63-244 and tests/{core,oracle,backend,app,render}/CMakeLists.txt gtest_discover_tests",
+    "configured_operations": "tests/CMakeLists.txt:63,152,172 configure_file calls; source-only required_skip_rejection/vulkan_runtime_profile/p1_burn_in registrations at206-244",
+    "install": "cmake/sirius_install.cmake:3-32 and cmake/verify_sirius_install.cmake.in; recursive generated cmake_install include tree",
+    "existing_product_export": "scripts/verify-attestation.py:3076 record_build and copy_qualification_test_inputs:129",
+    "workflow_policy": "scripts/governance/build_policy.py:196-270 exact stage/upload literals and integration_boundary_errors:488-500; candidate changes only those two constants."
+  }
+}

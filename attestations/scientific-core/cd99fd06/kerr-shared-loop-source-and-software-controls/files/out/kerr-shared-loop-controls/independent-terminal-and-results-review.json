@@ -1,0 +1,218 @@
+{
+  "schema": "sirius-kerr-shared-loop-independent-terminal-and-results-review-v1",
+  "passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "finite_controls_passed": 7,
+  "finite_controls_incomplete": 1,
+  "all_eight_passed": false,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "scope": "Independent of root operation/current Linux packet author; prior native preparation/source and numerical review roles. Passive terminal evidence only.",
+  "pins": {
+    "actions.json": {
+      "bytes": 39135,
+      "sha256": "f60a6aecbccd9354f860f2493aa53b768b6f8c6bbd86bf667ec2ba71f4ae8920"
+    },
+    "readiness.json": {
+      "bytes": 26673,
+      "sha256": "2541882d7a1383339fe136de7d512196c3074f1000ebe84a8e5410b73bcb03b9"
+    },
+    "root-preflight.json": {
+      "bytes": 11268,
+      "sha256": "79bfe126334758c8f519deb10407556b5af3002987457612f34d43cd5fe52594"
+    },
+    "independent-runtime-admission.json": {
+      "bytes": 6574,
+      "sha256": "495f47f80ad45973fa1d025abcc90835df94c72faba339f542c31f4ce640a0ac"
+    },
+    "precision-invariants/owner.json": {
+      "bytes": 2620,
+      "sha256": "c4a90a45ac35a4d082b13954cb696c79a767c4a971da6e2ec763844279653813"
+    },
+    "precision-invariants/inputs-before.json": {
+      "bytes": 148010,
+      "sha256": "d24374e76776e681211e37530192fec0dc22f95ede40ddea6bb213523049a5c4"
+    },
+    "precision-invariants/inputs-after.json": {
+      "bytes": 148010,
+      "sha256": "d24374e76776e681211e37530192fec0dc22f95ede40ddea6bb213523049a5c4"
+    },
+    "precision-invariants/stdout.log": {
+      "bytes": 1112,
+      "sha256": "0a2f4db3a5d8f141abd98148822ad6d62c0f7417ec5c248d0a8625eac810944e"
+    },
+    "precision-invariants/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "precision-invariants/samples.jsonl": {
+      "bytes": 2549858,
+      "sha256": "a25fe7122744fdbfd7b150fc0284e9dec1edb4812a165305ebe52582768f1b9b"
+    }
+  },
+  "seven_passed_results": [
+    {
+      "case": "captured-fp32",
+      "verdict": "PASS",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "test_seconds": "268.673",
+      "owner_seconds": 268.9656455619988,
+      "peak_aggregate_RSS_KiB": 3117500,
+      "samples": 9106,
+      "required_positive_property": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      }
+    },
+    {
+      "case": "captured-fp32comp",
+      "verdict": "PASS",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "test_seconds": "265.815",
+      "owner_seconds": 266.1128542630031,
+      "peak_aggregate_RSS_KiB": 3103448,
+      "samples": 9849,
+      "required_positive_property": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      }
+    },
+    {
+      "case": "retry-fp32",
+      "verdict": "PASS",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "test_seconds": "162.873",
+      "owner_seconds": 163.2118447499961,
+      "peak_aggregate_RSS_KiB": 1111272,
+      "samples": 4837,
+      "required_positive_property": {
+        "name": "fp32_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      }
+    },
+    {
+      "case": "retry-fp32comp",
+      "verdict": "PASS",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "test_seconds": "143.819",
+      "owner_seconds": 144.07525166000414,
+      "peak_aggregate_RSS_KiB": 1113020,
+      "samples": 4569,
+      "required_positive_property": {
+        "name": "fp32comp_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      }
+    },
+    {
+      "case": "retry-fp64",
+      "verdict": "PASS",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "test_seconds": "191.79",
+      "owner_seconds": 192.08086213399656,
+      "peak_aggregate_RSS_KiB": 2052516,
+      "samples": 6906,
+      "required_positive_property": {
+        "name": "fp64_evidence",
+        "value": "real_adaptive_minimum_retry_controls_executed"
+      }
+    },
+    {
+      "case": "unrepresented-stage",
+      "verdict": "PASS",
+      "test": "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+      "test_seconds": "120.317",
+      "owner_seconds": 120.52642248099437,
+      "peak_aggregate_RSS_KiB": 1108140,
+      "samples": 4653,
+      "required_positive_property": {
+        "name": "parity_opcode_8_completed_records",
+        "value": "1"
+      }
+    },
+    {
+      "case": "null-projection",
+      "verdict": "PASS",
+      "test": "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+      "test_seconds": "164.17",
+      "owner_seconds": 164.38966149098997,
+      "peak_aggregate_RSS_KiB": 1111440,
+      "samples": 5491,
+      "required_positive_property": {
+        "name": "parity_opcode_10_completed_records",
+        "value": "8"
+      }
+    }
+  ],
+  "root_acceptance_pins": {
+    "captured-fp32": {
+      "bytes": 1969,
+      "sha256": "5113a5816a6454f02c5d9a10eb85531c19f3a794a94d5dd84a215335a5646f6d"
+    },
+    "captured-fp32comp": {
+      "bytes": 2001,
+      "sha256": "f6798289c161f7b5fcdabc159c5b1ff97e45ddade4b05d9550e358f888c5bec3"
+    },
+    "retry-fp32": {
+      "bytes": 1970,
+      "sha256": "35d031c9e852ee59c479b88cd8e61f7d0a3729c960875d7114cae16e6236275e"
+    },
+    "retry-fp32comp": {
+      "bytes": 2007,
+      "sha256": "961387aee9dea1017de496677d60076f866b84e840977e83ce26f476ba5f04ed"
+    },
+    "retry-fp64": {
+      "bytes": 1970,
+      "sha256": "3cb6beacbdb6618c9fdf69e717345ee91d5079b3a207f0d7511172ad62b0cba9"
+    },
+    "unrepresented-stage": {
+      "bytes": 2018,
+      "sha256": "4b40d0ff53c38a177e2ff0289860c06c0dbc4fafeaeb6b165647e5c6b6616a5b"
+    },
+    "null-projection": {
+      "bytes": 1986,
+      "sha256": "0d5f8ec7c76d542edbc34558355c218314981504bd07a4f0e0bd56ec9ba3952a"
+    }
+  },
+  "final_attempt": {
+    "case": "precision-invariants",
+    "test": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+    "verdict": "INCOMPLETE_DIAGNOSTIC_TIMEOUT",
+    "owner_status": "terminal",
+    "child_exit": -15,
+    "stop_reason": "diagnostic_timeout",
+    "wall_seconds": 300.34497024299344,
+    "peak_aggregate_RSS_KiB": 1340860,
+    "minimum_sampled_available_KiB": 14896272,
+    "samples": 11203,
+    "last_sample_elapsed_seconds": 300.0205837669928,
+    "XML_present": false,
+    "whole_numerical_verdict_available": false,
+    "root_positive_acceptance_present": false,
+    "stdout_observation": "Two completed opcode6 single-record submissions; two printed initialization pipeline_setup_ms151379/139822. No finaltest/rung success or final phase/allocation cause inferred."
+  },
+  "verified": {
+    "all_eight_source_and_whole_inputs_unchanged": true,
+    "final_rich_input_keys_freshly_checked": 616,
+    "all_before_after_raw_rows": 9632,
+    "root_preflight_physical_pins_freshly_checked": 60,
+    "all_samples_read": 56614,
+    "current_boot_matches_all_owners": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "unique_observed_child_and_controller_births_freshly_absent": 16,
+    "provider": "Every saved mapping is actual owned child/session/start, LVPpath/dev/inode matches current pinned library. Loader/LLVM bytepins are frozen input evidence, not extra live module capture.",
+    "limits": "All8 original external300s/aggregate4194304KiB/reserve2097152KiB, LVPdevice0/defaultcache and original1000ms assertions unchanged. Seven XMLcases run/completed zeroFESD and positive properties/rootrawpins match. No cleanup errors/owned remainers/adopted children.",
+    "sequence": "Exact eight ordered attempts; later maps retain four exact input/owner/XML seals per earlier passedcase. Final stop has no positive XML or acceptance; no retry/guard raise."
+  },
+  "limits": [
+    "Seven finite parity passes only. Final original P1precision test incomplete; two stdout completions cannot qualify allrungs or complete numerical assertions.",
+    "No all8, fullimage, P1estate/allrung, Mandatory/science/release, performance/cache benefit or precise timeout phase/cause claim. External diagnostic timeout is distinct from a scientific assertion failure; native sequence admission remains a separate root decision.",
+    "No project helper/parser/provider/test/CLI/network/signal execution by reviewer, no tracked/frozen/compiled or other packet input mutation. Only stdlib reads/hash/JSON/XML/proc and Git ref-file reads; root retains preservation/retirement."
+  ],
+  "source_tracking": {
+    "branch_ref": "refs/heads/development/minimum-step-floor-2026-10-15",
+    "current_HEAD_and_origin_tracking_ref": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+    "saved_source_clean": true,
+    "all_current_frozen_source_bytes_match": true
+  },
+  "blockers": []
+}

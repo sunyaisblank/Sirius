@@ -1,0 +1,48 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-accepted-control-v1",
+  "passed": true,
+  "case": "retry-fp32",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "exact_one_completed_XML_zero_FESD": true,
+  "required_positive_property": {
+    "name": "fp32_evidence",
+    "value": "real_adaptive_minimum_retry_controls_executed"
+  },
+  "test_seconds": "162.873",
+  "owner_seconds": 163.2118447499961,
+  "peak_sampled_aggregate_RSS_KiB": 1111272,
+  "fresh_whole_input_rows": 596,
+  "owned_child_and_controller_births_absent": true,
+  "source_and_inputs_unchanged": true,
+  "files": {
+    "out/kerr-shared-loop-controls/retry-fp32/gtest.xml": {
+      "bytes": 1040,
+      "sha256": "e89d907c89e4fb9cb1aeda9f1cedb61682c657c5899286beceb906cc8283dd7f"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32/inputs-after.json": {
+      "bytes": 142348,
+      "sha256": "54f37f8b75b82d6f11749ddfe4b7248f024f304b533f4f1b966d24e3e3d05163"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32/inputs-before.json": {
+      "bytes": 142348,
+      "sha256": "54f37f8b75b82d6f11749ddfe4b7248f024f304b533f4f1b966d24e3e3d05163"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32/owner.json": {
+      "bytes": 3164,
+      "sha256": "10f89dc5fe415b1dc2f58965adc0bd1d72b63ef9d9b30e8a589e3f488b8d866d"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32/samples.jsonl": {
+      "bytes": 1095958,
+      "sha256": "fde15ea5e238efef0f7f7b7688a4bc44a60c8ab1d5b3c2419e1cb674e9fae0dd"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-shared-loop-controls/retry-fp32/stdout.log": {
+      "bytes": 1000,
+      "sha256": "bc219ccc52f7866ff9a327b5b56a6b7642414878cf543bec8adac53cc4bf539a"
+    }
+  },
+  "scope": "One exact focused parity control with original assertions and guards; no fullimage/allP1/Mandatory/latency/release qualification."
+}

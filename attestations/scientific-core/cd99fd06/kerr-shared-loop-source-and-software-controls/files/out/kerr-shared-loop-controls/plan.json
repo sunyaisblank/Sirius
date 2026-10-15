@@ -1,0 +1,56 @@
+{
+  "schema": "sirius-kerr-shared-loop-focused-plan-v1",
+  "admitted": true,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "order": [
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "commands": [
+    "LVP_JIT_OPTIMIZATION_LEVEL=0 python3 -B out/kerr-shared-loop-controls/run_owned.py captured-fp32",
+    "LVP_JIT_OPTIMIZATION_LEVEL=0 python3 -B out/kerr-shared-loop-controls/run_owned.py captured-fp32comp",
+    "LVP_JIT_OPTIMIZATION_LEVEL=0 python3 -B out/kerr-shared-loop-controls/run_owned.py retry-fp32",
+    "LVP_JIT_OPTIMIZATION_LEVEL=0 python3 -B out/kerr-shared-loop-controls/run_owned.py retry-fp32comp",
+    "LVP_JIT_OPTIMIZATION_LEVEL=0 python3 -B out/kerr-shared-loop-controls/run_owned.py retry-fp64",
+    "LVP_JIT_OPTIMIZATION_LEVEL=0 python3 -B out/kerr-shared-loop-controls/run_owned.py unrepresented-stage",
+    "LVP_JIT_OPTIMIZATION_LEVEL=0 python3 -B out/kerr-shared-loop-controls/run_owned.py null-projection",
+    "LVP_JIT_OPTIMIZATION_LEVEL=0 python3 -B out/kerr-shared-loop-controls/run_owned.py precision-invariants"
+  ],
+  "kind": "test",
+  "expected_exit": 0,
+  "limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "software_provider": {
+    "icd": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "device": "0",
+    "cache": "default; no MESA_SHADER_CACHE_DISABLE override"
+  },
+  "before_first_action": "Root must finish all fresh preflight checks, materialize final actions.json/readiness.json, independently review final bytes and admit runtime. Mature owner is unchanged and has no new admission parser.",
+  "before_each_following_action": "Root must accept preceding owner and exact XML/property, whole source/input stability, provider mapping, cleanup and saved-birth absence. Do not launch later action after any nonpass.",
+  "actual_action_and_output_files_required_absent": [
+    "actions.json",
+    "readiness.json",
+    "captured-fp32",
+    "captured-fp32comp",
+    "retry-fp32",
+    "retry-fp32comp",
+    "retry-fp64",
+    "unrepresented-stage",
+    "null-projection",
+    "precision-invariants"
+  ],
+  "scope": "Unadmitted source-only adaptation. Eight ordered focused controls only; no source build/current product snapshot or provider execution by author.",
+  "inventory_role": "Already produced root fresh CTest metadata copy, not a numerical test output.",
+  "root_launch_environment": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+  }
+}

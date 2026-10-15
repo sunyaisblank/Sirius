@@ -1,0 +1,15 @@
+Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
+[ParityProbe] phase=initialization opcode=8 offset=0 count=0 submit_wait_ms=35.4811 pipeline_setup_ms=120201 total_ms=120236 success=1
+[ParityProbe] phase=actual opcode=8 offset=0 count=1 submit_wait_ms=0.457738 pipeline_setup_ms=0.00494 total_ms=0.508285 success=1
+[ParityProbe] completed opcode=8 records=1 submissions=1 allocated_bytes=336
+[       OK ] KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation (120317 ms)
+[----------] 1 test from KernelParity (120317 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (120317 ms total)
+[  PASSED  ] 1 test.

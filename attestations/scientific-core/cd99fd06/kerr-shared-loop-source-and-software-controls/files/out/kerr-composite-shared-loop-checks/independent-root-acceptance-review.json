@@ -1,0 +1,107 @@
+{
+  "schema": "sirius-kerr-shared-loop-independent-root-acceptance-source-review-v1",
+  "passed": true,
+  "verdict": "ROOT_POST_ACCEPTANCE_CHECKPOINT_SOURCE_ACCEPTABLE",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "blockers": [],
+  "scope": "Passive source/AST/JSON/XML/hash/Git and two saved-birth proc reads only. Root postprocessing/checkpoint verifier, not a new scientific runner. No helper/import/program/provider/test execution. Live compensated outputs were not read.",
+  "pins": {
+    "script": {
+      "path": "out/kerr-composite-shared-loop-checks/root_acceptance.py",
+      "bytes": 3755,
+      "sha256": "0b01313e0adabb4511624758c7de3f631d270e59e4d6c121605f0789c4646ca4"
+    },
+    "reviewed_runtime_packet": {
+      "path": "out/kerr-shared-loop-controls/independent-runtime-admission.json",
+      "bytes": 6574,
+      "sha256": "495f47f80ad45973fa1d025abcc90835df94c72faba339f542c31f4ce640a0ac"
+    },
+    "root_preflight": {
+      "path": "out/kerr-shared-loop-controls/root-preflight.json",
+      "bytes": 11268,
+      "sha256": "79bfe126334758c8f519deb10407556b5af3002987457612f34d43cd5fe52594"
+    },
+    "closed_first_checkpoint": {
+      "path": "out/kerr-shared-loop-controls/root-accepted-captured-fp32.json",
+      "bytes": 1969,
+      "sha256": "5113a5816a6454f02c5d9a10eb85531c19f3a794a94d5dd84a215335a5646f6d"
+    },
+    "closed_first_launch_environment": {
+      "path": "out/kerr-shared-loop-controls/root-observed-first-launch-environment.json",
+      "bytes": 1038,
+      "sha256": "3a51b83d5c6da21689bdcb052ecd18a5e16638e167ee2c45154b36b786eada59"
+    }
+  },
+  "source_contract": {
+    "every_preceding_action_checkpoint_required": true,
+    "every_saved_prior_rawfile_pin_rechecked_before_acceptance": true,
+    "root_preflight_static_input_rows_rehashed": 60,
+    "actual_before_and_after_input_objects_must_equal": true,
+    "all_actual_whole_input_pins_and_recorded_resolved_paths_rechecked": true,
+    "owner_requires": "terminal/passed/child0/no stop/no cleanup errors/no remaining owned session; exact revision clean, source and whole inputs unchanged",
+    "fresh_birth_requirements": "Every recorded owned birth and controller birth absent, normalizing saved ticks to strings.",
+    "actual_provider_requirements": "Nonempty recorded LVP maps tied to actual child PID/start ticks and owned session; mature runner performs the live same-birth/session observation.",
+    "unchanged_outer_thresholds": {
+      "wall_seconds_less_than": 300,
+      "aggregate_sampled_rss_kib_at_most": 4194304,
+      "available_reserve_kib_at_least": 2097152
+    },
+    "XML_requirements": "Exactly1 testcase/root count1, exact suite/name, run/completed, zero failure/error/skip/disabled attributes and no failure/error/skipped elements, exact required positive execution property.",
+    "source_rechecked_after_all_evidence": true,
+    "publish_only_after_all_checks": "Hashes every closed case file, then refuses an existing root-accepted checkpoint before writing passed=true. No child launch, retry, test setting or numerical threshold change.",
+    "root_checkpoints_and_postprocessor_outside_owner_inputs": true
+  },
+  "bounded_closed_first_case_review": {
+    "label": "captured-fp32",
+    "owner_passed": true,
+    "child_exit": 0,
+    "stop_reason": null,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "before_after_equal_rows": 588,
+    "raw_current_file_pins_checked": 7,
+    "exact_checkpoint_file_set_equal": true,
+    "owner_argv_and_limits_equal_admitted_action": true,
+    "XML": "1 exact original testcase/run/completed/zeroFESD; parity_opcode_8_completed_records=1",
+    "test_seconds": "268.673",
+    "owner_seconds": 268.9656455619988,
+    "samples_parsed": 9106,
+    "maximum_aggregate_rss_kib": 3117500,
+    "minimum_available_kib": 14987836,
+    "sample_max_min_equal_owner": true,
+    "same_boot_fresh_absent_births": [
+      {
+        "pid": 791551,
+        "saved_start_ticks": "11799699"
+      },
+      {
+        "pid": 791545,
+        "saved_start_ticks": "11799582"
+      }
+    ],
+    "actual_LVP_map_same_child_start_and_session": true,
+    "first_launch_observed_settings": {
+      "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "MESA_SHADER_CACHE_DISABLE": null
+    },
+    "environment_scope": "Only first child, same saved ticks before/after; not an eight-case environment observation.",
+    "optional_metadata_observer_errors": "Two recorded failed optional readers (integer/string tick comparison and indentation parse) preceded the corrected observation; no scientific owner/helper/input mutation or signal.",
+    "full588_current_input_rehash_not_repeated_by_reviewer_while_next_case_live": true,
+    "root_actual_full_input_recheck_claim_is_distinct_from_this_bounded_raw_output_review": true
+  },
+  "Hoare_preconditions_and_limits": [
+    "Root preserves this reviewed script hash, current trusted ordered actions and root-preflight records. Run normal non-optimized Python with assertions enabled; this is root-owned checkpoint storage rather than a signed adversarial receipt service.",
+    "Root explicitly launches all8 with LVP_JIT_OPTIMIZATION_LEVEL=0/defaultcache as separately admitted. The postprocessor does not itself observe that environment for future cases; first-child observation must not be generalized.",
+    "Accept and preserve each preceding checkpoint before the next ordered action; stop first nonpass and retain candid failed/incomplete evidence.",
+    "Provider, source, raw map and sample semantics derive from the unchanged mature owner; no Windows held-handle or global all-process-absence claim is made by this Linux checkpoint.",
+    "Only the closed first focused parity case is presently reviewed here. No compensated/future case result, full trace/image, raw GPU buffer, P1all, Mandatory, science estate, performance, UI or release qualification is inferred."
+  ],
+  "workspace": {
+    "tracked_source_clean": true,
+    "committed_pushed": "0 ahead / 0 behind",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "review_sidecar_uncommitted_pending_root_preservation": true
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "sirius-focused-root-preflight-input-order-observation-v1",
+  "preflight_exit": 1,
+  "tests_executed": 0,
+  "actual_config_files_created": false,
+  "cause": "Root preflight incorrectly required hash-input list order base-then-ancestors. Actual prepared lists preserve original input ordering and insert ancestors before appended current-closure fields. All exact47+4n path sets are complete and duplicate-free; action command order remains exact.",
+  "observations": [
+    {
+      "case": "captured-fp32",
+      "ordered_equal": true,
+      "set_equal": true,
+      "duplicates": 0,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "case": "captured-fp32comp",
+      "ordered_equal": false,
+      "set_equal": true,
+      "duplicates": 0,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "case": "retry-fp32",
+      "ordered_equal": false,
+      "set_equal": true,
+      "duplicates": 0,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "case": "retry-fp32comp",
+      "ordered_equal": false,
+      "set_equal": true,
+      "duplicates": 0,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "case": "retry-fp64",
+      "ordered_equal": false,
+      "set_equal": true,
+      "duplicates": 0,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "case": "unrepresented-stage",
+      "ordered_equal": false,
+      "set_equal": true,
+      "duplicates": 0,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "case": "null-projection",
+      "ordered_equal": false,
+      "set_equal": true,
+      "duplicates": 0,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "case": "precision-invariants",
+      "ordered_equal": false,
+      "set_equal": true,
+      "duplicates": 0,
+      "missing": [],
+      "extra": []
+    }
+  ],
+  "correction": "Validate exact duplicate-free input set membership; retain exact ordered8 commands, originalfields,all ancestor content acceptance and all47+4n input checks. No candidate/helper/data or guard change."
+}

@@ -1,0 +1,159 @@
+{
+  "schema": "sirius-composite-compiled-module-baseline-v1",
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "previous_source_revision": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+  "previous_evidence_commit": "6a12f2b22c4ad9460bfdeeea007bc64e80031d81",
+  "scope": "Passive bytes/header observation of already-built modules only; source sharing candidate not applied or compiled. Size differences do not attribute driver setup cost, numerical behaviour or performance.",
+  "modules": [
+    {
+      "module": "trace.spv",
+      "previous_native": {
+        "bytes": 4038148,
+        "sha256": "aa6e283b5a88e1d3ec02dbadcba41dfb61c440ded47e802e7f9a411c4e16591b",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 305605
+      },
+      "current_native": {
+        "bytes": 4990064,
+        "sha256": "95a9fe0544821152e80fb022f2cd56866185be2d0944f170bdfe13d6738a4e3b",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 393676
+      },
+      "current_local": {
+        "bytes": 4990064,
+        "sha256": "95a9fe0544821152e80fb022f2cd56866185be2d0944f170bdfe13d6738a4e3b",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 393676
+      },
+      "native_size_change_bytes": 951916
+    },
+    {
+      "module": "trace_fp32comp.spv",
+      "previous_native": {
+        "bytes": 4041472,
+        "sha256": "a84a219d9c05090e149f22da9254f8dad76440f3addd764820245f078aa882ca",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 306872
+      },
+      "current_native": {
+        "bytes": 4993388,
+        "sha256": "0b67bb7351299c19957ebce591528f70bc3af09b874f33d165a04b9fe6fe69a8",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 394943
+      },
+      "current_local": {
+        "bytes": 4993388,
+        "sha256": "0b67bb7351299c19957ebce591528f70bc3af09b874f33d165a04b9fe6fe69a8",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 394943
+      },
+      "native_size_change_bytes": 951916
+    },
+    {
+      "module": "trace_fp64.spv",
+      "previous_native": {
+        "bytes": 3916620,
+        "sha256": "b5d777cd1a64f60bde1a4441a8cddf2e008400a07b20d131b44d21b0b927e2b9",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 298195
+      },
+      "current_native": {
+        "bytes": 4890080,
+        "sha256": "68466bf4a13a38e998a19b55724e244b71676860312a1021efbeae611ba9df12",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 386622
+      },
+      "current_local": {
+        "bytes": 4890080,
+        "sha256": "68466bf4a13a38e998a19b55724e244b71676860312a1021efbeae611ba9df12",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 386622
+      },
+      "native_size_change_bytes": 973460
+    },
+    {
+      "module": "parity_probe.spv",
+      "previous_native": {
+        "bytes": 6302544,
+        "sha256": "bbdb764ede32e6d596c959255d494fd774178387df2d69e459b7769a09b13c5f",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 510499
+      },
+      "current_native": {
+        "bytes": 9827140,
+        "sha256": "3dcf4d75f132dcbb99a7d207c430aea8ff4e482b11fc93298d0d333866069b2d",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 842314
+      },
+      "current_local": {
+        "bytes": 9827140,
+        "sha256": "3dcf4d75f132dcbb99a7d207c430aea8ff4e482b11fc93298d0d333866069b2d",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 842314
+      },
+      "native_size_change_bytes": 3524596
+    },
+    {
+      "module": "parity_probe_fp32comp.spv",
+      "previous_native": {
+        "bytes": 6306768,
+        "sha256": "194b63bf37f33b390f8b2507728d9c3bf0a24fecb7a07f8f1846da007b1f2a35",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 511810
+      },
+      "current_native": {
+        "bytes": 9831364,
+        "sha256": "062e03dc1f5f5d3ad40a8734bcb8a6aee7026b7532f58f2096fb376d0e3264a3",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 843625
+      },
+      "current_local": {
+        "bytes": 9831364,
+        "sha256": "062e03dc1f5f5d3ad40a8734bcb8a6aee7026b7532f58f2096fb376d0e3264a3",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 843625
+      },
+      "native_size_change_bytes": 3524596
+    },
+    {
+      "module": "parity_probe_fp64.spv",
+      "previous_native": {
+        "bytes": 6290916,
+        "sha256": "7ff787763274886319d58a5f70fe8fe71ccbba4dce3cc6d626835aa0c7a6ea74",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 502766
+      },
+      "current_native": {
+        "bytes": 9918432,
+        "sha256": "15871ff7b8e368728b0d75d09ae6f4300b646f00603a6a3a711dbe2ebd21ced3",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 835963
+      },
+      "current_local": {
+        "bytes": 9918432,
+        "sha256": "15871ff7b8e368728b0d75d09ae6f4300b646f00603a6a3a711dbe2ebd21ced3",
+        "spirv_version_word": 66816,
+        "generator_word": 2621440,
+        "id_bound": 835963
+      },
+      "native_size_change_bytes": 3627516
+    }
+  ]
+}

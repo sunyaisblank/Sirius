@@ -1,0 +1,48 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-accepted-control-v1",
+  "passed": true,
+  "case": "unrepresented-stage",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "exact_one_completed_XML_zero_FESD": true,
+  "required_positive_property": {
+    "name": "parity_opcode_8_completed_records",
+    "value": "1"
+  },
+  "test_seconds": "120.317",
+  "owner_seconds": 120.52642248099437,
+  "peak_sampled_aggregate_RSS_KiB": 1108140,
+  "fresh_whole_input_rows": 608,
+  "owned_child_and_controller_births_absent": true,
+  "source_and_inputs_unchanged": true,
+  "files": {
+    "out/kerr-shared-loop-controls/unrepresented-stage/gtest.xml": {
+      "bytes": 951,
+      "sha256": "14c16cbd9884ea82c2c6d1739d9f10f3f2f7e3205c42298adaf8fa0fc1e9bbf6"
+    },
+    "out/kerr-shared-loop-controls/unrepresented-stage/inputs-after.json": {
+      "bytes": 145692,
+      "sha256": "e5f971ea14c8df8bf240732afff4fbc4cafb6541e2a07a7298b6d01d2a86d6e8"
+    },
+    "out/kerr-shared-loop-controls/unrepresented-stage/inputs-before.json": {
+      "bytes": 145692,
+      "sha256": "e5f971ea14c8df8bf240732afff4fbc4cafb6541e2a07a7298b6d01d2a86d6e8"
+    },
+    "out/kerr-shared-loop-controls/unrepresented-stage/owner.json": {
+      "bytes": 3067,
+      "sha256": "4bb719c88efc77c04b05e0ada08007771115dfadb2fb3067648445d1128f5502"
+    },
+    "out/kerr-shared-loop-controls/unrepresented-stage/samples.jsonl": {
+      "bytes": 1053589,
+      "sha256": "e179ac33d6c845374a6716de35bd1da56c2377cf87c3f87824d72bca57395ee9"
+    },
+    "out/kerr-shared-loop-controls/unrepresented-stage/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-shared-loop-controls/unrepresented-stage/stdout.log": {
+      "bytes": 1031,
+      "sha256": "12029583a9ad9fafa3a2138b14b59d0355970e35c4bcaeb274bbfa745d082f16"
+    }
+  },
+  "scope": "One exact focused parity control with original assertions and guards; no fullimage/allP1/Mandatory/latency/release qualification."
+}

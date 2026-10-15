@@ -1,0 +1,48 @@
+{
+  "schema": "sirius-kerr-shared-loop-root-accepted-control-v1",
+  "passed": true,
+  "case": "null-projection",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "exact_one_completed_XML_zero_FESD": true,
+  "required_positive_property": {
+    "name": "parity_opcode_10_completed_records",
+    "value": "8"
+  },
+  "test_seconds": "164.17",
+  "owner_seconds": 164.38966149098997,
+  "peak_sampled_aggregate_RSS_KiB": 1111440,
+  "fresh_whole_input_rows": 612,
+  "owned_child_and_controller_births_absent": true,
+  "source_and_inputs_unchanged": true,
+  "files": {
+    "out/kerr-shared-loop-controls/null-projection/gtest.xml": {
+      "bytes": 949,
+      "sha256": "4232d484e09483d3b249202228431f8eef136a14a42b8cd8ddc5db5b42140569"
+    },
+    "out/kerr-shared-loop-controls/null-projection/inputs-after.json": {
+      "bytes": 146867,
+      "sha256": "0fedb1fa643dcdc6a4192cbc6306a5c8b0cd57142e7dfa71d06cf893bcd78067"
+    },
+    "out/kerr-shared-loop-controls/null-projection/inputs-before.json": {
+      "bytes": 146867,
+      "sha256": "0fedb1fa643dcdc6a4192cbc6306a5c8b0cd57142e7dfa71d06cf893bcd78067"
+    },
+    "out/kerr-shared-loop-controls/null-projection/owner.json": {
+      "bytes": 3055,
+      "sha256": "b6c48ae1ffb917f99818fe0acf0464ffc762aa93f3d04dd0979c5574e014554d"
+    },
+    "out/kerr-shared-loop-controls/null-projection/samples.jsonl": {
+      "bytes": 1243899,
+      "sha256": "70fd1ccd58b63210b1bc15cd22fb7330745f79fd8773b22dcc8bfd01bd7753a9"
+    },
+    "out/kerr-shared-loop-controls/null-projection/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/kerr-shared-loop-controls/null-projection/stdout.log": {
+      "bytes": 1023,
+      "sha256": "ca2c69f5a4cd0a97d2292e05d81dfc2083a02503fad0bd61c6137d0b04d23d3b"
+    }
+  },
+  "scope": "One exact focused parity control with original assertions and guards; no fullimage/allP1/Mandatory/latency/release qualification."
+}

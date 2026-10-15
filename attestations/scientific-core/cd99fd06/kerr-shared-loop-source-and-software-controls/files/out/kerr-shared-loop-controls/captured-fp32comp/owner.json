@@ -1,0 +1,69 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "--gtest_filter=KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp"
+  ],
+  "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+  "case": "captured-fp32comp",
+  "child_exit": 0,
+  "child_pid": 799631,
+  "child_start_ticks": "11839274",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 799626,
+    "pid": 799627,
+    "ppid": 799626,
+    "rss_kib": 20584,
+    "session": 799626,
+    "start_ticks": "11839233",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/kerr-shared-loop-controls/captured-fp32comp/gtest.xml",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "One exact focused control on the causally changed shared-loop evaluator; original assertions/RunProbe1000ms/tolerances unchanged; original packet300s external diagnostic/aggregate4GiB/reserve2GiB/default cache unchanged. Requires fresh root build/alignment/registration/module/resource/ldd admission in readiness.json, then stop first nonpass. Prior ed764546 software attempt had RSSguard/no XML/no numerical verdict; no image/fullP1/performance/release claim.",
+  "minimum_sampled_available_kib": 14743320,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 799631,
+      "saved_start_ticks": "11839274"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 3103448,
+  "provider_mappings": [
+    {
+      "maps": [
+        "762fb3400000-762fb345b000 r--p 00000000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "762fb345b000-762fb386b000 r-xp 0005b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "762fb386b000-762fb3ec6000 r--p 0046b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "762fb3ec6000-762fb3f5c000 r--p 00ac5000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "762fb3f5c000-762fb3f61000 rw-p 00b5b000 08:50 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so"
+      ],
+      "owned_session": 799631,
+      "pid": 799631,
+      "start_ticks": "11839274"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "One exact focused control on the causally changed shared-loop evaluator; original assertions/RunProbe1000ms/tolerances unchanged; original packet300s external diagnostic/aggregate4GiB/reserve2GiB/default cache unchanged. Requires fresh root build/alignment/registration/module/resource/ldd admission in readiness.json, then stop first nonpass. Prior ed764546 software attempt had RSSguard/no XML/no numerical verdict; no image/fullP1/performance/release claim.",
+  "source": {
+    "revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 266.1128542630031,
+  "whole_inputs_unchanged": true
+}

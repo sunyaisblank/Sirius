@@ -1,0 +1,42 @@
+{
+  "schema": "sirius-kerr-composite-shared-loop-independent-source-review-v1",
+  "passed": true,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "applied_or_executed": false,
+  "pins": {
+    "gr_integrator.original.slang": {
+      "bytes": 27196,
+      "sha256": "15ec6df994f342b91351c493ee022d2fe8e009c12ee96dd8bd29b4b81e8de552"
+    },
+    "gr_integrator.candidate.slang": {
+      "bytes": 27190,
+      "sha256": "e7b2c282edec4c4e3e768c3b1d20559c4c59c9a4c9a6e091932a274c4162ff11"
+    },
+    "candidate.patch": {
+      "bytes": 4760,
+      "sha256": "96b16d2ba44a30c83578c4de9a2b51aebec64bd39fb4e59e9b47abd42c17eadd"
+    },
+    "source-contracts.json": {
+      "bytes": 4325,
+      "sha256": "4741789502ef2d9468afc3a99dde922e3a5e6e1cc8316ec27acd7cdddde68140"
+    }
+  },
+  "checks": [
+    "Original equals current tracked/HEAD bytes; all declared hashes and regenerated unified patch match.",
+    "Prefix before helper, floor selector, entire common representation-failure/error/raw-null/projection/controller/acceptance tail and public wrappers are byte-exact.",
+    "Removed helper and private resolution caller references occur only in this integrator; no external API consumer is stranded.",
+    "Two bounded passes each reset current=original state. Coarse failure resets only its result/flag and breaks only its inner loop; fine still executes independently. No coarse endpoint or partial state is reused.",
+    "Fine failure resets local result and flag. The unchanged common tail rejects/reset candidate and sentinels. For N1 this retains original coarse,first-half,dependent-second-half ordering and first-half failure short circuit.",
+    "Private selector supplies1,2,32; guard1..32 precedes doubling, so fine count2..64 fits int, cannot overflow and has nonzero denominator. Successful trial RHS counts remain12/24/384; failures may stop earlier.",
+    "Both meshes cover the same original interval with no intermediate projection, retry, affine/counter/field publication or ABI change. Error divisor15,exponent1/5,tolerances and all caller limits remain unchanged."
+  ],
+  "floating_arithmetic_limits": [
+    "Ordinary h and h*.5 become h/1 and h/2; for represented finite binary values, power-of-two scaling has the same mathematical target. Selected integer counts are exactly representable in both Real rungs, and division by these positive counts cannot overflow finite h.",
+    "Underflow/subnormal rounding, denormal handling and actual compiler lowering remain numerical-validation concerns. No source-level bitwise, emitted-SPIRV or device-result equivalence is asserted.",
+    "The helper shares one static RK4 call site; compiler/driver may clone or transform it. No code-size,JIT-memory,latency,performance or scientific acceptance follows from this source form."
+  ],
+  "blockers": [],
+  "admission_limit": "Source semantics only. Root may select/apply after current frozen native batch is terminal, then perform original checks; no guard/deadline waiver or horizon/fullqualification claim.",
+  "review_method": "Passive source/hash/byte comparison, targeted reference search and read-onlyGit only; no helper/import/parser/compiler/formatter/provider/test/program execution.",
+  "workspace": "Trackeded764 source clean, committed/pushed0:0,soleworktree; ignored candidate/review uncommitted. Root retains integration/execution ownership."
+}
