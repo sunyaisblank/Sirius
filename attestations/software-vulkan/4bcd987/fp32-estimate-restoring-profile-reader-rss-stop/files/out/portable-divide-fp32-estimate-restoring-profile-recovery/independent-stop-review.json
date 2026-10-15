@@ -1,0 +1,182 @@
+{
+  "actual_ownership": {
+    "compile-candidate": {
+      "child_exit": 0,
+      "minimum_sampled_available_kib": 19642068,
+      "observed_births": 54,
+      "passed": true,
+      "peak_sampled_rss_kib": 337260,
+      "stop_reason": null,
+      "wall_seconds": 32.586702180007705
+    },
+    "read-profile": {
+      "child_exit": -15,
+      "minimum_sampled_available_kib": 15963724,
+      "observed_births": 1,
+      "passed": false,
+      "peak_sampled_rss_kib": 4216860,
+      "stop_reason": "diagnostic_sampled_rss_guard",
+      "wall_seconds": 8.750974383990979
+    },
+    "reuse-stock": {
+      "child_exit": 0,
+      "minimum_sampled_available_kib": 20200560,
+      "observed_births": 1,
+      "passed": true,
+      "peak_sampled_rss_kib": 45712,
+      "stop_reason": null,
+      "wall_seconds": 1.0470864980015904
+    }
+  },
+  "claims": {
+    "completed_compiler_accepted": true,
+    "failed_profile_reader_promoted": false,
+    "full_profile_graph_accepted": false,
+    "production_adopted": false,
+    "provider_or_numerical_test_or_benefit_executed": false,
+    "science_platform_or_release_qualification": false
+  },
+  "classification": "PROFILE_READER_RSS_GUARD_STOP",
+  "completed_compiler": {
+    "all35_original_candidate_recipes_completed_under_original_policies_and_validation": true,
+    "candidate90_files_all_current_and_exact_seal_products": true,
+    "compiler_acceptance_and_rich_receipts_join": true,
+    "retained_profile_or_numerical_acceptance_inferred": false,
+    "shader_binary_framing_only": {
+      "files_checked": 52,
+      "magic_version_schema_and_finite_word_count_walk": true,
+      "semantic_validation_rerun": false
+    },
+    "stock39_exact_copies_and_stock_output_seal_pass": true,
+    "structural_graph_accepted": false
+  },
+  "critical": {
+    "actions.json": {
+      "bytes": 272160,
+      "sha256": "15527d21bf4ad6b122e1567ab18914cfc1a3a78e0a65608c0bd52b42669b081a"
+    },
+    "analysis/candidate/retained_camera_portable.spvasm": {
+      "bytes": 1435995,
+      "sha256": "60b87897c5c1a7142848b218641bf0e8c2f680b9c841fe049022def53b4d6300"
+    },
+    "camera_profile.py": {
+      "bytes": 12874,
+      "sha256": "424f0b4285fccacfa220abd8896c3a798dfa2e6efa02c81daa3f663bf2e3ebec"
+    },
+    "compile-candidate/output-seal.json": {
+      "bytes": 46313,
+      "sha256": "583a48e9908040934af5adb0eb95e8ce42e3b4aadb51da23fcc64fbcde7ebfb5"
+    },
+    "compile-candidate/owner.json": {
+      "bytes": 8411,
+      "sha256": "d41c1e7c39b3f0591444d87e48fa088aaa004734e17c47f163f42bbb05db48f7"
+    },
+    "compiler-producer-acceptance.json": {
+      "bytes": 1847,
+      "sha256": "9773888e815f5a24dc4bb81f5fdc69c86b140a297cfc3423762e4ebf6afe7302"
+    },
+    "compiler-products.json": {
+      "bytes": 45110,
+      "sha256": "19bfe979eaf7d523343c2868a6e86e960f14a6b260967456e2e95e70081637d0"
+    },
+    "operator-context.json": {
+      "bytes": 958,
+      "sha256": "dae2f13f62f79e645ce937497abaa23a436ddcaa99a3404653e2623ab4d3f6f5"
+    },
+    "read-profile/inputs-after.json": {
+      "bytes": 379700,
+      "sha256": "95edc0b01259d72ba2f81d0d09b3c7939ce5dd5771459f8531edf294a0ed224e"
+    },
+    "read-profile/inputs-before.json": {
+      "bytes": 379700,
+      "sha256": "95edc0b01259d72ba2f81d0d09b3c7939ce5dd5771459f8531edf294a0ed224e"
+    },
+    "read-profile/owner.json": {
+      "bytes": 1475,
+      "sha256": "0842285e92a003de46ad66d12014b037da86edbf56548e41678652bd7f727483"
+    },
+    "read-profile/samples.jsonl": {
+      "bytes": 7447,
+      "sha256": "19a68096efe235b60ad7d74580e1f1e0887da69e550ae0aad33de2d130cafa21"
+    },
+    "reuse-stock/output-seal.json": {
+      "bytes": 19730,
+      "sha256": "e7dc57d5cc57b32e9b364db54c14a7e2f83759cdc88e2fff7c880f54c6973946"
+    },
+    "reuse-stock/owner.json": {
+      "bytes": 1602,
+      "sha256": "4b72a4343b52fb4d38f281f22926207a4fee76deba95a0b2669cdb14bfe91b0d"
+    },
+    "root-first-stop.json": {
+      "bytes": 13750,
+      "sha256": "f21acb6cee20f510069648a433e0de2edc1e7233227b09f49801d9af0b6a9ecd"
+    },
+    "source-freeze.json": {
+      "bytes": 244620,
+      "sha256": "6cb714dd315c289026792e01ca1d8e4d232c6c65cc8155826e7fac19669a83d2"
+    }
+  },
+  "failed_reader": {
+    "assembly_bytes": 1435995,
+    "assembly_framing": "SPIR-V1.5 disassembly header and final OpFunctionEnd;9582 OpLabel definitions inside the actual ComputeMain. This is a complete dumped module within an incomplete profile, not graph acceptance.",
+    "assembly_sha256": "60b87897c5c1a7142848b218641bf0e8c2f680b9c841fe049022def53b4d6300",
+    "child_exit": -15,
+    "excess_kib": 22556,
+    "observed_stop": "diagnostic_sampled_rss_guard",
+    "owner_passed": false,
+    "partial_profile_has_one_complete_framed_assembly_dump": true,
+    "postterminal_final_profile_review_not_run": true,
+    "reader_output_seal_profile_result_profile_acceptance_absent": true,
+    "reserve_guard_or_deadline_triggered": false,
+    "sampled_peak_kib": 4216860,
+    "unchanged_limit_kib": 4194304,
+    "wrapper_exit": 1
+  },
+  "input_and_retirement": {
+    "actual_records": {
+      "compile-candidate": 1017,
+      "read-profile": 1113,
+      "reuse-stock": 973
+    },
+    "all467_rich_static_pins_current": true,
+    "all_declared470_514_610_inputs_join": true,
+    "all_three_before_after_maps_equal_and_every_record_current": true,
+    "cleanup_errors_and_remaining_members_all_empty": true,
+    "context_actions_freeze_preparation_joins": true,
+    "failed_reader_birth": {
+      "current_start_ticks": null,
+      "pid": 467001,
+      "saved_start_ticks": "8732662"
+    },
+    "no_global_process_absence_claim": true,
+    "provider_mappings_all_empty": true,
+    "same_boot_56_string_normalized_saved_births_freshly_absent": true,
+    "source_and_whole_inputs_unchanged": true,
+    "unique_current_consumed_records": 1113
+  },
+  "meaning_of_passed": "Truthful stop/provenance acceptance only. Reader remains failed; completed stock and candidate compiler owners remain separately passed.",
+  "passed": true,
+  "recovery_boundary": "Preserve this immutable RSS stop and all accepted compiler products first. A separate causal reader-only finisher may use exact linear-memory dominance reachability for the needed queries while retaining the4GiB/2GiB/300s guard, complete typed graph/Phi/step checks and stated source-inlining limits. No Slang/SSA/policy/assembly/validation rerun or retrospective reader promotion is admitted here.",
+  "review_execution": "Passive stdlib JSON/hash/struct/regex/source/AST and targeted /proc/read-only Git only. No authored helper/parser/policy/compiler/assembler/validator/disassembler/provider/API/test executed.",
+  "reviewer": "forensic_obligations",
+  "roles": "Independent of profile/recovery author and root operator; authored earlier arithmetic/JIT apparatus and performed source admissions. Root alone executed the six commands; this audit re-executes none.",
+  "schema": "sirius-fp32-restoring-profile-reader-rss-stop-independent-review-v1",
+  "source_memory_finding": {
+    "N_full_sets_proxy_bytes": 5025797328,
+    "actual_entry_block_count": 9582,
+    "allocation_order": "One near-full block set per nonentry label before iterative refinement and per-proposal checks.",
+    "code": "dom={label:({entry} if label==entry else set(blocks)) for label in blocks}",
+    "independent_inference": "Quadratic set-table storage at the observed CFG size alone exceeds4GiB before dictionary/other reader state. This concrete reader scaling defect plausibly explains the sampled RSS stop. No terminated-process stack/PC was captured, and no full quadratic allocation or authored reader was rerun.",
+    "native_shader_compiler_or_numerical_failure_established": false,
+    "one_entry_is_a_singleton": true,
+    "one_full_set_shallow_bytes_from_root_single_set_measurement": 524504,
+    "source_line": 97
+  },
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "workspace": {
+    "new_stop_bundle_committed_or_pushed": false,
+    "tracked_clean": true,
+    "upstream": "0/0",
+    "worktrees": 1
+  }
+}

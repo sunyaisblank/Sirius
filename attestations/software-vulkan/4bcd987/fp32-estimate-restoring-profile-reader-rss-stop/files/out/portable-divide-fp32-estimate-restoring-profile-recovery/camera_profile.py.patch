@@ -1,0 +1,137 @@
+--- /home/astra/.project/Sirius/out/portable-divide-fp32-estimate-restoring-profile/originals/camera_profile.py
++++ camera_profile.py
+@@ -27,8 +27,7 @@
+         assert len(values) == 1, values
+         return values[0]
+     u32 = one(k for k,v in definitions.items() if v == 'OpTypeInt 32 0')
+-    wide = one(k for k,v in definitions.items() if v == 'OpTypeFloat 64')
+-    vec = one(k for k,v in definitions.items() if v == 'OpTypeVector '+u32+' 2')
++    f32 = one(k for k,v in definitions.items() if v == 'OpTypeFloat 32')
+     entry = re.search(r'OpEntryPoint GLCompute (%\S+)', candidate)[1]
+     body = re.search(r'^\s*'+re.escape(entry)+r' = OpFunction\b.*?OpFunctionEnd', candidate, re.M|re.S)[0]
+     local = dict(re.findall(r'^\s*(%\S+) = (.+)$',body,re.M))
+@@ -91,20 +90,44 @@
+     def true_arm(condition,destination):
+         label=where[origin(condition)];b=one(x.split() for x in blocks[label] if x.startswith('OpBranchConditional '))
+         assert origin(b[1])==origin(condition) and b[2]==destination and pred[destination]=={label}
+-    divides=[k for k in local if word(k)[:2]==['OpFDiv',wide]]
++    assert not re.search(r"\b(?:NoUnsignedWrap|NoSignedWrap|RelaxedPrecision|FPFastMathMode|FPFastMathDefault|OpConvertFTo[SU]|OpConvert[SU]ToF)\b",candidate)
++    divides=[k for k in local if word(k)[:2]==['OpFDiv',f32]]
+     assert len(divides)==2
++    entry=next(iter(blocks))
++    dom={label:({entry} if label==entry else set(blocks)) for label in blocks}
++    for _ in range(len(blocks)+1):
++        changed=False
++        for label in blocks:
++            if label==entry:continue
++            assert pred[label]
++            new={label}|set.intersection(*(dom[p] for p in pred[label]))
++            if dom[label]!=new:dom[label]=new;changed=True
++        if not changed:break
++    else:raise AssertionError('camera dominance did not converge')
+     rows=[]
+     for divide in divides:
+-        scaled,den=word(divide)[2:];assert word(origin(scaled))[:2]==['OpFMul',wide]
+-        converted,scale=word(origin(scaled))[2:];assert number(scale,67108864)
+-        assert word(origin(converted))[:2]==word(origin(den))[:2]==['OpConvertUToF',wide]
+-        m,d=origin(word(origin(converted))[2]),origin(word(origin(den))[2])
+-        bits=one(k for k in local if word(k)==['OpBitcast',vec,divide])
+-        lo=one(k for k in local if word(k)==['OpCompositeExtract',u32,bits,'0'])
+-        hi=one(k for k in local if word(k)==['OpCompositeExtract',u32,bits,'1'])
+-        range_cond=one(k for k in local if binary(k,'OpIEqual',lambda v:binary(v,'OpBitwiseAnd',same(hi),num(0xfff00000),True),num(0x41900000),True))
+-        guess=one(k for k in local if binary(k,'OpBitwiseOr',lambda v:binary(v,'OpShiftLeftLogical',lambda x:binary(x,'OpBitwiseOr',lambda y:binary(y,'OpBitwiseAnd',same(hi),num(0xfffff),True),num(0x100000),True),num(6)),lambda v:binary(v,'OpShiftRightLogical',same(lo),num(26)),True))
+-        product=one(k for k in local if word(k)[0]=='OpUMulExtended' and [origin(x) for x in word(k)[2:]]==[origin(guess),d])
++        assert re.search(r'OpDecorate '+re.escape(divide)+r' NoContraction(?:\s|$)',candidate)
++        numerator_cast,denominator_cast=word(divide)[2:]
++        assert word(origin(numerator_cast))[:2]==word(origin(denominator_cast))[:2]==['OpBitcast',f32]
++        numerator_bits=origin(word(origin(numerator_cast))[2]);denominator_bits=origin(word(origin(denominator_cast))[2])
++        # Identify the denominator by its exact normalized mask operand, not by a name.
++        den_parts=word(denominator_bits)[2:]
++        den_mask=one(v for v in den_parts if word(origin(v))[0]=='OpBitwiseAnd')
++        d=one(v for v in word(origin(den_mask))[2:] if not number(v,0x7fffff))
++        selector=one(v for v in word(numerator_bits)[2:] if choice(v,lambda x:word(origin(x))[0]=='OpULessThan',num(0x4d000000),num(0x4c800000)))
++        selection=word(origin(selector))
++        if selection[0]=='OpSelect':norm=origin(selection[2])
++        else:
++            start=choices[origin(selector)]['entry'];norm=one(line.split()[1] for line in blocks[start] if line.startswith('OpBranchConditional '))
++        assert word(norm)[:2]==['OpULessThan',one(k for k,v in definitions.items() if v=='OpTypeBool')]
++        base,normal_d=map(origin,word(norm)[2:]);assert normal_d==origin(d)
++        assert binary(numerator_bits,'OpBitwiseOr',same(selector),lambda v:binary(v,'OpBitwiseAnd',same(base),num(0x7fffff),True),True)
++        m=one(k for k in local if choice(k,same(norm),lambda v:binary(v,'OpShiftLeftLogical',same(base),num(1)),same(base)))
++        bits=one(k for k in local if word(k)==['OpBitcast',u32,divide])
++        guard=one(k for k in local if binary(k,'OpIEqual',lambda v:binary(v,'OpBitwiseAnd',same(bits),num(0xff800000),True),num(0x4c800000),True))
++        h=one(k for k in local if binary(k,'OpShiftLeftLogical',lambda v:binary(v,'OpBitwiseOr',lambda v:binary(v,'OpBitwiseAnd',same(bits),num(0x7fffff),True),num(0x800000),True),num(3)))
++        guess=one(k for k in local if binary(k,'OpISub',same(h),num(16)))
++        product=one(k for k in local if word(k)[0]=='OpUMulExtended' and [origin(v) for v in word(k)[2:]]==[origin(guess),origin(d)])
+         assert word(word(product)[1])==['OpTypeStruct',u32,u32]
+         def member(index):
+             values=[k for k in local if word(k)==['OpCompositeExtract',u32,product,str(index)]]
+@@ -114,27 +137,48 @@
+         plo,phi=member(0),member(1)
+         nlo=one(k for k in local if binary(k,'OpShiftLeftLogical',same(m),num(26)))
+         nhi=one(k for k in local if binary(k,'OpShiftRightLogical',same(m),num(6)))
+-        below=lambda v:binary(v,'OpULessThan',same(phi),same(nhi))
+-        equal=lambda v:binary(v,'OpIEqual',same(phi),same(nhi),True)
+-        lowok=lambda v:binary(v,'OpULessThanEqual',same(plo),same(nlo))
+-        not_above=one(k for k in local if logical(k,'OpLogicalOr',below,lambda v:logical(v,'OpLogicalAnd',equal,lowok)))
+         rlo=one(k for k in local if binary(k,'OpISub',same(nlo),same(plo)))
+         borrow_test=one(k for k in local if binary(k,'OpULessThan',same(nlo),same(plo)))
+-        borrow=lambda v:choice(v,same(borrow_test),num(1),num(0))
+-        rhi=one(k for k in local if binary(k,'OpISub',lambda v:binary(v,'OpISub',same(nhi),same(phi)),borrow))
+-        verified=one(k for k in local if logical(k,'OpLogicalAnd',lambda v:binary(v,'OpIEqual',same(rhi),num(0),True),lambda v:binary(v,'OpULessThan',same(rlo),same(d))))
+-        sticky=lambda v:choice(v,lambda x:binary(x,'OpINotEqual',same(rlo),num(0),True),num(1),num(0))
+-        jam=one(k for k in local if binary(k,'OpBitwiseOr',same(guess),sticky,True))
+-        true_arm(range_cond,where[product]);assert where[guess]==where[product]==choices[origin(not_above)]['entry']
+-        true_arm(not_above,where[rlo]);borrow_value=origin(word(rhi)[3])
+-        assert choices[borrow_value]['entry']==where[rlo] and choices[borrow_value]['merge']==where[rhi]
+-        assert choices[origin(verified)]['entry']==where[rhi]
+-        t=word(jam);sticky_value=origin(t[3] if origin(t[2])==origin(guess) else t[2])
+-        true_arm(verified,choices[sticky_value]['entry']);assert choices[sticky_value]['merge']==where[jam]
+-        assert any(binary(k,'OpIEqual',same(jam),num(0),True) for k in local)  # Inlined PB32Round's original zero gate.
+-        rows.append({'estimate':divide,'normalized_numerator':m,'denominator':d,'bitcast':bits,'range_gate':range_cond,'guess':guess,'exact_product':product,'numerator_words':[nlo,nhi],'remainder_words':[rlo,rhi],'verified':verified,'jam':jam,'closed_guarded_success_and_exact_remainder_footprint':True})
++        borrow=one(k for k in local if choice(k,same(borrow_test),num(1),num(0)))
++        high_difference=one(k for k in local if binary(k,'OpISub',same(nhi),same(phi)))
++        rhi=one(k for k in local if binary(k,'OpISub',same(high_difference),same(borrow)))
++        bound=one(k for k in local if binary(k,'OpShiftLeftLogical',same(d),num(5)))
++        highzero=lambda v:binary(v,'OpIEqual',same(rhi),num(0),True)
++        lowok=lambda v:binary(v,'OpULessThan',same(rlo),same(bound))
++        verified=one(k for k in local if logical(k,'OpLogicalAnd',highzero,lowok))
++        steps=[];rem=rlo;previous=None
++        for shift in (4,3,2,1,0):
++            threshold=one(k for k in local if binary(k,'OpShiftLeftLogical',same(d),num(shift))) if shift else d
++            test=one(k for k in local if binary(k,'OpUGreaterThanEqual',same(rem),same(threshold)))
++            mask=one(k for k in local if choice(k,same(test),num(0xffffffff),num(0)))
++            selected=one(k for k in local if binary(k,'OpBitwiseAnd',same(threshold),same(mask),True))
++            next_rem=one(k for k in local if binary(k,'OpISub',same(rem),same(selected)))
++            bit=one(k for k in local if binary(k,'OpBitwiseAnd',num(1<<shift),same(mask),True))
++            if previous is None:
++                merged=[k for k in local if binary(k,'OpBitwiseOr',num(0),same(bit),True)]
++                assert len(merged)<=1;digit=merged[0] if merged else bit
++            else:digit=one(k for k in local if binary(k,'OpBitwiseOr',same(previous),same(bit),True))
++            steps.append({'shift':shift,'threshold':threshold,'test':test,'mask':mask,'selected':selected,'input_remainder':rem,'remainder':next_rem,'bit':bit,'digit':digit})
++            rem=next_rem;previous=digit
++        q=one(k for k in local if binary(k,'OpIAdd',same(guess),same(digit),True))
++        sticky=one(k for k in local if choice(k,lambda v:binary(v,'OpINotEqual',same(rem),num(0),True),num(1),num(0)))
++        jam=one(k for k in local if binary(k,'OpBitwiseOr',same(q),same(sticky),True))
++        # Same guard/control obligations as original inlined profile, now all5 steps.
++        true_arm(guard,where[product]);assert where[guess]==where[product]
++        assert choices[origin(borrow)]['entry']==where[rlo] and choices[origin(borrow)]['merge']==where[rhi]
++        first=choices[origin(steps[0]['mask'])]['entry'];true_arm(verified,first)
++        success=where[jam]
++        assert where[guard] in dom[success] and where[product] in dom[success] and where[verified] in dom[success]
++        for step in steps:
++            c=choices[origin(step['mask'])]
++            assert c['entry'] in dom[success] and c['merge'] in dom[success]
++        assert any(binary(k,'OpIEqual',same(jam),num(0),True) for k in local)  # Original inlined Round zero gate.
++        rows.append({'proposal':divide,'normalization_predicate':norm,'base':base,'normalized_m':m,'denominator':d,'guard':guard,'guess':guess,'product':product,'numerator_words':[nlo,nhi],'residual_words':[rlo,rhi],'verified':verified,'steps':steps,'q':q,'sticky':sticky,'jam':jam,'closed_guard_and_restoring_dataflow':True})
++    signature=integer_division_signature(candidate)
++    assert signature==integer_division_signature(stock)
+     assert candidate.count('OpUDiv')==stock.count('OpUDiv')==3
+     assert candidate.count('OpLoopMerge')==stock.count('OpLoopMerge')
+-    signature = integer_division_signature(candidate)
+-    assert signature == integer_division_signature(stock)
+-    return {'sites':rows,'inlined_camera':True,'integer_division_signature':signature,'integer_division_and_loop_counts_unchanged':True,'normalization_and_complete_common_round_equivalence':'Frozen identical source outside insertion, canonical O1 inlining; not independently reconstructed by this footprint reader.','fallback_scope':'Original complete source fallback exact; emitted integer division/loop counts unchanged. Full named-body fallback comparison applies to the other13 changed modules.'}
++    return {'inlined_camera':True,'sites':rows,'integer_division_signature':signature,'integer_division_and_loop_counts_unchanged':True,'corrective_UDiv_absent':True,
++            'normalization_and_complete_common_round_equivalence':'Exact candidate source differs only by accepted insertion; original O1 inlining. This bounded dataflow reader does not independently reconstruct full inlined normalization/Round or complete fallback.',
++            'fallback_scope':'Original source fallback exact, emitted original integer opcode/type/count and loop signatures equal. Named13 modules separately prove complete prefix/fallback/helper bodies.',
++            'native_accuracy_or_hitrate_assumed':False,'arithmetic_executed':False}
