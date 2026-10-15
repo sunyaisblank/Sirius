@@ -1,0 +1,352 @@
+{
+  "schema": "sirius-kerr-composite-independent-ci-product-review-v1",
+  "passed": true,
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "run_id": 38724081383,
+  "reviewer_role": "Independent of root CI/product/staging operator; previously reviewed current source/integration and native source-copy adaptation. Passive JSON/XML/ZIP/hash/byte comparisons and read-only Git only. No authored helper/import/parser, repository verifier, program, compiler, provider, test, API or CI executed.",
+  "critical_metadata": {
+    "ci-run-final.json": {
+      "path": "out/kerr-composite-ci-ed764546/ci-run-final.json",
+      "bytes": 12153,
+      "sha256": "cae0dc49cab5dbeff7895dc0d73aa69cc5676018947ae405a6b75ab97d5f8c36"
+    },
+    "ci-jobs-final.json": {
+      "path": "out/kerr-composite-ci-ed764546/ci-jobs-final.json",
+      "bytes": 14220,
+      "sha256": "cdbc43961b698b75fd39ff14e4e6b6ea9daf8717feeec7eb129472db04f754ae"
+    },
+    "artifacts-progress.json": {
+      "path": "out/kerr-composite-ci-ed764546/artifacts-progress.json",
+      "bytes": 3761,
+      "sha256": "31c478861eb0d6438be160b692b8bde1976398df4361b33008367fd8e88e365c"
+    },
+    "root-ci-products-admission.json": {
+      "path": "out/kerr-composite-ci-ed764546/root-ci-products-admission.json",
+      "bytes": 8151,
+      "sha256": "029228162d426f31e83b9665cdc0c002f52014848941b03f3d7de8133dfd6bd9"
+    }
+  },
+  "CI": {
+    "event": "workflow_dispatch",
+    "run_attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "source_and_branch_match_current_committed_revision": true,
+    "jobs": [
+      {
+        "name": "integration-macos-no-render",
+        "id": 116385527921,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "integration-windows-no-render",
+        "id": 116385528342,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "integration-no-render",
+        "id": 116385528354,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "linux-sanitizers",
+        "id": 116385529120,
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "windows-build",
+        "id": 116385529245,
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "macos-build",
+        "id": 116385529592,
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "macos-retained-diagnostic",
+        "id": 116385529668,
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "linux-gate",
+        "id": 116385529717,
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ],
+    "three_integration_jobs_successful": true,
+    "full_qualification_jobs_skipped": true
+  },
+  "selected_artifacts": [
+    {
+      "kind": "macos-native",
+      "artifact_id": 11967890674,
+      "API_record": {
+        "path": "out/kerr-composite-ci-ed764546/macos-artifact-identity.json",
+        "bytes": 1070,
+        "sha256": "001b9b35b956c5b6c2ecd8f7575930451fc4201c2cbf7b7cebf2a00491c48767"
+      },
+      "archive": {
+        "path": "out/kerr-composite-ci-ed764546/macos-native.zip",
+        "bytes": 63031155,
+        "sha256": "30825e43c58cd13bc200ef8b2840f3d3dff39ab1fba857816ed817eec3d3a91d"
+      },
+      "raw_members_checked": 40
+    },
+    {
+      "kind": "windows-native",
+      "artifact_id": 11968177529,
+      "API_record": {
+        "path": "out/kerr-composite-ci-ed764546/windows-native-artifact-identity.json",
+        "bytes": 1072,
+        "sha256": "cef37bd6c287b503f6dda99dd4ad5f8bb690d72e859bfb1b51e3cecda4f9e1d2"
+      },
+      "archive": {
+        "path": "out/kerr-composite-ci-ed764546/windows-native.zip",
+        "bytes": 61860080,
+        "sha256": "246eecdd06d47053b770e14a3e7f740283e19260f3ad41ea3fe987429a4b4196"
+      },
+      "raw_members_checked": 40
+    },
+    {
+      "kind": "windows-diagnostic",
+      "artifact_id": 11967238335,
+      "API_record": {
+        "path": "out/kerr-composite-ci-ed764546/windows-diagnostic-artifact-identity.json",
+        "bytes": 1079,
+        "sha256": "e02cd54d6d8a6ca904ae88da3d683bc56bd9a20322c873681bca331dd5ff73b3"
+      },
+      "archive": {
+        "path": "out/kerr-composite-ci-ed764546/windows-diagnostic.zip",
+        "bytes": 73396376,
+        "sha256": "a4cc6b58953f18812fbc2c3741e4b44cfab33ae22222c6066d0017f81285a47f"
+      },
+      "raw_members_checked": 75
+    }
+  ],
+  "ZIP_checks": {
+    "selected_archives": 3,
+    "raw_members": 155,
+    "whole_API_digest_sizes_and_source_run_joins_match": true,
+    "member_names_unique_safe_relative_no_symlinks": true,
+    "every_raw_ZIP_member_equals_extracted_file_bytes": true,
+    "extracted_regular_file_sets_exact": true,
+    "all_other_listed_API_artifact_payloads_reviewed_claim": false
+  },
+  "native_records": {
+    "windows": {
+      "record": {
+        "path": "out/kerr-composite-ci-ed764546/windows-native/windows-build.json",
+        "bytes": 9131,
+        "sha256": "2ad9afdafaf4c10d02780f073405d65cc773e612c9b14ab4ad88113a99659887"
+      },
+      "gate": {
+        "path": "out/kerr-composite-ci-ed764546/windows-native/native_build_gate.json",
+        "bytes": 10013,
+        "sha256": "12d1675b6a38b812f3104d497a2b1720a36ee938675852028bd1731651a40a9c"
+      },
+      "inventory": {
+        "path": "out/kerr-composite-ci-ed764546/windows-native/ctest-inventory.json",
+        "bytes": 1059497,
+        "sha256": "f9088fb42a6980444808e754b29cd0104137b31e89482314788ad4e9dfe14470"
+      },
+      "JUnit": {
+        "path": "out/kerr-composite-ci-ed764546/windows-native/native_build_gate_junit.xml",
+        "bytes": 5244,
+        "sha256": "52946f6f690d8291a9b7a81e86232a748c2d52028c93d42735ce509b85fdafeb"
+      },
+      "raw_CTest_log": {
+        "path": "out/kerr-composite-ci-ed764546/windows-native/native-build-gate-log",
+        "bytes": 2931,
+        "sha256": "fb1ccd1c6173c33ea3aa2cb2421605534de1ca7548575496259bf8908808c25f"
+      },
+      "artifact_rows": 39,
+      "tested_executables": 7,
+      "product_rows": 9,
+      "generated_test_inputs": 20,
+      "registered": 1152,
+      "actual_native_cases": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "disabled": 0,
+      "source_governance_seconds": "6.46499",
+      "build_gate_selftest_seconds": "6.78422",
+      "original_build_gate_selftest_deadline_seconds": 10,
+      "root_reported_existing_repository_validator_exit": 0
+    },
+    "macos": {
+      "record": {
+        "path": "out/kerr-composite-ci-ed764546/macos-native/macos-build.json",
+        "bytes": 8900,
+        "sha256": "4da6549acf36bac88ac2e9006b10783cd5f02ceb90ccde5c375164ee3382c4e8"
+      },
+      "gate": {
+        "path": "out/kerr-composite-ci-ed764546/macos-native/native_build_gate.json",
+        "bytes": 9651,
+        "sha256": "cf0277f18ebc8e5668c1b1a0630607254f86cf18ede1de72088b811c66b842df"
+      },
+      "inventory": {
+        "path": "out/kerr-composite-ci-ed764546/macos-native/ctest-inventory.json",
+        "bytes": 1198664,
+        "sha256": "3bdaf2fbfde41efd293fceef170e5dd8573fa10117ba9e95164154febc6d2834"
+      },
+      "JUnit": {
+        "path": "out/kerr-composite-ci-ed764546/macos-native/native_build_gate_junit.xml",
+        "bytes": 5162,
+        "sha256": "08ef58ab05f8e9d8be05fd2bcccc8830bde1ffe2db023cb6a3482fc96ef92688"
+      },
+      "raw_CTest_log": {
+        "path": "out/kerr-composite-ci-ed764546/macos-native/native-build-gate-log",
+        "bytes": 2923,
+        "sha256": "1117cfe169ee599a231390fdf0ceebbf8879fddc1df71242623d9522a62b8f3d"
+      },
+      "artifact_rows": 39,
+      "tested_executables": 7,
+      "product_rows": 9,
+      "generated_test_inputs": 20,
+      "registered": 1152,
+      "actual_native_cases": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "disabled": 0,
+      "source_governance_seconds": "3.1299",
+      "build_gate_selftest_seconds": "2.36798",
+      "original_build_gate_selftest_deadline_seconds": 10,
+      "root_reported_existing_repository_validator_exit": 0
+    }
+  },
+  "native_joins": {
+    "both39_flat_artifact_rows_and_complete7exe9product20input_alias_sets_match": true,
+    "both_current_clean_qualification_source_gates": true,
+    "both_exact9_JUnit_names_run_zeroFESD": true,
+    "both_canonical_JSON_inventory_digests_match": true,
+    "both_JUnit_log_model_alignment_inputs_match": true,
+    "both_exported_model_JSON_semantics_equal_current_source": true,
+    "raw_platform_specific_source_product_hashes_preserved": true,
+    "existing_repository_verifier_exit0_reported_by_root": true,
+    "verifier_reexecuted_by_reviewer": false
+  },
+  "inventory_comparison": {
+    "prior_source_revision": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+    "prior_evidence_commit": "6a12f2b22c4ad9460bfdeeea007bc64e80031d81",
+    "prior_inventory_pins": {
+      "windows-native": {
+        "path": "attestations/qualification/69fcf27/native-build-ci-38718286928/files/windows-native/ctest-inventory.json",
+        "bytes": 1057433,
+        "sha256": "a226fe7876ecdff55c603f0d7296bd22d1914b369311102db363d535dbec2293"
+      },
+      "macos-native": {
+        "path": "attestations/qualification/69fcf27/native-build-ci-38718286928/files/macos-native/ctest-inventory.json",
+        "bytes": 1196362,
+        "sha256": "3cd0e1714c43d9ea7084e956fabaeef542703564976a0bfa08a46b123e03797b"
+      }
+    },
+    "prior1150_names_preserved_each_platform": true,
+    "all_old_LABELS_and_TIMEOUT_values_equal_each_platform": true,
+    "only_added_names": [
+      "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp"
+    ],
+    "all1152_registered_tests_Mandatory_both_platforms": true,
+    "registration_is_not_execution_of_new2_numerical_cases": true
+  },
+  "Windows_stage": {
+    "path": "bin/windows-msvc/diagnostic-ed764546",
+    "exact_regular_files": 76,
+    "manifest": {
+      "path": "bin/windows-msvc/diagnostic-ed764546/generated/sirius/windows-diagnostic-build-products.json",
+      "bytes": 16928,
+      "sha256": "cff9804e7320a1111cde5ac2971fe0202527df09802d6156851747ffd13f2958"
+    },
+    "native_gate": {
+      "path": "bin/windows-msvc/diagnostic-ed764546/generated/sirius/native_build_gate.json",
+      "bytes": 10013,
+      "sha256": "12d1675b6a38b812f3104d497a2b1720a36ee938675852028bd1731651a40a9c"
+    },
+    "manifest_rows": 74,
+    "all74_original_path_rows_equal_extracted_and_staged_bytes": true,
+    "manifest_self_copy_and_gate_copy_exact": true,
+    "CLI_backend_bytes_equal_native_export": true,
+    "CLI": {
+      "path": "bin/windows-msvc/diagnostic-ed764546/src/sirius/app/Release/sirius.exe",
+      "bytes": 7890432,
+      "sha256": "5ccc2b3d7aaa3ba3529c46fe9bb534b29f421d10b34a8d4ace1ef27139ac1690"
+    },
+    "backend": {
+      "path": "bin/windows-msvc/diagnostic-ed764546/tests/backend/Release/sirius_backend_tests.exe",
+      "bytes": 11103744,
+      "sha256": "f6e1881e48dc79b580d0205f283a4d70db57bd8e1b7dd0129b2d42c188912a46"
+    },
+    "diagnostic_build_only": true,
+    "qualification_claimed": false,
+    "MSVC": "19.44.35229.0",
+    "release_CRT": "14.44.35112"
+  },
+  "raw_logs": {
+    "ZIP": {
+      "path": "out/kerr-composite-ci-ed764546/ci-logs.zip",
+      "bytes": 143159,
+      "sha256": "4455b1af5e325894663db7b016cd091a9686bced29fef908f67abe440843c588"
+    },
+    "four_step_members": [
+      {
+        "member": "integration-windows-no-render/7_Non-render authority controls.txt",
+        "bytes": 4966,
+        "sha256": "2fc24070ec9760664334236c873265063bd7b59a5a5d8f78f74befd52d5bcb90",
+        "scope": "initial10 passed"
+      },
+      {
+        "member": "integration-windows-no-render/10_Exact native-build evidence gate.txt",
+        "bytes": 5147,
+        "sha256": "17b37ffdda8d4d34b8b37d538c2c1038831861c51dfc6f7f9212c6f9acd2c257",
+        "scope": "exact native9 binding completion"
+      },
+      {
+        "member": "integration-macos-no-render/8_Non-render authority controls.txt",
+        "bytes": 4804,
+        "sha256": "90575944cf3cc30b5879bbe87532750e4c529de0d4a5c105e5d414d5d5716d4f",
+        "scope": "initial10 passed"
+      },
+      {
+        "member": "integration-macos-no-render/9_Exact native-build evidence gate.txt",
+        "bytes": 2327,
+        "sha256": "562ddbac82ef710722f799e7e2f63c5ecaf797140489db4bc1496711f2bf9926",
+        "scope": "exact native9 binding completion"
+      }
+    ],
+    "both_native_artifact_CTest_logs_report9passed_and_returncode0": true
+  },
+  "review_check_corrections": [
+    "Initial passive JUnit assertion used GoogleTest class.name; existing gate inspect_junit correctly uses full CTest testcase.name. Corrected comparison passed both9-case selections.",
+    "Initial console-summary assertion expected a native CTest summary inline and identical Windows/Mac wording. Native console redirects to the preserved artifact CTest log; Mac summary omits redundant zero-failed wording. Raw JUnit/log checks passed. No artifact/source changed, helper/test rerun or receipt written during the stopped assertions."
+  ],
+  "alignment_and_scope": {
+    "available_native_build_records": 2,
+    "compiled_admitted_domains": 0,
+    "required_pending_domains": 8,
+    "both_compiled_records_empty": true,
+    "both_ultimate_goal_satisfied": false,
+    "runtime_ready_claim": false,
+    "full_Mandatory_science_UI_domain_performance_release_or_horizon_claim": false,
+    "native_runtime_execution_admitted_by_this_receipt": false
+  },
+  "blockers_to_CI_product_provenance_admission": [],
+  "workspace": {
+    "tracked_source_clean": true,
+    "source_committed_and_pushed": true,
+    "ahead": 0,
+    "behind": 0,
+    "worktrees": 1,
+    "review_receipt": "Ignored task evidence; root owns Git preservation and cleanup."
+  }
+}

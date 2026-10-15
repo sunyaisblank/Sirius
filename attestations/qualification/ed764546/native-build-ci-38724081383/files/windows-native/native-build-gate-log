@@ -1,0 +1,32 @@
+command: C:\Program Files\CMake\bin\ctest.exe --test-dir D:\a\Sirius\Sirius\bin\windows-msvc --output-on-failure --no-tests=error -R ^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$ --output-junit D:\a\Sirius\Sirius\bin\windows-msvc\generated\sirius\native_build_gate_junit.xml -C Release
+output: combined stdout/stderr (running)
+Test project D:/a/Sirius/Sirius/bin/windows-msvc
+    Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+1/9 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    6.46 sec
+    Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2/9 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.07 sec
+    Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+3/9 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................   Passed    6.78 sec
+    Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+4/9 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   29.47 sec
+    Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+5/9 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.53 sec
+    Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+6/9 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.11 sec
+    Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+7/9 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.23 sec
+    Start 1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+8/9 Test #1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.01 sec
+    Start 1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+9/9 Test #1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.79 sec
+
+100% tests passed, 0 tests failed out of 9
+
+Label Time Summary:
+Correctness    =   0.80 sec*proc (2 tests)
+Mandatory      =  44.46 sec*proc (9 tests)
+Operational    =  44.46 sec*proc (9 tests)
+
+Total Test time (real) =  44.54 sec
+
+return_code: 0

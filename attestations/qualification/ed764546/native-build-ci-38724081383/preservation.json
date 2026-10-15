@@ -1,0 +1,41 @@
+{
+  "schema": "sirius-kerr-composite-ci-preservation-v1",
+  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+  "run_id": 38724081383,
+  "all3integration_jobs_passed": true,
+  "both_native_build_gates": {
+    "registered": 1152,
+    "selected": 9,
+    "executed": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "all1150prior_names_labels_timeouts_preserved": true,
+  "only2newMandatory_names_added": true,
+  "compiled_domains_admitted": 0,
+  "available_native_build_records": 2,
+  "full_Mandatory_runtime_science_release_claimed": false,
+  "payload_uncompressed_members": 155,
+  "omitted_product_containers": [
+    {
+      "name": "macos-native.zip",
+      "bytes": 63031155,
+      "sha256": "30825e43c58cd13bc200ef8b2840f3d3dff39ab1fba857816ed817eec3d3a91d",
+      "all_uncompressed_members_kept": true
+    },
+    {
+      "name": "windows-diagnostic.zip",
+      "bytes": 73396376,
+      "sha256": "a4cc6b58953f18812fbc2c3741e4b44cfab33ae22222c6066d0017f81285a47f",
+      "all_uncompressed_members_kept": true
+    },
+    {
+      "name": "windows-native.zip",
+      "bytes": 61860080,
+      "sha256": "246eecdd06d47053b770e14a3e7f740283e19260f3ad41ea3fe987429a4b4196",
+      "all_uncompressed_members_kept": true
+    }
+  ],
+  "retirement": "Raw CI packet currently remains a frozen dependency of the native seven-control sequence; remove only after those consumers are terminal and preservation verified."
+}

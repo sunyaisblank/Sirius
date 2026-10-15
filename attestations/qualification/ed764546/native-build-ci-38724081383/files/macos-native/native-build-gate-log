@@ -1,0 +1,32 @@
+command: /opt/homebrew/bin/ctest --test-dir /Users/runner/work/Sirius/Sirius/bin/macos --output-on-failure --no-tests=error -R ^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$ --output-junit /Users/runner/work/Sirius/Sirius/bin/macos/generated/sirius/native_build_gate_junit.xml -C Release
+output: combined stdout/stderr (running)
+Test project /Users/runner/work/Sirius/Sirius/bin/macos
+    Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+1/9 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    3.13 sec
+    Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2/9 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.04 sec
+    Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+3/9 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................   Passed    2.37 sec
+    Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+4/9 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   25.15 sec
+    Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+5/9 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.38 sec
+    Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+6/9 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.09 sec
+    Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+7/9 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.07 sec
+    Start 1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+8/9 Test #1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.01 sec
+    Start 1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+9/9 Test #1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.83 sec
+
+100% tests passed out of 9
+
+Label Time Summary:
+Correctness    =   0.84 sec*proc (2 tests)
+Mandatory      =  32.07 sec*proc (9 tests)
+Operational    =  32.07 sec*proc (9 tests)
+
+Total Test time (real) =  32.10 sec
+
+return_code: 0

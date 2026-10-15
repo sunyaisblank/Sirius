@@ -1,0 +1,268 @@
+{
+  "alignment_mode": "qualification",
+  "ctest": {
+    "errors": 0,
+    "executed": 9,
+    "failures": 0,
+    "inventory_sha256": "2eb6fc5e7abac2685b4825eca4c12ee1eddbd4060f2ab5548025d3cac276af39",
+    "junit": {
+      "bytes": 5244,
+      "path": "generated/sirius/native_build_gate_junit.xml",
+      "root": "build",
+      "sha256": "52946f6f690d8291a9b7a81e86232a748c2d52028c93d42735ce509b85fdafeb"
+    },
+    "log": {
+      "bytes": 2931,
+      "path": "generated/sirius/native_build_gate_ctest.log",
+      "root": "build",
+      "sha256": "fb1ccd1c6173c33ea3aa2cb2421605534de1ca7548575496259bf8908808c25f"
+    },
+    "registered": 1152,
+    "selected": 9,
+    "selection": [
+      "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+      "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+      "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+      "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+      "OperationalAttestation.FalseExternalEvidenceIsRejected",
+      "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+      "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+      "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+      "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims"
+    ],
+    "skipped": 0
+  },
+  "inputs": {
+    "alignment_receipt_sha256": "0b7ed45dbff8640439ddab35b9b199de7f7feae8ae048f0657c53cbc22dfc26e",
+    "operating_model_sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+  },
+  "kind": "sirius-native-build-gate",
+  "product_artifacts": {
+    "alignment_receipt": {
+      "bytes": 1240,
+      "path": "generated/sirius/alignment_receipt.json",
+      "root": "build",
+      "sha256": "0b7ed45dbff8640439ddab35b9b199de7f7feae8ae048f0657c53cbc22dfc26e"
+    },
+    "operating_model": {
+      "bytes": 130827,
+      "path": "tests/operating_model.json",
+      "root": "source",
+      "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+    },
+    "sirius": {
+      "bytes": 7890432,
+      "path": "src/sirius/app/Release/sirius.exe",
+      "root": "build",
+      "sha256": "5ccc2b3d7aaa3ba3529c46fe9bb534b29f421d10b34a8d4ace1ef27139ac1690"
+    },
+    "starfield": {
+      "bytes": 29984397,
+      "path": "assets/Starfield.png",
+      "root": "source",
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "trace_fp32comp_spv": {
+      "bytes": 4993388,
+      "path": "kernels/trace_fp32comp.spv",
+      "root": "build",
+      "sha256": "0b67bb7351299c19957ebce591528f70bc3af09b874f33d165a04b9fe6fe69a8"
+    },
+    "trace_fp64_spv": {
+      "bytes": 4890080,
+      "path": "kernels/trace_fp64.spv",
+      "root": "build",
+      "sha256": "68466bf4a13a38e998a19b55724e244b71676860312a1021efbeae611ba9df12"
+    },
+    "trace_spv": {
+      "bytes": 4990064,
+      "path": "kernels/trace.spv",
+      "root": "build",
+      "sha256": "95a9fe0544821152e80fb022f2cd56866185be2d0944f170bdfe13d6738a4e3b"
+    },
+    "viewer_rdsd003a_fragment": {
+      "bytes": 1167,
+      "path": "src/sirius/app/viewer/shaders/RDSD003A.frag",
+      "root": "source",
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "viewer_rdsd003a_vertex": {
+      "bytes": 198,
+      "path": "src/sirius/app/viewer/shaders/RDSD003A.vert",
+      "root": "source",
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    }
+  },
+  "schema_version": 2,
+  "source": {
+    "clean": true,
+    "revision": "ed76454617063f2463a75423b2756e8c957ce6c2"
+  },
+  "status": "passed",
+  "test_input_artifacts": {
+    "camera_frame_probe_fp32comp_spv": {
+      "bytes": 36660,
+      "path": "kernels/camera_frame_probe_fp32comp.spv",
+      "root": "build",
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "camera_frame_probe_fp64_spv": {
+      "bytes": 37728,
+      "path": "kernels/camera_frame_probe_fp64.spv",
+      "root": "build",
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "camera_frame_probe_spv": {
+      "bytes": 36660,
+      "path": "kernels/camera_frame_probe.spv",
+      "root": "build",
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "coupled_probe_fp64_spv": {
+      "bytes": 3252616,
+      "path": "kernels/coupled_probe_fp64.spv",
+      "root": "build",
+      "sha256": "6b45f084f4b8b22a51a013cb3d5d2fdbc1e464ec3a4245f79f8fcd5e5f42c15c"
+    },
+    "infinity_probe_fp32comp_spv": {
+      "bytes": 100040,
+      "path": "kernels/infinity_probe_fp32comp.spv",
+      "root": "build",
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "infinity_probe_fp64_spv": {
+      "bytes": 100568,
+      "path": "kernels/infinity_probe_fp64.spv",
+      "root": "build",
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "infinity_probe_spv": {
+      "bytes": 99692,
+      "path": "kernels/infinity_probe.spv",
+      "root": "build",
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "metric_consistency_probe_fp32comp_spv": {
+      "bytes": 65616,
+      "path": "kernels/metric_consistency_probe_fp32comp.spv",
+      "root": "build",
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "metric_consistency_probe_fp64_spv": {
+      "bytes": 66064,
+      "path": "kernels/metric_consistency_probe_fp64.spv",
+      "root": "build",
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "metric_consistency_probe_spv": {
+      "bytes": 65616,
+      "path": "kernels/metric_consistency_probe.spv",
+      "root": "build",
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "parity_probe_fp32comp_spv": {
+      "bytes": 9831364,
+      "path": "kernels/parity_probe_fp32comp.spv",
+      "root": "build",
+      "sha256": "062e03dc1f5f5d3ad40a8734bcb8a6aee7026b7532f58f2096fb376d0e3264a3"
+    },
+    "parity_probe_fp64_spv": {
+      "bytes": 9918432,
+      "path": "kernels/parity_probe_fp64.spv",
+      "root": "build",
+      "sha256": "15871ff7b8e368728b0d75d09ae6f4300b646f00603a6a3a711dbe2ebd21ced3"
+    },
+    "parity_probe_spv": {
+      "bytes": 9827140,
+      "path": "kernels/parity_probe.spv",
+      "root": "build",
+      "sha256": "3dcf4d75f132dcbb99a7d207c430aea8ff4e482b11fc93298d0d333866069b2d"
+    },
+    "portable_binary32_reference": {
+      "bytes": 4182444,
+      "path": "tests/backend/portable_binary32_reference.bin",
+      "root": "build",
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "retained_camera_fixture": {
+      "bytes": 421866,
+      "path": "tests/backend/retained_camera/program_fixture.h",
+      "root": "build",
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "retained_camera_fp32_spv": {
+      "bytes": 35160,
+      "path": "tests/backend/retained_camera/program_camera_probe-fp32.spv",
+      "root": "build",
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "retained_camera_fp32comp_spv": {
+      "bytes": 35196,
+      "path": "tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
+      "root": "build",
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "smoke_spv": {
+      "bytes": 1404,
+      "path": "kernels/smoke.spv",
+      "root": "build",
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "trace_cuda": {
+      "bytes": 654055,
+      "path": "kernels/portability/trace.cu",
+      "root": "build",
+      "sha256": "be0c634d23ac771dede56327ac029173007119aea787916ee61e7c8d084a0d70"
+    },
+    "trace_metal": {
+      "bytes": 362758,
+      "path": "kernels/portability/trace.metal",
+      "root": "build",
+      "sha256": "68e4c110bf42226517ad984ecc78f635d7a45813642195622664666dde104f42"
+    }
+  },
+  "tested_artifacts": {
+    "sirius": {
+      "bytes": 7890432,
+      "path": "src/sirius/app/Release/sirius.exe",
+      "root": "build",
+      "sha256": "5ccc2b3d7aaa3ba3529c46fe9bb534b29f421d10b34a8d4ace1ef27139ac1690"
+    },
+    "sirius_app_tests": {
+      "bytes": 8708096,
+      "path": "src/sirius/app/Release/sirius_app_tests.exe",
+      "root": "build",
+      "sha256": "751354b2c0a76e71c1755c72a6f85b105e3bf35fb87846adb5896381115dc0f8"
+    },
+    "sirius_backend_tests": {
+      "bytes": 11103744,
+      "path": "tests/backend/Release/sirius_backend_tests.exe",
+      "root": "build",
+      "sha256": "f6e1881e48dc79b580d0205f283a4d70db57bd8e1b7dd0129b2d42c188912a46"
+    },
+    "sirius_base_tests": {
+      "bytes": 583680,
+      "path": "tests/Release/sirius_base_tests.exe",
+      "root": "build",
+      "sha256": "fbe593a09fec417a4a1e3185bef22fec6a807d8b851b907ec34c187174d18c88"
+    },
+    "sirius_core_tests": {
+      "bytes": 2473472,
+      "path": "tests/core/Release/sirius_core_tests.exe",
+      "root": "build",
+      "sha256": "da0182f4426a3b57baeeece284dcf11a28fedb2a96fa7a64e552dbcaba31c527"
+    },
+    "sirius_oracle_tests": {
+      "bytes": 838656,
+      "path": "tests/oracle/Release/sirius_oracle_tests.exe",
+      "root": "build",
+      "sha256": "dab4c1cde06603d7341d6440a94949ac6f565bbb867492def89a432d1aeb7089"
+    },
+    "sirius_render_tests": {
+      "bytes": 9195520,
+      "path": "src/sirius/app/Release/sirius_render_tests.exe",
+      "root": "build",
+      "sha256": "fc58ce8a4a428b34d049affdbc35f9d2cca12135ca62a06dca24e5674070fb07"
+    }
+  }
+}
