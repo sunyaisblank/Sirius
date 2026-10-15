@@ -1,0 +1,409 @@
+{
+  "schema": "sirius-e2-original-cpu-independent-runtime-admission-v1",
+  "passed": true,
+  "materialized_metadata_admitted": true,
+  "test_execution_authorized_by_this_review": false,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewed_utc": "2026-10-15T17:38:29.329991+00:00",
+  "blockers": [],
+  "critical_pins": {
+    "independent-source-review.json": {
+      "path": "out/e2-original-cpu-witnesses-pending/independent-source-review.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/independent-source-review.json",
+      "bytes": 15217,
+      "sha256": "c40489677799ff0d151ed226485887b3fc5e8402bbd3fbd5ac0a70e3466cf205"
+    },
+    "source-contracts.json": {
+      "path": "out/e2-original-cpu-witnesses-pending/source-contracts.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/source-contracts.json",
+      "bytes": 35044,
+      "sha256": "c2d9be0818d68f260cb0be565cb65c816db98a14fc4081a7c9a3c89454538c8c"
+    },
+    "actions.pending.json": {
+      "path": "out/e2-original-cpu-witnesses-pending/actions.pending.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/actions.pending.json",
+      "bytes": 63453,
+      "sha256": "e964132317a8507ce48b44ff1cdee1f9a3305fc196775048f446408037a18678"
+    },
+    "commands.pending.json": {
+      "path": "out/e2-original-cpu-witnesses-pending/commands.pending.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/commands.pending.json",
+      "bytes": 3144,
+      "sha256": "4f6c6d9ca5404dd4079d2c83fbfff34bc1740e0e100410af929e37bd274bf236"
+    },
+    "actions.json": {
+      "path": "out/e2-original-cpu-witnesses-pending/actions.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/actions.json",
+      "bytes": 572192,
+      "sha256": "83956aff74304c138abcb7de2a483f622a7658350ef5205115233b5ae3cd62cb"
+    },
+    "readiness.json": {
+      "path": "out/e2-original-cpu-witnesses-pending/readiness.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/readiness.json",
+      "bytes": 59665,
+      "sha256": "a1ac89bc73d4a9d9e42a75757365ce948d40005cca09fc38deeccd71b05b6f55"
+    },
+    "root-preflight.json": {
+      "path": "out/e2-original-cpu-witnesses-pending/root-preflight.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/root-preflight.json",
+      "bytes": 322503,
+      "sha256": "2b788f2326fac54c3b25ad8e165ca37da2c00073156764b9f435ea777cd1999c"
+    },
+    "build-input-observation.json": {
+      "path": "out/e2-original-cpu-witnesses-pending/build-input-observation.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/build-input-observation.json",
+      "bytes": 240790,
+      "sha256": "e83ff8903332cb3ce6a583723f3972e31d28225ee8602f2eeb7622e46f1078e4"
+    },
+    "tool-dependency-strengthening.json": {
+      "path": "out/e2-original-cpu-witnesses-pending/tool-dependency-strengthening.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/tool-dependency-strengthening.json",
+      "bytes": 4453,
+      "sha256": "fb9815bae2b7e8d454383cd9c954c86971c2bf1657a6c32df2f339f0a1f1fa71"
+    },
+    "run_owned.py": {
+      "path": "out/e2-original-cpu-witnesses-pending/run_owned.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/e2-original-cpu-witnesses-pending/owned_guard.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "path": "out/e2-original-cpu-witnesses-pending/root_acceptance.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/root_acceptance.py",
+      "bytes": 3884,
+      "sha256": "825d7063c7742c229882b5f2a7e54439c67a70ac5f3a060ad00b3c3bd88fd813"
+    }
+  },
+  "scope": "Passive concrete-byte review of the existing eleven original E2 CPU single-case actions. This admits the materialized runtime metadata; root must separately release and own each execution. No test has been run by this reviewer.",
+  "materialization": {
+    "exact_pending_delta_fields": [
+      "revision",
+      "scope",
+      "frozen_inputs"
+    ],
+    "pending_revision_replaced_by_actual_clean_source": true,
+    "all_original_pending_selectors_and_ancestor_paths_retained": true,
+    "same_complete_common_strengthening_applied_to_all11": true,
+    "author_source_helpers_collector_and_numerical_assertions_unchanged": true,
+    "actual_action_order_exact_registered_argv": true,
+    "active_cases": 11,
+    "executables": 5,
+    "registered_estate": 1152,
+    "original_registered_TIMEOUT_absent_for_all11": true,
+    "expected_exit_integer_zero_kind_test_for_all11": true,
+    "software_provider_false_default_cache_for_all11": true,
+    "required_XML_property_omitted_for_all11": true,
+    "optional_property_collector_path_retains_exact_zero_FESD_single_completed_name_checks": true,
+    "linked_Vulkan_and_inherited_resource_lock_are_not_GPU_execution_evidence": true,
+    "all11_serial_stop_first_nonpass": true,
+    "commands_pending_remains_historical_unadmitted_template": true,
+    "cases": [
+      {
+        "case": "oracle-initial-domain",
+        "original_name": "WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution",
+        "frozen_selector_paths": 825,
+        "expected_whole_input_rows": 1257,
+        "previous_case_files": 0
+      },
+      {
+        "case": "oracle-schwarzschild-rigid",
+        "original_name": "WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly",
+        "frozen_selector_paths": 829,
+        "expected_whole_input_rows": 1261,
+        "previous_case_files": 4
+      },
+      {
+        "case": "core-wp-conservation",
+        "original_name": "WalkerPenroseLivePath.ConservesConstantAndOrthonormality",
+        "frozen_selector_paths": 833,
+        "expected_whole_input_rows": 1265,
+        "previous_case_files": 8
+      },
+      {
+        "case": "core-wp-cross-charts",
+        "original_name": "WalkerPenroseLivePath.AgreesWithOracleAcrossCharts",
+        "frozen_selector_paths": 837,
+        "expected_whole_input_rows": 1269,
+        "previous_case_files": 12
+      },
+      {
+        "case": "app-polarisation-domain",
+        "original_name": "ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk",
+        "frozen_selector_paths": 841,
+        "expected_whole_input_rows": 1273,
+        "previous_case_files": 16
+      },
+      {
+        "case": "backend-disk-reconstruction",
+        "original_name": "PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction",
+        "frozen_selector_paths": 845,
+        "expected_whole_input_rows": 1277,
+        "previous_case_files": 20
+      },
+      {
+        "case": "backend-outward-passive",
+        "original_name": "PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive",
+        "frozen_selector_paths": 849,
+        "expected_whole_input_rows": 1281,
+        "previous_case_files": 24
+      },
+      {
+        "case": "render-disk-orientation",
+        "original_name": "GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation",
+        "frozen_selector_paths": 853,
+        "expected_whole_input_rows": 1285,
+        "previous_case_files": 28
+      },
+      {
+        "case": "render-past-horizon",
+        "original_name": "GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture",
+        "frozen_selector_paths": 857,
+        "expected_whole_input_rows": 1289,
+        "previous_case_files": 32
+      },
+      {
+        "case": "session-cpu-polarisation",
+        "original_name": "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes",
+        "frozen_selector_paths": 861,
+        "expected_whole_input_rows": 1293,
+        "previous_case_files": 36
+      },
+      {
+        "case": "session-request-domain",
+        "original_name": "RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented",
+        "frozen_selector_paths": 865,
+        "expected_whole_input_rows": 1297,
+        "previous_case_files": 40
+      }
+    ]
+  },
+  "current_input_closure": {
+    "preflight_files_freshly_hashed": 1256,
+    "tracked_source_files": 538,
+    "owner_expected_rows": [
+      1257,
+      1261,
+      1265,
+      1269,
+      1273,
+      1277,
+      1281,
+      1285,
+      1289,
+      1293,
+      1297
+    ],
+    "common_frozen_selector_paths": 825,
+    "prior_ancestor_files_exactly": [
+      "owner.json",
+      "stdout.log",
+      "stderr.log",
+      "gtest.xml"
+    ],
+    "owner_union_equals_preflight_plus_preflight_itself_plus_exact_prior_files": true,
+    "collector_rechecks_all_prior_root_acceptance_saved_raw_pins_before_current_acceptance": true,
+    "preflight_excludes_own_hash_and_future_case_outputs": true,
+    "this_sidecar_excluded_from_all_actions_and_preflight": true,
+    "all11_case_and_root_acceptance_outputs_absent": true,
+    "historical_retired_runtime_maps_not_replayed": true
+  },
+  "actual_build_dependency_evidence": {
+    "source_application": {
+      "path": "out/trace-jacobi-device-lifetime-checks/source-application.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-device-lifetime-checks/source-application.json",
+      "bytes": 3974,
+      "sha256": "f00fd8ef248994f09a51f62ec2ba69a94f55463e0cf39b1ce5a0fb33fc61139e"
+    },
+    "configure_and_strict_build_reported_actual_exit_zero": true,
+    "raw_build_log_contains_all5_links_SourceGovernance_and_110_completed_commands": true,
+    "fresh_test_ELFs": {
+      "bin/linux-gcc/tests/backend/sirius_backend_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "bytes": 13502080,
+        "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+      },
+      "bin/linux-gcc/tests/core/sirius_core_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "bytes": 5199120,
+        "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+      },
+      "bin/linux-gcc/tests/oracle/sirius_oracle_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "bytes": 1678696,
+        "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+      },
+      "bin/linux-gcc/src/sirius/app/sirius_app_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_app_tests",
+        "bytes": 11397000,
+        "sha256": "753f08c883336261d15bbe069dc463ca1aba36ec6ce1a56b968715859a7c95b4"
+      },
+      "bin/linux-gcc/src/sirius/app/sirius_render_tests": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "bytes": 12212608,
+        "sha256": "37fef0e35bea4abf28a075ba6b5cf1918cfde318a4988ae0255553f50689f18e"
+      }
+    },
+    "actual_metadata_exits": {
+      "ctest_show_only": 0,
+      "ldd5": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ninja_selected_deps": 0,
+      "ninja_five_commands": 0
+    },
+    "saved_Ninja_dependency_sections_VALID": 11,
+    "unique_resolved_header_dependencies": 620,
+    "selected_compile_rows_exact_compile_commands_and_saved_commands": 11,
+    "compile_flags": [
+      "-Werror",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-std=c++2c"
+    ],
+    "Release_NDEBUG_retained_GoogleTest_assertions_unchanged": true,
+    "link_edges_exact_current_build_ninja_and_saved_commands": 5,
+    "literal_regular_link_file_union": 129,
+    "all_link_files_and_dependency_headers_content_pinned": true,
+    "extra_build_runtime_pin_rows_immutable_observation": 788,
+    "latest_Ninja_multioutput_ledger_checks": {
+      "tests/backend/sirius_backend_tests": {
+        "rule_outputs": [
+          "tests/backend/sirius_backend_tests",
+          "tests/backend/sirius_backend_tests[1]_tests.cmake"
+        ],
+        "logged_output_mtime_ns": "1792084884141110682",
+        "matches_maximum_rule_output_mtime": true
+      },
+      "tests/core/sirius_core_tests": {
+        "rule_outputs": [
+          "tests/core/sirius_core_tests",
+          "tests/core/sirius_core_tests[1]_tests.cmake"
+        ],
+        "logged_output_mtime_ns": "1792084875789103764",
+        "matches_maximum_rule_output_mtime": true
+      },
+      "tests/oracle/sirius_oracle_tests": {
+        "rule_outputs": [
+          "tests/oracle/sirius_oracle_tests",
+          "tests/oracle/sirius_oracle_tests[1]_tests.cmake"
+        ],
+        "logged_output_mtime_ns": "1792084876084712885",
+        "matches_maximum_rule_output_mtime": true
+      },
+      "src/sirius/app/sirius_app_tests": {
+        "rule_outputs": [
+          "src/sirius/app/sirius_app_tests",
+          "tests/app/sirius_app_tests[1]_tests.cmake"
+        ],
+        "logged_output_mtime_ns": "1792084884564798878",
+        "matches_maximum_rule_output_mtime": true
+      },
+      "src/sirius/app/sirius_render_tests": {
+        "rule_outputs": [
+          "src/sirius/app/sirius_render_tests",
+          "tests/render/sirius_render_tests[1]_tests.cmake"
+        ],
+        "logged_output_mtime_ns": "1792084890071594033",
+        "matches_maximum_rule_output_mtime": true
+      }
+    },
+    "compiled_alignment_admitted_domains": 0,
+    "compiled_alignment_required_domains": 8,
+    "alignment_mode": "qualification",
+    "release_packaging_disabled": true
+  },
+  "runtime_libraries": {
+    "selected_five_test_ELF_DSO_union": [
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+    ],
+    "Git_Python_additional_actual_DSOs": [
+      "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2",
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.3"
+    ],
+    "combined_test_and_tool_DT_NEEDED_union": [
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.3"
+    ],
+    "all7_saved_ldd_captures_zero_stderr_no_missing_paths_and_exact_resolved_sets": true,
+    "test_union_count": 6,
+    "combined_union_count": 9,
+    "strengthening_happened_before_release_or_test": true,
+    "scope": "Saved actual ldd output and current file bytes for these five executables, Git and Python. This is not a claim about every possible dynamic import or unobserved provider."
+  },
+  "CPU_asset": {
+    "canonical": {
+      "path": "assets/Starfield.png",
+      "resolved_path": "/home/astra/.project/Sirius/assets/Starfield.png",
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "actual_executable_adjacent": {
+      "path": "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png",
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "exact_bytes_equal": true,
+    "source_resolution_review": "Release-resource-locked current locator and CPU nonpoint session resolve the exact executable-adjacent asset; no resource override. write_output=false does not remove Starfield input.",
+    "real_session_modes": "Original CPU TrueColor and Polarisation, 24x24, one SPP; no executor/backend injection or output-file substitution."
+  },
+  "guards_and_release_conditions": {
+    "prospective_external_seconds_per_case": 300,
+    "aggregate_controller_plus_owned_child_RSS_KiB": 4194304,
+    "minimum_available_memory_KiB": 2097152,
+    "operator_bounds_are_not_an_original_registered_deadline": true,
+    "normal_Python_assertions_and_no_protected_inherited_overrides_required": true,
+    "current_review_environment_protected_overrides": {},
+    "provider_mappings_expected": [],
+    "no_Vulkan_LVP_Int64_Float64_or_native_build_gate_runtime_precondition_added": true,
+    "root_release_pending_in_both_materialized_receipts": true,
+    "before_each_case": "Root must freshly validate pinned current source/inputs, then run the exact ordinary owner once. Stop on first nonpass; accept exact XML and complete unchanged input/source/ownership/guard evidence before the next case.",
+    "full_CI_or_external_qualification_not_required_for_this_scoped_CPU_metadata_admission": true
+  },
+  "method": {
+    "allowed_only": "Passive Python standard-library JSON/hash/text/AST and read-only Git; no project/helper import or execution, compiler, provider, test, native tool, network or process query.",
+    "reviewer_readonly_check_refinements": [
+      "Link inputs exclude Ninja order-only outputs such as the incidental CLI.",
+      "Canonical Starfield identity uses source-contract assets/Starfield.png.",
+      "Ninja executable rules also emit CTest registration; ledger mtime matches the newest rule output, not necessarily the executable alone."
+    ],
+    "integer_timestamps_preserved_as_Python_integers_or_exact_strings": true
+  },
+  "checkout": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "tracked_tree_clean": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "review_sidecar_committed_or_pushed": false
+  },
+  "limitations": [
+    "No numerical verdict or actual E2 case execution follows from this metadata review.",
+    "No full E2/scientific-domain, P1, Mandatory estate, native AMD, UI, performance or release qualification.",
+    "Original unsupported-request refusals remain required outcomes in the selected negative cases; no invented positive CPU XML property."
+  ]
+}

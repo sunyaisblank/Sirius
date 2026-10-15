@@ -1,0 +1,679 @@
+{
+  "schema": "sirius-kerr-cartdelta-rhs-root-retirement-result-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "completed_utc": "2026-10-15T17:17:02.048474+00:00",
+  "exact_files_removed": 643,
+  "bytes_removed": 506858498,
+  "Git_backed_removed": 638,
+  "explicit_ZIP_encodings_removed": 5,
+  "exact_replacement_members_rechecked": 227,
+  "all621_P2_inputs_and29_extra_holds_unchanged_after": true,
+  "remaining_files_in_selected_roots": {
+    "out/kerr-cartdelta-rhs-ci-e0db7d59": [],
+    "out/kerr-cartdelta-rhs-controls": [],
+    "out/native-windows-kerr-rhs-e0db7d59": [],
+    "out/native-windows-kerr-rhs-preservation": [],
+    "out/kerr-cartdelta-rhs-software-preservation": [],
+    "out/kerr-cartdelta-rhs-ci-preservation": [],
+    "out/coupled-rk4-original-witness-e0db7d59": [
+      "out/coupled-rk4-original-witness-e0db7d59/independent-completion-review.json",
+      "out/coupled-rk4-original-witness-e0db7d59/root-completed-results.json"
+    ]
+  },
+  "fresh_saved_Linux_birth_absences": [
+    {
+      "pid": 939764,
+      "saved_start_ticks": "12549500",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarecontroller"
+    },
+    {
+      "pid": 939768,
+      "saved_start_ticks": "12549558",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarechild"
+    },
+    {
+      "pid": 941218,
+      "saved_start_ticks": "12574155",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarecontroller"
+    },
+    {
+      "pid": 941222,
+      "saved_start_ticks": "12574187",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarechild"
+    },
+    {
+      "pid": 942911,
+      "saved_start_ticks": "12599512",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarecontroller"
+    },
+    {
+      "pid": 942915,
+      "saved_start_ticks": "12599567",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarechild"
+    },
+    {
+      "pid": 947127,
+      "saved_start_ticks": "12652384",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarecontroller"
+    },
+    {
+      "pid": 947131,
+      "saved_start_ticks": "12652416",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarechild"
+    },
+    {
+      "pid": 947700,
+      "saved_start_ticks": "12668954",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarecontroller"
+    },
+    {
+      "pid": 947704,
+      "saved_start_ticks": "12668987",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarechild"
+    },
+    {
+      "pid": 951220,
+      "saved_start_ticks": "12718095",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarecontroller"
+    },
+    {
+      "pid": 951224,
+      "saved_start_ticks": "12718130",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarechild"
+    },
+    {
+      "pid": 952297,
+      "saved_start_ticks": "12733428",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarecontroller"
+    },
+    {
+      "pid": 952322,
+      "saved_start_ticks": "12733496",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarechild"
+    },
+    {
+      "pid": 953542,
+      "saved_start_ticks": "12747455",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarecontroller"
+    },
+    {
+      "pid": 953551,
+      "saved_start_ticks": "12747510",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "softwarechild"
+    },
+    {
+      "pid": 960111,
+      "saved_start_ticks": "12849823",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 960146,
+      "saved_start_ticks": "12850326",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 970225,
+      "saved_start_ticks": "12881759",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 973935,
+      "saved_start_ticks": "12894148",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 973944,
+      "saved_start_ticks": "12894583",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 983686,
+      "saved_start_ticks": "12930802",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 986893,
+      "saved_start_ticks": "12934931",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 986901,
+      "saved_start_ticks": "12935495",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 997263,
+      "saved_start_ticks": "12971052",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1000701,
+      "saved_start_ticks": "12977378",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1000761,
+      "saved_start_ticks": "12978113",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1009570,
+      "saved_start_ticks": "12986186",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1013111,
+      "saved_start_ticks": "12994425",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1013135,
+      "saved_start_ticks": "12995277",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1021213,
+      "saved_start_ticks": "13001686",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1024550,
+      "saved_start_ticks": "13008436",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1024596,
+      "saved_start_ticks": "13009869",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1033455,
+      "saved_start_ticks": "13038179",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1036977,
+      "saved_start_ticks": "13044485",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1037033,
+      "saved_start_ticks": "13045699",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1046499,
+      "saved_start_ticks": "13077770",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "nativeinterop"
+    },
+    {
+      "pid": 1055797,
+      "saved_start_ticks": "13190537",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "finalcontroller"
+    },
+    {
+      "pid": 1055801,
+      "saved_start_ticks": "13190570",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "finalchild"
+    },
+    {
+      "pid": 1061335,
+      "saved_start_ticks": "13273216",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "finalcontroller"
+    },
+    {
+      "pid": 1061358,
+      "saved_start_ticks": "13273252",
+      "current_start_ticks": null,
+      "absent": true,
+      "role": "finalchild"
+    }
+  ],
+  "fresh_accessible_consumer_audit": {
+    "process_entries": 54,
+    "hits": [],
+    "inaccessible_fields": [
+      {
+        "pid": 6,
+        "field": "cwd"
+      },
+      {
+        "pid": 6,
+        "field": "exe"
+      },
+      {
+        "pid": 6,
+        "field": "fd"
+      },
+      {
+        "pid": 40,
+        "field": "cwd"
+      },
+      {
+        "pid": 40,
+        "field": "exe"
+      },
+      {
+        "pid": 40,
+        "field": "fd"
+      },
+      {
+        "pid": 90,
+        "field": "cwd"
+      },
+      {
+        "pid": 90,
+        "field": "exe"
+      },
+      {
+        "pid": 90,
+        "field": "fd"
+      },
+      {
+        "pid": 147,
+        "field": "cwd"
+      },
+      {
+        "pid": 147,
+        "field": "exe"
+      },
+      {
+        "pid": 147,
+        "field": "fd"
+      },
+      {
+        "pid": 148,
+        "field": "cwd"
+      },
+      {
+        "pid": 148,
+        "field": "exe"
+      },
+      {
+        "pid": 148,
+        "field": "fd"
+      },
+      {
+        "pid": 157,
+        "field": "cwd"
+      },
+      {
+        "pid": 157,
+        "field": "exe"
+      },
+      {
+        "pid": 157,
+        "field": "fd"
+      },
+      {
+        "pid": 158,
+        "field": "cwd"
+      },
+      {
+        "pid": 158,
+        "field": "exe"
+      },
+      {
+        "pid": 158,
+        "field": "fd"
+      },
+      {
+        "pid": 165,
+        "field": "cwd"
+      },
+      {
+        "pid": 165,
+        "field": "exe"
+      },
+      {
+        "pid": 165,
+        "field": "fd"
+      },
+      {
+        "pid": 169,
+        "field": "cwd"
+      },
+      {
+        "pid": 169,
+        "field": "exe"
+      },
+      {
+        "pid": 169,
+        "field": "fd"
+      },
+      {
+        "pid": 176,
+        "field": "cwd"
+      },
+      {
+        "pid": 176,
+        "field": "exe"
+      },
+      {
+        "pid": 176,
+        "field": "fd"
+      },
+      {
+        "pid": 179,
+        "field": "cwd"
+      },
+      {
+        "pid": 179,
+        "field": "exe"
+      },
+      {
+        "pid": 179,
+        "field": "fd"
+      },
+      {
+        "pid": 195,
+        "field": "cwd"
+      },
+      {
+        "pid": 195,
+        "field": "exe"
+      },
+      {
+        "pid": 195,
+        "field": "fd"
+      },
+      {
+        "pid": 211,
+        "field": "cwd"
+      },
+      {
+        "pid": 211,
+        "field": "exe"
+      },
+      {
+        "pid": 211,
+        "field": "fd"
+      },
+      {
+        "pid": 216,
+        "field": "cwd"
+      },
+      {
+        "pid": 216,
+        "field": "exe"
+      },
+      {
+        "pid": 216,
+        "field": "fd"
+      },
+      {
+        "pid": 327,
+        "field": "cwd"
+      },
+      {
+        "pid": 327,
+        "field": "exe"
+      },
+      {
+        "pid": 327,
+        "field": "fd"
+      },
+      {
+        "pid": 329,
+        "field": "cwd"
+      },
+      {
+        "pid": 329,
+        "field": "exe"
+      },
+      {
+        "pid": 329,
+        "field": "fd"
+      },
+      {
+        "pid": 332,
+        "field": "cwd"
+      },
+      {
+        "pid": 332,
+        "field": "exe"
+      },
+      {
+        "pid": 332,
+        "field": "fd"
+      },
+      {
+        "pid": 359,
+        "field": "cwd"
+      },
+      {
+        "pid": 359,
+        "field": "exe"
+      },
+      {
+        "pid": 359,
+        "field": "fd"
+      },
+      {
+        "pid": 439,
+        "field": "cwd"
+      },
+      {
+        "pid": 439,
+        "field": "exe"
+      },
+      {
+        "pid": 439,
+        "field": "fd"
+      },
+      {
+        "pid": 440,
+        "field": "cwd"
+      },
+      {
+        "pid": 440,
+        "field": "exe"
+      },
+      {
+        "pid": 440,
+        "field": "fd"
+      },
+      {
+        "pid": 462,
+        "field": "cwd"
+      },
+      {
+        "pid": 462,
+        "field": "exe"
+      },
+      {
+        "pid": 462,
+        "field": "fd"
+      },
+      {
+        "pid": 585,
+        "field": "cwd"
+      },
+      {
+        "pid": 585,
+        "field": "exe"
+      },
+      {
+        "pid": 585,
+        "field": "fd"
+      },
+      {
+        "pid": 586,
+        "field": "cwd"
+      },
+      {
+        "pid": 586,
+        "field": "exe"
+      },
+      {
+        "pid": 586,
+        "field": "fd"
+      },
+      {
+        "pid": 1127,
+        "field": "cwd"
+      },
+      {
+        "pid": 1127,
+        "field": "exe"
+      },
+      {
+        "pid": 1127,
+        "field": "fd"
+      },
+      {
+        "pid": 1128,
+        "field": "cwd"
+      },
+      {
+        "pid": 1128,
+        "field": "exe"
+      },
+      {
+        "pid": 1128,
+        "field": "fd"
+      },
+      {
+        "pid": 355328,
+        "field": "cwd"
+      },
+      {
+        "pid": 355328,
+        "field": "exe"
+      },
+      {
+        "pid": 355328,
+        "field": "fd"
+      },
+      {
+        "pid": 420683,
+        "field": "cwd"
+      },
+      {
+        "pid": 420683,
+        "field": "exe"
+      },
+      {
+        "pid": 420683,
+        "field": "fd"
+      },
+      {
+        "pid": 478591,
+        "field": "cwd"
+      },
+      {
+        "pid": 478591,
+        "field": "exe"
+      },
+      {
+        "pid": 478591,
+        "field": "fd"
+      },
+      {
+        "pid": 478592,
+        "field": "cwd"
+      },
+      {
+        "pid": 478592,
+        "field": "exe"
+      },
+      {
+        "pid": 478592,
+        "field": "fd"
+      }
+    ],
+    "scope": "Accessible Linux cwd/exe/fd and exactsavedbirths only; no global/Windowsabsence."
+  },
+  "admission_publication": {
+    "bytes": 1603,
+    "sha256": "de494de0204bd14025f6b42ac46a123f9f259d87031d8e7cd433b3fa76ad63c8"
+  },
+  "independent_final_review": {
+    "bytes": 6954,
+    "sha256": "7fb75925bcb251eeab4c41bc92785996ccee14af427520376d5e61ee3452cf78"
+  },
+  "deletion_complete": true,
+  "P2rawpacket_source_build_canonical_stages_tools_held": true,
+  "source_or_build_hold_release": false,
+  "scope": "Exact listed643closeddiagnostic leaves retired after published reviews/backups/freshroot checks. Original P2RSSstop remains incomplete/noXML; no retry/qualification/sourcechange."
+}

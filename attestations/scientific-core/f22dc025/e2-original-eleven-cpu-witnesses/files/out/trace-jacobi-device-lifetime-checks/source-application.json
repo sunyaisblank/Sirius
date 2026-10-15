@@ -1,0 +1,99 @@
+{
+  "schema": "sirius-trace-jacobi-device-lifetime-source-application-v1",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "parent_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "created_utc": "2026-10-15T17:18:38.550149+00:00",
+  "changed_files": [
+    "tests/backend/kernel_trace_test.cpp"
+  ],
+  "candidate_cpp": {
+    "bytes": 30579,
+    "sha256": "a5087954943aad20123b08acb0153db71eb69dddd4676ebecc6691ca43f4d549"
+  },
+  "reviewed_candidate_exact": true,
+  "independent_source_review": {
+    "bytes": 7684,
+    "sha256": "84e8d11030c566d5d3a66598fb83c62c2815e096427b5b943268a0bc7448d22a"
+  },
+  "source_contracts": {
+    "bytes": 8502,
+    "sha256": "51106f6ff62bcd4433c0d718bfcec1dbf642e6373818cd9e863d194352101628"
+  },
+  "prior_source_build_hold_release": {
+    "bytes": 1380,
+    "sha256": "2405304a502f66d3cd7385f7c0d847f93edfcceec743e8a449838b388f01ba78"
+  },
+  "actual_clang_format_dry_run_exit": 0,
+  "format_log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "commit_diff": {
+    "bytes": 2229,
+    "sha256": "27ec7e243ffc30dca93e39499f6dde278de53269fd351c9111ca4d31eb2063b7"
+  },
+  "source_committed": true,
+  "source_pushed": true,
+  "strict_build_pending": false,
+  "runtime_qualification_pending": true,
+  "scope": "Existing originalP2test only: perrungdevice lifetime and3flushedprogressmarkers. Sameall3rungs/assertions/settings/refusal/recovery/ABI/1000ms/128attempts; no shader/numerical/productionAPI change or RSS/performance/completion claim.",
+  "actual_push_observed_closed_zero": true,
+  "fresh_remote_verified_after_actual_push_closure": true,
+  "source_push_verified_utc": "2026-10-15T17:19:12.006853+00:00",
+  "strict_configure_actual_exit": 0,
+  "strict_build_actual_exit": 0,
+  "strict_build_completed_utc": "2026-10-15T17:23:35.910537+00:00",
+  "strict_preset": "linux-gcc",
+  "strict_targets": [
+    "sirius_backend_tests",
+    "sirius_core_tests",
+    "sirius_oracle_tests",
+    "sirius_app_tests",
+    "sirius_render_tests",
+    "SiriusSourceGovernance"
+  ],
+  "parallel_jobs": 2,
+  "required_cache": [
+    "SIRIUS_ALIGNMENT_MODE:STRING=qualification",
+    "SIRIUS_CONTRACT_MODE:STRING=2",
+    "SIRIUS_MANDATORY_TESTS:BOOL=ON",
+    "SIRIUS_WERROR:BOOL=ON",
+    "SIRIUS_REQUIRE_VULKAN_RUNTIME:BOOL=ON",
+    "CMAKE_BUILD_TYPE:STRING=Release"
+  ],
+  "configure_log": {
+    "bytes": 1277,
+    "sha256": "6fab11c240d2da21ca97a41b7b910acdb2593aecd7bd0a91d4c7ec8f4b4c108c"
+  },
+  "build_log": {
+    "bytes": 10562,
+    "sha256": "67d73145550011ed3565411593ba6eb60a3f26aa204b499aacb10570e4d3ed2e"
+  },
+  "current_five_test_ELFs": {
+    "bin/linux-gcc/tests/backend/sirius_backend_tests": {
+      "bytes": 13502080,
+      "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    "bin/linux-gcc/src/sirius/app/sirius_app_tests": {
+      "bytes": 11397000,
+      "sha256": "753f08c883336261d15bbe069dc463ca1aba36ec6ce1a56b968715859a7c95b4"
+    },
+    "bin/linux-gcc/src/sirius/app/sirius_render_tests": {
+      "bytes": 12212608,
+      "sha256": "37fef0e35bea4abf28a075ba6b5cf1918cfde318a4988ae0255553f50689f18e"
+    }
+  },
+  "generated_alignment_receipt": {
+    "bytes": 1240,
+    "sha256": "ea38f2e58909a4cd1f236717fd02ce7ab808977eae3e9f979faf2eab70072b4f"
+  },
+  "build_scope": "Actual110commands/sourcegovernance, all5ELFslinked (backendkernel_trace_test.cpp compiled) plusincidentalCLIlink/appdependencies. No shadercompile/relink claim inferred fromold e0producer; unchanged currentSPIRV mustbe freshlybytebound inruntimeadmission. Compiledalignment0of8/nofullruntimequalification."
+}

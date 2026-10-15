@@ -1,0 +1,62 @@
+{
+  "schema": "sirius-e2-original-cpu-root-runtime-release-v1",
+  "created_utc": "2026-10-15T17:39:19.141443+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "source_clean_committed_pushed": true,
+  "all1256_static_preflight_pins_fresh_exact": true,
+  "independent_runtime_review": {
+    "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/independent-runtime-admission.json",
+    "bytes": 18803,
+    "sha256": "403a5aa611e317acffc779b79ac5c0ecc0363d0dfe09f35b95f46591d57a340b"
+  },
+  "critical_inputs": {
+    "actions.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/actions.json",
+      "bytes": 572192,
+      "sha256": "83956aff74304c138abcb7de2a483f622a7658350ef5205115233b5ae3cd62cb"
+    },
+    "readiness.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/readiness.json",
+      "bytes": 59665,
+      "sha256": "a1ac89bc73d4a9d9e42a75757365ce948d40005cca09fc38deeccd71b05b6f55"
+    },
+    "root-preflight.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/root-preflight.json",
+      "bytes": 322503,
+      "sha256": "2b788f2326fac54c3b25ad8e165ca37da2c00073156764b9f435ea777cd1999c"
+    },
+    "build-input-observation.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/build-input-observation.json",
+      "bytes": 240790,
+      "sha256": "e83ff8903332cb3ce6a583723f3972e31d28225ee8602f2eeb7622e46f1078e4"
+    },
+    "tool-dependency-strengthening.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/tool-dependency-strengthening.json",
+      "bytes": 4453,
+      "sha256": "fb9815bae2b7e8d454383cd9c954c86971c2bf1657a6c32df2f339f0a1f1fa71"
+    }
+  },
+  "authorized_serial_order": [
+    "oracle-initial-domain",
+    "oracle-schwarzschild-rigid",
+    "core-wp-conservation",
+    "core-wp-cross-charts",
+    "app-polarisation-domain",
+    "backend-disk-reconstruction",
+    "backend-outward-passive",
+    "render-disk-orientation",
+    "render-past-horizon",
+    "session-cpu-polarisation",
+    "session-request-domain"
+  ],
+  "release": true,
+  "normal_Python_assertions": true,
+  "protected_environment": {},
+  "per_case_limits": {
+    "seconds": 300,
+    "aggregate_sampled_RSS_KiB": 4194304,
+    "reserve_KiB": 2097152
+  },
+  "before_each_next_case": "Fresh root preflight +allprioraccepted/rawpins, exactowneractualclosure then collectoractualclosure; stopfirstnonpass. Keep source/build/privateproofs frozen.",
+  "scope": "Root releases original11 CPU witnesses once serially. Not a numerical verdict/fullscience/Mandatory/native/release qualification."
+}

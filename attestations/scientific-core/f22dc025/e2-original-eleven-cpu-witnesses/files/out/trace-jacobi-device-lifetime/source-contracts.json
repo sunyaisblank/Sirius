@@ -1,0 +1,148 @@
+{
+  "schema": "sirius-trace-jacobi-rung-device-lifetime-source-candidate-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "source_only": true,
+  "tracked_source_applied": false,
+  "runtime_authorized_or_executed": false,
+  "case": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+  "original_source": {
+    "path": "tests/backend/kernel_trace_test.cpp",
+    "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+    "git_blob": "5f1bc3ce761f254284df2520c68e84d0b70d700e",
+    "bytes": 30289,
+    "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a"
+  },
+  "files": {
+    "original.cpp": {
+      "bytes": 30289,
+      "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a"
+    },
+    "candidate.cpp": {
+      "bytes": 30579,
+      "sha256": "a5087954943aad20123b08acb0153db71eb69dddd4676ebecc6691ca43f4d549"
+    },
+    "patch.diff": {
+      "bytes": 1873,
+      "sha256": "e3b23ba7d5f5db2561efc4105023bcb084fe307ba582a3a4bec22faea7b05657"
+    }
+  },
+  "delta": {
+    "only_function": "tests/backend/kernel_trace_test.cpp:424",
+    "include_change": false,
+    "iostream_already_included": true,
+    "device_creation": "Move existing CreateVulkanDevice(*selected), its existing ASSERT_TRUE and device reference from outside to inside unchanged3-rung loop, after begin marker. No factory/API/selection changes.",
+    "stdout_only_additions": [
+      {
+        "line": "std::cout << \"[TraceJacobiRung] module=\" << name << \" phase=begin\" << std::endl;",
+        "where": "At start of rung after SCOPED_TRACE, before logical device creation."
+      },
+      {
+        "line": "std::cout << \"[TraceJacobiRung] module=\" << name << \" phase=prepared\" << std::endl;",
+        "where": "Immediately after existing successful Prepare assertion; includes completion of software zero-active warm dispatch when applicable."
+      },
+      {
+        "line": "std::cout << \"[TraceJacobiRung] module=\" << name << \" phase=exercised\" << std::endl;",
+        "where": "After existing ASSERT_NO_FATAL_FAILURE float/double branch, before rung scope ends."
+      }
+    ],
+    "markers_flushed_by_std_endl": true,
+    "marker_exercised_means_PASS": false,
+    "exact_inverse_restores_original": true,
+    "bytes_outside_function_unchanged": true,
+    "all_assertion_macro_names_order_and_count_unchanged": true,
+    "all_numeric_literals_order_and_count_unchanged": true
+  },
+  "Hoare_contract": {
+    "preconditions": [
+      "Run only after source/evidence hold release and independent/root review/application/build/admission; current e0/source/build/P2raw inputs remain untouched.",
+      "Original Enumerate/Resolve once and same selected physical index remain outside3-rung loop; each factory call opens that same selected index.",
+      "Synchronous Dispatch completion/adapter lifetime semantics remain unchanged."
+    ],
+    "invariant": [
+      "Each supported rung uses exactly one logical device for its complete original probe, all10 RunRegion calls and manual negative Finalize.",
+      "Failed-record retention/sample1/2 refusal/sample0 recovery/sample1 averaging retain same buffers/probe/device within that rung.",
+      "Kernel order, full float/double bodies, assertions,70-float packet,128attempts,64-row allocation,8x8localgroup,1000msphysical phases/tolerances/guards/cache/settings are unchanged.",
+      "No FP64 property added; existing unsupported-FP64 decline/property/continue are unchanged.",
+      "No numerical/RK/metric/ABI/production releaseAPI or filters/tests split is introduced."
+    ],
+    "postconditions": [
+      "At loop end or any fatal-return/unsupported-continue path, automatic unique_ptr destruction invokes existing VulkanDevice destructor before next rung.",
+      "Normal destruction waits idle, snapshots bounded optional cache, destroys pipelines/layouts/modules/buffers/memory/cache/device/instance.",
+      "Existing exceptional destruction rule retained: if vkDeviceWaitIdle returns neither VK_SUCCESS nor VK_ERROR_DEVICE_LOST, the native device/instance chain is intentionally retained until process termination; no unconditional release claim.",
+      "Source selection and all3 supported rung executions remain required; markers are diagnostic progress only, completed zeroFESD/no skips remains numerical authority."
+    ]
+  },
+  "unchanged_counts": {
+    "precision_rungs": [
+      "trace.spv",
+      "trace_fp32comp.spv",
+      "trace_fp64.spv"
+    ],
+    "supported_test_calls_per_rung": {
+      "RunRegion": 10,
+      "positive_RunRegion": 7,
+      "expected_shader_failure_RunRegion": 1,
+      "expected_no_dispatch_retained_failure_RunRegion": 2,
+      "manual_failed_Finalize": 1
+    },
+    "buffers_per_rung": 7,
+    "requested_buffer_payload_bytes": {
+      "fp32": 543044,
+      "fp32comp": 543044,
+      "fp64": 556356
+    },
+    "device_creations": {
+      "old_per_supported_complete_case": 1,
+      "candidate_per_all3supported_complete_case": 3
+    },
+    "physical_dispatch_and_operation_counts": "Original per-rung numerical/physical operation paths unchanged; actual number of adaptive Advance dispatches remains data-dependent. New host work is2additional selected-device factory/destructor lifetimes for full3rung completion and3flushed stdout records per supported rung."
+  },
+  "lifetime_evidence": {
+    "owner_tables": "vulkan_device.h:205-209 owns kernels/buffers/pipelines; device.h:143-202 exposes no unload/release API.",
+    "append_or_cache": "vulkan_device.cpp:753-784 LoadKernel stores words/module;796-846 allocates/stores buffers;913-984 caches one pipeline per kernel/binding signature.",
+    "destruction": "vulkan_device.cpp:519-560 waits idle and frees normal completed resources.",
+    "dispatch_cleanup": "vulkan_device.cpp:1056-1058/1188-1192 frees completed descriptor sets; one dispatch command reused, no new per-phase resource retention fix claimed.",
+    "process_cache": "ProcessPipelineCache single serialized blob capped32MiB survives fresh devices; underlying driver cache/LLVM allocator behavior is not bounded by that serialized limit.",
+    "source_pins": {
+      "src/sirius/backend/device.h": {
+        "bytes": 9669,
+        "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983",
+        "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+        "git_blob": "328d743ef3b9f03786341f8ae4750257885ab097"
+      },
+      "src/sirius/backend/vulkan/vulkan_device.h": {
+        "bytes": 9768,
+        "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de",
+        "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+        "git_blob": "7a75c46474845e11effad2e12ff28b3451ebd614"
+      },
+      "src/sirius/backend/vulkan/vulkan_device.cpp": {
+        "bytes": 56500,
+        "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae",
+        "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+        "git_blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94"
+      },
+      "tests/support/trace_continuation_probe.h": {
+        "bytes": 13798,
+        "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399",
+        "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+        "git_blob": "f534108cf38b117f10cfd8a9b67b29212fbdbe57"
+      },
+      "src/sirius/render/trace_continuation.h": {
+        "bytes": 7192,
+        "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005",
+        "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+        "git_blob": "4e61faf3471d19d16a73c8ea080c26b76d472969"
+      }
+    }
+  },
+  "risks_and_limits": [
+    "Old P2 guard stop had no XML/rung markers: first-rung stop remains possible; cross-rung accumulation is a source fact, not observed RSS cause.",
+    "No guarantee vkDestroyDevice/pipeline releases driver process-global compiler/allocator caches or lowers sampledRSS.",
+    "Fresh device creation, idle wait, optional cache export/import and stdout flushing add host work under unchanged external guard; no completion/performance improvement promised.",
+    "The pre-existing serialized process cache may seed next device; no default-cache/optimization/provider setting changes.",
+    "Fixture M=a=Q=Lambda=0 covers flat event/Jacobi/failure recovery, not captured strong-field/floor accuracy/fullP1/coldframe/Mandatory/release."
+  ],
+  "independent_and_root_review_required": true,
+  "current_hold_release_performed": false
+}

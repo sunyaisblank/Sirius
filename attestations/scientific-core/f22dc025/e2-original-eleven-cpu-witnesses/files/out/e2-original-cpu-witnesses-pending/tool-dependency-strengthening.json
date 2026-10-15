@@ -1,0 +1,96 @@
+{
+  "schema": "sirius-e2-cpu-tool-dependency-strengthening-v1",
+  "created_utc": "2026-10-15T17:34:32.667556+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_root_ldd_exits": {
+    "git": 0,
+    "python": 0
+  },
+  "prior_unreleased_materialization": {
+    "actions.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/actions.json",
+      "bytes": 566780,
+      "sha256": "8194ec3b66c1dc23adc7cf6bcdbcf1446d1afe8f44c48340478fe489cee6a02b"
+    },
+    "readiness.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/readiness.json",
+      "bytes": 58439,
+      "sha256": "26778dec5d22f644819167a87f1a3cef32fda9c36127cd0022a8fefa394a93c3"
+    },
+    "root-preflight.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/root-preflight.json",
+      "bytes": 320300,
+      "sha256": "49bb37eb53f0a30fec04a2f92fc8163a073f0bd4d8a023f7a2a3c759164993d9"
+    }
+  },
+  "five_test_ELF_DSO_union": [
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+    "/usr/lib/x86_64-linux-gnu/libc.so.6",
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+    "/usr/lib/x86_64-linux-gnu/libm.so.6",
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275"
+  ],
+  "tool_DSO_union": [
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+    "/usr/lib/x86_64-linux-gnu/libc.so.6",
+    "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+    "/usr/lib/x86_64-linux-gnu/libm.so.6",
+    "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2",
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3"
+  ],
+  "additional_actual_DSO_union": [
+    "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+    "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2",
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3"
+  ],
+  "full_test_and_tool_DT_NEEDED_union": [
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+    "/usr/lib/x86_64-linux-gnu/libc.so.6",
+    "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+    "/usr/lib/x86_64-linux-gnu/libm.so.6",
+    "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2",
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3"
+  ],
+  "actual_added_pins": {
+    "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "bytes": 186624,
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+    },
+    "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2",
+      "bytes": 625344,
+      "sha256": "e00576d71d81d3ba0cfa4903c835a44a8723aac96f72f79ff75200b4cff9071b"
+    },
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "out/e2-original-cpu-witnesses-pending/git-ldd.stdout": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/git-ldd.stdout",
+      "bytes": 301,
+      "sha256": "fb7e8386995c504099e8cb932ae94acc30310372e880555f08bf0eedcfc1179d"
+    },
+    "out/e2-original-cpu-witnesses-pending/git-ldd.stderr": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/git-ldd.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/e2-original-cpu-witnesses-pending/python-ldd.stdout": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/python-ldd.stdout",
+      "bytes": 364,
+      "sha256": "07ae6bb9f175c2691a2450c87d24b0c0dbcf29928b0218f85f364e798deb72af"
+    },
+    "out/e2-original-cpu-witnesses-pending/python-ldd.stderr": {
+      "resolved_path": "/home/astra/.project/Sirius/out/e2-original-cpu-witnesses-pending/python-ldd.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "scope": "Before runtime admission/execution, append observed tool DT_NEEDED DSOs/captures to pending materialization. No authored-source/owner/guard/collector/build change; no claim all Python dynamic imports or globally observed processes."
+}

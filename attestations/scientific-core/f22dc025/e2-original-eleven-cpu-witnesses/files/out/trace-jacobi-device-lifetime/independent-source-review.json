@@ -1,0 +1,124 @@
+{
+  "schema": "sirius-trace-jacobi-device-lifetime-independent-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "runtime_admitted": false,
+  "tracked_source_applied_by_reviewer": false,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "reviewed_utc": "2026-10-15T17:09:41.574658+00:00",
+  "blockers": [],
+  "candidate_pins": {
+    "original.cpp": {
+      "path": "out/trace-jacobi-device-lifetime/original.cpp",
+      "bytes": 30289,
+      "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a"
+    },
+    "candidate.cpp": {
+      "path": "out/trace-jacobi-device-lifetime/candidate.cpp",
+      "bytes": 30579,
+      "sha256": "a5087954943aad20123b08acb0153db71eb69dddd4676ebecc6691ca43f4d549"
+    },
+    "patch.diff": {
+      "path": "out/trace-jacobi-device-lifetime/patch.diff",
+      "bytes": 1873,
+      "sha256": "e3b23ba7d5f5db2561efc4105023bcb084fe307ba582a3a4bec22faea7b05657"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-device-lifetime/source-contracts.json",
+      "bytes": 8502,
+      "sha256": "51106f6ff62bcd4433c0d718bfcec1dbf642e6373818cd9e863d194352101628"
+    }
+  },
+  "mechanical_frame": {
+    "current_original_equals_named_e0Git_bytes": true,
+    "patch_equals_actual_original_candidate_unifieddiff": true,
+    "exact_inverse_removes3markerlines_and_moves_existing3device_lines_outside_loop": true,
+    "all_bytes_outside_only_target_test_function_equal": true,
+    "all_original_assertion_names_order_count_and_arguments_preserved_by_exactinverse": true,
+    "all_numeric_literal_order_and_count_unchanged": true,
+    "no_include_or_other_test_registration_filter_setting_ABI_shader_numerical_change": true
+  },
+  "ownership_and_controlflow": {
+    "selected_index": "Enumerate/Resolve once outsideloop unchanged; same selected index passed to each existingfactory. Factory re-lists physicals eachcall, so index alone is not proof of immutable deviceUUID under topology changes; actualruntime/provider admission remains separate.",
+    "rung_order": [
+      "trace.spv",
+      "trace_fp32comp.spv",
+      "trace_fp64.spv"
+    ],
+    "per_supported_rung": "One complete fresh logicaldevice contains its kernel, probe, seven buffers, all10RunRegion calls and failedFinalize. Withinrung failed-state retention/sample1/2 no-dispatch refusal/samplezero reset/sample1 averaging remain exactsource. No crossdevice handles are carried betweenrungs.",
+    "destruction_order": "Probe/lambda/kernel-word locals leave before openedExpected<unique_ptr<ComputeDevice>> at iterationend. Normaliteration, unsupportedcontinue, fatalASSERTreturn and exceptionunwind invoke virtualdevice destruction before any nextiteration.",
+    "normal_Vulkan_destruction": "WaitIdle then optional cache snapshot, pipeline/layout/module/buffer/memory/cache/query/descriptor/command/device/instance destruction in existingdtor. Handlesalone do notfree device tables; new scope permits retirement of completedpreviousrung device resources.",
+    "exceptional_completion": "If vkDeviceWaitIdle is neitherSUCCESS norDEVICE_LOST, existingdtor intentionallyreturns retaining nativechain until processtermination. No unconditional release, fixed destructorlatency or comprehensive driver/compiler-memory bound claimed. Snapshotbad_alloc is caught by existingcode; this candidate doesnot introduce a new exceptionhandling or releaseAPI.",
+    "same_original_supported_and_refusal_paths": "UnsupportedFP64 stillrequires shaderFloat64decline/property andcontinue; supportedfloat/double fullrun paths remain ASSERT_NO_FATAL_FAILURE. No positiveFP64property invented."
+  },
+  "markers": {
+    "begin": "FlushedafterSCOPED_TRACE,before freshdevicecreation/moduleload.",
+    "prepared": "Flushedonlyafter existing Prepare success, includingsoftwarezeroactive initialization whereapplicable; not numericalsuccess.",
+    "exercised": "Flushedafter existing supportedfloat/double ASSERT_NO_FATAL_FAILURE branch. NonfatalEXPECT failures maystillprintit, so not aPASSmarker.",
+    "authority": "ExactcompleteXMLzeroFESD and separate FP64propertyNAMEabsence/fullsource/modulejoins remain required; markers provide only bounded progress localization."
+  },
+  "unchanged_contracts": {
+    "fixture": "OriginalflatM=a=Q=Lambda=0,onepixel,all4Jacobi/sourceboundary/retainedfailure/nopublish/recovery assertions.",
+    "record_packet_ABI": "70floatpacket;272Bfloat/COMP,480Bdouble;7buffers/64allocatedrows.",
+    "perrung_requested_buffer_payload_bytes": [
+      543044,
+      543044,
+      556356
+    ],
+    "active_physical_submit_ms_cap": 1000,
+    "maximum_attempts_each_RunRegion": 128,
+    "software_zeroactive_prepare_original_active1000ms_cap": false,
+    "original_test_case_not_split": true,
+    "outer_guard_cache_device_settings_and_registration_unchanged": true
+  },
+  "lifetime_source_pins": {
+    "src/sirius/backend/device.h": {
+      "path": "src/sirius/backend/device.h",
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.h": {
+      "path": "src/sirius/backend/vulkan/vulkan_device.h",
+      "bytes": 9768,
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "path": "src/sirius/backend/vulkan/vulkan_device.cpp",
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "path": "tests/support/trace_continuation_probe.h",
+      "bytes": 13798,
+      "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399"
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "path": "src/sirius/render/trace_continuation.h",
+      "bytes": 7192,
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005"
+    }
+  },
+  "risks_and_limits": [
+    "This is a fixture device-lifetime correction, not proof that cross-rung accumulation caused the priorRSSstop; first-rungstop remains possible.",
+    "Driverprocessglobal caches/LLVMallocator/tempJIT memory may persist or dominate aftervkDestroyDevice; no sampledRSS decrease or successfulcompletion guarantee.",
+    "Twoadditional devicefactory/destructor lifetimes on full3rung completion, WaitIdle/cache snapshot/import and flushedstdout add serializedhostwork under unchanged prospectiveguards; no performancebenefit promised.",
+    "Existing process-pipeline-cache serializedblob is capped32MiB and mayseed nextdevice; underlyingdriver allocations are not bounded by thatcap. Defaultcache/provider/compiler options remainunchanged.",
+    "No new strongfield/flooraccuracy/fullP1/fullMandatory/coldframe/scientificrelease qualification."
+  ],
+  "future_preconditions": [
+    "Root must first preserve/push/freshlyverify exactP2RSSstop and release currentfrozen source/build/runtime holds.",
+    "Root separate sourceintegration/format/build/actualmetadata/provider/ownership admission required before a changed originaltest attempt; this sourcePASS doesnot authorize execution or unchangedretry."
+  ],
+  "method": "Passive source/hash/JSON and read-onlyGit only. No projectimport/helper/compiler/parser/test/provider/network/processquery/signal/Gitmutation/sourceapplication. Only this independent source receipt written.",
+  "checkout": {
+    "head": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "candidate_and_new_review_committed_or_pushed_by_reviewer": false
+  }
+}

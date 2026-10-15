@@ -1,0 +1,34 @@
+--- a/tests/backend/kernel_trace_test.cpp
++++ b/tests/backend/kernel_trace_test.cpp
+@@ -428,11 +428,12 @@
+     if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+     const auto selected = ResolveVulkanDeviceIndex(*devices);
+     ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+-    auto opened = CreateVulkanDevice(*selected);
+-    ASSERT_TRUE(opened.has_value()) << opened.error().Description();
+-    auto& device = **opened;
+     for (const char* name : {"trace.spv", "trace_fp32comp.spv", "trace_fp64.spv"}) {
+         SCOPED_TRACE(name);
++        std::cout << "[TraceJacobiRung] module=" << name << " phase=begin" << std::endl;
++        auto opened = CreateVulkanDevice(*selected);
++        ASSERT_TRUE(opened.has_value()) << opened.error().Description();
++        auto& device = **opened;
+         const auto words = LoadSpirv(sirius::test::ResourcePath(std::string("kernels/") + name));
+         ASSERT_FALSE(words.empty());
+         const auto kernel = device.LoadKernel(words);
+@@ -448,6 +449,7 @@
+             sirius::test::TraceContinuationProbe<Real> probe(device, *kernel);
+             const auto prepared = probe.Prepare();
+             ASSERT_TRUE(prepared.has_value()) << prepared.error().Description();
++            std::cout << "[TraceJacobiRung] module=" << name << " phase=prepared" << std::endl;
+             // Independent Minkowski solution: X_direction=lambda*screen,
+             // V_direction=screen, X_position=screen, V_position=0. Both labelled
+             // pairs must survive regardless of which one feeds the beam image.
+@@ -567,6 +569,7 @@
+         } else {
+             ASSERT_NO_FATAL_FAILURE(run.template operator()<float>());
+         }
++        std::cout << "[TraceJacobiRung] module=" << name << " phase=exercised" << std::endl;
+     }
+ #else
+     GTEST_SKIP() << "trace kernels not compiled";
