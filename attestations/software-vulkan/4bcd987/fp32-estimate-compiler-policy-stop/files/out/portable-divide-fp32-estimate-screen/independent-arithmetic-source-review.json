@@ -1,0 +1,122 @@
+{
+  "blockers": [],
+  "cost_and_retry_scope": {
+    "closed_previous_49bfb434": {
+      "commit": "49bfb434b0a31df958572448acebf655eb192296",
+      "disposition": {
+        "bytes": 1336,
+        "path": "/home/astra/.project/Sirius/attestations/software-vulkan/49bfb43/portable-integer-reciprocal/files/out/portable-integer-reciprocal/disposition.json",
+        "sha256": "4a5838241f535e59d7d18d303e4cb257866c0b44f37400be5d55eda219d8fecc"
+      },
+      "rejected_unchanged_retry_closed": true,
+      "source_difference": "UINT_MAX/d reciprocal plus four per-chunk high-product corrections; no native float proposal."
+    },
+    "closed_previous_FP64": {
+      "commit": "5d9dc30b293efced050d18c593bf0b987de94f3d",
+      "manifest_sha256": "83447264bf4cc3c4c86393b9fb7e88269c13612cfd2520b3620da1c71822fd57",
+      "unchanged_retry_closed": true
+    },
+    "cost_unproved": true,
+    "deadline_limit": "No estimate, retained mode, cold-frame deadline, frame-throughput or production benefit inferred from the source proof.",
+    "differences": "New proposal uses binary32 normal raw words and a bounded exact residual correction. PriorFP64 path used64-bit proposal/conversion and zero integer correction;49bfb used one integer reciprocal plus four per-chunk high-product corrections. Their unchanged retries remain closed.",
+    "hit_rate_unproved": true,
+    "new_hypothesis": "Accepted path intends one nativeF32 division+one exactUInt2 product+one uint32 residual division/lowproduct/sticky, versus the original four uint32 quotient divisions. Guard/fallback/mixed-SIMD/code/register/stack costs can defeat this hypothesis.",
+    "not_an_unchanged_rejected_candidate": true
+  },
+  "exact_source_frame_conditions": {
+    "ABI_and_SPIRV_modes": "Source header does not change public layouts or requested modes. Actual compiler ABI/layout/bindings/capabilities/NoContraction/denorm/RTE and guard-dominator graph still require independent emitted-product checks.",
+    "all_other_function_bodies_unchanged": true,
+    "default_native_float_comment_scoped_honestly": true,
+    "insertion_occurs_once": true,
+    "public_structs_signatures_storage_tables_bindings_unchanged_in_header": true,
+    "removing_insertion_and_only_two_documentation_replacements_restores_canonical_stock_exactly": true,
+    "special_guards_unpack_normalization_and_full_fallback_unchanged": true,
+    "wide_product_wide_subtract_round_multiply_residual_seed_unchanged": true
+  },
+  "independence": "Reviewer did not author or modify candidate/header/patch/contracts/origins. Only this separate source review file was written.",
+  "method": "Bounded passive source/math proof, exact byte reversal and small-file hashes. No authored helper/parser/compiler/validator/build/test/provider/device execution, numerical experiment, exhaustive enumeration or machine-checked arithmetic proof.",
+  "native_representation_precondition": {
+    "no_accuracy_premise": "Correct rounding, RTE mode, quotient accuracy and estimate hit-rate are not prerequisites for returned-value correctness; any proposal bits must pass exact integer checks. Floating exception flags/payload propagation remain outside existing value API.",
+    "operands": "Let a=aa.significand,d=bb.significand,k=(a<d),m=a*2^k. Bit-built numerator is x=a*2^(3+k), denominator y=d*2^-23; x/y=m*2^26/d=N/d. Both operands are positive normal binary32 (x in[2^26,2^28),y in[1,2)).",
+    "reinterpretation": "C++ std::bit_cast<float>/std::bit_cast<uint> and Slang asfloat/asuint reinterpret the same32-bit representation; no uint-to-float numeric conversion is introduced.",
+    "required": "Slang native float is IEEE754 binary32, and the selected C++ diagnostic target uses IEEE754 binary32 float with uint32 raw-word bit correspondence.",
+    "scope": "Existing actual Slang32/C++ target profile, not a claim about every possible C++ implementation. C++ sizeof(float)==sizeof(uint)==4 assertion alone does not establish IEC559 encoding."
+  },
+  "next_boundary": "Root separately reviews actual complete compiler/reader/helper/recipe/source-freeze packet before any operation. This source/math PASS supplies no execution permission or final packet admission.",
+  "not_admitted": {
+    "SPIRV_validation_modes_ABI": true,
+    "compiler_producer_recipes": true,
+    "final_source_packet": true,
+    "integrated_eight_controls": true,
+    "lowering_or_operation_count": true,
+    "ordinary_driver_JIT": true,
+    "original_ABBA_benefit": true,
+    "original_numeric_corpus": true,
+    "production_adoption": true,
+    "scientific_platform_release_qualification": true,
+    "structural_reader": true
+  },
+  "passed": true,
+  "pins": {
+    "candidate-insertion.txt": {
+      "bytes": 2024,
+      "path": "out/portable-divide-fp32-estimate-screen/candidate-insertion.txt",
+      "sha256": "e528c7aa0ffd8681be5e8f8dd3ef042eecdf447903519109dc5b2730059541ab"
+    },
+    "candidate.patch": {
+      "bytes": 3247,
+      "path": "out/portable-divide-fp32-estimate-screen/candidate.patch",
+      "sha256": "66b69b265a0ecb712dd94b5e464478a5675a8f9da858599209f58355e7cab0af"
+    },
+    "candidate/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 14973,
+      "path": "out/portable-divide-fp32-estimate-screen/candidate/src/sirius/kernels/portable_binary32.h",
+      "sha256": "c21eb8259f2ed51bce2333ded7065c820dd782cf32ce5e46ea8976166503cdb5"
+    },
+    "origins.json": {
+      "bytes": 5864,
+      "path": "out/portable-divide-fp32-estimate-screen/origins.json",
+      "sha256": "40d6eae7c6d7ada8c7e9b2a8b174948256ccd86d7a22d8c72f9e2fba17d1f064"
+    },
+    "source-contracts.json": {
+      "bytes": 5290,
+      "path": "out/portable-divide-fp32-estimate-screen/source-contracts.json",
+      "sha256": "99f49a7f76e3d093dc4bba6f5d947c7285828d24f9f62c8017986df246071736"
+    },
+    "stock/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 12797,
+      "path": "out/portable-divide-fp32-estimate-screen/stock/src/sirius/kernels/portable_binary32.h",
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    }
+  },
+  "proof": {
+    "accepted_window_exact": "For guarded h and original q=floor(N/d), accepted residual is equivalent to q-h in[-16,15]. The exact guard permits this bounded window but does not establish frequency of acceptance.",
+    "correction": "t=floor(residualLo/d) is in[0,31],d is nonzero,t*d<2^29, r=residualLo-t*d satisfies0<=r<d, and q=g+t=floor(N/d). Addition fits unsigned32 independently of acceptance (g+t<2^28); accepted q lies in[2^26,2^27). Low-product and residual subtraction are exact unsigned32, without overflow or underflow.",
+    "entry": "Unchanged NaN/Infinity/zero and invalid special-result guards run first. Only finite nonzero normalized significands reach proposal. Original sign/exponent and normalization are retained.",
+    "estimate_bounds": "h=((bits&0x7fffff)|0x800000)<<3 is a multiple of8 in[2^26,2^27-8]. guess=g=h-16 is positive,<2^27; subtraction cannot underflow. The24-bit significand left shift3 fits unsigned32.",
+    "estimate_guard": "(proposalBits&0xff800000)==0x4c800000 enforces positive normal binade[2^26,2^27), excluding signed/nonfinite/subnormal/out-of-binade words before extraction.",
+    "modular_subtraction": "Inline residualLo=Nlo-Plo,residualHi=Nhi-Phi-(Nlo<Plo) computes (N-P)mod2^64 through defined uint32 wrap and explicit low-word borrow. Existing PB32WideSubtract is not called: its a>=b precondition has not yet been established.",
+    "nonnegative_guard": "If P>N, then0<P-N<2^51 and modular residual>2^64-2^51, whose highword is nonzero. Therefore residualHi==0 proves the residual is exact nonnegative N-P<2^32.",
+    "normalized_bounds": "2^23<=a,d<2^24; d<=m<2d<2^25; N=m*2^26<2^51. Original unpacked exponents in[-149,127], normalized difference in[-277,276], safe signed32.",
+    "numerator_words": "numeratorLo=m<<26 (defined unsigned low32 bits),numeratorHi=m>>6; together exactly represent N. Shift counts26 and6 are valid.",
+    "product": "One unchanged PB32WideProduct(g,d) supplies exact two-word P=g*d<2^51. No native64 integer or float product is required.",
+    "rejection": "Proposal and exact checks use only new locals. They do not modify original remainder,d,sign or exponent; any failed estimate/binade/residual guard enters the original complete radix8/8/8/2 fallback unchanged.",
+    "rounding": "q|uint(r!=0) exactly matches the original26fractional-bit quotient plus sticky. The unchanged PB32Round receives original sign/exponent and identical extended word, preserving ties-to-even, signedzero, normal/subnormal transition, gradual underflow and overflow.",
+    "window_guard": "d<<5=32d lies in[2^28,2^29), so no overflow. residualHi==0 && residualLo<32d proves0<=N-P<32d."
+  },
+  "reviewer": "sanitizer_gate_contract",
+  "schema": "sirius-fp32-estimate-independent-arithmetic-source-review-v1",
+  "source": {
+    "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "status": ""
+  },
+  "verdict": "SOURCE_MATH_PASS_ONLY",
+  "workspace": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "canonical_committed_and_pushed": true,
+    "this_review_is_ignored_uncommitted_preparation": true,
+    "tracked_changes": false,
+    "tracking": "0\t0",
+    "worktrees": 1
+  }
+}

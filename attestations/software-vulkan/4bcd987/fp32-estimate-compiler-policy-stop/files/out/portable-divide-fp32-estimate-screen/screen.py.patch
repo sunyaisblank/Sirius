@@ -1,0 +1,247 @@
+--- archived-fp64-screen/screen.py
++++ fp32-compiler-producer/screen.py
+@@ -1,7 +1,8 @@
+-"""Reuse accepted stock, compile one full divide-fp64-estimate Endpoint, then read its terminal owner.
+-
+-No mode creates a Vulkan instance, device, pipeline or dispatch. Root operates
+-the unchanged copied owner; the companion capture is gated by terminal acceptance.
++"""One complete FP32-proposal compiler producer; graph acceptance is separate.
++
++Root alone operates the unchanged owner. This source creates no Vulkan objects
++and issues no numerical or cost acceptance. Completed outputs receive a producer
++seal before any later separately owned structural reader can inspect them.
+ """
+ from pathlib import Path
+ import hashlib
+@@ -17,8 +18,8 @@
+ 
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+-ROOT = WORK.parents[2]
+-PRODUCTS = ROOT / "bin/linux-gcc/portable-divide-fp64-estimate-screen/compiler"
++ROOT = WORK.parents[1]
++PRODUCTS = ROOT / "bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler"
+ CANONICAL = ROOT / "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv"
+ PRODUCT_REVISION = "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+ 
+@@ -63,6 +64,7 @@
+     assert not PRODUCTS.exists(), PRODUCTS
+     assert not (WORK / "compile-endpoint-normal").exists()
+     assert not (WORK / "operator-context.json").exists(), "pin once before consumption"
++    assert not any((WORK / name).exists() for name in ("compiler-products.json", "compiler-producer-acceptance.json"))
+     assert not subprocess.check_output(["git", "status", "--porcelain=v1"], cwd=ROOT)
+     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+     assert len(sys.argv) == 3 and revision == sys.argv[2] and re.fullmatch(r"[0-9a-f]{40}", revision)
+@@ -118,7 +120,8 @@
+ 
+ 
+ def content(path):
+-    return {key: record(path)[key] for key in ("bytes", "sha256")}
++    value = record(path)
++    return {key: value[key] for key in ("bytes", "sha256")}
+ 
+ 
+ def verify_stock_reuse():
+@@ -162,12 +165,21 @@
+     header = (WORK / "candidate/src/sirius/kernels/portable_binary32.h").read_text()
+     insertion = (WORK / "candidate-insertion.txt").read_text()
+     assert header.count(insertion) == 1
+-    assert header.replace(insertion, "", 1) == (WORK / "stock/src/sirius/kernels/portable_binary32.h").read_text()
+-    assert header.replace(insertion, "", 1) == (ROOT / "src/sirius/kernels/portable_binary32.h").read_text()
++    reversed_header = header.replace(insertion, "", 1)
++    revised = "// Exact arithmetic uses uint32, including explicit two-word exact products.\n"
++    original = "// All arithmetic uses uint32, including explicit two-word exact products.\n"
++    caveat = ("// The same source is used by C++ and Slang. The default path uses no native\n"
++              "// floating operation. Optional FP32 quotient proposals are accepted only after\n"
++              "// exact integer verification; their accuracy is not a correctness premise.\n")
++    assert reversed_header.count(revised) == reversed_header.count(caveat) == 1
++    reversed_header = reversed_header.replace(revised, original, 1).replace(caveat,
++        "// The same source is used by C++ and Slang; no native floating operation is used.\n", 1)
++    assert reversed_header == (WORK / "stock/src/sirius/kernels/portable_binary32.h").read_text()
++    assert reversed_header == (ROOT / "src/sirius/kernels/portable_binary32.h").read_text()
+     return {"archive_manifest": record(archive / "manifest.json"), "original_owner": record(history / "compile-endpoint-normal/owner.json"),
+             "original_acceptance": record(history / "compiler-acceptance.json"), "guard_controls": record(reuse["guard_controls"]),
+             "source_joins": len(reuse["source_joins"]), "tool_joins": len(reuse["tool_joins"]),
+-            "scope": "Exact accepted full stock/compiler-policy reuse; no stock compiler or original Int64-policy execution repeated. New Float64 estimate policy remains separately scoped."}
++            "scope": "Exact accepted full stock/compiler-policy reuse; no stock compiler or original Int64-policy execution repeated. New FP32-proposal policy remains separately scoped."}
+ 
+ 
+ def normalized_function(text, name):
+@@ -187,10 +199,6 @@
+             for line in body.splitlines() if line.strip()]
+ 
+ 
+-def estimate_shape(stock, candidate):
+-    reader = load_module("estimate_graph", WORK / "estimate_graph.py")
+-    return reader.inspect(stock, candidate, function_body)
+-
+ 
+ def compile_candidate():
+     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+@@ -203,31 +211,29 @@
+     assert context["actions"] == record(WORK / "actions.json")
+     assert context["source_freeze"] == record(WORK / "source-freeze.json")
+     assert context["preparation"] == record(WORK / "preparation.json")
+-    assert not PRODUCTS.exists(), PRODUCTS
++    assert not PRODUCTS.exists()
++    assert not (WORK / "compiler-products.json").exists()
++    folder = WORK / "compile-endpoint-normal"
++    assert (folder / "inputs-before.json").is_file()
+     modules_dir = PRODUCTS / "modules"
+     modules_dir.mkdir(parents=True)
+     reuse = json.loads((WORK / "stock-reuse.json").read_text())
+-    import shutil
+-    stock = modules_dir / "stock-endpoint-normal.spv"
+-    stock_assembly = stock.with_suffix(".final.spvasm")
+-    shutil.copyfile(reuse["stock_module"], stock)
+-    shutil.copyfile(reuse["stock_assembly"], stock_assembly)
+-    assert content(stock) == content(reuse["stock_module"]) and content(stock_assembly) == content(reuse["stock_assembly"])
++    stock = Path(reuse["stock_module"])
++    stock_assembly = Path(reuse["stock_assembly"])
+     recipe = json.loads((WORK / "generated/endpoint-arguments.json").read_text())
+     tools = recipe["tools"]
+-    builder = load_module("divide-fp64-estimate_candidate_builder", WORK / "candidate/scripts/build-retained-kernels.py")
++    builder = load_module("fp32_estimate_candidate_builder", WORK / "candidate/scripts/build-retained-kernels.py")
+     candidate = modules_dir / "candidate-endpoint-normal.spv"
+     builder.compile_shader(WORK / "candidate/src/sirius/kernels/retained_endpoint.slang",
+         candidate, tools["compiler"], tools["assembler"], tools["disassembler"], tools["validator"],
+         recipe["registers"], 5, recipe["layers"], recipe["prefix"], portable=True,
+         optimizer=tools["optimizer"], normal_sum32=True,
+-        endpoint_specialized=tuple(recipe["endpoint_specialized"]), diagnostic_divide_fp64_estimate=True)
++        endpoint_specialized=tuple(recipe["endpoint_specialized"]), diagnostic_divide_fp32_estimate=True)
++    assembler_input = candidate.with_suffix(".spvasm")
++    assert assembler_input.is_file()
+     candidate_assembly = candidate.with_suffix(".final.spvasm")
+     subprocess.run([tools["disassembler"], str(candidate), "-o", str(candidate_assembly)], check=True)
+     texts = {"stock": stock_assembly.read_text(), "candidate": candidate_assembly.read_text()}
+-    shape = estimate_shape(texts["stock"], texts["candidate"])
+-    for name in ("PB32Unpack", "PB32Round", "PB32Multiply", "PB32WideProduct", "PB32ProductResidual"):
+-        assert normalized_function(texts["stock"], name) == normalized_function(texts["candidate"], name)
+     assert stock.read_bytes() == CANONICAL.read_bytes() and stock.read_bytes() != candidate.read_bytes()
+     assert interface_signature(texts["stock"]) == interface_signature(texts["candidate"])
+     modes = lambda text: sorted(re.findall(r"OpExecutionMode %\S+ (.*)$", text, re.M))
+@@ -238,36 +244,36 @@
+                 for opcode, operands in re.findall(r"^\s*(OpControlBarrier|OpMemoryBarrier) (.+)$", text, re.M)]
+     assert barriers(texts["stock"]) == barriers(texts["candidate"])
+     modules = {}
+-    for mode, output in (("stock", stock), ("candidate", candidate)):
++    for mode, output, assembly in (("stock", stock, stock_assembly), ("candidate", candidate, candidate_assembly)):
+         text = texts[mode]
+         capabilities = re.findall(r"OpCapability (\S+)", text)
+-        assert sorted(capabilities) == sorted(["Shader", "RoundingModeRTE"] + (["Float64"] if mode == "candidate" else []))
+-        widths = dict(re.findall(r"(%\S+) = OpTypeInt (\d+) [01]", text))
+-        assert set(widths.values()) == {"32"}
+-        assert sorted(re.findall(r"OpTypeFloat (\d+)", text)) == (["32", "64"] if mode == "candidate" else ["32"])
+-        divide = function_body(text, "PB32Divide")
+-        assert {widths[kind] for kind in re.findall(r"= OpUDiv (%\S+) ", divide)} == {"32"}
+-        assert divide.count("OpLoopMerge") == 1
+-        assert all(widths[kind] == "32" for kind in re.findall(r"= OpUDiv (%\S+) ", text))
+-        bodies = {}
+-        for name in ("PB32Multiply", "PB32Divide"):
+-            path = output.with_suffix("." + name + ".spvasm")
+-            path.write_text(function_body(text, name)); bodies[name] = record(path)
+-        modules[mode] = {"module": record(output), "assembly": record(output.with_suffix(".final.spvasm")),
+-                         "bodies": bodies, "capabilities": capabilities, "integer_widths": sorted(set(widths.values()))}
+-    assert "OpConvertFToU" not in texts["candidate"] and "OpConvertFToS" not in texts["candidate"]
++        assert sorted(capabilities) == sorted(["Shader", "RoundingModeRTE"])
++        widths = re.findall(r"OpTypeInt (\d+) [01]", text)
++        assert widths and set(widths) == {"32"}
++        assert re.findall(r"OpTypeFloat (\d+)", text) == ["32"]
++        assert "OpConvertFToU" not in text and "OpConvertFToS" not in text
++        modules[mode] = {"module": record(output), "assembly": record(assembly),
++                         "capabilities": capabilities, "integer_widths": ["32"], "float_widths": ["32"]}
+     verify_frozen()
+-    write("compiler-result.json", {"schema": "sirius-divide-fp64-estimate-compiler-screen/v1",
+-          "stock_reuse": reused, "stock_equals_current_canonical": True, "modules": modules,
+-          "candidate_estimate_graph": shape, "original_multiply_residual_unpack_round_normalized_bodies_equal": True,
+-          "original_fallback_complete_suffix_normalized_equal": True,
+-          "complete_descriptor_and_workgroup_type_decorations_exact": True,
+-          "execution_modes_exact": True, "ordered_barrier_operands_exact": True,
+-          "stock_builder_and_control_policy_reused_unchanged": True,
+-          "candidate_only_allowance": "Explicit Float64-estimate normal Endpoint only; exact Float64 multiset, no Int64. Original normal32 floating/order/layout/barrier policies retained.",
+-          "runtime_or_numerical_admission": False, "candidate_has_no_Int64_or_FToU": True, "benefit_established": False,
+-          "next_review": "Inspect complete ordinary LLVM/native guarded estimate/check/fallback lowering and all frame/stack/code countercosts before numerical admission. Companion candidate-only passive capture is gated by this terminal acceptance."})
+-    print("One full divide-fp64-estimate Endpoint compiled; stock exact reuse. No numerical or cost verdict.", flush=True)
++    result_path = WORK / "compiler-products.json"
++    write("compiler-products.json", {"schema": "sirius-fp32-estimate-compiler-products-v1",
++          "passed": True, "original_compile_ssa_assemble_validate_complete": True,
++          "stock_reuse": reused, "stock_equals_current_canonical": True, "modules": modules, "actual_assembler_input": record(assembler_input),
++          "complete_descriptor_and_workgroup_type_decorations_equal": True,
++          "execution_modes_equal": True, "ordered_barrier_operands_equal": True,
++          "private_single_FDiv32_policy_and_original_normal_policy_passed": True,
++          "structural_graph_accepted": False, "runtime_or_numerical_admission": False,
++          "benefit_established": False,
++          "scope": "Successful complete normal Endpoint compiler producer and type/interface/mode/barrier policy only. Exact correction/dominator/fallback graph remains for a separate reader against these immutable outputs."})
++    write("compile-endpoint-normal/output-seal.json", {
++          "schema": "sirius-fp32-estimate-compiler-output-seal-v1", "label": "compile-endpoint-normal",
++          "source_freeze": record(WORK / "source-freeze.json"),
++          "operator_context": record(WORK / "operator-context.json"),
++          "inputs_before": record(folder / "inputs-before.json"),
++          "recipe": record(WORK / "compiler-recipes.json"),
++          "outputs": {str(path): record(path) for path in (candidate, assembler_input, candidate_assembly, result_path)},
++          "structural_graph_accepted": False})
++    print("Complete FP32-proposal Endpoint compiler outputs sealed; structural reader and device work unexecuted.", flush=True)
+ 
+ 
+ def review_terminal():
+@@ -282,25 +288,41 @@
+     assert owner["source"] == {"revision": context["revision"], "status": ""}
+     assert owner["argv"] == action["argv"] and owner["limits"] == action["limits"]
+     assert owner["observed_births"] and all(row["absent"] for row in owner["observed_births"])
+-    before_path = folder / "inputs-before.json"
+-    assert before_path.read_bytes() == (folder / "inputs-after.json").read_bytes()
+-    before = json.loads(before_path.read_text())
+-    for name in action["frozen_inputs"]:
+-        path = Path(name)
+-        key = str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
+-        current = record(path)
+-        assert before[key] == {field: current[field] for field in ("bytes", "sha256", "resolved_path")}, name
+-    result = json.loads((WORK / "compiler-result.json").read_text())
+-    for row in result["modules"].values():
+-        for pin in [row["module"], row["assembly"], *row["bodies"].values()]:
+-            assert record(pin["resolved_path"]) == pin
+-    write("compiler-acceptance.json", {"compiler_owner": record(folder / "owner.json"),
+-          "compiler_result": record(WORK / "compiler-result.json"), "passed": True,
+-          "scope": "Terminal compiler ownership, exact stock reuse and complete candidate structure only. No Vulkan/JIT execution, arithmetic, benefit or qualification verdict."})
+-    print("Terminal compiler/source/module joins accepted; ordinary lowering remains untested.", flush=True)
++    before = json.loads((folder / "inputs-before.json").read_text())
++    assert (folder / "inputs-before.json").read_bytes() == (folder / "inputs-after.json").read_bytes()
++    for name, pin in before.items():
++        path = Path(name); path = ROOT / path if not path.is_absolute() else path
++        assert content(path) == {key: pin[key] for key in ("bytes", "sha256")}
++        assert str(path.resolve(strict=True)) == pin["resolved_path"]
++    assert context["actions"] == record(WORK / "actions.json")
++    assert context["source_freeze"] == record(WORK / "source-freeze.json")
++    assert context["preparation"] == record(WORK / "preparation.json")
++    seal = json.loads((folder / "output-seal.json").read_text())
++    assert seal["label"] == "compile-endpoint-normal" and seal["structural_graph_accepted"] is False
++    for key, path in (("source_freeze", WORK / "source-freeze.json"),
++                      ("operator_context", WORK / "operator-context.json"),
++                      ("inputs_before", folder / "inputs-before.json"),
++                      ("recipe", WORK / "compiler-recipes.json")):
++        assert seal[key] == record(path)
++    expected = [PRODUCTS / "modules/candidate-endpoint-normal.spv",
++                PRODUCTS / "modules/candidate-endpoint-normal.spvasm",
++                PRODUCTS / "modules/candidate-endpoint-normal.final.spvasm", WORK / "compiler-products.json"]
++    assert seal["outputs"] == {str(path): record(path) for path in expected}
++    result = json.loads((WORK / "compiler-products.json").read_text())
++    assert result["passed"] and result["structural_graph_accepted"] is False
++    assert not result["runtime_or_numerical_admission"] and not result["benefit_established"]
++    assert not (WORK / "compiler-producer-acceptance.json").exists()
++    write("compiler-producer-acceptance.json", {
++          "schema": "sirius-fp32-estimate-compiler-producer-acceptance-v1", "passed": True,
++          "compiler_owner": record(folder / "owner.json"), "output_seal": record(folder / "output-seal.json"),
++          "compiler_products": record(WORK / "compiler-products.json"),
++          "structural_graph_accepted": False, "runtime_or_numerical_admission": False,
++          "scope": "One successful original tool producer with exact consumed-input and output-seal joins. A separately admitted owned structural reader is still required; no graph/cost/numerical conclusion."})
++    print("Terminal compiler producer accepted; separate structural graph admission remains pending.", flush=True)
+ 
+ 
+ if __name__ == "__main__":
+-    {"pin-context": pin_context, "compile": compile_candidate, "review": review_terminal}[sys.argv[1]]()
+-
+-
++    if sys.argv[1] == "pin-context": pin_context()
++    elif sys.argv[1] == "compile": compile_candidate()
++    elif sys.argv[1] == "review": review_terminal()
++    else: raise SystemExit("unknown compiler-producer phase")

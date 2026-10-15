@@ -1,0 +1,209 @@
+{
+  "assembly_or_validation_complete": false,
+  "benefit_established": false,
+  "completed_compiler_producer": false,
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/screen.py",
+      "compile"
+    ],
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "case": "compile-endpoint-normal",
+    "child_exit": 1,
+    "child_pid": 434798,
+    "child_start_ticks": "7522279",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 434794,
+      "pid": 434794,
+      "ppid": 1313,
+      "rss_kib": 20524,
+      "session": 434794,
+      "start_ticks": "7522246",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "minimum_sampled_available_kib": 19639204,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 434798,
+        "saved_start_ticks": "7522279"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 434799,
+        "saved_start_ticks": "7522319"
+      }
+    ],
+    "passed": false,
+    "peak_sampled_rss_kib": 252868,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "One full original normal portable Endpoint FP32-proposal compiler/SSA/assembly/validation producer. Exact stock/source/tool/program reuse; complete outputseal preserved independently of later graphreader. No provider,numerical,cost or adoption acceptance.",
+    "source": {
+      "revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 1.3003400629968382,
+    "whole_inputs_unchanged": true
+  },
+  "producer_output_seal_created": false,
+  "product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "qualification_claimed": false,
+  "raw_disassembly": {
+    "bytes": 427609,
+    "sha256": "e7c5ca09fad31018ded39015f37adf672b268eed9e3dcf7c8903b165415a008b"
+  },
+  "raw_optimized_module": {
+    "bytes": 152808,
+    "sha256": "6b4225b0e7b5a745b921b3607c6cda8928752cfa0a30233827b5a94bdc540237"
+  },
+  "reviews": {
+    "independent-arithmetic-source-review.json": {
+      "bytes": 9254,
+      "sha256": "5521effdd96fa88165eb79649965b11bb344589a21e157328338940ac48bb40d"
+    },
+    "independent-compiler-policy-stop-review.json": {
+      "bytes": 14042,
+      "sha256": "6da0700ca26f99cedfac5df61d6b930e08d3d55bf318ea5946308f21c966d3d0"
+    },
+    "independent-compiler-producer-source-review.json": {
+      "bytes": 14687,
+      "sha256": "951dc2c7fc246726125e6b84c8d29fc89717147d1fd16de1ad6513d852fac717"
+    },
+    "root-source-admission.json": {
+      "bytes": 2119,
+      "sha256": "94b170762be7d98001917dfeb4dedb75fd8156d9619a5240f7bffbd9b154319e"
+    },
+    "root-terminal-admission.json": {
+      "bytes": 2189,
+      "sha256": "92d9416e298f0d1d990422a2188ec2a8dac4995f3876da0cbc52f837c5ff3c55"
+    }
+  },
+  "root_terminal_stop": {
+    "actual_fdiv": [
+      "%proposal",
+      "%float",
+      "%3422",
+      "%3423"
+    ],
+    "after": {
+      "bytes": 160162,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/compile-endpoint-normal/inputs-after.json",
+      "sha256": "e3f2d033eb163881973b25204ffab43cbc85e78d5ead68bb6d7c80864a8c042f",
+      "symlink_target": null
+    },
+    "all96_static_pins_match": true,
+    "all_consumed_input_rows_current": 630,
+    "before": {
+      "bytes": 160162,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/compile-endpoint-normal/inputs-before.json",
+      "sha256": "e3f2d033eb163881973b25204ffab43cbc85e78d5ead68bb6d7c80864a8c042f",
+      "symlink_target": null
+    },
+    "completed_operations": [
+      "Slang compile",
+      "original SSA rewrite",
+      "optimized module disassembly"
+    ],
+    "failure": "Private diagnostic policy expected NoContraction on untrusted native FDiv32; actual sole %proposal FDiv32 carries no decoration. No compiler semantic failure established.",
+    "next_step": "Independently review a separate scoped annotation/policy/assembly/validation finisher reusing these exact successful compiler/SSA outputs. No recovery is admitted by this stop audit.",
+    "no_graph_numerical_provider_cost_adoption_qualification_claim": true,
+    "not_completed": [
+      "candidate policy acceptance",
+      "assembly",
+      "Vulkan1.2 validation",
+      "final disassembly",
+      "producer output seal"
+    ],
+    "observed_births_freshly_absent": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "fresh_absent": true,
+        "fresh_current_start_ticks": null,
+        "pid": 434798,
+        "saved_start_ticks": "7522279"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "fresh_absent": true,
+        "fresh_current_start_ticks": null,
+        "pid": 434799,
+        "saved_start_ticks": "7522319"
+      }
+    ],
+    "original_false1_owner_retained": true,
+    "owner": {
+      "bytes": 1658,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/compile-endpoint-normal/owner.json",
+      "sha256": "2e99b40dd28f4f01ddb9a271b9ef2cc757ebdaafb4694c56ad72557616d826e4",
+      "symlink_target": null
+    },
+    "partial_products": {
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.compiler.spv": {
+        "bytes": 152808,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.compiler.spv",
+        "sha256": "6b4225b0e7b5a745b921b3607c6cda8928752cfa0a30233827b5a94bdc540237",
+        "symlink_target": null
+      },
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.spvasm": {
+        "bytes": 427609,
+        "mode": 420,
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.spvasm",
+        "sha256": "e7c5ca09fad31018ded39015f37adf672b268eed9e3dcf7c8903b165415a008b",
+        "symlink_target": null
+      }
+    },
+    "passed": false,
+    "peak_sampled_rss_kib": 252868,
+    "schema": "sirius-fp32-estimate-root-compiler-policy-stop-v1",
+    "source_freeze": {
+      "bytes": 37967,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/source-freeze.json",
+      "sha256": "b3e2f62fd339bedbc8c5c377043fc8ab4a8a2a2c2f97ea31986f7c11d0a701e3",
+      "symlink_target": null
+    },
+    "stop_audit_passed": true,
+    "unchanged_compiler_retry_permitted": false,
+    "wall_seconds": 1.3003400629968382
+  },
+  "runtime_or_numerical_admission": false,
+  "schema": "sirius-fp32-estimate-compiler-policy-stop-evidence-v1",
+  "scope": "Original false/child1 owner and exact stable source/inputs preserved with successful Slang/SSA/disassembly outputs. Private diagnostic policy refused missing NoContraction on the untrusted FDiv32. Assembly, validation, completed producer seal and all graph/provider/numerical/cost/adoption/qualification remain unaccepted. No unchanged compiler retry is admitted.",
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "static_inputs_verified": 96,
+  "structural_graph_accepted": false,
+  "unexecuted_success_collector": {
+    "base": "attestations/software-vulkan/4498cc4/fp64-estimate-final-retirement/preserve-finite-result.py",
+    "draft_sha256": "59f3f31e8c322875ef4599db58722764097dd0de10aeca7eb469440cbf980fb4",
+    "executed": false,
+    "patch": {
+      "bytes": 11541,
+      "sha256": "6cafc344ef081c793e0c8498dcf2dc6cbf63c5d681ac086092f0d5dee4a23730"
+    }
+  },
+  "whole_owned_inputs_verified": 630
+}

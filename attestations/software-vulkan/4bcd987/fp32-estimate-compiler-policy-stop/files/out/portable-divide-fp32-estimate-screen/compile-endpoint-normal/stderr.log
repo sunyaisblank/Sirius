@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/screen.py", line 326, in <module>
+    elif sys.argv[1] == "compile": compile_candidate()
+                                   ^^^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/screen.py", line 227, in compile_candidate
+    builder.compile_shader(WORK / "candidate/src/sirius/kernels/retained_endpoint.slang",
+  File "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/candidate/scripts/build-retained-kernels.py", line 420, in compile_shader
+    text = (diagnostic_divide_fp32_normal_sum_controls(text) if diagnostic_divide_fp32_estimate
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/candidate/scripts/build-retained-kernels.py", line 122, in diagnostic_divide_fp32_normal_sum_controls
+    raise ValueError("diagnostic FP32 proposal lost its single scoped division/order")
+ValueError: diagnostic FP32 proposal lost its single scoped division/order

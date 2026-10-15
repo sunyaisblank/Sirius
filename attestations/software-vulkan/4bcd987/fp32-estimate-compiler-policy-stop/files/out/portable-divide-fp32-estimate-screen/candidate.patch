@@ -1,0 +1,58 @@
+--- stock/src/sirius/kernels/portable_binary32.h
++++ candidate/src/sirius/kernels/portable_binary32.h
+@@ -2,10 +2,12 @@
+ #define SIRIUS_KERNELS_PORTABLE_BINARY32_H
+ 
+ // Raw-word IEEE binary32 roundTiesToEven with gradual underflow and signed zero.
+-// All arithmetic uses uint32, including explicit two-word exact products.
++// Exact arithmetic uses uint32, including explicit two-word exact products.
+ // Arithmetic NaNs are canonical 0x7fc00000; exception flags/payload propagation
+ // are outside this value API. Bit operations preserve the input payload bits.
+-// The same source is used by C++ and Slang; no native floating operation is used.
++// The same source is used by C++ and Slang. The default path uses no native
++// floating operation. Optional FP32 quotient proposals are accepted only after
++// exact integer verification; their accuracy is not a correctness premise.
+ #if defined(__cplusplus)
+ #include <bit>
+ #include <cstdint>
+@@ -184,6 +186,40 @@
+         remainder <<= 1;
+         --exponent;
+     }
++#if defined(SIRIUS_PB32_DIVIDE_FP32_ESTIMATE)
++    // This normal binary32 proposal is untrusted; only exact integer checks
++    // below can authorize an early return. The original fallback is unchanged.
++    const uint numeratorExponentBits = aa.significand < bb.significand ? 0x4d000000u : 0x4c800000u;
++    const uint numeratorBits = numeratorExponentBits | (aa.significand & 0x007fffffu);
++    const uint denominatorBits = 0x3f800000u | (bb.significand & 0x007fffffu);
++#if defined(__cplusplus)
++    static_assert(sizeof(float) == sizeof(uint));
++    const float proposal = std::bit_cast<float>(numeratorBits) / std::bit_cast<float>(denominatorBits);
++    const uint proposalBits = std::bit_cast<uint>(proposal);
++#else
++    const float proposal = asfloat(numeratorBits) / asfloat(denominatorBits);
++    const uint proposalBits = asuint(proposal);
++#endif
++    // Reject sign, non-normal and out-of-binade results before bit extraction.
++    if ((proposalBits & 0xff800000u) == 0x4c800000u) {
++        const uint h = ((proposalBits & 0x007fffffu) | 0x00800000u) << 3;
++        const uint guess = h - 16u;
++        const PB32Wide product = PB32WideProduct(guess, bb.significand);
++        const uint numeratorLo = remainder << 26;
++        const uint numeratorHi = remainder >> 6;
++        // Unsigned two-word subtraction is modulo 2^64, without a >= b
++        // precondition. Since both magnitudes are <2^51, a negative result
++        // cannot have high word zero and therefore cannot pass this guard.
++        const uint residualLo = numeratorLo - product.lo;
++        const uint residualHi = numeratorHi - product.hi - (numeratorLo < product.lo ? 1u : 0u);
++        if (residualHi == 0u && residualLo < (bb.significand << 5)) {
++            const uint digit = residualLo / bb.significand;
++            const uint exactRemainder = residualLo - digit * bb.significand;
++            const uint exactQuotient = guess + digit;
++            return PB32Round(sign, exponent, exactQuotient | (exactRemainder != 0u ? 1u : 0u));
++        }
++    }
++#endif
+     // Normalization gives d <= remainder < 2*d. Emit the leading bit,
+     // then the same 26 fractional bits in exact radix-256/4 chunks.
+     uint quotient = 1u;

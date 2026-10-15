@@ -1,0 +1,94 @@
+{
+  "actual_fdiv": [
+    "%proposal",
+    "%float",
+    "%3422",
+    "%3423"
+  ],
+  "after": {
+    "bytes": 160162,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/compile-endpoint-normal/inputs-after.json",
+    "sha256": "e3f2d033eb163881973b25204ffab43cbc85e78d5ead68bb6d7c80864a8c042f",
+    "symlink_target": null
+  },
+  "all96_static_pins_match": true,
+  "all_consumed_input_rows_current": 630,
+  "before": {
+    "bytes": 160162,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/compile-endpoint-normal/inputs-before.json",
+    "sha256": "e3f2d033eb163881973b25204ffab43cbc85e78d5ead68bb6d7c80864a8c042f",
+    "symlink_target": null
+  },
+  "completed_operations": [
+    "Slang compile",
+    "original SSA rewrite",
+    "optimized module disassembly"
+  ],
+  "failure": "Private diagnostic policy expected NoContraction on untrusted native FDiv32; actual sole %proposal FDiv32 carries no decoration. No compiler semantic failure established.",
+  "next_step": "Independently review a separate scoped annotation/policy/assembly/validation finisher reusing these exact successful compiler/SSA outputs. No recovery is admitted by this stop audit.",
+  "no_graph_numerical_provider_cost_adoption_qualification_claim": true,
+  "not_completed": [
+    "candidate policy acceptance",
+    "assembly",
+    "Vulkan1.2 validation",
+    "final disassembly",
+    "producer output seal"
+  ],
+  "observed_births_freshly_absent": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "fresh_absent": true,
+      "fresh_current_start_ticks": null,
+      "pid": 434798,
+      "saved_start_ticks": "7522279"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "fresh_absent": true,
+      "fresh_current_start_ticks": null,
+      "pid": 434799,
+      "saved_start_ticks": "7522319"
+    }
+  ],
+  "original_false1_owner_retained": true,
+  "owner": {
+    "bytes": 1658,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/compile-endpoint-normal/owner.json",
+    "sha256": "2e99b40dd28f4f01ddb9a271b9ef2cc757ebdaafb4694c56ad72557616d826e4",
+    "symlink_target": null
+  },
+  "partial_products": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.compiler.spv": {
+      "bytes": 152808,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.compiler.spv",
+      "sha256": "6b4225b0e7b5a745b921b3607c6cda8928752cfa0a30233827b5a94bdc540237",
+      "symlink_target": null
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.spvasm": {
+      "bytes": 427609,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.spvasm",
+      "sha256": "e7c5ca09fad31018ded39015f37adf672b268eed9e3dcf7c8903b165415a008b",
+      "symlink_target": null
+    }
+  },
+  "passed": false,
+  "peak_sampled_rss_kib": 252868,
+  "schema": "sirius-fp32-estimate-root-compiler-policy-stop-v1",
+  "source_freeze": {
+    "bytes": 37967,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/source-freeze.json",
+    "sha256": "b3e2f62fd339bedbc8c5c377043fc8ab4a8a2a2c2f97ea31986f7c11d0a701e3",
+    "symlink_target": null
+  },
+  "stop_audit_passed": true,
+  "unchanged_compiler_retry_permitted": false,
+  "wall_seconds": 1.3003400629968382
+}

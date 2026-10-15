@@ -1,0 +1,88 @@
+{
+  "claims": {
+    "adopted": false,
+    "compile_executed": false,
+    "provider_or_arithmetic_or_benefit_executed": false,
+    "structural_graph_accepted": false
+  },
+  "compiler_owner": {
+    "candidate_macro": "SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+    "file_cap_bytes": 67108864,
+    "label": "compile-endpoint-normal",
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "outputs": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.spv",
+      "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler/modules/candidate-endpoint-normal.final.spvasm",
+      "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/compiler-products.json",
+      "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/compile-endpoint-normal/output-seal.json"
+    ],
+    "policy_layout_checks": "Original full builder/normal32 mode/binding/table/storage/type/order policies plus scoped1FDiv32. Complete final module/disassembly output and exact full interface/executionmodes/barrier comparison.",
+    "source": {
+      "bytes": 38824,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/candidate/src/sirius/kernels/retained_endpoint.slang",
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d",
+      "symlink_target": null
+    },
+    "stock_compile_repeated": false
+  },
+  "historical_scope": {
+    "clean_operator": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "fp64_original_failed_compiler_wrapper_preserved": "d547d32330a6f4cabb2a8f4f8345fa1ac3c79a93",
+    "prior_ordinary_JIT": "91c27164ad67c469cfd98cc897dc1db4623ced66",
+    "retired_scratch_not_consumed": true,
+    "separate_corrected_reader": "56076d8dff4b19c0bb40ffecb1f7432ce83bb1e6",
+    "source_product": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+  },
+  "schema": "sirius-fp32-estimate-compiler-producer-contract-v1",
+  "scope": "One complete original normal portable Endpoint compiler producer; no graph reader,provider,numerical or cost admission.",
+  "separate_structural_reader": {
+    "future_owned_inputs": [
+      "source/candidate_header+patch+contracts",
+      "complete stock/candidate modules+assemblies",
+      "compiler-products.json",
+      "compile-endpoint-normal/owner.json",
+      "compile-endpoint-normal/inputs-before.json",
+      "compile-endpoint-normal/inputs-after.json",
+      "compile-endpoint-normal/output-seal.json",
+      "operator-context.json",
+      "source-freeze.json",
+      "compiler-producer-acceptance.json"
+    ],
+    "no_compiler_rerun_for_reader_representation_failure": true,
+    "not_claimed": [
+      "proposalaccuracy/RTE",
+      "hitrate",
+      "Float64/Int64",
+      "driverlowering",
+      "dynamicworkremoval",
+      "performance/adoption/qualification"
+    ],
+    "required_checks": [
+      "actual nativeFDiv32 operands/bitguard/extract/guess\u221216",
+      "exactoneUInt2 product/inlineborrow/highzero/R<d<<5 and closedCFG",
+      "onecorrectiveUInt32 division and product/remainder/quotient/sticky/commonRound",
+      "complete unchanged originalfallback suffix and guards/Unpack/Round/Multiply/Residual; PB32WideProduct may be absent as namedfunction and inlineUMulExtended instead",
+      "alltypes,caps,publicstorage/tupleorder/layout/descriptors/modes/barriers/original normal32 floatbodyorder",
+      "meaningful actualfullmodule negative sourcegraph controls before admitting reader"
+    ],
+    "status": "NOT_AUTHORED_OR_ADMITTED_UNTIL_ACTUAL_COMPILER_PRODUCTS"
+  },
+  "status": "SOURCE_PREPARATION_ONLY_PENDING_INDEPENDENT_AND_ROOT_ADMISSION",
+  "stock_reuse": {
+    "archive_commit": "34f22437f8d9ae863d36bdcee01ab64edc71b572",
+    "archive_manifest_sha256": "229b3a64b30db736b895642a73d0dc5c7630650a4dc3192253cc6a3bdcc3ae9d",
+    "complete_program_words": 21143,
+    "module": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    },
+    "original12policy_controls_reused_only_original_scope": true,
+    "sources": 8,
+    "tools_and_libraries": 16
+  }
+}

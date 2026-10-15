@@ -1,0 +1,89 @@
+{
+  "candidate": {
+    "bytes": 14973,
+    "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/candidate/src/sirius/kernels/portable_binary32.h",
+    "sha256": "c21eb8259f2ed51bce2333ded7065c820dd782cf32ce5e46ea8976166503cdb5"
+  },
+  "candidate_macro": "SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+  "claims": {
+    "arithmetic_executed": false,
+    "benefit_executed": false,
+    "compiled": false,
+    "production_adopted": false,
+    "provider_support_observed": false,
+    "validated": false
+  },
+  "cost_hypothesis": {
+    "countercosts": [
+      "extra nativeF32division",
+      "mask/guard/borrow/correctionintegerdivision",
+      "full fallback remains",
+      "mixedSIMD groups can retain fallback work",
+      "code/register/stack/frame changes unknown"
+    ],
+    "material_difference_from_49bfb434": "Global27-bit proposal+onewideproduct+one residualdigit rather than one integer reciprocal and four high products/four per-chunk corrections.",
+    "material_difference_from_fp64_estimate": "Single32-bit bitcast/extraction,bit-built normal operands and no FP64 conversions/arithmetic/capability; adds one correction UInt32 division compared with exact-guess FP64 success path.",
+    "ordinary_lowering_speed_benefit_adoption": "UNPROVED; reject equivalent/worse lowering before numeric controls.",
+    "successful_path": "One nativeF32 proposal division,one exactUInt2 product,inlineborrow+range guard,oneuint32 correctiondivision+lowproduct+sticky."
+  },
+  "hoare_argument": {
+    "P": "One existing PB32WideProduct(g,d), exact P<2^51.",
+    "R": "Inline uint32 low subtract plus unsigned high subtract/borrow computes (N-P) mod2^64. Existing PB32WideSubtract(a>=b) is not called.",
+    "acceptance": "residualHi==0 && residualLo<(d<<5). Since P,N<2^51, if P>N the modulo difference is >2^64-2^51 and cannot have highword0; accepted R therefore is exact nonnegative N-P<32d.",
+    "accepted_proposal_window": "q-h in[-16,15] exactly; correctness does not imply this occurs frequently.",
+    "correction": "t=floor(R/d)<32; t*d<2^29; r=R-t*d in[0,d); q=g+t=floor(N/d) in[2^26,2^27). One uint32 correction division and low product; no second wide product or P<=N comparator.",
+    "rejection": "No proposal expression modifies original remainder,bb.significand,exponent orsign. Entire original radix8/8/8/2 fallback, sticky andRound remain byte-exact.",
+    "rounding": "q|bool(r) is identical to original26fractional-bit quotient and sticky; common original PB32Round handles sign,underflow ties,subnormal transition,overflow and signedzero."
+  },
+  "insertion": {
+    "bytes": 2024,
+    "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/candidate-insertion.txt",
+    "sha256": "e528c7aa0ffd8681be5e8f8dd3ef042eecdf447903519109dc5b2730059541ab"
+  },
+  "patch": {
+    "bytes": 3247,
+    "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/candidate.patch",
+    "sha256": "66b69b265a0ecb712dd94b5e464478a5675a8f9da858599209f58355e7cab0af"
+  },
+  "postcondition": "Return is bit-equal original PB32Divide for every accepted exact-check path; all rejected proposal paths execute original fallback. This is a source/math argument, not an executed/exhaustive proof.",
+  "precondition": {
+    "finite_guard_precedence": "Unchanged original NaN/Inf/zero guards before Unpack; normalized finite nonzero only.",
+    "normalized_significands": "2^23<=d<2^24; d<=m<2d; m is original aa.significand or its exact one-bit double; exponent/sign remain unchanged.",
+    "numerator": "N=m*2^26; N<2^51; UInt2 words m<<26 and m>>6."
+  },
+  "proposal": {
+    "denominator_bits": "0x3f800000 | (d&0x7fffff)",
+    "exact_operand_identity": "Native operands are normal binary32: x=aa.significand*2^(3+k), k=(aa.significand<d); y=d*2^-23; x/y=N/d. No uint-to-float conversion.",
+    "extraction": "h=((proposalBits&0x7fffff)|0x800000)<<3",
+    "guard": "(proposalBits&0xff800000)==0x4c800000",
+    "integer_bounds": "2^26<=h<=2^27-8; h multiple8; g=h-16 is nonnegative,<2^27; subtract cannot underflow.",
+    "nonfinite_negative_subnormal_or_outside_binade": "Rejected by integer bit guard before extraction.",
+    "not_assumed": [
+      "proposal accuracy",
+      "RTE mode",
+      "correctly rounded native division",
+      "estimate hit-rate",
+      "Float64 or Int64 capability"
+    ],
+    "numerator_bits": "(aa.significand<d ? 0x4d000000 : 0x4c800000) | (aa.significand&0x7fffff)"
+  },
+  "reversible_source_delta": {
+    "comments_only_elsewhere": true,
+    "full_reversal_byte_equals_canonical_stock": true,
+    "insertion_only_function_change": true
+  },
+  "schema": "sirius-fp32-estimate-source-contract-v1",
+  "status": "SOURCE_ONLY_UNSEALED_NOT_ADMITTED",
+  "stock": {
+    "bytes": 12797,
+    "path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/stock/src/sirius/kernels/portable_binary32.h",
+    "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+  },
+  "untouched": [
+    "all original PB32Divide special guards,Unpack,normalization",
+    "complete original fallback suffix",
+    "PB32Multiply/PB32FMA/PB32ProductResidual/seed arithmetic",
+    "PB32WideProduct/PB32WideSubtract/PB32Round",
+    "all public32-bit storage/layout/tables/bindings/barriers/modes"
+  ]
+}

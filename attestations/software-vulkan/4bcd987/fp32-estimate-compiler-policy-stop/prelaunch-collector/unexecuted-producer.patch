@@ -1,0 +1,120 @@
+--- attestations/software-vulkan/4498cc4/fp64-estimate-final-retirement/preserve-finite-result.py
++++ out/preserve-finite-result.py
+@@ -11,7 +11,7 @@
+ root = Path.cwd()
+ kind = sys.argv[1]
+ parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
++assert parent == ('4498cc41168ad29fc4c111819a4cb7ccaa54a8bf' if kind in ('minimum-step-floor-alignment-stop', 'minimum-step-floor-focused-controls', 'divide-fp64-estimate-compiler-reader-stop', 'fp64-estimate-float-controls-properties', 'divide-fp64-estimate-reader-recovery', 'divide-fp64-estimate-ordinary-jit-screen', 'fp64-estimate-original-arithmetic', 'fp64-estimate-original-controls', 'fp64-estimate-original-benefit', 'fp64-estimate-final-retirement', 'original-cold-kerr-source-review', 'fp64-estimate-controls-profile-reader-stop', 'fp64-estimate-profile-recovery', 'divide-fp32-estimate-compiler-producer') else '27f5d9cdc6f9268b598a2b954febca8ec3468394' if kind == 'minimum-step-floor-configure-stop' else '46a9599a0cb30b0667e09838eac7a87690e982e4' if kind in ('multiply64-original-benefit', 'sanitizer-debug-o1-focused', 'multiply64-compiler-screen', 'multiply64-ordinary-jit-screen', 'multiply64-original-arithmetic', 'multiply64-profile-graph-stop', 'multiply64-o0-parser-fixture-stop', 'native-windows-system-5b5fad9', 'linux-gate-incomplete-38577826600', 'macos-full-ci-incomplete-38577826600', 'multiply64-original-controls', 'p1-kerr-observer-rss-stop', 'macos-current-provider-recovery', 'windows-runner-loss-38577826600', 'p2-cpu-radial-congruence', 'p2-source-sky-differential', 'e3-dispatch-continuations') else 'f5d649bf5067d1d68dc9215462f37830122f0540')
+ assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
+ 
+ def pin(path):
+@@ -1443,6 +1443,108 @@
+         'scope':'Public instance/physical-device properties only. Eligible mixed RTE32/Float64 profile, with exact alive loader/LVP/LLVM map identities and raw structures; no logical-device enablement, shader/pipeline/dispatch/JIT, numerical precision/equivalence, performance, hardware-domain or release qualification.',
+         'future_capture_rule':'Use exact archived owners/results/raw/inputs and selected provider/image identities; separately observe successful Float64-enabled VkDevice arguments and accepted exact candidate structure before dispatch.'}
+     message = 'Preserve selected LVP mixed-width float-control property observation (#44)\n'
++elif kind == 'divide-fp32-estimate-compiler-producer':
++    import stat
++    work = root / 'out/portable-divide-fp32-estimate-screen'
++    products = root / 'bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler'
++    bundle = root / 'attestations/software-vulkan/4bcd987/fp32-estimate-compiler-producer'
++    tag = 'evidence/issue-44-fp32-estimate-compiler-producer'
++    load = lambda path: json.loads(path.read_text())
++    def compiler_record(path):
++        return dict(pin(path), mode=stat.S_IMODE(path.stat().st_mode),
++                    resolved_path=str(path.resolve(strict=True)),
++                    symlink_target=os.readlink(path) if path.is_symlink() else None)
++    folder = work / 'compile-endpoint-normal'
++    owner = load(folder / 'owner.json')
++    actions = load(work / 'actions.json')
++    assert list(actions) == ['compile-endpoint-normal']
++    action = actions['compile-endpoint-normal']
++    context = load(work / 'operator-context.json')
++    assert context['revision'] == action['revision'] == parent and context['status'] == ''
++    assert context['product_revision'] == '4bcd9875cd9308deabed06a5fa2f17d2321b0cbc'
++    assert owner['status'] == 'terminal' and owner['passed'] is True and owner['child_exit'] == 0
++    assert owner['source'] == {'revision': parent, 'status': ''}
++    assert owner['source_unchanged'] and owner['whole_inputs_unchanged']
++    assert owner['stop_reason'] is None and not owner['cleanup_errors'] and not owner['remaining_owned_processes']
++    assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
++    assert not owner['provider_mappings']
++    assert owner['argv'] == action['argv']
++    assert owner['limits'] == action['limits'] == {'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++    before = load(folder / 'inputs-before.json')
++    assert (folder / 'inputs-before.json').read_bytes() == (folder / 'inputs-after.json').read_bytes()
++    for name, expected in before.items():
++        path = root / name
++        assert str(path.resolve(strict=True)) == expected['resolved_path'], name
++        assert pin(path) == {key:expected[key] for key in ('bytes','sha256')}, name
++    for key, relative in [('actions','actions.json'), ('source_freeze','source-freeze.json'),
++                          ('preparation','preparation.json')]:
++        assert context[key] == compiler_record(work / relative)
++    frozen = load(work / 'source-freeze.json')
++    counts = {}
++    for prefix, field in [(work,'private_inputs'), (root,'external_inputs')]:
++        for name, expected in frozen[field].items():
++            assert compiler_record(prefix / name) == expected, name
++        counts[field] = len(frozen[field])
++    preparation = load(work / 'preparation.json')
++    assert preparation['private_input_count'] == counts['private_inputs']
++    assert preparation['external_input_count'] == counts['external_inputs']
++    reviews = {}
++    for name in ('independent-arithmetic-source-review.json', 'independent-source-review.json',
++                 'root-source-admission.json', 'root-terminal-admission.json'):
++        review = load(work / name)
++        assert review['passed'] is True, name
++        reviews[name] = pin(work / name)
++    result = load(work / 'compiler-products.json')
++    acceptance = load(work / 'compiler-producer-acceptance.json')
++    assert result['schema'] == 'sirius-fp32-estimate-compiler-products-v1' and result['passed'] is True
++    assert result['original_compile_ssa_assemble_validate_complete'] is True
++    assert result['stock_equals_current_canonical'] is True
++    assert result['complete_descriptor_and_workgroup_type_decorations_equal'] is True
++    assert result['execution_modes_equal'] is True and result['ordered_barrier_operands_equal'] is True
++    assert result['private_single_FDiv32_policy_and_original_normal_policy_passed'] is True
++    assert result['structural_graph_accepted'] is False and result['runtime_or_numerical_admission'] is False
++    assert result['benefit_established'] is False
++    assert acceptance['schema'] == 'sirius-fp32-estimate-compiler-producer-acceptance-v1'
++    assert acceptance['passed'] is True and acceptance['structural_graph_accepted'] is False
++    assert acceptance['runtime_or_numerical_admission'] is False
++    for key, relative in [('compiler_owner','compile-endpoint-normal/owner.json'),
++                          ('output_seal','compile-endpoint-normal/output-seal.json'),
++                          ('compiler_products','compiler-products.json')]:
++        assert acceptance[key] == compiler_record(work / relative)
++    seal = load(folder / 'output-seal.json')
++    assert seal['schema'] == 'sirius-fp32-estimate-compiler-output-seal-v1'
++    assert seal['label'] == 'compile-endpoint-normal' and seal['structural_graph_accepted'] is False
++    for key, relative in [('source_freeze','source-freeze.json'), ('operator_context','operator-context.json'),
++                          ('inputs_before','compile-endpoint-normal/inputs-before.json'),
++                          ('recipe','compiler-recipes.json')]:
++        assert seal[key] == compiler_record(work / relative)
++    candidate = products / 'modules/candidate-endpoint-normal.spv'
++    assembler_input = candidate.with_suffix('.spvasm')
++    disassembly = candidate.with_suffix('.final.spvasm')
++    expected_outputs = [candidate, assembler_input, disassembly, work / 'compiler-products.json']
++    assert seal['outputs'] == {str(path):compiler_record(path) for path in expected_outputs}
++    assert candidate.read_bytes()[:4] == bytes.fromhex('03022307')
++    assert result['modules']['candidate']['module'] == compiler_record(candidate)
++    assert result['modules']['candidate']['assembly'] == compiler_record(disassembly)
++    assert result['actual_assembler_input'] == compiler_record(assembler_input)
++    for mode in ('stock','candidate'):
++        module = result['modules'][mode]
++        assert sorted(module['capabilities']) == ['RoundingModeRTE','Shader']
++        assert module['integer_widths'] == module['float_widths'] == ['32']
++        for field in ('module','assembly'):
++            assert module[field] == compiler_record(Path(module[field]['resolved_path']))
++    mapping = [(work, 'files/out/portable-divide-fp32-estimate-screen'),
++               (products, 'files/bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler')]
++    summary = {'schema':'sirius-fp32-estimate-complete-compiler-producer-evidence-v1',
++        'source_revision':parent, 'product_revision':'4bcd9875cd9308deabed06a5fa2f17d2321b0cbc',
++        'compiler_producer_accepted':True, 'owner':owner, 'result':result, 'acceptance':acceptance,
++        'static_inputs_verified':sum(counts.values()), 'whole_owned_inputs_verified':len(before),
++        'reviews':reviews, 'actual_candidate_module':pin(candidate),
++        'actual_assembler_input':pin(assembler_input), 'actual_final_disassembly':pin(disassembly),
++        'structural_graph_accepted':False, 'runtime_or_numerical_admission':False,
++        'benefit_established':False, 'qualification_claimed':False,
++        'scope':'Complete original normal Endpoint compiler producer and exact source/input/output-seal/type/interface/mode/barrier policy evidence only. Stock compilation and original policy controls reused. The separate quotient/correction/fallback graph, driver/JIT, original arithmetic, integrated controls and benefit remain unaccepted and unexecuted by this producer.'}
++    message = 'Preserve complete FP32 estimate Endpoint compiler producer without graph or runtime admission (#44)\n'
+ elif kind == 'divide-fp64-estimate-compiler-reader-stop':
+     import stat
+     work = root / 'out/portable-divide-fp64-estimate-screen/compiler'

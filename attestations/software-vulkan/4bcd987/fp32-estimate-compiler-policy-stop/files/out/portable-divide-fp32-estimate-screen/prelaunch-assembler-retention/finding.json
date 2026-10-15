@@ -1,0 +1,64 @@
+{
+  "canonical_source": {
+    "bytes": 35006,
+    "mode": 420,
+    "resolved_path": "/home/astra/.project/Sirius/scripts/build-retained-kernels.py",
+    "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e",
+    "symlink_target": null
+  },
+  "correction": "Diagnostic-only skip of assembly.unlink; macro-off lifecycle remains exact. Add .spvasm to product seal/terminal expected outputs and explicitly record optimizer/raw lifecycle. No additional tool,shader,validator or parser execution.",
+  "executed": false,
+  "finding": "Canonical portable compile_shader deletes assembly after validation. Root requested actual assembler input be preserved and sealed; previous unconsumed draft had not yet retained it.",
+  "preimage_files": {
+    "actions.unpinned.json": {
+      "bytes": 11746,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/prelaunch-assembler-retention/actions.unpinned.json",
+      "sha256": "0e89bcce9af992fd8320e411c9c2f2de340b8041fc78824be4e7eca7ccb20054",
+      "symlink_target": null
+    },
+    "candidate-builder.py": {
+      "bytes": 37524,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/prelaunch-assembler-retention/candidate-builder.py",
+      "sha256": "94d6a487ebbb04a36af0aacf559b36daf3d389ed1447bc623c93c8deb18f6336",
+      "symlink_target": null
+    },
+    "compiler-contracts.json": {
+      "bytes": 4217,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/prelaunch-assembler-retention/compiler-contracts.json",
+      "sha256": "c69b0b56243f2f69db93376499c8223d5e8b15f40db2656980cfa71ff4d2f84a",
+      "symlink_target": null
+    },
+    "compiler-recipes.json": {
+      "bytes": 6073,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/prelaunch-assembler-retention/compiler-recipes.json",
+      "sha256": "43d6dee70b009f88a828501c43f8c603603489dae53eb9c8ec893baa14402eb4",
+      "symlink_target": null
+    },
+    "preparation.json": {
+      "bytes": 2107,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/prelaunch-assembler-retention/preparation.json",
+      "sha256": "b38d8c51c6362c6466bbc29925493b2986f1e3c61df4d098064d69a7d1b5ac7d",
+      "symlink_target": null
+    },
+    "screen.py": {
+      "bytes": 19576,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/prelaunch-assembler-retention/screen.py",
+      "sha256": "db3f6b70f4d353b3456ea6409cea90b73aa1fd8769ad939dedf9856a58d0672f",
+      "symlink_target": null
+    },
+    "source-freeze.json": {
+      "bytes": 35075,
+      "mode": 420,
+      "resolved_path": "/home/astra/.project/Sirius/out/portable-divide-fp32-estimate-screen/prelaunch-assembler-retention/source-freeze.json",
+      "sha256": "8d6aeaa62cc80405816bc1fa665ded9a4c10848f73e0e0224ff8d2def774deb4",
+      "symlink_target": null
+    }
+  },
+  "schema": "sirius-fp32-compiler-source-prelaunch-retention-finding-v1"
+}
