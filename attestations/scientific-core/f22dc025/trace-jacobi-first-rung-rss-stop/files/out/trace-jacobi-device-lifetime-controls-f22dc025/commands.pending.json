@@ -1,0 +1,26 @@
+{
+  "schema": "sirius-trace-jacobi-device-lifetime-pending-commands-v1",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "admitted": false,
+  "runtime_admitted": false,
+  "hold": "Root alone admits current f22 exact local producer/source/runtime closure after independent/rootSOURCEreview; source-only/pending, no runtime authority. Parallel remote build-only CI completion is not required for this Linux diagnostic.",
+  "order": [
+    "trace-jacobi-all-rungs"
+  ],
+  "commands_after_root_admission": [
+    "/usr/bin/python3 out/trace-jacobi-device-lifetime-controls-f22dc025/run_owned.py trace-jacobi-all-rungs",
+    "/usr/bin/python3 out/trace-jacobi-device-lifetime-controls-f22dc025/root_acceptance.py trace-jacobi-all-rungs"
+  ],
+  "strict_additional_root_postcheck": "Require exact one completed zeroFESD/noskip original testcase; assert fp64_evidence property NAME absent; bind full exact3rungsource and actual selectedLVPdevice/provider/live birth; verify all6currentmodule compile-stage pairs and all9ordered exactprogressmarkerlines. Neither exercised nor markers implyPASS.",
+  "required_stdout_progress_marker_lines_in_order": [
+    "[TraceJacobiRung] module=trace.spv phase=begin",
+    "[TraceJacobiRung] module=trace.spv phase=prepared",
+    "[TraceJacobiRung] module=trace.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+  ]
+}

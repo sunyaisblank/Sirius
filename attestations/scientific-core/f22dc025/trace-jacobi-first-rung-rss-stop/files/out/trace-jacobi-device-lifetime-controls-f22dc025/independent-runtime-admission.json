@@ -1,0 +1,194 @@
+{
+  "schema": "sirius-trace-jacobi-device-lifetime-independent-runtime-admission-v1",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T17:40:48.286574+00:00",
+  "materialized_readiness_accepted": true,
+  "test_execution_authorized": false,
+  "runtime_release_pending": true,
+  "test_executions_observed": 0,
+  "blockers": [],
+  "critical_pins": {
+    "actions.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/actions.json",
+      "bytes": 53567,
+      "sha256": "393b08bdd090cf79a8dfc5025a932dd5b42337974d56878ca37af35a8bc23da8"
+    },
+    "actions.pending.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/actions.pending.json",
+      "bytes": 6972,
+      "sha256": "468449bca9fa3fed03fd3afcac54d4cf516ebc729b67d85737d985deacfd8599"
+    },
+    "readiness.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/readiness.json",
+      "bytes": 63397,
+      "sha256": "ed13640d46e6518dff5221a09f6c81c98c978f7120fce49d28733a58cda017f7"
+    },
+    "compiled-size-observation.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/compiled-size-observation.json",
+      "bytes": 23973,
+      "sha256": "24377bf2d1850254dbdd4f0da888e88be3bdd422c012c50fdc0be006212a4019"
+    },
+    "root-preflight.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/root-preflight.json",
+      "bytes": 333295,
+      "sha256": "8fe5e1be0ebc8a1e0a5a2727fa411c6a063beccba0cfc1ab25780847c163efcc"
+    },
+    "independent-source-review.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/independent-source-review.json",
+      "bytes": 8191,
+      "sha256": "a528ec11f1f6a24094882061d99711b97cc4a09edf0444f977bd86668bdd062f"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/source-contracts.json",
+      "bytes": 18165,
+      "sha256": "3999abd542309a16ceb30c66465dcc49f744b38be88b90c822d74cbbe6ee6e74"
+    }
+  },
+  "build_input_observation": {
+    "path": "out/e2-original-cpu-witnesses-pending/build-input-observation.json",
+    "bytes": 240790,
+    "sha256": "e83ff8903332cb3ce6a583723f3972e31d28225ee8602f2eeb7622e46f1078e4"
+  },
+  "concrete_closure": {
+    "all_current_rich_content_and_resolved_pins_match": 1296,
+    "tracked_source_files": 538,
+    "expected_first_owner_whole_inputs": 1297,
+    "exact_owner_set": "Tracked538 plus automatic owner/guard/actions plus declared862; exactly preflight1296 keys plus preflight itself.",
+    "original_pending84_preserved_as_ordered_prefix": true,
+    "additional_unique_paths": 778,
+    "only_action_scope_and_input_strengthening_changed": true,
+    "CPU_build_observation_only_reused": true,
+    "all788_actual_extra_build_runtime_pins_join_current_preflight": true,
+    "CPU_case_readiness_action_owner_outputs_consumed": false,
+    "VALID_selected_object_dependency_records": 11,
+    "distinct_declared_dependency_files": 620,
+    "resolved_five_link_edge_inputs": 129,
+    "selected_commands_match_current_compile_commands_and_objects": true,
+    "new_trace_TU_command": "Original Release/O3/NDEBUG retained; contract mode2, Werror, kernel feature, original fail_on_skip include active; no fast-math/Ofast addition.",
+    "own_runtime_review_outside_future_inputs": true,
+    "fresh_case_collector_result_and_rootrelease_absent": true
+  },
+  "current_producer_and_modules": {
+    "backend": {
+      "path": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bytes": 13502080,
+      "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+    },
+    "fresh_f22_CXX_compile_link_not_old_ELF_alias": true,
+    "actual110step_build_sourcegov_and_changed_trace_TU_link_logs_join": true,
+    "root_recorded_configure_and_build_exit": 0,
+    "current_cache": "Release, qualification, contract2, MandatoryON,WerrorON,requiredVulkanON; saved build and current cache agree.",
+    "compiled_alignment": "Exact current f22,0of8 admitted domains, release ideal unsatisfied; not domain/runtime qualification.",
+    "six_current_compiled_staged_module_pairs_and_d066_Git_blob_bytes_match": true,
+    "modules": {
+      "parity_probe.spv": {
+        "bytes": 3969508,
+        "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed"
+      },
+      "parity_probe_fp32comp.spv": {
+        "bytes": 3973732,
+        "sha256": "2524459927bf743700a3e2024a73e6794a1030a09220898470604fd51d1d0bfc"
+      },
+      "parity_probe_fp64.spv": {
+        "bytes": 3879216,
+        "sha256": "3dbc622818259a3cbf0c2abc95efc406f48b8284bc3b0bd2ccbc7d9c2fbcc2aa"
+      },
+      "trace.spv": {
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "trace_fp32comp.spv": {
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "trace_fp64.spv": {
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      }
+    },
+    "alias_scope": "Unchanged SPIRV bytes only; no foreign-OS executable equivalence or new shader compile inferred.",
+    "actual_registration_count": 1152,
+    "original_case_active_and_Mandatory": true,
+    "original_registered_TIMEOUT": null,
+    "argv_delta": "Unchanged original direct filter omits registration-only --gtest_also_run_disabled_tests; this selected case is active."
+  },
+  "runtime_dependency_observation": {
+    "actual_saved_ldd_roles": [
+      "backend",
+      "provider",
+      "git",
+      "python"
+    ],
+    "four_actual_saved_exits": 0,
+    "raw_stdout_parsed_and_stderr_empty": true,
+    "backend_provider_resolved_DSO_union": 32,
+    "four_role_resolved_DSO_union": 33,
+    "extra_tool_DSO": "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2",
+    "all33_current_DSO_bytes_and_full_frozen_closure_join": true,
+    "direct_LVP": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+      "device_major": 8,
+      "device_minor": 80,
+      "inode": 143595
+    },
+    "actual_live_provider_mapping_proven_now": false,
+    "requirement": "Root must join actual child/session/saved-birth/provider maps to this pinned LVP device/inode/content during original attempt; installation metadata does not prove loading."
+  },
+  "launch_and_positive_acceptance_conditions": {
+    "root_sole_operator_and_separate_release_required": true,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "default_cache": true,
+    "software_provider_device": "LVP0",
+    "per_launch_external_environment": {
+      "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+    },
+    "recorded_inherited_protected_environment": {},
+    "normal_Python_assertions_required": true,
+    "actual_samebirth_controller_child_environment_and_provider_map_required": true,
+    "original_physical_phase_cap_ms": 1000,
+    "maximum_attempts_each_RunRegion": 128,
+    "strict_property_NAME_absence": "fp64_evidence",
+    "null_collector_comparison_alone_sufficient": false,
+    "all_three_complete_source_branches_and_exact_nine_ordered_marker_lines_required": [
+      "[TraceJacobiRung] module=trace.spv phase=begin",
+      "[TraceJacobiRung] module=trace.spv phase=prepared",
+      "[TraceJacobiRung] module=trace.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+    ],
+    "mandatory_final_authority": "Exactly one completed original zero-FESD testcase, no skip/unsupported decline, with strict property-NAME absence/full source+module joins. Markers alone, including exercised after nonfatal EXPECT, never imply PASS.",
+    "stop_first_nonpass_no_unchanged_retry_or_guard_raise": true,
+    "remote_parallel_build_CI_completion_not_local_launch_gate": true
+  },
+  "method": "Passive stdlib source/JSON/text/hash/current file stat and read-only Git. No helper/project import/parser/tool/provider/test/network/process query. Initial raw-link-path subset assertion omitted resolution of3 link-time .so aliases; current resolved targets are all pinned and exact129-input union passes. No source/data change.",
+  "checkout": {
+    "head": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "this_ignored_review_committed_or_pushed": false
+  },
+  "limitations": [
+    "Concrete metadata admission only; original changed-source attempt not yet run/released.",
+    "No P2/FP64 numerical or memory/completion/performance claim; prior e0RSS stop remains incomplete/noXML/no known rung.",
+    "No fullP1/strong-field/cold-frame/Mandatory/fullscience/domain/UI/release qualification."
+  ]
+}

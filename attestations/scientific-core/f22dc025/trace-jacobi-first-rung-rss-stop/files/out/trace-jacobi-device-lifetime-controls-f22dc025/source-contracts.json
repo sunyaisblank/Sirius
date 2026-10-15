@@ -1,0 +1,366 @@
+{
+  "schema": "sirius-trace-jacobi-device-lifetime-pending-source-contracts-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "source_files": {
+    "run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "bytes": 3776,
+      "sha256": "b95f96ea12d20981f86ade54cf3317d0249e615bcb7044e88d9c6d1ded53aa97"
+    },
+    "originals/actions.json": {
+      "bytes": 6016,
+      "sha256": "bfa88781c433ff6d082c4128435e276df7421a223ac0e0d9f5b299295cfc97db"
+    },
+    "originals/root_acceptance.py": {
+      "bytes": 3768,
+      "sha256": "ff4c2c971de65e87aedaf92239083b1e707b7b08a9a14b63c69f7b70b64b45c2"
+    },
+    "originals/commands.pending.json": {
+      "bytes": 985,
+      "sha256": "bd937af11ff079015f5da21e2f0efb317b08b7739097d203f3f86121cd32d3b1"
+    },
+    "actions.pending.json": {
+      "bytes": 6972,
+      "sha256": "468449bca9fa3fed03fd3afcac54d4cf516ebc729b67d85737d985deacfd8599"
+    },
+    "commands.pending.json": {
+      "bytes": 1714,
+      "sha256": "6e4667649655e922dec1e79144913c1400b982cd01a8fc1299cab5991ebd655a"
+    }
+  },
+  "origin": {
+    "commit": "5cc46b727d53603e919727aec110cfd12108a560",
+    "bundle": "attestations/scientific-core/e0db7d59/trace-jacobi-source-and-software-rss-stop",
+    "source_prefix": "attestations/scientific-core/e0db7d59/trace-jacobi-source-and-software-rss-stop/files/out/trace-jacobi-original-witness-e0db7d59/",
+    "original_actions_source": "actions.pending.json6016B",
+    "original_collector_source": "root_acceptance.py3768B",
+    "original_commands_source": "commands.pending.json985B",
+    "mature_owner_guard_byte_exact": true
+  },
+  "collector_delta": {
+    "old_work_directory": "out/trace-jacobi-original-witness-e0db7d59",
+    "new_work_directory": "out/trace-jacobi-device-lifetime-controls-f22dc025",
+    "literal_replacements": 1,
+    "inverse_exact": true,
+    "functional_changes": false
+  },
+  "pending_action_delta": {
+    "label": "trace-jacobi-all-rungs",
+    "original_filter_and_all_owner_governors_XML_predicates_retained": true,
+    "revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "original_selectors": 76,
+    "approved_producer_proof_retargets": {
+      "out/kerr-cartdelta-rhs-checks/configure.log": "out/trace-jacobi-device-lifetime-checks/configure.log",
+      "out/kerr-cartdelta-rhs-checks/build.log": "out/trace-jacobi-device-lifetime-checks/build.log",
+      "out/kerr-cartdelta-rhs-checks/source-application.json": "out/trace-jacobi-device-lifetime-checks/source-application.json",
+      "out/kerr-cartdelta-rhs-checks/source-push.log": "out/trace-jacobi-device-lifetime-checks/source-push.log",
+      "out/kerr-cartdelta-rhs-checks/dependency-set-check-correction.json": "out/trace-jacobi-device-lifetime-checks/source-remote-ref.txt"
+    },
+    "extra_selectors": [
+      "out/trace-jacobi-device-lifetime-controls-f22dc025/commands.pending.json",
+      "out/trace-jacobi-device-lifetime-controls-f22dc025/originals/commands.pending.json",
+      "out/trace-jacobi-device-lifetime/original.cpp",
+      "out/trace-jacobi-device-lifetime/candidate.cpp",
+      "out/trace-jacobi-device-lifetime/patch.diff",
+      "out/trace-jacobi-device-lifetime/source-contracts.json",
+      "out/trace-jacobi-device-lifetime/independent-source-review.json",
+      "out/trace-jacobi-device-lifetime/root-source-build-hold-release.json"
+    ],
+    "total_selectors": 84,
+    "historical_unchanged_shader_proof_kept": [
+      "out/kerr-cartdelta-rhs-loop/source-contracts.json",
+      "out/kerr-cartdelta-rhs-loop/independent-source-review.json"
+    ],
+    "kernel_pairs": "Three parity and3trace compile/stage pairs remain prospective,12paths total.",
+    "runtime_DSOs": "32original runtimeDSO selectors plus LVPprovider retained prospectively; root must freshly revalidate full current ELF/interpreter/Git/loader/provider dependency set. No freshDSO/ELF facts produced here."
+  },
+  "tracked_source_content_pins": {
+    "tests/backend/kernel_trace_test.cpp": {
+      "bytes": 30579,
+      "sha256": "a5087954943aad20123b08acb0153db71eb69dddd4676ebecc6691ca43f4d549",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "630bb50ff53d4e0c0bc5c2ea95826e6db0ed38db",
+      "same_bytes_as_e0": false
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "bytes": 13798,
+      "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "f534108cf38b117f10cfd8a9b67b29212fbdbe57",
+      "same_bytes_as_e0": true
+    },
+    "tests/support/test_resource.h": {
+      "bytes": 796,
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "98087810848d204144c13a24c8782f58ffb4a87b",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "bytes": 7192,
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "4e61faf3471d19d16a73c8ea080c26b76d472969",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/render/dispatch_governor.h": {
+      "bytes": 7908,
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "a690f5c665f771aa1b5e9cc8f153e4b1292f8a99",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/render/dispatch_governor.cpp": {
+      "bytes": 9243,
+      "sha256": "b1e92debf12f32adfab38a7f6754b5dd421518d04502c804d37bd05151a4ad87",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "79bffb5a84524e3f3a17ec7c7f442eac2e0eebb0",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/kernels/trace.slang": {
+      "bytes": 63460,
+      "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "ede032048159e456d5d63afc271c64160487aa05",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "e131912d6344029881602dd106803fc95f738c0d",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "0d239802eb92efc07c2dba107dbbede4cb03b804",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/backend/CMakeLists.txt": {
+      "bytes": 17763,
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "c629f17fc0611874533f2dbe0b986b685f0f74fc",
+      "same_bytes_as_e0": true
+    },
+    "tests/backend/CMakeLists.txt": {
+      "bytes": 5448,
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "68735044e5a46054e4449ddc60f6132d2d75e8b7",
+      "same_bytes_as_e0": true
+    },
+    "cmake/sirius_testing.cmake": {
+      "bytes": 12349,
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/backend/device.h": {
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "328d743ef3b9f03786341f8ae4750257885ab097",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/backend/vulkan/vulkan_device.h": {
+      "bytes": 9768,
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "7a75c46474845e11effad2e12ff28b3451ebd614",
+      "same_bytes_as_e0": true
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae",
+      "source_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94",
+      "same_bytes_as_e0": true
+    }
+  },
+  "source_change_frame": {
+    "changed_paths_e0_to_f22": [
+      "tests/backend/kernel_trace_test.cpp"
+    ],
+    "only_P2_case_lifetime_and_progress_markers_changed": true,
+    "full_current_test_equals_reviewed30579byte_candidate": true,
+    "old_original_30289byte_source_pin": {
+      "bytes": 30289,
+      "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a"
+    },
+    "current_candidate_pin": {
+      "bytes": 30579,
+      "sha256": "a5087954943aad20123b08acb0153db71eb69dddd4676ebecc6691ca43f4d549"
+    },
+    "other_original_tracked_source_pins_current_equal_e0": 11,
+    "additional_unchanged_lifetime_API_source_pins": 3,
+    "outside_case_exact_and_all_assertions_numeric_literals_original": "Independently reviewed candidate inverse/source-contracts prove it; parent source diff is exact candidate.",
+    "reviewed_candidate_source_proofs": {
+      "out/trace-jacobi-device-lifetime/original.cpp": {
+        "bytes": 30289,
+        "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a"
+      },
+      "out/trace-jacobi-device-lifetime/candidate.cpp": {
+        "bytes": 30579,
+        "sha256": "a5087954943aad20123b08acb0153db71eb69dddd4676ebecc6691ca43f4d549"
+      },
+      "out/trace-jacobi-device-lifetime/patch.diff": {
+        "bytes": 1873,
+        "sha256": "e3b23ba7d5f5db2561efc4105023bcb084fe307ba582a3a4bec22faea7b05657"
+      },
+      "out/trace-jacobi-device-lifetime/source-contracts.json": {
+        "bytes": 8502,
+        "sha256": "51106f6ff62bcd4433c0d718bfcec1dbf642e6373818cd9e863d194352101628"
+      },
+      "out/trace-jacobi-device-lifetime/independent-source-review.json": {
+        "bytes": 7684,
+        "sha256": "84e8d11030c566d5d3a66598fb83c62c2815e096427b5b943268a0bc7448d22a"
+      },
+      "out/trace-jacobi-device-lifetime/root-source-build-hold-release.json": {
+        "bytes": 1380,
+        "sha256": "2405304a502f66d3cd7385f7c0d847f93edfcceec743e8a449838b388f01ba78"
+      },
+      "out/trace-jacobi-device-lifetime-checks/source-application.json": {
+        "bytes": 3974,
+        "sha256": "f00fd8ef248994f09a51f62ec2ba69a94f55463e0cf39b1ce5a0fb33fc61139e"
+      },
+      "out/trace-jacobi-device-lifetime-checks/source-remote-ref.txt": {
+        "bytes": 94,
+        "sha256": "a2c0f3d69c6b1b114abc388d29425c6e543eb2766306e836e731ad35a79b30d2"
+      }
+    }
+  },
+  "required_root_postcheck": {
+    "strict_fp64_property_NAME_absent": true,
+    "null_collector_predicate_scope": "Inherited get(name)==None can also match malformed property lackingvalue. Root MUST separately require propertyNAME absent; unsupported decline nonnull refused. No positive FP64property invented.",
+    "all3_supported_rungs_full_source_branch_and_zeroFESD_required": true,
+    "required_progress_lines_in_order": [
+      "[TraceJacobiRung] module=trace.spv phase=begin",
+      "[TraceJacobiRung] module=trace.spv phase=prepared",
+      "[TraceJacobiRung] module=trace.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+    ],
+    "all9_exact_marker_lines_required": true,
+    "markers_are_PASS": false,
+    "unsupported_FP64_branch": "Unchanged decline/property/continue; this omits prepared/exercised forFP64 and fails required marker+strictabsence acceptance.",
+    "no_device_or_missing_kernels": "OriginalGTestSkip refused by exactonecompleted/noskips acceptance.",
+    "exercised_can_follow_nonfatal_expectation_failure": "Yes; completedzeroFESD remains acceptance authority."
+  },
+  "original_unchanged_contract": {
+    "active_pixels": 1,
+    "allocated_rows": 64,
+    "buffers": 7,
+    "packet_float32_words": 70,
+    "record_bytes": {
+      "fp32": 272,
+      "fp32comp": 272,
+      "fp64": 480
+    },
+    "requested_buffer_payload_bytes_not_driver_RSS": {
+      "fp32": 543044,
+      "fp32comp": 543044,
+      "fp64": 556356
+    },
+    "maximum_attempts": 128,
+    "physical_phase_submit_wait_ms_maximum": 1000,
+    "software_zeroactive_prepare_separate_from_active_phase_bound": true,
+    "external_diagnostic_limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "default_cache": true,
+    "software_provider_device": "LVP0",
+    "registered_original_TIMEOUT": null,
+    "within_rung_failure_retention_manualFinalize_sample1_2_refusal_sample0reset_sample1averaging": "Byte-exact original body/assertions/state continuity.",
+    "scope": "FlatM=a=Q=Lambda=0 event/Jacobi/failedsample recovery; no strong-field or guaranteed compositefloor coverage."
+  },
+  "lifetime_contract": {
+    "normal_release": "Same selectedphysicalindex; one new logicaldevice perrung. After the complete original rung body, or fatalreturn/unsupportedcontinue, RAII invokes existing WaitIdle+destruction before next rung.",
+    "existing_exception": "If WaitIdle returns neitherSUCCESS norDEVICE_LOST, nativechain intentionally retained until process exit; no unconditional release guarantee.",
+    "driver_scope": "Pipelines/modules/buffers intentionally device-lived; previousrungresources no longer retained by thisfixture acrossrungs on normaldestruction. No driver-global LLVM/cache reclamation orRSScausality claim.",
+    "new_host_work": "Extra selected-device create/destroy/cacheimport-export/waitidle and flushedstdout; no numerical/workgroup/physicaloperation/settings change."
+  },
+  "prior_incomplete_attempt": {
+    "commit": "5cc46b727d53603e919727aec110cfd12108a560",
+    "preservation_git_path": "attestations/scientific-core/e0db7d59/trace-jacobi-source-and-software-rss-stop/preservation.json",
+    "bytes": 18092,
+    "sha256": "bfc06bd16c1fc46b602aceed5d9dbc1956967815c39dfa47c9983c714d9c1d99",
+    "completed_positive_witness": false,
+    "disposition": "incomplete_at_original_sampled_aggregate_RSS_guard",
+    "actual_attempt": {
+      "owner_seconds": 188.78222234197892,
+      "peak_sampled_aggregate_RSS_KiB": 4203496,
+      "limit_aggregate_RSS_KiB": 4194304,
+      "sampled_excess_KiB": 9192,
+      "minimum_sampled_available_KiB": 15806704,
+      "child_exit": -15,
+      "stop_reason": "diagnostic_sampled_rss_guard",
+      "XML_present": false,
+      "collector_executed": false,
+      "completed_rung_or_numeric_result_known": false
+    },
+    "root_bounded_stop": {
+      "preserved_path": "files/out/trace-jacobi-original-witness-e0db7d59/root-bounded-stop.json",
+      "bytes": 7197,
+      "sha256": "3f67b7f7439883169c5b44e5eb9b9429574fb413ff8bea8faeb017dd4e46f410"
+    },
+    "independent_terminal_audit": {
+      "preserved_path": "files/out/trace-jacobi-original-witness-e0db7d59/independent-terminal-stop-review.json",
+      "bytes": 9752,
+      "sha256": "4c063fed4efa0f8209e8c6ce3ddb7627c79f7071658b1d08cd0da7b5b20dfa0e",
+      "audit_completed": true,
+      "ownership_record_valid": true,
+      "passed": false
+    },
+    "no_rung_or_driver_phase_inferred": true
+  },
+  "root_materialization_before_runtime": [
+    "Independent/root SOURCEreview and explicit runtime release.",
+    "Current exactf22 clean source, fresh local strictproducer proof/current alignment/1152registration/owner schema/preflight wholeinputs.",
+    "Fresh newbackendELF pin required; no old backendELF bytealias accepted.",
+    "Fresh all6compile/stage kernelpair equality before reusing named e0d066SPVbytealiases.",
+    "Fresh actual runtimeDSO/loader/Git/Python/LVPclosure and selectedprovider/device0 live birth/map joins; defaultcache; explicitLVPJIT0 setting ifrootusesit.",
+    "Five current proofselector files must exist/current and sourceapplication/sourcepush/remoteref agree; root must append concrete sourceformatlog/proof if independently consumed.",
+    "Bind all3original source/progress branches and strictFP64NAMEabsence/ordered9markers after completedzeroFESD owner+collector."
+  ],
+  "CI_scope": {
+    "parallel_current_f22_build_only_CI_run": 38776590607,
+    "remote_CI_completion_is_Linux_diagnostic_launch_requirement": false,
+    "fresh_local_fullsource_runtime_review_is_required": true,
+    "native_or_domain_qualification_inferred": false
+  },
+  "meaningful_risks": [
+    "Original stop had noXML/rungmarkers; first-rungstop remains possible.",
+    "Freshdevice lifecycle may not lower process-global driverRSS, may add walltime/cacheoverhead; no300scompletion/RSS/performance promise.",
+    "Markers identify begin/Preparecompletion/bodyexercise, not which driverallocation causedRSS or numericalPASS."
+  ],
+  "not_created_or_read": [
+    "finalactions/readiness/inventory/compiledobservations/ldd/preflight/runtimeoutputs",
+    "oldmutable rawP2case/retiredC/W/N/Wc",
+    "currentELF/DSObuildfact snapshots"
+  ],
+  "no_authored_helper_import_execution_compiler_provider_test_network_process_or_Git_mutation": true,
+  "nonclaims": [
+    "Runtimeadmission/execution",
+    "NumericalP2/FP64 verdict",
+    "Strong-field/fullP1/cold/performance/Mandatory/release"
+  ]
+}

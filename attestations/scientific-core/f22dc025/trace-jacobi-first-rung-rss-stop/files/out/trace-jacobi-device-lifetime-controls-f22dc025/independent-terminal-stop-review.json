@@ -1,0 +1,293 @@
+{
+  "schema": "sirius-trace-jacobi-f22-independent-terminal-stop-review-v1",
+  "passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewed_utc": "2026-10-15T18:03:29.389220+00:00",
+  "classification": "ORIGINAL_TRACE_JACOBI_FIRST_RUNG_BOUNDED_RSS_STOP",
+  "audit_blockers": [],
+  "critical_pins": {
+    "root-bounded-stop.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/root-bounded-stop.json",
+      "bytes": 5164,
+      "sha256": "5f296f18b3ce7f83af720c6daff866adeb0222e6a8b0f759746bb4f84a0006b4"
+    },
+    "root-preflight.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/root-preflight.json",
+      "bytes": 333295,
+      "sha256": "8fe5e1be0ebc8a1e0a5a2727fa411c6a063beccba0cfc1ab25780847c163efcc"
+    },
+    "actions.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/actions.json",
+      "bytes": 53567,
+      "sha256": "393b08bdd090cf79a8dfc5025a932dd5b42337974d56878ca37af35a8bc23da8"
+    },
+    "readiness.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/readiness.json",
+      "bytes": 63397,
+      "sha256": "ed13640d46e6518dff5221a09f6c81c98c978f7120fce49d28733a58cda017f7"
+    },
+    "compiled-size-observation.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/compiled-size-observation.json",
+      "bytes": 23973,
+      "sha256": "24377bf2d1850254dbdd4f0da888e88be3bdd422c012c50fdc0be006212a4019"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/source-contracts.json",
+      "bytes": 18165,
+      "sha256": "3999abd542309a16ceb30c66465dcc49f744b38be88b90c822d74cbbe6ee6e74"
+    },
+    "independent-source-review.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/independent-source-review.json",
+      "bytes": 8191,
+      "sha256": "a528ec11f1f6a24094882061d99711b97cc4a09edf0444f977bd86668bdd062f"
+    },
+    "independent-runtime-admission.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/independent-runtime-admission.json",
+      "bytes": 9458,
+      "sha256": "8a3be449079c09453c7203eaa4801b8843e0babbe0c4a448705f93e0966cf7a6"
+    },
+    "root-runtime-release.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/root-runtime-release.json",
+      "bytes": 3503,
+      "sha256": "cdf940295a2f6da53b71af6623d3890143d63bf991bddf3311d7979a25e0847c"
+    },
+    "root-prelaunch.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/root-prelaunch.json",
+      "bytes": 974,
+      "sha256": "e60e2d5a9e3d46b646d35c9e12f250461e4d5b34c6faeaa9b035e787d927610f"
+    },
+    "root-live-environment.json": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/root-live-environment.json",
+      "bytes": 2830,
+      "sha256": "34e8baf23ecfbf416971ec5e370857dddf6dab3c541a93cdd60d3b7ad1114431"
+    },
+    "root-helper-operation.log": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/root-helper-operation.log",
+      "bytes": 3187,
+      "sha256": "50d3176d3b498910553f4224ef2cb7df0fe41d4adad95d8bd4fcf14a6dc5aa4d"
+    },
+    "run_owned.py": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "path": "out/trace-jacobi-device-lifetime-controls-f22dc025/root_acceptance.py",
+      "bytes": 3776,
+      "sha256": "b95f96ea12d20981f86ade54cf3317d0249e615bcb7044e88d9c6d1ded53aa97"
+    }
+  },
+  "raw_case_pins": {
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/samples.jsonl": {
+      "bytes": 1248532,
+      "sha256": "d48270ea986a74c9a5083245b83d963c3036c83f84967a1e9802e23d38bbf551"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/inputs-before.json": {
+      "bytes": 319722,
+      "sha256": "8f7db7e0a40220325d3a9c53e30c223f82e5bb02136928807402cc82c54a8fbd"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/stdout.log": {
+      "bytes": 468,
+      "sha256": "7532230738f2583d4a60fc2a1096d1d6b01247588f60a4033adba341401f6d6b"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/inputs-after.json": {
+      "bytes": 319722,
+      "sha256": "8f7db7e0a40220325d3a9c53e30c223f82e5bb02136928807402cc82c54a8fbd"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/owner.json": {
+      "bytes": 3110,
+      "sha256": "b30b470e719dfd92c013333937c142da6316233873ca781a67c07200e445ea9a"
+    }
+  },
+  "actual_terminal": {
+    "root_observed_helper_closed_exit": 1,
+    "owner_passed": false,
+    "status": "terminal",
+    "child_exit": -15,
+    "stop_reason": "diagnostic_sampled_rss_guard",
+    "wall_seconds": 137.3254029410018,
+    "samples": 5400,
+    "peak_sampled_aggregate_RSS_KiB": 4196456,
+    "RSS_limit_KiB": 4194304,
+    "sampled_excess_KiB": 2152,
+    "minimum_sampled_available_KiB": 16030256,
+    "reserve_limit_KiB": 2097152,
+    "outer_wall_limit_seconds": 300,
+    "only_last_sample_exceeded_RSS_limit": true,
+    "last_sample": {
+      "elapsed_seconds": 136.80409663400496,
+      "rss_kib": 4196456,
+      "available_kib": 16030256,
+      "members": [
+        {
+          "pid": 1081907,
+          "state": "S",
+          "ppid": 1081902,
+          "pgrp": 1081907,
+          "session": 1081907,
+          "start_ticks": "13627178",
+          "rss_kib": 4174348
+        }
+      ]
+    },
+    "last_child_RSS_KiB": 4174348,
+    "last_controller_RSS_KiB": 22108,
+    "all_samples_monotone_owned_session_identified_and_before_timeout": true,
+    "reserve_limit_not_triggered": true,
+    "sampled_scope": "Controller plus observed owned-session RSS. This is sampled memory, not continuous peak or attribution to a particular allocation.",
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "adopted_children_reaped": [],
+    "raw_helper_failure": "Mature owner refused acceptance at its unchanged stop_reason assertion after terminal cleanup and stable input/source receipts. This is not an original numerical assertion failure."
+  },
+  "whole_input_and_source_closure": {
+    "static_preflight_current_rows": 1296,
+    "actual_before_rows": 1297,
+    "actual_after_rows": 1297,
+    "all_before_after_current_content_resolved_paths_equal": true,
+    "exact_owner_set_preflight_plus_preflight_itself": true,
+    "actual_raw_six_artifacts_and_all_root_operational_pins_current": true,
+    "source_revision_clean_committed_pushed": true,
+    "mature_owner_guard_exact_original_bytes": true,
+    "root_and_independent_source_runtime_admissions_and_release_hashjoined": true,
+    "CPU11_completed_root_and_independent_predecessor_pins_exact": true,
+    "six_current_compiled_staged_resource_pairs_exact": true,
+    "resource_bytes_do_not_establish_all_rung_execution": true,
+    "XML_collector_or_root_acceptance_not_present": true
+  },
+  "provider_and_environment": {
+    "saved_same_birth_controller": {
+      "role": "controller",
+      "before": {
+        "pid": 1081902,
+        "start_ticks": "13627128",
+        "session": 1081901,
+        "pgrp": 1081901,
+        "state": "S"
+      },
+      "after": {
+        "pid": 1081902,
+        "start_ticks": "13627128",
+        "session": 1081901,
+        "pgrp": 1081901,
+        "state": "S"
+      },
+      "actual_protected_environment": {
+        "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+      }
+    },
+    "saved_same_birth_child": {
+      "role": "child",
+      "before": {
+        "pid": 1081907,
+        "start_ticks": "13627178",
+        "session": 1081907,
+        "pgrp": 1081907,
+        "state": "R"
+      },
+      "after": {
+        "pid": 1081907,
+        "start_ticks": "13627178",
+        "session": 1081907,
+        "pgrp": 1081907,
+        "state": "R"
+      },
+      "actual_protected_environment": {
+        "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+        "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+        "SIRIUS_VULKAN_DEVICE": "0",
+        "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/gtest.xml"
+      }
+    },
+    "saved_live_LVP_map_before_after_same_child_birth_session": true,
+    "owner_captured_map_lines": 4,
+    "separate_root_captured_map_lines": 5,
+    "provider_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "device_major": 8,
+    "device_minor": 80,
+    "inode": 143595,
+    "provider_bytes": 11929384,
+    "provider_sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+    "all_nine_saved_map_lines_same_actual_file_identity": true,
+    "actual_provider_current_disk_hash_and_inode_joined": true,
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+    "default_shader_cache": true,
+    "MESA_SHADER_CACHE_DISABLE_and_assert_override_absent_in_saved_environment": true,
+    "scope": "These are saved live observations of the selected actual child and loaded LVP file. They do not identify an active driver/compiler function or prove numerical dispatch completion."
+  },
+  "saved_birth_and_cleanup_scope": {
+    "owner_child_absent_record_checked": true,
+    "root_saved_fresh_controller_child_absence_records": [
+      {
+        "role": "controller",
+        "pid": 1081902,
+        "saved_start_ticks": "13627128",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "role": "child",
+        "pid": 1081907,
+        "saved_start_ticks": "13627178",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      }
+    ],
+    "recorded_births_match_actual_owner_identities": true,
+    "independent_process_queries": 0,
+    "scope": "Saved root and owner observations only; root remains the actual fresh process observer. No global process absence or new census claim."
+  },
+  "progress_and_scientific_scope": {
+    "stdout_markers_exact": [
+      "[TraceJacobiRung] module=trace.spv phase=begin"
+    ],
+    "first_module": "trace.spv",
+    "prepared_marker_observed": false,
+    "exercised_marker_observed": false,
+    "later_rung_begin_observed": false,
+    "completed_rung_known": false,
+    "XML_present": false,
+    "collector_executed": false,
+    "scientific_verdict": "INCOMPLETE_UNJUDGED",
+    "strict_FP64_property_NAME_absence_postcheck_reached": false,
+    "all3rung_positive_join_reached": false,
+    "required9marker_join_reached": false,
+    "source_location": "tests/backend/kernel_trace_test.cpp:424",
+    "source_bound": "First begin is flushed before CreateVulkanDevice, SPIRV loading, LoadKernel and probe.Prepare. The prepared marker follows successful preparation and precedes numerical trace checks. Captured stdout does not localize a call or allocation within this interval.",
+    "causal_limit": "There was no earlier rung lifetime to retain at this current first-rung stop. This does not identify the original e0 stop phase, establish a driver leak, attribute RSS, or promise that another lifetime/loop change would complete.",
+    "original_physical_1000ms_and_128attempts_unchanged_but_no_completion_claim": true,
+    "no_original_numerical_failure_or_success_inferred": true
+  },
+  "disposition": {
+    "preserve_candid_bounded_stop": true,
+    "no_unchanged_retry_or_guard_raise_admitted": true,
+    "source_build_and_private_input_hold_not_released": true,
+    "no_next_runtime_or_removal_admission": true,
+    "CPU_preservation_bundle_not_mutated": true
+  },
+  "method": "Passive standard-library JSON/hash/AST literal parsing/source/regular-file identity and read-only Git only. No helper/project import, project/native tool, provider, test, network, process query, signal or source mutation. Exact integer/string identities retained via Python JSON.",
+  "checkout": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "review_sidecar_committed_or_pushed": false
+  },
+  "limitations": [
+    "This receipt deliberately remains passed:false. Audit completion and valid ownership records do not convert the stopped original witness into scientific PASS.",
+    "No FP64/all3rung, native/direct-device, fullP1, Mandatory, UI, coldness/performance, fullscience or release qualification."
+  ]
+}

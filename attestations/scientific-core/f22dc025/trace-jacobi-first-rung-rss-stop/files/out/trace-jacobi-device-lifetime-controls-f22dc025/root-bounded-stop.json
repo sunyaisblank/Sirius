@@ -1,0 +1,128 @@
+{
+  "schema": "sirius-trace-jacobi-device-lifetime-root-bounded-stop-v1",
+  "created_utc": "2026-10-15T18:00:17.326803+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "actual_helper_operation_observed_closed_exit": 1,
+  "collector_executed": false,
+  "XML_present": false,
+  "owner_seconds": 137.3254029410018,
+  "peak_sampled_aggregate_RSS_KiB": 4196456,
+  "RSS_limit_KiB": 4194304,
+  "sampled_excess_KiB": 2152,
+  "minimum_available_KiB": 16030256,
+  "stop_reason": "diagnostic_sampled_rss_guard",
+  "child_exit": -15,
+  "sample_count": 5400,
+  "last_sample": {
+    "elapsed_seconds": 136.80409663400496,
+    "rss_kib": 4196456,
+    "available_kib": 16030256,
+    "members": [
+      {
+        "pid": 1081907,
+        "state": "S",
+        "ppid": 1081902,
+        "pgrp": 1081907,
+        "session": 1081907,
+        "start_ticks": "13627178",
+        "rss_kib": 4174348
+      }
+    ]
+  },
+  "progress_markers": [
+    "[TraceJacobiRung] module=trace.spv phase=begin"
+  ],
+  "progress_scope": "Only first FP32 begin. Factory creation and original Prepare lie between begin/prepared; actual allocating/JIT call not observed. No original rung numerical body reached its prepared marker; no completed numerical verdict.",
+  "causal_scope": "Later-rung resource retention cannot explain this current first-rung stop. Original e0stop had no markers and its allocating phase remains unknown. No elapsed/RSS performance comparison or guaranteed cure claimed.",
+  "all_static1296_and_whole1297_inputs_current_unchanged": true,
+  "strict_FP64_property_NAME_absence_check_reached": false,
+  "all3module_positive_join_reached": false,
+  "strict9markers_positive_join_met": false,
+  "samebirth_live_env_and_actual_LVP_maps_joined": true,
+  "owner_map_lines": 4,
+  "separate_live_capture_map_lines": 5,
+  "fresh_saved_birth_checks": [
+    {
+      "role": "controller",
+      "pid": 1081902,
+      "saved_start_ticks": "13627128",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "role": "child",
+      "pid": 1081907,
+      "saved_start_ticks": "13627178",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "cleanup_errors": [],
+  "remaining_owned_processes": [],
+  "source_clean_committed_pushed": true,
+  "raw_case_pins": {
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/samples.jsonl": {
+      "bytes": 1248532,
+      "sha256": "d48270ea986a74c9a5083245b83d963c3036c83f84967a1e9802e23d38bbf551"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/inputs-before.json": {
+      "bytes": 319722,
+      "sha256": "8f7db7e0a40220325d3a9c53e30c223f82e5bb02136928807402cc82c54a8fbd"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/stdout.log": {
+      "bytes": 468,
+      "sha256": "7532230738f2583d4a60fc2a1096d1d6b01247588f60a4033adba341401f6d6b"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/inputs-after.json": {
+      "bytes": 319722,
+      "sha256": "8f7db7e0a40220325d3a9c53e30c223f82e5bb02136928807402cc82c54a8fbd"
+    },
+    "out/trace-jacobi-device-lifetime-controls-f22dc025/trace-jacobi-all-rungs/owner.json": {
+      "bytes": 3110,
+      "sha256": "b30b470e719dfd92c013333937c142da6316233873ca781a67c07200e445ea9a"
+    }
+  },
+  "operational_pins": {
+    "actions.json": {
+      "bytes": 53567,
+      "sha256": "393b08bdd090cf79a8dfc5025a932dd5b42337974d56878ca37af35a8bc23da8"
+    },
+    "root-preflight.json": {
+      "bytes": 333295,
+      "sha256": "8fe5e1be0ebc8a1e0a5a2727fa411c6a063beccba0cfc1ab25780847c163efcc"
+    },
+    "readiness.json": {
+      "bytes": 63397,
+      "sha256": "ed13640d46e6518dff5221a09f6c81c98c978f7120fce49d28733a58cda017f7"
+    },
+    "root-runtime-release.json": {
+      "bytes": 3503,
+      "sha256": "cdf940295a2f6da53b71af6623d3890143d63bf991bddf3311d7979a25e0847c"
+    },
+    "root-prelaunch.json": {
+      "bytes": 974,
+      "sha256": "e60e2d5a9e3d46b646d35c9e12f250461e4d5b34c6faeaa9b035e787d927610f"
+    },
+    "root-live-environment.json": {
+      "bytes": 2830,
+      "sha256": "34e8baf23ecfbf416971ec5e370857dddf6dab3c541a93cdd60d3b7ad1114431"
+    },
+    "root-helper-operation.log": {
+      "bytes": 3187,
+      "sha256": "50d3176d3b498910553f4224ef2cb7df0fe41d4adad95d8bd4fcf14a6dc5aa4d"
+    },
+    "independent-runtime-admission.json": {
+      "bytes": 9458,
+      "sha256": "8a3be449079c09453c7203eaa4801b8843e0babbe0c4a448705f93e0966cf7a6"
+    }
+  },
+  "disposition": "Preserveincompleteoriginalwitness; no unchangedretry/guardraise/positivePASS. Source/build/privateproofhold remains untilpreservationandexplicitrelease.",
+  "scope": "Audited bounded stop only, no numerical failure assertion or success, FP64/direct-device/native/Mandatory/cold/performance/fullscience/release qualification."
+}

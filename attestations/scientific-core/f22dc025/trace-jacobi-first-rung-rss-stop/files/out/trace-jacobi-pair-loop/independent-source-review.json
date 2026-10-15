@@ -1,0 +1,171 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-independent-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "tracked_source_applied": false,
+  "runtime_admitted": false,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewed_utc": "2026-10-15T18:11:33.935350+00:00",
+  "blockers": [],
+  "candidate_pins": {
+    "original.slang": {
+      "path": "out/trace-jacobi-pair-loop/original.slang",
+      "bytes": 63460,
+      "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+    },
+    "candidate.slang": {
+      "path": "out/trace-jacobi-pair-loop/candidate.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "patch.diff": {
+      "path": "out/trace-jacobi-pair-loop/patch.diff",
+      "bytes": 1100,
+      "sha256": "f66d4c196645412ab51498adac9be98c9befb2503f9099c892c53a4c401cb69c"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-pair-loop/source-contracts.json",
+      "bytes": 11527,
+      "sha256": "6b9878f7ff343526bed6df58a9ac478157601b3d39364fc8c95998132d0b556b"
+    }
+  },
+  "source_evidence_pins": {
+    "src/sirius/kernels/gr_deviation.slang": {
+      "bytes": 17259,
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "fbceb351e906967ac44fe8d1aa5a0d53eb2fbc8a"
+    },
+    "src/sirius/kernels/gr_metrics.slang": {
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "efd5d207555b4e05dbc7c03745ca0debd14aea13"
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "0d239802eb92efc07c2dba107dbbede4cb03b804"
+    },
+    "src/sirius/kernels/gr_trace_continuation.slang": {
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "c1d67fc0ffecd8181d159384f5ee957c150c8107"
+    },
+    "tests/backend/kernel_trace_test.cpp": {
+      "bytes": 30579,
+      "sha256": "a5087954943aad20123b08acb0153db71eb69dddd4676ebecc6691ca43f4d549",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "630bb50ff53d4e0c0bc5c2ea95826e6db0ed38db"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "bytes": 13798,
+      "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "f534108cf38b117f10cfd8a9b67b29212fbdbe57"
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "bytes": 7192,
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "4e61faf3471d19d16a73c8ea080c26b76d472969"
+    },
+    "src/sirius/backend/device.h": {
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "328d743ef3b9f03786341f8ae4750257885ab097"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.h": {
+      "bytes": 9768,
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "7a75c46474845e11effad2e12ff28b3451ebd614"
+    },
+    "src/sirius/backend/CMakeLists.txt": {
+      "bytes": 17763,
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "c629f17fc0611874533f2dbe0b986b685f0f74fc"
+    }
+  },
+  "mechanical_scope": {
+    "canonical_original_exact_current_and_namedGit_blob": "ede032048159e456d5d63afc271c64160487aa05",
+    "one_exact_replacement_inverse_and_patch_verified": true,
+    "all_outside_region_bytes_unchanged": true,
+    "source_pair_call_sites_before": 2,
+    "source_pair_call_sites_after": 1,
+    "only_new_control": "[loop] pair=0; pair<2; ++pair, firstColumn=2*pair; no other source delta.",
+    "no_new_refusal_shortcircuit_break_return_or_fallback": true
+  },
+  "source_semantic_proof": {
+    "private_storage": "ComputeMain has separate function-local Real4 X[4] and V[4]. Initialization and restoration from record make value copies. No groupshared state, external alias, cross-lane update or new buffer write is introduced by the region.",
+    "guard": "Unchanged accepted attempted.accepted path, after central floor handling and optional compensation/event clipping, under beamsEnabled && !isWarp && !isWormhole && dt>Real(0.0f). Disabled Jacobi/warp/wormhole/rejected or nonpositive-dt paths remain exact.",
+    "index_bounds": "pair0 gives firstColumn0 and second1; pair1 gives2 and3; loop exits at2. All integer products/increments are bounded and representable.",
+    "inout_aliasing": "Each call passes four distinct lvalues X[2p],V[2p],X[2p+1],V[2p+1]. Read-only central positions/tangents/dt/metric parameters are passed by value. There is no alias among the inout arguments or central inputs.",
+    "copy_out_order": "Unchanged void helper stages all k1-k4 derivatives before xiA,VA,xiB,VB commits. Each call operates on one disjoint pair. Any conforming inout copy-in/out lowering therefore has no conflicting copy-out; emitted dynamic-array lowering remains a required separate check.",
+    "ordered_induction": "At p, columns below2p equal the original completed pairs and later columns retain original input. p0 performs original pair0/1 once, p1 original pair2/3 once with unchanged central geometry. At p2, the two original ordered pair results are represented in all four columns.",
+    "nonfinite_failure": "AdvanceJacobiPairAcceptedSegment returns void and has no failure/refusal return. Both pairs execute when the guard is entered even if the first produces nonfinite values, just as before. No transactional rollback of either pair is invented.",
+    "packing_and_publication": "Affine/accepted/state commit, event classification and later packing of all four X/V columns are outside the exact delta. Existing TraceStateFinite may mark kTraceArithmetic after packing; continuation and host validation/publication/refusal authority remain unchanged.",
+    "all_precisions": "Same region serves FP32, FP32_COMP and FP64. Real/Real4 definitions and compensated central-state branch are unchanged. Pair indices are integer selectors and add no floating-point expression or conversion.",
+    "lanes_and_ABI": "Same 8x8 workgroup, main entry,70-float packet, seven bindings, record layout and per-pixel identity. Two bounded private iterations add no shared memory, barrier, atomic, submission, wait or cancellation point."
+  },
+  "geometry_and_work_scope": {
+    "per_entered_region_pair_helper_invocations": 2,
+    "per_pair_top_level_Riemann_builds": 3,
+    "per_pair_direct_Christoffel_builds": 3,
+    "per_pair_deviation_RHS_invocations": 8,
+    "both_pairs_top_level_Riemann_builds": 6,
+    "both_pairs_direct_Christoffel_builds": 6,
+    "both_pairs_deviation_RHS_invocations": 16,
+    "nested_stencil_source_calls": "GetRiemannTensorCart calls Christoffel once at centre and six spatial stencil points per axis for FP32/COMP, four per axis for FP64. Including six direct helper calls, this gives nominal120 and84 Christoffel function entries respectively across both pairs before optimization/early metric return. No geometry work is deliberately removed.",
+    "geometry_positions": "Same start, cubic-Hermite midpoint and end; unchanged parameter values, stencil, contraction and within-pair RK arithmetic/sum order.",
+    "distinction": "One source callsite does not establish one emitted helper body, driver function or reduced dynamic arithmetic. These are source-call counts, not measured instruction or execution counts."
+  },
+  "tradeoffs_and_limits": {
+    "plausible_static_hypothesis": "One source callsite may avoid duplicated expansion of the large connection/curvature path.",
+    "not_proved": [
+      "Compiler retains a loop or body sharing",
+      "Module/JIT memory or wall time improves",
+      "Register/spill/stack/liveness footprint improves",
+      "Bitwise or actual three-rung numerical equivalence",
+      "Full original witness completes within300s"
+    ],
+    "compiler_risks": [
+      "Dynamic private array inout indexing may lower to selects, whole-array copies or local memory.",
+      "Fixed-bound loop may be unrolled, cloned or specialized despite [loop].",
+      "Register pressure, spills and copy-out liveness can increase; existing floating arithmetic may be scheduled differently even with the same source order."
+    ],
+    "stopped_call_scope": "The saved f22 stop showed only first trace.spv begin, not prepared. Source contains device creation, module loading and probe preparation in that interval. No exact allocating, pipeline/JIT or dispatch call is identified, and no earlier-rung retention cause is inferred.",
+    "pipeline_scope": "Software Prepare includes a zero-active dispatch. Pipeline construction consumes the module before that invocation can return on zero active dimensions. This source path does not prove where the stopped process was executing."
+  },
+  "required_next_gates": {
+    "root_only_offline_screen": "Compile original and candidate with exact original tools/recipes/flags for FP32,COMP,FP64; validate and inspect actual CFG/loop/inout targets/copy-outs/index bounds, sharing and outside-graph scope.",
+    "interface_and_mode_check": "Compare full capabilities/types/bindings/layout/entry/execution modes and source import closure. Preserve portability emissions as applicable.",
+    "footprint_check": "Inspect actual module, body duplication, variable-array copies, stack/spill/register/liveness evidence before selecting a candidate.",
+    "original_runtime_gates": "Retain all original numerical, physical1000ms,128attempt,buffer/identity/rollback/publishing/refusal/cleanup and300s/4GiB/2GiB/default-cache ownership conditions. Source PASS is not runtime admission.",
+    "canonical_apply_or_next_execution_authority": "Root decision and separate evidence admission remain necessary; reviewer performs no apply, compiler or runtime operation."
+  },
+  "method": "Passive source, standard-library JSON/hash/diff and read-only named Git only; no helper/project import, parser, compiler, formatter, provider, test, network, process query, current build snapshot or tracked mutation.",
+  "checkout": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "candidate_and_review_committed_or_pushed": false
+  },
+  "limitations": [
+    "Source semantics and mechanical scope PASS only. No emitted-code, numerical, memory, JIT, performance, coldness, fullP1/P2/Mandatory or release claim.",
+    "No unchanged retry, guard raise, current hold release or automatic adoption is authorized."
+  ]
+}

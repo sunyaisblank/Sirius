@@ -1,0 +1,113 @@
+{
+  "schema": "sirius-f22-current-CI-independent-preservation-review-v1",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T18:10:34.913259+00:00",
+  "blockers": [],
+  "scope": "Preservation of completed build-only CI and late publication metadata. No new execution, retirement, source/build hold release or scientific/runtime qualification.",
+  "pins": {
+    "manifest": {
+      "path": "attestations/qualification/f22dc025/native-build-ci-38776590607/manifest.json",
+      "bytes": 81420,
+      "sha256": "2cf2d1d6aaa387358a35b0daf7a180cc6991c747485399ce3b0d3717309418e3"
+    },
+    "preservation": {
+      "path": "attestations/qualification/f22dc025/native-build-ci-38776590607/preservation.json",
+      "bytes": 151988,
+      "sha256": "33830f63573744de884ac57ee54bcf1f6aa1e4f97f2f3f29e3699ebdda831696"
+    },
+    "accepted_CI_review": {
+      "path": "attestations/qualification/f22dc025/native-build-ci-38776590607/files/out/trace-jacobi-device-lifetime-ci-f22dc025/independent-CI-review.json",
+      "bytes": 15455,
+      "sha256": "e2d3241f21c9ef3e9a2a154723c9f7453eff5336e521df8d534810bd732c7c48"
+    },
+    "root_product_joins": {
+      "path": "attestations/qualification/f22dc025/native-build-ci-38776590607/files/out/trace-jacobi-device-lifetime-ci-f22dc025/root-product-joins.json",
+      "bytes": 28320,
+      "sha256": "1ec36bafc0fad6e93c1c51d2db6f966c07c95166af2a0eaa0f8e8ded2f75cd1f"
+    },
+    "late_CPU_publication": {
+      "path": "attestations/qualification/f22dc025/native-build-ci-38776590607/files/out/e2-original-cpu-witnesses-preservation/root-git-preservation.json",
+      "bytes": 1456,
+      "sha256": "aa91bcd65078cf58dff120177b15d5c49b4431be43ffa507b8c3158db4a3127d"
+    }
+  },
+  "complete_coverage": {
+    "actual_regular_files": 304,
+    "copied_payload_files": 302,
+    "metadata_files": 2,
+    "exact_manifest_payload_tree_plus_manifest_and_preservation": true,
+    "all302_current_raw_to_preserved_copy_pairs_match_bytes_hashes": true,
+    "payload_partition": {
+      "complete_current_CI_nonZIP_files": 297,
+      "late_CPU_publication_files": 5
+    },
+    "all303_current_CI_files_partitioned_as297copies_plus6explicit_omissions": true,
+    "manifest_design": "Manifest lists302 payloads; preservation pins its exact bytes. Both metadata files are independently pinned here; no self-hash cycle or missing payload inferred.",
+    "existing_source_or_artifacts_modified": false
+  },
+  "ZIP_encoding_boundary": {
+    "omitted_original_container_encodings": 6,
+    "artifact_archives": 5,
+    "raw_log_archive": 1,
+    "all6_current_container_hashes_match_explicit_omission_metadata": true,
+    "all5_artifact_API_ids_names_source_run_sizes_digests_and_saved_member_maps_retained": true,
+    "all227_artifact_member_paths_bytes_and_copy_destinations_covered": true,
+    "all46_raw_log_member_paths_bytes_and_copy_destinations_covered": true,
+    "exact_ZIP_encoding_backup_or_reconstruction_claimed": false,
+    "scope": "Original whole-container identities and complete exact extracted payloads/maps survive. Omitted compressed encodings cannot be reconstructed from that claim. Their current raw files are still held; copying authorizes no deletion."
+  },
+  "accepted_CI_disposition_preserved": {
+    "run": 38776590607,
+    "attempt": 1,
+    "head_source": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "requested_integration_successes": 3,
+    "unrequested_qualification_skips": 5,
+    "Windows_and_macOS_original_native_authority_cases_each": 9,
+    "both_native_JUnit_zero_failures_errors_skips_disabled": true,
+    "full_registered_cases_each": 1152,
+    "all39_receipt_declared_artifacts_each_copied_exact": true,
+    "prior_exact7tested_9products_20inputs_joins_preserved": true,
+    "receipt_runtime_ready": false,
+    "compiled_external_domains_admitted": 0,
+    "required_external_domains": 8,
+    "Windows_M138_and_manifest_registration63_exact_copies": true,
+    "recipe_comparison_reused": "Accepted CI review proves62 byte-exact e0 payloads plus single40-byte revision literal in verify_sirius_install.cmake. No registration/install execution or tool relocation admitted.",
+    "inventory_metadata_scope": "Windows inventory is byte-exact e0; macOS has only the reviewed DEF_SOURCE_LINE576\u2192579 shift. Original names/commands/labels/locks/deadlines remain.",
+    "configured_Python_alias": "Metadata reports python3.exe bytes0 and target SHA434b361fe0c5960d404974feed493db47f2603a1ace2574312104fbed0182c6f; neither an interpreter backup nor substitution authority.",
+    "project_attestation_verifiers": "Both previously root-operated CLOSED0 verifier logs preserved; neither verifier rerun by reviewer."
+  },
+  "late_CPU_publication": {
+    "files": 5,
+    "commit": "34a94cd5b367dfdb9b62f71be693bf1e80bf7781",
+    "publication_pin_and_all4_referenced_late_file_pins_match": true,
+    "recorded_actual_push_exit": 0,
+    "recorded_fresh_remote_after_push_closure_exit": 0,
+    "local_exact_tag_and_saved_remote_ref_join": true,
+    "named_Git_manifest_and_preservation_bytes_match_root180file_publication_receipt": true,
+    "independent_preservation_review_passed": true,
+    "scope": "Publication metadata only; no CPU scientific outputs read or180-file numerical audit repeated. Historical rootcheck push_pending is retained as creation-time state and composed with later actual publication.",
+    "source_build_hold_release": false
+  },
+  "holds_and_qualification": {
+    "new_CI_bundle_Git_publication_pending": true,
+    "raw_CI_artifacts_and_stages_held": true,
+    "deletion_authorized_or_performed": false,
+    "source_build_hold_release": false,
+    "scope": "Finite native-build authority is not execution of all1152 Mandatory tests, native Vulkan/Metal science, current P2, cold-frame/performance/UI/external-runtime or release qualification. No science output or bounded-stop result was read for this preservation review."
+  },
+  "checkout": {
+    "head": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "this_ignored_review_committed_or_pushed": false
+  },
+  "method": "Passive stdlib JSON/XML/hash/current regular file reads and read-only Git tag plus selected publication manifest/preservation bytes. Accepted exact CI semantic review reused. No helper/project import/parser/verifier/compiler/provider/test/network/process query/signal/Git mutation/removal or existing artifact/source mutation."
+}

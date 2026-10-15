@@ -1,0 +1,192 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-source-candidate-v1",
+  "source_only": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "canonical_path": "src/sirius/kernels/trace.slang",
+  "tracked_source_applied": false,
+  "runtime_authorized_or_executed": false,
+  "files": {
+    "original.slang": {
+      "bytes": 63460,
+      "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+    },
+    "candidate.slang": {
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "patch.diff": {
+      "bytes": 1100,
+      "sha256": "f66d4c196645412ab51498adac9be98c9befb2503f9099c892c53a4c401cb69c"
+    }
+  },
+  "original_git_blob": "ede032048159e456d5d63afc271c64160487aa05",
+  "exact_delta": {
+    "replacement_count": 1,
+    "original_region": "                    AdvanceJacobiPairAcceptedSegment(\n                        state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,\n                        X[0], V[0], X[1], V[1]);\n                    AdvanceJacobiPairAcceptedSegment(\n                        state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,\n                        X[2], V[2], X[3], V[3]);",
+    "candidate_region": "                    [loop] for (int pair = 0; pair < 2; ++pair) {\n                        const int firstColumn = 2 * pair;\n                        AdvanceJacobiPairAcceptedSegment(\n                            state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,\n                            X[firstColumn], V[firstColumn],\n                            X[firstColumn + 1], V[firstColumn + 1]);\n                    }",
+    "outside_region_all_bytes_unchanged": true,
+    "inverse_exact": true,
+    "source_pair_call_sites": {
+      "original": 2,
+      "candidate": 1
+    },
+    "loop_attribute": "[loop]",
+    "runtime_pair_order": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "no_other_production_lines_changed": true,
+    "no_math_tolerance_guard_ABI_dispatch_precision_mode_or_helper_change": true
+  },
+  "source_evidence_pins": {
+    "src/sirius/kernels/gr_deviation.slang": {
+      "bytes": 17259,
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "fbceb351e906967ac44fe8d1aa5a0d53eb2fbc8a"
+    },
+    "src/sirius/kernels/gr_metrics.slang": {
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "efd5d207555b4e05dbc7c03745ca0debd14aea13"
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "0d239802eb92efc07c2dba107dbbede4cb03b804"
+    },
+    "src/sirius/kernels/gr_trace_continuation.slang": {
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "c1d67fc0ffecd8181d159384f5ee957c150c8107"
+    },
+    "tests/backend/kernel_trace_test.cpp": {
+      "bytes": 30579,
+      "sha256": "a5087954943aad20123b08acb0153db71eb69dddd4676ebecc6691ca43f4d549",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "630bb50ff53d4e0c0bc5c2ea95826e6db0ed38db"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "bytes": 13798,
+      "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "f534108cf38b117f10cfd8a9b67b29212fbdbe57"
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "bytes": 7192,
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "4e61faf3471d19d16a73c8ea080c26b76d472969"
+    },
+    "src/sirius/backend/device.h": {
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "328d743ef3b9f03786341f8ae4750257885ab097"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.h": {
+      "bytes": 9768,
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "7a75c46474845e11effad2e12ff28b3451ebd614"
+    },
+    "src/sirius/backend/CMakeLists.txt": {
+      "bytes": 17763,
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2",
+      "git_commit": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+      "git_blob": "c629f17fc0611874533f2dbe0b986b685f0f74fc"
+    }
+  },
+  "Hoare_contract": {
+    "preconditions": [
+      "Original enclosing predicate beamsEnabled && !isWarp && !isWormhole && dt>Real(0.0f) remains exact.",
+      "X andV are separate private Real4[4] arrays; eachpair supplies distinct X[2p],V[2p],X[2p+1],V[2p+1] inouts.",
+      "Existing accepted start/end/possiblyevent-clipped dt and metricparameters are passedbyvalue, and helper modifies only its four inoutcolumns.",
+      "No external alias or inter-thread shared write participates in these privatearray updates."
+    ],
+    "loop_invariant": "At pair=p in{0,1,2}, columns[0,2p) equal the corresponding original ordered pair results, remainingcolumns retain original inputs, and centralstate/next/dt/metricparameters are unchanged by completed paircalls.",
+    "induction": "p=0 applies originalF01 once to X0,V0,X1,V1; p=1 applies originalF23 once to X2,V2,X3,V3. Pairs are disjoint; samegeometryinputs and all arithmetic/orderinsideeach unchangedhelper. At p=2 arrays equal originalF23(F01(input)).",
+    "bounds": "Two iterations0,1; firstColumn=0,2; second=1,3; all4inoutindices valid/distinct, integerselectoroperations boundedwithoutoverflow. Counterthen2 exits.",
+    "failure_and_shortcircuit": "Actualhelper is void, with no return/refusal branch. Originalcalls bothpairs whenenclosingguardtrue, evenif firstproducesnonfinitevalues. Candidate doeslikewise; no boolean shortcircuit/break/newfallback is introduced.",
+    "rejected_central_attempt": "Original rejection pathbeforethisregion shrinks/retriesorMinimumStep-terminates without anyJacobi mutation; unchanged.",
+    "postconditions": [
+      "Samecolumns and samecentral/source/volume/controlinputsreach the exactunchanged affineLength/accepted/statecommit and terminal-event classification.",
+      "Existing laterTraceStateFinite(record) check remainsafterpacking; it may markArithmetic. No newtransactionalrollback onnonfiniteJacobi output isclaimed.",
+      "Original host ValidateTraceContinuation publication/refusal/identity/counter/rollback authority and complete continuation-record consumers remain unchanged."
+    ],
+    "cancellation": "No newsubmission/queue/wait/cancellationpoint; onephysicalAdvance and rootgovernors unchanged. Pairloop terminatesafter2calls. No interruption betweenpaircalls isnewlyexposed; existingcompleteddispatch/cancellationprotocol remainsauthority."
+  },
+  "unchanged_operation_scope": {
+    "runtime_pair_calls_per_entered_update": 2,
+    "top_level_Riemann_build_calls_per_pair": 3,
+    "top_level_Christoffel_build_calls_per_pair": 3,
+    "geometry_positions": [
+      "start",
+      "cubicHermitemidpoint",
+      "end"
+    ],
+    "total_top_level_Riemann_build_calls_per_entered_update": 6,
+    "total_top_level_Christoffel_build_calls_per_entered_update": 6,
+    "helper_internal_GeodesicDeviationRhs_calls_per_pair": 8,
+    "same_all4physical_columns_and_original_withinpair_RKsumorder": true,
+    "new_work": "Onlybounded2iteration loop/counter/indexselection source; no removedphysicalgeometryorRHS computation.",
+    "ABI": "Same70floatpacket/sevenbindings/8x8workgroup/precisionReal/continuationrecordtypes/outputreadbacks, no host/sourceconsumerchanges."
+  },
+  "compiler_screen_required_before_application_or_adoption": [
+    "IndependentSOURCEreview first; root alone performs controlled original/candidate threeprecisioncompiles/validation under exactoriginalrecipes/tools/flags.",
+    "Inspect emitted actual loop/CFG/inout targets/copymemory/arrayindexbounds/callcoverage/NoUnrollbehavior; [loop] is intention, not proof compilerretains sharing.",
+    "Compare capabilities/types/bindings/layouts/entry/modes and complete outsidegraph unchangedscope acrossFP32/COMP/FP64.",
+    "Inspect code/module/variablearray/spill/register/stack/liveness footprint before selecting any canonical/runtime candidate.",
+    "All original numerical/physicalgovernor/rollback/publishing gates remainrequired; no source-onlynumericaladmission."
+  ],
+  "expected_static_tradeoffs": {
+    "motivation": "One sourcecallsite mayavoid duplicate expansion of the large3position connection/curvature builder perpair in the fulltraceprogram.",
+    "not_established": [
+      "Actualbodysharing or modulegrowth/reduction",
+      "DriverJITRSS orwallimprovement",
+      "Full300sdiagnosticcompletion",
+      "Actualbitwise3rungnumericalequivalence"
+    ],
+    "risks": [
+      "Dynamicprivatearrayindex/inoutcopy lowering may addselects/copies/localmemory or extendliveness ofX/V.",
+      "Compiler mayignore/canonicalize/unroll theboundedloop orspecialize/inlinemultiplecontexts; sourcecallsitecount isnotbinarybodycount.",
+      "Register/spill/copyout behavior couldworsen evenwithsmallerstaticcode; no gainpromised."
+    ]
+  },
+  "first_factory_and_Prepare_boundary": {
+    "known_marker": "Latestf22 attempt emitted firsttrace.spv phase=begin butnotprepared; parent reports sampledRSSguard/noXML/no numericalverdict.",
+    "source_callgraph": "begin -> CreateVulkanDevice ->LoadSpirv/LoadKernel ->Probe.Prepare:7CreateBuffer/zeroWriteBuffer +recordsresize ->softwarezeroactivepacketwrite/Dispatch ->GetOrCreatePipeline/fullmodulepipelinecreation ->zeroactiveentryreturnsbeforeactivephysics.",
+    "full_shader_vs_zeroactive": "Runtimeemptytile guard isearly inComputeMain, but ordinarypipelinecreation consumes thefullmodule beforezeroactiveexecution; packetzero doesnotbyitselfpromise compileromitsactivebranches.",
+    "actual_stopped_call_unknown": true,
+    "no_later_rung_retention_cause_inferred": true,
+    "no_first_factory_or_warm_pipeline_allocation_cause_proven": true
+  },
+  "optional_later_progress_markers_not_implemented": [
+    "AfteractualCreateVulkanDevice success",
+    "AfteractualLoadKernel success",
+    "InsidePrepare afterall7buffers/zerowrites",
+    "Immediatelybefore/afterexistingzeroactiveDispatch"
+  ],
+  "source_and_build_holds": "Canonicalf22source/products and currentP2stopraw/buildmetadata remainheld; thiscandidatefiles only create no apply/build/runtimerelease.",
+  "nonclaims": [
+    "RSS/JIT/performance/coldframebenefit",
+    "Scientific/fullP2orP1qualification",
+    "Runtimeadmission/unchangedretry/raisedguards"
+  ],
+  "no_helper_projectimport_compiler_provider_test_network_process_or_Git_mutation_execution": true
+}
