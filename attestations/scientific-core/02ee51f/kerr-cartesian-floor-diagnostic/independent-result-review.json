@@ -1,0 +1,200 @@
+{
+  "schema": "sirius-kerr-cartesian-floor-independent-result-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "output_consistency_passed": true,
+  "source_revision": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+  "captured_source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "numerical_test_passed": false,
+  "actual_gpu_trial_reproduced": false,
+  "product_or_numerical_settings_modified": false,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "author": "/root/divide_contract_review",
+  "source_reviewer": "/root/forensic_obligations",
+  "operator": "/root",
+  "scope": "Passive audit of completed ideal Cartesian diagnostic outputs. Saved summary arithmetic only; no diagnostic/reference function, metric/RHS/integration, authored parser, provider, compiler or original test executed by reviewer.",
+  "pins": {
+    "cartesian_trial.py": {
+      "path": "out/kerr-cartesian-floor-diagnostic/cartesian_trial.py",
+      "bytes": 17302,
+      "sha256": "c41c92e176c758fdae095f0544fa7a4f446dd86d7aadd7074863218c1f237917"
+    },
+    "independent-source-review.json": {
+      "path": "out/kerr-cartesian-floor-diagnostic/independent-source-review.json",
+      "bytes": 6775,
+      "sha256": "1aa1514c30ae4f948d319a949796a2272fc04d1dccc6686367397008bbf4ab8c"
+    },
+    "root-runtime-admission.json": {
+      "path": "out/kerr-cartesian-floor-diagnostic/root-runtime-admission.json",
+      "bytes": 629,
+      "sha256": "c04412fa10cd0ca6e8cdeee39ba4e468f263d2de044879300359b797b9620ec2"
+    },
+    "root-execution.json": {
+      "path": "out/kerr-cartesian-floor-diagnostic/root-execution.json",
+      "bytes": 712,
+      "sha256": "922458553202b0390bdfa6be4ac9eb06d95222f465ae9270f5306d288fe45555"
+    },
+    "trial.stdout": {
+      "path": "out/kerr-cartesian-floor-diagnostic/trial.stdout",
+      "bytes": 122,
+      "sha256": "f59967c079547bd53c91a2cb0a1babdc54e36c3aa0b0ee75da503aa3724b7a9e"
+    },
+    "trial.stderr": {
+      "path": "out/kerr-cartesian-floor-diagnostic/trial.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "result.json": {
+      "path": "out/kerr-cartesian-floor-diagnostic/result.json",
+      "bytes": 21830,
+      "sha256": "af00e4897067f3d73fd48b5c5f822e52fb67500b1a002f0052522acb786a8db3"
+    }
+  },
+  "input": {
+    "path": "attestations/scientific-core/02ee51f/kerr-local-hamiltonian-reference/result.json",
+    "bytes": 65734,
+    "sha256": "e93e6f2e1925d086238f550dd849da13f1e7b7dc1ae465a3fadcf3118c2275b1",
+    "commit": "b3c57f4d59e27b40a74c923b2fc246ef6526623b",
+    "Git_blob_bytes_and_current_input_identity_match": true,
+    "raw_context_exact_equal_reference": true,
+    "previous_current_record_bytes": 272,
+    "packet_bytes": 280,
+    "pixel_sample_epoch": [
+      24,
+      23,
+      0,
+      24
+    ],
+    "previous_control": [
+      1,
+      0,
+      99,
+      89
+    ],
+    "current_control": [
+      2,
+      5,
+      100,
+      89
+    ]
+  },
+  "checks": {
+    "all_source_review_admission_execution_stdout_stderr_output_pins_join": true,
+    "operator_recorded_returncode": 0,
+    "operator_elapsed_seconds": 0.0643976730061695,
+    "reference_internal_elapsed_seconds": 0.009176728999591433,
+    "stderr_bytes": 0,
+    "both_epsilon_runs_present": true,
+    "exact_initial_q_u_from_raw_binary32_and_canonical_input": true,
+    "exact_floor_joins_packet_stored_step_and_canonical_interval": true,
+    "all_4_saved_full_twohalf_summaries_finite_and_arithmetically_consistent": true,
+    "recomputed_summary_arithmetic": "Norm drift, E=-p_t, Lz=x*p_y-y*p_x, radius-minus-capture, abs(gkk)/max(absolute metric term sum, exact1e-20f), division by exact5e-4f and boolean comparator statuses.",
+    "recomputed_all_8_source_scales_and_component_differences_each_epsilon": true,
+    "source_scale": "max(1,abs(initial_i),abs(twohalf_i)); max normalized full-vs-twohalf difference/15, then divide by exact2e-5f.",
+    "both_dominant_component_indices": 5,
+    "component_name": "u_x",
+    "all_4_matching_epsilon_canonical128_q_u_norm_differences_recomputed": true,
+    "all_2_full_twohalf_epsilon_q_u_norm_sensitivities_recomputed": true,
+    "IEEE_binary32_literal_bits_and_exact_Decimal_values_checked": {
+      "integration": {
+        "bits": "37a7c5ac",
+        "exact_decimal": "0.0000199999994947575032711029052734375"
+      },
+      "raw_null": {
+        "bits": "3a03126f",
+        "exact_decimal": "0.0005000000237487256526947021484375"
+      },
+      "null_scale_floor": {
+        "bits": "1e3ce508",
+        "exact_decimal": "9.999999682655225388967887463487205224055287544615566730499267578125E-21"
+      }
+    },
+    "initial_norms_preserved_nonzero_and_join_arithmetic_checked": true,
+    "initial_norm_join_absolute_difference": "1.215E-76",
+    "algebra_join_tolerance_not_product_tolerance": "1E-60",
+    "work_counts_exact_source_accounting": "2epsilon *3RK4=6steps;4RHS each=24;7metric perRHS +1initial+4summary=173.",
+    "maximum_inverse_identity_residual_emitted": "2.37E-79",
+    "inverse_residual_scope": "Finite/nonnegative reported2.37e-79; intermediate metrics/inverses are not stored, so reviewer did not recompute them or their maximum."
+  },
+  "observations": {
+    "1e-18": {
+      "step_ratio_to_exact_binary32_2e_minus5": "2.1065694582393318734594118191590769779333838795504350776029346541357932800325419",
+      "dominant_component": "u_x",
+      "ideal_step_comparator_le_one": false,
+      "two_half_unprojected_normalized_null": "0.0000020503937437300210680094878240338706569546272301661878550556276578784564069517919",
+      "two_half_ratio_to_exact_binary32_5e_minus4": "0.0041007872926830973880439104705382181671522119361484535016650575592672340411514701",
+      "ideal_raw_null_comparator_le_one": true,
+      "two_half_difference_from_computed_canonical128": {
+        "q_maximum_absolute_difference": "0.0000073962852019461816872514529239887361103656181111081935918089675754446641102",
+        "u_maximum_absolute_difference": "0.000114218802001186330985154739720776137373407612759029536514077668130968343080",
+        "norm_absolute_difference": "0.0045580365311267637356157540122812458159700510579607461002764507735552741207048",
+        "reference_is_computed_canonical128_not_an_exact_or_certified_solution": true
+      }
+    },
+    "1e-22": {
+      "step_ratio_to_exact_binary32_2e_minus5": "2.1065694582393318734594118191590769739431462141014104176677694624594709672948748",
+      "dominant_component": "u_x",
+      "ideal_step_comparator_le_one": false,
+      "two_half_unprojected_normalized_null": "0.0000020503937437300210680094878240338998586963411851288486881538156662652514473166091",
+      "two_half_ratio_to_exact_binary32_5e_minus4": "0.0041007872926830973880439104705382765706328658295953516117424129073021881667051045",
+      "ideal_raw_null_comparator_le_one": true,
+      "two_half_difference_from_computed_canonical128": {
+        "q_maximum_absolute_difference": "0.0000073962852019461816872514529239887087209164070907991684356356546912478629497",
+        "u_maximum_absolute_difference": "0.000114218802001186330985154739720780109613740306505520313423893718194876642232",
+        "norm_absolute_difference": "0.0045580365311267637356157540122814560546809552063066496582857682012554569188678",
+        "reference_is_computed_canonical128_not_an_exact_or_certified_solution": true
+      }
+    }
+  },
+  "epsilon_sensitivity": {
+    "full": {
+      "q_maximum_absolute_difference": "7.71233101727211640299927754762608069139036E-39",
+      "u_maximum_absolute_difference": "9.036314265614592206996459604915491795084385E-37",
+      "gkk_absolute_difference": "6.28047191319062048030531191436696783020283524E-35"
+    },
+    "two_half": {
+      "q_maximum_absolute_difference": "7.71669030734716453076670625303799476403356E-39",
+      "u_maximum_absolute_difference": "9.026815246379530009674468856950479279400693E-37",
+      "gkk_absolute_difference": "6.29084864815576365150099664132662049321680630E-35"
+    }
+  },
+  "bounds": {
+    "external_seconds": 90,
+    "shared_internal_seconds": 60,
+    "maximum_rhs": 64,
+    "maximum_metrics": 1000,
+    "maximum_RK4_steps": 16,
+    "actual": {
+      "rhs": 24,
+      "metric": 173,
+      "step": 6
+    },
+    "all_count_and_elapsed_bounds_satisfied": true,
+    "scope": "Bounded CPU diagnostic work and wall time; no memory/provider/frame-latency guarantee."
+  },
+  "limits": [
+    "The approximately2.106569458 ideal ratio exceeds1 in both channels; the twohalf normalized raw-null residual approximately2.050393744e-6 is below exact5e-4f. These are diagnostic source-scale comparisons, not actual GPU trials, a GPU acceptance oracle, or identification of the failed GPU conjunct.",
+    "Two finite-difference epsilon sensitivities are small for these saved summaries. They and differences from computed canonical128 are observations, not certified accuracy/error bounds or proof of production floor acceptance.",
+    "No metric, acceleration, RK4 state, half-step midpoint or inverse was independently recomputed; this review verifies existing saved-output arithmetic and provenance against the separately reviewed source.",
+    "No physics fix, settings/tolerance/floor change, projection replay, full ray/scene/scientific/native/UI/Mandatory/release/performance qualification follows. New currentCI build status is separate and is not admitted by this output review."
+  ],
+  "execution": {
+    "authored_helpers_imported_or_executed": false,
+    "metric_rhs_state_integration_provider_test_compiler_api_or_native_tool_execution": false,
+    "source_or_input_edits": false,
+    "only_file_written": "independent-result-review.json",
+    "method": "Passive source/JSON/hex/struct/hash/Git reads, IEEE literal decoding and Decimal arithmetic on saved fields."
+  },
+  "workspace": {
+    "head": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "canonical_source_committed_and_pushed": true,
+    "review": "Ignored audit receipt, uncommitted and unpushed pending root preservation."
+  }
+}

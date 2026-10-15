@@ -1,0 +1,91 @@
+{
+  "schema": "sirius-kerr-cartesian-floor-independent-source-review-v1",
+  "passed": true,
+  "source_admission_only": true,
+  "captured_source_revision": "02ee51f85e45e8342923bae1d9f26d50f1d39e6d",
+  "reviewer": {
+    "agent": "/root/forensic_obligations",
+    "author": "/root/divide_contract_review",
+    "operator": "/root",
+    "independent_of_this_source_author_and_operator": true,
+    "prior_involvement": "Reviewer authored the preceding committed-state Decimal analysis and independently source-reviewed the local canonical reference. This Cartesian diagnostic source is separately authored."
+  },
+  "pins": {
+    "cartesian_source": {
+      "bytes": 17302,
+      "sha256": "c41c92e176c758fdae095f0544fa7a4f446dd86d7aadd7074863218c1f237917"
+    },
+    "exact_canonical_result": {
+      "path": "attestations/scientific-core/02ee51f/kerr-local-hamiltonian-reference/result.json",
+      "commit": "b3c57f4d59e27b40a74c923b2fc246ef6526623b",
+      "bytes": 65734,
+      "sha256": "e93e6f2e1925d086238f550dd849da13f1e7b7dc1ae465a3fadcf3118c2275b1"
+    }
+  },
+  "mathematical_review": {
+    "metric_and_domain": "Neutral asymptotically-flat Kerr input restriction matches Q=Lambda0/M1/0<a<1. Defining ingoing Cartesian Kerr-Schild metric uses the positive quartic radial root, stable rationalized reduced-negative branch, h=2Mr/Sigma and ell=(1,(rx+ay)/(r2+a2),(ry-ax)/(r2+a2),z/r). No product geometry or null-cone projection imported.",
+    "inverse": "Generic four-column partial-pivot Gauss-Jordan inverse has correct row normalization/elimination. Zero pivots decline. It reports maximum metric-times-inverse identity residual over RHS calls rather than assuming the closed-form Kerr inverse.",
+    "euler_lagrange": "For L=.5*g_ab*u^a*u^b, g_mu,nu*a^nu=.5*partial_mu(g_ab)*u^a*u^b-partial_k(g_mu,j)*u^k*u^j. Source dg[k][mu][j] indexing and reciprocal[i][mu]*C[mu] contraction match this identity, including temporal acceleration. Stationarity makes dg[0]=0, not u^t constant.",
+    "differentiation": "Centered differences hold the other coordinates and all u components fixed while differentiating the covariant metric. Both epsilon channels1e-18/1e-22 start from identical captured binary32 q/u, converted exactly with Decimal.from_float inside80-digit context. This is independent Euler-Lagrange acceleration rather than a production connection/controller copy.",
+    "rk4_trials": "For each epsilon, a fresh full floor step and two consecutive half steps start from the same immutable q/u. All8position/tangent components use the standard classical RK4 tableau. No projection, compensation or mass-shell replacement is performed.",
+    "source_scaling_only": "The comparator uses max(1,abs(start_i),abs(two_half_i)), max component full-vs-twohalf difference divided15 and exact binary32 literal2e-5f. Raw unprojected norm comparator uses abs(gkk)/max(sum(abs(gij*ui*uj)),binary32_1e-20f), relative to exact5e-4f. This reproduces source scaling for a diagnostic ideal calculation, not actual binary32 GPU trials or independent acceptance truth.",
+    "canonical_comparison": "Full/twohalf endpoints are compared to the already-computed matching-epsilon canonical128 endpoint at the same affine floor. q/u/norm comparisons are coherent between canonical and tangent formulations. The source explicitly labels canonical128 as computed, not exact/certified."
+  },
+  "input_and_semantic_review": {
+    "hard_whole_input_pin": true,
+    "input_schema_source_and_negative_numerical_status_match_actual_JSON": true,
+    "raw_packet280_and_both_record272_hex_sizes": true,
+    "sample_epoch_identity_and_failed_control_transition_joins": true,
+    "initial_q_u_strings_join_exact_captured_bytes_and_canonical_reference": true,
+    "floor_joins_packet_stored_previous_step_and_canonical_interval": true,
+    "independent_initial_metric_norm_joins_canonical_2H_without_projection": true,
+    "algebra_join_tolerance": "1e-60*max(1,abs(initial_norm)) is explicitly an independent algebra join, not a product physics tolerance.",
+    "canonical128_consumed_field_schemas_types_and_epsilons_match_actual_input": true,
+    "input_and_source_rechecked_before_output": true,
+    "exclusive_output_creation": true,
+    "retired_current_input_paths_replayed": false
+  },
+  "source_literal_metadata": {
+    "2e-5f_bits": "37a7c5ac",
+    "5e-4f_bits": "3a03126f",
+    "1e-20f_bits": "1e3ce508",
+    "verification": "Passive standard-library struct packing of these source constants only; no reference or captured-state calculation."
+  },
+  "finite_and_work_bounds": {
+    "shared_wall_seconds": 60,
+    "declared_RK4_limit": 16,
+    "declared_rhs_limit": 64,
+    "declared_metric_limit": 1000,
+    "source_loop_RK4_count": 6,
+    "source_loop_rhs_count": 24,
+    "source_loop_metric_count": 173,
+    "derivation": "2epsilon channels each perform3RK4 steps with4RHS perstep; eachRHS uses1base+6perturbed metric calls. Add1initial metric and4trial summary metrics. These are static source counts, not execution observations.",
+    "finite_checks": "Inputs/states/metric/inverse/acceleration/results must be finite; positive radial root, nonzero inverse pivot, surviving finite-difference displacement and positive finite affine interval are required. Work/wall guards execute at each step/RHS/metric tick.",
+    "output_structure": "Two fixed epsilon runs retain full+twohalf summaries and fixed comparator/reference differences; no trajectory or repeated-refinement log.80digit values and pinned fixed-size raw input bound the report structure; no explicit byte cap is claimed."
+  },
+  "limits": [
+    "Source PASS does not admit actual diagnostic execution or output.",
+    "Ideal Decimal trial ratios are diagnostic source-scale comparisons only; there is no actual GPU candidate, rejection-status/projection replay or identified failed GPU conjunct.",
+    "Canonical128 differences and two-epsilon sensitivity are not certified accuracy bounds or proof of original floor acceptance.",
+    "No product floor/tolerance, shaders, test assertions, physical capture rule or full-ray/science qualification changes follow."
+  ],
+  "executions_by_reviewer": {
+    "source_parsed_imported_or_executed": false,
+    "reference_or_captured_state_calculation_performed": false,
+    "helper_provider_compiler_test_or_ci_executed": false,
+    "tracked_source_or_packet_edited": false,
+    "only_file_written": "out/kerr-cartesian-floor-diagnostic/independent-source-review.json"
+  },
+  "blockers": [],
+  "workspace": {
+    "head": "69fcf27dd2958f0fbda16de0cc206c4dbbcba150",
+    "tracked_clean": true,
+    "upstream_left_right": [
+      0,
+      0
+    ],
+    "worktree_count": 1,
+    "source_committed_and_pushed": true,
+    "receipt": "Ignored source review, not yet committed/pushed."
+  }
+}
