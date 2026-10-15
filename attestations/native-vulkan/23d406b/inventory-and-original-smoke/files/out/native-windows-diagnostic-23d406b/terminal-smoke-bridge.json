@@ -1,0 +1,39 @@
+{
+  "mode": "diagnostic-build",
+  "label": "smoke",
+  "case": "smoke",
+  "read_case_pass": true,
+  "observer_sha256": "8f2945ef5a6087f4aa91c3daa95a2689aa5f0c3454c23f28ae1ea8b9e62d67d0",
+  "audit_script_sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+  "arguments": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only terminal auditor bootstrap, no Add-Type or scientific launch'}|ConvertTo-Json|Set-Content -LiteralPath '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\temp\\terminal-smoke\\bootstrap.json' -Encoding UTF8;& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\terminal-audit.ps1' -Workspace '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b' -RunName 'native/smoke' -Receipt 'terminal-smoke.json' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b'"
+  ],
+  "deadline_seconds": 60,
+  "outer_stop": false,
+  "errors": [],
+  "started_epoch": 1792052709.700417,
+  "qualification_claimed": false,
+  "scope": "Exact normal inventory or original-smoke owner completion and diagnostic source/input identities, followed by bounded Windows birth/provider/accessible-consumer audit. Inventory without actual module capture remains incomplete loaded-provider evidence; hidden fields/handles/global or unconditional descendant absence not asserted.",
+  "linux_child_pid": 557854,
+  "linux_child_birth": "10209604",
+  "controller_signals": [],
+  "returncode": 0,
+  "elapsed_seconds": 1.718864066991955,
+  "linux_child_birth_absent": true,
+  "accepted": true,
+  "loaded_provider_evidence_complete": true,
+  "terminal_receipt_sha256": "79fb399616dfa977496837266a7414cbabb7c6d35527141384260f7b4e6f5b77",
+  "bootstrap": {
+    "owner_start_time_utc": "2026-10-15T08:25:09.7435533Z",
+    "scope": "Read-only terminal auditor bootstrap, no Add-Type or scientific launch",
+    "owner_pid": 17280,
+    "expected_test_executable": ""
+  },
+  "source_binding_owner_bridge_action_post_sealed": true
+}

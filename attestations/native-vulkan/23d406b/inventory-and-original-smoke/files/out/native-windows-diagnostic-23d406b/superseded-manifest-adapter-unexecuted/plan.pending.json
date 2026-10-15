@@ -1,0 +1,23 @@
+{
+  "admitted": false,
+  "artifact_status": "PENDING_ACTUAL_ROOT_DOWNLOAD_AND_ADMISSION",
+  "inventory_owner_seconds": 60,
+  "linux_bridge_outer_seconds": 480,
+  "minimum_wsl_available_kib": 2097152,
+  "owner_rss_bytes": 4294967296,
+  "prospective_commands": [
+    "python3 -B out/native-windows-diagnostic-23d406b/run_system.py inventory",
+    "python3 -B out/native-windows-diagnostic-23d406b/run_terminal.py inventory",
+    "python3 -B out/native-windows-diagnostic-23d406b/run_system.py smoke",
+    "python3 -B out/native-windows-diagnostic-23d406b/run_terminal.py smoke"
+  ],
+  "resource_semantics": "Windows child WorkingSet64/PrivateMemorySize64 and held-handle exit/birth guards retained. Linux480s bridge includes bootstrap/Add-Type overhead and WSL2GiB sampled MemAvailable reserve; this is not Windows aggregate/bootstrap/compiler/global availability. Separate terminal60s; limited accessible census only.",
+  "runner_source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "schema": "sirius-native-windows-diagnostic-plan-v1",
+  "scope": "Separate finite inventory then original VulkanBackend.SlangKernelMatchesCpuReference. Original smoke two actual submissions <=1000ms and1e-6 reference assertions unchanged;320s external diagnostic process wall, not a replacement device deadline. No native-build/Mandatory gate, UI/fullruntime/fullscience/domain/release claim. Inventory missing actualModules remains incomplete DLL evidence.",
+  "smoke_owner_seconds": 320,
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "stage": "bin/windows-msvc/diagnostic-23d406b",
+  "terminal_observer_seconds": 60,
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius"
+}

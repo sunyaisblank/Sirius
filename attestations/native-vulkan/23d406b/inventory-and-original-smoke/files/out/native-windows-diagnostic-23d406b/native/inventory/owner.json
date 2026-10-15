@@ -1,0 +1,56 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "bounded-native-Windows-control",
+    "start_utc":  "2026-10-15T08:22:32.0441608Z",
+    "owner_pid":  22356,
+    "owner_start_time_utc":  "2026-10-15T08:22:30.7308126Z",
+    "test_executable":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\src\\sirius\\app\\Release\\sirius.exe",
+    "test_executable_sha256":  "5431067be6ac3af2b7a320959167a3659e54fc1e2669a2bebf029aab8488a0f2",
+    "arguments":  [
+                      "--json",
+                      "info",
+                      "system"
+                  ],
+    "working_directory":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\src\\sirius\\app\\Release",
+    "outer_guard_seconds":  60,
+    "rss_guard_bytes":  4294967296,
+    "outer_stop":  false,
+    "status":  "completed",
+    "numerical_control_passed":  false,
+    "expected_cases":  [
+                           "SystemInventory"
+                       ],
+    "qualification_claimed":  false,
+    "scope":  "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind":  "SystemInventory",
+    "system_inventory_passed":  true,
+    "environment":  {
+                        "VK_DRIVER_FILES":  null,
+                        "VK_ICD_FILENAMES":  null,
+                        "VK_ADD_DRIVER_FILES":  null,
+                        "SIRIUS_VULKAN_DEVICE":  null,
+                        "SIRIUS_PRECISION":  null,
+                        "SIRIUS_MEMORY_BUDGET_MB":  null,
+                        "SIRIUS_DISPATCH_TARGET_MS":  null,
+                        "TEMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\temp\\inventory",
+                        "TMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\temp\\inventory",
+                        "TMPDIR":  null
+                    },
+    "test_pid":  18212,
+    "test_start_time_utc":  "2026-10-15T08:22:42.6109705Z",
+    "returncode":  0,
+    "exit_code_source":  "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent":  true,
+    "end_utc":  "2026-10-15T08:22:44.1764173Z",
+    "elapsed_seconds":  12.1301817,
+    "peak_sampled_rss_bytes":  11022336,
+    "source_revision":  "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+    "live_source_revision":  "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+    "source_build_gate_sha256":  "b962047d6e47a5dc03eb986602e681fb2c064a0dc5d728d99b94acf278709e15",
+    "source_build_gate_unchanged":  true,
+    "loaded_driver_modules_recorded":  true,
+    "test_executable_unchanged":  true,
+    "cleanup_errors":  [
+
+                       ]
+}

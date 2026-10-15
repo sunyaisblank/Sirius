@@ -1,0 +1,213 @@
+{
+  "pass": true,
+  "case": "smoke",
+  "mode": "diagnostic-build",
+  "label": "smoke",
+  "record": {
+    "owner": {
+      "schema_version": 1,
+      "kind": "bounded-native-Windows-control",
+      "start_utc": "2026-10-15T08:24:11.2571393Z",
+      "owner_pid": 19276,
+      "owner_start_time_utc": "2026-10-15T08:24:09.8396231Z",
+      "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release\\sirius_backend_tests.exe",
+      "test_executable_sha256": "e83de1a089627b64ed10f8e4dc22069abad564f8858252a8516ae89c6a77c3fc",
+      "arguments": [
+        "--gtest_filter=VulkanBackend.SlangKernelMatchesCpuReference",
+        "--gtest_color=no",
+        "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\native\\smoke\\gtest.xml\""
+      ],
+      "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release",
+      "outer_guard_seconds": 320,
+      "rss_guard_bytes": 4294967296,
+      "outer_stop": false,
+      "status": "completed",
+      "numerical_control_passed": true,
+      "expected_cases": [
+        "VulkanBackend.SlangKernelMatchesCpuReference"
+      ],
+      "qualification_claimed": false,
+      "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+      "invocation_kind": "Control",
+      "system_inventory_passed": false,
+      "environment": {
+        "VK_DRIVER_FILES": null,
+        "VK_ICD_FILENAMES": null,
+        "VK_ADD_DRIVER_FILES": null,
+        "SIRIUS_VULKAN_DEVICE": null,
+        "SIRIUS_PRECISION": null,
+        "SIRIUS_MEMORY_BUDGET_MB": null,
+        "SIRIUS_DISPATCH_TARGET_MS": null,
+        "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\temp\\smoke",
+        "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\temp\\smoke",
+        "TMPDIR": null
+      },
+      "test_pid": 20260,
+      "test_start_time_utc": "2026-10-15T08:24:12.8241579Z",
+      "returncode": 0,
+      "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+      "owned_process_absent": true,
+      "end_utc": "2026-10-15T08:24:14.2820169Z",
+      "elapsed_seconds": 3.0142067,
+      "peak_sampled_rss_bytes": 54378496,
+      "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+      "live_source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+      "source_build_gate_sha256": "b962047d6e47a5dc03eb986602e681fb2c064a0dc5d728d99b94acf278709e15",
+      "source_build_gate_unchanged": true,
+      "loaded_driver_modules_recorded": true,
+      "test_executable_unchanged": true,
+      "cleanup_errors": []
+    },
+    "bridge": {
+      "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+      "runner_source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+      "kind": "smoke",
+      "argv": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\run_native_control.ps1",
+        "-Stage",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release",
+        "-Output",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\native\\smoke",
+        "-Filter",
+        "VulkanBackend.SlangKernelMatchesCpuReference",
+        "-Seconds",
+        "320",
+        "-RssBytes",
+        "4294967296",
+        "-TemporaryDirectory",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\temp\\smoke",
+        "-BuildRoot",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b",
+        "-ExpectedGateSha256",
+        "b962047d6e47a5dc03eb986602e681fb2c064a0dc5d728d99b94acf278709e15",
+        "-LiveRevision",
+        "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+        "-ExecutableName",
+        "sirius_backend_tests.exe",
+        "-InvocationKind",
+        "Control"
+      ],
+      "binding_sha256": "086e2fe6763e054e609b48c14f072291e37985d386cd210238bd6b2040c12def",
+      "linux_controller_pid": 550966,
+      "linux_controller_birth": "10203571",
+      "predecessor_inputs": {
+        "out/native-windows-diagnostic-23d406b/inventory-bridge.json": {
+          "bytes": 2515,
+          "sha256": "81015599421e4a766e9802df4fee8d73b1cf2d34c971e80fdb127102377e8103"
+        },
+        "out/native-windows-diagnostic-23d406b/inventory-inputs-before.json": {
+          "bytes": 19448,
+          "sha256": "a6040ea0e010b3caa10546112781d322c7dd88c8599638aaaa45e1195dcb6972"
+        },
+        "out/native-windows-diagnostic-23d406b/inventory-inputs-after.json": {
+          "bytes": 19448,
+          "sha256": "a6040ea0e010b3caa10546112781d322c7dd88c8599638aaaa45e1195dcb6972"
+        },
+        "out/native-windows-diagnostic-23d406b/native/inventory/owner.json": {
+          "bytes": 2956,
+          "sha256": "b8c39a96bebba0c1de913d4624f770abfa4a4ec25ac9e9a0e976a8c157460182"
+        },
+        "out/native-windows-diagnostic-23d406b/native/inventory/stdout.log": {
+          "bytes": 1220,
+          "sha256": "2fa1c434bc565f76dd4a35af48bd0c15c9f79cabfbff43c2c7961fa0afce922f"
+        },
+        "out/native-windows-diagnostic-23d406b/native/inventory/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-windows-diagnostic-23d406b/native/inventory/memory.json": {
+          "bytes": 396,
+          "sha256": "215abae9e4be13efc27e3ac33ddc5557d281e6fd7b79517f2a40312ed17263f9"
+        },
+        "out/native-windows-diagnostic-23d406b/terminal-inventory.json": {
+          "bytes": 4041,
+          "sha256": "bc75205dc4eb7f8bc5a7e1de85ae4dfcb749625f5777ae11cf2ec2e14ee22888"
+        },
+        "out/native-windows-diagnostic-23d406b/terminal-inventory-bridge.json": {
+          "bytes": 2456,
+          "sha256": "173bb5ab94702c4af5f9ee43e3b2a1c6c8085ffb0a7ee4836e25cd53c52f81c0"
+        },
+        "out/native-windows-diagnostic-23d406b/terminal-inventory-accepted.json": {
+          "bytes": 7680,
+          "sha256": "537542207f6f88fa7e20e47462d428277eaf056155f2c137f028a9e7706a9e24"
+        },
+        "out/native-windows-diagnostic-23d406b/native/inventory/driver-modules.json": {
+          "bytes": 686,
+          "sha256": "2f4db4e8debc495b57f919f4e2cddce291b11a40664044b219cdbe7200f81816"
+        }
+      },
+      "bridge_outer_seconds": 480,
+      "windows_owner_seconds": 320,
+      "minimum_wsl_available_kib": 2097152,
+      "resource_scope": "Windows child WorkingSet64/PrivateMemorySize64 and held-handle exit/birth guards retained. Linux480s bridge includes bootstrap/Add-Type overhead and WSL2GiB sampled MemAvailable reserve; this is not Windows aggregate/bootstrap/compiler/global availability. Separate terminal60s; limited accessible census only.",
+      "accepted_owner_execution": true,
+      "completed": true,
+      "cleanup_errors": [],
+      "full_qualification_claimed": false,
+      "minimum_sampled_wsl_available_kib": 19577540,
+      "linux_child_pid": 550971,
+      "linux_child_birth": "10203618",
+      "returncode": 0,
+      "linux_child_birth_absent": true,
+      "native_build_gate_authority_used": true,
+      "mandatory_or_full_runtime_admitted": false,
+      "loaded_provider_evidence_complete": true,
+      "whole_inputs_unchanged": true,
+      "elapsed_seconds": 5.66477904599742,
+      "signals": []
+    },
+    "stdout_sha256": "12c0e7d089c12057d2330e3da7fd06fc7d005f510ef41e66d10c25a1a1593194",
+    "whole_inputs": {
+      "smoke-bridge.json": {
+        "bytes": 4590,
+        "sha256": "aaa814b0e46f6759126fc2ce9c519bd557ba01810a8be9aa6b619bee732f0bd3"
+      },
+      "native/smoke/owner.json": {
+        "bytes": 3183,
+        "sha256": "fecfa3f8646bc0bd9577424bf3db4882071b04905a93435ec0752fb37cc898e3"
+      },
+      "native/smoke/stdout.log": {
+        "bytes": 627,
+        "sha256": "12c0e7d089c12057d2330e3da7fd06fc7d005f510ef41e66d10c25a1a1593194"
+      },
+      "native/smoke/stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/smoke/memory.json": {
+        "bytes": 269,
+        "sha256": "96e3e66220cfe3aa75d27817548d552c24a958cb6b84215d6ba1fd917db73e7e"
+      },
+      "smoke-inputs-before.json": {
+        "bytes": 21412,
+        "sha256": "126c75567c9c0fd0305e93a4bed6f3f9c1bc93993f257218e3f5cf90f68f499f"
+      },
+      "smoke-inputs-after.json": {
+        "bytes": 21412,
+        "sha256": "126c75567c9c0fd0305e93a4bed6f3f9c1bc93993f257218e3f5cf90f68f499f"
+      },
+      "native/smoke/gtest.xml": {
+        "bytes": 1388,
+        "sha256": "fabb4fd5ca2e14120d9ea711229f8104a7e896a00a5724a4b0b1775f47394f4c"
+      },
+      "native/smoke/driver-modules.json": {
+        "bytes": 684,
+        "sha256": "27df4df7fccb8c9c67f5e8111d80979554c7f4c035924d28ab5b1206ab7ee389"
+      }
+    }
+  },
+  "terminal_receipt": "out/native-windows-diagnostic-23d406b/terminal-smoke.json",
+  "terminal_receipt_sha256": "79fb399616dfa977496837266a7414cbabb7c6d35527141384260f7b4e6f5b77",
+  "terminal_bridge_sha256": "2e9890be986def26687ded5ec5e9a13ede8c64e245981a056e98bc42cf70911a",
+  "loaded_provider_evidence_complete": true,
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "native_build_gate_authority_used": true,
+  "mandatory_or_full_runtime_admitted": false,
+  "scope": "Finite diagnostic inventory or exact original smoke only. Missing inventory module capture is explicitly incomplete DLL evidence; smoke requires actual staged SDK loader plus AMD provider. Limited accessible terminal census; no UI/full-frame/full-runtime/domain/release qualification claim."
+}

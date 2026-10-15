@@ -1,0 +1,79 @@
+{
+  "actual_artifact_admitted": false,
+  "actual_plan_and_bindings_absent": true,
+  "exact_emergency_unchanged": true,
+  "executed": false,
+  "helpers": {
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "run_native_control.ps1": {
+      "bytes": 15580,
+      "sha256": "30df4449c2e4b0039653aec6e9762850d38ed528e0ef5439e42fc7307ab5fd89"
+    },
+    "run_system.py": {
+      "bytes": 16585,
+      "sha256": "d0f67de6fb0df42207482e390a9f3b03716b539968d3bc6b5748f74c3b7d243a"
+    },
+    "run_terminal.py": {
+      "bytes": 14220,
+      "sha256": "de896e1b1728eb8133d1196395cd7b98ea92dce06ea70fefff2c6a7b866309d7"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 7038,
+      "sha256": "33332614e841e7f1d2d315058783154c88a603bcee22c0524a7042ddbfd571b1"
+    }
+  },
+  "operational_reports_outside_inputs": true,
+  "original_source": {
+    "commit": "8caa498bfe71b7a86ff99b1fa54c6a67c5e98e48",
+    "root": "attestations/native-vulkan/5b5fad9/fresh-windows-system-inventory/files/out/native-windows-system-5b5fad9",
+    "tag": "evidence/issue-48-native-windows-system-5b5fad9"
+  },
+  "originals": {
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "run_system.py": {
+      "bytes": 10084,
+      "sha256": "543b4a6a6aa2086001b99bd320f99a1c5d96c1d5c6205791733595af82d95a16"
+    },
+    "run_terminal.py": {
+      "bytes": 9080,
+      "sha256": "d0c06987678b77bea87cc7f5ceb7bde508374427c463c9bde7cc9c3c3360e503"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    }
+  },
+  "patch": {
+    "bytes": 44391,
+    "sha256": "1610109d29c2800996e15cf4d07d9b67542f28fc316f13e700be2bb84f7061c4"
+  },
+  "pending_fields": [
+    "plan.json admitted:true after root source/runtime admission",
+    "execution-bindings.json admitted:true",
+    "manifest_identity bytes/sha256",
+    "artifact.id and actualAPI/ZIP/membermap file pins",
+    "files all actual physical stagedmanifestrows+statichelper/metadata/externalinputs",
+    "actions.inventory/smoke argv+cleanup_argv",
+    "terminal_actions.inventory/smoke argv+cleanup_argv"
+  ],
+  "prepared_only": true,
+  "prospective_commands": [
+    "python3 -B out/native-windows-diagnostic-23d406b/run_system.py inventory",
+    "python3 -B out/native-windows-diagnostic-23d406b/run_terminal.py inventory",
+    "python3 -B out/native-windows-diagnostic-23d406b/run_system.py smoke",
+    "python3 -B out/native-windows-diagnostic-23d406b/run_terminal.py smoke"
+  ],
+  "schema": "sirius-native-windows-diagnostic-source-preparation-v1",
+  "scope": "Separate finite inventory then original VulkanBackend.SlangKernelMatchesCpuReference. Original smoke two actual submissions <=1000ms and1e-6 reference assertions unchanged;320s external diagnostic process wall, not a replacement device deadline. No native-build/Mandatory gate, UI/fullruntime/fullscience/domain/release claim. Inventory missing actualModules remains incomplete DLL evidence.",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39"
+}

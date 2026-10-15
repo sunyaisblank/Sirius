@@ -1,0 +1,31 @@
+{
+  "schema": "sirius-native-windows-predecessor-integrity-source-fix-v1",
+  "finding": "Smoke predecessor snapshot must match previously accepted inventory whole_inputs, rather than admitting changed bytes anew.",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "changed_helper": {
+    "path": "run_system.py",
+    "bytes": 18017,
+    "sha256": "b4fa36dd337913d4269eeb342a760688b34a176380d43efc8b8e625d9814a70a"
+  },
+  "source_freeze": {
+    "bytes": 2813,
+    "sha256": "0dec7e340fa4756504aa4b3234c985dbd6d9042b2923762d436a6900a0eff78d"
+  },
+  "preparation": {
+    "bytes": 4398,
+    "sha256": "3fb6cc0ee82f8f64acf5d70e1c82e85e0ac121b476b5b9b57a873b73dcbe0b3d"
+  },
+  "patch": {
+    "bytes": 29842,
+    "sha256": "059ed239f566aced6aca01850cc438f3d2778f2bf4656b6b69f19698aebb3ea7"
+  },
+  "execution_bindings": {
+    "bytes": 29883,
+    "sha256": "086e2fe6763e054e609b48c14f072291e37985d386cd210238bd6b2040c12def"
+  },
+  "input_files": 95,
+  "two_python_builtin_ast_parses_passed": true,
+  "helpers_executed": false,
+  "provider_executed": false,
+  "runtime_admitted": false
+}

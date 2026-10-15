@@ -1,0 +1,48 @@
+{
+  "backends": {
+    "cpu": {
+      "available": true
+    },
+    "vulkan": {
+      "available": true,
+      "compiled": true,
+      "device_count": 1,
+      "devices": [
+        {
+          "api_version": 4211037,
+          "device_id": 6400,
+          "device_local_bytes": 34027667456,
+          "driver_id": 1,
+          "driver_info": "26.8.1 (LLPC)",
+          "driver_name": "AMD proprietary driver",
+          "index": 0,
+          "kind": "integrated",
+          "name": "AMD Radeon 780M Graphics",
+          "preserves_fp32_denormals": true,
+          "render_memory_bytes": 17013800960,
+          "rounds_fp32_to_nearest": true,
+          "rounds_fp64_to_nearest": true,
+          "supports_fp64": true,
+          "vendor_id": 4098
+        }
+      ],
+      "selected_device_index": 0,
+      "selected_device_name": "AMD Radeon 780M Graphics"
+    }
+  },
+  "interactive_viewer": {
+    "compiled": true
+  },
+  "language": {
+    "p2900_contracts": {
+      "implementation": "checked-macro",
+      "native": false
+    },
+    "p2996_reflection": {
+      "implementation": "explicit-schema",
+      "native": false
+    }
+  },
+  "platform": "Windows",
+  "wsl2": false
+}

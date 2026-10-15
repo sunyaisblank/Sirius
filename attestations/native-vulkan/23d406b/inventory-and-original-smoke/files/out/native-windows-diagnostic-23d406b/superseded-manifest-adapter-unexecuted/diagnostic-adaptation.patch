@@ -1,0 +1,474 @@
+--- a/8caa/run_native_control.ps1
++++ b/native-windows-diagnostic-23d406b/run_native_control.ps1
+@@ -1,4 +1,4 @@
+-param([Parameter(Mandatory=$true)][string]$Stage,[Parameter(Mandatory=$true)][string]$Output,[Parameter(Mandatory=$true)][string]$Filter,[int]$Seconds=320,[long]$RssBytes=4294967296,[string]$Expected=$Filter,[string]$ExecutableName='sirius_backend_tests.exe',[string]$TemporaryDirectory='',[Parameter(Mandatory=$true)][string]$BuildRoot,[Parameter(Mandatory=$true)][string]$ExpectedGateSha256,[Parameter(Mandatory=$true)][string]$LiveRevision,[string]$RenderDirectory='',[ValidateSet('Control','SystemInventory')][string]$InvocationKind='Control')
++param([Parameter(Mandatory=$true)][string]$Stage,[Parameter(Mandatory=$true)][string]$Output,[Parameter(Mandatory=$true)][string]$Filter,[int]$Seconds=320,[long]$RssBytes=4294967296,[string]$Expected=$Filter,[string]$ExecutableName='sirius_backend_tests.exe',[string]$TemporaryDirectory='',[Parameter(Mandatory=$true)][string]$BuildRoot,[Parameter(Mandatory=$true)][string]$ExpectedManifestSha256,[Parameter(Mandatory=$true)][string]$LiveRevision,[string]$RenderDirectory='',[ValidateSet('Control','SystemInventory')][string]$InvocationKind='Control')
+ $ErrorActionPreference='Stop'
+ if (!$TemporaryDirectory) { throw 'Task-local temporary directory required' }
+ if ($TemporaryDirectory) {
+@@ -41,18 +41,36 @@
+ 
+ $exeHash=(Get-FileHash -Algorithm SHA256 -LiteralPath $exe).Hash.ToLowerInvariant()
+ $BuildRoot=(Get-Item -LiteralPath $BuildRoot).FullName
+-$gatePath=Join-Path $BuildRoot 'generated/sirius/native_build_gate.json'
+-$gateHash=(Get-FileHash -Algorithm SHA256 -LiteralPath $gatePath).Hash.ToLowerInvariant()
+-if ($gateHash -ne $ExpectedGateSha256 -or $LiveRevision -notmatch '^[0-9a-f]{40}$') { throw 'Native producer/live source gate identity mismatch' }
+-$gate=Get-Content -Raw -LiteralPath $gatePath | ConvertFrom-Json
+-if (!$gate.source.clean -or $gate.source.revision -notmatch '^[0-9a-f]{40}$') { throw 'Invalid native producer source receipt' }
+-$logicalName=[IO.Path]::GetFileNameWithoutExtension($ExecutableName)
+-$binding=$gate.tested_artifacts.$logicalName
+-$expectedPath=[IO.Path]::GetFullPath((Join-Path $BuildRoot $binding.path))
+-if ($binding.root -ne 'build' -or $exeHash -ne $binding.sha256 -or (Get-Item -LiteralPath $exe).Length -ne $binding.bytes -or [IO.Path]::GetFullPath($exe) -ne $expectedPath) { throw 'Executable does not match exact native producer gate' }
++$manifestPath=Join-Path $BuildRoot 'generated/sirius/windows-diagnostic-build-products.json'
++$manifestHash=(Get-FileHash -Algorithm SHA256 -LiteralPath $manifestPath).Hash.ToLowerInvariant()
++if ($manifestHash -ne $ExpectedManifestSha256 -or $LiveRevision -cne '23d406b8ca99695f362b88e0c5f9a706f08a7a39') { throw 'Diagnostic product/live source identity mismatch' }
++$manifest=Get-Content -Raw -LiteralPath $manifestPath | ConvertFrom-Json
++if ($manifest.schema -cne 'sirius-windows-diagnostic-build-products-v1' -or $manifest.source_revision -cne $LiveRevision -or $manifest.repository -cne 'sunyaisblank/Sirius' -or $manifest.run_id -cne '38701994420' -or $manifest.run_attempt -cne '1' -or $manifest.diagnostic_build_only -isnot [bool] -or !$manifest.diagnostic_build_only -or $manifest.qualification_claimed -isnot [bool] -or $manifest.qualification_claimed) { throw 'Wrong diagnostic build-only manifest' }
++foreach ($entry in $manifest.files.PSObject.Properties) {
++ $key=$entry.Name;$prefix='bin/windows-msvc/'
++ if (!$key.StartsWith($prefix,[StringComparison]::Ordinal) -or $key.Contains('\') -or $key.Contains(':')) { throw 'Unsafe diagnostic product key' }
++ $relative=$key.Substring($prefix.Length);$parts=@($relative -split '/')
++ if (@($parts | Where-Object {$_ -eq '' -or $_ -eq '.' -or $_ -eq '..'}).Count) { throw 'Unsafe diagnostic product path component' }
++ $path=[IO.Path]::GetFullPath((Join-Path $BuildRoot $relative))
++ if (!$path.StartsWith($BuildRoot.TrimEnd('\')+'\',[StringComparison]::OrdinalIgnoreCase)) { throw 'Diagnostic product escapes build root' }
++ if (!(Test-Path -LiteralPath $path -PathType Leaf) -or (Get-Item -LiteralPath $path).Length -ne $entry.Value.bytes -or (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant() -cne $entry.Value.sha256) { throw ('Diagnostic product differs: '+$key) }
++}
++if ($InvocationKind -eq 'SystemInventory') {
++ if ($ExecutableName -cne 'sirius.exe' -or $Filter -cne 'SystemInventory' -or $Expected -cne 'SystemInventory') { throw 'Only exact inventory is admitted' }
++ $exeKey='bin/windows-msvc/src/sirius/app/Release/sirius.exe'
++} else {
++ if ($ExecutableName -cne 'sirius_backend_tests.exe' -or $Filter -cne 'VulkanBackend.SlangKernelMatchesCpuReference' -or $Expected -cne $Filter) { throw 'Only original smoke is admitted' }
++ $exeKey='bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe'
++}
++$binding=$manifest.files.PSObject.Properties[$exeKey].Value
++$expectedPath=[IO.Path]::GetFullPath((Join-Path $BuildRoot $exeKey.Substring('bin/windows-msvc/'.Length)))
++if (!$binding -or $exeHash -cne $binding.sha256 -or (Get-Item -LiteralPath $exe).Length -ne $binding.bytes -or ![String]::Equals([IO.Path]::GetFullPath($exe),$expectedPath,[StringComparison]::OrdinalIgnoreCase)) { throw 'Executable differs from exact diagnostic product' }
++$loaderPath=Join-Path $Stage 'vulkan-1.dll';$loaderKey=$exeKey.Substring(0,$exeKey.LastIndexOf('/')+1)+'vulkan-1.dll'
++$loaderBinding=$manifest.files.PSObject.Properties[$loaderKey].Value
++if (!$loaderBinding) { throw 'Exact staged SDK loader is absent from manifest' }
+ $stdout=Join-Path $Output 'stdout.log';$stderr=Join-Path $Output 'stderr.log';$xml=Join-Path $Output 'gtest.xml'
+ $arguments=if ($InvocationKind -eq 'SystemInventory') { @('--json','info','system') } else { @("--gtest_filter=$Filter",'--gtest_color=no',('"--gtest_output=xml:'+ $xml+'"')) }
+-$record=[ordered]@{schema_version=1;kind='bounded-native-Windows-control';start_utc=[DateTime]::UtcNow.ToString('o');owner_pid=$PID;owner_start_time_utc=$ownerStart;test_executable=$exe;test_executable_sha256=$exeHash;arguments=$arguments;working_directory=$Stage;outer_guard_seconds=$Seconds;rss_guard_bytes=$RssBytes;outer_stop=$false;status='running';numerical_control_passed=$false;expected_cases=$expectedNames;qualification_claimed=$false;scope='Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.'}
++$record=[ordered]@{schema_version=1;kind='bounded-native-Windows-control';start_utc=[DateTime]::UtcNow.ToString('o');owner_pid=$PID;owner_start_time_utc=$ownerStart;test_executable=$exe;test_executable_sha256=$exeHash;arguments=$arguments;working_directory=$Stage;outer_guard_seconds=$Seconds;rss_guard_bytes=$RssBytes;outer_stop=$false;status='running';numerical_control_passed=$false;expected_cases=$expectedNames;qualification_claimed=$false;scope='Exact diagnostic-manifest inventory or original smoke on actual native driver. Diagnostic RSS/time guards retain original scientific checks; no native-build/Mandatory gate, UI, full runtime or release qualification claim.'}
+ $record.invocation_kind=$InvocationKind
+ $record.system_inventory_passed=$false
+ $record.environment=[ordered]@{}
+@@ -70,6 +88,8 @@
+    $modules=@($process.Modules | Where-Object {$_.ModuleName -match '(?i)amdvlk|^vulkan-1\.dll$'})
+    if (@($modules | Where-Object {$_.ModuleName -match '(?i)amdvlk'}).Count -gt 0 -and @($modules | Where-Object {$_.ModuleName -ieq 'vulkan-1.dll'}).Count -gt 0) {
+     $bindings=@($modules | ForEach-Object {[ordered]@{name=$_.ModuleName;path=$_.FileName;bytes=(Get-Item -LiteralPath $_.FileName).Length;sha256=(Get-FileHash -Algorithm SHA256 -LiteralPath $_.FileName).Hash.ToLowerInvariant();version=$_.FileVersionInfo.FileVersion}})
++   $loadedLoader=@($bindings | Where-Object {$_.name -ieq 'vulkan-1.dll'})
++   if ($loadedLoader.Count -ne 1 -or ![String]::Equals([IO.Path]::GetFullPath($loadedLoader[0].path),[IO.Path]::GetFullPath($loaderPath),[StringComparison]::OrdinalIgnoreCase) -or $loadedLoader[0].sha256 -cne $loaderBinding.sha256 -or $loadedLoader[0].bytes -ne $loaderBinding.bytes) { throw 'Observed loader differs from exact staged SDK loader' }
+     ConvertTo-Json -InputObject $bindings -Depth 6 | Set-Content -LiteralPath (Join-Path $Output 'driver-modules.json') -Encoding UTF8
+    }
+   }
+@@ -116,12 +136,15 @@
+  $watch.Stop();$record.end_utc=[DateTime]::UtcNow.ToString('o');$record.elapsed_seconds=$watch.Elapsed.TotalSeconds
+  if ($record.status -ne 'failed') { $record.status=if ($record.outer_stop) {'invalidated'} else {'completed'} }
+  $record.peak_sampled_rss_bytes=if ($samples.Count) { ($samples.ToArray() | Measure-Object -Property working_set_bytes -Maximum).Maximum } else { 0 }
+- $record.source_revision=$gate.source.revision
++ $record.source_revision=$manifest.source_revision
+  $record.live_source_revision=$LiveRevision
+- $record.source_build_gate_sha256=$gateHash
+- $record.source_build_gate_unchanged=$false
+- try { $record.source_build_gate_unchanged=((Get-FileHash -Algorithm SHA256 -LiteralPath $gatePath).Hash.ToLowerInvariant() -eq $gateHash) } catch { $cleanupErrors.Add('post-exit-gate: '+$_.Exception.Message) }
+- if (!$record.source_build_gate_unchanged) { $cleanupErrors.Add('native producer gate changed') }
++ $record.source_product_manifest_sha256=$manifestHash
++ $record.source_product_manifest_path=$manifestPath
++ $record.expected_staged_loader=[ordered]@{path=$loaderPath;bytes=$loaderBinding.bytes;sha256=$loaderBinding.sha256}
++ $record.native_build_or_mandatory_gate_admitted=$false
++ $record.source_product_manifest_unchanged=$false
++ try { $record.source_product_manifest_unchanged=((Get-FileHash -Algorithm SHA256 -LiteralPath $manifestPath).Hash.ToLowerInvariant() -eq $manifestHash) } catch { $cleanupErrors.Add('post-exit-gate: '+$_.Exception.Message) }
++ if (!$record.source_product_manifest_unchanged) { $cleanupErrors.Add('diagnostic product manifest changed') }
+  $record.loaded_driver_modules_recorded=$false
+  try { $record.loaded_driver_modules_recorded=(Test-Path (Join-Path $Output 'driver-modules.json')) } catch { $cleanupErrors.Add('module-receipt: '+$_.Exception.Message) }
+  $record.test_executable_unchanged=$false
+@@ -135,4 +158,4 @@
+  }
+ }
+ [pscustomobject]@{status=$record.status;returncode=$record.returncode;elapsed_seconds=$record.elapsed_seconds;peak_sampled_rss_bytes=$record.peak_sampled_rss_bytes;owned_process_absent=$record.owned_process_absent} | ConvertTo-Json -Compress
+-if ($record.status -ne 'completed' -or !$record.test_executable_unchanged -or !$record.owned_process_absent -or !$record.source_build_gate_unchanged -or ($InvocationKind -eq 'Control' -and (!$record.loaded_driver_modules_recorded -or !$record.numerical_control_passed)) -or ($InvocationKind -eq 'SystemInventory' -and !$record.system_inventory_passed)) { exit 1 }
++if ($record.status -ne 'completed' -or !$record.test_executable_unchanged -or !$record.owned_process_absent -or !$record.source_product_manifest_unchanged -or ($InvocationKind -eq 'Control' -and (!$record.loaded_driver_modules_recorded -or !$record.numerical_control_passed)) -or ($InvocationKind -eq 'SystemInventory' -and !$record.system_inventory_passed)) { exit 1 }
+--- a/8caa/run_system.py
++++ b/native-windows-diagnostic-23d406b/run_system.py
+@@ -1,8 +1,9 @@
+-"""Own one archived-export native Windows inventory; no test/render/qualification."""
+-from pathlib import Path
++"""Own exact diagnostic-manifest Windows inventory or original smoke; no qualification."""
++from pathlib import Path, PurePosixPath
+ import hashlib
+ import json
+ import os
++import re
+ import signal
+ import subprocess
+ import sys
+@@ -15,12 +16,15 @@
+ WORK = Path(__file__).resolve().parent
+ if ROOT != WORK.parents[1]: raise RuntimeError('Run from the canonical checkout')
+ kind, = sys.argv[1:]
+-assert kind == 'inventory'
++assert kind in ('inventory', 'smoke')
+ plan = json.loads((WORK / 'plan.json').read_text())
+ binding_path = WORK / 'execution-bindings.json'
+ binding = json.loads(binding_path.read_text())
+ HEAD = plan['runner_source_revision']
+ SOURCE = plan['source_revision']
++assert plan['admitted'] is True and binding['admitted'] is True
++assert SOURCE == HEAD == '23d406b8ca99695f362b88e0c5f9a706f08a7a39'
++assert plan['stage'] == binding['stage'] == 'bin/windows-msvc/diagnostic-23d406b'
+ signals = []
+ predecessors = {}
+ for number in (signal.SIGINT, signal.SIGTERM):
+@@ -37,6 +41,38 @@
+ def clean():
+     assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip() == HEAD
+     assert not subprocess.check_output(['git', 'status', '--porcelain'])
++
++def verify_manifest():
++    stage = ROOT / plan['stage']
++    manifest_path = stage / 'generated/sirius/windows-diagnostic-build-products.json'
++    assert {'bytes': manifest_path.stat().st_size, 'sha256': digest(manifest_path)} == binding['manifest_identity']
++    assert binding['files'][str(manifest_path.relative_to(ROOT))] == binding['manifest_identity']
++    manifest = json.loads(manifest_path.read_text(encoding='utf-8-sig'))
++    for key, value in {'schema':'sirius-windows-diagnostic-build-products-v1', 'source_revision':SOURCE,
++                       'repository':'sunyaisblank/Sirius', 'run_id':'38701994420', 'run_attempt':'1'}.items():
++        assert type(manifest[key]) is str and manifest[key] == value
++    assert manifest['diagnostic_build_only'] is True and manifest['qualification_claimed'] is False
++    assert binding['artifact']['repository'] == manifest['repository'] and binding['artifact']['run_id'] == manifest['run_id']
++    assert binding['artifact']['run_attempt'] == manifest['run_attempt'] and binding['artifact']['name'] == 'sirius-windows-diagnostic-build-products'
++    assert type(binding['artifact']['id']) is int and binding['artifact']['id'] > 0
++    assert isinstance(manifest['files'], dict) and manifest['files']
++    for key, row in manifest['files'].items():
++        logical = PurePosixPath(key)
++        assert isinstance(key, str) and key.startswith('bin/windows-msvc/') and '\\' not in key and ':' not in key
++        assert not logical.is_absolute() and str(logical) == key and all(part not in ('', '.', '..') for part in key.split('/'))
++        assert set(row) == {'bytes', 'sha256'} and type(row['bytes']) is int and row['bytes'] >= 0 and re.fullmatch('[0-9a-f]{64}', row['sha256'])
++        relative = logical.relative_to('bin/windows-msvc')
++        path = stage / relative
++        assert path.is_file() and path.resolve(strict=True) == path and path.is_relative_to(stage)
++        assert binding['files'][str(path.relative_to(ROOT))] == row
++    for relative in ['src/sirius/app/Release/sirius.exe', 'tests/backend/Release/sirius_backend_tests.exe',
++                     'src/sirius/app/Release/vulkan-1.dll', 'tests/backend/Release/vulkan-1.dll']:
++        assert 'bin/windows-msvc/' + relative in manifest['files']
++    alignment_path = stage / 'src/sirius/app/Release/resources/model/alignment_receipt.json'
++    alignment = json.loads(alignment_path.read_text(encoding='utf-8-sig'))
++    assert alignment['source_revision'] == SOURCE and alignment['source_tree_clean'] is True and alignment['alignment_mode'] == 'qualification'
++    assert binding['files'][str(alignment_path.relative_to(ROOT))] == manifest['files']['bin/windows-msvc/src/sirius/app/Release/resources/model/alignment_receipt.json']
++    return manifest
+ 
+ def verify():
+     assert not signals
+@@ -48,6 +84,7 @@
+         p = ROOT / rel
+         assert {'bytes': p.stat().st_size, 'sha256': digest(p)} == item, rel
+     assert digest(binding_path) == binding_hash
++    verify_manifest()
+ 
+ def win(p):
+     p = p.resolve()
+@@ -59,7 +96,7 @@
+     return int(rows['MemAvailable'].split()[0])
+ 
+ def input_records():
+-    paths = [ROOT / rel for rel in binding['files']] + [binding_path, WORK / 'preparation.json']
++    paths = [ROOT / rel for rel in binding['files']] + [binding_path, WORK / 'plan.json', WORK / 'preparation.json'] + [ROOT / rel for rel in predecessors]
+     return {str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p): {'bytes': p.stat().st_size, 'sha256': digest(p)} for p in paths}
+ 
+ def birth(pid):
+@@ -70,31 +107,48 @@
+ 
+ binding_hash = digest(binding_path)
+ assert binding['source_revision'] == SOURCE and binding['runner_source_revision'] == HEAD
+-assert plan['inventory_owner_seconds'] == 60 and plan['owner_rss_bytes'] == 4294967296
++assert plan['inventory_owner_seconds'] == 60 and plan['smoke_owner_seconds'] == 320 and plan['owner_rss_bytes'] == 4294967296
++assert plan['linux_bridge_outer_seconds'] == 480 and plan['terminal_observer_seconds'] == 60
+ assert plan['minimum_wsl_available_kib'] == 2097152
+ 
+ verify()
+-stage = ROOT / binding['stage']
++stage = ROOT / plan['stage']
+ output = WORK / 'native' / kind
+ temporary = WORK / 'temp' / kind
+ record_path = WORK / (kind + '-bridge.json')
+ assert not output.exists() and not temporary.exists() and not record_path.exists()
+-assert not (WORK / 'inputs-before.json').exists() and not (WORK / 'inputs-after.json').exists()
+-executable = 'sirius'
+-exe = stage / json.loads((stage / 'generated/sirius/native_build_gate.json').read_text())['tested_artifacts'][executable]['path']
+-case = 'SystemInventory'
+-seconds = plan['inventory_owner_seconds']
++assert not (WORK / (kind+'-inputs-before.json')).exists() and not (WORK / (kind+'-inputs-after.json')).exists()
++exe = stage / ('src/sirius/app/Release/sirius.exe' if kind == 'inventory' else 'tests/backend/Release/sirius_backend_tests.exe')
++case = 'SystemInventory' if kind == 'inventory' else 'VulkanBackend.SlangKernelMatchesCpuReference'
++seconds = plan[kind+'_owner_seconds']
+ ps = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
+ argv = [ps, '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', win(WORK / 'run_native_control.ps1'),
+         '-Stage', win(exe.parent), '-Output', win(output), '-Filter', case, '-Seconds', str(seconds),
+         '-RssBytes', str(plan['owner_rss_bytes']), '-TemporaryDirectory', win(temporary), '-BuildRoot', win(stage),
+-        '-ExpectedGateSha256', binding['gate_sha256'], '-LiveRevision', HEAD, '-ExecutableName', exe.name,
++        '-ExpectedManifestSha256', binding['manifest_identity']['sha256'], '-LiveRevision', HEAD, '-ExecutableName', exe.name,
+         '-InvocationKind', 'SystemInventory' if kind == 'inventory' else 'Control']
+ cleanup_argv = [ps, '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', win(WORK / 'emergency_native_cleanup.ps1'),
+                 '-TemporaryDirectory', win(temporary), '-Output', win(output), '-Receipt', win(WORK / (kind + '-emergency-cleanup.json'))]
+-assert argv == binding['inventory_argv'] and cleanup_argv == binding['inventory_cleanup_argv']
++assert argv == binding['actions'][kind]['argv'] and cleanup_argv == binding['actions'][kind]['cleanup_argv']
++if kind == 'smoke':
++    prior = json.loads((WORK/'terminal-inventory-accepted.json').read_text())
++    assert prior['pass'] is True and prior['case'] == 'inventory'
++    assert prior['record']['bridge']['binding_sha256'] == binding_hash
++    assert prior['terminal_receipt_sha256'] == digest(WORK/'terminal-inventory.json')
++    assert prior['terminal_bridge_sha256'] == digest(WORK/'terminal-inventory-bridge.json')
++    prior_owner = prior['record']['owner']
++    assert prior_owner == json.loads((WORK/'native/inventory/owner.json').read_text(encoding='utf-8-sig'))
++    assert prior_owner['source_revision'] == SOURCE and prior_owner['system_inventory_passed'] is True
++    for relative in ['inventory-bridge.json', 'inventory-inputs-before.json', 'inventory-inputs-after.json',
++                     'native/inventory/owner.json', 'native/inventory/stdout.log', 'native/inventory/stderr.log', 'native/inventory/memory.json',
++                     'terminal-inventory.json', 'terminal-inventory-bridge.json', 'terminal-inventory-accepted.json']:
++        path = WORK/relative
++        predecessors[str(path.relative_to(ROOT))] = {'bytes':path.stat().st_size, 'sha256':digest(path)}
++    if (WORK/'native/inventory/driver-modules.json').exists():
++        path=WORK/'native/inventory/driver-modules.json';predecessors[str(path.relative_to(ROOT))]={'bytes':path.stat().st_size,'sha256':digest(path)}
++    verify()
+ before = input_records()
+-write(WORK / 'inputs-before.json', before)
++write(WORK / (kind+'-inputs-before.json'), before)
+ record = {'source_revision': SOURCE, 'runner_source_revision': HEAD, 'kind': kind, 'argv': argv, 'binding_sha256': binding_hash,
+           'linux_controller_pid': os.getpid(), 'linux_controller_birth': birth(os.getpid()),
+           'predecessor_inputs': predecessors,
+@@ -159,19 +213,38 @@
+     assert record['linux_child_birth_absent']
+     owner = json.loads((output / 'owner.json').read_text(encoding='utf-8-sig'))
+     assert owner['status'] == 'completed' and owner['returncode'] == 0 and not owner['outer_stop'] and not owner['cleanup_errors']
+-    assert owner['owned_process_absent'] and owner['source_build_gate_unchanged'] and owner['test_executable_unchanged']
+-    assert owner['source_revision'] == SOURCE and owner['live_source_revision'] == HEAD and owner['source_build_gate_sha256'] == binding['gate_sha256']
+-    assert owner['system_inventory_passed'] and not owner['numerical_control_passed']
+-    inventory = json.loads((output / 'stdout.log').read_text(encoding='utf-8-sig'))
+-    assert inventory['platform'] == 'Windows' and inventory['wsl2'] is False
+-    assert inventory['backends']['vulkan']['device_count'] == 1
+-    device = inventory['backends']['vulkan']['devices'][0]
+-    assert device['name'] == 'AMD Radeon 780M Graphics' and device['kind'] in ('integrated', 'discrete')
+-    assert not any(word in (device['driver_name'] + ' ' + device['driver_info']).lower() for word in ('dozen', 'dzn', 'llvmpipe', 'lavapipe'))
++    assert owner['owned_process_absent'] and owner['source_product_manifest_unchanged'] and owner['test_executable_unchanged']
++    assert owner['source_revision'] == SOURCE and owner['live_source_revision'] == HEAD and owner['source_product_manifest_sha256'] == binding['manifest_identity']['sha256']
++    assert owner['native_build_or_mandatory_gate_admitted'] is False
++    if kind == 'inventory':
++        assert owner['system_inventory_passed'] is True and owner['numerical_control_passed'] is False
++        inventory = json.loads((output / 'stdout.log').read_text(encoding='utf-8-sig'))
++        assert inventory['platform'] == 'Windows' and inventory['wsl2'] is False
++        assert inventory['backends']['vulkan']['device_count'] == 1
++        device = inventory['backends']['vulkan']['devices'][0]
++        assert device['name'] == 'AMD Radeon 780M Graphics' and device['kind'] in ('integrated', 'discrete')
++        assert inventory['backends']['vulkan']['selected_device_index'] == device['index'] == 0
++        assert not any(word in (device['driver_name'] + ' ' + device['driver_info']).lower() for word in ('dozen', 'dzn', 'llvmpipe', 'lavapipe'))
++    else:
++        assert owner['numerical_control_passed'] is True and owner['system_inventory_passed'] is False and owner['loaded_driver_modules_recorded'] is True
++        xml=ET.parse(output/'gtest.xml').getroot();cases=xml.findall('.//testcase')
++        assert int(xml.get('tests','-1')) == 1 and len(cases) == 1
++        assert all(int(node.get(key,'0')) == 0 for node in [xml,*xml.findall('.//testsuite')] for key in ['failures','errors','skipped','disabled'])
++        assert not any(xml.findall('.//'+key) for key in ['failure','error','skipped'])
++        assert cases[0].get('classname')+'.'+cases[0].get('name') == case and cases[0].get('status') == 'run' and cases[0].get('result') == 'completed'
++    record['loaded_provider_evidence_complete'] = owner['loaded_driver_modules_recorded'] is True
++    if owner['loaded_driver_modules_recorded']:
++        modules=json.loads((output/'driver-modules.json').read_text(encoding='utf-8-sig'))
++        assert isinstance(modules,list) and len(modules) == 2
++        loader=[row for row in modules if row['name'].lower() == 'vulkan-1.dll']
++        assert len(loader) == 1 and any('amdvlk' in row['name'].lower() for row in modules)
++        expected=verify_manifest()['files']['bin/windows-msvc/'+str(exe.parent.relative_to(stage)).replace('\\','/')+'/vulkan-1.dll']
++        assert loader[0]['path'].replace('/','\\').casefold() == win(exe.parent/'vulkan-1.dll').casefold()
++        assert {key:loader[0][key] for key in ['bytes','sha256']} == expected
+     verify()
+     assert not signals
+     after = input_records()
+-    write(WORK / 'inputs-after.json', after)
++    write(WORK / (kind+'-inputs-after.json'), after)
+     assert before == after
+     record['whole_inputs_unchanged'] = True
+     record['accepted_owner_execution'] = True
+@@ -179,7 +252,7 @@
+     record['postcondition_error'] = repr(error)
+ try:
+     after = input_records()
+-    write(WORK / 'inputs-after.json', after)
++    write(WORK / (kind+'-inputs-after.json'), after)
+     record['whole_inputs_unchanged'] = before == after
+     if not record['whole_inputs_unchanged']:
+         record['accepted_owner_execution'] = False
+--- a/8caa/run_terminal.py
++++ b/native-windows-diagnostic-23d406b/run_terminal.py
+@@ -1,13 +1,46 @@
+ """Bounded read-only terminal observer, with early Windows birth on failure."""
+-from pathlib import Path
++from pathlib import Path, PurePosixPath
+ import json,os,signal,subprocess,sys,time
+-import hashlib
++import hashlib,re
++import xml.etree.ElementTree as ET
+ sys.dont_write_bytecode=True
+ if sys.flags.optimize or os.environ.get('PYTHONOPTIMIZE'): raise RuntimeError('Python assertions must be enabled')
+ ROOT=Path.cwd();WORK=Path(__file__).resolve().parent
+ if ROOT != WORK.parents[1]: raise RuntimeError('Run from the canonical checkout')
+ def document(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
++def verify_manifest():
++    stage = ROOT / plan['stage']
++    manifest_path = stage / 'generated/sirius/windows-diagnostic-build-products.json'
++    assert {'bytes': manifest_path.stat().st_size, 'sha256': sha(manifest_path)} == bindings['manifest_identity']
++    assert bindings['files'][str(manifest_path.relative_to(ROOT))] == bindings['manifest_identity']
++    manifest = json.loads(manifest_path.read_text(encoding='utf-8-sig'))
++    for key, value in {'schema':'sirius-windows-diagnostic-build-products-v1', 'source_revision':bindings['source_revision'],
++                       'repository':'sunyaisblank/Sirius', 'run_id':'38701994420', 'run_attempt':'1'}.items():
++        assert type(manifest[key]) is str and manifest[key] == value
++    assert manifest['diagnostic_build_only'] is True and manifest['qualification_claimed'] is False
++    assert bindings['artifact']['repository'] == manifest['repository'] and bindings['artifact']['run_id'] == manifest['run_id']
++    assert bindings['artifact']['run_attempt'] == manifest['run_attempt'] and bindings['artifact']['name'] == 'sirius-windows-diagnostic-build-products'
++    assert type(bindings['artifact']['id']) is int and bindings['artifact']['id'] > 0
++    assert isinstance(manifest['files'], dict) and manifest['files']
++    for key, row in manifest['files'].items():
++        logical = PurePosixPath(key)
++        assert isinstance(key, str) and key.startswith('bin/windows-msvc/') and '\\' not in key and ':' not in key
++        assert not logical.is_absolute() and str(logical) == key and all(part not in ('', '.', '..') for part in key.split('/'))
++        assert set(row) == {'bytes', 'sha256'} and type(row['bytes']) is int and row['bytes'] >= 0 and re.fullmatch('[0-9a-f]{64}', row['sha256'])
++        relative = logical.relative_to('bin/windows-msvc')
++        path = stage / relative
++        assert path.is_file() and path.resolve(strict=True) == path and path.is_relative_to(stage)
++        assert bindings['files'][str(path.relative_to(ROOT))] == row
++    for relative in ['src/sirius/app/Release/sirius.exe', 'tests/backend/Release/sirius_backend_tests.exe',
++                     'src/sirius/app/Release/vulkan-1.dll', 'tests/backend/Release/vulkan-1.dll']:
++        assert 'bin/windows-msvc/' + relative in manifest['files']
++    alignment_path = stage / 'src/sirius/app/Release/resources/model/alignment_receipt.json'
++    alignment = json.loads(alignment_path.read_text(encoding='utf-8-sig'))
++    assert alignment['source_revision'] == bindings['source_revision'] and alignment['source_tree_clean'] is True and alignment['alignment_mode'] == 'qualification'
++    assert bindings['files'][str(alignment_path.relative_to(ROOT))] == manifest['files']['bin/windows-msvc/src/sirius/app/Release/resources/model/alignment_receipt.json']
++    return manifest
++
+ def read_case(mode,label,case,bindings):
+  assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==bindings['runner_source_revision']
+  assert not subprocess.check_output(['git','status','--porcelain'])
+@@ -15,26 +48,42 @@
+  assert bridge['accepted_owner_execution'] and bridge['completed'] and bridge['returncode']==0
+  assert bridge['binding_sha256']==sha(WORK/'execution-bindings.json')
+  assert owner['status']=='completed' and owner['returncode']==0 and not owner['outer_stop'] and not owner['cleanup_errors']
+- assert owner['owned_process_absent'] and owner['system_inventory_passed'] and not owner['numerical_control_passed']
++ assert owner['owned_process_absent'] and owner['source_product_manifest_unchanged'] and owner['test_executable_unchanged']
++ assert owner['source_product_manifest_sha256']==bindings['manifest_identity']['sha256'] and owner['native_build_or_mandatory_gate_admitted'] is False
++ assert owner['system_inventory_passed'] is (case=='inventory') and owner['numerical_control_passed'] is (case=='smoke')
++ verify_manifest()
+  assert owner['source_revision']==bindings['source_revision'] and owner['live_source_revision']==bindings['runner_source_revision']
+  for rel,item in bindings['files'].items():
+   p=Path(rel) if rel.startswith('/') else ROOT/rel
+   assert {'bytes':p.stat().st_size,'sha256':sha(p)}==item,rel
+  assert bridge['whole_inputs_unchanged']
+- assert (WORK/'inputs-before.json').read_bytes()==(WORK/'inputs-after.json').read_bytes()
+- for rel,item in document(WORK/'inputs-before.json').items():
++ assert (WORK/(case+'-inputs-before.json')).read_bytes()==(WORK/(case+'-inputs-after.json')).read_bytes()
++ for rel,item in document(WORK/(case+'-inputs-before.json')).items():
+   p=Path(rel) if rel.startswith('/') else ROOT/rel
+   assert {'bytes':p.stat().st_size,'sha256':sha(p)}==item,rel
+- receipts=[WORK/(case+'-bridge.json'),WORK/'native'/case/'owner.json',WORK/'native'/case/'stdout.log',WORK/'inputs-before.json',WORK/'inputs-after.json']
++ for rel,item in bridge['predecessor_inputs'].items():
++  path=ROOT/rel;assert {'bytes':path.stat().st_size,'sha256':sha(path)}==item
++ receipts=[WORK/(case+'-bridge.json'),WORK/'native'/case/'owner.json',WORK/'native'/case/'stdout.log',WORK/'native'/case/'stderr.log',WORK/'native'/case/'memory.json',WORK/(case+'-inputs-before.json'),WORK/(case+'-inputs-after.json')]
++ if case=='smoke':
++  assert owner['loaded_driver_modules_recorded'] is True
++  xml=ET.parse(WORK/'native'/case/'gtest.xml').getroot();cases=xml.findall('.//testcase')
++  assert int(xml.get('tests','-1'))==1 and len(cases)==1
++  assert all(int(node.get(key,'0'))==0 for node in [xml,*xml.findall('.//testsuite')] for key in ['failures','errors','skipped','disabled'])
++  assert not any(xml.findall('.//'+key) for key in ['failure','error','skipped'])
++  assert cases[0].get('classname')+'.'+cases[0].get('name')=='VulkanBackend.SlangKernelMatchesCpuReference' and cases[0].get('status')=='run' and cases[0].get('result')=='completed'
++  receipts.append(WORK/'native'/case/'gtest.xml')
+  if (WORK/'native'/case/'driver-modules.json').exists(): receipts.append(WORK/'native'/case/'driver-modules.json')
+  whole_inputs={str(p.relative_to(WORK)):{'bytes':p.stat().st_size,'sha256':sha(p)} for p in receipts}
+- return {'owner':owner,'bridge':bridge,'inventory_sha256':sha(WORK/'native'/case/'stdout.log'),'whole_inputs':whole_inputs}
++ return {'owner':owner,'bridge':bridge,'stdout_sha256':sha(WORK/'native'/case/'stdout.log'),'whole_inputs':whole_inputs}
+ controller_signals=[]
+ def interrupted(signum,frame):controller_signals.append(signum)
+ signal.signal(signal.SIGTERM,interrupted);signal.signal(signal.SIGINT,interrupted)
+-case,=sys.argv[1:];assert case=='inventory';mode='current';label=case
++case,=sys.argv[1:];assert case in ('inventory','smoke');mode='diagnostic-build';label=case
+ binding_path=WORK/'execution-bindings.json'
+ bindings=document(binding_path);binding_sha256=sha(binding_path)
++plan=document(WORK/'plan.json');assert plan['admitted'] is True and bindings['admitted'] is True
++assert plan['source_revision']==plan['runner_source_revision']==bindings['source_revision']==bindings['runner_source_revision']=='23d406b8ca99695f362b88e0c5f9a706f08a7a39'
++assert plan['stage']==bindings['stage']=='bin/windows-msvc/diagnostic-23d406b'
+ observed=read_case(mode,label,case,bindings)
+ prefix='terminal-'+case
+ receipt=WORK/(prefix+'.json');bridge=WORK/(prefix+'-bridge.json')
+@@ -47,8 +96,8 @@
+ command="$ErrorActionPreference='Stop';$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only terminal auditor bootstrap, no Add-Type or scientific launch'}|ConvertTo-Json|Set-Content -LiteralPath "+quote(bootstrap)+" -Encoding UTF8;& "+quote(audit)+" -Workspace "+quote(workspace)+" -RunName "+quote('native/'+run)+" -Receipt "+quote(receipt.name)+' -BuildRoot '+quote(win(ROOT/bindings['stage']))
+ arguments=['/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-Command',command]
+ cleanup_args=[arguments[0],'-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',win(WORK/'emergency_native_cleanup.ps1'),'-TemporaryDirectory',win(temp),'-Output',win(temp),'-Receipt',win(WORK/(prefix+'-emergency-cleanup.json'))]
+-assert arguments==bindings['terminal_argv'] and cleanup_args==bindings['terminal_cleanup_argv']
+-record={'mode':mode,'label':label,'case':case,'read_case_pass':True,'observer_sha256':sha(Path(__file__)),'audit_script_sha256':sha(WORK/'terminal-audit.ps1'),'arguments':arguments,'deadline_seconds':60,'outer_stop':False,'errors':[],'started_epoch':time.time(),'qualification_claimed':False,'scope':'Actual normal inventory owner completion and exact source/input identities checked before bounded read-only Windows birth/provider/accessible-consumer audit. Hidden fields/handles/global or unconditional descendant absence not asserted.'}
++assert arguments==bindings['terminal_actions'][case]['argv'] and cleanup_args==bindings['terminal_actions'][case]['cleanup_argv']
++record={'mode':mode,'label':label,'case':case,'read_case_pass':True,'observer_sha256':sha(Path(__file__)),'audit_script_sha256':sha(WORK/'terminal-audit.ps1'),'arguments':arguments,'deadline_seconds':60,'outer_stop':False,'errors':[],'started_epoch':time.time(),'qualification_claimed':False,'scope':'Exact normal inventory or original-smoke owner completion and diagnostic source/input identities, followed by bounded Windows birth/provider/accessible-consumer audit. Inventory without actual module capture remains incomplete loaded-provider evidence; hidden fields/handles/global or unconditional descendant absence not asserted.'}
+ started=time.monotonic()
+ with (WORK/(prefix+'.stdout')).open('wb') as out,(WORK/(prefix+'.stderr')).open('wb') as err:
+  assert not controller_signals,('interrupted before spawn',controller_signals)
+@@ -96,13 +145,16 @@
+ if record['accepted']:
+  try:
+   terminal=document(receipt);assert terminal['owned_births_absent'] and terminal['all_observed_module_seals_match']
++  assert terminal['source_product_manifest_sha256']==bindings['manifest_identity']['sha256']
++  if case=='smoke':assert terminal['actual_loaded_modules_observed'] is True
++  record['loaded_provider_evidence_complete']=terminal['actual_loaded_modules_observed'] is True
+   assert not terminal['consumer_scan']['matches'] and not terminal['consumer_scan']['accessible_compilers']
+   record['terminal_receipt_sha256']=sha(receipt)
+   record['bootstrap']=document(temp/'bootstrap.json')
+   assert sha(binding_path)==binding_sha256
+   assert read_case(mode,label,case,bindings)==observed
+   assert not controller_signals
+-  record['source_binding_owner_bridge_inventory_post_sealed']=True
++  record['source_binding_owner_bridge_action_post_sealed']=True
+  except BaseException as error:
+   record['accepted']=False;record['errors'].append('post-audit: '+repr(error))
+ if controller_signals:
+@@ -112,6 +164,6 @@
+ bridge.write_text(json.dumps(record,indent=2)+'\n')
+ print(json.dumps({k:record[k] for k in ('mode','label','case','returncode','elapsed_seconds','accepted')}),flush=True)
+ assert record['accepted']
+-result={'pass':True,'case':case,'mode':mode,'label':label,'record':observed,'terminal_receipt':str(receipt.relative_to(ROOT)),'terminal_receipt_sha256':sha(receipt),'terminal_bridge_sha256':sha(bridge),'scope':'One finite native inventory owner/observed-provider acceptance with limited accessible terminal census, no performance/full-frame/full qualification claim.'}
++result={'pass':True,'case':case,'mode':mode,'label':label,'record':observed,'terminal_receipt':str(receipt.relative_to(ROOT)),'terminal_receipt_sha256':sha(receipt),'terminal_bridge_sha256':sha(bridge),'loaded_provider_evidence_complete':record['loaded_provider_evidence_complete'],'source_revision':bindings['source_revision'],'native_build_or_mandatory_gate_admitted':False,'scope':'Finite diagnostic inventory or exact original smoke only. Missing inventory module capture is explicitly incomplete DLL evidence; smoke requires actual staged SDK loader plus AMD provider. Limited accessible terminal census; no UI/full-frame/full-runtime/domain/release qualification claim.'}
+ assert not controller_signals,('controller signals before acceptance publication',controller_signals)
+ output=WORK/(prefix+'-accepted.json');assert not output.exists();output.write_text(json.dumps(result,indent=2)+'\n')
+--- a/8caa/terminal-audit.ps1
++++ b/native-windows-diagnostic-23d406b/terminal-audit.ps1
+@@ -1,6 +1,15 @@
+ param([Parameter(Mandatory=$true)][string]$Workspace,[string]$RunName='native-run',[string]$Receipt='native-terminal-audit.json',[Parameter(Mandatory=$true)][string]$BuildRoot)
+ $ErrorActionPreference='Stop'
+ $owner=Get-Content -Raw -LiteralPath (Join-Path $Workspace ($RunName+'\owner.json')) | ConvertFrom-Json
++$manifestPath=Join-Path $BuildRoot 'generated/sirius/windows-diagnostic-build-products.json'
++$manifestHash=(Get-FileHash -Algorithm SHA256 -LiteralPath $manifestPath).Hash.ToLowerInvariant()
++if ($manifestHash -cne $owner.source_product_manifest_sha256 -or !$owner.source_product_manifest_unchanged -or $owner.native_build_or_mandatory_gate_admitted) { throw 'Diagnostic product authority changed' }
++$manifest=Get-Content -Raw -LiteralPath $manifestPath | ConvertFrom-Json
++if ($manifest.schema -cne 'sirius-windows-diagnostic-build-products-v1' -or $manifest.source_revision -cne '23d406b8ca99695f362b88e0c5f9a706f08a7a39' -or $manifest.repository -cne 'sunyaisblank/Sirius' -or $manifest.run_id -cne '38701994420' -or $manifest.run_attempt -cne '1' -or !$manifest.diagnostic_build_only -or $manifest.qualification_claimed) { throw 'Wrong diagnostic manifest' }
++$exeKey=if ($owner.invocation_kind -eq 'SystemInventory') {'bin/windows-msvc/src/sirius/app/Release/sirius.exe'} else {'bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe'}
++$loaderKey=$exeKey.Substring(0,$exeKey.LastIndexOf('/')+1)+'vulkan-1.dll';$loaderBinding=$manifest.files.PSObject.Properties[$loaderKey].Value
++$loaderPath=Join-Path ([IO.Path]::GetDirectoryName($owner.test_executable)) 'vulkan-1.dll'
++if (!$loaderBinding -or $owner.expected_staged_loader.sha256 -cne $loaderBinding.sha256 -or $owner.expected_staged_loader.bytes -ne $loaderBinding.bytes -or ![String]::Equals([IO.Path]::GetFullPath($owner.expected_staged_loader.path),[IO.Path]::GetFullPath($loaderPath),[StringComparison]::OrdinalIgnoreCase)) { throw 'Staged SDK loader authority differs' }
+ $births=New-Object 'System.Collections.Generic.List[object]'
+ foreach ($name in @('owner','test')) {
+  $pidValue=if ($name -eq 'owner') {[int]$owner.owner_pid} else {[int]$owner.test_pid}
+@@ -14,6 +23,7 @@
+ $seals=New-Object 'System.Collections.Generic.List[object]'
+ $modulePath=Join-Path $Workspace ($RunName+'\driver-modules.json')
+ $actualModulesObserved=Test-Path -LiteralPath $modulePath
++if ($owner.invocation_kind -eq 'Control' -and !$actualModulesObserved) { throw 'Original smoke requires actual loader and AMD provider capture' }
+ if ($actualModulesObserved) {
+  $modules=Get-Content -Raw -LiteralPath $modulePath | ConvertFrom-Json
+  foreach ($m in $modules) {
+@@ -22,6 +32,7 @@
+   $same=($actual -eq $m.sha256 -and $actualBytes -eq $m.bytes)
+   $seals.Add([ordered]@{path=$m.path;expected_sha256=$m.sha256;post_sha256=$actual;expected_bytes=$m.bytes;post_bytes=$actualBytes;unchanged=$same})
+   if (!$same) { throw 'Loaded provider module post-seal differs' }
++  if ($m.name -ieq 'vulkan-1.dll' -and (![String]::Equals([IO.Path]::GetFullPath($m.path),[IO.Path]::GetFullPath($loaderPath),[StringComparison]::OrdinalIgnoreCase) -or $m.sha256 -cne $loaderBinding.sha256 -or $m.bytes -ne $loaderBinding.bytes)) { throw 'Observed loader is not the exact staged SDK loader' }
+  }
+  if ($seals.Count -ne 2) { throw 'Observed module receipt must contain both loader and AMD provider' }
+ }
+@@ -41,6 +52,6 @@
+ }
+ if ($compilers.Count) { throw 'Accessible CSharp compiler remains live' }
+ if ($matches.Count) { throw 'Accessible native consumer still references scratch workspace' }
+-$v=[ordered]@{schema_version=1;kind='terminal ownership/provider seal audit';run=$RunName;births=$births.ToArray();loaded_module_post_seals=$seals.ToArray();owned_executable_post_seal=[ordered]@{path=$owner.test_executable;sha256=$exeHash;unchanged=$true};owned_births_absent=$true;all_observed_module_seals_match=$true;actual_loaded_modules_observed=$actualModulesObserved;installed_loader_input=$installedLoader;consumer_scan=[ordered]@{processes=$processes.Count;hidden_field_records=$hidden;matches=$matches.ToArray();accessible_compilers=$compilers.ToArray()};scope='Inventory only; absent short-lived module capture is explicitly incomplete loaded-provider evidence. Installed loader bytes do not replace it. Normal completion required. Accessible command/executable scan only; no handle enumeration, unconditional compiler-descendant guard ownership or all-consumer absence claim.'}
++$v=[ordered]@{schema_version=1;kind='terminal ownership/provider seal audit';run=$RunName;births=$births.ToArray();loaded_module_post_seals=$seals.ToArray();owned_executable_post_seal=[ordered]@{path=$owner.test_executable;sha256=$exeHash;unchanged=$true};owned_births_absent=$true;all_observed_module_seals_match=$true;actual_loaded_modules_observed=$actualModulesObserved;source_product_manifest_sha256=$manifestHash;native_build_or_mandatory_gate_admitted=$false;installed_loader_input=$installedLoader;consumer_scan=[ordered]@{processes=$processes.Count;hidden_field_records=$hidden;matches=$matches.ToArray();accessible_compilers=$compilers.ToArray()};scope='Diagnostic inventory or original smoke only; absent short-lived inventory module capture is explicitly incomplete loaded-provider evidence. Installed loader bytes do not replace it. Normal completion required. Accessible command/executable scan only; no handle enumeration, unconditional compiler-descendant guard ownership or all-consumer absence claim.'}
+ $v | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $Workspace $Receipt) -Encoding UTF8
+ [pscustomobject]@{run=$RunName;owned_births_absent=$true;module_seals=$seals.Count;accessible_processes=$processes.Count;hidden_field_records=$hidden;consumer_matches=$matches.Count;accessible_compilers=$compilers.Count} | ConvertTo-Json -Compress

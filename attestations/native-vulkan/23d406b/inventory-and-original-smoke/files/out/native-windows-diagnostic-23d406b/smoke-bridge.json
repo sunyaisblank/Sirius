@@ -1,0 +1,104 @@
+{
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "runner_source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "kind": "smoke",
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\run_native_control.ps1",
+    "-Stage",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b\\tests\\backend\\Release",
+    "-Output",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\native\\smoke",
+    "-Filter",
+    "VulkanBackend.SlangKernelMatchesCpuReference",
+    "-Seconds",
+    "320",
+    "-RssBytes",
+    "4294967296",
+    "-TemporaryDirectory",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-diagnostic-23d406b\\temp\\smoke",
+    "-BuildRoot",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-23d406b",
+    "-ExpectedGateSha256",
+    "b962047d6e47a5dc03eb986602e681fb2c064a0dc5d728d99b94acf278709e15",
+    "-LiveRevision",
+    "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+    "-ExecutableName",
+    "sirius_backend_tests.exe",
+    "-InvocationKind",
+    "Control"
+  ],
+  "binding_sha256": "086e2fe6763e054e609b48c14f072291e37985d386cd210238bd6b2040c12def",
+  "linux_controller_pid": 550966,
+  "linux_controller_birth": "10203571",
+  "predecessor_inputs": {
+    "out/native-windows-diagnostic-23d406b/inventory-bridge.json": {
+      "bytes": 2515,
+      "sha256": "81015599421e4a766e9802df4fee8d73b1cf2d34c971e80fdb127102377e8103"
+    },
+    "out/native-windows-diagnostic-23d406b/inventory-inputs-before.json": {
+      "bytes": 19448,
+      "sha256": "a6040ea0e010b3caa10546112781d322c7dd88c8599638aaaa45e1195dcb6972"
+    },
+    "out/native-windows-diagnostic-23d406b/inventory-inputs-after.json": {
+      "bytes": 19448,
+      "sha256": "a6040ea0e010b3caa10546112781d322c7dd88c8599638aaaa45e1195dcb6972"
+    },
+    "out/native-windows-diagnostic-23d406b/native/inventory/owner.json": {
+      "bytes": 2956,
+      "sha256": "b8c39a96bebba0c1de913d4624f770abfa4a4ec25ac9e9a0e976a8c157460182"
+    },
+    "out/native-windows-diagnostic-23d406b/native/inventory/stdout.log": {
+      "bytes": 1220,
+      "sha256": "2fa1c434bc565f76dd4a35af48bd0c15c9f79cabfbff43c2c7961fa0afce922f"
+    },
+    "out/native-windows-diagnostic-23d406b/native/inventory/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-diagnostic-23d406b/native/inventory/memory.json": {
+      "bytes": 396,
+      "sha256": "215abae9e4be13efc27e3ac33ddc5557d281e6fd7b79517f2a40312ed17263f9"
+    },
+    "out/native-windows-diagnostic-23d406b/terminal-inventory.json": {
+      "bytes": 4041,
+      "sha256": "bc75205dc4eb7f8bc5a7e1de85ae4dfcb749625f5777ae11cf2ec2e14ee22888"
+    },
+    "out/native-windows-diagnostic-23d406b/terminal-inventory-bridge.json": {
+      "bytes": 2456,
+      "sha256": "173bb5ab94702c4af5f9ee43e3b2a1c6c8085ffb0a7ee4836e25cd53c52f81c0"
+    },
+    "out/native-windows-diagnostic-23d406b/terminal-inventory-accepted.json": {
+      "bytes": 7680,
+      "sha256": "537542207f6f88fa7e20e47462d428277eaf056155f2c137f028a9e7706a9e24"
+    },
+    "out/native-windows-diagnostic-23d406b/native/inventory/driver-modules.json": {
+      "bytes": 686,
+      "sha256": "2f4db4e8debc495b57f919f4e2cddce291b11a40664044b219cdbe7200f81816"
+    }
+  },
+  "bridge_outer_seconds": 480,
+  "windows_owner_seconds": 320,
+  "minimum_wsl_available_kib": 2097152,
+  "resource_scope": "Windows child WorkingSet64/PrivateMemorySize64 and held-handle exit/birth guards retained. Linux480s bridge includes bootstrap/Add-Type overhead and WSL2GiB sampled MemAvailable reserve; this is not Windows aggregate/bootstrap/compiler/global availability. Separate terminal60s; limited accessible census only.",
+  "accepted_owner_execution": true,
+  "completed": true,
+  "cleanup_errors": [],
+  "full_qualification_claimed": false,
+  "minimum_sampled_wsl_available_kib": 19577540,
+  "linux_child_pid": 550971,
+  "linux_child_birth": "10203618",
+  "returncode": 0,
+  "linux_child_birth_absent": true,
+  "native_build_gate_authority_used": true,
+  "mandatory_or_full_runtime_admitted": false,
+  "loaded_provider_evidence_complete": true,
+  "whole_inputs_unchanged": true,
+  "elapsed_seconds": 5.66477904599742,
+  "signals": []
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "sirius-native-windows-owner-root-source-review-v1",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "source_freeze": {
+    "bytes": 2813,
+    "sha256": "3f8bfda91760e7147eefb063227a2d75a2b09e27a78752a753648668f369f598"
+  },
+  "reviewed_source_files": {
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "run_system.py": {
+      "bytes": 17827,
+      "sha256": "7ac9dc910165c5b9c6c2c7bf87d8f25e08596943c1912dc5d7a7682b08c9988e"
+    },
+    "run_terminal.py": {
+      "bytes": 16051,
+      "sha256": "8f2945ef5a6087f4aa91c3daa95a2689aa5f0c3454c23f28ae1ea8b9e62d67d0"
+    }
+  },
+  "all14_source_pins_match": true,
+  "three_powershell_helpers_exact_named_git_baseline": true,
+  "two_python_full_source_read_and_builtin_ast_parse": true,
+  "reviewed_contracts": [
+    "Exact native-build gate and diagnostic manifest/source/run/product joins",
+    "Two explicit unchanged inventory and original smoke invocations",
+    "Separate immutable phase input maps and passed inventory terminal predecessors",
+    "Held Windows handles/birth identity, unchanged 4GiB and wall guards, emergency cleanup",
+    "Actual loader path/hash and AMD module observations distinct from installed file inputs",
+    "Strict original one-case smoke XML with zero failures/errors/skips/disabled",
+    "Terminal source/input/owner/post-seal checks and bounded accessible census"
+  ],
+  "helper_execution_performed": false,
+  "native_provider_execution_performed": false,
+  "runtime_admitted": false,
+  "scope": "Source review complete; actual bindings, independent source review and final root runtime admission remain pending."
+}

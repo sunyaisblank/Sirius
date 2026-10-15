@@ -1,0 +1,33 @@
+{
+  "schema": "sirius-native-windows-root-runtime-admission-v1",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "source_freeze": {
+    "bytes": 2813,
+    "sha256": "0dec7e340fa4756504aa4b3234c985dbd6d9042b2923762d436a6900a0eff78d"
+  },
+  "bindings": {
+    "bytes": 29883,
+    "sha256": "086e2fe6763e054e609b48c14f072291e37985d386cd210238bd6b2040c12def"
+  },
+  "plan": {
+    "bytes": 1796,
+    "sha256": "e07744e6224ce7485942a111de5fcce193c82b0d188e34da7959060b64185f92"
+  },
+  "independent_review": {
+    "bytes": 953,
+    "sha256": "27d5b04e1bc875a67ff510e2e7fa4e78fb83a67b8e64f7544c0635c8ff28cf04"
+  },
+  "root_source_review_and_fix": {
+    "bytes": 1096,
+    "sha256": "16a15d1b54eddf0b44970b9be7e1ce54d6e78d38b4f2191661610a21fbfe02cd"
+  },
+  "admitted_sequence": [
+    "run_system.py inventory",
+    "run_terminal.py inventory",
+    "run_system.py smoke",
+    "run_terminal.py smoke"
+  ],
+  "admission_granted": true,
+  "actual_runs_so_far": 0,
+  "scope": "One execution each; original assertions, inherited overrides, cache, resource guards and accepted ownership unchanged. No UI, full runtime, scientific-domain or release admission."
+}

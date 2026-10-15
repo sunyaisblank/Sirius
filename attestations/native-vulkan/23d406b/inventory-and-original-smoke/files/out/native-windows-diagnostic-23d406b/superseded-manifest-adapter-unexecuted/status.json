@@ -1,0 +1,48 @@
+{
+  "executed": false,
+  "original_files": {
+    "diagnostic-adaptation.patch": {
+      "bytes": 44391,
+      "sha256": "1610109d29c2800996e15cf4d07d9b67542f28fc316f13e700be2bb84f7061c4"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "execution-bindings.pending.json": {
+      "bytes": 1585,
+      "sha256": "eb741584fc882e1b57187f269d98634ec97db46dbf61748248fbde24b477a18d"
+    },
+    "plan.pending.json": {
+      "bytes": 1720,
+      "sha256": "0d147741b47bca3cdb44f24176a1fc212c2a8bde022ca23f0322e83af5f8ffaf"
+    },
+    "preparation.json": {
+      "bytes": 3364,
+      "sha256": "accb33f913c94517908e9d9fc16616cc71d917f5a7f79c9e65a34c0a50202771"
+    },
+    "run_native_control.ps1": {
+      "bytes": 15580,
+      "sha256": "30df4449c2e4b0039653aec6e9762850d38ed528e0ef5439e42fc7307ab5fd89"
+    },
+    "run_system.py": {
+      "bytes": 16585,
+      "sha256": "d0f67de6fb0df42207482e390a9f3b03716b539968d3bc6b5748f74c3b7d243a"
+    },
+    "run_terminal.py": {
+      "bytes": 14220,
+      "sha256": "de896e1b1728eb8133d1196395cd7b98ea92dce06ea70fefff2c6a7b866309d7"
+    },
+    "source-freeze.json": {
+      "bytes": 2751,
+      "sha256": "922e4878a8624e8db5440181162129bef6ce2f7c80c55aea9de5218439c0ca96"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 7038,
+      "sha256": "33332614e841e7f1d2d315058783154c88a603bcee22c0524a7042ddbfd571b1"
+    }
+  },
+  "reason": "Successful current CI native-build gate permits the mature byte-exact PowerShell authority path. Replaced only two Python wrappers; prior source freeze is historical lexical preimage, not a current/runtime map.",
+  "runtime_admitted": false,
+  "schema": "sirius-superseded-native-manifest-adapter-source-v1"
+}
