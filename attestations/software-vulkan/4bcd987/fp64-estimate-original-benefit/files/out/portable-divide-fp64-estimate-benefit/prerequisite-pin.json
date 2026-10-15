@@ -1,0 +1,92 @@
+{
+  "admitted": true,
+  "apparatus": {
+    "actions.json": {
+      "bytes": 171951,
+      "sha256": "f215eb8720879a4786d7b01155423b9ae7c6073115a8363b70458cd123f5b52b"
+    },
+    "compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+    },
+    "expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "retention-gate-frozen.json": {
+      "bytes": 1879,
+      "sha256": "b2cb915d29db806d2d856f0143a1c4d80bcc3ed247d414a6cc0839156e436af5"
+    },
+    "run_limb_benefit_slot.py": {
+      "bytes": 664,
+      "sha256": "92ba25fa864aaa307207978f8846735a3728e26acb5938d5e15015d5423150cc"
+    },
+    "run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+    },
+    "software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    }
+  },
+  "archive": "attestations/software-vulkan/4bcd987/fp64-estimate-original-controls",
+  "arithmetic_archive": "attestations/software-vulkan/4bcd987/fp64-estimate-original-arithmetic",
+  "arithmetic_commit": "3514c46de43e0a2bcd8426441264c32f6f76fc62",
+  "arithmetic_inner_result_sha256": "a7e56867c7b4600a7e1bd9d3047190873579d4335ea79289dc9d51f7df5d8a39",
+  "arithmetic_manifest_sha256": "6e02f93e774df2f3bef5c84c9f82975488b53ab619bd434d6030f579a14aba08",
+  "arithmetic_terminal_review_sha256": "aa81ba956f65df3cdf46c1034a5a4b973b6aff8f3d73809bfb143fcd4770f8fc",
+  "baseline_sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856",
+  "candidate_header": {
+    "bytes": 14719,
+    "sha256": "24ea42f825cde5c1378ac57dd194c245ebc2ed396a6cf212d2c642fa2b67d020"
+  },
+  "candidate_macro": "SIRIUS_PB32_DIVIDE_FP64_ESTIMATE=1",
+  "candidate_sha256": "644cacd545692ae6a4bd308ab32804bcf4a6699404a0b04020d3d9b5618d9033",
+  "changed_arrays": [
+    "kCameraPortableFp64Shader",
+    "kCameraPortableShader",
+    "kDensePortableFp64Shader",
+    "kDensePortableShader",
+    "kDopriPhasePortableFp64Shader",
+    "kDopriPhasePortableNormalSumShader",
+    "kDopriPhasePortableShader",
+    "kEndpointPortableFp64Shader",
+    "kEndpointPortableNormalSumShader",
+    "kEndpointPortableShader",
+    "kInitializePortableFp64Shader",
+    "kInitializePortableShader",
+    "kRayCameraPortableFp64Shader",
+    "kRayCameraPortableShader",
+    "kTransportPortableFp64Shader",
+    "kTransportPortableNormalSumShader",
+    "kTransportPortableShader"
+  ],
+  "compiler_stop_commit": "b1f0795a168807e28143e45221c5a1c584195630",
+  "compiler_stop_manifest_sha256": "806d071b24816b7dde0de3acfe47a7f9c15e4e3daaad96421752fd59c9f52499",
+  "controls_inner_work": "out/portable-divide-fp64-estimate-controls-continuation",
+  "controls_result_schema": "sirius-fp64-estimate-controls-continuation-result-v1",
+  "evidence_commit": "dfa4867b881e1e6f1466cff243c4ccad4e9ae177",
+  "evidence_tag": "evidence/issue-44-fp64-estimate-original-controls",
+  "execution_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "gate_sha256": "87c3c20c2665bb7b8d2137db56db92f32531baa3d89f494f009bebd0aed07ebe",
+  "historical_execution_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "manifest_sha256": "120b664051cbfaebc3c5d750115efe263a03e4c56544132c6a1b6e52677d9ee6",
+  "prerequisite_reader_sha256": "c9cc44c1ea7e6e5268f5ae51b603ff1e4e36cdb76bff9ffd6e799cb4cc98d827",
+  "prerequisites_result_sha256": "b00c9e5daa4e0a40f4cdd5941a7ba80967a21acaec7e2bbb47c5711abf9ed068",
+  "profile_acceptance_sha256": "0e0972c4996d17b70defdc1d609319f6a6ce2291e12588c1bd5a87c82dbf11f6",
+  "profile_archive_commit": "a69e600d953c648ebc57bc83990f1c69baa2e6d8",
+  "profile_archive_manifest_sha256": "f4be9bca44320565afe6e0893fc00792089fd415a1300b85b6e31e8e245834f5",
+  "profile_terminal_review_sha256": "e3ab41e088ce3d5f058ab81d322139c9fa4667ad86b6005cae0538d44236ff04",
+  "schema": "sirius-fp64-estimate-benefit-prerequisite-pin/v1",
+  "source_freeze_sha256": "7dca628a0e50f92fd83b5c0720dcc7a51d8ba4962256b40998d8cca1758e262e",
+  "terminal_prerequisite_review_sha256": "339438b22497a66f9e149a23dad12bd5e7be169efb9f0612d97d164182561c9d"
+}

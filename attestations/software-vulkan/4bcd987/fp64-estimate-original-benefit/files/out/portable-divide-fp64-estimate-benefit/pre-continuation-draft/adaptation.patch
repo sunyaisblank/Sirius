@@ -1,0 +1,152 @@
+--- attestations/software-vulkan/4bcd987/divide64-original-benefit/files/out/portable-divide64-benefit/prepare.py
++++ out/portable-divide-fp64-estimate-benefit/prepare.py
+@@ -1,4 +1,4 @@
+-"""Restore the accepted optional64 producer pair for the unchanged original trial."""
++"""Restore the accepted guarded-FP64-estimate producer pair for the unchanged original trial."""
+ from pathlib import Path
+ import ast, hashlib, json, re, shutil, subprocess
+ import xml.etree.ElementTree as ET
+@@ -6,13 +6,14 @@
+ R = Path.cwd().resolve()
+ Q = Path(__file__).resolve().parent
+ W = Q / 'benefit'
+-T = R / 'bin/linux-gcc/portable-divide64-benefit'
++T = R / 'bin/linux-gcc/portable-divide-fp64-estimate-benefit'
+ for name, pin in json.loads((Q / 'source-freeze.json').read_text())['pins'].items():
+     path = Path(name)
+     data = path.read_bytes()
+     assert {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()} == pin, name
+ P = json.loads((Q / 'prerequisite-pin.json').read_text())
+ # Fail before any trial output or owner admission while preservation is pending.
++assert P['admitted'] is True, 'immutable eight-control PASS and final source admission pending'
+ assert re.fullmatch('[0-9a-f]{64}', P['manifest_sha256'])
+ assert re.fullmatch('[0-9a-f]{40}', P['evidence_commit'])
+ assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip() == P['execution_revision']
+@@ -34,8 +35,8 @@
+ manifest_path = archive / 'manifest.json'
+ assert identity(manifest_path)['sha256'] == P['manifest_sha256']
+ manifest = json.loads(manifest_path.read_text())
+-old_work = 'out/portable-divide64-original-controls/'
+-old_bin = 'bin/linux-gcc/portable-divide64-original-controls/'
++old_work = 'out/portable-divide-fp64-estimate-controls/'
++old_bin = 'bin/linux-gcc/portable-divide-fp64-estimate-controls/'
+ old_stage = old_bin + 'controls/'
+ old_roots = [(R / name).resolve() for name in (old_work, old_bin)]
+ archive_inputs = {str(manifest_path): identity(manifest_path)}
+@@ -73,6 +74,11 @@
+ for name, pin in json.loads(preserved(old_work + 'source-freeze.json').read_text())['pins'].items():
+     joined(name, pin)
+ assert packet['changed_arrays'] == P['changed_arrays'] and len(P['changed_arrays']) == 17
++assert packet['candidate_macro'] == P['candidate_macro'] == 'SIRIUS_PB32_DIVIDE_FP64_ESTIMATE=1'
++assert packet['arithmetic_commit'] == P['arithmetic_commit']
++assert packet['arithmetic_manifest_sha256'] == P['arithmetic_manifest_sha256']
++assert packet['arithmetic_inner_result_sha256'] == P['arithmetic_inner_result_sha256']
++assert packet['arithmetic_terminal_review_sha256'] == P['arithmetic_terminal_review_sha256']
+ 
+ owners = {}
+ def accepted(label):
+@@ -109,11 +115,20 @@
+     for name, pin in seal['outputs'].items():
+         joined(name, pin)
+ 
+-result = json.loads(preserved(old_work + 'prerequisites-result.json').read_text())
++result_path = preserved(old_work + 'prerequisites-result.json')
++assert identity(result_path)['sha256'] == P['prerequisites_result_sha256']
++result = json.loads(result_path.read_text())
++assert result['schema'] == 'sirius-fp64-estimate-original-controls-result-v1'
++terminal_path = preserved(old_work + 'independent-terminal-review.json')
++assert identity(terminal_path)['sha256'] == P['terminal_prerequisite_review_sha256']
++assert json.loads(terminal_path.read_text())['passed'] is True
+ assert result['passed'] and result['original_eight_controls_passed']
+ assert result['production_adopted'] is False and result['benefit_executed'] is False
+-for key in ('profile', 'arithmetic', 'control_acceptance', 'endpoint_route_acceptance'):
++for key in ('profile', 'control_acceptance', 'endpoint_route_acceptance'):
+     joined(result[key]['resolved_path'], result[key])
++for key in ('result', 'terminal_review', 'manifest'):
++    joined(result['arithmetic'][key]['resolved_path'], result['arithmetic'][key])
++assert result['arithmetic']['all1886_original_static_and10terminal_owners_input_joins'] is True
+ controls = json.loads(preserved(old_work + 'control-acceptance.json').read_text())
+ routes = json.loads(preserved(old_work + 'endpoint-route-acceptance.json').read_text())
+ assert controls['passed'] and len(controls['original_controls']) == 8 and routes['passed']
+@@ -159,19 +174,36 @@
+     if isinstance(pin, dict) and 'resolved_path' in pin:
+         joined(pin['resolved_path'], pin)
+ runtime = json.loads(preserved(old_work + 'runtime-context.json').read_text())
+-for key in ('profile', 'products', 'producer', 'feature', 'executable', 'arithmetic'):
++for key in ('profile', 'products', 'producer', 'feature', 'executable'):
+     joined(runtime[key]['resolved_path'], runtime[key])
++assert runtime['arithmetic'] == result['arithmetic']
+ assert runtime['producer_output_seals'] == {label: dict(identity(preserved(old_work + label + '/output-seal.json')), resolved_path=str(R / old_work / label / 'output-seal.json')) for label in producer_labels}
+ 
+ arithmetic = R / P['arithmetic_archive']
+ assert identity(arithmetic / 'manifest.json')['sha256'] == P['arithmetic_manifest_sha256']
+ current_inputs[str(arithmetic / 'manifest.json')] = identity(arithmetic / 'manifest.json')
+-arith_result = arithmetic / 'files/out/portable-divide64-arithmetic/arithmetic-result.json'
+-assert identity(arith_result) == {k: result['arithmetic'][k] for k in ('bytes', 'sha256')}
++subprocess.run(['git', 'cat-file', '-e', P['arithmetic_commit'] + '^{commit}'], check=True)
++arith_work = arithmetic / 'files/out/portable-divide-fp64-estimate-arithmetic'
++arith_result = arith_work / 'arithmetic-result.json'
++assert identity(arith_result) == {k: result['arithmetic']['result'][k] for k in ('bytes', 'sha256')}
++assert identity(arith_result)['sha256'] == P['arithmetic_inner_result_sha256']
++assert identity(arithmetic / 'manifest.json') == {k: result['arithmetic']['manifest'][k] for k in ('bytes', 'sha256')}
+ ar = json.loads(arith_result.read_text())
+-assert ar['passed'] and ar['original_records'] == 174268 and ar['complete_output_words_per_provider'] == 697072
+-assert ar['host_explicit64_and_both_full_gpu_outputs_equal_original_expected']
+-current_inputs[str(arith_result)] = identity(arith_result)
++assert ar['schema'] == 'sirius-fp64-estimate-original-arithmetic-result-v1'
++assert ar['passed'] and ar['original_records'] == 174268 and ar['original_operation_count'] == 14
++assert ar['complete_output_words_per_provider'] == 697072
++assert ar['fresh_candidate_host_and_full_gpu_plus_reused_stock_equal_original_expected'] and ar['stock_result_reused']
++assert ar['candidate_macro'] == P['candidate_macro']
++assert ar['original_corpus']['division_branch_coverage']['optional_finite_nonzero_branch_records'] == 12263
++assert {k: ar['candidate_header'][k] for k in ('bytes', 'sha256')} == P['candidate_header']
++arith_header = arith_work / 'candidate/src/sirius/kernels/portable_binary32.h'
++assert identity(arith_header) == P['candidate_header']
++arith_terminal = arith_work / 'independent-terminal-review.json'
++assert identity(arith_terminal) == {k: result['arithmetic']['terminal_review'][k] for k in ('bytes', 'sha256')}
++assert identity(arith_terminal)['sha256'] == P['arithmetic_terminal_review_sha256']
++assert json.loads(arith_terminal.read_text())['passed'] is True
++for path in (arith_result, arith_header, arith_terminal):
++    current_inputs[str(path)] = identity(path)
+ 
+ # Reuse only the original ELF-reader definitions, without running its footer.
+ tree = ast.parse(preserved(old_work + 'verify_producer.py').read_text())
+@@ -233,7 +265,7 @@
+ wrapper = (apparatus / 'run_limb_benefit_slot.py').read_text()
+ old_allowlist = 'bin/linux-gcc/computed-carry-exit-benefit/original_'
+ assert wrapper.count(old_allowlist) == 1
+-(W / 'run_limb_benefit_slot.py').write_text(wrapper.replace(old_allowlist, 'bin/linux-gcc/portable-divide64-benefit/original_'))
++(W / 'run_limb_benefit_slot.py').write_text(wrapper.replace(old_allowlist, 'bin/linux-gcc/portable-divide-fp64-estimate-benefit/original_'))
+ for mode, name in (('baseline', 'baseline.json'), ('candidate', 'build-and-arrays.json')):
+     write(W / name, {'arrays': producer['actual_ELF_arrays'][mode]})
+ shared = [*archive_inputs, *current_inputs, *resources]
+@@ -257,7 +289,7 @@
+ freeze = json.loads((apparatus / 'retention-gate-frozen.json').read_text())
+ freeze.update(candidate_revision=P['execution_revision'], baseline_revision=P['execution_revision'],
+               executables=executables, actions_sha256=identity(W / 'actions.json')['sha256'],
+-              scope='One original fixed optional64 divide A1/B1/B2/A2 trial. Original stock host; candidate alone admits Int64. Accepted17/23/0 producer footprint. Original measured windows and20+2 gates unchanged.')
++              scope='One original fixed guarded-FP64-estimate A1/B1/B2/A2 trial. Original stock host and accepted diagnostic Float64 host with historical unused Int64; candidate shaders require no Int64. Accepted17/23 plus2 unchanged owner arrays. Original measured windows, forced cacheoff and20+2 gates unchanged.')
+ assert freeze['sequence'] == ['a1', 'b1', 'b2', 'a2'] and freeze['within_slot_repeats'] == 3
+ assert (freeze['complete_call_minimum_improvement_percent'], freeze['every_inclusive_stage_minimum_improvement_percent'], freeze['observed_instance_api_minimum_improvement_percent']) == (5, -5, 0)
+ assert freeze['all20_gates_required']
+@@ -267,7 +299,8 @@
+     'prior_manifest_sha256': P['manifest_sha256'], 'prerequisite_evidence_commit': P['evidence_commit'],
+     'producer_prerequisites': {'actual40array_ELF_proof': True, 'actual2owner_array_ELF_proof': True,
+         'same_observer_CPP': True, 'original8controls_passed': True, 'nineteen_terminal_owners': owners,
+-        'candidate_only_Int64_host': True, 'original_stock_host_unchanged': True},
++        'candidate_diagnostic_Float64_host_with_historical_unused_Int64': True,
++        'candidate_shaders_require_no_Int64': True, 'original_stock_host_unchanged': True},
+     'executables': executables, 'changed_arrays': P['changed_arrays'],
+     'current_byte_exact_dependency_joins': current_inputs, 'preserved_archive_joins': archive_inputs,
+     'unchanged_original_apparatus': P['apparatus'], 'resources': len(resources), 'sequence': freeze['sequence'],
+--- attestations/software-vulkan/4bcd987/divide64-original-benefit/files/out/portable-divide64-benefit/finish_trial.py
++++ out/portable-divide-fp64-estimate-benefit/finish_trial.py
+@@ -77,7 +77,7 @@
+               'protected_payloads_unchanged': len(protected), **counts,
+               'performance_acceptance': comparison['pass'],
+               'scope': 'Original comparator and complete owner/XML/input/source closure. A rejected fixed benefit verdict is a valid experiment outcome, not full qualification.'}
+-disposition = {'decision': 'PROCEED_TO_PRODUCTION_IMPLEMENTATION' if comparison['pass'] else 'REJECT_OPTIONAL64_DIVIDE_COST',
++disposition = {'decision': 'PROCEED_TO_PRODUCTION_IMPLEMENTATION' if comparison['pass'] else 'REJECT_GUARDED_FP64_ESTIMATE_COST',
+                'issue': 44, 'source_revision': freeze['candidate_revision'],
+                'original_benefit_trial_completed': True, 'original_correctness_prerequisites_passed': True,
+                'production_adopted': False, **counts,

@@ -1,0 +1,39 @@
+{
+  "admitted": false,
+  "cache_policy": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "authority": "byte-exact original-apparatus/run_owned.py; no new option"
+  },
+  "commands": [
+    "python3 -B out/portable-divide-fp64-estimate-benefit/prepare.py",
+    "python3 -B out/portable-divide-fp64-estimate-benefit/prove_reuse.py",
+    "python3 -B out/portable-divide-fp64-estimate-benefit/benefit/run_sequence.py",
+    "python3 -B out/portable-divide-fp64-estimate-benefit/benefit/compare_software.py",
+    "python3 -B out/portable-divide-fp64-estimate-benefit/finish_trial.py"
+  ],
+  "future_bin_root": "bin/linux-gcc/portable-divide-fp64-estimate-benefit",
+  "limits_per_owner": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "original_gate_counts": [
+    20,
+    2
+  ],
+  "pending": [
+    "actual original eight-control PASS preserved and pushed, exact archive/commit/manifest/result/terminal/producer pins",
+    "root review and independent source admission of archive-pinned adaptation and final source-freeze.json",
+    "exclusive root scheduling of the sole original trial; no performance samples reused"
+  ],
+  "repeats_per_family_per_slot": 3,
+  "schema": "sirius-fp64-estimate-benefit-prospective-commands/v1",
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "stop": "First incomplete or failed prerequisite/owner/readback/input join; preserve, no retry. Comparator rejection is the sole fixed-trial outcome.",
+  "timing_scope": "Original windows unchanged; Create and all11 numerical API windows include original measured costs; fixture device negotiation excluded only as original. Full owned process wall retained. No performance samples reused."
+}

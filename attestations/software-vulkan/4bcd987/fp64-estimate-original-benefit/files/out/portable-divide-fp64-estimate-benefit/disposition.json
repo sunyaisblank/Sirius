@@ -1,0 +1,137 @@
+{
+  "decision": "REJECT_GUARDED_FP64_ESTIMATE_COST",
+  "issue": 44,
+  "source_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "original_benefit_trial_completed": true,
+  "original_correctness_prerequisites_passed": true,
+  "production_adopted": false,
+  "interval_stage_passed": 17,
+  "interval_stage_required": 20,
+  "inclusive_API_passed": 1,
+  "inclusive_API_required": 2,
+  "complete_call_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        37.070806,
+        32.0454,
+        35.271177
+      ],
+      "candidate_samples_ms": [
+        33.458592,
+        33.463004,
+        32.310713
+      ],
+      "baseline_median_ms": 35.271177,
+      "candidate_median_ms": 33.458592,
+      "improvement_percent": 5.1389977714664825,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        40.272532,
+        38.014719,
+        38.711423
+      ],
+      "candidate_samples_ms": [
+        38.623303,
+        38.586493,
+        37.579527999999996
+      ],
+      "baseline_median_ms": 38.711423,
+      "candidate_median_ms": 38.586493,
+      "improvement_percent": 0.3227212804861402,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        37.04867,
+        34.694449,
+        35.639956
+      ],
+      "candidate_samples_ms": [
+        38.423195,
+        32.390957,
+        31.649093
+      ],
+      "baseline_median_ms": 35.639956,
+      "candidate_median_ms": 32.390957,
+      "improvement_percent": 9.116170064856416,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        42.357454,
+        40.761192,
+        39.207712
+      ],
+      "candidate_samples_ms": [
+        39.881558999999996,
+        37.552023999999996,
+        38.795511
+      ],
+      "baseline_median_ms": 40.761192,
+      "candidate_median_ms": 38.795511,
+      "improvement_percent": 4.822432572629386,
+      "minimum_percent": 5,
+      "pass": false
+    }
+  ],
+  "inclusive_API_checks": [
+    {
+      "direction": "forward",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 8542.523706,
+      "candidate_ms": 8520.973092,
+      "improvement_percent": 0.25227455892060674,
+      "minimum_percent": 0,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 8757.673855000001,
+      "candidate_ms": 9416.368714,
+      "improvement_percent": -7.52134493594931,
+      "minimum_percent": 0,
+      "pass": false
+    }
+  ],
+  "failed_stage_checks": [
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.322316,
+        2.264748,
+        2.344795
+      ],
+      "candidate_samples_ms": [
+        2.8662,
+        3.190321,
+        2.78727
+      ],
+      "baseline_median_ms": 2.322316,
+      "candidate_median_ms": 2.8662,
+      "improvement_percent": -23.41989634485575,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "policy": "One unchanged original A1/B1/B2/A2; no retries, pooling, cost subtraction or weakened gates. Source/compiler/arithmetic/eight-control prerequisites remain finite evidence. Full owned process wall retained; original device fixture SetUp remains outside original measured windows. Rendering/science/native/platform/release goal remains active."
+}

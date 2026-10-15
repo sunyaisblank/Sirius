@@ -1,0 +1,473 @@
+{
+  "files": {
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/original_baseline_controls": {
+      "bytes": 10753968,
+      "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/original_candidate_controls": {
+      "bytes": 10803440,
+      "sha256": "644cacd545692ae6a4bd308ab32804bcf4a6699404a0b04020d3d9b5618d9033"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/portability/trace.cu": {
+      "bytes": 316063,
+      "sha256": "e8460dbe10346d5cf457a533c7126707b87cbd108f43c7a8f2fb6e92f5e8fd8d"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/portability/trace.metal": {
+      "bytes": 338766,
+      "sha256": "879d15908e66449f789652f40a329b731bebc65dca396659b636cf834943df06"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "files/bin/linux-gcc/portable-divide-fp64-estimate-benefit/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/adaptation.patch": {
+      "bytes": 15560,
+      "sha256": "bd6aa655314d93c5e42d056efb7a7a65646b4b1288e570ee3f85c326144c71d9"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/audited-observer.cpp": {
+      "bytes": 335033,
+      "sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a1/gtest.xml": {
+      "bytes": 40879,
+      "sha256": "32130e4356eb19a97dc9068e57b00765ca2c4fdea69642eba0483b45e3ac922b"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a1/inputs-after.json": {
+      "bytes": 1012821,
+      "sha256": "eb03a9664059b44a2adc25a3726442c7c0145af232e068dea0e9eb1c105c2045"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a1/inputs-before.json": {
+      "bytes": 1012821,
+      "sha256": "eb03a9664059b44a2adc25a3726442c7c0145af232e068dea0e9eb1c105c2045"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a1/owner.json": {
+      "bytes": 2838,
+      "sha256": "85e5cb65440fef1335d338c55092b85d8e17dc3ea31cc6be69da446717f1ab4a"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a1/samples.jsonl": {
+      "bytes": 465368,
+      "sha256": "15a12bff20cb5d13dd67c68a94397fad1f00b44a6fb7ec27760b1ed0b5b97959"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a1/stdout.log": {
+      "bytes": 708,
+      "sha256": "93b04b74fae8e4fe2dbdc3e96203485e9cc63b0550b08fe7ca766ab31e8ed89b"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a2/gtest.xml": {
+      "bytes": 41035,
+      "sha256": "6957686183e395a50f35204ac80a5877ed53d0f96d0decb53c9446536161f6f5"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a2/inputs-after.json": {
+      "bytes": 1012821,
+      "sha256": "eb03a9664059b44a2adc25a3726442c7c0145af232e068dea0e9eb1c105c2045"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a2/inputs-before.json": {
+      "bytes": 1012821,
+      "sha256": "eb03a9664059b44a2adc25a3726442c7c0145af232e068dea0e9eb1c105c2045"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a2/owner.json": {
+      "bytes": 2711,
+      "sha256": "6c499d78ef776e69e2d0a074ee6129c87fdb55ea3f27d2fc8d2e44962f2aa047"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a2/samples.jsonl": {
+      "bytes": 473881,
+      "sha256": "09db23a8b00e0cf3ea8938fbde6cd998da0e8846bc21baadde4f699f6462bdae"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/a2/stdout.log": {
+      "bytes": 708,
+      "sha256": "a3b055f4bdc6f035af065a3bd1a75ca96c2558297db5e4d5f67eb33873b5420c"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/actions.json": {
+      "bytes": 1495531,
+      "sha256": "06d26f7c705fb934a3bc40eef8bef4290a7eb4d3d432429872cc21c22012c053"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b1/gtest.xml": {
+      "bytes": 41031,
+      "sha256": "86c2949874efe29ddda76cb42efc2b964fb4b19e8066f3dc7e2a39b99d5f8949"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b1/inputs-after.json": {
+      "bytes": 1012823,
+      "sha256": "c7efad254cce182723090092d5f9806a762892d653e6c6e08c221e472e552f2b"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b1/inputs-before.json": {
+      "bytes": 1012823,
+      "sha256": "c7efad254cce182723090092d5f9806a762892d653e6c6e08c221e472e552f2b"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b1/owner.json": {
+      "bytes": 2839,
+      "sha256": "62a2d33145dbd37d2f80240c37208aee56b1179179d2d29bacdfed0dd4e7b013"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b1/samples.jsonl": {
+      "bytes": 462571,
+      "sha256": "b9aa5b386559d215b12f633841c1321720d32e976bb4dfb3b53cea030f099ec2"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b1/stdout.log": {
+      "bytes": 708,
+      "sha256": "bc03a2019fd920a42a5121b3d60093ce73a25d678aa6e3e800f67d3be2504fe0"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b2/gtest.xml": {
+      "bytes": 40753,
+      "sha256": "6f38ef48f8a73978105411c52bcf89ee572dfe8e26c1e3707c1292ca958264c5"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b2/inputs-after.json": {
+      "bytes": 1012823,
+      "sha256": "c7efad254cce182723090092d5f9806a762892d653e6c6e08c221e472e552f2b"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b2/inputs-before.json": {
+      "bytes": 1012823,
+      "sha256": "c7efad254cce182723090092d5f9806a762892d653e6c6e08c221e472e552f2b"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b2/owner.json": {
+      "bytes": 2839,
+      "sha256": "e0f1b7774038882de79e07b4dd25e1fb55e5869218e82c7256b7a688365b345a"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b2/samples.jsonl": {
+      "bytes": 476124,
+      "sha256": "f5f481ef9a3b04a75739450bbd5e9e868554bc48620793e65eebe768de4abaf3"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/b2/stdout.log": {
+      "bytes": 708,
+      "sha256": "645b504193847e2a1bf93e2c859e798e9767633dcb57a6791dc90219aacf0531"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/baseline.json": {
+      "bytes": 7636,
+      "sha256": "2ce78e58cfae21b9f6298a2914a4663f16f4afd74b330c8d0fcf9178933497c0"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/build-and-arrays.json": {
+      "bytes": 7638,
+      "sha256": "9eb5a1741b86ccc0811fcf031420496bbffc6c44e8bdf6319f16963e2745322d"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/retention-gate-frozen.json": {
+      "bytes": 1910,
+      "sha256": "f834131ff3789eff4d6d969030c831e8abd8f612051248d11496b0a46583e02d"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/run_limb_benefit_slot.py": {
+      "bytes": 674,
+      "sha256": "edfc47016add258430550109b098b4213fbd2f457ab796ec54009808a7422ac7"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/software-comparison.json": {
+      "bytes": 12494,
+      "sha256": "a74f1e314437ef0526d4c3dc93415aa7bd464a954aa67f6566f9d9d05ef508e7"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/software-sequence.json": {
+      "bytes": 837,
+      "sha256": "f41d7d97cc6849c0d78a681347d069add89de898c839608ec89d438501e04c3e"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/benefit/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/commands.json": {
+      "bytes": 1787,
+      "sha256": "6ba58507d232cd43f32e9f31a841b0f957a9b4c920ee3dfb43975178058fd68a"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/control-acceptance.json": {
+      "bytes": 6380,
+      "sha256": "d7c42bff2f20599a2bce3b306d0ece3860c4e62f4d9b533ecf2f97fd2ce8e314"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/disposition.json": {
+      "bytes": 3824,
+      "sha256": "4b4565a463ce5e79504758107903e14a5853fddcae97a10427a59b15151d5be1"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/endpoint-route-acceptance.json": {
+      "bytes": 16396,
+      "sha256": "5384a0400aa832b497a8aa57b45ee754b3a6054d440a3fa27df0b9a11f99e945"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/finish_trial.py": {
+      "bytes": 5865,
+      "sha256": "efa1bb812fab2d363773e4a98494dee88a7945aaa308f535e8b1091b183ce7f5"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/independent-source-review.json": {
+      "bytes": 12678,
+      "sha256": "c4e37586136a96a37522c39ed50ef61a76b195f9a9bb43d9104d134fa5fbe74d"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/independent-terminal-review.json": {
+      "bytes": 22126,
+      "sha256": "ba2e9b742f531990101de7b2a0e253f071bfcc01ce3514cdbe44aa2fa4158c61"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/original-apparatus/actions.json": {
+      "bytes": 171951,
+      "sha256": "f215eb8720879a4786d7b01155423b9ae7c6073115a8363b70458cd123f5b52b"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/original-apparatus/compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/original-apparatus/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/original-apparatus/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/original-apparatus/retention-gate-frozen.json": {
+      "bytes": 1879,
+      "sha256": "b2cb915d29db806d2d856f0143a1c4d80bcc3ed247d414a6cc0839156e436af5"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/original-apparatus/run_limb_benefit_slot.py": {
+      "bytes": 664,
+      "sha256": "92ba25fa864aaa307207978f8846735a3728e26acb5938d5e15015d5423150cc"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/original-apparatus/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/original-apparatus/run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/original-apparatus/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/pre-continuation-draft/adaptation.patch": {
+      "bytes": 11230,
+      "sha256": "748b3c8ed7ee2249d6c12717b4bb15382928481cfef24a0b045b6280eed77387"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/pre-continuation-draft/commands.json": {
+      "bytes": 1706,
+      "sha256": "6e366a3293f61d065e3e498a2864a64db1f7e4846f47dbe69a584d5ac4a55689"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/pre-continuation-draft/preimage.json": {
+      "bytes": 1096,
+      "sha256": "52e259e4b80afe1b836bfca44740031d4b317dbbabbc5a10537c89ee9b54274a"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/pre-continuation-draft/prepare.py": {
+      "bytes": 20532,
+      "sha256": "48347c1b6b10c04bb82b29275909b65fa975b4a0616d43bce4974dfcc1d9ea9c"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/pre-continuation-draft/prerequisite-pin.json": {
+      "bytes": 3505,
+      "sha256": "604b63e71d7f3c71e37bf029f119e18b99dd274f8510c6491a5d7d441763a23e"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/pre-continuation-draft/source-contracts.json": {
+      "bytes": 5810,
+      "sha256": "d0a79f5a116eaf7f570e761c1f5334033ce31ebcf3bca5151b4f81ebecc633ae"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/pre-continuation-draft/source-freeze.pending.json": {
+      "bytes": 3662,
+      "sha256": "b942ccb94ad3eb9a50d0ec7525e3d8a993fe918df60ba390b5f7eb2ef028c947"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/preparation.json": {
+      "bytes": 685427,
+      "sha256": "f700795a1fae53703e093f2a1f7bcfcde3739538f3c52cf86122de8e88345089"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/prepare.py": {
+      "bytes": 22462,
+      "sha256": "92fd3c97d488a05d38c7ffad2667a17bcadf74d36e74d66b4963c88ecf230523"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/prerequisite-pin.json": {
+      "bytes": 4497,
+      "sha256": "1e16506122205234635d128b3c1d4cf74b2b3635c4bef0f614c28a3903cf54ae"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/producer-acceptance.json": {
+      "bytes": 32518,
+      "sha256": "cd42f63ecf125f17c364db595b284730f5f61bab6be2805820380256ec4bf0e2"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/producer-feature-acceptance.json": {
+      "bytes": 181988,
+      "sha256": "0f72a606d124e40fd1ff514f92f90c42e301154cccd0d9145958d8f20a19ef8b"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/producer-reuse.json": {
+      "bytes": 14717,
+      "sha256": "d66341fe5e7302ec7c785d38849d5a94060ce378f7dbaeb4937bc1deadc1b8eb"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/protected-before.json": {
+      "bytes": 21913,
+      "sha256": "3a5cdc2757ea8797747c131838debd0a5c49e0e50eda1b5ee015848d4b842c8f"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/prove_reuse.py": {
+      "bytes": 4229,
+      "sha256": "a12b3c68bfb22dc05d1a4a0803a8148ced67b5f2aaad94de7ccc44af83d4d3a1"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/root-prelaunch-input-check.json": {
+      "bytes": 717,
+      "sha256": "6aa7b542b23c11dda3be258c8bb25cf51149e2559157f3f2d6a9a6e04553c93a"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/root-runtime-admission.json": {
+      "bytes": 2126,
+      "sha256": "1c901761bad19fa7d584c9fe3373fc2dd9a7ea95626bd39465e79009d100a2e6"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/root-source-admission.json": {
+      "bytes": 1309,
+      "sha256": "b1546676e17ba22f9974a54464fc7b2cd6ecbc0045cdfa732c83a9d60ce6904a"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/root-terminal-admission.json": {
+      "bytes": 1207,
+      "sha256": "a734e9f3beae6bb37dd39caaf6bd86f2ccded938917c7d3f90589dc2b52d1a31"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/root-terminal-input-check.json": {
+      "bytes": 4018,
+      "sha256": "ea12d932588fd6da1fee6c5f02c715883a19b46e84ceaa28729d046aee788abc"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/source-contracts.json": {
+      "bytes": 6971,
+      "sha256": "87975cc596aae6ace45e1e8383d36815c9c57cb194a657fb668dc6d1bfd46703"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/source-freeze.json": {
+      "bytes": 5497,
+      "sha256": "a500c5c71fad2e75abcd8902bd02eb267b3156620dd10fcb03d9d91c4d9003c8"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/source-freeze.pending.json": {
+      "bytes": 5282,
+      "sha256": "642f46745b507c427f84f3b5e34e69001547f73adb108084e3d1407071132434"
+    },
+    "files/out/portable-divide-fp64-estimate-benefit/trial-acceptance.json": {
+      "bytes": 2067,
+      "sha256": "6d94cbd9b5a196110197b166f5637fb10c1a9af1cf5b02dea4802f7fc5d86063"
+    },
+    "preserve-finite-result.py": {
+      "bytes": 210369,
+      "sha256": "c9d3370e20c1ba3ceabbf5f88352f2ee3761c1ec939ed080c8e7988add70404a"
+    },
+    "result.json": {
+      "bytes": 33468,
+      "sha256": "a31c16b26741644d18ffdd8182d8dd97303499a1acdf39280690ef39c28861a3"
+    },
+    "runner-source/.github/workflows/ci.yml": {
+      "bytes": 33866,
+      "sha256": "bc6e773d2abaa9cc7f1f3530811996312e7155f57f7426695f87ad4dcdf197e1"
+    },
+    "runner-source/scripts/diagnose-macos-retained.py": {
+      "bytes": 46569,
+      "sha256": "8998d73985e3c330f4d7b55d5a421c33c06ceff5cfa160cda6ea54bb97cd9034"
+    },
+    "runner-source/scripts/governance/build_policy.py": {
+      "bytes": 71532,
+      "sha256": "53dbfdc1107c871e38b824746d75142f0edff3ce535bd91d97b393f16e49d142"
+    },
+    "runner-source/scripts/macos_metal_probe.py": {
+      "bytes": 16087,
+      "sha256": "e61c75e6b6769150b4e18632418cbffc1382db1730ca2dbd9b5fb5b813789804"
+    },
+    "runner-source/scripts/macos_moltenvk_integration.py": {
+      "bytes": 41404,
+      "sha256": "c6e20d512bd49cb197ffc79761ea47858b1a27f40949dca07829540417cf27b6"
+    },
+    "runner-source/scripts/macos_vulkan_identity.py": {
+      "bytes": 8915,
+      "sha256": "7f70c1a2a341ea071624dfb01993289a89d54f3377afb48035437469c7d81025"
+    },
+    "runner-source/scripts/runtime_identity.py": {
+      "bytes": 27490,
+      "sha256": "00aa1aa63250599db1cc33692b51dcf73e236be7596f19fc1b603807bbccc8f2"
+    }
+  },
+  "qualification_claimed": false
+}

@@ -1,0 +1,36 @@
+{
+  "candidate_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "baseline_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+  "executables": {
+    "baseline": {
+      "path": "bin/linux-gcc/computed-carry-exit-benefit/original_baseline_controls",
+      "source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+      "bytes": 10753968,
+      "sha256": "41eb7ce5e62380913a6c70fa2c3228acf8c427831c0611c84a670e238dc32856",
+      "observer_source_sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3"
+    },
+    "candidate": {
+      "path": "bin/linux-gcc/computed-carry-exit-benefit/original_candidate_controls",
+      "source_revision": "a1d6e75299a2bf250e5ce7d44ad5965f8acb4299",
+      "bytes": 10778544,
+      "sha256": "3e5bdf2654c0714eddbee67b73431d0be2ca91fa51306748bae7d1bc6eae71e5",
+      "observer_source_sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3"
+    }
+  },
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "within_slot_repeats": 3,
+  "complete_call_minimum_improvement_percent": 5,
+  "every_inclusive_stage_minimum_improvement_percent": -5,
+  "all20_gates_required": true,
+  "observed_instance_api_minimum_improvement_percent": 0,
+  "reader_sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9",
+  "comparator_sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3",
+  "launcher_sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342",
+  "actions_sha256": "f215eb8720879a4786d7b01155423b9ae7c6073115a8363b70458cd123f5b52b",
+  "scope": "One original fixed A1/B1/B2/A2 computed-carry exit trial. Previously accepted matched40+2-array producers and original8controls. Exact unchanged reader/comparator/launcher/gates; only wrapper executable allowlist adapted. No earlier rejected candidate observations reused as samples."
+}
