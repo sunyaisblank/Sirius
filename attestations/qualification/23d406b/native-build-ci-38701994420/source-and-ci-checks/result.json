@@ -1,0 +1,74 @@
+{
+  "schema": "sirius-windows-diagnostic-ci-source-checks-v1",
+  "source_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "source_dirty": true,
+  "source_before": {
+    ".github/workflows/ci.yml": {
+      "bytes": 40264,
+      "sha256": "441ce5a09b5a990f8d77f0bfbe1e807aeb7c1b3c9baf15951af4311eb9743a7d"
+    },
+    "scripts/governance/build_policy.py": {
+      "bytes": 81100,
+      "sha256": "ef9af204253e834eff84e868f2abc3523b9e4d5a3a4af5208ec9008ca018258a"
+    }
+  },
+  "source_after": {
+    ".github/workflows/ci.yml": {
+      "bytes": 40264,
+      "sha256": "441ce5a09b5a990f8d77f0bfbe1e807aeb7c1b3c9baf15951af4311eb9743a7d"
+    },
+    "scripts/governance/build_policy.py": {
+      "bytes": 81100,
+      "sha256": "ef9af204253e834eff84e868f2abc3523b9e4d5a3a4af5208ec9008ca018258a"
+    }
+  },
+  "source_unchanged": true,
+  "checks": [
+    {
+      "name": "source-governance",
+      "command": [
+        "/usr/bin/cmake",
+        "--build",
+        "--preset",
+        "linux-gcc",
+        "--target",
+        "SiriusSourceGovernance",
+        "-j",
+        "2"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.680686236999463,
+      "stdout": {
+        "bytes": 744,
+        "sha256": "19c2aaba27a2a9c184e27c1ca2dab2edc5f695847a9633cc418cf3c05dafe186"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "powershell-syntax",
+      "command": [
+        "/mnt/c/Program Files/PowerShell/7/pwsh.exe",
+        "-NoLogo",
+        "-NoProfile",
+        "-NonInteractive",
+        "-EncodedCommand",
+        "JABFAHIAcgBvAHIAQQBjAHQAaQBvAG4AUAByAGUAZgBlAHIAZQBuAGMAZQAgAD0AIAAnAFMAdABvAHAAJwA7ACAAJAB0AG8AawBlAG4AcwAgAD0AIAAkAG4AdQBsAGwAOwAgACQAZQByAHIAbwByAHMAIAA9ACAAJABuAHUAbABsADsAIAAkAGEAcwB0ACAAPQAgAFsAUwB5AHMAdABlAG0ALgBNAGEAbgBhAGcAZQBtAGUAbgB0AC4AQQB1AHQAbwBtAGEAdABpAG8AbgAuAEwAYQBuAGcAdQBhAGcAZQAuAFAAYQByAHMAZQByAF0AOgA6AFAAYQByAHMAZQBGAGkAbABlACgAJwBcAFwAdwBzAGwALgBsAG8AYwBhAGwAaABvAHMAdABcAFUAYgB1AG4AdAB1AFwAaABvAG0AZQBcAGEAcwB0AHIAYQBcAC4AcAByAG8AagBlAGMAdABcAFMAaQByAGkAdQBzAFwAbwB1AHQAXAB3AGkAbgBkAG8AdwBzAC0AZABpAGEAZwBuAG8AcwB0AGkAYwAtAGMAaQAtAGMAaABlAGMAawBzAFwAcwB0AGEAZwBpAG4AZwAuAHAAcwAxACcALAAgAFsAcgBlAGYAXQAkAHQAbwBrAGUAbgBzACwAIABbAHIAZQBmAF0AJABlAHIAcgBvAHIAcwApADsAIABpAGYAIAAoACQAZQByAHIAbwByAHMALgBDAG8AdQBuAHQAIAAtAGcAdAAgADAAKQAgAHsAIAAkAGUAcgByAG8AcgBzACAAfAAgAEYAbwByAG0AYQB0AC0ATABpAHMAdAA7ACAAZQB4AGkAdAAgADEAIAB9ADsAIABbAFAAUwBDAHUAcwB0AG8AbQBPAGIAagBlAGMAdABdAEAAewBwAGEAcgBzAGUAZABfAGYAaQBsAGUAPQAnAFwAXAB3AHMAbAAuAGwAbwBjAGEAbABoAG8AcwB0AFwAVQBiAHUAbgB0AHUAXABoAG8AbQBlAFwAYQBzAHQAcgBhAFwALgBwAHIAbwBqAGUAYwB0AFwAUwBpAHIAaQB1AHMAXABvAHUAdABcAHcAaQBuAGQAbwB3AHMALQBkAGkAYQBnAG4AbwBzAHQAaQBjAC0AYwBpAC0AYwBoAGUAYwBrAHMAXABzAHQAYQBnAGkAbgBnAC4AcABzADEAJwA7ACAAcABhAHIAcwBlAF8AZQByAHIAbwByAHMAPQAkAGUAcgByAG8AcgBzAC4AQwBvAHUAbgB0ADsAIABzAHQAYQB0AGUAbQBlAG4AdABzAD0AJABhAHMAdAAuAEUAbgBkAEIAbABvAGMAawAuAFMAdABhAHQAZQBtAGUAbgB0AHMALgBDAG8AdQBuAHQAOwAgAGUAeABlAGMAdQB0AGUAZABfAHMAdABhAGcAaQBuAGcAPQAkAGYAYQBsAHMAZQB9ACAAfAAgAEMAbwBuAHYAZQByAHQAVABvAC0ASgBzAG8AbgAgAC0AQwBvAG0AcAByAGUAcwBzAA=="
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.46863123500952497,
+      "stdout": {
+        "bytes": 182,
+        "sha256": "833c2c4ef9caf1ef675131304cbf53e5b88ac10634f73342d112f2e4f70f3d72"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "passed": true,
+  "scope": "Source governance and PowerShell parser only. Staging, native product and runtime qualification not executed."
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "sirius-ci-native-build-domain-admission-v1",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "run_id": 38701994420,
+  "artifact_id": 11957367451,
+  "artifact_sha256": "dff161a95e0c87dbbc378e20702691659e0a1c27f86fb3972f837b518bac8600",
+  "domain": "windows-native-build",
+  "manifest_files_checked": 39,
+  "command": [
+    "/usr/bin/python3.12",
+    "-B",
+    "scripts/verify-attestation.py",
+    "/home/astra/.project/Sirius/out/windows-diagnostic-ci-checks/windows-native-build/windows-build.json",
+    "--source-root",
+    "/home/astra/.project/Sirius"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 0.34571337899251375,
+  "runtime_ready": false,
+  "full_qualification_claimed": false,
+  "bundle": "out/windows-diagnostic-ci-checks/windows-native-build",
+  "diagnostic_native_gate_products_exactly_joined": {
+    "sirius": {
+      "path": "bin/windows-msvc/diagnostic-23d406b/src/sirius/app/Release/sirius.exe",
+      "bytes": 7889920,
+      "sha256": "5431067be6ac3af2b7a320959167a3659e54fc1e2669a2bebf029aab8488a0f2",
+      "native_export": "out/windows-diagnostic-ci-checks/windows-native-build/qualification-sirius.bin"
+    },
+    "sirius_backend_tests": {
+      "path": "bin/windows-msvc/diagnostic-23d406b/tests/backend/Release/sirius_backend_tests.exe",
+      "bytes": 11085824,
+      "sha256": "e83de1a089627b64ed10f8e4dc22069abad564f8858252a8516ae89c6a77c3fc",
+      "native_export": "out/windows-diagnostic-ci-checks/windows-native-build/native-build-tested-sirius_backend_tests"
+    }
+  },
+  "staged_native_gate": {
+    "path": "bin/windows-msvc/diagnostic-23d406b/generated/sirius/native_build_gate.json",
+    "bytes": 10013,
+    "sha256": "b962047d6e47a5dc03eb986602e681fb2c064a0dc5d728d99b94acf278709e15"
+  },
+  "gate_registered_cases": 1150,
+  "gate_executed_cases": 9
+}

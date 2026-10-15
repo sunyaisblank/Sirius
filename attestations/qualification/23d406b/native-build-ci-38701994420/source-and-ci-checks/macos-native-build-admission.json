@@ -1,0 +1,22 @@
+{
+  "schema": "sirius-ci-native-build-domain-admission-v1",
+  "source_revision": "23d406b8ca99695f362b88e0c5f9a706f08a7a39",
+  "run_id": 38701994420,
+  "artifact_id": 11957266172,
+  "artifact_sha256": "11b4a423a440ee94e9b96cc07fb46fa6bc8e07d13d24007058d22eb3c707ee4d",
+  "domain": "macos-native-build",
+  "manifest_files_checked": 39,
+  "command": [
+    "/usr/bin/python3.12",
+    "-B",
+    "scripts/verify-attestation.py",
+    "/home/astra/.project/Sirius/out/windows-diagnostic-ci-checks/macos-native-build/macos-build.json",
+    "--source-root",
+    "/home/astra/.project/Sirius"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 0.36516618001041934,
+  "runtime_ready": false,
+  "full_qualification_claimed": false,
+  "bundle": "out/windows-diagnostic-ci-checks/macos-native-build"
+}

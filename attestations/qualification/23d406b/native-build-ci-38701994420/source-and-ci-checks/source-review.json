@@ -1,0 +1,28 @@
+{
+  "schema": "sirius-windows-diagnostic-products-source-review-v1",
+  "base_revision": "248ed178cf1b5c445e8b1a3ff2a67b4f907ee6ff",
+  "files": {
+    ".github/workflows/ci.yml": {
+      "bytes": 40264,
+      "sha256": "441ce5a09b5a990f8d77f0bfbe1e807aeb7c1b3c9baf15951af4311eb9743a7d"
+    },
+    "scripts/governance/build_policy.py": {
+      "bytes": 81100,
+      "sha256": "ef9af204253e834eff84e868f2abc3523b9e4d5a3a4af5208ec9008ca018258a"
+    }
+  },
+  "reviewed_scope": [
+    "exact source and alignment identity",
+    "selected Visual Studio compiler and matching release CRT",
+    "pinned SDK loader and executable-relative resources",
+    "exact dispatch-only staging and bounded upload",
+    "build-only manifest with all payload file hashes",
+    "existing native-build and full-qualification boundaries",
+    "eight meaningful upload-boundary policy mutations"
+  ],
+  "local_checks": "result.json",
+  "qualification_claimed": false,
+  "staging_executed": false,
+  "native_runtime_executed": false,
+  "remaining": "Independent source review then exact CI execution."
+}

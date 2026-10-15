@@ -1,0 +1,23 @@
+{
+  "schema": "sirius-ci-explicit-dispatch-v1",
+  "started_utc": "2026-10-15T07:51:27.244337+00:00",
+  "source_revision": "85d5c31a8551f32f3013666df477256a136e4707",
+  "ref": "development/minimum-step-floor-2026-10-15",
+  "command": [
+    "gh",
+    "workflow",
+    "run",
+    "ci.yml",
+    "--ref",
+    "development/minimum-step-floor-2026-10-15",
+    "-f",
+    "full_qualification=false",
+    "-f",
+    "macos_retained_diagnostic=false"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 2.335668588988483,
+  "full_qualification": false,
+  "macos_retained_diagnostic": false,
+  "scope": "Existing strict nonrender integration/native-build jobs and Windows diagnostic build products. No full runtime or sanitizer dispatch."
+}
