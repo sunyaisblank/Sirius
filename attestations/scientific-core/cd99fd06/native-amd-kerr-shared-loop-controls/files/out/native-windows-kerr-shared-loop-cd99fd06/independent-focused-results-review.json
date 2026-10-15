@@ -1,0 +1,476 @@
+{
+  "schema": "sirius-native-windows-shared-loop-independent-focused-results-review-v1",
+  "passed": true,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "focused_controls_passed": 5,
+  "root_sole_actual_operator": true,
+  "blockers": [],
+  "scope": "Independent passive stdlib JSON/XML/hash/current-file and read-only Git/proc review. Only five explicitly listed completed case/native/temp/terminal-temp paths and frozen static files read. No helper/import/project parser/program/provider/native/test/CI/network/signals execution. Live image/precision or other live output directories were neither enumerated nor read.",
+  "reviewed_order": [
+    "floor-fp32",
+    "floor-fp32comp",
+    "floor-fp64",
+    "captured-fp32",
+    "captured-fp32comp"
+  ],
+  "binding_and_source_pins": {
+    "execution-bindings.json": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/execution-bindings.json",
+      "bytes": 224128,
+      "sha256": "d69d3385cfb99dc66c5c73c025995272d918e811f653a614136824bc0420a855"
+    },
+    "source-freeze.json": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/source-freeze.json",
+      "bytes": 192162,
+      "sha256": "1b263fad0616b3afd645c75d870e814dabe746281aa530f8e3e1d1e39c94c2c0"
+    },
+    "plan.json": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/plan.json",
+      "bytes": 4390,
+      "sha256": "399cae09389b31940f9321ccd6053e6d8041a0f31722cbed35547ec908d13d73"
+    },
+    "source-contracts.json": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/source-contracts.json",
+      "bytes": 7976,
+      "sha256": "6f0beb54d87f797b7572f032c456af97c77f0606aa1bcc4de24b564e28630969"
+    },
+    "independent-source-review.json": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/independent-source-review.json",
+      "bytes": 10336,
+      "sha256": "4eecaac2d933e5dd71899e80eae89c7f680980924e48e7fef56973316765efea"
+    },
+    "independent-runtime-admission.json": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/independent-runtime-admission.json",
+      "bytes": 10740,
+      "sha256": "3bc2e07b6a65f1be2d44ec78d0c7a409f61823871583a0a7f120eb24a35f3572"
+    }
+  },
+  "input_and_predecessor_closure": {
+    "all_binding_static_pins_rehashed_current": 1010,
+    "before_after_rows_each": [
+      1011,
+      1023,
+      1035,
+      1047,
+      1059
+    ],
+    "before_after_total_rows": 10350,
+    "unique_current_consumed_input_pins_rehashed": 1059,
+    "all_before_after_objects_and_raw_bytes_equal": true,
+    "exact_base": "1010 bound files + execution-bindings.json",
+    "all_ancestors_exact": "Each previous accepted9 whole-input files + its terminal/terminal-bridge/helper-acceptance3 files; counts0/12/24/36/48.",
+    "accepted_record_owner_bridge_objects_equal_raw": true,
+    "all45_accepted_case_whole_input_pins_match_current": true,
+    "all5_root_checkpoint_three_links_match_fresh_terminal_terminalbridge_helper_receipts": true,
+    "root_checkpoint_notes_and_this_sidecar_outside_owner_input_sets": true,
+    "source_current_clean_and_whole_inputs_stable": true
+  },
+  "case_summaries": [
+    {
+      "case": "floor-fp32",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "XML_tests": 1,
+      "failures_errors_skips_disabled": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_records": 4,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "17.481300",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "test_seconds": "315.028",
+      "native_owner_seconds": 317.15849399999996,
+      "bridge_seconds": 357.90695096300624,
+      "terminal_seconds": 25.839642253005877,
+      "peak_native_child_WorkingSet_bytes": 1252790272,
+      "memory_samples": 310,
+      "minimum_sampled_WSL_available_kib": 14197440,
+      "whole_input_rows_each": 1011,
+      "predecessor_files": 0,
+      "Windows_terminal_snapshot": {
+        "processes": 283,
+        "hidden_field_records": 179,
+        "matches": [],
+        "accessible_compilers": [],
+        "exact_owner_test_birth_records_absent": 2
+      }
+    },
+    {
+      "case": "floor-fp32comp",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "XML_tests": 1,
+      "failures_errors_skips_disabled": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_records": 4,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "18.421900",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp32comp_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "test_seconds": "300.204",
+      "native_owner_seconds": 301.1401042,
+      "bridge_seconds": 329.22232976800296,
+      "terminal_seconds": 33.29990906799503,
+      "peak_native_child_WorkingSet_bytes": 996179968,
+      "memory_samples": 295,
+      "minimum_sampled_WSL_available_kib": 16335080,
+      "whole_input_rows_each": 1023,
+      "predecessor_files": 12,
+      "Windows_terminal_snapshot": {
+        "processes": 283,
+        "hidden_field_records": 175,
+        "matches": [],
+        "accessible_compilers": [],
+        "exact_owner_test_birth_records_absent": 2
+      }
+    },
+    {
+      "case": "floor-fp64",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "XML_tests": 1,
+      "failures_errors_skips_disabled": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_records": 4,
+      "positive_properties": {
+        "parity_opcode_25_completed_records": "4",
+        "parity_opcode_25_actual_submissions": "1",
+        "parity_opcode_25_maximum_submit_ms": "20.279500",
+        "parity_opcode_25_allocated_bytes": "1296",
+        "fp64_evidence": "real_adaptive_minimum_retry_controls_executed"
+      },
+      "test_seconds": "279.676",
+      "native_owner_seconds": 280.42266539999997,
+      "bridge_seconds": 315.1443380779965,
+      "terminal_seconds": 32.455845172997215,
+      "peak_native_child_WorkingSet_bytes": 1100333056,
+      "memory_samples": 278,
+      "minimum_sampled_WSL_available_kib": 19444220,
+      "whole_input_rows_each": 1035,
+      "predecessor_files": 24,
+      "Windows_terminal_snapshot": {
+        "processes": 283,
+        "hidden_field_records": 175,
+        "matches": [],
+        "accessible_compilers": [],
+        "exact_owner_test_birth_records_absent": 2
+      }
+    },
+    {
+      "case": "captured-fp32",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "XML_tests": 1,
+      "failures_errors_skips_disabled": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_records": 1,
+      "positive_properties": {
+        "parity_opcode_8_completed_records": "1",
+        "parity_opcode_8_actual_submissions": "1",
+        "parity_opcode_8_maximum_submit_ms": "18.493100",
+        "parity_opcode_8_allocated_bytes": "336"
+      },
+      "test_seconds": "3.483",
+      "native_owner_seconds": 7.0685503,
+      "bridge_seconds": 48.48758992701187,
+      "terminal_seconds": 25.086052010010462,
+      "peak_native_child_WorkingSet_bytes": 45039616,
+      "memory_samples": 8,
+      "minimum_sampled_WSL_available_kib": 16868960,
+      "whole_input_rows_each": 1047,
+      "predecessor_files": 36,
+      "Windows_terminal_snapshot": {
+        "processes": 286,
+        "hidden_field_records": 178,
+        "matches": [],
+        "accessible_compilers": [],
+        "exact_owner_test_birth_records_absent": 2
+      }
+    },
+    {
+      "case": "captured-fp32comp",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "XML_tests": 1,
+      "failures_errors_skips_disabled": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_records": 1,
+      "positive_properties": {
+        "parity_opcode_8_completed_records": "1",
+        "parity_opcode_8_actual_submissions": "1",
+        "parity_opcode_8_maximum_submit_ms": "20.017200",
+        "parity_opcode_8_allocated_bytes": "336"
+      },
+      "test_seconds": "2.989",
+      "native_owner_seconds": 5.7373616,
+      "bridge_seconds": 49.84995255401009,
+      "terminal_seconds": 26.53942930199264,
+      "peak_native_child_WorkingSet_bytes": 45076480,
+      "memory_samples": 7,
+      "minimum_sampled_WSL_available_kib": 14862864,
+      "whole_input_rows_each": 1059,
+      "predecessor_files": 48,
+      "Windows_terminal_snapshot": {
+        "processes": 288,
+        "hidden_field_records": 180,
+        "matches": [],
+        "accessible_compilers": [],
+        "exact_owner_test_birth_records_absent": 2
+      }
+    }
+  ],
+  "case_receipt_pins": {
+    "floor-fp32": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-floor-fp32-accepted.json",
+      "bytes": 8517,
+      "sha256": "cec7ec51ec9ac4346d282c0cf33b8375ae3fc3d849749b848d70acae68c1cd69"
+    },
+    "floor-fp32comp": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-floor-fp32comp-accepted.json",
+      "bytes": 11130,
+      "sha256": "128543a4dbfc5c3757776c597e8b9e58fa20708ad67ff642dd068bc07d963013"
+    },
+    "floor-fp64": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-floor-fp64-accepted.json",
+      "bytes": 13626,
+      "sha256": "e9033fbf29a78076632ca0cf346b10c2c4f5442b5ac4ef95c1c39c4143fe124f"
+    },
+    "captured-fp32": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-captured-fp32-accepted.json",
+      "bytes": 16118,
+      "sha256": "a664b4c181c43825848125a42cf224078083d9cda94ff803de5ee5f29ba7190c"
+    },
+    "captured-fp32comp": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-captured-fp32comp-accepted.json",
+      "bytes": 18765,
+      "sha256": "de3ae1f066b2f655e490720e93e0ee441646cdbc9c2fead3a549fb92485c7cb9"
+    }
+  },
+  "execution_and_guard_integrity": {
+    "each_held_handle_native_exit": 0,
+    "each_bridge_exit": 0,
+    "each_terminal_exit": 0,
+    "no_outer_stop_cleanup_error_or_controller_signal": true,
+    "original_exact_filter_plus_mature_color_no_and_quoted_XML_arguments": true,
+    "native_owner_bound_seconds": 900,
+    "bridge_bound_seconds": 1380,
+    "terminal_bound_seconds": 60,
+    "native_child_WorkingSet_guard_bytes": 4294967296,
+    "WSL_available_reserve_kib": 2097152,
+    "all_memory_sample_maxima_equal_owner_and_root_note": true,
+    "total_memory_samples": 898,
+    "all_original_actual_submissions": 1,
+    "original_actual_submit_ms_limit": 1000,
+    "all_completed_stdout_markers_match_XML4_or1records": true,
+    "positive_FP64_execution_not_unsupported_decline": true,
+    "reported_VK_and_SIRIUS_execution_overrides_null": true,
+    "default_native_cache_policy_preserved": "No new cache override or cache-hit inference; original helper refusal contract unchanged.",
+    "bootstrap_owner_PID_and_exact_UTC_birth_match_owner": true,
+    "terminal_bootstrap_exactly_matches_terminalbridge_record": true,
+    "memory_scope": "Sampled child WorkingSet and WSL reserve; not aggregate native/bootstrap memory containment or a zero-memory assertion."
+  },
+  "provider_and_ownership": {
+    "each_case_module_rows": 2,
+    "exact_staged_SDK_loader": {
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-cd99fd06\\tests\\backend\\Release\\vulkan-1.dll"
+    },
+    "exact_AMD_module": {
+      "bytes": 103213064,
+      "name": "amdvlk64.dll",
+      "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+      "version": "9.2.10.395"
+    },
+    "same_child_scope": "The unchanged mature owner enumerated Modules from its owned held child; per-case owner/bootstrap/acceptance and terminalpostseals agree. No installed-file-only inference is substituted.",
+    "all10_loaded_module_postseals_and5_backend_executable_postseals_match": true,
+    "installed_System32_loader_is_distinct_unmapped_input": true,
+    "native_owner_test_birth_absences": "Ten saved terminal records, checked against exact owner/test PID+UTC birth. Reviewer did not execute a new Windows process query.",
+    "terminal_auditor_bootstraps": 5,
+    "fresh_Linux_saved_birth_absences": [
+      {
+        "case": "floor-fp32",
+        "kind": "controller",
+        "pid": 828523,
+        "saved_start_ticks": "12057318",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "floor-fp32",
+        "kind": "bridge-child",
+        "pid": 828526,
+        "saved_start_ticks": "12057604",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "floor-fp32",
+        "kind": "terminal-child",
+        "pid": 839209,
+        "saved_start_ticks": "12101923",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "floor-fp32comp",
+        "kind": "controller",
+        "pid": 843373,
+        "saved_start_ticks": "12119744",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "floor-fp32comp",
+        "kind": "bridge-child",
+        "pid": 843381,
+        "saved_start_ticks": "12120263",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "floor-fp32comp",
+        "kind": "terminal-child",
+        "pid": 854847,
+        "saved_start_ticks": "12164392",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "floor-fp64",
+        "kind": "controller",
+        "pid": 858751,
+        "saved_start_ticks": "12176672",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "floor-fp64",
+        "kind": "bridge-child",
+        "pid": 858783,
+        "saved_start_ticks": "12177198",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "floor-fp64",
+        "kind": "terminal-child",
+        "pid": 868149,
+        "saved_start_ticks": "12213510",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32",
+        "kind": "controller",
+        "pid": 872143,
+        "saved_start_ticks": "12226732",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32",
+        "kind": "bridge-child",
+        "pid": 872170,
+        "saved_start_ticks": "12227473",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32",
+        "kind": "terminal-child",
+        "pid": 880663,
+        "saved_start_ticks": "12236130",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32comp",
+        "kind": "controller",
+        "pid": 884253,
+        "saved_start_ticks": "12243700",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32comp",
+        "kind": "bridge-child",
+        "pid": 884291,
+        "saved_start_ticks": "12244582",
+        "current_start_ticks": null,
+        "absent": true
+      },
+      {
+        "case": "captured-fp32comp",
+        "kind": "terminal-child",
+        "pid": 893045,
+        "saved_start_ticks": "12253888",
+        "current_start_ticks": null,
+        "absent": true
+      }
+    ],
+    "accessible_census_scope": "Saved per-case snapshots only. Hidden-field counts179/175/175/178/180 remain explicit; no handles, complete compiler-descendant containment or global/current all-consumer absence claim. Later active image process is outside this review."
+  },
+  "reviewer_check_correction": "Initial passive verifier compared owner arguments to filter only and stopped. Corrected exact comparison includes the unchanged mature --gtest_color=no and quoted --gtest_output XML arguments. No helper, frozen input, test setting or product changed.",
+  "limitations": [
+    "These5 finite parity controls establish their original source assertions and actual completion markers. Raw GPU float readback buffers were not saved; no all-fields hash or full40-field coupled/retained result is claimed.",
+    "No original image/precision outcome is reviewed here and no fullP1/Mandatory/fullscience, horizon domain, physical budget, UI, performance/latency/coldness/hit-rate or release acceptance follows.",
+    "Elapsed test, native owner, bridge and submit windows have different scopes and are not compared for benefit.",
+    "This review is independent of current runtime operations; it previously source-reviewed this adaptation and its materialized bindings, as pinned above."
+  ],
+  "workspace": {
+    "tracked_source_clean": true,
+    "source_committed_pushed": "0 ahead / 0 behind",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "review_sidecar_uncommitted_pending_root_preservation": true
+  },
+  "root_checkpoint_pins": {
+    "floor-fp32": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-floor-fp32.json",
+      "bytes": 1169,
+      "sha256": "49e51a8633cc0be878c709c65a4d6bb208c3048b45ce626174be31bb5f9ff96b"
+    },
+    "floor-fp32comp": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-floor-fp32comp.json",
+      "bytes": 1170,
+      "sha256": "2349436b5a0e2b24cd77eda7c5a64464eec176ac8fca6af202a34204dbd0de73"
+    },
+    "floor-fp64": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-floor-fp64.json",
+      "bytes": 1169,
+      "sha256": "770c38272b32b242f65510c537a6dd59f277d9fc09a55f489f3e35927bfe7cd3"
+    },
+    "captured-fp32": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-captured-fp32.json",
+      "bytes": 1084,
+      "sha256": "4c335f613bcea12381c997bfcf2eac88310bf3cdd284ef7c4460aa4866d8f2aa"
+    },
+    "captured-fp32comp": {
+      "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-captured-fp32comp.json",
+      "bytes": 1088,
+      "sha256": "643af5d3556131300809c36bb7e43d8c88e5018beed51c648dc1e53d1dd3c4f7"
+    }
+  }
+}

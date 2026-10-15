@@ -1,0 +1,357 @@
+{
+  "schema": "sirius-native-shared-loop-completed-results-v1",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "passed": true,
+  "all7_finite_controls_passed": true,
+  "completed_utc": "2026-10-15T14:24:17.313132+00:00",
+  "root_sole_actual_operator": true,
+  "all14_actual_system_and_terminal_sessions_closed0": true,
+  "case_results": [
+    {
+      "case": "floor-fp32",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "test_seconds": "315.028",
+      "owner_seconds": 317.15849399999996,
+      "bridge_seconds": 357.90695096300624,
+      "peak_sampled_native_child_WorkingSet_bytes": 1252790272,
+      "memory_samples": 310,
+      "terminal_accepted": true,
+      "accepted_receipt": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-floor-fp32-accepted.json",
+        "bytes": 8517,
+        "sha256": "cec7ec51ec9ac4346d282c0cf33b8375ae3fc3d849749b848d70acae68c1cd69"
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-floor-fp32.json",
+        "bytes": 1169,
+        "sha256": "49e51a8633cc0be878c709c65a4d6bb208c3048b45ce626174be31bb5f9ff96b"
+      },
+      "whole_input_rows_each": 1011,
+      "Windows_hidden_field_records": 179
+    },
+    {
+      "case": "floor-fp32comp",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "test_seconds": "300.204",
+      "owner_seconds": 301.1401042,
+      "bridge_seconds": 329.22232976800296,
+      "peak_sampled_native_child_WorkingSet_bytes": 996179968,
+      "memory_samples": 295,
+      "terminal_accepted": true,
+      "accepted_receipt": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-floor-fp32comp-accepted.json",
+        "bytes": 11130,
+        "sha256": "128543a4dbfc5c3757776c597e8b9e58fa20708ad67ff642dd068bc07d963013"
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-floor-fp32comp.json",
+        "bytes": 1170,
+        "sha256": "2349436b5a0e2b24cd77eda7c5a64464eec176ac8fca6af202a34204dbd0de73"
+      },
+      "whole_input_rows_each": 1023,
+      "Windows_hidden_field_records": 175
+    },
+    {
+      "case": "floor-fp64",
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "test_seconds": "279.676",
+      "owner_seconds": 280.42266539999997,
+      "bridge_seconds": 315.1443380779965,
+      "peak_sampled_native_child_WorkingSet_bytes": 1100333056,
+      "memory_samples": 278,
+      "terminal_accepted": true,
+      "accepted_receipt": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-floor-fp64-accepted.json",
+        "bytes": 13626,
+        "sha256": "e9033fbf29a78076632ca0cf346b10c2c4f5442b5ac4ef95c1c39c4143fe124f"
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-floor-fp64.json",
+        "bytes": 1169,
+        "sha256": "770c38272b32b242f65510c537a6dd59f277d9fc09a55f489f3e35927bfe7cd3"
+      },
+      "whole_input_rows_each": 1035,
+      "Windows_hidden_field_records": 175
+    },
+    {
+      "case": "captured-fp32",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "test_seconds": "3.483",
+      "owner_seconds": 7.0685503,
+      "bridge_seconds": 48.48758992701187,
+      "peak_sampled_native_child_WorkingSet_bytes": 45039616,
+      "memory_samples": 8,
+      "terminal_accepted": true,
+      "accepted_receipt": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-captured-fp32-accepted.json",
+        "bytes": 16118,
+        "sha256": "a664b4c181c43825848125a42cf224078083d9cda94ff803de5ee5f29ba7190c"
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-captured-fp32.json",
+        "bytes": 1084,
+        "sha256": "4c335f613bcea12381c997bfcf2eac88310bf3cdd284ef7c4460aa4866d8f2aa"
+      },
+      "whole_input_rows_each": 1047,
+      "Windows_hidden_field_records": 178
+    },
+    {
+      "case": "captured-fp32comp",
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "test_seconds": "2.989",
+      "owner_seconds": 5.7373616,
+      "bridge_seconds": 49.84995255401009,
+      "peak_sampled_native_child_WorkingSet_bytes": 45076480,
+      "memory_samples": 7,
+      "terminal_accepted": true,
+      "accepted_receipt": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-captured-fp32comp-accepted.json",
+        "bytes": 18765,
+        "sha256": "de3ae1f066b2f655e490720e93e0ee441646cdbc9c2fead3a549fb92485c7cb9"
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-captured-fp32comp.json",
+        "bytes": 1088,
+        "sha256": "643af5d3556131300809c36bb7e43d8c88e5018beed51c648dc1e53d1dd3c4f7"
+      },
+      "whole_input_rows_each": 1059,
+      "Windows_hidden_field_records": 180
+    },
+    {
+      "case": "kerr-image",
+      "test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+      "test_seconds": "231.843",
+      "owner_seconds": 233.23877499999998,
+      "bridge_seconds": 261.14239674700366,
+      "peak_sampled_native_child_WorkingSet_bytes": 1161850880,
+      "memory_samples": 230,
+      "terminal_accepted": true,
+      "accepted_receipt": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-kerr-image-accepted.json",
+        "bytes": 21233,
+        "sha256": "988d5fb6805a959307c40368afc31105ff4722a4f248a932f74475f882752fc2"
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-kerr-image.json",
+        "bytes": 1148,
+        "sha256": "330100e7499012f4f2b06d686438e73c6708ffa5638d80b0beaa1d3d00131508"
+      },
+      "whole_input_rows_each": 1071,
+      "Windows_hidden_field_records": 174
+    },
+    {
+      "case": "kerr-precision",
+      "test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+      "test_seconds": "440.052",
+      "owner_seconds": 441.5764407,
+      "bridge_seconds": 482.74045773700345,
+      "peak_sampled_native_child_WorkingSet_bytes": 1367998464,
+      "memory_samples": 431,
+      "terminal_accepted": true,
+      "accepted_receipt": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/terminal-kerr-precision-accepted.json",
+        "bytes": 23938,
+        "sha256": "5ff34b023170e574e2d536e47f3ca345a90c4f7ea6e08aee2c241b19f6931766"
+      },
+      "root_checkpoint": {
+        "path": "out/native-windows-kerr-shared-loop-cd99fd06/root-accepted-kerr-precision.json",
+        "bytes": 1260,
+        "sha256": "866a93ef7eacd7d9e428bd33acea746ecb490388ca757d192d0d5e2817909bb3"
+      },
+      "whole_input_rows_each": 1083,
+      "Windows_hidden_field_records": 180
+    }
+  ],
+  "binding_static_current_files": 1010,
+  "unique_consumed_input_files_current": 1083,
+  "accepted_chain_files_current": 84,
+  "all_before_after_rawbytes_equal_and_current": true,
+  "exact_predecessor_chains_verified": true,
+  "saved_Linux_births_fresh_absent": [
+    {
+      "case": "floor-fp32",
+      "kind": "controller",
+      "pid": 828523,
+      "saved_start_ticks": "12057318",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "floor-fp32",
+      "kind": "bridge-child",
+      "pid": 828526,
+      "saved_start_ticks": "12057604",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "floor-fp32",
+      "kind": "terminal-child",
+      "pid": 839209,
+      "saved_start_ticks": "12101923",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "floor-fp32comp",
+      "kind": "controller",
+      "pid": 843373,
+      "saved_start_ticks": "12119744",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "floor-fp32comp",
+      "kind": "bridge-child",
+      "pid": 843381,
+      "saved_start_ticks": "12120263",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "floor-fp32comp",
+      "kind": "terminal-child",
+      "pid": 854847,
+      "saved_start_ticks": "12164392",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "floor-fp64",
+      "kind": "controller",
+      "pid": 858751,
+      "saved_start_ticks": "12176672",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "floor-fp64",
+      "kind": "bridge-child",
+      "pid": 858783,
+      "saved_start_ticks": "12177198",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "floor-fp64",
+      "kind": "terminal-child",
+      "pid": 868149,
+      "saved_start_ticks": "12213510",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "captured-fp32",
+      "kind": "controller",
+      "pid": 872143,
+      "saved_start_ticks": "12226732",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "captured-fp32",
+      "kind": "bridge-child",
+      "pid": 872170,
+      "saved_start_ticks": "12227473",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "captured-fp32",
+      "kind": "terminal-child",
+      "pid": 880663,
+      "saved_start_ticks": "12236130",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "kind": "controller",
+      "pid": 884253,
+      "saved_start_ticks": "12243700",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "kind": "bridge-child",
+      "pid": 884291,
+      "saved_start_ticks": "12244582",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "captured-fp32comp",
+      "kind": "terminal-child",
+      "pid": 893045,
+      "saved_start_ticks": "12253888",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "kind": "controller",
+      "pid": 896417,
+      "saved_start_ticks": "12264375",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "kind": "bridge-child",
+      "pid": 896454,
+      "saved_start_ticks": "12265249",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "kerr-image",
+      "kind": "terminal-child",
+      "pid": 905202,
+      "saved_start_ticks": "12292416",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "kerr-precision",
+      "kind": "controller",
+      "pid": 909426,
+      "saved_start_ticks": "12301660",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "kerr-precision",
+      "kind": "bridge-child",
+      "pid": 909517,
+      "saved_start_ticks": "12302726",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "case": "kerr-precision",
+      "kind": "terminal-child",
+      "pid": 922066,
+      "saved_start_ticks": "12354026",
+      "current_start_ticks": null,
+      "absent": true
+    }
+  ],
+  "image_reported_metrics": {
+    "shadow_fraction": "0.109375",
+    "luminance_min": "0",
+    "luminance_max": "0.874792"
+  },
+  "precision_reported_metrics": {
+    "mean_absolute_difference": "1.66903e-07",
+    "maximum_absolute_difference": "1.07288e-05",
+    "fp64_range": [
+      "0",
+      "1"
+    ],
+    "black32": 448,
+    "black64": 448
+  },
+  "raw_framebuffers_saved": false,
+  "scope": "Original five focused parity controls and64x64 image plus realFP32/FP64 comparison on exact nativeAMD same-child stagedSDK+AMD modules; original assertions/settings/physical1000ms guards unchanged. No fullP1/40field/forensicJulyidentity/retainedcold128/latency/UI/fullMandatory/fullscience/eightdomain/release acceptance. SampledchildWorkingSet guard4GiB, not aggregateWindows/bootstrap memory containment. Accessiblecensus hidden gaps remain explicit; no global/allconsumer absence."
+}

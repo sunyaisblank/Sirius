@@ -1,0 +1,133 @@
+{
+  "schema": "sirius-kerr-shared-loop-independent-ci-preservation-review-v1",
+  "passed": true,
+  "verdict": "FILESYSTEM_PRESERVATION_BUNDLE_ACCEPTABLE_FOR_ROOT_GIT_COMMIT_AND_PUSH",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "run_id": 38735683288,
+  "run_attempt": 1,
+  "blockers": [],
+  "scope": "Passive stdlib JSON/ZIP/hash and read-only Git. No source/raw-data change, retirement, helper/program/provider/test/CI/network execution. No live native output read. Only this sidecar written outside C/N/bundle.",
+  "bundle": "attestations/qualification/cd99fd06/native-build-ci-38735683288",
+  "pins": {
+    "manifest": {
+      "path": "attestations/qualification/cd99fd06/native-build-ci-38735683288/manifest.json",
+      "bytes": 59997,
+      "sha256": "b676fc7f2775a3504c8326742cca583f97f79bb565ed116a290bac8598017b60"
+    },
+    "preservation": {
+      "path": "attestations/qualification/cd99fd06/native-build-ci-38735683288/preservation.json",
+      "bytes": 109158,
+      "sha256": "f2b0ad24037af759b7095d08651a6cb3a491580596965a0953c769f600d2dc1e"
+    },
+    "prior_independent_CI_review": {
+      "path": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/independent-ci-review.json",
+      "bytes": 16883,
+      "sha256": "dbcfc699a4c131c9a9d735a5d07ec84527154030a1cae507a3e70d0a7de2c65e"
+    },
+    "root_CI_product_admission": {
+      "path": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/root-ci-products-admission.json",
+      "bytes": 69147,
+      "sha256": "277fb0b652ff599a420485e54feb9aa0552d4b337f3b8ff89767c684cf2d4144"
+    },
+    "final_run_API": {
+      "path": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/ci-run-final.json",
+      "bytes": 12148,
+      "sha256": "d19dd46d65ce4744713e08c78654599f00e5e5e191202a6d0a24c38b523e3f91"
+    },
+    "final_jobs_API": {
+      "path": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/ci-jobs-final.json",
+      "bytes": 14220,
+      "sha256": "020cafdedf95968fc90c1c9980accd7b9647e6539674e955d44afc4c57387d5d"
+    }
+  },
+  "complete_preservation_checks": {
+    "physical_bundle_files": 298,
+    "manifest_rows": 297,
+    "manifest_covers_every_file_except_itself": true,
+    "all_manifest_current_bytes_SHA256_match": true,
+    "safe_unique_regular_paths_no_symlinks": true,
+    "retained_raw_payloads": 296,
+    "every_retained_payload_exact_bytes_equal_C_original": true,
+    "exact_source_to_preserved_relative_mapping": true,
+    "original_C_files_still_present": 301,
+    "original_set_exactly_retained296_plus_omitted5": true,
+    "no_source_packet_retirement": true
+  },
+  "transport_omission_checks": {
+    "only_omitted_containers": [
+      {
+        "source_path": "out/kerr-shared-loop-ci-cd99fd06/macos-diagnostic-logs.zip",
+        "bytes": 5675,
+        "sha256": "0d4ba2021b72e5b89dff4474e143aeaa29f84947f39c117a68c89d9f3be0df25",
+        "identity_map": "files/macos-diagnostic-logs-artifact-identity.json",
+        "member_count": 4
+      },
+      {
+        "source_path": "out/kerr-shared-loop-ci-cd99fd06/macos-native.zip",
+        "bytes": 55330062,
+        "sha256": "04acbfe973af16834a6c3ef5cdbc554c4446db76eef1f8abf7eefecf54d92894",
+        "identity_map": "files/macos-artifact-identity.json",
+        "member_count": 40
+      },
+      {
+        "source_path": "out/kerr-shared-loop-ci-cd99fd06/windows-diagnostic-logs.zip",
+        "bytes": 5855,
+        "sha256": "beea3500c4ac15850fb3790b97852f08b71875079cca08fc8f72655ce96cf565",
+        "identity_map": "files/windows-diagnostic-logs-artifact-identity.json",
+        "member_count": 4
+      },
+      {
+        "source_path": "out/kerr-shared-loop-ci-cd99fd06/windows-diagnostic.zip",
+        "bytes": 58141544,
+        "sha256": "6ab34e0d3908ad1695c7f5a113c81e5537c0653e4fc8f8f58b881042fe85c237",
+        "identity_map": "files/windows-diagnostic-artifact-identity.json",
+        "member_count": 139
+      },
+      {
+        "source_path": "out/kerr-shared-loop-ci-cd99fd06/windows-native.zip",
+        "bytes": 54158973,
+        "sha256": "15c86fa5e42d17bb47a806019ccd883ba78f925aaac5f09d53192ae8ed195885",
+        "identity_map": "files/windows-native-artifact-identity.json",
+        "member_count": 40
+      }
+    ],
+    "all5_original_sizes_SHA256_equal_saved_API_and_container_identity_maps": true,
+    "all_original_ZIP_member_sets_unique_and_complete": true,
+    "all227_members_exact_bytes_equal_bundle_payload_and_manifest_rows": true,
+    "all5_API_rows_and_member_identity_maps_retained": true,
+    "raw_CI_logs_ZIP_retained": {
+      "identity": {
+        "path": "attestations/qualification/cd99fd06/native-build-ci-38735683288/files/ci-raw-logs.zip",
+        "bytes": 145868,
+        "sha256": "e92ed1f8c1cd29d304e00b5d7a0b23d3f2c5840e72344bfc6ab78bd989f6a548"
+      },
+      "member_count": 46,
+      "all_member_pins_and_extracted_payloads_equal": true,
+      "API_container_digest_available": false
+    },
+    "scope": "All retained uncompressed payloads and recorded API/container/member identities are byte-backed by this filesystem bundle. The five omitted original ZIP byte streams are not stored here; byte-exact ZIP reconstruction or remote backing of those containers is not claimed."
+  },
+  "preserved_evidence_claims": {
+    "exact_source_run_attempt": true,
+    "three_requested_integration_jobs_success": true,
+    "five_unrequested_workflow_jobs_intentionally_skipped": true,
+    "native9_zero_FESD_build_estates_separate_from_workflow_skips": true,
+    "two_native_build_records_and_complete_product_export": true,
+    "compiled_alignment_admitted": 0,
+    "compiled_alignment_pending": 8,
+    "runtime_admitted_by_CI_bundle": false,
+    "fullMandatory_admitted": false,
+    "prior_independent_review_scope_retained": true
+  },
+  "hold_and_release_limits": [
+    "Raw C301 files including all5 original ZIPs remain untouched because the active native packet binds them. This review does not authorize their retirement or alter its frozen closure.",
+    "No current native control result, physical-driver/provider mapping, software sequence outcome, fullscience, cold frame, latency, UI or release acceptance follows from CI preservation.",
+    "This is a pre-commit filesystem preservation review. Root must independently verify isolated data-commit/tag/push/Git bytes and remote identity; no new data commit or remote backup is claimed yet."
+  ],
+  "workspace": {
+    "tracked_source_clean": true,
+    "source_committed_pushed": "0 ahead / 0 behind",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "review_sidecar_uncommitted_pending_root_preservation": true
+  }
+}

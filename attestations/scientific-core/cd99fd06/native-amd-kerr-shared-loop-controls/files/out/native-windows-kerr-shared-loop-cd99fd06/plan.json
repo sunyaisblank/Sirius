@@ -1,0 +1,91 @@
+{
+  "actions": {
+    "captured-fp32": {
+      "bridge_outer_seconds": 1380,
+      "expected_exit": 0,
+      "kind": "Control",
+      "owner_seconds": 900,
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32"
+    },
+    "captured-fp32comp": {
+      "bridge_outer_seconds": 1380,
+      "expected_exit": 0,
+      "kind": "Control",
+      "owner_seconds": 900,
+      "test": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp"
+    },
+    "floor-fp32": {
+      "bridge_outer_seconds": 1380,
+      "expected_exit": 0,
+      "kind": "Control",
+      "owner_seconds": 900,
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32"
+    },
+    "floor-fp32comp": {
+      "bridge_outer_seconds": 1380,
+      "expected_exit": 0,
+      "kind": "Control",
+      "owner_seconds": 900,
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp"
+    },
+    "floor-fp64": {
+      "bridge_outer_seconds": 1380,
+      "expected_exit": 0,
+      "kind": "Control",
+      "owner_seconds": 900,
+      "test": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64"
+    },
+    "kerr-image": {
+      "bridge_outer_seconds": 29280,
+      "expected_exit": 0,
+      "kind": "Control",
+      "owner_seconds": 28800,
+      "test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow"
+    },
+    "kerr-precision": {
+      "bridge_outer_seconds": 29280,
+      "expected_exit": 0,
+      "kind": "Control",
+      "owner_seconds": 28800,
+      "test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene"
+    }
+  },
+  "admitted": true,
+  "control_profile": "floor-regressions-then-original-kerr",
+  "minimum_wsl_available_kib": 2097152,
+  "order": [
+    "floor-fp32",
+    "floor-fp32comp",
+    "floor-fp64",
+    "captured-fp32",
+    "captured-fp32comp",
+    "kerr-image",
+    "kerr-precision"
+  ],
+  "owner_rss_bytes": 4294967296,
+  "prospective_commands": [
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py floor-fp32",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py floor-fp32",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py floor-fp32comp",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py floor-fp64",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py floor-fp64",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py captured-fp32",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py captured-fp32",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py captured-fp32comp",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py kerr-image",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py kerr-image",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py kerr-precision",
+    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py kerr-precision"
+  ],
+  "resource_semantics": "Unchanged held-handle Windows owner samples child WorkingSet64/PrivateMemorySize64 under4GiB. WSL sampled MemAvailable reserve2GiB; Linux bridge owner+480seconds; separate terminal60seconds. Original trace/P1 physical1000ms assertions unchanged; outer900/28800 bounds are prospective external diagnostics, not original whole-test deadlines or aggregate Windows/bootstrap memory guarantees. Default AMD cache and inherited override refusal unchanged.",
+  "runner_source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "schema": "sirius-native-windows-kerr-composite-plan-v1",
+  "scope": "Source-only pending positive-control protocol. No sampler/near rerun. Image then precision only after image terminal acceptance. Optional five parity witnesses run first only after explicit root selection. No fullMandatory, whole-domain horizon, image archive, performance or release qualification claim.",
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "stage": "bin/windows-msvc/diagnostic-cd99fd06",
+  "stop_on_first_nonpass": true,
+  "terminal_observer_seconds": 60,
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius"
+}

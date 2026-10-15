@@ -1,0 +1,30 @@
+{
+  "schema": "sirius-native-shared-loop-root-accepted-v1",
+  "passed": true,
+  "case": "floor-fp32comp",
+  "test_seconds": "300.204",
+  "native_owner_seconds": 301.1401042,
+  "bridge_seconds": 329.22232976800296,
+  "peak_native_child_WorkingSet_bytes": 996179968,
+  "positive_properties": {
+    "parity_opcode_25_completed_records": "4",
+    "parity_opcode_25_actual_submissions": "1",
+    "parity_opcode_25_maximum_submit_ms": "18.421900",
+    "parity_opcode_25_allocated_bytes": "1296",
+    "fp32comp_evidence": "real_adaptive_minimum_retry_controls_executed"
+  },
+  "terminal_receipt": {
+    "bytes": 4057,
+    "sha256": "f06a608307fceb9fac39708386834ff4cb58b81f5e459b85647143693156e1c0"
+  },
+  "terminal_bridge": {
+    "bytes": 2416,
+    "sha256": "0b30ec577a0997458ef4e8976f3be95d04e69209048cf853ed508567f26203af"
+  },
+  "helper_acceptance": {
+    "bytes": 11130,
+    "sha256": "128543a4dbfc5c3757776c597e8b9e58fa20708ad67ff642dd068bc07d963013"
+  },
+  "provider_and_accessible_ownership_seals_accepted": true,
+  "scope": "Exact finite nativeAMD control only; samechildstagedSDK+AMD observed, originalassertions. No fullMandatory/fullscience/latency/UI/release."
+}

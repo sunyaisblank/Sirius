@@ -1,0 +1,55 @@
+{
+  "schema": "sirius-kerr-shared-loop-independent-software-preservation-review-v1",
+  "passed": true,
+  "preservation_audit_passed": true,
+  "all_eight_scientific_controls_passed": false,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewer_role": "Independent of preservation collector/root operator; author of prior software terminal audit and some preserved source-only export metadata. This reviews copying/backing and truthful scope, not new numerical execution.",
+  "bundle": "attestations/scientific-core/cd99fd06/kerr-shared-loop-source-and-software-controls",
+  "pins": {
+    "manifest.json": {
+      "bytes": 24272,
+      "sha256": "5f131eaa83cbbb263931e82807a8b43f9df3778e95ac677182d4d18248f09c27"
+    },
+    "preservation.json": {
+      "bytes": 165003,
+      "sha256": "6fa6f59031e729a2c7ef4e7cef9cfd25e2764d68616e5b2070c2ce174103a294"
+    },
+    "copied_software_terminal_review": {
+      "bytes": 8889,
+      "sha256": "0d78d33df9cb606fbdb5598d1273e867aa839ab2775c0b91fcd35c66f956089d"
+    }
+  },
+  "counts": {
+    "actual_bundle_files": 131,
+    "manifest_records_excluding_manifest_self": 130,
+    "raw_source_and_producer_copies": 129,
+    "copied_software_workspace_files": 92,
+    "final_and_preflight_union_inputs": 626,
+    "exact_named_current_source_Git_blobs": 538,
+    "external_hash_only_inputs": 36,
+    "local_nontracked_input_files_preserved": 52
+  },
+  "checks": [
+    "Exact bundle membership130manifest rows+manifest itself; allbytes/SHA256 and no symlinks checked. All129retained source\u2192copy rows equal current raw/producer bytes, preserve_as exact, with no live native packet read. WholeW92file set preserved including allignored logs and samples.",
+    "Input union exactly final616 plus rootpreflight60 =626distinct:538namedGit source+36external hash-only+52local copies. Every saved input hash has backing, all52local files are in retained129.77other ancillary copies are not invented new input requirements.",
+    "Each538source_revision:path independently read by gitcat-file: exact declared blobID/Git object SHA1/size/SHA256 verified at cd99; source commits2904/cd99 exist. No source expansion, regeneration, reconstruction or code execution.",
+    "Copied terminal audit pin unchanged. Seven rootaccepted receipts still bind allraw files and single completed zeroFESD XML; final original precision control remains diagnostic_timeout/child-15/noXML/no numerical verdict or positive acceptance. Preservation verdict7PASS+1incomplete is exact.",
+    "BackendELF,current compiled/stagedparity3,compiledtrace3 and alignment bytes preserved. Source/build/module-size observations do not qualify original retained coldKerr path or a completed physical frame. Source-only registration/export contracts are not actual relocation/Mandatory admission."
+  ],
+  "limits": [
+    "Preservation complete for declared finite scope; raw_workspaces_retired remains false. New artifact Git commit/push and cleanup remain root-owned future actions, not claimed here.",
+    "External36tool/provider/library identities are hashes only; binaries not backed up. No current host remeasurement or added live loader/LLVM/provider trace inferred.",
+    "No unchanged software retry, all8, P1allrung, fullimage/retainedcoldframe, Mandatory/fullscience/UI/performance/release qualification claim. Native live sequence is separate and was not read.",
+    "No authored helper/parser/compiler/provider/test/native/CI/network execution or source/raw/bundle mutation by reviewer; only passive stdlib and read-only Git."
+  ],
+  "workspace": {
+    "source_clean": true,
+    "committed_and_pushed_source": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+    "ahead": 0,
+    "behind": 0,
+    "worktrees": 1
+  },
+  "blockers": []
+}

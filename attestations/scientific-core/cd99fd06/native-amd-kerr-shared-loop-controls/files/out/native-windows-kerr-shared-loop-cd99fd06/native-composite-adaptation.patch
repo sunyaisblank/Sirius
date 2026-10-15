@@ -1,0 +1,177 @@
+--- a/run_system.py
++++ b/run_system.py
+@@ -45,8 +45,8 @@
+ ORDER = PROFILES[plan['control_profile']]
+ assert kind in ORDER and set(binding['actions']) == set(ORDER) and set(binding['terminal_actions']) == set(ORDER)
+ assert plan['admitted'] is True and binding['admitted'] is True
+-assert SOURCE == HEAD == 'ed76454617063f2463a75423b2756e8c957ce6c2'
+-assert plan['stage'] == binding['stage'] == 'bin/windows-msvc/diagnostic-ed764546'
++assert SOURCE == HEAD == 'cd99fd06627cf1f2e1ece74fcf90abf129178940'
++assert plan['stage'] == binding['stage'] == 'bin/windows-msvc/diagnostic-cd99fd06'
+ assert plan['windows_checkout_unc']==binding['windows_checkout_unc']==r'\\wsl.localhost\Ubuntu\home\astra\.project\Sirius'
+ signals = []
+ predecessors = {}
+@@ -72,7 +72,7 @@
+     assert binding['files'][str(manifest_path.relative_to(ROOT))] == binding['manifest_identity']
+     manifest = json.loads(manifest_path.read_text(encoding='utf-8-sig'))
+     for key, value in {'schema':'sirius-windows-diagnostic-build-products-v1', 'source_revision':SOURCE,
+-                       'repository':'sunyaisblank/Sirius', 'run_id':'38724081383', 'run_attempt':'1'}.items():
++                       'repository':'sunyaisblank/Sirius', 'run_id':'38735683288', 'run_attempt':'1'}.items():
+         assert type(manifest[key]) is str and manifest[key] == value
+     assert manifest['diagnostic_build_only'] is True and manifest['qualification_claimed'] is False
+     assert binding['artifact']['repository'] == manifest['repository'] and binding['artifact']['run_id'] == manifest['run_id']
+--- a/run_terminal.py
++++ b/run_terminal.py
+@@ -16,7 +16,7 @@
+     assert bindings['files'][str(manifest_path.relative_to(ROOT))] == bindings['manifest_identity']
+     manifest = json.loads(manifest_path.read_text(encoding='utf-8-sig'))
+     for key, value in {'schema':'sirius-windows-diagnostic-build-products-v1', 'source_revision':bindings['source_revision'],
+-                       'repository':'sunyaisblank/Sirius', 'run_id':'38724081383', 'run_attempt':'1'}.items():
++                       'repository':'sunyaisblank/Sirius', 'run_id':'38735683288', 'run_attempt':'1'}.items():
+         assert type(manifest[key]) is str and manifest[key] == value
+     assert manifest['diagnostic_build_only'] is True and manifest['qualification_claimed'] is False
+     assert bindings['artifact']['repository'] == manifest['repository'] and bindings['artifact']['run_id'] == manifest['run_id']
+@@ -130,8 +130,8 @@
+ assert plan['control_profile']==bindings['control_profile'] and plan['control_profile'] in PROFILES
+ ORDER=PROFILES[plan['control_profile']]
+ assert case in ORDER and set(bindings['actions'])==set(ORDER) and set(bindings['terminal_actions'])==set(ORDER)
+-assert plan['source_revision']==plan['runner_source_revision']==bindings['source_revision']==bindings['runner_source_revision']=='ed76454617063f2463a75423b2756e8c957ce6c2'
+-assert plan['stage']==bindings['stage']=='bin/windows-msvc/diagnostic-ed764546'
++assert plan['source_revision']==plan['runner_source_revision']==bindings['source_revision']==bindings['runner_source_revision']=='cd99fd06627cf1f2e1ece74fcf90abf129178940'
++assert plan['stage']==bindings['stage']=='bin/windows-msvc/diagnostic-cd99fd06'
+ assert plan['windows_checkout_unc']==bindings['windows_checkout_unc']==r'\\wsl.localhost\Ubuntu\home\astra\.project\Sirius'
+ assert plan['order']==ORDER and set(plan['actions'])==set(ORDER)
+ for action_label in ORDER:
+--- a/prepare_bindings.py
++++ b/prepare_bindings.py
+@@ -6,7 +6,7 @@
+ assert not sys.flags.optimize and len(sys.argv) == 1
+ ROOT = Path.cwd()
+ WORK = Path(__file__).resolve().parent
+-SOURCE = 'ed76454617063f2463a75423b2756e8c957ce6c2'
++SOURCE = 'cd99fd06627cf1f2e1ece74fcf90abf129178940'
+ assert ROOT == WORK.parents[1] and ROOT.resolve(strict=True) == ROOT
+ assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip() == SOURCE
+ assert not subprocess.check_output(['git', 'status', '--porcelain'])
+@@ -44,7 +44,7 @@
+ admission_bytes = admission_path.read_bytes(); admission = json.loads(admission_bytes)
+ admission_pin = {'bytes': len(admission_bytes), 'sha256': hashlib.sha256(admission_bytes).hexdigest()}
+ assert admission['passed'] is True and admission['source_revision'] == SOURCE
+-assert admission['stage'] == plan['stage'] == 'bin/windows-msvc/diagnostic-ed764546'
++assert admission['stage'] == plan['stage'] == 'bin/windows-msvc/diagnostic-cd99fd06'
+ files = dict(admission['files']); assert files and key(admission_path) not in files
+ for name, expected in files.items(): checked(path(name), expected)
+ for name in ['plan.json', 'execution-bindings.json', 'source-freeze.json']:
+@@ -52,7 +52,7 @@
+ assert not any(path(name).is_relative_to(WORK / leaf) for name in files for leaf in ['native', 'temp'])
+ stage = ROOT / plan['stage']; manifest_path = stage / 'generated/sirius/windows-diagnostic-build-products.json'
+ checked(manifest_path, admission['manifest_identity']); manifest = read(manifest_path)
+-for field, expected in {'schema': 'sirius-windows-diagnostic-build-products-v1', 'source_revision': SOURCE, 'repository': 'sunyaisblank/Sirius', 'run_id': '38724081383', 'run_attempt': '1'}.items():
++for field, expected in {'schema': 'sirius-windows-diagnostic-build-products-v1', 'source_revision': SOURCE, 'repository': 'sunyaisblank/Sirius', 'run_id': '38735683288', 'run_attempt': '1'}.items():
+     assert type(manifest[field]) is str and manifest[field] == expected
+ assert manifest['diagnostic_build_only'] is True and manifest['qualification_claimed'] is False
+ artifact = admission['artifact']; assert type(artifact['id']) is int and artifact['id'] > 0
+--- a/plan.pending.json
++++ b/plan.pending.json
+@@ -1,10 +1,10 @@
+ {
+   "schema": "sirius-native-windows-kerr-composite-plan-v1",
+   "admitted": false,
+-  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+-  "runner_source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
++  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
++  "runner_source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+   "control_profile": "original-kerr-only",
+-  "stage": "bin/windows-msvc/diagnostic-ed764546",
++  "stage": "bin/windows-msvc/diagnostic-cd99fd06",
+   "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+   "order": [
+     "kerr-image",
+@@ -31,10 +31,10 @@
+   "terminal_observer_seconds": 60,
+   "resource_semantics": "Unchanged held-handle Windows owner samples child WorkingSet64/PrivateMemorySize64 under4GiB. WSL sampled MemAvailable reserve2GiB; Linux bridge owner+480seconds; separate terminal60seconds. Original trace/P1 physical1000ms assertions unchanged; outer900/28800 bounds are prospective external diagnostics, not original whole-test deadlines or aggregate Windows/bootstrap memory guarantees. Default AMD cache and inherited override refusal unchanged.",
+   "prospective_commands": [
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-image",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-image",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-precision",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-precision"
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py kerr-image",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py kerr-image",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py kerr-precision",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py kerr-precision"
+   ],
+   "stop_on_first_nonpass": true,
+   "scope": "Source-only pending positive-control protocol. No sampler/near rerun. Image then precision only after image terminal acceptance. Optional five parity witnesses run first only after explicit root selection. No fullMandatory, whole-domain horizon, image archive, performance or release qualification claim."
+--- a/plan.regressions.pending.json
++++ b/plan.regressions.pending.json
+@@ -1,10 +1,10 @@
+ {
+   "schema": "sirius-native-windows-kerr-composite-plan-v1",
+   "admitted": false,
+-  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+-  "runner_source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
++  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
++  "runner_source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+   "control_profile": "floor-regressions-then-original-kerr",
+-  "stage": "bin/windows-msvc/diagnostic-ed764546",
++  "stage": "bin/windows-msvc/diagnostic-cd99fd06",
+   "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+   "order": [
+     "floor-fp32",
+@@ -71,20 +71,20 @@
+   "terminal_observer_seconds": 60,
+   "resource_semantics": "Unchanged held-handle Windows owner samples child WorkingSet64/PrivateMemorySize64 under4GiB. WSL sampled MemAvailable reserve2GiB; Linux bridge owner+480seconds; separate terminal60seconds. Original trace/P1 physical1000ms assertions unchanged; outer900/28800 bounds are prospective external diagnostics, not original whole-test deadlines or aggregate Windows/bootstrap memory guarantees. Default AMD cache and inherited override refusal unchanged.",
+   "prospective_commands": [
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py floor-fp32",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py floor-fp32",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py floor-fp32comp",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py floor-fp32comp",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py floor-fp64",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py floor-fp64",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py captured-fp32",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py captured-fp32",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py captured-fp32comp",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py captured-fp32comp",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-image",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-image",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_system.py kerr-precision",
+-    "python3 -B out/native-windows-kerr-composite-ed764546/run_terminal.py kerr-precision"
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py floor-fp32",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py floor-fp32",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py floor-fp32comp",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py floor-fp32comp",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py floor-fp64",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py floor-fp64",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py captured-fp32",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py captured-fp32",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py captured-fp32comp",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py captured-fp32comp",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py kerr-image",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py kerr-image",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_system.py kerr-precision",
++    "python3 -B out/native-windows-kerr-shared-loop-cd99fd06/run_terminal.py kerr-precision"
+   ],
+   "stop_on_first_nonpass": true,
+   "scope": "Source-only pending positive-control protocol. No sampler/near rerun. Image then precision only after image terminal acceptance. Optional five parity witnesses run first only after explicit root selection. No fullMandatory, whole-domain horizon, image archive, performance or release qualification claim."
+--- a/execution-bindings.pending.json
++++ b/execution-bindings.pending.json
+@@ -1,15 +1,15 @@
+ {
+   "schema": "sirius-native-windows-kerr-composite-bindings-v1",
+   "admitted": false,
+-  "source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
+-  "runner_source_revision": "ed76454617063f2463a75423b2756e8c957ce6c2",
++  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
++  "runner_source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+   "control_profile": "original-kerr-only",
+-  "stage": "bin/windows-msvc/diagnostic-ed764546",
++  "stage": "bin/windows-msvc/diagnostic-cd99fd06",
+   "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+   "artifact": {
+     "id": null,
+     "repository": "sunyaisblank/Sirius",
+-    "run_id": "38724081383",
++    "run_id": "38735683288",
+     "run_attempt": "1",
+     "name": "sirius-windows-diagnostic-build-products",
+     "zip_identity": null

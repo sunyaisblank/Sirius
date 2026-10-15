@@ -1,0 +1,153 @@
+{
+  "schema": "sirius-native-windows-shared-loop-source-contracts-v1",
+  "source_only": true,
+  "admitted": false,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "origin": {
+    "commit": "7be3bee9ea8eaee33428b856edf01e511b7c5156",
+    "work": "attestations/scientific-core/ed764546/native-amd-kerr-composite-controls/files/out/native-windows-kerr-composite-ed764546",
+    "scope": "Successful ed764 seven-case apparatus source/templates only; no outcomes, actual bindings, stage, runtime receipts or prior admission are copied."
+  },
+  "helpers": {
+    "run_system.py": {
+      "bytes": 19322,
+      "sha256": "4fdb80598c44a76f15a5c23c2fe83c93d5e1845e46d905ed9d176e3cc66a222c"
+    },
+    "run_terminal.py": {
+      "bytes": 18548,
+      "sha256": "55607fe2bb52d69af3975333066a7d377f9a4b350271b0086389a8a114da0b2d"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "prepare_bindings.py": {
+      "bytes": 12262,
+      "sha256": "96b33868e6e952d2112b35ff39514a25740bf3648d3901fe5c42836b2039d3a7"
+    }
+  },
+  "pending_templates": {
+    "plan.pending.json": {
+      "bytes": 2241,
+      "sha256": "99be347eae156b1fef8567e52444b76c28dfa13e6bcfda98b4b115dafc30b47b"
+    },
+    "plan.regressions.pending.json": {
+      "bytes": 4391,
+      "sha256": "9582064e04292c72376289f72dcd305cd7516831af8527540d60200c4fc53c45"
+    },
+    "execution-bindings.pending.json": {
+      "bytes": 2143,
+      "sha256": "54fc43aecff2ec3c81b777919ccb481ad373d4e3c479dd211d93e6297f54d5f3"
+    }
+  },
+  "originals": {
+    "run_system.py": {
+      "bytes": 19322,
+      "sha256": "5fc687965dc4222713f904a33a3a90265f638533f362c3c0758f542368d97ee0"
+    },
+    "run_terminal.py": {
+      "bytes": 18548,
+      "sha256": "af25ae66a3049dfa40f425fab95f5a2347d593ec5483104c499abf84a3216a5c"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "prepare_bindings.py": {
+      "bytes": 12262,
+      "sha256": "003d4354a82f9d345f6f10b4e6b7b6c6c1d1c9e6fed1383dd69e208f83be83f7"
+    },
+    "plan.pending.json": {
+      "bytes": 2233,
+      "sha256": "880ddcb0cf148431f1849a102ca0fe27e62aff15ae1a36a00159cfea182bb5b1"
+    },
+    "plan.regressions.pending.json": {
+      "bytes": 4363,
+      "sha256": "d4cb7f22c9a26e606a3c22c9ba1670f9edd3040f826efe45b85bd39f824d6670"
+    },
+    "execution-bindings.pending.json": {
+      "bytes": 2143,
+      "sha256": "06de4f1d122d22a73398c2ba64a1525828551b2f674a2f5c6e5f063165d1947d"
+    }
+  },
+  "literal_substitutions": {
+    "ed76454617063f2463a75423b2756e8c957ce6c2": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+    "native-windows-kerr-composite-ed764546": "native-windows-kerr-shared-loop-cd99fd06",
+    "diagnostic-ed764546": "diagnostic-cd99fd06",
+    "38724081383": "38735683288"
+  },
+  "source_delta": "Python wrappers/preparer and pending JSON templates contain only these four literal substitutions. All3PS files byte-exact; inverse substitutions restore all6helper/3template bytes exactly.",
+  "protocol": {
+    "selected_profile": "floor-regressions-then-original-kerr",
+    "selected_order": [
+      "floor-fp32",
+      "floor-fp32comp",
+      "floor-fp64",
+      "captured-fp32",
+      "captured-fp32comp",
+      "kerr-image",
+      "kerr-precision"
+    ],
+    "native_then_terminal_each": true,
+    "stop_on_first_nonpass": true,
+    "predecessor_accepted_whole_input_binding_chain_unchanged": true,
+    "expected_int_exit": 0,
+    "XML": "One exact named run/completed case; zero failures/errors/skipped/disabled. Actual FP64 evidence properties required; unsupported decline cannot establish executed evidence.",
+    "required_properties": {
+      "floor-fp32": "fp32_evidence=real_adaptive_minimum_retry_controls_executed",
+      "floor-fp32comp": "fp32comp_evidence=real_adaptive_minimum_retry_controls_executed",
+      "floor-fp64": "fp64_evidence=real_adaptive_minimum_retry_controls_executed",
+      "captured-fp32": "parity_opcode_8_completed_records=1",
+      "captured-fp32comp": "parity_opcode_8_completed_records=1",
+      "kerr-precision": "fp64_evidence=native_comparison_executed"
+    },
+    "bounds": "First5 native900s, image/precision28800s; bridge+480s; nativechild WorkingSet4GiB; sampled WSL available reserve2GiB; separate terminal60s. Prospective diagnostic bounds, not aggregate native/bootstrap-memory guarantees or changed physical1000ms assertions.",
+    "cache": "Original default nativecache and inherited execution-override refusals unchanged.",
+    "original_assertions": "Exact tests/fixture/tolerances/adaptive limits/publication/refusal unchanged; image64x64, comparison and captured2e-5f two-epsilon reference scopes remain original."
+  },
+  "future_CI": {
+    "packet": "out/kerr-shared-loop-ci-cd99fd06",
+    "run_id": "38735683288",
+    "stage": "bin/windows-msvc/diagnostic-cd99fd06",
+    "source": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+    "actual_products_admitted": false,
+    "positive_native_gate_required": true,
+    "diagnostic_M_is_not_native_gate": "Preparer/wrappers require actual same-source passed native_build_gate and both tested product pins joined to M; no M-only fallback.",
+    "complete_export": "Existing generic manifest loops hash/check every actual M member and exact whole-stage file set=Mfiles+M+nativeGate, no numeric old74/76 restriction. New configured registration/install recipe members are included automatically.",
+    "future_counts": "Actual M member count, stage count, root-selected source/host/proof input count, freeze/binding counts and products/tool/AMD identities must come from final CI artifacts/root admission. Prior76stage/121inputs/123freeze/124binding are historical, not new constants.",
+    "bound_source_checks": "Require actual source/run/repository/attempt, current canonical pinned input files, no stage symlinks, alignment/nativeGate/product identity, expectedAMD/currentSDKloader inputs; live module/birth evidence remains future."
+  },
+  "preparation": "Root alone operates prepare_bindings.py only after separate current CI-stage/product/source admission. It exclusively creates plan/freeze/bindings, preserving absence/self-cycle/recheck rules. Independent concrete-output and root runtime admission remain required before native commands. Do not fill partial missing exports by configure/discovery/MSVC rebuild or fabricate receipts.",
+  "unused_compatibility_template": "plan.pending.json retains original Kerr-only pending interface; preparer explicitly selects plan.regressions.pending.json for root-authorized seven-case order.",
+  "scope": "No current product/provider/runtime/numerical/performance/fullMandatory/P1all-rung/scientific-estate/release acceptance. Historical ed764 sevenPASS do not qualify changed cd99. Candidate/root-resolution export changes are already canonical source; no new tracked changes by this preparation.",
+  "executed": {
+    "authored_helper_or_parser": false,
+    "compiler_or_test": false,
+    "native_or_provider": false,
+    "CI_or_API": false
+  },
+  "passive_checks": {
+    "exact_named_Git_originals": true,
+    "inverse_only_allowed_literals": true,
+    "three_PS_byte_exact": true,
+    "Python_AST_only": true,
+    "pending_false_and_null_products": true,
+    "future_outputs_and_native_temp_absent": true
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "runner_source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "kind": "floor-fp32comp",
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-shared-loop-cd99fd06\\run_native_control.ps1",
+    "-Stage",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-cd99fd06\\tests\\backend\\Release",
+    "-Output",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-shared-loop-cd99fd06\\native\\floor-fp32comp",
+    "-Filter",
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+    "-Seconds",
+    "900",
+    "-RssBytes",
+    "4294967296",
+    "-TemporaryDirectory",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-windows-kerr-shared-loop-cd99fd06\\temp\\floor-fp32comp",
+    "-BuildRoot",
+    "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-cd99fd06",
+    "-ExpectedGateSha256",
+    "6ccf44f2e148462a2d6c729017c89aa41592c27dc1dfaea7824eb0910e275e27",
+    "-LiveRevision",
+    "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+    "-ExecutableName",
+    "sirius_backend_tests.exe",
+    "-InvocationKind",
+    "Control"
+  ],
+  "binding_sha256": "d69d3385cfb99dc66c5c73c025995272d918e811f653a614136824bc0420a855",
+  "linux_controller_pid": 843373,
+  "linux_controller_birth": "12119744",
+  "predecessor_inputs": {
+    "out/native-windows-kerr-shared-loop-cd99fd06/floor-fp32-bridge.json": {
+      "bytes": 2833,
+      "sha256": "0a2c24b583fa3ef74d560e02af617b7c0e78ec8a41ae55955cc4189e0d8f5f0f"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/native/floor-fp32/owner.json": {
+      "bytes": 3250,
+      "sha256": "c4b9de0c5eacd92def8eb76b6757d58a2d77b758e20769232fc989084cd26f04"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/native/floor-fp32/stdout.log": {
+      "bytes": 870,
+      "sha256": "4ea2a384b335eb32bb6944f0bc11d592a2b217bb4103469772a7e8856c34d4c9"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/native/floor-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/native/floor-fp32/memory.json": {
+      "bytes": 42954,
+      "sha256": "d006959e95c7852d7c42aee65653d456e85a4e12f6c006ac39c5b7bae4c1274a"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/floor-fp32-inputs-before.json": {
+      "bytes": 184300,
+      "sha256": "884b52e7bebf2189c6ed70cc7fd5bce2657c8840b14f6eb1e46e2f47cff1cd03"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/floor-fp32-inputs-after.json": {
+      "bytes": 184300,
+      "sha256": "884b52e7bebf2189c6ed70cc7fd5bce2657c8840b14f6eb1e46e2f47cff1cd03"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/native/floor-fp32/gtest.xml": {
+      "bytes": 1046,
+      "sha256": "feb608ffecfe14cb858cbcdc5d95aad0afc3b7808fdc466b7cf0afcf4a32f5e2"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/native/floor-fp32/driver-modules.json": {
+      "bytes": 685,
+      "sha256": "c0ad3e696b807467f287fa3eaecd6cd7f99cd039ab42eff37a6ed0abdd9f9160"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/terminal-floor-fp32.json": {
+      "bytes": 4054,
+      "sha256": "e32738ac22338e1e32706471f17baec119b7d21ebdecad30af4b3fc14885f62f"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/terminal-floor-fp32-bridge.json": {
+      "bytes": 2395,
+      "sha256": "8436ce1841c7a3582c22662bc5f1c50f5dfa09880c6ed03b9d74128d39fab9de"
+    },
+    "out/native-windows-kerr-shared-loop-cd99fd06/terminal-floor-fp32-accepted.json": {
+      "bytes": 8517,
+      "sha256": "cec7ec51ec9ac4346d282c0cf33b8375ae3fc3d849749b848d70acae68c1cd69"
+    }
+  },
+  "bridge_outer_seconds": 1380,
+  "windows_owner_seconds": 900,
+  "minimum_wsl_available_kib": 2097152,
+  "resource_scope": "Unchanged held-handle Windows owner samples child WorkingSet64/PrivateMemorySize64 under4GiB. WSL sampled MemAvailable reserve2GiB; Linux bridge owner+480seconds; separate terminal60seconds. Original trace/P1 physical1000ms assertions unchanged; outer900/28800 bounds are prospective external diagnostics, not original whole-test deadlines or aggregate Windows/bootstrap memory guarantees. Default AMD cache and inherited override refusal unchanged.",
+  "accepted_owner_execution": true,
+  "completed": true,
+  "cleanup_errors": [],
+  "full_qualification_claimed": false,
+  "minimum_sampled_wsl_available_kib": 16335080,
+  "linux_child_pid": 843381,
+  "linux_child_birth": "12120263",
+  "returncode": 0,
+  "linux_child_birth_absent": true,
+  "native_build_gate_authority_used": true,
+  "mandatory_or_full_runtime_admitted": false,
+  "required_evidence_property": {
+    "fp32comp_evidence": "real_adaptive_minimum_retry_controls_executed"
+  },
+  "loaded_provider_evidence_complete": true,
+  "whole_inputs_unchanged": true,
+  "elapsed_seconds": 329.22232976800296,
+  "signals": []
+}
