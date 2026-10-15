@@ -1,0 +1,125 @@
+--- originals/screen.py
++++ screen.py
+@@ -1,4 +1,4 @@
+-"""One complete FP32-proposal compiler producer; graph acceptance is separate.
++"""One complete FP32-restoring-proposal compiler producer; graph acceptance is separate.
+ 
+ Root alone operates the unchanged owner. This source creates no Vulkan objects
+ and issues no numerical or cost acceptance. Completed outputs receive a producer
+@@ -19,7 +19,7 @@
+ sys.dont_write_bytecode = True
+ WORK = Path(__file__).resolve().parent
+ ROOT = WORK.parents[1]
+-PRODUCTS = ROOT / "bin/linux-gcc/portable-divide-fp32-estimate-screen/compiler"
++PRODUCTS = ROOT / "bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen/compiler"
+ CANONICAL = ROOT / "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv"
+ PRODUCT_REVISION = "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc"
+ 
+@@ -43,6 +43,31 @@
+     result = importlib.util.module_from_spec(spec)
+     spec.loader.exec_module(result)
+     return result
++
++
++
++def verify_previous_cost_premise():
++    previous = json.loads((WORK / "origins.json").read_text())["previous_actual_JIT"]
++    assert re.fullmatch(r"[0-9a-f]{40}", previous["commit"])
++    archive = Path(previous["archive"])
++    manifest_path = archive / "manifest.json"
++    assert content(manifest_path) == previous["manifest"]
++    manifest = json.loads(manifest_path.read_text())["files"]
++    result_path = archive / previous["cost_result_member"]
++    admission_path = archive / previous["root_admission_member"]
++    for path, member in ((result_path, previous["cost_result_member"]), (admission_path, previous["root_admission_member"])):
++        assert content(path) == manifest[member]
++    result = json.loads(result_path.read_text())
++    admission = json.loads(admission_path.read_text())
++    assert result["passed"] and admission["passed"]
++    assert result["decision"] == admission["decision"] == "COST_PREMISE_SURVIVES_UNPROVEN"
++    assert result["source_join"]["candidate_header_sha256"] == "c21eb8259f2ed51bce2333ded7065c820dd782cf32ce5e46ea8976166503cdb5"
++    assert content(result_path) == {key: admission["cost_review"][key] for key in ("bytes", "sha256")}
++    assert not result["retained_arithmetic_executed_by_canary"]
++    assert not admission["retained_arithmetic_or_performance_or_hitrate_or_adoption_or_qualification_admitted"]
++    return {"commit": previous["commit"], "manifest": record(manifest_path), "cost_result": record(result_path),
++            "root_admission": record(admission_path), "decision": result["decision"],
++            "scope": "Relevant immutable source/cost decision only; old JIT933 input proof not repeated as new compiler inputs."}
+ 
+ 
+ def verify_frozen():
+@@ -60,6 +85,7 @@
+ def pin_context():
+     verify_frozen()
+     verify_stock_reuse()
++    verify_previous_cost_premise()
+     assert Path.cwd().resolve() == ROOT
+     assert not PRODUCTS.exists(), PRODUCTS
+     assert not (WORK / "compile-endpoint-normal").exists()
+@@ -207,6 +233,7 @@
+     resource.setrlimit(resource.RLIMIT_FSIZE, (limit, limit))
+     verify_frozen()
+     reused = verify_stock_reuse()
++    previous_cost = verify_previous_cost_premise()
+     context = json.loads((WORK / "operator-context.json").read_text())
+     assert context["actions"] == record(WORK / "actions.json")
+     assert context["source_freeze"] == record(WORK / "source-freeze.json")
+@@ -230,7 +257,20 @@
+         optimizer=tools["optimizer"], normal_sum32=True,
+         endpoint_specialized=tuple(recipe["endpoint_specialized"]), diagnostic_divide_fp32_estimate=True)
+     assembler_input = candidate.with_suffix(".spvasm")
+-    assert assembler_input.is_file()
++    raw_module = candidate.with_suffix(".compiler.spv")
++    raw_assembly = candidate.with_suffix(".raw.spvasm")
++    assert assembler_input.is_file() and raw_module.is_file() and raw_assembly.is_file()
++    raw_text = raw_assembly.read_text()
++    float_type = re.search(r"(%\S+) = OpTypeFloat 32", raw_text)[1]
++    proposal_ids = re.findall(r"^\s*(%\S+) = OpFDiv " + re.escape(float_type) + r" .*?$", raw_text, re.M)
++    assert len(proposal_ids) == 1
++    entry = re.search(r"OpEntryPoint GLCompute (%\S+)", raw_text)[1]
++    annotation = "\n               OpDecorate " + proposal_ids[0] + " NoContraction"
++    cap = "OpCapability Shader\n               OpCapability RoundingModeRTE"
++    rte = "\n               OpExecutionMode " + entry + " RoundingModeRTE 32"
++    assembled_text = assembler_input.read_text()
++    assert assembled_text.count(annotation) == assembled_text.count(rte) == 1
++    assert assembled_text.replace(cap, "OpCapability Shader", 1).replace(rte, "", 1).replace(annotation, "", 1) == raw_text
+     candidate_assembly = candidate.with_suffix(".final.spvasm")
+     subprocess.run([tools["disassembler"], str(candidate), "-o", str(candidate_assembly)], check=True)
+     texts = {"stock": stock_assembly.read_text(), "candidate": candidate_assembly.read_text()}
+@@ -258,7 +298,9 @@
+     result_path = WORK / "compiler-products.json"
+     write("compiler-products.json", {"schema": "sirius-fp32-estimate-compiler-products-v1",
+           "passed": True, "original_compile_ssa_assemble_validate_complete": True,
+-          "stock_reuse": reused, "stock_equals_current_canonical": True, "modules": modules, "actual_assembler_input": record(assembler_input),
++          "stock_reuse": reused, "previous_actual_cost_premise": previous_cost, "stock_equals_current_canonical": True, "modules": modules, "actual_assembler_input": record(assembler_input),
++          "raw_post_SSA_module": record(raw_module), "raw_preannotation_assembly": record(raw_assembly),
++          "exact_one_NoContraction_and_original_two_RTE_lines_inverse_equal_raw": True,
+           "complete_descriptor_and_workgroup_type_decorations_equal": True,
+           "execution_modes_equal": True, "ordered_barrier_operands_equal": True,
+           "private_single_FDiv32_policy_and_original_normal_policy_passed": True,
+@@ -271,13 +313,13 @@
+           "operator_context": record(WORK / "operator-context.json"),
+           "inputs_before": record(folder / "inputs-before.json"),
+           "recipe": record(WORK / "compiler-recipes.json"),
+-          "outputs": {str(path): record(path) for path in (candidate, assembler_input, candidate_assembly, result_path)},
++          "outputs": {str(path): record(path) for path in (raw_module, raw_assembly, candidate, assembler_input, candidate_assembly, result_path)},
+           "structural_graph_accepted": False})
+     print("Complete FP32-proposal Endpoint compiler outputs sealed; structural reader and device work unexecuted.", flush=True)
+ 
+ 
+ def review_terminal():
+-    verify_frozen(); verify_stock_reuse()
++    verify_frozen(); verify_stock_reuse(); verify_previous_cost_premise()
+     context = json.loads((WORK / "operator-context.json").read_text())
+     folder = WORK / "compile-endpoint-normal"
+     owner = json.loads((folder / "owner.json").read_text())
+@@ -304,7 +346,9 @@
+                       ("inputs_before", folder / "inputs-before.json"),
+                       ("recipe", WORK / "compiler-recipes.json")):
+         assert seal[key] == record(path)
+-    expected = [PRODUCTS / "modules/candidate-endpoint-normal.spv",
++    expected = [PRODUCTS / "modules/candidate-endpoint-normal.compiler.spv",
++                PRODUCTS / "modules/candidate-endpoint-normal.raw.spvasm",
++                PRODUCTS / "modules/candidate-endpoint-normal.spv",
+                 PRODUCTS / "modules/candidate-endpoint-normal.spvasm",
+                 PRODUCTS / "modules/candidate-endpoint-normal.final.spvasm", WORK / "compiler-products.json"]
+     assert seal["outputs"] == {str(path): record(path) for path in expected}

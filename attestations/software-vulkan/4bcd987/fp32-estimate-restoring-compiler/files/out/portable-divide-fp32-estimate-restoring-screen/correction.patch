@@ -1,0 +1,33 @@
+--- originals/fp32-udiv-header.h
++++ candidate/src/sirius/kernels/portable_binary32.h
+@@ -213,8 +213,28 @@
+         const uint residualLo = numeratorLo - product.lo;
+         const uint residualHi = numeratorHi - product.hi - (numeratorLo < product.lo ? 1u : 0u);
+         if (residualHi == 0u && residualLo < (bb.significand << 5)) {
+-            const uint digit = residualLo / bb.significand;
+-            const uint exactRemainder = residualLo - digit * bb.significand;
++            // R < 32*d. Five exact restoring bits replace corrective division.
++            uint exactRemainder = residualLo;
++            uint digit = 0u;
++            const uint threshold4 = bb.significand << 4;
++            const uint takeMask4 = exactRemainder >= threshold4 ? 0xffffffffu : 0u;
++            exactRemainder -= threshold4 & takeMask4;
++            digit |= 16u & takeMask4;
++            const uint threshold3 = bb.significand << 3;
++            const uint takeMask3 = exactRemainder >= threshold3 ? 0xffffffffu : 0u;
++            exactRemainder -= threshold3 & takeMask3;
++            digit |= 8u & takeMask3;
++            const uint threshold2 = bb.significand << 2;
++            const uint takeMask2 = exactRemainder >= threshold2 ? 0xffffffffu : 0u;
++            exactRemainder -= threshold2 & takeMask2;
++            digit |= 4u & takeMask2;
++            const uint threshold1 = bb.significand << 1;
++            const uint takeMask1 = exactRemainder >= threshold1 ? 0xffffffffu : 0u;
++            exactRemainder -= threshold1 & takeMask1;
++            digit |= 2u & takeMask1;
++            const uint takeMask0 = exactRemainder >= bb.significand ? 0xffffffffu : 0u;
++            exactRemainder -= bb.significand & takeMask0;
++            digit |= 1u & takeMask0;
+             const uint exactQuotient = guess + digit;
+             return PB32Round(sign, exponent, exactQuotient | (exactRemainder != 0u ? 1u : 0u));
+         }

@@ -1,0 +1,61 @@
+--- originals/fp32-builder.py
++++ candidate/scripts/build-retained-kernels.py
+@@ -104,6 +104,34 @@
+     text = text.replace("OpCapability Shader", "OpCapability Shader\n               OpCapability RoundingModeRTE", 1)
+     local_size = re.search(r"^.*OpExecutionMode " + re.escape(entry) + r" LocalSize.*$", text, re.M)[0]
+     return text.replace(local_size, local_size + "\n               OpExecutionMode " + entry + " RoundingModeRTE 32", 1)
++
++
++
++def diagnostic_divide_fp32_proposal_annotation(text):
++    """Add the known missing order annotation before the unchanged strict policy."""
++    floating = re.findall(r"(%\S+) = OpTypeFloat (\d+)", text)
++    if len(floating) != 1 or floating[0][1] != "32":
++        raise ValueError("diagnostic FP32 annotation requires exactly binary32")
++    float_type = floating[0][0]
++    named = re.findall(r'OpName (%\S+) "PB32Divide"', text)
++    if len(named) != 1:
++        raise ValueError("diagnostic FP32 annotation lost its unique Divide")
++    body = re.search(r"^\s*" + re.escape(named[0]) + r" = OpFunction .*?OpFunctionEnd", text, re.M | re.S)
++    divisions = re.findall(r"^\s*(%\S+) = OpFDiv " + re.escape(float_type) + r" .*?$", text, re.M)
++    if (not body or len(divisions) != 1 or
++            re.findall(r"= (OpF(?!unction)\S+) ", body[0]) != ["OpFDiv"] or
++            not re.search(r"^\s*" + re.escape(divisions[0]) + r" = OpFDiv ", body[0], re.M) or
++            re.search(r"^\s*OpDecorate " + re.escape(divisions[0]) + r"\b", text, re.M)):
++        raise ValueError("diagnostic FP32 annotation requires one unannotated scoped proposal")
++    annotation = "\n               OpDecorate " + divisions[0] + " NoContraction"
++    decorations = list(re.finditer(r"^.*OpDecorate .*?$", text, re.M))
++    if not decorations:
++        raise ValueError("diagnostic FP32 annotation requires original decoration section")
++    point = decorations[-1].end()
++    transformed = text[:point] + annotation + text[point:]
++    if transformed.count(annotation) != 1 or transformed.replace(annotation, "", 1) != text:
++        raise ValueError("diagnostic FP32 annotation is not exactly reversible")
++    return transformed
+ 
+ 
+ def diagnostic_divide_fp32_normal_sum_controls(text):
+@@ -408,6 +436,13 @@
+         optimized.replace(raw)
+     subprocess.run([disassembler, str(raw), "-o", str(assembly)], check=True)
+     text = assembly.read_text()
++    if diagnostic_divide_fp32_estimate:
++        # Preserve exact post-SSA tool outputs before any policy annotation.
++        raw_assembly = destination.with_suffix(".raw.spvasm")
++        if raw_assembly.exists():
++            raise ValueError("diagnostic raw assembly already exists")
++        raw_assembly.write_text(text)
++        text = diagnostic_divide_fp32_proposal_annotation(text)
+     if portable:
+         # Inspect the exact module being embedded, not an adjacent cached dump.
+         # Legacy portable modules supply RTE/gradual underflow with integers.
+@@ -434,7 +469,8 @@
+             subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(destination)],
+                            check=True)
+             subprocess.run([validator, "--target-env", "vulkan1.2", str(destination)], check=True)
+-            raw.unlink()
++            if not diagnostic_divide_fp32_estimate:
++                raw.unlink()
+         else:
+             subprocess.run([validator, "--target-env", "vulkan1.2", str(raw)], check=True)
+             raw.replace(destination)

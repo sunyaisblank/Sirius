@@ -1,0 +1,68 @@
+{
+  "execution_performed_by_author": false,
+  "future_bin_root": "/home/astra/.project/Sirius/bin/linux-gcc/portable-divide-fp32-estimate-restoring-screen",
+  "header_math_compiler_adapter_ready_for_independent_review": true,
+  "operator_admitted": false,
+  "prospective_commands": [
+    "python3 -B out/portable-divide-fp32-estimate-restoring-screen/screen.py pin-context 4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-screen/run_owned.py compile-endpoint-normal",
+    "python3 -B out/portable-divide-fp32-estimate-restoring-screen/screen.py review"
+  ],
+  "remaining_admission": "Independent math/source review, then concrete final input/output actions/preparation/source-freeze and root admission. No context/actions/bin/compiler/helper run exists.",
+  "schema": "sirius-fp32-estimate-restoring-source-draft-v1",
+  "source_freeze_created": false,
+  "source_pins": {
+    "candidate-builder.patch": {
+      "bytes": 7907,
+      "sha256": "3a3fd21b6a342c9782107f4b1f400b55697f2607a12a7479bf497d5e89613228"
+    },
+    "candidate-insertion.txt": {
+      "bytes": 3154,
+      "sha256": "758d33214cee697a4cb326608981b0824f2ef33db7bfaeb1deb8c325f28c0ac2"
+    },
+    "candidate.patch": {
+      "bytes": 4385,
+      "sha256": "ea740053232e8cf04e7647c04026074c30d58d1545d08d75ad375244c072533f"
+    },
+    "candidate/scripts/build-retained-kernels.py": {
+      "bytes": 39716,
+      "sha256": "c69f51e2f1eb36781454ee0a2fb1ab0b2c1a65798f30d39d2add6df16d2261c2"
+    },
+    "candidate/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 16103,
+      "sha256": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca"
+    },
+    "compiler-annotation-adapter.patch": {
+      "bytes": 3486,
+      "sha256": "7af2316e4d90311d44838f5000a9affc43a32a2d9fcd9d2808dae9c7c9b28584"
+    },
+    "compiler-contracts.json": {
+      "bytes": 2252,
+      "sha256": "34d95636e13f81aaf976a410ad897df920bd029e6b968d2822973787242c1d60"
+    },
+    "compiler-recipes.json": {
+      "bytes": 7486,
+      "sha256": "9ba57edafcd0c86dd9b841e560666ea0aad58e033a52b888e852535c5531745c"
+    },
+    "correction.patch": {
+      "bytes": 1926,
+      "sha256": "25ca8ae3ac290a13b8a00012f4c6fe2eebbcd2f999e47140bafdb1d5702dcea4"
+    },
+    "origins.json": {
+      "bytes": 2068,
+      "sha256": "f733e452ac12332f1929fe0490394ef9550f1728c5a111f2262cc601a9560b7d"
+    },
+    "screen-adaptation.patch": {
+      "bytes": 7710,
+      "sha256": "24cc424bd6a56dd7fee58eb1e28a642c0212aa0872dfa92c2b05305e5e32dd1f"
+    },
+    "screen.py": {
+      "bytes": 23011,
+      "sha256": "2b24e47197178029027af67d4bb27a7621a2a8d7f9ebde7d3ddcb39acfbad4e9"
+    },
+    "source-contracts.json": {
+      "bytes": 4867,
+      "sha256": "4adf76ad94db09e4fa04b2a066c5c61367ab2c6c0f1683e5cad2c8d04e24ab13"
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "candidate_header": {
+    "bytes": 16103,
+    "sha256": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca"
+  },
+  "correction_precondition": {
+    "N": "d<=m<2d;N=m*2^26<2^51",
+    "P": "g*d<2^51",
+    "d": "2^23<=d<2^24",
+    "guard": "R=(N-P)mod2^64;Rhi==0&&Rlo<32*d uniquely proves0<=N-P<32*d;R0=Rlo",
+    "guess": "2^26-16<=g<=2^27-24"
+  },
+  "differences_from_passed_previous_screen": "Only corrective residualLo/d and digit*d are replaced by five literal restoring steps; previous candidate remains COST_PREMISE_SURVIVES_UNPROVEN, with no benefit failure or numerical acceptance fabricated.",
+  "executed_arithmetic_or_numeric_or_cost_or_adoption_claim": false,
+  "five_literal_steps": [
+    {
+      "digit_update": "digit|=16u&mask",
+      "entry_invariant": "0<=r<d*2^5",
+      "exit_invariant": "0<=r<d*2^4",
+      "mask": "r>=threshold ?0xffffffffu:0u",
+      "shift": 4,
+      "subtraction": "r-=threshold&mask",
+      "threshold": "d<<4"
+    },
+    {
+      "digit_update": "digit|=8u&mask",
+      "entry_invariant": "0<=r<d*2^4",
+      "exit_invariant": "0<=r<d*2^3",
+      "mask": "r>=threshold ?0xffffffffu:0u",
+      "shift": 3,
+      "subtraction": "r-=threshold&mask",
+      "threshold": "d<<3"
+    },
+    {
+      "digit_update": "digit|=4u&mask",
+      "entry_invariant": "0<=r<d*2^3",
+      "exit_invariant": "0<=r<d*2^2",
+      "mask": "r>=threshold ?0xffffffffu:0u",
+      "shift": 2,
+      "subtraction": "r-=threshold&mask",
+      "threshold": "d<<2"
+    },
+    {
+      "digit_update": "digit|=2u&mask",
+      "entry_invariant": "0<=r<d*2^2",
+      "exit_invariant": "0<=r<d*2^1",
+      "mask": "r>=threshold ?0xffffffffu:0u",
+      "shift": 1,
+      "subtraction": "r-=threshold&mask",
+      "threshold": "d<<1"
+    },
+    {
+      "digit_update": "digit|=1u&mask",
+      "entry_invariant": "0<=r<d*2^1",
+      "exit_invariant": "0<=r<d*2^0",
+      "mask": "r>=threshold ?0xffffffffu:0u",
+      "shift": 0,
+      "subtraction": "r-=threshold&mask",
+      "threshold": "d"
+    }
+  ],
+  "inductive_proof": [
+    "For T=d*2^s, entry0<=r<2T. If r>=T, mask all1 selects T and r-T is in[0,T); otherwise mask0 subtracts0 and r<T.",
+    "Maintain R0=d*digit+r. Each distinct bit2^s is set iff exactlyT is subtracted. OR equals addition because no bit is written twice.",
+    "After s0,0<=r<d and digit<=31, hence digit=floor(R0/d),r=R0%d. No division, multiplication, bool-to-uint conversion or helper occurs in the five-step correction.",
+    "With N=g*d+R0, exactQuotient=g+digit=floor(N/d)<2^27; finalr!=0 is exact sticky and original PB32Round receives unchanged sign/exponent."
+  ],
+  "lowering_and_cost_unproved": "Existing empty-arm choices reached LLVM selects/masks in prior actual screen. New emitted five-step graph, actual absence of correctiveUDiv, native compare/select/subtract shape, code/register/stack countercost and mixed-lane behavior require fresh admitted compiler/ordinary-code evidence.",
+  "macro": "SIRIUS_PB32_DIVIDE_FP32_ESTIMATE=1",
+  "original_product_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+  "previous_corrective_UDiv_header": {
+    "bytes": 14973,
+    "sha256": "c21eb8259f2ed51bce2333ded7065c820dd782cf32ce5e46ea8976166503cdb5"
+  },
+  "schema": "sirius-fp32-estimate-five-bit-restoring-source-contracts-v1",
+  "source_only": true,
+  "source_operator_revision": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+  "stock_header": {
+    "bytes": 12797,
+    "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+  },
+  "uint32_bounds": [
+    "Largest selected threshold d<<4<2^28; original guard d<<5<2^29. Every shift distance0..4 is valid; last threshold uses d directly.",
+    "Selected threshold is always<=r, so restoring subtraction has no unsigned underflow; mask/digit arithmetic is exact uint32.",
+    "No native-FDiv precision/RTE, hit rate, Float64/Int64 feature or FTZ float-cast assumption is used. C++ proposal bitcasts retain explicit IEEEbinary32 encoding precondition; sizeof alone does not prove it."
+  ],
+  "unchanged_after_correction": [
+    "exactQuotient=guess+digit and final-residual sticky/common PB32Round",
+    "entire original fallback inputs/radix256/4 loop/sticky/sign/exponent/round source bytes",
+    "all other PB32 operations including Multiply/FMA/Residual and uint32 public storage/layout",
+    "single existing optional macro, default macro-off exact original12797B49d3 source reversal"
+  ],
+  "unchanged_before_correction": [
+    "all NaN/infinity/signed-zero guards and refusal behavior",
+    "PB32Unpack and original normalization/exponent",
+    "untrusted nativeFDiv32 bit-built numerator/denominator and sign/binade rejection",
+    "h bit extraction and guess=h-16",
+    "one exact existing UInt2 product",
+    "inline unsigned modulo2^64 subtraction/borrow",
+    "high residual zero and strict low residual<d<<5 guard"
+  ]
+}

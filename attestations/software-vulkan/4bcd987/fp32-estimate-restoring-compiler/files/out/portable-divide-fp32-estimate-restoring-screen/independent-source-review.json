@@ -1,0 +1,137 @@
+{
+  "arithmetic_source_review": {
+    "assumptions_and_strength": "Manual exact-integer argument, not executed or machine-checked proof. Native proposal accuracy/RTE/hit rate is unnecessary; existing actual binary32 bit-encoding target precondition remains (sizeof(float) alone is insufficient). No Float64/Int64 feature is added.",
+    "bounds_and_rounding": "Largest threshold d<<4<2^28; guard d<<5<2^29; all shifts valid and selected subtraction cannot underflow. By N=g*d+R0, q=g+digit=floor(N/d) lies[2^26,2^27); final r!=0 is exact sticky for unchanged PB32Round. Bound q through this identity, not the looser independent guess+31 bound.",
+    "change_exactness": "Only the previous residualLo/d and digit*d correction is replaced. Exact string reversal recovers previous14973B/c21eb825 header; exceptional prefix, unpack/normalization, native bit proposal, g=h-16, one UInt2 product, explicit modular borrow guard, original fallback, common Round/sign/exponent and all other PB32 operations remain unchanged.",
+    "emitted_absence_of_integer_division_not_yet_proved": true,
+    "five_literal_steps": "s=4,3,2,1,0 with thresholds16d,8d,4d,2d,d; uint mask=(r>=T)?0xffffffffu:0u; subtract T&mask and OR digit with2^s&mask. Actual literal source matches all five; last threshold uses d directly.",
+    "invariant": "Maintain R0=d*digit+r and0<=r<d*2^(s+1) before step s. For T=d*2^s, subtracting T exactly when r>=T leaves0<=r<T. Each distinct digit bit is written once, so OR equals addition. After s0: r<d,digit<=31, hence digit=floor(R0/d),r=R0%d.",
+    "precondition": "2^23<=d<2^24;d<=m<2d;N=m*2^26<2^51;P=g*d<2^51. Unchanged high-zero and Rlo<d<<5 guard proves exact R0=N-P in[0,32d). Negative modulo2^64 residual cannot have high word0.",
+    "source_correction_contains_no_division_product_or_helper": true
+  },
+  "blockers": [],
+  "closure": {
+    "actual_input_scope": "mature owner additionally captures all tracked source and actions; no generated output freezes itself",
+    "all13_draft_source_pins_unchanged": true,
+    "context_owner_products_private_bin_absent": true,
+    "external": 58,
+    "only_missing_future_input": "operator-context.json",
+    "operational_root_receipts_and_this_review_outside_freeze": true,
+    "predicted_actual_owner_unique_inputs": 636,
+    "private": 44,
+    "rich_pins_exact": 102,
+    "source_ancestors": "Original previous header/builder/controller copies equal f5758f98 immutable Git bytes; default macro-off header reverses exactly to current stock12797B/49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60.",
+    "stock_reuse": "8 actual source,16 actual tool and24 selected archive pin joins checked; complete stock module equals current canonical. No claim all591 historical host inputs match. The12 preserved controls retain original Int64-policy scope.",
+    "union": "102 frozen paths plus source-freeze/preparation/future operator-context; actions==unpinned before pin-context",
+    "unique_declared_future_inputs_exact": 105
+  },
+  "compiler_adapter_review": {
+    "known_repair": "After unchanged compile/SSA/raw disassembly, diagnostic-only adapter retains post-SSA.compiler.spv and exact preannotation.raw.spvasm, uniquely finds sole FDiv32 in unique PB32Divide, requires no existing target decoration, inserts exactly one NoContraction and proves its inverse before unchanged strict policy.",
+    "no_graph_proof_in_producer": "Inherited normalized_function is unused on this producer path; no all-helper/graph proof is inferred. Actual restoring CFG/source/fallback graph requires a separately admitted reader after real products exist.",
+    "outputs_and_seal": "Five shader artifacts (raw postSSA SPV, raw ASM, actual assembler input, validated SPV, final readback) plus compiler-products.json; rich seal binds all six, freeze/context/actual inputs-before/recipe. Post-terminal reader rechecks owner exit0/source+whole-input stability/birth retirement/no cleanup remnants and exact seal/current outputs.",
+    "policy_unchanged": "AST bodies of original private FP32 policy, portable_normal_sum_controls, native_controls, FMA tool probe, coefficient/owner-layout helpers and main are unchanged. Validation-only one-FDiv projection still calls strict original normal32 checks; original two RTE lines remain.",
+    "producer_postconditions": "Exact one-annotation plus original two-RTE-line inverse equals raw ASM before seal; complete stock type/descriptor/workgroup decorations, execution modes and ordered barrier operands agree; Int32/Float32 and exact capabilities remain.",
+    "recipe_unchanged": "Full original portable normal Endpoint only, same optional macro, registers612/terms5/layers111/prefix250/program21143words, endpoint11240/9903/84/202, lanes64/execution16; SlangO0/SPIRV1.5, original SSA/DCE/preserve-bindings/interface, assemblerSPV1.5/validatorVulkan1.2/finalreadback. FP64/FMA/stage7 owner excluded; default builder lifecycle unchanged."
+  },
+  "limits": {
+    "arithmetic_corpus_or_provider_or_integrated_controls_or_benefit_accepted": false,
+    "compiler_owner_or_reader_executed": false,
+    "emitted_restoring_graph_accepted": false,
+    "later_boundary": "Actual producer/terminal acceptance first; separate emitted graph and ordinary LLVM/native cost review before expensive arithmetic/integration/benefit qualification.",
+    "new_native_lowering_or_cost_or_hitrate_established": false,
+    "production_adopted_or_full_qualification": false
+  },
+  "operation": {
+    "commands": [
+      "python3 -B out/portable-divide-fp32-estimate-restoring-screen/screen.py pin-context 4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+      "python3 -B out/portable-divide-fp32-estimate-restoring-screen/run_owned.py compile-endpoint-normal",
+      "python3 -B out/portable-divide-fp32-estimate-restoring-screen/screen.py review"
+    ],
+    "core_bytes": 0,
+    "kind": "diagnostic",
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "mature_owner_and_guard_byte_exact": true,
+    "per_file_bytes": 67108864,
+    "provider": false,
+    "root_prelaunch": "Same clean4498/sole worktree, exact102/105 inputs and unmodified13-pin draft source; assert-enabled/usr/bin/python3 and no relevant environment overrides; fresh output absence and root-exclusive operation.",
+    "stop_rule": "Stop/preserve first failure. No unchanged known NoContraction failure is scheduled: annotation repair precedes policy. New source materially changes correction; no compiler pass, science setting, test deadline or acceptance gate is relaxed."
+  },
+  "passed": true,
+  "pins": {
+    "actions.json": {
+      "bytes": 14084,
+      "sha256": "574eb880d79c118af955f77cf92ba55e7faf6f58da1e5762876b39c31f8ac5c7"
+    },
+    "actions.unpinned.json": {
+      "bytes": 14084,
+      "sha256": "574eb880d79c118af955f77cf92ba55e7faf6f58da1e5762876b39c31f8ac5c7"
+    },
+    "candidate/scripts/build-retained-kernels.py": {
+      "bytes": 39716,
+      "sha256": "c69f51e2f1eb36781454ee0a2fb1ab0b2c1a65798f30d39d2add6df16d2261c2"
+    },
+    "candidate/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 16103,
+      "sha256": "4335001872a77a107b5da94f9a4a4b21de007080e911a82b8c585ed4bd86eeca"
+    },
+    "compiler-annotation-adapter.patch": {
+      "bytes": 3486,
+      "sha256": "7af2316e4d90311d44838f5000a9affc43a32a2d9fcd9d2808dae9c7c9b28584"
+    },
+    "correction.patch": {
+      "bytes": 1926,
+      "sha256": "25ca8ae3ac290a13b8a00012f4c6fe2eebbcd2f999e47140bafdb1d5702dcea4"
+    },
+    "preparation.json": {
+      "bytes": 3772,
+      "sha256": "845d3a62da8c8118fd4c95f7278455d33f277067cd02cd0c9cda734d5816f58e"
+    },
+    "screen.py": {
+      "bytes": 23011,
+      "sha256": "2b24e47197178029027af67d4bb27a7621a2a8d7f9ebde7d3ddcb39acfbad4e9"
+    },
+    "source-contracts.json": {
+      "bytes": 4867,
+      "sha256": "4adf76ad94db09e4fa04b2a066c5c61367ab2c6c0f1683e5cad2c8d04e24ab13"
+    },
+    "source-draft.json": {
+      "bytes": 2816,
+      "sha256": "9d13fb5e9f9182533914aa6db799a300c37f43d188fe5b90bb386a44e1593c2f"
+    },
+    "source-freeze.json": {
+      "bytes": 40796,
+      "sha256": "316c30db9e99855441dcc7f221f31a279e9fc575d7e8066c4e605c63accb398a"
+    }
+  },
+  "prior_state": {
+    "decision": "COST_PREMISE_SURVIVES_UNPROVEN",
+    "new_compiler_reads_only_relevant_prior_cost_receipts_not_old933_inputs": true,
+    "no_previous_numeric_or_benefit_failure_or_acceptance_fabricated": true,
+    "original_compiler_child_exit": 1,
+    "original_compiler_owner_passed": false,
+    "previous_JIT_commit": "0ed71524fab1974f597ecc96d35c2dced512bb96",
+    "previous_JIT_manifest": {
+      "bytes": 33703,
+      "sha256": "718e5ce448d725b547b67a8c95cebac234be7d6d95c801268d616d3cb9cadf94"
+    },
+    "prior_cost_result_and_root_admission_match_actual_Git": true
+  },
+  "reviewer": "/root/sanitizer_gate_contract",
+  "schema": "sirius-fp32-estimate-restoring-independent-source-review-v1",
+  "scope": "Manual arithmetic/source and one compiler-producer packet admission only. No authored helper, policy, compiler, SSA/assembler/validator/disassembler, test or provider executed by reviewer.",
+  "utc": "2026-10-15T02:31:27.131878+00:00",
+  "workspace": {
+    "HEAD": "4498cc41168ad29fc4c111819a4cb7ccaa54a8bf",
+    "ahead": 0,
+    "behind": 0,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "canonical_committed_pushed": true,
+    "this_review": "ignored scratch; not committed or pushed",
+    "tracked_status": "",
+    "worktrees": 1
+  }
+}
