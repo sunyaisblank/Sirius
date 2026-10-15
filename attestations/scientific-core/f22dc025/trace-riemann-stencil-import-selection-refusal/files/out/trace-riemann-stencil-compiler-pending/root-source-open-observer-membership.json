@@ -1,0 +1,51 @@
+{
+  "schema": "sirius-stencil-source-open-observer-membership-supplement-v1",
+  "created_utc": "2026-10-15T20:11:47.879245+00:00",
+  "initial_observer_record": {
+    "bytes": 5825,
+    "sha256": "8da31ce32ae63b70f602908f40eab794102173f80e735cae15e3fe468c6e3d2f"
+  },
+  "additional_filter_reason": "Independent reviewer requires source opens on workers be joined to actual Slang child via clone/fork lineage, rather than guessed from TID.",
+  "actual_capability_argv": [
+    "/usr/bin/strace",
+    "-f",
+    "-yy",
+    "-s",
+    "4096",
+    "-e",
+    "trace=execve,chdir,fchdir,openat,openat2,readlink,readlinkat,clone,clone3,fork,vfork",
+    "-o",
+    "out/trace-riemann-stencil-compiler-pending/root-strace-membership-capability.trace",
+    "/usr/bin/true"
+  ],
+  "actual_capability_closed_exit": 0,
+  "capability_streams": {
+    "out/trace-riemann-stencil-compiler-pending/root-strace-membership-capability.trace": {
+      "bytes": 381,
+      "sha256": "ae15bc0ff527cbad2c9081d4d072dad134249b728b828870af7b4e7757cc5eea"
+    },
+    "out/trace-riemann-stencil-compiler-pending/root-strace-membership-capability.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-compiler-pending/root-strace-membership-capability.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "final_first_candidate_command_prefix": [
+    "/usr/bin/strace",
+    "-f",
+    "-yy",
+    "-s",
+    "4096",
+    "-e",
+    "trace=execve,chdir,fchdir,openat,openat2,readlink,readlinkat,clone,clone3,fork,vfork",
+    "-o",
+    "ROOT_OWNED_FIRST_CANDIDATE_TRACE"
+  ],
+  "Slang_recipe_or_mature_owner_change": false,
+  "membership_rule": "Tie actual saved Slang childPID/start birth/execve and CWD to successful openat paths. Worker opens require explicit trace clone/fork lineage rooted in that exact Slang child, with lifecycle ordering. Owner or Git sibling hashing is excluded. Refuse if unresolved; file opens only corroborate mandatory ordinary emitted new distance-loop proof.",
+  "root_observer_guard_scope": "Separate root observer outside owned Slang/controller RSS accounting, separately tool/DSO/input/trace pinned beforeafter. No timing/RSS/performance attribution or governor transfer.",
+  "scope": "Supplement only broadens root syscall observation; no project/compiler/provider/test or source mutation. Original observer record remains unchanged."
+}

@@ -1,0 +1,203 @@
+{
+  "schema": "sirius-trace-riemann-stencil-distance-loop-independent-source-review-v1",
+  "created_utc": "2026-10-15T19:58:22.106795+00:00",
+  "passed": true,
+  "source_only": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "candidate_applied": false,
+  "compiler_or_runtime_admitted": false,
+  "reviewer_scope": "Independent passive source/text/hash/read-only Git. No helper/project import/parser/compiler/provider/test/network/process query or canonical/other-packet mutation.",
+  "candidate_pins": {
+    "source-contracts.json": {
+      "path": "out/trace-riemann-stencil-loop/source-contracts.json",
+      "bytes": 14638,
+      "sha256": "c3a7e3e480c71e46506420bdea2d9189eeb2f4b886ba16b7804307d7523795b5"
+    },
+    "original-gr_deviation.slang": {
+      "path": "out/trace-riemann-stencil-loop/original-gr_deviation.slang",
+      "bytes": 17259,
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+    },
+    "candidate-gr_deviation.slang": {
+      "path": "out/trace-riemann-stencil-loop/candidate-gr_deviation.slang",
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    "candidate-trace.slang": {
+      "path": "out/trace-riemann-stencil-loop/candidate-trace.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "patch.diff": {
+      "path": "out/trace-riemann-stencil-loop/patch.diff",
+      "bytes": 6461,
+      "sha256": "e7efe78e843948086aab1ba2523d513d0925b48cc24923abed7497819bd0da9d"
+    }
+  },
+  "inspected_dependency_pins": {
+    "src/sirius/kernels/gr_metrics.slang": {
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    "src/sirius/kernels/parity_probe.slang": {
+      "bytes": 44089,
+      "sha256": "1d81e295c4bc288ba3a5032222c4bbbd95b2381d843526a50520b1222f25dc26"
+    }
+  },
+  "mechanical_scope": {
+    "exact_patch_and_inverse": true,
+    "single_rho_region_replacement": true,
+    "outside_prefix_and_suffix_exact": true,
+    "canonical_named_Git_preimage_verified": true,
+    "unchanged_regions": {
+      "unchanged_prefix": {
+        "bytes": 2721,
+        "sha256": "da34a9544c13d8fb9836f7ab4f7a3db8f3408ed6b89ca7d5750094d1cec05d91"
+      },
+      "unchanged_suffix": {
+        "bytes": 11680,
+        "sha256": "e99a49ce8e6b52047f46218a727e06b8aa0904dd78f786463a40255c0777c8a2"
+      }
+    },
+    "public_signatures_all_other_functions_and_post_Riemann_tensor_contraction_exact": true,
+    "private_trace_equals_previous63512B_pairloop": true
+  },
+  "Hoare_and_arithmetic_review": {
+    "preconditions": "Same original by-value x and M,a,Q,Lambda, Real types and caller domains. No added finite, metric, horizon or epsilon restriction.",
+    "outer_invariant": "rho advances1,2,3. Original dGamma[0] remains zero; previous spatial slabs retain completed derivatives. Original base Gamma, radius, epsilon and literal conversions are unchanged.",
+    "inner_invariant": "At each distance xp=x and xm=x, changing only selected spatial axis. Distance1 assigns all64 derivative components before distance2 reads them. Non-FP64 distance3 consumes the distance2 result. No uninitialized derivative read.",
+    "positions": "All9 per-axis +=/-= offsets retain exact eps,2.0f*eps,3.0f*eps expressions, not Real(distance)*eps, repeated increments or sign multiplication. Time and other coordinates are unchanged.",
+    "evaluation_order": "Positive then negative at distance1, then positive/negative2, then3 onlyFP32/COMP. Later offset calculations occur immediately before their pure local calls rather than upfront; no global state, API, barrier or cross-sample state is introduced.",
+    "FP32_COMP_component_sequence": [
+      "d=45.0f*(Gamma(+eps)-Gamma(-eps))",
+      "d-=9.0f*(Gamma(+2.0f*eps)-Gamma(-2.0f*eps))",
+      "d=(d+(Gamma(+3.0f*eps)-Gamma(-3.0f*eps)))/(60.0f*eps)"
+    ],
+    "FP64_component_sequence": [
+      "d=8.0f*(Gamma(+eps)-Gamma(-eps))",
+      "d=(d-(Gamma(+2.0f*eps)-Gamma(-2.0f*eps)))/(12.0f*eps)"
+    ],
+    "rounding": "Original subtraction orientation, multiplication grouping, intermediate store/read, final addition/subtraction/division and mu/nu/sig order retained. No weighted-sum reassociation, epsilon/Real literal conversion, FMA/fastmath policy or tolerance change. Source preservation does not establish compiled bit equality or accepted numerical results.",
+    "out_array_reuse": "Two original distinct64Real work arrays are reused; Christoffel zeros its entire out tensor before every early return and assigns all components. No alias to central Gamma, dGamma or caller R; no stale sample values, added sample tensor or changed inout/copy-out contract.",
+    "bounds": "rho1..3, distance1..3 float FP32/COMP or1..2 double FP64, component0..3. Integer bounds cannot overflow. All Gamma/dGamma indices are original bounded dimensions.",
+    "failure_semantics": "Void helper has no new refusal/shortcircuit/cancellation. Both signs and all distances still execute even for nonfinite values. NaN/Inf propagation and downstream finite/failed-state rules remain; no transactional rollback guarantee added.",
+    "postcondition": "Each derivative component follows the original sequence; all subsequent R assembly/contractions and remaining file bytes are unchanged."
+  },
+  "all_modes_and_composition": {
+    "Christoffel_source": "gr_metrics.slang:162: full zeroing precedes flat and zero-radius returns. M,a,Q,Lambda forwarded unchanged; no flat/Kerr/charged/spin/deSitter specialization.",
+    "precision": "gr_types:24 double under SIRIUS_FP64, otherwisefloat. COMP carry behavior elsewhere unchanged; original fourth/sixth-order stencils remain.",
+    "private_composite": "Previous pair-loop trace63512B plus new gr_deviation17768B. Future private imports must actually select trace.slang and gr_deviation.slang from these copies, with remaining canonical imports exact. This is not canonical f22 shader qualification.",
+    "callers": [
+      "AdvanceJacobiPairAcceptedSegment start/mid/end at original gr_deviation219/234/250",
+      "GeodesicDeviationAccelFullRiemann at original269",
+      "Private trace ordered two-pair loop with original accepted/clipped-segment guard",
+      "parity_probe765/824 accepted pair controls and850 full Riemann contraction"
+    ],
+    "import_without_new_direct_call_proof": [
+      "gr_camera",
+      "camera_frame_probe"
+    ],
+    "ABI_and_consumers": "No resources/entry/bindings/records/dispatch/packet fields changed. Four columns, central integration, floor/controller/projection/event intervals/failed-sample recovery/tolerances remain unchanged."
+  },
+  "prior_emitted_grounding": {
+    "all_supplied_pins_verified": true,
+    "passive_text_anchors": {
+      "fp32": {
+        "function_definitions": 1,
+        "function_calls": 0,
+        "first_stencil_guard_lines": [
+          98574,
+          99483,
+          100495,
+          101404,
+          102418,
+          103327
+        ],
+        "three_start_mid_end_coefficient_lines": [
+          100331,
+          109109,
+          118360
+        ]
+      },
+      "fp32comp": {
+        "function_definitions": 1,
+        "function_calls": 0,
+        "first_stencil_guard_lines": [
+          98687,
+          99596,
+          100608,
+          101517,
+          102531,
+          103440
+        ],
+        "three_start_mid_end_coefficient_lines": [
+          100444,
+          109222,
+          118473
+        ]
+      },
+      "fp64": {
+        "function_definitions": 1,
+        "function_calls": 0,
+        "first_stencil_guard_lines": [
+          98684,
+          99599,
+          100617,
+          101532
+        ],
+        "three_start_mid_end_coefficient_lines": [
+          100453,
+          107318,
+          114656
+        ]
+      }
+    },
+    "portable_anchors": "All6 supplied CUDA and MSL Christoffel call lines match old emitted source; no native compiler/runtime claim.",
+    "interpretation": "Old private pair-loop SPVs contain one entry function, no OpFunctionCall and separate six/four stencil body guards at each of three start/mid/end coefficients. This grounds a new static sharing hypothesis only.",
+    "literal_limit": "Prior Real(0.001)/0.04/60eps/12eps lowering observations are inherited facts, not new candidate codegen or permission to rewrite literals."
+  },
+  "work_and_risks": {
+    "dynamic_Christoffel_evaluations_per_Riemann": {
+      "FP32_COMP": 19,
+      "FP64": 13
+    },
+    "derivation": "One base plus3axes*2signs*3or2distances, unchanged mathematical sample count. Only source static stencil callsites6or4 become2.",
+    "compiler_risks": [
+      "Structurally uniform literal-bounded distance loop can still unroll/inline or duplicate bodies.",
+      "Dynamic predicates and shared work-array liveness can affect promotion, indexing, spills/local storage/register pressure and LLVM/driver cost.",
+      "Compiler reassociation/constant folding may differ despite same source arithmetic; actual emitted CFG/ABI/arithmetic dependency and footprint checks remain essential."
+    ],
+    "no_claims": [
+      "Current candidate emitted bodycount/loop retention or smaller module",
+      "Driver JIT/time/RSS/performance improvement",
+      "Numerical/scientific/native/Mandatory/release adoption"
+    ]
+  },
+  "prior_runtime_and_future_admission": {
+    "prior_attempt": "Pair-loop-only private attempt timed out300.377911921s; FP32 exercised thenCOMPbegin, noXML/fullnumericalverdict. Peak2520344KiB was not an RSS stop and identifies no allocating/JIT host call.",
+    "required_before_any_execution": [
+      "Preserved prior stop/publication and explicit root release; no unchanged retry or raised guard.",
+      "Controlled offline all3SPV+CUDA/MSL source screen with actual baseline equality, original validation, complete private import/producer/owner closure.",
+      "Independent/root emitted bounded-loop/arithmetic/layout/interface/footprint review, no assumed codegen equality.",
+      "Concrete original runtime admission preserving original assertions/settings/defaultcache/LVP0/300s4GiBaggregate2GiBreserve/1000ms active phases."
+    ],
+    "compiler_runtime_or_canonical_application_authorized_here": false,
+    "source_build_holds_released": false
+  },
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_clean": true,
+    "committed_and_pushed": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "review_awaits_preservation": true
+  },
+  "verdict": "SOURCE PASS: no concrete dataflow, bounds, sample-order or operation-order defect found. Actual emitted and runtime admission remain separate; no adoption authorization."
+}

@@ -1,0 +1,230 @@
+{
+  "schema": "sirius-riemann-stencil-compiler-independent-concrete-runtime-metadata-review-v1",
+  "passed": true,
+  "metadata_admitted": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T20:16:04.954868+00:00",
+  "blockers": [],
+  "admission_scope": {
+    "root_first_two_only": [
+      "control-fp32",
+      "candidate-fp32"
+    ],
+    "all_ten_operations_admitted": false,
+    "root_actual_launch_release_still_required": true,
+    "actual_shader_compilation_performed_by_reviewer": false,
+    "actual_import_selection_proved": false,
+    "provider_or_scientific_runtime_admitted": false,
+    "condition": "Root FULLREAD/release then serial stop-first-nonpass. First control must pass ordinary owner/product/baseline/posttool admission. Candidate uses the supplementary source-open observer and remains unaccepted until actual source-selection and emitted-distance-loop gate passes; no control-fp32comp or later operation before that root proof."
+  },
+  "critical_pins": {
+    "actions.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/actions.json",
+      "bytes": 4532924,
+      "sha256": "9f3b64edc2b270ec405f34518afbd0ea0f18d741bb9e6fce1ec6553dbd0086bd"
+    },
+    "actions.pending.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/actions.pending.json",
+      "bytes": 72384,
+      "sha256": "b8159a5dc78b4880f7cd3f35ba127d7d23cf497bb10e6f85708036bdb451a130"
+    },
+    "commands.pending.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/commands.pending.json",
+      "bytes": 3380,
+      "sha256": "b02e971f3ca276670297cdf6036aca76676abeedc236a25cae36e250efef8ef1"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/source-contracts.json",
+      "bytes": 43787,
+      "sha256": "8632764f0ca88303c1002cc70ccd46f267ef69d552e700f6e77406e06971f3a9"
+    },
+    "independent-source-review.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/independent-source-review.json",
+      "bytes": 12421,
+      "sha256": "94fb1a904c19f5619986ae7b35613cc98efa02b47bb3a4ae8d6429504f4775dd"
+    },
+    "readiness.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/readiness.json",
+      "bytes": 12397,
+      "sha256": "76cc257b2141816d7cc3c4e38fbf05cc919c39d6aeb7f59b9a54cbbcfd61a7ec"
+    },
+    "root-preflight.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/root-preflight.json",
+      "bytes": 1552209,
+      "sha256": "51bb90149a5bbbf9095be586ac54da8f46c14e383259afa3a984c325c7716b7d"
+    },
+    "root-compiler-tool-observation.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/root-compiler-tool-observation.json",
+      "bytes": 1359241,
+      "sha256": "bd0de81d5d3c781e67e63e3ecb45d1548bada61425687b77fd559c4f9ac2239e"
+    },
+    "root-metadata-query-records.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/root-metadata-query-records.json",
+      "bytes": 13192,
+      "sha256": "08311a14f8df21224392084c3233c5cfb0265717edbca1a2f399941c4d4908ca"
+    },
+    "run_owned.py": {
+      "path": "out/trace-riemann-stencil-compiler-pending/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/trace-riemann-stencil-compiler-pending/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "inputs/candidate/trace.slang": {
+      "path": "out/trace-riemann-stencil-compiler-pending/inputs/candidate/trace.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "inputs/candidate/gr_deviation.slang": {
+      "path": "out/trace-riemann-stencil-compiler-pending/inputs/candidate/gr_deviation.slang",
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    "root-source-open-observer.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/root-source-open-observer.json",
+      "bytes": 5825,
+      "sha256": "8da31ce32ae63b70f602908f40eab794102173f80e735cae15e3fe468c6e3d2f"
+    },
+    "root-source-open-observer-membership.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/root-source-open-observer-membership.json",
+      "bytes": 2498,
+      "sha256": "1e1654d79637fa22e11181302867f8f4c1af8cd0a297033229b11289a125daee"
+    }
+  },
+  "source_review_reuse": {
+    "candidate_source_review": {
+      "path": "out/trace-riemann-stencil-loop/independent-source-review.json",
+      "bytes": 10927,
+      "sha256": "e02883244e3f6aea0d62f617ac6cfcdcf40c0dd8772e701a4a6c9752856e7a79"
+    },
+    "packet_source_review": {
+      "path": "out/trace-riemann-stencil-compiler-pending/independent-source-review.json",
+      "bytes": 12421,
+      "sha256": "94fb1a904c19f5619986ae7b35613cc98efa02b47bb3a4ae8d6429504f4775dd"
+    },
+    "same_mature_helpers_e573_747_and_AST_checked": true,
+    "same_original_ten_recipe_flags_CWD_canonical_include_and_output_names": true,
+    "final_vs_pending_delta": "Only revision replacement and frozen-input strengthening; every pending51+7*n selector remains in order. No helper, argv, scope, expected exit, kind, cache, provider, guard or XML behavior changed.",
+    "source_identity": "Private trace63512B is exact prior reviewed pair-loop source; private gr_deviation17768B is the exact new reviewed stencil candidate. Fourteen declared canonical source/CMake current hashes and named f22 Git bytes match; canonical source/build remains unchanged."
+  },
+  "actual_input_and_output_state": {
+    "current_static_rich_pins": 4545,
+    "tracked_source_files": 538,
+    "actual_owner_union_sizes": [
+      4546,
+      4553,
+      4560,
+      4567,
+      4574,
+      4581,
+      4588,
+      4595,
+      4602,
+      4609
+    ],
+    "whole_input_shape": "Mature tracked-source+helper/actions union equals preflight4545+self and exactly seven immutable earlier raw/product records per case. Exact union checked for all10 declarations; no own/future mutable outputs or self-hash cycle.",
+    "old_selected_raw_closure": {
+      "completed_compiler_raw": 197,
+      "completed_private_runtime_raw": 50,
+      "runtime_preservation_records": 6
+    },
+    "complete_selected_prior_manifest_preservation_and_source_proofs_frozen": true,
+    "all10_case_folders_and_products_absent": true,
+    "root_observer_records": "Separate operational observer/capability records are outside the unchanged4545 Slang-owner map. They require their own before/after identity and trace checks; no hidden Slang flag/input mutation or transfer of guard guarantees.",
+    "normal_assertion_interpreter": "Current passive Python analysis has optimization0/assertions active; root must retain actual pinned /usr/bin/python3(.12), no relevant overrides and normal assertions in actual owner launch."
+  },
+  "fresh_tools_and_source_metadata": {
+    "installed_Slang_regular_path_pins": 3692,
+    "unique_installed_ELFs": 10,
+    "all3692_current_identities_equal_previous_exact_installation_observation": true,
+    "resolved_current_DT_NEEDED_union": 15,
+    "all15_equal_previous_and_current_byte_pins": true,
+    "all9_operation_tool_or_loader_cache_identities_current": true,
+    "captured_actual_metadata_queries": 22,
+    "actual_exit0_for_all_retained_queries": true,
+    "query_breakdown": {
+      "ldd": 16,
+      "version": 5,
+      "env_chdir_capability": 1
+    },
+    "all_raw_argv_exit_stdout_stderr_equal_enriched_observation_projection": true,
+    "all16_saved_ldd_resolved_paths_independently_join_exact15_DSO_union": true,
+    "environment": "Recorded C.UTF-8 LANG/LC_CTYPE/LC_ALL and PATH equal previous/current metadata selection; protected overrides absent and default compiler-cache policy unchanged. Root must retain that selection at launch.",
+    "scope": "Conservative installed-resource and static ldd/version metadata, not an actual compiler loaded-map or private-import-selection observation.",
+    "dated_metadata_stop": "Initial root unsupported Slang --version exited1 before any raw/final writes. Supported -version then produced the complete retained22 actual0 metadata records; this is no shader compile/retry or concealed codegen failure.",
+    "passive_review_projection_correction": "One initial local equality assertion compared raw query rows to enriched rows including resolved_DT_NEEDED and stopped. Corrected comparison checks all raw fields exactly plus independently parsed dependency enrichment; no artifact/workload changed."
+  },
+  "intended_private_import_gate": {
+    "intended_participating_sources": 11,
+    "private_overrides": [
+      "trace",
+      "gr_deviation"
+    ],
+    "other_canonical_modules": 9,
+    "all11_current_bytes_and_source_import_names_match_intended_graph": true,
+    "actual_source_resolution_remains_unproved": true,
+    "selection_risk": "gr_camera also imports gr_deviation; same-directory files or an intended graph do not establish compiler module resolution/cache selection.",
+    "mandatory_before_candidate_identity_acceptance_or_later_operation": "Join successful source opens to the actual saved Slang childPID/start birth/exec/CWD and explicit worker lineage. Independently check ordinary validated/disassembled candidateFP32 contains the actual new bounded distance loop and composite two-override graph with the other9 canonical modules. File opens are corroboration only; file placement and parent hashing are not proof.",
+    "refusal": "If selection/identity/loop/closure is unproved or differs, stop and preserve. Do not relabel pair-loop-only output as stencil success or silently change include path, CWD, source/module name, flags or cached inputs."
+  },
+  "separate_root_source_open_observer_composition": {
+    "initial_record": {
+      "path": "out/trace-riemann-stencil-compiler-pending/root-source-open-observer.json",
+      "bytes": 5825,
+      "sha256": "8da31ce32ae63b70f602908f40eab794102173f80e735cae15e3fe468c6e3d2f"
+    },
+    "membership_supplement": {
+      "path": "out/trace-riemann-stencil-compiler-pending/root-source-open-observer-membership.json",
+      "bytes": 2498,
+      "sha256": "1e1654d79637fa22e11181302867f8f4c1af8cd0a297033229b11289a125daee"
+    },
+    "strace_and6_static_dependencies_current_pins": true,
+    "version_ldd_initial_and_supplementary_true_capability_saved_actual0": true,
+    "final_filter": "execve,chdir,fchdir,openat,openat2,readlink,readlinkat,clone,clone3,fork,vfork",
+    "prefix": "/usr/bin/strace -f -yy -s4096 -e trace=<final_filter> -o ROOT_OWNED_FIRST_CANDIDATE_TRACE, followed by unchanged /usr/bin/python3 mature owner candidate-fp32 command.",
+    "ownership": "Root owns a fresh exclusive trace destination outside the Slang session. Saved actual compiler child birth/exec anchors lineage; worker opens require explicit clone/fork and lifetime ordering. Parent owner/Git sibling input hashing never counts. Unresolved lineage refuses candidate acceptance.",
+    "guard_scope": "Observer sits outside original Slang-child-session+controller sampledRSS accounting and has separately pinned tool/DSOs/inputs/trace beforeafter. No source/Slang argv/env/CWD/governor change, total-process memory certificate, timing/performance comparison or guard transfer. Capability on system true establishes syntax/permission only, not future source-resolution success."
+  },
+  "baseline_and_posttool_gates": {
+    "all5_current_canonical_baselines_exact_previous_published_control_bytes": true,
+    "all3_current_backend_staged_trace_copies_equal_canonical_baselines": true,
+    "all5_new_control_byteequalities_pending": true,
+    "required_later_attribution": "All five new controls must match pinned baselines before final source-effect/benefit attribution. No current candidate graph or footprint fact is invented.",
+    "posttools": "Root separately operates original spirv-val and ordinary spirv-dis under GNUtimeout300s/TERM/kill10. No Slang aggregateRSS/session-census transfer; CUDA/MSL remain source emission only.",
+    "Slang_owner_limits": {
+      "seconds": 300,
+      "aggregate_RSS_KiB": 4194304,
+      "minimum_available_KiB": 2097152,
+      "software_provider": false,
+      "disable_software_shader_cache": false,
+      "expected_exit": 0,
+      "kind": "compile",
+      "XML_or_collector": false
+    }
+  },
+  "published_prior_runtime_boundary": {
+    "publication": {
+      "path": "out/trace-jacobi-pair-loop-runtime-preservation/root-git-preservation.json",
+      "bytes": 1541,
+      "sha256": "ea5cba919755a048e57f60a80bddcb52de7453ee82f3060fa9bce1a470f6f21a"
+    },
+    "commit": "4a1883edc862b9cd4dcb342623d3a258b55c9d9c",
+    "actual_push0_fresh_remote_after_closure0_saved_local_tag_and_named_manifest_preservation_bytes_exact": true,
+    "prior_outcome": "Private pair-loop runtime remains one300.377911921s timeout, FP32prepared/exercised then COMPbegin, no XML/all-rung verdict or RSS/reserve failure. Pinned preservation/classifier receipts remain their exact negative scope; no JIT/allocation cause or performance premise is manufactured."
+  },
+  "method": "Passive standard-library source/AST/text/JSON/hash and read-only Git only. No helper/project import/parser/compiler/tool/provider/test/network/process query or mutation beyond this new sidecar; actual metadata and true-capability operations were root-operated saved evidence.",
+  "checkout": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "new_review_committed_or_pushed": false
+  },
+  "limits": "Concrete compiler metadata/observer composition PASS for root first-two-only release. No actual import/lowering proof, later operation release, canonical source adoption/hold release, provider/scientific/numerical/JIT/RSS/performance/full Mandatory/native/UI/cold/eight-domain/release qualification or cleanup authority."
+}

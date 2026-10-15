@@ -1,0 +1,133 @@
+{
+  "schema": "sirius-stencil-root-source-open-observer-admission-v1",
+  "created_utc": "2026-10-15T20:10:39.924993+00:00",
+  "tool_beforeafter": {
+    "resolved_path": "/usr/bin/strace",
+    "bytes": 2087432,
+    "sha256": "28f957c227012de0b18d1bd7fff2d396cb693ea60ed8013be68de071e84b5001"
+  },
+  "actual_metadata_and_capability_operations": [
+    {
+      "operation": "version",
+      "argv": [
+        "/usr/bin/strace",
+        "--version"
+      ],
+      "actual_exit": 0,
+      "stdout": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-compiler-pending/root-strace-version.stdout",
+        "bytes": 326,
+        "sha256": "9cbcd41c9492f2188db6a3fae935c7211b826b655fed03b41259cfdd22725da4"
+      },
+      "stderr": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-compiler-pending/root-strace-version.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "ldd",
+      "argv": [
+        "/usr/bin/ldd",
+        "/usr/bin/strace"
+      ],
+      "actual_exit": 0,
+      "stdout": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-compiler-pending/root-strace-ldd.stdout",
+        "bytes": 487,
+        "sha256": "1a7d84c1bd8fa7e6eb6ddf28f76c669a553caaea35f9a6b2004c87e6ec73f2f2"
+      },
+      "stderr": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-compiler-pending/root-strace-ldd.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "capability",
+      "argv": [
+        "/usr/bin/strace",
+        "-f",
+        "-yy",
+        "-s",
+        "4096",
+        "-e",
+        "trace=execve,chdir,fchdir,openat,openat2,readlink,readlinkat",
+        "-o",
+        "out/trace-riemann-stencil-compiler-pending/root-strace-capability.trace",
+        "/usr/bin/true"
+      ],
+      "actual_exit": 0,
+      "stdout": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-compiler-pending/root-strace-capability.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-compiler-pending/root-strace-capability.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "DSOs": {
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+      "bytes": 202904,
+      "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libunwind-ptrace.so.0.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libunwind-ptrace.so.0.0.0",
+      "bytes": 18656,
+      "sha256": "ec993e45c024b66ea0f17085be1333001428dc714bd9f0520f44a0cde18b921b"
+    },
+    "/usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1",
+      "bytes": 67672,
+      "sha256": "70a88c376a1aced719ca7bdcd5cdd6c5d3bdce44b99f5ab2037fdad096bbf03d"
+    },
+    "/usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1",
+      "bytes": 63776,
+      "sha256": "28e77a498f2f17f8cb883c91303f9901343ea0d8e34959d138dd462fcc9b201f"
+    }
+  },
+  "capability_trace": {
+    "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-compiler-pending/root-strace-capability.trace",
+    "bytes": 381,
+    "sha256": "5a9ff85a59a60cfa90e5092240eb936fc4136c628e89340864a4d69b7e249ec1"
+  },
+  "capability_target": {
+    "resolved_path": "/usr/bin/true",
+    "bytes": 26936,
+    "sha256": "8a63c98320173f79e263115e10cefc170155e47d1fd4b5a70e4429d2699cae28"
+  },
+  "capability_scope": "Existing root system true program only; no project/compiler/provider/scientific test executed.",
+  "intended_first_candidate_command_prefix": [
+    "/usr/bin/strace",
+    "-f",
+    "-yy",
+    "-s",
+    "4096",
+    "-e",
+    "trace=execve,chdir,fchdir,openat,openat2,readlink,readlinkat",
+    "-o",
+    "ROOT_OWNED_FIRST_CANDIDATE_TRACE"
+  ],
+  "trace_parent": "Root observer process wraps mature owner. It remains outside owned Slang child session/controller RSS accounting; its files and executable/DSOs are separately checked by root beforeafter. No timing/RSS/performance comparison or guard transfer.",
+  "compiler_recipe": "Actual mature owner and Slang argv/CWD/env/300s4GiB2GiB unchanged; ptrace observes source-file opens/exec only. No added Slang flags/include/CWD/source changes.",
+  "import_proof": "Use actual Slang childPID, saved birth and execve/CWD records plus successful opened source files. Parent owner hashing the same files is not compiler input-resolution proof. New bounded distance-loop in ordinary firstcandidateSPV must also be verified independently.",
+  "source_build_hold_release": false,
+  "shader_compiler_or_test_executed": false,
+  "scope": "Concrete root read-only source-open observation capability only, pending independent composition and root launch decision. No source import selection established by this system true probe."
+}

@@ -1,0 +1,245 @@
+{
+  "schema": "sirius-trace-riemann-stencil-pending-compiler-independent-source-review-v1",
+  "created_utc": "2026-10-15T20:02:15.702198+00:00",
+  "passed": true,
+  "source_only": true,
+  "compiler_execution_authorized": false,
+  "runtime_admitted": false,
+  "observed_source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer_scope": "Passive source/JSON/text/hash/stdlib AST and read-only Git only; reused mature owner/guard and prior compiler/source semantic reviews. No authored helper/project import/parser/tool/compiler/provider/test/network/process query.",
+  "release_pins": {
+    "source-contracts.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/source-contracts.json",
+      "bytes": 43787,
+      "sha256": "8632764f0ca88303c1002cc70ccd46f267ef69d552e700f6e77406e06971f3a9"
+    },
+    "actions.pending.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/actions.pending.json",
+      "bytes": 72384,
+      "sha256": "b8159a5dc78b4880f7cd3f35ba127d7d23cf497bb10e6f85708036bdb451a130"
+    },
+    "commands.pending.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/commands.pending.json",
+      "bytes": 3380,
+      "sha256": "b02e971f3ca276670297cdf6036aca76676abeedc236a25cae36e250efef8ef1"
+    },
+    "run_owned.py": {
+      "path": "out/trace-riemann-stencil-compiler-pending/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/trace-riemann-stencil-compiler-pending/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "originals/actions.pending.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/originals/actions.pending.json",
+      "bytes": 58234,
+      "sha256": "b6300c31ee3dec319381cd71527e08c87ec0d92bcbb3b79b41f631ecf7376c57"
+    },
+    "originals/commands.pending.json": {
+      "path": "out/trace-riemann-stencil-compiler-pending/originals/commands.pending.json",
+      "bytes": 2326,
+      "sha256": "8d828213df2157fb9fdcefeb0c4d156817d057117209d8902c1ac8763a17876b"
+    },
+    "inputs/candidate/trace.slang": {
+      "path": "out/trace-riemann-stencil-compiler-pending/inputs/candidate/trace.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "inputs/candidate/gr_deviation.slang": {
+      "path": "out/trace-riemann-stencil-compiler-pending/inputs/candidate/gr_deviation.slang",
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    }
+  },
+  "original_protocol_and_recipe_integrity": {
+    "owner_and_guard_exact_e573_747fe": true,
+    "original_pending_preimages_exact_prior_packet": true,
+    "AST_syntax_only_two_helpers": true,
+    "all10_recipe_fields_equal_prior_pending_after_namespace_substitution": true,
+    "five_selected_original_Ninja_lines_full_text_argv_and_trailing_validator_joined": true,
+    "CWD": "Original linux-gcc/src/sirius/backend via /usr/bin/env --chdir",
+    "include_policy": "Original canonical -I only; no added private include, module alias, flag, CWD or control baseline substitution.",
+    "allowed_source_output_delta": "Control retains original canonical lexical trace; candidate selects private same-basename trace; owned -o only. Original variants/defines/SPIRV1_5/entryComputeMain/stagecompute/FP64warning30082 andCUDA/MSL recipeflags unchanged.",
+    "action_limits": {
+      "seconds": 300,
+      "sampled_aggregate_RSS_KiB": 4194304,
+      "reserve_KiB": 2097152,
+      "kind": "compile",
+      "software_provider": false,
+      "disable_software_shader_cache": false,
+      "expected_exit_int": 0
+    },
+    "no_XML_or_collector": true
+  },
+  "prospective_ownership": {
+    "common_unique_selectors": 51,
+    "selector_counts_in_order": [
+      51,
+      58,
+      65,
+      72,
+      79,
+      86,
+      93,
+      100,
+      107,
+      114
+    ],
+    "operations": [
+      {
+        "case": "control-fp32",
+        "role": "control",
+        "variant": "fp32",
+        "pending_selectors": 51,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "candidate-fp32",
+        "role": "candidate",
+        "variant": "fp32",
+        "pending_selectors": 58,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "control-fp32comp",
+        "role": "control",
+        "variant": "fp32comp",
+        "pending_selectors": 65,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "candidate-fp32comp",
+        "role": "candidate",
+        "variant": "fp32comp",
+        "pending_selectors": 72,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "control-fp64",
+        "role": "control",
+        "variant": "fp64",
+        "pending_selectors": 79,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "candidate-fp64",
+        "role": "candidate",
+        "variant": "fp64",
+        "pending_selectors": 86,
+        "owned_product": "trace.spv"
+      },
+      {
+        "case": "control-cuda",
+        "role": "control",
+        "variant": "cuda",
+        "pending_selectors": 93,
+        "owned_product": "trace.cu"
+      },
+      {
+        "case": "candidate-cuda",
+        "role": "candidate",
+        "variant": "cuda",
+        "pending_selectors": 100,
+        "owned_product": "trace.cu"
+      },
+      {
+        "case": "control-metal",
+        "role": "control",
+        "variant": "metal",
+        "pending_selectors": 107,
+        "owned_product": "trace.metal"
+      },
+      {
+        "case": "candidate-metal",
+        "role": "candidate",
+        "variant": "metal",
+        "pending_selectors": 114,
+        "owned_product": "trace.metal"
+      }
+    ],
+    "all_prior_6_raw_plus_product_selectors_retained_exactly": true,
+    "all_old_source_recipe_and_proof_selectors_retained": true,
+    "own_current_or_future_case_outputs_excluded": true,
+    "no_final_actions_readiness_inventory_preflight_or_case_exists": true,
+    "pending_counts_are_not_actual_whole_owner_rows": true,
+    "root_must_materialize": "Actual clean revision/all tracked source, complete tools and installed resources/modules/plugins/DSOs/loader, imports/search environment, canonical5baseline/currentproducer proof, prior published runtime evidence and all consumed source/operational receipts; derive real row counts and freeze before operation."
+  },
+  "private_source_identity": {
+    "trace": "63512B/8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9 exact previous private pair-loop",
+    "gr_deviation": "17768B/7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b exact new stencil candidate",
+    "candidate_source_review": {
+      "path": "out/trace-riemann-stencil-loop/independent-source-review.json",
+      "bytes": 10927,
+      "sha256": "e02883244e3f6aea0d62f617ac6cfcdcf40c0dd8772e701a4a6c9752856e7a79"
+    },
+    "canonical_named_Git_fullbytes_and_blob_pins_checked": 14,
+    "canonical_unchanged": true,
+    "not_canonical_f22_shader_adoption": true
+  },
+  "import_resolution_refusal_gate": {
+    "intended_sources": {
+      "trace": "out/trace-riemann-stencil-compiler-pending/inputs/candidate/trace.slang",
+      "gr_types": "src/sirius/kernels/gr_types.slang",
+      "gr_metrics": "src/sirius/kernels/gr_metrics.slang",
+      "gr_integrator": "src/sirius/kernels/gr_integrator.slang",
+      "gr_camera": "src/sirius/kernels/gr_camera.slang",
+      "gr_disk": "src/sirius/kernels/gr_disk.slang",
+      "gr_deviation": "out/trace-riemann-stencil-compiler-pending/inputs/candidate/gr_deviation.slang",
+      "gr_trace_event": "src/sirius/kernels/gr_trace_event.slang",
+      "gr_ellis_topology": "src/sirius/kernels/gr_ellis_topology.slang",
+      "gr_point_star": "src/sirius/kernels/gr_point_star.slang",
+      "gr_trace_continuation": "src/sirius/kernels/gr_trace_continuation.slang"
+    },
+    "intended_total": 11,
+    "private_overrides": 2,
+    "canonical_remaining": 9,
+    "actual_selection_not_yet_proved": true,
+    "risk": "gr_camera itself imports gr_deviation; sibling placement and lexical source graph do not establish actual Slang module selection/cache/search precedence. Canonical -I stays unchanged.",
+    "required_sequence": [
+      "Root fresh materialization freezes intended source bytes, environment/search/direct directory identities before the first operations.",
+      "ControlFP32 original recipe must match its freshly pinned canonical baseline.",
+      "Only after candidateFP32 owner actual closes may root separately validate/disassemble and establish actual11source/two-override selection and new emitted distance-loop.",
+      "Do not accept candidate identity/attribute stencil effects or proceed to controlFP32COMP or later operations until that evidence passes. Commands are ordered prospective slots, not permission to batch through this manual gate.",
+      "If canonical gr_deviation selected or selection/required emitted loop unproved, stop and preserve import-resolution discrepancy. No silent -I/CWD/source-copy/flag change, unchanged retry or pairloop-only-success relabel."
+    ],
+    "extra_selectors": "gr_coupled/gr_kerr_infinity remain conservative original source proof; not asserted participating11."
+  },
+  "baseline_and_posttool_composition": {
+    "all5_control_byte_equal_before_candidate_difference_attribution": true,
+    "mismatch_scope": "Recipe/producer identity refusal, no numerical candidate verdict.",
+    "SPIRV": "Three control+candidate product pairs require separately admitted original validation/disassembly and complete CFG/type/capability/layout/entry/mode/arithmetic/body/footprint review; compiler exit0 alone insufficient.",
+    "CUDA_MSL": "Emitted source only; complete #line/import/body/ABI evidence still required, no native compiler execution inferred.",
+    "prior_leaf_comparison": "Only after baseline/tool/source/import joins compare new composite with published previous pairloop-only products, distinguishing source path annotations. No assumed bit equality/numerical/runtime/JIT/performance result."
+  },
+  "Hoare_summary": {
+    "precondition": "Candidate and packet independent/root SOURCE acceptance; exact prior timeout58 archive publication and root scheduling release; actual complete current materialized tool/source/wholeinput proof; no concurrent compiler/provider/test.",
+    "invariant": "Mature ownership/session/birth/subreaper/guard/input/source/cleanup bytes unchanged. Every next slot retains7 records per prior operation and requires root actual accepted postchecks. First candidate import-refusal gate is an additional mandatory root boundary.",
+    "postcondition": "At most bounded offline producer/emitted identity facts after all actual owner/control/import/posttool requirements pass. No scientific/runtime or adoption admission."
+  },
+  "prior_runtime_history": {
+    "outcome": "Original private pairloop300.377911921s diagnostic timeout/noXML/full-rung verdict; FP32exercised thenCOMPbegin, sampled2520344KiB notRSSfailure.",
+    "new_archive_binding": "ROOT_PENDING publication: do not invent commit/member pins or replay retired raw whole-input paths. Select actual immutable aliases with lexical/content identities after publication.",
+    "no_causation": "No exact allocation/JIT/driver cause or guaranteed new memory/performance improvement."
+  },
+  "pending_before_execution": [
+    "Parent FULLREAD/source acceptance.",
+    "Actual prior runtime58 Git publication and fresh remote proof/root release.",
+    "Final actual revision/actions/readiness/preflight/full tool and current source/input/installed-resource inventories with independent concrete admission.",
+    "Root explicit serial operation decisions and refusal enforcement; no source-level permission for arbitrary tools or tests."
+  ],
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_clean": true,
+    "committed_and_pushed": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "new_review_awaits_preservation": true
+  },
+  "verdict": "SOURCE PASS for the pending ten-operation offline screen, conditional on explicit current materialization and the mandatory first-candidate import/refusal gate. No compiler/runtime/adoption or source/build hold release authorized."
+}

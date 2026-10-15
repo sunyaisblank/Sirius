@@ -1,0 +1,186 @@
+{
+  "schema": "sirius-private-jacobi-pair-loop-timeout-independent-preservation-review-v1",
+  "passed": true,
+  "preservation_valid": true,
+  "scientific_attempt_passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "reviewed_utc": "2026-10-15T19:59:41.447309+00:00",
+  "blockers": [],
+  "bundle": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-private-runtime-timeout",
+  "critical_pins": {
+    "manifest": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-private-runtime-timeout/manifest.json",
+      "bytes": 11334,
+      "sha256": "8c0b62126780d4b114569547ed391e028b73bcf7ac003a0f28be752122f930f3"
+    },
+    "preservation": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-private-runtime-timeout/preservation.json",
+      "bytes": 23336,
+      "sha256": "fc13ac2c173c9e067919a7f4f75b66f798b7084c049a4d5c5e3193b6964e3954"
+    },
+    "catalogue": {
+      "path": "out/trace-jacobi-pair-loop-runtime-preservation/static-archive-dependencies.json",
+      "bytes": 860207,
+      "sha256": "62167f92f1a0cd729aea7a9c50033cd58bd77d1f4bce235f9a6d8eebda88f78d"
+    },
+    "root_timeout": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/root-completed-timeout.json",
+      "bytes": 5900,
+      "sha256": "bf421c018d83caf936fcb99b4be491187d57345b167cfeb45895316f852abc08"
+    },
+    "independent_completion": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/independent-completion-review.json",
+      "bytes": 11950,
+      "sha256": "f171229098c93549898e188281c747baf7cefddab538166e64690396cf18c598"
+    },
+    "original_live_snapshot": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/root-live-provider-environment.json",
+      "bytes": 63828,
+      "sha256": "5bc5a05bc30d79b92815b76f38b6f32f30fd7f74781c98d45c2fd9023eb81294"
+    },
+    "root_default_cache_interpretation": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/root-live-default-cache-interpretation.json",
+      "bytes": 3719,
+      "sha256": "f1e9d2d3c4007eb9073e8a7fe13909d43759ed07cdff1d1bde9eb7a83d9f8cde"
+    },
+    "independent_narrow_live_review": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/independent-live-observation-review.json",
+      "bytes": 12813,
+      "sha256": "9bea84374b5c14cdc16484f0a57c62748d12bfef9fd62296fa8a51aa5159d553"
+    },
+    "stage_materialization": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/root-stage-materialization.json",
+      "bytes": 4942,
+      "sha256": "cbfc988c301f2b9a646a5797b1ea3a59eee5c6f55f1e62f43106f4af64bcbee2"
+    },
+    "owner": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/trace-jacobi-all-rungs/owner.json",
+      "bytes": 2988,
+      "sha256": "5275ceefa71e2e495b31db03f05bbcd4139e65f8ffcd1dbc33976eb5f1c47bb6"
+    },
+    "samples": {
+      "path": "out/trace-jacobi-pair-loop-runtime-pending/trace-jacobi-all-rungs/samples.jsonl",
+      "bytes": 2243875,
+      "sha256": "d0da28fc152e2022be5ae9adeeb0bc4aa851b25729f732af8501d6014b29a7dc"
+    },
+    "late_compiler_publication": {
+      "path": "out/trace-jacobi-pair-loop-screen-preservation/root-git-preservation.json",
+      "bytes": 1446,
+      "sha256": "7d7f363fcfdf8ad94f20391e8673747889ffedc5d0f3bbd66d85a65654e0ba97"
+    }
+  },
+  "complete_file_and_copy_set": {
+    "actual_bundle_files": 58,
+    "manifest_payloads_and_exact_copy_pairs": 56,
+    "composition": {
+      "entire_private_runtime_raw": 50,
+      "late_compiler_publication": 5,
+      "catalogue": 1,
+      "manifest_and_preservation": 2
+    },
+    "exact_manifest_tree_all_payload_pins_and_raw_copy_pairs": true,
+    "all50_current_raw_files_included": true,
+    "no_bundle_symlinks_or_unlisted_payload": true,
+    "four_actual_stage_copies": "Backend ELF plus three candidate SPVs are real retained copies, with exact bytes/modes matching source files and named34a/d312 original Git bytes. No foreign executable alias or canonical product replacement.",
+    "metadata": "Preservation pins the payload manifest and catalogue without a self-hash cycle. The initial root guessed47 raw-count stop before any write is candidly retained; actual50 are dynamically enumerated."
+  },
+  "actual_input_provenance": {
+    "all_consumed_paths": 1645,
+    "actual_before_after_rows": 3290,
+    "partition": {
+      "tracked_source_Git": 538,
+      "hash_only_host_tool_or_build_dependency": 830,
+      "prior_published_exact_actual_bytes_Git": 237,
+      "actual_own_bundle_copy": 40
+    },
+    "all_catalogue_rich_resolved_path_size_hash_rows_equal_actual_before_after_current": true,
+    "all775_named_commit_path_records_compare_actual_Git_full_bytes": true,
+    "all40_own_static_copy_destinations_exact_inside_bundle": true,
+    "prior_named_bytes": {
+      "compiler_d312": 200,
+      "actual_Linux_CPU34a": 32,
+      "original_source_def305": 5
+    },
+    "role_boundaries": "Source538 remains exact f22. The host is genuine current f22 Linux backend bytes; the private candidate modules are published compiler products, distinct from canonical shader source/build baseline. Prior compiler/static evidence is not re-run or elevated to numerical acceptance.",
+    "hash_only_boundary": "830 host/tool/build identities are explicitly hash-only, not byte backups or a restorable runtime/toolchain. Mutable Mesa cache state is absent from the immutable catalogue and was not queried."
+  },
+  "preserved_negative_actual_outcome": {
+    "original_attempts": 1,
+    "actual_helper_closed_exit": 1,
+    "owner_passed": false,
+    "child_exit": -15,
+    "stop_reason": "diagnostic_timeout",
+    "owner_seconds": 300.3779119210085,
+    "last_sample_seconds": 300.0165300780209,
+    "samples": 9674,
+    "peak_sampled_aggregate_RSS_KiB": 2520344,
+    "minimum_sampled_available_KiB": 12827736,
+    "original_limits": {
+      "seconds": 300,
+      "sampled_aggregate_RSS_KiB": 4194304,
+      "minimum_available_KiB": 2097152
+    },
+    "sampled_RSS_excess_rows": 0,
+    "sampled_reserve_failure_rows": 0,
+    "sampled_timeout_rows": 1,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "source_and_whole_inputs_unchanged": true,
+    "exact_progress": [
+      "[TraceJacobiRung] module=trace.spv phase=begin",
+      "[TraceJacobiRung] module=trace.spv phase=prepared",
+      "[TraceJacobiRung] module=trace.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin"
+    ],
+    "XML_exists": false,
+    "all9_required_markers_met": false,
+    "strict_fp64_PROPERTY_NAME_absence_verifiable": false,
+    "collector_executed": false,
+    "interpretation": "FP32 prepared/exercised markers and compensated begin are observations only. Nonfatal assertions can precede exercised; no completed all-rung or FP32 numerical PASS, numerical failure, unsupported-FP64 disposition or exact allocating/JIT/dispatch-call attribution follows."
+  },
+  "saved_ownership_and_mapping_scope": {
+    "root_saved_controller_child_birth_absence_records": 2,
+    "same_owner_births_and_observed_child_retirement_match": true,
+    "fresh_process_queries_by_reviewer": 0,
+    "same_birth_LVP0_defaultcache_selected_ICD_device_observation_retained": true,
+    "LVP_saved_dev_inode": {
+      "device": "08:50",
+      "inode": 143595,
+      "same_child_map_lines": 5
+    },
+    "original_all_regular_external_maps_prelaunch_bound_flag": false,
+    "sole_unbound_regular_saved_map": "/home/astra/.cache/mesa_shader_cache/index",
+    "generated_memfd_map_rows": 8,
+    "classification_boundary": "Reuses exact pinned independent narrow interpretation: the shared writable default provider cache index is generated mutable state, while other saved regular mappings are bound immutable inputs. Eight runtime memfd maps are generated memory under the aggregate sampled guard. The original broad false flag remains false; this is no acceptance waiver, cold-cache snapshot, cache backup or continuous/global map census.",
+    "no_mutable_cache_query_or_policy_change_by_reviewer": true
+  },
+  "late_compiler_publication": {
+    "five_saved_records_copied_exact": true,
+    "commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+    "actual_push0_fresh_remote_after_closure0_and_saved_local_exact_tag_join": true,
+    "scope": "Published compiler/source/emitted-static proof retains its own boundaries. It does not convert this private runtime timeout into scientific or performance success."
+  },
+  "scope_and_disposition": {
+    "preservation_PASS_meaning": "All58 bundle files, copy/provenance roles and the negative diagnostic disposition are coherent. Root and independent terminal receipts remain passed:false/audit:true/ownership-valid.",
+    "candidate_applied_to_canonical_source": false,
+    "canonical_source_build_products_changed": false,
+    "source_build_hold_released": false,
+    "unchanged_retry_guard_raise_or_cleanup_authorized": false,
+    "new58_bundle_publication_pending_root_operation": true,
+    "nonclaims": "No runtime completion, numerical/bitwise/scientific/P2 qualification, cache coldness, JIT/allocation cause, driver-memory/time/performance benefit, source adoption, full Mandatory/native/UI/cold-frame/eight-domain/release qualification."
+  },
+  "method": "Passive standard-library file/hash/JSON/text and read-only Git only; no helper/project import/parser/compiler/provider/test/network/process or mutable-cache query, source/build change, deletion or write outside this new receipt. Declared immutable file identities alone were rehashed.",
+  "pre_release_passive_schema_correction": "An initial local check used the preceding catalogue count-key name and stopped at KeyError before catalogue/Git work or any write. Corrected to this schema actual_consumed_union_rows; full1645/775 checks then passed. No artifact or workload changed.",
+  "checkout": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "new_review_committed_or_pushed": false
+  }
+}

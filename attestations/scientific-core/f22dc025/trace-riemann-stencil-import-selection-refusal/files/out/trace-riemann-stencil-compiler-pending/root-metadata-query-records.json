@@ -1,0 +1,228 @@
+{
+  "actual_metadata_queries": [
+    {
+      "role": "ldd:/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "argv": [
+        "/usr/bin/ldd",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffd8a1bf000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f2f75a00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f2f75917000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f2f75600000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f2f75d92000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f2f75cab000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "argv": [
+        "/usr/bin/ldd",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffcc25f1000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007af2a1000000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007af2a1347000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007af2a0c00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007af2a1630000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007af2a1319000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/bin/slang",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/bin/slang"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007fff215e2000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007384aba00000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007384abcd3000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007384ab600000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007384ab917000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007384abd19000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/bin/slangc",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/bin/slangc"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffc11aaf000)\n\tlibslang-compiler.so.0.2026.12.0.1 => /opt/slang/bin/../lib/libslang-compiler.so.0.2026.12.0.1 (0x00007edfaa400000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007edfaa000000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007edfabf7c000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007edfa9c00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007edfabe93000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007edfabfc3000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/bin/slangd",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/bin/slangd"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007fffbb707000)\n\tlibslang-compiler.so.0.2026.12.0.1 => /opt/slang/bin/../lib/libslang-compiler.so.0.2026.12.0.1 (0x0000703e86000000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x0000703e85c00000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000703e87a24000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000703e85800000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x0000703e85f17000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000703e87a69000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/bin/slangi",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/bin/slangi"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffd903f9000)\n\tlibslang-compiler.so.0.2026.12.0.1 => /opt/slang/bin/../lib/libslang-compiler.so.0.2026.12.0.1 (0x000074db19e00000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000074db19a00000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000074db1b817000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000074db19600000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000074db19d17000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000074db1b85c000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/lib/libgfx.so.0.2026.12.0.1",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/lib/libgfx.so.0.2026.12.0.1"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffef83c5000)\n\tlibslang-compiler.so.0.2026.12.0.1 => /opt/slang/lib/../lib/libslang-compiler.so.0.2026.12.0.1 (0x00007e8113400000)\n\tlibX11.so.6 => /lib/x86_64-linux-gnu/libX11.so.6 (0x00007e81132c2000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007e8113000000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007e8114ed4000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007e8112c00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007e8114fd0000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007e8112f17000)\n\tlibxcb.so.1 => /lib/x86_64-linux-gnu/libxcb.so.1 (0x00007e8114ea9000)\n\tlibXau.so.6 => /lib/x86_64-linux-gnu/libXau.so.6 (0x00007e8114ea3000)\n\tlibXdmcp.so.6 => /lib/x86_64-linux-gnu/libXdmcp.so.6 (0x00007e8114e9b000)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0x00007e8114e85000)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0x00007e8114e74000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/lib/libslang-compiler.so.0.2026.12.0.1"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffc5fbcf000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x0000750d48200000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x0000750d4a04c000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000750d4a01e000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000750d47e00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000750d4a141000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/lib/libslang-glsl-module-2026.12.0.1.so"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffebc561000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000070f8b5000000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000070f8b4c00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000070f8b5372000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000070f8b559a000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000070f8b5344000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/lib/libslang-glslang-2026.12.0.1.so",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/lib/libslang-glslang-2026.12.0.1.so"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffc8a70b000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x0000768862600000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007688632b6000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000768863288000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000768862200000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007688633ab000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/lib/libslang-llvm.so",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/lib/libslang-llvm.so"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007fff033ac000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000075490faf2000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x0000754907800000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000075490fa09000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000075490f9db000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000754907400000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000075490fb1a000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/opt/slang/lib/libslang-rt.so.0.2026.12.0.1",
+      "argv": [
+        "/usr/bin/ldd",
+        "/opt/slang/lib/libslang-rt.so.0.2026.12.0.1"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffe317e7000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x0000706dec800000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000706decb98000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000706dec400000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x0000706decaaf000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000706decc18000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/usr/bin/env",
+      "argv": [
+        "/usr/bin/ldd",
+        "/usr/bin/env"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffefc7d6000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007c8b86e00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007c8b87074000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/usr/bin/git",
+      "argv": [
+        "/usr/bin/ldd",
+        "/usr/bin/git"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffeb5936000)\n\tlibpcre2-8.so.0 => /lib/x86_64-linux-gnu/libpcre2-8.so.0 (0x0000700ab2b66000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x0000700ab3040000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000700ab2800000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000700ab3068000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/usr/bin/python3.12",
+      "argv": [
+        "/usr/bin/ldd",
+        "/usr/bin/python3.12"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffecc4bb000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x0000743a1057e000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x0000743a10562000)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0x0000743a10534000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000743a10200000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000743a10673000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "ldd:/usr/bin/timeout",
+      "argv": [
+        "/usr/bin/ldd",
+        "/usr/bin/timeout"
+      ],
+      "actual_exit": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffcb4beb000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fefbf000000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fefbf380000)\n",
+      "stderr": ""
+    },
+    {
+      "role": "version:slang",
+      "argv": [
+        "/opt/slang/bin/slangc",
+        "-version"
+      ],
+      "actual_exit": 0,
+      "stdout": "",
+      "stderr": "2026.12.0.1\n"
+    },
+    {
+      "role": "version:spirv-val",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "--version"
+      ],
+      "actual_exit": 0,
+      "stdout": "SPIRV-Tools v2026.3 b707790a898e44038547df54580022fc1cf89c3d\nTargets:\n  SPIR-V 1.0\n  SPIR-V 1.1\n  SPIR-V 1.2\n  SPIR-V 1.3\n  SPIR-V 1.4\n  SPIR-V 1.5\n  SPIR-V 1.6\n  SPIR-V 1.2 (under OpenCL 2.2 Full Profile semantics)\n  SPIR-V 1.0 (under Vulkan 1.0 semantics)\n  SPIR-V 1.3 (under Vulkan 1.1 semantics)\n  SPIR-V 1.4 (under Vulkan 1.1 semantics)\n  SPIR-V 1.5 (under Vulkan 1.2 semantics)\n  SPIR-V 1.6 (under Vulkan 1.3 semantics) SPIR-V 1.6 (under Vulkan 1.4 semantics)\n",
+      "stderr": ""
+    },
+    {
+      "role": "version:spirv-dis",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "--version"
+      ],
+      "actual_exit": 0,
+      "stdout": "SPIRV-Tools v2026.3 b707790a898e44038547df54580022fc1cf89c3d\nTarget: SPIR-V 1.5\n",
+      "stderr": ""
+    },
+    {
+      "role": "version:env",
+      "argv": [
+        "/usr/bin/env",
+        "--version"
+      ],
+      "actual_exit": 0,
+      "stdout": "env (GNU coreutils) 9.4\nCopyright (C) 2023 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by Richard Mlynarik, David MacKenzie, and Assaf Gordon.\n",
+      "stderr": ""
+    },
+    {
+      "role": "version:timeout",
+      "argv": [
+        "/usr/bin/timeout",
+        "--version"
+      ],
+      "actual_exit": 0,
+      "stdout": "timeout (GNU coreutils) 9.4\nCopyright (C) 2023 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by P\u00e1draig Brady.\n",
+      "stderr": ""
+    },
+    {
+      "role": "env-chdir",
+      "argv": [
+        "/usr/bin/env",
+        "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+        "/usr/bin/python3.12",
+        "-c",
+        "import os; print(os.getcwd())"
+      ],
+      "actual_exit": 0,
+      "stdout": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend\n",
+      "stderr": ""
+    }
+  ],
+  "scope": "Actual captured standard metadata commands only; no shader/provider/test."
+}

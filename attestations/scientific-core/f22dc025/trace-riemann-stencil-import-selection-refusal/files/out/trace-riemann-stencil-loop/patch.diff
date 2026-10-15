@@ -1,0 +1,170 @@
+--- a/src/sirius/kernels/gr_deviation.slang
++++ b/src/sirius/kernels/gr_deviation.slang
+@@ -59,84 +59,95 @@
+                 dGamma[0][mu][nu][sig] = 0.0f;
+ 
+     for (int rho = 1; rho < 4; rho++) {
+-        Vec4Cart xp = x;
+-        Vec4Cart xm = x;
+-        Vec4Cart xpp = x;
+-        Vec4Cart xmm = x;
+-#ifndef SIRIUS_FP64
+-        Vec4Cart xppp = x;
+-        Vec4Cart xmmm = x;
+-#endif
+-        if (rho == 1) {
+-            xp.x += eps;
+-            xm.x -= eps;
+-            xpp.x += 2.0f * eps;
+-            xmm.x -= 2.0f * eps;
+-#ifndef SIRIUS_FP64
+-            xppp.x += 3.0f * eps;
+-            xmmm.x -= 3.0f * eps;
+-#endif
+-        } else if (rho == 2) {
+-            xp.y += eps;
+-            xm.y -= eps;
+-            xpp.y += 2.0f * eps;
+-            xmm.y -= 2.0f * eps;
+-#ifndef SIRIUS_FP64
+-            xppp.y += 3.0f * eps;
+-            xmmm.y -= 3.0f * eps;
+-#endif
+-        } else {
+-            xp.z += eps;
+-            xm.z -= eps;
+-            xpp.z += 2.0f * eps;
+-            xmm.z -= 2.0f * eps;
+-#ifndef SIRIUS_FP64
+-            xppp.z += 3.0f * eps;
+-            xmmm.z -= 3.0f * eps;
+-#endif
+-        }
+-
++        // Reuse the original two work arrays at each stencil distance.
+         Real Gamma_plus[4][4][4];
+         Real Gamma_minus[4][4][4];
+-        GetKerrSchildFamilyChristoffel(xp, M, a, Q, Lambda, Gamma_plus);
+-        GetKerrSchildFamilyChristoffel(xm, M, a, Q, Lambda, Gamma_minus);
+-
+-        for (int mu = 0; mu < 4; mu++)
+-            for (int nu = 0; nu < 4; nu++)
+-                for (int sig = 0; sig < 4; sig++)
+-                    dGamma[rho][mu][nu][sig] =
+ #ifdef SIRIUS_FP64
+-                        8.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
++        [loop] for (int distance = 1; distance <= 2; ++distance) {
+ #else
+-                        45.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+-#endif
+-
+-        // Reuse the two Christoffel work arrays so the higher-order stencil
+-        // does not double the shader's live local-array footprint.
+-        GetKerrSchildFamilyChristoffel(xpp, M, a, Q, Lambda, Gamma_plus);
+-        GetKerrSchildFamilyChristoffel(xmm, M, a, Q, Lambda, Gamma_minus);
+-        for (int mu = 0; mu < 4; mu++)
+-            for (int nu = 0; nu < 4; nu++)
+-                for (int sig = 0; sig < 4; sig++)
++        [loop] for (int distance = 1; distance <= 3; ++distance) {
++#endif
++            Vec4Cart xp = x;
++            Vec4Cart xm = x;
++            if (rho == 1) {
++                if (distance == 1) {
++                    xp.x += eps;
++                    xm.x -= eps;
++                } else if (distance == 2) {
++                    xp.x += 2.0f * eps;
++                    xm.x -= 2.0f * eps;
++#ifndef SIRIUS_FP64
++                } else {
++                    xp.x += 3.0f * eps;
++                    xm.x -= 3.0f * eps;
++#endif
++                }
++            } else if (rho == 2) {
++                if (distance == 1) {
++                    xp.y += eps;
++                    xm.y -= eps;
++                } else if (distance == 2) {
++                    xp.y += 2.0f * eps;
++                    xm.y -= 2.0f * eps;
++#ifndef SIRIUS_FP64
++                } else {
++                    xp.y += 3.0f * eps;
++                    xm.y -= 3.0f * eps;
++#endif
++                }
++            } else {
++                if (distance == 1) {
++                    xp.z += eps;
++                    xm.z -= eps;
++                } else if (distance == 2) {
++                    xp.z += 2.0f * eps;
++                    xm.z -= 2.0f * eps;
++#ifndef SIRIUS_FP64
++                } else {
++                    xp.z += 3.0f * eps;
++                    xm.z -= 3.0f * eps;
++#endif
++                }
++            }
++
++            GetKerrSchildFamilyChristoffel(xp, M, a, Q, Lambda, Gamma_plus);
++            GetKerrSchildFamilyChristoffel(xm, M, a, Q, Lambda, Gamma_minus);
++
++            if (distance == 1) {
++                for (int mu = 0; mu < 4; mu++)
++                    for (int nu = 0; nu < 4; nu++)
++                        for (int sig = 0; sig < 4; sig++)
++                            dGamma[rho][mu][nu][sig] =
+ #ifdef SIRIUS_FP64
+-                    dGamma[rho][mu][nu][sig] =
+-                        (dGamma[rho][mu][nu][sig] -
+-                         (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
+-                        (12.0f * eps);
++                                8.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+ #else
+-                    dGamma[rho][mu][nu][sig] -=
+-                        9.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+-
+-        GetKerrSchildFamilyChristoffel(xppp, M, a, Q, Lambda, Gamma_plus);
+-        GetKerrSchildFamilyChristoffel(xmmm, M, a, Q, Lambda, Gamma_minus);
+-        for (int mu = 0; mu < 4; mu++)
+-            for (int nu = 0; nu < 4; nu++)
+-                for (int sig = 0; sig < 4; sig++)
+-                    dGamma[rho][mu][nu][sig] =
+-                        (dGamma[rho][mu][nu][sig] +
+-                         (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
+-                        (60.0f * eps);
+-#endif
++                                45.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
++#endif
++            } else if (distance == 2) {
++                for (int mu = 0; mu < 4; mu++)
++                    for (int nu = 0; nu < 4; nu++)
++                        for (int sig = 0; sig < 4; sig++)
++#ifdef SIRIUS_FP64
++                            dGamma[rho][mu][nu][sig] =
++                                (dGamma[rho][mu][nu][sig] -
++                                 (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
++                                (12.0f * eps);
++#else
++                            dGamma[rho][mu][nu][sig] -=
++                                9.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
++#endif
++#ifndef SIRIUS_FP64
++            } else {
++                for (int mu = 0; mu < 4; mu++)
++                    for (int nu = 0; nu < 4; nu++)
++                        for (int sig = 0; sig < 4; sig++)
++                            dGamma[rho][mu][nu][sig] =
++                                (dGamma[rho][mu][nu][sig] +
++                                 (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
++                                (60.0f * eps);
++#endif
++            }
++        }
+     }
+ 
+     // R^mu_nu_rho_sigma = d_rho Gamma^mu_nu_sigma - d_sigma Gamma^mu_nu_rho

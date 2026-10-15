@@ -1,0 +1,95 @@
+{
+  "schema": "sirius-trace-stencil-root-owner-product-check-v1",
+  "case": "candidate-fp32",
+  "created_utc": "2026-10-15T20:19:29.967727+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_helper_observed_closed_exit": 0,
+  "owner_terminal_passed_exit0_original_guards": true,
+  "whole_input_rows": 4553,
+  "preflight_local_absolute_paths_normalized_to_owner_relative_keys": true,
+  "before_after_current_and_prior_raw_exact": true,
+  "source_unchanged": true,
+  "sample_count": 18,
+  "owner_seconds": 8.541716460022144,
+  "peak_sampled_aggregate_RSS_KiB": 465288,
+  "saved_owned_births_fresh_rechecked": [
+    {
+      "pid": 1152993,
+      "saved_start_ticks": "14486061",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 1153068,
+      "saved_start_ticks": "14487472",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "product": {
+    "path": "out/trace-riemann-stencil-compiler-pending/candidate-fp32/trace.spv",
+    "bytes": 2620748,
+    "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+  },
+  "role": "candidate",
+  "variant": "fp32",
+  "matching_original_control_byteequal_baseline": null,
+  "control_baseline": {
+    "path": "bin/linux-gcc/kernels/trace.spv",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv",
+    "bytes": 2994452,
+    "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd",
+    "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv",
+    "actual_previous_control_bytes_equal": true
+  },
+  "separate_validation_disassembly_and_root_acceptance_pending": true,
+  "all5_controls_before_candidate_source_attribution": true,
+  "files": {
+    "out/trace-riemann-stencil-compiler-pending/candidate-fp32/samples.jsonl": {
+      "bytes": 4142,
+      "sha256": "c4d983208b277735cafce8f987f259717fa4939914865eaa47e62d42ba049aff"
+    },
+    "out/trace-riemann-stencil-compiler-pending/candidate-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-compiler-pending/candidate-fp32/inputs-before.json": {
+      "bytes": 1507695,
+      "sha256": "6a9e8c0bb35f4c4e5f97988823727796b088a55daf957d9499e0c6c19e83fb55"
+    },
+    "out/trace-riemann-stencil-compiler-pending/candidate-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-compiler-pending/candidate-fp32/inputs-after.json": {
+      "bytes": 1507695,
+      "sha256": "6a9e8c0bb35f4c4e5f97988823727796b088a55daf957d9499e0c6c19e83fb55"
+    },
+    "out/trace-riemann-stencil-compiler-pending/candidate-fp32/trace.spv": {
+      "bytes": 2620748,
+      "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+    },
+    "out/trace-riemann-stencil-compiler-pending/candidate-fp32/owner.json": {
+      "bytes": 3628,
+      "sha256": "fc796b0484ffb6d7ce347f1baaf60aa63f526cc80aee2b856e7d7a45075d6a03"
+    },
+    "out/trace-riemann-stencil-compiler-pending/root-prelaunch-candidate-fp32.json": {
+      "bytes": 2528,
+      "sha256": "bf0433455236655010f6d13b75888edd6206f1ca8f013b99d55ebd703ca2ec8e"
+    },
+    "out/trace-riemann-stencil-compiler-pending/root-helper-candidate-fp32.log": {
+      "bytes": 1239,
+      "sha256": "18920c3457086b6c0755885dae9b82eb0ba515c0c7b388acd21e4f42939f4126"
+    },
+    "out/trace-riemann-stencil-compiler-pending/root-source-opens-candidate-fp32.trace": {
+      "bytes": 3136714,
+      "sha256": "7384e16b79aeafbdbb8c7bef08ea741671f33ff9f189c677b00f7cc8fc0b65ae"
+    },
+    "out/trace-riemann-stencil-compiler-pending/root-wrapper-result-candidate-fp32.json": {
+      "bytes": 951,
+      "sha256": "4b27ba6cefda7447d17331eef9c6d75540c6e8085ffce91484acee36ef8c8e84"
+    }
+  },
+  "scope": "One actual offline compiler owner/product only; no scientific/numerical/runtime/RSS/JIT/performance/adoption verdict. Three-dimensional8x8x1 kernel and ABI remain separate emitted checks."
+}
