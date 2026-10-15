@@ -1,0 +1,27 @@
+﻿2026-10-15T12:34:42.1389599Z ##[group]Run jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+2026-10-15T12:34:42.1390181Z with:
+2026-10-15T12:34:42.1390383Z   vulkan_version: 1.4.357.0
+2026-10-15T12:34:42.1390619Z   install_runtime: true
+2026-10-15T12:34:42.1390831Z   cache: false
+2026-10-15T12:34:42.1391027Z   stripdown: true
+2026-10-15T12:34:42.1393813Z   github_token: ***
+2026-10-15T12:34:42.1394040Z ##[endgroup]
+2026-10-15T12:34:42.2924115Z Using github_token to authenticate GitHub API requests.
+2026-10-15T12:34:42.2927244Z 🔽 Downloading Vulkan SDK 1.4.357.0
+2026-10-15T12:34:42.3621269Z ✔️ Http(200): The requested VULKAN_SDK 1.4.357.0 is downloadable.
+2026-10-15T12:34:42.3622361Z     URL: https://sdk.lunarg.com/sdk/download/1.4.357.0/windows/vulkansdk-windows-X64-1.4.357.0.exe
+2026-10-15T12:34:46.4369946Z ✔️ Download completed successfully!
+2026-10-15T12:34:46.4370402Z    File: C:\Users\RUNNER~1\AppData\Local\Temp\VulkanSDK-Installer.exe
+2026-10-15T12:34:46.4372334Z    SHA HASH URL: https://sdk.lunarg.com/sdk/sha/1.4.357.0/windows/vulkansdk-windows-X64-1.4.357.0.exe.json
+2026-10-15T12:34:47.0393136Z    SHA verified: C:\Users\RUNNER~1\AppData\Local\Temp\VulkanSDK-Installer.exe
+2026-10-15T12:34:47.0394107Z 📦 Extracting Vulkan SDK...
+2026-10-15T12:35:07.7848725Z    Installed into folder: C:\VulkanSDK\1.4.357.0
+2026-10-15T12:35:07.7850034Z 📦 Placing Vulkan Runtime into the SDK folder...
+2026-10-15T12:35:07.7854494Z    Copying x86 runtime files to SDK path (SysWOW64 -> runtime/x86)
+2026-10-15T12:35:07.7903265Z    Copying x64 runtime files to SDK path (system32 -> runtime/x64)
+2026-10-15T12:35:07.7941250Z    Installed into folder: C:\VulkanSDK\1.4.357.0\runtime
+2026-10-15T12:35:07.7953049Z ✔️ [PATH] Added path to Vulkan SDK to environment variable PATH.
+2026-10-15T12:35:07.7959351Z ✔️ [ENV] Set env variable VULKAN_SDK -> "C:\VulkanSDK\1.4.357.0".
+2026-10-15T12:35:07.7962548Z ✔️ [ENV] Set env variable VULKAN_VERSION -> "1.4.357.0".
+2026-10-15T12:35:07.7965332Z ℹ️ [INFO] Path to Vulkan Runtime: C:\VulkanSDK\1.4.357.0\runtime
+2026-10-15T12:35:07.7965968Z ✅ Done.

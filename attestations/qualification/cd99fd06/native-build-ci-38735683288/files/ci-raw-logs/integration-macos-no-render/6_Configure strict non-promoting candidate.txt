@@ -1,0 +1,48 @@
+﻿2026-10-15T12:35:57.4563760Z ##[group]Run cmake --preset macos -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
+2026-10-15T12:35:57.4565050Z [36;1mcmake --preset macos -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON[0m
+2026-10-15T12:35:57.4624360Z shell: /bin/bash -e {0}
+2026-10-15T12:35:57.4624840Z env:
+2026-10-15T12:35:57.4625170Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-15T12:35:57.4625630Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T12:35:57.4626200Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-15T12:35:57.4626950Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-15T12:35:57.4627740Z ##[endgroup]
+2026-10-15T12:36:02.5590020Z -- The CXX compiler identification is AppleClang 17.0.0.17000013
+2026-10-15T12:36:03.8462570Z -- The C compiler identification is AppleClang 17.0.0.17000013
+2026-10-15T12:36:03.9343250Z -- Detecting CXX compiler ABI info
+2026-10-15T12:36:04.2852850Z -- Detecting CXX compiler ABI info - done
+2026-10-15T12:36:04.3188190Z -- Check for working CXX compiler: /usr/bin/c++ - skipped
+2026-10-15T12:36:04.3199700Z -- Detecting CXX compile features
+2026-10-15T12:36:04.3206280Z -- Detecting CXX compile features - done
+2026-10-15T12:36:04.3355980Z -- Detecting C compiler ABI info
+2026-10-15T12:36:04.6032090Z -- Detecting C compiler ABI info - done
+2026-10-15T12:36:04.6505000Z -- Check for working C compiler: /usr/bin/cc - skipped
+2026-10-15T12:36:04.6507070Z -- Detecting C compile features
+2026-10-15T12:36:04.6508090Z -- Detecting C compile features - done
+2026-10-15T12:36:05.3277990Z -- Found Python3: /opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14 (found version "3.14.7") found components: Interpreter
+2026-10-15T12:36:14.5422530Z -- ┌─ FTXUI options ─────────────────────
+2026-10-15T12:36:14.5435400Z -- │ FTXUI_ENABLE_INSTALL     : OFF
+2026-10-15T12:36:14.5439440Z -- │ FTXUI_BUILD_EXAMPLES     : OFF
+2026-10-15T12:36:14.5440280Z -- │ FTXUI_QUIET              : OFF
+2026-10-15T12:36:14.5441490Z -- │ FTXUI_BUILD_DOCS         : OFF
+2026-10-15T12:36:14.5441900Z -- │ FTXUI_BUILD_TESTS        : OFF
+2026-10-15T12:36:14.5623850Z -- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+2026-10-15T12:36:14.5625170Z -- │ FTXUI_ENABLE_COVERAGE    : OFF
+2026-10-15T12:36:14.5626620Z -- │ FTXUI_DEV_WARNINGS       : OFF
+2026-10-15T12:36:14.5628190Z -- │ FTXUI_CLANG_TIDY         : OFF
+2026-10-15T12:36:14.5629660Z -- └─────────────────────────────────────
+2026-10-15T12:36:14.5659730Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+2026-10-15T12:36:15.0912100Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+2026-10-15T12:36:15.0928510Z -- Found Threads: TRUE
+2026-10-15T12:36:42.0628520Z -- Using the multi-header code from /Users/runner/work/Sirius/Sirius/bin/macos/_deps/json-src/include/
+2026-10-15T12:36:43.8374210Z -- alignment receipt generated: 0/8 domains admitted
+2026-10-15T12:36:45.8017330Z -- Including Cocoa support
+2026-10-15T12:36:46.0084360Z -- The OBJC compiler identification is AppleClang 17.0.0.17000013
+2026-10-15T12:36:46.0176920Z -- Detecting OBJC compiler ABI info
+2026-10-15T12:36:46.2472370Z -- Detecting OBJC compiler ABI info - done
+2026-10-15T12:36:46.3009140Z -- Check for working OBJC compiler: /usr/bin/clang - skipped
+2026-10-15T12:36:49.5628990Z -- Mandatory test gating: ENABLED
+2026-10-15T12:36:49.5643820Z -- Release packaging: DISABLED (configure SIRIUS_ALIGNMENT_MODE=release with the complete attestation set)
+2026-10-15T12:36:49.5658230Z -- Configuring done (51.6s)
+2026-10-15T12:36:50.7740540Z -- Generating done (1.2s)
+2026-10-15T12:36:50.7747450Z -- Build files have been written to: /Users/runner/work/Sirius/Sirius/bin/macos

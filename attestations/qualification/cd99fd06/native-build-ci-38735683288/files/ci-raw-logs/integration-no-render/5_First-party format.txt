@@ -1,0 +1,5 @@
+﻿2026-10-15T12:35:04.0105490Z ##[group]Run find src/sirius tests -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \
+2026-10-15T12:35:04.0106194Z [36;1mfind src/sirius tests -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \[0m
+2026-10-15T12:35:04.0106716Z [36;1m  -print0 | xargs -0 clang-format-18 --dry-run --Werror[0m
+2026-10-15T12:35:04.0169137Z shell: /usr/bin/bash -e {0}
+2026-10-15T12:35:04.0169575Z ##[endgroup]

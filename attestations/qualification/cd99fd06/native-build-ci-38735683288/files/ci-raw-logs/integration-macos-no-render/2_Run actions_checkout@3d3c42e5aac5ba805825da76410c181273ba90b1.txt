@@ -1,0 +1,87 @@
+﻿2026-10-15T12:34:45.8574720Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-15T12:34:45.8575450Z with:
+2026-10-15T12:34:45.8575790Z   repository: sunyaisblank/Sirius
+2026-10-15T12:34:45.8578510Z   token: ***
+2026-10-15T12:34:45.8578820Z   ssh-strict: true
+2026-10-15T12:34:45.8579140Z   ssh-user: git
+2026-10-15T12:34:45.8579470Z   persist-credentials: true
+2026-10-15T12:34:45.8579830Z   clean: true
+2026-10-15T12:34:45.8580370Z   sparse-checkout-cone-mode: true
+2026-10-15T12:34:45.8580830Z   fetch-depth: 1
+2026-10-15T12:34:45.8581230Z   fetch-tags: false
+2026-10-15T12:34:45.8581670Z   show-progress: true
+2026-10-15T12:34:45.8582100Z   lfs: false
+2026-10-15T12:34:45.8582490Z   submodules: false
+2026-10-15T12:34:45.8582870Z   set-safe-directory: true
+2026-10-15T12:34:45.8583460Z   allow-unsafe-pr-checkout: false
+2026-10-15T12:34:45.8584160Z ##[endgroup]
+2026-10-15T12:34:46.2157620Z Syncing repository: sunyaisblank/Sirius
+2026-10-15T12:34:46.2159760Z ##[group]Getting Git version info
+2026-10-15T12:34:46.2160700Z Working directory is '/Users/runner/work/Sirius/Sirius'
+2026-10-15T12:34:46.2168790Z [command]/opt/homebrew/bin/git version
+2026-10-15T12:34:46.2750790Z git version 2.55.0
+2026-10-15T12:34:46.2764710Z ##[endgroup]
+2026-10-15T12:34:46.2770880Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/dfb58d54-7472-4f88-868f-859a53e97fe6/.gitconfig'
+2026-10-15T12:34:46.2774780Z Temporarily overriding HOME='/Users/runner/work/_temp/dfb58d54-7472-4f88-868f-859a53e97fe6' before making global git config changes
+2026-10-15T12:34:46.2778030Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T12:34:46.2780200Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Sirius/Sirius
+2026-10-15T12:34:46.3009220Z Deleting the contents of '/Users/runner/work/Sirius/Sirius'
+2026-10-15T12:34:46.3011890Z ##[group]Determining repository object format
+2026-10-15T12:34:46.3016680Z ##[endgroup]
+2026-10-15T12:34:46.3019150Z ##[group]Initializing the repository
+2026-10-15T12:34:46.3022330Z [command]/opt/homebrew/bin/git init /Users/runner/work/Sirius/Sirius
+2026-10-15T12:34:46.3385380Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-15T12:34:46.3390140Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-15T12:34:46.3396310Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-15T12:34:46.3399900Z hint: call:
+2026-10-15T12:34:46.3401550Z hint:
+2026-10-15T12:34:46.3403480Z hint: 	git config --global init.defaultBranch <name>
+2026-10-15T12:34:46.3406050Z hint:
+2026-10-15T12:34:46.3410390Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-15T12:34:46.3414930Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-15T12:34:46.3417850Z hint:
+2026-10-15T12:34:46.3419490Z hint: 	git branch -m <name>
+2026-10-15T12:34:46.3421410Z hint:
+2026-10-15T12:34:46.3424230Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-15T12:34:46.3426680Z Initialized empty Git repository in /Users/runner/work/Sirius/Sirius/.git/
+2026-10-15T12:34:46.3429790Z [command]/opt/homebrew/bin/git remote add origin https://github.com/sunyaisblank/Sirius
+2026-10-15T12:34:46.3512710Z ##[endgroup]
+2026-10-15T12:34:46.3514230Z ##[group]Disabling automatic garbage collection
+2026-10-15T12:34:46.3518380Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-10-15T12:34:46.3592260Z ##[endgroup]
+2026-10-15T12:34:46.3593660Z ##[group]Setting up auth
+2026-10-15T12:34:46.3594720Z Removing SSH command configuration
+2026-10-15T12:34:46.3597400Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T12:34:46.3682400Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T12:34:46.5272630Z Removing HTTP extra header
+2026-10-15T12:34:46.5279780Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T12:34:46.5344090Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-15T12:34:46.6281260Z Removing includeIf entries pointing to credentials config files
+2026-10-15T12:34:46.6286760Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T12:34:46.6403710Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-15T12:34:46.7413410Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-e7bf1dd5-4d62-4ec3-ac39-4db80351f319.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-15T12:34:46.7416240Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Sirius/Sirius/.git.path /Users/runner/work/_temp/git-credentials-e7bf1dd5-4d62-4ec3-ac39-4db80351f319.config
+2026-10-15T12:34:46.7475980Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-e7bf1dd5-4d62-4ec3-ac39-4db80351f319.config
+2026-10-15T12:34:46.7543080Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-e7bf1dd5-4d62-4ec3-ac39-4db80351f319.config
+2026-10-15T12:34:46.7608260Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-e7bf1dd5-4d62-4ec3-ac39-4db80351f319.config
+2026-10-15T12:34:46.7711680Z ##[endgroup]
+2026-10-15T12:34:46.7712300Z ##[group]Fetching the repository
+2026-10-15T12:34:46.7713610Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cd99fd06627cf1f2e1ece74fcf90abf129178940:refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:48.2105560Z From https://github.com/sunyaisblank/Sirius
+2026-10-15T12:34:48.2111670Z  * [new ref]         cd99fd06627cf1f2e1ece74fcf90abf129178940 -> origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:48.2113690Z [command]/opt/homebrew/bin/git branch --list --remote origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:48.2212420Z   origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:48.2226070Z [command]/opt/homebrew/bin/git rev-parse refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:48.2294230Z cd99fd06627cf1f2e1ece74fcf90abf129178940
+2026-10-15T12:34:48.2300580Z ##[endgroup]
+2026-10-15T12:34:48.2301630Z ##[group]Determining the checkout info
+2026-10-15T12:34:48.2302910Z ##[endgroup]
+2026-10-15T12:34:48.2310270Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-10-15T12:34:48.2444350Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-15T12:34:48.2567390Z ##[group]Checking out the ref
+2026-10-15T12:34:48.2568440Z [command]/opt/homebrew/bin/git checkout --progress --force -B development/minimum-step-floor-2026-10-15 refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:48.5179030Z Switched to a new branch 'development/minimum-step-floor-2026-10-15'
+2026-10-15T12:34:48.5203370Z branch 'development/minimum-step-floor-2026-10-15' set up to track 'origin/development/minimum-step-floor-2026-10-15'.
+2026-10-15T12:34:48.5211500Z ##[endgroup]
+2026-10-15T12:34:48.5422790Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-10-15T12:34:48.5507950Z cd99fd06627cf1f2e1ece74fcf90abf129178940

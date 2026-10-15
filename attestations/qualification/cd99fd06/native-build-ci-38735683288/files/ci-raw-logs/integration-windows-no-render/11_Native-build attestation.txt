@@ -1,0 +1,8 @@
+﻿2026-10-15T12:51:21.8208135Z ##[group]Run python scripts/verify-attestation.py --record-build --domain windows-native-build --platform windows --source-revision cd99fd06627cf1f2e1ece74fcf90abf129178940 --source-root . --artifact bin/windows-msvc/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/windows-msvc/generated/sirius/alignment_receipt.json --native-build-gate bin/windows-msvc/generated/sirius/native_build_gate.json --native-build-gate-log bin/windows-msvc/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/windows-msvc/src/sirius/app/Release/sirius.exe --test-dir bin/windows-msvc --output attestations/windows-build.json
+2026-10-15T12:51:21.8213034Z [36;1mpython scripts/verify-attestation.py --record-build --domain windows-native-build --platform windows --source-revision cd99fd06627cf1f2e1ece74fcf90abf129178940 --source-root . --artifact bin/windows-msvc/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/windows-msvc/generated/sirius/alignment_receipt.json --native-build-gate bin/windows-msvc/generated/sirius/native_build_gate.json --native-build-gate-log bin/windows-msvc/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/windows-msvc/src/sirius/app/Release/sirius.exe --test-dir bin/windows-msvc --output attestations/windows-build.json[0m
+2026-10-15T12:51:21.8253820Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T12:51:21.8254175Z env:
+2026-10-15T12:51:21.8254399Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T12:51:21.8254674Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T12:51:21.8254897Z ##[endgroup]
+2026-10-15T12:51:24.4687248Z build attestation recorded and verified: attestations\windows-build.json

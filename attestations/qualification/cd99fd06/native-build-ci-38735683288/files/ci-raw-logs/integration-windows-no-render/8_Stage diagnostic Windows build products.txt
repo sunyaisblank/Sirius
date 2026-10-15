@@ -1,0 +1,106 @@
+﻿2026-10-15T12:50:07.2721193Z ##[group]Run $ErrorActionPreference = "Stop"
+2026-10-15T12:50:07.2721916Z [36;1m$ErrorActionPreference = "Stop"[0m
+2026-10-15T12:50:07.2722289Z [36;1m$revision = (git rev-parse HEAD).Trim()[0m
+2026-10-15T12:50:07.2722971Z [36;1mif ($LASTEXITCODE -ne 0 -or $revision -ne $env:GITHUB_SHA -or (git status --porcelain)) { throw "diagnostic source identity mismatch" }[0m
+2026-10-15T12:50:07.2723750Z [36;1m$alignment = "bin/windows-msvc/generated/sirius/alignment_receipt.json"[0m
+2026-10-15T12:50:07.2724526Z [36;1mif ((Get-Content -Raw $alignment | ConvertFrom-Json).source_revision -ne $revision) { throw "diagnostic alignment revision mismatch" }[0m
+2026-10-15T12:50:07.2725436Z [36;1m$volumes = @("bin/windows-msvc/src/sirius/app/Release", "bin/windows-msvc/tests/backend/Release")[0m
+2026-10-15T12:50:07.2726240Z [36;1m$executables = @("sirius.exe", "sirius_backend_tests.exe")[0m
+2026-10-15T12:50:07.2726813Z [36;1m$loader = Get-Item -LiteralPath (Join-Path $env:VULKAN_SDK "runtime/x64/vulkan-1.dll")[0m
+2026-10-15T12:50:07.2727459Z [36;1m$cache = Get-Content -Raw "bin/windows-msvc/CMakeCache.txt"[0m
+2026-10-15T12:50:07.2728174Z [36;1mif ($cache -notmatch '(?m)^BUILD_SHARED_LIBS:BOOL=OFF\r?$') { throw "diagnostic volumes require the existing static-library topology" }[0m
+2026-10-15T12:50:07.2729083Z [36;1mif ($cache -match '(?m)^GLFW_LIBRARY_TYPE:STRING=(?!STATIC\r?$)[^\r\n]+') { throw "diagnostic GLFW DLL topology is not represented" }[0m
+2026-10-15T12:50:07.2729800Z [36;1m$instance = [regex]::Match($cache, '(?m)^CMAKE_GENERATOR_INSTANCE:[^=]+=(.+)$')[0m
+2026-10-15T12:50:07.2730411Z [36;1mif (-not $instance.Success) { throw "selected Visual Studio instance is absent" }[0m
+2026-10-15T12:50:07.2731085Z [36;1m$compiler = @(Get-ChildItem -Path "bin/windows-msvc/CMakeFiles/*/CMakeCXXCompiler.cmake" -File)[0m
+2026-10-15T12:50:07.2731762Z [36;1mif ($compiler.Count -ne 1) { throw "selected C++ compiler metadata is ambiguous" }[0m
+2026-10-15T12:50:07.2732520Z [36;1m$compilerVersion = [regex]::Match((Get-Content -Raw $compiler[0].FullName), 'set\(CMAKE_CXX_COMPILER_VERSION "(19\.(\d+)\.[^"]+)"\)')[0m
+2026-10-15T12:50:07.2733318Z [36;1mif (-not $compilerVersion.Success) { throw "selected MSVC compiler version is absent" }[0m
+2026-10-15T12:50:07.2734120Z [36;1m$redistVersionFile = Join-Path ($instance.Groups[1].Value.Trim()) "VC/Auxiliary/Build/Microsoft.VCRedistVersion.default.txt"[0m
+2026-10-15T12:50:07.2734862Z [36;1m$redistVersion = (Get-Content -Raw $redistVersionFile).Trim()[0m
+2026-10-15T12:50:07.2735599Z [36;1mif ($redistVersion -notmatch ('^14\.' + $compilerVersion.Groups[2].Value + '\.')) { throw "selected MSVC and release CRT versions do not match" }[0m
+2026-10-15T12:50:07.2736503Z [36;1m$crtDirectory = Join-Path ($instance.Groups[1].Value.Trim()) "VC/Redist/MSVC/$redistVersion/x64/Microsoft.VC143.CRT"[0m
+2026-10-15T12:50:07.2737626Z [36;1m$crtNames = @("concrt140.dll", "msvcp140.dll", "msvcp140_1.dll", "msvcp140_2.dll", "msvcp140_atomic_wait.dll", "msvcp140_codecvt_ids.dll", "vcruntime140.dll", "vcruntime140_1.dll", "Microsoft.VC143.CRT.manifest")[0m
+2026-10-15T12:50:07.2738882Z [36;1m$crt = @($crtNames | ForEach-Object { $path = Join-Path $crtDirectory $_; if (Test-Path -LiteralPath $path -PathType Leaf) { Get-Item -LiteralPath $path } })[0m
+2026-10-15T12:50:07.2739737Z [36;1mforeach ($name in @("msvcp140.dll", "vcruntime140.dll", "vcruntime140_1.dll")) {[0m
+2026-10-15T12:50:07.2740294Z [36;1m  if ($name -notin $crt.Name) { throw "selected release CRT missing: $name" }[0m
+2026-10-15T12:50:07.2740919Z [36;1m}[0m
+2026-10-15T12:50:07.2741175Z [36;1m$files = @{}[0m
+2026-10-15T12:50:07.2741422Z [36;1m$origins = @{}[0m
+2026-10-15T12:50:07.2741795Z [36;1mforeach ($dll in @($loader) + @($crt)) { $origins[$dll.Name] = $dll.FullName }[0m
+2026-10-15T12:50:07.2742312Z [36;1mfor ($index = 0; $index -lt $volumes.Count; $index++) {[0m
+2026-10-15T12:50:07.2742684Z [36;1m  $volume = $volumes[$index][0m
+2026-10-15T12:50:07.2743198Z [36;1m  foreach ($dll in @($loader) + @($crt)) { Copy-Item -LiteralPath $dll.FullName -Destination $volume -Force }[0m
+2026-10-15T12:50:07.2745346Z [36;1m  $payload = @(Get-Item -LiteralPath (Join-Path $volume $executables[$index]))[0m
+2026-10-15T12:50:07.2745976Z [36;1m  $payload += @(Get-ChildItem -Path "$volume/*.dll", "$volume/*.manifest" -File -Force)[0m
+2026-10-15T12:50:07.2746621Z [36;1m  $payload += @(Get-ChildItem -LiteralPath "$volume/resources" -Recurse -File -Force)[0m
+2026-10-15T12:50:07.2747107Z [36;1m  foreach ($file in $payload) {[0m
+2026-10-15T12:50:07.2747602Z [36;1m    $relative = [IO.Path]::GetRelativePath($PWD.Path, $file.FullName).Replace('\', '/')[0m
+2026-10-15T12:50:07.2748428Z [36;1m    $files[$relative] = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant() }[0m
+2026-10-15T12:50:07.2749195Z [36;1m  }[0m
+2026-10-15T12:50:07.2749423Z [36;1m}[0m
+2026-10-15T12:50:07.2749898Z [36;1m$compilerCopy = "bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake"[0m
+2026-10-15T12:50:07.2750584Z [36;1mCopy-Item -LiteralPath $compiler[0].FullName -Destination $compilerCopy[0m
+2026-10-15T12:50:07.2751193Z [36;1mforeach ($path in @($alignment, "bin/windows-msvc/CMakeCache.txt", $compilerCopy)) {[0m
+2026-10-15T12:50:07.2751716Z [36;1m  $file = Get-Item -LiteralPath $path[0m
+2026-10-15T12:50:07.2752350Z [36;1m  $files[$path] = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant() }[0m
+2026-10-15T12:50:07.2752952Z [36;1m}[0m
+2026-10-15T12:50:07.2753379Z [36;1m$registrationRoot = "bin/windows-msvc/generated/sirius/windows-mandatory-registration"[0m
+2026-10-15T12:50:07.2754085Z [36;1mif (Test-Path -LiteralPath $registrationRoot) { throw "registration export already exists" }[0m
+2026-10-15T12:50:07.2754836Z [36;1m$registrationFiles = @(Get-ChildItem -LiteralPath "bin/windows-msvc" -Recurse -File | Where-Object {[0m
+2026-10-15T12:50:07.2755657Z [36;1m  $_.Name -in @("CTestTestfile.cmake", "cmake_install.cmake") -or $_.Name -match '_(tests|include)(-[^.]+)?\.cmake$'[0m
+2026-10-15T12:50:07.2756211Z [36;1m})[0m
+2026-10-15T12:50:07.2756561Z [36;1mforeach ($target in @("base", "core", "oracle", "backend", "app", "render")) {[0m
+2026-10-15T12:50:07.2757033Z [36;1m  foreach ($kind in @("tests", "include")) {[0m
+2026-10-15T12:50:07.2757652Z [36;1m    if (@($registrationFiles | Where-Object { $_.Name -match "^sirius_${target}_tests\[\d+\]_${kind}\.cmake$" }).Count -ne 1) {[0m
+2026-10-15T12:50:07.2758362Z [36;1m      throw "configured GoogleTest discovery is incomplete: $target/$kind"[0m
+2026-10-15T12:50:07.2758790Z [36;1m    }[0m
+2026-10-15T12:50:07.2759014Z [36;1m  }[0m
+2026-10-15T12:50:07.2759249Z [36;1m}[0m
+2026-10-15T12:50:07.2759528Z [36;1m$registrationFiles += @(Get-Item -LiteralPath @([0m
+2026-10-15T12:50:07.2760050Z [36;1m  "bin/windows-msvc/CTestTestfile.cmake", "bin/windows-msvc/cmake_install.cmake",[0m
+2026-10-15T12:50:07.2760584Z [36;1m  "bin/windows-msvc/tests/evidence_governance.cmake",[0m
+2026-10-15T12:50:07.2761032Z [36;1m  "bin/windows-msvc/tests/alignment_receipt_integrity.cmake",[0m
+2026-10-15T12:50:07.2761491Z [36;1m  "bin/windows-msvc/tests/volume_initialization.cmake",[0m
+2026-10-15T12:50:07.2761912Z [36;1m  "bin/windows-msvc/verify_sirius_install.cmake",[0m
+2026-10-15T12:50:07.2762330Z [36;1m  "bin/windows-msvc/tests/source-governance-ctest.json",[0m
+2026-10-15T12:50:07.2762791Z [36;1m  "tests/operational/required_skip_rejection.cmake",[0m
+2026-10-15T12:50:07.2763335Z [36;1m  "tests/operational/vulkan_runtime_profile.cmake", "tests/operational/p1_burn_in.cmake"))[0m
+2026-10-15T12:50:07.2763841Z [36;1m$configuredRoots = @{}[0m
+2026-10-15T12:50:07.2764422Z [36;1mforeach ($key in @("CMAKE_HOME_DIRECTORY", "CMAKE_CACHEFILE_DIR", "CMAKE_COMMAND", "CMAKE_CTEST_COMMAND", "CMAKE_ROOT", "_Python3_EXECUTABLE")) {[0m
+2026-10-15T12:50:07.2765114Z [36;1m  $entry = [regex]::Match($cache, "(?m)^${key}:[^=]+=(.+?)\r?$")[0m
+2026-10-15T12:50:07.2766126Z [36;1m  if (-not $entry.Success) { throw "configured root/tool is absent: $key" }[0m
+2026-10-15T12:50:07.2766621Z [36;1m  $configuredRoots[$key] = $entry.Groups[1].Value[0m
+2026-10-15T12:50:07.2766987Z [36;1m}[0m
+2026-10-15T12:50:07.2767392Z [36;1mif ([IO.Path]::GetFullPath($configuredRoots.CMAKE_HOME_DIRECTORY) -ne $PWD.Path -or[0m
+2026-10-15T12:50:07.2768134Z [36;1m    [IO.Path]::GetFullPath($configuredRoots.CMAKE_CACHEFILE_DIR) -ne (Resolve-Path "bin/windows-msvc").Path) {[0m
+2026-10-15T12:50:07.2768855Z [36;1m  throw "configured registration roots differ from the exported checkout/build"[0m
+2026-10-15T12:50:07.2769331Z [36;1m}[0m
+2026-10-15T12:50:07.2769564Z [36;1m$configuredTools = @{}[0m
+2026-10-15T12:50:07.2770004Z [36;1mforeach ($key in @("CMAKE_COMMAND", "CMAKE_CTEST_COMMAND", "_Python3_EXECUTABLE")) {[0m
+2026-10-15T12:50:07.2771119Z [36;1m  $tool = Get-Item -LiteralPath $configuredRoots[$key][0m
+2026-10-15T12:50:07.2771942Z [36;1m  $configuredTools[$key] = @{ path = $tool.FullName; bytes = $tool.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $tool.FullName).Hash.ToLowerInvariant() }[0m
+2026-10-15T12:50:07.2772678Z [36;1m}[0m
+2026-10-15T12:50:07.2774284Z [36;1m$registration = @{ schema = "sirius-windows-configured-mandatory-registration-v1"; source_revision = $revision; configuration = "Release"; configured_roots = $configuredRoots; configured_tools = $configuredTools; files = @{}; execution_claimed = $false; scope = "Unmodified configured registration/install recipes and the preceding governance inventory; no Mandatory execution, qualification, or tool substitution admission." }[0m
+2026-10-15T12:50:07.2776158Z [36;1mforeach ($file in @($registrationFiles | Sort-Object -Property FullName -Unique)) {[0m
+2026-10-15T12:50:07.2776799Z [36;1m  $relative = [IO.Path]::GetRelativePath($PWD.Path, $file.FullName).Replace('\', '/')[0m
+2026-10-15T12:50:07.2777317Z [36;1m  $destination = "$registrationRoot/$relative"[0m
+2026-10-15T12:50:07.2777850Z [36;1m  New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null[0m
+2026-10-15T12:50:07.2778479Z [36;1m  Copy-Item -LiteralPath $file.FullName -Destination $destination[0m
+2026-10-15T12:50:07.2779217Z [36;1m  $identity = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant() }[0m
+2026-10-15T12:50:07.2780289Z [36;1m  if ((Get-FileHash -Algorithm SHA256 -LiteralPath $destination).Hash.ToLowerInvariant() -ne $identity.sha256) { throw "registration copy changed: $relative" }[0m
+2026-10-15T12:50:07.2781045Z [36;1m  $files[$destination] = $identity[0m
+2026-10-15T12:50:07.2781756Z [36;1m  $registration.files[$relative] = @{ source_path = $file.FullName; artifact_path = $destination; bytes = $identity.bytes; sha256 = $identity.sha256 }[0m
+2026-10-15T12:50:07.2782428Z [36;1m}[0m
+2026-10-15T12:50:07.2782790Z [36;1m$registrationMetadata = "$registrationRoot/registration-metadata.json"[0m
+2026-10-15T12:50:07.2783628Z [36;1m[IO.File]::WriteAllText((Join-Path $PWD.Path $registrationMetadata), ($registration | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))[0m
+2026-10-15T12:50:07.2784771Z [36;1m$metadataFile = Get-Item -LiteralPath $registrationMetadata[0m
+2026-10-15T12:50:07.2793579Z [36;1m$files[$registrationMetadata] = @{ bytes = $metadataFile.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $registrationMetadata).Hash.ToLowerInvariant() }[0m
+2026-10-15T12:50:07.2797351Z [36;1m$record = @{ schema = "sirius-windows-diagnostic-build-products-v1"; source_revision = $revision; repository = $env:GITHUB_REPOSITORY; run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT; msvc_version = $compilerVersion.Groups[1].Value; release_crt_version = $redistVersion; runtime_dll_origins = $origins; files = $files; diagnostic_build_only = $true; qualification_claimed = $false; scope = "Strict compiled CLI/backend-test volumes and configured CTest/install recipes only; no native runtime, rendering, UI, scientific, release or native-build attestation claim. Windows OS/UCRT and the physical graphics driver remain host dependencies." }[0m
+2026-10-15T12:50:07.2800882Z [36;1m$output = "bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json"[0m
+2026-10-15T12:50:07.2801892Z [36;1m[IO.File]::WriteAllText((Join-Path $PWD.Path $output), ($record | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))[0m
+2026-10-15T12:50:07.2860945Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T12:50:07.2861361Z env:
+2026-10-15T12:50:07.2861599Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T12:50:07.2861905Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T12:50:07.2862172Z ##[endgroup]

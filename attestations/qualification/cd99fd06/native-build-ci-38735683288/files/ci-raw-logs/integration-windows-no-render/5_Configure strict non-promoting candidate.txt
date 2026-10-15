@@ -1,0 +1,55 @@
+﻿2026-10-15T12:35:08.3791676Z ##[group]Run cmake --preset windows-msvc -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON -DCMAKE_CONFIGURATION_TYPES=Release
+2026-10-15T12:35:08.3793029Z [36;1mcmake --preset windows-msvc -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON -DCMAKE_CONFIGURATION_TYPES=Release[0m
+2026-10-15T12:35:08.3835170Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-15T12:35:08.3835523Z env:
+2026-10-15T12:35:08.3835715Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T12:35:08.3835965Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T12:35:08.3836178Z ##[endgroup]
+2026-10-15T12:35:09.8938587Z Preset CMake variables:
+2026-10-15T12:35:09.8938969Z 
+2026-10-15T12:35:09.8939111Z   BUILD_TESTS="ON"
+2026-10-15T12:35:09.8939504Z   CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+2026-10-15T12:35:09.8939967Z   SIRIUS_CONTRACT_MODE="2"
+2026-10-15T12:35:09.8940390Z   SIRIUS_MANDATORY_TESTS="ON"
+2026-10-15T12:35:09.8940809Z   SIRIUS_WERROR="ON"
+2026-10-15T12:35:09.8941159Z 
+2026-10-15T12:35:10.6948031Z -- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+2026-10-15T12:35:22.2237290Z -- The CXX compiler identification is MSVC 19.44.35229.0
+2026-10-15T12:35:23.2407432Z -- The C compiler identification is MSVC 19.44.35229.0
+2026-10-15T12:35:23.3528926Z -- Detecting CXX compiler ABI info
+2026-10-15T12:35:24.3815659Z -- Detecting CXX compiler ABI info - done
+2026-10-15T12:35:24.3952808Z -- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+2026-10-15T12:35:24.3963761Z -- Detecting CXX compile features
+2026-10-15T12:35:24.4019644Z -- Detecting CXX compile features - done
+2026-10-15T12:35:24.4207098Z -- Detecting C compiler ABI info
+2026-10-15T12:35:25.0955417Z -- Detecting C compiler ABI info - done
+2026-10-15T12:35:25.1091993Z -- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+2026-10-15T12:35:25.1096412Z -- Detecting C compile features
+2026-10-15T12:35:25.1102938Z -- Detecting C compile features - done
+2026-10-15T12:35:26.4135458Z -- Found Python3: C:/hostedtoolcache/windows/Python/3.14.8/x64/python3.exe (found version "3.14.8") found components: Interpreter
+2026-10-15T12:35:32.7308175Z -- ┌─ FTXUI options ─────────────────────
+2026-10-15T12:35:32.7308818Z -- │ FTXUI_ENABLE_INSTALL     : OFF
+2026-10-15T12:35:32.7309369Z -- │ FTXUI_BUILD_EXAMPLES     : OFF
+2026-10-15T12:35:32.7309848Z -- │ FTXUI_QUIET              : OFF
+2026-10-15T12:35:32.7310301Z -- │ FTXUI_BUILD_DOCS         : OFF
+2026-10-15T12:35:32.7310766Z -- │ FTXUI_BUILD_TESTS        : OFF
+2026-10-15T12:35:32.7311225Z -- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+2026-10-15T12:35:32.7311710Z -- │ FTXUI_ENABLE_COVERAGE    : OFF
+2026-10-15T12:35:32.7312155Z -- │ FTXUI_DEV_WARNINGS       : OFF
+2026-10-15T12:35:32.7312631Z -- │ FTXUI_CLANG_TIDY         : OFF
+2026-10-15T12:35:32.7313516Z -- └─────────────────────────────────────
+2026-10-15T12:35:32.7493886Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+2026-10-15T12:35:34.3824494Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+2026-10-15T12:35:34.3825086Z -- Looking for pthread_create in pthreads
+2026-10-15T12:35:34.9546689Z -- Looking for pthread_create in pthreads - not found
+2026-10-15T12:35:34.9547330Z -- Looking for pthread_create in pthread
+2026-10-15T12:35:35.5071619Z -- Looking for pthread_create in pthread - not found
+2026-10-15T12:35:35.5083634Z -- Found Threads: TRUE
+2026-10-15T12:35:54.3083212Z -- Using the multi-header code from D:/a/Sirius/Sirius/bin/windows-msvc/_deps/json-src/include/
+2026-10-15T12:35:56.6947267Z -- alignment receipt generated: 0/8 domains admitted
+2026-10-15T12:35:56.8016718Z -- Including Win32 support
+2026-10-15T12:36:00.9319311Z -- Mandatory test gating: ENABLED
+2026-10-15T12:36:00.9380230Z -- Release packaging: DISABLED (configure SIRIUS_ALIGNMENT_MODE=release with the complete attestation set)
+2026-10-15T12:36:00.9387141Z -- Configuring done (51.0s)
+2026-10-15T12:36:01.1597770Z -- Generating done (0.2s)
+2026-10-15T12:36:01.1606551Z -- Build files have been written to: D:/a/Sirius/Sirius/bin/windows-msvc

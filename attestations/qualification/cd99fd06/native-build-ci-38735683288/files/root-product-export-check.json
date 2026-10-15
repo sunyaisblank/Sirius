@@ -1,0 +1,123 @@
+{
+  "schema": "sirius-current-ci-root-product-export-check-v1",
+  "passed": true,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "run_id": 38735683288,
+  "diagnostic_manifest": {
+    "bytes": 32517,
+    "sha256": "bb9b56023f6b3c338d3cffa36d60018c33ae53341f5c5643b28e7453b4cedee9"
+  },
+  "diagnostic_members": 139,
+  "manifest_members": 138,
+  "registration_metadata": {
+    "bytes": 28670,
+    "sha256": "9713b995c3ae16f8af607a5085c4cafeb042884f45126adef66bcc3edc99e871"
+  },
+  "registration_files": 63,
+  "registration_all_members_join_manifest": true,
+  "source_script_copies": {
+    "tests/operational/required_skip_rejection.cmake": {
+      "artifact": {
+        "bytes": 1445,
+        "sha256": "8ca130647983be98b52dc85543a8cc9a5e9dedb1d412b961d80bd1ac7d52b7c5"
+      },
+      "git_LF_bytes": 1412,
+      "git_LF_sha256": "95a27885c9c82e42ba76ac6fdebb6c8476c3295d8ba866b046bbb09f1bfbb611",
+      "mapping": "Exact Git LF to Windows checkout CRLF; artifact bytes retained unchanged"
+    },
+    "tests/operational/vulkan_runtime_profile.cmake": {
+      "artifact": {
+        "bytes": 1012,
+        "sha256": "5262379014bd1e7d4de97b22070d0a426251453a3c5d0ed91c805a3360f8dfed"
+      },
+      "git_LF_bytes": 990,
+      "git_LF_sha256": "e39e8aee8f82b4f1934a42542cd5b743822bed02f6ed15e1a3eaa6185bc0f8ea",
+      "mapping": "Exact Git LF to Windows checkout CRLF; artifact bytes retained unchanged"
+    },
+    "tests/operational/p1_burn_in.cmake": {
+      "artifact": {
+        "bytes": 1188,
+        "sha256": "05739dab13c61b52d83e0596a0b0116207e7b91f591a34bb83f4a4d22abb89b0"
+      },
+      "git_LF_bytes": 1163,
+      "git_LF_sha256": "a76ea8ea059ede93a7be103d6b066cecaa60c5af2069ee39a9a0939036158d0f",
+      "mapping": "Exact Git LF to Windows checkout CRLF; artifact bytes retained unchanged"
+    }
+  },
+  "native_build": {
+    "windows": {
+      "native9": true,
+      "inventory": {
+        "bytes": 1059497,
+        "sha256": "f9088fb42a6980444808e754b29cd0104137b31e89482314788ad4e9dfe14470"
+      },
+      "canonical_inventory_sha256": "2eb6fc5e7abac2685b4825eca4c12ee1eddbd4060f2ab5548025d3cac276af39",
+      "gate": {
+        "bytes": 10013,
+        "sha256": "6ccf44f2e148462a2d6c729017c89aa41592c27dc1dfaea7824eb0910e275e27"
+      },
+      "raw_junit": {
+        "bytes": 5245,
+        "sha256": "c8954b97e31983a34ae1b565eebbd9c758a04b1f792096967a29be71deb4eb1a"
+      },
+      "tested_products": 7,
+      "qualification_products": 9,
+      "test_inputs": 20,
+      "diagnostic_manifest_joined_roles": [
+        "tested_artifacts:sirius",
+        "tested_artifacts:sirius_backend_tests",
+        "product_artifacts:alignment_receipt",
+        "product_artifacts:sirius"
+      ],
+      "case_seconds": {
+        "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims": "6.97734",
+        "OperationalBuildPolicy.ReleaseCannotWeakenGates": "0.0653132",
+        "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate": "8.05728",
+        "OperationalAttestation.FalseExternalEvidenceIsRejected": "33.2378",
+        "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice": "0.505541",
+        "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected": "0.0974549",
+        "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness": "0.180926",
+        "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority": "0.0089841",
+        "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation": "0.697184"
+      }
+    },
+    "macos": {
+      "native9": true,
+      "inventory": {
+        "bytes": 1198664,
+        "sha256": "3bdaf2fbfde41efd293fceef170e5dd8573fa10117ba9e95164154febc6d2834"
+      },
+      "canonical_inventory_sha256": "067832078269a7a839eaa8257ecf923f57bb23597a26ca6571b3d327cdf694f3",
+      "gate": {
+        "bytes": 9651,
+        "sha256": "1761eed6083e4e7a414bb740dc105f5c5650f1fe888feed87d6a1402b0dc0730"
+      },
+      "raw_junit": {
+        "bytes": 5162,
+        "sha256": "c5ba8262a27930378677e6572857aeb8113bbd8f39d0c4fb7fe04b16ad21ecc2"
+      },
+      "tested_products": 7,
+      "qualification_products": 9,
+      "test_inputs": 20,
+      "diagnostic_manifest_joined_roles": [],
+      "case_seconds": {
+        "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims": "3.37919",
+        "OperationalBuildPolicy.ReleaseCannotWeakenGates": "0.069177",
+        "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate": "3.73559",
+        "OperationalAttestation.FalseExternalEvidenceIsRejected": "27.0763",
+        "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice": "0.454791",
+        "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected": "0.0773343",
+        "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness": "0.0873996",
+        "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority": "0.0145012",
+        "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation": "0.946282"
+      }
+    }
+  },
+  "prior_passive_check_corrections": [
+    "First direct Linux-source byte comparison failed on Windows CRLF copies; exact Git LF-to-CRLF mapping proved explicitly, original artifact bytes retained.",
+    "Second check incorrectly compared raw inventory SHA with gate canonical JSON digest. Actual canonical definition read from verify-attestation.py; both identities retained.",
+    "Third check incorrectly required diagnostic M to contain all7 native-test executables; diagnostic product is CLI/backend only. All7 native artifacts are individually verified against native gate; CLI/backend and every overlapping M role joined byte-exact. Other5 are not claimed as diagnostic members."
+  ],
+  "all_failed_attempts_scope": "Read-only root ad hoc verification before any current stage/admission/runtime; no inputs/helpers/gates/products/source altered.",
+  "qualification_limit": "Build-only native9 authority; no current native runtime/fullMandatory/scientific/UI/release execution."
+}

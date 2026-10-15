@@ -1,0 +1,39 @@
+{
+  "schema": "sirius-current-ci-root-final-job-check-v1",
+  "passed": true,
+  "source_revision": "cd99fd06627cf1f2e1ece74fcf90abf129178940",
+  "run_id": 38735683288,
+  "run_attempt": 1,
+  "integration_passed": [
+    "integration-macos-no-render",
+    "integration-no-render",
+    "integration-windows-no-render"
+  ],
+  "unrequested_skipped_jobs": [
+    "linux-gate",
+    "linux-sanitizers",
+    "macos-build",
+    "macos-retained-diagnostic",
+    "windows-build"
+  ],
+  "requested_inputs": {
+    "full_qualification": "false",
+    "macos_retained_diagnostic": "false"
+  },
+  "inputs": {
+    "ci-run-final.json": {
+      "bytes": 12148,
+      "sha256": "d19dd46d65ce4744713e08c78654599f00e5e5e191202a6d0a24c38b523e3f91"
+    },
+    "ci-jobs-final.json": {
+      "bytes": 14220,
+      "sha256": "020cafdedf95968fc90c1c9980accd7b9647e6539674e955d44afc4c57387d5d"
+    },
+    "dispatch-request.json": {
+      "bytes": 152,
+      "sha256": "512058e63ae4191c05ddcafff3906b1321e580642f94b8e58e6499cddf3d29ed"
+    }
+  },
+  "prior_passive_check_correction": "First root ad hoc check assumed API jobs collection contained only3 executed integrations; it failed before any admission. Full8jobAPI inspected and exact3success+5unrequestedskipped sets independently asserted. No actual CI failure/fullqualification claim.",
+  "full_qualification_or_sanitizer_claimed": false
+}

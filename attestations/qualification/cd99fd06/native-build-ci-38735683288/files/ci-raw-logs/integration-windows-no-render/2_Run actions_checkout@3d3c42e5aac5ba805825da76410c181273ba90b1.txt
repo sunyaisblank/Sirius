@@ -1,0 +1,73 @@
+﻿2026-10-15T12:34:36.8664816Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-15T12:34:36.8666153Z with:
+2026-10-15T12:34:36.8666565Z   repository: sunyaisblank/Sirius
+2026-10-15T12:34:36.8670336Z   token: ***
+2026-10-15T12:34:36.8670731Z   ssh-strict: true
+2026-10-15T12:34:36.8671133Z   ssh-user: git
+2026-10-15T12:34:36.8671527Z   persist-credentials: true
+2026-10-15T12:34:36.8671979Z   clean: true
+2026-10-15T12:34:36.8672383Z   sparse-checkout-cone-mode: true
+2026-10-15T12:34:36.8672879Z   fetch-depth: 1
+2026-10-15T12:34:36.8673274Z   fetch-tags: false
+2026-10-15T12:34:36.8673674Z   show-progress: true
+2026-10-15T12:34:36.8674083Z   lfs: false
+2026-10-15T12:34:36.8674483Z   submodules: false
+2026-10-15T12:34:36.8674894Z   set-safe-directory: true
+2026-10-15T12:34:36.8675350Z   allow-unsafe-pr-checkout: false
+2026-10-15T12:34:36.8676038Z ##[endgroup]
+2026-10-15T12:34:37.0129440Z Syncing repository: sunyaisblank/Sirius
+2026-10-15T12:34:37.0131141Z ##[group]Getting Git version info
+2026-10-15T12:34:37.0131793Z Working directory is 'D:\a\Sirius\Sirius'
+2026-10-15T12:34:37.1108757Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-10-15T12:34:37.4021145Z git version 2.56.0.windows.2
+2026-10-15T12:34:37.4062204Z ##[endgroup]
+2026-10-15T12:34:37.4077725Z Temporarily overriding HOME='D:\a\_temp\b41d0b45-4267-489a-a08a-199bf0504c49' before making global git config changes
+2026-10-15T12:34:37.4080326Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T12:34:37.4088262Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Sirius\Sirius
+2026-10-15T12:34:37.4615372Z Deleting the contents of 'D:\a\Sirius\Sirius'
+2026-10-15T12:34:37.4619315Z ##[group]Determining repository object format
+2026-10-15T12:34:37.4621310Z ##[endgroup]
+2026-10-15T12:34:37.4622410Z ##[group]Initializing the repository
+2026-10-15T12:34:37.4630191Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\Sirius\Sirius
+2026-10-15T12:34:37.5444662Z Initialized empty Git repository in D:/a/Sirius/Sirius/.git/
+2026-10-15T12:34:37.5477078Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/sunyaisblank/Sirius
+2026-10-15T12:34:37.5974394Z ##[endgroup]
+2026-10-15T12:34:37.5975668Z ##[group]Disabling automatic garbage collection
+2026-10-15T12:34:37.5982683Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-10-15T12:34:37.6249255Z ##[endgroup]
+2026-10-15T12:34:37.6250601Z ##[group]Setting up auth
+2026-10-15T12:34:37.6251583Z Removing SSH command configuration
+2026-10-15T12:34:37.6259331Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T12:34:37.6536770Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-10-15T12:34:38.8633998Z Removing HTTP extra header
+2026-10-15T12:34:38.8642859Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T12:34:38.8919967Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-10-15T12:34:39.3476462Z Removing includeIf entries pointing to credentials config files
+2026-10-15T12:34:39.3478655Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T12:34:39.3759463Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-15T12:34:39.8179287Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-d264fb21-9b86-425e-8749-bb418b3d33f4.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-10-15T12:34:39.8465237Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/Sirius/Sirius/.git.path D:\a\_temp\git-credentials-d264fb21-9b86-425e-8749-bb418b3d33f4.config
+2026-10-15T12:34:39.8746721Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path D:\a\_temp\git-credentials-d264fb21-9b86-425e-8749-bb418b3d33f4.config
+2026-10-15T12:34:39.9065634Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-d264fb21-9b86-425e-8749-bb418b3d33f4.config
+2026-10-15T12:34:39.9345559Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-d264fb21-9b86-425e-8749-bb418b3d33f4.config
+2026-10-15T12:34:39.9635070Z ##[endgroup]
+2026-10-15T12:34:39.9636233Z ##[group]Fetching the repository
+2026-10-15T12:34:39.9648660Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cd99fd06627cf1f2e1ece74fcf90abf129178940:refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:41.5088637Z From https://github.com/sunyaisblank/Sirius
+2026-10-15T12:34:41.5090700Z  * [new ref]         cd99fd06627cf1f2e1ece74fcf90abf129178940 -> origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:41.5135387Z [command]"C:\Program Files\Git\bin\git.exe" branch --list --remote origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:41.5447221Z   origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:41.5477179Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:41.5769369Z cd99fd06627cf1f2e1ece74fcf90abf129178940
+2026-10-15T12:34:41.5831358Z ##[endgroup]
+2026-10-15T12:34:41.5832152Z ##[group]Determining the checkout info
+2026-10-15T12:34:41.5832691Z ##[endgroup]
+2026-10-15T12:34:41.5840545Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-10-15T12:34:41.6238384Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-10-15T12:34:41.6506862Z ##[group]Checking out the ref
+2026-10-15T12:34:41.6514408Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B development/minimum-step-floor-2026-10-15 refs/remotes/origin/development/minimum-step-floor-2026-10-15
+2026-10-15T12:34:42.0195444Z Switched to a new branch 'development/minimum-step-floor-2026-10-15'
+2026-10-15T12:34:42.0213486Z branch 'development/minimum-step-floor-2026-10-15' set up to track 'origin/development/minimum-step-floor-2026-10-15'.
+2026-10-15T12:34:42.0275659Z ##[endgroup]
+2026-10-15T12:34:42.0669169Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-10-15T12:34:42.0945249Z cd99fd06627cf1f2e1ece74fcf90abf129178940

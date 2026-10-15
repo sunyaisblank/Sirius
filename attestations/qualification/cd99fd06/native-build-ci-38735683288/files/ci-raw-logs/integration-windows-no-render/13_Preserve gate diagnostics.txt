@@ -1,0 +1,35 @@
+﻿2026-10-15T12:51:28.8451704Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-15T12:51:28.8452364Z with:
+2026-10-15T12:51:28.8452650Z   name: sirius-gate-diagnostics-integration-windows-no-render
+2026-10-15T12:51:28.8453712Z   path: bin/**/generated/sirius/*gate*.json
+bin/**/generated/sirius/*gate*.xml
+bin/**/generated/sirius/*gate*.log
+bin/**/Testing/Temporary/LastTest.log
+bin/**/Testing/Temporary/LastTestsFailed.log
+linux-tests.xml
+windows-tests.xml
+macos-tests.xml
+
+2026-10-15T12:51:28.8454678Z   if-no-files-found: ignore
+2026-10-15T12:51:28.8454911Z   compression-level: 6
+2026-10-15T12:51:28.8455109Z   overwrite: false
+2026-10-15T12:51:28.8455316Z   include-hidden-files: false
+2026-10-15T12:51:28.8455550Z   archive: true
+2026-10-15T12:51:28.8455724Z env:
+2026-10-15T12:51:28.8455899Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+2026-10-15T12:51:28.8456152Z   VULKAN_VERSION: 1.4.357.0
+2026-10-15T12:51:28.8456362Z ##[endgroup]
+2026-10-15T12:51:29.7737248Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-15T12:51:29.7740732Z The least common ancestor is D:\a\Sirius\Sirius. This will be the root directory of the artifact
+2026-10-15T12:51:29.7741656Z With the provided path, there will be 4 files uploaded
+2026-10-15T12:51:29.7747507Z Artifact name is valid!
+2026-10-15T12:51:29.7749117Z Root directory input is valid!
+2026-10-15T12:51:29.9771088Z Uploading artifact: sirius-gate-diagnostics-integration-windows-no-render.zip
+2026-10-15T12:51:29.9816642Z Beginning upload of artifact content to blob storage
+2026-10-15T12:51:30.0414034Z Uploaded bytes 5855
+2026-10-15T12:51:30.0564942Z Finished uploading artifact content to blob storage!
+2026-10-15T12:51:30.0566596Z SHA256 digest of uploaded artifact is beea3500c4ac15850fb3790b97852f08b71875079cca08fc8f72655ce96cf565
+2026-10-15T12:51:30.0567502Z Finalizing artifact upload
+2026-10-15T12:51:30.2932514Z Artifact sirius-gate-diagnostics-integration-windows-no-render successfully finalized. Artifact ID 11973269070
+2026-10-15T12:51:30.2934082Z Artifact sirius-gate-diagnostics-integration-windows-no-render has been successfully uploaded! Final size is 5855 bytes. Artifact ID is 11973269070
+2026-10-15T12:51:30.2939664Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/38735683288/artifacts/11973269070
