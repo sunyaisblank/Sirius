@@ -1,0 +1,207 @@
+{
+  "schema": "sirius-original-trace-jacobi-independent-terminal-stop-review-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "reviewed_utc": "2026-10-15T17:05:09.277958+00:00",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "terminal_evidence_review_passed": true,
+  "disposition": "INCOMPLETE_DIAGNOSTIC_SAMPLED_AGGREGATE_RSS_GUARD_STOP",
+  "blockers_to_preserving_this_bounded_stop": [],
+  "actual_attempt": {
+    "case": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+    "root_session": 7607,
+    "observed_operator_closed_exit": 1,
+    "original_attempts": 1,
+    "owner_passed": false,
+    "child_exit": -15,
+    "stop_reason": "diagnostic_sampled_rss_guard",
+    "wall_seconds": 188.78222234197892,
+    "samples": 6604,
+    "peak_sampled_aggregate_RSS_KiB": 4203496,
+    "aggregate_RSS_limit_KiB": 4194304,
+    "sampled_excess_KiB": 9192,
+    "minimum_sampled_available_KiB": 15806704,
+    "all_preceding_samples_at_or_below_RSS_limit": true,
+    "all_samples_below_external300s_and_above2GiB_reserve": true,
+    "last_sample": {
+      "elapsed_seconds": 188.05751638798392,
+      "child_RSS_KiB": 4182852,
+      "aggregate_RSS_KiB": 4203496
+    },
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "limits_scope": "Unchanged external diagnostic ownership limits; registered original has no whole-test TIMEOUT. Original active physical submit/wait assertion remains1000ms and maximum128 attempts per RunRegion; no completed runtime assertion claimed.",
+    "XML_present": false,
+    "stdout": "Only original one-case GTest startup/RUN line; no completed case or rung evidence.",
+    "stderr_bytes": 0,
+    "collector_executed": false,
+    "root_positive_acceptance_present": false,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "adopted_children_reaped": []
+  },
+  "inputs_and_products": {
+    "root_stop_all30_file_pins_current": true,
+    "preflight_rich_current": 620,
+    "tracked_sources": 538,
+    "actual_before_keys": 621,
+    "actual_after_keys": 621,
+    "before_after_rows": 1242,
+    "before_equals_after_equals_current_rich_content_and_resolved_paths": true,
+    "actual_input_set": "Exactly620 preflight file keys plus root-preflight.json itself; no review sidecar or own mutable outputs consumed.",
+    "owner_source_and_whole_inputs_unchanged": true,
+    "all6_compiled_staged_module_pairs_current_equal": true,
+    "backend": {
+      "path": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bytes": 13502112,
+      "sha256": "a34ab6c95b69f7b6667842690409e634cf9b0c7381409e1e336e27da4f5d0be6"
+    },
+    "source_and_runtime_admissions": "Accepted original source and concrete admission retained unchanged. Their pending/publication flags are creation-time history, composed with later actual root release; not rewritten as execution success.",
+    "original_numerical_refusal_recovery_and_ABI_contracts_unchanged": true
+  },
+  "provider_environment_and_retirement": {
+    "boot_id": "ad8dc954-f13d-4920-9e97-797932f20548",
+    "same_current_boot_verified": true,
+    "controller": {
+      "pid": 1061335,
+      "saved_start_ticks": "13273216",
+      "session": 1061322
+    },
+    "child": {
+      "pid": 1061358,
+      "saved_start_ticks": "13273252",
+      "session": 1061358
+    },
+    "all6604_sample_member_lists_match_the_exact_child_birth_and_session": true,
+    "actual_LVP_map_lines": 4,
+    "map_device": "08:50",
+    "map_inode": 143595,
+    "map_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "current_provider_content_and_device_inode_match_frozen_input": true,
+    "actual_same_saved_birth_controller_and_child_environment": true,
+    "external_LVP_JIT_OPTIMIZATION_LEVEL": "0",
+    "device": "0",
+    "ICD": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "default_cache_overrides_absent": true,
+    "assertion_optimization_override_absent": true,
+    "fresh_exact_recorded_birth_checks": [
+      {
+        "pid": 1061335,
+        "saved_start_ticks": "13273216",
+        "current_start_ticks": null,
+        "saved_birth_absent": true
+      },
+      {
+        "pid": 1061358,
+        "saved_start_ticks": "13273252",
+        "current_start_ticks": null,
+        "saved_birth_absent": true
+      }
+    ],
+    "absence_scope": "Only these two exact recorded Linux births; no global process absence, unobserved child or allocation/driver-phase inference."
+  },
+  "coupled_prerequisite_and_release": {
+    "publication_receipt": {
+      "path": "out/coupled-rk4-original-witness-preservation/root-git-preservation.json",
+      "bytes": 1559,
+      "sha256": "b05f3bfe4a9b9ba2bf53eb458e5fc1b2b37ee3a1904bc758d2edcbbda8ea251e"
+    },
+    "accepted_evidence_commit": "4fea48f0797f3f905310e7555b1071bf54a2a528",
+    "recorded_actual_push_closed_zero_and_fresh_remote_verification": true,
+    "local_evidence_tag_and_namedGit_manifest_preservation_bytes_match": true,
+    "runtime_release_after_recorded_remote_verification": true,
+    "scope": "Reuses separately completed original coupled witness. It does not supply a result for this stopped trace/Jacobi attempt."
+  },
+  "critical_pins": {
+    "root-bounded-stop.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/root-bounded-stop.json",
+      "bytes": 7197,
+      "sha256": "3f67b7f7439883169c5b44e5eb9b9429574fb413ff8bea8faeb017dd4e46f410"
+    },
+    "trace-jacobi-all-rungs/owner.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/trace-jacobi-all-rungs/owner.json",
+      "bytes": 2842,
+      "sha256": "38bd46dcfe9be86276fe5014bad488d2ae8f7cb5e7fd0aba4b2ee1aafa4e24d6"
+    },
+    "trace-jacobi-all-rungs/inputs-before.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/trace-jacobi-all-rungs/inputs-before.json",
+      "bytes": 149560,
+      "sha256": "09b298ecf62a5a7140bce5eac5375e37a0d50723535f90ba2b61c31322131fa2"
+    },
+    "trace-jacobi-all-rungs/inputs-after.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/trace-jacobi-all-rungs/inputs-after.json",
+      "bytes": 149560,
+      "sha256": "09b298ecf62a5a7140bce5eac5375e37a0d50723535f90ba2b61c31322131fa2"
+    },
+    "trace-jacobi-all-rungs/samples.jsonl": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/trace-jacobi-all-rungs/samples.jsonl",
+      "bytes": 1527698,
+      "sha256": "2eb4e681236d5667ebabcf3d35e3ef171394bb55160938a6e4147823f3abc093"
+    },
+    "trace-jacobi-all-rungs/stdout.log": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/trace-jacobi-all-rungs/stdout.log",
+      "bytes": 421,
+      "sha256": "5e80b39ec1ad3d8424925714fd0a0387d4cb57dbab09ac0bf797044631aa0214"
+    },
+    "trace-jacobi-all-rungs/stderr.log": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/trace-jacobi-all-rungs/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "root-launch-environment.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/root-launch-environment.json",
+      "bytes": 979,
+      "sha256": "4766aac20c3633e888d314d23f05df879963daf6cfc13d63f1f28cfb1e5c5d87"
+    },
+    "root-preflight.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/root-preflight.json",
+      "bytes": 156656,
+      "sha256": "fae370f5d9a51cbceb0a3a79017f6507f54092b703ac96666da8e8e82893d8e4"
+    },
+    "root-runtime-release.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/root-runtime-release.json",
+      "bytes": 2325,
+      "sha256": "597d8b4f015d9c558810f99fd8c2be06eccd0becb75d8af63aeda10971e63644"
+    },
+    "independent-runtime-admission.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/independent-runtime-admission.json",
+      "bytes": 12147,
+      "sha256": "6587fcd8d15e48cf3b44be0a6d9937e9649f3104efddfb17eb9601545d07743d"
+    },
+    "source-contracts.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/source-contracts.json",
+      "bytes": 10656,
+      "sha256": "207b2b2261f1b96354c7c0ce081eb327dd72928e97c1be6a09a4eadbfb3322ee"
+    },
+    "actions.json": {
+      "path": "out/trace-jacobi-original-witness-e0db7d59/actions.json",
+      "bytes": 6613,
+      "sha256": "2baec691bfc1fe4aecb712660f557b93ae8036e34392066e19daf2b5fb38457f"
+    }
+  },
+  "claim_limits": [
+    "Attempt incomplete, not a P2 numerical assertion failure or pass. No completed precision rung, unsupported-FP64 diagnosis, physical phase, allocation cause, full trace/Jacobi or release qualification established.",
+    "No XML exists: strict completed-zero-FESD/source-branch/all3modules and fp64_evidence property-NAME-absence acceptance was never reached; null is not positive FP64 evidence.",
+    "No unchanged retry, raised guard, cold-frame, performance, fullP1/E2/all40, Mandatory, full-science, UI or release acceptance.",
+    "Normal guards remain authoritative. Prior accepted coupled/software/native results remain separate finite evidence."
+  ],
+  "checkout": {
+    "head": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "source_committed_and_pushed": true,
+    "this_ignored_review_committed_or_pushed": false
+  },
+  "method": "Passive stdlib JSON/text/hash, read-only Git and only the two authorized recorded-birth /proc/stat absence reads. No project helper/import/parser/test/compiler/provider/native/network/signal/deletion execution or existing input mutation."
+}

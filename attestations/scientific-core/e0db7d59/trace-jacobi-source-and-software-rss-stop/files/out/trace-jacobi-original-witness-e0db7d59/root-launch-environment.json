@@ -1,0 +1,27 @@
+{
+  "schema": "sirius-original-trace-jacobi-actual-launch-environment-v1",
+  "observed_utc": "2026-10-15T16:56:21.696608+00:00",
+  "same_saved_birth_before_and_after_read": true,
+  "controller": {
+    "pid": 1061335,
+    "start_ticks": "13273216",
+    "session": 1061322,
+    "protected_environment": {
+      "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+    }
+  },
+  "child": {
+    "pid": 1061358,
+    "start_ticks": "13273252",
+    "session": 1061358,
+    "protected_environment": {
+      "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/trace-jacobi-original-witness-e0db7d59/trace-jacobi-all-rungs/gtest.xml"
+    }
+  },
+  "default_cache_overrides_absent": true,
+  "normal_assertion_override_absent": true,
+  "scope": "Actual live controller/child environment at exact savedbirths; focusedLVP0/defaultcache, no coldness/globalprocessclaim."
+}

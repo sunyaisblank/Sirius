@@ -1,0 +1,15 @@
+{
+  "schema": "sirius-trace-jacobi-original-witness-pending-commands-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "admitted": false,
+  "runtime_admitted": false,
+  "hold": "Coupled actual terminal review/root decision, independent review and fresh actual root metadata/preflight required. Root alone materializes actions.json and admits runtime.",
+  "order": [
+    "trace-jacobi-all-rungs"
+  ],
+  "commands_after_root_admission": [
+    "/usr/bin/python3 out/trace-jacobi-original-witness-e0db7d59/run_owned.py trace-jacobi-all-rungs",
+    "/usr/bin/python3 out/trace-jacobi-original-witness-e0db7d59/root_acceptance.py trace-jacobi-all-rungs"
+  ],
+  "strict_additional_root_postcheck": "Before acceptance/advancement assert fp64_evidence property name absent, exact source branch covers all3rungs including full double run, exact completed single XML zeroFESD/no skip/decline, and all3 loaded compiled/staged module and actual device/provider identities."
+}

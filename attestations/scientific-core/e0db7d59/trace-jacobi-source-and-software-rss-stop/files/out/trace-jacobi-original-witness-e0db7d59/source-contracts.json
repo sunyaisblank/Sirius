@@ -1,0 +1,231 @@
+{
+  "schema": "sirius-trace-jacobi-original-witness-source-contracts-v1",
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "source_only": true,
+  "runtime_admitted": false,
+  "case": {
+    "label": "trace-jacobi-all-rungs",
+    "filter": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+    "precision_order": [
+      "trace.spv",
+      "trace_fp32comp.spv",
+      "trace_fp64.spv"
+    ]
+  },
+  "provenance": {
+    "commit": "2c419ad2f420a50ebb6cc92c37ef0cc30927a63d",
+    "archive_prefix": "attestations/scientific-core/e0db7d59/kerr-cartdelta-rhs-source-and-software-controls/files/out/kerr-cartdelta-rhs-controls/",
+    "owner_guard_byte_exact": true,
+    "original_actions_bytes": 52935,
+    "original_collector_bytes": 3757,
+    "collector_delta": {
+      "old_work_directory": "out/kerr-cartdelta-rhs-controls",
+      "new_work_directory": "out/trace-jacobi-original-witness-e0db7d59",
+      "literal_replacements": 1,
+      "inverse_exact": true,
+      "functional_change": false
+    },
+    "pending_action_delta": "First original action only; namespace/revision/filter/XML/scope retarget; all70 inherited selectors preserved modulo namespace; six new trace compiled/staged selectors."
+  },
+  "source_files": {
+    "run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "bytes": 3768,
+      "sha256": "ff4c2c971de65e87aedaf92239083b1e707b7b08a9a14b63c69f7b70b64b45c2"
+    },
+    "originals/actions.json": {
+      "bytes": 52935,
+      "sha256": "06b88d6852e85f1e271eeee1cdc3dcd980ae1b62abc10059f78021371e3d44a8"
+    },
+    "originals/root_acceptance.py": {
+      "bytes": 3757,
+      "sha256": "34b7ee5a700ab9c88622cd2e50e66f114cc78ab865e704187a641f46732b5ca4"
+    },
+    "actions.pending.json": {
+      "bytes": 6016,
+      "sha256": "bfa88781c433ff6d082c4128435e276df7421a223ac0e0d9f5b299295cfc97db"
+    },
+    "commands.pending.json": {
+      "bytes": 985,
+      "sha256": "bd937af11ff079015f5da21e2f0efb317b08b7739097d203f3f86121cd32d3b1"
+    }
+  },
+  "tracked_source_pins": {
+    "tests/backend/kernel_trace_test.cpp": {
+      "bytes": 30289,
+      "sha256": "0808f369fb02ec9fd4a0db62df1b2afd0f69fe26f6e72fe0cf8e40d2dd4c3d5a",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "5f1bc3ce761f254284df2520c68e84d0b70d700e"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "bytes": 13798,
+      "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "f534108cf38b117f10cfd8a9b67b29212fbdbe57"
+    },
+    "tests/support/test_resource.h": {
+      "bytes": 796,
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "98087810848d204144c13a24c8782f58ffb4a87b"
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "bytes": 7192,
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "4e61faf3471d19d16a73c8ea080c26b76d472969"
+    },
+    "src/sirius/render/dispatch_governor.h": {
+      "bytes": 7908,
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "a690f5c665f771aa1b5e9cc8f153e4b1292f8a99"
+    },
+    "src/sirius/render/dispatch_governor.cpp": {
+      "bytes": 9243,
+      "sha256": "b1e92debf12f32adfab38a7f6754b5dd421518d04502c804d37bd05151a4ad87",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "79bffb5a84524e3f3a17ec7c7f442eac2e0eebb0"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "bytes": 63460,
+      "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "ede032048159e456d5d63afc271c64160487aa05"
+    },
+    "src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "e131912d6344029881602dd106803fc95f738c0d"
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "0d239802eb92efc07c2dba107dbbede4cb03b804"
+    },
+    "src/sirius/backend/CMakeLists.txt": {
+      "bytes": 17763,
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "c629f17fc0611874533f2dbe0b986b685f0f74fc"
+    },
+    "tests/backend/CMakeLists.txt": {
+      "bytes": 5448,
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "68735044e5a46054e4449ddc60f6132d2d75e8b7"
+    },
+    "cmake/sirius_testing.cmake": {
+      "bytes": 12349,
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486",
+      "git_commit": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+      "git_blob": "539a44f2d4952343a1f4b8c56da611f496211d74"
+    }
+  },
+  "pending_action": {
+    "base_selectors": 70,
+    "extra_selectors": [
+      "bin/linux-gcc/kernels/trace.spv",
+      "bin/linux-gcc/tests/backend/resources/kernels/trace.spv",
+      "bin/linux-gcc/kernels/trace_fp32comp.spv",
+      "bin/linux-gcc/tests/backend/resources/kernels/trace_fp32comp.spv",
+      "bin/linux-gcc/kernels/trace_fp64.spv",
+      "bin/linux-gcc/tests/backend/resources/kernels/trace_fp64.spv"
+    ],
+    "total_selectors": 76,
+    "kind": "test",
+    "expected_exit": 0,
+    "software_provider": true,
+    "device": "0",
+    "disable_software_shader_cache": false,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "no_actions_json_written": true
+  },
+  "fp64_complete_execution": {
+    "xml_property": {
+      "name": "fp64_evidence",
+      "value": null
+    },
+    "inherited_collector_field_name": "required_positive_property",
+    "generic_field_despite_name": true,
+    "null_predicate": "properties.get(name)==None: absence is accepted, unsupported_kernel_declined is refused. A malformed property with missing value could also match, so root MUST separately assert the property NAME absent.",
+    "strict_additional_root_postcheck_mandatory": true,
+    "complete_source_branch": "Missing kernels/no devices SKIP; zero-skips acceptance refuses them. Empty SPV or create/load failures fail. Unsupported FP64 records nonnull decline. Otherwise entire double run is wrapped by ASSERT_NO_FATAL_FAILURE and reaches completed testcase only without fatal failures. No alternate successful missing-rung path.",
+    "xml_PASS_alone_sufficient": false
+  },
+  "original_contract": {
+    "active_pixels": 1,
+    "allocated_rows": 64,
+    "buffers": 7,
+    "packet_words_float32": 70,
+    "packet_bytes": 280,
+    "record_bytes": {
+      "fp32": 272,
+      "fp32comp": 272,
+      "fp64": 480
+    },
+    "requested_buffer_bytes_not_driver_memory": {
+      "fp32": 543044,
+      "fp32comp": 543044,
+      "fp64": 556356
+    },
+    "attempts_per_RunRegion_maximum": 128,
+    "physical_phase_submit_wait_ms_maximum": 1000,
+    "workgroups": [
+      1,
+      1,
+      1
+    ],
+    "local_size": [
+      8,
+      8,
+      1
+    ],
+    "software_prepare": "Zero-active initialization validates finite-positive timing separately; not an active1000ms phase. Outer diagnostic guard remains.",
+    "registered_original_TIMEOUT": null,
+    "external300s_is_original_test_deadline": false,
+    "calls_per_supported_rung": "Ten RunRegion calls:7positive,1expected shader-state failure,2host retained-failure refusals; plus1negative Finalize. Runtime physical dispatch count not assumed.",
+    "positive_assertions": "Independent affine2/1/0 boundaries; all4Jacobi columns at original1e-8/1e-12; multiple accepted steps; finite radiance/alpha3e-5; sample0restart/sample1exact averaging.",
+    "negative_assertions": "UnrepresentedEvent/unpublished0; failedFinalize preserves entire record/radiance; later failedsamples refuse withoutdispatch.",
+    "scope": "M=a=Q=Lambda=0 flat fixture; no guaranteed floor-resolution or strong-field coverage."
+  },
+  "consumer_closure": {
+    "compile": "trace.slang plus all CMake gr_*.slang dependencies; original SPIRV1.5 ComputeMain recipe and FP32_COMP/FP64defines/warning flags; spirv-val where configured.",
+    "stage": "Three compiled modules copied byteexact into backend executable-relative resources/kernels at each consumer build; six selectors added.",
+    "host": "Original test/probe/TraceContinuation validator/device/ELF plus complete root-admitted tool/provider/runtime-DSO/build/source closure. Empty CSR is internally allocated; no CLI model Mandatory receipt or catalogue resource.",
+    "changed_e0_path": "Production Advance -> AttemptAdaptiveGeodesicStepAtFloor -> composite pair -> four-stage CartDelta single RHS callsite."
+  },
+  "required_root_fresh_checks": [
+    "Coupled actual terminal review and root next-witness decision",
+    "Current clean exact e0/source and complete typed action schema",
+    "Actual registered original filter/no skips/no originalTIMEOUT",
+    "Fresh current ELF/tool/provider/DSO/build/source identities",
+    "Three trace compiled/staged byte-pairs; inherited parity modules/current dependencies",
+    "Fresh readiness/inventory/compiled-evidence/root-preflight and complete consumed-input closure",
+    "Explicit environment/defaultcache/device0 live mapping; LVP_JIT_OPTIMIZATION_LEVEL ifused must be separately admitted because unchanged helper does not set it",
+    "Strict FP64 property-NAME absence/source-branch postcheck after owner and collector"
+  ],
+  "not_created_or_read": [
+    "live actions.json/readiness/inventory/compiled-observations/preflight",
+    "runtime outputs/native/coupled mutable evidence"
+  ],
+  "nonclaims": [
+    "Runtime admission/execution",
+    "Invented positive FP64property",
+    "FullP1/strong-field/cold-frame/performance/Mandatory/scientific-release qualification"
+  ],
+  "existing_inputs_unchanged": true
+}

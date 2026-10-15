@@ -1,0 +1,418 @@
+{
+  "schema": "sirius-original-trace-jacobi-runtime-readiness-v1",
+  "admitted": true,
+  "runtime_release_pending": true,
+  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+  "clean_committed_pushed": true,
+  "created_utc": "2026-10-15T16:53:09.764314+00:00",
+  "strict_configure_and_build": {
+    "configure_exit": 0,
+    "build_exit": 0,
+    "preset": "linux-gcc",
+    "targets": [
+      "sirius_backend_tests",
+      "SiriusSourceGovernance"
+    ],
+    "parallel_jobs": 2,
+    "configure_log": {
+      "bytes": 1277,
+      "sha256": "f626166564b47ca34cd60cdeab89518594a6ce1bc407c76ee752f02d1118c7ea"
+    },
+    "build_log": {
+      "bytes": 4610,
+      "sha256": "5044c8ab9790d81ebab804bff7769265ee401fd7f332d4b3a691ce88b8881b67"
+    },
+    "required_cache": [
+      "SIRIUS_ALIGNMENT_MODE:STRING=qualification",
+      "SIRIUS_CONTRACT_MODE:STRING=2",
+      "SIRIUS_MANDATORY_TESTS:BOOL=ON",
+      "SIRIUS_WERROR:BOOL=ON",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME:BOOL=ON",
+      "CMAKE_BUILD_TYPE:STRING=Release"
+    ],
+    "outputs": "19shader outputs:17validatedSPIRV+CUDA/MSL;5governancecommands;exactinput-volume staging.",
+    "scope": "Reuse exact completed strict e0 shader producer/current Cache/Ninja and logs; no new build/relink."
+  },
+  "backend_executable": {
+    "path": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "bytes": 13502112,
+    "sha256": "a34ab6c95b69f7b6667842690409e634cf9b0c7381409e1e336e27da4f5d0be6"
+  },
+  "backend_reuse": "ELFbyte-identical to acceptedcd99producer; onlygr_integrator changed in namedGit diff. StrictNinja target reused unchangedC++object/link inputs and rebuilt runtime-loadedshader resources. No freshELFrelink claim.",
+  "generated_alignment_receipt": {
+    "path": "bin/linux-gcc/generated/sirius/alignment_receipt.json",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/generated/sirius/alignment_receipt.json",
+    "bytes": 1240,
+    "sha256": "e0c71063e683313dc2fa27a27d5aa85a635759c0d2b451ffdd10a54bba5b4b74"
+  },
+  "alignment_scope": "Currentgeneratedqualification0/8 buildfact. No stagedbackendmodelreceipt; unusedCLIreceipt outsidefocusedconsumer. No CLI/fullMandatory/init/readiness/release admission.",
+  "live_registered": 1152,
+  "inventory": {
+    "path": "out/trace-jacobi-original-witness-e0db7d59/inventory.json",
+    "bytes": 986718,
+    "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+  },
+  "fresh_inventory_actual_show_only_exit": 0,
+  "inventory_byte_identical_to_prior_current_e0": true,
+  "selected_registration": {
+    "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory",
+            "Operational",
+            "Rendering"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    }
+  },
+  "registered_TIMEOUT": null,
+  "external_diagnostic_seconds": 300,
+  "resource_copies": [
+    {
+      "compiled": "bin/linux-gcc/kernels/parity_probe.spv",
+      "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv",
+      "bytes": 3969508,
+      "sha256": "8793a26338d04bb30b66a25ed4252ba20b41bcb4460377f26d1b60625ae6e1ed"
+    },
+    {
+      "compiled": "bin/linux-gcc/kernels/parity_probe_fp32comp.spv",
+      "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv",
+      "bytes": 3973732,
+      "sha256": "2524459927bf743700a3e2024a73e6794a1030a09220898470604fd51d1d0bfc"
+    },
+    {
+      "compiled": "bin/linux-gcc/kernels/parity_probe_fp64.spv",
+      "staged": "bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv",
+      "bytes": 3879216,
+      "sha256": "3dbc622818259a3cbf0c2abc95efc406f48b8284bc3b0bd2ccbc7d9c2fbcc2aa"
+    },
+    {
+      "compiled": "bin/linux-gcc/kernels/trace.spv",
+      "staged": "bin/linux-gcc/tests/backend/resources/kernels/trace.spv",
+      "bytes": 2994452,
+      "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+    },
+    {
+      "compiled": "bin/linux-gcc/kernels/trace_fp32comp.spv",
+      "staged": "bin/linux-gcc/tests/backend/resources/kernels/trace_fp32comp.spv",
+      "bytes": 2997776,
+      "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+    },
+    {
+      "compiled": "bin/linux-gcc/kernels/trace_fp64.spv",
+      "staged": "bin/linux-gcc/tests/backend/resources/kernels/trace_fp64.spv",
+      "bytes": 2847024,
+      "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+    }
+  ],
+  "runtime_inputs": {
+    "/usr/bin/git": {
+      "resolved_path": "/usr/bin/git",
+      "bytes": 4066232,
+      "sha256": "2a8c18fbf43da9f692d75474c72bea9dfd796c260b0f3dfe456376abc3bbd668"
+    },
+    "/usr/bin/python3.12": {
+      "resolved_path": "/usr/bin/python3.12",
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    },
+    "/usr/share/vulkan/icd.d/lvp_icd.json": {
+      "resolved_path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "bytes": 135,
+      "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+    },
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+      "bytes": 143545784,
+      "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0",
+      "bytes": 14024,
+      "sha256": "941ab0ca78131e168817049d4c9935bb0e29b584cf05b58c47e3071f1fa81cf8"
+    },
+    "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+      "bytes": 18696,
+      "sha256": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+      "bytes": 26776,
+      "sha256": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+      "bytes": 80888,
+      "sha256": "e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+      "bytes": 92760,
+      "sha256": "ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67"
+    },
+    "/usr/lib/x86_64-linux-gnu/libedit.so.2.0.72": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libedit.so.2.0.72",
+      "bytes": 220472,
+      "sha256": "195c607216f8581dbf516346ed38f4c73500cac4b84e18eb0a4fd49931e4cd56"
+    },
+    "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "bytes": 186624,
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+    },
+    "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+      "bytes": 47672,
+      "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libicudata.so.74.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+      "bytes": 30795392,
+      "sha256": "ddbb3718b8bd9cbd780e5ab08b4503c30a6c4fa0706ebe5d074ed6b596c1714e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libicuuc.so.74.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+      "bytes": 2140336,
+      "sha256": "7560aadde38e5f4237a47a1ddd5891f9b36768a77a60faae30beee003ac01901"
+    },
+    "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+      "bytes": 202904,
+      "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+      "bytes": 55536,
+      "sha256": "423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef"
+    },
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.4": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.4",
+      "bytes": 208328,
+      "sha256": "e6089d7bb95eee5b545f3770dd69095b0bca47d26701cad145af429561d16306"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+      "bytes": 64776,
+      "sha256": "1c22abb422953442aa12822ea51ac76d1c8be92ed143e0159e0f830776cde2b2"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+      "bytes": 22744,
+      "sha256": "a919146693e71897484c2996beb837273a7a278d1a2afe477bc072f10681f3b0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0",
+      "bytes": 14536,
+      "sha256": "d06d982abe6e9202aecd22322166be8ba49e68e05889fb6c6faec0daa88530a4"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0",
+      "bytes": 67784,
+      "sha256": "9fa6b0ec4af163a86bc9a9ded3309a5979155fb5ef2d311fdda7fff0e9eee01a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0",
+      "bytes": 14552,
+      "sha256": "ad78a7b22409685ca82e54346c2b9465d697f303e69e74a9c1693bb206e319df"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0",
+      "bytes": 35032,
+      "sha256": "27c2d6dddde34146904c3c64cfcc885a14a351636d6611877368a48e29355c39"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0",
+      "bytes": 35016,
+      "sha256": "e59ef497333a6ede2096a0bd9eeb6ec4023374c16d3a8d7511d1251fb7f9b9df"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+      "bytes": 162392,
+      "sha256": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+      "bytes": 1967424,
+      "sha256": "209e941be9eb2eb9ab36caaa0b81d1c6b36c8f5d7268c24f19e81039137e6485"
+    },
+    "/usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0",
+      "bytes": 14480,
+      "sha256": "7d40b02b27d449b6b26cea10ea10aafd0cce5a1e2d7859ea57f34b29fe88923f"
+    },
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+      "bytes": 755864,
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+    }
+  },
+  "all32_current_ldd_dependencies_in_frozen_inputs": true,
+  "direct_LVP_library_distinct_from32_ldd_dependencies": true,
+  "fresh_actual_ldd_exits": {
+    "backend": 0,
+    "provider": 0
+  },
+  "ldd_output_pins": {
+    "out/trace-jacobi-original-witness-e0db7d59/backend-ldd.stdout": {
+      "bytes": 451,
+      "sha256": "da439bef3e002cd3bf9763edd98d8d02112b88ff5ba454441cb4c8d75c4b3bb7"
+    },
+    "out/trace-jacobi-original-witness-e0db7d59/backend-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-original-witness-e0db7d59/provider-ldd.stdout": {
+      "bytes": 2370,
+      "sha256": "1b2b91ceba77441d9f9d883d643116cedcc2a74e49a80ae8f4fbcba76cbcd117"
+    },
+    "out/trace-jacobi-original-witness-e0db7d59/provider-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "actions": {
+    "bytes": 6613,
+    "sha256": "2baec691bfc1fe4aecb712660f557b93ae8036e34392066e19daf2b5fb38457f"
+  },
+  "test_order": [
+    "trace-jacobi-all-rungs"
+  ],
+  "limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "root_launch_environment": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+    "MESA_SHADER_CACHE_DISABLE": null,
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "PYTHONOPTIMIZE": null,
+    "scope": "External focused LVP0 requires actual samebirth controller/child environment snapshot; default cache unchanged, no cold authority."
+  },
+  "approved_static_input_strengthening": {
+    "all76_pending_inputs_preserved_in_order": true,
+    "additional_common_proof_paths": [
+      "out/trace-jacobi-original-witness-e0db7d59/commands.pending.json",
+      "out/trace-jacobi-original-witness-e0db7d59/root-coupled-transition-decision.json",
+      "out/coupled-rk4-original-witness-e0db7d59/root-completed-results.json",
+      "out/coupled-rk4-original-witness-e0db7d59/independent-completion-review.json",
+      "out/coupled-rk4-original-witness-preservation/root-preservation-check.json",
+      "attestations/scientific-core/e0db7d59/coupled-rk4-original-witness/manifest.json",
+      "attestations/scientific-core/e0db7d59/coupled-rk4-original-witness/preservation.json"
+    ],
+    "eighth_authored_commands_file_now_frozen": true,
+    "no_case_output_or_own_mutable_output_frozen": true
+  },
+  "coupled_prerequisite": {
+    "root_and_independent_original_PASS": true,
+    "immutable_evidence_metadata": {
+      "out/trace-jacobi-original-witness-e0db7d59/commands.pending.json": {
+        "bytes": 985,
+        "sha256": "bd937af11ff079015f5da21e2f0efb317b08b7739097d203f3f86121cd32d3b1"
+      },
+      "out/trace-jacobi-original-witness-e0db7d59/root-coupled-transition-decision.json": {
+        "bytes": 1408,
+        "sha256": "7a73631af148ffe4adee42d37c92a5b745ca81fb48566514a4f984db0100bc4e"
+      },
+      "out/coupled-rk4-original-witness-e0db7d59/root-completed-results.json": {
+        "bytes": 3760,
+        "sha256": "b0422f8f5bd313bd8f511c618eae3e4f1c75d7c0516a43df80b4dc98fffe5d97"
+      },
+      "out/coupled-rk4-original-witness-e0db7d59/independent-completion-review.json": {
+        "bytes": 11706,
+        "sha256": "a37c8becf8e09b7a87b20603a234e24efe7acb8e07d3163170409d98ecb9a51e"
+      },
+      "out/coupled-rk4-original-witness-preservation/root-preservation-check.json": {
+        "bytes": 870,
+        "sha256": "cd23b093269ad626fce831323c81515bcadf772a8be38e388698f05e799c35a3"
+      },
+      "attestations/scientific-core/e0db7d59/coupled-rk4-original-witness/manifest.json": {
+        "bytes": 8004,
+        "sha256": "706b6962afb6271ee94bcdac1507ab180567f57b47415519eff0ccbeea37c75b"
+      },
+      "attestations/scientific-core/e0db7d59/coupled-rk4-original-witness/preservation.json": {
+        "bytes": 18840,
+        "sha256": "cbed55b4d1af1277261c70c7a34c1138f583888137e478abc5f18b19a987a31f"
+      }
+    },
+    "exact_coupled_bundle_Git_publication_and_fresh_remote_verification_required_before_launch": true
+  },
+  "strict_FP64_acceptance": {
+    "required_property_name_absent": "fp64_evidence",
+    "null_is_not_positive_property": true,
+    "original_source_branch_and_zeroFESD_and_all3module_joins_required": true,
+    "strict_root_property_name_absence_check_before_collector_and_again_at_final_acceptance": true,
+    "no_successful_unsupported_or_skipped_rung_admitted": true
+  },
+  "prior_outcome": "No current original trace/Jacobi witness execution observed; prospective admission only. Original coupled witness has separately reviewed PASS.",
+  "scope": "One original flat source-boundary/all4Jacobi/failed-state retention/no-publish/sample-zero-recovery test across all3supported precision rungs. No invented positiveFP64property or fixed phase count/timings/rawrecords; no strongfield/fullP1/E2/all40/fullscience/Mandatory/cold/performance/UI/release acceptance."
+}
