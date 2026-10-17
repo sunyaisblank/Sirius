@@ -1,0 +1,123 @@
+{
+  "schema": "sirius-private-stencil-independent-runtime-completion-review-v1",
+  "created_utc": "2026-10-17T23:44:12.286732+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "decision": "BOUNDED_300S_TIMEOUT_NO_COMPLETE_NUMERICAL_VERDICT",
+  "pins": {
+    "out/trace-riemann-stencil-import-order-runtime-pending/root-completed-timeout.json": {
+      "bytes": 4995,
+      "sha256": "5fc563d1529a3c7562427f2b4a493c73a5ea8d8c7c84dbd497dce0fd800d2de5"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/root-live-provider-environment.json": {
+      "bytes": 74379,
+      "sha256": "969ad1b69da9af97825b98408a122a237826a75540b422bf6bdaae8bef245d8b"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/independent-runtime-review.json": {
+      "bytes": 9012,
+      "sha256": "a4ec4bfc7483b92e4d61a96fe9c5f48d0551a0c13af3a8ecabe08df22e90e04a"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/root-runtime-release.json": {
+      "bytes": 3148,
+      "sha256": "d2dc5867b582e1c3113f1a2b5eed16e00b8d20b9655b84b79db8d3f39aac43f6"
+    },
+    "out/trace-riemann-stencil-import-order/independent-emitted-review.json": {
+      "bytes": 5952,
+      "sha256": "43eb0ac501233bdac8fb252797eef9e7b3ebb7422073b8d2777933fb8b287248"
+    },
+    "out/trace-riemann-stencil-import-order/root-completed.json": {
+      "bytes": 41631,
+      "sha256": "2c7b4ccb519de8583e5d1dae345b401c95fb3fd9ecc64c4afccbabaa77699724"
+    }
+  },
+  "input_and_ownership": {
+    "static_rows_current": 1632,
+    "owner_before_equals_after_current_rows": 1633,
+    "beforeafter_rows": 3266,
+    "all_root_terminal_linked_raw_pins_rehashed": 11,
+    "source_clean_exact": true,
+    "actual_helper_observed_closed_exit": 1,
+    "child_exit": -15,
+    "stop_reason": "diagnostic_timeout",
+    "wall_seconds": 300.2349755280011,
+    "samples": 11948,
+    "peak_sampled_aggregate_RSS_KiB": 2917884,
+    "minimum_sampled_available_KiB": 15264908,
+    "last_sample_elapsed_seconds": 300.01390474897926,
+    "no_sampled_RSS_or_reserve_failure": true,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "saved_ROOT_fresh_sameboot_birth_absence_records": [
+      {
+        "pid": 17127,
+        "saved_start_ticks": "15396697",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "pid": 17131,
+        "saved_start_ticks": "15396752",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      }
+    ],
+    "reviewer_did_not_query_processes": true
+  },
+  "actual_environment_and_maps": {
+    "samebirth_controller_and_child_LVP_JIT_OPTIMIZATION_LEVEL0": true,
+    "child_device0_explicit_LVP_ICD_defaultcache": true,
+    "provider_same_child_session_birth_four_maps_current_device_inode": "08:30 (major8/minor48),inode143595; unchanged full9d69 content",
+    "immutable_observed_regular_file_rows_join_current_inputs": 52,
+    "mutable_cache_observed_not_frozen_or_rehashed": [
+      {
+        "role": "child",
+        "path": "/home/astra/.cache/mesa_shader_cache/index",
+        "observed_identity": {
+          "resolved_path": "/home/astra/.cache/mesa_shader_cache/index",
+          "bytes": 1310728,
+          "sha256": "9bf9a7f7ddbadf645b0238a2a9654d549270375ed1539ccee07dbbe3e9c71a2a"
+        },
+        "device_major": 8,
+        "device_minor": 48,
+        "inode": 73478
+      }
+    ],
+    "seven_runtime_memfd_maps_separately_observed": "Saved under other_nonpersistent_or_deleted_file_maps; no persistent-input/hash equality or precise allocation-origin assertion.",
+    "all_regular_maps_prelaunch_immutable_claim": false,
+    "snapshot_limits": "One ROOT snapshot; no continuous module/cache observation, cache-cold/hit/miss/performance or guard transfer claim."
+  },
+  "outcome": {
+    "observed_ordered_markers": [
+      "[TraceJacobiRung] module=trace.spv phase=begin",
+      "[TraceJacobiRung] module=trace.spv phase=prepared",
+      "[TraceJacobiRung] module=trace.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=begin"
+    ],
+    "FP32_and_COMP_exercised_observed": true,
+    "FP64_begin_only": true,
+    "no_FP64_prepared_or_exercised": true,
+    "XML_produced": false,
+    "collector_or_acceptance_executed": false,
+    "all3rung_numerical_verdict": false,
+    "individual_markers_are_numerical_PASS": false,
+    "no_exact_stopped_JIT_allocating_or_math_call_inferred": true
+  },
+  "reused_proofs": "Accepted unchanged source/runtime admission and complete emitted screen reused; no duplicate historical partition/CI/whole-owner replay. Compiler screen is offline-only and private candidate remains unapplied.",
+  "disposition": "Preserve completed compiler screen and truthful incomplete runtime together before cleanup. No unchanged retry, guard raise, numerical acceptance, canonical adoption, JIT/RSS/time benefit, allP1/Mandatory/fullscience/cold/release claim; source/build holds remain.",
+  "repository": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "status": "",
+    "upstream_ahead_behind": [
+      "0",
+      "0"
+    ],
+    "sole_worktree": true,
+    "publication_pending_ROOT": true
+  }
+}

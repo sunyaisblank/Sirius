@@ -1,0 +1,407 @@
+{
+  "schema": "sirius-trace-jacobi-pair-loop-private-stage-pending-source-contracts-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "source_revision": "ROOT_PENDING_REVISION",
+  "stage": "ROOT_PENDING_STAGE",
+  "metadata": "ROOT_PENDING_METADATA",
+  "observed_source_content_basis": "f22dc025d112c2d967356dead6b6e9caf8b42d67; content pins below are static source observations, not future runtime metadata or a private-shader adoption claim.",
+  "origin": {
+    "apparatus": "out/trace-jacobi-device-lifetime-controls-f22dc025",
+    "owner_and_guard_byte_exact": true,
+    "collector_functional_delta": "None. Exactly one workdirectory literal replacement; originals and exact unified patch retained. All ownership/source/input/birth/aggregate guards/XML checks unchanged.",
+    "current_filtered_test_unchanged": true,
+    "no_runtime_dependency_on_old_case_or_readiness_maps": true
+  },
+  "source_files": {
+    "run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "root_acceptance.py": {
+      "bytes": 3768,
+      "sha256": "855e6d80afbf1a3c67b2bb243d523f140d094547c1a00dc2baf24d60ff0f05f2"
+    },
+    "collector-namespace.patch": {
+      "bytes": 472,
+      "sha256": "256c64d251e7f66e615b152bb993c60920e067482efac98165e572287506034c"
+    },
+    "actions.pending.json": {
+      "bytes": 9946,
+      "sha256": "b27eabf9f6d206b3c0b179c92b222557494ca8dcfc87dc986b0f484a7bb86241"
+    },
+    "commands.pending.json": {
+      "bytes": 2369,
+      "sha256": "9f629eec6affd26c6712f47f293a665c022d8669d0e6ce0e9e6ec908031eba4b"
+    },
+    "originals/actions.pending.json": {
+      "bytes": 6972,
+      "sha256": "468449bca9fa3fed03fd3afcac54d4cf516ebc729b67d85737d985deacfd8599"
+    },
+    "originals/commands.pending.json": {
+      "bytes": 1714,
+      "sha256": "6e4667649655e922dec1e79144913c1400b982cd01a8fc1299cab5991ebd655a"
+    },
+    "originals/root_acceptance.py": {
+      "bytes": 3776,
+      "sha256": "b95f96ea12d20981f86ade54cf3317d0249e615bcb7044e88d9c6d1ded53aa97"
+    }
+  },
+  "collector_delta": {
+    "preimage": {
+      "bytes": 3776,
+      "sha256": "b95f96ea12d20981f86ade54cf3317d0249e615bcb7044e88d9c6d1ded53aa97"
+    },
+    "candidate": {
+      "bytes": 3768,
+      "sha256": "855e6d80afbf1a3c67b2bb243d523f140d094547c1a00dc2baf24d60ff0f05f2"
+    },
+    "patch": {
+      "bytes": 472,
+      "sha256": "256c64d251e7f66e615b152bb993c60920e067482efac98165e572287506034c"
+    },
+    "inverse": "Replace new workdirectory literal once with mature workdirectory; exact preimage bytes.",
+    "generic_required_positive_property_field": "Inherited name is generic. For this case its requested value null is an absence predicate, not positive FP64 execution evidence. Root strict property-NAME absence/full-source/orderedmarkers checks are mandatory."
+  },
+  "pending_action_delta": {
+    "revision": "ROOT_PENDING_REVISION",
+    "executable": "Future private stage/sirius_backend_tests instead of canonical build path. Exact original gtest filter remains.",
+    "frozen_inputs": "Prospective current stage4 + exact source/protocol/compiler10 raw+products selectors; root derives complete actual fresh runtime/tool/dependency/accepted evidence closure before final. No guessed DSO records, hashes or observations.",
+    "unchanged_fields": [
+      "kind",
+      "software_provider",
+      "disable_software_shader_cache",
+      "expected_exit",
+      "limits",
+      "root_required_xml"
+    ],
+    "optional_positive_property": "No new XML property invented."
+  },
+  "tracked_source_content_pins": {
+    "tests/backend/kernel_trace_test.cpp": {
+      "bytes": 30579,
+      "sha256": "a5087954943aad20123b08acb0153db71eb69dddd4676ebecc6691ca43f4d549"
+    },
+    "tests/support/trace_continuation_probe.h": {
+      "bytes": 13798,
+      "sha256": "df2d2a583802323a9a5d7a8a197948a5703dfe080075401d16eaf36a52c9a399"
+    },
+    "tests/support/test_resource.h": {
+      "bytes": 796,
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3"
+    },
+    "src/sirius/render/trace_continuation.h": {
+      "bytes": 7192,
+      "sha256": "b8e27800cf96f4e417735a9ea7525da7f810e04b63a5e667da38df2c324e3005"
+    },
+    "src/sirius/render/dispatch_governor.h": {
+      "bytes": 7908,
+      "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a"
+    },
+    "src/sirius/render/dispatch_governor.cpp": {
+      "bytes": 9243,
+      "sha256": "b1e92debf12f32adfab38a7f6754b5dd421518d04502c804d37bd05151a4ad87"
+    },
+    "src/sirius/kernels/trace.slang": {
+      "bytes": 63460,
+      "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+    },
+    "src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    "src/sirius/backend/CMakeLists.txt": {
+      "bytes": 17763,
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2"
+    },
+    "tests/backend/CMakeLists.txt": {
+      "bytes": 5448,
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357"
+    },
+    "cmake/sirius_testing.cmake": {
+      "bytes": 12349,
+      "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+    },
+    "src/sirius/backend/device.h": {
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.h": {
+      "bytes": 9768,
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    "src/sirius/base/resource_locator.h": {
+      "bytes": 1665,
+      "sha256": "c1fb2222ae0370f70054b8da02453f34ab242df46f53155c0cce355d72eaf2aa"
+    },
+    "src/sirius/base/resource_locator.cpp": {
+      "bytes": 4788,
+      "sha256": "6c8c5f9302baa48f46dd1cad9118fd85c0ce5df747b38db90712694a1d5a304e"
+    },
+    "src/sirius/kernels/gr_deviation.slang": {
+      "bytes": 17259,
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+    },
+    "src/sirius/kernels/gr_trace_continuation.slang": {
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+    }
+  },
+  "private_candidate_source_proofs": {
+    "out/trace-jacobi-pair-loop/original.slang": {
+      "bytes": 63460,
+      "sha256": "041f0a9a695fbeaea09c5e4d71a4c60955fb1c0669a78f588962ba68cf514da9"
+    },
+    "out/trace-jacobi-pair-loop/candidate.slang": {
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "out/trace-jacobi-pair-loop/patch.diff": {
+      "bytes": 1100,
+      "sha256": "f66d4c196645412ab51498adac9be98c9befb2503f9099c892c53a4c401cb69c"
+    },
+    "out/trace-jacobi-pair-loop/source-contracts.json": {
+      "bytes": 11527,
+      "sha256": "6b9878f7ff343526bed6df58a9ac478157601b3d39364fc8c95998132d0b556b"
+    },
+    "out/trace-jacobi-pair-loop/independent-source-review.json": {
+      "bytes": 11663,
+      "sha256": "62709208b8b4e868bf11f4a5e61bb7ce1af1118155607c9d0406ed11f9144915"
+    }
+  },
+  "private_stage_contract": {
+    "executable": "out/trace-jacobi-pair-loop-runtime-pending/stage/sirius_backend_tests",
+    "modules": [
+      "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace.spv",
+      "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace_fp32comp.spv",
+      "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace_fp64.spv"
+    ],
+    "creator": "Root only, after emitted review/compiler preservation/release. This preparation creates no stage directory or products.",
+    "host_origin": "Genuine copy of actual current canonical Linux backend ELF, root must freshly pin expected fe663... host bytes and producer provenance; no guessed complete hash or old ELF alias.",
+    "module_origins": {
+      "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace.spv": "out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+      "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace_fp32comp.spv": "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv",
+      "out/trace-jacobi-pair-loop-runtime-pending/stage/resources/kernels/trace_fp64.spv": "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv"
+    },
+    "stage_copy_identity": "Root must verify full bytes/SHA/source/destination equality and executable mode; direct regular copied executable, not a symlink to canonical ELF. Linux /proc/self/exe anchors resource discovery to actual executable location.",
+    "resource_lookup": {
+      "source": "tests/support/test_resource.h:13-20; src/sirius/base/resource_locator.cpp:38-85,112-124",
+      "root": "<executed ELF directory>/resources only; no CWD, source/build fallback or SIRIUS_RESOURCE_DIR override in test ResourcePath. ResolveResourceFromRoot requires safe relative regular files and canonical containment.",
+      "exact_external_assets_for_this_filter": [
+        "kernels/trace.spv",
+        "kernels/trace_fp32comp.spv",
+        "kernels/trace_fp64.spv"
+      ],
+      "additional_scene_model_starfield_assets_required": false,
+      "reason": "Exact filtered test only calls ResourcePath for these3 modules. TraceContinuationProbe.Prepare creates/zeros all7 GPU bindings in memory, including one uint starfield,8float pointStar and empty full CSR offsets/indices. FlatBoundaryTraceParams uses generated values; no disk catalogue or model/mandatory gate input.",
+      "dynamic_libraries_are_not_scene_assets": "Root must freshly derive stage-executable/backend, Python/Git/loader/LVP complete actual dynamic closure and any ELF RUNPATH-relative requirements before staging admission; no claim stage4 alone is total runtime closure."
+    }
+  },
+  "compiler_evidence_contract": {
+    "serial_order": [
+      "control-fp32",
+      "candidate-fp32",
+      "control-fp32comp",
+      "candidate-fp32comp",
+      "control-fp64",
+      "candidate-fp64",
+      "control-cuda",
+      "candidate-cuda",
+      "control-metal",
+      "candidate-metal"
+    ],
+    "raw_selectors": [
+      "out/trace-jacobi-pair-loop-screen/control-fp32/owner.json",
+      "out/trace-jacobi-pair-loop-screen/control-fp32/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/control-fp32/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/control-fp32/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/control-fp32/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/control-fp32/samples.jsonl",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32/owner.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32/samples.jsonl",
+      "out/trace-jacobi-pair-loop-screen/control-fp32comp/owner.json",
+      "out/trace-jacobi-pair-loop-screen/control-fp32comp/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/control-fp32comp/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/control-fp32comp/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/control-fp32comp/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/control-fp32comp/samples.jsonl",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/owner.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/samples.jsonl",
+      "out/trace-jacobi-pair-loop-screen/control-fp64/owner.json",
+      "out/trace-jacobi-pair-loop-screen/control-fp64/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/control-fp64/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/control-fp64/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/control-fp64/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/control-fp64/samples.jsonl",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp64/owner.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp64/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp64/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp64/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp64/samples.jsonl",
+      "out/trace-jacobi-pair-loop-screen/control-cuda/owner.json",
+      "out/trace-jacobi-pair-loop-screen/control-cuda/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/control-cuda/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/control-cuda/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/control-cuda/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/control-cuda/samples.jsonl",
+      "out/trace-jacobi-pair-loop-screen/candidate-cuda/owner.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-cuda/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-cuda/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-cuda/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-cuda/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-cuda/samples.jsonl",
+      "out/trace-jacobi-pair-loop-screen/control-metal/owner.json",
+      "out/trace-jacobi-pair-loop-screen/control-metal/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/control-metal/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/control-metal/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/control-metal/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/control-metal/samples.jsonl",
+      "out/trace-jacobi-pair-loop-screen/candidate-metal/owner.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-metal/inputs-before.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-metal/inputs-after.json",
+      "out/trace-jacobi-pair-loop-screen/candidate-metal/stdout.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-metal/stderr.log",
+      "out/trace-jacobi-pair-loop-screen/candidate-metal/samples.jsonl"
+    ],
+    "product_selectors": [
+      "out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+      "out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp32comp/trace.spv",
+      "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv",
+      "out/trace-jacobi-pair-loop-screen/candidate-fp64/trace.spv",
+      "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+      "out/trace-jacobi-pair-loop-screen/candidate-cuda/trace.cu",
+      "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal",
+      "out/trace-jacobi-pair-loop-screen/candidate-metal/trace.metal"
+    ],
+    "actual_counts_and_hashes": "ROOT_PENDING_METADATA: root must bind all10 actual terminal owners/before-after/wholeinput/currentsource/guards/freshbirth proof, all5 control byte-equalities and3 candidate SPIRV validation/ABI/CFG/source reviews, exact candidate-source/import closure and compiler producer preservation/admission. No compiler/readers replay required or authorized here.",
+    "immutable_after_preservation": "If compiler scratch retires, root must replace selectors with explicit named immutable selected member aliases and retain original lexical identities/content joins; no retired-path replay or unproved alias."
+  },
+  "original_unchanged_contract": {
+    "active_pixels": 1,
+    "allocated_rows": 64,
+    "buffers": 7,
+    "packet_float32_words": 70,
+    "record_bytes": {
+      "fp32": 272,
+      "fp32comp": 272,
+      "fp64": 480
+    },
+    "requested_buffer_payload_bytes_not_driver_RSS": {
+      "fp32": 543044,
+      "fp32comp": 543044,
+      "fp64": 556356
+    },
+    "maximum_attempts": 128,
+    "physical_phase_submit_wait_ms_maximum": 1000,
+    "software_zeroactive_prepare_separate_from_active_phase_bound": true,
+    "external_diagnostic_limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "default_cache": true,
+    "software_provider_device": "LVP0",
+    "registered_original_TIMEOUT": null,
+    "within_rung_failure_retention_manualFinalize_sample1_2_refusal_sample0reset_sample1averaging": "Byte-exact original body/assertions/state continuity.",
+    "scope": "FlatM=a=Q=Lambda=0 event/Jacobi/failedsample recovery; no strong-field or guaranteed compositefloor coverage."
+  },
+  "required_root_postcheck": {
+    "strict_fp64_property_NAME_absent": true,
+    "null_collector_predicate_scope": "Inherited get(name)==None can also match malformed property lackingvalue. Root MUST separately require propertyNAME absent; unsupported decline nonnull refused. No positive FP64property invented.",
+    "all3_supported_rungs_full_source_branch_and_zeroFESD_required": true,
+    "required_progress_lines_in_order": [
+      "[TraceJacobiRung] module=trace.spv phase=begin",
+      "[TraceJacobiRung] module=trace.spv phase=prepared",
+      "[TraceJacobiRung] module=trace.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+    ],
+    "all9_exact_marker_lines_required": true,
+    "markers_are_PASS": false,
+    "unsupported_FP64_branch": "Unchanged decline/property/continue; this omits prepared/exercised forFP64 and fails required marker+strictabsence acceptance.",
+    "no_device_or_missing_kernels": "OriginalGTestSkip refused by exactonecompleted/noskips acceptance.",
+    "exercised_can_follow_nonfatal_expectation_failure": "Yes; completedzeroFESD remains acceptance authority."
+  },
+  "Hoare_contract": {
+    "preconditions": [
+      "Independent/root source and emitted-product review, actual compiler proof preserved and root releases this materially changed private-stage diagnostic.",
+      "Root binds actual clean current tracked revision, unchanged f22 filtered host/test source, whole host ELF identity, candidate source/module pairs, complete actual selected provider/tool/DSO/loader/runtime inputs, actual registration and original compile-defined kernels availability.",
+      "Root stages only the genuine admitted host ELF plus3 actual candidate modules at exact declared resource paths; root verifies all stage regular bytes and pin/readback stability before finalactions/readiness/preflight.",
+      "Root materializes all typed mature action fields with revision actual HEAD/int expected_exit0/kindtest/softwaretrue/cachefalse/exact300/4194304/2097152; preserves complete wholeinput declaration and excludes mutable case/self outputs.",
+      "Root records external inherited LVP_JIT_OPTIMIZATION_LEVEL=0/defaultcache/no unsupported overrides and actual LVP0 provider birth/session/dev-inode maps; unchanged owner sets selected ICD/device."
+    ],
+    "execution": "One original filter attempt under unchanged mature owner/aggregate guard. Three independent per-rung logical devices, original within-rung state continuity/decline/failure retention/reset/averaging and numerical assertions unchanged. Private shaders change only two ordered Jacobi-pair callsites to one two-iteration loop; candidate semantics/ABI exactness still requires accepted emitted proof and original runtime witness.",
+    "postconditions_on_success": [
+      "Owner terminal passed/child0/no stop/no cleanup errors/remainers, exact unchanged current source+whole inputs, guard bounds and freshly absent controller/observed births.",
+      "One exact original completed zero-FESD/noskip testcase; fp64_evidence PROPERTY NAME absent; all9 exact begin/prepared/exercised markers in original module order.",
+      "Root additionally accepts all3 supported module branches through complete source+module joins and original assertions, not XMLPASS alone/marker alone/null property get alone."
+    ],
+    "failure": "Stop on first owner/collector/strict-root nonpass; preserve exact failure/partial output. No numerical verdict if guard/noXML. No unchanged retry, raised guard, weakened assertion, manufactured FP64 property or source adoption."
+  },
+  "prior_stop_scope": {
+    "original_e0_attempt": "Named5cc46b old P2 stop: RSSguard/noXML/no rung verdict; historical only.",
+    "changed_f22_attempt": "Root observed first trace.spv begin before prepared and RSS stop. No numerical verdict or exact failed host call/driver allocation cause proved. The private shader candidate changes static program structure; it does not establish a memory cure. Root binds preserved complete stop evidence as needed without historical whole-map live replay."
+  },
+  "root_materialization_before_runtime": [
+    "Actual source/static/emitted/compiler preservation + root release and independent/root source+runtime admission.",
+    "Actual stageELF3module copy/provenance/modes/resource lookup/remaining runtime libraries, source/test/import closures and all10 compiler current-or-immutable selected proofs; dynamically derive exact row counts and current identities.",
+    "Fresh actual registration, producer/build/ELF-source joins, stage/backend/Python/Git/LVP/loader DT_NEEDED and available-host/provider identity; bind any actually consumed resource. Do not execute tools via this source preparation.",
+    "Actual actions/readiness/inventory/preflight and source review plus any root operational receipt actually consumed must be explicitly frozen; no guessed evidence pathname or stale live map dependency.",
+    "All stage4 current bytes, source/protocol/candidate proofs and full actual owner inputs before/after stable; immutable aliases require content/lexical explicit mapping.",
+    "After sole original attempt, root must enforce all strict source/FP64-property/marker/provider/birth/XML checks before any finite witness acceptance."
+  ],
+  "source_cost_limits": {
+    "program_structure_change": "Source pair-loop single callsite with two runtime pair evaluations; no mathematics/order/RHS-count change.",
+    "inout_layout": "4 X/V columns and all continuation bindings/layout unchanged; candidate proof and actual emitted review remain authorities.",
+    "unknown": [
+      "Actual LVP JIT time/memory and first-rung completion.",
+      "Any register/spill/localarray/driver codegen cost.",
+      "Actual accepted numerical results on this private stage."
+    ],
+    "not_claimed": [
+      "Canonical f22 shader qualification",
+      "Tracked source adoption",
+      "Physical/native or full strong-field/P1-P6/E1-E4 qualification",
+      "Retained coldframe/#44 performance benefit",
+      "Mandatory/release/scientific completion"
+    ]
+  },
+  "not_created_or_executed": [
+    "stage directory",
+    "ELF or SPV copies",
+    "actions.json",
+    "readiness.json",
+    "inventory.json",
+    "root-preflight.json",
+    "runtime case/output",
+    "helpers/imports/project parsers/tools/compiler/provider/test/network/process queries"
+  ],
+  "all_other_packets_canonical_source_build_unchanged": true
+}

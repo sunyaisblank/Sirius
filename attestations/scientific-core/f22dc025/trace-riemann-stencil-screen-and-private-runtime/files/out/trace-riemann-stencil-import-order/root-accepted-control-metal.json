@@ -1,0 +1,89 @@
+{
+  "schema": "sirius-trace-stencil-root-accepted-offline-operation-v1",
+  "case": "control-metal",
+  "created_utc": "2026-10-17T23:28:26.736733+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 4453,
+    "sha256": "6944e2ac6e340ea860d7e14be2012bf05025f5357e403ac3253ea337c0320781"
+  },
+  "posttools": {
+    "bytes": 1169,
+    "sha256": "2a0dbbc1fa31ebe9c6b2066013b334d13e32384c06da6c44e8e1dff03c6c06ca"
+  },
+  "whole_input_rows": 4782,
+  "product": {
+    "path": "out/trace-riemann-stencil-import-order/control-metal/trace.metal",
+    "bytes": 344056,
+    "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+  },
+  "role": "control",
+  "variant": "metal",
+  "matching_original_control_byteequal_baseline": true,
+  "SPIRV_original_validator_and_disassembly_passed": false,
+  "emitted_entry": null,
+  "emitted_local_size": null,
+  "all5_control_attribution_gate_and_complete_CFG_ABI_footprint_review_pending": true,
+  "files": {
+    "out/trace-riemann-stencil-import-order/control-metal/samples.jsonl": {
+      "bytes": 892,
+      "sha256": "498c113fb10beab686c928c611f77431af2ef6c2bdb7789ecf74e400953892fb"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/inputs-before.json": {
+      "bytes": 1577865,
+      "sha256": "419f0317408c27885e5962b6f1da018438cb8df97a3bb3d1d1be3d5e699a2c79"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/inputs-after.json": {
+      "bytes": 1577865,
+      "sha256": "419f0317408c27885e5962b6f1da018438cb8df97a3bb3d1d1be3d5e699a2c79"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/owner.json": {
+      "bytes": 3517,
+      "sha256": "8223b660eb3e43873ffb0f1112ac43a5d20236432fb4a61ef3ff484edbb39630"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/trace.metal": {
+      "bytes": 344056,
+      "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+    },
+    "out/trace-riemann-stencil-import-order/root-prelaunch-control-metal.json": {
+      "bytes": 3193,
+      "sha256": "a8138966bf13f96719219975378db558b338b2568e227ddd60836ea979386b11"
+    },
+    "out/trace-riemann-stencil-import-order/root-helper-control-metal.log": {
+      "bytes": 1222,
+      "sha256": "822b28dd1d3506686bb5e23e8fa2c06f688c5a5933d7e38058ddc0e0f45d88ea"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-observation.json": {
+      "bytes": 11599,
+      "sha256": "3f1e7c863451ef8b8a475596e97e2340d8313cb30046053c90cda0a6f8e5c38a"
+    },
+    "out/trace-riemann-stencil-import-order/independent-continuation-environment-review.json": {
+      "bytes": 5894,
+      "sha256": "3902638a40ff7ef2e0cb9b1ac0ab8ec507ab66dee8d502b2f1bde8dab7f1125f"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-release.json": {
+      "bytes": 3784,
+      "sha256": "bee447c1e0e6d4b743a01c33de4ca0cd7f434856ce79745837e50d37b1b13edc"
+    },
+    "out/trace-riemann-stencil-import-order/root-owner-product-control-metal.json": {
+      "bytes": 4453,
+      "sha256": "6944e2ac6e340ea860d7e14be2012bf05025f5357e403ac3253ea337c0320781"
+    },
+    "out/trace-riemann-stencil-import-order/root-posttools-control-metal.json": {
+      "bytes": 1169,
+      "sha256": "2a0dbbc1fa31ebe9c6b2066013b334d13e32384c06da6c44e8e1dff03c6c06ca"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

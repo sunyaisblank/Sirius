@@ -1,0 +1,30 @@
+{
+  "schema": "sirius-import-order-root-post-firstFP32-offline-compiler-continuation-v1",
+  "created_utc": "2026-10-15T21:13:04.261124+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "released": true,
+  "authorized_later_cases": [
+    "control-fp32comp",
+    "candidate-fp32comp",
+    "control-fp64",
+    "candidate-fp64",
+    "control-cuda",
+    "candidate-cuda",
+    "control-metal",
+    "candidate-metal"
+  ],
+  "first_FP32_root_gate": {
+    "bytes": 4526,
+    "sha256": "87a497df9c9671d97261fb62ea2449f79a2ee93ddaafaa7483c9fac3a063cdc3"
+  },
+  "accepted_first_candidate": {
+    "bytes": 6611,
+    "sha256": "72c7cdc8b71a8ef249b0498998e505323bd9849b751d21c985f966c6af512a66"
+  },
+  "original_serial_10_recipes_and_300s_4GiB_2GiB_guards_unchanged": true,
+  "actual_source_selection_and_three_new_stencil_loops_prerequisite_met": true,
+  "required_target_checks": "Remaining COMP/FP64SPV validation/ordinarydisassembly/ABI/type/mode/math/loopreview; CUDA/MSL emissiononly; all5newcontrols byteequal canonical baseline before any aggregate sourceattribution. Stopfirstnonpass/no retries/guards/cache changes.",
+  "source_candidate_applied": false,
+  "source_build_hold_release": false,
+  "scope": "Only remaining8 reviewed offline compiler operations and separate originalposttools; no numerical/provider/runtime/performance/sourceadoption/fullscience/Mandatory/cold/eightdomain/release qualification."
+}

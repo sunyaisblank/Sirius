@@ -1,0 +1,397 @@
+{
+  "schema": "sirius-riemann-stencil-first-candidate-import-selection-refusal-v1",
+  "created_utc": "2026-10-15T20:46:37.748723+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "audit_completed": true,
+  "passed": false,
+  "classification": "PRIVATE_STENCIL_OVERRIDE_NOT_SELECTED_NO_LATER_OPERATIONS",
+  "actual_compiler_helpers_observed_closed_exits": [
+    0,
+    0
+  ],
+  "actual_control_original_validation_disassembly_closed_exits": [
+    0,
+    0
+  ],
+  "actual_first2_owner_operations": [
+    {
+      "case": "control-fp32",
+      "owner_seconds": 6.532784477982204,
+      "sample_count": 25,
+      "peak_sampled_aggregate_RSS_KiB": 487484,
+      "product": {
+        "path": "out/trace-riemann-stencil-private-import/control-fp32/trace.spv",
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "matching_original_control_byteequal_baseline": true
+    },
+    {
+      "case": "candidate-fp32",
+      "owner_seconds": 6.2968733239977155,
+      "sample_count": 14,
+      "peak_sampled_aggregate_RSS_KiB": 466124,
+      "product": {
+        "path": "out/trace-riemann-stencil-private-import/candidate-fp32/trace.spv",
+        "bytes": 2620748,
+        "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+      },
+      "matching_original_control_byteequal_baseline": null
+    }
+  ],
+  "all4635_static_current_and_4636_4643_beforeafter_current_inputs_exact": true,
+  "actual_beforeafter_rows_checked": 18558,
+  "unique_whole_input_rows": 4643,
+  "fresh_saved_original_birth_absence": [
+    {
+      "case": "control-fp32",
+      "role": "controller",
+      "pid": 1166201,
+      "saved_start_ticks": "14635659",
+      "fresh_current_start_ticks": null,
+      "original_birth_absent": true
+    },
+    {
+      "case": "control-fp32",
+      "role": "compiler-child",
+      "pid": 1166212,
+      "saved_start_ticks": "14635815",
+      "fresh_current_start_ticks": null,
+      "original_birth_absent": true
+    },
+    {
+      "case": "candidate-fp32",
+      "role": "controller",
+      "pid": 1166399,
+      "saved_start_ticks": "14640245",
+      "fresh_current_start_ticks": null,
+      "original_birth_absent": true
+    },
+    {
+      "case": "candidate-fp32",
+      "role": "compiler-child",
+      "pid": 1166499,
+      "saved_start_ticks": "14641600",
+      "fresh_current_start_ticks": null,
+      "original_birth_absent": true
+    }
+  ],
+  "actual_Slang_child": {
+    "pid": 1166499,
+    "saved_start_ticks": "14641600",
+    "session": 1166499
+  },
+  "actual_main_child_exec_CWD_exit_rows": [
+    {
+      "trace_line": 5025,
+      "raw": "1166499 chdir(\"/home/astra/.project/Sirius\") = 0"
+    },
+    {
+      "trace_line": 5026,
+      "raw": "1166499 execve(\"/usr/bin/env\", [\"/usr/bin/env\", \"--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend\", \"/opt/slang/bin/slangc\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang\", \"-target\", \"spirv\", \"-profile\", \"spirv_1_5\", \"-entry\", \"ComputeMain\", \"-stage\", \"compute\", \"-I\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate\", \"-I\", \"/home/astra/.project/Sirius/src/sirius/backend/../kernels\", \"-o\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/candidate-fp32/trace.spv\"], 0x7bf9a1c07890 /* 43 vars */ <unfinished ...>"
+    },
+    {
+      "trace_line": 5028,
+      "raw": "1166499 <... execve resumed>)           = 0"
+    },
+    {
+      "trace_line": 5070,
+      "raw": "1166499 chdir(\"/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend\") = 0"
+    },
+    {
+      "trace_line": 5071,
+      "raw": "1166499 execve(\"/opt/slang/bin/slangc\", [\"/opt/slang/bin/slangc\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang\", \"-target\", \"spirv\", \"-profile\", \"spirv_1_5\", \"-entry\", \"ComputeMain\", \"-stage\", \"compute\", \"-I\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate\", \"-I\", \"/home/astra/.project/Sirius/src/sirius/backend/../kernels\", \"-o\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/candidate-fp32/trace.spv\"], 0x7fffb831a050 /* 43 vars */ <unfinished ...>"
+    },
+    {
+      "trace_line": 5073,
+      "raw": "1166499 <... execve resumed>)           = 0"
+    },
+    {
+      "trace_line": 7761,
+      "raw": "1166499 +++ exited with 0 +++"
+    }
+  ],
+  "actual_main_child_successful_Slang_source_opens": [
+    {
+      "trace_line": 5271,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang>",
+      "actual_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang",
+        "bytes": 63512,
+        "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+      }
+    },
+    {
+      "trace_line": 5364,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_types.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang",
+        "bytes": 5519,
+        "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+      }
+    },
+    {
+      "trace_line": 5475,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_metrics.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang",
+        "bytes": 30379,
+        "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+      }
+    },
+    {
+      "trace_line": 5625,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_integrator.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang",
+        "bytes": 27452,
+        "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+      }
+    },
+    {
+      "trace_line": 5719,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_camera.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_camera.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_camera.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_camera.slang",
+        "bytes": 7542,
+        "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+      }
+    },
+    {
+      "trace_line": 5773,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang",
+        "bytes": 17259,
+        "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+      }
+    },
+    {
+      "trace_line": 5840,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_disk.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_disk.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_disk.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_disk.slang",
+        "bytes": 16688,
+        "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+      }
+    },
+    {
+      "trace_line": 5907,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_trace_event.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_trace_event.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_event.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_event.slang",
+        "bytes": 15656,
+        "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+      }
+    },
+    {
+      "trace_line": 5974,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_ellis_topology.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang",
+        "bytes": 9393,
+        "sha256": "ebf8f6413fc3d158b2bc135634a8e6c8d6790c8be8a20b217e46424ba9a58ca8"
+      }
+    },
+    {
+      "trace_line": 6090,
+      "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_point_star.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_point_star.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_point_star.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_point_star.slang",
+        "bytes": 1773,
+        "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+      }
+    },
+    {
+      "trace_line": 6195,
+      "raw": "1166499 <... openat resumed>)           = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang>",
+      "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang",
+      "actual_identity": {
+        "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang",
+        "bytes": 2212,
+        "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+      }
+    }
+  ],
+  "all11_source_opens_main_child_no_worker_inference_needed": true,
+  "only_intended_actual_source_difference": {
+    "gr_deviation": {
+      "intended": {
+        "path": "out/trace-riemann-stencil-private-import/inputs/candidate/gr_deviation.slang",
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/gr_deviation.slang",
+        "bytes": 17768,
+        "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+      },
+      "actual": {
+        "trace_line": 5773,
+        "raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang\", O_RDONLY) = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang>",
+        "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang",
+        "actual_identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang",
+          "bytes": 17259,
+          "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+        }
+      }
+    }
+  },
+  "candidate_only_private_I_before_original_canonical_I_actual_and_ineffective": true,
+  "new_private_stencil_source_selected": false,
+  "private_trace_source_selected": true,
+  "candidate_product": {
+    "bytes": 2620748,
+    "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+  },
+  "actual_prior_pairloop_product_fullbytes_equal_and_named_Git_checked": {
+    "commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+    "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/files/out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+    "identity": {
+      "bytes": 2620748,
+      "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+    }
+  },
+  "prior_same_byte_ordinary_disassembly_fullbytes_named_Git_checked": {
+    "commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+    "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/files/out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32.spvasm",
+    "identity": {
+      "bytes": 7678941,
+      "sha256": "d09528306c6799a2effbea000f06c576d68ef48e0105eb3253b7f7b447021163"
+    },
+    "scope": "Existing ordinary disassembly of byte-identical prior pair-loop program; not a newly executed candidate posttool or validation transfer."
+  },
+  "new_candidate_validation_or_disassembly_executed": false,
+  "candidate_root_accepted": false,
+  "all5_new_control_gate_met": false,
+  "later8_compiler_cases_created_or_run": false,
+  "actual_provider_or_scientific_test_run": false,
+  "root_observer_tool_and_DSO_beforeafter_current_match": true,
+  "observer_guard_scope": "Root strace is outside Slang/controller aggregateRSS accounting. Instrumented owner times are not compile performance comparison.",
+  "root_parser_scope": "Reuses the prior corrected execve-resumed parser; no new collector failure or workload retry.",
+  "source_candidate_applied": false,
+  "source_build_hold_release": false,
+  "unchanged_retry_or_hidden_flag_change_authorized": false,
+  "raw_and_consumed_operational_pins": {
+    "out/trace-riemann-stencil-private-import/root-owner-product-control-fp32.json": {
+      "bytes": 3698,
+      "sha256": "a4b6c3f79c06dbd4a919dee94e75229e10d0b598847d861c573f10ecaee57b5f"
+    },
+    "out/trace-riemann-stencil-private-import/root-accepted-control-fp32.json": {
+      "bytes": 4442,
+      "sha256": "a682cfc4e0f5290c574081db6b3d669bf56326477d16dfed573268fb4a58d64d"
+    },
+    "out/trace-riemann-stencil-private-import/root-posttools-control-fp32.json": {
+      "bytes": 4762,
+      "sha256": "830e63d2f6af40c040f4619e9387d66eb9d5fcbf6c306116f83da6b8b6953c01"
+    },
+    "out/trace-riemann-stencil-private-import/root-owner-product-candidate-fp32.json": {
+      "bytes": 4126,
+      "sha256": "7f263524cf900d7d02e3b67e0902a8b5a6c90175306ed0ad4135463502a0083d"
+    },
+    "out/trace-riemann-stencil-private-import/root-wrapper-result-candidate-fp32.json": {
+      "bytes": 947,
+      "sha256": "9a0e29e2675f8ee071c67e2adbda219d835074b01d217fe4109da651351711f8"
+    },
+    "out/trace-riemann-stencil-private-import/root-prelaunch-control-fp32.json": {
+      "bytes": 2526,
+      "sha256": "f31597c987c0a14e31ae25f595ffc7872bfadf435113cc6be3ec4e3ad1cf1daf"
+    },
+    "out/trace-riemann-stencil-private-import/root-prelaunch-candidate-fp32.json": {
+      "bytes": 2528,
+      "sha256": "78f4a7e1953bb5a434c98050858dd49e87d7968a9d3aeeea8518851eff5131f4"
+    },
+    "out/trace-riemann-stencil-private-import/root-helper-control-fp32.log": {
+      "bytes": 1326,
+      "sha256": "26cf7d18c8c97472b8a7751f54a6ced90e621c4f2da2cc7f957436d1c905a076"
+    },
+    "out/trace-riemann-stencil-private-import/root-helper-candidate-fp32.log": {
+      "bytes": 1331,
+      "sha256": "a3fe680d2cfec37283c8c728da4f97f093f3069318383513e403872c61c702e6"
+    },
+    "out/trace-riemann-stencil-private-import/root-runtime-release.json": {
+      "bytes": 434081,
+      "sha256": "1fe1f70fc7e92ea1ae4cc66f953c71934cb063bef8e0efedc71d03c66a93b9bc"
+    },
+    "out/trace-riemann-stencil-private-import/root-source-open-observer.json": {
+      "bytes": 5825,
+      "sha256": "8da31ce32ae63b70f602908f40eab794102173f80e735cae15e3fe468c6e3d2f"
+    },
+    "out/trace-riemann-stencil-private-import/root-source-open-observer-membership.json": {
+      "bytes": 2498,
+      "sha256": "1e1654d79637fa22e11181302867f8f4c1af8cd0a297033229b11289a125daee"
+    },
+    "out/trace-riemann-stencil-private-import/root-source-open-observer-reuse.json": {
+      "bytes": 2515,
+      "sha256": "59eb7fe1b7a0a2faaada28b2305f900314481c92c3372409e9fae943e4df67b7"
+    },
+    "out/trace-riemann-stencil-private-import/root-source-opens-candidate-fp32.trace": {
+      "bytes": 3078094,
+      "sha256": "22638ac2954de45742b336cb137c2d2183469c31cfc875d51d03c4d2fe9b0d60"
+    },
+    "out/trace-riemann-stencil-private-import/control-fp32/inputs-after.json": {
+      "bytes": 1533039,
+      "sha256": "1b02151e944237c4ebc45eb5d76dd4468a32b23883f284523a0682abceb2ddf2"
+    },
+    "out/trace-riemann-stencil-private-import/control-fp32/inputs-before.json": {
+      "bytes": 1533039,
+      "sha256": "1b02151e944237c4ebc45eb5d76dd4468a32b23883f284523a0682abceb2ddf2"
+    },
+    "out/trace-riemann-stencil-private-import/control-fp32/owner.json": {
+      "bytes": 3770,
+      "sha256": "997fdca87c33c0e0154695dc591f73505ffa63edcb31c1bed226479096eb1016"
+    },
+    "out/trace-riemann-stencil-private-import/control-fp32/samples.jsonl": {
+      "bytes": 5756,
+      "sha256": "dee6f285bd5d62d0d03294994117dcfd09d1bb45c220584c4a93fee493e5c45f"
+    },
+    "out/trace-riemann-stencil-private-import/control-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-private-import/control-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-private-import/control-fp32/trace.spv": {
+      "bytes": 2994452,
+      "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+    },
+    "out/trace-riemann-stencil-private-import/candidate-fp32/inputs-after.json": {
+      "bytes": 1535134,
+      "sha256": "d0102c67767fcfb364f773bd0e935f46769d118d5ab5021073de2d6152ce18cf"
+    },
+    "out/trace-riemann-stencil-private-import/candidate-fp32/inputs-before.json": {
+      "bytes": 1535134,
+      "sha256": "d0102c67767fcfb364f773bd0e935f46769d118d5ab5021073de2d6152ce18cf"
+    },
+    "out/trace-riemann-stencil-private-import/candidate-fp32/owner.json": {
+      "bytes": 3910,
+      "sha256": "464cdc57aae49a9cd3467fad33462eaf2f556abdb96eeb48af8e84e6e074474f"
+    },
+    "out/trace-riemann-stencil-private-import/candidate-fp32/samples.jsonl": {
+      "bytes": 3227,
+      "sha256": "d89d06555eacb31ec6b3045ee1077530dcd1b3190bde481c9ff12c501151ac6f"
+    },
+    "out/trace-riemann-stencil-private-import/candidate-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-private-import/candidate-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-private-import/candidate-fp32/trace.spv": {
+      "bytes": 2620748,
+      "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+    }
+  },
+  "scope": "Source import-selection refusal after two successful compiler owners. Actual child opened canonical gr_deviation and product equals old pair-loop code; no new stencil lowering/numerical/runtime/JIT/RSS/performance/adoption conclusion. Stop before later operations; any private search-path change requires separate explicit reviewed preparation."
+}

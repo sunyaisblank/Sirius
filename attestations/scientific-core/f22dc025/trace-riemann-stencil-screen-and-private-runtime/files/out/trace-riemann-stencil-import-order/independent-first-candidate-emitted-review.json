@@ -1,0 +1,423 @@
+{
+  "schema": "sirius-trace-riemann-stencil-import-order-independent-first-fp32-emitted-review-v1",
+  "passed": true,
+  "decision": "FIRST_FP32_PRIVATE_STENCIL_EMITTED_GATE_PASS",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/divide_contract_review",
+  "reviewer_scope": {
+    "source_candidate_and_pending_packet_author": true,
+    "independent_of_actual_compiler_and_posttool_operator": true,
+    "independent_of_root_emitted_observation_author": true,
+    "not_independent_source_design_author": true,
+    "method": "Passive ordinary SPIR-V text/source/Git byte reads and consistent numeric-ID alpha comparisons. No authored helper/project parser/compiler/validator/disassembler/provider/test/network/process query or Git writes executed. This JSON is the sole newfile.",
+    "comparison_limits": "Numeric-ID bijection is consistent per compared whole region; named type/constant IDs and instruction/operand/control sequence retained. Cross-region roles were checked against source/bounded SSA pointers and unchanged pair setup/interleaving/suffix. This is bounded emitted source-selection/structure evidence, not a formal wholemodule semantic/numerical proof."
+  },
+  "input_pins": {
+    "out/trace-riemann-stencil-import-order/inputs/candidate/trace.slang": {
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    "out/trace-riemann-stencil-import-order/inputs/candidate/gr_deviation.slang": {
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    "out/trace-riemann-stencil-import-order/import-order.patch": {
+      "bytes": 303,
+      "sha256": "c76b5baa6c2790ada8927c8630dd5ced099ebffa5bc4bcc20508bce41eef8ab9"
+    },
+    "out/trace-riemann-stencil-import-order/source-contracts.json": {
+      "bytes": 62574,
+      "sha256": "167c4168dc86254878fa54f22c132b2b2f56658b2a5f1cc258db935cb4b6aadd"
+    },
+    "out/trace-riemann-stencil-import-order/independent-source-review.json": {
+      "bytes": 8648,
+      "sha256": "330e50c4c13b83b8702ee3c45ebc993b1173782e9306c20a209826adc284b967"
+    },
+    "out/trace-riemann-stencil-import-order/root-import-source-opens.json": {
+      "bytes": 17422,
+      "sha256": "e2ed55fbbb4d5ff141309a2c3338ad0fcd014c5a93b259231e04b5ee5b979f29"
+    },
+    "out/trace-riemann-stencil-import-order/independent-source-selection-review.json": {
+      "bytes": 16424,
+      "sha256": "b56422e9dc1c946c3a08600151c6e3780f2ea3b13a5b44943798cca24b0ff22c"
+    },
+    "out/trace-riemann-stencil-import-order/root-posttools-candidate-fp32.json": {
+      "bytes": 4763,
+      "sha256": "7473a75daa411f8bd08cd1fa33219230152aa9565fbc947d035e956be66f6bef"
+    },
+    "out/trace-riemann-stencil-import-order/root-owner-product-candidate-fp32.json": {
+      "bytes": 4101,
+      "sha256": "464e03071b6f66f7599d77a1491db076aabd243b344e7fbecd82135916db9b88"
+    },
+    "out/trace-riemann-stencil-import-order/root-first-candidate-emitted-observation.json": {
+      "bytes": 28749,
+      "sha256": "41e1093021d7fa1bb86fc90a766aa24b77553f97903e56b3130f5972fed48ed4"
+    },
+    "out/trace-riemann-stencil-import-order/root-spv-candidate-fp32.spvasm": {
+      "bytes": 7248800,
+      "sha256": "d9de1abac2b4f71c0a22164d23c4d3ccab720f0b701072fc344ac0469e260240"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp32/trace.spv": {
+      "bytes": 2470232,
+      "sha256": "b17d86904d6cbff957deebcc94c32956eb0aa90ddd17ca284f797c8d58f252ec"
+    },
+    "out/trace-riemann-stencil-loop/independent-source-review.json": {
+      "bytes": 10927,
+      "sha256": "e02883244e3f6aea0d62f617ac6cfcdcf40c0dd8772e701a4a6c9752856e7a79"
+    }
+  },
+  "prior_pairloop_named_Git": {
+    "commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+    "ordinary_assembly": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/files/out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32.spvasm",
+      "git_blob": "c0edaf4d1d7d2f4024ffc6666dcef7156dc8e157",
+      "bytes": 7678941,
+      "sha256": "d09528306c6799a2effbea000f06c576d68ef48e0105eb3253b7f7b447021163"
+    },
+    "product": {
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/files/out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+      "git_blob": "3e2cc056cb07a8cda045ba7727d6efebd779314b",
+      "bytes": 2620748,
+      "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+    },
+    "scope": "Accepted previous pairloop-only ordinary module; reused complete unchangedsource/pairloop evidence. Not a newly run old compiler/disassembler/validator."
+  },
+  "actual_source_selection": {
+    "root_source_opens_passed": true,
+    "independent_source_selection_passed": true,
+    "private_sources": 2,
+    "canonical_sources": 9,
+    "identity": "Private trace09a3 plusprivate gr_deviation7663; actualsamebirth mainchild opens separately audited by root+Forensic. This receipt binds that evidence and independently establishes new emitted distance-loop; placement/hash/OpName alone not used."
+  },
+  "actual_posttools": {
+    "root_validation_and_ordinary_disassembly_closed_zero": true,
+    "validator_seconds": 14.268347042991081,
+    "disassembler_seconds": 0.420194584003184,
+    "scope": "Reused exact root operations; this reviewer ran no tool. GNUtimeout posttool guard scope is that saved receipt, not a newly certified aggregateRSS/session guard."
+  },
+  "whole_loop_sites": [
+    {
+      "site": "start",
+      "rho": "84286",
+      "distance": "84291",
+      "dGamma": "84290",
+      "plus": "84292",
+      "minus": "84293",
+      "header": "84431",
+      "merge": "84763",
+      "continue": "84762",
+      "prefix_mu": "84285",
+      "tensor_merge": "84769",
+      "tensor_end": "84892",
+      "zero_line": 97961,
+      "initial_line": 98019,
+      "bound_line": 98030,
+      "store_increment_line": 100333,
+      "weights": [
+        100290,
+        100181,
+        100075
+      ],
+      "whole_loop_region": {
+        "first_line": 98021,
+        "last_line": 100337,
+        "instruction_lines": 2317
+      },
+      "whole_loop_numeric_ID_alpha_equal_first": true,
+      "prefix_R_zero_baseGamma_eps_time_derivative_zero": {
+        "first_line": 96802,
+        "last_line": 98002,
+        "instruction_lines": 1200
+      },
+      "prefix_numeric_ID_alpha_equal_first": true,
+      "tensor_tail": {
+        "first_line": 100348,
+        "last_line": 100537,
+        "instruction_lines": 190
+      },
+      "tensor_tail_numeric_ID_alpha_equal_first": true
+    },
+    {
+      "site": "Hermite_midpoint",
+      "rho": "88141",
+      "distance": "88146",
+      "dGamma": "88145",
+      "plus": "88147",
+      "minus": "88148",
+      "header": "88286",
+      "merge": "88618",
+      "continue": "88617",
+      "prefix_mu": "88140",
+      "tensor_merge": "88624",
+      "tensor_end": "88747",
+      "zero_line": 103191,
+      "initial_line": 103249,
+      "bound_line": 103260,
+      "store_increment_line": 105563,
+      "weights": [
+        105520,
+        105411,
+        105305
+      ],
+      "whole_loop_region": {
+        "first_line": 103251,
+        "last_line": 105567,
+        "instruction_lines": 2317
+      },
+      "whole_loop_numeric_ID_alpha_equal_first": true,
+      "prefix_R_zero_baseGamma_eps_time_derivative_zero": {
+        "first_line": 102032,
+        "last_line": 103232,
+        "instruction_lines": 1200
+      },
+      "prefix_numeric_ID_alpha_equal_first": true,
+      "tensor_tail": {
+        "first_line": 105578,
+        "last_line": 105767,
+        "instruction_lines": 190
+      },
+      "tensor_tail_numeric_ID_alpha_equal_first": true
+    },
+    {
+      "site": "end",
+      "rho": "92046",
+      "distance": "92051",
+      "dGamma": "92050",
+      "plus": "92052",
+      "minus": "92053",
+      "header": "92191",
+      "merge": "92523",
+      "continue": "92522",
+      "prefix_mu": "92045",
+      "tensor_merge": "92529",
+      "tensor_end": "92652",
+      "zero_line": 108894,
+      "initial_line": 108952,
+      "bound_line": 108963,
+      "store_increment_line": 111266,
+      "weights": [
+        111223,
+        111114,
+        111008
+      ],
+      "whole_loop_region": {
+        "first_line": 108954,
+        "last_line": 111270,
+        "instruction_lines": 2317
+      },
+      "whole_loop_numeric_ID_alpha_equal_first": true,
+      "prefix_R_zero_baseGamma_eps_time_derivative_zero": {
+        "first_line": 107735,
+        "last_line": 108935,
+        "instruction_lines": 1200
+      },
+      "prefix_numeric_ID_alpha_equal_first": true,
+      "tensor_tail": {
+        "first_line": 111281,
+        "last_line": 111470,
+        "instruction_lines": 190
+      },
+      "tensor_tail_numeric_ID_alpha_equal_first": true
+    }
+  ],
+  "unchanged_region_comparisons": [
+    {
+      "region": "prefix_Rzero_baseGamma_eps_dGamma0",
+      "new": {
+        "first_line": 96802,
+        "last_line": 98002,
+        "instruction_lines": 1200
+      },
+      "old_named_Git": {
+        "first_line": 97129,
+        "last_line": 98329,
+        "instruction_lines": 1200
+      },
+      "numeric_ID_alpha_equal": true
+    },
+    {
+      "region": "tensor_tail",
+      "new": {
+        "first_line": 100348,
+        "last_line": 100537,
+        "instruction_lines": 190
+      },
+      "old_named_Git": {
+        "first_line": 104223,
+        "last_line": 104412,
+        "instruction_lines": 190
+      },
+      "numeric_ID_alpha_equal": true
+    },
+    {
+      "region": "positive_Christoffel_full_body",
+      "new": {
+        "first_line": 98183,
+        "last_line": 99085,
+        "instruction_lines": 903
+      },
+      "old_named_Git": {
+        "first_line": 98451,
+        "last_line": 99353,
+        "instruction_lines": 903
+      },
+      "numeric_ID_alpha_equal": true
+    },
+    {
+      "region": "negative_Christoffel_full_body",
+      "new": {
+        "first_line": 99092,
+        "last_line": 99994,
+        "instruction_lines": 903
+      },
+      "old_named_Git": {
+        "first_line": 99360,
+        "last_line": 100262,
+        "instruction_lines": 903
+      },
+      "numeric_ID_alpha_equal": true
+    },
+    {
+      "region": "pair_setup_guarded_entry_and_column_bindings",
+      "new": {
+        "first_line": 96736,
+        "last_line": 96802,
+        "instruction_lines": 66
+      },
+      "old_named_Git": {
+        "first_line": 97063,
+        "last_line": 97129,
+        "instruction_lines": 66
+      },
+      "numeric_ID_alpha_equal": true
+    },
+    {
+      "region": "between_start_and_midpoint_Riemann",
+      "new": {
+        "first_line": 100537,
+        "last_line": 102032,
+        "instruction_lines": 1495
+      },
+      "old_named_Git": {
+        "first_line": 104412,
+        "last_line": 105907,
+        "instruction_lines": 1495
+      },
+      "numeric_ID_alpha_equal": true
+    },
+    {
+      "region": "between_midpoint_and_end_Riemann",
+      "new": {
+        "first_line": 105767,
+        "last_line": 107735,
+        "instruction_lines": 1968
+      },
+      "old_named_Git": {
+        "first_line": 113190,
+        "last_line": 115158,
+        "instruction_lines": 1968
+      },
+      "numeric_ID_alpha_equal": true
+    },
+    {
+      "region": "post_end_Riemann_through_pair_merge",
+      "new": {
+        "first_line": 111470,
+        "last_line": 112977,
+        "instruction_lines": 1508
+      },
+      "old_named_Git": {
+        "first_line": 122441,
+        "last_line": 123948,
+        "instruction_lines": 1508
+      },
+      "numeric_ID_alpha_equal": true
+    }
+  ],
+  "dataflow_and_CFG": {
+    "live_distance_loop": "Each three inlined Riemann sites has DontUnroll header, int32counter initialized1 immediately before header, <=3 bound, exactlyone in-region +1 store and continue backedge. Allthree whole loops are2317 instruction lines and alpha-identical. Counter Functionslots are reused elsewhere by compiler; no wholekernelunique-store premise.",
+    "axes": "Original outer rho initializes1, compares<4, increments1; each dGamma[0] zeroing prefix and Rzero/baseGamma/epsilon prefix alpha-equal old. Component loops preserve0..<4 indices.",
+    "x_reset": "Each distance begins by reloading the original input spatial components into distinct positive/negative scalar locals before axis selection. Reset is not cumulative. Time coordinate is unused by this stationary Christoffel body and is optimized away from emitted sampling; source xp/xm still copy full input.",
+    "displacement": "rho==1/2/else3 chooses original spatial coordinate. distance==1 chooses epsilon; ==2 chooses2epsilon; remaining reachable3 chooses3epsilon. Emitted compilerfolds scale to0.0799999982 or0.119999997 times maxradius as in prior code. FAdd positive/FSub negative remain; no sign-multiply rewrite.",
+    "work_arrays": "Per site two distinct Function 4x4x4f32 arrays (plus/minus IDs recorded), no sample-index tensor. Both903-instruction Gamma evaluations alpha-equal corresponding previous bodies and zero every64element before flat/origin exits. Positive body completes before negative body, then coefficient dispatch. No additional earlyabort or sample-skipping edge seen in the wholeloop comparison.",
+    "coefficient_dispatch": "First case tests distance==1 and enters45-difference assignment; else tests==2 and enters partial\u22129*difference; else enters partial+difference then division. Text places third branch beforesecond beforefirst, but actual CFG preserves dynamic1\u21922\u21923 order. Every component receives distance1 assignment before later loop-carried reads.",
+    "arithmetic_sequence": "FP32 only:45*(plus\u2212minus) store; partial\u22129*(plus\u2212minus) store; (partial+(plus\u2212minus))/(60*epsilon) store. Actual firstsite opIDs84737/84738,84667/84668/84670,84598/84599/84600/84601; repeated sites wholeloopalpha-equivalent. Denominator remains folded maxradius*2.39999986. No newprecision/FMA/flag premise introduced.",
+    "pair_and_tensor": "Original guarded two-pair loop remains at96740, counter0..<2, firstColumn=2*pair, X/V indices firstColumn andfirstColumn+1. Exact66instruction setup and1508instruction postthirdRiemann suffix match priornamedGit underIDrenaming; allfour columnstores and +1pairbackedge preserved. Intervening1495/1968instruction regions and all190instruction tensor tails match prior, covering original midpoint/end construction and following RHS/finalweighted updates."
+  },
+  "ABI_and_header": {
+    "independent_literal_comparison": "Caps,extension,entry,modes,all35decorations+16memberdecorations exactly equal priorordinaryASM. Declarative738instruction header is alpha-equal after ignoring the declaration order of two independent same-valued constants0.0799999982/0.119999997; no constant values/type graph changed. Full recursive seven-binding review is additionally pinned rootobservation41e109, not rerun by a project parser.",
+    "entry": "GLCompute ComputeMain namedmain",
+    "local_size": [
+      8,
+      8,
+      1
+    ],
+    "capabilities": [
+      "Shader"
+    ],
+    "extensions": [
+      "SPV_KHR_storage_buffer_storage_class"
+    ],
+    "float_widths": [
+      32
+    ],
+    "integer_types": [
+      {
+        "width": 32,
+        "signed": 1
+      },
+      {
+        "width": 32,
+        "signed": 0
+      }
+    ],
+    "seven_set0_bindings": {
+      "0": "radiance RWfloat",
+      "1": "params readonlyfloat",
+      "2": "starfield readonlyuint",
+      "3": "pointStars readonlyfloat",
+      "4": "pointOffsets readonlyuint",
+      "5": "pointIndices readonlyuint",
+      "6": "continuation RWTraceContinuation"
+    },
+    "continuation_stride": 272,
+    "continuation_member_offsets": [
+      0,
+      16,
+      32,
+      96,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256
+    ],
+    "X_V_element_stride": 16,
+    "no_new_optional_Float64_or_Int64_requirement": true,
+    "module_functions": 1,
+    "module_function_calls": 0,
+    "DontUnroll_count": {
+      "old_pairloop": 7,
+      "new": 10,
+      "new_stencil_loops": 3
+    }
+  },
+  "working_tree": {
+    "revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "status": "",
+    "source_build_modified": false
+  },
+  "scope_limits": {
+    "first_FP32_only": true,
+    "root_acceptance_and_later_operation_release_separate": true,
+    "all5_control_gate_complete": false,
+    "COMP_FP64_CUDA_Metal_pending": true,
+    "no_new_runtime_or_numerical_verdict": true,
+    "no_memory_JIT_time_speed_hitrate_or_adoption_claim": true,
+    "no_fullscience_Mandatory_or_release_claim": true,
+    "source_and_review_inputs_unchanged_during_read": true
+  },
+  "verdict": "No concrete blocker in the required firstFP32 private-source/new-stencil emitted gate. Actual private selection and allthree bounded stencil distance loops are supported; remaining offlineoperations require separate root gate/release, then matching pertarget checks. No numerical/runtime/performance admission."
+}

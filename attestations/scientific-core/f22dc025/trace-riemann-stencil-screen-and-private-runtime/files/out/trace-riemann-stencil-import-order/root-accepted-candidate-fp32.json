@@ -1,0 +1,145 @@
+{
+  "schema": "sirius-trace-stencil-root-accepted-offline-operation-v1",
+  "case": "candidate-fp32",
+  "created_utc": "2026-10-15T21:12:50.968697+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 4101,
+    "sha256": "464e03071b6f66f7599d77a1491db076aabd243b344e7fbecd82135916db9b88"
+  },
+  "posttools": {
+    "bytes": 4763,
+    "sha256": "7473a75daa411f8bd08cd1fa33219230152aa9565fbc947d035e956be66f6bef"
+  },
+  "whole_input_rows": 4733,
+  "product": {
+    "path": "out/trace-riemann-stencil-import-order/candidate-fp32/trace.spv",
+    "bytes": 2470232,
+    "sha256": "b17d86904d6cbff957deebcc94c32956eb0aa90ddd17ca284f797c8d58f252ec"
+  },
+  "role": "candidate",
+  "variant": "fp32",
+  "matching_original_control_byteequal_baseline": null,
+  "SPIRV_original_validator_and_disassembly_passed": true,
+  "emitted_entry": "main",
+  "emitted_local_size": [
+    8,
+    8,
+    1
+  ],
+  "all5_control_attribution_gate_and_complete_CFG_ABI_footprint_review_pending": true,
+  "files": {
+    "out/trace-riemann-stencil-import-order/independent-first-candidate-emitted-review.json": {
+      "bytes": 16972,
+      "sha256": "69289ddefcac32b037d3cbcd7f5ec2238a6a9792ffdc828c9cd041674b0c7f0b"
+    },
+    "out/trace-riemann-stencil-import-order/independent-source-selection-review.json": {
+      "bytes": 16424,
+      "sha256": "b56422e9dc1c946c3a08600151c6e3780f2ea3b13a5b44943798cca24b0ff22c"
+    },
+    "out/trace-riemann-stencil-import-order/root-first-candidate-emitted-observation.json": {
+      "bytes": 28749,
+      "sha256": "41e1093021d7fa1bb86fc90a766aa24b77553f97903e56b3130f5972fed48ed4"
+    },
+    "out/trace-riemann-stencil-import-order/root-import-source-opens.json": {
+      "bytes": 17422,
+      "sha256": "e2ed55fbbb4d5ff141309a2c3338ad0fcd014c5a93b259231e04b5ee5b979f29"
+    },
+    "out/trace-riemann-stencil-import-order/root-owner-product-control-fp32.json": {
+      "bytes": 3679,
+      "sha256": "29828e63c78fa848ba7108d6d283a7f1acc9e3d1b5f2900ee017a12773e68dbe"
+    },
+    "out/trace-riemann-stencil-import-order/root-owner-product-candidate-fp32.json": {
+      "bytes": 4101,
+      "sha256": "464e03071b6f66f7599d77a1491db076aabd243b344e7fbecd82135916db9b88"
+    },
+    "out/trace-riemann-stencil-import-order/root-accepted-control-fp32.json": {
+      "bytes": 4409,
+      "sha256": "585c265a87faf9a2d7eb8d3947d39c3cd72fa68a84284e2747a2498f6e052e84"
+    },
+    "out/trace-riemann-stencil-import-order/root-posttools-control-fp32.json": {
+      "bytes": 4730,
+      "sha256": "c39966c5cfe9764baa625426809e0db6cfb962f3dcf330277f27209ecf4981b3"
+    },
+    "out/trace-riemann-stencil-import-order/root-posttools-candidate-fp32.json": {
+      "bytes": 4763,
+      "sha256": "7473a75daa411f8bd08cd1fa33219230152aa9565fbc947d035e956be66f6bef"
+    },
+    "out/trace-riemann-stencil-import-order/root-spv-control-fp32.spvasm": {
+      "bytes": 8763285,
+      "sha256": "8c19a116890f402ce5f94bbf948bc845faaa465b27e1d1bf3021762d14f212d4"
+    },
+    "out/trace-riemann-stencil-import-order/root-spv-candidate-fp32.spvasm": {
+      "bytes": 7248800,
+      "sha256": "d9de1abac2b4f71c0a22164d23c4d3ccab720f0b701072fc344ac0469e260240"
+    },
+    "out/trace-riemann-stencil-import-order/root-import-selection-gate.json": {
+      "bytes": 4526,
+      "sha256": "87a497df9c9671d97261fb62ea2449f79a2ee93ddaafaa7483c9fac3a063cdc3"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp32/samples.jsonl": {
+      "bytes": 8288,
+      "sha256": "cb82898ea5f81cdef9f1144a1654256410ab03e2bd5c4c086a2e1b3d438e1576"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp32/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp32/inputs-before.json": {
+      "bytes": 1563180,
+      "sha256": "6c9627c20de49c42b5f43906fb653ce7e8667a96982c00affaaa6753fa07742f"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp32/inputs-after.json": {
+      "bytes": 1563180,
+      "sha256": "6c9627c20de49c42b5f43906fb653ce7e8667a96982c00affaaa6753fa07742f"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp32/trace.spv": {
+      "bytes": 2470232,
+      "sha256": "b17d86904d6cbff957deebcc94c32956eb0aa90ddd17ca284f797c8d58f252ec"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp32/owner.json": {
+      "bytes": 3691,
+      "sha256": "b79cdaa2cda666d47520a8363634533c9f0d1187df8ea8967164411894f79554"
+    },
+    "out/trace-riemann-stencil-import-order/root-prelaunch-candidate-fp32.json": {
+      "bytes": 2528,
+      "sha256": "217408c490a9ce76e5d6764556aa1ed49b87b2c147aee494aad80ab7dd7355cc"
+    },
+    "out/trace-riemann-stencil-import-order/root-helper-candidate-fp32.log": {
+      "bytes": 1224,
+      "sha256": "58346db88f80d66d8e394671fd17039cd090246bc07d3ef05430c49cb52664b4"
+    },
+    "out/trace-riemann-stencil-import-order/root-source-opens-candidate-fp32.trace": {
+      "bytes": 3541444,
+      "sha256": "f7dcb92c59a41891d44e6a097e92e08906f90ff940550357e4e8a6d08474e224"
+    },
+    "out/trace-riemann-stencil-import-order/root-wrapper-result-candidate-fp32.json": {
+      "bytes": 943,
+      "sha256": "2d12ff2f8ae700fe25dec23c04088ebb158ded1d270852de0d5f1753eb4a9dfc"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-candidate-fp32-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-candidate-fp32-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-candidate-fp32-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-candidate-fp32-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

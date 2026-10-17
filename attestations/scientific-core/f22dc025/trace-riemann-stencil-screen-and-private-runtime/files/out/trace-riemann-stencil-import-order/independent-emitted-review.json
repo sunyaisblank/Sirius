@@ -1,0 +1,97 @@
+{
+  "schema": "sirius-private-stencil-independent-emitted-review-v1",
+  "passed": true,
+  "decision": "OFFLINE_EMITTED_STENCIL_SCREEN_PASS",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/divide_contract_review; authored private stencil/pair-loop sources and predecessor apparatus. ROOT is separate actual producer. Passive emitted review; no helper, compiler, posttool, provider or test executed by reviewer.",
+  "input_pins": {
+    "first_FP32_complete_emitted_delta": {
+      "bytes": 16972,
+      "sha256": "69289ddefcac32b037d3cbcd7f5ec2238a6a9792ffdc828c9cd041674b0c7f0b"
+    },
+    "independent_actual_private_source_selection": {
+      "bytes": 16424,
+      "sha256": "b56422e9dc1c946c3a08600151c6e3780f2ea3b13a5b44943798cca24b0ff22c"
+    },
+    "root_ten_operation_completion": {
+      "bytes": 41631,
+      "sha256": "2c7b4ccb519de8583e5d1dae345b401c95fb3fd9ecc64c4afccbabaa77699724"
+    },
+    "root_all_six_recursive_ABI_observation": {
+      "bytes": 21382,
+      "sha256": "8948d9fedce9ba35fb0415509f8616193ef6d66a511e234ee0f505ab8f2b7306"
+    },
+    "private_trace": {
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    "private_deviation": {
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    }
+  },
+  "product_pins": [
+    [
+      "control-fp32",
+      2994452,
+      "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+    ],
+    [
+      "candidate-fp32",
+      2470232,
+      "b17d86904d6cbff957deebcc94c32956eb0aa90ddd17ca284f797c8d58f252ec"
+    ],
+    [
+      "control-fp32comp",
+      2997776,
+      "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+    ],
+    [
+      "candidate-fp32comp",
+      2473556,
+      "af80a6c3fb8ad5c45f60b4dbe9b55025aec900f22526fb44821279bf68be21a7"
+    ],
+    [
+      "control-fp64",
+      2847024,
+      "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+    ],
+    [
+      "candidate-fp64",
+      2479020,
+      "03cf56d43d7642bd4c66f2c1fd1dea0e2b3e0a575785af76431e13d95b1d28b5"
+    ],
+    [
+      "control-cuda",
+      321379,
+      "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+    ],
+    [
+      "candidate-cuda",
+      324168,
+      "1133d02ac38f875c078fcad941d5f7c061e2c1474fbc51369524a1c100b31907"
+    ],
+    [
+      "control-metal",
+      344056,
+      "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+    ],
+    [
+      "candidate-metal",
+      346699,
+      "535646b961da0e9937b4d3e284ff0fb14197898b6afbe0e55596f2a4a633413e"
+    ]
+  ],
+  "findings": {
+    "producer": "All10 accepted products hash-joined to ROOT completion; all5 controls canonical byteequal; all6 SPV validated/disassembled0. Actual owner/stability/birth joins reused from completion, not replayed. First2 import refusals excluded.",
+    "ABI": "Matching6 SPV capability/extension/memory/entry/mode/35decoration/16member lists equal; semantic GLSL.std.450 import equal despite numeric-ID changes. ROOT recursive7binding/type/member/builtin graphs reused. One function/zero calls. main8x8x1; FP32/COMP record272, FP64 record480 with original float32 source/volume and uint32 control/identity. No new widths/modes.",
+    "FP32_COMP": "First-FP32 complete proof reused. COMP three whole2317-line loops at98134,103364,109067 alpha-equal FP32. Both903-line Gamma bodies match prior accepted COMP. Pair setup/prefix/interstage/tensor/copyback regions alpha-equal FP32; no whole COMP-program equality claim. rho1..<4; distance1..3; fresh plus/minus;45diff,subtract9diff,adddiff/div60eps in original order.",
+    "FP64": "Three complete2194-line loops98323-100516,103444-105637,109038-111231 alpha-equal. Local counters1/<=2/+1, rho1..<4. Plus/minus fresh spatial copies before each pair; both907-line Gamma bodies equal old accepted FP64, including full zeroing/flat-origin returns. Dist1 stores8diff;dist2 subtracts diff/div12eps (100350-100364,100469-100471). Original converted eps0.0010000000474974513 and denominator0.012000000569969416 preserved. Prefix/tensor/interstage/full suffix through four copybacks112931-112934 and pair latch112939-112944 alpha-equal prior proof; no global unique-slot assumption.",
+    "CUDA_Metal": "Emission only. Original Gamma and AdvanceJacobiPair helper bodies equal matching controls under consistent identifier renaming/#line removal; record/binding/entry declarations and tensor suffix equal. CUDA loop12274-12682/Gamma12440,12446/weights12501,12579,12655; Metal12579-12987/Gamma12745,12751/weights12806,12884,12960. Fresh copies, distance1..3, plus-before-minus, original45/sub9/add-div60 and pair0..<2 four-column call/latch retained. No native compiler/driver/numerics claim."
+  },
+  "prior_proof_reuse": "NamedGit d312cb97f3be356f00aa15bc22ae6ea0abdd211e pair-loop emitted review SHAe055e17080b4c1a2961032b71843408d8a9dd80d27f5b3f73f539244e1a83444; accepted source-body review SHAe02883244e3f6aea0d62f617ac6cfcdcf40c0dd8772e701a4a6c9752856e7a79. Exact old ordinary bodies/regions read through namedGit. No historical full-map replay.",
+  "blockers": [],
+  "disposition": "PASS bounded offline emitted screen. ROOT concrete stage/input/runtime review and explicit release remain required. User-directed batched preservation is accepted; publication alone is not a runtime correctness gate. No source adoption or runtime authorization from this receipt.",
+  "limits": "Not formal whole-program/all40/numerical proof or scientific qualification. No JIT/allocation-cause, RSS/time/performance cure, CUDA/Metal native portability, fullP1/Mandatory/release claim. Driver indexing/liveness/spills and guarded first/later-rung failure remain possible.",
+  "checkout": "Observed f22 source clean, branch development/minimum-step-floor-2026-10-15 tracking0:0, one worktree. Private candidate/ignored receipt not production source adoption."
+}

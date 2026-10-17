@@ -1,0 +1,182 @@
+{
+  "schema": "sirius-riemann-stencil-import-order-independent-source-review-v1",
+  "created_utc": "2026-10-15T20:55:34.272292+00:00",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": true,
+  "source_only": true,
+  "runtime_admitted": false,
+  "compiler_execution_admitted": false,
+  "blockers": [],
+  "critical_pins": {
+    "source-contracts.json": {
+      "bytes": 62574,
+      "sha256": "167c4168dc86254878fa54f22c132b2b2f56658b2a5f1cc258db935cb4b6aadd"
+    },
+    "actions.pending.json": {
+      "bytes": 89279,
+      "sha256": "f39a6ede16d005703072310df619ca2b5536213a6b31560312e9b03ec6646fa3"
+    },
+    "commands.pending.json": {
+      "bytes": 3751,
+      "sha256": "e0db5ef7913f1c7a92932e4496d58242222d95ce82f1f1efadb70a39f0417adb"
+    },
+    "import-order.patch": {
+      "bytes": 303,
+      "sha256": "c76b5baa6c2790ada8927c8630dd5ced099ebffa5bc4bcc20508bce41eef8ab9"
+    },
+    "inputs/candidate/trace.slang": {
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    "inputs/candidate/gr_deviation.slang": {
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    "run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    }
+  },
+  "checked_source": {
+    "owned_source_files": 20,
+    "all19_declared_source_pins_plus_contract_exact": true,
+    "mature_helpers_byte_exact_and_AST_only_checked": true,
+    "all_nine_prior_privateI_preimages_and_three_selected_diagnostic_refusal_copies_exact": true,
+    "canonical_current_source_named_Git_blobs_exact": 14,
+    "earlier_body_review": {
+      "bytes": 10927,
+      "sha256": "e02883244e3f6aea0d62f617ac6cfcdcf40c0dd8772e701a4a6c9752856e7a79"
+    }
+  },
+  "exact_program_delta": {
+    "preimage": {
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "candidate": {
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    "old_import_region": [
+      "gr_camera",
+      "gr_disk",
+      "gr_deviation"
+    ],
+    "new_import_region": [
+      "gr_deviation",
+      "gr_camera",
+      "gr_disk"
+    ],
+    "import_multiset_equal": true,
+    "patch_regenerated_with_stdlib_exact": true,
+    "inverse_exact": true,
+    "outside_region_all_bytes_equal": true,
+    "unchanged_prefix_bytes": 2654,
+    "unchanged_suffix_bytes": 60804,
+    "function_math_pairloop_type_resource_and_remaining_bytes_unchanged": true,
+    "private_gr_deviation_byte_exact": true,
+    "scope": "Only the direct import permutation is new relative to the prior private-I program. The reviewed pair-loop/stencil bodies remain exact; no semantic or numerical execution equivalence established."
+  },
+  "recipes_and_selectors": {
+    "ten_argv_and_fixed_settings_exact_prior_privateI_after_namespace_only": true,
+    "scope_text_changed_to_current_hypothesis": true,
+    "same_candidate_private_I_before_canonical_I": true,
+    "controls_keep_original_canonical_source_include_CWD_and_flags": true,
+    "saved_five_original_Ninja_lines_exact": true,
+    "common_selectors": 72,
+    "counts": {
+      "control-fp32": 72,
+      "candidate-fp32": 79,
+      "control-fp32comp": 86,
+      "candidate-fp32comp": 93,
+      "control-fp64": 100,
+      "candidate-fp64": 107,
+      "control-cuda": 114,
+      "candidate-cuda": 121,
+      "control-metal": 128,
+      "candidate-metal": 135
+    },
+    "previous_six_raw_receipts_plus_product_per_operation_exact": true,
+    "no_own_or_future_mutable_output_selector": true,
+    "revision": "ROOT_PENDING_REVISION",
+    "kind": "compile",
+    "software_provider": false,
+    "disable_software_shader_cache": false,
+    "expected_exit": 0,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "all_ten_exclusive_output_folders_and_final_metadata_absent": true
+  },
+  "resolution_grounding": {
+    "root_findings": {
+      "bytes": 7139,
+      "sha256": "1ae93ab1df222221cd9c3f666d55364879c904614b8794997e58c7bb4224a033"
+    },
+    "all_ten_diagnostic_pins_exact": true,
+    "upstream_tag": "v2026.12",
+    "upstream_commit": "a7fbf1ab0e9ddd18b0a9eaa675ddc95f63532fee",
+    "all_five_fetched_source_HTTP_records_tree_Git_blob_bytes_exact": [
+      {
+        "path": "source/compiler-core/slang-include-system.cpp",
+        "git_blob": "47219232d599a8dc9a54f12c15fcb66bb9146cd9"
+      },
+      {
+        "path": "source/slang/slang-session.cpp",
+        "git_blob": "0b626d1f54659333d26827f52fe566858a869434"
+      },
+      {
+        "path": "source/slang/slang-compiler-api.cpp",
+        "git_blob": "6e3e8615f3a7fb3fac43b18947ceb613687450f8"
+      },
+      {
+        "path": "source/slang/slang-compiler-options.cpp",
+        "git_blob": "fb2b3ba3fd2170be0dd0fa0c29f66611a3e307af"
+      },
+      {
+        "path": "source/compiler-core/slang-include-system.h",
+        "git_blob": "2beea6d68ae6dc8d9df5b6fe01fb122b4b445adf"
+      }
+    ],
+    "source_rules": [
+      "IncludeSystem.findFile header38\u201348 defaults Quote; cpp112\u2013136 tries actual importer-relative path before search directories.",
+      "findOrImportModule session1471\u20131496 returns a previously loaded module name before any new path search;1591\u20131639 derives requesting actual source path for lookup.",
+      "Parsed source registration: loadParsedModule1046\u20131094 adds name/path1062\u20131063 before semantic check1071 and removes on failure. Historical1196\u20131220 is serialized-module registration; copied findings remain unchanged with explicit contract clarification."
+    ],
+    "source_graph": "types/metrics/integrator prefix cannot first-import deviation. Previous canonical camera imports deviation at line4 before trace direct deviation; new private trace requests deviation before camera. Private deviation imports only types/metrics.",
+    "actual_prior_corroboration": "Second-refusal main child opened canonical camera at saved trace5719 then canonical deviation5773; private-I candidate remained old636874 SPV and refusalfalse.",
+    "installed_binary_exact_upstream_source_build_correspondence_proved": false,
+    "new_import_selection_proved": false,
+    "expected_not_guaranteed": "Private trace importer-relative first deviation load should select its sibling; later canonical camera should reuse the name. Actual installed compiler opens and ordinary emitted loop must still prove this."
+  },
+  "Hoare_and_progression": {
+    "prior_second_refusal_and_independent_audit_copied_candidly_false": true,
+    "second_archive_publication_pending": true,
+    "fresh_complete_typed_root_metadata_and_source_tool_resource_environment_admission_required": true,
+    "first_two_only_possible_after_concrete_admission_and_root_release": true,
+    "mandatory_after_first_candidate": "Before candidate acceptance/attribution or any later eight compiler operations: bind actual same-birth Slang exec/CWD and successful source opens of private trace+private gr_deviation plus nine canonical modules, and independently validate/disassemble ordinary emitted output proving the new bounded distance loop. File placement, source order, upstream rules and private-I flags are not actual selection proof. Wrong or unresolved selection must stop/preserve.",
+    "all_five_controls_byte_equal_to_fresh_original_baselines_before_source_attribution": true,
+    "posttools_separately_owned_and_admitted": true,
+    "CUDA_MSL_emission_only": true,
+    "stop_first_nonpass_no_retry_or_guard_raise": true
+  },
+  "limits": [
+    "Source-only review. No project helper/import/parser/compiler/validator/disassembler/provider/test/network/process/cache operation executed; passive stdlib/AST/hash/text/read-only Git only.",
+    "No concrete new owner input count, metadata/tool reuse, source-selection, emitted output, numerical/runtime/JIT/RSS/performance/adoption/fullscience/Mandatory/release admission.",
+    "Prior timeout remains timeout/noXML; both prior import refusals remain false after successful compiler owners. Pending historical archive placeholders are not execution authority."
+  ],
+  "workspace": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "source_clean": true,
+    "source_committed_and_pushed_tracking": "0/0",
+    "worktrees": 1,
+    "only_this_ignored_review_sidecar_written": true
+  }
+}

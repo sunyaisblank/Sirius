@@ -1,0 +1,106 @@
+{
+  "schema": "sirius-private-stencil-root-completed-timeout-v1",
+  "created_utc": "2026-10-17T23:41:09.013186+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": false,
+  "audit_completed": true,
+  "classification": "ORIGINAL_PRIVATE_CHANGED_PROGRAM_REACHED_FP64_BEGIN_THEN_300S_TIMEOUT_NO_FINAL_VERDICT",
+  "actual_helper_observed_closed_exit": 1,
+  "owner_terminal_child_exit": -15,
+  "stop_reason": "diagnostic_timeout",
+  "wall_seconds": 300.2349755280011,
+  "peak_sampled_aggregate_RSS_KiB": 2917884,
+  "minimum_sampled_available_KiB": 15264908,
+  "sample_count": 11948,
+  "one_timeout_sample": {
+    "elapsed_seconds": 300.01390474897926,
+    "rss_kib": 1597844
+  },
+  "RSS_or_reserve_stop": false,
+  "cleanup_errors": [],
+  "remaining_owned_processes": [],
+  "beforeafter_rows_checked": 3266,
+  "whole_input_rows_current_exact": 1633,
+  "saved_owned_births_fresh_absent": [
+    {
+      "pid": 17127,
+      "saved_start_ticks": "15396697",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 17131,
+      "saved_start_ticks": "15396752",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "progress_markers": [
+    "[TraceJacobiRung] module=trace.spv phase=begin",
+    "[TraceJacobiRung] module=trace.spv phase=prepared",
+    "[TraceJacobiRung] module=trace.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=begin"
+  ],
+  "XML_produced": false,
+  "collector_executed": false,
+  "all3rung_numerical_verdict": false,
+  "individual_exercised_markers_are_PASS": false,
+  "actual_owned_samebirth_LVP0_JIT0_defaultcache_observed": true,
+  "immutable_runtime_mapped_code_bound": true,
+  "mutable_default_cache_and_runtime_memfd_separately_classified": true,
+  "source_and_inputs_unchanged": true,
+  "source_candidate_applied": false,
+  "unchanged_retry_or_guard_raise": false,
+  "files": {
+    "out/trace-riemann-stencil-import-order-runtime-pending/trace-jacobi-all-rungs/inputs-after.json": {
+      "bytes": 413528,
+      "sha256": "346b64fc3fc866c1c9e45a1f55cf0100098a02045831e0443850870dc0f97797"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/trace-jacobi-all-rungs/inputs-before.json": {
+      "bytes": 413528,
+      "sha256": "346b64fc3fc866c1c9e45a1f55cf0100098a02045831e0443850870dc0f97797"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/trace-jacobi-all-rungs/owner.json": {
+      "bytes": 2946,
+      "sha256": "0a2f711ec66c339f0ba5ddd863491e2f8512d1aabf02ee6e2e65a15a9156f688"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/trace-jacobi-all-rungs/samples.jsonl": {
+      "bytes": 2678335,
+      "sha256": "50892136aa603a55751af4d63f6394c0b7254b2623f973662953473485515033"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/trace-jacobi-all-rungs/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/trace-jacobi-all-rungs/stdout.log": {
+      "bytes": 796,
+      "sha256": "d8b83d55142a5981daec5d63d5af9aca4c1ac4b3e2fa34affc55d4a12761cfe4"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/helper.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/helper.stderr": {
+      "bytes": 3027,
+      "sha256": "6c7b899abd5d2b5b128dd2359856087bdaff40ea4414d218bfec29ff32e03750"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/root-runtime-release.json": {
+      "bytes": 3148,
+      "sha256": "d2dc5867b582e1c3113f1a2b5eed16e00b8d20b9655b84b79db8d3f39aac43f6"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/root-live-provider-environment.json": {
+      "bytes": 74379,
+      "sha256": "969ad1b69da9af97825b98408a122a237826a75540b422bf6bdaae8bef245d8b"
+    },
+    "out/trace-riemann-stencil-import-order-runtime-pending/independent-runtime-review.json": {
+      "bytes": 9012,
+      "sha256": "a4ec4bfc7483b92e4d61a96fe9c5f48d0551a0c13af3a8ecabe08df22e90e04a"
+    }
+  },
+  "source_build_hold_release": false,
+  "next_decision": "Do not retry this program unchanged. Shared start/mid/end curvature callsite source repair prepared independently in parallel; existing canonical controls/tool metadata reusable only with matching producer/input identities.",
+  "scope": "Actual bounded original private diagnostic stop, with completed ownership/cleanup. FP32 and COMP exercised markers precede FP64begin, but no completedGTest/XML/numericalpass. No exact allocating/JIT call cause, cold/performance benefit, canonical-source adoption/fullscience/Mandatory/release qualification."
+}

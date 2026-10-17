@@ -1,0 +1,198 @@
+{
+  "schema": "sirius-private-stencil-independent-concrete-runtime-review-v1",
+  "created_utc": "2026-10-17T23:34:56.618048+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": true,
+  "decision": "CONCRETE_METADATA_PASS_PENDING_ROOT_RELEASE",
+  "scope": "Meaningful private-program/stage/current-input delta and unchanged guards; accepted source, strict build and full emitted screen reused. No repeated historical ownership or CI sweep.",
+  "release_pins": {
+    "actions.json": {
+      "bytes": 78292,
+      "sha256": "6fa517e46499e078e2113ab9f771c257e1f4df74953fdb981cfae18d676c7055"
+    },
+    "readiness.json": {
+      "bytes": 8051,
+      "sha256": "4acd10c82a527d286d254b0640ccfb59bfd076af2277fba19afe682226122ec9"
+    },
+    "root-preflight.json": {
+      "bytes": 430488,
+      "sha256": "8f170a9c1338806bea0602e5de52a31fa269f26b308a75683fd4944394912807"
+    },
+    "root-runtime-observation.json": {
+      "bytes": 306352,
+      "sha256": "c38bd698769bf7df51963a65d11b74bd8a3d4d4383f0b145c5b5e3e33ba33f35"
+    }
+  },
+  "accepted_proofs": {
+    "source_review": {
+      "bytes": 20671,
+      "sha256": "a7caae04a8123f532cf2fa13a635725350f094ea6e29f4cb6fea5576860fcd0c"
+    },
+    "complete_emitted_review": {
+      "bytes": 5952,
+      "sha256": "43eb0ac501233bdac8fb252797eef9e7b3ebb7422073b8d2777933fb8b287248"
+    },
+    "compiler_completion": {
+      "bytes": 41631,
+      "sha256": "2c7b4ccb519de8583e5d1dae345b401c95fb3fd9ecc64c4afccbabaa77699724"
+    },
+    "all6_recursive_ABI": {
+      "bytes": 21382,
+      "sha256": "8948d9fedce9ba35fb0415509f8616193ef6d66a511e234ee0f505ab8f2b7306"
+    }
+  },
+  "closure": {
+    "all1632_static_file_bytes_hashes_and_resolved_identities_checked": true,
+    "expected_owner_rows": 1633,
+    "tracked_source_files": 538,
+    "complete_owner_set_equals_static_plus_preflight_self": true,
+    "preflight_self_hash_excluded": true,
+    "pending_selectors_retained_inorder": 131,
+    "additional_selectors": 1078,
+    "frozen_selectors": 1209,
+    "all960_runtime_build_input_rows_join_current_preflight": true,
+    "all788_strict_build_producer_proof_reused_with_current_pins": true,
+    "case_and_acceptance_outputs_absent": true
+  },
+  "stage": {
+    "regular_separate_mode_preserving_source_destination_copies_checked": [
+      {
+        "source": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "destination": "out/trace-riemann-stencil-import-order-runtime-pending/stage/sirius_backend_tests",
+        "identity": {
+          "bytes": 13502080,
+          "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+        },
+        "regular_real_copy": true,
+        "mode": "0o755"
+      },
+      {
+        "source": "out/trace-riemann-stencil-import-order/candidate-fp32/trace.spv",
+        "destination": "out/trace-riemann-stencil-import-order-runtime-pending/stage/resources/kernels/trace.spv",
+        "identity": {
+          "bytes": 2470232,
+          "sha256": "b17d86904d6cbff957deebcc94c32956eb0aa90ddd17ca284f797c8d58f252ec"
+        },
+        "regular_real_copy": true,
+        "mode": "0o644"
+      },
+      {
+        "source": "out/trace-riemann-stencil-import-order/candidate-fp32comp/trace.spv",
+        "destination": "out/trace-riemann-stencil-import-order-runtime-pending/stage/resources/kernels/trace_fp32comp.spv",
+        "identity": {
+          "bytes": 2473556,
+          "sha256": "af80a6c3fb8ad5c45f60b4dbe9b55025aec900f22526fb44821279bf68be21a7"
+        },
+        "regular_real_copy": true,
+        "mode": "0o644"
+      },
+      {
+        "source": "out/trace-riemann-stencil-import-order/candidate-fp64/trace.spv",
+        "destination": "out/trace-riemann-stencil-import-order-runtime-pending/stage/resources/kernels/trace_fp64.spv",
+        "identity": {
+          "bytes": 2479020,
+          "sha256": "03cf56d43d7642bd4c66f2c1fd1dea0e2b3e0a575785af76431e13d95b1d28b5"
+        },
+        "regular_real_copy": true,
+        "mode": "0o644"
+      }
+    ],
+    "host": "Genuine fe663 f22 strict host; private09a3 trace +7663 deviation produces b17/af80/03cf modules. Canonical f22 shader products remain unchanged.",
+    "no_extra_scene_assets": "Reused accepted exact-filter resource/source closure: regular executable-relative stage with only these three modules."
+  },
+  "registration_and_actions": {
+    "one_original_active_test": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+    "registered_total": 1152,
+    "delta_only": [
+      "revision",
+      "frozen_inputs",
+      "scope"
+    ],
+    "argv": [
+      "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order-runtime-pending/stage/sirius_backend_tests",
+      "--gtest_filter=KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs"
+    ],
+    "registration_only_disabled_flag_omission_preserved": true,
+    "original_CTest_TIMEOUT_not_declared": true,
+    "expected_exit_int0": true,
+    "software_provider": true,
+    "default_cache_disable_false": true,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "original_assertions_three_rungs_128attempts_physical1000ms_no_weakening": true
+  },
+  "provider_and_environment": {
+    "actual_current_provider": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+      "device_major": 8,
+      "device_minor": 48,
+      "inode": 143595
+    },
+    "current_map_device_text": "08:30 (major8/minor48 decimal)",
+    "historical_device_minor80_not_reused_for_live_joins": true,
+    "root_post_ctest_metadata_assertion_correction_preserved": "Current registration succeeded before historical device-number equality assertion. Corrected current stat without tool/provider/test rerun; no failure relabeling.",
+    "DSO_union33_and_optional_layer11_prior_exact_metadata_reuse": true,
+    "optional_layer_runtime_load_not_claimed": true,
+    "protected_overrides_empty": true,
+    "ROOT_must_launch_and_observe_samebirth_LVP_JIT_OPTIMIZATION_LEVEL0": true,
+    "default_cache_unchanged": "No MESA override/reset/relocation/cold assumption. Generated runtime memfd/cache state is separately observed, not immutable prelaunch source input.",
+    "current_PATH_interpretation": "Previously accepted narrow PATH continuation; no full environment identity or installed-binary/source correspondence inferred."
+  },
+  "required_ROOT_postconditions": {
+    "original_owner_source_wholeinputs_session_guard_cleanup_and_birth_checks": true,
+    "same_child_actual_LVP_mappings_join_current_dev_inode_and_hash": true,
+    "immutable_runtime_mapped_code_files_join_frozen_inputs": true,
+    "exact_one_completed_XML_zero_FESD": {
+      "suite": "KernelTrace",
+      "name": "ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "disabled": 0,
+      "skipped": 0,
+      "status": "run",
+      "result": "completed",
+      "property": {
+        "name": "fp64_evidence",
+        "value": null
+      }
+    },
+    "fp64_evidence_PROPERTY_NAME_strictly_absent_beyond_get_None": true,
+    "all9_ordered_markers_required": [
+      "[TraceJacobiRung] module=trace.spv phase=begin",
+      "[TraceJacobiRung] module=trace.spv phase=prepared",
+      "[TraceJacobiRung] module=trace.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+    ],
+    "markers_alone_not_PASS": true
+  },
+  "execution_and_preservation": {
+    "separate_ROOT_release_required": true,
+    "full_static_emitted_prerequisite_now_pinned_PASS": true,
+    "one_original_300s_attempt_no_retry_or_guard_relaxation": true,
+    "latest_user_directed_batch_timing": "Compiler+runtime publication after bounded decision and before cleanup; reversible stage/metadata allowed before final emitted review. Historical pending/publication wording retained; no publication or runtime success fabricated.",
+    "source_build_holds_not_released": true
+  },
+  "limits": "Preparation only. No numerical/all-rung runtime pass, formal whole-program proof, JIT/RSS/performance benefit, source adoption, allP1/Mandatory/fullscience/cold/release qualification. No helper/project/tool/compiler/provider/test/network/process query executed by reviewer.",
+  "repository": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "status": "",
+    "tracking_ahead_behind": [
+      "0",
+      "0"
+    ],
+    "sole_worktree": true,
+    "review_publication": "Ignored sidecar uncommitted; ROOT owns preservation."
+  }
+}

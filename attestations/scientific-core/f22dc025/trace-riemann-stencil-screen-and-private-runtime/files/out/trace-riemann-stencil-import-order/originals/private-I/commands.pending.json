@@ -1,0 +1,48 @@
+{
+  "schema": "sirius-trace-riemann-stencil-private-import-pending-commands-v1",
+  "source_only": true,
+  "runtime_or_tool_execution_admitted": false,
+  "revision": "ROOT_PENDING_REVISION",
+  "serial_order": [
+    "control-fp32",
+    "candidate-fp32",
+    "control-fp32comp",
+    "candidate-fp32comp",
+    "control-fp64",
+    "candidate-fp64",
+    "control-cuda",
+    "candidate-cuda",
+    "control-metal",
+    "candidate-metal"
+  ],
+  "stop_first_nonpass": true,
+  "root_sole_tool_operator": true,
+  "commands_after_root_admission": [
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py control-fp32",
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py candidate-fp32",
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py control-fp32comp",
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py candidate-fp32comp",
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py control-fp64",
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py candidate-fp64",
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py control-cuda",
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py candidate-cuda",
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py control-metal",
+    "/usr/bin/python3 out/trace-riemann-stencil-private-import/run_owned.py candidate-metal"
+  ],
+  "hold": "Prior import-refusal immutable preservation+publication and independent audit, stencil bodye028/source unchanged, this candidate-only private-I packet independent/rootSOURCEreview, fresh complete current metadata/wholeinputs and rootrelease. Allrevision/currentmetadata/priorarchive fields stayROOT_PENDING. No actualactions/readiness/preflight/case outputs or execution authorization.",
+  "postcompile_manual_root_gates": [
+    "Actual private import precedence must bind exactly11 participating source modules: local trace+gr_deviation and9 unchanged canonical modules. Samefolder placement does not prove this; if canonical gr_deviation is selected or resolution is unproved, refuse attribution and do not claim stencil candidate compiled.",
+    "Eachownerterminalpassed/exit0/nostop/noerrors/noownedremainers/sourceandwholeinputsunchanged/freshbirthabsence/guardbounds/outputidentity.",
+    "SPIR-V control+candidate val/disassembly/staticCFG/type/capability/layout/entry/mode checks under separate root-owned admitted operations; CUDA/MSL fullgeneratedsourceinspection as appropriate.",
+    "All5controls byteequal freshlypinnedcanonicalbaseline before differenceattribution; any mismatch is screenrefusal, not numericalcandidatefailure.",
+    "No XMLcollector/property or numerical/provider/runtime/performance/adoptionacceptance.",
+    "Compare candidate with prior pairloop-only leaf after matching baseline/tool/source closure; preserve old runtime timeout as timeout/noXML, not failure of a new stencil candidate or a proven allocation/JIT cause."
+  ],
+  "first_candidate_output_gate": "After first candidate-fp32 compiler owner closes, root separately verifies actual samebirth maincompiler source opens select exact11modules (private trace+gr_deviation, ninecanonical) AND newly emitted bounded stencil distance-loop, before later8operations or candidate attribution. Compilerexit0 alone is not candidate-selection acceptance. Ifwrong/unproved, preserve refusal without hiddenflags/retry/owner relabel.",
+  "candidate_only_private_include_argv_delta": [
+    "-I",
+    "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate",
+    "-I",
+    "/home/astra/.project/Sirius/src/sirius/backend/../kernels"
+  ]
+}

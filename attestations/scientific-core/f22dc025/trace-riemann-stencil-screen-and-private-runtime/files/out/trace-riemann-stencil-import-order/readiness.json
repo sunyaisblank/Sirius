@@ -1,0 +1,310 @@
+{
+  "schema": "sirius-riemann-stencil-import-order-compiler-concrete-readiness-v1",
+  "created_utc": "2026-10-15T20:56:31.441806+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "source_clean_committed_pushed": true,
+  "materialized": true,
+  "runtime_release_pending": true,
+  "kind": "compile",
+  "order": [
+    "control-fp32",
+    "candidate-fp32",
+    "control-fp32comp",
+    "candidate-fp32comp",
+    "control-fp64",
+    "candidate-fp64",
+    "control-cuda",
+    "candidate-cuda",
+    "control-metal",
+    "candidate-metal"
+  ],
+  "actions": {
+    "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/actions.json",
+    "bytes": 4679139,
+    "sha256": "6e781d5048cc7034fdd46cd6de93b6f3ec6e3aff86d35e6d5822e0c3325b3548"
+  },
+  "actual_tool_observation": {
+    "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/root-compiler-tool-observation.json",
+    "bytes": 1363199,
+    "sha256": "1c30b82bb2eb62f1de4a771eb49d791e199ad10b996aaee8afed5ff9e003e330"
+  },
+  "source_reviews": {
+    "out/trace-riemann-stencil-import-order/independent-source-review.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/independent-source-review.json",
+      "bytes": 8648,
+      "sha256": "330e50c4c13b83b8702ee3c45ebc993b1173782e9306c20a209826adc284b967"
+    },
+    "out/trace-riemann-stencil-loop/independent-source-review.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-loop/independent-source-review.json",
+      "bytes": 10927,
+      "sha256": "e02883244e3f6aea0d62f617ac6cfcdcf40c0dd8772e701a4a6c9752856e7a79"
+    }
+  },
+  "actual_installed_Slang_regular_paths": 3692,
+  "actual_installed_unique_ELFs": 10,
+  "actual_metadata_queries_closed0": 22,
+  "new_standard_metadata_queries_executed": 0,
+  "metadata_reuse": {
+    "record": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/root-compiler-tool-observation.json",
+      "bytes": 1362194,
+      "sha256": "78635eb9b36a0fe3461edb48fe68f3454fa7fc55574aa99ca3296e1e73bf1778"
+    },
+    "named_Git_commit": "174a9eb2baa0b2cbba8c4eb7ced5671a611ee1e6",
+    "named_Git_member": "attestations/scientific-core/f22dc025/trace-riemann-stencil-private-include-refusal/files/out/trace-riemann-stencil-private-import/root-compiler-tool-observation.json",
+    "all3692_installation_paths_and15DSOs_and9_operation_tools_fresh_matching": true,
+    "full_selected_environment_fresh_matching": true,
+    "source_recipe_delta_only": "Private trace moves existing deviation import before camera; same import multiset/function/math bytes and gr_deviation body. Same reviewed candidate private-I before canonical-I and controls remain original. No tool/resource/environment/cache-policy change. Current source graph remains intended until compiler-open+newloop proof.",
+    "actual_query_records_exact_copy": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/root-metadata-query-records.json",
+      "bytes": 13192,
+      "sha256": "08311a14f8df21224392084c3233c5cfb0265717edbca1a2f399941c4d4908ca"
+    },
+    "no_version_ldd_env_reexecution_claim": true
+  },
+  "prior_import_refusal_publication": {
+    "record": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-include-refusal-preservation/root-git-preservation.json",
+      "bytes": 1674,
+      "sha256": "cde3afdefb554ae25f6647ba1989434619d4d74a02300585024eed4a6922e871"
+    },
+    "commit": "174a9eb2baa0b2cbba8c4eb7ced5671a611ee1e6",
+    "actual_closed_push_then_fresh_remote0": true,
+    "root_refusal": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/root-import-refusal.json",
+      "bytes": 20547,
+      "sha256": "dc1fdae40594d90596f14d21688aecb83cf3628f1f40b10e68db30ecc2c1ea2d"
+    },
+    "independent_refusal_review": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/independent-import-refusal-review.json",
+      "bytes": 21077,
+      "sha256": "c703710b993ae84d95cc9983e46091a2b2e31d7a05c2fec1eac4ff33595496b7"
+    },
+    "selected_root_copy_exact": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/originals/second-root-import-refusal.json",
+      "bytes": 20547,
+      "sha256": "dc1fdae40594d90596f14d21688aecb83cf3628f1f40b10e68db30ecc2c1ea2d"
+    }
+  },
+  "candidate_only_include_precedence": [
+    "-I",
+    "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/inputs/candidate",
+    "-I",
+    "/home/astra/.project/Sirius/src/sirius/backend/../kernels"
+  ],
+  "new_source_import_order_delta": {
+    "patch": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/import-order.patch",
+      "bytes": 303,
+      "sha256": "c76b5baa6c2790ada8927c8630dd5ced099ebffa5bc4bcc20508bce41eef8ab9"
+    },
+    "private_trace": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/inputs/candidate/trace.slang",
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    "private_trace_preimage": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/originals/private-I/trace.slang",
+      "bytes": 63512,
+      "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+    },
+    "source_only_reordered_imports": true,
+    "actual_imports_proved": false
+  },
+  "actual_DT_NEEDED_union_count": 15,
+  "intended_candidate_source_graph": {
+    "trace": {
+      "path": "out/trace-riemann-stencil-import-order/inputs/candidate/trace.slang",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/inputs/candidate/trace.slang",
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    "gr_types": {
+      "path": "src/sirius/kernels/gr_types.slang",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang",
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    "gr_metrics": {
+      "path": "src/sirius/kernels/gr_metrics.slang",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang",
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    "gr_integrator": {
+      "path": "src/sirius/kernels/gr_integrator.slang",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang",
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+    },
+    "gr_camera": {
+      "path": "src/sirius/kernels/gr_camera.slang",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_camera.slang",
+      "bytes": 7542,
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+    },
+    "gr_disk": {
+      "path": "src/sirius/kernels/gr_disk.slang",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_disk.slang",
+      "bytes": 16688,
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+    },
+    "gr_deviation": {
+      "path": "out/trace-riemann-stencil-import-order/inputs/candidate/gr_deviation.slang",
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/inputs/candidate/gr_deviation.slang",
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    "gr_trace_event": {
+      "path": "src/sirius/kernels/gr_trace_event.slang",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_event.slang",
+      "bytes": 15656,
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+    },
+    "gr_ellis_topology": {
+      "path": "src/sirius/kernels/gr_ellis_topology.slang",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang",
+      "bytes": 9393,
+      "sha256": "ebf8f6413fc3d158b2bc135634a8e6c8d6790c8be8a20b217e46424ba9a58ca8"
+    },
+    "gr_point_star": {
+      "path": "src/sirius/kernels/gr_point_star.slang",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_point_star.slang",
+      "bytes": 1773,
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+    },
+    "gr_trace_continuation": {
+      "path": "src/sirius/kernels/gr_trace_continuation.slang",
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang",
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+    }
+  },
+  "intended_source_graph_is_NOT_actual_import_selection_proof": true,
+  "source_directory_direct_children": [
+    "camera_frame_probe.slang",
+    "coupled_probe.slang",
+    "gr_camera.slang",
+    "gr_coupled.slang",
+    "gr_deviation.slang",
+    "gr_disk.slang",
+    "gr_ellis_topology.slang",
+    "gr_integrator.slang",
+    "gr_kerr_infinity.slang",
+    "gr_metrics.slang",
+    "gr_point_star.slang",
+    "gr_trace_continuation.slang",
+    "gr_trace_event.slang",
+    "gr_types.slang",
+    "infinity_probe.slang",
+    "metric_consistency_probe.slang",
+    "parity_probe.slang",
+    "portable_binary32.h",
+    "retained_camera.slang",
+    "retained_dense.slang",
+    "retained_dopri_phase.slang",
+    "retained_endpoint.slang",
+    "retained_initialize.slang",
+    "retained_owner.slang",
+    "retained_pair.slang",
+    "retained_program.py",
+    "retained_ray_camera.slang",
+    "retained_scalar.slang",
+    "retained_scratch.slang",
+    "retained_transport.slang",
+    "retained_triple.slang",
+    "smoke.slang",
+    "trace.slang"
+  ],
+  "private_candidate_directory_direct_children": [
+    "gr_deviation.slang",
+    "trace.slang"
+  ],
+  "canonical5_baselines": {
+    "fp32": {
+      "path": "bin/linux-gcc/kernels/trace.spv",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv",
+      "bytes": 2994452,
+      "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd",
+      "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv",
+      "actual_previous_control_bytes_equal": true
+    },
+    "fp32comp": {
+      "path": "bin/linux-gcc/kernels/trace_fp32comp.spv",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv",
+      "bytes": 2997776,
+      "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d",
+      "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv",
+      "actual_previous_control_bytes_equal": true
+    },
+    "fp64": {
+      "path": "bin/linux-gcc/kernels/trace_fp64.spv",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv",
+      "bytes": 2847024,
+      "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076",
+      "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv",
+      "actual_previous_control_bytes_equal": true
+    },
+    "cuda": {
+      "path": "bin/linux-gcc/kernels/portability/trace.cu",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu",
+      "bytes": 321379,
+      "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1",
+      "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+      "actual_previous_control_bytes_equal": true
+    },
+    "metal": {
+      "path": "bin/linux-gcc/kernels/portability/trace.metal",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal",
+      "bytes": 344056,
+      "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88",
+      "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal",
+      "actual_previous_control_bytes_equal": true
+    }
+  },
+  "all5_current_baselines_match_published_previous_controls": true,
+  "new10_compiler_operations_executed": false,
+  "all5_new_controls_byte_equal_gate_pending": true,
+  "root_first2_only_release_possible_after_independent_concrete_admission": true,
+  "mandatory_manual_gate_after_first_candidate": "Before candidate acceptance, attribution or control-fp32comp/later operation: actual candidateFP32 validated/disassembled ordinary output must prove private new gr_deviation selection and new bounded distance loop, with intended11/twooverride remainingcanonical closure. File placement/private-I intent is not proof. Explicit candidate-only private-I before canonical-I is reviewed; no hidden include/CWD/body change. Refuse/preserve any mismatch.",
+  "posttools": "Root separately admits original spirv-val and ordinary spirv-dis under unchanged timeout300/TERM/kill10; no transfer of Slang owner aggregateRSS/session-census guarantees. CUDA/MSL emissiononly.",
+  "original_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "software_provider": false,
+  "disable_software_shader_cache": false,
+  "actual_root_selected_environment": {
+    "LANG": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "/home/astra/.codex/packages/standalone/releases/0.162.1-x86_64-unknown-linux-musl/codex-path:/home/astra/.local/bin:/home/astra/.codex/tmp/arg0/codex-arg0tWLEn2:/home/astra/.codex/packages/standalone/releases/0.162.1-x86_64-unknown-linux-musl/codex-path:/home/astra/.local/bin:/home/astra/.cargo/bin:/home/astra/.juliaup/bin:/home/astra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/Eclipse Adoptium/jdk-25.0.1.8-hotspot/bin:/mnt/c/Program Files/Microsoft/jdk-25.0.2.10-hotspot/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Neovim/bin:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/PowerShell/7/:/Docker/host/bin:/mnt/c/Users/alarisadmin/AppData/Local/Programs/OpenAI/Codex/bin:/mnt/c/Program Files/PowerShell/7:/mnt/c/Program Files/Eclipse Adoptium/jdk-25.0.1.8-hotspot/bin:/mnt/c/Program Files/Microsoft/jdk-25.0.2.10-hotspot/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Program Files/Neovim/bin:/Docker/host/bin:/mnt/c/Users/alarisadmin/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/alarisadmin/AppData/Local/Microsoft/WinGet/Packages/Fastfetch-cli.Fastfetch_Microsoft.Winget.Source_8wekyb3d8bbwe:/mnt/c/Users/alarisadmin/.local/bin:/snap/bin:/home/astra/.dotnet/tools"
+  },
+  "protected_overrides": {},
+  "prior_runtime58_Git_publication": {
+    "record": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-pair-loop-runtime-preservation/root-git-preservation.json",
+      "bytes": 1541,
+      "sha256": "ea5cba919755a048e57f60a80bddcb52de7453ee82f3060fa9bce1a470f6f21a"
+    },
+    "commit": "4a1883edc862b9cd4dcb342623d3a258b55c9d9c",
+    "actual_closed_push_then_fresh_remote0": true
+  },
+  "pending_selectors_inorder_preserved": true,
+  "pending_selector_counts": {
+    "control-fp32": 72,
+    "candidate-fp32": 79,
+    "control-fp32comp": 86,
+    "candidate-fp32comp": 93,
+    "control-fp64": 100,
+    "candidate-fp64": 107,
+    "control-cuda": 114,
+    "candidate-cuda": 121,
+    "control-metal": 128,
+    "candidate-metal": 135
+  },
+  "source_candidate_applied": false,
+  "source_build_hold_release": false,
+  "scope": "Concrete offline compiler metadata only pending independent review/root launch. Composite private trace+stencil import selection remains unproved. No provider/numerical/JIT/RSS/performance/adoption/fullscience/Mandatory/release qualification."
+}

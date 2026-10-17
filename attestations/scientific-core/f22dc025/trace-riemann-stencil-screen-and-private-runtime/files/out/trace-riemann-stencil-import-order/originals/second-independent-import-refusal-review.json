@@ -1,0 +1,442 @@
+{
+  "schema": "sirius-riemann-stencil-private-first-I-second-refusal-independent-review-v1",
+  "created_utc": "2026-10-15T20:48:17.211307+00:00",
+  "passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "refusal_provenance_accepted": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "classification": "PRIVATE_STENCIL_OVERRIDE_NOT_SELECTED_NO_LATER_OPERATIONS",
+  "reviewer_scope": "Independent passive JSON/text/hash/read-only Git; existing source/runtime/helper semantics reused. No helper/project import/parser/tool/compiler/provider/test/network/process query or canonical/other-packet mutation.",
+  "critical_pins": {
+    "source-contracts.json": {
+      "path": "out/trace-riemann-stencil-private-import/source-contracts.json",
+      "bytes": 50985,
+      "sha256": "c06a6c8a9ffde414e82a5c3796f881e77a29ef90a02a98874fd88ee4e5cbd945"
+    },
+    "independent-source-review.json": {
+      "path": "out/trace-riemann-stencil-private-import/independent-source-review.json",
+      "bytes": 10956,
+      "sha256": "738f1f35298013f581bafd374183d485427cafced52d3dceb8495a3f76b0ca0f"
+    },
+    "independent-runtime-review.json": {
+      "path": "out/trace-riemann-stencil-private-import/independent-runtime-review.json",
+      "bytes": 10524,
+      "sha256": "1d0530e98cccb17a103c31d82a52087618931858d8405b14758b3f6b0a46c718"
+    },
+    "actions.json": {
+      "path": "out/trace-riemann-stencil-private-import/actions.json",
+      "bytes": 4606239,
+      "sha256": "57dbc7d384c2cde3ae8b2f53bcc3aff5e9f56f2b95a1a23e6fcca0beaf6232e0"
+    },
+    "readiness.json": {
+      "path": "out/trace-riemann-stencil-private-import/readiness.json",
+      "bytes": 15259,
+      "sha256": "56fdd7c26b24f4b93ecdef2d8f1a3d2aa9ca631d256760d9cf3203ba1ec7692c"
+    },
+    "root-preflight.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-preflight.json",
+      "bytes": 1580596,
+      "sha256": "0a194bb33ea16dd02c92ba8ccd4320ef52389c6ff10766802559e64c8b7f1366"
+    },
+    "root-runtime-release.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-runtime-release.json",
+      "bytes": 434081,
+      "sha256": "1fe1f70fc7e92ea1ae4cc66f953c71934cb063bef8e0efedc71d03c66a93b9bc"
+    },
+    "root-source-open-observer.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-source-open-observer.json",
+      "bytes": 5825,
+      "sha256": "8da31ce32ae63b70f602908f40eab794102173f80e735cae15e3fe468c6e3d2f"
+    },
+    "root-source-open-observer-membership.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-source-open-observer-membership.json",
+      "bytes": 2498,
+      "sha256": "1e1654d79637fa22e11181302867f8f4c1af8cd0a297033229b11289a125daee"
+    },
+    "root-source-open-observer-reuse.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-source-open-observer-reuse.json",
+      "bytes": 2515,
+      "sha256": "59eb7fe1b7a0a2faaada28b2305f900314481c92c3372409e9fae943e4df67b7"
+    },
+    "root-wrapper-result-candidate-fp32.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-wrapper-result-candidate-fp32.json",
+      "bytes": 947,
+      "sha256": "9a0e29e2675f8ee071c67e2adbda219d835074b01d217fe4109da651351711f8"
+    },
+    "root-import-refusal.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-import-refusal.json",
+      "bytes": 20547,
+      "sha256": "dc1fdae40594d90596f14d21688aecb83cf3628f1f40b10e68db30ecc2c1ea2d"
+    },
+    "root-source-opens-candidate-fp32.trace": {
+      "path": "out/trace-riemann-stencil-private-import/root-source-opens-candidate-fp32.trace",
+      "bytes": 3078094,
+      "sha256": "22638ac2954de45742b336cb137c2d2183469c31cfc875d51d03c4d2fe9b0d60"
+    },
+    "root-owner-product-control-fp32.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-owner-product-control-fp32.json",
+      "bytes": 3698,
+      "sha256": "a4b6c3f79c06dbd4a919dee94e75229e10d0b598847d861c573f10ecaee57b5f"
+    },
+    "root-owner-product-candidate-fp32.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-owner-product-candidate-fp32.json",
+      "bytes": 4126,
+      "sha256": "7f263524cf900d7d02e3b67e0902a8b5a6c90175306ed0ad4135463502a0083d"
+    },
+    "root-posttools-control-fp32.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-posttools-control-fp32.json",
+      "bytes": 4762,
+      "sha256": "830e63d2f6af40c040f4619e9387d66eb9d5fcbf6c306116f83da6b8b6953c01"
+    },
+    "root-accepted-control-fp32.json": {
+      "path": "out/trace-riemann-stencil-private-import/root-accepted-control-fp32.json",
+      "bytes": 4442,
+      "sha256": "a682cfc4e0f5290c574081db6b3d669bf56326477d16dfed573268fb4a58d64d"
+    }
+  },
+  "completed_owner_scope": {
+    "owners": [
+      {
+        "case": "control-fp32",
+        "owner": {
+          "path": "out/trace-riemann-stencil-private-import/control-fp32/owner.json",
+          "bytes": 3770,
+          "sha256": "997fdca87c33c0e0154695dc591f73505ffa63edcb31c1bed226479096eb1016"
+        },
+        "owner_passed": true,
+        "owner_seconds": 6.532784477982204,
+        "samples": 25,
+        "sampled_peak_aggregate_RSS_KiB": 487484,
+        "whole_input_rows": 4636,
+        "product": {
+          "path": "out/trace-riemann-stencil-private-import/control-fp32/trace.spv",
+          "bytes": 2994452,
+          "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+        }
+      },
+      {
+        "case": "candidate-fp32",
+        "owner": {
+          "path": "out/trace-riemann-stencil-private-import/candidate-fp32/owner.json",
+          "bytes": 3910,
+          "sha256": "464cdc57aae49a9cd3467fad33462eaf2f556abdb96eeb48af8e84e6e074474f"
+        },
+        "owner_passed": true,
+        "owner_seconds": 6.2968733239977155,
+        "samples": 14,
+        "sampled_peak_aggregate_RSS_KiB": 466124,
+        "whole_input_rows": 4643,
+        "product": {
+          "path": "out/trace-riemann-stencil-private-import/candidate-fp32/trace.spv",
+          "bytes": 2620748,
+          "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+        }
+      }
+    ],
+    "both_original_helpers_owner_terminal_exit0": true,
+    "candidate_wrapper_actual_closed_exit": 0,
+    "source_and_inputs_unchanged": true,
+    "limits": {
+      "seconds": 300,
+      "sampled_aggregate_RSS_KiB": 4194304,
+      "reserve_KiB": 2097152
+    },
+    "sample_count": 39,
+    "no_sampled_guard_failure": true,
+    "cleanup_and_remaining_owned_empty": true,
+    "provider_mappings_empty": true
+  },
+  "whole_input_closure": {
+    "static_current_pins": 4635,
+    "beforeafter_rows": 18558,
+    "normalized_union": 4643,
+    "owner_rows": [
+      4636,
+      4643
+    ],
+    "all_before_after_current_content_and_resolved_identities_exact": true,
+    "second_owner_contains_exact_first7_raw_product_records": true,
+    "raw_root_and_accepted_control_posttool_pins_current": true,
+    "saved_four_original_birth_absence_records": [
+      {
+        "case": "control-fp32",
+        "role": "controller",
+        "pid": 1166201,
+        "saved_start_ticks": "14635659",
+        "fresh_current_start_ticks": null,
+        "original_birth_absent": true
+      },
+      {
+        "case": "control-fp32",
+        "role": "compiler-child",
+        "pid": 1166212,
+        "saved_start_ticks": "14635815",
+        "fresh_current_start_ticks": null,
+        "original_birth_absent": true
+      },
+      {
+        "case": "candidate-fp32",
+        "role": "controller",
+        "pid": 1166399,
+        "saved_start_ticks": "14640245",
+        "fresh_current_start_ticks": null,
+        "original_birth_absent": true
+      },
+      {
+        "case": "candidate-fp32",
+        "role": "compiler-child",
+        "pid": 1166499,
+        "saved_start_ticks": "14641600",
+        "fresh_current_start_ticks": null,
+        "original_birth_absent": true
+      }
+    ],
+    "reviewer_process_queries": false,
+    "absence_limit": "Saved root fresh same-owned-birth observations and owner records, not reviewer fresh or global process absence."
+  },
+  "actual_import_lineage": {
+    "Slang_child": {
+      "pid": 1166499,
+      "saved_start_ticks": "14641600",
+      "session": 1166499
+    },
+    "controller_pid": 1166399,
+    "controller_vfork_return": 5027,
+    "controller_python_exec_and_exit0_trace_checked": true,
+    "env_exec_backend_chdir_Slang_exec_and_exit0_rows": [
+      {
+        "trace_line": 5025,
+        "raw": "1166499 chdir(\"/home/astra/.project/Sirius\") = 0"
+      },
+      {
+        "trace_line": 5026,
+        "raw": "1166499 execve(\"/usr/bin/env\", [\"/usr/bin/env\", \"--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend\", \"/opt/slang/bin/slangc\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang\", \"-target\", \"spirv\", \"-profile\", \"spirv_1_5\", \"-entry\", \"ComputeMain\", \"-stage\", \"compute\", \"-I\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate\", \"-I\", \"/home/astra/.project/Sirius/src/sirius/backend/../kernels\", \"-o\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/candidate-fp32/trace.spv\"], 0x7bf9a1c07890 /* 43 vars */ <unfinished ...>"
+      },
+      {
+        "trace_line": 5028,
+        "raw": "1166499 <... execve resumed>)           = 0"
+      },
+      {
+        "trace_line": 5070,
+        "raw": "1166499 chdir(\"/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend\") = 0"
+      },
+      {
+        "trace_line": 5071,
+        "raw": "1166499 execve(\"/opt/slang/bin/slangc\", [\"/opt/slang/bin/slangc\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang\", \"-target\", \"spirv\", \"-profile\", \"spirv_1_5\", \"-entry\", \"ComputeMain\", \"-stage\", \"compute\", \"-I\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate\", \"-I\", \"/home/astra/.project/Sirius/src/sirius/backend/../kernels\", \"-o\", \"/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/candidate-fp32/trace.spv\"], 0x7fffb831a050 /* 43 vars */ <unfinished ...>"
+      },
+      {
+        "trace_line": 5073,
+        "raw": "1166499 <... execve resumed>)           = 0"
+      },
+      {
+        "trace_line": 7761,
+        "raw": "1166499 +++ exited with 0 +++"
+      }
+    ],
+    "successful_direct_Slang_source_opens": [
+      {
+        "trace_line": 5271,
+        "path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/trace.slang",
+          "bytes": 63512,
+          "sha256": "8f9d621737c3d3c64cf4a92fa1dff2bf306ef034acba28f3a1386a4384c6f2f9"
+        }
+      },
+      {
+        "trace_line": 5364,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang",
+          "bytes": 5519,
+          "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+        }
+      },
+      {
+        "trace_line": 5475,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang",
+          "bytes": 30379,
+          "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+        }
+      },
+      {
+        "trace_line": 5625,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang",
+          "bytes": 27452,
+          "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+        }
+      },
+      {
+        "trace_line": 5719,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_camera.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_camera.slang",
+          "bytes": 7542,
+          "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+        }
+      },
+      {
+        "trace_line": 5773,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang",
+          "bytes": 17259,
+          "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+        }
+      },
+      {
+        "trace_line": 5840,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_disk.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_disk.slang",
+          "bytes": 16688,
+          "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+        }
+      },
+      {
+        "trace_line": 5907,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_event.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_event.slang",
+          "bytes": 15656,
+          "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+        }
+      },
+      {
+        "trace_line": 5974,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_ellis_topology.slang",
+          "bytes": 9393,
+          "sha256": "ebf8f6413fc3d158b2bc135634a8e6c8d6790c8be8a20b217e46424ba9a58ca8"
+        }
+      },
+      {
+        "trace_line": 6090,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_point_star.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_point_star.slang",
+          "bytes": 1773,
+          "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+        }
+      },
+      {
+        "trace_line": 6195,
+        "path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang",
+        "identity": {
+          "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang",
+          "bytes": 2212,
+          "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+        }
+      }
+    ],
+    "source_opens": 11,
+    "private_trace_selected": true,
+    "actual_canonical_imports": 10,
+    "private_stencil_selected": false,
+    "actual_gr_deviation": "/home/astra/.project/Sirius/src/sirius/kernels/gr_deviation.slang",
+    "intended_gr_deviation": "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate/gr_deviation.slang",
+    "compiler_source_path_set_diff_exactly_one": true,
+    "parent_private_source_hash_opens_excluded": [
+      935,
+      8729
+    ],
+    "worker_scope": "All11 source opens occurred on exact saved main Slang PID between its exec and exit; no Slang child forks/clones observed or worker inference required. Owner/Git sibling source hashing is not input-resolution proof.",
+    "split_resumed_source_open": [
+      {
+        "start_trace_line": 6193,
+        "start_raw": "1166499 openat(AT_FDCWD</home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend>, \"/home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_trace_continuation.slang\", O_RDONLY <unfinished ...>",
+        "resumed_trace_line": 6195,
+        "resumed_raw": "1166499 <... openat resumed>)           = 3</home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang>",
+        "actual_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_trace_continuation.slang"
+      }
+    ],
+    "exact_executed_candidate_include_order": [
+      "/home/astra/.project/Sirius/out/trace-riemann-stencil-private-import/inputs/candidate",
+      "/home/astra/.project/Sirius/src/sirius/backend/../kernels"
+    ],
+    "private_first_I_was_present_but_ineffective": true,
+    "all_main_exec_rows_match_actual_owner_argv": true
+  },
+  "product_and_posttool_scope": {
+    "control": "Exact canonical2994452B/6138 product, accepted original validation and disassembly actual0 with separately recorded GNUtimeout300s/kill10s. No transferred aggregate-RSS guarantee for posttools.",
+    "candidate_product": {
+      "path": "out/trace-riemann-stencil-private-import/candidate-fp32/trace.spv",
+      "bytes": 2620748,
+      "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+    },
+    "byte_equal_prior_named_Git_product": {
+      "commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/files/out/trace-jacobi-pair-loop-screen/candidate-fp32/trace.spv",
+      "identity": {
+        "bytes": 2620748,
+        "sha256": "6368748857b402b56ae6a26984aa2ba46de2dfc0a0e9b9f2f0325059bbe71c22"
+      }
+    },
+    "prior_ordinary_ASM_corroboration": {
+      "commit": "d312cb97f3be356f00aa15bc22ae6ea0abdd211e",
+      "path": "attestations/scientific-core/f22dc025/trace-jacobi-pair-loop-compiler-screen/files/out/trace-jacobi-pair-loop-screen/root-spv-candidate-fp32.spvasm",
+      "identity": {
+        "bytes": 7678941,
+        "sha256": "d09528306c6799a2effbea000f06c576d68ef48e0105eb3253b7f7b447021163"
+      },
+      "scope": "Existing ordinary disassembly of byte-identical prior pair-loop program; not a newly executed candidate posttool or validation transfer."
+    },
+    "both_named_Git_blobs_independently_fullbytes_checked": true,
+    "new_candidate_val_dis_executed": false,
+    "candidate_root_accepted": false,
+    "interpretation": "Candidate filename/exit0 cannot identify new stencil. Actual opened canonical gr_deviation and exact prior pairloop output prove refusal of intended two-private-source identity. Prior ordinary ASM is old byte-identical corroboration, not a newly executed posttool or validation transfer."
+  },
+  "manual_refusal_enforced": {
+    "initial_released_slots_only": 2,
+    "later_eight_case_directories_absent": true,
+    "no_newcandidate_posttool_acceptance_files": true,
+    "all5control_gate_met": false,
+    "no_provider_scientific_test": true,
+    "no_source_application_or_hold_release": true,
+    "no_unchanged_retry_hidden_flags_or_guard_raise": true,
+    "next_change": "Any private search-path recipe correction requires a separate explicitly reviewed packet after truthful refusal preservation/publication; this review authorizes no operation.",
+    "second_distinct_recipe": "This separate source-reviewed experiment added private -I before canonical -I for candidates only. Actual argv is proved, but the override still was not selected. No new compile or automatic flag change authorized."
+  },
+  "observer_boundary": {
+    "tool_and_DSO_pins_current": true,
+    "wrapper_argv_matches_admitted_membership_supplement": true,
+    "guard_scope": "Root strace observer is outside Slang/controller aggregate sampled RSS; separately pinned tool/DSOs/trace. Instrumented owner times are not a compile-performance comparison or memory benefit.",
+    "capability_reuse": {
+      "record": {
+        "path": "out/trace-riemann-stencil-private-import/root-source-open-observer-reuse.json",
+        "bytes": 2515,
+        "sha256": "59eb7fe1b7a0a2faaada28b2305f900314481c92c3372409e9fae943e4df67b7"
+      },
+      "copied_record_count": 12,
+      "full_named_Git_byte_identity_independently_checked": true,
+      "original_commit": "05171782f392f060ca2ffa50747faa813069c5a6",
+      "new_capability_operations": 0,
+      "historical_paths": "Immutable observer records retain original lexical paths. Copies checked at new namespace and named051717 Git bytes; no retired live-path replay."
+    },
+    "source_open_parser_scope": "Reuses the prior corrected execve-resumed parser; no new collector failure or workload retry."
+  },
+  "limits": [
+    "Both compiler owners remain passed; only intended stencil import-selection gate is refused.",
+    "No new stencil emitted/arithmetic/ABI/CFG/numerical or runtime result.",
+    "No JIT allocation/cause, RSS/performance benefit or scientific/Mandatory/native/release/adoption claim.",
+    "Canonical source/build/product holds remain; preserve refusal before causal recipe change."
+  ],
+  "working_tree": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "new_review_awaits_preservation": true
+  },
+  "verdict": "SECOND REFUSAL: private-first -I candidate still opened canonical gr_deviation and emitted prior pairloop-only bytes. Both compiler owners remain passed; input/ownership/source-lineage audit accepted, no later progression/adoption."
+}

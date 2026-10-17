@@ -1,0 +1,39 @@
+{
+  "schema": "sirius-shared-segment-phases-ROOT-independent-source-review-v1",
+  "created_utc": "2026-10-17T23:42:08.949823+00:00",
+  "passed": true,
+  "author": "divide_contract_review",
+  "reviewer": "ROOT; independent of source author, actual future compiler operator",
+  "files": {
+    "out/trace-jacobi-shared-segment-phases/candidate-gr_deviation.slang": {
+      "bytes": 18264,
+      "sha256": "a75bcee061333845b47b94124c2d9dd7bce20ec474df21cf9d9bc80bf2c67994"
+    },
+    "out/trace-jacobi-shared-segment-phases/candidate-trace.slang": {
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    "out/trace-jacobi-shared-segment-phases/original-gr_deviation.slang": {
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    "out/trace-jacobi-shared-segment-phases/original-trace.slang": {
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    "out/trace-jacobi-shared-segment-phases/patch.diff": {
+      "bytes": 5093,
+      "sha256": "18b137951c96197b0e93b2a705f58c3af0130a90de13d4675725c19135fa1b53"
+    },
+    "out/trace-jacobi-shared-segment-phases/source-contracts.json": {
+      "bytes": 7551,
+      "sha256": "4f6cac7c5058a1d3fe0182d41465811f2951fa85420ff85a5c47ad637e77f255"
+    }
+  },
+  "mechanical_checks": "Exact patch and all input pins; trace identical; only helper phase region changes;16namedk declarations/finalcommit/outsidebytes unchanged; all8 RHS argument lists exact after selected equal tangent substitution; exact midpoint expression tokens; original3geometry calls shareone textual call each with identical metric/outputargs; no newarrays.",
+  "composition": "phase0 establishes k1A/B in originalorder; phase1 computes original midpoint then establishes k2A,k3A,k2B,k3B in originalorder;phase2 establishes k4A/B. Original Jacobi inouts remain unchanged until byteexact finalcommits. R/Gamma outputs fully overwritten eachphase by reused reviewed bodies; no new preconditions/refusal/finitepolicy/statewrites or physicalwork reduction.",
+  "required_next_gate": "One original-recipe firstFP32 compile, ordinary validation/ABI/CFG verify actual bounded threephase sharing and definite assignment before remainingcandidate targets/runtime. Reuse unchanged canonical baseline controls and exact tooling/sourcegraph evidence with explicit matching producer/input joins; no repeated fivecontrolreplay.",
+  "formal_or_numerical_or_benefit_proof": false,
+  "source_applied": false,
+  "scope": "Independent source and composition check only. Actual lowering, liveness/spills/runtime/numerics/performance remain unproved."
+}

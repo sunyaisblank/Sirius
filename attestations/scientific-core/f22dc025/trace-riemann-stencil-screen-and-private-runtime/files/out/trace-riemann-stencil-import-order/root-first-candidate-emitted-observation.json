@@ -1,0 +1,890 @@
+{
+  "schema": "sirius-import-order-first-FP32-root-emitted-static-observation-v1",
+  "created_utc": "2026-10-15T21:07:22.784089+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "scope": "FirstFP32 offline ABI/type/mode equality and three actual bounded distance-loop headers only; independent arithmetic/dataflow and root combined gate remain required. No later8/all5control/sourceattribution, numerical/provider/runtime/JIT/RSS/performance/adoption qualification.",
+  "control_candidate_recursive7bindings_types_and_all_member_decorations_equal": true,
+  "entry_local_caps_extensions_memory_widths_equal": true,
+  "interface_signature": {
+    "capabilities": [
+      [
+        "Shader"
+      ]
+    ],
+    "extensions": [
+      [
+        "SPV_KHR_storage_buffer_storage_class"
+      ]
+    ],
+    "extinst_imports": [
+      [
+        "GLSL.std.450"
+      ]
+    ],
+    "memory_model": [
+      [
+        "Logical",
+        "GLSL450"
+      ]
+    ],
+    "execution_modes": [
+      [
+        "LocalSize",
+        "8",
+        "8",
+        "1"
+      ]
+    ],
+    "entry": [
+      "GLCompute",
+      "main"
+    ],
+    "widths": [
+      [
+        "OpTypeFloat",
+        "32"
+      ],
+      [
+        "OpTypeInt",
+        "32",
+        "0"
+      ],
+      [
+        "OpTypeInt",
+        "32",
+        "1"
+      ]
+    ],
+    "bindings": {
+      "(0, 0)": {
+        "type": {
+          "op": "OpTypePointer",
+          "shape": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "shape": [
+                {
+                  "type": {
+                    "op": "OpTypeRuntimeArray",
+                    "shape": [
+                      {
+                        "op": "OpTypeFloat",
+                        "shape": [
+                          "32"
+                        ],
+                        "decorations": []
+                      }
+                    ],
+                    "decorations": [
+                      [
+                        "ArrayStride",
+                        "4"
+                      ]
+                    ]
+                  },
+                  "member_decorations": [
+                    [
+                      "Offset",
+                      "0"
+                    ]
+                  ]
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ]
+            }
+          ],
+          "decorations": []
+        },
+        "storage": "StorageBuffer",
+        "variable_decorations": [
+          [
+            "Binding",
+            "0"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ]
+        ]
+      },
+      "(0, 1)": {
+        "type": {
+          "op": "OpTypePointer",
+          "shape": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "shape": [
+                {
+                  "type": {
+                    "op": "OpTypeRuntimeArray",
+                    "shape": [
+                      {
+                        "op": "OpTypeFloat",
+                        "shape": [
+                          "32"
+                        ],
+                        "decorations": []
+                      }
+                    ],
+                    "decorations": [
+                      [
+                        "ArrayStride",
+                        "4"
+                      ]
+                    ]
+                  },
+                  "member_decorations": [
+                    [
+                      "Offset",
+                      "0"
+                    ]
+                  ]
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ]
+            }
+          ],
+          "decorations": []
+        },
+        "storage": "StorageBuffer",
+        "variable_decorations": [
+          [
+            "Binding",
+            "1"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ],
+          [
+            "NonWritable"
+          ]
+        ]
+      },
+      "(0, 2)": {
+        "type": {
+          "op": "OpTypePointer",
+          "shape": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "shape": [
+                {
+                  "type": {
+                    "op": "OpTypeRuntimeArray",
+                    "shape": [
+                      {
+                        "op": "OpTypeInt",
+                        "shape": [
+                          "32",
+                          "0"
+                        ],
+                        "decorations": []
+                      }
+                    ],
+                    "decorations": [
+                      [
+                        "ArrayStride",
+                        "4"
+                      ]
+                    ]
+                  },
+                  "member_decorations": [
+                    [
+                      "Offset",
+                      "0"
+                    ]
+                  ]
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ]
+            }
+          ],
+          "decorations": []
+        },
+        "storage": "StorageBuffer",
+        "variable_decorations": [
+          [
+            "Binding",
+            "2"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ],
+          [
+            "NonWritable"
+          ]
+        ]
+      },
+      "(0, 3)": {
+        "type": {
+          "op": "OpTypePointer",
+          "shape": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "shape": [
+                {
+                  "type": {
+                    "op": "OpTypeRuntimeArray",
+                    "shape": [
+                      {
+                        "op": "OpTypeFloat",
+                        "shape": [
+                          "32"
+                        ],
+                        "decorations": []
+                      }
+                    ],
+                    "decorations": [
+                      [
+                        "ArrayStride",
+                        "4"
+                      ]
+                    ]
+                  },
+                  "member_decorations": [
+                    [
+                      "Offset",
+                      "0"
+                    ]
+                  ]
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ]
+            }
+          ],
+          "decorations": []
+        },
+        "storage": "StorageBuffer",
+        "variable_decorations": [
+          [
+            "Binding",
+            "3"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ],
+          [
+            "NonWritable"
+          ]
+        ]
+      },
+      "(0, 4)": {
+        "type": {
+          "op": "OpTypePointer",
+          "shape": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "shape": [
+                {
+                  "type": {
+                    "op": "OpTypeRuntimeArray",
+                    "shape": [
+                      {
+                        "op": "OpTypeInt",
+                        "shape": [
+                          "32",
+                          "0"
+                        ],
+                        "decorations": []
+                      }
+                    ],
+                    "decorations": [
+                      [
+                        "ArrayStride",
+                        "4"
+                      ]
+                    ]
+                  },
+                  "member_decorations": [
+                    [
+                      "Offset",
+                      "0"
+                    ]
+                  ]
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ]
+            }
+          ],
+          "decorations": []
+        },
+        "storage": "StorageBuffer",
+        "variable_decorations": [
+          [
+            "Binding",
+            "4"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ],
+          [
+            "NonWritable"
+          ]
+        ]
+      },
+      "(0, 5)": {
+        "type": {
+          "op": "OpTypePointer",
+          "shape": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "shape": [
+                {
+                  "type": {
+                    "op": "OpTypeRuntimeArray",
+                    "shape": [
+                      {
+                        "op": "OpTypeInt",
+                        "shape": [
+                          "32",
+                          "0"
+                        ],
+                        "decorations": []
+                      }
+                    ],
+                    "decorations": [
+                      [
+                        "ArrayStride",
+                        "4"
+                      ]
+                    ]
+                  },
+                  "member_decorations": [
+                    [
+                      "Offset",
+                      "0"
+                    ]
+                  ]
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ]
+            }
+          ],
+          "decorations": []
+        },
+        "storage": "StorageBuffer",
+        "variable_decorations": [
+          [
+            "Binding",
+            "5"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ],
+          [
+            "NonWritable"
+          ]
+        ]
+      },
+      "(0, 6)": {
+        "type": {
+          "op": "OpTypePointer",
+          "shape": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "shape": [
+                {
+                  "type": {
+                    "op": "OpTypeRuntimeArray",
+                    "shape": [
+                      {
+                        "op": "OpTypeStruct",
+                        "shape": [
+                          {
+                            "type": {
+                              "op": "OpTypeVector",
+                              "shape": [
+                                {
+                                  "op": "OpTypeFloat",
+                                  "shape": [
+                                    "32"
+                                  ],
+                                  "decorations": []
+                                },
+                                "4"
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "0"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeVector",
+                              "shape": [
+                                {
+                                  "op": "OpTypeFloat",
+                                  "shape": [
+                                    "32"
+                                  ],
+                                  "decorations": []
+                                },
+                                "4"
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "16"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeStruct",
+                              "shape": [
+                                {
+                                  "type": {
+                                    "op": "OpTypeArray",
+                                    "shape": [
+                                      {
+                                        "op": "OpTypeVector",
+                                        "shape": [
+                                          {
+                                            "op": "OpTypeFloat",
+                                            "shape": [
+                                              "32"
+                                            ],
+                                            "decorations": []
+                                          },
+                                          "4"
+                                        ],
+                                        "decorations": []
+                                      },
+                                      {
+                                        "constant_type": {
+                                          "op": "OpTypeInt",
+                                          "shape": [
+                                            "32",
+                                            "1"
+                                          ],
+                                          "decorations": []
+                                        },
+                                        "value": [
+                                          "4"
+                                        ]
+                                      }
+                                    ],
+                                    "decorations": [
+                                      [
+                                        "ArrayStride",
+                                        "16"
+                                      ]
+                                    ]
+                                  },
+                                  "member_decorations": [
+                                    [
+                                      "Offset",
+                                      "0"
+                                    ]
+                                  ]
+                                }
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "32"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeStruct",
+                              "shape": [
+                                {
+                                  "type": {
+                                    "op": "OpTypeArray",
+                                    "shape": [
+                                      {
+                                        "op": "OpTypeVector",
+                                        "shape": [
+                                          {
+                                            "op": "OpTypeFloat",
+                                            "shape": [
+                                              "32"
+                                            ],
+                                            "decorations": []
+                                          },
+                                          "4"
+                                        ],
+                                        "decorations": []
+                                      },
+                                      {
+                                        "constant_type": {
+                                          "op": "OpTypeInt",
+                                          "shape": [
+                                            "32",
+                                            "1"
+                                          ],
+                                          "decorations": []
+                                        },
+                                        "value": [
+                                          "4"
+                                        ]
+                                      }
+                                    ],
+                                    "decorations": [
+                                      [
+                                        "ArrayStride",
+                                        "16"
+                                      ]
+                                    ]
+                                  },
+                                  "member_decorations": [
+                                    [
+                                      "Offset",
+                                      "0"
+                                    ]
+                                  ]
+                                }
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "96"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeVector",
+                              "shape": [
+                                {
+                                  "op": "OpTypeFloat",
+                                  "shape": [
+                                    "32"
+                                  ],
+                                  "decorations": []
+                                },
+                                "4"
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "160"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeVector",
+                              "shape": [
+                                {
+                                  "op": "OpTypeFloat",
+                                  "shape": [
+                                    "32"
+                                  ],
+                                  "decorations": []
+                                },
+                                "4"
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "176"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeVector",
+                              "shape": [
+                                {
+                                  "op": "OpTypeFloat",
+                                  "shape": [
+                                    "32"
+                                  ],
+                                  "decorations": []
+                                },
+                                "4"
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "192"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeVector",
+                              "shape": [
+                                {
+                                  "op": "OpTypeFloat",
+                                  "shape": [
+                                    "32"
+                                  ],
+                                  "decorations": []
+                                },
+                                "4"
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "208"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeVector",
+                              "shape": [
+                                {
+                                  "op": "OpTypeFloat",
+                                  "shape": [
+                                    "32"
+                                  ],
+                                  "decorations": []
+                                },
+                                "4"
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "224"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeVector",
+                              "shape": [
+                                {
+                                  "op": "OpTypeInt",
+                                  "shape": [
+                                    "32",
+                                    "0"
+                                  ],
+                                  "decorations": []
+                                },
+                                "4"
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "240"
+                              ]
+                            ]
+                          },
+                          {
+                            "type": {
+                              "op": "OpTypeVector",
+                              "shape": [
+                                {
+                                  "op": "OpTypeInt",
+                                  "shape": [
+                                    "32",
+                                    "0"
+                                  ],
+                                  "decorations": []
+                                },
+                                "4"
+                              ],
+                              "decorations": []
+                            },
+                            "member_decorations": [
+                              [
+                                "Offset",
+                                "256"
+                              ]
+                            ]
+                          }
+                        ],
+                        "decorations": []
+                      }
+                    ],
+                    "decorations": [
+                      [
+                        "ArrayStride",
+                        "272"
+                      ]
+                    ]
+                  },
+                  "member_decorations": [
+                    [
+                      "Offset",
+                      "0"
+                    ]
+                  ]
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ]
+            }
+          ],
+          "decorations": []
+        },
+        "storage": "StorageBuffer",
+        "variable_decorations": [
+          [
+            "Binding",
+            "6"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ]
+        ]
+      }
+    }
+  },
+  "ordinary_one_function_no_calls": true,
+  "three_distance_loop_headers": [
+    {
+      "counter": "%84291",
+      "header": "%84431",
+      "continue": "%84762",
+      "merge": "%84763",
+      "initial_store_line": 98019,
+      "loop_merge_line": 98022,
+      "signed_bound_le3_line": 98030,
+      "increment_store_line": 100333,
+      "counter_stores_in_live_loop_region": 2,
+      "global_reused_slot_store_count": 4,
+      "counter_resets1_bound3_increment1": true,
+      "proof_lines": {
+        "98019": "               OpStore %84291 %int_1",
+        "98022": "               OpLoopMerge %84763 %84762 DontUnroll",
+        "98030": "      %84436 = OpSLessThanEqual %bool %84435 %int_3",
+        "100333": "               OpStore %84291 %84761"
+      }
+    },
+    {
+      "counter": "%88146",
+      "header": "%88286",
+      "continue": "%88617",
+      "merge": "%88618",
+      "initial_store_line": 103249,
+      "loop_merge_line": 103252,
+      "signed_bound_le3_line": 103260,
+      "increment_store_line": 105563,
+      "counter_stores_in_live_loop_region": 2,
+      "global_reused_slot_store_count": 4,
+      "counter_resets1_bound3_increment1": true,
+      "proof_lines": {
+        "103249": "               OpStore %88146 %int_1",
+        "103252": "               OpLoopMerge %88618 %88617 DontUnroll",
+        "103260": "      %88291 = OpSLessThanEqual %bool %88290 %int_3",
+        "105563": "               OpStore %88146 %88616"
+      }
+    },
+    {
+      "counter": "%92051",
+      "header": "%92191",
+      "continue": "%92522",
+      "merge": "%92523",
+      "initial_store_line": 108952,
+      "loop_merge_line": 108955,
+      "signed_bound_le3_line": 108963,
+      "increment_store_line": 111266,
+      "counter_stores_in_live_loop_region": 2,
+      "global_reused_slot_store_count": 4,
+      "counter_resets1_bound3_increment1": true,
+      "proof_lines": {
+        "108952": "               OpStore %92051 %int_1",
+        "108955": "               OpLoopMerge %92523 %92522 DontUnroll",
+        "108963": "      %92196 = OpSLessThanEqual %bool %92195 %int_3",
+        "111266": "               OpStore %92051 %92521"
+      }
+    }
+  ],
+  "root_prewrite_correction": "Initial observer stopped before writes because it assumed a unique integer slot throughout the inlined kernel. Compiler reuses Function slots outside their live loop region; counter stores and condition are now bounded by the exact initialized loop/header/merge, with global store counts disclosed. No shader/tool/posttool reexecution or input change.",
+  "source_build_hold_release": false,
+  "files": {
+    "out/trace-riemann-stencil-import-order/root-spv-control-fp32.spvasm": {
+      "bytes": 8763285,
+      "sha256": "8c19a116890f402ce5f94bbf948bc845faaa465b27e1d1bf3021762d14f212d4"
+    },
+    "out/trace-riemann-stencil-import-order/root-spv-candidate-fp32.spvasm": {
+      "bytes": 7248800,
+      "sha256": "d9de1abac2b4f71c0a22164d23c4d3ccab720f0b701072fc344ac0469e260240"
+    },
+    "out/trace-riemann-stencil-import-order/control-fp32/trace.spv": {
+      "bytes": 2994452,
+      "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp32/trace.spv": {
+      "bytes": 2470232,
+      "sha256": "b17d86904d6cbff957deebcc94c32956eb0aa90ddd17ca284f797c8d58f252ec"
+    },
+    "out/trace-riemann-stencil-import-order/root-import-source-opens.json": {
+      "bytes": 17422,
+      "sha256": "e2ed55fbbb4d5ff141309a2c3338ad0fcd014c5a93b259231e04b5ee5b979f29"
+    },
+    "out/trace-riemann-stencil-import-order/root-owner-product-control-fp32.json": {
+      "bytes": 3679,
+      "sha256": "29828e63c78fa848ba7108d6d283a7f1acc9e3d1b5f2900ee017a12773e68dbe"
+    },
+    "out/trace-riemann-stencil-import-order/root-owner-product-candidate-fp32.json": {
+      "bytes": 4101,
+      "sha256": "464e03071b6f66f7599d77a1491db076aabd243b344e7fbecd82135916db9b88"
+    },
+    "out/trace-riemann-stencil-import-order/root-posttools-control-fp32.json": {
+      "bytes": 4730,
+      "sha256": "c39966c5cfe9764baa625426809e0db6cfb962f3dcf330277f27209ecf4981b3"
+    },
+    "out/trace-riemann-stencil-import-order/root-posttools-candidate-fp32.json": {
+      "bytes": 4763,
+      "sha256": "7473a75daa411f8bd08cd1fa33219230152aa9565fbc947d035e956be66f6bef"
+    }
+  }
+}

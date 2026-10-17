@@ -1,0 +1,89 @@
+{
+  "schema": "sirius-trace-stencil-root-accepted-offline-operation-v1",
+  "case": "control-cuda",
+  "created_utc": "2026-10-17T23:28:14.102353+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 4425,
+    "sha256": "82e59895c02e36f24491f6a7dcdb329fcb70e3b8a83f3434d05db0718c8477b3"
+  },
+  "posttools": {
+    "bytes": 1164,
+    "sha256": "8093ca1b952b1814d260fc791ba92626c8e1f2cec6b6723fa2942e6d1d5c09d3"
+  },
+  "whole_input_rows": 4768,
+  "product": {
+    "path": "out/trace-riemann-stencil-import-order/control-cuda/trace.cu",
+    "bytes": 321379,
+    "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+  },
+  "role": "control",
+  "variant": "cuda",
+  "matching_original_control_byteequal_baseline": true,
+  "SPIRV_original_validator_and_disassembly_passed": false,
+  "emitted_entry": null,
+  "emitted_local_size": null,
+  "all5_control_attribution_gate_and_complete_CFG_ABI_footprint_review_pending": true,
+  "files": {
+    "out/trace-riemann-stencil-import-order/control-cuda/samples.jsonl": {
+      "bytes": 892,
+      "sha256": "b8bb00586310fa0bde1c69b1ab4e9ba409618b750eaa3b2fcea62766d91319fd"
+    },
+    "out/trace-riemann-stencil-import-order/control-cuda/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/control-cuda/inputs-before.json": {
+      "bytes": 1573711,
+      "sha256": "e57a255f20b21adf17e7b8fdd8b06a9113ef5ba73529d5e2ec75e355a0cd7cb0"
+    },
+    "out/trace-riemann-stencil-import-order/control-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/control-cuda/inputs-after.json": {
+      "bytes": 1573711,
+      "sha256": "e57a255f20b21adf17e7b8fdd8b06a9113ef5ba73529d5e2ec75e355a0cd7cb0"
+    },
+    "out/trace-riemann-stencil-import-order/control-cuda/owner.json": {
+      "bytes": 3509,
+      "sha256": "d169a9e6b75da010f3245e3dcaacaf68749486cf951d93746c86c4c3db567fbf"
+    },
+    "out/trace-riemann-stencil-import-order/control-cuda/trace.cu": {
+      "bytes": 321379,
+      "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+    },
+    "out/trace-riemann-stencil-import-order/root-prelaunch-control-cuda.json": {
+      "bytes": 3192,
+      "sha256": "18f3b1cf3c65820b37c44ce552d4f1ba57df2784c5f042f75f1dbf0b9a012658"
+    },
+    "out/trace-riemann-stencil-import-order/root-helper-control-cuda.log": {
+      "bytes": 1220,
+      "sha256": "703c3472dc02a97d7a8a5b2d2a85d01cfd9f3b239269547f15486ac5f8dc5011"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-observation.json": {
+      "bytes": 11599,
+      "sha256": "3f1e7c863451ef8b8a475596e97e2340d8313cb30046053c90cda0a6f8e5c38a"
+    },
+    "out/trace-riemann-stencil-import-order/independent-continuation-environment-review.json": {
+      "bytes": 5894,
+      "sha256": "3902638a40ff7ef2e0cb9b1ac0ab8ec507ab66dee8d502b2f1bde8dab7f1125f"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-release.json": {
+      "bytes": 3784,
+      "sha256": "bee447c1e0e6d4b743a01c33de4ca0cd7f434856ce79745837e50d37b1b13edc"
+    },
+    "out/trace-riemann-stencil-import-order/root-owner-product-control-cuda.json": {
+      "bytes": 4425,
+      "sha256": "82e59895c02e36f24491f6a7dcdb329fcb70e3b8a83f3434d05db0718c8477b3"
+    },
+    "out/trace-riemann-stencil-import-order/root-posttools-control-cuda.json": {
+      "bytes": 1164,
+      "sha256": "8093ca1b952b1814d260fc791ba92626c8e1f2cec6b6723fa2942e6d1d5c09d3"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

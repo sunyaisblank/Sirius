@@ -1,0 +1,113 @@
+{
+  "schema": "sirius-riemann-stencil-independent-continuation-environment-review-v1",
+  "created_utc": "2026-10-17T23:25:22.156877+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": true,
+  "decision": "NARROW_PATH_CONTINUATION_ACCEPTABLE_PENDING_ROOT_RELEASE",
+  "review_scope": "Only launcher-PATH change and continued identity of direct tools/recipes, frozen metadata and accepted checkpoints. Prior source/runtime/import/emitted reviews are reused; this is not a new full ownership or emitted-product audit.",
+  "root_observation": {
+    "path": "out/trace-riemann-stencil-import-order/root-continuation-environment-observation.json",
+    "bytes": 11599,
+    "sha256": "3f1e7c863451ef8b8a475596e97e2340d8313cb30046053c90cda0a6f8e5c38a"
+  },
+  "direct_metadata_and_tool_checks": {
+    "root_observation_metadata_links_rehashed": 6,
+    "operation_tool_pins_rehashed": 9,
+    "saved_ROOT_PATH_resolution_targets_rehashed": [
+      "git",
+      "python3",
+      "env",
+      "timeout"
+    ],
+    "all4725_static_current_matches": "Reused fresh ROOT hash observation, joined to exact unchanged root-preflight and actions. No duplicate whole-installation/history sweep.",
+    "original_owner_guard_hashes_exact": true,
+    "four_accepted_checkpoint_pins": {
+      "control-fp32": {
+        "bytes": 4409,
+        "sha256": "585c265a87faf9a2d7eb8d3947d39c3cd72fa68a84284e2747a2498f6e052e84"
+      },
+      "candidate-fp32": {
+        "bytes": 6611,
+        "sha256": "72c7cdc8b71a8ef249b0498998e505323bd9849b751d21c985f966c6af512a66"
+      },
+      "control-fp32comp": {
+        "bytes": 4484,
+        "sha256": "23282a95bbb51a4c64424b72fa755952dd5d704af59329069d7e4d3b5048c8c4"
+      },
+      "candidate-fp32comp": {
+        "bytes": 4522,
+        "sha256": "728af4a0de6ec501bf6d5c36ffd81c207fb6e3ad5e010dda4e3dfbb322fc2249"
+      }
+    },
+    "accepted_checkpoint_leaf_hash_comparisons": 75,
+    "remaining_six_case_prelaunch_helperlog_absent": true
+  },
+  "environment_delta": {
+    "changed_selected_keys": [
+      "PATH"
+    ],
+    "prior_PATH_sha256": "58bfa45d07b8d3258a7eeefac9d30b86571233b41480a21181f41dda42594f2f",
+    "current_PATH_sha256": "859119cfd5943ae1773ac65c1eae0511029f7209458544be932a6ff9cba94e6d",
+    "LANG_LC_CTYPE_LC_ALL_unchanged": "C.UTF-8",
+    "launcher_changes": "Codex 0.162.1 to 0.163.0 and temporary PATH component; later Windows PowerShell/Docker order differs.",
+    "full_environment_identity_claim": false,
+    "old_frozen_environment_records_untouched_and_historical": true
+  },
+  "executed_path_source_reasoning": {
+    "implicit_git": "run_owned tracked-source query and guard.source_identity invoke git; saved fresh ROOT resolution is /usr/bin/git and its bytes/hash match the frozen tool.",
+    "Python": "ROOT uses absolute /usr/bin/python3 resolving to frozen /usr/bin/python3.12, optimize=0. Helper shebang is unused.",
+    "compiler": "All six original action argv begin absolute /usr/bin/env, exact backend --chdir and absolute /opt/slang/bin/slangc; control/candidate source and include ordering remain unchanged.",
+    "posttools": "Original separately governed posttools use absolute /usr/bin/timeout plus absolute frozen spirv-val/dis. No new version/ldd/env query is needed.",
+    "standalone_guard_CMake_branch": "guard.run contains a separate CMake lookup; run_owned imports the module and does not call guard.run or its __main__ entrypoint. That lookup is outside these compiler recipes.",
+    "limitation": "This establishes the inspected direct launch/helper chain, not arbitrary implicit subprocess behavior inside third-party tools or installed-binary/source correspondence."
+  },
+  "prewrite_refusal": {
+    "operation": "control-fp64 prelaunch environment check",
+    "actual_closed_exec_exit": 1,
+    "no_helper_compiler_or_provider_launched": true,
+    "no_case_prelaunch_or_helperlog_created": true,
+    "reason": "launcher PATH changed; exact selected_environment equality assertion stopped before writes",
+    "scope": "ROOT metadata assertion only, not a shader compile failure or rerun"
+  },
+  "continuation_conditions": {
+    "remaining_original_order": [
+      "control-fp64",
+      "candidate-fp64",
+      "control-cuda",
+      "candidate-cuda",
+      "control-metal",
+      "candidate-metal"
+    ],
+    "separate_ROOT_release_required": true,
+    "ROOT_must_record_current_PATH_observation_review_and_release_without_rewriting_prior_environment_records": true,
+    "fresh_original_pins_and_prior_accepted_content_checks_before_each_operation": true,
+    "first_private_import_and_new_stencil_loop_gate_retained": {
+      "path": "out/trace-riemann-stencil-import-order/root-import-gate-release.json",
+      "bytes": 1432,
+      "sha256": "74e9e714746f17b9b8b3ba47d1b1403c5993beada76ee4b1777db969b28ea0b5"
+    },
+    "all5_controls_byte_equal_before_attribution_still_required": true,
+    "COMP_FP64_validation_disassembly_CFG_ABI_math_and_CUDA_MSL_source_checks_still_required": true,
+    "original_serial_stopfirstnonpass_int0_compile_300s_4GiB_2GiB_guards_and_cache_policy_unchanged": true,
+    "no_restart_of_the_four_accepted_operations": true
+  },
+  "limits": {
+    "new_workload_or_helper_executed_by_reviewer": false,
+    "new_metadata_tool_queries_by_reviewer": false,
+    "provider_or_scientific_numerical_result": false,
+    "performance_or_JIT_or_RSS_improvement_claim": false,
+    "candidate_applied_or_source_build_hold_released": false,
+    "adoption_fullscience_Mandatory_release_qualification": false
+  },
+  "repository": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "tracked_and_nonignored_status": "",
+    "upstream_ahead_behind": [
+      "0",
+      "0"
+    ],
+    "sole_worktree": true,
+    "new_review_status": "Uncommitted ignored sidecar; parent owns later preservation/publication."
+  }
+}

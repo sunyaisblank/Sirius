@@ -1,0 +1,89 @@
+{
+  "schema": "sirius-trace-stencil-root-accepted-offline-operation-v1",
+  "case": "candidate-metal",
+  "created_utc": "2026-10-17T23:28:32.957986+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 4479,
+    "sha256": "46544b8ccd39a5c745d0fc74d5e3d09931bae4ab0fcfe0f38cd1b69ca98db7fb"
+  },
+  "posttools": {
+    "bytes": 1173,
+    "sha256": "14b538458492ccc7d4fe778b5ed34c82e6f02fa9295720c547a0e81340d917f8"
+  },
+  "whole_input_rows": 4789,
+  "product": {
+    "path": "out/trace-riemann-stencil-import-order/candidate-metal/trace.metal",
+    "bytes": 346699,
+    "sha256": "535646b961da0e9937b4d3e284ff0fb14197898b6afbe0e55596f2a4a633413e"
+  },
+  "role": "candidate",
+  "variant": "metal",
+  "matching_original_control_byteequal_baseline": null,
+  "SPIRV_original_validator_and_disassembly_passed": false,
+  "emitted_entry": null,
+  "emitted_local_size": null,
+  "all5_control_attribution_gate_and_complete_CFG_ABI_footprint_review_pending": true,
+  "files": {
+    "out/trace-riemann-stencil-import-order/candidate-metal/samples.jsonl": {
+      "bytes": 1114,
+      "sha256": "06b3479d5add69e469a6c67c9469e1e28f55caf9f4148f23ca3cc1d5d4e9b396"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-metal/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-metal/inputs-before.json": {
+      "bytes": 1579948,
+      "sha256": "90faaa73225dde2a8c70ada229e94cd5999cd39f4d022a0dc5a0cd8fbc385614"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-metal/inputs-after.json": {
+      "bytes": 1579948,
+      "sha256": "90faaa73225dde2a8c70ada229e94cd5999cd39f4d022a0dc5a0cd8fbc385614"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-metal/owner.json": {
+      "bytes": 3653,
+      "sha256": "3c5d9a95e91d3292f29d61eab2796caa37aa9d51e289979a86c2797b464a9eae"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-metal/trace.metal": {
+      "bytes": 346699,
+      "sha256": "535646b961da0e9937b4d3e284ff0fb14197898b6afbe0e55596f2a4a633413e"
+    },
+    "out/trace-riemann-stencil-import-order/root-prelaunch-candidate-metal.json": {
+      "bytes": 3195,
+      "sha256": "094df617a1b2b1631641e8100c2ee126bc2d77e5e60c434e163c77c9acff35d2"
+    },
+    "out/trace-riemann-stencil-import-order/root-helper-candidate-metal.log": {
+      "bytes": 1227,
+      "sha256": "f3d0c753d2662c613bd7b4b91eabc92c3dd917c2526b85a9ff165e7cbd8727d9"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-observation.json": {
+      "bytes": 11599,
+      "sha256": "3f1e7c863451ef8b8a475596e97e2340d8313cb30046053c90cda0a6f8e5c38a"
+    },
+    "out/trace-riemann-stencil-import-order/independent-continuation-environment-review.json": {
+      "bytes": 5894,
+      "sha256": "3902638a40ff7ef2e0cb9b1ac0ab8ec507ab66dee8d502b2f1bde8dab7f1125f"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-release.json": {
+      "bytes": 3784,
+      "sha256": "bee447c1e0e6d4b743a01c33de4ca0cd7f434856ce79745837e50d37b1b13edc"
+    },
+    "out/trace-riemann-stencil-import-order/root-owner-product-candidate-metal.json": {
+      "bytes": 4479,
+      "sha256": "46544b8ccd39a5c745d0fc74d5e3d09931bae4ab0fcfe0f38cd1b69ca98db7fb"
+    },
+    "out/trace-riemann-stencil-import-order/root-posttools-candidate-metal.json": {
+      "bytes": 1173,
+      "sha256": "14b538458492ccc7d4fe778b5ed34c82e6f02fa9295720c547a0e81340d917f8"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

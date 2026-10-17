@@ -1,0 +1,102 @@
+{
+  "schema": "sirius-trace-stencil-root-posttool-observation-v1",
+  "case": "control-fp32comp",
+  "created_utc": "2026-10-15T21:14:38.418146+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "product": {
+    "path": "out/trace-riemann-stencil-import-order/control-fp32comp/trace.spv",
+    "bytes": 2997776,
+    "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+  },
+  "owner_product_check": {
+    "bytes": 3748,
+    "sha256": "639bec0f48bf32071440e3a396c2b2c91765cf8b4d6bed46b1ee201b06616bd2"
+  },
+  "operations": [
+    {
+      "operation": "validate",
+      "tool_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/control-fp32comp/trace.spv"
+      ],
+      "actual_wrapped_argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "300s",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/control-fp32comp/trace.spv"
+      ],
+      "actual_closed_exit": 0,
+      "seconds": 12.536343782994663,
+      "stdout": {
+        "path": "out/trace-riemann-stencil-import-order/root-post-control-fp32comp-validate.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "out/trace-riemann-stencil-import-order/root-post-control-fp32comp-validate.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "disassemble",
+      "tool_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/control-fp32comp/trace.spv",
+        "-o",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/root-spv-control-fp32comp.spvasm"
+      ],
+      "actual_wrapped_argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "300s",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/control-fp32comp/trace.spv",
+        "-o",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/root-spv-control-fp32comp.spvasm"
+      ],
+      "actual_closed_exit": 0,
+      "seconds": 0.686013271973934,
+      "stdout": {
+        "path": "out/trace-riemann-stencil-import-order/root-post-control-fp32comp-disassemble.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "out/trace-riemann-stencil-import-order/root-post-control-fp32comp-disassemble.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "posttool_guard_scope": "Separate root-owned GNUtimeout300s/TERM/KILL10s per command and actual subprocess completion; no aggregateRSS/reserve or full session-census certification for these posttools. Mature Slangowner guards remain separate.",
+  "SPIRV_validation_and_disassembly_completed": true,
+  "portable_source_only_no_CUDA_or_Metal_native_compiler_executed": false,
+  "files": {
+    "out/trace-riemann-stencil-import-order/root-post-control-fp32comp-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-control-fp32comp-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-control-fp32comp-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-control-fp32comp-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-spv-control-fp32comp.spvasm": {
+      "bytes": 8772174,
+      "sha256": "452eeeaa02af9568e7660ad68418c35248c34a2004f17f878925be52aa2d76ea"
+    }
+  },
+  "scope": "Original SPVvalidator and ordinary disassembly only; emitted ABI/CFG/footprint and all5 baseline attribution gate pending. No driver execution/runtime benefit/numerical adoption."
+}

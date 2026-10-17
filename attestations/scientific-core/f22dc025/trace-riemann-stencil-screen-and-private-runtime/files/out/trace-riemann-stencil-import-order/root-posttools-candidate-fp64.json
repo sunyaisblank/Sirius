@@ -1,0 +1,102 @@
+{
+  "schema": "sirius-trace-stencil-root-posttool-observation-v1",
+  "case": "candidate-fp64",
+  "created_utc": "2026-10-17T23:27:04.120307+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "product": {
+    "path": "out/trace-riemann-stencil-import-order/candidate-fp64/trace.spv",
+    "bytes": 2479020,
+    "sha256": "03cf56d43d7642bd4c66f2c1fd1dea0e2b3e0a575785af76431e13d95b1d28b5"
+  },
+  "owner_product_check": {
+    "bytes": 4445,
+    "sha256": "dd3a8a24166781991f861eb1d827c651f4dad1fd466a29e40dcbaa4ff59d1a14"
+  },
+  "operations": [
+    {
+      "operation": "validate",
+      "tool_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/candidate-fp64/trace.spv"
+      ],
+      "actual_wrapped_argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "300s",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/candidate-fp64/trace.spv"
+      ],
+      "actual_closed_exit": 0,
+      "seconds": 3.311217490991112,
+      "stdout": {
+        "path": "out/trace-riemann-stencil-import-order/root-post-candidate-fp64-validate.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "out/trace-riemann-stencil-import-order/root-post-candidate-fp64-validate.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "disassemble",
+      "tool_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/candidate-fp64/trace.spv",
+        "-o",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/root-spv-candidate-fp64.spvasm"
+      ],
+      "actual_wrapped_argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "300s",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/candidate-fp64/trace.spv",
+        "-o",
+        "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/root-spv-candidate-fp64.spvasm"
+      ],
+      "actual_closed_exit": 0,
+      "seconds": 0.2791296720097307,
+      "stdout": {
+        "path": "out/trace-riemann-stencil-import-order/root-post-candidate-fp64-disassemble.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "out/trace-riemann-stencil-import-order/root-post-candidate-fp64-disassemble.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "posttool_guard_scope": "Separate root-owned GNUtimeout300s/TERM/KILL10s per command and actual subprocess completion; no aggregateRSS/reserve or full session-census certification for these posttools. Mature Slangowner guards remain separate.",
+  "SPIRV_validation_and_disassembly_completed": true,
+  "portable_source_only_no_CUDA_or_Metal_native_compiler_executed": false,
+  "files": {
+    "out/trace-riemann-stencil-import-order/root-post-candidate-fp64-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-candidate-fp64-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-candidate-fp64-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-post-candidate-fp64-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/root-spv-candidate-fp64.spvasm": {
+      "bytes": 7323534,
+      "sha256": "75e84a79ed682f7516498325c421762dcfc980dfe6f3139558a53f48a515bbc9"
+    }
+  },
+  "scope": "Original SPVvalidator and ordinary disassembly only; emitted ABI/CFG/footprint and all5 baseline attribution gate pending. No driver execution/runtime benefit/numerical adoption."
+}

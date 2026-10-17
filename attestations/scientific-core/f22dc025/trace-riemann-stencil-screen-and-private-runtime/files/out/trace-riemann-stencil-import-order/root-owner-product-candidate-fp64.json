@@ -1,0 +1,101 @@
+{
+  "schema": "sirius-trace-stencil-root-owner-product-check-v1",
+  "case": "candidate-fp64",
+  "created_utc": "2026-10-17T23:26:58.549293+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_helper_observed_closed_exit": 0,
+  "owner_terminal_passed_exit0_original_guards": true,
+  "whole_input_rows": 4761,
+  "preflight_local_absolute_paths_normalized_to_owner_relative_keys": true,
+  "before_after_current_and_prior_raw_exact": true,
+  "source_unchanged": true,
+  "sample_count": 26,
+  "owner_seconds": 7.016234789014561,
+  "peak_sampled_aggregate_RSS_KiB": 460360,
+  "saved_owned_births_fresh_rechecked": [
+    {
+      "pid": 13574,
+      "saved_start_ticks": "15346802",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 13644,
+      "saved_start_ticks": "15346948",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "current_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "product": {
+    "path": "out/trace-riemann-stencil-import-order/candidate-fp64/trace.spv",
+    "bytes": 2479020,
+    "sha256": "03cf56d43d7642bd4c66f2c1fd1dea0e2b3e0a575785af76431e13d95b1d28b5"
+  },
+  "role": "candidate",
+  "variant": "fp64",
+  "matching_original_control_byteequal_baseline": null,
+  "control_baseline": {
+    "path": "bin/linux-gcc/kernels/trace_fp64.spv",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv",
+    "bytes": 2847024,
+    "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076",
+    "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-fp64/trace.spv",
+    "actual_previous_control_bytes_equal": true
+  },
+  "separate_validation_disassembly_and_root_acceptance_pending": true,
+  "all5_controls_before_candidate_source_attribution": true,
+  "files": {
+    "out/trace-riemann-stencil-import-order/candidate-fp64/samples.jsonl": {
+      "bytes": 5781,
+      "sha256": "f581e1ee5db83baa4c4127c153b5ab473e0f574fac20c0f08c4ca8983e04657f"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp64/inputs-before.json": {
+      "bytes": 1571616,
+      "sha256": "a41bf77b68989123c8eec2edc8685144802038291d0ef25c3f61787296045a54"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp64/inputs-after.json": {
+      "bytes": 1571616,
+      "sha256": "a41bf77b68989123c8eec2edc8685144802038291d0ef25c3f61787296045a54"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp64/owner.json": {
+      "bytes": 3738,
+      "sha256": "ba72bfcdc27cebaba328710f425d4d049cee77cca83b0f8cb09dd5481b387586"
+    },
+    "out/trace-riemann-stencil-import-order/candidate-fp64/trace.spv": {
+      "bytes": 2479020,
+      "sha256": "03cf56d43d7642bd4c66f2c1fd1dea0e2b3e0a575785af76431e13d95b1d28b5"
+    },
+    "out/trace-riemann-stencil-import-order/root-prelaunch-candidate-fp64.json": {
+      "bytes": 3194,
+      "sha256": "218d56608c7bf278b0ec2cf5fe0b2ff11b56be3ba4a6ea0e634f4a3f37cc5484"
+    },
+    "out/trace-riemann-stencil-import-order/root-helper-candidate-fp64.log": {
+      "bytes": 1224,
+      "sha256": "d89a81910bde817fc400fd09983e2226be41ad2e66566f36ad0e1ab85f1c8f32"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-observation.json": {
+      "bytes": 11599,
+      "sha256": "3f1e7c863451ef8b8a475596e97e2340d8313cb30046053c90cda0a6f8e5c38a"
+    },
+    "out/trace-riemann-stencil-import-order/independent-continuation-environment-review.json": {
+      "bytes": 5894,
+      "sha256": "3902638a40ff7ef2e0cb9b1ac0ab8ec507ab66dee8d502b2f1bde8dab7f1125f"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-release.json": {
+      "bytes": 3784,
+      "sha256": "bee447c1e0e6d4b743a01c33de4ca0cd7f434856ce79745837e50d37b1b13edc"
+    }
+  },
+  "scope": "One actual offline compiler owner/product only; no scientific/numerical/runtime/RSS/JIT/performance/adoption verdict. Three-dimensional8x8x1 kernel and ABI remain separate emitted checks."
+}

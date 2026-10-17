@@ -1,0 +1,101 @@
+{
+  "schema": "sirius-trace-stencil-root-owner-product-check-v1",
+  "case": "control-metal",
+  "created_utc": "2026-10-17T23:28:25.804788+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_helper_observed_closed_exit": 0,
+  "owner_terminal_passed_exit0_original_guards": true,
+  "whole_input_rows": 4782,
+  "preflight_local_absolute_paths_normalized_to_owner_relative_keys": true,
+  "before_after_current_and_prior_raw_exact": true,
+  "source_unchanged": true,
+  "sample_count": 4,
+  "owner_seconds": 1.043768151983386,
+  "peak_sampled_aggregate_RSS_KiB": 279908,
+  "saved_owned_births_fresh_rechecked": [
+    {
+      "pid": 14602,
+      "saved_start_ticks": "15356360",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 14606,
+      "saved_start_ticks": "15356446",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "current_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "product": {
+    "path": "out/trace-riemann-stencil-import-order/control-metal/trace.metal",
+    "bytes": 344056,
+    "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+  },
+  "role": "control",
+  "variant": "metal",
+  "matching_original_control_byteequal_baseline": true,
+  "control_baseline": {
+    "path": "bin/linux-gcc/kernels/portability/trace.metal",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal",
+    "bytes": 344056,
+    "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88",
+    "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal",
+    "actual_previous_control_bytes_equal": true
+  },
+  "separate_validation_disassembly_and_root_acceptance_pending": true,
+  "all5_controls_before_candidate_source_attribution": true,
+  "files": {
+    "out/trace-riemann-stencil-import-order/control-metal/samples.jsonl": {
+      "bytes": 892,
+      "sha256": "498c113fb10beab686c928c611f77431af2ef6c2bdb7789ecf74e400953892fb"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/inputs-before.json": {
+      "bytes": 1577865,
+      "sha256": "419f0317408c27885e5962b6f1da018438cb8df97a3bb3d1d1be3d5e699a2c79"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/inputs-after.json": {
+      "bytes": 1577865,
+      "sha256": "419f0317408c27885e5962b6f1da018438cb8df97a3bb3d1d1be3d5e699a2c79"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/owner.json": {
+      "bytes": 3517,
+      "sha256": "8223b660eb3e43873ffb0f1112ac43a5d20236432fb4a61ef3ff484edbb39630"
+    },
+    "out/trace-riemann-stencil-import-order/control-metal/trace.metal": {
+      "bytes": 344056,
+      "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+    },
+    "out/trace-riemann-stencil-import-order/root-prelaunch-control-metal.json": {
+      "bytes": 3193,
+      "sha256": "a8138966bf13f96719219975378db558b338b2568e227ddd60836ea979386b11"
+    },
+    "out/trace-riemann-stencil-import-order/root-helper-control-metal.log": {
+      "bytes": 1222,
+      "sha256": "822b28dd1d3506686bb5e23e8fa2c06f688c5a5933d7e38058ddc0e0f45d88ea"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-observation.json": {
+      "bytes": 11599,
+      "sha256": "3f1e7c863451ef8b8a475596e97e2340d8313cb30046053c90cda0a6f8e5c38a"
+    },
+    "out/trace-riemann-stencil-import-order/independent-continuation-environment-review.json": {
+      "bytes": 5894,
+      "sha256": "3902638a40ff7ef2e0cb9b1ac0ab8ec507ab66dee8d502b2f1bde8dab7f1125f"
+    },
+    "out/trace-riemann-stencil-import-order/root-continuation-environment-release.json": {
+      "bytes": 3784,
+      "sha256": "bee447c1e0e6d4b743a01c33de4ca0cd7f434856ce79745837e50d37b1b13edc"
+    }
+  },
+  "scope": "One actual offline compiler owner/product only; no scientific/numerical/runtime/RSS/JIT/performance/adoption verdict. Three-dimensional8x8x1 kernel and ABI remain separate emitted checks."
+}
