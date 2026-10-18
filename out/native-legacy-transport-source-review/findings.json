@@ -1,0 +1,95 @@
+{
+  "schema": "sirius-native-legacy-transport-bounded-source-assessment-v1",
+  "created_utc": "2026-10-18T07:31:21.656918+00:00",
+  "reviewer": "/root/forensic_obligations",
+  "decision": "ONE_CONDITIONAL_SOURCE_OPPORTUNITY_NO_IMPLEMENTATION_ADMISSION",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "patch_authored": false,
+  "compiler_or_runtime_admitted": false,
+  "source_adopted": false,
+  "pins": [
+    {
+      "path": "src/sirius/kernels/retained_transport.slang",
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+    },
+    {
+      "path": "src/sirius/kernels/retained_triple.slang",
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    {
+      "path": "src/sirius/kernels/retained_pair.slang",
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    {
+      "path": "src/sirius/kernels/retained_scalar.slang",
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    {
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "bytes": 45570,
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    },
+    {
+      "path": "src/sirius/backend/vulkan/vulkan_device.cpp",
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    {
+      "path": "attestations/native-vulkan/3045067/transport-immutable-input-cache-rejected/prototype.patch",
+      "bytes": 2220,
+      "sha256": "b711096ea59548d51540da7b4c1db5e1195cd5af28e03f9f86d168d326ab89d1"
+    },
+    {
+      "path": "attestations/native-vulkan/3045067/transport-immutable-input-cache-rejected/analysis.json",
+      "bytes": 14094,
+      "sha256": "c934cedacd81b24be990a7f3cbb782e5e2a7cc61ddabb6641ad43c06d3f327fa"
+    },
+    {
+      "path": "attestations/native-vulkan/3045067/transport-immutable-input-cache-rejected/independent-final-review.json",
+      "bytes": 955,
+      "sha256": "7256c47e39d375658840db2e412f0350a394058a04a51b65e6eee0e823be9d00"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-ABBA-evidence/native-comparison.json",
+      "bytes": 231623,
+      "sha256": "64b2b3fb20778d014e26eab01480fd8054fc65b60a19fd16ea7cf41faf6e1035"
+    }
+  ],
+  "current_saved_result": {
+    "benefit_passed": false,
+    "checks_passed": 21,
+    "checks_total": 22,
+    "sole_failed_check": "reverse legacy complete_call_ms:1.0139936104512248percent<5",
+    "reverse_legacy_transport_inclusive_ms": {
+      "baseline_median": 20.2769,
+      "candidate_median": 20.3308
+    },
+    "limit": "Saved complete/inclusive Dispatch observations do not isolate validation,shader execution,hardware banks or driver cost. No remaining7 or unchanged retry."
+  },
+  "actual_source_findings": [
+    "retained_transport ReadOriginal26-32 reads five input words and calls unchanged pure RTPack;ComputeMain input admission currently repeats i=0..45 in every invocation before chart/spin/h checks and flat/general/Schwarzschild selection. For a valid native64-lane workgroup this is2944 logical source ReadOriginal calls,not a measured ISA count.",
+    "RTPack/RTFinishAccumulation retain bit bounds/error-sign checks and five ordered RetainedSum32 operations;native scalar owners preserve explicit NoContraction operations. These helpers have no output,shared-state,atomic or I/O side effects.",
+    "This is NOT full DAG validation. EvaluateOne opcode/destination/operand bounds and per-layer status/join checks remain necessary. Existing40root admission/publication is already cooperative and initializes never-assigned validities;do not repeat the adopted cooperative-root proposal.",
+    "RetainedCompute::Step fills/copies complete230-word rows;Dispatch writes input and reads output under existing owner. A refused row is all-zero after initial clearing,with validfalse/stages0;there is no public first-invalid-input index or normalization-error priority. Vulkan DispatchCommands includes pipeline,command,submit/wait,cleanup costs;no hidden-cost diagnosis follows."
+  ],
+  "one_opportunity": {
+    "scope": "Canonical unmodified five-word scratch baseline;only defaultnativeFP32Transport guard !PORTABLE&&!FP64&&!STAGE7_OWNER. No packing/cache/width/table/arithmetic change. Transport is shared by API families;this is not a legacy-benchmark-only bypass.",
+    "mechanism": "Initialize existing retainedStatus=0 in lane0 before the existing initial AllMemoryBarrierWithGroupSync. Keep dimension/shape gates and complete output clearing. After the unchanged uniform shape gate,assign i=lane;i<46;i+=EXECUTION_LANES:call exactly the same ReadOriginal and RejectRetainedProgram on invalid. All invocations,including idle46..63,must reach one unconditional GroupMemoryBarrierWithGroupSync;then uniformly return if status!=0. Keep every subsequent ReadOriginal and all original code/joins unchanged.",
+    "material_difference": "46 independent normalization/admission checks total instead of46per invocation,with no230-word originalTerms cache and no rewriting later consumers. Adds one collective join;all-valid inputs execute no reject atomic. This changes iteration ownership,not floating operation order within any normalized input.",
+    "refusal_and_liveness": "Rows/length/shape conditions before the new join are workgroup-uniform. Input indices0..45 are already fully in bounds for46x5 row words. Pure later normalizations may run after another input is invalid,but no result is published;postjoin returns the same zero row/stages0. No lane-local return inside cooperative validation. Reset must be before the existing initial join to avoid reset-versus-reject race. Owner/S7 path excluded because its loop has S7Key side effects.",
+    "contract_preserved_conditionally": "All46 original malformed-value checks and every later malformed-program/invalid-root refusal remain;no assumption that arbitrary malformed DAGs are valid or race-free. Full40fields/7RHS/threeRK/fourquartic consumers,ABI,table/scratch/register plans,rollback,governors and every original assertion/deadline stay unchanged. Actual compiled CFG/control and bounded behavior remain unproved until separately reviewed.",
+    "falsifiable_gate": "If ROOT chooses to author it,first inspect exact emitted candidate versus canonical:only intended nativeTransport change,cooperative46coverage/reset-before-join/all-lane join/uniform refusal,unchanged numerical/ABI/other-mode bodies and no new arrays. Stop if these fail or actual emission eliminates the stated distinction. No new benchmark or tool operation is authorized by this assessment."
+  },
+  "relevant_prior_rejection": {
+    "candidate": "3045067 immutable-input cache",
+    "actual": "Rejected16-block stage screen;zero complete-word mismatches but64/128-row regressions roughly36-48percent in saved clocks. Same AMDdriver identity;regression cause not established.",
+    "source_delta": "It already normalized46 cooperatively before an existing join,added230shareduints(920B),and replaced EVERY later ReadOriginal with cached shared reads.",
+    "disposition": "Caching is not revived. A no-cache,validation-only permutation has a concrete distinct storage/consumer/join tradeoff;the old experiment neither validates its speed nor isolates its outcome. Bounded source/history search found this close overlap,not proof of a globally novel technique."
+  },
+  "uncertainty_and_stop_boundary": "Uniform original reads may broadcast/scalarize;cooperative distinct indices alter access grouping and need an extra group join. The46checks may be a small part of7large DAG evaluations. No wavewidth,ISA,bottleneck,occupancy,speedup or5percent sufficiency inferred. No lane0-speed assumption. This is one source-grounded option for ROOT judgment,not an implementation/performance/adoption recommendation.",
+  "method_and_state": "Passive existing source/raw JSON/text/hash/history only;no compiler/helper/test/provider/network/Git/process operation and no canonical mutation. Only this ignored findings file written;canonical5b2 latest recorded clean/pushed0:0/soleworktree. No commit/push by reviewer."
+}

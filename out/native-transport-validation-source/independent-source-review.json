@@ -1,0 +1,51 @@
+{
+  "schema": "sirius-native-transport-validation-independent-source-review-v1",
+  "created_utc": "2026-10-18T07:38:03.435217+00:00",
+  "reviewer": "/root/forensic_obligations",
+  "passed": true,
+  "source_invariant_passed": true,
+  "compiler_admitted": false,
+  "runtime_admitted": false,
+  "production_adopted": false,
+  "pins": [
+    {
+      "path": "out/native-transport-validation-source/original-retained_transport.slang",
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+    },
+    {
+      "path": "out/native-transport-validation-source/candidate-retained_transport.slang",
+      "bytes": 29427,
+      "sha256": "2caf03aa9e8731153d28f0a31c86c97bdab450c05f8bb2a9ea3656e14e897964"
+    },
+    {
+      "path": "out/native-transport-validation-source/source.patch",
+      "bytes": 1138,
+      "sha256": "32187763a89fa2d6afaa0c876d3ce472c576a7b01dbfd71f6239ecb125ccb995"
+    },
+    {
+      "path": "out/native-transport-validation-source/source-contracts.json",
+      "bytes": 9118,
+      "sha256": "b9ea754a3b162f848724f29e3d2df7aadbd6dbac6edc6e2e7a73ba83a1c58280"
+    }
+  ],
+  "exact_delta": "Full-read4files/current purehelper contracts. Exactly two insertions/eight lines;inverse equals complete canonical28933B source. Unifiedpatch and declared prefix/tail hashes match. Unpacked892B scratch and all pinned dependencies unchanged;no cache/storage/width/table/host change.",
+  "proof": {
+    "coverage": "In current native64 group,i=lane;i<46;i+=64 covers each original0..45 exactly once;lanes46..63 have zero checks but still join. Existing row bound supplies230input words. Each call uses original five-word ReadOriginal/RTPack and unchanged bound/sign/raw-valid checks;only ownership/order across independent pure checks changes.",
+    "reset_and_collective": "Guard implies existing initial AllMemoryBarrierWithGroupSync is active. Lane0 resets retainedStatus before that join;all reject atomicORs occur after it. Intervening shape predicates are workgroup-uniform. No loop-local return/earlybreak. Every invocation reaches unconditional GroupMemoryBarrierWithGroupSync,then observes status0 iff all46validities passed and takes uniform continue/refusal. No reset/reject race or wave-size assumption.",
+    "early_refusal": "The original complete output clear is already joined before these input checks;no nonzero output has been written. An invalid input therefore leaves the same zero row/stages0. Evaluating additional bounded,pure later inputs after one invalid cannot expose a new first-error index. Early dimensions retain original pre-clear behavior;no universal zero-output guarantee.",
+    "later_semantics": "All-valid input continues into byte-identical chart/spin/lambda/h checks,flat/general/Schwarzschild branches and later reads. Entire EvaluateOne/EvaluateProgram/scratch/root publication,coefficients/sevenRHS/40fields/math and caller/refusal/rollback bodies unchanged. Existing later partial-output/stage/refusal semantics are preserved,not replaced by an all-refusals-zero claim.",
+    "modes": "PORTABLE/FP64/OWNER disable both insertions,leaving original bodies;owner S7Key side effects remain. Current FMA build definesFP64,so excluded as well. Pair/Camera and all other sources untouched. This is source/preprocessor-profile isolation,not an observed34other-SPV byte comparison."
+  },
+  "cost_and_history": "Valid native64 source calls fall2944to46 for this precheck only;not an emitted/ISA/wall-cost result. Adds one group join. Old304 input-cache rejection remains distinct:230shared words and all later consumer rewrites are absent here. Broadcast/scalarization/access-grouping and extra-join costs remain unknown;no sufficient complete-call gain inferred.",
+  "next_boundary": "ROOT may separately prepare compiler proof;before any runtime require actual coverage/reset/join/uniform refusal/ABI and unchanged-other-products checks. Original controls,22benefit gates,cache/provider settings and guards remain unchanged. No compile/helper/provider/test/network/process execution by reviewer.",
+  "workspace": {
+    "canonical_HEAD": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "tracked_tree_clean": true,
+    "upstream_counts": "0\t0",
+    "worktrees": 1,
+    "only_new_ignored_review_written": true,
+    "review_committed_or_pushed": false
+  },
+  "blockers": []
+}

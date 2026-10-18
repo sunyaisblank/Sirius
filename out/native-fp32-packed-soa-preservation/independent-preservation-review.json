@@ -1,0 +1,172 @@
+{
+  "schema": "sirius-native-packed-soa-independent-preservation-review-v1",
+  "passed": true,
+  "preservation_audit_completed": true,
+  "performance_acceptance": false,
+  "production_adopted": false,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "canonical_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "producer_source_revision": "45d91ac36d1135d18cba8ebb1923339723fde5df",
+  "pins": {
+    "manifest": {
+      "path": "attestations/qualification/5b2df58b/native-packed-soa-rejected/manifest.json",
+      "bytes": 234930,
+      "sha256": "678b4f6128839ca66ace5c37464e676e04b1e0828980d3de406abf6953f0f296"
+    },
+    "preservation": {
+      "path": "attestations/qualification/5b2df58b/native-packed-soa-rejected/preservation.json",
+      "bytes": 723,
+      "sha256": "2c6096c1e9958c9ecdfd21f81c61116f4fe0f83801ebe882d7caedf636f3ad2e"
+    },
+    "archive": {
+      "path": "attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-ci-publication/run39106068467-artifact.zip",
+      "bytes": 25897828,
+      "sha256": "1e09419918141402266a9a91f9feb958c6f0f3ef0c0ec6591d2812a51dad251e"
+    },
+    "root_negative": {
+      "path": "out/native-fp32-packed-soa-publication/root-rejection-decision.json",
+      "bytes": 1941,
+      "sha256": "25bbbbe42c8d415b58928a6af1c11d1a05598989eaad6166a05a71775f496ac3"
+    },
+    "independent_negative": {
+      "path": "out/native-fp32-packed-soa-publication/independent-ABBA-rejection-review.json",
+      "bytes": 10902,
+      "sha256": "88ee60e306fb5956214ba74e391fcf91a8f168d2e24ee10083c9dbfd236adfe8"
+    },
+    "comparison": {
+      "path": "out/native-fp32-packed-soa-ABBA-evidence/native-comparison.json",
+      "bytes": 231623,
+      "sha256": "64b2b3fb20778d014e26eab01480fd8054fc65b60a19fd16ea7cf41faf6e1035"
+    },
+    "authority_metadata_correction": {
+      "path": "out/native-fp32-packed-soa-pe-audit/root-reader-authority-key-correction.json",
+      "bytes": 1368,
+      "sha256": "2ebfffa954e1c6874333db2ee51668379014f7b24d7a7e7d462cc2e73b28d3ff"
+    },
+    "context_metadata_correction": {
+      "path": "out/native-fp32-packed-soa-ABBA-evidence/root-control8-context-link-correction.json",
+      "bytes": 1150,
+      "sha256": "79649cfc7047dfd008b77f46fb8ac5462de98e90f7896be01aacd7e009164a16"
+    },
+    "actual_source_Git": {
+      "path": "out/native-fp32-packed-soa-ci-publication/root-actual-source-Git.json",
+      "bytes": 102338,
+      "sha256": "466a91ae6ac17ebdad66465406e549c8be364b324a5cf0bf950f3549caef6a11"
+    },
+    "actual_source_push": {
+      "path": "out/native-fp32-packed-soa-ci-publication/root-actual-source-push.json",
+      "bytes": 345,
+      "sha256": "d600bb4f6742069999bf88657a866b796b38d6067d8eb9411e4fe0b4716cf612"
+    },
+    "actual_remote": {
+      "path": "out/native-fp32-packed-soa-ci-publication/remote.stdout",
+      "bytes": 113,
+      "sha256": "9f97e9de764bd56eb59f39efee3760fd7d35534ba01190a8a2f7e90eb66f9e9e"
+    },
+    "actual_download": {
+      "path": "out/native-fp32-packed-soa-ci-publication/root-actual-download.json",
+      "bytes": 729,
+      "sha256": "23245cd6f64cca83a976b3220154b84e76f5f9fad53e36245a0041422dd47b44"
+    }
+  },
+  "exact_inventory": {
+    "ordinary_payloads": 412,
+    "ordinary_bytes": 69890728,
+    "bundle_files_including_manifest_preservation": 414,
+    "all_source_copy_hash_size_POSIX_mode_equal": true,
+    "all15_source_root_regular_file_inventories_exact": true,
+    "source_roots": {
+      "out/native-fp32-packed-soa-source": 5,
+      "out/native-fp32-packed-soa-compiler-source": 125,
+      "out/native-fp32-packed-soa-producer-source": 1,
+      "out/native-fp32-packed-soa-producer-inputs": 79,
+      "out/native-fp32-packed-soa-windows-source": 10,
+      "out/native-fp32-packed-soa-runtime-authority-source": 17,
+      "out/native-fp32-packed-soa-pe-audit": 14,
+      "out/native-fp32-packed-soa-publication": 11,
+      "out/native-fp32-packed-soa-ci-publication": 33,
+      "out/native-fp32-packed-soa-runtime-timestamp": 26,
+      "out/native-fp32-packed-soa-runtime-abba": 77,
+      "out/native-fp32-packed-soa-timestamp-evidence": 3,
+      "out/native-fp32-packed-soa-ABBA-evidence": 6,
+      "renders/native-fp32-packed-soa-runtime-timestamp": 1,
+      "renders/native-fp32-packed-soa-runtime-abba": 4
+    },
+    "archive_stored_once": true,
+    "archive_members": 122,
+    "expanded_stage_bytes": 98218610,
+    "all_current_stage_names_bytes_hashes_modes_match_recorded_archive_members": true,
+    "duplicate_expanded_stage_copies": 0,
+    "restore_authority": "Read the122 exact member names from preserved original ZIP; apply separately recorded POSIX mode. ZIP container encoding itself retained, not reconstructed. Original export manifest/Windows attribute+alias metadata inside it unchanged."
+  },
+  "actual_Git_source": {
+    "local_exact_commit_exists": true,
+    "named_blob_rows_full_bytes_checked": 252,
+    "actual_push_exit": 0,
+    "saved_fresh_remote_exact": true,
+    "fresh_network_query_performed_by_reviewer": false,
+    "successful_CI_head_matches": true
+  },
+  "outcome_and_history": {
+    "root_and_independent_negative_retained": true,
+    "wholepath_checks_passed": 3,
+    "inclusive_stage_checks_passed": 16,
+    "inclusive_API_checks_passed": 2,
+    "checks_passed": 21,
+    "checks_total": 22,
+    "sole_failure": {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "improvement_percent": 1.0139936104512248,
+      "minimum_percent": 5
+    },
+    "control8_and_sole4slots": [
+      {
+        "label": "control-8",
+        "saved_native_birth": [
+          18756,
+          "2026-10-18T07:14:59.9033997Z"
+        ]
+      },
+      {
+        "label": "a1",
+        "saved_native_birth": [
+          11356,
+          "2026-10-18T07:21:23.5873409Z"
+        ]
+      },
+      {
+        "label": "b1",
+        "saved_native_birth": [
+          11904,
+          "2026-10-18T07:22:53.5985593Z"
+        ]
+      },
+      {
+        "label": "b2",
+        "saved_native_birth": [
+          7076,
+          "2026-10-18T07:23:35.1613038Z"
+        ]
+      },
+      {
+        "label": "a2",
+        "saved_native_birth": [
+          852,
+          "2026-10-18T07:23:59.3076810Z"
+        ]
+      }
+    ],
+    "remaining7_stopped": true,
+    "both_metadata_corrections_and_bound_originals_preserved_exact": true,
+    "corrections": "Case-only fma_available key correction preserves allPE/array bools; subsequent evidence context adds only already-completedcontrol8 case+3provenance pins. First comparator stopped at expectedcaseinventory before numerical decision; original workload/rawvalues/gates unchanged."
+  },
+  "limits": [
+    "This PASS audits preservation, not candidate benefit or scientific/release qualification. NativeSoA remains REJECT21/22.",
+    "All fullsource/build/emitted/raw/native/decision records kept, including failed metadata representations and corrections; no evidence relabeled.",
+    "Only owned412roots and122stagemembers audited; external host tool/library bytes are retained by existing hash records, not backed up by this bundle.",
+    "No compiler/provider/test/workload/helper/projectimport/network/process/Git mutation/deletion. Local Git read-only cat-file/rev-parse only. ROOT alone decides publication and fresh scoped cleanup; this receipt releases neither cleanup nor source holds.",
+    "Reviewer authored portions of source and prior emitted/control8reviews; preservation/copy construction and all actual operations were ROOT-owned, independentnegative was authored separately."
+  ]
+}
