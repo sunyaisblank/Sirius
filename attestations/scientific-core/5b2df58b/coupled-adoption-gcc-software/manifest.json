@@ -1,0 +1,439 @@
+{
+  "schema": "sirius-coupled-adoption-gcc-software-bundle-v1",
+  "created_utc": "2026-10-18T02:09:08.138906+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_branch": "development/minimum-step-floor-2026-10-15",
+  "source_committed_pushed": true,
+  "exact_single_file_adopted": true,
+  "strict_GCC_build_and_governance_passed": true,
+  "canonical_private_native_product_joined": true,
+  "other18_products_byteequal": true,
+  "original_software_coupled_numerical_and_ownership_passed": true,
+  "software_JIT_and_cache_default_UNSET": true,
+  "prior_private_evidence_commit": "cf2414211fa2cd721b49f73f6e5cfaa7b94544ad",
+  "prior_native_host_evidence_commit": "44985de06680984e69b98aa6300ec395e8aace15",
+  "current_registered_Mandatory": 1152,
+  "full_Mandatory_executed": false,
+  "alignment_admitted_domains": 0,
+  "alignment_total_domains": 8,
+  "files": {
+    "README.md": {
+      "mode": "0o644",
+      "bytes": 5012,
+      "sha256": "8a10de8dc0ac837f69db08edcf9580949d563f0e1632b5563483eccc028654f6"
+    },
+    "files/bin/linux-gcc/CMakeCache.txt": {
+      "mode": "0o644",
+      "bytes": 60324,
+      "sha256": "e495eb24cd37e87de7a3ea6346cc967d8884556dfcd90d3a1a3341226e3d0e0f"
+    },
+    "files/bin/linux-gcc/build.ninja": {
+      "mode": "0o644",
+      "bytes": 488456,
+      "sha256": "f9f65b44d42daefab33397177499423f423345e78ef3e22391f67f7620b38065"
+    },
+    "files/bin/linux-gcc/compile_commands.json": {
+      "mode": "0o644",
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "files/bin/linux-gcc/generated/sirius/alignment_receipt.json": {
+      "mode": "0o644",
+      "bytes": 1240,
+      "sha256": "bc441b1aa4a92cf6f3ec6b199c260e220649b626df4dd485272916cc5c349d1b"
+    },
+    "files/bin/linux-gcc/generated/sirius/base/operating_model_embedded.h": {
+      "mode": "0o644",
+      "bytes": 134002,
+      "sha256": "05f7bd0da1e34273e4bbe62339fda08f7b01bf3df3e86f77a537234d4f215106"
+    },
+    "files/bin/linux-gcc/kernels/coupled_probe_fp64.spv": {
+      "mode": "0o644",
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+    },
+    "files/bin/linux-gcc/src/sirius/app/sirius": {
+      "mode": "0o755",
+      "bytes": 9725048,
+      "sha256": "e8f98d886e5a2dee38e2ffc9c452e98102a799b5f2c17be3a5a88819834d0eef"
+    },
+    "files/bin/linux-gcc/src/sirius/app/sirius_app_tests": {
+      "mode": "0o755",
+      "bytes": 11397000,
+      "sha256": "c74ee4638e0ebb8f8091ffaf08630a051af008b9a91b6310bc0130aeaaff1da9"
+    },
+    "files/bin/linux-gcc/src/sirius/app/sirius_render_tests": {
+      "mode": "0o755",
+      "bytes": 12212608,
+      "sha256": "37fef0e35bea4abf28a075ba6b5cf1918cfde318a4988ae0255553f50689f18e"
+    },
+    "files/bin/linux-gcc/tests/backend/portable_binary32_reference.bin": {
+      "mode": "0o600",
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "files/bin/linux-gcc/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "mode": "0o644",
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "files/bin/linux-gcc/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "mode": "0o644",
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "files/bin/linux-gcc/tests/backend/retained_camera/program_fixture.h": {
+      "mode": "0o644",
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+    },
+    "files/out/coupled-shared-trial-adoption/current-products-before.json": {
+      "mode": "0o644",
+      "bytes": 4909,
+      "sha256": "5d0e41ef42d6387c3a7feeeb7fbc59b2a7b49aaf253187fd33ccd6df3f06d8ac"
+    },
+    "files/out/coupled-shared-trial-preservation/push.log": {
+      "mode": "0o644",
+      "bytes": 168,
+      "sha256": "00f71317a0db6e6bd11dd07e6e092c312b09e7ce772359b8850a6e5ef3aae595"
+    },
+    "files/out/coupled-shared-trial-preservation/remote-ref.txt": {
+      "mode": "0o644",
+      "bytes": 99,
+      "sha256": "51ddc6d7bd7bc948eb2609dd6f9f4f4f85d1ac1b03f0a6058003fafe13e52711"
+    },
+    "files/out/coupled-shared-trial-preservation/root-git-preservation.json": {
+      "mode": "0o644",
+      "bytes": 918,
+      "sha256": "92c76bd8212485d751ffe5190762e19dd13423447b5f6992818b5a5d8369a1fd"
+    },
+    "files/out/coupled-shared-trial-preservation/root-preservation-check.json": {
+      "mode": "0o644",
+      "bytes": 794,
+      "sha256": "09c23919bd480296f78b52e3d9600dbc41a582d47dd7d62c99af1a5d250ca020"
+    },
+    "files/out/coupled-shared-trial-preservation/root-source-adoption.json": {
+      "mode": "0o644",
+      "bytes": 650,
+      "sha256": "6427b38312bc322579f1f8fba41bf9ad452e702a62ddd56e8d3749a152ab226e"
+    },
+    "files/out/coupled-shared-trial-preservation/root-source-build-hold-release.json": {
+      "mode": "0o644",
+      "bytes": 1355,
+      "sha256": "40966feac328ab016338e1ca8716b0d80c6001402fb13c27f776ba90d1091273"
+    },
+    "files/out/coupled-shared-trial-preservation/root-source-publication.json": {
+      "mode": "0o644",
+      "bytes": 573,
+      "sha256": "9b296cf7cf0b3ee55863dac4d4ed03ba2c0e409b30624a71597891f849ec3490"
+    },
+    "files/out/coupled-shared-trial-preservation/source-commit-message.txt": {
+      "mode": "0o644",
+      "bytes": 458,
+      "sha256": "a730d1a12e244010ff4267a342c3f9e090e7d0ceb58f0552876a9477d44fd7e8"
+    },
+    "files/out/coupled-shared-trial-preservation/source-push.log": {
+      "mode": "0o644",
+      "bytes": 156,
+      "sha256": "c72c8e844ee7bd9825dc9eaf2242b78e68149d41a963a8c92c8428869f10a7b9"
+    },
+    "files/out/coupled-shared-trial-preservation/source-remote-ref.txt": {
+      "mode": "0o644",
+      "bytes": 94,
+      "sha256": "ad17e4c4158443a99241a3cea9d90f7988fcb55bd34249d955bcf5a093df07e5"
+    },
+    "files/out/coupled-shared-trial-software-pending/actions.json": {
+      "mode": "0o644",
+      "bytes": 20214,
+      "sha256": "12a7641fbc9f0f7b9662e86272173fd428c63ee7315cdfd582746676c33aeaee"
+    },
+    "files/out/coupled-shared-trial-software-pending/actions.pending.json": {
+      "mode": "0o644",
+      "bytes": 18395,
+      "sha256": "370ddcb15d1e9a3c38473c9f5cce2363c9476bfc1fd4e1a21d78a769ffcd79d1"
+    },
+    "files/out/coupled-shared-trial-software-pending/commands.pending.json": {
+      "mode": "0o644",
+      "bytes": 400,
+      "sha256": "202f17eed5219253d209e726e15c5a8b10621108800d24453571555e8b66fb40"
+    },
+    "files/out/coupled-shared-trial-software-pending/coupled-fp64/gtest.xml": {
+      "mode": "0o644",
+      "bytes": 10030,
+      "sha256": "3536e4c135e128cd4c5bab0575245511bb979f1f7de3a0d78c74cb7a3af8d21e"
+    },
+    "files/out/coupled-shared-trial-software-pending/coupled-fp64/inputs-after.json": {
+      "mode": "0o644",
+      "bytes": 191841,
+      "sha256": "f57a423ad32cdf00203e337b15b53814c5794aff21893252e3bf48265ca820e6"
+    },
+    "files/out/coupled-shared-trial-software-pending/coupled-fp64/inputs-before.json": {
+      "mode": "0o644",
+      "bytes": 191841,
+      "sha256": "f57a423ad32cdf00203e337b15b53814c5794aff21893252e3bf48265ca820e6"
+    },
+    "files/out/coupled-shared-trial-software-pending/coupled-fp64/owner.json": {
+      "mode": "0o644",
+      "bytes": 3427,
+      "sha256": "da85ee492e93124b9b8494d1990caf56a2a42da1b54cfad25e89b07e379cdc8b"
+    },
+    "files/out/coupled-shared-trial-software-pending/coupled-fp64/samples.jsonl": {
+      "mode": "0o644",
+      "bytes": 246537,
+      "sha256": "5e9c3680e7b3c101d81eff12331b28b202694acbb653d5e5ab31b0e9998e183e"
+    },
+    "files/out/coupled-shared-trial-software-pending/coupled-fp64/stderr.log": {
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/coupled-shared-trial-software-pending/coupled-fp64/stdout.log": {
+      "mode": "0o644",
+      "bytes": 4286,
+      "sha256": "4f3060d7263482e306c80bc541aec7da4ea51fe16dafaf788bb9995a19e99fda"
+    },
+    "files/out/coupled-shared-trial-software-pending/ctest-inventory.json": {
+      "mode": "0o644",
+      "bytes": 986718,
+      "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+    },
+    "files/out/coupled-shared-trial-software-pending/ctest-inventory.stderr": {
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/coupled-shared-trial-software-pending/helper.stderr": {
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/coupled-shared-trial-software-pending/helper.stdout": {
+      "mode": "0o644",
+      "bytes": 902,
+      "sha256": "c763435d4379f1b0db37adaff86cc8b63439990b4792b34153afc53a339c2294"
+    },
+    "files/out/coupled-shared-trial-software-pending/independent-completion-review.json": {
+      "mode": "0o644",
+      "bytes": 2995,
+      "sha256": "18b074474cb6e1d26b32925c0244ad9f92891b89398d723b9fd6ad2d18954c5d"
+    },
+    "files/out/coupled-shared-trial-software-pending/independent-runtime-review.json": {
+      "mode": "0o644",
+      "bytes": 3113,
+      "sha256": "73047b4d41c366a20ec9348b306b8bd548b1ba5089559d5b6a78191beb24bafb"
+    },
+    "files/out/coupled-shared-trial-software-pending/independent-source-review.json": {
+      "mode": "0o644",
+      "bytes": 1375,
+      "sha256": "4d646b904d829ea50c72457cf155f57f1f8205813a98485271e010a1edcc0115"
+    },
+    "files/out/coupled-shared-trial-software-pending/owned_guard.py": {
+      "mode": "0o644",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/coupled-shared-trial-software-pending/readiness.json": {
+      "mode": "0o644",
+      "bytes": 17514,
+      "sha256": "cf188e2f4d2ee9a6dc20104acac5ff8f57a94289c7ef09ce2d5196d2864aff8b"
+    },
+    "files/out/coupled-shared-trial-software-pending/readiness.pending.json": {
+      "mode": "0o644",
+      "bytes": 16495,
+      "sha256": "d1a935a331a37eb5a52052482c7ed0c6152eb65550bf46d4686fa5218b55a6ef"
+    },
+    "files/out/coupled-shared-trial-software-pending/root-completed.json": {
+      "mode": "0o644",
+      "bytes": 9008,
+      "sha256": "4ffa19c04febbe31f713fc8f4a180b080ece6aa9fe3f40de3ced2fd79146a84f"
+    },
+    "files/out/coupled-shared-trial-software-pending/root-live-provider-environment.json": {
+      "mode": "0o644",
+      "bytes": 168666,
+      "sha256": "955a8716987acaf95197097a78c2c8ad86b11ab5a0533f4a7c1bc72454fe0eb5"
+    },
+    "files/out/coupled-shared-trial-software-pending/root-preflight.json": {
+      "mode": "0o644",
+      "bytes": 202208,
+      "sha256": "3207da370059bd5421c8e8a602879199910e0866fb77bfc92b326fd4695f42f9"
+    },
+    "files/out/coupled-shared-trial-software-pending/root-runtime-observation.json": {
+      "mode": "0o644",
+      "bytes": 12672,
+      "sha256": "9f707faa7926135b0c00c3136b789bd066e21b19d23a63d68a164bf2bc2915a4"
+    },
+    "files/out/coupled-shared-trial-software-pending/root-runtime-release.json": {
+      "mode": "0o644",
+      "bytes": 3489,
+      "sha256": "ba11fa7709cbdc0c67c5faab5d68705d2cb30e67e7dfedd6e372786330dbf2af"
+    },
+    "files/out/coupled-shared-trial-software-pending/run_owned.py": {
+      "mode": "0o644",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "files/out/coupled-shared-trial-software-pending/runtime-paths.pending.json": {
+      "mode": "0o644",
+      "bytes": 42095,
+      "sha256": "fcd69b9664690eb0d4b067b1c19ff42c340baf4a6071cba7904e48e9ae0f0980"
+    },
+    "files/out/coupled-shared-trial-software-pending/source-contracts.json": {
+      "mode": "0o644",
+      "bytes": 8575,
+      "sha256": "45380f4d69b9c7c041158dd112efbf7cbf4e1e318fbf47b429df960207b95bc8"
+    },
+    "files/out/coupled-shared-trial-strict-build/actions.json": {
+      "mode": "0o644",
+      "bytes": 464069,
+      "sha256": "eb247eddf1377a98c9fea27550980f186c79cd7bd0d218fc5084e967c32d11c8"
+    },
+    "files/out/coupled-shared-trial-strict-build/configure.log": {
+      "mode": "0o644",
+      "bytes": 1277,
+      "sha256": "7db1ba28804aee7a849ddceeb0d5138efb08373f1775ae690efd16ed2fb9dd5a"
+    },
+    "files/out/coupled-shared-trial-strict-build/helper.stderr": {
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/coupled-shared-trial-strict-build/helper.stdout": {
+      "mode": "0o644",
+      "bytes": 714,
+      "sha256": "f775a23915a9b62e789786108c4794fb177379875ad015444e654908a17a0338"
+    },
+    "files/out/coupled-shared-trial-strict-build/independent-integration-review.json": {
+      "mode": "0o644",
+      "bytes": 2906,
+      "sha256": "0da961c871ccc404d08531828a1523b32055e179da29d3f09be850daeb53601a"
+    },
+    "files/out/coupled-shared-trial-strict-build/owned_guard.py": {
+      "mode": "0o644",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "files/out/coupled-shared-trial-strict-build/root-completed.json": {
+      "mode": "0o644",
+      "bytes": 18777,
+      "sha256": "1994613ad1827d80bbba621db48f6651a9331cba6bf78b221f3c428a4e9fcd45"
+    },
+    "files/out/coupled-shared-trial-strict-build/root-configure-observation.json": {
+      "mode": "0o644",
+      "bytes": 1575,
+      "sha256": "59f40842d11f11179963d8dc2ddc535d724e3201184cf8f71f249882fd3b6041"
+    },
+    "files/out/coupled-shared-trial-strict-build/root-helper-closure.json": {
+      "mode": "0o644",
+      "bytes": 245,
+      "sha256": "2638bff0b4111fca150e911bc326e3365d44c707d929bf064aacbe3f7f3bef3f"
+    },
+    "files/out/coupled-shared-trial-strict-build/root-preflight.json": {
+      "mode": "0o644",
+      "bytes": 1624598,
+      "sha256": "6bb382e65868de4bbcfa934016871d1f9b876a51f01f24ea5bcc41bcc2b04854"
+    },
+    "files/out/coupled-shared-trial-strict-build/run_owned.py": {
+      "mode": "0o644",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "files/out/coupled-shared-trial-strict-build/strict-build/inputs-after.json": {
+      "mode": "0o644",
+      "bytes": 1573839,
+      "sha256": "333004e77191a1a6f65d4f9d6486891557be29a3b012935307606a5f55337297"
+    },
+    "files/out/coupled-shared-trial-strict-build/strict-build/inputs-before.json": {
+      "mode": "0o644",
+      "bytes": 1573839,
+      "sha256": "333004e77191a1a6f65d4f9d6486891557be29a3b012935307606a5f55337297"
+    },
+    "files/out/coupled-shared-trial-strict-build/strict-build/owner.json": {
+      "mode": "0o644",
+      "bytes": 13073,
+      "sha256": "d3f1e1b6780fb351d6f84ab49da6902e919cf4b0caa5ebf69a5a607cefb68370"
+    },
+    "files/out/coupled-shared-trial-strict-build/strict-build/samples.jsonl": {
+      "mode": "0o644",
+      "bytes": 312756,
+      "sha256": "7b62036440fe9ee6b3b283f9cc9f59281c6a39a93304fc15b96be98c7bb99c0d"
+    },
+    "files/out/coupled-shared-trial-strict-build/strict-build/stderr.log": {
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "files/out/coupled-shared-trial-strict-build/strict-build/stdout.log": {
+      "mode": "0o644",
+      "bytes": 13073,
+      "sha256": "f96508ccdb7fa24a4f9524608a32e893bb027a9abb81b88db0db4527cde98bf5"
+    }
+  },
+  "captured_source_inventories": {
+    "out/coupled-shared-trial-preservation": [
+      "out/coupled-shared-trial-preservation/push.log",
+      "out/coupled-shared-trial-preservation/remote-ref.txt",
+      "out/coupled-shared-trial-preservation/root-git-preservation.json",
+      "out/coupled-shared-trial-preservation/root-preservation-check.json",
+      "out/coupled-shared-trial-preservation/root-source-adoption.json",
+      "out/coupled-shared-trial-preservation/root-source-build-hold-release.json",
+      "out/coupled-shared-trial-preservation/root-source-publication.json",
+      "out/coupled-shared-trial-preservation/source-commit-message.txt",
+      "out/coupled-shared-trial-preservation/source-push.log",
+      "out/coupled-shared-trial-preservation/source-remote-ref.txt"
+    ],
+    "out/coupled-shared-trial-strict-build": [
+      "out/coupled-shared-trial-strict-build/actions.json",
+      "out/coupled-shared-trial-strict-build/configure.log",
+      "out/coupled-shared-trial-strict-build/helper.stderr",
+      "out/coupled-shared-trial-strict-build/helper.stdout",
+      "out/coupled-shared-trial-strict-build/independent-integration-review.json",
+      "out/coupled-shared-trial-strict-build/owned_guard.py",
+      "out/coupled-shared-trial-strict-build/root-completed.json",
+      "out/coupled-shared-trial-strict-build/root-configure-observation.json",
+      "out/coupled-shared-trial-strict-build/root-helper-closure.json",
+      "out/coupled-shared-trial-strict-build/root-preflight.json",
+      "out/coupled-shared-trial-strict-build/run_owned.py",
+      "out/coupled-shared-trial-strict-build/strict-build/inputs-after.json",
+      "out/coupled-shared-trial-strict-build/strict-build/inputs-before.json",
+      "out/coupled-shared-trial-strict-build/strict-build/owner.json",
+      "out/coupled-shared-trial-strict-build/strict-build/samples.jsonl",
+      "out/coupled-shared-trial-strict-build/strict-build/stderr.log",
+      "out/coupled-shared-trial-strict-build/strict-build/stdout.log"
+    ],
+    "out/coupled-shared-trial-software-pending": [
+      "out/coupled-shared-trial-software-pending/actions.json",
+      "out/coupled-shared-trial-software-pending/actions.pending.json",
+      "out/coupled-shared-trial-software-pending/commands.pending.json",
+      "out/coupled-shared-trial-software-pending/coupled-fp64/gtest.xml",
+      "out/coupled-shared-trial-software-pending/coupled-fp64/inputs-after.json",
+      "out/coupled-shared-trial-software-pending/coupled-fp64/inputs-before.json",
+      "out/coupled-shared-trial-software-pending/coupled-fp64/owner.json",
+      "out/coupled-shared-trial-software-pending/coupled-fp64/samples.jsonl",
+      "out/coupled-shared-trial-software-pending/coupled-fp64/stderr.log",
+      "out/coupled-shared-trial-software-pending/coupled-fp64/stdout.log",
+      "out/coupled-shared-trial-software-pending/ctest-inventory.json",
+      "out/coupled-shared-trial-software-pending/ctest-inventory.stderr",
+      "out/coupled-shared-trial-software-pending/helper.stderr",
+      "out/coupled-shared-trial-software-pending/helper.stdout",
+      "out/coupled-shared-trial-software-pending/independent-completion-review.json",
+      "out/coupled-shared-trial-software-pending/independent-runtime-review.json",
+      "out/coupled-shared-trial-software-pending/independent-source-review.json",
+      "out/coupled-shared-trial-software-pending/owned_guard.py",
+      "out/coupled-shared-trial-software-pending/readiness.json",
+      "out/coupled-shared-trial-software-pending/readiness.pending.json",
+      "out/coupled-shared-trial-software-pending/root-completed.json",
+      "out/coupled-shared-trial-software-pending/root-live-provider-environment.json",
+      "out/coupled-shared-trial-software-pending/root-preflight.json",
+      "out/coupled-shared-trial-software-pending/root-runtime-observation.json",
+      "out/coupled-shared-trial-software-pending/root-runtime-release.json",
+      "out/coupled-shared-trial-software-pending/run_owned.py",
+      "out/coupled-shared-trial-software-pending/runtime-paths.pending.json",
+      "out/coupled-shared-trial-software-pending/source-contracts.json"
+    ],
+    "out/coupled-shared-trial-adoption": [
+      "out/coupled-shared-trial-adoption/current-products-before.json"
+    ]
+  },
+  "source_build_cleanup_released": false,
+  "full_qualification_pending": true
+}

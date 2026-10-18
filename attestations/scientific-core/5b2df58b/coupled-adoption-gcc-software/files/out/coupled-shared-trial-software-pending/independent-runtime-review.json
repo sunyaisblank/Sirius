@@ -1,0 +1,49 @@
+{
+  "schema": "sirius-coupled-shared-trial-software-independent-runtime-review-v1",
+  "created_utc": "2026-10-18T02:01:57.263111+00:00",
+  "passed": true,
+  "runtime_released": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "actions.json": {
+      "bytes": 20214,
+      "sha256": "12a7641fbc9f0f7b9662e86272173fd428c63ee7315cdfd582746676c33aeaee"
+    },
+    "readiness.json": {
+      "bytes": 17514,
+      "sha256": "cf188e2f4d2ee9a6dc20104acac5ff8f57a94289c7ef09ce2d5196d2864aff8b"
+    },
+    "root-preflight.json": {
+      "bytes": 202208,
+      "sha256": "3207da370059bd5421c8e8a602879199910e0866fb77bfc92b326fd4695f42f9"
+    },
+    "root-runtime-observation.json": {
+      "bytes": 12672,
+      "sha256": "9f707faa7926135b0c00c3136b789bd066e21b19d23a63d68a164bf2bc2915a4"
+    },
+    "independent-source-review.json": {
+      "bytes": 1375,
+      "sha256": "4d646b904d829ea50c72457cf155f57f1f8205813a98485271e010a1edcc0115"
+    }
+  },
+  "reuse": {
+    "strict_integration": {
+      "bytes": 2906,
+      "sha256": "0da961c871ccc404d08531828a1523b32055e179da29d3f09be850daeb53601a"
+    },
+    "mature_owner_guard": "Exact e573fd19/747fe1e0; prior ownership/guard review reused, no execution."
+  },
+  "checks": [
+    "All795 preflight rows freshly match bytes/hash/resolved paths. Exact797 owner keys compose538 tracked files, helpers/actions, declared selectors, preflight and future release; no case output is frozen.",
+    "Final action changes only frozen_inputs:264 normalized selectors retained plus ten proofs=274 unique selectors. Reviewer prefix-order assumption corrected; owner keysets agree, no packet mutation.",
+    "All178 runtime pins/23 source-staged pairs match. Backend fe663 and coupled878700/fbdd17 join reviewed strict producer. Current LVP dev8:48/inode143595 used.",
+    "Saved fresh1152 inventory: exact active original argv/disabled-test flag, no ENVIRONMENT/TIMEOUT, serial lock. Executable-relative resources permit mature checkout cwd.",
+    "Exact e573/747fe helpers; typed test/softwaretrue/cache-disablefalse/int0;300s aggregate4GiB/reserve2GiB. Default/unset JIT/cache, no profiler. Device0 does not mean JIT0."
+  ],
+  "release_conditions": [
+    "ROOT may create only root-runtime-release.json after separate release;795 inputs/actions/readiness/preflight remain unchanged. Owner freezes release+preflight at entry; case/release absent now.",
+    "ROOT actual same-birth child environment/provider/maps check remains required: ICD/device0/owned XML, JIT/cache/SLANG/LD overrides absent, current LVP inode and immutable code joins.",
+    "Acceptance: owner/child0, unchanged797 maps, clean birth closure; one completed zeroFESD XML, unique full-positive FP64/supports64 properties; nine original numerical/refusal/336B/allocation/actual1000ms assertions. Original zero-count software initialization has no1000ms cap."
+  ],
+  "limits": "Metadata admission only; no numerical/fullMandatory/science/cold/performance/native/release/cleanup claim. Source clean committed/pushed0:0/sole checkout checked read-only; only this sidecar written."
+}

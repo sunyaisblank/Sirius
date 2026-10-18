@@ -1,0 +1,41 @@
+{
+  "schema": "sirius-coupled-shared-trial-software-independent-completion-review-v1",
+  "created_utc": "2026-10-18T02:06:36.951686+00:00",
+  "passed": true,
+  "audit_completed": true,
+  "numerical_passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "root-completed.json": {
+      "bytes": 9008,
+      "sha256": "4ffa19c04febbe31f713fc8f4a180b080ece6aa9fe3f40de3ced2fd79146a84f"
+    },
+    "independent-runtime-review.json": {
+      "bytes": 3113,
+      "sha256": "73047b4d41c366a20ec9348b306b8bd548b1ba5089559d5b6a78191beb24bafb"
+    },
+    "coupled-fp64/owner.json": {
+      "bytes": 3427,
+      "sha256": "da85ee492e93124b9b8494d1990caf56a2a42da1b54cfad25e89b07e379cdc8b"
+    },
+    "coupled-fp64/gtest.xml": {
+      "bytes": 10030,
+      "sha256": "3536e4c135e128cd4c5bab0575245511bb979f1f7de3a0d78c74cb7a3af8d21e"
+    }
+  },
+  "checks": [
+    "All797 before=after=current rich rows and795 preflight pins matched, including unchanged actions/readiness/helpers plus permitted ROOT release. All completion raw-file pins matched; reviewed source/build/product composition reused.",
+    "Original one active FP64 coupled case completed: one XML run/completed, zeroFESD, unique full-positive fp64_evidence and coupled_supports_fp64=true. Unchanged original assertions exercise seven positive/two refusal packets; no unsupported-FP64 early return accepted.",
+    "Nine actual packet submit waits finitepositive0.605494..2.668662ms <=1000ms. Each336B, cumulative/resident/peak3024B <=original1GiB. Original zero-count initialization submit25601.004971ms/setup2281.358781ms has no original1000ms cap; unchanged sentinel initialization is not an added warmup.",
+    "Actual same-birth controller11223/16251581 and child11227/16251620 snapshots join owner. Default/unset JIT/cache overrides, exact ICD/device0/XML;45 distinct immutable mapped paths prebound. LVPdev8:48/inode143595/fullbytes matched. Mutable Mesa index and anonymous/memfd allocations separately classified, not frozen/cold/hitrate evidence.",
+    "Owner actual0/terminal/no stop, source and whole inputs unchanged, cleanup/remainers empty.1108 samples peakaggregate681064KiB/reserve minimum19298592KiB remain within300s/4GiB/2GiB. ROOT saved both fresh birth absences; reviewer made no process query."
+  ],
+  "observed": {
+    "owner_seconds": 28.104531429009512,
+    "XML_seconds": 28.003,
+    "sample_count": 1108,
+    "peak_aggregate_RSS_KiB": 681064
+  },
+  "orchestration_scope": "ROOT records capture actual0 followed by JS undefined-session bookkeeping exception; preserved as observer bookkeeping, not workload/capture retry or input change. No reviewer execution.",
+  "limits": "Selected canonical FP64 software case only; prior native/strict-build joins remain separately scoped. No fullscience/Mandatory/8domains/cold/ABBA/performance/driver-cause/release/cleanup claim. Source clean committed/pushed0:0/sole checkout checked read-only; this sidecar awaits ROOT preservation."
+}

@@ -1,0 +1,3 @@
+Share coupled RK4 trial body for native compilation
+
+Reuse one complete four-stage body across the full step and two half steps, keeping both output copies before each failure return. Independent emitted comparison preserves trial order, short-circuit failures, twelve derivative stages, arithmetic and ABI. The unchanged native AMD nine-packet coupled case passes with this shader. Private screen/runtime evidence: cf2414211fa2cd721b49f73f6e5cfaa7b94544ad.

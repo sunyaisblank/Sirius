@@ -1,0 +1,258 @@
+{
+  "schema": "sirius-coupled-shared-trial-software-root-completed-v1",
+  "created_utc": "2026-10-18T02:05:25.651819+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "passed": true,
+  "audit_completed": true,
+  "numerical_passed": true,
+  "actual_root_observed_closed_exits": {
+    "original_owner_helper": 0,
+    "one_shot_live_capture": 0
+  },
+  "scope_of_orchestration_exception": "The functions JS wrapper attempted to store an undefined nonrunning capture-session id AFTER actual capture had returned0 and written a positive snapshot; only that bookkeeping threw. No owner/capture/program retry or setting/input mutation occurred.",
+  "original_test": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+  "XML": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "disabled": 0,
+    "case_status": "run/completed",
+    "test_seconds": 28.003,
+    "fp64_evidence": "actual_four_column_joint_rk4_and_independent_scalar_neighbours",
+    "coupled_supports_fp64": "true"
+  },
+  "original_seven_positive_two_refusal_assertions_completed": true,
+  "original_software_initialization": {
+    "submit_wait_ms": "25601.004971",
+    "dispatch_wall_ms": "27882.515479",
+    "pipeline_setup_ms": "2281.358781",
+    "command_setup_ms": "0.110075",
+    "cleanup_ms": "0.039301",
+    "total_ms": "27882.513128",
+    "pipeline_created": "true"
+  },
+  "initialization_scope": "Original ordinal0 zero-active dispatch/readback sentinel is unchanged, finitepositive submit required; no1000ms cap on initialization. All9actualone-record packets retain original1000ms cap. No new warmup added.",
+  "packets": [
+    {
+      "ordinal": 0,
+      "actual_submit_wait_ms": 1.546154,
+      "dispatch_wall_ms": 1.621229,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 336
+    },
+    {
+      "ordinal": 1,
+      "actual_submit_wait_ms": 2.480185,
+      "dispatch_wall_ms": 2.52097,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 672
+    },
+    {
+      "ordinal": 2,
+      "actual_submit_wait_ms": 2.396138,
+      "dispatch_wall_ms": 2.436374,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 1008
+    },
+    {
+      "ordinal": 3,
+      "actual_submit_wait_ms": 1.862336,
+      "dispatch_wall_ms": 1.889898,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 1344
+    },
+    {
+      "ordinal": 4,
+      "actual_submit_wait_ms": 1.892288,
+      "dispatch_wall_ms": 1.920989,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 1680
+    },
+    {
+      "ordinal": 5,
+      "actual_submit_wait_ms": 2.668662,
+      "dispatch_wall_ms": 2.699511,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 2016
+    },
+    {
+      "ordinal": 6,
+      "actual_submit_wait_ms": 2.545062,
+      "dispatch_wall_ms": 2.58418,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 2352
+    },
+    {
+      "ordinal": 7,
+      "actual_submit_wait_ms": 0.605494,
+      "dispatch_wall_ms": 0.637201,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 2688
+    },
+    {
+      "ordinal": 8,
+      "actual_submit_wait_ms": 2.066936,
+      "dispatch_wall_ms": 2.090181,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 3024
+    }
+  ],
+  "actual_device": {
+    "coupled_device_index": "0",
+    "coupled_device_name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "coupled_device_kind": "software",
+    "coupled_vendor_id": "65541",
+    "coupled_device_id": "0",
+    "coupled_driver_id": "13",
+    "coupled_driver_name": "llvmpipe",
+    "coupled_driver_info": "Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+    "coupled_supports_fp64": "true"
+  },
+  "whole_beforeafter_current_rows": 797,
+  "all_selected_inputs_unchanged": true,
+  "actual_samebirth_LVP_device0_default_JIT_and_cache_UNSET": true,
+  "actual_provider_code_dev_inode_prebound": {
+    "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "bytes": 11929384,
+    "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+    "device_major": 8,
+    "device_minor": 48,
+    "inode": 143595
+  },
+  "live_provider_snapshot": {
+    "bytes": 168666,
+    "sha256": "955a8716987acaf95197097a78c2c8ad86b11ab5a0533f4a7c1bc72454fe0eb5"
+  },
+  "all_snapshot_owner_target_immutable_mapped_code_prebound": true,
+  "default_cache_is_not_cold_or_hitrate_proof": true,
+  "owner_wall_seconds": 28.104531429009512,
+  "peak_sampled_aggregate_RSS_KiB": 681064,
+  "minimum_sampled_available_KiB": 19298592,
+  "sample_count": 1108,
+  "all_saved_owned_births_fresh_absent": true,
+  "fresh_births": [
+    {
+      "pid": 11223,
+      "saved_start_ticks": "16251581",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 11227,
+      "saved_start_ticks": "16251620",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "no_guard_cleanup_or_remaining_process_error": true,
+  "source_clean_committed_pushed0_0": true,
+  "raw_files": {
+    "actions.pending.json": {
+      "bytes": 18395,
+      "sha256": "370ddcb15d1e9a3c38473c9f5cce2363c9476bfc1fd4e1a21d78a769ffcd79d1"
+    },
+    "ctest-inventory.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "root-preflight.json": {
+      "bytes": 202208,
+      "sha256": "3207da370059bd5421c8e8a602879199910e0866fb77bfc92b326fd4695f42f9"
+    },
+    "independent-source-review.json": {
+      "bytes": 1375,
+      "sha256": "4d646b904d829ea50c72457cf155f57f1f8205813a98485271e010a1edcc0115"
+    },
+    "ctest-inventory.json": {
+      "bytes": 986718,
+      "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+    },
+    "owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "independent-runtime-review.json": {
+      "bytes": 3113,
+      "sha256": "73047b4d41c366a20ec9348b306b8bd548b1ba5089559d5b6a78191beb24bafb"
+    },
+    "run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "root-live-provider-environment.json": {
+      "bytes": 168666,
+      "sha256": "955a8716987acaf95197097a78c2c8ad86b11ab5a0533f4a7c1bc72454fe0eb5"
+    },
+    "helper.stdout": {
+      "bytes": 902,
+      "sha256": "c763435d4379f1b0db37adaff86cc8b63439990b4792b34153afc53a339c2294"
+    },
+    "actions.json": {
+      "bytes": 20214,
+      "sha256": "12a7641fbc9f0f7b9662e86272173fd428c63ee7315cdfd582746676c33aeaee"
+    },
+    "root-runtime-observation.json": {
+      "bytes": 12672,
+      "sha256": "9f707faa7926135b0c00c3136b789bd066e21b19d23a63d68a164bf2bc2915a4"
+    },
+    "runtime-paths.pending.json": {
+      "bytes": 42095,
+      "sha256": "fcd69b9664690eb0d4b067b1c19ff42c340baf4a6071cba7904e48e9ae0f0980"
+    },
+    "readiness.pending.json": {
+      "bytes": 16495,
+      "sha256": "d1a935a331a37eb5a52052482c7ed0c6152eb65550bf46d4686fa5218b55a6ef"
+    },
+    "readiness.json": {
+      "bytes": 17514,
+      "sha256": "cf188e2f4d2ee9a6dc20104acac5ff8f57a94289c7ef09ce2d5196d2864aff8b"
+    },
+    "commands.pending.json": {
+      "bytes": 400,
+      "sha256": "202f17eed5219253d209e726e15c5a8b10621108800d24453571555e8b66fb40"
+    },
+    "helper.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source-contracts.json": {
+      "bytes": 8575,
+      "sha256": "45380f4d69b9c7c041158dd112efbf7cbf4e1e318fbf47b429df960207b95bc8"
+    },
+    "root-runtime-release.json": {
+      "bytes": 3489,
+      "sha256": "ba11fa7709cbdc0c67c5faab5d68705d2cb30e67e7dfedd6e372786330dbf2af"
+    },
+    "coupled-fp64/samples.jsonl": {
+      "bytes": 246537,
+      "sha256": "5e9c3680e7b3c101d81eff12331b28b202694acbb653d5e5ab31b0e9998e183e"
+    },
+    "coupled-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "coupled-fp64/inputs-before.json": {
+      "bytes": 191841,
+      "sha256": "f57a423ad32cdf00203e337b15b53814c5794aff21893252e3bf48265ca820e6"
+    },
+    "coupled-fp64/stdout.log": {
+      "bytes": 4286,
+      "sha256": "4f3060d7263482e306c80bc541aec7da4ea51fe16dafaf788bb9995a19e99fda"
+    },
+    "coupled-fp64/inputs-after.json": {
+      "bytes": 191841,
+      "sha256": "f57a423ad32cdf00203e337b15b53814c5794aff21893252e3bf48265ca820e6"
+    },
+    "coupled-fp64/owner.json": {
+      "bytes": 3427,
+      "sha256": "da85ee492e93124b9b8494d1990caf56a2a42da1b54cfad25e89b07e379cdc8b"
+    },
+    "coupled-fp64/gtest.xml": {
+      "bytes": 10030,
+      "sha256": "3536e4c135e128cd4c5bab0575245511bb979f1f7de3a0d78c74cb7a3af8d21e"
+    }
+  },
+  "cleanup_released": false,
+  "scope": "One currentcanonicalFP64 original9packet software Lavapipe case PASS with default/unsetJIT/cache and actualboundprovider/input/ownership. No profiling/oldnativefailurecause/ABBA/performance/coldKerrframe/otherprecision/fulltrace/Mandatory/8domains/release acceptance."
+}

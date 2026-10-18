@@ -1,0 +1,47 @@
+{
+  "schema": "sirius-coupled-shared-trial-strict-configure-v1",
+  "created_utc": "2026-10-18T01:49:59.091400+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "argv": [
+    "/usr/bin/cmake",
+    "--preset",
+    "linux-gcc",
+    "-DSIRIUS_ALIGNMENT_MODE=qualification",
+    "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON"
+  ],
+  "actual_closed_exit": 0,
+  "required_cache": [
+    "CMAKE_BUILD_TYPE:STRING=Release",
+    "SIRIUS_ALIGNMENT_MODE:STRING=qualification",
+    "SIRIUS_CONTRACT_MODE:STRING=2",
+    "SIRIUS_MANDATORY_TESTS:BOOL=ON",
+    "SIRIUS_WERROR:BOOL=ON",
+    "SIRIUS_REQUIRE_VULKAN_RUNTIME:BOOL=ON"
+  ],
+  "alignment_admitted_domains": [],
+  "alignment_pending_domains": [
+    "macos-moltenvk",
+    "macos-native-build",
+    "physical-imax-5616x4096",
+    "physical-radeon-780m",
+    "viewer-native-window-input",
+    "windows-native-build",
+    "windows-native-vulkan",
+    "wsl2-dozen"
+  ],
+  "files": {
+    "out/coupled-shared-trial-strict-build/configure.log": {
+      "bytes": 1277,
+      "sha256": "7db1ba28804aee7a849ddceeb0d5138efb08373f1775ae690efd16ed2fb9dd5a"
+    },
+    "bin/linux-gcc/CMakeCache.txt": {
+      "bytes": 60324,
+      "sha256": "e495eb24cd37e87de7a3ea6346cc967d8884556dfcd90d3a1a3341226e3d0e0f"
+    },
+    "bin/linux-gcc/generated/sirius/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "bc441b1aa4a92cf6f3ec6b199c260e220649b626df4dd485272916cc5c349d1b"
+    }
+  },
+  "scope": "Actual original strict preset configure, subprocess300s timeout; no aggregateRSS/build/runtime/science/release qualification."
+}

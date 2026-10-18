@@ -1,0 +1,110 @@
+{
+  "schema": "sirius-coupled-shared-trial-current-product-and-impact-checkpoint-v1",
+  "created_utc": "2026-10-18T01:45:03.353602+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "canonical_source_unchanged": true,
+  "canonical_products_before": {
+    "bin/linux-gcc/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/linux-gcc/kernels/coupled_probe_fp64.spv": {
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "bin/linux-gcc/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/linux-gcc/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/linux-gcc/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/linux-gcc/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/linux-gcc/kernels/parity_probe.spv": {
+      "bytes": 3377936,
+      "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+    },
+    "bin/linux-gcc/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 3382160,
+      "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+    },
+    "bin/linux-gcc/kernels/parity_probe_fp64.spv": {
+      "bytes": 3427652,
+      "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+    },
+    "bin/linux-gcc/kernels/portability/trace.cu": {
+      "bytes": 336030,
+      "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+    },
+    "bin/linux-gcc/kernels/portability/trace.metal": {
+      "bytes": 358529,
+      "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+    },
+    "bin/linux-gcc/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/linux-gcc/kernels/trace.spv": {
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+    },
+    "bin/linux-gcc/kernels/trace_fp32comp.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+    },
+    "bin/linux-gcc/kernels/trace_fp64.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+    }
+  },
+  "only_reaching_import": [
+    "src/sirius/kernels/coupled_probe.slang"
+  ],
+  "only_definition_and_call_modules": [
+    "src/sirius/kernels/coupled_probe.slang",
+    "src/sirius/kernels/gr_coupled.slang"
+  ],
+  "changed_module": {
+    "path": "src/sirius/kernels/gr_coupled.slang",
+    "identity": {
+      "bytes": 12632,
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    }
+  },
+  "backend_CMake": {
+    "bytes": 17763,
+    "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2"
+  },
+  "ninja": {
+    "bytes": 488456,
+    "sha256": "f9a58eff72b2417bfac1cfa70e531c251e47e6bfeae0857b1b021cdd241429be"
+  },
+  "actual_coupled_product": "bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+  "dedicated_mode": "Only FP64 is built; no coupledFP32/COMP products registered. Other18 shaders have no gr_coupled import/reach, stronger than DCE assumption. CMake broad all13gr_* prerequisite list causes their regeneration.",
+  "adoption_gate": "Only after preserving completed private proof: exact source singlefile; ordinary strictbuild/validators/governance; canonicalcoupledSPV must equal private878700/fbdd17, other18 products must equal beforepins to reuse priorwitnesses. Inspect any unexpecteddelta instead of unchanged runtime replays.",
+  "scope": "Current before-build identities and passive source reachability only, not a new test, numerical/adoption/otherprecision/fullscience qualification."
+}

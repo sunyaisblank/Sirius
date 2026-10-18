@@ -1,0 +1,249 @@
+{
+  "schema": "sirius-coupled-software-current-runtime-and-registration-observation-v1",
+  "created_utc": "2026-10-18T01:57:50.213520+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "matching178_runtime_paths": true,
+  "selected_historical_observation": {
+    "bytes": 42095,
+    "sha256": "fcd69b9664690eb0d4b067b1c19ff42c340baf4a6071cba7904e48e9ae0f0980"
+  },
+  "actual_new_version_ldd_readelf_or_provider_queries": 0,
+  "actual_inventory_query": {
+    "argv": [
+      "/usr/bin/ctest",
+      "--test-dir",
+      "/home/astra/.project/Sirius/bin/linux-gcc",
+      "--show-only=json-v1"
+    ],
+    "actual_exit": 0,
+    "registered": 1152,
+    "executed": 0,
+    "stdout": {
+      "bytes": 986718,
+      "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "selected_test": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+      "properties": [
+        {
+          "name": "SKIP_REGULAR_EXPRESSION",
+          "value": [
+            "\\[  SKIPPED \\]"
+          ]
+        },
+        {
+          "name": "LABELS",
+          "value": [
+            "Correctness",
+            "Mandatory"
+          ]
+        },
+        {
+          "name": "RESOURCE_LOCK",
+          "value": [
+            "sirius_vulkan_device"
+          ]
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+        }
+      ]
+    }
+  },
+  "actual_provider_current_identity": {
+    "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "bytes": 11929384,
+    "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139",
+    "device_major": 8,
+    "device_minor": 48,
+    "inode": 143595
+  },
+  "canonical_backend": {
+    "bytes": 13502080,
+    "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+  },
+  "source_and_staged_resources": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/portable_binary32_reference.bin": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/portable_binary32_reference.bin",
+      "identity": {
+        "bytes": 4182444,
+        "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera/program_fixture.h": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera/program_fixture.h",
+      "identity": {
+        "bytes": 416303,
+        "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera/program_camera_probe-fp32.spv",
+      "identity": {
+        "bytes": 35160,
+        "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
+      "identity": {
+        "bytes": 35196,
+        "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/smoke.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/smoke.spv",
+      "identity": {
+        "bytes": 1404,
+        "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe.spv",
+      "identity": {
+        "bytes": 3377936,
+        "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe_fp32comp.spv",
+      "identity": {
+        "bytes": 3382160,
+        "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe_fp64.spv",
+      "identity": {
+        "bytes": 3427652,
+        "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/infinity_probe.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/infinity_probe.spv",
+      "identity": {
+        "bytes": 99692,
+        "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/infinity_probe_fp32comp.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/infinity_probe_fp32comp.spv",
+      "identity": {
+        "bytes": 100040,
+        "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/infinity_probe_fp64.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/infinity_probe_fp64.spv",
+      "identity": {
+        "bytes": 100568,
+        "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/metric_consistency_probe.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/metric_consistency_probe.spv",
+      "identity": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/metric_consistency_probe_fp32comp.spv",
+      "identity": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/metric_consistency_probe_fp64.spv",
+      "identity": {
+        "bytes": 66064,
+        "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/camera_frame_probe.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/camera_frame_probe.spv",
+      "identity": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/camera_frame_probe_fp32comp.spv",
+      "identity": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/camera_frame_probe_fp64.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/camera_frame_probe_fp64.spv",
+      "identity": {
+        "bytes": 37728,
+        "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/coupled_probe_fp64.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+      "identity": {
+        "bytes": 878700,
+        "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/portability/trace.cu": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu",
+      "identity": {
+        "bytes": 336030,
+        "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/portability/trace.metal": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal",
+      "identity": {
+        "bytes": 358529,
+        "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/trace.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv",
+      "identity": {
+        "bytes": 2325528,
+        "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/trace_fp32comp.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv",
+      "identity": {
+        "bytes": 2328852,
+        "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+      }
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/trace_fp64.spv": {
+      "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv",
+      "identity": {
+        "bytes": 2336860,
+        "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+      }
+    }
+  },
+  "parent_selected_environment": {
+    "HOME": "/home/astra",
+    "LANG": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "DEBUGINFOD_URLS": "https://debuginfod.ubuntu.com ",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "/home/astra/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/astra/.local/bin:/home/astra/.codex/tmp/arg0-linux/codex-arg0yBb0Y8:/home/astra/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/astra/.local/bin:/home/astra/.cargo/bin:/home/astra/.juliaup/bin:/home/astra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/Eclipse Adoptium/jdk-25.0.1.8-hotspot/bin:/mnt/c/Program Files/Microsoft/jdk-25.0.2.10-hotspot/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Neovim/bin:/mnt/c/Program Files/Git/cmd:/Docker/host/bin:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Users/alarisadmin/AppData/Local/Programs/OpenAI/Codex/bin:/mnt/c/Program Files/PowerShell/7:/mnt/c/Program Files/Eclipse Adoptium/jdk-25.0.1.8-hotspot/bin:/mnt/c/Program Files/Microsoft/jdk-25.0.2.10-hotspot/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Program Files/Neovim/bin:/Docker/host/bin:/mnt/c/Users/alarisadmin/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/alarisadmin/AppData/Local/Microsoft/WinGet/Packages/Fastfetch-cli.Fastfetch_Microsoft.Winget.Source_8wekyb3d8bbwe:/mnt/c/Users/alarisadmin/.local/bin:/snap/bin:/home/astra/.dotnet/tools"
+  },
+  "protected_parent_overrides": {},
+  "required_policy": "Actual target samebirthenv must have exact VK_DRIVER_FILES/SIRIUS_VULKAN_DEVICE/GTEST_OUTPUT, default/unset JIT/cache/SLANG/LD overrides; actual LVP inode+mapped code joins still required.",
+  "scope": "Fresh physical metadata/current178pins/resource23/fullregistration1152 selection only; no case/provider runtime executed or qualification."
+}

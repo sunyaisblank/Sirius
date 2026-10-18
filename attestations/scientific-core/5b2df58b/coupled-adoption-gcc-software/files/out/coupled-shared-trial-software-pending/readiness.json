@@ -1,0 +1,178 @@
+{
+  "schema": "sirius-coupled-shared-trial-software-concrete-readiness-v1",
+  "source_only": false,
+  "admitted": false,
+  "source_revision_expected_from_ROOT": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_status": "ROOT committed/pushed adoption; author did not query Git or admit build outputs. Unchanged owner requires exact current revision and empty status.",
+  "prior_native_private_evidence_commit": "cf2414211fa2cd721b49f73f6e5cfaa7b94544ad",
+  "canonical_product_required": {
+    "path": "bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+    "bytes": 878700,
+    "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767",
+    "staged_path": "bin/linux-gcc/tests/backend/resources/kernels/coupled_probe_fp64.spv",
+    "current_join_ROOT_required": true
+  },
+  "current_strict_build_and18_unchanged_products": "ROOT reports strict six-target build0 and canonical/private SPV equality/allother18 equality; ROOT pins actual completion/product-adoption receipts into final closure before admission. No author output observation.",
+  "registration": {
+    "file": {
+      "path": "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake",
+      "bytes": 113318,
+      "sha256": "fabbc55b60e850f70dc264d87d45ecb7a238c7b4cd5a887124bab8384a493f11"
+    },
+    "exact_add_test": "add_test([=[KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64]=]  /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests [==[--gtest_filter=KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64]==] --gtest_also_run_disabled_tests)",
+    "exact_properties": "set_tests_properties([=[KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64]=]  PROPERTIES WORKING_DIRECTORY /home/astra/.project/Sirius/bin/linux-gcc/tests/backend SKIP_REGULAR_EXPRESSION [==[\\[  SKIPPED \\]]==] RESOURCE_LOCK sirius_vulkan_device LABELS Correctness)",
+    "no_original_ENVIRONMENT_or_TIMEOUT": true,
+    "original_argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "--gtest_filter=KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "RESOURCE_LOCK_honored_by_ROOT_serial_launch": true
+  },
+  "runtime_path_selection": {
+    "path": "out/coupled-shared-trial-software-pending/runtime-paths.pending.json",
+    "bytes": 42095,
+    "sha256": "fcd69b9664690eb0d4b067b1c19ff42c340baf4a6071cba7904e48e9ae0f0980"
+  },
+  "resource_recipe": {
+    "build_ninja_command": "cd /home/astra/.project/Sirius/bin/linux-gcc && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/portable_binary32_reference.bin /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/portable_binary32_reference.bin && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera/program_fixture.h /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera/program_fixture.h && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera/program_camera_probe-fp32.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera/program_camera_probe-fp32comp.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/smoke.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/smoke.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe_fp32comp.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe_fp64.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/infinity_probe.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/infinity_probe.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/infinity_probe_fp32comp.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/infinity_probe_fp32comp.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/infinity_probe_fp64.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/infinity_probe_fp64.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/metric_consistency_probe.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/metric_consistency_probe.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/metric_consistency_probe_fp32comp.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/metric_consistency_probe_fp32comp.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/metric_consistency_probe_fp64.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/metric_consistency_probe_fp64.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/camera_frame_probe.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/camera_frame_probe.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/camera_frame_probe_fp32comp.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/camera_frame_probe_fp32comp.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/camera_frame_probe_fp64.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/camera_frame_probe_fp64.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/coupled_probe_fp64.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/coupled_probe_fp64.spv && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/portability && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/portability/trace.cu && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/portability && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/portability/trace.metal && /usr/bin/cmake -E make_directory /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels && /usr/bin/cmake -E copy_if_different /home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv /home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv /home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels",
+    "source_and_staged_pairs": [
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/portable_binary32_reference.bin",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/portable_binary32_reference.bin"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera/program_fixture.h",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera/program_fixture.h"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera/program_camera_probe-fp32.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/smoke.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/smoke.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe_fp32comp.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp32comp.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/parity_probe_fp64.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/parity_probe_fp64.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/infinity_probe.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/infinity_probe.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/infinity_probe_fp32comp.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/infinity_probe_fp32comp.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/infinity_probe_fp64.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/infinity_probe_fp64.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/metric_consistency_probe.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/metric_consistency_probe.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/metric_consistency_probe_fp32comp.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/metric_consistency_probe_fp32comp.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/metric_consistency_probe_fp64.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/metric_consistency_probe_fp64.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/camera_frame_probe.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/camera_frame_probe.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/camera_frame_probe_fp32comp.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/camera_frame_probe_fp32comp.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/camera_frame_probe_fp64.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/camera_frame_probe_fp64.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/coupled_probe_fp64.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/portability/trace.cu"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/portability/trace.metal"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/trace.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/trace_fp32comp.spv"
+      },
+      {
+        "source": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv",
+        "staged": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/resources/kernels/trace_fp64.spv"
+      }
+    ],
+    "count": 23,
+    "ROOT_must_bind_actual_complete_postbuild_resources": true
+  },
+  "external_environment": {
+    "owner_sets": {
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "GTEST_OUTPUT": "xml:<owned case>/gtest.xml"
+    },
+    "LVP_JIT_OPTIMIZATION_LEVEL": "DEFAULT/UNSET; do not inherit focused Jacobi0",
+    "MESA_SHADER_CACHE_DISABLE": "UNSET/default; no coldcachetrue policy",
+    "ROOT_refuses_nonempty_LVP_or_SLANG_or_LD_override": "Before release, capture actual parent environment; actual same-owned-birth child environment must lack JIT/cache override. Unchanged helper does not itself reject LVP_/SLANG_; ROOT check is mandatory.",
+    "no_profiler": true
+  },
+  "prospective_selector_count": 264,
+  "ROOT_materialization_fields_pending": [
+    "Current postbuild ELF/full source+producer/23resource pins and strict build/product-joins receipt",
+    "Actual current reused runtime path/DSO/tool/Python/library/current ICD/provider dev+inode pins; no observed module claim before execution",
+    "Actual full current test inventory and registration case/argv/current source revisions",
+    "Actual actions.json/readiness/rootpreflight+independent/root release; no mutable case output as frozen input"
+  ],
+  "runtime_admitted": false,
+  "materialized": true,
+  "readiness_complete": true,
+  "strict_build_current_join": {
+    "bytes": 18777,
+    "sha256": "1994613ad1827d80bbba621db48f6651a9331cba6bf78b221f3c428a4e9fcd45"
+  },
+  "strict_independent_integration": {
+    "bytes": 2906,
+    "sha256": "0da961c871ccc404d08531828a1523b32055e179da29d3f09be850daeb53601a"
+  },
+  "actual_runtime_observation": {
+    "bytes": 12672,
+    "sha256": "9f707faa7926135b0c00c3136b789bd066e21b19d23a63d68a164bf2bc2915a4"
+  },
+  "canonical_backend_identity": {
+    "bytes": 13502080,
+    "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+  },
+  "canonical_coupled_identity": {
+    "bytes": 878700,
+    "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+  },
+  "execution_hold": "Frozen root-runtime-release.json deliberately absent. Actual owner cannot freeze its complete inputs or spawn workload until ROOT creates that file after concrete independent review. Readiness remains an as-of materialization record."
+}
