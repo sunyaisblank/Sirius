@@ -1,0 +1,128 @@
+{
+  "schema": "sirius-native-constant-independent-actual-composition-review-v1",
+  "created_utc": "2026-10-18T08:51:11.340136+00:00",
+  "reviewer": "/root/divide_contract_review",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "composition_report": {
+      "path": "out/native-constant-producer-inputs/root-composed-inputs.json",
+      "bytes": 16583,
+      "sha256": "d43b0d3278a648d3871e7a4cd1f3c723f6e93b23721b4573578a5afb69a07e2d"
+    },
+    "ROOT_emitted_admission": {
+      "path": "out/native-constant-publication/root-emitted-admission.json",
+      "bytes": 3521,
+      "sha256": "81ff45608b4ad178b4c89d6a28fc10e2e2e675bcea9ef428357f351b3b6b0775"
+    },
+    "separate_emitted_review": {
+      "path": "out/native-constant-publication/independent-emitted-and-compiler-review.json",
+      "bytes": 29709,
+      "sha256": "44b6bc02d3926df6eb5dd1f9a8658927b65746c6b72aa0944ae721f16dcb30d3"
+    },
+    "composer": {
+      "path": "out/native-constant-producer-source/compose_inputs.py",
+      "bytes": 12447,
+      "sha256": "220e7e259531f3b4e2914f28144edc1615deb65e3bfb8afbb0feff5e23a29306"
+    },
+    "composer_freeze": {
+      "path": "out/native-constant-producer-source/source-freeze.json",
+      "bytes": 1520,
+      "sha256": "a9c5ec157035513406137feee4ac1b7fe8755feac9167e11efb4292606af1190"
+    },
+    "Windows_freeze": {
+      "path": "out/native-constant-windows-source/source-freeze.json",
+      "bytes": 1307,
+      "sha256": "c3328daefc0e6dd74b58023c71e3c9180cfc3989b39997d5a936b0c357ae1d52"
+    },
+    "PE_audit_freeze": {
+      "path": "out/native-constant-pe-audit/source-freeze.json",
+      "bytes": 715,
+      "sha256": "70f68e28270f852748dd6b200a192fca14e0111526b839df40bd79dbf7f8914a"
+    }
+  },
+  "actual_composition": {
+    "payloads": 77,
+    "report_files": 1,
+    "total_regular_files": 78,
+    "all_inventory_hashes_modes0644_no_extras_or_symlinks": true,
+    "baseline_files_current_canonical": 38,
+    "candidate_files": 38,
+    "observer_files": 1,
+    "observer_c948_exact_27cases1492assertions_source_proof_reused": true,
+    "baseline_authority5d406_exact": true,
+    "changed_arrays": [
+      "kTransportShader",
+      "kEndpointShader",
+      "kDenseShader",
+      "kInitializeShader",
+      "kDopriPhaseShader"
+    ],
+    "other_main_arrays_byte_exact": 35,
+    "seven_program_tables_exact": [
+      "kCameraProgram",
+      "kDenseProgram",
+      "kDopriPhaseProgram",
+      "kEndpointProgram",
+      "kInitializeProgram",
+      "kRayCameraProgram",
+      "kTransportProgram"
+    ],
+    "outside_five_declarations_header_text_and_public_constants_exact": true,
+    "all35_header_SPV_payload_joins_independently_decoded": true,
+    "excluded_SPVs_exact": 30,
+    "two_owner_payloads_and_both_owner_headers_layout_exact": true,
+    "only_candidate_file_deltas": [
+      "retained_kernels.h",
+      "shaders/retained_dense.spv",
+      "shaders/retained_dopri_phase.spv",
+      "shaders/retained_endpoint.spv",
+      "shaders/retained_initialize.spv",
+      "shaders/retained_transport.spv"
+    ],
+    "all_payload_readbacks_stable": true
+  },
+  "actual_new_modules": {
+    "retained_transport.spv": {
+      "path": "out/native-constant-compiler-source/candidate/retained_transport.spv",
+      "bytes": 85832,
+      "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+    },
+    "retained_endpoint.spv": {
+      "path": "out/native-constant-compiler-source/candidate/retained_endpoint.spv",
+      "bytes": 99728,
+      "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+    },
+    "retained_dense.spv": {
+      "path": "out/native-constant-compiler-source/candidate/retained_dense.spv",
+      "bytes": 78380,
+      "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2"
+    },
+    "retained_initialize.spv": {
+      "path": "out/native-constant-compiler-source/candidate/retained_initialize.spv",
+      "bytes": 57596,
+      "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3"
+    },
+    "retained_dopri_phase.spv": {
+      "path": "out/native-constant-compiler-source/candidate/retained_dopri_phase.spv",
+      "bytes": 59228,
+      "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+    }
+  },
+  "emission_and_SOURCE_joins": {
+    "actual_owner_products_25command_and_five_module_pins_match": true,
+    "ROOT_honest_pure_CSE_semantics_admission_true": true,
+    "strict_outside_RTConstant_alpha_is_explicitly_false": true,
+    "ROOT_admitted_explicit_pure_CSE_count": 7,
+    "actual_constructor15525c035_and_unpacked_scratch892cd4_pins_exact": true,
+    "held_source_freeze_counts": {
+      "native-constant-producer-source": 9,
+      "native-constant-windows-source": 8,
+      "native-constant-pe-audit": 4
+    },
+    "composer_originalSoA_inverse_and_Windows_PE_namespace_inverses_exact": true,
+    "pre_CSE_source_packet_retained_in_current_composer_freeze": true
+  },
+  "limits": "Composition/source proof only. Reuses separate emitted/compiler and prior source/body proofs, does not repeat them. Actual matched Windows source/tool/API/CRT/SDK/object/map/42payload/selector eligibility and native ownership/provider,original controls/32raw-buffer word equality/sole22benefit remain future gates. No current word/performance/science/Mandatory/release/adoption claim.",
+  "method_and_authorship": "Reviewer authored composer/Windows/PE adapters. This receipt independently recomputes actual ROOT output inventories,full header restoration,all35payload joins,current modes/identities and exact narrow SOURCE inverses; separate shader-emission review was by another agent. Passive stdlib only; no composer/reader/helper import or execution,compiler/provider/test/network/process query or Git mutation. Only this new receipt written."
+}
