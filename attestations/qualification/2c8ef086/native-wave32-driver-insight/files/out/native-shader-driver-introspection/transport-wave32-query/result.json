@@ -1,0 +1,94 @@
+﻿{
+    "device":  "AMD Radeon 780M Graphics",
+    "enumerated_devices":  [
+                               "AMD Radeon 780M Graphics"
+                           ],
+    "driver_version_raw":  8389003,
+    "queue_family":  0,
+    "loader_requested":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\constant-original-frame-2c8ef086\\src\\sirius\\app\\Release\\vulkan-1.dll",
+    "loaded_modules":  [
+                           {
+                               "name":  "vulkan-1.dll",
+                               "path":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\constant-original-frame-2c8ef086\\src\\sirius\\app\\Release\\vulkan-1.dll",
+                               "bytes":  1685432,
+                               "sha256":  "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+                               "version":  "1.4.357.0"
+                           },
+                           {
+                               "name":  "amdvlk64.dll",
+                               "path":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+                               "bytes":  103213064,
+                               "sha256":  "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+                               "version":  "9.2.10.395"
+                           }
+                       ],
+    "shader":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\linux-gcc\\src\\sirius\\backend\\retained\\retained_transport.spv",
+    "shader_bytes":  85832,
+    "shader_sha256":  "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+    "entry_point":  "main",
+    "storage_bindings":  2,
+    "pipeline_flags":  0,
+    "pipeline_cache":  "VK_NULL_HANDLE",
+    "enabled_device_extensions":  [
+                                      "VK_AMD_shader_info",
+                                      "VK_EXT_subgroup_size_control"
+                                  ],
+    "optional_device_features_enabled":  [
+                                             "subgroupSizeControl"
+                                         ],
+    "required_subgroup_size":  32,
+    "queried_subgroup_properties":  {
+                                        "minimum":  32,
+                                        "maximum":  64,
+                                        "maximum_subgroups":  4294967295,
+                                        "required_stages":  240
+                                    },
+    "query_results":  [
+                          {
+                              "kind":  0,
+                              "size_result":  0,
+                              "requested_bytes":  72,
+                              "data_result":  0,
+                              "returned_bytes":  72,
+                              "path":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shader-driver-introspection\\transport-wave32-query\\shader\\shader-info-0.bin",
+                              "sha256":  "c7aeff83d2a637c4eb520bd3ab3dca9fcf6e73a51e5991e0bce651d5a6c8133b",
+                              "statistics":  {
+                                                 "stage_mask":  32,
+                                                 "used_vgprs":  54,
+                                                 "used_sgprs":  100,
+                                                 "lds_per_group":  65536,
+                                                 "lds_bytes":  9728,
+                                                 "scratch_bytes":  0,
+                                                 "physical_vgprs":  1024,
+                                                 "physical_sgprs":  2048,
+                                                 "available_vgprs":  256,
+                                                 "available_sgprs":  106,
+                                                 "workgroup":  [
+                                                                   64,
+                                                                   1,
+                                                                   1
+                                                               ]
+                                             }
+                          },
+                          {
+                              "kind":  1,
+                              "size_result":  0,
+                              "requested_bytes":  2751432,
+                              "data_result":  0,
+                              "returned_bytes":  2751432,
+                              "path":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shader-driver-introspection\\transport-wave32-query\\shader\\shader-info-1.bin",
+                              "sha256":  "a89cd440c644b7ba382c0b605c2bccc034d09154820046d30b595c82b0f822dd"
+                          },
+                          {
+                              "kind":  2,
+                              "size_result":  0,
+                              "requested_bytes":  2450420,
+                              "data_result":  0,
+                              "returned_bytes":  2450420,
+                              "path":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shader-driver-introspection\\transport-wave32-query\\shader\\shader-info-2.isa.txt",
+                              "sha256":  "6c9aae67bbeadfaa4ec66222e6360232b27bd8ea6ae60a9759447f80befcc980"
+                          }
+                      ],
+    "dispatches":  0,
+    "numerical_or_performance_qualification":  false
+}

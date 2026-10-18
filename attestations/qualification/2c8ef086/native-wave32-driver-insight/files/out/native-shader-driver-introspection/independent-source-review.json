@@ -1,0 +1,58 @@
+{
+  "schema": "sirius-native-shader-info-independent-source-review-v1",
+  "passed": true,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "scope": "Passive prelaunch source/ABI/configuration review of one canonical Transport live-driver pipeline/query, zero dispatches. No query, compiler, provider, test, or benchmark executed by reviewer.",
+  "blockers": [],
+  "critical_pins": [
+    {
+      "path": "out/native-shader-driver-introspection/ShaderQuery.cs",
+      "bytes": 15023,
+      "sha256": "25e73224591c7c9a524d93792872ac5316aa95868a768f1044d477db49324af0"
+    },
+    {
+      "path": "out/native-shader-driver-introspection/query.ps1",
+      "bytes": 1099,
+      "sha256": "f747ef70869c45a279888694ea144320913b5a06ebe4ea9b6b63dcecfd5de8ce"
+    },
+    {
+      "path": "out/native-shader-driver-introspection/guard_query.ps1",
+      "bytes": 3813,
+      "sha256": "0ae00d19dd90a8777c4a6ad37ae33a41e5ff7a6ce6a0989aeb23b72bdadec695"
+    },
+    {
+      "path": "out/native-shader-driver-introspection/run_query.py",
+      "bytes": 1991,
+      "sha256": "7e4d78ed9fa9696bca5eca35e8f53cb633357045d1241127d801dbb5acd67837"
+    },
+    {
+      "path": "out/native-shader-driver-introspection/transport-default-config.json",
+      "bytes": 2766,
+      "sha256": "b99d93097ff2abcc5416bab03b49e64edc2cf2abdb31053f8b2f7c7173b97afd"
+    }
+  ],
+  "checks": {
+    "x64_ABI": "Installed vulkan_core.h declarations manually matched: dispatchable handles IntPtr, non-dispatchable handles ulong, size_t UIntPtr; Winapi delegates and native parameter order match. Sequential sizes app48/instance64/queue40/device72/module40/binding24/set32/layout48/stage48/pipeline96 and AMD statistics72 are correct. ResourceUsage offset8, two size_t fields; group uints at56/60/64.",
+    "pipeline": "Canonical VulkanDevice::GetOrCreatePipeline source lines925 onward matches entry main, set0 bindings0/1 storage buffers, compute stage, no specialization/push ranges, flags0; basePipelineIndex0 ignored without derivative flags. Explicit null pipeline cache is a diagnostic choice, not a claim to duplicate application cache state.",
+    "SPIRV": "Actual pinned85832B Transport inspected by passive word walking: Shader/DenormPreserve/RoundingModeRTE only; DenormPreserve32, RTE32, local64x1x1. No Float64 or Int64 capability. Vulkan1.2 float controls are supported physical-device properties, with no additional feature enable bits for this module.",
+    "SDK_and_config": "All six configured input byte counts and SHA256 values match current files, including canonical Transport2caabcd7, exact explicit stage SDK loader cd862090 and expected AMD5c056196. No phantom VulkanSDK installation path. Actual WindowsPowerShell5.1 bridge path agrees with guard PSHOME/powershell.exe.",
+    "lifecycle": "Extension and exact device-name checks fail closed. Pipeline/query precede zero-dispatch teardown; C# finally destroys pipeline/module/layout/set/device/instance and frees allocations. Loaded SDK/AMD module identities are recorded while device/pipeline remain alive; ROOT must match them after the actual run.",
+    "ownership": "Exclusive output directory; held child Process.Handle and birth; 100ms sampled child WorkingSet ceiling4GiB and elapsed120s, Kill plus5000ms waits on nonpass; source/loader/shader expected hashes before and after query. PS automatic input variable fixed to queryInput. Bridge binds clean current Git revision/config hash and propagates owner exit.",
+    "result_semantics": "Each optional AMD query retains raw size/data VkResults and successful bytes; query failures are not statistics success. Statistics success requires72-byte output. No dispatch/API timing, numerical, performance, or qualification acceptance follows from normal process exit."
+  },
+  "limits": [
+    "Static C#/PowerShell review only; no actual diagnostic compilation or runtime success asserted.",
+    "120s and4GiB apply to sampled query child loop; guard setup, shutdown waits and outer WSL bridge are distinct. No aggregate/GPU memory or reserve accounting.",
+    "Child exit/held-handle ownership is narrower than a global process census; no global absence claim. No driver-supported optional output guaranteed."
+  ],
+  "workspace": {
+    "tracked_tree_clean": true,
+    "head_matches_upstream": true,
+    "sole_worktree": true,
+    "review_receipt_committed": false,
+    "review_receipt_pushed": false
+  },
+  "runtime_executed_by_reviewer": false,
+  "numerical_or_performance_qualification": false
+}

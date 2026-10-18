@@ -1,0 +1,63 @@
+{
+  "schema": "sirius-native-wave32-driver-insight-root-v1",
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "queries": [
+    {
+      "query": "transport-default-query",
+      "shader_sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+      "wavefront_size": 64,
+      "text_bytes": 233728,
+      "statistics": {
+        "stage_mask": 32,
+        "used_vgprs": 55,
+        "used_sgprs": 106,
+        "lds_per_group": 65536,
+        "lds_bytes": 9728,
+        "scratch_bytes": 0,
+        "physical_vgprs": 1024,
+        "physical_sgprs": 2048,
+        "available_vgprs": 256,
+        "available_sgprs": 106,
+        "workgroup": [
+          64,
+          1,
+          1
+        ]
+      },
+      "dispatches": 0,
+      "owned_child_absent": true
+    },
+    {
+      "query": "transport-wave32-query",
+      "shader_sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+      "wavefront_size": 32,
+      "text_bytes": 221824,
+      "statistics": {
+        "stage_mask": 32,
+        "used_vgprs": 54,
+        "used_sgprs": 100,
+        "lds_per_group": 65536,
+        "lds_bytes": 9728,
+        "scratch_bytes": 0,
+        "physical_vgprs": 1024,
+        "physical_sgprs": 2048,
+        "available_vgprs": 256,
+        "available_sgprs": 106,
+        "workgroup": [
+          64,
+          1,
+          1
+        ]
+      },
+      "dispatches": 0,
+      "owned_child_absent": true
+    }
+  ],
+  "finding": "Actual default64 versus required32 hardware waves compile the same SPIR-V and local64 workgroup with lower code size/reported SGPR/VGPR use. Both report zero scratch. This is a distinct code-generation premise from rejected local-workgroup32 trials.",
+  "limitation": "Diagnostic queries use shader-info extension/app Vulkan1.2/optional features disabled except subgroup control in required32; canonical app uses Vulkan1.3/its original Float64/FMA admission. No executed-app binary identity, dynamic bottleneck, speedup, occupancy, numerical or adoption inference.",
+  "candidate_source_commit": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+  "compile_only_CI_run": 39120634635,
+  "performance_admitted": false,
+  "full_frame_admitted": false,
+  "adopted": false
+}

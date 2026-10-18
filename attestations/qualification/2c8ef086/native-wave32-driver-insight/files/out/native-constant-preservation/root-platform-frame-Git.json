@@ -1,0 +1,613 @@
+{
+  "schema": "sirius-native-constant-platform-frame-Git-v1",
+  "commit": "b8ecca0ff4d7fe399db5f37922416f589e822e98",
+  "parent": "5b65b542fcc017c99503418cda889f45b201649f",
+  "branch": "refs/heads/development/native-fp32-packed-scratch-runtime-2026-10-18",
+  "tag": "refs/tags/evidence/native-constant-platform-builds-and-frame-2c8ef086",
+  "bundle": "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame",
+  "files": {
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/MANIFEST.json": {
+      "bytes": 181453,
+      "sha256": "2b457ad65d1d6a10b5a63a12583233bf9e398fe9fb2f5f3ec3ad1a2d81e75a27",
+      "Git_mode": "100644",
+      "blob": "85f2b0086fabd7a3cda50ffa169adbe97e8277eb",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/PRESERVATION.json": {
+      "bytes": 2328,
+      "sha256": "74b9fdb33dd9895bddaf176e91579ed29029106992b7cfc79a120c7646a993c2",
+      "Git_mode": "100644",
+      "blob": "0d51c873850182b2e09874c3cbf8243f8f27f286",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/archives/12132272383-sirius-macos-native-attestation.zip": {
+      "bytes": 53668573,
+      "sha256": "3556ca1705dad5d3425b338b493174f88b7442d00d0c0e0b0e18874f13c21804",
+      "Git_mode": "100644",
+      "blob": "54ef5fa4d7f4c09177a4a836de988af7ec6038d1",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/archives/12132668607-sirius-windows-native-attestation.zip": {
+      "bytes": 52497602,
+      "sha256": "8dfb25cf385c3f2688b186fcf6add529115a056682cafdb60d95669257146459",
+      "Git_mode": "100644",
+      "blob": "b52400950636dcecc9066f952e7be778edfd3c0d",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/archives/12132962644-sirius-gate-diagnostics-integration-windows-no-render.zip": {
+      "bytes": 5851,
+      "sha256": "3709ade7a3a46b9b0c0b13edad2b44601911b54a249ada732f49e1df81ed1881",
+      "Git_mode": "100644",
+      "blob": "552a9c43154e738208e1962f82844d49bc9268f8",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/archives/12133065302-sirius-gate-diagnostics-integration-macos-no-render.zip": {
+      "bytes": 5673,
+      "sha256": "71bfdcd4c8f8a96786ded79832396d5ff4bb451b1545cd66eb34aab5ed3805d6",
+      "Git_mode": "100644",
+      "blob": "d9bff05080199f492f6849698a74469bded77339",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/archives/12133420045-sirius-windows-diagnostic-build-products.zip": {
+      "bytes": 54813273,
+      "sha256": "4987a040a4f10dc1bbdff51981d394a6f63c12a3640dbcf6eba4225a872e1b18",
+      "Git_mode": "100644",
+      "blob": "18d5585db544521ed507e407e601e7b8a1de8609",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifact-12132272383.json": {
+      "bytes": 10269,
+      "sha256": "e599a0e58e5026e3bbe25bee9d7e5bcb9cf530f3780bca4b95118c5a0410c89a",
+      "Git_mode": "100644",
+      "blob": "771d9e93049d34f875c70009d413edceccfc26ae",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifact-12132668607.json": {
+      "bytes": 10276,
+      "sha256": "1ea290f29dea2982bea8bbaa97061339db6eec01d9fb1f0db7e114930bfbdc96",
+      "Git_mode": "100644",
+      "blob": "ecf4bddd1191db5b0328dce3f70e5c3a3f71c869",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifact-12132962644.json": {
+      "bytes": 2565,
+      "sha256": "63b1ae99db7f22fa8ac199ba0593e69ba2d34b411b16181d3159f20626675821",
+      "Git_mode": "100644",
+      "blob": "d5603cb919f146fd2011f5445c80d0c3bf9dcaa0",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifact-12133065302.json": {
+      "bytes": 2530,
+      "sha256": "8f0d2577498f21635161070d1134ee4a2cbdbe2fcbde620cbf6b68481c0ffb2a",
+      "Git_mode": "100644",
+      "blob": "1a7a18c13756a402c507cc171c47a5cfe6437cef",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifact-12133420045.json": {
+      "bytes": 37904,
+      "sha256": "6717f35f3eb2ff2b6202ab6d7ea7319f775d561505f162fce99371de634d4851",
+      "Git_mode": "100644",
+      "blob": "56c79c3f6b3adccedd73d4104ecd54b5c8063555",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifacts-download-diagnostic.json": {
+      "bytes": 962,
+      "sha256": "0cc0bf7b5f85b04e20f30e88851c077d18a2c5d54041888abcc5abc6c97fa37c",
+      "Git_mode": "100644",
+      "blob": "e1a745208bd07bce74b94cc24fc0f2d9a35d41f3",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifacts-download-native.json": {
+      "bytes": 1882,
+      "sha256": "4079e6427f6b0d2de5cc1d33edc141ba0fa4dc76e370f7b01cc4fca1bf46af2b",
+      "Git_mode": "100644",
+      "blob": "17bf35a4f6570df20f5ae3a02f71ff1311b8e847",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifacts-first.json": {
+      "bytes": 1539,
+      "sha256": "7c9f6bc650c361ca2ddad965068f1f9e6c96a5e3d452015bbed3f9c8f222146c",
+      "Git_mode": "100644",
+      "blob": "7ff6339c4fa6799945c5fb165f502fb416bd5168",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifacts-fourth.json": {
+      "bytes": 3806,
+      "sha256": "df45d6e2b2a604d309a11d6999ff9b3e5e4d037dec4cd029bbf4bfddd2068463",
+      "Git_mode": "100644",
+      "blob": "5ecfd3a5b2d8730ad6e114d2af0fa9db37c64789",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifacts-second.json": {
+      "bytes": 1539,
+      "sha256": "7c9f6bc650c361ca2ddad965068f1f9e6c96a5e3d452015bbed3f9c8f222146c",
+      "Git_mode": "100644",
+      "blob": "7ff6339c4fa6799945c5fb165f502fb416bd5168",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/artifacts-third.json": {
+      "bytes": 2294,
+      "sha256": "067ebcb48c77facbfb83d254c806d1868079bdcd4e4b198dca127971f6c4c2ca",
+      "Git_mode": "100644",
+      "blob": "24ae98728c7bcc910cd47ac445409dfab56b258b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/check_frame_payloads.py": {
+      "bytes": 3056,
+      "sha256": "feda6ef6b944ede11b3606305dcb43871c272bc43600997f02dead7681566289",
+      "Git_mode": "100644",
+      "blob": "d8b3c3b089549b04c0d160d3996f001f16cbc778",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/fetch_artifacts.py": {
+      "bytes": 3483,
+      "sha256": "238e9d95d690bbb2153bcdb19ae201776039e6c46c1962819e25e1203c91541d",
+      "Git_mode": "100644",
+      "blob": "865d2ad9b80b94f349edc33416160b87617e61ee",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/frame-PE-payloads.json": {
+      "bytes": 33273,
+      "sha256": "39aecc777782f4cf04c350edaae7e42cff6ec45dacbdaa1017683c658f8c9ee3",
+      "Git_mode": "100644",
+      "blob": "9a034618b3b792f060cafb39aacb0137257f90e3",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/jobs-completed.json": {
+      "bytes": 14292,
+      "sha256": "ebdadf425dcea786de152dcc1ad96005878166ff1803251c11e5d0f29e18620a",
+      "Git_mode": "100644",
+      "blob": "3bb00b65c3d691dd5d83280bd986dd48dbeb927a",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/jobs-fifth.json": {
+      "bytes": 13752,
+      "sha256": "2218c0b562426aac3a35ab854713f0fc1f751c1957f1042766fca615eb6c59ea",
+      "Git_mode": "100644",
+      "blob": "aba3ef7b0bc4dd7804e9b2fa4362dbfb19ee592b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/jobs-first.json": {
+      "bytes": 13752,
+      "sha256": "2218c0b562426aac3a35ab854713f0fc1f751c1957f1042766fca615eb6c59ea",
+      "Git_mode": "100644",
+      "blob": "aba3ef7b0bc4dd7804e9b2fa4362dbfb19ee592b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/jobs-fourth.json": {
+      "bytes": 13752,
+      "sha256": "2218c0b562426aac3a35ab854713f0fc1f751c1957f1042766fca615eb6c59ea",
+      "Git_mode": "100644",
+      "blob": "aba3ef7b0bc4dd7804e9b2fa4362dbfb19ee592b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/jobs-second.json": {
+      "bytes": 13752,
+      "sha256": "2218c0b562426aac3a35ab854713f0fc1f751c1957f1042766fca615eb6c59ea",
+      "Git_mode": "100644",
+      "blob": "aba3ef7b0bc4dd7804e9b2fa4362dbfb19ee592b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/jobs-sixth.json": {
+      "bytes": 13881,
+      "sha256": "1568fc3625ed47a5464bacfa84b2421584a6dabe252776160ff74eb6b9917d9b",
+      "Git_mode": "100644",
+      "blob": "25f72acab2ac202cfa3e95f7de2dc6aad0dc08d4",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/jobs-third.json": {
+      "bytes": 13752,
+      "sha256": "2218c0b562426aac3a35ab854713f0fc1f751c1957f1042766fca615eb6c59ea",
+      "Git_mode": "100644",
+      "blob": "aba3ef7b0bc4dd7804e9b2fa4362dbfb19ee592b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/macos-build-scope.json": {
+      "bytes": 1338,
+      "sha256": "c756baf342ea1c9ad17259c5df0c43cf07fe5367e847e74a0d439632d9bc871e",
+      "Git_mode": "100644",
+      "blob": "9504ee13561add0f625da82fa4012b6d4da2ccf1",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/macos-canonical-verifier.json": {
+      "bytes": 568,
+      "sha256": "e3c2a8cd059bd9cbf611f5a8d355863887805489c807853d2fbddd03d62ef8f3",
+      "Git_mode": "100644",
+      "blob": "5a4a5470210d34f5f9115932727be8dbfbf86d0b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/root-frame-CI-admission.json": {
+      "bytes": 4548,
+      "sha256": "c0747e8f0d4f45c53d7cc7959605c311b758b8f173f2b66a8f04d19f4eaaedbd",
+      "Git_mode": "100644",
+      "blob": "edbdb67ba23c6d3a3aaaaeded76a0f572a44eac9",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/run-completed.json": {
+      "bytes": 12713,
+      "sha256": "a39cb456ba7987cac07c2b7560e6d6475d994da9a64f8b4e6f3e9081b3d0ef2c",
+      "Git_mode": "100644",
+      "blob": "fb0af5eb0ae8ff1306d1606410be5ef5c4de975a",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/software-route-reuse.json": {
+      "bytes": 2620,
+      "sha256": "47a2fc07676fff943b12b7c6d1aa29250af7563a647e6fa51120dc0822aecb41",
+      "Git_mode": "100644",
+      "blob": "a633e42be9e457a5bd8925c9cd3cafa4bdf98853",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/transport-timeout.json": {
+      "bytes": 576,
+      "sha256": "e60531e8395f5997fd3534955b2ffebcd9084046ba5e7045c577ee8050ec4be0",
+      "Git_mode": "100644",
+      "blob": "602cfe5e27dbde21aa2d8dde105cafd9e33cad85",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/windows-canonical-verifier.json": {
+      "bytes": 205,
+      "sha256": "ddc6395ca98b794fe9b897e4ace820015ca8279a274cdb32ec863a4e17418da4",
+      "Git_mode": "100644",
+      "blob": "47e39db9d24235ddecfc962b801440b1081e5129",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/windows-canonical-verifier.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/windows-canonical-verifier.stdout": {
+      "bytes": 112,
+      "sha256": "bcdedc3e4993ca6901fad1e723e23cc62809e95fb0821dbff23fb72810b3ff48",
+      "Git_mode": "100644",
+      "blob": "d9d907af994a01f7a8c8b8f92c17ba1091ef0377",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-current-ci/windows-stage.json": {
+      "bytes": 31643,
+      "sha256": "0703563860cd32eb53c5f99c0a1b33d1c3337757cd227fbbcfdb5eea88a4b85b",
+      "Git_mode": "100644",
+      "blob": "805b9a4aec8a18f617aa3fb374ca09fa6bc30178",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/before-CI-run-retarget/execution-bindings.json": {
+      "bytes": 157602,
+      "sha256": "0f917f05e02c341a1fab9bfa29bec0c4dd46af3566163b40ceaf4a3c394663fb",
+      "Git_mode": "100644",
+      "blob": "9ef3072540352da39a2e24941151abeec6d22005",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/before-CI-run-retarget/independent-source-and-concrete-review.json": {
+      "bytes": 4678,
+      "sha256": "aab1fde3f9f6276bfbc9b24f61a336d6d284c7cfd3c55d5c4fa157cbf422e8d3",
+      "Git_mode": "100644",
+      "blob": "2809a546943f8f342166a89eee6cdbc2151999bb",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/before-CI-run-retarget/plan.json": {
+      "bytes": 1925,
+      "sha256": "1e8b1d682c8c92712c452ffb3f70cdc8ed200253f5d1c74cd613aad11047ab2e",
+      "Git_mode": "100644",
+      "blob": "373ea306ce2a0ba7535a2a6c1572b51b0910b97a",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/before-CI-run-retarget/preparation.json": {
+      "bytes": 1517,
+      "sha256": "9d651e498c289d0a1857eecbce3c4cd541c9a09cf2424314ffeb1744f8ad9408",
+      "Git_mode": "100644",
+      "blob": "6465f6bd85040f415c475b85ba8fc9f5863a376b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/before-CI-run-retarget/root-execution-release.json": {
+      "bytes": 1125,
+      "sha256": "954858b14697a0409209fca7b74acb5f05714477a42885e5e5134e77073e254a",
+      "Git_mode": "100644",
+      "blob": "3f378142a9c017d1b0f41b4a118f17bdd5d083a4",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/before-CI-run-retarget/run_system.py": {
+      "bytes": 25362,
+      "sha256": "daf5728167c32e420b9407f92aef7a33c34d21ad8a3baed65e71a94503400f3b",
+      "Git_mode": "100644",
+      "blob": "e6a964af74f639636088b7df1d0b6ab01350d4e2",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/before-CI-run-retarget/run_terminal.py": {
+      "bytes": 23918,
+      "sha256": "17459b0df01df8fbbf8ad32075c8dd2dc3a4dc6c3c638d06d0420ee7494cfe99",
+      "Git_mode": "100644",
+      "blob": "a040b37e6f35856b131618b7eddb2334e4906309",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/before-CI-run-retarget/source-adaptation.json": {
+      "bytes": 3654,
+      "sha256": "d623c77fc8f154c73ba450119ed7f7958871b061a34f9689e0573cc82721c916",
+      "Git_mode": "100644",
+      "blob": "7804046ecf748d37f98882b04a1f20189dd1e4d2",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/canonical-source-freeze.json": {
+      "bytes": 84793,
+      "sha256": "d12d33518c65c2c4d800841cd917ce039c3df9efe0e2e8c4954db407a0e8d1b8",
+      "Git_mode": "100644",
+      "blob": "f4926b4e380d8357a4c6e93dabee3d4048337472",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/execution-bindings.json": {
+      "bytes": 157602,
+      "sha256": "9abddde008c5cb4101d2d7610c8ca53a28742154135fd6f3886e198a2c4c5c95",
+      "Git_mode": "100644",
+      "blob": "c872280d78816d210c2b2517a5fe7d9e1942b43b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/independent-CI-run-retarget-review.json": {
+      "bytes": 3629,
+      "sha256": "2a1e55ca931d3f33e3609842378d60262fa4f224479e7e7377f1bfc438c202f9",
+      "Git_mode": "100644",
+      "blob": "fb670c498c97d407777b5bdef44e0da4f57457dc",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/independent-frame-completion.json": {
+      "bytes": 6213,
+      "sha256": "ce629d896441a6185a9ea8260cce740c12b33a16a4d5070199838510ebc2de1d",
+      "Git_mode": "100644",
+      "blob": "ba1adcb6eecb442d17c740d64fde26c848e4fafc",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/independent-source-and-concrete-review.json": {
+      "bytes": 4678,
+      "sha256": "aab1fde3f9f6276bfbc9b24f61a336d6d284c7cfd3c55d5c4fa157cbf422e8d3",
+      "Git_mode": "100644",
+      "blob": "2809a546943f8f342166a89eee6cdbc2151999bb",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/materialize.py": {
+      "bytes": 13803,
+      "sha256": "71bd2e6085c4c95d5175ef86ea5910969ff616b2b9a94f6e1ac7cc675b7c08c9",
+      "Git_mode": "100644",
+      "blob": "ffc1887755aab1766f88615eea9cc20a8e5e817f",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native/native-frame/driver-modules.json": {
+      "bytes": 700,
+      "sha256": "993d6f864cda0970dc80ad17b3a4ca80d52fa2b1b26bfedb0a7e8b8eb1e25d6f",
+      "Git_mode": "100644",
+      "blob": "7669e1d9c2a9bd98a356bc49252f12b1d3cc1e47",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native/native-frame/memory.json": {
+      "bytes": 40849,
+      "sha256": "3f7af16f32fadc874ba111f766bd81a1a331656f1699b061ad15582fae50dd32",
+      "Git_mode": "100644",
+      "blob": "e218e2f7231fd872993f4c3121e81cad150201bf",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native/native-frame/owner.json": {
+      "bytes": 3312,
+      "sha256": "0e24ac8692f90ee4490eaae633a39f39653c531b59c814653930914786024add",
+      "Git_mode": "100644",
+      "blob": "ef8a5ecee69e359771074b190ea90f94466ea0e4",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native/native-frame/stderr.log": {
+      "bytes": 62476,
+      "sha256": "fbc771379ed90338d7e162fbe54ecbb5cfe6779cb47d33db900d259dfa2c9a41",
+      "Git_mode": "100644",
+      "blob": "bd8a42647994472124a7ec1f3ee8150122d46ac8",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native/native-frame/stdout.log": {
+      "bytes": 277716,
+      "sha256": "005924a1afa5c480112d16a4303cb8c3d06b32526143e4be3008050c47a6db84",
+      "Git_mode": "100644",
+      "blob": "1572510d6482e69b798792b59f0e88ca54772d9b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native-frame-bridge.json": {
+      "bytes": 2717,
+      "sha256": "9b64b25f04573233cd11b1c46550d91939fbc08123ea3f472ed0c2dfcd40ffef",
+      "Git_mode": "100644",
+      "blob": "bc828f5e8133707c1729c5e502c22f1523200484",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native-frame-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native-frame-bridge.stdout": {
+      "bytes": 142,
+      "sha256": "b62d1c1d6edae0a814c08ed4ace00ac6e82467285a821413dbb3f3ac138e86ae",
+      "Git_mode": "100644",
+      "blob": "44720c90d15d574bf9096fbf30a0366d48fd484c",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native-frame-inputs-after.json": {
+      "bytes": 144298,
+      "sha256": "f8692791ca189e3bd8d57aec6a32fe4be5e5bcf69074fbe868f56b25844bb953",
+      "Git_mode": "100644",
+      "blob": "0863cefa12022d9065235623dc87c5247119ea9b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/native-frame-inputs-before.json": {
+      "bytes": 144298,
+      "sha256": "f8692791ca189e3bd8d57aec6a32fe4be5e5bcf69074fbe868f56b25844bb953",
+      "Git_mode": "100644",
+      "blob": "0863cefa12022d9065235623dc87c5247119ea9b",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/negative_terminal_audit.py": {
+      "bytes": 9899,
+      "sha256": "101b8ec0d836b1e73392a65fbb765a020965bb8a7f0af71155a8e52ac31b526e",
+      "Git_mode": "100644",
+      "blob": "ae2f1ce4ea34da76ee231dfb9fd1b2e44e42878f",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "Git_mode": "100644",
+      "blob": "96e12b077cd9af2d5d1de3b2acf1ef6ef63dd546",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/plan.json": {
+      "bytes": 1925,
+      "sha256": "1e8b1d682c8c92712c452ffb3f70cdc8ed200253f5d1c74cd613aad11047ab2e",
+      "Git_mode": "100644",
+      "blob": "373ea306ce2a0ba7535a2a6c1572b51b0910b97a",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/plan.pending.json": {
+      "bytes": 1926,
+      "sha256": "bfa2d6ce26ba6ea8fcce629d8dde7414f50c855831ecdcac6f716c4c15dd74c4",
+      "Git_mode": "100644",
+      "blob": "91a9597350d5c210ef2282b913679c5b7631c163",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/prelaunch-CI-literal-failure.json": {
+      "bytes": 1482,
+      "sha256": "7237a285defa3c2a2dfc09f751dcfdb99a0c61c26e14f09d480879e2b394149b",
+      "Git_mode": "100644",
+      "blob": "af5fb38d6f12a3dcdb70f4f26210b660ad60b8e3",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/preparation.json": {
+      "bytes": 1672,
+      "sha256": "bf59d1d0b24d14b73f67c991cc16a61e5fb838906a52ffcc57e58fc1ec026c78",
+      "Git_mode": "100644",
+      "blob": "e1ae9200447b3d22fbc8e45160c1cf3e2c4e1662",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/root-execution-release.json": {
+      "bytes": 1074,
+      "sha256": "559262a3e6cc580d13cd5bc2557483648b67c4ad6c23e7ae2d2338cc3ebc4552",
+      "Git_mode": "100644",
+      "blob": "6c29948850cbc1004feca877660ba4024fc54a4f",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/root-materializer-source-admission.json": {
+      "bytes": 705,
+      "sha256": "efe5ee5fc1c590b4b58421320f3746c5a40000ba324841b0cb2408581cbbe858",
+      "Git_mode": "100644",
+      "blob": "83e5c1994c4f583cafaf97b184cd2545ec03205c",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3",
+      "Git_mode": "100644",
+      "blob": "5f99d9cb6eb427afebcc3f913de2153df2771823",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "Git_mode": "100644",
+      "blob": "6f970c4fdc7d7eae995cbf7736b629df8dd31c53",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/run_system.py": {
+      "bytes": 25362,
+      "sha256": "2ee2f3bd6444ed945923eed680f088b72c68365c02a1d5b1061ff658b568f5bb",
+      "Git_mode": "100644",
+      "blob": "a791b4e3eb3772e0ccc0f09bbc0394cf5fe14a93",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/run_terminal.py": {
+      "bytes": 23918,
+      "sha256": "33f42e87b28794e16b12927455fcf1f946b24df87446146d1f621989bae0ccaf",
+      "Git_mode": "100644",
+      "blob": "08425ebba1e2aaabf28a141202cfa8985c89f89e",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/source-adaptation.json": {
+      "bytes": 3880,
+      "sha256": "abe13617c1be4cc5dfba07e0df1fb2e90b155c5f81bf4cc8fe3b686cf03dc5bb",
+      "Git_mode": "100644",
+      "blob": "1702be0751df2b4f9119a7ec5aa7b28ce0160146",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/temp/terminal-native-frame/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "7b4a6bd8fb3157223d1042554a62c1ec4c518850f69e0ab432057a9376c17b02",
+      "Git_mode": "100644",
+      "blob": "157d7c7b3b16450bda556df8aeaa1e76ea3df477",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/terminal-native-frame-failure-audit-bridge.json": {
+      "bytes": 3033,
+      "sha256": "e3d437e8bfae8a424f94e9de58fa306429366152871021d65e2a63123db9d483",
+      "Git_mode": "100644",
+      "blob": "10ba7fe315f73324bdf66918a37d52cc7dcaf265",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/terminal-native-frame.json": {
+      "bytes": 4084,
+      "sha256": "bb9522bd2a6188d5ab2e6da923b7f7a833678ee46c99988b7df47b56c09f347a",
+      "Git_mode": "100644",
+      "blob": "33c2677044a30144c3ed4bafa4281db53aac9183",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/terminal-native-frame.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-original-frame/terminal-native-frame.stdout": {
+      "bytes": 175,
+      "sha256": "d420211040fa4be664eab851656d303245f1e2fa4f5c5c6c4eb4a3daf8b503be",
+      "Git_mode": "100644",
+      "blob": "f561f077b78188277b20ea0042ecd4ddde9a9f20",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-preservation/root-preservation-closeout-Git.json": {
+      "bytes": 1645,
+      "sha256": "b2aeaca17c3f6df1a207b70a0a17b938ba6e14fa7f62ea9a93106a9a57791322",
+      "Git_mode": "100644",
+      "blob": "2737d2b0640884ab93a08491c781ad2c7097b1b5",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/out/native-constant-preservation/root-source-build-Git.json": {
+      "bytes": 765,
+      "sha256": "334c7135909e2f2687986fe18ef41a06960f18137ac67a68343ccbe738484b72",
+      "Git_mode": "100644",
+      "blob": "790a152cbf1e73b782926b96b4117ed3af3a9241",
+      "physical_mode": "0o644"
+    },
+    "attestations/qualification/2c8ef086/native-constant-platform-builds-and-frame/files/renders/constant-original-frame-2c8ef086/native-frame/bootstrap.json": {
+      "bytes": 863,
+      "sha256": "aec97c3dec27dd2675033c6a8c4e1bb41fbaef14bfaecb34a0973c5a7d8d369d",
+      "Git_mode": "100644",
+      "blob": "0ad9f8950aaff773f04e41c40f664a4a7c4fe9fc",
+      "physical_mode": "0o644"
+    }
+  },
+  "stored_full_blob_bytes_verified": true,
+  "physical_modes_restored_by_manifest_including0666_Git_tracks_only_exec_bit": true,
+  "current_source_clean_2c8": true,
+  "pushed": true,
+  "fresh_remote_verified": {
+    "refs/heads/development/native-fp32-packed-scratch-runtime-2026-10-18": "b8ecca0ff4d7fe399db5f37922416f589e822e98",
+    "refs/tags/evidence/native-constant-platform-builds-and-frame-2c8ef086": "b8ecca0ff4d7fe399db5f37922416f589e822e98"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-Command",
+    "$ErrorActionPreference='Stop';$names=@('rga.exe','vulkaninfo.exe','python.exe');$rows=@();foreach($n in $names){$c=Get-Command $n -ErrorAction SilentlyContinue;if($c){foreach($v in @($c)){$i=Get-Item -LiteralPath $v.Source -ErrorAction SilentlyContinue;$rows+=@{name=$n;path=$v.Source;bytes=if($i){[long]$i.Length}else{$null}}}}};$sdk='C:\\VulkanSDK\\1.4.357.0\\Bin\\vulkaninfo.exe';if(Test-Path -LiteralPath $sdk){$i=Get-Item -LiteralPath $sdk;$rows+=@{name='sdk-vulkaninfo.exe';path=$sdk;bytes=[long]$i.Length}};@{scope='Read-only command availability; no tools/provider launched';commands=$rows}|ConvertTo-Json -Depth 5"
+  ],
+  "returncode": 0
+}

@@ -1,0 +1,135 @@
+{
+  "schema": "sirius-independent-driver-query-results-review-v1",
+  "passed": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "scope": "Saved-file audit of two completed no-dispatch diagnostic pipeline compilations and AMD query outputs; no tools/provider/workloads/host-input rechecks executed.",
+  "blockers": [],
+  "critical_pins": {
+    "transport-default-config.json": {
+      "bytes": 2766,
+      "sha256": "b99d93097ff2abcc5416bab03b49e64edc2cf2abdb31053f8b2f7c7173b97afd"
+    },
+    "transport-default-query/owner.json": {
+      "bytes": 785,
+      "sha256": "c6e5d1729779104e30cd5697428ec9767cce38e7406694b55dd177f1256f4797"
+    },
+    "transport-default-query/result.json": {
+      "bytes": 5216,
+      "sha256": "74c91275c1cb00b8786e8379689bdf4cecf525dd89b890d5ac615c5336e33e22"
+    },
+    "transport-default-query/decoded-driver-object.json": {
+      "bytes": 3996,
+      "sha256": "bc0d7ace75e90c7029dcce12673fd97d309a246e543ccb54364c8cfca5da87b2"
+    },
+    "transport-default-query/samples.json": {
+      "bytes": 8765,
+      "sha256": "37e006d0b6fd71c634ac7c493b02d5d0751a9a93eaf3c46b47e9bafff60cc62c"
+    },
+    "transport-default-bridge.json": {
+      "bytes": 863,
+      "sha256": "55230889266290977c8b2703b316e293f60b3f0992c9320b05f57f7b6a79128d"
+    },
+    "transport-wave32-config.json": {
+      "bytes": 2839,
+      "sha256": "20721ec67d35d93209d50237e31193f22224f7446a7ffe7cb5c1a98ee66968d4"
+    },
+    "transport-wave32-query/owner.json": {
+      "bytes": 777,
+      "sha256": "97c1339052d245f9087b9c5cff1959e0afddfd3dbe00447db975ecd44f3d5b8b"
+    },
+    "transport-wave32-query/result.json": {
+      "bytes": 5761,
+      "sha256": "36d722ea0bc5bd092a705bd3afb0463a8abfa085c3c2565d76d40d13ac270338"
+    },
+    "transport-wave32-query/decoded-driver-object.json": {
+      "bytes": 3996,
+      "sha256": "f5c2fc3e8d329033cd800bb71c2e082940b0c3cc5fe5f6ffb3ea6f9d7e40f6b8"
+    },
+    "transport-wave32-query/samples.json": {
+      "bytes": 8873,
+      "sha256": "f846bd9e4afd0fa051e74fe2a41e57e36f885064054491eb1fa1e58602b48521"
+    },
+    "transport-wave32-bridge.json": {
+      "bytes": 870,
+      "sha256": "ee3f2511a8aafca31fe6e604a590336b3235a4469bbdb12d2c93b14dde9bab0b"
+    },
+    "read_driver_object.py": {
+      "bytes": 3769,
+      "sha256": "e2a6d6a4612ce352435fa443bd7e88b351f366b145927469f8b0182899517264"
+    },
+    "independent-source-review.json": {
+      "bytes": 4544,
+      "sha256": "06e3dae3ec4e564eb5ae117729d8973d69fff2178d9619be6b4daad89f33507a"
+    },
+    "independent-wave32-source-review.json": {
+      "bytes": 3738,
+      "sha256": "45889b4704ba8df6df85a9c198170dfea8f2c73156521d85d2676c088e3e2e1f"
+    }
+  },
+  "actual_results": [
+    {
+      "variant": "default",
+      "owner_pid": 15288,
+      "owner_birth": "2026-10-18T10:35:05.2708511Z",
+      "child_pid": 13352,
+      "child_birth": "2026-10-18T10:35:05.8865796Z",
+      "owner_seconds": 10.987698799999999,
+      "WSL_bridge_seconds_distinct_clock": 11.022208687994862,
+      "sample_count": 97,
+      "peak_sampled_child_bytes": 313155584,
+      "child_absent_recorded": true,
+      "dispatches": 0,
+      "wavefront_size": 64,
+      "workgroup": [
+        64,
+        1,
+        1
+      ],
+      "text_bytes": 233728,
+      "used_sgprs": 106,
+      "used_vgprs": 55,
+      "LDS_bytes": 9728,
+      "scratch_bytes": 0
+    },
+    {
+      "variant": "wave32",
+      "owner_pid": 15816,
+      "owner_birth": "2026-10-18T10:37:39.9950505Z",
+      "child_pid": 16624,
+      "child_birth": "2026-10-18T10:37:40.5961736Z",
+      "owner_seconds": 11.1197594,
+      "WSL_bridge_seconds_distinct_clock": 11.120451728987973,
+      "sample_count": 98,
+      "peak_sampled_child_bytes": 282656768,
+      "child_absent_recorded": true,
+      "dispatches": 0,
+      "wavefront_size": 32,
+      "workgroup": [
+        64,
+        1,
+        1
+      ],
+      "text_bytes": 221824,
+      "used_sgprs": 100,
+      "used_vgprs": 54,
+      "LDS_bytes": 9728,
+      "scratch_bytes": 0
+    }
+  ],
+  "checks": [
+    "Both owners passed/child exit0/recorded absent/no stop or errors; saved sample counts/peaks/elapsed and bridge/config identities joined. Recorded absence is not a fresh census.",
+    "Config source files still match declared hashes; actual recorded shader identity same in both. Live-process SDKcd862090/AMD5c056196 paths/size/digests exactly match each config. No host DLL rehash by this audit.",
+    "All three query kinds succeeded twice. Saved raw72-byte statistics independently unpacked at native x64 offsets exactly equal JSON, including workgroup64. Raw queried binary/disassembly sizes+SHA match receipts. Raw payload hashes remain bound through each pinned result.json rather than duplicated in this receipt.",
+    "Full ELF section dictionaries and AMDGPU/type32 note independently bounded-decoded with stdlib; entire MessagePack PAL metadata equals saved decoded JSON, preserving large integer hashes in Python. Reviewed read_driver_object.py source/AST; no execution/import of it.",
+    "Observed wave64 to32; text233728 to221824, SGPR106 to100, VGPR55 to54; LDS9728 and scratch0 unchanged."
+  ],
+  "limits": [
+    "Zero dispatch means no actual result-buffer comparison or numerical acceptance.",
+    "Static driver-reported resource use and code size do not establish dynamic occupancy, bottleneck causality, speedup, or frame deadline closure.",
+    "Separate owner/WSL clocks are not cross-platform timing comparisons. No performance, source-adoption, qualification, global process absence, or current-host-before/after claim."
+  ],
+  "reviewer_runtime_executions": 0,
+  "numerical_or_performance_qualification": false,
+  "pins_base": "out/native-shader-driver-introspection"
+}

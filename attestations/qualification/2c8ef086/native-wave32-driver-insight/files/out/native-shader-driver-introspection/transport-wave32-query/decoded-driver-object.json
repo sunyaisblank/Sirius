@@ -1,0 +1,165 @@
+{
+  "binary_bytes": 2751432,
+  "binary_sha256": "a89cd440c644b7ba382c0b605c2bccc034d09154820046d30b595c82b0f822dd",
+  "sections": {
+    "": {
+      "offset": 0,
+      "bytes": 0,
+      "flags": 0
+    },
+    ".strtab": {
+      "offset": 2750600,
+      "bytes": 189,
+      "flags": 0
+    },
+    ".text": {
+      "offset": 256,
+      "bytes": 221824,
+      "flags": 6
+    },
+    ".rel.text": {
+      "offset": 2750376,
+      "bytes": 224,
+      "flags": 64
+    },
+    ".AMDGPU.gpr_maximums": {
+      "offset": 222080,
+      "bytes": 0,
+      "flags": 0
+    },
+    ".rodata": {
+      "offset": 222080,
+      "bytes": 540,
+      "flags": 2
+    },
+    ".AMDGPU.comment.llvmir": {
+      "offset": 222624,
+      "bytes": 2526530,
+      "flags": 0
+    },
+    ".note.GNU-stack": {
+      "offset": 2749154,
+      "bytes": 0,
+      "flags": 0
+    },
+    ".note": {
+      "offset": 2749156,
+      "bytes": 980,
+      "flags": 0
+    },
+    ".symtab": {
+      "offset": 2750136,
+      "bytes": 240,
+      "flags": 0
+    }
+  },
+  "PAL_metadata": {
+    "amdpal.pipelines": [
+      {
+        ".api": "Vulkan",
+        ".compute_registers": {
+          ".tg_size_en": true,
+          ".tgid_x_en": true,
+          ".tgid_y_en": true,
+          ".tgid_z_en": true,
+          ".tidig_comp_cnt": 0
+        },
+        ".hardware_stages": {
+          ".cs": {
+            ".checksum_value": 2027482410,
+            ".debug_mode": false,
+            ".entry_point_symbol": "_amdgpu_cs_main",
+            ".excp_en": 0,
+            ".float_mode": 240,
+            ".forward_progress": true,
+            ".ieee_mode": false,
+            ".image_op": false,
+            ".lds_size": 9728,
+            ".mem_ordered": true,
+            ".scratch_en": false,
+            ".scratch_memory_size": 0,
+            ".sgpr_count": 100,
+            ".sgpr_limit": 106,
+            ".threadgroup_dimensions": [
+              64,
+              1,
+              1
+            ],
+            ".trap_present": false,
+            ".user_data_reg_map": [
+              268435456,
+              1,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295,
+              4294967295
+            ],
+            ".user_sgprs": 2,
+            ".vgpr_count": 54,
+            ".vgpr_limit": 256,
+            ".wavefront_size": 32,
+            ".wgp_mode": false
+          }
+        },
+        ".internal_pipeline_hash": [
+          6782310109128192528,
+          176283760131699628
+        ],
+        ".shaders": {
+          ".compute": {
+            ".api_shader_hash": [
+              6123220693204036416,
+              17597239996382215719
+            ],
+            ".hardware_mapping": [
+              ".cs"
+            ]
+          }
+        },
+        ".spill_threshold": 65535,
+        ".type": "Cs",
+        ".user_data_limit": 2,
+        ".xgl_cache_info": {
+          ".128_bit_cache_hash": [
+            12886440787495992131,
+            11549482453701468794
+          ],
+          ".llpc_version": "83.0"
+        }
+      }
+    ],
+    "amdpal.version": [
+      3,
+      6
+    ]
+  },
+  "disassembly_bytes": 2450420,
+  "disassembly_sha256": "6c9aae67bbeadfaa4ec66222e6360232b27bd8ea6ae60a9759447f80befcc980",
+  "scope": "Metadata of this diagnostic pipeline only; no dispatch, dynamic occupancy, bottleneck attribution or performance claim"
+}

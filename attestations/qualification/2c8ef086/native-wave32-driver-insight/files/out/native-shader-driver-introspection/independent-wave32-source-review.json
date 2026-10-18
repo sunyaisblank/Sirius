@@ -1,0 +1,54 @@
+{
+  "schema": "sirius-shader-required-wave32-independent-source-review-v1",
+  "passed": true,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "scope": "Narrow passive source delta from accepted default-query apparatus; no diagnostic compilation/query/dispatch executed by reviewer. Runtime outputs not reviewed.",
+  "blockers": [],
+  "critical_pins": [
+    {
+      "path": "out/native-shader-driver-introspection/ShaderWave32Query.cs",
+      "bytes": 17094,
+      "sha256": "83704337100c4c35191d6cd8422f2bd1734b65de995b202a2b10d5f3c9194d3c"
+    },
+    {
+      "path": "out/native-shader-driver-introspection/query_wave32.ps1",
+      "bytes": 1105,
+      "sha256": "8792d2630e2f8f120c6a5c1e961055a6969cf942dcb2309d43f07a650fa47721"
+    },
+    {
+      "path": "out/native-shader-driver-introspection/run_wave32_query.py",
+      "bytes": 1991,
+      "sha256": "915cec4702644925c3bae4dad4ec0304856a730ef81199a453ac427c41c2d143"
+    },
+    {
+      "path": "out/native-shader-driver-introspection/transport-wave32-config.json",
+      "bytes": 2839,
+      "sha256": "20721ec67d35d93209d50237e31193f22224f7446a7ffe7cb5c1a98ee66968d4"
+    },
+    {
+      "path": "out/native-shader-driver-introspection/guard_query.ps1",
+      "bytes": 3813,
+      "sha256": "0ae00d19dd90a8777c4a6ad37ae33a41e5ff7a6ce6a0989aeb23b72bdadec695"
+    },
+    {
+      "path": "out/native-shader-driver-introspection/independent-source-review.json",
+      "bytes": 4544,
+      "sha256": "06e3dae3ec4e564eb5ae117729d8973d69fff2178d9619be6b4daad89f33507a"
+    }
+  ],
+  "checks": {
+    "subgroup_ABI": "Installed vulkan_core.h confirms properties sType1000225000,size32,fields16/20/24/28; required-size sType1000225001,size24,uint16; features sType1000225002,size24,bools16/20. Features2/Properties2 sTypes1000059000/1000059001, pNext8; zeroed512/4096 allocation bounds exceed core payload sizes.",
+    "feature_enable": "Advertised VK_EXT_subgroup_size_control and subgroupSizeControl required. Device next attaches only subgroup feature struct, subgroupSizeControl1/computeFullSubgroups0; queried core feature payload is not enabled and core pEnabledFeatures remains null.",
+    "required_size": "Same85832B Transport2caabcd7/local64x1x1. Checks min<=32<=max, compute required-stage bit32 and maxComputeWorkgroupSubgroups>=2. Stage pNext requests32, stage flags0; no allow-varying/require-full feature. Workgroup/source unchanged.",
+    "bounded_delta": "C# adds class identity, subgroup query/enable/stage chain and reporting only; layout/statistics72/query bounds/cache-null/zero-dispatch/teardown unchanged. PS class-name delta only; bridge/output/config retarget. Byteexact guard0ae00d19 preserves sampled120s child/4GiB scope and prior accounting limits.",
+    "configuration": "Three source/guard identities match config; shader/SDK/revision unchanged and four remaining input records literal-equal to default. No actual query result accepted by this source review."
+  },
+  "limits": [
+    "ROOT must inspect actual VkResults, PAL/statistics and same-process SDK/AMD identities. Request32 alone is not an observed hardware wave32 result.",
+    "No dispatch, numerical equivalence, runtime gain or qualification follows. Owner scope is sampled childWorkingSet and elapsed loop, not aggregate/GPU memory or whole-bridge deadline."
+  ],
+  "passive_check_correction": "Prospective output-absent assertion encountered output directory after immediate source verdict had been sent to ROOT; it was removed as inapplicable to this source-only receipt. No files or query outputs were changed/read and no helper ran.",
+  "runtime_executed_by_reviewer": false,
+  "numerical_or_performance_qualification": false
+}
