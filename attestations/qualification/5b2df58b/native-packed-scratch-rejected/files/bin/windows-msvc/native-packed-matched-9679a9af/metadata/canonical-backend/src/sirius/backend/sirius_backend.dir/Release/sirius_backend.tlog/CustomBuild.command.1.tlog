@@ -1,0 +1,20 @@
+^D:\A\SIRIUS\SIRIUS\BIN\WINDOWS-MSVC\CMAKEFILES\E3CC68069FDE99F2E4B36503E2971F30\RETAINED_KERNELS.H.RULE
+setlocal
+C:\hostedtoolcache\windows\Python\3.14.8\x64\python3.exe D:/a/Sirius/Sirius/scripts/build-retained-kernels.py --output D:/a/Sirius/Sirius/bin/windows-msvc/src/sirius/backend/retained/retained_kernels.h --compiler C:/VulkanSDK/1.4.357.0/Bin/slangc.exe --assembler C:/VulkanSDK/1.4.357.0/Bin/spirv-as.exe --disassembler C:/VulkanSDK/1.4.357.0/Bin/spirv-dis.exe --validator C:/VulkanSDK/1.4.357.0/Bin/spirv-val.exe --optimizer C:/VulkanSDK/1.4.357.0/Bin/spirv-opt.exe
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\A\SIRIUS\SIRIUS\SRC\SIRIUS\BACKEND\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/a/Sirius/Sirius -BD:/a/Sirius/Sirius/bin/windows-msvc --check-stamp-file D:/a/Sirius/Sirius/bin/windows-msvc/src/sirius/backend/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

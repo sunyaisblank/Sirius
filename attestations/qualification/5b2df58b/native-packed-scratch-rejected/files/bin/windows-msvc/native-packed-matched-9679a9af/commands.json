@@ -1,0 +1,40 @@
+[
+  {
+    "label": "configure",
+    "argv": [
+      "C:\\Program Files\\CMake\\bin\\cmake.exe",
+      "--preset",
+      "windows-msvc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification",
+      "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+      "-DCMAKE_CONFIGURATION_TYPES:STRING=Release",
+      "-DCMAKE_PROJECT_Sirius_INCLUDE=D:\\a\\Sirius\\Sirius\\out\\native-fp32-packed-scratch-windows-producer-source\\matched-producer.cmake"
+    ],
+    "cwd": "D:\\a\\Sirius\\Sirius",
+    "started_utc": "2026-10-18T06:05:02.0869389Z",
+    "finished_utc": "2026-10-18T06:05:55.0482171Z",
+    "exit_code": 0
+  },
+  {
+    "label": "build",
+    "argv": [
+      "C:\\Program Files\\CMake\\bin\\cmake.exe",
+      "--build",
+      "--preset",
+      "windows-msvc",
+      "--config",
+      "Release",
+      "--target",
+      "SiriusNativePackedMatchedProducer",
+      "--parallel",
+      "2",
+      "--",
+      "/verbosity:normal",
+      "/bl:D:\\a\\Sirius\\Sirius\\bin\\windows-msvc\\private-native-packed-export\\build.binlog"
+    ],
+    "cwd": "D:\\a\\Sirius\\Sirius",
+    "started_utc": "2026-10-18T06:06:36.7437704Z",
+    "finished_utc": "2026-10-18T06:10:45.1163524Z",
+    "exit_code": 0
+  }
+]

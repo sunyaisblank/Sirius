@@ -1,0 +1,58 @@
+{
+  "schema": "sirius-native-packed-root-timestamp-runtime-release-v1",
+  "created_utc": "2026-10-18T06:17:49.157119+00:00",
+  "released": true,
+  "released_actions": [
+    "control-8"
+  ],
+  "source_revision": "9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": [
+    {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/plan.json",
+      "bytes": 1206,
+      "sha256": "57d094b8e5d55b673ca1d113a03423a1b16831af64b329e1ec9a74745aeff5a3"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/execution-bindings.json",
+      "bytes": 152648,
+      "sha256": "015e07a39d1413d32405df0ddcce843e2ea116d04771bb8e5e5352938c1dfb21"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/preparation.json",
+      "bytes": 719,
+      "sha256": "3e33ffd8f5d383411417d46ad1107b0bd409b44c658dc96e202c5cab712b0303"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/independent-preflight-review.json",
+      "bytes": 3009,
+      "sha256": "cca0d905caf9fa916523ba5987887058c5fbee6cbb055f5feb254a02e5fc20f3"
+    }
+  ],
+  "root_concrete_review": {
+    "path": "out/native-fp32-packed-scratch-runtime-materialization/root-concrete-timestamp-review.json",
+    "bytes": 919,
+    "sha256": "5427136dbfa703665529680b8af4027ab1823fc942bdf57f45dfd8cf9a372522"
+  },
+  "actual_producer_eligibility": {
+    "path": "out/native-fp32-packed-scratch-pe-audit/root-actual-producer-eligibility.json",
+    "bytes": 2261,
+    "sha256": "3073c928c0b61188217973d538cf49016d03e0039c736e43854bb583efeecbbd"
+  },
+  "runtime_prior_executed": false,
+  "ABBA_or_remaining_controls_released": false,
+  "purpose": "One originalnative timestamp numerical/control/provider/complete-readback gate; no performance verdict or retry.",
+  "next_command": [
+    "python3",
+    "-B",
+    "out/native-fp32-packed-scratch-runtime-timestamp/run_system.py",
+    "control-8"
+  ],
+  "terminal_after_zero_exit": [
+    "python3",
+    "-B",
+    "out/native-fp32-packed-scratch-runtime-timestamp/run_terminal.py",
+    "control-8"
+  ],
+  "limits": "Original300s nativechild4GiBsampledWorkingSet/2GiBWSLreserve/1380bridge/60terminal; no Windowsaggregate/GPUbudget claim."
+}

@@ -1,0 +1,112 @@
+{
+  "schema": "sirius-native-packed-native128-source-premise-stop-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "decision": "STOP_BEFORE_CANDIDATE_OR_COMPILER",
+  "candidate_or_patch_authored": false,
+  "compiler_or_runtime_executed": false,
+  "canonical_or_prior_packet_changed": false,
+  "source_facts": [
+    {
+      "input": {
+        "path": "scripts/build-retained-kernels.py",
+        "bytes": 35006,
+        "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+      },
+      "spans": [
+        "18-19",
+        "314-318",
+        "353-356"
+      ],
+      "finding": "One ray/workgroup;WORKGROUP_LANES64 is both current native execution width and separately emitted SIRIUS_RETAINED_LANES layer-capacity64. The proposed execution-only128 would leave layer admission64."
+    },
+    {
+      "input": {
+        "path": "src/sirius/kernels/retained_transport.slang",
+        "bytes": 28933,
+        "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+      },
+      "spans": [
+        "129-145",
+        "169-181",
+        "193-209",
+        "478-525",
+        "568-606"
+      ],
+      "finding": "Each accepted layer has end-start<=64;native node=start+lane and node<end executes allnodes exactlyonce with lanes0..63. Lanes64..127 never evaluate an expression. Alllanes still reach original joins/status reads. Extra lanes only redistribute strided output/scratch initialization or duplicate all-lane admission/validation work."
+    },
+    {
+      "input": {
+        "path": "src/sirius/kernels/retained_endpoint.slang",
+        "bytes": 38824,
+        "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d"
+      },
+      "spans": [
+        "125-149",
+        "168-178",
+        "543-575",
+        "699-744",
+        "746-803"
+      ],
+      "finding": "Same<=64 admission and direct start+lane mapping;alloriginal nodes already assigned0..63. Addedlanes do not accelerate prefix/suffix expression ownership. Curved Project at790 is already all-lane, so newlanes add logical repetitions;flat path retires nonzero lanes at749. Clear stride changes but expression DAG remainsunchanged."
+    }
+  ],
+  "conclusion": "The stated increased-expression-parallelism premise is false for a macro-only64to128 change. Packing changes scratch word representation,not layer width/dependencies;it cannot make addedlanes own nodes. No source-supported whole-path benefit justifies building this candidate. Actual wave/resource/scheduling cost is not inferred.",
+  "format_boundary": "Increasing SIRIUS_RETAINED_LANES or regenerating wider tables/register lifetimes would be a separate substantial scheduling/format/validation change,not authorized by this proposal.",
+  "saved_actual128_history": {
+    "findings": {
+      "path": "attestations/native-vulkan/b34d8c2/native-transport-128-lanes-prototype/evidence/findings.json",
+      "bytes": 42794,
+      "sha256": "fdbe673c1348528b9e27a4dab203b7bfa72583be4c5c9284bb3293134242bcf1"
+    },
+    "analysis": {
+      "path": "attestations/native-vulkan/b34d8c2/native-transport-128-lanes-prototype/evidence/transport-comparison/analysis.json",
+      "bytes": 38984,
+      "sha256": "2b151e2c5d85db666181a09c9b2218e4861ce2fe28c944832cc6c362a51c8597"
+    },
+    "source_revision": "b34d8c25ec33891bafbb264e6e483de9362e2286",
+    "disposition": "NOT ADOPTED:large128-row cohorts regress;finite output correspondence alone does not admitbenefit.",
+    "saved_performance": [
+      {
+        "wide": false,
+        "cohort": "curved-128",
+        "baseline_sum_ms": 214.0607,
+        "candidate_sum_ms": 278.2988,
+        "saved_sum_reduction_percent": -30.009291756964277
+      },
+      {
+        "wide": false,
+        "cohort": "original-13",
+        "baseline_sum_ms": 109.5886,
+        "candidate_sum_ms": 97.92750000000001,
+        "saved_sum_reduction_percent": 10.640796579206222
+      },
+      {
+        "wide": true,
+        "cohort": "curved-128",
+        "baseline_sum_ms": 297.8457,
+        "candidate_sum_ms": 382.85760000000005,
+        "saved_sum_reduction_percent": -28.542261983302097
+      },
+      {
+        "wide": true,
+        "cohort": "original-13",
+        "baseline_sum_ms": 156.35430000000002,
+        "candidate_sum_ms": 137.8252,
+        "saved_sum_reduction_percent": 11.850713411783383
+      }
+    ],
+    "scope": "Warm native host submit/wait observations,not complete API/frame/GPU-only timing. Older128-node/128-thread Transport rescheduling changed75to60layers and459to518registers;different from current tables/packed scratch,so its outcome is not mechanically transferred as current runtime evidence.",
+    "published_comment": {
+      "id": 6004603698,
+      "url": "https://github.com/sunyaisblank/Sirius/issues/44#issuecomment-6004603698",
+      "container": {
+        "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/native-frame-issue-followup/issue44-comments-before.json",
+        "bytes": 520425,
+        "sha256": "9c340edd3b0608fb140e1fd756345789f4f08609596df598d037cfcccf907ad9"
+      },
+      "body_sha256": "e2d6c0e9b32ada0e001ae2b050940f3ea9767d9abc5860e62bd1bc695aa267f4"
+    }
+  },
+  "retained_state": "Current nativepacked soleABBA rejection21of22 remains unchanged;no remaining7/adoption/unchangedretry. Currentpacked source/helpers preserved untouched.",
+  "scope": "Concise stopped source/historical premise only. No compiler,provider,test,network,processquery,newprotocol or trackedsource/Git mutation."
+}

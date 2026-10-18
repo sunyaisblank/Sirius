@@ -1,0 +1,80 @@
+{
+  "schema": "sirius-native-packed-runtime-plan-v1",
+  "admitted": true,
+  "source_revision": "9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "stage": "bin/windows-msvc/native-packed-matched-9679a9af",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "control_profile": "abba",
+  "order": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "actions": {
+    "a1": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "b1": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "b2": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "a2": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "child_environment": {
+    "a1": {
+      "TEMP": "renders/native-fp32-packed-scratch-runtime-abba/a1",
+      "TMP": "renders/native-fp32-packed-scratch-runtime-abba/a1"
+    },
+    "b1": {
+      "TEMP": "renders/native-fp32-packed-scratch-runtime-abba/b1",
+      "TMP": "renders/native-fp32-packed-scratch-runtime-abba/b1"
+    },
+    "b2": {
+      "TEMP": "renders/native-fp32-packed-scratch-runtime-abba/b2",
+      "TMP": "renders/native-fp32-packed-scratch-runtime-abba/b2"
+    },
+    "a2": {
+      "TEMP": "renders/native-fp32-packed-scratch-runtime-abba/a2",
+      "TMP": "renders/native-fp32-packed-scratch-runtime-abba/a2"
+    }
+  },
+  "phase_prerequisites": {
+    "timestamp_acceptance": {
+      "path": "out/native-fp32-packed-scratch-timestamp-evidence/timestamp-acceptance.json",
+      "identity": {
+        "bytes": 53176,
+        "sha256": "3b3792e63041d70cac3eb31651a78e5a3ca4abd708280995935f88ae3335ae4b"
+      }
+    }
+  }
+}

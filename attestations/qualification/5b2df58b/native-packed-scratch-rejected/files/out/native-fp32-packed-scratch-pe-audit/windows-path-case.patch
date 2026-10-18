@@ -1,0 +1,11 @@
+--- out/native-fp32-packed-scratch-pe-audit/audit_export.py
++++ out/native-fp32-packed-scratch-pe-audit/audit_export_windows_paths.py
+@@ -243,7 +243,7 @@
+                 require(suffix in dependencies, "Private dependency missing: " + suffix)
+             require("/" + other + "/retained_kernels.h" not in dependencies, "Other arm header consumed")
+         if not target.endswith("compute"):
+-            require("fail_on_skip.h" in command, "Missing required-runtime skip refusal")
++            require("fail_on_skip.h" in command.lower(), "Missing required-runtime skip refusal")
+         project = ET.parse(export / "metadata/projects" / (target + ".vcxproj")).getroot()
+         sources = [v.attrib["Include"] for v in project.findall(".//m:ClCompile[@Include]", NS)]
+         require(len(sources) == 1, "Private target source count differs")

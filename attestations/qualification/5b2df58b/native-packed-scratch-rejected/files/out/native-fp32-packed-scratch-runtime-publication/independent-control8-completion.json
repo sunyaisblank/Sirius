@@ -1,0 +1,113 @@
+{
+  "schema": "sirius-native-packed-independent-control8-completion-v1",
+  "passed": true,
+  "audit_completed": true,
+  "control8_passed": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "created_utc": "2026-10-18T06:23:57.787864+00:00",
+  "source_revision": "9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "authorship": "Authority-source author; independent actual completion review of ROOT-operated first control and separately authored native reader. No workload/helper/reader was rerun.",
+  "critical_pins": {
+    "timestamp_acceptance": {
+      "path": "out/native-fp32-packed-scratch-timestamp-evidence/timestamp-acceptance.json",
+      "bytes": 53176,
+      "sha256": "3b3792e63041d70cac3eb31651a78e5a3ca4abd708280995935f88ae3335ae4b"
+    },
+    "reader_bindings": {
+      "path": "out/native-fp32-packed-scratch-timestamp-evidence/reader-bindings.json",
+      "bytes": 155442,
+      "sha256": "d2c56d39552b87da1f6190cd1b4cda9ec0c106bdbb7b4025d71f7818ee84808b"
+    },
+    "reader_admission": {
+      "path": "out/native-fp32-packed-scratch-timestamp-evidence/root-admission.json",
+      "bytes": 377,
+      "sha256": "1976919b9df4a21f6fe6fc9264521c3e984ced935ca7ed2a2b97743e105c81a5"
+    },
+    "execution_bindings": {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/execution-bindings.json",
+      "bytes": 152648,
+      "sha256": "015e07a39d1413d32405df0ddcce843e2ea116d04771bb8e5e5352938c1dfb21"
+    },
+    "owner": {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/native/control-8/owner.json",
+      "bytes": 3632,
+      "sha256": "5c918e69281685638be202ad468454ba301c441a7f0c1318d93de1144f24950c"
+    },
+    "xml": {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/native/control-8/gtest.xml",
+      "bytes": 40957,
+      "sha256": "d4e32138dbead1ba5567e0496fab79d34a6b522b29d8d8667ef14c60d603046a"
+    },
+    "modules": {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/native/control-8/driver-modules.json",
+      "bytes": 691,
+      "sha256": "fe3a4cbae685546901ef5f53182c8a8045c3b881f4e360b044089f738643c8ed"
+    },
+    "bridge": {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/control-8-bridge.json",
+      "bytes": 2883,
+      "sha256": "da8f70bc150068da6aa81529f6790180330b2cf37b5c3dbe92e695b1ff6ad615"
+    },
+    "terminal": {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/terminal-control-8.json",
+      "bytes": 4071,
+      "sha256": "0705b7da77e910ac8b2f0184fddba67320e84d0b33c5925c99e921eec777aea4"
+    },
+    "terminal_bridge": {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/terminal-control-8-bridge.json",
+      "bytes": 2431,
+      "sha256": "9ca5affb95f47b58764a3e55a7c96340b6802453c9c03de3f5eee1129f84d83f"
+    },
+    "terminal_accepted": {
+      "path": "out/native-fp32-packed-scratch-runtime-timestamp/terminal-control-8-accepted.json",
+      "bytes": 9123,
+      "sha256": "42dc393c2421d62f2b0420b9e2c0513ae3b90c462c8c0306fae03bb8c9754947"
+    }
+  },
+  "checks": {
+    "inputs": "All846 before/after/current whole-input rows and877 context rows independently full-byte matched,with raw before==after and accepted/owner/bridge/terminal/context identity joins. Exact bound argv/filter/arm and private result/manifest compatibility seals match. Prior compiler/PE source proof composed,not rerun.",
+    "execution": "Original RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults completed one run/zeroFESD. Child0,owner64.1591762s,XML60.627s,bridge73.828574836s;no outer stop/signals/cleanup errors. Actual samples establish500416512B peak below4GiB child guard;2GiBWSL reserve respected.",
+    "native": "Actual candidate PE a3a05f81...6bb;native AMD780M/26.8.1LLPC/default binary32 selected. Same-child mapped staged SDK1.4.357.0 cd862090...8696 and AMD103213064B5c056196...8650 match raw modules and terminal postseals. No installed-System32-loader substitution.",
+    "timestamps": "Raw32 complete-buffer metadata/digests,51 ordered/available markers and raw tick-to-ms arithmetic,54 executed module/LoadKernel joins all match accepted output and actual selected candidate arrays. Seven selected modules/four executed roles. Original durations and full instance API accounting recomputed from saved properties;no benefit comparison inferred.",
+    "ownership": "Native owner/test PID+exactUTC births match terminal absent-birth records and executable/module seals. Recorded Linux controller/bridge/auditor births freshly absent via scoped /proc reads. Accessible census278processes/191hidden-field records,zero matches/compilers;no global absence claim."
+  },
+  "actual": {
+    "windows_test_birth": [
+      8812,
+      "2026-10-18T06:18:04.2385212Z"
+    ],
+    "windows_owner_birth": [
+      10972,
+      "2026-10-18T06:17:51.2902164Z"
+    ],
+    "linux_recorded_births": [
+      {
+        "pid": 45969,
+        "start_ticks": "17713085",
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 45992,
+        "start_ticks": "17713299",
+        "recorded_birth_absent": true
+      },
+      {
+        "pid": 78331,
+        "start_ticks": "17722584",
+        "recorded_birth_absent": true
+      }
+    ],
+    "memory_samples": 62,
+    "peak_sampled_child_WorkingSet_bytes": 500416512,
+    "minimum_sampled_WSL_available_kib": 14829704,
+    "xml_test_seconds": 60.627,
+    "readbacks": 32,
+    "markers": 51,
+    "module_command_joins": 54
+  },
+  "limits": "One finite native default control8 only. FP64/RTE64 context values are expected capability declarations,not timestamp wide execution;original native Factored wide/control1 stillpending. No baseline execution,ABBA benefit,remaining7,adoption,frame/fullscience/Mandatory/release claim.",
+  "audit_note": "Initial passive stdin audit matched full current closure and raw ownership/markers before an undefined-name typo in its final readback comprehension;no receipt/workload/helper write occurred. Corrected passive data-only continuation completed the remaining32/54/accounting joins and this receipt.",
+  "blockers": [],
+  "method": "Passive stdlib file/hash/JSON/XML/math and exact recorded Linux /proc birth absence only. No project imports/helper/reader/tool/provider/test/network or native process query."
+}

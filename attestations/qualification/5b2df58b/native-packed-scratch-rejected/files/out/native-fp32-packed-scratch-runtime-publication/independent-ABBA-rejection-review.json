@@ -1,0 +1,261 @@
+{
+  "schema": "sirius-native-packed-independent-ABBA-rejection-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "benefit_passed": false,
+  "decision": "REJECT_NATIVE_PACKED_SCRATCH_COST",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "created_utc": "2026-10-18T06:31:43.531588+00:00",
+  "authorship": "Authority-source author;independent of ROOT trial operator and native reader author. No helper/reader/comparator/test rerun.",
+  "critical_pins": {
+    "comparison": {
+      "path": "out/native-fp32-packed-scratch-ABBA-evidence/native-comparison.json",
+      "bytes": 231614,
+      "sha256": "7e8e9fa38951210c0f6f29c8bc85aba18e29ae5e387bd53173d7957fc311615b"
+    },
+    "reader_bindings": {
+      "path": "out/native-fp32-packed-scratch-ABBA-evidence/reader-bindings.json",
+      "bytes": 171666,
+      "sha256": "c474575c6eb7b70ba788153e466aa7cd8aaa0537dd08dfa83018c5f846bdcab2"
+    },
+    "reader_admission": {
+      "path": "out/native-fp32-packed-scratch-ABBA-evidence/root-admission.json",
+      "bytes": 372,
+      "sha256": "a592033731af43c2228b2af73c552020e861897739613bfbb3108bd0d8a52884"
+    },
+    "phase_bindings": {
+      "path": "out/native-fp32-packed-scratch-runtime-abba/execution-bindings.json",
+      "bytes": 173437,
+      "sha256": "68e3c874bfca3bb69796c4f93ed697d66097d1ae07c9cdc36a9dffcb97e4c77f"
+    },
+    "phase_release": {
+      "path": "out/native-fp32-packed-scratch-runtime-abba/root-runtime-release.json",
+      "bytes": 2087,
+      "sha256": "936487038d9cd750259a2a82f56ff07d737278bafeb081360f3c76aa6a59353f"
+    }
+  },
+  "counts": {
+    "current_context_rows": 959,
+    "whole_before_after_rows": 7248,
+    "slots": 4,
+    "internal_repeats_per_family": 3,
+    "whole_passed": 3,
+    "whole_total": 4,
+    "stage_passed": 16,
+    "stage_total": 16,
+    "inclusive_API_passed": 2,
+    "inclusive_API_total": 2,
+    "all_passed": 21,
+    "all_total": 22,
+    "each_slot_readbacks": 32,
+    "each_slot_ordered_markers": 51,
+    "each_slot_module_command_joins": 54
+  },
+  "failed_checks": [
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "improvement_percent": 3.1264607529394794,
+      "minimum_percent": 5,
+      "pass": false
+    }
+  ],
+  "whole_improvement_percent": [
+    16.22727104851715,
+    37.366356488240775,
+    3.1264607529394794,
+    29.797583946055553
+  ],
+  "slots": [
+    {
+      "label": "a1",
+      "arm": "baseline",
+      "owner": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/native/a1/owner.json",
+        "bytes": 3584,
+        "sha256": "8298ff6788a72e6a4471d76e9ec36f6c8179ab05027e9118a9399e185f99681d"
+      },
+      "xml": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/native/a1/gtest.xml",
+        "bytes": 40927,
+        "sha256": "9cb887cbf64def2afd8643b4ce1898de6cea594fa7ff3715f468c7bc2698a3a6"
+      },
+      "terminal_accepted": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/terminal-a1-accepted.json",
+        "bytes": 8945,
+        "sha256": "f227d3fb4bee1639e636a4ed503a09d5f3a071d553e9829318997edc2b3f72c3"
+      },
+      "whole_input_rows": 888,
+      "wall_seconds": 61.6322598,
+      "peak_sampled_child_WorkingSet_bytes": 538460160,
+      "samples": 61,
+      "windows_test_birth": [
+        6272,
+        "2026-10-18T06:24:30.7798650Z"
+      ],
+      "accessible_processes": 278,
+      "hidden_field_records": 191
+    },
+    {
+      "label": "b1",
+      "arm": "candidate",
+      "owner": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/native/b1/owner.json",
+        "bytes": 3586,
+        "sha256": "4ba1463ef5b6d208da92baf795a68d18df11b1940e609e74ebfa43a6350a85fa"
+      },
+      "xml": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/native/b1/gtest.xml",
+        "bytes": 41146,
+        "sha256": "26a3156405100b63c885435e7be499af1bc09fbd219d4d87a6075784e1d51ae2"
+      },
+      "terminal_accepted": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/terminal-b1-accepted.json",
+        "bytes": 11377,
+        "sha256": "5b48675ae981b2c9bc372765e3ffc77aa69b91e1b5fb06f0ed6b43efc455d93b"
+      },
+      "whole_input_rows": 900,
+      "wall_seconds": 1.8518156,
+      "peak_sampled_child_WorkingSet_bytes": 67100672,
+      "samples": 3,
+      "windows_test_birth": [
+        6152,
+        "2026-10-18T06:26:02.6127711Z"
+      ],
+      "accessible_processes": 280,
+      "hidden_field_records": 193
+    },
+    {
+      "label": "b2",
+      "arm": "candidate",
+      "owner": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/native/b2/owner.json",
+        "bytes": 3595,
+        "sha256": "298ad067e97ae37224feeba183410fe963d2fc202038151dea8d538fe53674de"
+      },
+      "xml": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/native/b2/gtest.xml",
+        "bytes": 41072,
+        "sha256": "f99a37a43cfd7b03744c0c0cbf0c5ecf83cf3681c495fe419c7d64553cdf3e5a"
+      },
+      "terminal_accepted": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/terminal-b2-accepted.json",
+        "bytes": 13807,
+        "sha256": "66577821bc56f8fdc8d1a6ee4642849212675358e817e42a3de97a803da692d4"
+      },
+      "whole_input_rows": 912,
+      "wall_seconds": 1.9647728999999998,
+      "peak_sampled_child_WorkingSet_bytes": 67072000,
+      "samples": 3,
+      "windows_test_birth": [
+        6212,
+        "2026-10-18T06:26:27.8380704Z"
+      ],
+      "accessible_processes": 277,
+      "hidden_field_records": 190
+    },
+    {
+      "label": "a2",
+      "arm": "baseline",
+      "owner": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/native/a2/owner.json",
+        "bytes": 3584,
+        "sha256": "f7447e5e5bb19a33354ecceb8f56421e50b84be9fc7d9afa9f2d18218e800cdc"
+      },
+      "xml": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/native/a2/gtest.xml",
+        "bytes": 40787,
+        "sha256": "ef0cf39fe76dc45e8dd65f617f5de1ac5407cc9a3e12cc4f222d27819e8fdeba"
+      },
+      "terminal_accepted": {
+        "path": "out/native-fp32-packed-scratch-runtime-abba/terminal-a2-accepted.json",
+        "bytes": 16211,
+        "sha256": "6dc6c6c17ec9264df3075cb8a8b8c3acfc42dfb29d64136c69eef1d5ad118f4d"
+      },
+      "whole_input_rows": 924,
+      "wall_seconds": 1.8553574,
+      "peak_sampled_child_WorkingSet_bytes": 66879488,
+      "samples": 3,
+      "windows_test_birth": [
+        12796,
+        "2026-10-18T06:26:56.2608220Z"
+      ],
+      "accessible_processes": 279,
+      "hidden_field_records": 192
+    }
+  ],
+  "checks": {
+    "closure": "All959context rows and each888/900/912/924 actualbefore==after/current map independently full-byte matched;acceptedraw/owner/XML/bridge/terminal/predecessor/PE/provider seals join. No earlier compiler/source algorithm rerun.",
+    "raw_results": "Four exact original single-case completedzeroFESD XML;all32raw whole-buffer digests equal across all4arms+initialcontrol8;51raw orderedmarkers/tick arithmetic/complete-duration identities and54raw actualmodule joins perprocess match each selected matchedPE arm. All22medians/thresholds/direction pairs andinclusiveAPI accounting independently recomputed fromraw savednativeproperties.",
+    "ownership": "Four different actual Windows test PID+UTCbirths,serial originalA1/B1/B2/A2;child0/no guard/signals/cleanup/errors. Allrecorded owner/test births retired andsame-child SDK1.4.357+AMD26.8.1 modules postsealed. Twelve saved Linux controller/bridge/auditor births freshly absent;accessiblecensus limits explicit.",
+    "policy": "Original defaultnative cache/300s child/4GiBsampledWorkingSet/2GiBWSLreserve preserved. No pooling,subtraction,resampling,warmup/retry or guardraise. Remaining7 native controls have no owned output folders and stay unrun."
+  },
+  "fresh_linux_births": [
+    {
+      "pid": 83755,
+      "start_ticks": "17750191",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 83759,
+      "start_ticks": "17750367",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 15950,
+      "start_ticks": "17757570",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 18697,
+      "start_ticks": "17757949",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 18718,
+      "start_ticks": "17758255",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 50100,
+      "start_ticks": "17760789",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 52864,
+      "start_ticks": "17761210",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 52871,
+      "start_ticks": "17761546",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 84421,
+      "start_ticks": "17763114",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 87152,
+      "start_ticks": "17763457",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 87181,
+      "start_ticks": "17763990",
+      "recorded_birth_absent": true
+    },
+    {
+      "pid": 18869,
+      "start_ticks": "17765801",
+      "recorded_birth_absent": true
+    }
+  ],
+  "limits": "AuditPASS validates finite correctness/provenance and fixedREJECT;benefitfalse. Firstcontrol8+four timestamp cases do not completeall8 orwidecontrol1,adoption,frame,fullscience,Mandatory/release. No occupancy/cache/driver-speed/causal performance attribution.",
+  "blockers": [],
+  "method": "Passive stdlibfile/hash/JSON/XML/math and exact recorded/procLinuxbirthabsence only;no project imports,helper/tools/provider/test/network/native process query."
+}

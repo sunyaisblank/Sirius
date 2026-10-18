@@ -1,0 +1,51 @@
+{
+  "schema": "sirius-native-packed-root-sole-ABBA-runtime-release-v1",
+  "created_utc": "2026-10-18T06:24:18.420351+00:00",
+  "released": true,
+  "released_actions": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "source_revision": "9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": [
+    {
+      "path": "out/native-fp32-packed-scratch-runtime-abba/plan.json",
+      "bytes": 2644,
+      "sha256": "4c29e8561c7803e6a6491cadd0b10cd2b067ee0a18939c9b27185cd8b263431f"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-runtime-abba/execution-bindings.json",
+      "bytes": 173437,
+      "sha256": "68e3c874bfca3bb69796c4f93ed697d66097d1ae07c9cdc36a9dffcb97e4c77f"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-runtime-abba/preparation.json",
+      "bytes": 714,
+      "sha256": "4d6ebc7d5f0277fc8b140bb6b31680a224b4f95ed319b08a80d3ed03bc90dd86"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-runtime-abba/independent-preflight-review.json",
+      "bytes": 2767,
+      "sha256": "13435285f46bebf6cf4a62b83817772271c77614b1e2c4e2e55632f171457aa4"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-runtime-abba/root-concrete-review.json",
+      "bytes": 724,
+      "sha256": "e43c6c79a4b238e4d001ff61220be83e7ff418a2e38b9ac5f666661c3045c4af"
+    }
+  ],
+  "independent_control8_completion": {
+    "path": "out/native-fp32-packed-scratch-runtime-publication/independent-control8-completion.json",
+    "bytes": 6326,
+    "sha256": "eafbe2d6ed95039112465826c6a3d6c235c16e37e7d01d6ef3500cde58010514"
+  },
+  "one_process_per_slot": true,
+  "original_internal_repeats": 3,
+  "outer_repeats_or_warmup_or_retry": false,
+  "sequence": "For each a1,b1,b2,a2 exactly once: frozen run_system then frozen run_terminal; stop on any nonzero. Only after all4complete run one original22numeric reader.",
+  "remaining7_or_adoption_released": false,
+  "resource_scope": "Original300sWindowschild/4GiBsampledWorkingSet/2GiBWSLavailable/1380bridge/60terminal; not Windowsaggregate/GPUbudget."
+}

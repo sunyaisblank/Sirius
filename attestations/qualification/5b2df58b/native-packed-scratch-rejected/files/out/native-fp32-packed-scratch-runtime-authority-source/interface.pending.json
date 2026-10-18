@@ -1,0 +1,121 @@
+{
+  "schema": "sirius-native-packed-runtime-authority-interface-pending-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "phase_work_directories": "ROOT_PENDING separate immutable out/<phase-namespace>, each exact root-level WORK.parents[1]==ROOT. Do not rewrite timestamp plan/binding for ABBA or remaining.",
+  "plan_schema": "sirius-native-packed-runtime-plan-v1",
+  "binding_schema": "sirius-native-packed-runtime-bindings-v1",
+  "profiles": {
+    "timestamp": [
+      "control-8"
+    ],
+    "abba": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "remaining": [
+      "control-1",
+      "control-2",
+      "control-3",
+      "control-4",
+      "control-5",
+      "control-6",
+      "control-7"
+    ]
+  },
+  "action_filters": {
+    "control-1": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+    "control-2": "RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal",
+    "control-3": "RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation",
+    "control-4": "RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection",
+    "control-5": "RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets",
+    "control-6": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+    "control-7": "RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement",
+    "control-8": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "a1": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "b1": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "b2": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "a2": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+  },
+  "action_arms": {
+    "control-1": "candidate",
+    "control-2": "candidate",
+    "control-3": "candidate",
+    "control-4": "candidate",
+    "control-5": "candidate",
+    "control-6": "candidate",
+    "control-7": "candidate",
+    "control-8": "candidate",
+    "a1": "baseline",
+    "b1": "candidate",
+    "b2": "candidate",
+    "a2": "baseline"
+  },
+  "plan_fields": {
+    "admitted": false,
+    "source_revision": "ROOT_PENDING_ACTUAL_PRODUCER_GIT_SHA",
+    "runner_source_revision": "ROOT_PENDING_ACTUAL_CLEAN_CURRENT_HEAD",
+    "stage": "ROOT_PENDING_exact_export_under_bin/windows-msvc",
+    "control_profile": "ROOT_PENDING_one_profile",
+    "order": "ROOT_PENDING_exact_profile_order",
+    "actions": "ROOT_PENDING_each_exact_kind_Control_test_arm_expected_exit0_owner300_bridge1380",
+    "owner_rss_bytes": 4294967296,
+    "minimum_wsl_available_kib": 2097152,
+    "terminal_observer_seconds": 60,
+    "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+    "child_environment": "per-label {TEMP:renders/<WORK.name>/<label>,TMP:same}; no MESA/LVP/SLANG override",
+    "phase_prerequisites": "timestamp:{};abba:{timestamp_acceptance};remaining:{timestamp_acceptance,benefit_acceptance}",
+    "resource_semantics": "Windows native single-child sampled WorkingSet with4GiB limit; separate sampled WSL available reserve2GiB. Not Windows aggregate, GPU allocation or device-budget accounting."
+  },
+  "binding_fields": {
+    "admitted": false,
+    "artifact": "ROOT_PENDING_actual_repository/name/id/run_id/run_attempt",
+    "manifest_identity": "ROOT_PENDING bytes/sha256 of exact manifest.json",
+    "producer_identity": "ROOT_PENDING bytes/sha256 of exact producer-result.json",
+    "selected_executables": "exactly baseline,candidate each {relative_path:payload/<arm>/original_<arm>_controls.exe,identity:{bytes,sha256}}",
+    "files": "ROOT_PENDING exact current whole static input map,all staged manifest leaves+manifest self,source/helpers/tools/host/proofs;no own future outputs",
+    "actions": "ROOT_PENDING per-label exact argv+cleanup_argv",
+    "terminal_actions": "ROOT_PENDING per-label exact argv+cleanup_argv",
+    "expected_amd_module": "ROOT_PENDING actual native AMD file name/path/bytes/hash/version",
+    "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+    "native_build_gate_authority_used": false
+  },
+  "phase_prerequisite_records": "Each required {path:ROOT-relative out/... readonly prior proof,identity:{bytes,sha256}} must be in current binding.files. Timestamp proof passed:true/source_revision producerSHA/control8_passed:true; benefit proof additionally benefit_passed:true and integer checks_total=checks_passed=22. Actual raw/evidence closure is independently ROOT-frozen; no self/circular current-phase output.",
+  "stage_shape": "Exact whole export manifest.json + every manifest.files relative member,regular files/no symlinks; both payload/{arm} PE/MAP+SDKloader+CRT;no fabricated native_build_gate/mandatory_gate.",
+  "native_owner_options": [
+    "-Stage",
+    "-Output",
+    "-Filter",
+    "-Seconds",
+    "-RssBytes",
+    "-TemporaryDirectory",
+    "-BuildRoot",
+    "-ExpectedManifestSha256",
+    "-ExpectedProducerSha256",
+    "-Arm",
+    "-LiveRevision",
+    "-ExecutableName",
+    "-InvocationKind"
+  ],
+  "owner_and_terminal_outputs": [
+    "native/{label}/owner.json",
+    "native/{label}/gtest.xml",
+    "native/{label}/stdout.log",
+    "native/{label}/stderr.log",
+    "native/{label}/memory.json",
+    "native/{label}/driver-modules.json",
+    "{label}-bridge.json",
+    "{label}-inputs-before.json",
+    "{label}-inputs-after.json",
+    "terminal-{label}.json",
+    "terminal-{label}-bridge.json",
+    "terminal-{label}-accepted.json"
+  ],
+  "reader_interface": "terminal accepted {pass:true,case,record:{owner,bridge,whole_inputs,stdout_sha256,original_control_identity},source_revision,private_producer_authority_used:true,native_build_gate_authority_used:false}; same-child SDK loader key payload/{arm}/vulkan-1.dll. Full native timestamp/route/array/readback/22numeric proof is Divide reader, not wrapper zeroFESD.",
+  "legacy_aliases": "owner.source_build_gate_sha256/unchanged alias only producer-result.json path/hash;source_revision is producer GitSHA. Explicit owner.source_private_manifest_sha256/unchanged and private_producer_arm/kind disambiguate. No Gate fabricated.",
+  "native_route_scope": "Original native AMD Factored has two routes (decline_rte32=false,wide false/true),28readbacks; portable masked four-route56 expectation is inapplicable. Timestamp original32/51/54 and original8 scientific assertions remain unchanged.",
+  "remaining": "No actual plan.json,execution-bindings.json,preparation.json,stage/native/temp/output or launch commands are materialized by this source packet.",
+  "typed_current_configure_argument": "-DCMAKE_CONFIGURATION_TYPES:STRING=Release; strict cache CMAKE_CONFIGURATION_TYPES:STRING=Release retained. Untyped predecessor configured but was refused before build."
+}

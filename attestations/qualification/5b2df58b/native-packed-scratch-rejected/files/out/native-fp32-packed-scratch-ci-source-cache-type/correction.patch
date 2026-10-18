@@ -1,0 +1,60 @@
+--- out/native-fp32-packed-scratch-ci-source-git-resolution/build-and-stage.ps1
++++ out/native-fp32-packed-scratch-ci-source-cache-type/build-and-stage.ps1
+@@ -77,7 +77,8 @@
+     foreach ($Relative in @('out/native-fp32-packed-scratch-producer-inputs',
+                            'out/native-fp32-packed-scratch-windows-producer-source',
+                            'out/native-fp32-packed-scratch-ci-source',
+-                           'out/native-fp32-packed-scratch-ci-source-git-resolution')) {
++                           'out/native-fp32-packed-scratch-ci-source-git-resolution',
++                           'out/native-fp32-packed-scratch-ci-source-cache-type')) {
+         $Directory = Join-Path $Root $Relative
+         if (-not (Test-Path -LiteralPath $Directory -PathType Container)) { throw "Missing private input tree: $Relative" }
+         $Paths += @(Get-ChildItem -LiteralPath $Directory -Recurse -File -Force | ForEach-Object FullName)
+@@ -114,11 +115,14 @@
+     $SourceBeforeConfigure = Snapshot (Source-Paths)
+     Write-Json $SourceBeforeConfigure 'source-before-configure.json'
+     $Configure = @('--preset', 'windows-msvc', '-DSIRIUS_ALIGNMENT_MODE=qualification',
+-        '-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON', '-DCMAKE_CONFIGURATION_TYPES=Release',
++        '-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON', '-DCMAKE_CONFIGURATION_TYPES:STRING=Release',
+         "-DCMAKE_PROJECT_Sirius_INCLUDE=$Fragment")
+     if ((Invoke-Recorded 'configure' $CMake $Configure) -ne 0) { throw 'Configure failed; build not started' }
+     $Result.configure_passed = $true
+     $Cache = Get-Content -LiteralPath (Join-Path $Build 'CMakeCache.txt') -Raw
++    # Preserve actual configure products before strict post-configure checks.
++    Copy-Evidence (Join-Path $Build 'CMakeCache.txt') 'metadata/config/CMakeCache.txt'
++    Copy-Evidence (Join-Path $Build 'CMakeFiles/CMakeConfigureLog.yaml') 'metadata/config/CMakeFiles/CMakeConfigureLog.yaml'
+     foreach ($Required in @('BUILD_TESTS:BOOL=ON', 'SIRIUS_MANDATORY_TESTS:BOOL=ON',
+                             'SIRIUS_WERROR:BOOL=ON', 'SIRIUS_CONTRACT_MODE:STRING=2',
+                             'SIRIUS_REQUIRE_VULKAN_RUNTIME:BOOL=ON', 'SIRIUS_ALIGNMENT_MODE:STRING=qualification',
+@@ -213,6 +217,20 @@
+             }
+         }
+     }
++    # Export existing canonical compile/archive evidence; no extra build target.
++    $BackendProject = 'src/sirius/backend/sirius_backend.vcxproj'
++    Copy-Evidence (Join-Path $Build $BackendProject) "metadata/canonical-backend/$BackendProject"
++    $BackendObjects = Join-Path $Build 'src/sirius/backend/sirius_backend.dir/Release'
++    if (Test-Path -LiteralPath $BackendObjects -PathType Container) {
++        foreach ($File in @(Get-ChildItem -LiteralPath $BackendObjects -Recurse -File -Force | Where-Object { $_.Extension -in @('.tlog','.obj') })) {
++            $Relative = [IO.Path]::GetRelativePath($Build, $File.FullName)
++            Copy-Evidence $File.FullName "metadata/canonical-backend/$Relative"
++        }
++    }
++    $BackendArchive = 'src/sirius/backend/Release/sirius_backend.lib'
++    if (Test-Path -LiteralPath (Join-Path $Build $BackendArchive) -PathType Leaf) {
++        Copy-Evidence (Join-Path $Build $BackendArchive) "metadata/canonical-backend/$BackendArchive"
++    }
+     if ($BuildCode -ne 0) { throw 'Build failed; logs/input snapshots retained, no product PASS' }
+     $Alignment = Get-Content -LiteralPath (Join-Path $Build 'generated/sirius/alignment_receipt.json') -Raw | ConvertFrom-Json
+     if ($Alignment.source_revision -cne $Result.source_revision) { throw 'Alignment revision mismatch' }
+--- .github/workflows/native-packed-diagnostic.yml@f0d2b42d
++++ .github/workflows/native-packed-diagnostic.yml@cache-type
+@@ -28,7 +28,7 @@
+           github_token: ${{ secrets.GITHUB_TOKEN }}
+       - name: Compile and stage the two matched private producers
+         shell: pwsh
+-        run: ./out/native-fp32-packed-scratch-ci-source-git-resolution/build-and-stage.ps1
++        run: ./out/native-fp32-packed-scratch-ci-source-cache-type/build-and-stage.ps1
+       - name: Preserve producer products and failure diagnostics
+         if: always()
+         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

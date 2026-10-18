@@ -1,0 +1,2203 @@
+MSBuild version 17.14.60+43b635718 for .NET Framework
+Build started 10/18/2026 6:06:36 AM.
+
+     1>Project "D:\a\Sirius\Sirius\bin\windows-msvc\SiriusNativePackedMatchedProducer.vcxproj" on node 1 (default targets).
+     1>Project "D:\a\Sirius\Sirius\bin\windows-msvc\SiriusNativePackedMatchedProducer.vcxproj" (1) is building "D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj" (2) on node 1 (default targets).
+     2>PrepareForBuild:
+         Creating directory "x64\Release\ZERO_CHECK\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "x64\Release\ZERO_CHECK\ZERO_CHECK.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\ZERO_CHECK\ZERO_CHECK.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\ZERO_CHECK\ZERO_CHECK.tlog\unsuccessfulbuild".
+       PreBuildEvent:
+         Checking File Globs
+         setlocal
+         "C:\Program Files\CMake\bin\cmake.exe" -P D:/a/Sirius/Sirius/bin/windows-msvc/CMakeFiles/VerifyGlobs.cmake
+         if %errorlevel% neq 0 goto :cmEnd
+         :cmEnd
+         endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+         :cmErrorLevel
+         exit /b %1
+         :cmDone
+         if %errorlevel% neq 0 goto :VCEnd
+         :VCEnd
+       CustomBuild:
+         1>Checking Build System
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\ZERO_CHECK\ZERO_CHECK.tlog\unsuccessfulbuild".
+         Touching "x64\Release\ZERO_CHECK\ZERO_CHECK.tlog\ZERO_CHECK.lastbuildstate".
+     2>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj" (default targets).
+     1>Project "D:\a\Sirius\Sirius\bin\windows-msvc\SiriusNativePackedMatchedProducer.vcxproj" (1) is building "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_controls.vcxproj" (3) on node 1 (default targets).
+     3>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_controls.vcxproj" (3) is building "D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj" (4) on node 1 (default targets).
+     4>PrepareForBuild:
+         Creating directory "x64\Release\SiriusSourceGovernance\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "x64\Release\SiriusSourceGovernance\SiriusSo.C81813E5.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\SiriusSourceGovernance\SiriusSo.C81813E5.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\SiriusSourceGovernance\SiriusSo.C81813E5.tlog\unsuccessfulbuild".
+       CustomBuild:
+         1>Verifying test-label, operating-model, and repository-structure governance
+     1>Project "D:\a\Sirius\Sirius\bin\windows-msvc\SiriusNativePackedMatchedProducer.vcxproj" (1) is building "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.vcxproj" (5) on node 2 (default targets).
+     5>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.vcxproj" (5) is building "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (7) on node 2 (default targets).
+     7>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (7) is building "D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_portable_binary32_test_inputs.vcxproj" (8) on node 2 (default targets).
+     8>PrepareForBuild:
+         Creating directory "x64\Release\sirius_portable_binary32_test_inputs\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "x64\Release\sirius_portable_binary32_test_inputs\sirius_p.EF73758A.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\sirius_portable_binary32_test_inputs\sirius_p.EF73758A.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\sirius_portable_binary32_test_inputs\sirius_p.EF73758A.tlog\unsuccessfulbuild".
+       CustomBuild:
+         "The build of 'D:\a\Sirius\Sirius\bin\windows-msvc\CMakeFiles\6d22164a3de95c590be585b78d0efe1e\sirius_portable_binary32_test_inputs.rule' depends on 'D:\A\SIRIUS\SIRIUS\BIN\WINDOWS-MSVC\TESTS\BACKEND\PORTABLE_BINARY32_REFERENCE.BIN' which is produced by the build of 'D:\a\Sirius\Sirius\bin\windows-msvc\CMakeFiles\0b1dedb8e9756c4a8ba291965bb5f81a\portable_binary32_reference.bin.rule'. The items cannot be built in parallel."
+         1>Generating independent exact binary32 arithmetic expectations
+     4>CustomBuild:
+         CTest label file is up to date
+         operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+     8>CustomBuild:
+         {"bytes": 4182444, "categories": {"primitive/declared-halfway-boundary": 24, "primitive/edge-cross": 38332, "primitive/raw-fixed-seed": 28672, "primitive/subnormal-fixed-seed": 28672, "primitive/unary-edge": 468, "primitive/unary-fixed-seed": 24576, "residual/analytic-selfcheck": 16, "residual/bounded-raw-fixed-seed": 16384, "residual/edge-cross": 4356, "residual/product-rounding-boundaries": 8192, "residual/scaled-mantissa-fixed-seed": 16384, "residual/subnormal-input-fixed-seed": 8192}, "fixture_sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e", "magic": "PB32", "negative_zero_residuals": 9635, "nonzero_rounded_residuals": 31239, "primitive_cases": 120744, "records": 174268, "residual_cases": 53524, "subnormal_residuals": 5517, "version": 1}
+         Building Custom Rule D:/a/Sirius/Sirius/tests/backend/CMakeLists.txt
+     7>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (7) is building "D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_retained_camera_test_inputs.vcxproj" (9) on node 2 (default targets).
+     9>PrepareForBuild:
+         Creating directory "x64\Release\sirius_retained_camera_test_inputs\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "x64\Release\sirius_retained_camera_test_inputs\sirius_r.17E224F7.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\sirius_retained_camera_test_inputs\sirius_r.17E224F7.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\sirius_retained_camera_test_inputs\sirius_r.17E224F7.tlog\unsuccessfulbuild".
+       ComputeCustomBuildOutput:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\retained_camera\".
+       CustomBuild:
+         "The build of 'D:\a\Sirius\Sirius\bin\windows-msvc\CMakeFiles\6d22164a3de95c590be585b78d0efe1e\sirius_retained_camera_test_inputs.rule' depends on 'D:\A\SIRIUS\SIRIUS\BIN\WINDOWS-MSVC\TESTS\BACKEND\RETAINED_CAMERA\PROGRAM_FIXTURE.H' which is produced by the build of 'D:\a\Sirius\Sirius\bin\windows-msvc\CMakeFiles\e76ce83ca69453cb134b91b37a535c4e\program_fixture.h.rule'. The items cannot be built in parallel."
+         1>Building bounded retained camera program and independent witnesses
+         program_camera_probe-fp32: compiled and validated
+         program_camera_probe-fp32comp: compiled and validated
+         Building Custom Rule D:/a/Sirius/Sirius/tests/backend/CMakeLists.txt
+     4>CustomBuild:
+         repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+         strict qualification/release policy rejected every weakened configuration and product
+         escaping-copy controls: filesystem symlinks
+         build-gate receipt rejected missing, stale, skipped, and tampered evidence
+         Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\SiriusSourceGovernance\SiriusSo.C81813E5.tlog\unsuccessfulbuild".
+         Touching "x64\Release\SiriusSourceGovernance\SiriusSo.C81813E5.tlog\SiriusSourceGovernance.lastbuildstate".
+     4>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj" (default targets).
+     9>FinalizeBuildStatus:
+         Deleting file "x64\Release\sirius_retained_camera_test_inputs\sirius_r.17E224F7.tlog\unsuccessfulbuild".
+         Touching "x64\Release\sirius_retained_camera_test_inputs\sirius_r.17E224F7.tlog\sirius_retained_camera_test_inputs.lastbuildstate".
+     9>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_retained_camera_test_inputs.vcxproj" (default targets).
+     8>FinalizeBuildStatus:
+         Deleting file "x64\Release\sirius_portable_binary32_test_inputs\sirius_p.EF73758A.tlog\unsuccessfulbuild".
+         Touching "x64\Release\sirius_portable_binary32_test_inputs\sirius_p.EF73758A.tlog\sirius_portable_binary32_test_inputs.lastbuildstate".
+     8>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_portable_binary32_test_inputs.vcxproj" (default targets).
+     3>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_controls.vcxproj" (3) is building "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.vcxproj" (10) on node 2 (default targets).
+    10>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.vcxproj" (10) is building "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.vcxproj" (11) on node 1 (default targets).
+    11>Project "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.vcxproj" (11) is building "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_kernels.vcxproj" (12) on node 1 (default targets).
+    12>PrepareForBuild:
+         Creating directory "x64\Release\sirius_kernels\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "x64\Release\sirius_kernels\sirius_kernels.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\sirius_kernels\sirius_kernels.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\sirius_kernels\sirius_kernels.tlog\unsuccessfulbuild".
+       CustomBuild:
+         "The build of 'D:\a\Sirius\Sirius\bin\windows-msvc\CMakeFiles\280f94c7e4a2459706e97cc3c30f60e3\sirius_kernels.rule' depends on 'D:\A\SIRIUS\SIRIUS\BIN\WINDOWS-MSVC\KERNELS\SMOKE.SPV' which is produced by the build of 'D:\a\Sirius\Sirius\bin\windows-msvc\CMakeFiles\46d49c54537e0348037126023c349635\smoke.spv.rule'. The items cannot be built in parallel."
+         3>Compiling metric_consistency_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+         4>Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)
+         1>Compiling camera_frame_probe.slang (fp32) -> SPIR-V (+spirv-val)
+         warning[E41018]: returning without initializing out parameter
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+             |
+         276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+             |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+             |
+         375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+             |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         3>Compiling metric_consistency_probe.slang (fp64) -> SPIR-V (+spirv-val)
+         1>Compiling camera_frame_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41018]: returning without initializing out parameter
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+             |
+         276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+             |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+         ----'
+         2>Compiling infinity_probe.slang (fp32) -> SPIR-V (+spirv-val)
+         2>Compiling infinity_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+             |
+         375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+             |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+     5>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.vcxproj" (5) is building "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.vcxproj" (6) on node 2 (default targets).
+     6>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.vcxproj" (6) is building "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj" (13) on node 2 (default targets).
+    13>PrepareForBuild:
+         Creating directory "sirius_base.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\".
+         Creating directory "sirius_base.dir\Release\sirius_base.tlog\".
+       InitializeBuildStatus:
+         Creating "sirius_base.dir\Release\sirius_base.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "sirius_base.dir\Release\sirius_base.tlog\unsuccessfulbuild".
+       CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/src/sirius/CMakeLists.txt
+    12>CustomBuild:
+         3>Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)
+    13>ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "sirius_base.dir\Release\sirius_base_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /ID:\a\Sirius\Sirius\src\sirius\.. /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"sirius_base.dir\Release\\" /Fd"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.pdb" /external:W4 /Gd /TP /errorReport:queue  /utf-8 D:\a\Sirius\Sirius\src\sirius\base\contracts.cpp D:\a\Sirius\Sirius\src\sirius\base\resource_locator.cpp
+         contracts.cpp
+    12>CustomBuild:
+         1>Compiling camera_frame_probe.slang (fp64) -> SPIR-V (+spirv-val)
+         2>Compiling infinity_probe.slang (fp64) -> SPIR-V (+spirv-val)
+    13>ClCompile:
+         resource_locator.cpp
+    12>CustomBuild:
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41018]: returning without initializing out parameter
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+             |
+         276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+             |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+             |
+         375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+             |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         1>Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)
+         2>Compiling metric_consistency_probe.slang (fp32) -> SPIR-V (+spirv-val)
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         2>Compiling Slang kernel trace.slang -> SPIR-V (+spirv-val)
+     7>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (7) is building "D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest.vcxproj" (15) on node 2 (default targets).
+    15>PrepareForBuild:
+         Creating directory "gtest.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\".
+         Creating directory "gtest.dir\Release\gtest.tlog\".
+       InitializeBuildStatus:
+         Creating "gtest.dir\Release\gtest.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "gtest.dir\Release\gtest.tlog\unsuccessfulbuild".
+       CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/CMakeLists.txt
+    13>ClCompile:
+         Generating Code...
+    15>ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /I"D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-src\googletest\include" /I"D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-src\googletest" /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _UNICODE /D UNICODE /D WIN32 /D _WINDOWS /D NDEBUG /D _UNICODE /D UNICODE /D _WIN32 /D STRICT /D WIN32_LEAN_AND_MEAN /D GTEST_HAS_PTHREAD=0 /D _HAS_EXCEPTIONS=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"gtest.dir\Release\\" /Fd"D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.pdb" /external:W4 /Gd /TP /wd4251 /wd4275 /wd4702 /errorReport:queue  -J -utf-8 "D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-src\googletest\src\gtest-all.cc"
+         gtest-all.cc
+    13>Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib" /NOLOGO /MACHINE:X64  /machine:x64 sirius_base.dir\Release\contracts.obj
+         sirius_base.dir\Release\resource_locator.obj
+         sirius_base.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\Release\sirius_base.lib
+    15>Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib" /NOLOGO /MACHINE:X64  /machine:x64 "gtest.dir\Release\gtest-all.obj"
+         gtest.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest.lib
+    12>CustomBuild:
+         2>Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         4>Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         3>Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)
+         4>Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         4>Compiling Slang kernel smoke.slang -> SPIR-V (+spirv-val)
+         2>Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+             |
+         266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+             |
+         267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+             |
+         269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+             |
+         270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+             |
+         272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+             |
+         273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+             |
+         275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+             |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+             |
+         276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+             |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+             |
+         278 | stepXi = xiA + k3XiA * dLambda;
+             |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+             |
+         279 | stepV = VA + k3VA * dLambda;
+             |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+             |
+         281 | stepXi = xiB + k3XiB * dLambda;
+             |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+             |
+         282 | stepV = VB + k3VB * dLambda;
+             |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         warning[E41035]: possible use of uninitialized variable
+            --> D:/a/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+             |
+         286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+             |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+         ----'
+         Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\sirius_kernels\sirius_kernels.tlog\unsuccessfulbuild".
+         Touching "x64\Release\sirius_kernels\sirius_kernels.tlog\sirius_kernels.lastbuildstate".
+    12>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_kernels.vcxproj" (default targets).
+    15>FinalizeBuildStatus:
+         Deleting file "gtest.dir\Release\gtest.tlog\unsuccessfulbuild".
+         Touching "gtest.dir\Release\gtest.tlog\gtest.lastbuildstate".
+    15>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest.vcxproj" (default targets).
+    13>FinalizeBuildStatus:
+         Deleting file "sirius_base.dir\Release\sirius_base.tlog\unsuccessfulbuild".
+         Touching "sirius_base.dir\Release\sirius_base.tlog\sirius_base.lastbuildstate".
+    13>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj" (default targets).
+     6>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.vcxproj" (6) is building "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj" (14) on node 2 (default targets).
+    14>PrepareForBuild:
+         Creating directory "sirius_core.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\".
+         Creating directory "sirius_core.dir\Release\sirius_core.tlog\".
+       InitializeBuildStatus:
+         Creating "sirius_core.dir\Release\sirius_core.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "sirius_core.dir\Release\sirius_core.tlog\unsuccessfulbuild".
+       CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/src/sirius/core/CMakeLists.txt
+       ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "sirius_core.dir\Release\sirius_core_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /ID:\a\Sirius\Sirius\src\sirius\.. /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"sirius_core.dir\Release\\" /Fd"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.pdb" /external:W4 /Gd /TP /errorReport:queue  /utf-8 D:\a\Sirius\Sirius\src\sirius\core\tensor.cpp D:\a\Sirius\Sirius\src\sirius\core\geodesic_integrator.cpp
+     7>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (7) is building "D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest_main.vcxproj" (16) on node 2 (default targets).
+    16>PrepareForBuild:
+         Creating directory "gtest_main.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "gtest_main.dir\Release\gtest_main.tlog\".
+       InitializeBuildStatus:
+         Creating "gtest_main.dir\Release\gtest_main.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "gtest_main.dir\Release\gtest_main.tlog\unsuccessfulbuild".
+    14>ClCompile:
+         tensor.cpp
+    16>CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/CMakeLists.txt
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _UNICODE /D UNICODE /D WIN32 /D _WINDOWS /D NDEBUG /D _UNICODE /D UNICODE /D _WIN32 /D STRICT /D WIN32_LEAN_AND_MEAN /D GTEST_HAS_PTHREAD=0 /D _HAS_EXCEPTIONS=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"gtest_main.dir\Release\\" /Fd"D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.pdb" /external:W0 /Gd /TP /wd4251 /wd4275 /wd4702 /errorReport:queue  /external:I "D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/include" /external:I "D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest" -J -utf-8 "D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-src\googletest\src\gtest_main.cc"
+         gtest_main.cc
+    14>ClCompile:
+         geodesic_integrator.cpp
+    16>Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib" /NOLOGO /MACHINE:X64  /machine:x64 gtest_main.dir\Release\gtest_main.obj
+         gtest_main.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\lib\Release\gtest_main.lib
+       FinalizeBuildStatus:
+         Deleting file "gtest_main.dir\Release\gtest_main.tlog\unsuccessfulbuild".
+         Touching "gtest_main.dir\Release\gtest_main.tlog\gtest_main.lastbuildstate".
+    16>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest_main.vcxproj" (default targets).
+    14>ClCompile:
+         Generating Code...
+       Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib" /NOLOGO /MACHINE:X64  /machine:x64 sirius_core.dir\Release\tensor.obj
+         sirius_core.dir\Release\geodesic_integrator.obj
+         sirius_core.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\Release\sirius_core.lib
+       FinalizeBuildStatus:
+         Deleting file "sirius_core.dir\Release\sirius_core.tlog\unsuccessfulbuild".
+         Touching "sirius_core.dir\Release\sirius_core.tlog\sirius_core.lastbuildstate".
+    14>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj" (default targets).
+    11>PrepareForBuild:
+         Creating directory "sirius_backend.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "sirius_backend.dir\Release\sirius_backend.tlog\".
+       InitializeBuildStatus:
+         Creating "sirius_backend.dir\Release\sirius_backend.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "sirius_backend.dir\Release\sirius_backend.tlog\unsuccessfulbuild".
+       ComputeCustomBuildOutput:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained\".
+     7>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (7) is building "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend_cpu.vcxproj" (17) on node 2 (default targets).
+    17>PrepareForBuild:
+         Creating directory "sirius_backend_cpu.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\".
+         Creating directory "sirius_backend_cpu.dir\Release\sirius_b.3CC6790B.tlog\".
+       InitializeBuildStatus:
+         Creating "sirius_backend_cpu.dir\Release\sirius_b.3CC6790B.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "sirius_backend_cpu.dir\Release\sirius_b.3CC6790B.tlog\unsuccessfulbuild".
+       CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt
+    11>CustomBuild:
+         1>Building bounded retained camera and joint transport stages
+    17>ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend_cpu.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "sirius_backend_cpu.dir\Release\sirius_b.3CC6790B_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /ID:\a\Sirius\Sirius\src\sirius\.. /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"sirius_backend_cpu.dir\Release\\" /Fd"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.pdb" /external:W4 /Gd /TP /errorReport:queue  /utf-8 D:\a\Sirius\Sirius\src\sirius\backend\cpu\geodesic_tracer.cpp
+         geodesic_tracer.cpp
+       Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib" /NOLOGO /MACHINE:X64  /machine:x64 sirius_backend_cpu.dir\Release\geodesic_tracer.obj
+         sirius_backend_cpu.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend_cpu.lib
+       FinalizeBuildStatus:
+         Deleting file "sirius_backend_cpu.dir\Release\sirius_b.3CC6790B.tlog\unsuccessfulbuild".
+         Touching "sirius_backend_cpu.dir\Release\sirius_b.3CC6790B.tlog\sirius_backend_cpu.lastbuildstate".
+    17>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend_cpu.vcxproj" (default targets).
+    11>CustomBuild:
+         Camera 5292 instructions; 613 registers; [47720, 61048, 512324, 512324] native/native-wide/portable/portable-wide shader bytes
+         Transport optional FMA32: validated
+         Transport 2587 instructions; 459 registers; [85364, 98008, 99740, 99740] native/native-wide/portable/portable-wide shader bytes
+         Endpoint optional FMA32: validated
+         Endpoint 2205 instructions; 612 registers; [99300, 111960, 145344, 145344] native/native-wide/portable/portable-wide shader bytes
+         Dense 6345 instructions; 815 registers; [77952, 90628, 116204, 116204] native/native-wide/portable/portable-wide shader bytes
+         Initialize 1961 instructions; 362 registers; [57108, 70468, 77444, 77444] native/native-wide/portable/portable-wide shader bytes
+         RayCamera 6115 instructions; 660 registers; [45368, 58728, 475256, 475256] native/native-wide/portable/portable-wide shader bytes
+         DopriPhase 2088 instructions; 629 registers; [58740, 72100, 92844, 92844] native/native-wide/portable/portable-wide shader bytes
+         Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt
+       ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "sirius_backend.dir\Release\sirius_backend_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /I"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained" /ID:\a\Sirius\Sirius\src\sirius\.. /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_HAS_RETAINED_COMPUTE=1 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"sirius_backend.dir\Release\\" /Fd"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.pdb" /external:W0 /Gd /TP /errorReport:queue  /external:I "C:/VulkanSDK/1.4.357.0/Include" /utf-8 D:\a\Sirius\Sirius\src\sirius\backend\vulkan\vulkan_device.cpp D:\a\Sirius\Sirius\src\sirius\backend\retained_compute.cpp D:\a\Sirius\Sirius\src\sirius\backend\retained_integrator.cpp D:\a\Sirius\Sirius\src\sirius\backend\retained_trace_executor.cpp
+         vulkan_device.cpp
+         retained_compute.cpp
+         retained_integrator.cpp
+         retained_trace_executor.cpp
+         Generating Code...
+       Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib" /NOLOGO /MACHINE:X64  /machine:x64 sirius_backend.dir\Release\vulkan_device.obj
+         sirius_backend.dir\Release\retained_compute.obj
+         sirius_backend.dir\Release\retained_integrator.obj
+         sirius_backend.dir\Release\retained_trace_executor.obj
+         sirius_backend.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\sirius_backend.lib
+       FinalizeBuildStatus:
+         Deleting file "sirius_backend.dir\Release\sirius_backend.tlog\unsuccessfulbuild".
+         Touching "sirius_backend.dir\Release\sirius_backend.tlog\sirius_backend.lastbuildstate".
+    11>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.vcxproj" (default targets).
+    10>PrepareForBuild:
+         Creating directory "native_packed_baseline_compute.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "native_packed_baseline_compute.dir\Release\native_p.C2A5887D.tlog\".
+       InitializeBuildStatus:
+         Creating "native_packed_baseline_compute.dir\Release\native_p.C2A5887D.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "native_packed_baseline_compute.dir\Release\native_p.C2A5887D.tlog\unsuccessfulbuild".
+       CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+     6>PrepareForBuild:
+         Creating directory "native_packed_candidate_compute.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "native_packed_candidate_compute.dir\Release\native_p.8AC44AA1.tlog\".
+       InitializeBuildStatus:
+         Creating "native_packed_candidate_compute.dir\Release\native_p.8AC44AA1.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "native_packed_candidate_compute.dir\Release\native_p.8AC44AA1.tlog\unsuccessfulbuild".
+       CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+       ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "native_packed_candidate_compute.dir\Release\native_p.8AC44AA1_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /I"D:\a\Sirius\Sirius\out\native-fp32-packed-scratch-producer-inputs\candidate" /I"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained" /ID:\a\Sirius\Sirius\src\sirius\.. /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_HAS_RETAINED_COMPUTE=1 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"native_packed_candidate_compute.dir\Release\\" /Fd"native_packed_candidate_compute.dir\Release\native_packed_candidate_compute.pdb" /external:W0 /Gd /TP /errorReport:queue  /external:I "C:/VulkanSDK/1.4.357.0/Include" /utf-8 D:\a\Sirius\Sirius\src\sirius\backend\retained_compute.cpp
+    10>ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "native_packed_baseline_compute.dir\Release\native_p.C2A5887D_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /I"D:\a\Sirius\Sirius\out\native-fp32-packed-scratch-producer-inputs\baseline" /I"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained" /ID:\a\Sirius\Sirius\src\sirius\.. /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_HAS_RETAINED_COMPUTE=1 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"native_packed_baseline_compute.dir\Release\\" /Fd"native_packed_baseline_compute.dir\Release\native_packed_baseline_compute.pdb" /external:W0 /Gd /TP /errorReport:queue  /external:I "C:/VulkanSDK/1.4.357.0/Include" /utf-8 D:\a\Sirius\Sirius\src\sirius\backend\retained_compute.cpp
+     7>Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (7) is building "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj" (18) on node 2 (default targets).
+    18>PrepareForBuild:
+         Creating directory "sirius_render.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\".
+         Creating directory "sirius_render.dir\Release\sirius_render.tlog\".
+       InitializeBuildStatus:
+         Creating "sirius_render.dir\Release\sirius_render.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "sirius_render.dir\Release\sirius_render.tlog\unsuccessfulbuild".
+     6>ClCompile:
+         retained_compute.cpp
+    10>ClCompile:
+         retained_compute.cpp
+    18>CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/src/sirius/render/CMakeLists.txt
+       ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "sirius_render.dir\Release\sirius_render_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /ID:\a\Sirius\Sirius\lib\stb /ID:\a\Sirius\Sirius\lib\tinyexr /ID:\a\Sirius\Sirius\src\sirius\.. /I"D:\a\Sirius\Sirius\bin\windows-msvc\_deps\json-src\include" /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D SIRIUS_HAS_VULKAN_BACKEND=1 /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D SIRIUS_HAS_RETAINED_COMPUTE=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"sirius_render.dir\Release\\" /Fd"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.pdb" /external:W0 /Gd /TP /errorReport:queue  /external:I "C:/VulkanSDK/1.4.357.0/Include" /utf-8 -w D:\a\Sirius\Sirius\src\sirius\render\exr_writer.cpp D:\a\Sirius\Sirius\src\sirius\render\stb_impl.cpp D:\a\Sirius\Sirius\src\sirius\render\stb_write_impl.cpp
+    18>cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj]
+         exr_writer.cpp
+         stb_impl.cpp
+         stb_write_impl.cpp
+         Generating Code...
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /ID:\a\Sirius\Sirius\lib\stb /ID:\a\Sirius\Sirius\lib\tinyexr /ID:\a\Sirius\Sirius\src\sirius\.. /I"D:\a\Sirius\Sirius\bin\windows-msvc\_deps\json-src\include" /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D SIRIUS_HAS_VULKAN_BACKEND=1 /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D SIRIUS_HAS_RETAINED_COMPUTE=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"sirius_render.dir\Release\\" /Fd"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.pdb" /external:W0 /Gd /TP /errorReport:queue  /external:I "C:/VulkanSDK/1.4.357.0/Include" /utf-8 D:\a\Sirius\Sirius\src\sirius\render\png_writer.cpp D:\a\Sirius\Sirius\src\sirius\render\render_evidence.cpp D:\a\Sirius\Sirius\src\sirius\render\memory_governor.cpp D:\a\Sirius\Sirius\src\sirius\render\dispatch_governor.cpp D:\a\Sirius\Sirius\src\sirius\render\session\render_session.cpp D:\a\Sirius\Sirius\src\sirius\render\session\pixel_shading.cpp D:\a\Sirius\Sirius\src\sirius\render\session\point_source_detector.cpp D:\a\Sirius\Sirius\src\sirius\render\session\ray_work_queue.cpp D:\a\Sirius\Sirius\src\sirius\render\vulkan_renderer.cpp
+         png_writer.cpp
+         render_evidence.cpp
+    10>Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"native_packed_baseline_compute.dir\Release\native_packed_baseline_compute.lib" /NOLOGO /MACHINE:X64  /machine:x64 native_packed_baseline_compute.dir\Release\retained_compute.obj
+         native_packed_baseline_compute.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.dir\Release\native_packed_baseline_compute.lib
+       FinalizeBuildStatus:
+         Deleting file "native_packed_baseline_compute.dir\Release\native_p.C2A5887D.tlog\unsuccessfulbuild".
+         Touching "native_packed_baseline_compute.dir\Release\native_p.C2A5887D.tlog\native_packed_baseline_compute.lastbuildstate".
+    10>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.vcxproj" (default targets).
+     6>Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"native_packed_candidate_compute.dir\Release\native_packed_candidate_compute.lib" /NOLOGO /MACHINE:X64  /machine:x64 native_packed_candidate_compute.dir\Release\retained_compute.obj
+         native_packed_candidate_compute.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.dir\Release\native_packed_candidate_compute.lib
+       FinalizeBuildStatus:
+         Deleting file "native_packed_candidate_compute.dir\Release\native_p.8AC44AA1.tlog\unsuccessfulbuild".
+         Touching "native_packed_candidate_compute.dir\Release\native_p.8AC44AA1.tlog\native_packed_candidate_compute.lastbuildstate".
+     6>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.vcxproj" (default targets).
+    18>ClCompile:
+         memory_governor.cpp
+         dispatch_governor.cpp
+         render_session.cpp
+         pixel_shading.cpp
+         point_source_detector.cpp
+         ray_work_queue.cpp
+         vulkan_renderer.cpp
+         Generating Code...
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /ID:\a\Sirius\Sirius\lib\stb /ID:\a\Sirius\Sirius\lib\tinyexr /ID:\a\Sirius\Sirius\src\sirius\.. /I"D:\a\Sirius\Sirius\bin\windows-msvc\_deps\json-src\include" /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D SIRIUS_HAS_VULKAN_BACKEND=1 /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D SIRIUS_HAS_RETAINED_COMPUTE=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c17 /permissive- /Fo"sirius_render.dir\Release\\" /Fd"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.pdb" /external:W0 /Gd /TC /errorReport:queue  /external:I "C:/VulkanSDK/1.4.357.0/Include" /utf-8 -w D:\a\Sirius\Sirius\lib\tinyexr\miniz.c
+    18>cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj]
+         miniz.c
+       Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib" /NOLOGO /MACHINE:X64  /machine:x64 sirius_render.dir\Release\exr_writer.obj
+         sirius_render.dir\Release\png_writer.obj
+         sirius_render.dir\Release\render_evidence.obj
+         sirius_render.dir\Release\stb_impl.obj
+         sirius_render.dir\Release\stb_write_impl.obj
+         sirius_render.dir\Release\memory_governor.obj
+         sirius_render.dir\Release\dispatch_governor.obj
+         sirius_render.dir\Release\render_session.obj
+         sirius_render.dir\Release\pixel_shading.obj
+         sirius_render.dir\Release\point_source_detector.obj
+         sirius_render.dir\Release\ray_work_queue.obj
+         sirius_render.dir\Release\miniz.obj
+         sirius_render.dir\Release\vulkan_renderer.obj
+         sirius_render.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\Release\sirius_render.lib
+       FinalizeBuildStatus:
+         Deleting file "sirius_render.dir\Release\sirius_render.tlog\unsuccessfulbuild".
+         Touching "sirius_render.dir\Release\sirius_render.tlog\sirius_render.lastbuildstate".
+    18>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj" (default targets).
+     7>PrepareForBuild:
+         Creating directory "native_packed_dopri.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "native_packed_dopri.dir\Release\native_p.27380AC1.tlog\".
+       InitializeBuildStatus:
+         Creating "native_packed_dopri.dir\Release\native_p.27380AC1.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "native_packed_dopri.dir\Release\native_p.27380AC1.tlog\unsuccessfulbuild".
+       CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+       ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "native_packed_dopri.dir\Release\native_p.27380AC1_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /ID:\a\Sirius\Sirius\tests /I"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained" /I"D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\retained_camera" /ID:\a\Sirius\Sirius\src\sirius\.. /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_TEST_HAS_KERNELS=1 /D SIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1 /D SIRIUS_TEST_HAS_RETAINED_CAMERA=1 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D SIRIUS_HAS_RETAINED_COMPUTE=1 /D SIRIUS_HAS_VULKAN_BACKEND=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"native_packed_dopri.dir\Release\\" /Fd"native_packed_dopri.dir\Release\native_packed_dopri.pdb" /external:W0 /Gd /TP /FID:/a/Sirius/Sirius/tests/support/fail_on_skip.h /errorReport:queue  /external:I "C:/VulkanSDK/1.4.357.0/Include" /external:I "D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/include" /external:I "D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest" /utf-8 D:\a\Sirius\Sirius\tests\backend\retained_dopri_test.cpp
+         retained_dopri_test.cpp
+       Lib:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\Lib.exe /OUT:"native_packed_dopri.dir\Release\native_packed_dopri.lib" /NOLOGO /MACHINE:X64  /machine:x64 native_packed_dopri.dir\Release\retained_dopri_test.obj
+         native_packed_dopri.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.dir\Release\native_packed_dopri.lib
+       FinalizeBuildStatus:
+         Deleting file "native_packed_dopri.dir\Release\native_p.27380AC1.tlog\unsuccessfulbuild".
+         Touching "native_packed_dopri.dir\Release\native_p.27380AC1.tlog\native_packed_dopri.lastbuildstate".
+     7>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (default targets).
+     5>PrepareForBuild:
+         Creating directory "native_packed_candidate_controls.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\private-native-packed\candidate\Release\".
+         Creating directory "native_packed_candidate_controls.dir\Release\native_p.4A4FF457.tlog\".
+       InitializeBuildStatus:
+         Creating "native_packed_candidate_controls.dir\Release\native_p.4A4FF457.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "native_packed_candidate_controls.dir\Release\native_p.4A4FF457.tlog\unsuccessfulbuild".
+       CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+       ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "native_packed_candidate_controls.dir\Release\native_p.4A4FF457_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /I"D:\a\Sirius\Sirius\out\native-fp32-packed-scratch-producer-inputs\candidate" /ID:\a\Sirius\Sirius\tests /I"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained" /I"D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\retained_camera" /ID:\a\Sirius\Sirius\src\sirius\.. /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_TEST_HAS_KERNELS=1 /D SIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1 /D SIRIUS_TEST_HAS_RETAINED_CAMERA=1 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D SIRIUS_HAS_RETAINED_COMPUTE=1 /D SIRIUS_HAS_VULKAN_BACKEND=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"native_packed_candidate_controls.dir\Release\\" /Fd"native_packed_candidate_controls.dir\Release\vc143.pdb" /external:W0 /Gd /TP /FID:/a/Sirius/Sirius/tests/support/fail_on_skip.h /errorReport:queue  /external:I "C:/VulkanSDK/1.4.357.0/Include" /external:I "D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/include" /external:I "D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest" /utf-8 "D:\a\Sirius\Sirius\out\native-fp32-packed-scratch-producer-inputs\observer\audited-observer.cpp"
+     3>PrepareForBuild:
+         Creating directory "native_packed_baseline_controls.dir\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\private-native-packed\baseline\Release\".
+         Creating directory "native_packed_baseline_controls.dir\Release\native_p.54AFA33D.tlog\".
+       InitializeBuildStatus:
+         Creating "native_packed_baseline_controls.dir\Release\native_p.54AFA33D.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "native_packed_baseline_controls.dir\Release\native_p.54AFA33D.tlog\unsuccessfulbuild".
+     5>ClCompile:
+         audited-observer.cpp
+     3>CustomBuild:
+         Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+       ComputeStdModulesCompileInputs:
+         Reading library manifest file 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\modules.json' which provides data for library 'microsoft/STL'.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.ixx' from library 'microsoft/STL' to be built with this project.
+         Adding module source 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx' from library 'microsoft/STL' to be built with this project.
+       MakeDirsForCl:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_controls.dir\Release\microsoft\STL".
+       SetModuleDependencies:
+         Creating directory "native_packed_baseline_controls.dir\Release\native_p.54AFA33D_MD.tlog\".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /I"D:\a\Sirius\Sirius\out\native-fp32-packed-scratch-producer-inputs\baseline" /ID:\a\Sirius\Sirius\tests /I"D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained" /I"D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\retained_camera" /ID:\a\Sirius\Sirius\src\sirius\.. /nologo /W4 /WX /diagnostics:column /O2 /Ob2 /D _MBCS /D WIN32 /D _WINDOWS /D NDEBUG /D _USE_MATH_DEFINES /D _CRT_SECURE_NO_WARNINGS /D SIRIUS_CONTRACT_MODE=2 /D SIRIUS_TEST_HAS_KERNELS=1 /D SIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1 /D SIRIUS_TEST_HAS_RETAINED_CAMERA=1 /D SIRIUS_RELEASE_RESOURCE_LOCKED=1 /D SIRIUS_HAS_RETAINED_COMPUTE=1 /D SIRIUS_HAS_VULKAN_BACKEND=1 /D "CMAKE_INTDIR=\"Release\"" /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /permissive- /Fo"native_packed_baseline_controls.dir\Release\\" /Fd"native_packed_baseline_controls.dir\Release\vc143.pdb" /external:W0 /Gd /TP /FID:/a/Sirius/Sirius/tests/support/fail_on_skip.h /errorReport:queue  /external:I "C:/VulkanSDK/1.4.357.0/Include" /external:I "D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest/include" /external:I "D:/a/Sirius/Sirius/bin/windows-msvc/_deps/googletest-src/googletest" /utf-8 "D:\a\Sirius\Sirius\out\native-fp32-packed-scratch-producer-inputs\observer\audited-observer.cpp"
+         audited-observer.cpp
+     5>MakeDirsForLink:
+         Creating directory "D:\a\Sirius\Sirius\bin\windows-msvc\Release\".
+       Link:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\a\Sirius\Sirius\bin\windows-msvc\private-native-packed\candidate\Release\original_candidate_controls.exe" /INCREMENTAL:NO /NOLOGO src\sirius\backend\Release\sirius_backend_cpu.lib src\sirius\backend\Release\sirius_backend.lib src\sirius\render\Release\sirius_render.lib lib\Release\gtest_main.lib src\sirius\backend\Release\sirius_backend_cpu.lib src\sirius\backend\Release\sirius_backend.lib "C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib" src\sirius\core\Release\sirius_core.lib src\sirius\Release\sirius_base.lib lib\Release\gtest.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"D:/a/Sirius/Sirius/bin/windows-msvc/private-native-packed/candidate/Release/original_candidate_controls.pdb" /MAP:"D:/a/Sirius/Sirius/bin/windows-msvc/private-native-packed/candidate/Release/original_candidate_controls.map" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/a/Sirius/Sirius/bin/windows-msvc/Release/original_candidate_controls.lib" /MACHINE:X64  /machine:x64 /VERBOSE:LIB "native_packed_candidate_controls.dir\Release\audited-observer.obj"
+         "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.dir\Release\retained_compute.obj"
+         "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.dir\Release\retained_dopri_test.obj"
+         
+         Searching libraries
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+             Searching lib\Release\gtest.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+     3>Link:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\a\Sirius\Sirius\bin\windows-msvc\private-native-packed\baseline\Release\original_baseline_controls.exe" /INCREMENTAL:NO /NOLOGO src\sirius\backend\Release\sirius_backend_cpu.lib src\sirius\backend\Release\sirius_backend.lib src\sirius\render\Release\sirius_render.lib lib\Release\gtest_main.lib src\sirius\backend\Release\sirius_backend_cpu.lib src\sirius\backend\Release\sirius_backend.lib "C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib" src\sirius\core\Release\sirius_core.lib src\sirius\Release\sirius_base.lib lib\Release\gtest.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"D:/a/Sirius/Sirius/bin/windows-msvc/private-native-packed/baseline/Release/original_baseline_controls.pdb" /MAP:"D:/a/Sirius/Sirius/bin/windows-msvc/private-native-packed/baseline/Release/original_baseline_controls.map" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/a/Sirius/Sirius/bin/windows-msvc/Release/original_baseline_controls.lib" /MACHINE:X64  /machine:x64 /VERBOSE:LIB "native_packed_baseline_controls.dir\Release\audited-observer.obj"
+         "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.dir\Release\retained_compute.obj"
+         "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.dir\Release\retained_dopri_test.obj"
+         
+         Searching libraries
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+             Searching lib\Release\gtest.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+     5>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+     3>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+     5>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+     3>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+     5>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+     3>Link:
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+     5>Link:
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+     3>Link:
+             Searching lib\Release\gtest_main.lib:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+     5>Link:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+     3>Link:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+             Searching lib\Release\gtest.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+     5>Link:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+     5>Link:
+             Searching src\sirius\core\Release\sirius_core.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+     5>Link:
+             Searching src\sirius\Release\sirius_base.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+     5>Link:
+             Searching lib\Release\gtest.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+     3>Link:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+     3>Link:
+             Searching lib\Release\gtest.lib:
+         
+         Finished searching libraries
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+     3>Link:
+         
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+     3>Link:
+         Searching libraries
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+     3>Link:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+     3>Link:
+             Searching lib\Release\gtest.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+     3>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+         
+         Finished searching libraries
+         
+         Searching libraries
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+     3>Link:
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+             Searching lib\Release\gtest.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+     5>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+     5>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+     3>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+         
+         Finished searching libraries
+         
+         Searching libraries
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+     5>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+     3>Link:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+             Searching lib\Release\gtest.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+     5>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+         
+         Finished searching libraries
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+     3>Link:
+         
+         Searching libraries
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+     5>Link:
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+     3>Link:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+     5>Link:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+     3>Link:
+             Searching src\sirius\render\Release\sirius_render.lib:
+     5>Link:
+             Searching lib\Release\gtest_main.lib:
+     3>Link:
+             Searching lib\Release\gtest_main.lib:
+     5>Link:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+     3>Link:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+     5>Link:
+             Searching src\sirius\core\Release\sirius_core.lib:
+     3>Link:
+             Searching src\sirius\Release\sirius_base.lib:
+     5>Link:
+             Searching src\sirius\Release\sirius_base.lib:
+             Searching lib\Release\gtest.lib:
+     3>Link:
+             Searching lib\Release\gtest.lib:
+     5>Link:
+         
+         Finished searching libraries
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+     5>Link:
+         
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+     5>Link:
+         Searching libraries
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+     5>Link:
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+     5>Link:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+     5>Link:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+     5>Link:
+             Searching lib\Release\gtest.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+     3>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+     3>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+     3>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+     5>Link:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+         
+         Finished searching libraries
+         
+         Searching libraries
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+             Searching lib\Release\gtest.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+     3>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+         
+         Finished searching libraries
+     5>Link:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+         
+         Finished searching libraries
+         
+         Searching libraries
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+             Searching lib\Release\gtest.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64\ucrt.lib:
+         
+         Finished searching libraries
+         
+         Searching libraries
+             Searching src\sirius\backend\Release\sirius_backend_cpu.lib:
+             Searching src\sirius\backend\Release\sirius_backend.lib:
+             Searching src\sirius\render\Release\sirius_render.lib:
+             Searching lib\Release\gtest_main.lib:
+             Searching C:\VulkanSDK\1.4.357.0\Lib\vulkan-1.lib:
+             Searching src\sirius\core\Release\sirius_core.lib:
+             Searching src\sirius\Release\sirius_base.lib:
+             Searching lib\Release\gtest.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\kernel32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\user32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\gdi32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\winspool.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\shell32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\ole32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\oleaut32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\uuid.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\comdlg32.lib:
+             Searching C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\advapi32.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\msvcprt.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\MSVCRT.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\OLDNAMES.lib:
+             Searching C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64\vcruntime.lib:
+         
+         Finished searching libraries
+     3>Link:
+         native_packed_baseline_controls.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\private-native-packed\baseline\Release\original_baseline_controls.exe
+     5>Link:
+         native_packed_candidate_controls.vcxproj -> D:\a\Sirius\Sirius\bin\windows-msvc\private-native-packed\candidate\Release\original_candidate_controls.exe
+       FinalizeBuildStatus:
+         Deleting file "native_packed_candidate_controls.dir\Release\native_p.4A4FF457.tlog\unsuccessfulbuild".
+         Touching "native_packed_candidate_controls.dir\Release\native_p.4A4FF457.tlog\native_packed_candidate_controls.lastbuildstate".
+     5>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.vcxproj" (default targets).
+     3>FinalizeBuildStatus:
+         Deleting file "native_packed_baseline_controls.dir\Release\native_p.54AFA33D.tlog\unsuccessfulbuild".
+         Touching "native_packed_baseline_controls.dir\Release\native_p.54AFA33D.tlog\native_packed_baseline_controls.lastbuildstate".
+     3>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_controls.vcxproj" (default targets).
+     1>PrepareForBuild:
+         Creating directory "x64\Release\SiriusNativePackedMatchedProducer\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "x64\Release\SiriusNativePackedMatchedProducer\SiriusNa.C051EECB.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\SiriusNativePackedMatchedProducer\SiriusNa.C051EECB.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\SiriusNativePackedMatchedProducer\SiriusNa.C051EECB.tlog\unsuccessfulbuild".
+       CustomBuild:
+         1>
+         Building Custom Rule D:/a/Sirius/Sirius/CMakeLists.txt
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\SiriusNativePackedMatchedProducer\SiriusNa.C051EECB.tlog\unsuccessfulbuild".
+         Touching "x64\Release\SiriusNativePackedMatchedProducer\SiriusNa.C051EECB.tlog\SiriusNativePackedMatchedProducer.lastbuildstate".
+     1>Done Building Project "D:\a\Sirius\Sirius\bin\windows-msvc\SiriusNativePackedMatchedProducer.vcxproj" (default targets).
+Deferred Messages
+         
+         Detailed Build Summary
+         ======================
+             
+         
+         ============================== Build Hierarchy (IDs represent configurations) =====================================================
+         Id                  : Exclusive Time   Total Time   Path (Targets)
+         -----------------------------------------------------------------------------------------------------------------------------------
+         0                   : 0.299s           248.046s       D:\a\Sirius\Sirius\bin\windows-msvc\SiriusNativePackedMatchedProducer.vcxproj () 
+         | 1                 : 0.264s           0.264s       D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj () 
+         | 2                 : 0.820s           188.161s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_controls.vcxproj () 
+         | | 8               : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_retained_camera_test_inputs.vcxproj () 
+         | | 7               : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_portable_binary32_test_inputs.vcxproj () 
+         | | 6               : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj () 
+         | | 110             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj (GetNativeManifest) 
+         | | 4               : 14.173s           14.173s       D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj () 
+         | | | 9             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj (GetNativeManifest) 
+         | | . 16            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj (GetProjectInfoForReference) 
+         | | 5               : 0.312s           118.027s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.vcxproj () 
+         | | | 4             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj () 
+         | | | 22            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj () 
+         | | | 21            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj () 
+         | | | 20            : 33.830s           79.994s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.vcxproj () 
+         | | | | 22          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj () 
+         | | | | 21          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj () 
+         | | | | 51          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj (GetNativeManifest) 
+         | | | | 23          : 39.941s           39.941s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_kernels.vcxproj () 
+         | | | | 49          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_kernels.vcxproj (GetNativeManifest) 
+         | | | | 55          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_kernels.vcxproj (GetProjectInfoForReference) 
+         | | | | 58          : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_kernels.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | | | 56          : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | | . 57          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | | 60            : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj (GetNativeManifest) 
+         | | | 68            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.vcxproj (GetProjectInfoForReference) 
+         | | | 67            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj (GetProjectInfoForReference) 
+         | | . 80            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | 109             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.vcxproj (GetNativeManifest) 
+         | | 121             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.vcxproj (GetProjectInfoForReference) 
+         | | 125             : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | 124             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_compute.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | 123             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest_main.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | 122             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | 127             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj (GetCopyToOutputDirectoryItems) 
+         | . 126             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend_cpu.vcxproj (GetCopyToOutputDirectoryItems) 
+         | 3                 : 1.288s           188.177s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.vcxproj () 
+         | | 8               : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_retained_camera_test_inputs.vcxproj () 
+         | | 7               : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_portable_binary32_test_inputs.vcxproj () 
+         | | 4               : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj () 
+         | | 11              : 0.312s           122.295s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.vcxproj () 
+         | | | 4             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj () 
+         | | | 20            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.vcxproj () 
+         | | | 21            : 10.167s           32.231s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj () 
+         | | | . 35          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | . 22            : 0.344s           38.204s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj () 
+         | | | | 21          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj () 
+         | | | | 42          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj (GetNativeManifest) 
+         | | | . 44          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj (GetProjectInfoForReference) 
+         | | 6               : 0.317s           173.486s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj () 
+         | | | 4             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\SiriusSourceGovernance.vcxproj () 
+         | | | 20            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.vcxproj () 
+         | | | 22            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj () 
+         | | | 21            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj () 
+         | | | 7             : 2.856s           13.809s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_portable_binary32_test_inputs.vcxproj () 
+         | | | . 16          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj (GetProjectInfoForReference) 
+         | | | 8             : 1.391s           10.953s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_retained_camera_test_inputs.vcxproj () 
+         | | | . 16          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj (GetProjectInfoForReference) 
+         | | | 24            : 8.309s           29.711s       D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest.vcxproj () 
+         | | | . 35          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | | 25            : 0.328s           21.949s       D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest_main.vcxproj () 
+         | | | | 24          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest.vcxproj () 
+         | | | | 40          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest.vcxproj (GetNativeManifest) 
+         | | | . 46          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest.vcxproj (GetProjectInfoForReference) 
+         | | | 26            : 0.329s           27.782s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend_cpu.vcxproj () 
+         | | | | 22          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj () 
+         | | | | 21          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj () 
+         | | | | 51          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj (GetNativeManifest) 
+         | | | . 53          : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj (GetProjectInfoForReference) 
+         | | | 27            : 0.500s           89.880s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj () 
+         | | | | 23          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_kernels.vcxproj () 
+         | | | | 22          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj () 
+         | | | | 21          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj () 
+         | | | | 26          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend_cpu.vcxproj () 
+         | | | | 20          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.vcxproj () 
+         | | | | 63          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend.vcxproj (GetNativeManifest) 
+         | | | | 64          : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend_cpu.vcxproj (GetNativeManifest) 
+         | | | . 77          : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_backend_cpu.vcxproj (GetProjectInfoForReference) 
+         | | | 91            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_retained_camera_test_inputs.vcxproj (GetNativeManifest) 
+         | | | 90            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_portable_binary32_test_inputs.vcxproj (GetNativeManifest) 
+         | | | 94            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj (GetNativeManifest) 
+         | | | 92            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest_main.vcxproj (GetNativeManifest) 
+         | | | 99            : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_portable_binary32_test_inputs.vcxproj (GetProjectInfoForReference) 
+         | | | 97            : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-build\googletest\gtest_main.vcxproj (GetProjectInfoForReference) 
+         | | | 101           : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_retained_camera_test_inputs.vcxproj (GetProjectInfoForReference) 
+         | | | 100           : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj (GetProjectInfoForReference) 
+         | | | 105           : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_portable_binary32_test_inputs.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | . 106           : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\tests\backend\sirius_retained_camera_test_inputs.vcxproj (GetCopyToOutputDirectoryItems) 
+         | | 110             : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj (GetNativeManifest) 
+         | | 114             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.vcxproj (GetNativeManifest) 
+         | | 118             : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_compute.vcxproj (GetProjectInfoForReference) 
+         | . 119             : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj (GetProjectInfoForReference) 
+         | 132               : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.vcxproj (GetNativeManifest) 
+         | 131               : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_controls.vcxproj (GetNativeManifest) 
+         | 134               : 0.016s           0.016s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.vcxproj (GetProjectInfoForReference) 
+         . 133               : 0.000s           0.000s       D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_baseline_controls.vcxproj (GetProjectInfoForReference) 
+         
+         ============================== Node Utilization (IDs represent configurations) ====================================================
+         Timestamp:            1       2        Duration   Cumulative
+         -----------------------------------------------------------------------------------------------------------------------------------
+         639279003969872838:   0       x        0.221s     0.221s ....
+         639279003972079729:   1       x        0.264s     0.485s .....
+         639279003974720796:   2       x        0.094s     0.579s .
+         639279003975658265:   4       3        0.031s     0.610s 
+         639279003975970710:   |       |        0.266s     0.875s .....
+         639279003978627076:   |       11       0.062s     0.938s .
+         639279003979251918:   |       6        0.067s     1.005s .
+         639279003979923958:   |       7        2.825s     3.830s ........................................................
+         639279004008173954:   |       8        1.344s     5.174s ..........................
+         639279004021614258:   |       5        0.062s     5.237s .
+         639279004022239247:   |       x        9.499s     14.736s + (scale 1:100)
+         639279004117233471:   |       8        0.016s     14.752s 
+         639279004117389719:   x       |        0.031s     14.783s 
+         639279004117702217:   20      7        0.031s     14.814s 
+         639279004118014695:   23      21       2.018s     16.832s ........................................
+         639279004138195127:   |       22       0.109s     16.942s ..
+         639279004139288890:   |       24       7.648s     24.589s + (scale 1:100)
+         639279004215766896:   |       |        0.505s     25.095s ..........
+         639279004220820067:   |       21       8.134s     33.228s + (scale 1:100)
+         639279004302157527:   |       25       0.078s     33.306s .
+         639279004302933972:   |       24       0.141s     33.447s ..
+         639279004304340101:   |       26       0.094s     33.540s .
+         639279004305277716:   |       27       0.109s     33.650s ..
+         639279004306371405:   |       x        21.105s     54.755s ++++ (scale 1:100)
+         639279004517424293:   20      27       0.016s     54.771s 
+         639279004517580583:   35      24       0.016s     54.786s 
+         639279004517736869:   |       21       0.016s     54.802s 
+         639279004517893117:   |       22       0.016s     54.818s 
+         639279004518049475:   |       |        0.078s     54.896s .
+         639279004518830577:   |       |        0.031s     54.927s 
+         639279004519143081:   |       25       0.094s     55.022s .
+         639279004520088034:   |       |        0.031s     55.052s 
+         639279004520395109:   |       |        1.031s     56.083s ....................
+         639279004530705258:   |       |        0.125s     56.208s ..
+         639279004531955364:   |       22       4.661s     60.869s .............................................................................................
+         639279004578561293:   |       |        0.109s     60.978s ..
+         639279004579655129:   20      26       0.078s     61.056s .
+         639279004580437526:   |       53       0.016s     61.072s 
+         639279004580593804:   |       26       0.031s     61.103s 
+         639279004580906273:   |       |        4.410s     65.513s ........................................................................................
+         639279004625004297:   |       |        0.125s     65.639s ..
+         639279004626258657:   |       x        28.945s     94.583s +++++ (scale 1:100)
+         639279004915705961:   |       x        0.100s     94.684s ..
+         639279004916708983:   |       x        28.050s     122.733s +++++ (scale 1:100)
+         639279005197205071:   |       x        0.078s     122.811s .
+         639279005197986311:   58      56       0.016s     122.827s 
+         639279005198142575:   60      27       0.016s     122.843s 
+         639279005198298898:   63      5        0.078s     122.921s .
+         639279005199080112:   68      11       0.109s     123.030s ..
+         639279005200169780:   |       5        0.016s     123.045s 
+         639279005200326034:   |       64       0.016s     123.061s 
+         639279005200482317:   |       27       0.094s     123.155s .
+         639279005201419812:   |       |        0.062s     123.217s .
+         639279005202044807:   |       |        7.318s     130.535s + (scale 1:100)
+         639279005275226804:   |       |        0.031s     130.567s 
+         639279005275539333:   |       |        6.942s     137.509s + (scale 1:100)
+         639279005344963822:   |       5        0.141s     137.650s ..
+         639279005346369861:   80      |        0.016s     137.665s 
+         639279005346526132:   |       11       0.359s     138.025s .......
+         639279005350121039:   |       |        0.141s     138.165s ..
+         639279005351527169:   |       27       34.821s     172.987s ++++++ (scale 1:100)
+         639279005699738447:   |       |        0.031s     173.018s 
+         639279005700051009:   |       |        0.969s     173.987s ...................
+         639279005709740381:   |       |        0.141s     174.127s ..
+         639279005711146591:   |       6        0.016s     174.143s 
+         639279005711302904:   |       |        0.094s     174.237s .
+         639279005712240413:   |       99       0.016s     174.252s 
+         639279005712396794:   |       101      0.016s     174.268s 
+         639279005712553025:   |       6        0.016s     174.284s 
+         639279005712709167:   |       |        13.309s     187.592s ++ (scale 1:100)
+         639279005845795894:   |       |        0.094s     187.686s .
+         639279005846733269:   |       105      0.016s     187.702s 
+         639279005846889460:   |       6        0.031s     187.733s 
+         639279005847201970:   2       110      0.016s     187.749s 
+         639279005847358234:   |       3        0.078s     187.827s .
+         639279005848139244:   |       118      0.016s     187.842s 
+         639279005848295483:   |       3        0.031s     187.874s 
+         639279005848608012:   |       109      0.078s     187.952s .
+         639279005849389241:   |       121      0.031s     187.983s 
+         639279005849702637:   |       |        59.072s     247.055s # (scale 1:1000)
+         639279006440424390:   |       3        0.234s     247.290s ....
+         639279006442768133:   |       |        0.616s     247.906s ............
+         639279006448932396:   x       |        0.031s     247.937s 
+         639279006449244885:   x       125      0.016s     247.953s 
+         639279006449401119:   0       132      0.094s     248.047s .
+         639279006450338675:   133     134      0.016s     248.062s 
+         639279006450338675:   0       x        0.016s     248.078s 
+         -----------------------------------------------------------------------------------------------------------------------------------
+         Utilization:          71.2    83.5     Average Utilization: 77.4
+
+Build succeeded.
+
+       "D:\a\Sirius\Sirius\bin\windows-msvc\SiriusNativePackedMatchedProducer.vcxproj" (default target) (1) ->
+       "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.vcxproj" (default target) (5) ->
+       "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (default target) (7) ->
+       "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj" (default target) (18) ->
+       (ClCompile target) -> 
+         cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj]
+
+
+       "D:\a\Sirius\Sirius\bin\windows-msvc\SiriusNativePackedMatchedProducer.vcxproj" (default target) (1) ->
+       "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_candidate_controls.vcxproj" (default target) (5) ->
+       "D:\a\Sirius\Sirius\bin\windows-msvc\native_packed_dopri.vcxproj" (default target) (7) ->
+       "D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj" (default target) (18) ->
+         cl : command line  warning D9025: overriding '/W4' with '/w' [D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\render\sirius_render.vcxproj]
+
+    2 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:04:08.09

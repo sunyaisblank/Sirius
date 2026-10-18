@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{518AB9BE-E069-3102-9A09-CC8DA98F8B7E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>sirius_backend</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">sirius_backend.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">sirius_backend</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained;D:\a\Sirius\Sirius\src\sirius\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/VulkanSDK/1.4.357.0/Include" /utf-8</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ConformanceMode>true</ConformanceMode>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;SIRIUS_CONTRACT_MODE=2;SIRIUS_HAS_RETAINED_COMPUTE=1;SIRIUS_RELEASE_RESOURCE_LOCKED=1;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;SIRIUS_CONTRACT_MODE=2;SIRIUS_HAS_RETAINED_COMPUTE=1;SIRIUS_RELEASE_RESOURCE_LOCKED=1;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained;D:\a\Sirius\Sirius\src\sirius\..;C:\VulkanSDK\1.4.357.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained;D:\a\Sirius\Sirius\src\sirius\..;C:\VulkanSDK\1.4.357.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\a\Sirius\Sirius\bin\windows-msvc\CMakeFiles\e3cc68069fde99f2e4b36503e2971f30\retained_kernels.h.rule">
+      <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</BuildInParallel>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building bounded retained camera and joint transport stages</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\hostedtoolcache\windows\Python\3.14.8\x64\python3.exe D:/a/Sirius/Sirius/scripts/build-retained-kernels.py --output D:/a/Sirius/Sirius/bin/windows-msvc/src/sirius/backend/retained/retained_kernels.h --compiler C:/VulkanSDK/1.4.357.0/Bin/slangc.exe --assembler C:/VulkanSDK/1.4.357.0/Bin/spirv-as.exe --disassembler C:/VulkanSDK/1.4.357.0/Bin/spirv-dis.exe --validator C:/VulkanSDK/1.4.357.0/Bin/spirv-val.exe --optimizer C:/VulkanSDK/1.4.357.0/Bin/spirv-opt.exe
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\a\Sirius\Sirius\scripts\build-retained-kernels.py;C:\VulkanSDK\1.4.357.0\Bin\spirv-opt.exe;D:\a\Sirius\Sirius\src\sirius\kernels\retained_program.py;D:\a\Sirius\Sirius\src\sirius\kernels\portable_binary32.h;D:\a\Sirius\Sirius\src\sirius\kernels\retained_scalar.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_pair.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_triple.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_scratch.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_owner.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_camera.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_transport.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_endpoint.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_dense.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_initialize.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_ray_camera.slang;D:\a\Sirius\Sirius\src\sirius\kernels\retained_dopri_phase.slang;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained\retained_kernels.h;D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained\retained_owner_kernels.h;D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained\retained_owner_layout.h;D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained\retained_owner_layout.slang</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\a\Sirius\Sirius\src\sirius\backend\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/a/Sirius/Sirius/src/sirius/backend/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/a/Sirius/Sirius -BD:/a/Sirius/Sirius/bin/windows-msvc --check-stamp-file D:/a/Sirius/Sirius/bin/windows-msvc/src/sirius/backend/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\FindVulkan.cmake;D:\a\Sirius\Sirius\bin\windows-msvc\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="D:\a\Sirius\Sirius\src\sirius\backend\vulkan\vulkan_device.cpp" />
+    <ClCompile Include="D:\a\Sirius\Sirius\src\sirius\backend\retained_compute.cpp" />
+    <ClCompile Include="D:\a\Sirius\Sirius\src\sirius\backend\retained_integrator.cpp" />
+    <ClCompile Include="D:\a\Sirius\Sirius\src\sirius\backend\retained_trace_executor.cpp" />
+    <ClInclude Include="D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\retained\retained_kernels.h" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="D:\a\Sirius\Sirius\bin\windows-msvc\ZERO_CHECK.vcxproj">
+      <Project>{A6957057-9ADE-39F0-B82F-FFD0F1159162}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\sirius_base.vcxproj">
+      <Project>{9E3DDDC2-6922-386C-A015-D0C16C587876}</Project>
+      <Name>sirius_base</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\core\sirius_core.vcxproj">
+      <Project>{CB7D4D60-56CB-34B1-96DD-91024C51FC1A}</Project>
+      <Name>sirius_core</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\a\Sirius\Sirius\bin\windows-msvc\src\sirius\backend\sirius_kernels.vcxproj">
+      <Project>{6B560261-AB9A-3B23-93F6-A3B0C7D4745A}</Project>
+      <Name>sirius_kernels</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

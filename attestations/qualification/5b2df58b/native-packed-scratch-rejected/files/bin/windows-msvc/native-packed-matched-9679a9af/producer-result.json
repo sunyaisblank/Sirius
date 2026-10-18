@@ -1,0 +1,66 @@
+{
+  "schema": "sirius-native-packed-matched-ci-producer-v1",
+  "passed": true,
+  "configure_passed": true,
+  "build_passed": true,
+  "source_unchanged": true,
+  "frozen_build_inputs_unchanged": true,
+  "repository": "sunyaisblank/Sirius",
+  "run_id": "39102739326",
+  "run_attempt": "1",
+  "github_sha": "9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce",
+  "source_revision": "9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce",
+  "commands": [
+    {
+      "label": "configure",
+      "argv": [
+        "C:\\Program Files\\CMake\\bin\\cmake.exe",
+        "--preset",
+        "windows-msvc",
+        "-DSIRIUS_ALIGNMENT_MODE=qualification",
+        "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+        "-DCMAKE_CONFIGURATION_TYPES:STRING=Release",
+        "-DCMAKE_PROJECT_Sirius_INCLUDE=D:\\a\\Sirius\\Sirius\\out\\native-fp32-packed-scratch-windows-producer-source\\matched-producer.cmake"
+      ],
+      "cwd": "D:\\a\\Sirius\\Sirius",
+      "started_utc": "2026-10-18T06:05:02.0869389Z",
+      "finished_utc": "2026-10-18T06:05:55.0482171Z",
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "C:\\Program Files\\CMake\\bin\\cmake.exe",
+        "--build",
+        "--preset",
+        "windows-msvc",
+        "--config",
+        "Release",
+        "--target",
+        "SiriusNativePackedMatchedProducer",
+        "--parallel",
+        "2",
+        "--",
+        "/verbosity:normal",
+        "/bl:D:\\a\\Sirius\\Sirius\\bin\\windows-msvc\\private-native-packed-export\\build.binlog"
+      ],
+      "cwd": "D:\\a\\Sirius\\Sirius",
+      "started_utc": "2026-10-18T06:06:36.7437704Z",
+      "finished_utc": "2026-10-18T06:10:45.1163524Z",
+      "exit_code": 0
+    }
+  ],
+  "source_root": "D:\\a\\Sirius\\Sirius",
+  "build_root": "D:\\a\\Sirius\\Sirius\\bin\\windows-msvc",
+  "export_root": "D:\\a\\Sirius\\Sirius\\bin\\windows-msvc\\private-native-packed-export",
+  "pe_or_provider_or_test_executed": false,
+  "mandatory_gate_executed": false,
+  "native_build_attestation_claimed": false,
+  "scientific_qualification_claimed": false,
+  "release_or_adoption_claimed": false,
+  "failure": null,
+  "scope": "Compile-only two-arm matched products, with actual canonical dependency work. Input scope is tracked/private sources, fetched source trees, selected primary tools and adjacent DLLs; not complete host/SDK-header/DSO closure. Runtime/PE selectors and source/header/map proof require ROOT download review.",
+  "private_compile_object_count": 5,
+  "input_rows": 2904,
+  "finished_utc": "2026-10-18T06:10:48.3561347Z"
+}

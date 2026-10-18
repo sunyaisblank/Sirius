@@ -1,0 +1,10 @@
+^D:\A\SIRIUS\SIRIUS\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/a/Sirius/Sirius -BD:/a/Sirius/Sirius/bin/windows-msvc --check-stamp-file D:/a/Sirius/Sirius/bin/windows-msvc/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
