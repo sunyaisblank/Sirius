@@ -1,0 +1,29 @@
+{
+  "schema": "sirius-native-packed-actual-tlog-case-source-correction-v1",
+  "created_utc": "2026-10-18T06:12:36.407317+00:00",
+  "source_only": true,
+  "original": {
+    "path": "out/native-fp32-packed-scratch-pe-audit/audit_export.py",
+    "bytes": 18572,
+    "sha256": "2cd3663ea2dbd221c9ba9508c7d265cd1610dea56054681bcdc244d868901839"
+  },
+  "corrected": {
+    "path": "out/native-fp32-packed-scratch-pe-audit/audit_export_windows_paths.py",
+    "bytes": 18580,
+    "sha256": "cee37e6559f3f8b100bf8ff87940049229fe20299beaefef353ae66f4064d741"
+  },
+  "patch": {
+    "path": "out/native-fp32-packed-scratch-pe-audit/windows-path-case.patch",
+    "bytes": 850,
+    "sha256": "5e1b6879e0cbfd80f4ab506216e0eff278d97f3206b0490af891acf099699150"
+  },
+  "failed_reader_result": {
+    "path": "out/native-fp32-packed-scratch-pe-audit/actual-9679a9af-audit.json",
+    "bytes": 266,
+    "sha256": "2fee94ba71b8241215595779166ad711f16072c04f1ecdebfce128e83df25536"
+  },
+  "cause": "MSVC actual CL.command tlogs normalize header pathname to upper case; forced /FI.../FAIL_ON_SKIP.H is present. Original predicate used case-sensitive lowercase filename. Only Windows pathname case comparison corrected; no compiler flags or products changed.",
+  "changed_reader_actual_data_audit_released": true,
+  "new_compile_CI_PE_or_provider_executed": false,
+  "runtime_admitted": false
+}

@@ -1,0 +1,449 @@
+--- original-software_contracts.py
++++ native_evidence.py
+@@ -1,48 +1,108 @@
+-"""Read original native controls without launching any work."""
+-from pathlib import Path
+-import hashlib, json, math, re, subprocess, xml.etree.ElementTree as ET
+-
+-ROOT = Path(__file__).resolve().parents[3]
++"""Read only genuine native matched-control receipts; never launch a workload.
++
++Authority/launch/cleanup remains in the separately reviewed mature wrappers.
++Unknown artifact/array/provider identities must be concretely ROOT-bound first.
++"""
++from pathlib import Path, PurePosixPath
++import hashlib
++import json
++import math
++import re
++import sys
++import xml.etree.ElementTree as ET
++sys.dont_write_bytecode = True
++if sys.flags.optimize:
++    raise RuntimeError('Assertions must be enabled')
++ROOT = Path(__file__).resolve().parents[2]
+ WORK = Path(__file__).resolve().parent
++STAGES = ('camera', 'transport', 'endpoint', 'dense', 'initialize', 'ray_camera', 'dopri_phase')
++PREFIXES = ('Camera', 'Transport', 'Endpoint', 'Dense', 'Initialize', 'RayCamera', 'DopriPhase')
+ CASES = {
+- 'dense': 'RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives',
+- 'dense_authority': 'RetainedComputeTest.ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal',
+- 'dopri_reference': 'RetainedDopriTest.IndependentQuarticPreservesCompletePhase',
+- 'dopri_refusal': 'RetainedDopriTest.MalformedRowsRefuseAndRecover',
+- 'dopri_projection': 'RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection',
+- 'dopri_connected': 'RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets',
+- 'dopri_arrival': 'RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates',
+- 'timestamps': 'RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults',
+- 'wide': 'RetainedComputeTest.WideDeviceTimestampsPreserveOriginalIntervalResults',
++ 'control-1': 'RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission',
++ 'control-2': 'RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal',
++ 'control-3': 'RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation',
++ 'control-4': 'RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection',
++ 'control-5': 'RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets',
++ 'control-6': 'RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates',
++ 'control-7': 'RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement',
++ 'control-8': 'RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults',
+ }
+-
++for _label in ('a1', 'b1', 'b2', 'a2'):
++    CASES[_label] = CASES['control-8']
+ MODERN = [('transport', 12), ('endpoint', 24), ('transport', 12), ('endpoint', 24),
+           ('transport', 12), ('endpoint', 24), ('dopri_phase', 24), ('dopri_phase', 24),
+           ('endpoint', 12), ('dopri_phase', 12), ('endpoint', 12)]
+ LEGACY = ['transport', 'endpoint', 'transport', 'endpoint', 'transport', 'endpoint+dense']
+ MARKER_MS = ['device_ms', 'host_submit_ms', 'host_wait_ms', 'host_completion_ms',
+              'pipeline_ms', 'setup_ms', 'cleanup_ms', 'total_ms']
+-
+-def sha(path):
+-    return hashlib.sha256(path.read_bytes()).hexdigest()
+-
+-def identity(path):
+-    return {'path': str(path.relative_to(ROOT)), 'bytes': path.stat().st_size, 'sha256': sha(path)}
++FACTORED_ROWS = (29, 29, 29, 4, 8, 29, 27, 27, 23, 23, 23, 4, 1, 29)
++
++
++def pairs(items):
++    result = {}
++    for key, value in items:
++        assert key not in result, ('duplicate JSON key', key)
++        result[key] = value
++    return result
++
+ 
+ def read(path):
+-    assert path.is_file() and path.stat().st_size <= 16 * 1024 * 1024, str(path)
+-    return path.read_text(encoding='utf-8-sig')
++    assert path.is_file() and not path.is_symlink()
++    payload = path.read_bytes()
++    assert len(payload) <= 64 * 1024 * 1024, path
++    return payload
++
+ 
+ def document(path):
+     def invalid(value):
+         raise ValueError('Nonfinite JSON constant: ' + value)
+-    return json.loads(read(path), parse_constant=invalid)
++    return json.loads(read(path).decode('utf-8-sig'), object_pairs_hook=pairs, parse_constant=invalid)
++
++
++def identity(path):
++    payload = read(path)
++    return {'bytes': len(payload), 'sha256': hashlib.sha256(payload).hexdigest()}
++
++
++
++def physical_identity(path):
++    assert path.is_file()
++    digest = hashlib.sha256()
++    size = 0
++    with path.open('rb') as stream:
++        while True:
++            block = stream.read(1024 * 1024)
++            if not block: break
++            size += len(block)
++            digest.update(block)
++    return {'bytes': size, 'sha256': digest.hexdigest()}
++
++
++def physical(key):
++    assert type(key) is str
++    return Path(key) if key.startswith('/') else local(key)
++
++def pin(value):
++    assert type(value) is dict and type(value['bytes']) is int and value['bytes'] >= 0
++    assert type(value['sha256']) is str and re.fullmatch('[0-9a-f]{64}', value['sha256'])
++    return {key: value[key] for key in ('bytes', 'sha256')}
++
++
++def local(relative):
++    logical = PurePosixPath(relative)
++    assert type(relative) is str and not logical.is_absolute() and str(logical) == relative
++    assert '\\' not in relative and all(p not in ('', '.', '..') for p in relative.split('/'))
++    path = ROOT / logical
++    assert path.resolve(strict=True) == path and path.is_relative_to(ROOT), relative
++    return path
++
+ 
+ def number(value):
+     assert not isinstance(value, bool)
+     result = float(value)
+     assert math.isfinite(result) and result >= 0
+     return result
++
+ 
+ def fields(value):
+     result = {}
+@@ -52,7 +112,8 @@
+         result[key] = word
+     return result
+ 
+-def xml_properties(path, case):
++
++def xml_properties(path, label):
+     xml = ET.fromstring(read(path))
+     assert int(xml.get('tests', '-1')) == 1
+     for node in [xml, *xml.findall('.//testsuite')]:
+@@ -60,7 +121,7 @@
+             assert int(node.get(key, '0')) == 0
+     assert not any(xml.findall('.//' + tag) for tag in ('failure', 'error', 'skipped'))
+     cases = xml.findall('.//testcase')
+-    assert len(cases) == 1 and cases[0].get('classname') + '.' + cases[0].get('name') == CASES[case]
++    assert len(cases) == 1 and cases[0].get('classname') + '.' + cases[0].get('name') == CASES[label]
+     assert cases[0].get('status') == 'run' and cases[0].get('result') == 'completed'
+     props = {}
+     for item in xml.findall('.//property'):
+@@ -69,21 +130,197 @@
+         props[key] = item.get('value')
+     return props
+ 
+-def timestamp_result(props, producer, wide=False):
+-    software = True
+-    assert producer in ('baseline','candidate')
+-    assert props['selected_device'] == ('llvmpipe (LLVM 20.1.2, 256 bits)' if software else 'AMD Radeon 780M Graphics')
+-    assert props['selected_driver'] == ('llvmpipe: Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)' if software else 'AMD proprietary driver: 26.8.1 (LLPC)')
++
++class Context:
++    def __init__(self, path, admission_path):
++        self.path, self.admission_path = path, admission_path
++        self.value, admission = document(path), document(admission_path)
++        self.seal = identity(path)
++        v = self.value
++        assert v['schema'] == 'sirius-native-packed-evidence-bindings-v1' and v['admitted'] is True
++        for key in ('producer_source_revision', 'runner_source_revision'):
++            assert type(v[key]) is str and re.fullmatch('[0-9a-f]{40}', v[key])
++        assert admission['schema'] == 'sirius-native-packed-evidence-root-admission-v1'
++        assert admission['passed'] is True and admission['reader_bindings'] == dict(path=str(path.relative_to(ROOT)), **self.seal)
++        assert admission['scope'] == 'native matched retained controls and sole original22 ABBA only'
++        assert v['observed_instance_api_minimum_improvement_percent'] == 0
++        self.admission_seal = identity(admission_path)
++        self.files = v['files']
++        assert type(self.files) is dict and self.files
++        # Reader code, exact numeric helper and layout authority are ordinary frozen inputs.
++        for name in ('native_evidence.py', 'numeric_gates.py', 'compare_native.py', 'read_controls_native.py', 'expected-readback-layout.json'):
++            p = WORK / name
++            assert self.files[str(p.relative_to(ROOT))] == identity(p)
++        self.verify_current()
++        arrays_path = local(v['array_authority']['path'])
++        assert identity(arrays_path) == pin(v['array_authority']) == pin(self.files[str(arrays_path.relative_to(ROOT))])
++        authority = document(arrays_path)
++        assert authority['schema'] == 'sirius-native-packed-matched-array-authority-v1' and authority['passed'] is True
++        assert authority['producer_source_revision'] == v['producer_source_revision']
++        assert authority['actual_PE_payload_and_selector_joins_passed'] is True
++        assert authority['original27_test_bodies_and1492_assertion_lines_equal'] is True
++        assert authority['seven_program_tables_and_public_constants_equal'] is True
++        assert authority['owner2_payloads_equal'] is True
++        self.arms = authority['arms']
++        assert set(self.arms) == {'baseline', 'candidate'}
++        a, b = (self.arms[k]['arrays'] for k in ('baseline', 'candidate'))
++        assert len(a) == len(b) == 40 and set(a) == set(b)
++        changed = {'kTransportShader', 'kEndpointShader', 'kDenseShader', 'kInitializeShader', 'kDopriPhaseShader'}
++        assert {k for k in a if pin(a[k]) != pin(b[k])} == changed
++        for arm in self.arms.values():
++            for row in arm['arrays'].values(): pin(row)
++            assert set(arm['fma_available']) == {'transport', 'endpoint'}
++            assert all(type(q) is bool for q in arm['fma_available'].values())
++        assert self.arms['baseline']['fma_available'] == self.arms['candidate']['fma_available']
++        hardware = v['native_identity']
++        assert hardware['selected_device'] == 'AMD Radeon 780M Graphics'
++        assert type(hardware['selected_driver']) is str and hardware['selected_driver']
++        assert hardware['retained_scalar_route'] == 'native binary32'
++        assert hardware['fma_fp32_enabled'] in ('0', '1', 'false', 'true')
++        assert hardware['preserves_fp32_signed_zero_inf_nan'] in ('1', 'true')
++        assert type(hardware['supports_fp64']) is bool and hardware['supports_fp64'] is True
++        assert type(hardware['rounds_fp64_to_nearest']) is bool and hardware['rounds_fp64_to_nearest'] is True
++        assert 1 <= int(hardware['timestamp_valid_bits']) <= 64
++        assert number(hardware['timestamp_period_ns']) > 0
++
++    def verify_current(self):
++        for relative, expected in self.files.items():
++            assert physical_identity(physical(relative)) == pin(expected), relative
++
++    def finish(self):
++        self.verify_current()
++        assert identity(self.path) == self.seal and identity(self.admission_path) == self.admission_seal
++
++
++def selected_names(context, arm, wide=False):
++    suffix = 'Fp64Shader' if wide else 'Shader'
++    names = dict(zip(STAGES, ['k' + name + suffix for name in PREFIXES]))
++    hardware = context.value['native_identity']
++    fma = wide and hardware['fma_fp32_enabled'] in ('1', 'true') and hardware['preserves_fp32_signed_zero_inf_nan'] in ('1', 'true')
++    for stage, prefix in (('transport', 'Transport'), ('endpoint', 'Endpoint')):
++        if fma and context.arms[arm]['fma_available'][stage]:
++            names[stage] = 'k' + prefix + 'FmaShader'
++    return names
++
++
++def native_case(context, label):
++    row = context.value['cases'][label]
++    arm = 'baseline' if label in ('a1', 'a2') else 'candidate'
++    assert row['arm'] == arm
++    work = local(row['work'])
++    accepted_path = work / ('terminal-' + label + '-accepted.json')
++    assert identity(accepted_path) == pin(row['terminal_accepted'])
++    accepted = document(accepted_path)
++    assert accepted['pass'] is True and accepted['case'] == accepted['label'] == label
++    assert accepted['private_producer_authority_used'] is True and accepted['native_build_gate_authority_used'] is False
++    assert accepted['loaded_provider_evidence_complete'] is True
++    record = accepted['record']
++    for rel, expected in record['whole_inputs'].items():
++        logical = PurePosixPath(rel)
++        assert not logical.is_absolute() and all(p not in ('', '.', '..') for p in rel.split('/'))
++        assert identity(work / logical) == pin(expected), rel
++    folder = work / 'native' / label
++    owner, bridge = document(folder / 'owner.json'), document(work / (label + '-bridge.json'))
++    assert owner == record['owner'] and bridge == record['bridge']
++    bindings = document(work / 'execution-bindings.json')
++    assert bindings['admitted'] is True and bindings['control_profile'] == row['profile']
++    assert bridge['binding_sha256'] == identity(work / 'execution-bindings.json')['sha256']
++    assert bridge['accepted_owner_execution'] is True and bridge['completed'] is True
++    assert type(bridge['returncode']) is int and bridge['returncode'] == 0 and bridge['whole_inputs_unchanged'] is True
++    before = document(work / (label + '-inputs-before.json'))
++    assert before == document(work / (label + '-inputs-after.json'))
++    for rel, expected in before.items():
++        # Context seals current phase inputs once; no replay of retired historical maps.
++        assert pin(context.files[rel]) == pin(expected), rel
++    for rel, expected in bridge['predecessor_inputs'].items():
++        assert pin(context.files[rel]) == pin(expected), rel
++    assert owner['status'] == 'completed' and type(owner['returncode']) is int and owner['returncode'] == 0
++    assert owner['outer_stop'] is False and owner['cleanup_errors'] == []
++    for key in ('owned_process_absent', 'numerical_control_passed', 'loaded_driver_modules_recorded', 'source_build_gate_unchanged', 'test_executable_unchanged'):
++        assert owner[key] is True, key
++    assert owner['system_inventory_passed'] is False
++    assert owner['expected_cases'] == [CASES[label]]
++    assert [q for q in owner['arguments'] if q.startswith('--gtest_filter=')] == ['--gtest_filter=' + CASES[label]]
++    assert owner['source_revision'] == bindings['source_revision'] == context.value['producer_source_revision']
++    assert owner['live_source_revision'] == bindings['runner_source_revision'] == context.value['runner_source_revision']
++    # The preserved legacy field name explicitly aliases the actual producer-result seal.
++    assert owner['source_build_gate_sha256'] == bindings['producer_identity']['sha256']
++    assert owner['source_private_manifest_sha256'] == bindings['manifest_identity']['sha256']
++    assert owner['source_private_manifest_unchanged'] is True and owner['private_producer_arm'] == arm
++    assert owner['private_producer_authority_kind'] == 'private-ci-producer-result-and-manifest'
++    assert owner['native_build_gate_authority_used'] is False
++    selected = bindings['selected_executables'][arm]
++    assert selected['relative_path'] == f'payload/{arm}/original_{arm}_controls.exe'
++    assert owner['test_executable_sha256'] == selected['identity']['sha256']
++    expected_exe = bindings['windows_checkout_unc'] + '\\' + (bindings['stage'] + '/' + selected['relative_path']).replace('/', '\\')
++    assert owner['test_executable'].replace('/', '\\').casefold() == expected_exe.casefold()
++    assert type(owner['outer_guard_seconds']) is int and owner['outer_guard_seconds'] == 300
++    assert type(owner['rss_guard_bytes']) is int and owner['rss_guard_bytes'] == 4294967296
++    assert 0 < number(owner['peak_sampled_rss_bytes']) <= 4294967296
++    number(owner['elapsed_seconds'])
++    for role in ('owner', 'test'):
++        assert type(owner[role + '_pid']) is int and owner[role + '_pid'] > 0
++        assert type(owner[role + '_start_time_utc']) is str and owner[role + '_start_time_utc']
++    for key, value in owner['environment'].items():
++        if key not in ('TEMP', 'TMP'): assert value in (None, ''), (key, value)
++    for key in ('LVP_JIT_OPTIMIZATION_LEVEL', 'MESA_SHADER_CACHE_DISABLE'):
++        assert bindings.get('approved_environment', {}).get(key) in (None, '')
++    modules = document(folder / 'driver-modules.json')
++    assert type(modules) is list and len(modules) == 2
++    loader = [m for m in modules if m['name'].casefold() == 'vulkan-1.dll']
++    amd = [m for m in modules if 'amdvlk' in m['name'].casefold()]
++    assert len(loader) == len(amd) == 1 and amd == [bindings['expected_amd_module']]
++    for module in modules:
++        pin(module)
++        assert type(module['version']) is str and module['version']
++    expected_loader = context.value['loader_modules'][arm]
++    assert loader[0] == expected_loader
++    manifest = document(local(bindings['stage']) / 'manifest.json')
++    sdk_key = f'payload/{arm}/vulkan-1.dll'
++    assert pin(loader[0]) == pin(manifest['files'][sdk_key])
++    expected_sdk = bindings['windows_checkout_unc'] + '\\' + (bindings['stage'] + '/' + sdk_key).replace('/', '\\')
++    assert loader[0]['path'].replace('/', '\\').casefold() == expected_sdk.casefold()
++    terminal = document(work / ('terminal-' + label + '.json'))
++    assert identity(work / ('terminal-' + label + '.json'))['sha256'] == accepted['terminal_receipt_sha256']
++    terminal_bridge = document(work / ('terminal-' + label + '-bridge.json'))
++    assert identity(work / ('terminal-' + label + '-bridge.json'))['sha256'] == accepted['terminal_bridge_sha256']
++    assert terminal_bridge['accepted'] is True and terminal_bridge['returncode'] == 0
++    assert terminal_bridge['outer_stop'] is False and terminal_bridge['errors'] == []
++    assert terminal_bridge['linux_child_birth_absent'] is True and terminal_bridge['source_binding_owner_bridge_action_post_sealed'] is True
++    assert terminal['owned_births_absent'] is True and terminal['all_observed_module_seals_match'] is True
++    assert terminal['actual_loaded_modules_observed'] is True
++    assert terminal['consumer_scan']['matches'] == terminal['consumer_scan']['accessible_compilers'] == []
++    assert {b['kind'] for b in terminal['births']} == {'owner', 'test'} and len(terminal['births']) == 2
++    for birth in terminal['births']:
++        role = birth['kind']
++        assert birth['pid'] == owner[role + '_pid'] and birth['recorded_start_utc'] == owner[role + '_start_time_utc']
++        assert birth['owned_birth_absent'] is True
++    assert len(terminal['loaded_module_post_seals']) == 2
++    for seal in terminal['loaded_module_post_seals']:
++        module, = [m for m in modules if m['path'] == seal['path']]
++        assert seal['unchanged'] is True and seal['expected_sha256'] == seal['post_sha256'] == module['sha256']
++        assert seal['expected_bytes'] == seal['post_bytes'] == module['bytes']
++    assert terminal['owned_executable_post_seal']['sha256'] == owner['test_executable_sha256']
++    assert terminal['owned_executable_post_seal']['unchanged'] is True
++    return {'arm': arm, 'folder': folder, 'props': xml_properties(folder / 'gtest.xml', label),
++            'owner': owner, 'modules': modules, 'accepted': identity(accepted_path),
++            'windows_birth': [owner['test_pid'], owner['test_start_time_utc']]}
++
++
++def timestamp_result(props, producer, context, wide=False):
++    assert producer in ('baseline', 'candidate') and wide is False
++    hardware = context.value['native_identity']
++    for key in ('selected_device', 'selected_driver', 'retained_scalar_route',
++                'timestamp_valid_bits', 'timestamp_period_ns'):
++        assert props[key] == hardware[key], key
+     assert props['coupled_rows'] == '12' and props['coupled_projection_budget'] == '24'
+-    assert props['product_mode'] == ('fp64' if wide else 'default')
+-    assert props.get('wide_exercised') == ('1' if wide else None)
+-    assert props['retained_scalar_route'] == ('portable with guarded normal sums' if software else 'native binary32')
+-    for key, expected in [('fma_fp32_enabled', not software), ('preserves_fp32_signed_zero_inf_nan', True)]:
++    assert props['product_mode'] == 'default' and props.get('wide_exercised') is None
++    for key in ('fma_fp32_enabled', 'preserves_fp32_signed_zero_inf_nan'):
+         assert props[key] in ('0', '1', 'false', 'true')
+-        assert (props[key] in ('1', 'true')) is expected
++        assert (props[key] in ('1', 'true')) == (hardware[key] in ('1', 'true'))
+     assert props['device_observations'] == '51'
+     bits = int(props['timestamp_valid_bits']); period = number(props['timestamp_period_ns'])
+-    assert bits == 64 and period == (1 if software else 10)
++    assert 1 <= bits <= 64 and period > 0
+     expected = {f'device_observation_{i}' for i in range(51)}
+     assert {key for key in props if key.startswith('device_observation_')} == expected
+     order = [(f'legacy_repeat{r}', stage) for r in range(3) for stage in LEGACY]
+@@ -137,10 +374,9 @@
+     result['readbacks'] = readbacks
+     result['identity'] = {key: props[key] for key in ('selected_device', 'selected_driver', 'retained_scalar_route', 'product_mode', 'timestamp_valid_bits', 'timestamp_period_ns', 'coupled_rows', 'coupled_projection_budget', 'timestamp_scope', 'legacy_call_timing_scope', 'coupled_call_timing_scope')}
+     stages = ['camera', 'transport', 'endpoint', 'dense', 'initialize', 'ray_camera', 'dopri_phase']
+-    arrays = document(WORK / ('baseline.json' if producer == 'baseline' else 'build-and-arrays.json'))['arrays']
+-    suffix = 'PortableFp64Shader' if wide else 'PortableShader'
+-    names = ['kCamera'+suffix, 'kTransportPortableNormalSumShader', 'kEndpointPortableNormalSumShader',
+-             'kDense'+suffix, 'kInitialize'+suffix, 'kRayCamera'+suffix, 'kDopriPhasePortableNormalSumShader']
++    arrays = context.arms[producer]['arrays']
++    route_names = selected_names(context, producer)
++    names = [route_names[stage] for stage in stages]
+     assert {k for k in props if k.startswith('selected_module_')} == {f'selected_module_{i}' for i in range(7)}
+     selected = {}
+     for i, (stage, name) in enumerate(zip(stages, names)):
+@@ -183,3 +419,71 @@
+     result['instance_api_duration_ms'] = math.fsum([create, disabled_attempt, disabled_sample, *legacy_calls, *modern_calls])
+     result['separate_provisioning_attribution_ms'] = provisioning
+     return result
++
++
++def factored_routes(case, context):
++    """Current original native routes; portable-only RTE32 masking is not invented."""
++    props, folder, arm = case['props'], case['folder'], case['arm']
++    logs = '\n'.join(read(folder / name).decode('utf-8-sig') for name in ('stdout.log', 'stderr.log'))
++    blocks = []
++    for line in logs.splitlines():
++        m = re.fullmatch(r'\[FactoredEndpoint\] create: portable=([01]);wide=([01]);decline_rte32=([01]);fma_enabled=([01])', line)
++        if m:
++            blocks.append({'portable': int(m[1]), 'wide': int(m[2]), 'decline': int(m[3]), 'fma': int(m[4]), 'lines': []})
++        elif blocks:
++            blocks[-1]['lines'].append(line)
++    assert [(b['portable'], b['wide'], b['decline']) for b in blocks] == [(0, 0, 0), (0, 1, 0)]
++    # In native mode mask_useful=false; these portable-path properties stay zero.
++    for key in ('normal_default', 'normal_fp64', 'integer_default', 'integer_fp64'):
++        assert props['factored_endpoint_' + key + '_exercised'] == '0'
++    expected_keys = {f'factored_endpoint_readback_0_{wide}_{i}' for wide in range(2) for i in range(14)}
++    assert {k for k in props if k.startswith('factored_endpoint_readback_')} == expected_keys
++    records = []
++    for block in blocks:
++        wide = block['wide']
++        assert '[FactoredEndpoint] create returned: success=1' in block['lines']
++        assert block['fma'] == int(context.value['native_identity']['fma_fp32_enabled'] in ('1', 'true'))
++        selected = []
++        endpoint, starts, ends = [], [], []
++        for line in block['lines']:
++            m = re.fullmatch(r'\[FactoredEndpoint\] selected_stage=(\w+);sha256=([0-9a-f]{64})', line)
++            if m: selected.append((m[1], m[2]))
++            m = re.fullmatch(r'\[FactoredEndpoint\] selected_endpoint_sha256=([0-9a-f]{64})', line)
++            if m: endpoint.append(m[1])
++            m = re.fullmatch(r'\[FactoredEndpoint\] begin: call=(\d+);rows=(\d+);wide=(\d);decline_rte32=(\d)', line)
++            if m:
++                assert int(m[3]) == wide and m[4] == '0'
++                starts.append((int(m[1]), int(m[2])))
++            m = re.fullmatch(r'\[FactoredEndpoint\] returned: call=(\d+);success=([01]);pipeline_ms=([^;\s]+);submit_wait_ms=([^;\s]+);total_ms=([^;\s]+)', line)
++            if m:
++                assert m[2] == '1'
++                ends.append({'call': int(m[1]), 'pipeline_ms': number(m[3]), 'submit_wait_ms': number(m[4]), 'total_ms': number(m[5])})
++        assert tuple(stage for stage, _ in selected) == STAGES
++        names = selected_names(context, arm, bool(wide))
++        for stage, digest in selected:
++            assert digest == context.arms[arm]['arrays'][names[stage]]['sha256'], (wide, stage)
++        assert endpoint == [dict(selected)['endpoint']]
++        assert starts == list(enumerate(FACTORED_ROWS)) and [q['call'] for q in ends] == list(range(14))
++        readbacks = {}
++        for i, rows in enumerate(FACTORED_ROWS):
++            key = f'factored_endpoint_readback_0_{wide}_{i}'
++            value = fields(props[key])
++            assert set(value) == {'rows', 'bytes', 'sha256'}
++            assert value['rows'] == str(rows) and value['bytes'] == str(rows * 3829 * 4)
++            assert re.fullmatch('[0-9a-f]{64}', value['sha256'])
++            readbacks[key] = value
++        records.append({'wide': bool(wide), 'declined_RTE32': False, 'selected_arrays': names,
++                        'selected_stage_sha256': dict(selected), 'all14_calls': ends, 'readbacks': readbacks})
++    return {'routes': records, 'routes_count': 2, 'complete_readbacks': 28,
++            'scope': 'Actual native default plus wide/FMA selection joined to accepted producer arrays. All original reference/refusal/recovery assertions are the unchanged completed test; no historical software digest equality is asserted.'}
++
++
++def publish(path, result, context):
++    context.finish()
++    result['reader_bindings'] = dict(path=str(context.path.relative_to(ROOT)), **context.seal)
++    result['root_reader_admission'] = dict(path=str(context.admission_path.relative_to(ROOT)), **context.admission_seal)
++    result['native_provider_scope'] = 'Same-child observed SDK loader and AMD modules, exact Windows PID/birth and terminal post-seals; accessible consumer scope only. Windows sampled child WorkingSet is not aggregate Windows/GPU-memory accounting.'
++    payload = (json.dumps(result, indent=2, allow_nan=False) + '\n').encode()
++    assert len(payload) <= 32 * 1024 * 1024
++    assert path.parent.resolve(strict=True).is_relative_to(ROOT) and not path.exists()
++    with path.open('xb') as handle: handle.write(payload)

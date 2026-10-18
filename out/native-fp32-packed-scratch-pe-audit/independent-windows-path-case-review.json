@@ -1,0 +1,56 @@
+{
+  "schema": "sirius-native-packed-PE-windows-path-case-independent-review-v1",
+  "created_utc": "2026-10-18T06:15:01.925404+00:00",
+  "passed": true,
+  "static_artifact_audit_accepted": true,
+  "full_producer_eligibility_admitted": false,
+  "runtime_admitted": false,
+  "source_revision": "9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce",
+  "run_id": "39102739326",
+  "pins": [
+    {
+      "path": "out/native-fp32-packed-scratch-pe-audit/audit_export.py",
+      "bytes": 18572,
+      "sha256": "2cd3663ea2dbd221c9ba9508c7d265cd1610dea56054681bcdc244d868901839"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-pe-audit/audit_export_windows_paths.py",
+      "bytes": 18580,
+      "sha256": "cee37e6559f3f8b100bf8ff87940049229fe20299beaefef353ae66f4064d741"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-pe-audit/windows-path-case.patch",
+      "bytes": 850,
+      "sha256": "5e1b6879e0cbfd80f4ab506216e0eff278d97f3206b0490af891acf099699150"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-pe-audit/actual-9679a9af-audit.json",
+      "bytes": 266,
+      "sha256": "2fee94ba71b8241215595779166ad711f16072c04f1ecdebfce128e83df25536"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-pe-audit/actual-9679a9af-windows-paths-audit.json",
+      "bytes": 41702,
+      "sha256": "4f0a6cabcc8e0654ac4550fdbf02a62c7ad4230a8a2192b21d5bec787800c0bd"
+    }
+  ],
+  "correction": {
+    "exact_one_expression_inverse": true,
+    "delta": "Only forced-header pathname predicate uses command.lower(); no flags, artifact or producer change.",
+    "actual_evidence": "All3 applicable actual CL.command tlogs contain uppercase FAIL_ON_SKIP.H. Windows pathname spelling, not missing /FI policy, caused the first reader failure.",
+    "reviewer_miss": "I authored the case-sensitive predicate and missed this Windows tlog normalization. Original18572B reader and false result remain unchanged; the failed report is not relabeled PASS.",
+    "actual_invocation": "ROOT reports corrected reader session3940 exit0; this reviewer did not execute/import either reader or any PE."
+  },
+  "bounded_actual_joins": {
+    "both_current_PE_and_map_hashes_equal_report": true,
+    "full_expected_header_payloads_at_reported_PE_offsets": 84,
+    "scope": "40main+2owner arrays per PE, against exact current baseline/candidate headers; successful report map-RVA joins are from the admitted reader.",
+    "five_private_object_hashes_current": true,
+    "three_actual_forced_header_paths_case_confirmed": true,
+    "canonical_compute_archive_member_absent_from_both_maps": true,
+    "canonical_device_object_and_archive_hashes_current": true,
+    "saved_CL_LINK_and_archive_joins": "Corrected admitted reader completed private source/header/strictflag/LINK object and canonical device CL/member checks. Its original semantics are unchanged by this correction; selected records and current files rechecked passively."
+  },
+  "limits": "No CI/compiler/PE/provider/runtime rerun. API/source/Git/selected CRT/SDK/import and full producer eligibility remain ROOT manual gates; the successful static report explicitly keeps full_producer_eligibility_passed=false. No native numerical, benefit or adoption claim.",
+  "method": "Passive exact source inverse, saved JSON/text/tlogs, full-byte header decoding/PE offset comparison and selected current file hashes only. No helper/project import/tool/network/process execution; only this sidecar written."
+}

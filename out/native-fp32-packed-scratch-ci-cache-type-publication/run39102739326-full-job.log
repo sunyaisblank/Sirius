@@ -1,0 +1,209 @@
+windows-matched-producer	Set up job	﻿2026-10-18T06:04:24.1377292Z Current runner version: '2.337.0'
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1441918Z ##[group]Runner Image Provisioner
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1442815Z Hosted Compute Agent
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1443379Z Version: 20261012.601
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1443953Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1444636Z Build Date: 2026-10-12T17:48:21Z
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1445360Z Worker ID: {526fd9a9-2a58-44c1-894b-d8f698170c33}
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1446021Z Region: eastus
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1446598Z Cloud: Azure
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1447070Z ##[endgroup]
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1448426Z ##[group]Operating System
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1449106Z Microsoft Windows Server 2022
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1449661Z 10.0.20348
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1450122Z Datacenter
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1450595Z ##[endgroup]
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1451077Z ##[group]Runner Image
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1451610Z Image: windows-2022
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1452110Z Version: 20261012.333.1
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1453126Z Included Software: https://github.com/actions/runner-images/blob/win22/20261012.333/images/windows/Windows2022-Readme.md
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1454895Z Image Release: https://github.com/actions/runner-images/releases/tag/win22%2F20261012.333
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1455766Z ##[endgroup]
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1456762Z ##[group]GITHUB_TOKEN Permissions
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1458707Z Contents: read
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1459273Z Metadata: read
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1459793Z ##[endgroup]
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1461837Z Secret source: Actions
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1462675Z Cache mode: write
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1463362Z Prepare workflow directory
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1775560Z Prepare all required actions
+windows-matched-producer	Set up job	2026-10-18T06:04:24.1823156Z Getting action download info
+windows-matched-producer	Set up job	2026-10-18T06:04:24.3569431Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+windows-matched-producer	Set up job	2026-10-18T06:04:24.4951331Z Download action repository 'jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa' (SHA:37effcfa045411f8bfbbda26df2fd1b3bf3436fa)
+windows-matched-producer	Set up job	2026-10-18T06:04:24.6926327Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+windows-matched-producer	Set up job	2026-10-18T06:04:24.9239592Z Complete job name: windows-matched-producer
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	﻿2026-10-18T06:04:25.1003912Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1005426Z with:
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1005951Z   repository: sunyaisblank/Sirius
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1011750Z   token: ***
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1012275Z   ssh-strict: true
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1012769Z   ssh-user: git
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1013275Z   persist-credentials: true
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1013827Z   clean: true
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1014311Z   sparse-checkout-cone-mode: true
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1014795Z   fetch-depth: 1
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1015186Z   fetch-tags: false
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1015589Z   show-progress: true
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1016008Z   lfs: false
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1016380Z   submodules: false
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1016808Z   set-safe-directory: true
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1017272Z   allow-unsafe-pr-checkout: false
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1018069Z env:
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1018437Z   GIT_CONFIG_COUNT: 1
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1018869Z   GIT_CONFIG_KEY_0: core.autocrlf
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1019355Z   GIT_CONFIG_VALUE_0: false
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.1019817Z ##[endgroup]
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.2481253Z Syncing repository: sunyaisblank/Sirius
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.2482984Z ##[group]Getting Git version info
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.2483584Z Working directory is 'D:\a\Sirius\Sirius'
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.3615128Z [command]"C:\Program Files\Git\bin\git.exe" version
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.7367542Z git version 2.56.0.windows.2
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.7403729Z ##[endgroup]
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.7419449Z Temporarily overriding HOME='D:\a\_temp\af27b84f-c9c2-4a9f-b75f-d622c5f4d08b' before making global git config changes
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.7421383Z Adding repository directory to the temporary git global config as a safe directory
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.7430034Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Sirius\Sirius
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.8004647Z Deleting the contents of 'D:\a\Sirius\Sirius'
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.8008972Z ##[group]Determining repository object format
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.8011488Z ##[endgroup]
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.8013822Z ##[group]Initializing the repository
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.8022270Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\Sirius\Sirius
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.9022070Z Initialized empty Git repository in D:/a/Sirius/Sirius/.git/
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.9058720Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/sunyaisblank/Sirius
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.9641310Z ##[endgroup]
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.9642988Z ##[group]Disabling automatic garbage collection
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.9649402Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.9937763Z ##[endgroup]
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.9940151Z ##[group]Setting up auth
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.9941903Z Removing SSH command configuration
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:25.9949820Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:26.0247342Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:27.4473431Z Removing HTTP extra header
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:27.4483314Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:27.4778844Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:27.9281077Z Removing includeIf entries pointing to credentials config files
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:27.9297050Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:27.9596880Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:28.4474114Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:28.4780775Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/Sirius/Sirius/.git.path D:\a\_temp\git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:28.5078516Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path D:\a\_temp\git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:28.5443621Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:28.5766645Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:28.6176964Z ##[endgroup]
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:28.6177442Z ##[group]Fetching the repository
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:28.6202331Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce:refs/remotes/origin/development/native-fp32-packed-scratch-diagnostic-2026-10-18
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6044719Z From https://github.com/sunyaisblank/Sirius
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6046403Z  * [new ref]         9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce -> origin/development/native-fp32-packed-scratch-diagnostic-2026-10-18
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6083355Z [command]"C:\Program Files\Git\bin\git.exe" branch --list --remote origin/development/native-fp32-packed-scratch-diagnostic-2026-10-18
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6416682Z   origin/development/native-fp32-packed-scratch-diagnostic-2026-10-18
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6449631Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse refs/remotes/origin/development/native-fp32-packed-scratch-diagnostic-2026-10-18
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6757471Z 9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6782468Z ##[endgroup]
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6782932Z ##[group]Determining the checkout info
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6784101Z ##[endgroup]
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.6793042Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.7227543Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.7519223Z ##[group]Checking out the ref
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:30.7528596Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B development/native-fp32-packed-scratch-diagnostic-2026-10-18 refs/remotes/origin/development/native-fp32-packed-scratch-diagnostic-2026-10-18
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:31.1607340Z Switched to a new branch 'development/native-fp32-packed-scratch-diagnostic-2026-10-18'
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:31.1629021Z branch 'development/native-fp32-packed-scratch-diagnostic-2026-10-18' set up to track 'origin/development/native-fp32-packed-scratch-diagnostic-2026-10-18'.
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:31.1698844Z ##[endgroup]
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:31.2120929Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+windows-matched-producer	Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:04:31.2408935Z 9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce
+windows-matched-producer	Vulkan SDK qualification toolchain	﻿2026-10-18T06:04:31.2803389Z ##[group]Run jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.2803968Z with:
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.2804172Z   vulkan_version: 1.4.357.0
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.2804390Z   install_runtime: true
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.2804578Z   cache: false
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.2804773Z   stripdown: true
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.2807435Z   github_token: ***
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.2807642Z ##[endgroup]
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.4417365Z Using github_token to authenticate GitHub API requests.
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.4420666Z 🔽 Downloading Vulkan SDK 1.4.357.0
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.5422877Z ✔️ Http(200): The requested VULKAN_SDK 1.4.357.0 is downloadable.
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:31.5424009Z     URL: https://sdk.lunarg.com/sdk/download/1.4.357.0/windows/vulkansdk-windows-X64-1.4.357.0.exe
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:35.8758556Z ✔️ Download completed successfully!
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:35.8759131Z    File: C:\Users\RUNNER~1\AppData\Local\Temp\VulkanSDK-Installer.exe
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:35.8761870Z    SHA HASH URL: https://sdk.lunarg.com/sdk/sha/1.4.357.0/windows/vulkansdk-windows-X64-1.4.357.0.exe.json
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:36.6281349Z    SHA verified: C:\Users\RUNNER~1\AppData\Local\Temp\VulkanSDK-Installer.exe
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:04:36.6282623Z 📦 Extracting Vulkan SDK...
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.0972790Z    Installed into folder: C:\VulkanSDK\1.4.357.0
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.0974219Z 📦 Placing Vulkan Runtime into the SDK folder...
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.0978817Z    Copying x86 runtime files to SDK path (SysWOW64 -> runtime/x86)
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.1022213Z    Copying x64 runtime files to SDK path (system32 -> runtime/x64)
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.1058556Z    Installed into folder: C:\VulkanSDK\1.4.357.0\runtime
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.1070116Z ✔️ [PATH] Added path to Vulkan SDK to environment variable PATH.
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.1075805Z ✔️ [ENV] Set env variable VULKAN_SDK -> "C:\VulkanSDK\1.4.357.0".
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.1077788Z ✔️ [ENV] Set env variable VULKAN_VERSION -> "1.4.357.0".
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.1080444Z ℹ️ [INFO] Path to Vulkan Runtime: C:\VulkanSDK\1.4.357.0\runtime
+windows-matched-producer	Vulkan SDK qualification toolchain	2026-10-18T06:05:00.1082018Z ✅ Done.
+windows-matched-producer	Compile and stage the two matched private producers	﻿2026-10-18T06:05:00.1450721Z ##[group]Run ./out/native-fp32-packed-scratch-ci-source-cache-type/build-and-stage.ps1
+windows-matched-producer	Compile and stage the two matched private producers	2026-10-18T06:05:00.1451553Z ^[[36;1m./out/native-fp32-packed-scratch-ci-source-cache-type/build-and-stage.ps1^[[0m
+windows-matched-producer	Compile and stage the two matched private producers	2026-10-18T06:05:00.1610929Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+windows-matched-producer	Compile and stage the two matched private producers	2026-10-18T06:05:00.1611437Z env:
+windows-matched-producer	Compile and stage the two matched private producers	2026-10-18T06:05:00.1611691Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+windows-matched-producer	Compile and stage the two matched private producers	2026-10-18T06:05:00.1612040Z   VULKAN_VERSION: 1.4.357.0
+windows-matched-producer	Compile and stage the two matched private producers	2026-10-18T06:05:00.1612336Z ##[endgroup]
+windows-matched-producer	Preserve producer products and failure diagnostics	﻿2026-10-18T06:10:48.5518974Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5519681Z with:
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5519971Z   name: sirius-native-packed-matched-producer
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5520390Z   path: bin/windows-msvc/private-native-packed-export
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5520757Z   include-hidden-files: true
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5521044Z   if-no-files-found: error
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5521334Z   compression-level: 6
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5521584Z   overwrite: false
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5521816Z   archive: true
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5522043Z env:
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5522265Z   VULKAN_SDK: C:\VulkanSDK\1.4.357.0
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5522626Z   VULKAN_VERSION: 1.4.357.0
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.5522968Z ##[endgroup]
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.7849743Z With the provided path, there will be 122 files uploaded
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.7855603Z Artifact name is valid!
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:48.7857286Z Root directory input is valid!
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:49.0186747Z Uploading artifact: sirius-native-packed-matched-producer.zip
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:49.0238456Z Beginning upload of artifact content to blob storage
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:50.3621287Z Uploaded bytes 8388608
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:51.1964576Z Uploaded bytes 16777216
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:52.0135347Z Uploaded bytes 25165824
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:52.0363349Z Uploaded bytes 25868714
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:52.0520260Z Finished uploading artifact content to blob storage!
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:52.0524934Z SHA256 digest of uploaded artifact is cc77e5df08a38cd58b439b222071769f101419bbc980b9192fe802c8fc3e1a61
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:52.0527447Z Finalizing artifact upload
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:52.2759846Z Artifact sirius-native-packed-matched-producer successfully finalized. Artifact ID 12127128255
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:52.2761569Z Artifact sirius-native-packed-matched-producer has been successfully uploaded! Final size is 25868714 bytes. Artifact ID is 12127128255
+windows-matched-producer	Preserve producer products and failure diagnostics	2026-10-18T06:10:52.2769068Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/39102739326/artifacts/12127128255
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	﻿2026-10-18T06:10:52.3081064Z Post job cleanup.
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:52.4957923Z [command]"C:\Program Files\Git\bin\git.exe" version
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:52.5226432Z git version 2.56.0.windows.2
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:52.5294452Z Temporarily overriding HOME='D:\a\_temp\7222d9e8-9ace-45c3-8dce-10c282fd87dd' before making global git config changes
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:52.5295850Z Adding repository directory to the temporary git global config as a safe directory
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:52.5307162Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Sirius\Sirius
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:52.5700230Z Removing SSH command configuration
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:52.5717150Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:52.6034439Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.0631535Z Removing HTTP extra header
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.0641590Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.0939934Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.5683758Z Removing includeIf entries pointing to credentials config files
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.5695455Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.5998308Z includeif.gitdir:D:/a/Sirius/Sirius/.git.path
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.5999014Z includeif.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.5999577Z includeif.gitdir:/github/workspace/.git.path
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.6000090Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.6033331Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/Sirius/Sirius/.git.path
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.6292705Z D:\a\_temp\git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.6329613Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/Sirius/Sirius/.git.path D\:\\a\\_temp\\git\-credentials\-f3975dd4\-79ea\-4804\-a959\-6aeb7907e66f\.config
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.6667653Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.6924745Z D:\a\_temp\git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.6960404Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/Sirius/Sirius/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-f3975dd4\-79ea\-4804\-a959\-6aeb7907e66f\.config
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.7251942Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.7507307Z /github/runner_temp/git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.7538384Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-f3975dd4\-79ea\-4804\-a959\-6aeb7907e66f\.config
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.7826321Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.8083355Z /github/runner_temp/git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.8116386Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-f3975dd4\-79ea\-4804\-a959\-6aeb7907e66f\.config
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:53.8410682Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+windows-matched-producer	Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1	2026-10-18T06:10:54.3006797Z Removing credentials config 'D:\a\_temp\git-credentials-f3975dd4-79ea-4804-a959-6aeb7907e66f.config'
+windows-matched-producer	Complete job	﻿2026-10-18T06:10:54.3193019Z Cleaning up orphan processes
+windows-matched-producer	Complete job	2026-10-18T06:10:54.3507309Z Terminate orphan process: pid (3904) (vctip)
+windows-matched-producer	Complete job	2026-10-18T06:10:54.3559081Z Terminate orphan process: pid (6600) (MSBuild)
+windows-matched-producer	Complete job	2026-10-18T06:10:54.3705436Z Terminate orphan process: pid (5424) (conhost)

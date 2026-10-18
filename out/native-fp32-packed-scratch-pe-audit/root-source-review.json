@@ -1,0 +1,14 @@
+{
+  "schema": "sirius-native-packed-root-static-artifact-reader-source-review-v1",
+  "created_utc": "2026-10-18T06:08:14.732006+00:00",
+  "passed": true,
+  "source": {
+    "path": "out/native-fp32-packed-scratch-pe-audit/audit_export.py",
+    "bytes": 18572,
+    "sha256": "2cd3663ea2dbd221c9ba9508c7d265cd1610dea56054681bcdc244d868901839"
+  },
+  "review": "ROOT full-read all317lines; manifest membership/currentbytes,source/header selectors,strict CL flags,42actual data payloads/mapRVAs,opposite-arm exclusion,5privateobject/link reads,canonical device compilation/archive membership reviewed. Pure stdlib read-only data reader; output exclusive outside export.",
+  "single_actual_artifact_audit_released_after_verified_download": true,
+  "PE_or_provider_execution_released": false,
+  "scope": "Static actual product checks only. API/ZIP/tool/source/VERBOSE/CRT/full producer eligibility requires ROOT separate actual review. Numeric/performance/runtime/adoption claims remain false."
+}
