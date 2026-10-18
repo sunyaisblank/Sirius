@@ -1,0 +1,97 @@
+{
+  "schema": "sirius-native-transport-validation-independent-preservation-review-v1",
+  "created_utc": "2026-10-18T08:19:16.386218+00:00",
+  "reviewer": "/root/divide_contract_review",
+  "passed": true,
+  "commit": "545582306752214df297bc588ccc856c7647e313",
+  "parent": "006e832b7df77ee47f790af5a74634fb76f6d7b5",
+  "tag": "evidence/native-transport-validation-rejected-5b2df58b",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "private_producer_revision": "ac6559d7e2910b4a8f11fedadc320f3e4d1bf8f4",
+  "pins": {
+    "manifest": {
+      "path": "attestations/qualification/5b2df58b/native-transport-validation-rejected/MANIFEST.json",
+      "bytes": 243309,
+      "sha256": "364687cf4d53f79338e72a28a1cf003bb9293dbd6b30c51f39200c775a37bb1a"
+    },
+    "preservation": {
+      "path": "attestations/qualification/5b2df58b/native-transport-validation-rejected/PRESERVATION.json",
+      "bytes": 506,
+      "sha256": "14033b2118797b65cf58d4bca3d4e861a8500098528aebed4dd2ffc6d62168a9"
+    },
+    "ROOT_Git_proof": {
+      "path": "out/native-transport-validation-preservation/root-actual-Git-preservation.json",
+      "bytes": 138233,
+      "sha256": "23d89c37272d67dc8b0017744150efedccd5be31df9247c110cd80d79679adb5"
+    },
+    "stage_archive": {
+      "path": "attestations/qualification/5b2df58b/native-transport-validation-rejected/files/out/native-transport-validation-ci-publication/run39109116124-artifact.zip",
+      "bytes": 25922003,
+      "sha256": "e2785575371c9051b1bce8810b19b706ba031b9ba8c16b8037c3ded69f95c421"
+    }
+  },
+  "verified": {
+    "payload_files": 380,
+    "payload_bytes": 64093427,
+    "bundle_files_including_manifest_and_preservation": 382,
+    "bundle_Git_bytes": 64337242,
+    "owned_roots": 16,
+    "all_current_owned_regular_files_inventoried_and_copied": true,
+    "all_current_source_copy_SHA256_bytes_and_full_POSIX_modes_equal": true,
+    "all_named_Git_blobs_and_executable_modes_equal": true,
+    "named_commit_only_bundle_paths": true,
+    "local_tag_names_exact_commit": true,
+    "zero_byte_payload_files": 42,
+    "payload_mode_counts": {
+      "0o644": 380
+    },
+    "Git_mode_counts": {
+      "100644": 382
+    },
+    "root_regular_file_counts": {
+      "out/native-transport-validation-source": 5,
+      "out/native-transport-validation-compiler-source": 68,
+      "out/native-transport-validation-producer-source": 5,
+      "out/native-transport-validation-producer-inputs": 78,
+      "out/native-transport-validation-windows-source": 9,
+      "out/native-transport-validation-pe-audit": 8,
+      "out/native-transport-validation-runtime-source": 17,
+      "out/native-transport-validation-runtime-authority-source": 17,
+      "out/native-transport-validation-publication": 18,
+      "out/native-transport-validation-ci-publication": 43,
+      "out/native-transport-validation-runtime-timestamp": 25,
+      "out/native-transport-validation-runtime-abba": 76,
+      "out/native-transport-validation-timestamp-evidence": 3,
+      "out/native-transport-validation-ABBA-evidence": 3,
+      "renders/native-transport-validation-runtime-timestamp": 1,
+      "renders/native-transport-validation-runtime-abba": 4
+    }
+  },
+  "archive_backed_stage": {
+    "root": "bin/windows-msvc/native-transport-validation-matched-ac6559d7",
+    "members": 122,
+    "expanded_bytes": 98582559,
+    "archive_exact_Git_blob": true,
+    "all_ZIP_member_bytes_equal_current_stage_and_manifest": true,
+    "full_actual_stage_inventory_exact": true,
+    "declared_POSIX_restore_modes_equal_current_modes": true,
+    "restore_mode_counts": {
+      "0o644": 102,
+      "0o755": 20
+    },
+    "source_export_manifest_121_members_plus_manifest_itself": true,
+    "expanded_payloads_not_duplicated": "Stage member bytes are kept once inside the exact preserved actual ZIP; the122-member map supplies hashes/lengths/POSIX restore modes. This does not claim ZIP external attributes equal local POSIX modes."
+  },
+  "outcome_preserved": {
+    "audit_passed": true,
+    "benefit_passed": false,
+    "checks_passed": 16,
+    "checks_total": 22,
+    "control8_passed": true,
+    "remaining7_executed": false,
+    "production_adopted": false,
+    "unchanged_retries": 0
+  },
+  "scope_and_limits": "Preservation closure only; prior numerical/provider/ownership/source reviews are retained, not repeated. All16 declared owned roots/current stage remain present. No omitted regular data within those declared roots; this review and ROOT Git-operation receipt are later operational records outside the immutable bundle and need separate preservation if their raw directories are retired. No remote push verification, process/birth/consumer audit, cleanup permission or hold release is supplied by this receipt. No new qualification/adoption claim.",
+  "method": "Passive stdlib file/hash/JSON/ZIP and read-only namedGit tree/blob/parent/tag comparison only. No project helper/test/compiler/provider/network/process query or Git mutation, no copying/cleanup, no existing packet/bundle mutation. Reviewer authored portions of original source apparatus and priorcontrol8/data checks; this preservation proof independently recomputes all inventories/bytes/modes/Git/ZIP joins. Only this receipt written."
+}
