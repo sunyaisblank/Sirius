@@ -1,0 +1,1437 @@
+{
+  "schema": "sirius-native-wave32-rejection-Git-v1",
+  "commit": "b56762a537711dfc85a4a8cdf86fa2a511d9f740",
+  "parent": "1cb6e6aaff04ddd54ff7ee133b773257338f2c52",
+  "branch": "refs/heads/development/native-fp32-packed-scratch-runtime-2026-10-18",
+  "tag": "refs/tags/evidence/native-wave32-rejected-2c8ef086",
+  "bundle": "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome",
+  "files": {
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/MANIFEST.json": {
+      "bytes": 125015,
+      "sha256": "346c36a8d930b9e3e13b4ffdee08a99e83b56e0ba2a43cfc4d91c224bc51cc3d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0a1d5e97cb5c389fcc2aada9125d1d2abb0e3da9"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/PRESERVATION.json": {
+      "bytes": 1252,
+      "sha256": "ddf24fb8d9e57cda67ecb91165beb8b8dba3df6b2a162a2e305eb7d8fcc45bf1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7078c218994c366b79800bae8013513e56e5ab23"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ABBA-evidence/native-benefit.json": {
+      "bytes": 231578,
+      "sha256": "63b1927e10c392d3e9acdf9efa128dd073b0bc6995f3a2431b94257db180472e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "4941b38429aeea024413e0bb5edade71feddc208"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ABBA-evidence/reader-bindings.json": {
+      "bytes": 168514,
+      "sha256": "0c4e059c1b1c3727f9a3c943dbbe7dad1a0565c658278bef64515343238b67fd",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "cba328208c834dc75d7582a78e94aae81c603e31"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ABBA-evidence/root-admission.json": {
+      "bytes": 359,
+      "sha256": "d3a9f5dd8200ff4251138c73699eb396319f306836a31b5d6a34df90c5805a47",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "17e4062b97f21baa1c34d07024b7e7e9e5c4645e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/ABBA-root-release.json": {
+      "bytes": 572,
+      "sha256": "deae59b6b765280f93836b98a442d099a337af2a49ca3c58dde254053dcfe894",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "88c8f873bb4b79851c84047800e7eb0b8544da65"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/actual-download.json": {
+      "bytes": 33779,
+      "sha256": "ab1afcf5c588fb590da469a6bf8d037feaab9ebcdbd73dfd4f70830abfb2f546",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "9f485b20d720bb5a80ba7ae44b2d3ed3687a40b5"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/artifacts-first.json": {
+      "bytes": 780,
+      "sha256": "031f6fd45dfdeaa124ccefcbb89f3f8540cf0551c337bfe15c85f9be9afc53fb",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "51d0f767c710eb0ab58727e059c699d8a1eca6fb"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/baseline-PE-imports.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/baseline-PE-imports.stdout": {
+      "bytes": 1675417,
+      "sha256": "e903cbd525f147380fe8bff3c3bbc1d1c8a9ec206f1ed6ec048a7a9f27553284",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ae488ac4ef121c3e49740798a5ba6ea0f8205c0f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/candidate-PE-imports.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/candidate-PE-imports.stdout": {
+      "bytes": 1675922,
+      "sha256": "bbbcf583e272e56022bf0ba124180c409ea326908a19eda340e3bc2fcf585626",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "06e95b666623ec52b619b30ae88587de31e96337"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/check_publication.py": {
+      "bytes": 5262,
+      "sha256": "4b15660413dd94ff0a5c7936d6944bd0ba5bc60679393f0c163604eb6b8c4103",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "58fb56ec81b808417fe6388109824d5ffbc8bf58"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/completed-frame-retirement.json": {
+      "bytes": 124384,
+      "sha256": "4c973d2f5d6126e1b53abf77d42af7ea40cb8383dbe9649738a16d165b6ad9a5",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "3c437f8aaf6231c4ace01e00317dcd314f4ae882"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/control8-materialized-execution-bindings.json": {
+      "bytes": 153156,
+      "sha256": "aaa42c82adebb750284b2a2dc687c565bd0164cbe17e59b09221efcb0e682d88",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "55e4ca668a8a5a4b42786c685eeebac79d86b53d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/control8-materialized-plan.json": {
+      "bytes": 1258,
+      "sha256": "0cff62b7ce8a85f0212a1de6fb5c0b4cc9dc8087e427d25b3a7b966eda856744",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a746cb8efb72d7e162fc79d4913b66fc87676119"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/control8-pre-review-hold.json": {
+      "bytes": 733,
+      "sha256": "a6b8ab06fafb6a7a5f57149f1262e54f8540eeba3910051cb321cf38eea9a13e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "34dc2e1492db8aa267dd2a84941fdaccf0d69ec7"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/control8-root-release.json": {
+      "bytes": 773,
+      "sha256": "69f40679d0414a33ed605257288f58f88e43feeb64f6c149702081d93bf94677",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "3581e346769bb5a3a1a56d1f43344b97535a5f5e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/download.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/driver-insight-Git.json": {
+      "bytes": 22016,
+      "sha256": "fd6d29a8c5e52be248536400f2ec41450365c121bc9bde7764db1d4b755b5137",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0d91aaf93a27c564384a7ceb3e95a80968bd12bd"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/fetch_producer.py": {
+      "bytes": 4226,
+      "sha256": "04dc8334f26df8ee7d137850bda1855c3ad1dfc7772a14db74162b4f81c7f9b8",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "25ce9e593dfb0ca8bac5844fa2ce620cdf99743b"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/jobs-first.json": {
+      "bytes": 1979,
+      "sha256": "28f1372ed96593eea76e1f807d4c05e906cd9903e41c0c0d76567f765d6a43aa",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7d47c4f2ebb1c6456f872b01ad48728274c166fb"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/jobs-second.json": {
+      "bytes": 1979,
+      "sha256": "28f1372ed96593eea76e1f807d4c05e906cd9903e41c0c0d76567f765d6a43aa",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7d47c4f2ebb1c6456f872b01ad48728274c166fb"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/preserve_driver_insight.py": {
+      "bytes": 5454,
+      "sha256": "cf4e7d947bca7c35d45d76e85e8bc3e8cd2eb4ffb27cb6657700647095836ccc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "66955f2f699e3e09e58dbc0922ad58f89c0b9369"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/producer-12134421297.zip": {
+      "bytes": 26212858,
+      "sha256": "34aa9dbf575cad0540c791b29ee56828cc65318c4e806e48e0635ead16e11935",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2969f0c9fb38c646bbcffe069c96e2d20aa258bd"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/publish_source.py": {
+      "bytes": 3162,
+      "sha256": "53395312b3feae87a0ccb2cbd7323ca1cd8b001575836824a8ae70af5aa2b67a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "51567e3b3d355fdf769e54f5eff86103173da495"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/retire_completed_frame.py": {
+      "bytes": 3493,
+      "sha256": "1ec38b3a00febb62fdfbb6f597372f9a74600e7073574abec5093e73f40a2c4d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "54d3ee70f926afe2b5256cf3d522b4f776526d15"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/root-compile-release.json": {
+      "bytes": 727,
+      "sha256": "906836eaf1954285f3f67f9e2447e6fcfd03283bc464897a4a089f7a52099164",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7a31a3e556c499383720ee5df7344898cc39b70c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/root-publication-check.json": {
+      "bytes": 10572,
+      "sha256": "bb9d1f04b2e427ac9e2c99ab609f019e65b891e520634fbb44719c09c00782dd",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c466baa5e8f41d367a3b1e6800561f79e4a25b5b"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/root-rejection.json": {
+      "bytes": 2255,
+      "sha256": "3609bd05b2c5527b786fe0799aa34b2f5caeeea200955b109db019389466319c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "57b52a7b395e35f014f6eb98bd4e2e81b3717f7f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/root-runtime-source-review.json": {
+      "bytes": 495,
+      "sha256": "9ac8cd53c85de6d27ec1dab823bcb2fa208fc46c01c85005ab12c711e9059143",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e1ebb26ca1b6b2a9cfd42bc2ea6030e600a0c263"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/run-second.json": {
+      "bytes": 12240,
+      "sha256": "915640ea9eb729fc60e5ac8d2944769761e9bbfac88d00c992f6e7584e2825b8",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2a4764b4cb794fdeae22e49d6dbb50d6ae64d831"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/run-third.json": {
+      "bytes": 12243,
+      "sha256": "53b68f8115e7051b6c77f59e8ab0056d2e52b3f0d49e8d91b8999787bd3d8719",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "98d1ee0458f2863efec9514bc6d125333f5ce853"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/runs-first.json": {
+      "bytes": 12276,
+      "sha256": "533d65e30f605ac336d17c5ca1f4202a3c143e408883a193c61d147c02b34ac2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6f6f685c9140eab1d81cb7c97a7f25f6fc668949"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-ci-publication/source-Git.json": {
+      "bytes": 29098,
+      "sha256": "c763c4021c663c7d48401af317edd48770a4630996ec4c287c185a08a0e882d1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c345a2af961cde3a4b2dc107e6edd2e08d5db16b"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/actual-5d993d12-audit.json": {
+      "bytes": 395,
+      "sha256": "fe40f23fb1035ee933aa1f15ba4abac31d241b8edb8cf48139257dbe383f578f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "07d5d89be8603f00a0e9eeb5b69ad56a38fafd0c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/actual-5d993d12-link-paths-audit.json": {
+      "bytes": 52725,
+      "sha256": "bb29af43163f009e3e3cc375dcf451792f8f27bbd3c6900d2f04067d237daa4d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "11d22a6643e49190a2ed281d7f68281fc4633952"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/audit_export_wave32.py": {
+      "bytes": 27794,
+      "sha256": "ad96cc93d8cde650659bac02d5644d51a4b4411aa26f91c38513fab0452338b5",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e88586593d6c1bc459b99c9f0ee8567df34744c4"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/audit_export_wave32_link_paths.py": {
+      "bytes": 30139,
+      "sha256": "254299a22e37e610f58e433674745c0e8720e7aea346bb30e7838730a3467148",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2cdd1063ce1461e661e3e5e780d69329e29468a7"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/independent-actual-producer-and-control8-review.json": {
+      "bytes": 5258,
+      "sha256": "c1a67bdd9d46e4631fd7c87ea980ae90256ebaebe5f597b6f099cde7624b7f40",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e219947ae866493a24c8efe339d2c339878a9ace"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/independent-benefit-rejection-review.json": {
+      "bytes": 7718,
+      "sha256": "0e2f3e357915aacb1486e508b2b1e598842b08352fa80d78065de14779f596f7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d902f718c54a711fe5d038e2a79b5945feb4782b"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/independent-control8-completion-and-ABBA-review.json": {
+      "bytes": 4949,
+      "sha256": "0329eea1eb1a44d80d0caff4ea83bf79cbf803a75d13605d4b232b00c779d488",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "88a71d26b21e77bc8dc5757841fed90a1d4da43e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/link-paths-source-contracts.json": {
+      "bytes": 3496,
+      "sha256": "04ee388dce583dd59e59feb56ad38a6e08e93d7596e5a7db8298fbb478e5740d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "8677a4680c0cb6f72e0361eac8468538a2698588"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/link-paths-source-freeze.json": {
+      "bytes": 2759,
+      "sha256": "1ee8a1b64db16e963b648cb0ddb19ca63985dca84530abbfa2c535c04ee3305d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "5d059b9f73f76c177fabb3f3177d8ca97b61d3b1"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/link-paths.patch": {
+      "bytes": 5936,
+      "sha256": "2ad1f12af36bbaa15fc751e7f597b510ef4e332b3579cb382d89ae2828988fbe",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "512bc7acb4e2a854e9f83ce6376634fb927d1a27"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/make_authority.py": {
+      "bytes": 6455,
+      "sha256": "38ce839a278236e9baece428f041858997ba3d313a68c829efd3128a1396cd45",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "650b1f0d7b829d2e8d8f0605c8431e2e735684e5"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/matched-array-authority.json": {
+      "bytes": 41886,
+      "sha256": "8e70d1f9d1592c865d46c7343d1c5dd6707443c4df177a30f0e810ffe5c3b8bc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "bb0aefc269beac088a6a08164c835fa13c5e3cc9"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/originals/audit_export_windows_paths.py": {
+      "bytes": 18525,
+      "sha256": "1a1e617d533788dda35578a3596bf5ea506a9ee5b2fb1b65ae95625f6cefacbb",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d5a9b8127b1147676504062226108aeab1ee496f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/root-actual-producer-eligibility.json": {
+      "bytes": 1787,
+      "sha256": "351c44f70ca7983fad958a859022e96947d4b4208b68ac407131e5da44636f7d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d39512b6c288bb0e54f24c52c1b65a791dda4df6"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/source-contracts.json": {
+      "bytes": 5319,
+      "sha256": "978d08cedc9c2bb438b6d444abd23bd33212cfd483b6a072c0ddbba391021602",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "780f0b485809d998fec86bdaefdf851a0a65d67d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/source-freeze.json": {
+      "bytes": 1204,
+      "sha256": "a16c3db38d8ded0b5c69d0270d13aa2d04de3fdc057a71722c483bac8534a7d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "23ee4a2578398a46a054f8368a4263547d9576c2"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/source.patch": {
+      "bytes": 23475,
+      "sha256": "7e36e79ec46bb1f6f96a46cacc6cd7c7faa7997f64f23797a6047206191ed596",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "577d774ebae5153182cc0ab3c67994082e5c890d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/superseded-link-representation-refused/actual-5d993d12-audit.json": {
+      "bytes": 395,
+      "sha256": "fe40f23fb1035ee933aa1f15ba4abac31d241b8edb8cf48139257dbe383f578f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "07d5d89be8603f00a0e9eeb5b69ad56a38fafd0c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/superseded-link-representation-refused/audit_export_wave32.py": {
+      "bytes": 27794,
+      "sha256": "ad96cc93d8cde650659bac02d5644d51a4b4411aa26f91c38513fab0452338b5",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e88586593d6c1bc459b99c9f0ee8567df34744c4"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/superseded-link-representation-refused/source-contracts.json": {
+      "bytes": 5319,
+      "sha256": "978d08cedc9c2bb438b6d444abd23bd33212cfd483b6a072c0ddbba391021602",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "780f0b485809d998fec86bdaefdf851a0a65d67d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/superseded-link-representation-refused/source-freeze.json": {
+      "bytes": 1204,
+      "sha256": "a16c3db38d8ded0b5c69d0270d13aa2d04de3fdc057a71722c483bac8534a7d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "23ee4a2578398a46a054f8368a4263547d9576c2"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/superseded-link-representation-refused/source.patch": {
+      "bytes": 23475,
+      "sha256": "7e36e79ec46bb1f6f96a46cacc6cd7c7faa7997f64f23797a6047206191ed596",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "577d774ebae5153182cc0ab3c67994082e5c890d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/superseded-link-representation-refused/status.json": {
+      "bytes": 1680,
+      "sha256": "52c6d5e4b63a38f1d7123b9248f8ea8561b657c48832338d4401cd94480bbc15",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7650b9313d03beffbb8693023ef0e7b93d610e7e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-preservation/prepare_bundle.py": {
+      "bytes": 13775,
+      "sha256": "14a12ce5fa914a0588a69da669427cc2e5ecb4381aed32d3c2a0bfda6526ea14",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "4563892e73589bbcdbe230d54c8f7a13e4eec8d8"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-preservation/source-contracts.json": {
+      "bytes": 3789,
+      "sha256": "0b60946049491315c8ca824aa351ee940aa52243088f67346b17311d85b86841",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "51762722f8daa33a412b27cc6cff147957d9d8c2"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-preservation/source-freeze.json": {
+      "bytes": 641,
+      "sha256": "6a64db5d986cdbb92df42e518a4e002ff68170f02c5758937182b465e01f80a3",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "bf3528dd754d02c1e48ef0334d6788feb38d33a8"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a1-bridge.json": {
+      "bytes": 2802,
+      "sha256": "04396c6c82de0f9b818844ce150eb64ff6211a7715fd721e1406b5a8c9cf39ae",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "24c452cd4f0471ae15c2ab8654ad93a6d5bb67d6"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a1-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a1-bridge.stdout": {
+      "bytes": 131,
+      "sha256": "e803fa6bf2b74dd598093ecdbfa394796dc8f48c100e4506dbf203b5ee7f9d78",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1929b264e0fa12146ea8187cdaf3d3ec13e07ffe"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a1-inputs-after.json": {
+      "bytes": 145643,
+      "sha256": "373aa001897de96a55aea270794a3e3e0353ca899a06b89b5ce6f7c861228b4f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "8174d4a4ae01dff36ae4d57b71f906bc4e7f741e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a1-inputs-before.json": {
+      "bytes": 145643,
+      "sha256": "373aa001897de96a55aea270794a3e3e0353ca899a06b89b5ce6f7c861228b4f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "8174d4a4ae01dff36ae4d57b71f906bc4e7f741e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a2-bridge.json": {
+      "bytes": 9020,
+      "sha256": "eb2c0de733339f0969c4bc29ef5d751ba8fab302122e361e5fd68a08148777fe",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d93f6c6eecb22dd4397bc5602cec47f545fcc837"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a2-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a2-bridge.stdout": {
+      "bytes": 138,
+      "sha256": "d2e4be8b9a66ab63438fac6fc4850cbf71fe29d96406b6a5f50f7d3254874158",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "91e5900f7e31c78561b72081bbc94217a513e44b"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a2-inputs-after.json": {
+      "bytes": 151571,
+      "sha256": "5ee8616133bbb42b61d4c8d43ed2d2fb7c8ebdc23aec27e49d050f96fc9fb7f4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "49e3711526d6602a2a9b77d53c3ba3beec1efcb2"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/a2-inputs-before.json": {
+      "bytes": 151571,
+      "sha256": "5ee8616133bbb42b61d4c8d43ed2d2fb7c8ebdc23aec27e49d050f96fc9fb7f4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "49e3711526d6602a2a9b77d53c3ba3beec1efcb2"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b1-bridge.json": {
+      "bytes": 4881,
+      "sha256": "d6d62f3cbca3bbb85006217521c0366261f6c3db47f30ac277c42ec21d538ef6",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fccaf14282cd59a268df0479126fab623f06076d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b1-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b1-bridge.stdout": {
+      "bytes": 138,
+      "sha256": "213f77979558ed3fee5b69fe7f90293d308d98fe19afeb5bbe85b84f4b6c2153",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2adf74eca2d2dd13b3bde17a4044698458e5bfb7"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b1-inputs-after.json": {
+      "bytes": 147619,
+      "sha256": "a808bb41960dea0eb5739de71338d3ae665b03537b3ed6c0b53b9795d7c7ed5c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1b2c2f814a7f76c67c2ced7bc5fdbfeb94fe2931"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b1-inputs-before.json": {
+      "bytes": 147619,
+      "sha256": "a808bb41960dea0eb5739de71338d3ae665b03537b3ed6c0b53b9795d7c7ed5c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1b2c2f814a7f76c67c2ced7bc5fdbfeb94fe2931"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b2-bridge.json": {
+      "bytes": 6953,
+      "sha256": "1dc67d581b135f91991731f7c9032f623f96a42ab037e7d13198db883b6f9d2c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6711b8637b67f96145f939a044fe63a07d097fb1"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b2-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b2-bridge.stdout": {
+      "bytes": 129,
+      "sha256": "431a2190000ee3a31fc8630bc6af6b76222bb44eff6170fbcb137eba7e87f4a2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2bb0b8e74fccceaf25e35484688e063c8236f8e1"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b2-inputs-after.json": {
+      "bytes": 149595,
+      "sha256": "519db09ab0133d9c9d673a852b3eb6b7de029aa85a12cbf831071b4b7596dd3e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c12cacceec1c493babe04426495f1d3d1c496dff"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/b2-inputs-before.json": {
+      "bytes": 149595,
+      "sha256": "519db09ab0133d9c9d673a852b3eb6b7de029aa85a12cbf831071b4b7596dd3e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c12cacceec1c493babe04426495f1d3d1c496dff"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/execution-bindings.json": {
+      "bytes": 170528,
+      "sha256": "7f465fe0b62c501db6ac412bba13f110e8e80a2b583ce5b644b16e8259d80e91",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1f7b8717e5c053a2402e4658df8ed839d2941ca5"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a1/driver-modules.json": {
+      "bytes": 689,
+      "sha256": "30641e4b6485027ded9a0848a50b6fbe20a7268135316c4aea9fd264fc1aad8c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d6726edcda886aea6b4450a2e1ee8edbe768c2bb"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a1/gtest.xml": {
+      "bytes": 40487,
+      "sha256": "309e27a87746b3e4088c89847ca645b4b4860717ea06103187f15e980ae6b23c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "96e3170858b8254a94a5d76609f5718ca3b45917"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a1/memory.json": {
+      "bytes": 8030,
+      "sha256": "656572d9051bd2dd8279b4ccf2863e699ea129fdbebec3f5eeaa280a8f573017",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2e4303912d60841afccf6c7980b957da7bae3a17"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a1/owner.json": {
+      "bytes": 3543,
+      "sha256": "754131ce74fd67d37af20e3752a879466ad55d1fa0619bd4d5542a6600a17cc2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "def7584a4e08659e192b9545acc9480872f2b26e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a1/stdout.log": {
+      "bytes": 714,
+      "sha256": "dd5b972dbe88c4669921619e2acea01b5a665d8b6d4feaba6b71eb69d9d7ba80",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f7afa23a91c2c7dab38f970fe9ffede59b2c47d7"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a2/driver-modules.json": {
+      "bytes": 689,
+      "sha256": "30641e4b6485027ded9a0848a50b6fbe20a7268135316c4aea9fd264fc1aad8c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d6726edcda886aea6b4450a2e1ee8edbe768c2bb"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a2/gtest.xml": {
+      "bytes": 40677,
+      "sha256": "a6e236ae2e7dfe8e1a09d764c1b3566755933dee36204d7e7c7f6e5700abac51",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d7c7fc12f2a554aa65bfdad163e20348149f9934"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a2/memory.json": {
+      "bytes": 399,
+      "sha256": "71a02a97781292e0e47d081bb7ba8e92bac2590ca09a646e4d91ce1a867abebc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d76ad83695204c31de1e9c872d671cd98a8ced10"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a2/owner.json": {
+      "bytes": 3550,
+      "sha256": "88dd1e0008f0e8dedb9f426400796ad714d3aaf19477859eff4a48e2f1768b67",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6b8fc82000692e278c28aff08564c62a803c47d9"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/a2/stdout.log": {
+      "bytes": 708,
+      "sha256": "43ee01b56faa51a3f5d52ddc3b6372fe5d43f82d7d0c101638e229892bf453ee",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7f2bd4bb2655fc3536c9caa3fa75d1d3c04d00ba"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b1/driver-modules.json": {
+      "bytes": 690,
+      "sha256": "3de4d0d40ca26a908512ad73b48a0430b36ab65e2bc1f2404d51c22abb6ed0cd",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "43b7b9c98b04a95571b6c1db05a6abd7d5aa6b50"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b1/gtest.xml": {
+      "bytes": 40882,
+      "sha256": "78f1cae72ca77a2946ab109a2133f50fe17e5aa99c5c715ef692b60999d9c703",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e06c3e79a1000c74924a3988dbef83534b85a295"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b1/memory.json": {
+      "bytes": 409,
+      "sha256": "90c450e4f347285c53b924373c6deeaf04664b32ba139b26dab0fda0dd2a5f74",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "351fedf66ce59ada6b80b02917666b8ceecba3a1"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b1/owner.json": {
+      "bytes": 3556,
+      "sha256": "70bc0b7811b1bd6468e6a8b12c28d48d79e36c2fa836219dad444c251de37630",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e3de7dca388bb83bcc386814be9e4e984f01f205"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b1/stdout.log": {
+      "bytes": 708,
+      "sha256": "704f9b9a5bd77a511e20856a0e8045bf8eda42dd21da63570180b5f9b94d14f1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f965851b4d01cb8f9798d8caa4ad4749529fa91a"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b2/driver-modules.json": {
+      "bytes": 690,
+      "sha256": "3de4d0d40ca26a908512ad73b48a0430b36ab65e2bc1f2404d51c22abb6ed0cd",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "43b7b9c98b04a95571b6c1db05a6abd7d5aa6b50"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b2/gtest.xml": {
+      "bytes": 40775,
+      "sha256": "c20ae077201af9b6567ff61de0052aaa568ced37ab4705f9947c3707b31df136",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "455080cc6db7e2dccecf9ac539bb20b48b780571"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b2/memory.json": {
+      "bytes": 409,
+      "sha256": "8f3cbfda88b0ca3044d4656d8d74fe5817a9f0d59b4002afc834a2c6d4814f21",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "61365425dea2b0558534fdeb451419c881e363de"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b2/owner.json": {
+      "bytes": 3547,
+      "sha256": "26724e094e88a10e43bbc6a56bdc507d5eafcd53e549ce396b533f943bd83bcb",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d72b31401474e8525a00ccbf384f207bfce2483a"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/native/b2/stdout.log": {
+      "bytes": 708,
+      "sha256": "d6d8a8d6dc88c514f438aff048a7a1d94e5e98b58b7e114b9712d0f2f82f548f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d1ffb0211dff5365498248056bd477c11e14f6e7"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/plan.json": {
+      "bytes": 2605,
+      "sha256": "fd1dc4a463cf3c6aa79f812a56de593cd9492a28bfb578d29930b875c5e01a00",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1e087907c2db220a6ef75a9f18541889f2caf367"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/preparation.json": {
+      "bytes": 714,
+      "sha256": "c0d0b0990da2e73d2b6c21fdb18daea7d90a19279075c2db97b5197ef267f643",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f0580419278cf472a1e1e571714dcc17253da64d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/run_system.py": {
+      "bytes": 25470,
+      "sha256": "d059550c1ce8c0db59064e9d263e4dedccac3634cc03785d7c56218c9464981b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "01b83ecda1cb49435232c106b7be8f2e8ae9ec4e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/run_terminal.py": {
+      "bytes": 24052,
+      "sha256": "13682866cfd7157c372c2ac46af7697f0080cd92c18cb5c38e7b8c5a43b39631",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6769b0cc5391705cd64e7bc4ee52b6937b56e23c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/temp/terminal-a1/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "6cd942a0a3f704faf87d71511c3087d2696d356357e066dc39704860f350b7e7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c71737315c45615db09e6541c741485b2cb8481b"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/temp/terminal-a2/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "98d6a1e49999ef220100b3ca813cb269389a319cd685515a376dc4602ca7509a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a087c4dc154060b4ad010a61a6ce335d681f8a02"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/temp/terminal-b1/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "c67985e62f811076e543b7ba9f64a8f5488f6b0ec06d218b42e9fe917f47da21",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "40a2935d80d4b394f4cf8968fe2b362df9b8e283"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/temp/terminal-b2/bootstrap.json": {
+      "bytes": 222,
+      "sha256": "7ff2271ffc48045dc1d849e11a428f7b1f8c161927938fd1c1770816a5b948a2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "df3524b28bdddc6f3cd97eb768e6b2808f5805be"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a1-accepted.json": {
+      "bytes": 8850,
+      "sha256": "79c3f92f4d75c8388e84db661f18803fe0bce9a7257cdbe2fe64a1656094d597",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "590b6a6305c0be4188d5c5d8208dcbe137b1850e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a1-bridge.json": {
+      "bytes": 2341,
+      "sha256": "8b89a3c0b456b92287f231da3d379c78bfd865ae49896f2ad96bdef70bd7366a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e44a6edc5f804ab9408e32f228285a600f2be735"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a1.json": {
+      "bytes": 4058,
+      "sha256": "04d9c88be3dfe8b1e801dcd47c000cab053c0605f73d9bd3d3ff26161ddeeaa3",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "4dc35e6158893af0c28f8cfb68d35fb3cfd90bbe"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a1.stdout": {
+      "bytes": 165,
+      "sha256": "7e3038b83a2956b341ba9ad3f621bf849162ced40260b7b670d4114c4d411e10",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "775a69e289c7f7f3235c05e98b86c68aa84e8fbc"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a2-accepted.json": {
+      "bytes": 15654,
+      "sha256": "dbdb7eb6e54247313f415921b6d68cb3c8adb73568f5c44488f053431ac98923",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "9e271de7bda022cf03b3a3f35a7a2751414cafd5"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a2-bridge.json": {
+      "bytes": 2341,
+      "sha256": "a77c141d900eba16554bbdb36d4b0830747d5173111fdff2a75291b1a4b185ef",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "8acac8c704ef5a50bc6a54d7b67d0bc19337721a"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a2.json": {
+      "bytes": 4058,
+      "sha256": "945679e57fb503d6f94b6cf34a0de383c333101a5a6ae772745db00b14b1966f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b615714d7a3f5138c034e63673557fb446535f11"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-a2.stdout": {
+      "bytes": 165,
+      "sha256": "5b42079a343289a725d83e144b60f65966d0c9b5d9c4e650bc97f286c796a766",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2a52812e713786aa76ee9859c81c75c7c6ff439c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b1-accepted.json": {
+      "bytes": 11138,
+      "sha256": "3ff10b14f19bed9f9bee9f381fd20975448bf1078abe2d7180337fd889163309",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "76ea4313762a678bdecd6cdfc1200d311f1e667b"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b1-bridge.json": {
+      "bytes": 2342,
+      "sha256": "06c384412c59ae4292e0e357627cfe07abd29afd1b33800597abbeb30fcc7f4c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ca122285022765fe116c14e8dd4939c97bc349d0"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b1.json": {
+      "bytes": 4063,
+      "sha256": "904770f7f5a6a021d487a070ca48e4b7e8ff640c087c854187fc8936b3d749a9",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "851b6c310b4ae1719067e9eca8ba873b2624cc86"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b1.stdout": {
+      "bytes": 165,
+      "sha256": "bf142590c48b358593e1e03c2c65dc235147318c04c91d653de4c799a5dec0a4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "426576f8ecefa8e4e50fab83462ab347f6a117f6"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b2-accepted.json": {
+      "bytes": 13393,
+      "sha256": "54b4c47db2ec83293f566407b05f441fefaa703a52b088703f3c4e2a48b1a34b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fdac15e1bf3396d286510e0d6fb5d39bd172b868"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b2-bridge.json": {
+      "bytes": 2341,
+      "sha256": "0b1fa138381a357d18122198e798302e30122cbb3f843787c14ce532ec2bcda8",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "747695799a1ac95daf1d1ec83971476affcec8e5"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b2.json": {
+      "bytes": 4063,
+      "sha256": "01d8a71b923e32967457cac1b7e112f0353a8cdf3c244a37413bd7fa1e1d8840",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "5a015c467fa5149af5ff536eef5ef59e9d91cb19"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-abba/terminal-b2.stdout": {
+      "bytes": 165,
+      "sha256": "0bf77a212de9b1bc5c3f1d403f8f505245a4c26ec3c3e98147b1f74683fabc90",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "8c9dfd42e58438e462618964cea3e4e2515a31c8"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/compare_native.py": {
+      "bytes": 3902,
+      "sha256": "d3011756300a671006b3cf6a11611eddc4bb75c71ff856ff3a6c37d2d5fcdfbe",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "15c3b60e7bba41c3826554407a00f2cd8281148d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6da77e40774b93024f6582d0d0501a59c2c41f28"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/materialize_phase.py": {
+      "bytes": 14013,
+      "sha256": "ea58de0c496499dd8b4d2386657ed19d377fa5aa791489d941fd500edb9b2057",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "748990f55db699dcdc4d50975a89f394f3046e6d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/materialize_reader_context.py": {
+      "bytes": 14116,
+      "sha256": "12f08a53ab6c226639b41ca063973f4e2b1ff19e699a45fda8b2d02e4f42558e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f7a58cc7d2daddcf1257934f565e2178a4cd2022"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/native_evidence.py": {
+      "bytes": 29641,
+      "sha256": "0b727520417d1b51a778ce0786990285f0271a6fa009158e95e9b63e001379bb",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1bba1e207c1f884528c3e89225f99a3ab6fa6fda"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/numeric_gates.py": {
+      "bytes": 2890,
+      "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "19864ecc50448e8a6bf9571a29a9456ff2d089e8"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/compare_native.py": {
+      "bytes": 3902,
+      "sha256": "d3011756300a671006b3cf6a11611eddc4bb75c71ff856ff3a6c37d2d5fcdfbe",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "15c3b60e7bba41c3826554407a00f2cd8281148d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6da77e40774b93024f6582d0d0501a59c2c41f28"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/materialize_phase.py": {
+      "bytes": 12938,
+      "sha256": "82e462a159685baea4e1eb16a0a2b1e3bcd9070f8b6612dcfcee1ce726033720",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "9ffdfb7376062b737af9295daca6b2ebe14c83fc"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/materialize_reader_context.py": {
+      "bytes": 13871,
+      "sha256": "5379cd6c8ef128116c0b438dabad2329895cdf8f54bad2cfbd199f2e71e66843",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "bb07987e85643812ee06438948988296c519c43a"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/native_evidence.py": {
+      "bytes": 29506,
+      "sha256": "ec5368565ceb7cec93254cab7dc5a08055f024375ece80c76677061ffd5bf201",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0fc5262c31e535f8aa80469a28d406388bcfa0e0"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/numeric_gates.py": {
+      "bytes": 2890,
+      "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "19864ecc50448e8a6bf9571a29a9456ff2d089e8"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/protocol.pending.json": {
+      "bytes": 6151,
+      "sha256": "26496b4e76ded66efc5c592351e9abd1e4fb3e35e110183939f96495ab1b5e84",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ecdf1f213109af949482fde8f0a7d7670da960ae"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/read_controls_native.py": {
+      "bytes": 3271,
+      "sha256": "c6d772fe7f706df1e038567ba938961e3a7c0b3f3180626e6a975ad88e84b47f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fb10de474f5e3c5119743c765729474573ce9261"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/reader-bindings.pending.json": {
+      "bytes": 3011,
+      "sha256": "87ba623dbae8fda15305088e6e820e9d03f9ee5abe6f680d2ae85c93ba141d5a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c24aa1099fdf0eb674eb64b4a3e3c48778206482"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/run_system.py": {
+      "bytes": 25066,
+      "sha256": "d1218e1426583919287875407d66a855bb20c8f49663d3f2e0c190ad76f3e9c0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7f818ae80f341494febe87da04c1d04289300f2f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/run_terminal.py": {
+      "bytes": 23651,
+      "sha256": "547ba5d9befb016f2b3f876fbe297ef6434cc1c71d80835ca4f82998eec28ac2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "25e2ed88d2b3ee5d8f78fdc5944106691e985e5f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/originals/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/protocol.pending.json": {
+      "bytes": 6533,
+      "sha256": "ccecb867f9a9b616614be61a5a4d384bcdc7606fb51f9df2370bf8f344e9e123",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "4f6c87fbeab2a275e12ee42b5cb08a15778dcbd3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/read_controls_native.py": {
+      "bytes": 3271,
+      "sha256": "c6d772fe7f706df1e038567ba938961e3a7c0b3f3180626e6a975ad88e84b47f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fb10de474f5e3c5119743c765729474573ce9261"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/reader-bindings.pending.json": {
+      "bytes": 3364,
+      "sha256": "cc1a2c70d21f0643ca900703fc2fe258c679ee438a82f4851baa9f7fcec2e27c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "99a45cb1eead25b38c16b0f680d2b110887158de"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/run_system.py": {
+      "bytes": 25470,
+      "sha256": "d059550c1ce8c0db59064e9d263e4dedccac3634cc03785d7c56218c9464981b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "01b83ecda1cb49435232c106b7be8f2e8ae9ec4e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/run_terminal.py": {
+      "bytes": 24052,
+      "sha256": "13682866cfd7157c372c2ac46af7697f0080cd92c18cb5c38e7b8c5a43b39631",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6769b0cc5391705cd64e7bc4ee52b6937b56e23c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/source-contracts.json": {
+      "bytes": 12230,
+      "sha256": "bbd76aa8cfa925dbbd58d778d42a30fd25dba4031ce5f89b478706cccc56e149",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b8fd9425c654d4831b93d9dd7538ccac64879df3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/source-freeze.json": {
+      "bytes": 4544,
+      "sha256": "80349a5505bcb5819278332282eca55c66c0914c91d3747a797982c3175db83b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a69320b5d19134a9a35ee46296a8a263f713dbee"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/source.patch": {
+      "bytes": 22456,
+      "sha256": "42a517b36d4fc76a4228f7a8453ff5058dc39b54d00b0217a8abe49a944ed508",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "06b4c8e121a54e98a5459252b670752f6593ca95"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-source/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/control-8-bridge.json": {
+      "bytes": 2842,
+      "sha256": "c15cba4800834247b2931f143987a4b6820d9eeffd186881246648a5fb905cb1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1267d62a764e6d1547543fc6c6a41ccb9ca51311"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/control-8-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/control-8-bridge.stdout": {
+      "bytes": 131,
+      "sha256": "97e71bd80ff9e42ffe814fee36a1bf6f49b250e0ad82cfebd0a0c88ab1d41dd7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fb9eea9dd10f1faabbe1519d80e2347827d9dc70"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/control-8-inputs-after.json": {
+      "bytes": 140661,
+      "sha256": "e2bd16a34d1b03d5fb296fc46991b18379b876d282ed2c2704abc5317d86ec00",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "df9054baf44e067ab6f79d61ca7bc714509aded3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/control-8-inputs-before.json": {
+      "bytes": 140661,
+      "sha256": "e2bd16a34d1b03d5fb296fc46991b18379b876d282ed2c2704abc5317d86ec00",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "df9054baf44e067ab6f79d61ca7bc714509aded3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/execution-bindings.json": {
+      "bytes": 153156,
+      "sha256": "aaa42c82adebb750284b2a2dc687c565bd0164cbe17e59b09221efcb0e682d88",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "55e4ca668a8a5a4b42786c685eeebac79d86b53d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/native/control-8/driver-modules.json": {
+      "bytes": 690,
+      "sha256": "3de4d0d40ca26a908512ad73b48a0430b36ab65e2bc1f2404d51c22abb6ed0cd",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "43b7b9c98b04a95571b6c1db05a6abd7d5aa6b50"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/native/control-8/gtest.xml": {
+      "bytes": 41216,
+      "sha256": "1fc8f1fdc864f38bd4b0e9f6d48218baba8f0b23a8153d8cc258df8d40728add",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5da25311f69de3bb550a2d512514d0dbde67356"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/native/control-8/memory.json": {
+      "bytes": 6156,
+      "sha256": "76319d8626d8d124fb03d6a9d98a4288424200c838649a8658457624687f70e8",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fa0f952e5afe059cc62381b703150a733908c85b"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/native/control-8/owner.json": {
+      "bytes": 3583,
+      "sha256": "e55d758c1889e0e621bbca2e5732458735c68f70317ac3dd5f3fd046d58b327e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1c2087dbfd6ed1f99a676dda52280852a2e814fe"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/native/control-8/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/native/control-8/stdout.log": {
+      "bytes": 714,
+      "sha256": "0639a04540de91575b19f0cc55bafaa62c69dcea2687b5d5fc1691361529d003",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "4bd5d8f8da8153b4e4f5ea187642c6e759ac5fe1"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/plan.json": {
+      "bytes": 1258,
+      "sha256": "0cff62b7ce8a85f0212a1de6fb5c0b4cc9dc8087e427d25b3a7b966eda856744",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a746cb8efb72d7e162fc79d4913b66fc87676119"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/preparation.json": {
+      "bytes": 719,
+      "sha256": "b2ccefc65df31172a26a30e91707594b7c07f5552271423f072ce20f895354d5",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c3b2dd4e0ffc49a853d1ca8984c7c89f5b752e86"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/run_system.py": {
+      "bytes": 25470,
+      "sha256": "d059550c1ce8c0db59064e9d263e4dedccac3634cc03785d7c56218c9464981b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "01b83ecda1cb49435232c106b7be8f2e8ae9ec4e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/run_terminal.py": {
+      "bytes": 24052,
+      "sha256": "13682866cfd7157c372c2ac46af7697f0080cd92c18cb5c38e7b8c5a43b39631",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6769b0cc5391705cd64e7bc4ee52b6937b56e23c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/temp/terminal-control-8/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "9530de2cc65f981b4183874a42275d4aca92b38b0b4d5fde1057d214859024bf",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "5e71f5132cfd26489801a2344d2f14f17d7a799d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/terminal-control-8-accepted.json": {
+      "bytes": 9020,
+      "sha256": "cf1ec6a7619639c5380741f834738a82e5b90139445f762aa4c66272672e5b71",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c219f985b11c55ecd3a598710cd154ffcd4feb6d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/terminal-control-8-bridge.json": {
+      "bytes": 2391,
+      "sha256": "5ac58507c82e6f72e03cac4b611fa9f0148b9b2e509f24d0b99f04458c1a36eb",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0a123fbefc23824b16d7a0d506008427c217bded"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/terminal-control-8.json": {
+      "bytes": 4068,
+      "sha256": "3a371946bffed0de136d72f98c85943f11658c7806a30cc10ddabbaf1c69e0b4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "46b5cb769007f7203a1f050436d6a1e68e752178"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/terminal-control-8.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-runtime-timestamp/terminal-control-8.stdout": {
+      "bytes": 172,
+      "sha256": "676cf9452f84a9d6c763aea806ceabd5a58b9eb88f6750b6740d926bc3758272",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "03c31927460441e6583e32a01cb79dffbf9c914d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-timestamp-evidence/reader-bindings.json": {
+      "bytes": 153203,
+      "sha256": "51883781ca0c8d6892a5e39b3cc38b0cf0acd9b73462946fc9a7e69d28c66123",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "884d60bbb46789348810b2f230943ffcb5d962a4"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-timestamp-evidence/root-admission.json": {
+      "bytes": 364,
+      "sha256": "ba217f10f9856eda22cf90f741cb536318d51f0586e84ed54c1f2fe950915428",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2eb789931f2357dedb2392b2093e54a6f63ac386"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-timestamp-evidence/timestamp-acceptance.json": {
+      "bytes": 53071,
+      "sha256": "51c39a344b3e758eda4638042b39e2d93cdc9262a0d4b3ea39eb6db7b3e86c67",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "955eb7188d2c96d2d56b91f831db6a7ab3d6235a"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/renders/native-wave32-runtime-abba/a1/bootstrap.json": {
+      "bytes": 838,
+      "sha256": "ce24cd378e2d2696ab8abe50cc32d05684d89f38dd2104cbfacefe2ef3927e72",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6b72a97acd8f5c514dbf9e4603a3273e6357f2af"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/renders/native-wave32-runtime-abba/a2/bootstrap.json": {
+      "bytes": 838,
+      "sha256": "5acdc0412ae2cf0c993e8fefa2bbabc4c4f5541dfcf1a6bafaefc73398cf0cd4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "3f3fc88dd7569cb0afe760cda7f809b8e9d52d66"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/renders/native-wave32-runtime-abba/b1/bootstrap.json": {
+      "bytes": 841,
+      "sha256": "64de83903a272ee0dfcc0bd17266ccb2f14a28e6c58061553eae317df98359f7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "63877c68ec02087902b29a5d6ef2f97664d1ed5e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/renders/native-wave32-runtime-abba/b2/bootstrap.json": {
+      "bytes": 841,
+      "sha256": "6f4e2c8fdc2954cb8e82258f4c26502d0f7cfec8576681043445c92dba575037",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ec19d4496e521ca7a7ac56980e183b998d7064c6"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/renders/native-wave32-runtime-timestamp/control-8/bootstrap.json": {
+      "bytes": 857,
+      "sha256": "0e047f5eea3e51b6584cd9f89a8c7225f432e8b641f82d9d0487ba3958b555ed",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "45495b425189a881d3b5db402c6570cb5d10e522"
+    },
+    "out/native-wave32-preservation/commit_bundle.py": {
+      "bytes": 3398,
+      "sha256": "410a9190062e7e985028ebe24231867c75a1fa1b0c4d0db066cfea19e583674b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "506927be37cc163faccddc699cc805102500f376"
+    },
+    "out/native-wave32-preservation/root-preparation.json": {
+      "bytes": 1002,
+      "sha256": "7b5ee0936551d68e0ca7e6109ba37be83812312a05e9567fbd420fa5ede4f9ca",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "99a66e5dd5178831f040a2a8927e6fc2329da422"
+    }
+  },
+  "full_stored_Git_bytes_verified": true,
+  "Git_exec_modes_verified": true,
+  "full_POSIX_modes_restored_by_manifest": true,
+  "pushed": true,
+  "fresh_remote_verified": true,
+  "fresh_remote_refs": "b56762a537711dfc85a4a8cdf86fa2a511d9f740\trefs/heads/development/native-fp32-packed-scratch-runtime-2026-10-18\nb56762a537711dfc85a4a8cdf86fa2a511d9f740\trefs/tags/evidence/native-wave32-rejected-2c8ef086\n"
+}

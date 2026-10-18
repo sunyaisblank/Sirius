@@ -1,0 +1,74 @@
+{
+  "schema": "sirius-native-wave32-published-inputs-retirement-v1",
+  "passed": true,
+  "started_utc": "2026-10-18T11:28:45.596991+00:00",
+  "finished_utc": "2026-10-18T11:28:47.425169+00:00",
+  "roots": {
+    "out/native-wave32-source": {
+      "root": "out/native-wave32-source",
+      "verified": true,
+      "removed": true,
+      "mismatch": null,
+      "file_count": 11,
+      "bytes": 136010,
+      "directory_count": 1,
+      "named_Git_revision": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+      "removed_file_count": 11,
+      "removed_byte_count": 136010
+    },
+    "out/native-wave32-producer-inputs": {
+      "root": "out/native-wave32-producer-inputs",
+      "verified": true,
+      "removed": true,
+      "mismatch": null,
+      "file_count": 80,
+      "bytes": 27222977,
+      "directory_count": 6,
+      "named_Git_revision": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+      "removed_file_count": 80,
+      "removed_byte_count": 27222977
+    },
+    "out/native-wave32-windows-source": {
+      "root": "out/native-wave32-windows-source",
+      "verified": true,
+      "removed": true,
+      "mismatch": null,
+      "file_count": 9,
+      "bytes": 104160,
+      "directory_count": 2,
+      "named_Git_revision": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+      "removed_file_count": 9,
+      "removed_byte_count": 104160
+    },
+    "out/native-shader-driver-introspection": {
+      "root": "out/native-shader-driver-introspection",
+      "verified": true,
+      "removed": true,
+      "mismatch": null,
+      "file_count": 52,
+      "bytes": 10856115,
+      "directory_count": 7,
+      "named_Git_revision": "1cb6e6aaff04ddd54ff7ee133b773257338f2c52",
+      "removed_file_count": 52,
+      "removed_byte_count": 10856115
+    }
+  },
+  "removed_files": 152,
+  "removed_bytes": 38319262,
+  "remote_proof": "out/native-wave32-closeout/published-inputs-remote-verification.json",
+  "cleanup_source": {
+    "path": "out/native-wave32-closeout/retire_published_inputs.py",
+    "bytes": 11016,
+    "sha256": "30ac37a30ba761f7c10d71434cf82a9e4036fa59357cf4cbd161b6e006606467",
+    "mode": "0644",
+    "device": 2096,
+    "inode": 1920919,
+    "mtime_ns": 1792322925525214296,
+    "hardlink_count": 1
+  },
+  "canonical_new_candidate_and_other_roots_mutated": false,
+  "already_retired_320_files_132789368_bytes_b567_repeated": false,
+  "Git_branch_index_ref_or_source_mutation": false,
+  "ownership_basis": "ROOT confirmed all completed runtimes closed, no live consumers, and new candidate consumers use immutable named Git; no new process/provider query performed.",
+  "scope": "Four explicitly named published input roots only. Physical bytes/modes/inventory and actual named Git blob conservation plus fresh remote refs verified before removal; no source adoption or qualification claim."
+}
