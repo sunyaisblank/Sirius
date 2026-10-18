@@ -1,0 +1,148 @@
+{
+  "schema": "sirius-native-transport-validation-composer-source-v1",
+  "source_only": true,
+  "admitted": false,
+  "origin": {
+    "path": "attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-producer-source/compose_inputs.py",
+    "bytes": 12202,
+    "sha256": "71c8080460961b12834c0adb25b4a8607647117bd7db1d4cf0160015eb74b323"
+  },
+  "origin_archive_commit": "06376a05a74af6f3d410bac142a0771372054f40",
+  "canonical_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "deltas": [
+    {
+      "old": "sirius-native-packed-soa-emitted-admission-v1",
+      "new": "sirius-native-transport-validation-emitted-admission-v1",
+      "occurrences": 2
+    },
+    {
+      "old": "outside_helper_functions_alpha_exact",
+      "new": "unchanged_numerical_helpers_alpha_exact",
+      "occurrences": 2
+    },
+    {
+      "old": "packed_component_major_address_validated",
+      "new": "validation_only_CFG_validated",
+      "occurrences": 2
+    },
+    {
+      "old": "out/native-fp32-packed-soa-compiler-source/candidate",
+      "new": "out/native-transport-validation-compiler-source/candidate",
+      "occurrences": 1
+    },
+    {
+      "old": "out/native-fp32-packed-soa-producer-inputs",
+      "new": "out/native-transport-validation-producer-inputs",
+      "occurrences": 1
+    },
+    {
+      "old": "TARGETS = {\"retained_transport.spv\": \"kTransportShader\",\n           \"retained_endpoint.spv\": \"kEndpointShader\",\n           \"retained_dense.spv\": \"kDenseShader\",\n           \"retained_initialize.spv\": \"kInitializeShader\",\n           \"retained_dopri_phase.spv\": \"kDopriPhaseShader\"}",
+      "new": "TARGETS = {\"retained_transport.spv\": \"kTransportShader\"}",
+      "occurrences": 1
+    },
+    {
+      "old": "sirius-native-packed-soa-five-compiler-products-v1",
+      "new": "sirius-native-transport-validation-one-compiler-products-v1",
+      "occurrences": 1
+    },
+    {
+      "old": "products[\"actual_tool_calls\"] == 25",
+      "new": "products[\"actual_tool_calls\"] == 5",
+      "occurrences": 1
+    },
+    {
+      "old": "len(commands) == 25",
+      "new": "len(commands) == 5",
+      "occurrences": 1
+    },
+    {
+      "old": "    read(COMPILE.parent / \"source/src/sirius/kernels/retained_scratch.slang\", {\n        \"bytes\": 2264, \"sha256\": \"c4261ae5201e4d627b5b02d6181fe8ecdd5f90b363eab92105cacfb2c96d7841\"})",
+      "new": "    read(COMPILE.parent / \"source/src/sirius/kernels/retained_transport.slang\", {\n        \"bytes\": 29427, \"sha256\": \"2caf03aa9e8731153d28f0a31c86c97bdab450c05f8bb2a9ea3656e14e897964\"})\n    read(COMPILE.parent / \"source/src/sirius/kernels/retained_scratch.slang\", {\n        \"bytes\": 892, \"sha256\": \"cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8\"})",
+      "occurrences": 1
+    },
+    {
+      "old": "\"text outside five array blocks changed\"",
+      "new": "\"text outside the single Transport array block changed\"",
+      "occurrences": 1
+    },
+    {
+      "old": "== 35,\n            \"expected35 byte-exact arrays including seven tables\"",
+      "new": "== 39,\n            \"expected39 byte-exact arrays including seven tables\"",
+      "occurrences": 1
+    },
+    {
+      "old": "== 30,\n            \"excluded30 shader payloads changed\"",
+      "new": "== 34,\n            \"excluded34 shader payloads changed\"",
+      "occurrences": 1
+    },
+    {
+      "old": "sirius-native-packed-soa-diagnostic-input-composition-v1",
+      "new": "sirius-native-transport-validation-diagnostic-input-composition-v1",
+      "occurrences": 1
+    },
+    {
+      "old": "\"changed\": 5, \"exact\": 35",
+      "new": "\"changed\": 1, \"exact\": 39",
+      "occurrences": 1
+    },
+    {
+      "old": "\"excluded_SPVs_exact\": 30",
+      "new": "\"excluded_SPVs_exact\": 34",
+      "occurrences": 1
+    },
+    {
+      "old": "Five new compiler/emitted-reviewed ordinary nativeFP32 SPVs composed with current5b2 canonical baseline.",
+      "new": "One new compiler/emitted-reviewed nativeFP32 Transport SPV composed with current5b2 canonical unpacked baseline.",
+      "occurrences": 1
+    }
+  ],
+  "mechanical_proof": {
+    "all_literal_inverses_reconstruct_complete_original": true,
+    "builtin_AST_parse_only": true,
+    "all_non_main_function_ASTs_exact": true,
+    "original_formatter_bytes_exact": true
+  },
+  "input_interface": {
+    "argv": "python3 -B compose_inputs.py ROOT_AUTHORED_EMITTED_ADMISSION.json",
+    "admission_schema": "sirius-native-transport-validation-emitted-admission-v1",
+    "required_true": [
+      "passed",
+      "unchanged_numerical_helpers_alpha_exact",
+      "public_ABI_equal",
+      "validation_only_CFG_validated"
+    ],
+    "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "rich_pins": [
+      "compiler_owner",
+      "compiler_products",
+      "command_results"
+    ],
+    "modules_exact": [
+      "retained_transport.spv"
+    ],
+    "compiler_products_schema": "sirius-native-transport-validation-one-compiler-products-v1",
+    "actual_tool_calls": 5,
+    "private_source_pins": [
+      {
+        "path": "out/native-transport-validation-compiler-source/source/src/sirius/kernels/retained_transport.slang",
+        "bytes": 29427,
+        "sha256": "2caf03aa9e8731153d28f0a31c86c97bdab450c05f8bb2a9ea3656e14e897964"
+      },
+      {
+        "path": "out/native-transport-validation-compiler-source/source/src/sirius/kernels/retained_scratch.slang",
+        "bytes": 892,
+        "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+      }
+    ],
+    "emitted_admission_state": "ROOT_PENDING actual full-read emitted/source/compiler admission; owner exit alone supplies no emission or runtime acceptance. Exact proposed fields confirmed with emitted reviewer."
+  },
+  "baseline_authority": {
+    "path": "out/native-fp32-packed-scratch-producer-inputs/root-composed-inputs.json",
+    "bytes": 30848,
+    "sha256": "5d4062652bcad0e10807c8195b6279d05f9fd5a2a9dbad592424d1f977da5922"
+  },
+  "preserved_baseline": "Same retained live canonical5b2 baseline38files plus exact342470B c948 audited observer from inherited 5d406 authority. Composer rereads authority-listed regular files/hashpins and matches each baseline product to current canonical directory; old rejected candidate inputs are never read.",
+  "composition": "Decode and crossjoin all35 baseline SPVs/header payloads (including2owner),40main arrays/seven tables. Replace only the complete kTransportShader declaration and its candidate/shaders/retained_transport.spv. Restore that whole declaration and require original header text byte-exact;39other arrays/seven tables exact,34excluded SPVs exact,ownerheaders/layout exact. Canonical unpacked scratch remains five words per triple; no packed/SoA payload used.",
+  "output_layout": "Unchanged77 payloads (baseline38,candidate38,observer1),same decimal-u/16words formatter/mode0o644/exclusive writes,plus root-composed-inputs.json. Output out/native-transport-validation-producer-inputs must not exist. No output tree created by source author.",
+  "hold": "No composer/project helper import or execution, no compilation, provider/test, network, process query, staging, input materialization or Git mutation. No canonical, baseline, old packet, frozen compiler or Windows producer file changed. ROOT SOURCE review then actual emitted admission before composition; C++ producer/runtime/benefit/adoption remain separate and unadmitted."
+}

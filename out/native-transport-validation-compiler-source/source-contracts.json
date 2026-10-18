@@ -1,0 +1,169 @@
+{
+  "schema": "sirius-native-transport-validation-one-compiler-source-contract-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_only": true,
+  "offline_compile_released": false,
+  "runtime_admitted": false,
+  "source_adopted": false,
+  "source": {
+    "candidate": {
+      "path": "/home/astra/.project/Sirius/out/native-transport-validation-source/candidate-retained_transport.slang",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-transport-validation-source/candidate-retained_transport.slang",
+      "bytes": 29427,
+      "sha256": "2caf03aa9e8731153d28f0a31c86c97bdab450c05f8bb2a9ea3656e14e897964"
+    },
+    "independent_source_review": {
+      "path": "/home/astra/.project/Sirius/out/native-transport-validation-source/independent-source-review.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-transport-validation-source/independent-source-review.json",
+      "bytes": 4361,
+      "sha256": "9e81f4f5cd1f1fd3e23041285d1fcea11eb8459854711ec84df0087bc9439267"
+    },
+    "canonical_scratch": {
+      "path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/source/src/sirius/kernels/retained_scratch.slang",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/source/src/sirius/kernels/retained_scratch.slang",
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    "private_kernel_files": 33,
+    "private_changed_files": [
+      "retained_transport.slang"
+    ],
+    "other32_private_source_bytes_canonical": true
+  },
+  "recipe": "Exactly one ordinary native FP32 Transport. Original macro order/values: general13096words,special2871words/42layers,coefficients25,registers459,terms5,lanes64,executionlanes64,layers117,prefix0. Exact canonical Slang -O0/-target spirv/-profile spirv_1_5/ComputeMain/compute/denorm-mode-fp32 preserve; unchanged native_controls(fma=False); qualified dis/as spv1.5/val vulkan1.2/finaldis. Five serial tools within ONE original300s/4GiB sampled aggregate/2GiB host reserve budget.",
+  "driver_delta": {
+    "origin": {
+      "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-compiler-source/compile_five.py",
+      "resolved_path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-compiler-source/compile_five.py",
+      "bytes": 5835,
+      "sha256": "466e82ef72a4be6c6bc488ca489f789bf9873fbf5509f42b4d1777ec69fecf94"
+    },
+    "original": {
+      "path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/originals/compile_five.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/originals/compile_five.py",
+      "bytes": 5835,
+      "sha256": "466e82ef72a4be6c6bc488ca489f789bf9873fbf5509f42b4d1777ec69fecf94"
+    },
+    "candidate": {
+      "path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/compile_transport.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/compile_transport.py",
+      "bytes": 5777,
+      "sha256": "ae002aa80a9f9c11b751e916867f49f203735fa1d108fa635f421e62eae16922"
+    },
+    "patch": {
+      "path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/compiler-driver.patch",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/compiler-driver.patch",
+      "bytes": 2071,
+      "sha256": "1aadf98234e0f2dc5dd3a3310ac5c700f54390d4729bcc7f879755e7df7fdb90"
+    },
+    "changes": [
+      [
+        "sirius-native-packed-soa-five-compiler-recipes-v1",
+        "sirius-native-transport-validation-one-compiler-recipes-v1"
+      ],
+      [
+        "names = [\"retained_transport\", \"retained_endpoint\", \"retained_dense\", \"retained_initialize\", \"retained_dopri_phase\"]",
+        "names = [\"retained_transport\"]"
+      ],
+      [
+        "assert len(records) == 25",
+        "assert len(records) == 5"
+      ],
+      [
+        "sirius-native-packed-soa-five-compiler-products-v1",
+        "sirius-native-transport-validation-one-compiler-products-v1"
+      ],
+      [
+        "Five ordinary native FP32 modules compiled/annotated/assembled/validated only",
+        "One ordinary native FP32 Transport module compiled/annotated/assembled/validated only"
+      ],
+      [
+        "emitted_address_semantics_admitted",
+        "emitted_validation_semantics_admitted"
+      ]
+    ],
+    "exact_inverse": true,
+    "native_controls_source_exact_canonical": true,
+    "all_other_driver_bytes_exact": true
+  },
+  "guards": {
+    "owner": {
+      "path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/run_owned.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "guard": {
+      "path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/owned_guard.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "byte_exact_mature_e573_747": true,
+    "software_provider": false
+  },
+  "tool_reuse": {
+    "prior_preflight": {
+      "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-compiler-source/root-preflight.json",
+      "resolved_path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-compiler-source/root-preflight.json",
+      "bytes": 1549243,
+      "sha256": "c83f2e8fec37abc01c02907f4bcad2cc7463b2d060d2d41c9752f65c01db02d7"
+    },
+    "prior_rich_rows_current_equal": 3855,
+    "queries_performed": 0,
+    "scope": "Reuse same bounded primary tools+aliases/Slang resources/Python/Git/observed libraries; no GCC headers/resources added. Optimizer pinned inherited-unused and never invoked; no new ldd/version/resource query or complete-host discovery claim."
+  },
+  "canonical_baseline": {
+    "SPV": {
+      "path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/originals/canonical-retained_transport.spv",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-transport-validation-compiler-source/originals/canonical-retained_transport.spv",
+      "bytes": 85364,
+      "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+    },
+    "source_header": {
+      "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-controls/headers/baseline/retained_kernels.h",
+      "resolved_path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-controls/headers/baseline/retained_kernels.h",
+      "bytes": 7952166,
+      "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc"
+    },
+    "existing_disassembly": {
+      "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.spvasm",
+      "resolved_path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.spvasm",
+      "bytes": 246554,
+      "sha256": "cb9003c48a19654f734f653a92e9adec9d67f44006fe4300ad574028c75ba413"
+    },
+    "root_products": {
+      "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/root-compiler-products.json",
+      "resolved_path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/root-compiler-products.json",
+      "bytes": 15812,
+      "sha256": "2be6e9e799531dd19cf040829f4320c726e1e41c6f80ab9fec9629b2faafa114"
+    },
+    "named_Git": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+    "method": "Only kTransportShader words decoded as little-endian SPV data from preserved canonical baseline header; exact current85364B/b52e6373 SPV and old recordedbaseline matched. No baseline compiler/disassembler and no packedAoS/SoA SPV baseline."
+  },
+  "no_execution": "No compiler/helper/projectimports/provider/tests/network/process/Gitwrites/configure/build/staging/canonical edits by source author. Future candidate output directory absent.",
+  "postcompile_conditions": [
+    "ROOT independently verifies owner terminal, full before/after/current closure, all five exact commands/exits and raw+finalproducts.",
+    "Direct saved actual emitted comparison: native NoContraction/RTE32/local64 and canonical5R=2295uint scratch/public ABI unchanged. All functions outside ComputeMain and globals/type/constants require explicit ID/type mapping if shifted; no opaque AST or byte-equality assumption.",
+    "Check actual ComputeMain added native-lane validation loop/reset/atomicOR/unconditionaljoin/uniformrefusal and original later consumer/work/ordering under admitted SOURCE proof. No emitted/runtime benefit presumed.",
+    "Separate composition retains other34SPVs/other39mainarrays/all7tables/twoownerproducts canonical, not recompiled here. Original eight controls+sole22gateABBA remain required for any adoption."
+  ],
+  "output_interface": {
+    "folder": "candidate",
+    "profiles": [
+      "retained_transport"
+    ],
+    "per_profile_suffixes": [
+      ".compiler.spv",
+      ".raw.spvasm",
+      ".spvasm",
+      ".spv",
+      ".final.spvasm"
+    ],
+    "command_results": "candidate/command-results.json",
+    "products": "candidate/products.json",
+    "products_schema": "sirius-native-transport-validation-one-compiler-products-v1",
+    "products_pass_scope": "Compiler-only; emitted_validation_semantics_admitted:false/runtime_admitted:false."
+  },
+  "authorship": "/root/sanitizer_gate_contract, compiler SOURCE author; no independent source-admission claim."
+}
