@@ -1,0 +1,1569 @@
+{
+  "schema": "sirius-native-packed-original-controls-acceptance-v1",
+  "passed": true,
+  "source_revision": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+  "control8_passed": true,
+  "original_controls_passed": 1,
+  "controls": [
+    {
+      "label": "control-8",
+      "case": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "accepted": {
+        "bytes": 9020,
+        "sha256": "cf1ec6a7619639c5380741f834738a82e5b90139445f762aa4c66272672e5b71"
+      },
+      "actual_windows_birth": [
+        3824,
+        "2026-10-18T11:07:23.9548882Z"
+      ],
+      "wall_seconds": 45.3388547,
+      "peak_sampled_child_WorkingSet_bytes": 483667968
+    }
+  ],
+  "timestamp": {
+    "legacy": {
+      "repeats": [
+        {
+          "complete_call_ms": 37.8954,
+          "device_ms": 35.684,
+          "host_completion_ms": 37.0066,
+          "markers": [
+            {
+              "phase": "legacy_repeat0",
+              "stage": "transport",
+              "begin": "19534843404122",
+              "end": "19534844270438",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 8.66316,
+              "host_submit_ms": 0.0267,
+              "host_wait_ms": 8.8944,
+              "host_completion_ms": 8.9211,
+              "pipeline_ms": 0.0008,
+              "setup_ms": 0.0459,
+              "cleanup_ms": 0.0128,
+              "total_ms": 8.9806
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "endpoint",
+              "begin": "19534844320564",
+              "end": "19534844555976",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.35412,
+              "host_submit_ms": 0.0078,
+              "host_wait_ms": 2.6727,
+              "host_completion_ms": 2.6805,
+              "pipeline_ms": 0.0004,
+              "setup_ms": 0.0289,
+              "cleanup_ms": 0.0069,
+              "total_ms": 2.7167
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "transport",
+              "begin": "19534844580676",
+              "end": "19534845436388",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 8.55712,
+              "host_submit_ms": 0.0054,
+              "host_wait_ms": 8.7274,
+              "host_completion_ms": 8.7328,
+              "pipeline_ms": 0.0001,
+              "setup_ms": 0.0176,
+              "cleanup_ms": 0.0075,
+              "total_ms": 8.758
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "endpoint",
+              "begin": "19534845466989",
+              "end": "19534845697761",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.3077199999999998,
+              "host_submit_ms": 0.0094,
+              "host_wait_ms": 2.4767,
+              "host_completion_ms": 2.4861,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.029,
+              "cleanup_ms": 0.0073,
+              "total_ms": 2.5227
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "transport",
+              "begin": "19534845725976",
+              "end": "19534846591964",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 8.65988,
+              "host_submit_ms": 0.007,
+              "host_wait_ms": 8.838,
+              "host_completion_ms": 8.845,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0233,
+              "cleanup_ms": 0.0071,
+              "total_ms": 8.8756
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "endpoint+dense",
+              "begin": "19534846624255",
+              "end": "19534847138455",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.1419999999999995,
+              "host_submit_ms": 0.0109,
+              "host_wait_ms": 5.3302,
+              "host_completion_ms": 5.3411,
+              "pipeline_ms": 0.0005,
+              "setup_ms": 0.0187,
+              "cleanup_ms": 0.007,
+              "total_ms": 5.3673
+            }
+          ]
+        },
+        {
+          "complete_call_ms": 29.9862,
+          "device_ms": 28.19936,
+          "host_completion_ms": 29.487,
+          "markers": [
+            {
+              "phase": "legacy_repeat1",
+              "stage": "transport",
+              "begin": "19534847343439",
+              "end": "19534848124803",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 7.8136399999999995,
+              "host_submit_ms": 0.0062,
+              "host_wait_ms": 8.1046,
+              "host_completion_ms": 8.1108,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0222,
+              "cleanup_ms": 0.007,
+              "total_ms": 8.1402
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "endpoint",
+              "begin": "19534848157870",
+              "end": "19534848353702",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.9583199999999998,
+              "host_submit_ms": 0.0064,
+              "host_wait_ms": 2.176,
+              "host_completion_ms": 2.1824,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0088,
+              "cleanup_ms": 0.0071,
+              "total_ms": 2.1985
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "transport",
+              "begin": "19534848375316",
+              "end": "19534849063668",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 6.88352,
+              "host_submit_ms": 0.0052,
+              "host_wait_ms": 7.047,
+              "host_completion_ms": 7.0522,
+              "pipeline_ms": 0.0001,
+              "setup_ms": 0.0074,
+              "cleanup_ms": 0.0072,
+              "total_ms": 7.0669
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "endpoint",
+              "begin": "19534849097108",
+              "end": "19534849275120",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.78012,
+              "host_submit_ms": 0.0087,
+              "host_wait_ms": 2.0278,
+              "host_completion_ms": 2.0365,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.008,
+              "cleanup_ms": 0.0069,
+              "total_ms": 2.0517
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "transport",
+              "begin": "19534849296414",
+              "end": "19534849915186",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 6.18772,
+              "host_submit_ms": 0.0054,
+              "host_wait_ms": 6.3588,
+              "host_completion_ms": 6.3642,
+              "pipeline_ms": 0.0001,
+              "setup_ms": 0.0079,
+              "cleanup_ms": 0.0072,
+              "total_ms": 6.3794
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "endpoint+dense",
+              "begin": "19534849942136",
+              "end": "19534850299740",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.57604,
+              "host_submit_ms": 0.0085,
+              "host_wait_ms": 3.7324,
+              "host_completion_ms": 3.7409,
+              "pipeline_ms": 0.0008,
+              "setup_ms": 0.0181,
+              "cleanup_ms": 0.0072,
+              "total_ms": 3.767
+            }
+          ]
+        },
+        {
+          "complete_call_ms": 23.8402,
+          "device_ms": 21.77672,
+          "host_completion_ms": 23.2814,
+          "markers": [
+            {
+              "phase": "legacy_repeat2",
+              "stage": "transport",
+              "begin": "19534850497878",
+              "end": "19534851088618",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.9074,
+              "host_submit_ms": 0.0061,
+              "host_wait_ms": 6.1349,
+              "host_completion_ms": 6.141,
+              "pipeline_ms": 0.0001,
+              "setup_ms": 0.0219,
+              "cleanup_ms": 0.0102,
+              "total_ms": 6.1732
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "endpoint",
+              "begin": "19534851118315",
+              "end": "19534851264687",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.46372,
+              "host_submit_ms": 0.005,
+              "host_wait_ms": 1.6854,
+              "host_completion_ms": 1.6904,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0084,
+              "cleanup_ms": 0.0091,
+              "total_ms": 1.7081
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "transport",
+              "begin": "19534851306253",
+              "end": "19534851829665",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.23412,
+              "host_submit_ms": 0.0091,
+              "host_wait_ms": 5.608,
+              "host_completion_ms": 5.6171,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0211,
+              "cleanup_ms": 0.0099,
+              "total_ms": 5.6484
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "endpoint",
+              "begin": "19534851873516",
+              "end": "19534852012752",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.39236,
+              "host_submit_ms": 0.0056,
+              "host_wait_ms": 1.7073,
+              "host_completion_ms": 1.7129,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0088,
+              "cleanup_ms": 0.0092,
+              "total_ms": 1.7311
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "transport",
+              "begin": "19534852036597",
+              "end": "19534852524993",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 4.88396,
+              "host_submit_ms": 0.0047,
+              "host_wait_ms": 5.0645,
+              "host_completion_ms": 5.0692,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0077,
+              "cleanup_ms": 0.0074,
+              "total_ms": 5.0845
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "endpoint+dense",
+              "begin": "19534852549880",
+              "end": "19534852839396",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.8951599999999997,
+              "host_submit_ms": 0.0183,
+              "host_wait_ms": 3.0325,
+              "host_completion_ms": 3.0508,
+              "pipeline_ms": 0.0004,
+              "setup_ms": 0.0131,
+              "cleanup_ms": 0.0074,
+              "total_ms": 3.0717
+            }
+          ]
+        }
+      ],
+      "sums": {
+        "device_ms": 85.66008,
+        "host_completion_ms": 89.775,
+        "complete_call_ms": 91.7218
+      }
+    },
+    "modern": {
+      "repeats": [
+        {
+          "complete_call_ms": 27.3528,
+          "device_ms": 21.44744,
+          "host_completion_ms": 24.3159,
+          "markers": [
+            {
+              "phase": "coupled_repeat0",
+              "stage": "transport:rows=12",
+              "begin": "19534960742265",
+              "end": "19534961096293",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.5402799999999996,
+              "host_submit_ms": 0.0184,
+              "host_wait_ms": 3.759,
+              "host_completion_ms": 3.7774,
+              "pipeline_ms": 0.0005,
+              "setup_ms": 0.047,
+              "cleanup_ms": 0.0096,
+              "total_ms": 3.8345
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=24",
+              "begin": "19534961177762",
+              "end": "19534961348690",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.70928,
+              "host_submit_ms": 0.0078,
+              "host_wait_ms": 1.9485,
+              "host_completion_ms": 1.9563,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0234,
+              "cleanup_ms": 0.007,
+              "total_ms": 1.987
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "transport:rows=12",
+              "begin": "19534961404432",
+              "end": "19534961757440",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.53008,
+              "host_submit_ms": 0.0089,
+              "host_wait_ms": 3.7912,
+              "host_completion_ms": 3.8001,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0236,
+              "cleanup_ms": 0.0081,
+              "total_ms": 3.832
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=24",
+              "begin": "19534961824715",
+              "end": "19534961996239",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.7152399999999999,
+              "host_submit_ms": 0.0083,
+              "host_wait_ms": 1.9592,
+              "host_completion_ms": 1.9675,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.023,
+              "cleanup_ms": 0.007,
+              "total_ms": 1.9977
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "transport:rows=12",
+              "begin": "19534962045434",
+              "end": "19534962399638",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.5420399999999996,
+              "host_submit_ms": 0.0063,
+              "host_wait_ms": 3.88,
+              "host_completion_ms": 3.8863,
+              "pipeline_ms": 0.0004,
+              "setup_ms": 0.0217,
+              "cleanup_ms": 0.007,
+              "total_ms": 3.9154
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=24",
+              "begin": "19534962448903",
+              "end": "19534962619847",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.7094399999999998,
+              "host_submit_ms": 0.006,
+              "host_wait_ms": 1.9846,
+              "host_completion_ms": 1.9906,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0218,
+              "cleanup_ms": 0.0069,
+              "total_ms": 2.0195
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "dopri_phase:rows=24",
+              "begin": "19534962667249",
+              "end": "19534962743141",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 0.7589199999999999,
+              "host_submit_ms": 0.0071,
+              "host_wait_ms": 0.9762,
+              "host_completion_ms": 0.9833,
+              "pipeline_ms": 0.0004,
+              "setup_ms": 0.0127,
+              "cleanup_ms": 0.0069,
+              "total_ms": 1.0033
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "dopri_phase:rows=24",
+              "begin": "19534962791994",
+              "end": "19534962865390",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 0.73396,
+              "host_submit_ms": 0.0067,
+              "host_wait_ms": 0.9283,
+              "host_completion_ms": 0.935,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0215,
+              "cleanup_ms": 0.0069,
+              "total_ms": 0.9636
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=12",
+              "begin": "19534962914746",
+              "end": "19534963085742",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.70996,
+              "host_submit_ms": 0.0056,
+              "host_wait_ms": 1.9704,
+              "host_completion_ms": 1.976,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0214,
+              "cleanup_ms": 0.0077,
+              "total_ms": 2.0054
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "dopri_phase:rows=12",
+              "begin": "19534963160244",
+              "end": "19534963239248",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 0.79004,
+              "host_submit_ms": 0.0089,
+              "host_wait_ms": 1.143,
+              "host_completion_ms": 1.1519,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0266,
+              "cleanup_ms": 0.0071,
+              "total_ms": 1.1859
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=12",
+              "begin": "19534963271987",
+              "end": "19534963442807",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.7082,
+              "host_submit_ms": 0.0393,
+              "host_wait_ms": 1.8522,
+              "host_completion_ms": 1.8915,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0047,
+              "cleanup_ms": 0.0079,
+              "total_ms": 1.9044
+            }
+          ]
+        },
+        {
+          "complete_call_ms": 25.8209,
+          "device_ms": 21.448439999999998,
+          "host_completion_ms": 23.891,
+          "markers": [
+            {
+              "phase": "coupled_repeat1",
+              "stage": "transport:rows=12",
+              "begin": "19534963511404",
+              "end": "19534963864872",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.53468,
+              "host_submit_ms": 0.0088,
+              "host_wait_ms": 3.7437,
+              "host_completion_ms": 3.7525,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0298,
+              "cleanup_ms": 0.007,
+              "total_ms": 3.7895
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=24",
+              "begin": "19534963904175",
+              "end": "19534964075359",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.71184,
+              "host_submit_ms": 0.0106,
+              "host_wait_ms": 1.8636,
+              "host_completion_ms": 1.8742,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0135,
+              "cleanup_ms": 0.0089,
+              "total_ms": 1.8968
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "transport:rows=12",
+              "begin": "19534964106868",
+              "end": "19534964459752",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.5288399999999998,
+              "host_submit_ms": 0.0055,
+              "host_wait_ms": 3.6876,
+              "host_completion_ms": 3.6931,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0217,
+              "cleanup_ms": 0.0071,
+              "total_ms": 3.7221
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=24",
+              "begin": "19534964507479",
+              "end": "19534964678871",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.7139199999999999,
+              "host_submit_ms": 0.0053,
+              "host_wait_ms": 2.013,
+              "host_completion_ms": 2.0183,
+              "pipeline_ms": 0.0001,
+              "setup_ms": 0.0215,
+              "cleanup_ms": 0.007,
+              "total_ms": 2.0469
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "transport:rows=12",
+              "begin": "19534964710212",
+              "end": "19534965064764",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.54552,
+              "host_submit_ms": 0.0096,
+              "host_wait_ms": 3.7154,
+              "host_completion_ms": 3.725,
+              "pipeline_ms": 0.0004,
+              "setup_ms": 0.0256,
+              "cleanup_ms": 0.0074,
+              "total_ms": 3.7584
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=24",
+              "begin": "19534965110961",
+              "end": "19534965282153",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.7119199999999999,
+              "host_submit_ms": 0.0094,
+              "host_wait_ms": 1.9664,
+              "host_completion_ms": 1.9758,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0206,
+              "cleanup_ms": 0.0071,
+              "total_ms": 2.0037
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "dopri_phase:rows=24",
+              "begin": "19534965328967",
+              "end": "19534965404943",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 0.75976,
+              "host_submit_ms": 0.0082,
+              "host_wait_ms": 1.0463,
+              "host_completion_ms": 1.0545,
+              "pipeline_ms": 0.0005,
+              "setup_ms": 0.0244,
+              "cleanup_ms": 0.0071,
+              "total_ms": 1.0865
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "dopri_phase:rows=24",
+              "begin": "19534965453171",
+              "end": "19534965526747",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 0.73576,
+              "host_submit_ms": 0.007,
+              "host_wait_ms": 1.016,
+              "host_completion_ms": 1.023,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0181,
+              "cleanup_ms": 0.0071,
+              "total_ms": 1.0485
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=12",
+              "begin": "19534965559568",
+              "end": "19534965730364",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.70796,
+              "host_submit_ms": 0.0064,
+              "host_wait_ms": 1.8517,
+              "host_completion_ms": 1.8581,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0225,
+              "cleanup_ms": 0.0071,
+              "total_ms": 1.8879
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "dopri_phase:rows=12",
+              "begin": "19534965783279",
+              "end": "19534965862263",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 0.78984,
+              "host_submit_ms": 0.007,
+              "host_wait_ms": 0.9955,
+              "host_completion_ms": 1.0025,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0229,
+              "cleanup_ms": 0.0069,
+              "total_ms": 1.0326
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=12",
+              "begin": "19534965895437",
+              "end": "19534966066277",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.7084,
+              "host_submit_ms": 0.0059,
+              "host_wait_ms": 1.9081,
+              "host_completion_ms": 1.914,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0222,
+              "cleanup_ms": 0.0082,
+              "total_ms": 1.9446
+            }
+          ]
+        },
+        {
+          "complete_call_ms": 23.4691,
+          "device_ms": 19.008119999999998,
+          "host_completion_ms": 21.438200000000002,
+          "markers": [
+            {
+              "phase": "coupled_repeat2",
+              "stage": "transport:rows=12",
+              "begin": "19534966124094",
+              "end": "19534966468894",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.448,
+              "host_submit_ms": 0.0085,
+              "host_wait_ms": 3.6668,
+              "host_completion_ms": 3.6753,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.024,
+              "cleanup_ms": 0.0079,
+              "total_ms": 3.7074
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=24",
+              "begin": "19534966516431",
+              "end": "19534966678303",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.61872,
+              "host_submit_ms": 0.0084,
+              "host_wait_ms": 1.8285,
+              "host_completion_ms": 1.8369,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0245,
+              "cleanup_ms": 0.0071,
+              "total_ms": 1.8688
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "transport:rows=12",
+              "begin": "19534966724927",
+              "end": "19534967051231",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.2630399999999997,
+              "host_submit_ms": 0.0095,
+              "host_wait_ms": 3.5333,
+              "host_completion_ms": 3.5428,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0212,
+              "cleanup_ms": 0.0071,
+              "total_ms": 3.5714
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=24",
+              "begin": "19534967109567",
+              "end": "19534967262039",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.5247199999999999,
+              "host_submit_ms": 0.0166,
+              "host_wait_ms": 1.869,
+              "host_completion_ms": 1.8856,
+              "pipeline_ms": 0.0004,
+              "setup_ms": 0.0154,
+              "cleanup_ms": 0.0074,
+              "total_ms": 1.9088
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "transport:rows=12",
+              "begin": "19534967294141",
+              "end": "19534967602397",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.08256,
+              "host_submit_ms": 0.0163,
+              "host_wait_ms": 3.2392,
+              "host_completion_ms": 3.2555,
+              "pipeline_ms": 0.0004,
+              "setup_ms": 0.0135,
+              "cleanup_ms": 0.0071,
+              "total_ms": 3.2765
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=24",
+              "begin": "19534967634390",
+              "end": "19534967778042",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.43652,
+              "host_submit_ms": 0.0056,
+              "host_wait_ms": 1.5632,
+              "host_completion_ms": 1.5688,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0223,
+              "cleanup_ms": 0.0072,
+              "total_ms": 1.5986
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "dopri_phase:rows=24",
+              "begin": "19534967823266",
+              "end": "19534967886630",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 0.63364,
+              "host_submit_ms": 0.0073,
+              "host_wait_ms": 0.8938,
+              "host_completion_ms": 0.9011,
+              "pipeline_ms": 0.0004,
+              "setup_ms": 0.0232,
+              "cleanup_ms": 0.007,
+              "total_ms": 0.9317
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "dopri_phase:rows=24",
+              "begin": "19534967933366",
+              "end": "19534967994106",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 0.6073999999999999,
+              "host_submit_ms": 0.0058,
+              "host_wait_ms": 0.8558,
+              "host_completion_ms": 0.8616,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0217,
+              "cleanup_ms": 0.0071,
+              "total_ms": 0.8906
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=12",
+              "begin": "19534968025013",
+              "end": "19534968164317",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.3930399999999998,
+              "host_submit_ms": 0.0056,
+              "host_wait_ms": 1.5208,
+              "host_completion_ms": 1.5264,
+              "pipeline_ms": 0.0002,
+              "setup_ms": 0.0214,
+              "cleanup_ms": 0.0071,
+              "total_ms": 1.5551
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "dopri_phase:rows=12",
+              "begin": "19534968214791",
+              "end": "19534968278511",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 0.6372,
+              "host_submit_ms": 0.0099,
+              "host_wait_ms": 0.8144,
+              "host_completion_ms": 0.8243,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0258,
+              "cleanup_ms": 0.007,
+              "total_ms": 0.8574
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=12",
+              "begin": "19534968309665",
+              "end": "19534968445993",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.36328,
+              "host_submit_ms": 0.0057,
+              "host_wait_ms": 1.5542,
+              "host_completion_ms": 1.5599,
+              "pipeline_ms": 0.0003,
+              "setup_ms": 0.0217,
+              "cleanup_ms": 0.0069,
+              "total_ms": 1.5888
+            }
+          ]
+        }
+      ],
+      "sums": {
+        "device_ms": 61.903999999999996,
+        "host_completion_ms": 69.6451,
+        "complete_call_ms": 76.6428
+      }
+    },
+    "readbacks": {
+      "coupled_readback_7": {
+        "stage": "dopri_phase",
+        "bytes": "398304",
+        "sha256": "6de47a39a354529949b442322a0502d4f0aecb3df7269baa03693a500a5253ce"
+      },
+      "coupled_readback_6": {
+        "stage": "dopri_phase",
+        "bytes": "398304",
+        "sha256": "a85c09b3329b8bfae3d1349963ad0eec89446e313e4bc9710461413d4d42fe10"
+      },
+      "legacy_repeat0_readback_3": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "3f65040286af09d4e4f51b3e41ec0361316c4809460ab35e54199daf7eb21aa5"
+      },
+      "coupled_readback_9": {
+        "stage": "dopri_phase",
+        "bytes": "199152",
+        "sha256": "6e6ffd4c6458e3673652e0c6d0a417627357889910ccd643a07f022ffca7a847"
+      },
+      "legacy_repeat0_readback_6": {
+        "stage": "dense",
+        "bytes": "51348",
+        "sha256": "97a79f2bea024ea70bbc1a58f715f7d65fbbde0df2e08039eb1d11bed5d54efd"
+      },
+      "coupled_readback_0": {
+        "stage": "transport",
+        "bytes": "225552",
+        "sha256": "108da9b8c72238312d1f41f22f74f495be6e87947ddad43ac8b6fe3e705f1b8f"
+      },
+      "coupled_readback_10": {
+        "stage": "endpoint",
+        "bytes": "183792",
+        "sha256": "1ecd2b392e38a25479b9c06d11c02ac9fef06f336ff555e4a5b28c189707eed3"
+      },
+      "legacy_repeat0_readback_1": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "fd272998e3798ceecfd22670ec6a0ff701f78708b9e910b6917a742c2ca6430d"
+      },
+      "coupled_readback_2": {
+        "stage": "transport",
+        "bytes": "225552",
+        "sha256": "2e0263461e276200c4aed78c0f52a63b7ded9731059e89ccb85351ca050825ca"
+      },
+      "legacy_repeat1_readback_2": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "c81657da807d47d536c85621597f785429a6e778d4d5f7d3e4e0c901cfcf545c"
+      },
+      "coupled_readback_5": {
+        "stage": "endpoint",
+        "bytes": "367584",
+        "sha256": "df28bdc922dd021e8519e42ca48d33c011a0fb0bbef3b43b9dc6a6a74fe7e978"
+      },
+      "legacy_repeat2_readback_4": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "2fd4369ab5a8852de76ffa4ee78337218fef1b9f644295c49aea7cabd0d1e79e"
+      },
+      "legacy_repeat1_readback_4": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "2fd4369ab5a8852de76ffa4ee78337218fef1b9f644295c49aea7cabd0d1e79e"
+      },
+      "legacy_repeat0_readback_0": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "16c92a604d5fa798be96acf4d557291896555062c22b108b50c5b072e78c94f0"
+      },
+      "legacy_repeat2_readback_0": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "16c92a604d5fa798be96acf4d557291896555062c22b108b50c5b072e78c94f0"
+      },
+      "legacy_repeat0_readback_4": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "2fd4369ab5a8852de76ffa4ee78337218fef1b9f644295c49aea7cabd0d1e79e"
+      },
+      "legacy_repeat1_readback_1": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "fd272998e3798ceecfd22670ec6a0ff701f78708b9e910b6917a742c2ca6430d"
+      },
+      "coupled_readback_1": {
+        "stage": "endpoint",
+        "bytes": "367584",
+        "sha256": "696dcb1856222174005991f3fe43bd2968768b2670d7a464ecc83acd53ac026e"
+      },
+      "legacy_repeat1_readback_5": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "32c3a2f603bf4b663daf02a7bf25626e2b89c091a341e2db980fa39d5b1ecc3b"
+      },
+      "legacy_repeat1_readback_3": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "3f65040286af09d4e4f51b3e41ec0361316c4809460ab35e54199daf7eb21aa5"
+      },
+      "legacy_repeat2_readback_6": {
+        "stage": "dense",
+        "bytes": "51348",
+        "sha256": "97a79f2bea024ea70bbc1a58f715f7d65fbbde0df2e08039eb1d11bed5d54efd"
+      },
+      "legacy_repeat2_readback_2": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "c81657da807d47d536c85621597f785429a6e778d4d5f7d3e4e0c901cfcf545c"
+      },
+      "legacy_repeat2_readback_5": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "32c3a2f603bf4b663daf02a7bf25626e2b89c091a341e2db980fa39d5b1ecc3b"
+      },
+      "legacy_repeat0_readback_5": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "32c3a2f603bf4b663daf02a7bf25626e2b89c091a341e2db980fa39d5b1ecc3b"
+      },
+      "legacy_repeat1_readback_0": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "16c92a604d5fa798be96acf4d557291896555062c22b108b50c5b072e78c94f0"
+      },
+      "legacy_repeat2_readback_1": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "fd272998e3798ceecfd22670ec6a0ff701f78708b9e910b6917a742c2ca6430d"
+      },
+      "legacy_repeat1_readback_6": {
+        "stage": "dense",
+        "bytes": "51348",
+        "sha256": "97a79f2bea024ea70bbc1a58f715f7d65fbbde0df2e08039eb1d11bed5d54efd"
+      },
+      "legacy_repeat0_readback_2": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "c81657da807d47d536c85621597f785429a6e778d4d5f7d3e4e0c901cfcf545c"
+      },
+      "coupled_readback_8": {
+        "stage": "endpoint",
+        "bytes": "183792",
+        "sha256": "d721b5e34fcc4c6e82d6519d757e25f9207782c59c4b19151472274951965514"
+      },
+      "coupled_readback_3": {
+        "stage": "endpoint",
+        "bytes": "367584",
+        "sha256": "2261dafb7bb3522795d16edcadd0a96e431ae25ebfcc802c44130fea4c6b2848"
+      },
+      "coupled_readback_4": {
+        "stage": "transport",
+        "bytes": "225552",
+        "sha256": "0445f85b6f2245292b0f09ba36c056c6f6f057c89dcbdc67e5f1965a0f8608ff"
+      },
+      "legacy_repeat2_readback_3": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "3f65040286af09d4e4f51b3e41ec0361316c4809460ab35e54199daf7eb21aa5"
+      }
+    },
+    "identity": {
+      "selected_device": "AMD Radeon 780M Graphics",
+      "selected_driver": "AMD proprietary driver: 26.8.1 (LLPC)",
+      "retained_scalar_route": "native binary32",
+      "product_mode": "default",
+      "timestamp_valid_bits": "64",
+      "timestamp_period_ns": "10",
+      "coupled_rows": "12",
+      "coupled_projection_budget": "24",
+      "timestamp_scope": "opt-in device marker span includes original barriers and scheduling; not isolated shader time or calibrated host/driver overhead; existing host governor unchanged; finite original critical0/critical1/flat intervals, plus current 12-row Schwarzschild DP/sample cohorts; not frame, cold, full-science or release qualification",
+      "legacy_call_timing_scope": "original synchronous interval call including allocation, packing, decoding and existing marker/readback observers; excludes SetUp, assertions, digest serialization and result disposal; unchanged general-Kerr/flat inputs and projection budget; no cold, frame or release claim",
+      "coupled_call_timing_scope": "sum of synchronous construction and interior sampling calls, including allocation, packing, decoding and existing marker/readback observers; excludes SetUp, assertions between calls and result disposal; unchanged 12-row inputs and projection budget; no cold, frame or release claim"
+    },
+    "selected_modules": {
+      "camera": {
+        "array": "kCameraShader",
+        "stage": "camera",
+        "bytes": "47720",
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+      },
+      "transport": {
+        "array": "kTransportShader",
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+      },
+      "endpoint": {
+        "array": "kEndpointShader",
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+      },
+      "dense": {
+        "array": "kDenseShader",
+        "stage": "dense",
+        "bytes": "78380",
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2"
+      },
+      "initialize": {
+        "array": "kInitializeShader",
+        "stage": "initialize",
+        "bytes": "57596",
+        "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3"
+      },
+      "ray_camera": {
+        "array": "kRayCameraShader",
+        "stage": "ray_camera",
+        "bytes": "45368",
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+      },
+      "dopri_phase": {
+        "array": "kDopriPhaseShader",
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+      }
+    },
+    "expected_complete_readback_count": 32,
+    "executed_modules": [
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "dense",
+        "bytes": "78380",
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+        "loaded_index": "3",
+        "handle": "3",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "dense",
+        "bytes": "78380",
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+        "loaded_index": "3",
+        "handle": "3",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "dense",
+        "bytes": "78380",
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+        "loaded_index": "3",
+        "handle": "3",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "loaded_index": "6",
+        "handle": "6",
+        "bindings": "2"
+      },
+      {
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "loaded_index": "6",
+        "handle": "6",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "loaded_index": "6",
+        "handle": "6",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "loaded_index": "6",
+        "handle": "6",
+        "bindings": "2"
+      },
+      {
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "loaded_index": "6",
+        "handle": "6",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "loaded_index": "6",
+        "handle": "6",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "transport",
+        "bytes": "85832",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "loaded_index": "1",
+        "handle": "1",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "loaded_index": "6",
+        "handle": "6",
+        "bindings": "2"
+      },
+      {
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "loaded_index": "6",
+        "handle": "6",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      },
+      {
+        "stage": "dopri_phase",
+        "bytes": "59228",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "loaded_index": "6",
+        "handle": "6",
+        "bindings": "2"
+      },
+      {
+        "stage": "endpoint",
+        "bytes": "99728",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "loaded_index": "2",
+        "handle": "2",
+        "bindings": "2"
+      }
+    ],
+    "instance_api_duration_ms": 1239.9034000000001,
+    "separate_provisioning_attribution_ms": 0.0
+  },
+  "scope": "Original native integrated controls with unchanged scientific/refusal/recovery assertions, same-child mapped SDK/AMD and terminal ownership. No full qualification, cold-frame, release or production adoption.",
+  "reader_bindings": {
+    "path": "out/native-wave32-timestamp-evidence/reader-bindings.json",
+    "bytes": 153203,
+    "sha256": "51883781ca0c8d6892a5e39b3cc38b0cf0acd9b73462946fc9a7e69d28c66123"
+  },
+  "root_reader_admission": {
+    "path": "out/native-wave32-timestamp-evidence/root-admission.json",
+    "bytes": 364,
+    "sha256": "ba217f10f9856eda22cf90f741cb536318d51f0586e84ed54c1f2fe950915428"
+  },
+  "native_provider_scope": "Same-child observed SDK loader and AMD modules, exact Windows PID/birth and terminal post-seals; accessible consumer scope only. Windows sampled child WorkingSet is not aggregate Windows/GPU-memory accounting."
+}

@@ -1,0 +1,81 @@
+{
+  "schema": "sirius-native-packed-runtime-plan-v1",
+  "admitted": true,
+  "source_revision": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+  "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "stage": "bin/windows-msvc/native-wave32-matched-current",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "control_profile": "abba",
+  "order": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "actions": {
+    "a1": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "b1": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "b2": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "a2": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "child_environment": {
+    "a1": {
+      "TEMP": "renders/native-wave32-runtime-abba/a1",
+      "TMP": "renders/native-wave32-runtime-abba/a1"
+    },
+    "b1": {
+      "TEMP": "renders/native-wave32-runtime-abba/b1",
+      "TMP": "renders/native-wave32-runtime-abba/b1"
+    },
+    "b2": {
+      "TEMP": "renders/native-wave32-runtime-abba/b2",
+      "TMP": "renders/native-wave32-runtime-abba/b2"
+    },
+    "a2": {
+      "TEMP": "renders/native-wave32-runtime-abba/a2",
+      "TMP": "renders/native-wave32-runtime-abba/a2"
+    }
+  },
+  "phase_prerequisites": {
+    "timestamp_acceptance": {
+      "path": "out/native-wave32-timestamp-evidence/timestamp-acceptance.json",
+      "identity": {
+        "bytes": 53071,
+        "sha256": "51c39a344b3e758eda4638042b39e2d93cdc9262a0d4b3ea39eb6db7b3e86c67"
+      }
+    }
+  }
+}

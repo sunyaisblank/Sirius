@@ -1,0 +1,83 @@
+{
+  "schema": "sirius-native-wave32-PE-auditor-source-v1",
+  "source_only": true,
+  "executed": false,
+  "runtime_admitted": false,
+  "preimage": {
+    "commit": "fd530d957d2e0737f5453d88d78d979f8ed17607",
+    "path": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-pe-audit/audit_export_windows_paths.py",
+    "identity": {
+      "path": "out/native-wave32-pe-audit/originals/audit_export_windows_paths.py",
+      "bytes": 18525,
+      "sha256": "1a1e617d533788dda35578a3596bf5ea506a9ee5b2fb1b65ae95625f6cefacbb",
+      "mode": "0644"
+    }
+  },
+  "reader": {
+    "path": "out/native-wave32-pe-audit/audit_export_wave32.py",
+    "bytes": 27794,
+    "sha256": "ad96cc93d8cde650659bac02d5644d51a4b4411aa26f91c38513fab0452338b5",
+    "mode": "0644"
+  },
+  "AST_syntax_parse_only": true,
+  "cli": [
+    "python3",
+    "-B",
+    "out/native-wave32-pe-audit/audit_export_wave32.py",
+    "--export",
+    "bin/windows-msvc/native-wave32-matched-current",
+    "--revision",
+    "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+    "--run-id",
+    "39120634635",
+    "--output",
+    "out/native-wave32-pe-audit/actual-5d993d12-audit.json"
+  ],
+  "current_program_scope": {
+    "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+    "private_producer_revision_expected_by_root": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+    "inputs": "out/native-wave32-producer-inputs",
+    "candidate_device_source": "out/native-wave32-source/vulkan_device.cpp",
+    "profile": "native-wave32-transport-device-only",
+    "expected_private_objects": 7,
+    "wire_schemas": "Existing native-packed manifest/producer/static-PE labels retained for mature-reader compatibility; source and result explicitly distinguish wave32 and zero payload changes."
+  },
+  "retained_checks": [
+    "Every manifest member byte identity/safe relative name/case-collision/current regular-file inventory",
+    "Producer successful configure/build/source/before-after seals/revision/repository/run/attempt",
+    "Per-arm all40 main and2 owner exact PE byte payloads with MAP RVAs; full retained headers identical; all35 source SPVs identical; observer c948",
+    "Each actual vcxproj source count and actual per-source CL command/read records; original forced skip refusal for test sources",
+    "Both actual LINK command/read records, no WHOLEARCHIVE, selected private object inputs and canonical backend archive present",
+    "Canonical Vulkan object uniquely matches retained backend archive member; source records retained as separate provenance"
+  ],
+  "new_device_joins": [
+    "Exactly two compute objects per arm plus two observer objects and shared DP object:7 total",
+    "Per-source command switches after removing only include/output/source paths match canonical Vulkan actual switches; includes remain recorded for full ROOT review; retained/resource defines required",
+    "Candidate Vulkan command/read records consume the correct arm main retained header; baseline uses canonical source copy; all current producer-input files match source/build seals",
+    "Both private Vulkan COFF objects must be ordinary x64 COFF, external function symbol definitions bounded/decoded; unsupported BigObj/LTCG refuses",
+    "CreateVulkanDevice, EnumerateVulkanDevices, LoadKernel and GetOrCreatePipeline each have one MAP row owned by direct vulkan_device.obj, and matching defined symbol in the selected arm COFF object",
+    "Correct arm private objects must appear in LINK reads/commands before backend archive; opposite arm compute target forbidden",
+    "Both MAPs reject canonical Vulkan/retained_compute archive contributions; VERBOSE:LIB build text rejects Loaded canonical Vulkan archive member",
+    "Private candidate Vulkan object must differ from baseline, with same shader payloads"
+  ],
+  "success_fields": {
+    "native_wave32_device_object_and_map_joins_passed": true,
+    "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+    "zero_changed_SPV_payloads": true,
+    "private_compile_object_count": 7,
+    "full_producer_eligibility_passed": false,
+    "runtime_admitted": false
+  },
+  "failure_behavior": "Exclusive output creation outside immutable export. Failure records audit_completed:false, array/device joins false and exits1; no PE execution, staging, subprocesses or project imports.",
+  "remaining_root_admission": [
+    "Actual API/ZIP/source538 Git provenance and selected CRT/SDK/PE import authority",
+    "Read full actual MSVC/VERBOSE records, header precedence, selected tools/cache/alias metadata and source candidate feature-patch review",
+    "Current matched-array authority may be constructed only after actual reader PASS plus ROOT full producer admission",
+    "Actual required32 eligible native device behavior and unchanged scientific/benefit controls require separate runtime release"
+  ],
+  "limits": [
+    "Source-only now: no actual artifact PASS or product identity invented.",
+    "Source/COFF/MAP/link records establish object selection; not hardware subgroup width, numerical equivalence, JIT causation, benefit or release qualification.",
+    "Canonical Vulkan object equality is claimed only against its archive member. The candidate private device implementation intentionally differs from canonical."
+  ]
+}

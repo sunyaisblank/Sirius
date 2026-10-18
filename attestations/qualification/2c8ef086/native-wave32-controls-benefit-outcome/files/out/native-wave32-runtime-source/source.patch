@@ -1,0 +1,328 @@
+--- originals/materialize_phase.py
++++ materialize_phase.py
+@@ -8,8 +8,8 @@
+ import sys
+ 
+ ROOT = Path.cwd()
+-AUTH = ROOT / 'out/native-constant-runtime-authority-source'
+-READERS = ROOT / 'out/native-constant-runtime-source'
++AUTH = ROOT / 'out/native-wave32-runtime-source'
++READERS = ROOT / 'out/native-wave32-runtime-source'
+ 
+ 
+ def identity(path):
+@@ -40,11 +40,15 @@
+ assert stage.is_relative_to(ROOT / 'bin/windows-msvc') and stage.resolve(strict=True) == stage
+ artifacts_path, pe_authority_path = ROOT / artifacts_name, ROOT / pe_authority_name
+ artifacts = read(artifacts_path)['artifacts']
+-assert len(artifacts) == 1 and artifacts[0]['name'] == 'sirius-native-packed-matched-producer'
++assert len(artifacts) == 1 and artifacts[0]['name'] == 'sirius-native-wave32-matched-producer'
+ artifact = artifacts[0]
+ producer = read(stage / 'producer-result.json')
+ manifest = read(stage / 'manifest.json')
+ assert producer['passed'] is True and manifest['passed'] is True
++assert producer['producer_profile'] == 'native-wave32-transport-device-only'
++assert producer['shader_bytes_identical_between_arms'] is True
++assert type(producer['private_compile_object_count']) is int and producer['private_compile_object_count'] == 7
++assert type(producer['expected_private_compile_objects']) is int and producer['expected_private_compile_objects'] == 7
+ source = producer['source_revision']
+ assert source == manifest['source_revision'] == producer['github_sha']
+ assert artifact['workflow_run']['head_sha'] == source
+@@ -57,6 +61,13 @@
+ assert pe_authority['original27_test_bodies_and1492_assertion_lines_equal'] is True
+ assert pe_authority['seven_program_tables_and_public_constants_equal'] is True
+ assert pe_authority['owner2_payloads_equal'] is True
++assert pe_authority['native_wave32_device_object_and_map_joins_passed'] is True
++assert pe_authority['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
++assert set(pe_authority['arms']) == {'baseline', 'candidate'}
++left, right = (pe_authority['arms'][arm]['arrays'] for arm in ('baseline', 'candidate'))
++assert len(left) == len(right) == 40 and set(left) == set(right)
++assert all({key: left[name][key] for key in ('bytes', 'sha256')} ==
++           {key: right[name][key] for key in ('bytes', 'sha256')} for name in left)
+ assert pe_authority['manifest_identity'] == identity(stage / 'manifest.json')
+ assert pe_authority['producer_identity'] == identity(stage / 'producer-result.json')
+ for arm in ('baseline', 'candidate'):
+@@ -65,7 +76,7 @@
+     assert pe_authority['arms'][arm]['PE'] == selected
+     assert selected == {k: manifest['files'][relative][k] for k in ('bytes', 'sha256')}
+ head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+-assert head == '5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e'
++assert head == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+ assert not subprocess.check_output(['git', 'status', '--porcelain'])
+ 
+ # Parse the held source's static tables without importing its execution body.
+@@ -75,7 +86,7 @@
+         if node.targets[0].id in ('ACTION_NAMES', 'ACTION_ARMS', 'PROFILES'):
+             constants[node.targets[0].id] = ast.literal_eval(node.value)
+ order = constants['PROFILES'][phase]
+-work = ROOT / ('out/native-constant-runtime-' + phase)
++work = ROOT / ('out/native-wave32-runtime-' + phase)
+ assert not work.exists()
+ 
+ prior_keys = {'timestamp': [], 'abba': ['timestamp_acceptance'],
+@@ -129,10 +140,9 @@
+         path = Path(name)
+         assert identity(path) == row, ('Host input changed; assess before materializing', name)
+         files[name] = row
+-    elif not name.startswith(('out/', 'bin/', 'attestations/', 'renders/')):
+-        path = ROOT / name
+-        assert identity(path) == row, ('Mature source input changed', name)
+-        files[name] = row
++# Historical source rows belong to the old producer and are not replayed.
++# The exact clean2c8 HEAD above and fresh git-ls-files snapshot below bind
++# the current canonical/private sources; external host rows retain old pins.
+ 
+ paths = [ROOT / p for p in subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0') if p]
+ for directory in (AUTH, READERS, stage):
+@@ -189,13 +199,13 @@
+ 
+ amd = old['expected_amd_module']
+ plan = {'schema': 'sirius-native-packed-runtime-plan-v1', 'admitted': True, 'source_revision': source,
+-        'runner_source_revision': head, 'stage': stage_name, 'windows_checkout_unc': unc,
++        'runner_source_revision': head, 'canonical_CXX_source_revision': '2c8ef08693d46f57d5dea14efdbddd4874dac684', 'stage': stage_name, 'windows_checkout_unc': unc,
+         'control_profile': phase, 'order': order, 'actions': plan_actions, 'owner_rss_bytes': 4294967296,
+         'minimum_wsl_available_kib': 2097152, 'terminal_observer_seconds': 60,
+         'resource_semantics': '300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim',
+         'child_environment': environments, 'phase_prerequisites': prerequisites}
+ binding = {'schema': 'sirius-native-packed-runtime-bindings-v1', 'admitted': True, 'source_revision': source,
+-           'runner_source_revision': head, 'stage': stage_name, 'windows_checkout_unc': unc, 'control_profile': phase,
++           'runner_source_revision': head, 'canonical_CXX_source_revision': '2c8ef08693d46f57d5dea14efdbddd4874dac684', 'stage': stage_name, 'windows_checkout_unc': unc, 'control_profile': phase,
+            'manifest_identity': identity(stage / 'manifest.json'), 'producer_identity': identity(stage / 'producer-result.json'),
+            'artifact': {'repository': producer['repository'], 'name': artifact['name'], 'id': artifact['id'],
+                         'run_id': producer['run_id'], 'run_attempt': producer['run_attempt']},
+--- originals/materialize_reader_context.py
++++ materialize_reader_context.py
+@@ -15,7 +15,7 @@
+ import xml.etree.ElementTree as ET
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-SOURCE = ROOT / 'out/native-constant-runtime-source'
++SOURCE = ROOT / 'out/native-wave32-runtime-source'
+ 
+ 
+ def identity(path):
+@@ -47,8 +47,8 @@
+     phase, authority_name = sys.argv[1:]
+     assert phase in ('timestamp', 'abba', 'all8')
+     profile = 'remaining' if phase == 'all8' else phase
+-    work = ROOT / ('out/native-constant-runtime-' + profile)
+-    output = ROOT / ('out/native-constant-' +
++    work = ROOT / ('out/native-wave32-runtime-' + profile)
++    output = ROOT / ('out/native-wave32-' +
+                      {'timestamp': 'timestamp-evidence', 'abba': 'ABBA-evidence',
+                       'all8': 'all8-evidence'}[phase])
+     assert not output.exists()
+@@ -98,6 +98,8 @@
+     av = document(authority)
+     assert av['schema'] == 'sirius-native-packed-matched-array-authority-v1'
+     assert av['passed'] is True and av['producer_source_revision'] == producer
++    assert av['native_wave32_device_object_and_map_joins_passed'] is True
++    assert av['canonical_CXX_source_revision'] == bindings['canonical_CXX_source_revision'] == plan['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+     assert av['manifest_identity'] == bindings['manifest_identity']
+     assert av['producer_identity'] == bindings['producer_identity']
+     for field in ('actual_PE_payload_and_selector_joins_passed',
+@@ -107,7 +109,7 @@
+     assert set(av['arms']) == {'baseline', 'candidate'}
+     left, right = (av['arms'][arm]['arrays'] for arm in ('baseline', 'candidate'))
+     assert len(left) == len(right) == 40 and set(left) == set(right)
+-    assert {name for name in left if pin(left[name]) != pin(right[name])} == {'kTransportShader', 'kEndpointShader', 'kDenseShader', 'kInitializeShader', 'kDopriPhaseShader'}
++    assert {name for name in left if pin(left[name]) != pin(right[name])} == set()
+     for arm in ('baseline', 'candidate'):
+         relative = 'payload/' + arm + '/original_' + arm + '_controls.exe'
+         assert av['arms'][arm]['PE'] == pin(manifest['files'][relative]) == identity(stage / relative)
+@@ -210,6 +212,7 @@
+     hardware.update(supports_fp64=True, rounds_fp64_to_nearest=True)
+     value = {'schema': 'sirius-native-packed-evidence-bindings-v1', 'admitted': True,
+              'phase': phase, 'producer_source_revision': producer, 'runner_source_revision': runner,
++             'canonical_CXX_source_revision': '2c8ef08693d46f57d5dea14efdbddd4874dac684',
+              'observed_instance_api_minimum_improvement_percent': 0, 'files': files,
+              'array_authority': {'path': authority_name, **identity(authority)},
+              'native_identity': hardware,
+--- originals/native_evidence.py
++++ native_evidence.py
+@@ -161,11 +161,13 @@
+         assert authority['original27_test_bodies_and1492_assertion_lines_equal'] is True
+         assert authority['seven_program_tables_and_public_constants_equal'] is True
+         assert authority['owner2_payloads_equal'] is True
++        assert authority['native_wave32_device_object_and_map_joins_passed'] is True
++        assert authority['canonical_CXX_source_revision'] == v['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+         self.arms = authority['arms']
+         assert set(self.arms) == {'baseline', 'candidate'}
+         a, b = (self.arms[k]['arrays'] for k in ('baseline', 'candidate'))
+         assert len(a) == len(b) == 40 and set(a) == set(b)
+-        changed = {'kTransportShader', 'kEndpointShader', 'kDenseShader', 'kInitializeShader', 'kDopriPhaseShader'}
++        changed = set()
+         assert {k for k in a if pin(a[k]) != pin(b[k])} == changed
+         for arm in self.arms.values():
+             for row in arm['arrays'].values(): pin(row)
+--- originals/protocol.pending.json
++++ protocol.pending.json
+@@ -4,8 +4,8 @@
+   "runtime_admitted": false,
+   "adapter_complete": true,
+   "producer_source_revision": "ROOT_PENDING_ACTUAL_ACCEPTED_CI_PRODUCER_SOURCE",
+-  "canonical_CXX_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+-  "runner_source_revision": "ROOT_PENDING_ACTUAL_CURRENT_HEAD",
++  "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
++  "runner_source_revision": "ROOT_PENDING_ACTUAL_CLEAN_LOCAL_HEAD_2c8ef086",
+   "control_filters": {
+     "control-1": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+     "control-2": "RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal",
+@@ -123,7 +123,7 @@
+     },
+     "pool_subtract_resample_retry": false,
+     "source_exact_math": {
+-      "path": "out/native-constant-runtime-source/numeric_gates.py",
++      "path": "out/native-wave32-runtime-source/numeric_gates.py",
+       "bytes": 2890,
+       "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1"
+     }
+@@ -135,19 +135,20 @@
+     "Concrete native data-reader bindings+ROOT admission; no runtime evidence exists in this source packet"
+   ],
+   "candidate_scope": {
+-    "changed_main_array": [
+-      "kTransportShader",
+-      "kEndpointShader",
+-      "kDenseShader",
+-      "kInitializeShader",
+-      "kDopriPhaseShader"
+-    ],
+-    "unchanged_main_arrays": 35,
+-    "unchanged_other_SPVs": 30,
++    "changed_main_arrays": [],
++    "unchanged_main_arrays": 40,
++    "unchanged_SPVs": 35,
+     "both_owner_payloads_exact_required": true,
+-    "scratch_or_lane_or_arithmetic_mode_change": false,
+-    "native_RTConstant_refinement_requires_actual_word_gates": true
++    "all7_program_tables_and_public_constants_exact_required": true,
++    "shader_header_scratch_lane_or_arithmetic_mode_change": false,
++    "candidate_only_change": "Reviewed private VulkanDevice ordinary nativeFP32 Transport requiredSubgroupSize32; original64-thread shader workgroup unchanged.",
++    "native_wave32_device_object_and_map_joins_passed_required": true,
++    "original_same_provider_word_and22_gates_required": true
+   },
+-  "wire_compatibility": "Mature native-packed schemas/decision labels are compatibility identifiers;this RTConstant candidate does not pack scratch or change arithmetic modes.",
+-  "historical_unexecuted_wire_draft_origin_commit": "898e52ca3ecbab002a33ad0bb9420732717685d3"
++  "wire_compatibility": "Mature native-packed wire/decision labels only; no scratch packing or shader change and no prior native-constant PASS transferred.",
++  "historical_unexecuted_wire_draft_origin_commit": "898e52ca3ecbab002a33ad0bb9420732717685d3",
++  "stage": "ROOT_PENDING_ACTUAL_VERIFIED_EXPORT_UNDER_bin/windows-msvc",
++  "artifact": "sirius-native-wave32-matched-producer",
++  "producer_profile": "native-wave32-transport-device-only",
++  "private_compile_objects": 7
+ }
+--- originals/reader-bindings.pending.json
++++ reader-bindings.pending.json
+@@ -3,7 +3,7 @@
+   "admitted": false,
+   "phase": "ROOT_PENDING_timestamp_OR_abba_OR_all8",
+   "producer_source_revision": "ROOT_PENDING_ACTUAL_ACCEPTED_CI_PRODUCER_SOURCE",
+-  "runner_source_revision": "ROOT_PENDING_ACTUAL_CURRENT_HEAD",
++  "runner_source_revision": "ROOT_PENDING_ACTUAL_CLEAN_LOCAL_HEAD_2c8ef086",
+   "observed_instance_api_minimum_improvement_percent": 0,
+   "files": "ROOT_PENDING_current_physical_reader_code_and_all_phase_binding_static_raw_terminal_proof_pins",
+   "array_authority": {
+@@ -86,7 +86,13 @@
+     "producer_identity": {
+       "bytes": null,
+       "sha256": null
+-    }
++    },
++    "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
++    "native_wave32_device_object_and_map_joins_passed": false,
++    "expected_changed_main_arrays": [],
++    "expected_unchanged_main_arrays": 40,
++    "expected_unchanged_SPVs": 35
+   },
+-  "context_writer_interface": "materialize_reader_context.py timestamp|abba|all8 ARRAY_AUTHORITY_RELATIVE;actual current producer/runner derived from sealed phase binding+M."
++  "context_writer_interface": "materialize_reader_context.py timestamp|abba|all8 ARRAY_AUTHORITY_RELATIVE;actual current producer/runner derived from sealed phase binding+M.",
++  "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684"
+ }
+--- originals/run_system.py
++++ run_system.py
+@@ -66,17 +66,20 @@
+     assert manifest['complete_host_or_sdk_or_tool_dso_backup'] is False
+     assert manifest['source_revision'] == producer['source_revision'] == SOURCE
+     assert producer['schema'] == 'sirius-native-packed-matched-ci-producer-v1'
++    assert producer['producer_profile'] == 'native-wave32-transport-device-only'
++    assert producer['shader_bytes_identical_between_arms'] is True
++    assert type(producer['expected_private_compile_objects']) is int and producer['expected_private_compile_objects'] == 7
+     for key in ['passed','configure_passed','build_passed','source_unchanged','frozen_build_inputs_unchanged']:
+         assert producer[key] is True, key
+     for key in ['pe_or_provider_or_test_executed','mandatory_gate_executed','native_build_attestation_claimed','scientific_qualification_claimed','release_or_adoption_claimed']:
+         assert producer[key] is False, key
+-    assert producer['failure'] is None and type(producer['private_compile_object_count']) is int and producer['private_compile_object_count'] == 5
++    assert producer['failure'] is None and type(producer['private_compile_object_count']) is int and producer['private_compile_object_count'] == 7
+     artifact = binding['artifact']
+     assert artifact['repository'] == producer['repository'] == 'sunyaisblank/Sirius'
+     assert artifact['run_id'] == producer['run_id'] and artifact['run_attempt'] == producer['run_attempt']
+     assert type(artifact['run_id']) is str and artifact['run_id'].isdigit()
+     assert type(artifact['run_attempt']) is str and artifact['run_attempt'].isdigit()
+-    assert artifact['name'] == 'sirius-native-packed-matched-producer' and type(artifact['id']) is int and artifact['id'] > 0
++    assert artifact['name'] == 'sirius-native-wave32-matched-producer' and type(artifact['id']) is int and artifact['id'] > 0
+     assert isinstance(manifest['files'],dict) and manifest['files'] and len({k.casefold() for k in manifest['files']}) == len(manifest['files'])
+     for key,row in manifest['files'].items():
+         logical=PurePosixPath(key)
+@@ -103,8 +106,8 @@
+     configure=commands[0]['argv'];build=commands[1]['argv']
+     assert configure[:6]==[tools['cmake'],'--preset','windows-msvc','-DSIRIUS_ALIGNMENT_MODE=qualification','-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON','-DCMAKE_CONFIGURATION_TYPES:STRING=Release'] and len(configure)==7
+     option='-DCMAKE_PROJECT_Sirius_INCLUDE='
+-    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-constant-windows-source/matched-producer.cmake'
+-    assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativePackedMatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
++    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-wave32-windows-source/matched-producer.cmake'
++    assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativeWave32MatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
+     assert build[12].startswith('/bl:') and PureWindowsPath(build[12][4:])==PureWindowsPath(producer['export_root'])/'build.binlog'
+     assert all(PureWindowsPath(c['cwd'])==PureWindowsPath(producer['source_root']) for c in commands)
+     cache=(stage/'metadata/config/CMakeCache.txt').read_text(encoding='utf-8-sig')
+@@ -172,6 +175,7 @@
+ 
+ binding_hash = digest(binding_path)
+ assert binding['source_revision'] == SOURCE and binding['runner_source_revision'] == HEAD
++assert plan['canonical_CXX_source_revision'] == binding['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+ assert plan['order'] == ORDER and set(plan['actions']) == set(ORDER)
+ for label in ORDER:
+     action = plan['actions'][label]
+--- originals/run_terminal.py
++++ run_terminal.py
+@@ -22,17 +22,20 @@
+     assert manifest['complete_host_or_sdk_or_tool_dso_backup'] is False
+     assert manifest['source_revision'] == producer['source_revision'] == bindings['source_revision']
+     assert producer['schema'] == 'sirius-native-packed-matched-ci-producer-v1'
++    assert producer['producer_profile'] == 'native-wave32-transport-device-only'
++    assert producer['shader_bytes_identical_between_arms'] is True
++    assert type(producer['expected_private_compile_objects']) is int and producer['expected_private_compile_objects'] == 7
+     for key in ['passed','configure_passed','build_passed','source_unchanged','frozen_build_inputs_unchanged']:
+         assert producer[key] is True, key
+     for key in ['pe_or_provider_or_test_executed','mandatory_gate_executed','native_build_attestation_claimed','scientific_qualification_claimed','release_or_adoption_claimed']:
+         assert producer[key] is False, key
+-    assert producer['failure'] is None and type(producer['private_compile_object_count']) is int and producer['private_compile_object_count'] == 5
++    assert producer['failure'] is None and type(producer['private_compile_object_count']) is int and producer['private_compile_object_count'] == 7
+     artifact = bindings['artifact']
+     assert artifact['repository'] == producer['repository'] == 'sunyaisblank/Sirius'
+     assert artifact['run_id'] == producer['run_id'] and artifact['run_attempt'] == producer['run_attempt']
+     assert type(artifact['run_id']) is str and artifact['run_id'].isdigit()
+     assert type(artifact['run_attempt']) is str and artifact['run_attempt'].isdigit()
+-    assert artifact['name'] == 'sirius-native-packed-matched-producer' and type(artifact['id']) is int and artifact['id'] > 0
++    assert artifact['name'] == 'sirius-native-wave32-matched-producer' and type(artifact['id']) is int and artifact['id'] > 0
+     assert isinstance(manifest['files'],dict) and manifest['files'] and len({k.casefold() for k in manifest['files']}) == len(manifest['files'])
+     for key,row in manifest['files'].items():
+         logical=PurePosixPath(key)
+@@ -59,8 +62,8 @@
+     configure=commands[0]['argv'];build=commands[1]['argv']
+     assert configure[:6]==[tools['cmake'],'--preset','windows-msvc','-DSIRIUS_ALIGNMENT_MODE=qualification','-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON','-DCMAKE_CONFIGURATION_TYPES:STRING=Release'] and len(configure)==7
+     option='-DCMAKE_PROJECT_Sirius_INCLUDE='
+-    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-constant-windows-source/matched-producer.cmake'
+-    assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativePackedMatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
++    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-wave32-windows-source/matched-producer.cmake'
++    assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativeWave32MatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
+     assert build[12].startswith('/bl:') and PureWindowsPath(build[12][4:])==PureWindowsPath(producer['export_root'])/'build.binlog'
+     assert all(PureWindowsPath(c['cwd'])==PureWindowsPath(producer['source_root']) for c in commands)
+     cache=(stage/'metadata/config/CMakeCache.txt').read_text(encoding='utf-8-sig')
+@@ -162,6 +165,7 @@
+ ORDER=PROFILES[plan['control_profile']]
+ assert case in ORDER and set(bindings['actions'])==set(ORDER) and set(bindings['terminal_actions'])==set(ORDER)
+ assert plan['source_revision']==bindings['source_revision'] and plan['runner_source_revision']==bindings['runner_source_revision']
++assert plan['canonical_CXX_source_revision']==bindings['canonical_CXX_source_revision']=='2c8ef08693d46f57d5dea14efdbddd4874dac684'
+ assert all(re.fullmatch('[0-9a-f]{40}',plan[k]) for k in ['source_revision','runner_source_revision'])
+ assert plan['stage']==bindings['stage'] and plan['stage'].startswith('bin/windows-msvc/')
+ assert plan['windows_checkout_unc']==bindings['windows_checkout_unc']==r'\\wsl.localhost\Ubuntu\home\astra\.project\Sirius'

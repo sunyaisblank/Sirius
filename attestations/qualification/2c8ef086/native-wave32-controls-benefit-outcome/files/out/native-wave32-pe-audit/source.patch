@@ -1,0 +1,330 @@
+--- originals/audit_export_windows_paths.py
++++ audit_export_wave32.py
+@@ -3,7 +3,8 @@
+ Header decoding is retained from f851 read_postproof.py::arrays. Windows source/
+ artifact joins follow the selected-record approach of 9d56406 reconstruction,
+ without its project imports, staging, subprocesses or native-gate authority.
+-This source has not been executed. ROOT must review it before use.
++Wave32 adds two private Vulkan objects and identical shader payloads. This source
++has not been executed. ROOT must review it before use.
+ """
+ from pathlib import Path
+ import argparse
+@@ -14,7 +15,8 @@
+ import xml.etree.ElementTree as ET
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-INPUTS = ROOT / "out/native-constant-producer-inputs"
++INPUTS = ROOT / "out/native-wave32-producer-inputs"
++CANONICAL_CXX_REVISION = "2c8ef08693d46f57d5dea14efdbddd4874dac684"
+ NS = {"m": "http://schemas.microsoft.com/developer/msbuild/2003"}
+ 
+ 
+@@ -56,8 +58,9 @@
+ 
+ 
+ def check_flags(command, label):
+-    for option in ("/std:c++latest", "/W4", "/WX", "/permissive-", "/utf-8", "SIRIUS_CONTRACT_MODE=2"):
++    for option in ("/std:c++latest", "/W4", "/WX", "/permissive-", "/utf-8"):
+         require(option.lower() in command.lower(), "Missing strict flag: " + label + " " + option)
++    require(re.search(r"SIRIUS_CONTRACT_MODE=2(?![0-9])", command), "Missing exact contract mode2: " + label)
+ 
+ 
+ def source_records(paths, suffix):
+@@ -149,6 +152,69 @@
+                 "Missing/ambiguous map-to-PE array join: " + name)
+         result[name] = {"bytes": len(payload), "sha256": hashlib.sha256(payload).hexdigest(),
+                         "locations": locations, "map_rvas": sorted(set(addresses))}
++    return result
++
++
++def coff_functions(path):
++    """Read ordinary AMD64 COFF external function definitions; fail on other formats."""
++    data = path.read_bytes()
++    require(len(data) >= 20, "Truncated COFF object")
++    machine, sections, _, pointer, count, optional, _ = struct.unpack_from("<HHIIIHH", data)
++    require(machine == 0x8664 and sections > 0 and optional == 0,
++            "Expected ordinary x64 COFF object; BigObj/LTCG needs separate review")
++    strings = pointer + count * 18
++    require(pointer >= 20 + sections * 40 and strings + 4 <= len(data), "COFF symbol bounds")
++    length = struct.unpack_from("<I", data, strings)[0]
++    require(length >= 4 and strings + length <= len(data), "COFF string bounds")
++    result, index = {}, 0
++    while index < count:
++        entry = pointer + index * 18
++        raw = data[entry:entry + 8]
++        if raw[:4] == b"\0" * 4:
++            offset = struct.unpack_from("<I", raw, 4)[0]
++            require(4 <= offset < length, "COFF name offset")
++            end = data.find(b"\0", strings + offset, strings + length)
++            require(end >= 0, "Unterminated COFF symbol")
++            name = data[strings + offset:end].decode("ascii")
++        else:
++            name = raw.rstrip(b"\0").decode("ascii")
++        value, section, kind, storage, auxiliary = struct.unpack_from("<IhHBB", data, entry + 8)
++        require(index + auxiliary < count, "COFF auxiliary symbol bounds")
++        if storage == 2 and kind & 0x20 and section > 0:
++            require(section <= sections and name not in result, "COFF duplicate/invalid function")
++            result[name] = {"section": section, "value": value}
++        index += auxiliary + 1
++    require(result, "No external COFF function definitions")
++    return result
++
++
++def selected_command_semantics(command):
++    """Compare actual non-path compiler switches; retain includes for manual audit."""
++    body = " ".join(line for line in command.splitlines() if not line.startswith("^"))
++    body = re.sub(r'(?i)(?<!\S)/(?:external:)?I\s*(?:"[^"\r\n]*"|\S+)', " ", body)
++    body = re.sub(r'(?i)(?<!\S)/F[od]\s*(?:"[^"\r\n]*"|\S+)', " ", body)
++    body = re.sub(r'(?i)(?:[A-Z]:[^\s"]*|"[A-Z]:[^"\r\n]*")\.cpp(?=\s|$)', " ", body)
++    # The remaining switches include all /D feature defines and arithmetic/ABI flags.
++    return " ".join(body.lower().split())
++
++
++def map_device_functions(mapping, obj, arm):
++    definitions = coff_functions(obj)
++    result = {}
++    for prefix in ("?CreateVulkanDevice@backend@sirius@@", "?EnumerateVulkanDevices@backend@sirius@@",
++                   "?LoadKernel@VulkanDevice@backend@sirius@@",
++                   "?GetOrCreatePipeline@VulkanDevice@backend@sirius@@"):
++        rows = []
++        for line in mapping.splitlines():
++            match = re.match(r"\s*[0-9a-fA-F]{4}:[0-9a-fA-F]+\s+(\S+)\s+([0-9a-fA-F]{8,16})\b(.*)", line)
++            if match and match[1].startswith(prefix):
++                owner = match[3].split()[-1]
++                require(norm(owner) == "vulkan_device.obj", "Device definition is not a direct private object: " + arm)
++                require(match[1] in definitions, "MAP definition absent from selected private COFF object")
++                rows.append({"symbol": match[1], "address": match[2], "map_object": owner,
++                             "coff_definition": definitions[match[1]]})
++        require(len(rows) == 1, "Missing/ambiguous private device method MAP join: " + prefix)
++        result[prefix] = rows[0]
+     return result
+ 
+ 
+@@ -181,24 +247,46 @@
+     require(result["repository"] == "sunyaisblank/Sirius" and str(result["run_id"]) == args.run_id,
+             "Producer run/repository mismatch")
+     require(str(result["run_attempt"]) == "1", "Unexpected run attempt")
++    require(result["schema"] == "sirius-native-packed-matched-ci-producer-v1" and
++            result["producer_profile"] == "native-wave32-transport-device-only" and
++            result["shader_bytes_identical_between_arms"] is True and
++            type(result["expected_private_compile_objects"]) is int and
++            result["expected_private_compile_objects"] == 7 and
++            result["private_compile_object_count"] == 7, "Wrong wave32 producer/object profile")
+     before = document(export / "build-inputs-before.json")
+     require(before == document(export / "build-inputs-after.json"), "Build seals differ")
+     source = document(export / "source-before-configure.json")
++    for path in sorted(p for p in INPUTS.rglob("*") if p.is_file()):
++        require(not path.is_symlink(), "Aliased local producer input")
++        suffix = str(path.relative_to(ROOT)).replace("\\", "/")
++        selected_row(source, suffix, identity(path))
++        selected_row(before, suffix, identity(path))
++    require(identity(INPUTS / "observer/audited-observer.cpp")["sha256"] ==
++            "c9485d03ec55b5c1307a34097f15efbc58c4f84749e9f3736ad063a68676b601", "Observer changed")
++    require((INPUTS / "baseline/vulkan_device.cpp").read_bytes() ==
++            (ROOT / "src/sirius/backend/vulkan/vulkan_device.cpp").read_bytes(), "Baseline Vulkan source is not canonical")
++    require((INPUTS / "candidate/vulkan_device.cpp").read_bytes() ==
++            (ROOT / "out/native-wave32-source/vulkan_device.cpp").read_bytes(), "Candidate Vulkan source mismatch")
++    for header in ("retained_kernels.h", "retained_owner_kernels.h", "retained_owner_layout.h"):
++        require((INPUTS / "baseline" / header).read_bytes() == (INPUTS / "candidate" / header).read_bytes(),
++                "Full retained header differs between arms")
++    shaders = {arm: {p.name: identity(p) for p in (INPUTS / arm / "shaders").glob("*.spv")}
++               for arm in ("baseline", "candidate")}
++    require(len(shaders["baseline"]) == 35 and shaders["baseline"] == shaders["candidate"], "Expected identical35 SPVs")
+     for arm in ("baseline", "candidate"):
+         for header in ("retained_kernels.h", "retained_owner_kernels.h", "retained_owner_layout.h"):
+-            suffix = "out/native-constant-producer-inputs/" + arm + "/" + header
++            suffix = "out/native-wave32-producer-inputs/" + arm + "/" + header
+             selected_row(source, suffix, identity(INPUTS / arm / header))
+             selected_row(before, suffix, identity(INPUTS / arm / header))
+     for relative in ("src/sirius/backend/retained_compute.cpp", "tests/backend/retained_dopri_test.cpp",
+                      "src/sirius/backend/vulkan/vulkan_device.cpp", "cmake/sirius_toolchain.cmake"):
+         selected_row(source, relative, identity(ROOT / relative))
+-    selected_row(source, "out/native-constant-producer-inputs/observer/audited-observer.cpp",
++    selected_row(source, "out/native-wave32-producer-inputs/observer/audited-observer.cpp",
+                  identity(INPUTS / "observer/audited-observer.cpp"))
+     expected = {arm: arrays(INPUTS / arm / "retained_kernels.h") for arm in ("baseline", "candidate")}
+     require(all(len(v) == 40 for v in expected.values()), "Expected40 main arrays")
+     changed = [name for name in expected["baseline"] if expected["baseline"][name] != expected["candidate"][name]]
+-    require(set(changed) == {"kTransportShader", "kEndpointShader", "kDenseShader", "kInitializeShader", "kDopriPhaseShader"},
+-            "Unexpected arm payload delta")
++    require(not changed and expected["baseline"] == expected["candidate"], "Wave32 may not change any main array")
+     owner_arrays = arrays(INPUTS / "baseline/retained_owner_kernels.h")
+     require(len(owner_arrays) == 2 and owner_arrays == arrays(INPUTS / "candidate/retained_owner_kernels.h"),
+             "Owner payload delta")
+@@ -209,67 +297,95 @@
+         image_base, sections = pe_sections(exe)
+         require(not re.search(r"sirius_backend(?:\.lib)?[:(][^\s)]*retained_compute\.obj", mapping, re.I),
+                 "Canonical compute object extracted")
+-        device_members = set(re.findall(r"sirius_backend(?:\.lib)?[:(][^\s)]*vulkan_device\.obj", mapping, re.I))
+-        require(len({v.lower() for v in device_members}) == 1, "Canonical device map member missing/ambiguous")
++        require(not re.search(r"sirius_backend(?:\.lib)?[:(][^\s)]*vulkan_device\.obj", mapping, re.I),
++                "Canonical device object extracted instead of private implementation")
+         products[arm] = {"PE": identity(exe), "map": identity(exe.with_suffix(".map")),
+                          "main_arrays": verify_arrays(exe, mapping, "retained_program", expected[arm], image_base, sections),
+                          "owner_arrays": verify_arrays(exe, mapping, "retained_owner", owner_arrays, image_base, sections),
+-                         "canonical_device_map_members": sorted(device_members)}
++                         "canonical_device_map_members": []}
+         for name in changed:
+             foreign = expected["candidate" if arm == "baseline" else "baseline"][name]
+             require(all(data.find(foreign) < 0 for _, _, _, data in sections),
+                     "Foreign changed-arm shader remains in PE: " + arm + " " + name)
+     tlogs = {}
+-    targets = ["native_packed_dopri"] + ["native_packed_" + arm + "_" + kind
++    targets = ["native_wave32_dopri"] + ["native_wave32_" + arm + "_" + kind
+                for arm in ("baseline", "candidate") for kind in ("compute", "controls")]
++    all_objects = []
+     for target in targets:
+         base = export / "metadata/private-objects" / (target + ".dir") / "Release"
+-        objects = list(base.rglob("*.obj"))
+-        require(len(objects) == 1, "Missing/extra private object: " + target)
+-        commands = logs(base, "CL.command.")
+-        reads = logs(base, "CL.read.")
++        objects = sorted(base.rglob("*.obj"))
++        require(len(objects) == (2 if target.endswith("compute") else 1), "Private object count: " + target)
++        all_objects += objects
++        commands, reads = logs(base, "CL.command."), logs(base, "CL.read.")
+         require(commands and reads, "Missing CL command/read tlogs: " + target)
+-        command = "\n".join(text(p) for p in commands)
+-        dependencies = norm("\n".join(text(p) for p in reads))
+-        check_flags(command, target)
+-        if target == "native_packed_dopri":
+-            require("retained_kernels.h" not in dependencies, "Shared DP consumes an arm header")
+-        else:
+-            arm = "baseline" if "baseline" in target else "candidate"
+-            other = "candidate" if arm == "baseline" else "baseline"
+-            for header in (("retained_kernels.h", "retained_owner_layout.h", "retained_owner_kernels.h")
+-                           if target.endswith("compute") else ("retained_kernels.h", "retained_owner_layout.h")):
+-                suffix = "out/native-constant-producer-inputs/" + arm + "/" + header
+-                require(suffix in dependencies, "Private dependency missing: " + suffix)
+-            require("/" + other + "/retained_kernels.h" not in dependencies, "Other arm header consumed")
+-        if not target.endswith("compute"):
+-            require("fail_on_skip.h" in command.lower(), "Missing required-runtime skip refusal")
+         project = ET.parse(export / "metadata/projects" / (target + ".vcxproj")).getroot()
+         sources = [v.attrib["Include"] for v in project.findall(".//m:ClCompile[@Include]", NS)]
+-        require(len(sources) == 1, "Private target source count differs")
+-        expected_source = ("tests/backend/retained_dopri_test.cpp" if target == "native_packed_dopri"
+-                           else "src/sirius/backend/retained_compute.cpp" if target.endswith("compute")
+-                           else "out/native-constant-producer-inputs/observer/audited-observer.cpp")
+-        require(norm(sources[0]).endswith(expected_source), "Wrong private source: " + target)
+-        tlogs[target] = {"object": identity(objects[0]), "source": sources[0],
++        arm = "baseline" if "baseline" in target else "candidate"
++        expected_sources = (["tests/backend/retained_dopri_test.cpp"] if target == "native_wave32_dopri" else
++                            ["src/sirius/backend/retained_compute.cpp", "out/native-wave32-producer-inputs/" + arm + "/vulkan_device.cpp"]
++                            if target.endswith("compute") else ["out/native-wave32-producer-inputs/observer/audited-observer.cpp"])
++        require(len(sources) == len(expected_sources) and
++                all(sum(norm(v).endswith(suffix) for v in sources) == 1 for suffix in expected_sources),
++                "Unexpected private target sources: " + target)
++        records = {}
++        for suffix in expected_sources:
++            command = source_records(commands, suffix)
++            dependencies = norm(source_records(reads, suffix))
++            check_flags(command, target + " " + suffix)
++            basename = Path(suffix).stem.lower()
++            selected_objects = [p for p in objects if p.stem.lower() in (basename, basename + ".cpp")]
++            require(len(selected_objects) == 1, "Cannot uniquely join private object by source basename")
++            if target == "native_wave32_dopri":
++                require("retained_kernels.h" not in dependencies, "Shared DP consumes arm header")
++            else:
++                other = "candidate" if arm == "baseline" else "baseline"
++                headers = (("retained_kernels.h", "retained_owner_layout.h", "retained_owner_kernels.h")
++                           if basename == "retained_compute" else ("retained_kernels.h", "retained_owner_layout.h")
++                           if not target.endswith("compute") else ("retained_kernels.h",) if arm == "candidate" else ())
++                for header in headers:
++                    require("out/native-wave32-producer-inputs/" + arm + "/" + header in dependencies,
++                            "Expected private header dependency missing")
++                require("/" + other + "/retained_kernels.h" not in dependencies, "Other arm header consumed")
++            if not target.endswith("compute"):
++                require("fail_on_skip.h" in command.lower(), "Missing required-runtime skip refusal")
++            if target.endswith("compute"):
++                require("SIRIUS_HAS_RETAINED_COMPUTE=1" in command and "SIRIUS_RELEASE_RESOURCE_LOCKED=1" in command,
++                        "Missing canonical retained/resource feature define")
++            records[suffix] = {"object": identity(selected_objects[0]),
++                               "object_path": str(selected_objects[0].relative_to(export)),
++                               "command_semantics": selected_command_semantics(command),
++                               "source_record": suffix}
++        tlogs[target] = {"sources": sources, "records": records,
+                          "command_tlogs": [str(p.relative_to(export)) for p in commands],
+                          "read_tlogs": [str(p.relative_to(export)) for p in reads]}
++    require(len(all_objects) == 7, "Expected exactly seven exported private objects")
+     for arm in ("baseline", "candidate"):
+-        base = export / "metadata/private-objects" / ("native_packed_" + arm + "_controls.dir") / "Release"
+-        link_reads = logs(base, "link.read.")
+-        link_commands = logs(base, "link.command.")
++        base = export / "metadata/private-objects" / ("native_wave32_" + arm + "_controls.dir") / "Release"
++        link_reads, link_commands = logs(base, "link.read."), logs(base, "link.command.")
+         require(link_reads and link_commands, "Missing LINK records: " + arm)
+         dependencies = norm("\n".join(text(p) for p in link_reads))
+-        command = "\n".join(text(p) for p in link_commands)
+-        require("/wholearchive" not in command.lower(), "Unexpected WHOLEARCHIVE")
+-        for target in ("native_packed_" + arm + "_compute", "native_packed_" + arm + "_controls", "native_packed_dopri"):
++        command = norm("\n".join(text(p) for p in link_commands))
++        require("/wholearchive" not in command, "Unexpected WHOLEARCHIVE")
++        require("native_wave32_" + ("candidate" if arm == "baseline" else "baseline") + "_compute.dir" not in dependencies,
++                "Other arm object linked")
++        archive_suffix = "/src/sirius/backend/release/sirius_backend.lib"
++        require(archive_suffix in dependencies and archive_suffix in command, "Backend archive not linked")
++        for target in ("native_wave32_" + arm + "_compute", "native_wave32_" + arm + "_controls", "native_wave32_dopri"):
+             folder = export / "metadata/private-objects" / (target + ".dir") / "Release"
+-            obj = next(folder.rglob("*.obj"))
+-            suffix = norm(obj.relative_to(export / "metadata/private-objects"))
+-            require(suffix in dependencies, "Private object absent from LINK read: " + suffix)
+-        require("/src/sirius/backend/release/sirius_backend.lib" in dependencies, "Backend archive not linked")
++            for obj in folder.rglob("*.obj"):
++                suffix = norm(obj.relative_to(export / "metadata/private-objects"))
++                require(suffix in dependencies and suffix in command, "Private object missing from LINK: " + suffix)
++                require(command.index(suffix) < command.index(archive_suffix), "Private object not before canonical archive")
++        device_obj = export / tlogs["native_wave32_" + arm + "_compute"]["records"][
++            "out/native-wave32-producer-inputs/" + arm + "/vulkan_device.cpp"]["object_path"]
++        mapping = text(export / "payload" / arm / ("original_" + arm + "_controls.map"))
++        products[arm]["private_device_object"] = identity(device_obj)
++        products[arm]["private_device_COFF_MAP_joins"] = map_device_functions(mapping, device_obj, arm)
+         products[arm]["link_read_tlogs"] = [str(p.relative_to(export)) for p in link_reads]
+         products[arm]["link_command_tlogs"] = [str(p.relative_to(export)) for p in link_commands]
++    build_log = text(export / "build.stdout.log")
++    require(not re.search(r"Loaded[^\r\n]*sirius_backend\.lib\([^)]*vulkan_device\.obj\)", build_log, re.I),
++            "VERBOSE:LIB reports canonical Vulkan object extraction")
+     backend = export / "metadata/canonical-backend/src/sirius/backend"
+     device_root = backend / "sirius_backend.dir/Release"
+     devices = [p for p in device_root.rglob("*.obj") if p.name.lower() in ("vulkan_device.obj", "vulkan_device.cpp.obj")]
+@@ -281,13 +397,30 @@
+     require(norm(device_source) in norm(device_reads), "Device source missing from actual dependencies")
+     archive = backend / "Release/sirius_backend.lib"
+     archive_label = archive_member(archive, devices[0])
++    canonical_semantics = selected_command_semantics(device_commands)
++    for arm in ("baseline", "candidate"):
++        records = tlogs["native_wave32_" + arm + "_compute"]["records"]
++        for row in records.values():
++            require(row["command_semantics"] == canonical_semantics,
++                    "Private compute/device command switches differ from canonical Vulkan usage")
++    require(tlogs["native_wave32_baseline_compute"]["records"][
++        "out/native-wave32-producer-inputs/baseline/vulkan_device.cpp"]["object"]["sha256"] !=
++        tlogs["native_wave32_candidate_compute"]["records"][
++        "out/native-wave32-producer-inputs/candidate/vulkan_device.cpp"]["object"]["sha256"],
++        "Private candidate Vulkan object is identical to baseline")
+     return {"schema": "sirius-native-packed-static-PE-audit-v1", "audit_completed": True,
+             "array_and_private_compile_checks_passed": True, "full_producer_eligibility_passed": False,
++            "native_wave32_device_object_and_map_joins_passed": True,
++            "canonical_CXX_source_revision": CANONICAL_CXX_REVISION,
++            "zero_changed_SPV_payloads": True, "private_compile_object_count": 7,
++            "manifest_identity": identity(export / "manifest.json"),
++            "producer_identity": identity(export / "producer-result.json"),
+             "source_revision": args.revision, "run_id": args.run_id, "products": products,
+             "private_compiles": tlogs, "changed_main_arrays": changed,
+             "canonical_device": {"object": identity(devices[0]), "archive": identity(archive),
+                                  "exact_archive_member_label": archive_label,
+-                                 "actual_CL_source_records_joined": True},
++                                 "actual_CL_source_records_joined": True,
++                                 "scope": "Canonical archive object retained for provenance only; not selected by either arm MAP."},
+             "remaining_manual_gates": [
+                 "Independent read of actual source/tool/API provenance, complete MSVC commands and VERBOSE:LIB records; this narrow reader is not that whole admission.",
+                 "Actual selected DLL/CRT/SDK imports, command/source/API/ZIP provenance and full current producer admission; no PE/provider execution is performed here."],
+@@ -309,6 +442,8 @@
+     except (ValueError, KeyError, IndexError, TypeError, OSError, struct.error, UnicodeError, ET.ParseError) as error:
+         report = {"schema": "sirius-native-packed-static-PE-audit-v1", "audit_completed": False,
+                   "array_and_private_compile_checks_passed": False, "full_producer_eligibility_passed": False,
++                  "native_wave32_device_object_and_map_joins_passed": False,
++                  "canonical_CXX_source_revision": CANONICAL_CXX_REVISION,
+                   "failure": str(error), "runtime_admitted": False}
+     args.output.parent.mkdir(parents=True, exist_ok=True)
+     with args.output.open("x", encoding="utf-8") as stream:

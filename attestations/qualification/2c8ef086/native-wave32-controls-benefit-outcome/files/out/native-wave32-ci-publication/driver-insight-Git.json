@@ -1,0 +1,425 @@
+{
+  "schema": "sirius-native-wave32-driver-insight-Git-v1",
+  "commit": "1cb6e6aaff04ddd54ff7ee133b773257338f2c52",
+  "parent": "b8ecca0ff4d7fe399db5f37922416f589e822e98",
+  "branch": "refs/heads/development/native-fp32-packed-scratch-runtime-2026-10-18",
+  "tag": "refs/tags/evidence/native-wave32-driver-insight-2c8ef086",
+  "bundle": "attestations/qualification/2c8ef086/native-wave32-driver-insight",
+  "payload_files": 57,
+  "payload_bytes": 10940808,
+  "stored_files": {
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/MANIFEST.json": {
+      "bytes": 22833,
+      "sha256": "46837b5dcbc2b3672149627ea641660ff29cfb677376bfa377c668d63ae88d41",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "6ad6271b3466c225c1bb6c99e447910857edb977"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-constant-preservation/independent-platform-frame-preservation.json": {
+      "bytes": 4259,
+      "sha256": "fafdf53982a8fbf49384348a8f70ad5f10273c021a9483e32a4af48c5c05a754",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "65f135c00cef66d6aad4bbbceefdb7b6add7ea1c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-constant-preservation/root-platform-frame-Git.json": {
+      "bytes": 33606,
+      "sha256": "aaeb707b55f2fce287a13f12a25c618e841084f97337af5e1f57f0ca560e5420",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "92f8ee0743506099614de3f6d0b921883f413a4c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/ShaderQuery.cs": {
+      "bytes": 15023,
+      "sha256": "25e73224591c7c9a524d93792872ac5316aa95868a768f1044d477db49324af0",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "4ed7025aac56fe667624408e8b5dcb9d1d4370b3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/ShaderWave32Query.cs": {
+      "bytes": 17094,
+      "sha256": "83704337100c4c35191d6cd8422f2bd1734b65de995b202a2b10d5f3c9194d3c",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "b9ade8cc03684f6033c158fd839128f96acb61a3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/command-availability.json": {
+      "bytes": 794,
+      "sha256": "ec4d3c3e5efda978a9b3773aa8294e7fb5c7e56db5308415d0858d6fd7a0bf60",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "3a59a2f6cc6fab9e6fb679881d260013d67e1b1f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/command-availability.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/command-availability.stdout": {
+      "bytes": 593,
+      "sha256": "cf26ace3ea7ad4b739b503253b23251cd76a3bba570983f9560bf3b3f9ca2a5c",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "956f5b71fab8d9ed990a64cc5c1919da5377520d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/guard_query.ps1": {
+      "bytes": 3813,
+      "sha256": "0ae00d19dd90a8777c4a6ad37ae33a41e5ff7a6ce6a0989aeb23b72bdadec695",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "99c44b159060147db337f1a48ef7f7993b917eee"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/independent-driver-results-review.json": {
+      "bytes": 5772,
+      "sha256": "350814bdb5c97580a0f288b023b6e333a1e909a8833dce0bc7d55dc362a17ebc",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "b5ca5f38183703d5470a73f5b41e6d1ece315dd6"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/independent-source-review.json": {
+      "bytes": 4544,
+      "sha256": "06e3dae3ec4e564eb5ae117729d8973d69fff2178d9619be6b4daad89f33507a",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "0871dce9c776835b040767d0bbac750ab648f9bb"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/independent-wave32-source-review.json": {
+      "bytes": 3738,
+      "sha256": "45889b4704ba8df6df85a9c198170dfea8f2c73156521d85d2676c088e3e2e1f",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "64c844d00302178c89915675d1c1f9851b601b18"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/issue44-before-platform-update.json": {
+      "bytes": 12186,
+      "sha256": "eb40f76f31fa76559e05ead7bbceed81bb5569351e4186d2cf17f52364319ad9",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "66574823aa1e0b1e5fa4612e380c5298e69f4997"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/issue44-platform-update-response.json": {
+      "bytes": 13577,
+      "sha256": "eb467dd012a1a2bd371f781392a57ff88475a2be1e6348c73d15f0112eb0ce74",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "0d7f2139850574d0535c842e08fd047825bbac8c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/issue44-platform-update.json": {
+      "bytes": 11232,
+      "sha256": "909ec48b507bc76fc30fdb52556dc9af94675d8970d5873f7ccdc92142a5c428",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "b74b32c681df8afb9e4e4d6cd63d6bd66f975072"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/query.ps1": {
+      "bytes": 1099,
+      "sha256": "f747ef70869c45a279888694ea144320913b5a06ebe4ea9b6b63dcecfd5de8ce",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "ee77c9f1d585278a362b480cc0cfe2f56c6c394d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/query_wave32.ps1": {
+      "bytes": 1105,
+      "sha256": "8792d2630e2f8f120c6a5c1e961055a6969cf942dcb2309d43f07a650fa47721",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "220ddb6c7a488841be9e2f308a0af7623a9f7a19"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/read_driver_object.py": {
+      "bytes": 3769,
+      "sha256": "e2a6d6a4612ce352435fa443bd7e88b351f366b145927469f8b0182899517264",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "8386d988783a734b4c7d9c98127c6240a466c56f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/root-findings.json": {
+      "bytes": 2232,
+      "sha256": "8c421cdeedac6e602499c656116f243c022684d192e6ec0aff3f2afe77f11166",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "7ff58f05d1a93c47cda339fdefbaa96452feb1cd"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/run_query.py": {
+      "bytes": 1991,
+      "sha256": "7e4d78ed9fa9696bca5eca35e8f53cb633357045d1241127d801dbb5acd67837",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "27d2cbd6f4561bfb5cbb635052d9c40f57ff1c96"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/run_wave32_query.py": {
+      "bytes": 1991,
+      "sha256": "915cec4702644925c3bae4dad4ec0304856a730ef81199a453ac427c41c2d143",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e05cf66d713b991dd0b023c9a1e10542e0b89ad4"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-SPIRV-admission.json": {
+      "bytes": 500,
+      "sha256": "effeea9c6083e6cca865ed76e07ad99d032a6592aac928cb3e1d0a160899af3c",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "4f8337098ea5d2751d9be38c3f09169cf28f3e7d"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-bridge.json": {
+      "bytes": 863,
+      "sha256": "55230889266290977c8b2703b316e293f60b3f0992c9320b05f57f7b6a79128d",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "b5827089c82d6c6199e1f1e55062b6b3ecc4f330"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-bridge.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-config.json": {
+      "bytes": 2766,
+      "sha256": "b99d93097ff2abcc5416bab03b49e64edc2cf2abdb31053f8b2f7c7173b97afd",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "74cea81b07559f475b94c389fefd67e710a95d9a"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/decoded-driver-object.json": {
+      "bytes": 3996,
+      "sha256": "bc0d7ace75e90c7029dcce12673fd97d309a246e543ccb54364c8cfca5da87b2",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "a1971aab84373a17869e77517af536998042121b"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/owner.json": {
+      "bytes": 785,
+      "sha256": "c6e5d1729779104e30cd5697428ec9767cce38e7406694b55dd177f1256f4797",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "5f070d9cca3408b4d7a3f1f110db7b4723dbf3e4"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/result.json": {
+      "bytes": 5216,
+      "sha256": "74c91275c1cb00b8786e8379689bdf4cecf525dd89b890d5ac615c5336e33e22",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "664ceed316da9919e900d1c0010055a2d8e37b43"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/samples.json": {
+      "bytes": 8765,
+      "sha256": "37e006d0b6fd71c634ac7c493b02d5d0751a9a93eaf3c46b47e9bafff60cc62c",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "4651bb9d3ee2290f777f1a981a4a6c404e3feb4e"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/shader/shader-info-0.bin": {
+      "bytes": 72,
+      "sha256": "caaaebd283d895fbe91cda8ef787ef2b6ed77dbc2e7cf57e0025f054b745864d",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "58abf29a82d85f67651087e82b9a14ad109115b5"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/shader/shader-info-1.bin": {
+      "bytes": 2763344,
+      "sha256": "bf080bebf607b73c8e6b0de1c2b882cc7779feca8751e882032cce2435664ad3",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "c6fe6e0db86c1d807b88c0156b9ae8942d96edbd"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/shader/shader-info-2.isa.txt": {
+      "bytes": 2651958,
+      "sha256": "8ccba4dbe9219a3abad7d475a415717e3465c6d7492fd1df88bee97fc3776c21",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "c0f3ec81952f62ce2f21d67abc02cf5cf79b9cca"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-bridge.json": {
+      "bytes": 870,
+      "sha256": "ee3f2511a8aafca31fe6e604a590336b3235a4469bbdb12d2c93b14dde9bab0b",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "c91c1115c971c8050b561ad429d6aaa037d54831"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-bridge.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-config.json": {
+      "bytes": 2839,
+      "sha256": "20721ec67d35d93209d50237e31193f22224f7446a7ffe7cb5c1a98ee66968d4",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "6a6f1e6ceae64453611336bb7f083b10254fa2f3"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-query/decoded-driver-object.json": {
+      "bytes": 3996,
+      "sha256": "f5c2fc3e8d329033cd800bb71c2e082940b0c3cc5fe5f6ffb3ea6f9d7e40f6b8",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "929b1cc5af16221d74a42f353bba61920a07b61c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-query/owner.json": {
+      "bytes": 777,
+      "sha256": "97c1339052d245f9087b9c5cff1959e0afddfd3dbe00447db975ecd44f3d5b8b",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "39c596032dbc8c7d8b664120efe892ace7e93cd6"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-query/result.json": {
+      "bytes": 5761,
+      "sha256": "36d722ea0bc5bd092a705bd3afb0463a8abfa085c3c2565d76d40d13ac270338",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "9fe1be08b0957f839374409384a45071fdae621c"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-query/samples.json": {
+      "bytes": 8873,
+      "sha256": "f846bd9e4afd0fa051e74fe2a41e57e36f885064054491eb1fa1e58602b48521",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "042f0237e929a59e81a1aae7b46d43ef46886f8a"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-query/shader/shader-info-0.bin": {
+      "bytes": 72,
+      "sha256": "c7aeff83d2a637c4eb520bd3ab3dca9fcf6e73a51e5991e0bce651d5a6c8133b",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "303ea82bae78cc371e488b0bed7486ed0e440185"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-query/shader/shader-info-1.bin": {
+      "bytes": 2751432,
+      "sha256": "a89cd440c644b7ba382c0b605c2bccc034d09154820046d30b595c82b0f822dd",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "b8a4ed19a8f9c83f5de8ab062cc58cf2318224e6"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-query/shader/shader-info-2.isa.txt": {
+      "bytes": 2450420,
+      "sha256": "6c9aae67bbeadfaa4ec66222e6360232b27bd8ea6ae60a9759447f80befcc980",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "daa412c466e1ae516df20ecdb800eaebb30688b8"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-query/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-wave32-query/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/vulkaninfo-help.json": {
+      "bytes": 171,
+      "sha256": "bb43fb8933d3ca40e0dcde7806678df71c0687c72f243080e36eb65b34fc7ab3",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "f03c5481316d2aaf1f41fe05df4e604b15dd0ef2"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/vulkaninfo-help.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/vulkaninfo-help.stdout": {
+      "bytes": 2453,
+      "sha256": "329e581b591d21ca30fc25b2ad1b48a81f80f55acf25001af8b20eca015c0acd",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "b306d08bd33ac1e950b21b990639d20b07473d2f"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/vulkaninfo-inventory.json": {
+      "bytes": 605,
+      "sha256": "7e4a1fe90a647ef206c10439db6f9973dcdcc34bf94d5e2488c37605872a3e7e",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "dd18873a38cdccf988c4c47a29f741a587b5b2f8"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/vulkaninfo-inventory.stderr": {
+      "bytes": 125,
+      "sha256": "10000b0c6c22a68433aa5713b94086643563809390eab31497357d81bf80966a",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "df6d1073eede21b6300afffcab5b332fd241ec71"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/vulkaninfo-inventory.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/vulkaninfo.txt": {
+      "bytes": 88903,
+      "sha256": "f3c8172b4efc89d2d51b203ad85b6fe2aa5ca6d74f764d641289ea380e6d3a59",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "8db3098856c44a67b0a305adb842b06d11d573e9"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-wave32-ci-publication/preserve_driver_insight.py": {
+      "bytes": 5454,
+      "sha256": "cf4e7d947bca7c35d45d76e85e8bc3e8cd2eb4ffb27cb6657700647095836ccc",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "66955f2f699e3e09e58dbc0922ad58f89c0b9369"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-wave32-ci-publication/runs-first.json": {
+      "bytes": 12276,
+      "sha256": "533d65e30f605ac336d17c5ca1f4202a3c143e408883a193c61d147c02b34ac2",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "6f6f685c9140eab1d81cb7c97a7f25f6fc668949"
+    },
+    "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-wave32-ci-publication/source-Git.json": {
+      "bytes": 29098,
+      "sha256": "c763c4021c663c7d48401af317edd48770a4630996ec4c287c185a08a0e882d1",
+      "mode": "0644",
+      "Git_mode": "100644",
+      "blob": "c345a2af961cde3a4b2dc107e6edd2e08d5db16b"
+    }
+  },
+  "stored_full_bytes_verified": true,
+  "all_source_copies_and_modes_equal": true,
+  "pushed": true,
+  "fresh_remote_verified": {
+    "branch": "1cb6e6aaff04ddd54ff7ee133b773257338f2c52",
+    "tag": "1cb6e6aaff04ddd54ff7ee133b773257338f2c52"
+  }
+}

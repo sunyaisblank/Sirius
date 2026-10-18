@@ -1,0 +1,61 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "bounded-native-Windows-control",
+    "start_utc":  "2026-10-18T11:13:32.7080897Z",
+    "owner_pid":  3936,
+    "owner_start_time_utc":  "2026-10-18T11:13:23.5785606Z",
+    "test_executable":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-wave32-matched-current\\payload\\baseline\\original_baseline_controls.exe",
+    "test_executable_sha256":  "04af9cd80c99491bbaa8d73721818fa2f8ada9c17be6fe4bb3ebdbaac9cd381b",
+    "arguments":  [
+                      "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+                      "--gtest_color=no",
+                      "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-wave32-runtime-abba\\native\\a2\\gtest.xml\""
+                  ],
+    "working_directory":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-wave32-matched-current\\payload\\baseline",
+    "outer_guard_seconds":  300,
+    "rss_guard_bytes":  4294967296,
+    "outer_stop":  false,
+    "status":  "completed",
+    "numerical_control_passed":  true,
+    "expected_cases":  [
+                           "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+                       ],
+    "qualification_claimed":  false,
+    "scope":  "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind":  "Control",
+    "system_inventory_passed":  false,
+    "private_producer_authority_kind":  "private-ci-producer-result-and-manifest",
+    "native_build_gate_authority_used":  false,
+    "private_producer_arm":  "baseline",
+    "source_private_manifest_sha256":  "2ca07bc45486534911bcd27f8d917571e76088e932c983c7e6a2ce3642b3466f",
+    "environment":  {
+                        "VK_DRIVER_FILES":  null,
+                        "VK_ICD_FILENAMES":  null,
+                        "VK_ADD_DRIVER_FILES":  null,
+                        "SIRIUS_VULKAN_DEVICE":  null,
+                        "SIRIUS_PRECISION":  null,
+                        "SIRIUS_MEMORY_BUDGET_MB":  null,
+                        "SIRIUS_DISPATCH_TARGET_MS":  null,
+                        "TEMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-wave32-runtime-abba\\a2",
+                        "TMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-wave32-runtime-abba\\a2",
+                        "TMPDIR":  null
+                    },
+    "test_pid":  7332,
+    "test_start_time_utc":  "2026-10-18T11:13:33.0970333Z",
+    "returncode":  0,
+    "exit_code_source":  "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent":  true,
+    "end_utc":  "2026-10-18T11:13:34.5921175Z",
+    "elapsed_seconds":  1.8757545999999998,
+    "peak_sampled_rss_bytes":  66973696,
+    "source_revision":  "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+    "live_source_revision":  "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+    "source_build_gate_sha256":  "f1c3448269058362a1a72d9735c205f465b7f8def6f23ddb0ee04092b3534d3d",
+    "source_build_gate_unchanged":  true,
+    "source_private_manifest_unchanged":  true,
+    "loaded_driver_modules_recorded":  true,
+    "test_executable_unchanged":  true,
+    "cleanup_errors":  [
+
+                       ]
+}

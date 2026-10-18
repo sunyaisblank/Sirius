@@ -1,0 +1,632 @@
+{
+  "schema": "sirius-native-wave32-private-source-publication-v1",
+  "commit": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+  "base": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "branch": "refs/heads/development/native-wave32-diagnostic-2026-10-18",
+  "files": {
+    ".github/workflows/native-wave32-diagnostic.yml": {
+      "bytes": 1295,
+      "sha256": "0d60cc2d164c5cdee116bc66255187b2c9c1fe81cdc8166ba66f24c18a8a5f3a",
+      "blob": "fc8f5fc8a4515039c10bd750768ced6cea8dbcd6",
+      "mode": "100644"
+    },
+    "out/native-wave32-ci-publication/publish_source.py": {
+      "bytes": 3162,
+      "sha256": "53395312b3feae87a0ccb2cbd7323ca1cd8b001575836824a8ae70af5aa2b67a",
+      "blob": "51567e3b3d355fdf769e54f5eff86103173da495",
+      "mode": "100644"
+    },
+    "out/native-wave32-ci-publication/root-compile-release.json": {
+      "bytes": 727,
+      "sha256": "906836eaf1954285f3f67f9e2447e6fcfd03283bc464897a4a089f7a52099164",
+      "blob": "7a31a3e556c499383720ee5df7344898cc39b70c",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d",
+      "blob": "7c01c580259525f99c375a0457c95aec93422eb7",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+      "blob": "0e93ad35d4e253f25bcc732dc7986e8028910b55",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+      "blob": "c0f8c1fdc1e3e6eb4d43da98c9a7042ad37bdf3e",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+      "blob": "a00a3fc70baec9a329f36ad8f09d0bc887569520",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+      "blob": "c7fa8ddd5e26529b5cbf22f83478a61b9b89b057",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "blob": "7a77767399a2e15bb585bb67c34c210e627100ea",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "blob": "7a77767399a2e15bb585bb67c34c210e627100ea",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_dense.spv": {
+      "bytes": 78380,
+      "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+      "blob": "f066d2cf115908944e6616e29ca2203313cd3b4a",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_dense_fp64.spv": {
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+      "blob": "3347d9dfbc56c0eed16f173dbe0479af301f124e",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_dense_portable.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "blob": "be9d28b834cdc298a603c9021bd632e75f778b88",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_dense_portable_fp64.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "blob": "be9d28b834cdc298a603c9021bd632e75f778b88",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_dopri_phase.spv": {
+      "bytes": 59228,
+      "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+      "blob": "80416c5a433b515aaa302c0f6ac6dc5887e48669",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_dopri_phase_fp64.spv": {
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+      "blob": "9158cc3f66e5a746d3e2071068c3da387cc8b18a",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_dopri_phase_portable.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "blob": "e2436ccd97bb3f1890ed94372abe7af3f2255914",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "blob": "e2436ccd97bb3f1890ed94372abe7af3f2255914",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+      "blob": "3e40641b0741688905911bc77387b2fc440fc0ce",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_endpoint.spv": {
+      "bytes": 99728,
+      "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+      "blob": "4c09855f3b0457cb4a36710853638fb286cd8abc",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_endpoint_fma.spv": {
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+      "blob": "c59ccc34a3c22f431ef473f02a64b8fcbcbec333",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_endpoint_fp64.spv": {
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+      "blob": "7fa089d4bade3d944b350d531296c769a802a5ae",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_endpoint_portable.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "blob": "91656d0add3e83de835d122236c3838b02892743",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_endpoint_portable_fp64.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "blob": "91656d0add3e83de835d122236c3838b02892743",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "blob": "e366b8b9de2bc1796bf8f901ab3d39dba280a525",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+      "blob": "734dc5c2bdce42880fee4641354b9a6173f80947",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_initialize.spv": {
+      "bytes": 57596,
+      "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+      "blob": "f91806ae1b9ba6c7ea0a05b36a324038d6ee2058",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_initialize_fp64.spv": {
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+      "blob": "fcb7b5370cd3f01630cd40e51891c7aff17891ba",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_initialize_portable.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "blob": "a2dd6c6ac81592ba9a9d2b7e09ddc5e4108f97d0",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_initialize_portable_fp64.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "blob": "a2dd6c6ac81592ba9a9d2b7e09ddc5e4108f97d0",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+      "blob": "7378cc593b18f15f9821ae3cf9b7970af9550701",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+      "blob": "e8913bd743790381c2a38b9d07da52472a694aec",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "blob": "8fd199c178ffab350b71938dcec9e064e24da2e6",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "blob": "8fd199c178ffab350b71938dcec9e064e24da2e6",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_transport.spv": {
+      "bytes": 85832,
+      "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+      "blob": "d02d11449c27674e187337595babb718b86e1554",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_transport_fma.spv": {
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+      "blob": "68f7d47f0cdb99cef70415a12419d123a808c10b",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_transport_fp64.spv": {
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+      "blob": "2a97c7dec274812b9d6c9dba45a3e070a7c07142",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_transport_portable.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "blob": "ce7fd3a5cde67dc10b3fd541fa59cd4cb0c01c03",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_transport_portable_fp64.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "blob": "ce7fd3a5cde67dc10b3fd541fa59cd4cb0c01c03",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+      "blob": "ac6f63f1943754187bd1d477c8b868fcfbad94d2",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/shaders/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+      "blob": "808cd164d54113adebb1cafaac430a41e00cc737",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/baseline/vulkan_device.cpp": {
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae",
+      "blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d",
+      "blob": "7c01c580259525f99c375a0457c95aec93422eb7",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+      "blob": "0e93ad35d4e253f25bcc732dc7986e8028910b55",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+      "blob": "c0f8c1fdc1e3e6eb4d43da98c9a7042ad37bdf3e",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+      "blob": "a00a3fc70baec9a329f36ad8f09d0bc887569520",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+      "blob": "c7fa8ddd5e26529b5cbf22f83478a61b9b89b057",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "blob": "7a77767399a2e15bb585bb67c34c210e627100ea",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "blob": "7a77767399a2e15bb585bb67c34c210e627100ea",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_dense.spv": {
+      "bytes": 78380,
+      "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+      "blob": "f066d2cf115908944e6616e29ca2203313cd3b4a",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_dense_fp64.spv": {
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+      "blob": "3347d9dfbc56c0eed16f173dbe0479af301f124e",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_dense_portable.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "blob": "be9d28b834cdc298a603c9021bd632e75f778b88",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_dense_portable_fp64.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "blob": "be9d28b834cdc298a603c9021bd632e75f778b88",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_dopri_phase.spv": {
+      "bytes": 59228,
+      "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+      "blob": "80416c5a433b515aaa302c0f6ac6dc5887e48669",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_dopri_phase_fp64.spv": {
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+      "blob": "9158cc3f66e5a746d3e2071068c3da387cc8b18a",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_dopri_phase_portable.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "blob": "e2436ccd97bb3f1890ed94372abe7af3f2255914",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "blob": "e2436ccd97bb3f1890ed94372abe7af3f2255914",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+      "blob": "3e40641b0741688905911bc77387b2fc440fc0ce",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_endpoint.spv": {
+      "bytes": 99728,
+      "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+      "blob": "4c09855f3b0457cb4a36710853638fb286cd8abc",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_endpoint_fma.spv": {
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+      "blob": "c59ccc34a3c22f431ef473f02a64b8fcbcbec333",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_endpoint_fp64.spv": {
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+      "blob": "7fa089d4bade3d944b350d531296c769a802a5ae",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_endpoint_portable.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "blob": "91656d0add3e83de835d122236c3838b02892743",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_endpoint_portable_fp64.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "blob": "91656d0add3e83de835d122236c3838b02892743",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "blob": "e366b8b9de2bc1796bf8f901ab3d39dba280a525",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+      "blob": "734dc5c2bdce42880fee4641354b9a6173f80947",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_initialize.spv": {
+      "bytes": 57596,
+      "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+      "blob": "f91806ae1b9ba6c7ea0a05b36a324038d6ee2058",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_initialize_fp64.spv": {
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+      "blob": "fcb7b5370cd3f01630cd40e51891c7aff17891ba",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_initialize_portable.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "blob": "a2dd6c6ac81592ba9a9d2b7e09ddc5e4108f97d0",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_initialize_portable_fp64.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "blob": "a2dd6c6ac81592ba9a9d2b7e09ddc5e4108f97d0",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+      "blob": "7378cc593b18f15f9821ae3cf9b7970af9550701",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+      "blob": "e8913bd743790381c2a38b9d07da52472a694aec",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "blob": "8fd199c178ffab350b71938dcec9e064e24da2e6",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "blob": "8fd199c178ffab350b71938dcec9e064e24da2e6",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_transport.spv": {
+      "bytes": 85832,
+      "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+      "blob": "d02d11449c27674e187337595babb718b86e1554",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_transport_fma.spv": {
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+      "blob": "68f7d47f0cdb99cef70415a12419d123a808c10b",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_transport_fp64.spv": {
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+      "blob": "2a97c7dec274812b9d6c9dba45a3e070a7c07142",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_transport_portable.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "blob": "ce7fd3a5cde67dc10b3fd541fa59cd4cb0c01c03",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_transport_portable_fp64.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "blob": "ce7fd3a5cde67dc10b3fd541fa59cd4cb0c01c03",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+      "blob": "ac6f63f1943754187bd1d477c8b868fcfbad94d2",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/shaders/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+      "blob": "808cd164d54113adebb1cafaac430a41e00cc737",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/candidate/vulkan_device.cpp": {
+      "bytes": 59255,
+      "sha256": "fe51e406bce4fe4e02097943dccd0c1df7d58099ac42a521ee27d59bf1cf10b0",
+      "blob": "6b89443a1923dc27cf4fa168dc9fa117ee88e7c4",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/observer/audited-observer.cpp": {
+      "bytes": 342470,
+      "sha256": "c9485d03ec55b5c1307a34097f15efbc58c4f84749e9f3736ad063a68676b601",
+      "blob": "34fec1647018fe57b06748d81952f8d97ca50512",
+      "mode": "100644"
+    },
+    "out/native-wave32-producer-inputs/root-composed-inputs.json": {
+      "bytes": 42808,
+      "sha256": "0c2398b231398dfd23d1e4b809686d90d4f1d8d0e5748d574f355efc7a9fa1da",
+      "blob": "f21612fff4395df960c9a2fd4cd29b53479749be",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/check_syntax.py": {
+      "bytes": 3150,
+      "sha256": "e286e24506942c1b92abb3a28bbf68b7b36f42359e59cf05edca05889ae5d638",
+      "blob": "d8955044d721034b4d460857576a9d1cc7f96d36",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/independent-source-review.json": {
+      "bytes": 6753,
+      "sha256": "3077b038e9524a952e11e30bd48418f5591231e3bd02bdf85d706cc204604e04",
+      "blob": "83d1b774babfdf429844f84516bb47d53428bcaa",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/original-vulkan_device.cpp": {
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae",
+      "blob": "2a9db0878f6a8ba672d4c8e0bf32540f0accdc94",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/source.patch": {
+      "bytes": 4825,
+      "sha256": "adba485645e0218c025d08a0b8b4934f21b0295bbafc7578a37235521addd2c7",
+      "blob": "c0b4731bccd8158d11c8846d9f60feba4caa9560",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/syntax.json": {
+      "bytes": 4768,
+      "sha256": "3ba0e341b489e62e7a1dbe0a40ea41acb6791e9b4136827f770ee31ca6c76844",
+      "blob": "a71d3178d72468dcd97a53757eac957280d83932",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/unchanged-workgroup-joins.json": {
+      "bytes": 759,
+      "sha256": "5df162256fa571fbd875d6291b13bbb4d58785cca2d10388a8d972e14e24039d",
+      "blob": "7f1cf82a335ef4a2413bbf96fdfa9f56f2c25797",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/vulkan_device.cpp": {
+      "bytes": 59255,
+      "sha256": "fe51e406bce4fe4e02097943dccd0c1df7d58099ac42a521ee27d59bf1cf10b0",
+      "blob": "6b89443a1923dc27cf4fa168dc9fa117ee88e7c4",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/with-retained.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/with-retained.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/without-retained.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644"
+    },
+    "out/native-wave32-source/without-retained.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644"
+    },
+    "out/native-wave32-windows-source/build-and-stage.ps1": {
+      "bytes": 20152,
+      "sha256": "25b929fad959f9aab5c1645c1881039abd2e3a628abab281466920254d3c0750",
+      "blob": "9f215b94055924d7ef865507471c6b9e7ebbb373",
+      "mode": "100644"
+    },
+    "out/native-wave32-windows-source/matched-producer.cmake": {
+      "bytes": 5975,
+      "sha256": "aab286f278e354aedf4aa08f61b6cce6894089a9b8f5dd3615c547bef4157b8c",
+      "blob": "8434d8c7a3763e86d15a834b732dc2c55a44a504",
+      "mode": "100644"
+    },
+    "out/native-wave32-windows-source/native-wave32-diagnostic.yml": {
+      "bytes": 1295,
+      "sha256": "0d60cc2d164c5cdee116bc66255187b2c9c1fe81cdc8166ba66f24c18a8a5f3a",
+      "blob": "fc8f5fc8a4515039c10bd750768ced6cea8dbcd6",
+      "mode": "100644"
+    },
+    "out/native-wave32-windows-source/originals/build-and-stage.ps1": {
+      "bytes": 19965,
+      "sha256": "6ea9400898ecba7234367293d5eadcd6408493c58f307fd9e2432d0daadd95c6",
+      "blob": "151cf8bf0ed91069cb0217fd7d9b57455a534a02",
+      "mode": "100644"
+    },
+    "out/native-wave32-windows-source/originals/matched-producer.cmake": {
+      "bytes": 5658,
+      "sha256": "dbb2c2be2e96284c32d8ca76202f47406da6b89209801a3ce3639c16545860ca",
+      "blob": "e9c27f8c1020b27ee253f148e15625423dd9db77",
+      "mode": "100644"
+    },
+    "out/native-wave32-windows-source/originals/native-packed-diagnostic.yml": {
+      "bytes": 1310,
+      "sha256": "112b83f2215687a49badb58732261579e4a0528759629a4bc263eec5b979dd86",
+      "blob": "b259bc470bf16405532dbf51b46adf358c19c335",
+      "mode": "100644"
+    },
+    "out/native-wave32-windows-source/source-contracts.json": {
+      "bytes": 8750,
+      "sha256": "4f8955a4af84ff906b68fa29b410a1317c41768867622de13f0fb0526090532c",
+      "blob": "28a29a19e5d612bc25b588b8df144a70cd457a46",
+      "mode": "100644"
+    },
+    "out/native-wave32-windows-source/source-freeze.json": {
+      "bytes": 28397,
+      "sha256": "0dfcc948fe8767d42d241cb2c312c5d386af4ad197a2d7557fb1af6c23c1499d",
+      "blob": "38ff02c7a40fa8a46eba18469c52635d0368cee6",
+      "mode": "100644"
+    },
+    "out/native-wave32-windows-source/source.patch": {
+      "bytes": 12658,
+      "sha256": "1088d03c271fb1e25fb243cc268f8d59ddb115595d3cf32bb024125d10427c48",
+      "blob": "dbd739561aa17f5f02e7c1c1d891d0bd878254a4",
+      "mode": "100644"
+    }
+  },
+  "all_canonical_files_unchanged": true,
+  "stored_full_bytes_verified": true,
+  "pushed": true,
+  "compile_only": true,
+  "runtime_admitted": false,
+  "fresh_remote_verified": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291\trefs/heads/development/native-wave32-diagnostic-2026-10-18"
+}

@@ -1,0 +1,216 @@
+{
+  "schema": "sirius-native-wave32-independent-benefit-rejection-review-v1",
+  "passed": false,
+  "audit_passed": true,
+  "ownership_record_valid": true,
+  "benefit_passed": false,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+  "decision": "REJECT_NATIVE_TRANSPORT_REQUIRED_WAVE32",
+  "saved_comparator_decision_compatibility_label": "REJECT_NATIVE_PACKED_SCRATCH_COST",
+  "checks_total": 22,
+  "checks_passed": 20,
+  "whole_passed": 3,
+  "stage_passed": 15,
+  "inclusive_API_passed": 2,
+  "failed_checks": [
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        19.7642,
+        19.8298,
+        19.191300000000002
+      ],
+      "candidate_samples_ms": [
+        18.670700000000004,
+        19.281000000000002,
+        20.679100000000002
+      ],
+      "baseline_median_ms": 19.7642,
+      "candidate_median_ms": 19.281000000000002,
+      "improvement_percent": 2.44482448062657,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        1.3254000000000001,
+        1.3441,
+        1.3537
+      ],
+      "candidate_samples_ms": [
+        1.3835,
+        1.4383,
+        1.532
+      ],
+      "baseline_median_ms": 1.3441,
+      "candidate_median_ms": 1.4383,
+      "improvement_percent": -7.008407112566017,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "critical_pins": [
+    {
+      "path": "out/native-wave32-runtime-abba/terminal-a1-accepted.json",
+      "bytes": 8850,
+      "sha256": "79c3f92f4d75c8388e84db661f18803fe0bce9a7257cdbe2fe64a1656094d597"
+    },
+    {
+      "path": "out/native-wave32-runtime-abba/native/a1/gtest.xml",
+      "bytes": 40487,
+      "sha256": "309e27a87746b3e4088c89847ca645b4b4860717ea06103187f15e980ae6b23c"
+    },
+    {
+      "path": "out/native-wave32-runtime-abba/terminal-b1-accepted.json",
+      "bytes": 11138,
+      "sha256": "3ff10b14f19bed9f9bee9f381fd20975448bf1078abe2d7180337fd889163309"
+    },
+    {
+      "path": "out/native-wave32-runtime-abba/native/b1/gtest.xml",
+      "bytes": 40882,
+      "sha256": "78f1cae72ca77a2946ab109a2133f50fe17e5aa99c5c715ef692b60999d9c703"
+    },
+    {
+      "path": "out/native-wave32-runtime-abba/terminal-b2-accepted.json",
+      "bytes": 13393,
+      "sha256": "54b4c47db2ec83293f566407b05f441fefaa703a52b088703f3c4e2a48b1a34b"
+    },
+    {
+      "path": "out/native-wave32-runtime-abba/native/b2/gtest.xml",
+      "bytes": 40775,
+      "sha256": "c20ae077201af9b6567ff61de0052aaa568ced37ab4705f9947c3707b31df136"
+    },
+    {
+      "path": "out/native-wave32-runtime-abba/terminal-a2-accepted.json",
+      "bytes": 15654,
+      "sha256": "dbdb7eb6e54247313f415921b6d68cb3c8adb73568f5c44488f053431ac98923"
+    },
+    {
+      "path": "out/native-wave32-runtime-abba/native/a2/gtest.xml",
+      "bytes": 40677,
+      "sha256": "a6e236ae2e7dfe8e1a09d764c1b3566755933dee36204d7e7c7f6e5700abac51"
+    },
+    {
+      "path": "out/native-wave32-ABBA-evidence/native-benefit.json",
+      "bytes": 231578,
+      "sha256": "63b1927e10c392d3e9acdf9efa128dd073b0bc6995f3a2431b94257db180472e"
+    },
+    {
+      "path": "out/native-wave32-ABBA-evidence/reader-bindings.json",
+      "bytes": 168514,
+      "sha256": "0c4e059c1b1c3727f9a3c943dbbe7dad1a0565c658278bef64515343238b67fd"
+    },
+    {
+      "path": "out/native-wave32-ABBA-evidence/root-admission.json",
+      "bytes": 359,
+      "sha256": "d3a9f5dd8200ff4251138c73699eb396319f306836a31b5d6a34df90c5805a47"
+    },
+    {
+      "path": "out/native-wave32-runtime-abba/execution-bindings.json",
+      "bytes": 170528,
+      "sha256": "7f465fe0b62c501db6ac412bba13f110e8e80a2b583ce5b644b16e8259d80e91"
+    },
+    {
+      "path": "out/native-wave32-pe-audit/independent-control8-completion-and-ABBA-review.json",
+      "bytes": 4949,
+      "sha256": "0329eea1eb1a44d80d0caff4ea83bf79cbf803a75d13605d4b232b00c779d488"
+    },
+    {
+      "path": "out/native-wave32-runtime-source/numeric_gates.py",
+      "bytes": 2890,
+      "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1"
+    },
+    {
+      "path": "out/native-wave32-runtime-source/compare_native.py",
+      "bytes": 3902,
+      "sha256": "d3011756300a671006b3cf6a11611eddc4bb75c71ff856ff3a6c37d2d5fcdfbe"
+    }
+  ],
+  "actual_slots": [
+    {
+      "slot": "a1",
+      "arm": "baseline",
+      "actual_birth": [
+        2296,
+        "2026-10-18T11:11:25.3494746Z"
+      ],
+      "Windows_owner_seconds": 59.6125428,
+      "WSL_bridge_seconds_distinct_clock": 68.11534527098411,
+      "peak_sampled_child_bytes": 503353344,
+      "all32_equal": true,
+      "markers": 51,
+      "module_joins": 54
+    },
+    {
+      "slot": "b1",
+      "arm": "candidate",
+      "actual_birth": [
+        13324,
+        "2026-10-18T11:12:45.0191121Z"
+      ],
+      "Windows_owner_seconds": 1.8502189999999998,
+      "WSL_bridge_seconds_distinct_clock": 13.631615234015044,
+      "peak_sampled_child_bytes": 68509696,
+      "all32_equal": true,
+      "markers": 51,
+      "module_joins": 54
+    },
+    {
+      "slot": "b2",
+      "arm": "candidate",
+      "actual_birth": [
+        15056,
+        "2026-10-18T11:13:08.9056676Z"
+      ],
+      "Windows_owner_seconds": 1.8783925,
+      "WSL_bridge_seconds_distinct_clock": 13.674648883024929,
+      "peak_sampled_child_bytes": 66740224,
+      "all32_equal": true,
+      "markers": 51,
+      "module_joins": 54
+    },
+    {
+      "slot": "a2",
+      "arm": "baseline",
+      "actual_birth": [
+        7332,
+        "2026-10-18T11:13:33.0970333Z"
+      ],
+      "Windows_owner_seconds": 1.8757545999999998,
+      "WSL_bridge_seconds_distinct_clock": 13.54280773899518,
+      "peak_sampled_child_bytes": 66973696,
+      "all32_equal": true,
+      "markers": 51,
+      "module_joins": 54
+    }
+  ],
+  "reader_closure_rows": 953,
+  "actual_before_after_rows_each": {
+    "a1": 881,
+    "b1": 893,
+    "b2": 905,
+    "a2": 917
+  },
+  "before_after_all_exact": true,
+  "checks": [
+    "Four rawcompleted singlecase zeroFESD XML/owners/bridges/terminal receipts/providerpostseals/serial distinct savedbirths joined; allcurrent953savedclosure descriptors cover actual before==after maps. No hostrehash or freshprocessquery.",
+    "All32full-bufferdigests exactlyequal C8+all4slots, and all51markers/54executedmodule identities percase match rawXML and comparator. Timestamp arithmetic and inclusive total components checked; no bits masked.",
+    "All20 original comparisons independently reconstructed from rawpropertysample windows using same3-sample medians/4whole>=5/16stage>=-5. Both originalCreate+11numericalAPI windows independently summed, threshold>=0. All22 percentages/thresholds/booleans exactly match saved comparator.",
+    "One fixedA1B1B2A2 trial, no pooling/subtracting/retry/resampling. Originalreader auditpassed is distinct from failedbenefit. Remaining7 packet absent and unrun perROOTstop."
+  ],
+  "limits": [
+    "No new helper/provider/test/tool/network/host workload executed by reviewer.",
+    "ReversemodernDProws24 SPV is unchanged; observed failedstage does not identify cause or prove a wave-size effect on that shader.",
+    "Smaller diagnostic drivercode/register counts did not satisfy required wholepath benefit. No occupancy/bottleneck/frame/performance-generalization or sourceadoption/fullscience/Mandatory/release claim.",
+    "Saved exactbirth teardown and accessibleprovider seals are not global currentabsence."
+  ],
+  "remaining7_admitted": false,
+  "unchanged_retry_admitted": false,
+  "source_adoption_admitted": false
+}

@@ -1,0 +1,95 @@
+--- superseded-link-representation-refused/audit_export_wave32.py
++++ audit_export_wave32_link_paths.py
+@@ -3,13 +3,16 @@
+ Header decoding is retained from f851 read_postproof.py::arrays. Windows source/
+ artifact joins follow the selected-record approach of 9d56406 reconstruction,
+ without its project imports, staging, subprocesses or native-gate authority.
+-Wave32 adds two private Vulkan objects and identical shader payloads. This source
++Wave32 adds two private Vulkan objects and identical shader payloads. LINK input
++paths are resolved against the recorded Windows build directory; caret headers
++are excluded. COFF/MAP/VERBOSE records establish selection, not textual order. This source
+ has not been executed. ROOT must review it before use.
+ """
+ from pathlib import Path
+ import argparse
+ import hashlib
+ import json
++import ntpath
+ import re
+ import struct
+ import xml.etree.ElementTree as ET
+@@ -216,6 +219,37 @@
+         require(len(rows) == 1, "Missing/ambiguous private device method MAP join: " + prefix)
+         result[prefix] = rows[0]
+     return result
++
++
++def windows_file(value, build_root):
++    """Resolve a selected explicit file operand in the recorded MSBuild directory."""
++    require(ntpath.isabs(build_root) and ntpath.splitdrive(build_root)[0], "Not an absolute Windows build root")
++    return ntpath.normcase(ntpath.normpath(value if ntpath.isabs(value) else ntpath.join(build_root, value)))
++
++
++def link_command_files(records, build_root):
++    # A caret header lists tlog tracking keys, not LINK command arguments.
++    command = "\n".join(line for line in records.splitlines() if not line.startswith("^"))
++    require(not re.search(r"(?i)(?<!\S)/(?:force|wholearchive)(?=[:\s]|$)", command),
++            "Unexpected FORCE or WHOLEARCHIVE")
++    paths = set()
++    # Current selected object/archive operands are standalone bare or quoted
++    # path arguments. Output switches (e.g. /IMPLIB:"...") are not operands.
++    for quoted, bare in re.findall(r'(?<!\S)(?:"([^"\r\n]+)"|([^\s"]+))(?=\s|$)', command):
++        value = quoted or bare
++        if value.startswith(("/", "-")) or not value.lower().endswith((".obj", ".lib")):
++            continue
++        # Bare library names use LINK search rules. Do not invent their resolved
++        # paths; only explicit selected archive/object paths are joined below.
++        if value.lower().endswith(".lib") and not ntpath.dirname(value):
++            continue
++        paths.add(windows_file(value, build_root))
++    return command, paths
++
++
++def link_read_files(records, build_root):
++    return {windows_file(line.strip(), build_root) for line in records.splitlines()
++            if not line.startswith("^") and line.strip().lower().endswith((".obj", ".lib"))}
+ 
+ 
+ def main(args):
+@@ -363,22 +397,29 @@
+         base = export / "metadata/private-objects" / ("native_wave32_" + arm + "_controls.dir") / "Release"
+         link_reads, link_commands = logs(base, "link.read."), logs(base, "link.command.")
+         require(link_reads and link_commands, "Missing LINK records: " + arm)
+-        dependencies = norm("\n".join(text(p) for p in link_reads))
+-        command = norm("\n".join(text(p) for p in link_commands))
+-        require("/wholearchive" not in command, "Unexpected WHOLEARCHIVE")
++        read_records = "\n".join(text(p) for p in link_reads)
++        command_records = "\n".join(text(p) for p in link_commands)
++        command, command_paths = link_command_files(command_records, result["build_root"])
++        read_paths = link_read_files(read_records, result["build_root"])
++        dependencies = norm("\n".join(line for line in read_records.splitlines() if not line.startswith("^")))
+         require("native_wave32_" + ("candidate" if arm == "baseline" else "baseline") + "_compute.dir" not in dependencies,
+                 "Other arm object linked")
+-        archive_suffix = "/src/sirius/backend/release/sirius_backend.lib"
+-        require(archive_suffix in dependencies and archive_suffix in command, "Backend archive not linked")
++        archive_path = windows_file("src/sirius/backend/Release/sirius_backend.lib", result["build_root"])
++        require(archive_path in read_paths and archive_path in command_paths,
++                "Selected backend archive missing from LINK operands/read records")
+         for target in ("native_wave32_" + arm + "_compute", "native_wave32_" + arm + "_controls", "native_wave32_dopri"):
+             folder = export / "metadata/private-objects" / (target + ".dir") / "Release"
+             for obj in folder.rglob("*.obj"):
+                 suffix = norm(obj.relative_to(export / "metadata/private-objects"))
+-                require(suffix in dependencies and suffix in command, "Private object missing from LINK: " + suffix)
+-                require(command.index(suffix) < command.index(archive_suffix), "Private object not before canonical archive")
++                selected_path = windows_file(suffix, result["build_root"])
++                require(selected_path in read_paths and selected_path in command_paths,
++                        "Private object missing from actual LINK operands/read records: " + suffix)
+         device_obj = export / tlogs["native_wave32_" + arm + "_compute"]["records"][
+             "out/native-wave32-producer-inputs/" + arm + "/vulkan_device.cpp"]["object_path"]
+         mapping = text(export / "payload" / arm / ("original_" + arm + "_controls.map"))
++        products[arm]["selected_LINK_archive"] = archive_path
++        products[arm]["LINK_operands_and_read_records_joined"] = True
++        products[arm]["link_textual_order_is_selection_authority"] = False
+         products[arm]["private_device_object"] = identity(device_obj)
+         products[arm]["private_device_COFF_MAP_joins"] = map_device_functions(mapping, device_obj, arm)
+         products[arm]["link_read_tlogs"] = [str(p.relative_to(export)) for p in link_reads]

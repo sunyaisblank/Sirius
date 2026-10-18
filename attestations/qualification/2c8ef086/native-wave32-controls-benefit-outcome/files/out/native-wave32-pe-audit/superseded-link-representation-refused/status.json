@@ -1,0 +1,38 @@
+{
+  "schema": "sirius-native-wave32-static-reader-refusal-v1",
+  "executed_static_reader_only": true,
+  "audit_completed": false,
+  "failure": "Backend archive not linked",
+  "actual_CI_or_PE_or_runtime_retried": false,
+  "reader_defects": [
+    "Expected leading slash in relative command LIB path",
+    "Compared text ordering including non-command caret header; MSVC object selection cannot be established by that ordering check"
+  ],
+  "files": {
+    "audit_export_wave32.py": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/audit_export_wave32.py",
+      "bytes": 27794,
+      "sha256": "ad96cc93d8cde650659bac02d5644d51a4b4411aa26f91c38513fab0452338b5"
+    },
+    "source-contracts.json": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/source-contracts.json",
+      "bytes": 5319,
+      "sha256": "978d08cedc9c2bb438b6d444abd23bd33212cfd483b6a072c0ddbba391021602"
+    },
+    "source-freeze.json": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/source-freeze.json",
+      "bytes": 1204,
+      "sha256": "a16c3db38d8ded0b5c69d0270d13aa2d04de3fdc057a71722c483bac8534a7d0"
+    },
+    "source.patch": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/source.patch",
+      "bytes": 23475,
+      "sha256": "7e36e79ec46bb1f6f96a46cacc6cd7c7faa7997f64f23797a6047206191ed596"
+    },
+    "actual-5d993d12-audit.json": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/actual-5d993d12-audit.json",
+      "bytes": 395,
+      "sha256": "fe40f23fb1035ee933aa1f15ba4abac31d241b8edb8cf48139257dbe383f578f"
+    }
+  }
+}

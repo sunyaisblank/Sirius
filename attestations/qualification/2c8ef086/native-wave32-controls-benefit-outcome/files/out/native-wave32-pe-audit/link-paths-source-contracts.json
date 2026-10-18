@@ -1,0 +1,68 @@
+{
+  "schema": "sirius-native-wave32-PE-auditor-link-path-correction-v1",
+  "source_only": true,
+  "reader_executed": false,
+  "runtime_admitted": false,
+  "reader": {
+    "path": "out/native-wave32-pe-audit/audit_export_wave32_link_paths.py",
+    "bytes": 30139,
+    "sha256": "254299a22e37e610f58e433674745c0e8720e7aea346bb30e7838730a3467148"
+  },
+  "pre_fix": {
+    "source": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/audit_export_wave32.py",
+      "bytes": 27794,
+      "sha256": "ad96cc93d8cde650659bac02d5644d51a4b4411aa26f91c38513fab0452338b5"
+    },
+    "contracts": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/source-contracts.json",
+      "bytes": 5319,
+      "sha256": "978d08cedc9c2bb438b6d444abd23bd33212cfd483b6a072c0ddbba391021602"
+    },
+    "freeze": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/source-freeze.json",
+      "bytes": 1204,
+      "sha256": "a16c3db38d8ded0b5c69d0270d13aa2d04de3fdc057a71722c483bac8534a7d0"
+    },
+    "actual_static_refusal": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/actual-5d993d12-audit.json",
+      "bytes": 395,
+      "sha256": "fe40f23fb1035ee933aa1f15ba4abac31d241b8edb8cf48139257dbe383f578f"
+    },
+    "status": {
+      "path": "out/native-wave32-pe-audit/superseded-link-representation-refused/status.json",
+      "bytes": 1680,
+      "sha256": "52c6d5e4b63a38f1d7123b9248f8ea8561b657c48832338d4401cd94480bbc15"
+    }
+  },
+  "correction": [
+    "LINK.command caret headers are tracking metadata and excluded from command arguments",
+    "Selected explicit relative .obj/.lib arguments are normalized using recorded producer build_root with Windows ntpath rules; LINK.read actual full paths normalized independently",
+    "Require correct four private input objects per arm (compute2,observer1,sharedDP1) and canonical archive in both actual command operands and read records",
+    "Bare system library names are not resolved by assumption; output switches are not counted as input operands",
+    "Drop textual library/object ordering proof, reject /FORCE and /WHOLEARCHIVE. Direct private COFF/MAP critical-method joins, no canonical Vulkan/compute MAP contribution and no VERBOSE loaded canonical Vulkan member remain authority"
+  ],
+  "unchanged": [
+    "All previous manifest/source seals/profile7 and zero40+2payload/all35SPV/header checks",
+    "All per-source CL/vcxproj/COFF/archive checks and actual source/root full producer manual admission obligations",
+    "No observer, product, stage, gate, source candidate, CI or workload change"
+  ],
+  "limitations": [
+    "The source review missed the MSVC representation and non-command header distinction; preserve that false static audit candidly.",
+    "This repair admits only re-reading the same artifact; it does not authorize CI recompile or runtime/benchmark retry.",
+    "Canonical libraries appearing textually before explicit objects is not interpreted as failed selection. Actual COFF/MAP/VERBOSE records decide the selected implementation."
+  ],
+  "CLI": [
+    "python3",
+    "-B",
+    "out/native-wave32-pe-audit/audit_export_wave32_link_paths.py",
+    "--export",
+    "bin/windows-msvc/native-wave32-matched-current",
+    "--revision",
+    "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+    "--run-id",
+    "39120634635",
+    "--output",
+    "out/native-wave32-pe-audit/actual-5d993d12-link-paths-audit.json"
+  ]
+}

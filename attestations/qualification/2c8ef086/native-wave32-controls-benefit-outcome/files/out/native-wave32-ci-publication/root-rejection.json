@@ -1,0 +1,66 @@
+{
+  "schema": "sirius-native-wave32-root-rejection-v1",
+  "canonical_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "producer_source_revision": "5d993d12b3fde7a65eaa5f7988b73b86b3a9a291",
+  "decision": "REJECT_NATIVE_TRANSPORT_REQUIRED_WAVE32",
+  "control8_passed": true,
+  "sole_original_ABBA_completed": true,
+  "original22_passed": false,
+  "checks_passed": 20,
+  "checks_total": 22,
+  "failed_conditions": [
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        19.7642,
+        19.8298,
+        19.191300000000002
+      ],
+      "candidate_samples_ms": [
+        18.670700000000004,
+        19.281000000000002,
+        20.679100000000002
+      ],
+      "baseline_median_ms": 19.7642,
+      "candidate_median_ms": 19.281000000000002,
+      "improvement_percent": 2.44482448062657,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        1.3254000000000001,
+        1.3441,
+        1.3537
+      ],
+      "candidate_samples_ms": [
+        1.3835,
+        1.4383,
+        1.532
+      ],
+      "baseline_median_ms": 1.3441,
+      "candidate_median_ms": 1.4383,
+      "improvement_percent": -7.008407112566017,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "same_complete32_readbacks_and51markers54joins": true,
+  "original_distinct_controls_completed": 1,
+  "completed_control8_instances_including_ABBA_slots": 5,
+  "remaining_seven_original_controls": "NOT_MATERIALIZED_OR_RUN",
+  "unchanged_retry_admitted": false,
+  "candidate_adopted": false,
+  "earlier_constructor_source_2c8_and_its_original8_22_pass_remain_separate": true,
+  "scope": "Smaller driver code and reported registers established a distinct premise but did not satisfy whole-path benefit. DP shader payload was unchanged; cause of its timing regression is unproved. No frame/fullscience/UI/Mandatory/release qualification.",
+  "benefit": {
+    "path": "out/native-wave32-ABBA-evidence/native-benefit.json",
+    "bytes": 231578,
+    "sha256": "63b1927e10c392d3e9acdf9efa128dd073b0bc6995f3a2431b94257db180472e"
+  }
+}
