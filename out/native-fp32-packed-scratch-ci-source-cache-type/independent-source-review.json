@@ -1,0 +1,56 @@
+{
+  "schema": "sirius-native-packed-ci-cache-type-independent-delta-review-v1",
+  "created_utc": "2026-10-18T06:03:43.539750+00:00",
+  "passed": true,
+  "source_correction_admitted": true,
+  "execution_release_granted": false,
+  "runtime_admitted": false,
+  "pins": [
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-cache-type/source-freeze.json",
+      "bytes": 1027,
+      "sha256": "6cbd1157b30ef9fc37c14043deec819d57cf99310e63296a8424a9a63207229f"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-cache-type/source-contracts.json",
+      "bytes": 2726,
+      "sha256": "2164831d2902464beeb03dddd6ccb16029f3568fbb1ec71d5f75b9129f288455"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-cache-type/correction.patch",
+      "bytes": 4256,
+      "sha256": "c6084d1f68fde37b0467f6ea7eb1d6de772ee489eb60b92b40cf93512dbf8417"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-cache-type/build-and-stage.ps1",
+      "bytes": 20255,
+      "sha256": "147829e4054731bc59a42144c7520695e396c87ddcffeb98b19a48f0c1657250"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-cache-type/native-packed-diagnostic.yml",
+      "bytes": 1327,
+      "sha256": "795406ab9a00dd5599a41bc58c4d03d9f9381070e87ca101cf3a512b046af12a"
+    }
+  ],
+  "actual_predecessor": {
+    "revision": "f0d2b42dcc47b529d2e2b78d7cbaee1241ee8c39",
+    "run_id": 39102350415,
+    "failure_audit": {
+      "path": "out/native-fp32-packed-scratch-ci-git-resolution-publication/root-second-failure-audit.json",
+      "bytes": 1215,
+      "sha256": "1ebc4f5020070aabf7d42b53aadb102b802b37726669881698069435aafa5464"
+    },
+    "outcome": "Actual saved producer result: configure passed, strict post-configure STRING=Release check failed, private build did not pass/start. Original false artifact remains unchanged.",
+    "type_provenance": "Failed-current Cache was not exported. Its specific type remains inferred; independently read saved successful current5b2 ZIP Cache3191c804\u2026 and verified UNINITIALIZED=Release under the same untyped argument.",
+    "reviewer_miss": "My earlier source reviews missed the untyped -D assignment versus strict STRING cache expectation. This receipt does not rewrite those historical PASS records or the failed artifacts."
+  },
+  "delta_checks": [
+    "Exact script inverse and workflow run-path inverse reconstruct prior files; both prior full bytes match namedf0d2 Git blobs. All4 final frozen members match6cbd1157 freeze.",
+    "Only configure value delta is explicit -DCMAKE_CONFIGURATION_TYPES:STRING=Release. Existing strict type/value check remains exact. No assertion, policy, target, parallelism, source/header arm or guard weakening.",
+    "Actual Cache/ConfigureLog copies now occur immediately after configure0 and before strict postchecks, preserving direct evidence if those checks fail. Only exported copies are outputs; original configured Cache/Log remain frozen before/after build inputs.",
+    "Additional copies use existing canonical backend vcxproj/Release object+tlog/archive paths; no new compiler/tool/target invocation. Copy destination is metadata/canonical-backend. Conditional partial-build copies are not proof of completeness: actual canonical device object/read+command/archive/map evidence remains a required post-download gate.",
+    "Other changes only add the new source namespace to input membership and retarget workflow run path. Resolver/PATH selection, original CMake fragment, two matched PEs,5private objects, all strict checks/failure semantics and one-job trigger/actions remain unchanged."
+  ],
+  "remaining_scope": "Source correction only; ROOT owns commit/push/actual configure-build. No corrected CI success, PE/provider execution, native runtime, benefit, Mandatory, science or adoption claim. Artifact reader remains unexecuted/unsealed pending this source step.",
+  "method": "Passive source/JSON/hash, selected prior ZIP Cache member and two read-only Git preimages. No PowerShell/parser/CMake/compiler/provider/test/network/process invocation. Only this sidecar written."
+}
