@@ -1,0 +1,81 @@
+{
+  "schema": "sirius-cold-retained-stage-observability-source-v1",
+  "source_only": true,
+  "tracked_patch_applied": false,
+  "runtime_admitted": false,
+  "source_revision_context": "Root current adopted5b2; no Git query or canonical modification by author.",
+  "existing_observable": {
+    "producer": "retained_compute.cpp258\u2013327: six software-only one-workgroup zero-active-row dispatches, ordered ray_camera, initialize, transport, endpoint, dense, dopri_phase. Existing StageStats stores attempts/dispatch_attempts/completed_dispatches/completed/header_restored plus dispatch phase/write timing. Film camera stage is not prepared.",
+    "gap": "vulkan_renderer.cpp521\u2013543 emits all stage rows only after the entire synchronous preparation call returns. A guard stop inside preparation loses all completed-stage log rows. Final render_evidence.cpp137\u2013164 also appears only after a successful frame.",
+    "actual_cold_route": "RenderVulkanToDisplay895\u2013911 sends Kerr-family to AcquireRetainedOwner and RenderRetained. Acquire470\u2013484 opens device and creates all retained resources first. RenderRetained518\u2013547 prepares software stages before session.Configure/Start and workers. Ordinary trace SPVs and coupled_probe are not this retained arithmetic path.",
+    "existing_active_work_observation": "After session.Start, current30s logs report executor completed-batch snapshots, camera/accepted/rejected intervals, per-stage pipeline/submit/transfer timings and shared Endpoint/Dense once. Shader math/40fields/7RHS/3trials/4quartics remain unchanged.",
+    "existing_timing_scope": "VulkanDevice1198\u20131201 separately records pipeline setup, command setup, submit/wait, cleanup after returned dispatch. Driver-deferred compilation may lie in submit/wait; fields do not alone establish pure compiler/GPU-numerical time."
+  },
+  "minimal_patch": {
+    "optional_api": "PreparationProgress(stage,begin_or_returned,const existing_stage_stats&) defaults empty, synchronous caller thread. Existing two-argument and no-callback callers remain source compatible.",
+    "begin": "Exactly once per attempted stage after existing cancellation check/attempt increment, before any zero-header write or Dispatch. Flush renderer stdout.",
+    "returned": "Exactly once after original capacity-header restoration and stats update, before original failure/restoration/cancellation return decisions. Move existing detailed stage row here without changing its fields. A returned failure is not stage PASS.",
+    "frame_phase": "One flushed existing-log-family marker after successful session.Start, before existing30s numerical progress. This marks worker start, not completion, first numerical dispatch or acceptance.",
+    "bounded_output": "At most12 prep lines plus1 worker marker per complete retained frame. No per-physical-dispatch flood, timer thread, file IO, environment/precision/JIT/cache/settings or deadline change.",
+    "observer_contract": "Diagnostic callback must not throw or reenter/submit to device. Production callback only formats/flushes logs. Printing overhead remains included in original complete preparation/render wall, no performance exclusion."
+  },
+  "interpretation": {
+    "last_begin_without_returned": "Names the current zero-active preparation stage; may be stuck in header write, pipeline creation, command/submit/wait or restoration. Does not identify exact driver allocation/compiler function. No accepted trajectory work has begun.",
+    "returned_rows": "Provide completed-stage identity and existing actual pipeline_setup/submit timing, count/header restoration, including returned failures. Do not add nested times as disjoint wall partitions.",
+    "rendering_marker_plus30s_rows": "Separates worker phase from preparation and uses existing actual completed-stage/interval counters to distinguish further driver setup from numerical work. Marker alone is not numerical progress.",
+    "before_first_renderer_log": "AcquireRetainedOwner may still be loading shader modules/allocating/validating device. This patch does not isolate pre-RenderRetained acquisition; no stage allocation-cause claim.",
+    "no_mandatory_cold_retry": "This source candidate supplies a new required discriminator only. Root must review/apply/build/admit changed observability and preserve flushed stdout/stderr under the original cold300s guards before any further original attempt; this packet does not authorize one."
+  },
+  "invariants": [
+    "Original software-only admission, stage order, counts, zero/capacity writes and exact buffer IDs unchanged.",
+    "Same synchronousDispatch one-workgroup/zero-activeheaders; output/program-upload/physical stats/feedback not modified by observer.",
+    "Same cancellation poll order, failure precedence and best-effort header restoration before all returned failure/cancel paths.",
+    "No shader/source arithmetic, 40field ABI, numerical literal, correctness assertion, dispatch guard or rollback/statepublication change.",
+    "Existing final PreparationStats/evidence schema and active30s progress continue unchanged."
+  ],
+  "targeted_validation_if_root_selects": [
+    "Extend existing RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting mock assertions to collect observer begin/returned order, unchanged header writes/physical counters and postrestore snapshot.",
+    "Use existing returned failure/cancellation mock cases836 onward to verify last returned event/restoration and no later stage. No provider benchmark or numerical test change is needed for the callback contract.",
+    "Existing render-evidence and renderer cancellation/recovery tests cover unchanged final evidence/accounting; strict source format/build/governance before any guarded cold observation."
+  ],
+  "source_pins": [
+    {
+      "path": "out/cold-stage-observability/original/retained_compute.h",
+      "bytes": 15862,
+      "sha256": "be59f256c881e47eed888e40fdc32dfd164bdb3eca83f09ffdab44d401b37ee1"
+    },
+    {
+      "path": "out/cold-stage-observability/original/retained_compute.cpp",
+      "bytes": 45570,
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    },
+    {
+      "path": "out/cold-stage-observability/original/vulkan_renderer.cpp",
+      "bytes": 74538,
+      "sha256": "f4a7b2e9e702369e1f740957485f1e5bc6ba8cf18ae4fa068dccb7876bf669e5"
+    }
+  ],
+  "candidate_pins": [
+    {
+      "path": "out/cold-stage-observability/candidate/retained_compute.h",
+      "bytes": 16346,
+      "sha256": "c24793eab48091543380f0081b6740dd6cca3058c373443bd0627694f5175e13"
+    },
+    {
+      "path": "out/cold-stage-observability/candidate/retained_compute.cpp",
+      "bytes": 45785,
+      "sha256": "9f8c565fdbb54167418aacbc1ea1e8f14395c1ff11559fb4a3f2f84396d7f60f"
+    },
+    {
+      "path": "out/cold-stage-observability/candidate/vulkan_renderer.cpp",
+      "bytes": 74978,
+      "sha256": "0124c962c13f784387c8461a747469bb862a17fc74dfc131b925ca53dadb7aff"
+    }
+  ],
+  "patch": {
+    "path": "out/cold-stage-observability/patch.diff",
+    "bytes": 5799,
+    "sha256": "cf800326284a44e9b59c4fc9dfeb444d27e8a50ad409fe71cf77733443c35d4f"
+  },
+  "limits": "No measured cold-phase verdict, JIT/RSS/latency improvement, optimizer hypothesis, shader scientific acceptance, #44benefit/Mandatory/release or original cold success claim."
+}

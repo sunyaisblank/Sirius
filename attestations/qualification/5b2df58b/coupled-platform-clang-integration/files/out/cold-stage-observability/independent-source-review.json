@@ -1,0 +1,36 @@
+{
+  "schema": "sirius-cold-stage-observability-independent-source-review-v1",
+  "created_utc": "2026-10-18T02:14:37.670138+00:00",
+  "passed": true,
+  "source_only": true,
+  "runtime_admitted": false,
+  "adoption_ready": false,
+  "source_revision_context": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "patch.diff": {
+      "bytes": 5799,
+      "sha256": "cf800326284a44e9b59c4fc9dfeb444d27e8a50ad409fe71cf77733443c35d4f"
+    },
+    "source-findings.json": {
+      "bytes": 7373,
+      "sha256": "dd0688a217d51e18a84eec12412c8c31955fe0903bf73c04fee8521b6943b21c"
+    }
+  },
+  "candidate_SHA256": {
+    "retained_compute.h": "c24793eab48091543380f0081b6740dd6cca3058c373443bd0627694f5175e13",
+    "retained_compute.cpp": "9f8c565fdbb54167418aacbc1ea1e8f14395c1ff11559fb4a3f2f84396d7f60f",
+    "vulkan_renderer.cpp": "0124c962c13f784387c8461a747469bb862a17fc74dfc131b925ca53dadb7aff"
+  },
+  "mechanical": "All three original copies equal current canonical files; exact regenerated unified diff equals patch.diff. No shader/settings/cache/deadline/assertion or device-work changes outside that diff.",
+  "semantics": [
+    "Synchronous optional const-reference std::function: temporary renderer conversion survives the call, never stored or used by workers. Stage stats reference aliases caller observation; observers must not retain it, mutate/reenter compute or submit device work.",
+    "For conforming nonthrowing observers: begin follows existing cancellation poll/attempt increment and precedes zero-header mutation; returned follows restoration attempt and stats update. Original status error precedes restoration error, then cancellation; all stage order/writes/dispatches/counters unchanged.",
+    "No noexcept guarantee: uncaught observer/iostream exceptions can bypass finish/wall update or mask Expected error/cancellation. Begin is before header mutation, returned after restoration attempt. Existing callback/log APIs also use uncaught exceptions; no new exception-recovery guarantee claimed.",
+    "Six attempted stages maximum: ray_camera,initialize,transport,endpoint,dense,dopri_phase. At most12 prep events plus one session marker/frame; film camera excluded. Flushing and callback overhead remain charged to preparation/render wall; historical preparation-wall timing is not log-overhead-equivalent.",
+    "Begin without returned localizes a zero-active preparation stage, not write/pipeline/submit/restore or JIT allocation cause. Returned failure is not PASS. Acquisition/load/allocation before RenderRetained remains outside these markers. Stdout and clog/stderr are distinct streams without calibrated merged timestamps."
+  ],
+  "required_wording_correction": "Before use, replace phase=rendering; workers started with session-start accepted/render-thread-launched wording. RenderSession::Start125-158 returns after thread creation; asynchronous initialisation/worker creation and numerical progress are not yet guaranteed.",
+  "coverage": "Existing SoftwareRendererPreparationPreservesPhysicalAccounting706-916 covers six-stage accounting, header writes, error precedence, cancellation and invalid timing with empty observer. It does not test new events. ROOT plans to extend this existing mock for event order/caller thread/restoration/returned failure, retaining original assertions; not executed here.",
+  "decision_limit": "Useful preparation-versus-session discriminator only. ROOT reports d240b82c saved cold evidence already completed six-stage preparation and has active30s progress; that history was not re-extracted by this review. Hook does not repair or establish cause of that active-work deficit and alone does not justify another cold run. No runtime/performance/JIT/science/qualification/adoption admission.",
+  "workspace": "Canonical clean committed/pushed0:0/sole checkout checked read-only. Only this sidecar written; private candidate unapplied."
+}

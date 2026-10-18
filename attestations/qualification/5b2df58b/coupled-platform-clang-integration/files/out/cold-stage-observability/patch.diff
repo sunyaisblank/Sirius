@@ -1,0 +1,99 @@
+--- a/src/sirius/backend/retained_compute.h
++++ b/src/sirius/backend/retained_compute.h
+@@ -211,6 +211,12 @@
+         std::array<PreparationStageStats, kStageCount> stages{};
+         double wall_ms = 0;  // Entire preparation, including failure/cancellation and restoration.
+     };
++    enum class PreparationPhase { kBegin, kReturned };
++    // Caller-thread diagnostics only: observers must not throw or submit device work.
++    // kReturned follows capacity-header restoration, including returned failures;
++    // completed/header_restored retain their original meanings, not a PASS claim.
++    using PreparationProgress = std::function<void(
++        KernelStage, PreparationPhase, const PreparationStageStats&)>;
+     // Logical shader spans; actual device residency may include adapter padding.
+     [[nodiscard]] static std::uint64_t RequiredBufferBytes(std::size_t capacity);
+     [[nodiscard]] static base::Expected<std::uint64_t> RequiredAllocationBytes(
+@@ -230,7 +236,8 @@
+     // in complete render wall time. Cancellation is polled on the caller thread;
+     // it cannot interrupt a synchronous Dispatch already in progress.
+     [[nodiscard]] base::Expected<void> PrepareSoftwareRendererStages(
+-        PreparationStats& observation, const std::function<bool()>& should_cancel = {});
++        PreparationStats& observation, const std::function<bool()>& should_cancel = {},
++        const PreparationProgress& on_progress = {});
+     [[nodiscard]] base::Expected<std::vector<RetainedCameraOutput>> Camera(
+         std::span<const RetainedCameraInput> inputs, DispatchTiming* timing = nullptr);
+     [[nodiscard]] base::Expected<std::vector<RetainedCameraOutput>> RayCamera(
+--- a/src/sirius/backend/retained_compute.cpp
++++ b/src/sirius/backend/retained_compute.cpp
+@@ -256,7 +256,8 @@
+ }
+ 
+ base::Expected<void> RetainedCompute::PrepareSoftwareRendererStages(
+-    PreparationStats& observation, const std::function<bool()>& should_cancel) {
++    PreparationStats& observation, const std::function<bool()>& should_cancel,
++    const PreparationProgress& on_progress) {
+     InvalidateStageSevenOwner();
+     using Clock = std::chrono::steady_clock;
+     observation = {};
+@@ -285,6 +286,7 @@
+         if (cancelled()) return finish(cancellation());
+         auto& stats = observation.stages[static_cast<std::size_t>(stage->kind)];
+         ++stats.attempts;
++        if (on_progress) on_progress(stage->kind, PreparationPhase::kBegin, stats);
+         const auto write_header = [&](std::uint32_t header) {
+             ++stats.write_buffer_calls;
+             const auto write_started = Clock::now();
+@@ -319,6 +321,7 @@
+         auto restored = write_header(static_cast<std::uint32_t>(capacity_));
+         stats.header_restored = restored.has_value();
+         if (stats.completed_dispatches && restored) ++stats.completed;
++        if (on_progress) on_progress(stage->kind, PreparationPhase::kReturned, stats);
+         if (!status) return finish(std::move(status));
+         if (!restored) return finish(std::move(restored));
+         if (cancelled()) return finish(cancellation());
+--- a/src/sirius/render/vulkan_renderer.cpp
++++ b/src/sirius/render/vulkan_renderer.cpp
+@@ -518,13 +518,18 @@
+     if (device.Info().kind == backend::DeviceKind::kSoftware) {
+         std::cout << "[Vulkan] initialising software retained kernels with zero active rays"
+                   << std::endl;
+-        const auto prepared = compute->PrepareSoftwareRendererStages(preparation, should_cancel);
+-        for (std::size_t i = 0; i < preparation.stages.size(); ++i) {
+-            const auto& stage = preparation.stages[i];
+-            if (stage.attempts == 0) continue;
++        const auto report_preparation = [](
++            backend::RetainedCompute::KernelStage kind,
++            backend::RetainedCompute::PreparationPhase phase,
++            const backend::RetainedCompute::PreparationStageStats& stage) {
++            if (phase == backend::RetainedCompute::PreparationPhase::kBegin) {
++                std::cout << "[Vulkan] software retained initialization begin: "
++                          << backend::RetainedCompute::StageName(kind) << ", 0 active rays"
++                          << std::endl;
++                return;
++            }
+             std::cout << "[Vulkan] software retained initialization: "
+-                      << backend::RetainedCompute::StageName(
+-                             static_cast<backend::RetainedCompute::KernelStage>(i))
++                      << backend::RetainedCompute::StageName(kind)
+                       << ", attempts=" << stage.attempts
+                       << ", dispatch_attempts=" << stage.dispatch_attempts
+                       << ", completed_dispatches=" << stage.completed_dispatches
+@@ -540,7 +545,9 @@
+                       << ", write_buffer_bytes=" << stage.write_buffer_bytes
+                       << ", header_restored=" << stage.header_restored << ", 0 active rays"
+                       << std::endl;
+-        }
++        };
++        const auto prepared =
++            compute->PrepareSoftwareRendererStages(preparation, should_cancel, report_preparation);
+         std::cout << "[Vulkan] software retained initialization wall: "
+                   << preparation.wall_ms / 1000 << "s" << std::endl;
+         if (!prepared) return std::unexpected(prepared.error());
+@@ -566,6 +573,7 @@
+     if (!session.Start())
+         return Fail(ErrorDomain::kInternal, "start retained renderer",
+                     "worker session did not start");
++    std::clog << "[Vulkan] Retained frame phase=rendering; workers started" << std::endl;
+     auto next_progress = std::chrono::steady_clock::now() + std::chrono::seconds(30);
+     while (!session.IsComplete()) {
+         if (session.IsStopping()) cancelled = true;

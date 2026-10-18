@@ -1,0 +1,257 @@
+[0/2] Re-checking globbed directories...
+[1/81] Verifying revision-bound upstream/downstream alignment
+alignment receipt is current: 0/8 domains admitted
+[2/81] Compiling camera_frame_probe.slang (fp32) -> SPIR-V (+spirv-val)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[3/81] Compiling camera_frame_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[4/81] Compiling camera_frame_probe.slang (fp64) -> SPIR-V (+spirv-val)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[5/81] Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)
+[6/81] Verifying test-label, operating-model, and repository-structure governance
+CTest label file is up to date
+operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+strict qualification/release policy rejected every weakened configuration and product
+escaping-copy controls: filesystem symlinks
+build-gate receipt rejected missing, stale, skipped, and tampered evidence
+[7/81] Compiling infinity_probe.slang (fp32) -> SPIR-V (+spirv-val)
+warning[E41018]: returning without initializing out parameter
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+    |
+276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+    |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+    |
+375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+    |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[8/81] Compiling infinity_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+warning[E41018]: returning without initializing out parameter
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+    |
+276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+    |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+    |
+375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+    |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[9/81] Compiling metric_consistency_probe.slang (fp32) -> SPIR-V (+spirv-val)
+[10/81] Compiling infinity_probe.slang (fp64) -> SPIR-V (+spirv-val)
+warning[E41018]: returning without initializing out parameter
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+    |
+276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+    |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+    |
+375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+    |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[11/81] Compiling metric_consistency_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+[12/81] Compiling metric_consistency_probe.slang (fp64) -> SPIR-V (+spirv-val)
+[13/81] Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[14/81] Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[15/81] Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[16/81] Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[17/81] Compiling Slang kernel smoke.slang -> SPIR-V (+spirv-val)
+[18/81] Compiling Slang kernel trace.slang -> SPIR-V (+spirv-val)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[19/81] Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[20/81] Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[21/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/context.c.o
+[22/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/init.c.o
+[23/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/input.c.o
+[24/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/monitor.c.o
+[25/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/platform.c.o
+[26/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o
+[27/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/window.c.o
+[28/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o
+[29/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o
+[30/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_init.c.o
+[31/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o
+[32/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_window.c.o
+[33/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o
+[34/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o
+[35/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_time.c.o
+[36/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o
+[37/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/x11_init.c.o
+[38/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/x11_monitor.c.o
+[39/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/x11_window.c.o
+[40/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/xkb_unicode.c.o
+[41/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/glx_context.c.o
+[42/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/wl_init.c.o
+[43/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/wl_monitor.c.o
+[44/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/wl_window.c.o
+[45/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/linux_joystick.c.o
+[46/81] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_poll.c.o
+[47/81] Linking C static library lib/glfw/src/libglfw3.a
+[48/81] Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'
+[49/81] Staging exact qualification inputs beside sirius_backend_tests
+[50/81] Staging exact qualification inputs beside sirius_render_tests
+[51/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o
+[52/81] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o
+[53/81] Linking CXX static library src/sirius/backend/libsirius_backend.a
+[54/81] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/alignment_authority.cpp.o
+[55/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o
+[56/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o
+[57/81] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/info_command.cpp.o
+[58/81] Linking CXX static library src/sirius/app/libsirius_app_lib.a
+[59/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o
+[60/81] Linking CXX executable src/sirius/app/sirius
+[61/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o
+[62/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o
+[63/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o
+[64/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o
+[65/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o
+[66/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o
+[67/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o
+[68/81] Linking CXX executable tests/oracle/sirius_oracle_tests
+[69/81] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o
+[70/81] Linking CXX executable tests/core/sirius_core_tests
+[71/81] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/vulkan_smoke_test.cpp.o
+[72/81] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o
+[73/81] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o
+[74/81] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o
+[75/81] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o
+[76/81] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_beam_test.cpp.o
+[77/81] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o
+[78/81] Linking CXX executable tests/backend/sirius_backend_tests
+[79/81] Linking CXX executable src/sirius/app/sirius_app_tests
+[80/81] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o
+[81/81] Linking CXX executable src/sirius/app/sirius_render_tests

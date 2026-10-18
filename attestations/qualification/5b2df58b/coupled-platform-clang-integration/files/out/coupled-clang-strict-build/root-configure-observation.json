@@ -1,0 +1,51 @@
+{
+  "schema": "sirius-coupled-Clang-strict-configure-v1",
+  "created_utc": "2026-10-18T02:21:36.017566+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "argv": [
+    "/usr/bin/cmake",
+    "--preset",
+    "linux-clang",
+    "-DSIRIUS_ALIGNMENT_MODE=qualification",
+    "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+    "-DSIRIUS_ATTESTATION_ROOT="
+  ],
+  "actual_closed_exit": 0,
+  "required_cache": [
+    "CMAKE_BUILD_TYPE:STRING=Release",
+    "SIRIUS_ALIGNMENT_MODE:STRING=qualification",
+    "SIRIUS_CONTRACT_MODE:STRING=2",
+    "SIRIUS_MANDATORY_TESTS:BOOL=ON",
+    "SIRIUS_WERROR:BOOL=ON",
+    "SIRIUS_REQUIRE_VULKAN_RUNTIME:BOOL=ON"
+  ],
+  "alignment_admitted_domains": [],
+  "alignment_pending_domains": [
+    "macos-moltenvk",
+    "macos-native-build",
+    "physical-imax-5616x4096",
+    "physical-radeon-780m",
+    "viewer-native-window-input",
+    "windows-native-build",
+    "windows-native-vulkan",
+    "wsl2-dozen"
+  ],
+  "files": {
+    "out/coupled-clang-strict-build/configure.log": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-clang-strict-build/configure.log",
+      "bytes": 1287,
+      "sha256": "19b63b21b1778e8c5b1a07a2c8804eb412ddf96f2d6530d735dda4cb9cc6ae0c"
+    },
+    "bin/linux-clang/CMakeCache.txt": {
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-clang/CMakeCache.txt",
+      "bytes": 58147,
+      "sha256": "bd131d381d69cb85027d227cdbb316e4f6bff404dea03cd1dea4cae712279ffa"
+    },
+    "bin/linux-clang/generated/sirius/alignment_receipt.json": {
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-clang/generated/sirius/alignment_receipt.json",
+      "bytes": 1240,
+      "sha256": "bc441b1aa4a92cf6f3ec6b199c260e220649b626df4dd485272916cc5c349d1b"
+    }
+  },
+  "scope": "One strict existing Clang qualification configure;300s timeout. Build/runtime/science/release not executed."
+}

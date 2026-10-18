@@ -1,0 +1,33 @@
+{
+  "schema": "sirius-cold-existing-evidence-root-review-v1",
+  "created_utc": "2026-10-18T02:25:10.600062+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "passed": true,
+  "extraction": {
+    "bytes": 46184,
+    "sha256": "eea8eaecce76f0cb4f6429a1143bbe8c872976cfee5015d230dac008c0dff243"
+  },
+  "exact_full_log_and_bounded_excerpt_verified": true,
+  "all8_existing_snapshot_line_references_and_stage_fields_verified": true,
+  "last_total_and_transport_endpoint_share_independently_recomputed": true,
+  "source_checks": [
+    {
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "bytes": 45570,
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566",
+      "current_equals_original_cold_source": true
+    },
+    {
+      "path": "src/sirius/render/vulkan_renderer.cpp",
+      "bytes": 74538,
+      "sha256": "f4a7b2e9e702369e1f740957485f1e5bc6ba8cf18ae4fa068dccb7876bf669e5",
+      "current_equals_original_cold_source": true
+    }
+  ],
+  "decision": "Original saved evidence already identifies prolonged active rendering after successful43.1s preparation. The private logging patch does not address that actual deficit and is not adopted or a reason for a new cold run. Ranked cumulative host submit/wait includes possible driver work; not pure numerical/compile time. No extrapolated final frame or current performance verdict.",
+  "new_shader_compiles": 0,
+  "new_numerical_tests": 0,
+  "new_cold_attempts": 0,
+  "canonical_changed": false,
+  "scope": "Read-only reuse of original failure evidence and current host source identity."
+}

@@ -1,0 +1,199 @@
+{
+  "schema": "sirius-coupled-clang-sanitizer-passive-preflight-findings-v1",
+  "created_utc": "2026-10-18T02:21:55.895127+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "read_only_preflight": true,
+  "configure_build_test_execution_performed": false,
+  "finding": "Both existing build trees need current configuration/build evidence; neither is a current-source qualification receipt. The changed source is gr_coupled.slang, imported by coupled_probe.slang and explicitly included in its custom-command dependency set.",
+  "source_authorities": {
+    "CMakePresets.json": {
+      "bytes": 5002,
+      "sha256": "605044b054a91099cd71975fa73f4789922759c778f28ef18667aec9c9747270"
+    },
+    "cmake/sirius_toolchain.cmake": {
+      "bytes": 5383,
+      "sha256": "53bb5f339886172e7552aa37122ec69b12bde6d2c96cfe18abe824310501e189"
+    },
+    "src/sirius/backend/CMakeLists.txt": {
+      "bytes": 17763,
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2"
+    },
+    "src/sirius/kernels/gr_coupled.slang": {
+      "bytes": 13076,
+      "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce"
+    },
+    "consumer_locus": "src/sirius/backend/CMakeLists.txt:219-239 (original FP64 Slang command plus optional existing validator; depends on complete SIRIUS_KERNEL_LIBS)."
+  },
+  "old_tree_observations": {
+    "linux-clang": {
+      "alignment_configure_revision": "4bcd9875cd9308deabed06a5fa2f17d2321b0cbc",
+      "mode": "qualification",
+      "build_type": "Release",
+      "contracts": 2,
+      "Werror": true,
+      "require_Vulkan": true,
+      "sanitizers": "none",
+      "cache": {
+        "bytes": 58147,
+        "sha256": "bd131d381d69cb85027d227cdbb316e4f6bff404dea03cd1dea4cae712279ffa"
+      },
+      "backend_ELF": {
+        "bytes": 12379160,
+        "sha256": "9eb96d52c73bc050d2f0c1418a820591f6acb3f4c726e0d88bbba09052e54927"
+      },
+      "scope": "Receipt is configure-source identity, not proof that every existing object/ELF was last built from that revision. Current binary producer closure is not admitted."
+    },
+    "linux-gcc-sanitize": {
+      "alignment_configure_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+      "mode": "development",
+      "build_type": "Debug",
+      "flags": "-g -O1; contracts2/Werror; address,undefined; frame pointers; no sanitizer recovery; no NDEBUG in first-party Debug commands",
+      "cache": {
+        "bytes": 57743,
+        "sha256": "f73a43a0957c891d82b777019016553c1f232ea7217dc0d7285fe88553fb3741"
+      },
+      "backend_ELF": {
+        "bytes": 161294120,
+        "sha256": "4b10d8b9be74d5c2cefe972345a78ace078ebdb3a5eae52972eb6612bd91b350"
+      },
+      "base_ELF": {
+        "bytes": 9543880,
+        "sha256": "5fa283be99595c9e94998a397ac34bd112f1f57986a1f45c7dc531a6f50fac23"
+      },
+      "matched_historical46a_build_review_products": true,
+      "historical_result": "attestations/qualification/46a9599/sanitizer-debug-o1-focused/files/out/sanitizer-debug-o1-verification/focused-result.json; original5contracts and relocated CPU installation passed then. No current source/runtime claim."
+    },
+    "both_old_coupled_module_and_backend_stage": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "current_accepted_GCC_module_and_stage": {
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+    },
+    "mtime_not_used_as_provenance": true
+  },
+  "next_Clang_root_commands": {
+    "configure": [
+      "/usr/bin/cmake",
+      "--preset",
+      "linux-clang",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification",
+      "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+      "-DSIRIUS_ATTESTATION_ROOT="
+    ],
+    "build": [
+      "/usr/bin/cmake",
+      "--build",
+      "--preset",
+      "linux-clang",
+      "--parallel",
+      "2",
+      "--target",
+      "sirius_backend_tests",
+      "sirius_core_tests",
+      "sirius_oracle_tests",
+      "sirius_app_tests",
+      "sirius_render_tests",
+      "SiriusSourceGovernance"
+    ],
+    "mature_owner": "out/coupled-shared-trial-strict-build/run_owned.py",
+    "guard": "out/coupled-shared-trial-strict-build/owned_guard.py",
+    "owner_SHA256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+    "guard_SHA256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+    "build_limits": {
+      "seconds": 1800,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "kind": "build",
+    "software_provider": false,
+    "full_ALL_Mandatory_target_invoked": false
+  },
+  "concrete_tool_closure_route": {
+    "existing_base": "out/coupled-shared-trial-strict-build/root-preflight.json:4922 rows; explicitly scoped selected GCC/FetchContent headers, full3692 Slang installation and recorded tools/DSOs/Python. Recheck matching current bytes; do not relabel historical rows current. It contains no Clang installation closure.",
+    "Clang_driver_aliases": [
+      "/usr/bin/clang-21",
+      "/usr/bin/clang++-21"
+    ],
+    "driver_resolves": "/usr/lib/llvm-21/bin/clang",
+    "driver": {
+      "bytes": 137408,
+      "sha256": "2451bd5e44d0fe575e3088eb29725b4b0820e5c335a3fdb889ae036f55b57f56"
+    },
+    "ar_ranlib_resolves": "/usr/lib/llvm-21/bin/llvm-ar",
+    "ar_ranlib": {
+      "bytes": 77200,
+      "sha256": "3faff5ba36e20722832b00170e77bb384a46b4ca7a76ca8be5b81a9cc77ba900"
+    },
+    "cached_version_only": "21.1.8, bin/linux-clang/CMakeFiles/3.28.3/CMakeCXXCompiler.cmake; not a fresh version operation.",
+    "resource_headers": "/usr/lib/llvm-21/lib/clang/21/include:297 current regular paths observed; freeze actual content alongside reusable selected C++14/system/FetchContent headers.",
+    "cached_implicit_include_dirs": [
+      "/usr/include/c++/14",
+      "/usr/include/x86_64-linux-gnu/c++/14",
+      "/usr/include/c++/14/backward",
+      "/usr/lib/llvm-21/lib/clang/21/include",
+      "/usr/local/include",
+      "/usr/include/x86_64-linux-gnu",
+      "/usr/include"
+    ],
+    "required_nonprovider_metadata_if_no_exact_current_reuse": [
+      "/usr/bin/ldd",
+      "/usr/bin/clang++-21"
+    ],
+    "known_current_shared_libraries": {
+      "/usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1": {
+        "bytes": 60209472,
+        "sha256": "c23ec909f82634227be628ad00fbafe372a09b30aeacb661e28740947b674c6d"
+      },
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.21.1": {
+        "bytes": 138493144,
+        "sha256": "fd419f2d3eddfbdece987a7757da8f66794ab933dde48fa685c2ad1c9478225e"
+      }
+    },
+    "not_a_complete_DSO_list": "Root owns the one ldd metadata query/reuse and freezes the actual complete returned loader/DSO identities plus invoked ar/linker/tools; no compiler/provider invocation is needed for this observation.",
+    "scope": "Same selected-transitive-header scope as mature GCC apparatus; no invented exhaustive header guarantee/new framework."
+  },
+  "minimal_meaningful_sanitizer_check": {
+    "configure": "Existing linux-gcc-sanitize preset with qualification/requireVulkan/empty attestation-root and all current strict flags. Keep Debug -g -O1 and all ASan/UBSan/LSan options unchanged. Cached development/source46a must not stand in for fresh admission.",
+    "build": "Reuse original focused build targets SiriusSourceGovernance sirius sirius_base_tests sirius_backend_tests at-j2, using 1800s/4GiB/2GiB requested bound; alternatively same six strict targets if broader compile coverage is desired. Original46a build used8GiB, so do not describe requested4GiB as that old measurement.",
+    "execution_argv": [
+      "/usr/bin/ctest",
+      "--preset",
+      "linux-gcc-sanitize",
+      "--no-tests=error",
+      "--output-junit",
+      "{folder}/ctest.xml",
+      "-R",
+      "^(ContractsDeathTest|Contracts)\\."
+    ],
+    "execution_mature_original_limits": {
+      "seconds": 120,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "execution_kind": "build (CTest preset supplies unchanged sanitizer environment)",
+    "actual_five_case_zero_FESD_required": true,
+    "preset_environment": {
+      "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:strict_string_checks=1",
+      "LSAN_OPTIONS": "suppressions=/home/astra/.project/Sirius/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1",
+      "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+    },
+    "consumer_policy_coverage": "Fresh build governs new shader dependency/codegen/validation/staging and source policy; five instrumented host tests exercise enforced contracts. This does not execute coupled shader mathematics or prove device memory safety.",
+    "optional_original_host_only_artifact_case": "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability reads3staged parity modules without a provider. It does not inspect the coupled module or qualify coupled numerics.",
+    "no_new_device_or_failed_frame_retry_required": true
+  },
+  "root_before_overwrite_and_after_build": [
+    "Normal build output replacement needs no duplicate full workspace archive. Retain these old config/product pins and already published source/evidence identities; do not promote old rows into current runtime proof. Root checks any still-declared frozen consumer before overwriting its inputs.",
+    "Fresh configure receipt must bind clean5b2/strictqualification/0of8/emptyattestationroot/requiredVulkan/compiler/tools and generated current cache/ninja/compile_commands; build action freezes actual inputs, excluding outputs it mutates.",
+    "After build, review actual six-target log/strict first-party commands/contracts2/Werror/C++26/FPflags, actual dependencies and stage source/product joins; coupled output must match admitted newproducer or receive its own exact source/recipe analysis.",
+    "Keep new current test registration/sourcegov mutable Testing outputs outside their own frozen sets. San CTest must retain preset sanitizer env and original assertions; no fullMandatory/science/runtime/release claim."
+  ],
+  "workspace": {
+    "source_clean_committed_pushed": true,
+    "tracking": "0/0",
+    "worktrees": 1,
+    "no_build_tree_mutation_by_reviewer": true
+  }
+}
