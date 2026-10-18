@@ -1,0 +1,242 @@
+[
+  {
+    "name": "retained_transport",
+    "old_address": "%ScratchAddress = OpFunction %uint None %520\n    %index_2 = OpFunctionParameter %uint\n%component_0 = OpFunctionParameter %uint\n  %rowBase_1 = OpFunctionParameter %uint\n   %prefix_0 = OpFunctionParameter %uint\n       %2012 = OpLabel\n       %2013 = OpVariable %_ptr_Function_uint Function\n       %2014 = OpIMul %uint %index_2 %uint_4\n       %2015 = OpIEqual %bool %component_0 %uint_4\n               OpSelectionMerge %2016 None\n               OpBranchConditional %2015 %2017 %2018\n       %2017 = OpLabel\n               OpStore %2013 %uint_3\n               OpBranch %2016\n       %2018 = OpLabel\n               OpStore %2013 %component_0\n               OpBranch %2016\n       %2016 = OpLabel\n       %2019 = OpLoad %uint %2013\n       %2020 = OpIAdd %uint %2014 %2019\n               OpReturnValue %2020\n               OpFunctionEnd",
+    "candidate_address": "%ScratchAddress = OpFunction %uint None %520\n    %index_2 = OpFunctionParameter %uint\n%component_0 = OpFunctionParameter %uint\n  %rowBase_1 = OpFunctionParameter %uint\n   %prefix_0 = OpFunctionParameter %uint\n       %2012 = OpLabel\n       %2013 = OpVariable %_ptr_Function_uint Function\n       %2014 = OpIEqual %bool %component_0 %uint_4\n               OpSelectionMerge %2015 None\n               OpBranchConditional %2014 %2016 %2017\n       %2016 = OpLabel\n               OpStore %2013 %uint_3\n               OpBranch %2015\n       %2017 = OpLabel\n               OpStore %2013 %component_0\n               OpBranch %2015\n       %2015 = OpLabel\n       %2018 = OpLoad %uint %2013\n       %2019 = OpIMul %uint %2018 %uint_459\n       %2020 = OpIAdd %uint %2019 %index_2\n               OpReturnValue %2020\n               OpFunctionEnd",
+    "old_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%520",
+      "parameters": [
+        "%index_2",
+        "%component_0",
+        "%rowBase_1",
+        "%prefix_0"
+      ],
+      "function_local_address_temporary": "%2013",
+      "blocks": [
+        "%2012",
+        "%2017",
+        "%2018",
+        "%2016"
+      ],
+      "comparison_result": "%2015",
+      "result": "%2020",
+      "first_line": 3305
+    },
+    "candidate_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%520",
+      "parameters": [
+        "%index_2",
+        "%component_0",
+        "%rowBase_1",
+        "%prefix_0"
+      ],
+      "function_local_address_temporary": "%2013",
+      "blocks": [
+        "%2012",
+        "%2016",
+        "%2017",
+        "%2015"
+      ],
+      "comparison_result": "%2014",
+      "result": "%2020",
+      "first_line": 3305
+    },
+    "outside_function_text_sha256": "12aa9f829a37cc14043b2d08d268796eeef4bd74b7f7fd32bbd0840d38c44973"
+  },
+  {
+    "name": "retained_endpoint",
+    "old_address": "%ScratchAddress = OpFunction %uint None %595\n    %index_2 = OpFunctionParameter %uint\n%component_2 = OpFunctionParameter %uint\n  %rowBase_8 = OpFunctionParameter %uint\n   %prefix_3 = OpFunctionParameter %uint\n       %3170 = OpLabel\n       %3171 = OpVariable %_ptr_Function_uint Function\n       %3172 = OpIMul %uint %index_2 %uint_4\n       %3173 = OpIEqual %bool %component_2 %uint_4\n               OpSelectionMerge %3174 None\n               OpBranchConditional %3173 %3175 %3176\n       %3175 = OpLabel\n               OpStore %3171 %uint_3\n               OpBranch %3174\n       %3176 = OpLabel\n               OpStore %3171 %component_2\n               OpBranch %3174\n       %3174 = OpLabel\n       %3177 = OpLoad %uint %3171\n       %3178 = OpIAdd %uint %3172 %3177\n               OpReturnValue %3178\n               OpFunctionEnd",
+    "candidate_address": "%ScratchAddress = OpFunction %uint None %595\n    %index_2 = OpFunctionParameter %uint\n%component_2 = OpFunctionParameter %uint\n  %rowBase_8 = OpFunctionParameter %uint\n   %prefix_3 = OpFunctionParameter %uint\n       %3170 = OpLabel\n       %3171 = OpVariable %_ptr_Function_uint Function\n       %3172 = OpIEqual %bool %component_2 %uint_4\n               OpSelectionMerge %3173 None\n               OpBranchConditional %3172 %3174 %3175\n       %3174 = OpLabel\n               OpStore %3171 %uint_3\n               OpBranch %3173\n       %3175 = OpLabel\n               OpStore %3171 %component_2\n               OpBranch %3173\n       %3173 = OpLabel\n       %3176 = OpLoad %uint %3171\n       %3177 = OpIMul %uint %3176 %uint_612\n       %3178 = OpIAdd %uint %3177 %index_2\n               OpReturnValue %3178\n               OpFunctionEnd",
+    "old_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%595",
+      "parameters": [
+        "%index_2",
+        "%component_2",
+        "%rowBase_8",
+        "%prefix_3"
+      ],
+      "function_local_address_temporary": "%3171",
+      "blocks": [
+        "%3170",
+        "%3175",
+        "%3176",
+        "%3174"
+      ],
+      "comparison_result": "%3173",
+      "result": "%3178",
+      "first_line": 5468
+    },
+    "candidate_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%595",
+      "parameters": [
+        "%index_2",
+        "%component_2",
+        "%rowBase_8",
+        "%prefix_3"
+      ],
+      "function_local_address_temporary": "%3171",
+      "blocks": [
+        "%3170",
+        "%3174",
+        "%3175",
+        "%3173"
+      ],
+      "comparison_result": "%3172",
+      "result": "%3178",
+      "first_line": 5468
+    },
+    "outside_function_text_sha256": "e913791ce7e90b6e0ccb3af9e5231fe15cd767748357d1847a45241b8cf75361"
+  },
+  {
+    "name": "retained_dense",
+    "old_address": "%ScratchAddress = OpFunction %uint None %524\n    %index_4 = OpFunctionParameter %uint\n%component_0 = OpFunctionParameter %uint\n  %rowBase_5 = OpFunctionParameter %uint\n   %prefix_0 = OpFunctionParameter %uint\n       %2415 = OpLabel\n       %2416 = OpVariable %_ptr_Function_uint Function\n       %2417 = OpIMul %uint %index_4 %uint_4\n       %2418 = OpIEqual %bool %component_0 %uint_4\n               OpSelectionMerge %2419 None\n               OpBranchConditional %2418 %2420 %2421\n       %2420 = OpLabel\n               OpStore %2416 %uint_3\n               OpBranch %2419\n       %2421 = OpLabel\n               OpStore %2416 %component_0\n               OpBranch %2419\n       %2419 = OpLabel\n       %2422 = OpLoad %uint %2416\n       %2423 = OpIAdd %uint %2417 %2422\n               OpReturnValue %2423\n               OpFunctionEnd",
+    "candidate_address": "%ScratchAddress = OpFunction %uint None %524\n    %index_4 = OpFunctionParameter %uint\n%component_0 = OpFunctionParameter %uint\n  %rowBase_5 = OpFunctionParameter %uint\n   %prefix_0 = OpFunctionParameter %uint\n       %2415 = OpLabel\n       %2416 = OpVariable %_ptr_Function_uint Function\n       %2417 = OpIEqual %bool %component_0 %uint_4\n               OpSelectionMerge %2418 None\n               OpBranchConditional %2417 %2419 %2420\n       %2419 = OpLabel\n               OpStore %2416 %uint_3\n               OpBranch %2418\n       %2420 = OpLabel\n               OpStore %2416 %component_0\n               OpBranch %2418\n       %2418 = OpLabel\n       %2421 = OpLoad %uint %2416\n       %2422 = OpIMul %uint %2421 %uint_815\n       %2423 = OpIAdd %uint %2422 %index_4\n               OpReturnValue %2423\n               OpFunctionEnd",
+    "old_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%524",
+      "parameters": [
+        "%index_4",
+        "%component_0",
+        "%rowBase_5",
+        "%prefix_0"
+      ],
+      "function_local_address_temporary": "%2416",
+      "blocks": [
+        "%2415",
+        "%2420",
+        "%2421",
+        "%2419"
+      ],
+      "comparison_result": "%2418",
+      "result": "%2423",
+      "first_line": 4153
+    },
+    "candidate_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%524",
+      "parameters": [
+        "%index_4",
+        "%component_0",
+        "%rowBase_5",
+        "%prefix_0"
+      ],
+      "function_local_address_temporary": "%2416",
+      "blocks": [
+        "%2415",
+        "%2419",
+        "%2420",
+        "%2418"
+      ],
+      "comparison_result": "%2417",
+      "result": "%2423",
+      "first_line": 4153
+    },
+    "outside_function_text_sha256": "3144b2b782291bbbeccfc4aa1215eb44d8bcc16bfe168aaba9135a9ba4d92398"
+  },
+  {
+    "name": "retained_initialize",
+    "old_address": "%ScratchAddress = OpFunction %uint None %383\n    %index_3 = OpFunctionParameter %uint\n%component_0 = OpFunctionParameter %uint\n  %rowBase_4 = OpFunctionParameter %uint\n   %prefix_0 = OpFunctionParameter %uint\n       %1300 = OpLabel\n       %1301 = OpVariable %_ptr_Function_uint Function\n       %1302 = OpIMul %uint %index_3 %uint_4\n       %1303 = OpIEqual %bool %component_0 %uint_4\n               OpSelectionMerge %1304 None\n               OpBranchConditional %1303 %1305 %1306\n       %1305 = OpLabel\n               OpStore %1301 %uint_3\n               OpBranch %1304\n       %1306 = OpLabel\n               OpStore %1301 %component_0\n               OpBranch %1304\n       %1304 = OpLabel\n       %1307 = OpLoad %uint %1301\n       %1308 = OpIAdd %uint %1302 %1307\n               OpReturnValue %1308\n               OpFunctionEnd",
+    "candidate_address": "%ScratchAddress = OpFunction %uint None %383\n    %index_3 = OpFunctionParameter %uint\n%component_0 = OpFunctionParameter %uint\n  %rowBase_4 = OpFunctionParameter %uint\n   %prefix_0 = OpFunctionParameter %uint\n       %1300 = OpLabel\n       %1301 = OpVariable %_ptr_Function_uint Function\n       %1302 = OpIEqual %bool %component_0 %uint_4\n               OpSelectionMerge %1303 None\n               OpBranchConditional %1302 %1304 %1305\n       %1304 = OpLabel\n               OpStore %1301 %uint_3\n               OpBranch %1303\n       %1305 = OpLabel\n               OpStore %1301 %component_0\n               OpBranch %1303\n       %1303 = OpLabel\n       %1306 = OpLoad %uint %1301\n       %1307 = OpIMul %uint %1306 %uint_362\n       %1308 = OpIAdd %uint %1307 %index_3\n               OpReturnValue %1308\n               OpFunctionEnd",
+    "old_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%383",
+      "parameters": [
+        "%index_3",
+        "%component_0",
+        "%rowBase_4",
+        "%prefix_0"
+      ],
+      "function_local_address_temporary": "%1301",
+      "blocks": [
+        "%1300",
+        "%1305",
+        "%1306",
+        "%1304"
+      ],
+      "comparison_result": "%1303",
+      "result": "%1308",
+      "first_line": 2206
+    },
+    "candidate_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%383",
+      "parameters": [
+        "%index_3",
+        "%component_0",
+        "%rowBase_4",
+        "%prefix_0"
+      ],
+      "function_local_address_temporary": "%1301",
+      "blocks": [
+        "%1300",
+        "%1304",
+        "%1305",
+        "%1303"
+      ],
+      "comparison_result": "%1302",
+      "result": "%1308",
+      "first_line": 2206
+    },
+    "outside_function_text_sha256": "8d54e8e54b69a3ec0db7f13110848685ba5966f3b3661a50de01def5f880a311"
+  },
+  {
+    "name": "retained_dopri_phase",
+    "old_address": "%ScratchAddress = OpFunction %uint None %400\n    %index_3 = OpFunctionParameter %uint\n%component_0 = OpFunctionParameter %uint\n  %rowBase_4 = OpFunctionParameter %uint\n   %prefix_0 = OpFunctionParameter %uint\n       %1423 = OpLabel\n       %1424 = OpVariable %_ptr_Function_uint Function\n       %1425 = OpIMul %uint %index_3 %uint_4\n       %1426 = OpIEqual %bool %component_0 %uint_4\n               OpSelectionMerge %1427 None\n               OpBranchConditional %1426 %1428 %1429\n       %1428 = OpLabel\n               OpStore %1424 %uint_3\n               OpBranch %1427\n       %1429 = OpLabel\n               OpStore %1424 %component_0\n               OpBranch %1427\n       %1427 = OpLabel\n       %1430 = OpLoad %uint %1424\n       %1431 = OpIAdd %uint %1425 %1430\n               OpReturnValue %1431\n               OpFunctionEnd",
+    "candidate_address": "%ScratchAddress = OpFunction %uint None %400\n    %index_3 = OpFunctionParameter %uint\n%component_0 = OpFunctionParameter %uint\n  %rowBase_4 = OpFunctionParameter %uint\n   %prefix_0 = OpFunctionParameter %uint\n       %1423 = OpLabel\n       %1424 = OpVariable %_ptr_Function_uint Function\n       %1425 = OpIEqual %bool %component_0 %uint_4\n               OpSelectionMerge %1426 None\n               OpBranchConditional %1425 %1427 %1428\n       %1427 = OpLabel\n               OpStore %1424 %uint_3\n               OpBranch %1426\n       %1428 = OpLabel\n               OpStore %1424 %component_0\n               OpBranch %1426\n       %1426 = OpLabel\n       %1429 = OpLoad %uint %1424\n       %1430 = OpIMul %uint %1429 %uint_629\n       %1431 = OpIAdd %uint %1430 %index_3\n               OpReturnValue %1431\n               OpFunctionEnd",
+    "old_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%400",
+      "parameters": [
+        "%index_3",
+        "%component_0",
+        "%rowBase_4",
+        "%prefix_0"
+      ],
+      "function_local_address_temporary": "%1424",
+      "blocks": [
+        "%1423",
+        "%1428",
+        "%1429",
+        "%1427"
+      ],
+      "comparison_result": "%1426",
+      "result": "%1431",
+      "first_line": 2431
+    },
+    "candidate_ids": {
+      "function_id": "%ScratchAddress",
+      "uint32_type": "%uint",
+      "function_type": "%400",
+      "parameters": [
+        "%index_3",
+        "%component_0",
+        "%rowBase_4",
+        "%prefix_0"
+      ],
+      "function_local_address_temporary": "%1424",
+      "blocks": [
+        "%1423",
+        "%1427",
+        "%1428",
+        "%1426"
+      ],
+      "comparison_result": "%1425",
+      "result": "%1431",
+      "first_line": 2431
+    },
+    "outside_function_text_sha256": "e73682ceccd16f482ba6d175c50fc6565bf7ca7ceea2b9ef239a2c4b4f1a7647"
+  }
+]

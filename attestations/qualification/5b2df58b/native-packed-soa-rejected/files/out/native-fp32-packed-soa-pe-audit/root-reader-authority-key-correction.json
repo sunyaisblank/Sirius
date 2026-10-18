@@ -1,0 +1,17 @@
+{
+  "schema": "sirius-packed-soa-root-array-authority-reader-key-correction-v1",
+  "created_utc": "2026-10-18T07:18:05.326662+00:00",
+  "original": {
+    "path": "out/native-fp32-packed-soa-pe-audit/matched-array-authority-45d91ac3.json",
+    "sha256": "c50970ecd685ae27badbb0d5e1296579edfde50fe2f748bac0aec52638fb198f"
+  },
+  "corrected": {
+    "path": "out/native-fp32-packed-soa-pe-audit/matched-array-authority-45d91ac3-reader.json",
+    "sha256": "6174f97b770408e2ac3d2182e281edef3c5a31138052148675a82605ef6df7bc"
+  },
+  "delta": "Only Transport/Endpoint key casing under arms.*.fma_available becomes transport/endpoint as required by unchanged native_evidence.Context. Both available booleans remain true; all40arrays/PE/manifest/producer/header/source payloads unchanged.",
+  "original_control8_inputs_untouched": true,
+  "basis": "Actual current headers contain unchanged kTransportFmaShader and kEndpointFmaShader. Availability metadata only; default native FP32 control8 does not select FMA or wide arrays. Original first-control wrapper uses actual M/producer/PE and source guards; source data and observed execution unchanged.",
+  "no_workload_repeated": true,
+  "scope": "Corrected reader authority for current actual product; not new execution/benefit/adoption. Original erroneous data remains bound/current for its existing before/after raw records."
+}

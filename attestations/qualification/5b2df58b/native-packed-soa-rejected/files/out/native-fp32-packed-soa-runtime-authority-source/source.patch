@@ -1,0 +1,42 @@
+--- originals/run_system.py
++++ run_system.py
+@@ -103,7 +103,7 @@
+     configure=commands[0]['argv'];build=commands[1]['argv']
+     assert configure[:6]==[tools['cmake'],'--preset','windows-msvc','-DSIRIUS_ALIGNMENT_MODE=qualification','-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON','-DCMAKE_CONFIGURATION_TYPES:STRING=Release'] and len(configure)==7
+     option='-DCMAKE_PROJECT_Sirius_INCLUDE='
+-    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-fp32-packed-scratch-windows-producer-source/matched-producer.cmake'
++    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-fp32-packed-soa-windows-source/matched-producer.cmake'
+     assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativePackedMatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
+     assert build[12].startswith('/bl:') and PureWindowsPath(build[12][4:])==PureWindowsPath(producer['export_root'])/'build.binlog'
+     assert all(PureWindowsPath(c['cwd'])==PureWindowsPath(producer['source_root']) for c in commands)
+--- originals/run_terminal.py
++++ run_terminal.py
+@@ -59,7 +59,7 @@
+     configure=commands[0]['argv'];build=commands[1]['argv']
+     assert configure[:6]==[tools['cmake'],'--preset','windows-msvc','-DSIRIUS_ALIGNMENT_MODE=qualification','-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON','-DCMAKE_CONFIGURATION_TYPES:STRING=Release'] and len(configure)==7
+     option='-DCMAKE_PROJECT_Sirius_INCLUDE='
+-    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-fp32-packed-scratch-windows-producer-source/matched-producer.cmake'
++    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-fp32-packed-soa-windows-source/matched-producer.cmake'
+     assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativePackedMatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
+     assert build[12].startswith('/bl:') and PureWindowsPath(build[12][4:])==PureWindowsPath(producer['export_root'])/'build.binlog'
+     assert all(PureWindowsPath(c['cwd'])==PureWindowsPath(producer['source_root']) for c in commands)
+--- originals/materialize_phase.py
++++ materialize_phase.py
+@@ -8,7 +8,7 @@
+ import sys
+ 
+ ROOT = Path.cwd()
+-AUTH = ROOT / 'out/native-fp32-packed-scratch-runtime-authority-source'
++AUTH = ROOT / 'out/native-fp32-packed-soa-runtime-authority-source'
+ READERS = ROOT / 'out/native-fp32-packed-scratch-runtime-source'
+ 
+ 
+@@ -75,7 +75,7 @@
+         if node.targets[0].id in ('ACTION_NAMES', 'ACTION_ARMS', 'PROFILES'):
+             constants[node.targets[0].id] = ast.literal_eval(node.value)
+ order = constants['PROFILES'][phase]
+-work = ROOT / ('out/native-fp32-packed-scratch-runtime-' + phase)
++work = ROOT / ('out/native-fp32-packed-soa-runtime-' + phase)
+ assert not work.exists()
+ 
+ prior_keys = {'timestamp': [], 'abba': ['timestamp_acceptance'],

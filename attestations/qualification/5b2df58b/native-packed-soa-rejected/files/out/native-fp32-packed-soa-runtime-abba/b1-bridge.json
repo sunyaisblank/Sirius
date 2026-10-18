@@ -1,0 +1,92 @@
+{
+  "source_revision": "45d91ac36d1135d18cba8ebb1923339723fde5df",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "kind": "b1",
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';foreach($v in Get-ChildItem Env:){if($v.Name -match '^(LVP_|SLANG_|MESA_)'){throw 'Unexpected inherited compiler/cache override'}};& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-fp32-packed-soa-runtime-abba\\run_native_control.ps1' -Stage '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-packed-soa-matched-45d91ac3\\payload\\candidate' -Output '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-fp32-packed-soa-runtime-abba\\native\\b1' -Filter 'RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults' -Seconds '300' -RssBytes '4294967296' -TemporaryDirectory '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-fp32-packed-soa-runtime-abba\\b1' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-packed-soa-matched-45d91ac3' -ExpectedManifestSha256 '54b48e9903e9006360625a9f00ad52d4b7587a88bf86f79614383868859bc017' -ExpectedProducerSha256 'c4d033c6dc8cba2bae4111d860055dbf739e536c6d8b1086c096b67f0faa2314' -Arm 'candidate' -LiveRevision '5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e' -ExecutableName 'original_candidate_controls.exe' -InvocationKind 'Control';exit $LASTEXITCODE"
+  ],
+  "binding_sha256": "f97ecb56b78bf0d547d040c2b173dec98187a8d58720c101201509e46e411983",
+  "linux_controller_pid": 31408,
+  "linux_controller_birth": "18082179",
+  "predecessor_inputs": {
+    "out/native-fp32-packed-soa-runtime-abba/a1-bridge.json": {
+      "bytes": 2838,
+      "sha256": "4bff2b465c26393ca71ba7c751f146d3b6fea20824526fdad4ee101b2834a354"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/native/a1/owner.json": {
+      "bytes": 3581,
+      "sha256": "a283e09d41dedcd33631c507c85f25de704a6eebc742d4ec01306ec9da6735fe"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/native/a1/stdout.log": {
+      "bytes": 714,
+      "sha256": "0b0478700cc0fa50a44098017ffe4d0bf147d2f3ed90c1d894c424f22875ca4a"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/native/a1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/native/a1/memory.json": {
+      "bytes": 8098,
+      "sha256": "8b68bbb862b7cf43ea3e015a7808f7f18d62170e3ef518e8f4f20f28e2f4c461"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/a1-inputs-before.json": {
+      "bytes": 147519,
+      "sha256": "9f2a1f45bc6e7f9b7da47a4c2d861c1ecd9676403038436542237090acbc6f8a"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/a1-inputs-after.json": {
+      "bytes": 147519,
+      "sha256": "9f2a1f45bc6e7f9b7da47a4c2d861c1ecd9676403038436542237090acbc6f8a"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/native/a1/gtest.xml": {
+      "bytes": 40996,
+      "sha256": "45103b5d7ecd92b9a1c840e8a78813861a28a88215f4feac51e48febcf70863f"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/native/a1/driver-modules.json": {
+      "bytes": 694,
+      "sha256": "82c75ee86065566b6c78458cdb10a4e0ff82474838a941252d1e429f63dde549"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/terminal-a1.json": {
+      "bytes": 4069,
+      "sha256": "0c93bbbea5bb7c5b3ede15552d7cff0f491a1084ac60ba549c1d26fd54564512"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/terminal-a1-bridge.json": {
+      "bytes": 2373,
+      "sha256": "265dbacca60b29a8f1c9c5f29d113e90fd3f21c02f810a9b171fecb57d709b36"
+    },
+    "out/native-fp32-packed-soa-runtime-abba/terminal-a1-accepted.json": {
+      "bytes": 8933,
+      "sha256": "f727c5c78b13db56707da2b50e91f895f9ebb9d16378f8e777668a1e9f9c7077"
+    }
+  },
+  "bridge_outer_seconds": 1380,
+  "windows_owner_seconds": 300,
+  "minimum_wsl_available_kib": 2097152,
+  "resource_scope": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "accepted_owner_execution": true,
+  "completed": true,
+  "cleanup_errors": [],
+  "full_qualification_claimed": false,
+  "minimum_sampled_wsl_available_kib": 17609100,
+  "linux_child_pid": 31425,
+  "linux_child_birth": "18082470",
+  "returncode": 0,
+  "linux_child_birth_absent": true,
+  "native_build_gate_authority_used": false,
+  "private_producer_authority_used": true,
+  "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+  "mandatory_or_full_runtime_admitted": false,
+  "original_control_identity": {
+    "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "arm": "candidate"
+  },
+  "loaded_provider_evidence_complete": true,
+  "whole_inputs_unchanged": true,
+  "elapsed_seconds": 23.41122800798621,
+  "signals": []
+}

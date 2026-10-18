@@ -1,0 +1,87 @@
+{
+  "schema": "sirius-native-packed-soa-five-compiler-source-contract-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_only": true,
+  "offline_compile_released": false,
+  "runtime_admitted": false,
+  "canonical_changed": false,
+  "source": {
+    "review": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-source/independent-source-review.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-source/independent-source-review.json",
+      "bytes": 5217,
+      "sha256": "cec310c275d5f264bffef486642944b3159553c00bf9d131abd6f594f2b24c9e"
+    },
+    "candidate": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-source/candidate-retained_scratch.slang",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-source/candidate-retained_scratch.slang",
+      "bytes": 2264,
+      "sha256": "c4261ae5201e4d627b5b02d6181fe8ecdd5f90b363eab92105cacfb2c96d7841"
+    },
+    "private_kernel_files": 33,
+    "private_deltas": [
+      "retained_scratch.slang"
+    ],
+    "builder_preimage": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/originals/build-retained-kernels.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/originals/build-retained-kernels.py",
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+    }
+  },
+  "recipe": "Five ordinary native FP32 Transport/Endpoint/Dense/Initialize/DopriPhase only. Definitions are read from unchanged cached program arrays/owner layout; exact canonical native Slang -O0/spirv_1_5/ComputeMain/compute/DenormPreserve32 recipe, unchanged native_controls(fma=False), as spv1.5, val vulkan1.2. No optimizer/SSA, program generator, baseline compile, full35 build, FMA/portable/wide/owner module compile or provider.",
+  "retention_only_delta": "Retain raw compiler SPV/raw disassembly/annotated assembly; final ordinary disassembly is diagnostic. Five profiles x five actual tool calls, all serial inside one original 300s/4GiB sampled aggregate RSS/2GiB host reserve owner.",
+  "helpers": {
+    "owner": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/run_owned.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "guard": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/owned_guard.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "origin_commit": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+    "origin_directory": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen"
+  },
+  "tools_reuse": {
+    "old_preflight": {
+      "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/root-preflight.json",
+      "resolved_path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/root-preflight.json",
+      "bytes": 1648106,
+      "sha256": "2f6360e48cbd473e52e21445beefb0c6587f0b17517845f9d4fb0fd860f801d1"
+    },
+    "current_prior_equal_rows": 3852,
+    "all_slang_prior_resources_pinned": true,
+    "no_version_or_ldd_or_provider_query_executed": true,
+    "lexical_python_alias_matches_prior_python3_12": true,
+    "additional_current_hash_only_support_aliases": [
+      "/lib/x86_64-linux-gnu/libffi.so.8",
+      "/lib/x86_64-linux-gnu/libcrypto.so.3"
+    ],
+    "scope": "Exact selected old observed resources plus direct tool/interpreter/Git paths and two support aliases. Bounded reused observation, not complete host/SDK/transitive dependency discovery; no current tool invocation or environment discovery."
+  },
+  "cached_products": {
+    "canonical_spv_count": 35,
+    "headers": 3,
+    "expected_future_substitution": "After direct emitted proof, replace only five native ordinary arrays; other30 SPVs remain cached/canonical. Main40 arrays five changed35same, all7tables and twoownerheaders exact; not granted by this compiler result."
+  },
+  "postcompile_required": [
+    "ROOT checks actual owner passed/source/input stability/birth retirement and command-results25 exits0 against frozen recipes.",
+    "ROOT performs direct actual emitted comparison against saved five packed-AoS SPV/ASM: identical local64, capabilities/modes/interfaces/layout/4R allocation; every body/globals outside ScratchAddress equivalent under explicit ID/type normalization; actual plane*R+index address graph, packing RMW/barriers/WriteValue unchanged. No source AST-only or opaque optimizer equivalence claim.",
+    "ROOT independently admits exact actual products before any C++ producer/resource composition; no runtime/performance/adoption authority."
+  ],
+  "history": {
+    "prior_native_packed_AoS": "REJECT21of22; remaining7unrun; no unchanged retry. New component-major address permutation is distinct source hypothesis; no hardware/runtime/cache/occupancy gain assumed.",
+    "prior_software_packed": "REJECT17of22 distinct provider history, not acceptance."
+  },
+  "prelaunch_obligations": [
+    "Clean exact source revision; assertions enabled, /usr/bin/python3 -B; no Python/Slang/compiler/loader overrides.",
+    "Independent/root source and concrete input admission followed by ROOT explicit offline release; candidate directory absent before first owned launch.",
+    "No source/build/provider/CI/test/runtime/cleanup performed by source author."
+  ],
+  "authorship": "/root/sanitizer_gate_contract; source preparation only; no independent-source-admission claim."
+}

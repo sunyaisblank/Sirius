@@ -1,0 +1,2031 @@
+{
+  "schema": "sirius-packed-soa-root-actual-diagnostic-source-Git-v1",
+  "created_utc": "2026-10-18T07:00:18.638555+00:00",
+  "branch": "refs/heads/development/native-fp32-packed-scratch-diagnostic-2026-10-18",
+  "parent": "9679a9afddc7f8242a42ccfd0ca6c1ce6814ddce",
+  "commit": "45d91ac36d1135d18cba8ebb1923339723fde5df",
+  "files": [
+    {
+      "path": "out/native-fp32-packed-soa-source/candidate-retained_scratch.slang",
+      "source": "out/native-fp32-packed-soa-source/candidate-retained_scratch.slang",
+      "bytes": 2264,
+      "sha256": "c4261ae5201e4d627b5b02d6181fe8ecdd5f90b363eab92105cacfb2c96d7841",
+      "mode": "100644",
+      "blob": "49fcea7b6eeded24a1dfa5b3ce759cd3b7a824a3"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-source/independent-source-review.json",
+      "source": "out/native-fp32-packed-soa-source/independent-source-review.json",
+      "bytes": 5217,
+      "sha256": "cec310c275d5f264bffef486642944b3159553c00bf9d131abd6f594f2b24c9e",
+      "mode": "100644",
+      "blob": "54e066d43e03471984ebf6c94a91fa0402fe5be2"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-source/original-retained_scratch.slang",
+      "source": "out/native-fp32-packed-soa-source/original-retained_scratch.slang",
+      "bytes": 2241,
+      "sha256": "64159e43065426556e76c06b2324abf4adb02f9e96f541b844eba1fd791c9286",
+      "mode": "100644",
+      "blob": "3f7622529ac596e280f9d6392f72ec5b792c09a0"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-source/source-contracts.json",
+      "source": "out/native-fp32-packed-soa-source/source-contracts.json",
+      "bytes": 6089,
+      "sha256": "fbed7865ba13500bccee008159d2128a4d05b8878441127dd531482eb9d2fd15",
+      "mode": "100644",
+      "blob": "9a86386f77c7f83698a744bb7467c87f2be5e573"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-source/source.patch",
+      "source": "out/native-fp32-packed-soa-source/source.patch",
+      "bytes": 655,
+      "sha256": "1deec3a964de6f209f26d6704320acd6ff217c9875e3d1e97b8c431a557d26cf",
+      "mode": "100644",
+      "blob": "b2bd9369ab337e115c3fc7cee22aa5af4e4cb51d"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/actions.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/actions.json",
+      "bytes": 486975,
+      "sha256": "e724f511aac05e83e365ae74e061c12730e14753798f1a956caa43d5e270b2f4",
+      "mode": "100644",
+      "blob": "aaa998f2e730ccda4c26637a31f2bfe56f910248"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/command-results.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/command-results.json",
+      "bytes": 27097,
+      "sha256": "c6954c5b8a7afa8d18b740aa946e7fdab0ab0aa91335b9b91b062c9fbcb6232b",
+      "mode": "100644",
+      "blob": "ed522927c926e72c6a2a24110283552a08961e8f"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/inputs-after.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/inputs-after.json",
+      "bytes": 1484880,
+      "sha256": "e8ebd1a7b202d7f9c1fe648a708c4991d150590fcb994b09563d482cdf9b09be",
+      "mode": "100644",
+      "blob": "1d8d2e53ebd0f03c4b925961883c6a915d1c18b2"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/inputs-before.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/inputs-before.json",
+      "bytes": 1484880,
+      "sha256": "e8ebd1a7b202d7f9c1fe648a708c4991d150590fcb994b09563d482cdf9b09be",
+      "mode": "100644",
+      "blob": "1d8d2e53ebd0f03c4b925961883c6a915d1c18b2"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/owner.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/owner.json",
+      "bytes": 2261,
+      "sha256": "cbd263388181bded5c92fd0666b95384f9e8586bfd946faad1281935430e48ce",
+      "mode": "100644",
+      "blob": "1fe9b7459142caf6a6a9871f335478b153dc76c8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/products.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/products.json",
+      "bytes": 7430,
+      "sha256": "1a0d3699644a48c84a08ed09d95b77605f157f6d1c37cfc675521acd1b494829",
+      "mode": "100644",
+      "blob": "99025262d0c743d68626c6279de01f2d2c412de8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-assemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-assemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-assemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-assemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-compile.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-compile.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-compile.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-compile.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-final-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-final-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-final-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-final-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-raw-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-raw-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-raw-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-raw-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-validate.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-validate.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-validate.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense-validate.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.compiler.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.compiler.spv",
+      "bytes": 78660,
+      "sha256": "7513aef3697ab7cf8cfdaf94002955faa5579451be0aa22433661dc172502783",
+      "mode": "100644",
+      "blob": "6c934f1f6d320b6bd080271d71a7e0e87abbe03a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.final.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.final.spvasm",
+      "bytes": 228892,
+      "sha256": "ed25049be55806d49c3bace080d1f0299b98b69d9eee0b139bc53f306e2a5bd5",
+      "mode": "100644",
+      "blob": "b09b6050068b810741b00840268bf284ad998bff"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.raw.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.raw.spvasm",
+      "bytes": 228419,
+      "sha256": "e21f6ebcf3302b53efae2b54a577b588745376ee8d207c99674a354edeac67c0",
+      "mode": "100644",
+      "blob": "4f50db02645b6a15f50a5a74eaf274acf460bae9"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.spv",
+      "bytes": 78684,
+      "sha256": "3fc06d89f5543fb4f1efc610a11d526b90b9784742a101e1d1177b4e0e07b4c4",
+      "mode": "100644",
+      "blob": "03acddbb3751fe5c4dda1d81b2911f3080d9992a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.spvasm",
+      "bytes": 228526,
+      "sha256": "6c595e130a6bc61bb414d780b28a9ffaaebe59419e489722bd0a64e75b2d6cdd",
+      "mode": "100644",
+      "blob": "932f0cb1889d9399d1895a0e6dc8ea09aa3584b7"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-assemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-assemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-assemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-assemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-compile.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-compile.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-compile.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-compile.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-final-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-final-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-final-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-final-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-raw-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-raw-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-raw-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-raw-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-validate.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-validate.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-validate.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase-validate.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.compiler.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.compiler.spv",
+      "bytes": 59448,
+      "sha256": "3152ee726ad0bf71d5509a8eeabbbf2d20f49fc4e87c3bfe8830f4adb45f493c",
+      "mode": "100644",
+      "blob": "c87c36842531dd0b48886e3ac3097c60be3efcc9"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.final.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.final.spvasm",
+      "bytes": 172003,
+      "sha256": "dd5d63c3a3baaf4064da3cadbd3a23c5f5102ffefdc8481d86f0910a1ade268e",
+      "mode": "100644",
+      "blob": "1f2b7e8c219ae60471b43b55c41cf9ddcf32374a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.raw.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.raw.spvasm",
+      "bytes": 171669,
+      "sha256": "0271f73190a5065acc8211284f7faabae2b407152f2abb515b680c94d6e095ef",
+      "mode": "100644",
+      "blob": "a49aec967cfc6df2d0ad87acc1d295826ff88de4"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.spv",
+      "bytes": 59472,
+      "sha256": "a9415f2c0eae55d2aa940f34b343fec79693d77ceeaf4df7f602fe6b86c34b90",
+      "mode": "100644",
+      "blob": "37e8a757b5d19a7be94fa54e0277ef24df29e3fc"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.spvasm",
+      "bytes": 171776,
+      "sha256": "21b41810dc624856874747f8f90d3e467d628e6952a1b668f2c5d3a15396ccfe",
+      "mode": "100644",
+      "blob": "ff29df904849c9c5241dfd280a6c7ae7002eecc7"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-assemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-assemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-assemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-assemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-compile.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-compile.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-compile.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-compile.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-final-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-final-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-final-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-final-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-raw-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-raw-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-raw-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-raw-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-validate.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-validate.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-validate.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint-validate.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.compiler.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.compiler.spv",
+      "bytes": 100008,
+      "sha256": "1f84e1c71cd7d29a8afb5681a7644a32f6c374bd5b624ab188e9005f80f41edb",
+      "mode": "100644",
+      "blob": "fbfe9eabed5a23d946c523f9e4e93eb02fea6afa"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.final.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.final.spvasm",
+      "bytes": 291137,
+      "sha256": "f1041b11ba0bff8224b3c25f22e298a7608aff436fc427d43b83bd2a8c73263b",
+      "mode": "100644",
+      "blob": "54978af1aac586454e3ee3a767f1b658e4768b77"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.raw.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.raw.spvasm",
+      "bytes": 290500,
+      "sha256": "0057fdceba56d8a9deafb91e57351792859b9bb89d026fda1ffc4f8af6218b29",
+      "mode": "100644",
+      "blob": "a3ac90b79e7dcf69562f70fa1647a8a6eae45403"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.spv",
+      "bytes": 100032,
+      "sha256": "b4d9b7d69ed432ebd42197d8e5a40b24eeb087161aeb2f625a6a7ec382486005",
+      "mode": "100644",
+      "blob": "d2274c07eae9d9b43e480a4ca0acd5e8b9828069"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.spvasm",
+      "bytes": 290607,
+      "sha256": "8a5a4fc176230fe8ff3dff563549127ee7a95fca049fea8c0961365d99aa4360",
+      "mode": "100644",
+      "blob": "27b6f0003a9e3d2482776c3eff3f9d79a1e974aa"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-assemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-assemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-assemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-assemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-compile.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-compile.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-compile.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-compile.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-final-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-final-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-final-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-final-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-raw-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-raw-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-raw-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-raw-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-validate.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-validate.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-validate.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize-validate.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.compiler.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.compiler.spv",
+      "bytes": 57816,
+      "sha256": "e44924bcc69c9873555695aced73a5a14ff88db373a26b38ebe6e8598d281b1d",
+      "mode": "100644",
+      "blob": "2ca2399453f517b9700df889f91fbfb2a0b03e0e"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.final.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.final.spvasm",
+      "bytes": 167089,
+      "sha256": "7998e3be3e70eb4bf7cabaf00302191035ce197471b804d501b7299869c0102b",
+      "mode": "100644",
+      "blob": "5b5f374c8d468a001f9ebcb93a7e3f1902186bf6"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.raw.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.raw.spvasm",
+      "bytes": 166772,
+      "sha256": "2c1a7f3ab1689f1abb7fcb5eb56972c88d1f51537fe1311c4971654e433ae603",
+      "mode": "100644",
+      "blob": "4c4eedd4fa768edfdbb6b768764a946e8e9a29e1"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.spv",
+      "bytes": 57840,
+      "sha256": "b12eb4f12aa8f1c25fa9fc7678f2f178d737bce09ff8b1a950e336b22c5e267d",
+      "mode": "100644",
+      "blob": "45ba92f0ebc69d8228c031ff1fef23bdb9a3c6c5"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.spvasm",
+      "bytes": 166879,
+      "sha256": "a1b8d1e35b18a29ecdf65bc0630e61eaaa325d17477e04a56746fbb36e607b06",
+      "mode": "100644",
+      "blob": "8e842bbb36978b8b65fd65ca9183f6bb0a15dfc6"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-assemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-assemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-assemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-assemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-compile.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-compile.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-compile.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-compile.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-final-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-final-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-final-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-final-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-raw-disassemble.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-raw-disassemble.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-raw-disassemble.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-raw-disassemble.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-validate.stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-validate.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-validate.stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport-validate.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.compiler.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.compiler.spv",
+      "bytes": 86072,
+      "sha256": "82de9a0da1e77b0b39d7096b97432ddee7cba6f9ab373cd8206174dacfc44168",
+      "mode": "100644",
+      "blob": "da17a63fb8250bb2784c95330771ea756cc6d2a4"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.final.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.final.spvasm",
+      "bytes": 248765,
+      "sha256": "184e3ee064770bac0f846e070433502a03aa52ad9d344b5f24f7bc1744bd0c76",
+      "mode": "100644",
+      "blob": "e7795136ba111eecb5e274f46d613923950b1268"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.raw.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.raw.spvasm",
+      "bytes": 248045,
+      "sha256": "dc9223a744480779b8cc3f8481e7972aa9a92064cbb98204fab4a26ff819cbbe",
+      "mode": "100644",
+      "blob": "ee8bebef2b4911b4df720a321a5b927d278a1f1b"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.spv",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.spv",
+      "bytes": 86096,
+      "sha256": "239d106c4bb67f4dc8e7f671f828576424d99da9011b0924e78c0868cb724d64",
+      "mode": "100644",
+      "blob": "9b66ca1fcfaa3882df3177b1b806106261f5c1ea"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.spvasm",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.spvasm",
+      "bytes": 248152,
+      "sha256": "8b39a1aa01323a952f7e30345ac084749fee34a6ea8581410fc31347aa9e7fd5",
+      "mode": "100644",
+      "blob": "a01f65bf263d994d4797a655ca3c8af467813070"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/samples.jsonl",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/samples.jsonl",
+      "bytes": 4114,
+      "sha256": "7204b17a178fc1d9126f7a4ec426d60d7ed16055b5a8c3685a2636ab4fcabd2b",
+      "mode": "100644",
+      "blob": "81d5c524b8134ac07b1c585a95b3305313af4e01"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/stderr.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/candidate/stdout.log",
+      "source": "out/native-fp32-packed-soa-compiler-source/candidate/stdout.log",
+      "bytes": 7430,
+      "sha256": "1a0d3699644a48c84a08ed09d95b77605f157f6d1c37cfc675521acd1b494829",
+      "mode": "100644",
+      "blob": "99025262d0c743d68626c6279de01f2d2c412de8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/compile_five.py",
+      "source": "out/native-fp32-packed-soa-compiler-source/compile_five.py",
+      "bytes": 5835,
+      "sha256": "466e82ef72a4be6c6bc488ca489f789bf9873fbf5509f42b4d1777ec69fecf94",
+      "mode": "100644",
+      "blob": "e2f269176f0502915211ffdc631e76bdd6ca7f7a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/originals/build-retained-kernels.py",
+      "source": "out/native-fp32-packed-soa-compiler-source/originals/build-retained-kernels.py",
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e",
+      "mode": "100644",
+      "blob": "6768c166aabefa3fdb8ab450be9e0b877a93eaae"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/owned_guard.py",
+      "source": "out/native-fp32-packed-soa-compiler-source/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "100644",
+      "blob": "96e12b077cd9af2d5d1de3b2acf1ef6ef63dd546"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/recipes.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/recipes.json",
+      "bytes": 4337,
+      "sha256": "23b76e472cc59141fc72ba7a9ce4ba79633cf4a8bd61d4f8d433dc089709eb04",
+      "mode": "100644",
+      "blob": "17f3ab68a69b2c237afa82f97dfac7421f7dad4d"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/root-preflight.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/root-preflight.json",
+      "bytes": 1549243,
+      "sha256": "c83f2e8fec37abc01c02907f4bcad2cc7463b2d060d2d41c9752f65c01db02d7",
+      "mode": "100644",
+      "blob": "ad1f151cf0267d8c5e43fa1dc37a3e856a011b64"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/run_owned.py",
+      "source": "out/native-fp32-packed-soa-compiler-source/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "100644",
+      "blob": "6f970c4fdc7d7eae995cbf7736b629df8dd31c53"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/camera_frame_probe.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/camera_frame_probe.slang",
+      "bytes": 2470,
+      "sha256": "00120f5858efb20ba53ffa9cb3942860ed5474c012f5db75a2b79c3e9448105c",
+      "mode": "100644",
+      "blob": "205f03313f566017d980a6a88b2e14cedb21bcdd"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/coupled_probe.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/coupled_probe.slang",
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc",
+      "mode": "100644",
+      "blob": "030b4e4d74b256375d54d52692936b61be6342b8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_camera.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_camera.slang",
+      "bytes": 7542,
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12",
+      "mode": "100644",
+      "blob": "3eebdc2becb1ad0bc07f10b605465fef443aa48a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_coupled.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_coupled.slang",
+      "bytes": 13076,
+      "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce",
+      "mode": "100644",
+      "blob": "94d0359111fd79637bc28acf32754355bf8f0bcd"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_deviation.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_deviation.slang",
+      "bytes": 18835,
+      "sha256": "9737e7ad54d06c9cb584c14504d574f88551833b3c602ed8335157c100a6a38b",
+      "mode": "100644",
+      "blob": "306e990cd57e0d52d4fa07e182bb17fdedbcae15"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_disk.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_disk.slang",
+      "bytes": 16688,
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8",
+      "mode": "100644",
+      "blob": "1b0f997e779954c133fd03849e4d3f4128b1f136"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_ellis_topology.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_ellis_topology.slang",
+      "bytes": 9393,
+      "sha256": "ebf8f6413fc3d158b2bc135634a8e6c8d6790c8be8a20b217e46424ba9a58ca8",
+      "mode": "100644",
+      "blob": "67e942717a665b51dd4c3d4b7cce5fdb2f671065"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_integrator.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_integrator.slang",
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22",
+      "mode": "100644",
+      "blob": "e131912d6344029881602dd106803fc95f738c0d"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_kerr_infinity.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_kerr_infinity.slang",
+      "bytes": 23616,
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c",
+      "mode": "100644",
+      "blob": "5b773bcf60be603b713b2f386ea26cc43ddd7cb2"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_metrics.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_metrics.slang",
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b",
+      "mode": "100644",
+      "blob": "efd5d207555b4e05dbc7c03745ca0debd14aea13"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_point_star.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_point_star.slang",
+      "bytes": 1773,
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae",
+      "mode": "100644",
+      "blob": "1f75de2cf5b032e036c6aeb44d25094303932dbd"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_trace_continuation.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_trace_continuation.slang",
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb",
+      "mode": "100644",
+      "blob": "c1d67fc0ffecd8181d159384f5ee957c150c8107"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_trace_event.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_trace_event.slang",
+      "bytes": 15656,
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c",
+      "mode": "100644",
+      "blob": "dc33ee085f16736de179749a15e6f540a2dc3ca8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_types.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/gr_types.slang",
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d",
+      "mode": "100644",
+      "blob": "0d239802eb92efc07c2dba107dbbede4cb03b804"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/infinity_probe.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/infinity_probe.slang",
+      "bytes": 3057,
+      "sha256": "dcddb120fe9cf4306df9e18ded240e629fea31012352e540f275f77955700888",
+      "mode": "100644",
+      "blob": "3875efd487db5ccfa13bce1be11f89a9072a6e31"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/metric_consistency_probe.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/metric_consistency_probe.slang",
+      "bytes": 2352,
+      "sha256": "d21dd5305080cbee5c13aa0e435bb47e45117e35de4aafece4cd94224f64739e",
+      "mode": "100644",
+      "blob": "a618f0a6deef34320705b27b829c9618cee6c6de"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/parity_probe.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/parity_probe.slang",
+      "bytes": 44089,
+      "sha256": "1d81e295c4bc288ba3a5032222c4bbbd95b2381d843526a50520b1222f25dc26",
+      "mode": "100644",
+      "blob": "12767a965793f88b652f60fe6ec73b6a6ed8a382"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/portable_binary32.h",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/portable_binary32.h",
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60",
+      "mode": "100644",
+      "blob": "40fee72b36c0946d5943cbcd9bcf0c77e473a54a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_camera.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_camera.slang",
+      "bytes": 9716,
+      "sha256": "a2ec29ccb7d7dc5aba98319d0ac902f2550ece2837f8d6366620bb5b54ed5929",
+      "mode": "100644",
+      "blob": "77ae876a7485b469c12163cf9d0782399cf2d5f8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_dense.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_dense.slang",
+      "bytes": 20082,
+      "sha256": "9230821aa20883ab0994e06f7d17165fb9ada0fc8054e5eceaae4fd421e0193c",
+      "mode": "100644",
+      "blob": "fd1a756a2e98d9f4c1b6c5f279b5fe2aced0e70a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_dopri_phase.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_dopri_phase.slang",
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f",
+      "mode": "100644",
+      "blob": "14037fa2b7b3cd5e1be7b543398d1f8407407952"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_endpoint.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_endpoint.slang",
+      "bytes": 38824,
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d",
+      "mode": "100644",
+      "blob": "a2db2016e02a3317d573ec9941d363c850a3aef5"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_initialize.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_initialize.slang",
+      "bytes": 8778,
+      "sha256": "79bf6e37634991d94e85f7bd032576b5cc5ae2c9bf3a6a172d20557ffd9c59a6",
+      "mode": "100644",
+      "blob": "7527ff232d9319ac35e4a743f1b628ce9b742506"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_owner.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_owner.slang",
+      "bytes": 8042,
+      "sha256": "7d70e581acedccd688dadff476629de52c304d25657389179923b6fb32f8db62",
+      "mode": "100644",
+      "blob": "816d344f614f37f074884bc80fd9e8517ec615b6"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_pair.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_pair.slang",
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304",
+      "mode": "100644",
+      "blob": "b58757383966ef11d229b9caa0cfaab0a5f19225"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_program.py",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_program.py",
+      "bytes": 38341,
+      "sha256": "71a242ed70e984352da250c71bbadf269d3e55af9decb33d3a453e2684dda1d0",
+      "mode": "100644",
+      "blob": "598b62f9c5d49a8b97f18219cd4de7c0cf67800f"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_ray_camera.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_ray_camera.slang",
+      "bytes": 9201,
+      "sha256": "e3bfbfedd91096af1374ccd32119c6e1556b2b588f0106e7df1f488055acaf00",
+      "mode": "100644",
+      "blob": "e4094b9daba24ba8d5331e7d9cba95cb30aa6e11"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_scalar.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_scalar.slang",
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc",
+      "mode": "100644",
+      "blob": "40ed498f4a077393c47b02883975784ea0312f78"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_scratch.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_scratch.slang",
+      "bytes": 2264,
+      "sha256": "c4261ae5201e4d627b5b02d6181fe8ecdd5f90b363eab92105cacfb2c96d7841",
+      "mode": "100644",
+      "blob": "49fcea7b6eeded24a1dfa5b3ce759cd3b7a824a3"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_transport.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_transport.slang",
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec",
+      "mode": "100644",
+      "blob": "51fa47edfdd937cbeb9a3604d8efd9bcd0785260"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_triple.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/retained_triple.slang",
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd",
+      "mode": "100644",
+      "blob": "655ff7001694fbd3682790217af4b807aef9d091"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/smoke.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/smoke.slang",
+      "bytes": 1002,
+      "sha256": "674183f4aef31db29e7a78985ba616c7e5cd401fd21161c798b3028b2142c27e",
+      "mode": "100644",
+      "blob": "c37f2c5dbea5349d55e06a0aaed12cc583a56969"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/trace.slang",
+      "source": "out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels/trace.slang",
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36",
+      "mode": "100644",
+      "blob": "b13ebcbeac98c5c3eb008114234a176719dd56d4"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source-contracts.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/source-contracts.json",
+      "bytes": 6089,
+      "sha256": "2100fa396491aa4ee47f36f660df8b208eeb70d9638c04ecff0eb0934144cb6e",
+      "mode": "100644",
+      "blob": "d8da7b140464859e588817e6cfc064a1d306ccef"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-compiler-source/source-freeze.json",
+      "source": "out/native-fp32-packed-soa-compiler-source/source-freeze.json",
+      "bytes": 14738,
+      "sha256": "cf2325e6c6a94c6fa501132ac2e4bb05099b0c1de513da11966dc978a38285e5",
+      "mode": "100644",
+      "blob": "9e09ed56e8df485614e0f297f82901bcf1e35012"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-source/compose_inputs.py",
+      "source": "out/native-fp32-packed-soa-producer-source/compose_inputs.py",
+      "bytes": 12202,
+      "sha256": "71c8080460961b12834c0adb25b4a8607647117bd7db1d4cf0160015eb74b323",
+      "mode": "100644",
+      "blob": "0bb6357bc091260babb70441d97fb1844d954943"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/retained_kernels.h",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/retained_kernels.h",
+      "bytes": 7952166,
+      "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc",
+      "mode": "100644",
+      "blob": "b992bfe2835c8e275a5fc4c88fbf6f4dffdbdf7a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/retained_owner_kernels.h",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/retained_owner_kernels.h",
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+      "mode": "100644",
+      "blob": "0e93ad35d4e253f25bcc732dc7986e8028910b55"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/retained_owner_layout.h",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/retained_owner_layout.h",
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+      "mode": "100644",
+      "blob": "c0f8c1fdc1e3e6eb4d43da98c9a7042ad37bdf3e"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_camera.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_camera.spv",
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+      "mode": "100644",
+      "blob": "a00a3fc70baec9a329f36ad8f09d0bc887569520"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_camera_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_camera_fp64.spv",
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+      "mode": "100644",
+      "blob": "c7fa8ddd5e26529b5cbf22f83478a61b9b89b057"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_camera_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_camera_portable.spv",
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "100644",
+      "blob": "7a77767399a2e15bb585bb67c34c210e627100ea"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_camera_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_camera_portable_fp64.spv",
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "100644",
+      "blob": "7a77767399a2e15bb585bb67c34c210e627100ea"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dense.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dense.spv",
+      "bytes": 77952,
+      "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab",
+      "mode": "100644",
+      "blob": "d9c34ea7ff1f8d9856f7ee98a61b16ac21c59422"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dense_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dense_fp64.spv",
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+      "mode": "100644",
+      "blob": "3347d9dfbc56c0eed16f173dbe0479af301f124e"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dense_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dense_portable.spv",
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": "100644",
+      "blob": "be9d28b834cdc298a603c9021bd632e75f778b88"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dense_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dense_portable_fp64.spv",
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": "100644",
+      "blob": "be9d28b834cdc298a603c9021bd632e75f778b88"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase.spv",
+      "bytes": 58740,
+      "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895",
+      "mode": "100644",
+      "blob": "a5ca213af50f28d98f1586d832e7d8e9682aa661"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase_fp64.spv",
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+      "mode": "100644",
+      "blob": "9158cc3f66e5a746d3e2071068c3da387cc8b18a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase_portable.spv",
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": "100644",
+      "blob": "e2436ccd97bb3f1890ed94372abe7af3f2255914"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase_portable_fp64.spv",
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": "100644",
+      "blob": "e2436ccd97bb3f1890ed94372abe7af3f2255914"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase_portable_normal_sum.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_dopri_phase_portable_normal_sum.spv",
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+      "mode": "100644",
+      "blob": "3e40641b0741688905911bc77387b2fc440fc0ce"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint.spv",
+      "bytes": 99300,
+      "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559",
+      "mode": "100644",
+      "blob": "088b2f5671e287807eaa0686dce66ce7c4390ef9"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_fma.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_fma.spv",
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+      "mode": "100644",
+      "blob": "c59ccc34a3c22f431ef473f02a64b8fcbcbec333"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_fp64.spv",
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+      "mode": "100644",
+      "blob": "7fa089d4bade3d944b350d531296c769a802a5ae"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_portable.spv",
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": "100644",
+      "blob": "91656d0add3e83de835d122236c3838b02892743"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_portable_fp64.spv",
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": "100644",
+      "blob": "91656d0add3e83de835d122236c3838b02892743"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_portable_normal_sum.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_portable_normal_sum.spv",
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": "100644",
+      "blob": "e366b8b9de2bc1796bf8f901ab3d39dba280a525"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_portable_stage7_owner.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_endpoint_portable_stage7_owner.spv",
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+      "mode": "100644",
+      "blob": "734dc5c2bdce42880fee4641354b9a6173f80947"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_initialize.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_initialize.spv",
+      "bytes": 57108,
+      "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a",
+      "mode": "100644",
+      "blob": "3516d01a2007de6a71058dd6fed96080bb4548ea"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_initialize_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_initialize_fp64.spv",
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+      "mode": "100644",
+      "blob": "fcb7b5370cd3f01630cd40e51891c7aff17891ba"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_initialize_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_initialize_portable.spv",
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": "100644",
+      "blob": "a2dd6c6ac81592ba9a9d2b7e09ddc5e4108f97d0"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_initialize_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_initialize_portable_fp64.spv",
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": "100644",
+      "blob": "a2dd6c6ac81592ba9a9d2b7e09ddc5e4108f97d0"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_ray_camera.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_ray_camera.spv",
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+      "mode": "100644",
+      "blob": "7378cc593b18f15f9821ae3cf9b7970af9550701"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_ray_camera_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_ray_camera_fp64.spv",
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+      "mode": "100644",
+      "blob": "e8913bd743790381c2a38b9d07da52472a694aec"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_ray_camera_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_ray_camera_portable.spv",
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "100644",
+      "blob": "8fd199c178ffab350b71938dcec9e064e24da2e6"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_ray_camera_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_ray_camera_portable_fp64.spv",
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "100644",
+      "blob": "8fd199c178ffab350b71938dcec9e064e24da2e6"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport.spv",
+      "bytes": 85364,
+      "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1",
+      "mode": "100644",
+      "blob": "35d9e9496dd35a52b087ee486c7823b014b89de8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_fma.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_fma.spv",
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+      "mode": "100644",
+      "blob": "68f7d47f0cdb99cef70415a12419d123a808c10b"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_fp64.spv",
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+      "mode": "100644",
+      "blob": "2a97c7dec274812b9d6c9dba45a3e070a7c07142"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_portable.spv",
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": "100644",
+      "blob": "ce7fd3a5cde67dc10b3fd541fa59cd4cb0c01c03"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_portable_fp64.spv",
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": "100644",
+      "blob": "ce7fd3a5cde67dc10b3fd541fa59cd4cb0c01c03"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_portable_normal_sum.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_portable_normal_sum.spv",
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+      "mode": "100644",
+      "blob": "ac6f63f1943754187bd1d477c8b868fcfbad94d2"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_portable_stage7_owner.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/baseline/shaders/retained_transport_portable_stage7_owner.spv",
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+      "mode": "100644",
+      "blob": "808cd164d54113adebb1cafaac430a41e00cc737"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/retained_kernels.h",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/retained_kernels.h",
+      "bytes": 7957986,
+      "sha256": "36e1305bef724d40cf63d26c7bb475abb32795b87c38e8fc383ce67f66727b9f",
+      "mode": "100644",
+      "blob": "c71641d085bc341df34f91242d3c0066caedc0b8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/retained_owner_kernels.h",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/retained_owner_kernels.h",
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+      "mode": "100644",
+      "blob": "0e93ad35d4e253f25bcc732dc7986e8028910b55"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/retained_owner_layout.h",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/retained_owner_layout.h",
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+      "mode": "100644",
+      "blob": "c0f8c1fdc1e3e6eb4d43da98c9a7042ad37bdf3e"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_camera.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_camera.spv",
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+      "mode": "100644",
+      "blob": "a00a3fc70baec9a329f36ad8f09d0bc887569520"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_camera_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_camera_fp64.spv",
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+      "mode": "100644",
+      "blob": "c7fa8ddd5e26529b5cbf22f83478a61b9b89b057"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_camera_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_camera_portable.spv",
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "100644",
+      "blob": "7a77767399a2e15bb585bb67c34c210e627100ea"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_camera_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_camera_portable_fp64.spv",
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "100644",
+      "blob": "7a77767399a2e15bb585bb67c34c210e627100ea"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dense.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dense.spv",
+      "bytes": 78684,
+      "sha256": "3fc06d89f5543fb4f1efc610a11d526b90b9784742a101e1d1177b4e0e07b4c4",
+      "mode": "100644",
+      "blob": "03acddbb3751fe5c4dda1d81b2911f3080d9992a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dense_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dense_fp64.spv",
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+      "mode": "100644",
+      "blob": "3347d9dfbc56c0eed16f173dbe0479af301f124e"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dense_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dense_portable.spv",
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": "100644",
+      "blob": "be9d28b834cdc298a603c9021bd632e75f778b88"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dense_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dense_portable_fp64.spv",
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": "100644",
+      "blob": "be9d28b834cdc298a603c9021bd632e75f778b88"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase.spv",
+      "bytes": 59472,
+      "sha256": "a9415f2c0eae55d2aa940f34b343fec79693d77ceeaf4df7f602fe6b86c34b90",
+      "mode": "100644",
+      "blob": "37e8a757b5d19a7be94fa54e0277ef24df29e3fc"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase_fp64.spv",
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+      "mode": "100644",
+      "blob": "9158cc3f66e5a746d3e2071068c3da387cc8b18a"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase_portable.spv",
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": "100644",
+      "blob": "e2436ccd97bb3f1890ed94372abe7af3f2255914"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase_portable_fp64.spv",
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": "100644",
+      "blob": "e2436ccd97bb3f1890ed94372abe7af3f2255914"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase_portable_normal_sum.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_dopri_phase_portable_normal_sum.spv",
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+      "mode": "100644",
+      "blob": "3e40641b0741688905911bc77387b2fc440fc0ce"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint.spv",
+      "bytes": 100032,
+      "sha256": "b4d9b7d69ed432ebd42197d8e5a40b24eeb087161aeb2f625a6a7ec382486005",
+      "mode": "100644",
+      "blob": "d2274c07eae9d9b43e480a4ca0acd5e8b9828069"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_fma.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_fma.spv",
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+      "mode": "100644",
+      "blob": "c59ccc34a3c22f431ef473f02a64b8fcbcbec333"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_fp64.spv",
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+      "mode": "100644",
+      "blob": "7fa089d4bade3d944b350d531296c769a802a5ae"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_portable.spv",
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": "100644",
+      "blob": "91656d0add3e83de835d122236c3838b02892743"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_portable_fp64.spv",
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": "100644",
+      "blob": "91656d0add3e83de835d122236c3838b02892743"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_portable_normal_sum.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_portable_normal_sum.spv",
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": "100644",
+      "blob": "e366b8b9de2bc1796bf8f901ab3d39dba280a525"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_portable_stage7_owner.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_endpoint_portable_stage7_owner.spv",
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+      "mode": "100644",
+      "blob": "734dc5c2bdce42880fee4641354b9a6173f80947"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_initialize.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_initialize.spv",
+      "bytes": 57840,
+      "sha256": "b12eb4f12aa8f1c25fa9fc7678f2f178d737bce09ff8b1a950e336b22c5e267d",
+      "mode": "100644",
+      "blob": "45ba92f0ebc69d8228c031ff1fef23bdb9a3c6c5"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_initialize_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_initialize_fp64.spv",
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+      "mode": "100644",
+      "blob": "fcb7b5370cd3f01630cd40e51891c7aff17891ba"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_initialize_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_initialize_portable.spv",
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": "100644",
+      "blob": "a2dd6c6ac81592ba9a9d2b7e09ddc5e4108f97d0"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_initialize_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_initialize_portable_fp64.spv",
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": "100644",
+      "blob": "a2dd6c6ac81592ba9a9d2b7e09ddc5e4108f97d0"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_ray_camera.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_ray_camera.spv",
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+      "mode": "100644",
+      "blob": "7378cc593b18f15f9821ae3cf9b7970af9550701"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_ray_camera_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_ray_camera_fp64.spv",
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+      "mode": "100644",
+      "blob": "e8913bd743790381c2a38b9d07da52472a694aec"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_ray_camera_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_ray_camera_portable.spv",
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "100644",
+      "blob": "8fd199c178ffab350b71938dcec9e064e24da2e6"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_ray_camera_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_ray_camera_portable_fp64.spv",
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "100644",
+      "blob": "8fd199c178ffab350b71938dcec9e064e24da2e6"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport.spv",
+      "bytes": 86096,
+      "sha256": "239d106c4bb67f4dc8e7f671f828576424d99da9011b0924e78c0868cb724d64",
+      "mode": "100644",
+      "blob": "9b66ca1fcfaa3882df3177b1b806106261f5c1ea"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_fma.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_fma.spv",
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+      "mode": "100644",
+      "blob": "68f7d47f0cdb99cef70415a12419d123a808c10b"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_fp64.spv",
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+      "mode": "100644",
+      "blob": "2a97c7dec274812b9d6c9dba45a3e070a7c07142"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_portable.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_portable.spv",
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": "100644",
+      "blob": "ce7fd3a5cde67dc10b3fd541fa59cd4cb0c01c03"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_portable_fp64.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_portable_fp64.spv",
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": "100644",
+      "blob": "ce7fd3a5cde67dc10b3fd541fa59cd4cb0c01c03"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_portable_normal_sum.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_portable_normal_sum.spv",
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+      "mode": "100644",
+      "blob": "ac6f63f1943754187bd1d477c8b868fcfbad94d2"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_portable_stage7_owner.spv",
+      "source": "out/native-fp32-packed-soa-producer-inputs/candidate/shaders/retained_transport_portable_stage7_owner.spv",
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+      "mode": "100644",
+      "blob": "808cd164d54113adebb1cafaac430a41e00cc737"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/independent-concrete-input-review.json",
+      "source": "out/native-fp32-packed-soa-producer-inputs/independent-concrete-input-review.json",
+      "bytes": 3446,
+      "sha256": "4f68f6c5cdd2d9ad7d3d13a0739cb81c4cd90ade5ca2f5fe37e21fdc30d8b939",
+      "mode": "100644",
+      "blob": "1aaa85dce31f3210eea36065701a3be86e3071cc"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/observer/audited-observer.cpp",
+      "source": "out/native-fp32-packed-soa-producer-inputs/observer/audited-observer.cpp",
+      "bytes": 342470,
+      "sha256": "c9485d03ec55b5c1307a34097f15efbc58c4f84749e9f3736ad063a68676b601",
+      "mode": "100644",
+      "blob": "34fec1647018fe57b06748d81952f8d97ca50512"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-producer-inputs/root-composed-inputs.json",
+      "source": "out/native-fp32-packed-soa-producer-inputs/root-composed-inputs.json",
+      "bytes": 16573,
+      "sha256": "9aaef636ec18babdac065812965d0c1e6d77d4a007d88b764e4ad4799a754f40",
+      "mode": "100644",
+      "blob": "99b0895f1f582cae8fccedfa94fd28273e5a2810"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/build-and-stage.ps1",
+      "source": "out/native-fp32-packed-soa-windows-source/build-and-stage.ps1",
+      "bytes": 19986,
+      "sha256": "68191b1cf58a6abe7fa1ef945201dc480f2d502091c7a055642bb740285f0636",
+      "mode": "100644",
+      "blob": "20d03cad86a363b4774d1c94fead6d4d78a4eb96"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/independent-source-review.json",
+      "source": "out/native-fp32-packed-soa-windows-source/independent-source-review.json",
+      "bytes": 928,
+      "sha256": "8876099f06ef9110d44c2e1eb948c9db431d3bd840577a77c7ca511932025887",
+      "mode": "100644",
+      "blob": "be214a260e23d07e1c841e35aa0f4c22604fc7a7"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/matched-producer.cmake",
+      "source": "out/native-fp32-packed-soa-windows-source/matched-producer.cmake",
+      "bytes": 5665,
+      "sha256": "5f101166bbc0c3e2bfd338f7f0616473af4560e86c438a8f1e085f52d14337c9",
+      "mode": "100644",
+      "blob": "8c8b62b5ee4122f61b81227ac30cc43071534bfc"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/native-packed-diagnostic.yml",
+      "source": "out/native-fp32-packed-soa-windows-source/native-packed-diagnostic.yml",
+      "bytes": 1317,
+      "sha256": "44978a893118af48ccc18f2384d48a6c9cd5460c57a28270c3df6e8f1a88264e",
+      "mode": "100644",
+      "blob": "461706fcfd297d0dc3dd79b9b2d3fcda1b3a9ded"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/originals/build-and-stage.ps1",
+      "source": "out/native-fp32-packed-soa-windows-source/originals/build-and-stage.ps1",
+      "bytes": 20255,
+      "sha256": "147829e4054731bc59a42144c7520695e396c87ddcffeb98b19a48f0c1657250",
+      "mode": "100644",
+      "blob": "f439c29d320a67b3c68fee618053619dbceee4f6"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/originals/matched-producer.cmake",
+      "source": "out/native-fp32-packed-soa-windows-source/originals/matched-producer.cmake",
+      "bytes": 5669,
+      "sha256": "c6712badcab8f941a6f0bbc5b4aded4e020d1ebc4e29bbf2cd4b3998c3c141cb",
+      "mode": "100644",
+      "blob": "810141e3ebfad1620350e976be0c4d8b20fd9c55"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/originals/native-packed-diagnostic.yml",
+      "source": "out/native-fp32-packed-soa-windows-source/originals/native-packed-diagnostic.yml",
+      "bytes": 1327,
+      "sha256": "795406ab9a00dd5599a41bc58c4d03d9f9381070e87ca101cf3a512b046af12a",
+      "mode": "100644",
+      "blob": "0a8f5d1e78cfa6e2b398b93ef043b857bb69c4de"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/source-contracts.json",
+      "source": "out/native-fp32-packed-soa-windows-source/source-contracts.json",
+      "bytes": 5073,
+      "sha256": "08d1d4cdd8e4b94357a05a8d2aff824469188ee2cddeb21e5711ba6710f23c02",
+      "mode": "100644",
+      "blob": "4b6328a59b0c7487435eab1cb74d6c73d98ded29"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/source-freeze.json",
+      "source": "out/native-fp32-packed-soa-windows-source/source-freeze.json",
+      "bytes": 1309,
+      "sha256": "cb4e498cf70e701f355604b97cbed0450077ea2cda588f72e153488d4a3fe7f5",
+      "mode": "100644",
+      "blob": "5eca892f83b618c1a8f1ff430e6a36cc7871c5d8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-windows-source/source.patch",
+      "source": "out/native-fp32-packed-soa-windows-source/source.patch",
+      "bytes": 2990,
+      "sha256": "4bf36f4a08d6c3591851a3cc55cb1b22d3ba32ce7b771db1c9b869a063202bb2",
+      "mode": "100644",
+      "blob": "a417f2ba6ddbc2fa2bbca62ceaaf20539e883ffc"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/emergency_native_cleanup.ps1",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/emergency_native_cleanup.ps1",
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "mode": "100644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/independent-source-review.json",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/independent-source-review.json",
+      "bytes": 922,
+      "sha256": "da2d4fd4d59307b7b32abf7a46190cd1c6bf16216cb23490a67f9cddcfe3e902",
+      "mode": "100644",
+      "blob": "d4cbbe867c1fae3e46b584d74638215515a7ffbe"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/materialize_phase.py",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/materialize_phase.py",
+      "bytes": 12963,
+      "sha256": "1a71bdd9105f8b50e93b4e557cb8887afe7367a613a59b6947390d9bd78a89db",
+      "mode": "100644",
+      "blob": "13b1dc0d15cd77df5024177eec744671c90a1a28"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/originals/emergency_native_cleanup.ps1",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/originals/emergency_native_cleanup.ps1",
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "mode": "100644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/originals/materialize_phase.py",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/originals/materialize_phase.py",
+      "bytes": 12971,
+      "sha256": "00259c897aeacf989d905feba03e04e1861b7b5d0c7ff4c749b7fa38b70c081c",
+      "mode": "100644",
+      "blob": "0ad042798a58b21929a8f49b73bbe5937d971fe2"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/originals/run_native_control.ps1",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/originals/run_native_control.ps1",
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "mode": "100644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/originals/run_system.py",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/originals/run_system.py",
+      "bytes": 25086,
+      "sha256": "ab320cfcfb2e018d370bde29fd7905ed589e52ed61b9e79f572ccccef312c568",
+      "mode": "100644",
+      "blob": "3b5e735edab75900d036d0dc5b1e764253a8a6e7"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/originals/run_terminal.py",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/originals/run_terminal.py",
+      "bytes": 23671,
+      "sha256": "6e4ddd100ac274bda0d4c02671c6f5c37d437a9335c32652a4c665d2cc5afb3c",
+      "mode": "100644",
+      "blob": "3ff4d2a5b360965de163ac73364bfbaef68cfb87"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/originals/terminal-audit.ps1",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/originals/terminal-audit.ps1",
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "mode": "100644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/run_native_control.ps1",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/run_native_control.ps1",
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "mode": "100644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/run_system.py",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/run_system.py",
+      "bytes": 25073,
+      "sha256": "15b5dc3ee54207042c9202705f1c64b762a7a7c47bff628df7822ab81d4a862c",
+      "mode": "100644",
+      "blob": "d1996cc35099c403e015430d0176552c0e9a2b53"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/run_terminal.py",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/run_terminal.py",
+      "bytes": 23658,
+      "sha256": "27f36f7519bc7ec92fc7453885e717a0ae6ccf96e906016eb7e6dc67afe8ad8e",
+      "mode": "100644",
+      "blob": "12bc963fdd334722b2de135219773df6be6ed998"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/source-contracts.json",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/source-contracts.json",
+      "bytes": 6157,
+      "sha256": "485c622a4f988a2753f1dadb5997c32c39e831320e3437b03498dfa36dd98b0f",
+      "mode": "100644",
+      "blob": "3cb594e20f4ab973519c3c55cb57659759b07da9"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/source-freeze.json",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/source-freeze.json",
+      "bytes": 2174,
+      "sha256": "345a71ca93cf9e5b3826fc2f4837835e8f13612228ec62f181944e4b8921b60e",
+      "mode": "100644",
+      "blob": "bce2b30ea6412a4198bad054aa9c91bf3dea5c0c"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/source.patch",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/source.patch",
+      "bytes": 3252,
+      "sha256": "5e70a296f2661c4336e3e9f3dca9e273cc36977d1183742b99026a54e51ab8e7",
+      "mode": "100644",
+      "blob": "5fd771292dc9742574ed0f4e4fda813b8ac0d2d0"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-runtime-authority-source/terminal-audit.ps1",
+      "source": "out/native-fp32-packed-soa-runtime-authority-source/terminal-audit.ps1",
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "mode": "100644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-pe-audit/audit_export_windows_paths.py",
+      "source": "out/native-fp32-packed-soa-pe-audit/audit_export_windows_paths.py",
+      "bytes": 18560,
+      "sha256": "62be81f7ff8ff1b2ee9a65c732530cc0a98381071b592e4ae8cc991178f16b3a",
+      "mode": "100644",
+      "blob": "57dd28a3c8439da188260b51275e6ddb4708ed51"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-pe-audit/independent-source-review.json",
+      "source": "out/native-fp32-packed-soa-pe-audit/independent-source-review.json",
+      "bytes": 1130,
+      "sha256": "313882f5d0d799d9d45dba51c6a6cc52fd51f4c732512f7fffd05f6b76576177",
+      "mode": "100644",
+      "blob": "cbfab96ec16f2dd6ad2ba9dccfe894e0b5033d4b"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-pe-audit/namespace.patch",
+      "source": "out/native-fp32-packed-soa-pe-audit/namespace.patch",
+      "bytes": 3216,
+      "sha256": "3a787920cfca25211033bcf48b4421db1b2ad4ecbe131304e3220cd5c3531e40",
+      "mode": "100644",
+      "blob": "81fa4728d5041c17b6d24d02f2146c59fc4c0343"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-pe-audit/originals/audit_export_windows_paths.py",
+      "source": "out/native-fp32-packed-soa-pe-audit/originals/audit_export_windows_paths.py",
+      "bytes": 18580,
+      "sha256": "cee37e6559f3f8b100bf8ff87940049229fe20299beaefef353ae66f4064d741",
+      "mode": "100644",
+      "blob": "ba25a18fb0f24f207992332c38f876f1d925dd60"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-pe-audit/source-contracts.json",
+      "source": "out/native-fp32-packed-soa-pe-audit/source-contracts.json",
+      "bytes": 3273,
+      "sha256": "e2c1a7ff2924d7b69d70d028c22476f7701ab9c64925c3075d381ef8adfeec2a",
+      "mode": "100644",
+      "blob": "fe4f75277a04348b156cbe6bbac868b01e713da8"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-pe-audit/source-freeze.json",
+      "source": "out/native-fp32-packed-soa-pe-audit/source-freeze.json",
+      "bytes": 875,
+      "sha256": "477a26eb140b97fc991fcb2777084af3df75bbde59e2c39c32e671bccd5b3a39",
+      "mode": "100644",
+      "blob": "a5ddbda0cfccc7fcd5c8f6ab74af707e00d5ac83"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-publication/independent-emitted-and-compiler-review.json",
+      "source": "out/native-fp32-packed-soa-publication/independent-emitted-and-compiler-review.json",
+      "bytes": 21695,
+      "sha256": "3f21d8399e22c89831631b939b9968bad61125156ebb2d38820c9b2286e79b45",
+      "mode": "100644",
+      "blob": "c738802b4f041ec1a5328cb6eeeba5322c7452c0"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-publication/root-Git-preservation.json",
+      "source": "out/native-fp32-packed-soa-publication/root-Git-preservation.json",
+      "bytes": 9248,
+      "sha256": "3d10c6d5dfd2f359455bd13465287d5a1fb21dfa6edd74f472c67eae53e89402",
+      "mode": "100644",
+      "blob": "e14e2576b44ac752a3657487dab4943ee6ac689b"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-publication/root-actual-compiler-check.json",
+      "source": "out/native-fp32-packed-soa-publication/root-actual-compiler-check.json",
+      "bytes": 656,
+      "sha256": "72f4202b49989019bb7b3944b023e800a9613fb38b88c4334d7ba9e5ac61ca02",
+      "mode": "100644",
+      "blob": "8aee44d9f54c6aedca030a7aa27be3de117fe0ba"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-publication/root-actual-push.json",
+      "source": "out/native-fp32-packed-soa-publication/root-actual-push.json",
+      "bytes": 502,
+      "sha256": "38929ac2c8a1fce0acc0a1e75e73ffa9c36b3a1e17b8196982842b7b86d59faa",
+      "mode": "100644",
+      "blob": "b236ebefaff014684021cfb3c1981d93e217f62f"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-publication/root-compiler-source-admission.json",
+      "source": "out/native-fp32-packed-soa-publication/root-compiler-source-admission.json",
+      "bytes": 1143,
+      "sha256": "76f1023053799255cf958540210f0a31a3dd2b6372f8961fe245109936d06dce",
+      "mode": "100644",
+      "blob": "225216c3d81ed04e05b96a1fd95c46b0c7b162af"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-publication/root-emitted-admission.json",
+      "source": "out/native-fp32-packed-soa-publication/root-emitted-admission.json",
+      "bytes": 3809,
+      "sha256": "539ededf83a695ea7fd881f449eb85d06dee2f132ff9de5cb60fd93505c34ec1",
+      "mode": "100644",
+      "blob": "62b52590ec6bc68c210ce51579899bd6006a96fa"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-publication/source/address-graphs.json",
+      "source": "out/native-fp32-packed-soa-publication/source/address-graphs.json",
+      "bytes": 14211,
+      "sha256": "baa775728a37f7aecc034b120ad398f68e15eaa39299ac5700a69e2fcc144cea",
+      "mode": "100644",
+      "blob": "c583ea3043a6504458c0c1fa4b21f6b91e4953da"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-publication/source/review_emitted.py",
+      "source": "out/native-fp32-packed-soa-publication/source/review_emitted.py",
+      "bytes": 15557,
+      "sha256": "3f7f2f64bf1d26b293b38c848ddf5141993121e195f805d054043b4a879b33d1",
+      "mode": "100644",
+      "blob": "e884d52ef9da5640a5bf3a1fc49bf103155af4b6"
+    },
+    {
+      "path": "out/native-fp32-packed-soa-ci-publication/root-source-admission.json",
+      "source": "out/native-fp32-packed-soa-ci-publication/root-source-admission.json",
+      "bytes": 2022,
+      "sha256": "51be424d51c446ada5164bae4faf8288b3a85e0d08511dcdfa4121b4c8d3115e",
+      "mode": "100644",
+      "blob": "94f0f58e237f69aeff6719559b8547b155b178d7"
+    },
+    {
+      "path": ".github/workflows/native-packed-diagnostic.yml",
+      "source": "out/native-fp32-packed-soa-windows-source/native-packed-diagnostic.yml",
+      "bytes": 1317,
+      "sha256": "44978a893118af48ccc18f2384d48a6c9cd5460c57a28270c3df6e8f1a88264e",
+      "mode": "100644",
+      "blob": "461706fcfd297d0dc3dd79b9b2d3fcda1b3a9ded"
+    }
+  ],
+  "all_current_source_bytes_Git_blobs_modes_verified": true,
+  "canonical_tracked_blobs_exact_5b2": 538,
+  "all_changes_private_out_or_one_custom_workflow": true,
+  "CI_push_released": true,
+  "runtime_admitted": false,
+  "pushed": false
+}

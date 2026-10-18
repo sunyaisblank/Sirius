@@ -1,0 +1,33 @@
+{
+  "schema": "sirius-native-packed-runtime-plan-v1",
+  "admitted": true,
+  "source_revision": "45d91ac36d1135d18cba8ebb1923339723fde5df",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "stage": "bin/windows-msvc/native-packed-soa-matched-45d91ac3",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "control_profile": "timestamp",
+  "order": [
+    "control-8"
+  ],
+  "actions": {
+    "control-8": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "child_environment": {
+    "control-8": {
+      "TEMP": "renders/native-fp32-packed-soa-runtime-timestamp/control-8",
+      "TMP": "renders/native-fp32-packed-soa-runtime-timestamp/control-8"
+    }
+  },
+  "phase_prerequisites": {}
+}

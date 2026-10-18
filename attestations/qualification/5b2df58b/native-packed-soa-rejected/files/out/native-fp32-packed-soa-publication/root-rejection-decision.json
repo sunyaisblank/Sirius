@@ -1,0 +1,51 @@
+{
+  "schema": "sirius-packed-soa-root-original-native-rejection-v1",
+  "created_utc": "2026-10-18T07:30:26.913748+00:00",
+  "producer_revision": "45d91ac36d1135d18cba8ebb1923339723fde5df",
+  "canonical_runner_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "decision": "REJECT_21_OF_22",
+  "audit_passed": true,
+  "performance_acceptance": false,
+  "whole_call_gains_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "improvement_percent": 10.985845779525727,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": 32.69344389738273,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "improvement_percent": 1.0139936104512248,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "improvement_percent": 16.097747935688563,
+      "pass": true
+    }
+  ],
+  "inclusive_stage_passes": 16,
+  "inclusive_API_passes": 2,
+  "failed_gate": "Reverse legacy whole-call 1.0139936104512248% < unchanged5%; no pooling, cost subtraction, resampling or workload retry.",
+  "original_controls_executed": 1,
+  "remaining_seven_controls_stopped": true,
+  "production_adopted": false,
+  "actual_sessions": {
+    "compiler": 25360,
+    "native_control8": 84133,
+    "native_control8_terminal": 57593,
+    "original_sole_ABBA": 54264,
+    "original_timestamp_reader": 92387,
+    "original_numeric_comparator": 34320
+  },
+  "metadata_corrections": "Original authority key casing and missing first-control context link were corrected in separate records preserving original frozen input/data. First comparator attempt stopped at case inventory before gates; numerical evaluation used the same sole five actual executions.",
+  "scope": "Source and build/emitted/native-control experiment only. Full scientific, frame/UI, Mandatory and release qualification remain unresolved."
+}

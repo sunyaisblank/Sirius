@@ -1,0 +1,330 @@
+{
+  "schema": "sirius-native-packed-soa-independent-ABBA-rejection-review-v1",
+  "audit_completed": true,
+  "passed": false,
+  "audit_passed": true,
+  "performance_acceptance": false,
+  "decision": "REJECT_NATIVE_PACKED_SCRATCH_COST",
+  "source_revision": "45d91ac36d1135d18cba8ebb1923339723fde5df",
+  "checks_total": 22,
+  "checks_passed": 21,
+  "failed_checks": [
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "improvement_percent": 1.0139936104512248,
+      "minimum_percent": 5,
+      "pass": false
+    }
+  ],
+  "all22_independently_recomputed_from_rawXML": true,
+  "all16_stage_and2API_pass": true,
+  "checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "improvement_percent": 10.985845779525727,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "improvement_percent": 11.523805254191696,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "improvement_percent": 5.637379380396143,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "improvement_percent": 12.427345696097428,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "improvement_percent": 32.69344389738273,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "improvement_percent": 34.797140469779954,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "improvement_percent": 32.601318596083004,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "improvement_percent": 36.1564097997812,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "improvement_percent": 36.49375321998969,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "improvement_percent": 41.497401633259095,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "improvement_percent": 1.0139936104512248,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "improvement_percent": 6.887665138485739,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "improvement_percent": 2.4199498303083917,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "improvement_percent": -0.26581972589497765,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "improvement_percent": 16.097747935688563,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "improvement_percent": 13.503499382461923,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "improvement_percent": 17.423822714681428,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "improvement_percent": 13.233361675813544,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "improvement_percent": 14.280741017033435,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "improvement_percent": 13.497812607443059,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "scope": "inclusive API",
+      "improvement_percent": 89.79172416771068,
+      "minimum_percent": 0,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "scope": "inclusive API",
+      "improvement_percent": 6.170323197016297,
+      "minimum_percent": 0,
+      "pass": true
+    }
+  ],
+  "raw_cases": [
+    {
+      "label": "control-8",
+      "owner": {
+        "path": "out/native-fp32-packed-soa-runtime-timestamp/native/control-8/owner.json",
+        "bytes": 3622,
+        "sha256": "0d2990f2f7478e50374c292e306fc191417f334f4af24b466ae63bf737eba861"
+      },
+      "XML": {
+        "path": "out/native-fp32-packed-soa-runtime-timestamp/native/control-8/gtest.xml",
+        "bytes": 40916,
+        "sha256": "be8215c4b7a4763c73cf8dc8e16127f91d368aee81a3cd534a9cbc84ba5acda6"
+      },
+      "Windows_birth": [
+        18756,
+        "2026-10-18T07:14:59.9033997Z"
+      ],
+      "memory_samples": 57
+    },
+    {
+      "label": "a1",
+      "owner": {
+        "path": "out/native-fp32-packed-soa-runtime-abba/native/a1/owner.json",
+        "bytes": 3581,
+        "sha256": "a283e09d41dedcd33631c507c85f25de704a6eebc742d4ec01306ec9da6735fe"
+      },
+      "XML": {
+        "path": "out/native-fp32-packed-soa-runtime-abba/native/a1/gtest.xml",
+        "bytes": 40996,
+        "sha256": "45103b5d7ecd92b9a1c840e8a78813861a28a88215f4feac51e48febcf70863f"
+      },
+      "Windows_birth": [
+        11356,
+        "2026-10-18T07:21:23.5873409Z"
+      ],
+      "memory_samples": 59
+    },
+    {
+      "label": "b1",
+      "owner": {
+        "path": "out/native-fp32-packed-soa-runtime-abba/native/b1/owner.json",
+        "bytes": 3584,
+        "sha256": "bf77c8fa8f3ec87eca667148b445831e477515c945b931264532350dca958a60"
+      },
+      "XML": {
+        "path": "out/native-fp32-packed-soa-runtime-abba/native/b1/gtest.xml",
+        "bytes": 40808,
+        "sha256": "3fc56b86945041b0ccb844b0a9188cf001e8c5430cfda60c39ac930fe83de9f5"
+      },
+      "Windows_birth": [
+        11904,
+        "2026-10-18T07:22:53.5985593Z"
+      ],
+      "memory_samples": 3
+    },
+    {
+      "label": "b2",
+      "owner": {
+        "path": "out/native-fp32-packed-soa-runtime-abba/native/b2/owner.json",
+        "bytes": 3592,
+        "sha256": "3e5c09e02e9241a7ea5cbbbe264d0fe3965a53fe1b22d562dbdb527fbbc6de58"
+      },
+      "XML": {
+        "path": "out/native-fp32-packed-soa-runtime-abba/native/b2/gtest.xml",
+        "bytes": 40882,
+        "sha256": "9c09b9fd11b57f251cbdcc8bba9ce24c72e3073e102e48b5248442ea0daf77d3"
+      },
+      "Windows_birth": [
+        7076,
+        "2026-10-18T07:23:35.1613038Z"
+      ],
+      "memory_samples": 3
+    },
+    {
+      "label": "a2",
+      "owner": {
+        "path": "out/native-fp32-packed-soa-runtime-abba/native/a2/owner.json",
+        "bytes": 3587,
+        "sha256": "8d25f40e7795f8da889b9a5499c1cde5a3faa2a78c1d5cdf3e2e0cf6bcbbca4f"
+      },
+      "XML": {
+        "path": "out/native-fp32-packed-soa-runtime-abba/native/a2/gtest.xml",
+        "bytes": 40793,
+        "sha256": "04b9011f522ff4fa8d1ed0136369b0ba677a3e217bb6f60bf86ac41f0ee792dd"
+      },
+      "Windows_birth": [
+        852,
+        "2026-10-18T07:23:59.3076810Z"
+      ],
+      "memory_samples": 3
+    }
+  ],
+  "current_context_pins": 960,
+  "raw_before_after_rows": 8918,
+  "unique_raw_input_paths": 920,
+  "pins": {
+    "original_context": {
+      "path": "out/native-fp32-packed-soa-ABBA-evidence/reader-bindings.json",
+      "bytes": 170892,
+      "sha256": "3fd99a3b90565ed5e3f1bf5bd156a6186bf6b6a6b3b2e275d36ec3256e721e02"
+    },
+    "corrected_context": {
+      "path": "out/native-fp32-packed-soa-ABBA-evidence/reader-bindings-with-control8.json",
+      "bytes": 171749,
+      "sha256": "294e1451c8a22b5c2fe3c9eccf75cfc5649b37d89fa6308945be0d7c8d6850c3"
+    },
+    "correction": {
+      "path": "out/native-fp32-packed-soa-ABBA-evidence/root-control8-context-link-correction.json",
+      "bytes": 1150,
+      "sha256": "79649cfc7047dfd008b77f46fb8ac5462de98e90f7896be01aacd7e009164a16"
+    },
+    "root_admission": {
+      "path": "out/native-fp32-packed-soa-ABBA-evidence/root-admission-with-control8.json",
+      "bytes": 382,
+      "sha256": "238bf0449a43b790936132ad2f43961cba922a772e409e93edafbd77e9fe6b84"
+    },
+    "actual_comparison": {
+      "path": "out/native-fp32-packed-soa-ABBA-evidence/native-comparison.json",
+      "bytes": 231623,
+      "sha256": "64b2b3fb20778d014e26eab01480fd8054fc65b60a19fd16ea7cf41faf6e1035"
+    },
+    "array_authority": {
+      "path": "out/native-fp32-packed-soa-pe-audit/matched-array-authority-45d91ac3-reader.json",
+      "bytes": 14433,
+      "sha256": "6174f97b770408e2ac3d2182e281edef3c5a31138052148675a82605ef6df7bc"
+    }
+  },
+  "metadata_correction": "Only add already-current control8 case reference plus3 provenancefiles. All957existing pins/fourcase records unchanged;newadmission onlyrebinds wholecontext. Initialreader failed its expected5case prerequisite before numerical decision;no workload,numericpolicy orrawvalue change.",
+  "source_and_provider": "Current960pins/header/actualPEarrayauthority/source/hardware joined. All5rawcases singlecompletedzeroFESD;each32wholebufferhashes identical acrossarms,51orderedmarkers54modulejoins,sevenselectedarrays/fourexecutedroles. SamechildSDK+AMD,exactWindowsPIDbirth/postseals,normalowner/terminalclosure,recordedLinuxchildabsence andsampledguard evidence valid. No freshprocessquery/globalabsence claim.",
+  "disclosure": "Reviewer authored unchanged passive readers and namespace source adapters;independent recomputation here used directstdlibXML/JSON/math only,not importing/executing projectreaders. No provider/helper/test/PS/compiler/toolworkload rerun.",
+  "scope": "Finite nativeSoA experiment rejected. Remaining7STOP,productionnotadopted,nounchangedretry/layouttuning. This does not close coldframe/fullscience/Mandatory/UI/release qualification."
+}

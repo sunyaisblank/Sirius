@@ -1,0 +1,107 @@
+{
+  "schema": "sirius-native-packed-soa-independent-actual-producer-review-v1",
+  "passed": true,
+  "source_revision": "45d91ac36d1135d18cba8ebb1923339723fde5df",
+  "canonical_CXX_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "run_id": 39106068467,
+  "attempt": 1,
+  "job_id": 117612056985,
+  "artifact_id": 12128279016,
+  "runtime_admitted": false,
+  "reviewer": "/root/divide_contract_review",
+  "disclosure": "Reviewer authored narrow SoA Windows/authority namespace source adapters;ROOT authored/executed producer/static audit. This review executes no helper/tool/compiler/provider/test;stdlib file/ZIP/PE-byte/source/Git reads only.",
+  "pins": {
+    "ZIP": {
+      "path": "out/native-fp32-packed-soa-ci-publication/run39106068467-artifact.zip",
+      "bytes": 25897828,
+      "sha256": "1e09419918141402266a9a91f9feb958c6f0f3ef0c0ec6591d2812a51dad251e"
+    },
+    "run_API": {
+      "path": "out/native-fp32-packed-soa-ci-publication/run39106068467-run.json",
+      "bytes": 12682,
+      "sha256": "df60c9c0b66fe907639be640b41729612d5f187537cce841528a490f95b7f48c"
+    },
+    "artifacts_API": {
+      "path": "out/native-fp32-packed-soa-ci-publication/run39106068467-artifacts.json",
+      "bytes": 793,
+      "sha256": "8f4656979ba4d148e95b5405258d1e23eadc936d7f1009574b21f3b16b4910b0"
+    },
+    "manifest": {
+      "path": "bin/windows-msvc/native-packed-soa-matched-45d91ac3/manifest.json",
+      "bytes": 89262,
+      "sha256": "54b48e9903e9006360625a9f00ad52d4b7587a88bf86f79614383868859bc017"
+    },
+    "producer": {
+      "path": "bin/windows-msvc/native-packed-soa-matched-45d91ac3/producer-result.json",
+      "bytes": 2579,
+      "sha256": "c4d033c6dc8cba2bae4111d860055dbf739e536c6d8b1086c096b67f0faa2314"
+    },
+    "full_source_check_reused": {
+      "path": "out/native-fp32-packed-soa-ci-publication/root-actual-CI-source-check.json",
+      "bytes": 593,
+      "sha256": "55fe09502cc8608f0a11215630542d25dcda02c7e680f6b55569ea957789d422"
+    },
+    "narrow_static_PE_audit": {
+      "path": "out/native-fp32-packed-soa-pe-audit/actual-45d91ac3-audit.json",
+      "bytes": 41694,
+      "sha256": "eb7a685a42f749735f798381523e1405b640919c395e5ea8301207aeae9bb1c3"
+    },
+    "cache": {
+      "path": "bin/windows-msvc/native-packed-soa-matched-45d91ac3/metadata/config/CMakeCache.txt",
+      "bytes": 28843,
+      "sha256": "e7320c59c4611742fad4af8bc554c780fe6e1844b716f57b809be8358defaf29"
+    },
+    "commands": {
+      "path": "bin/windows-msvc/native-packed-soa-matched-45d91ac3/commands.json",
+      "bytes": 1198,
+      "sha256": "0ab5e4a45430b0e56c5399e98834034e215099e9b2fb61c0481c3137dc6f5cdb"
+    },
+    "selected_tools": {
+      "path": "bin/windows-msvc/native-packed-soa-matched-45d91ac3/selected-tools.json",
+      "bytes": 1196,
+      "sha256": "b9de04ee5af8f055445d727e09df762ae0ea402f1f9cd3526669f4569fa5c0e0"
+    },
+    "CRT_SDK": {
+      "path": "bin/windows-msvc/native-packed-soa-matched-45d91ac3/runtime-packaging.json",
+      "bytes": 6566,
+      "sha256": "3c72dad2f0482ec08369e4bc6a0190fe314bdbc130e8f74a14c40fc16c67c280"
+    }
+  },
+  "verified": {
+    "122ZIP_members_full_stage_manifest_bytes": true,
+    "927source_rows_ROOT_full_Git_proof_composed": true,
+    "538canonical_Git_blob_modes_exact_5b2": true,
+    "critical_source_blob_joins": 6,
+    "build_before_after_rows": 3155,
+    "selected_tool_pin_rows": 15,
+    "private_CL": 5,
+    "LINK": 2,
+    "same_release_DLL_imports": [
+      "vulkan-1.dll",
+      "KERNEL32.dll",
+      "MSVCP140.dll",
+      "MSVCP140_2.dll",
+      "VCRUNTIME140.dll",
+      "VCRUNTIME140_1.dll",
+      "api-ms-win-crt-runtime-l1-1-0.dll",
+      "api-ms-win-crt-math-l1-1-0.dll",
+      "api-ms-win-crt-heap-l1-1-0.dll",
+      "api-ms-win-crt-stdio-l1-1-0.dll",
+      "api-ms-win-crt-locale-l1-1-0.dll",
+      "api-ms-win-crt-string-l1-1-0.dll",
+      "api-ms-win-crt-environment-l1-1-0.dll",
+      "api-ms-win-crt-convert-l1-1-0.dll",
+      "api-ms-win-crt-filesystem-l1-1-0.dll",
+      "api-ms-win-crt-time-l1-1-0.dll"
+    ]
+  },
+  "findings": [
+    "Actual API/head/branch/attempt/job success+artifact size/digest/CRC122members/fullstage/M/result join. Producer strict configure/build exit0,typedRelease:STRING/scalarGetCommand fixes,c948observer,currentcanonical CXX/source and all3155beforeafter records coherent.",
+    "Private5CL records strictW4/WX/O2/Ob2/MD/fp:precise/C++latest/contracts2/fail_on_skip;correctFIRSTarmheaders and sharedDP. BothLINK records direct correctarmcompute+observer+sharedDP,canonical libraries/MAP/VERBOSE:LIB;map excludes canonicalcompute extraction. ROOT narrowPE proof supplies42payload-perarm and exactcanonical devicearchive-member joins.",
+    "Matched runtime DLL imports are16each,noDebugCRT. SelectedMSVC19.44 matches releaseCRT14.44;allpackagedCRT/SDKcopies exactbotharms. These are installed/stagedfile records,not loaded-provider execution.",
+    "Build succeeds with2canonicalrender D9025warnings (/W4 overridden by /w),repeated in finalsummary;private5commands remain strict. No warning-free or allcanonicalobjectW4 claim.",
+    "Tool/input closure is selectedprimary15tools+recordedadjacentDLLs/config/fetchedsources only. ConfiguredPythonalias0-byte metadata is explicit;nonempty sibling captured;no substitution or completehost/WindowsSDKheader/DSO backup claim."
+  ],
+  "eligibility": "Compile-only actualproducer source/config/tool/package/manualeligibility PASS composing narrowPE audit;ROOT stillsoleadmissionoperator. Oldnarrowreader full_producer_eligibility_passed:false is its declared limitedscope,not rewritten/promoted.",
+  "scope": "No PE/provider/scientific/performance/fullMandatory/frame/UI/release/adoption execution or qualification. Freshconcrete stage/bindings/ROOTrelease and genuine samechild nativeevidence still required."
+}

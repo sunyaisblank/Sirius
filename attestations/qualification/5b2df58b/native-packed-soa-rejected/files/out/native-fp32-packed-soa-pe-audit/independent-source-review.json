@@ -1,0 +1,23 @@
+{
+  "reviewer": "/root",
+  "created_utc": "2026-10-18T06:59:54.507932+00:00",
+  "passed": true,
+  "entire_known_good_reader_exact_after_five_namespace_substitutions": true,
+  "freeze": {
+    "path": "out/native-fp32-packed-soa-pe-audit/source-freeze.json",
+    "bytes": 875,
+    "sha256": "477a26eb140b97fc991fcb2777084af3df75bbde59e2c39c32e671bccd5b3a39"
+  },
+  "candidate": {
+    "path": "out/native-fp32-packed-soa-pe-audit/audit_export_windows_paths.py",
+    "bytes": 18560,
+    "sha256": "62be81f7ff8ff1b2ee9a65c732530cc0a98381071b592e4ae8cc991178f16b3a"
+  },
+  "original": {
+    "path": "out/native-fp32-packed-scratch-pe-audit/audit_export_windows_paths.py",
+    "bytes": 18580,
+    "sha256": "cee37e6559f3f8b100bf8ff87940049229fe20299beaefef353ae66f4064d741"
+  },
+  "preparation": "First passive pin check expected the other source-freeze dictionary shape; read actual pins list and corrected before writing review. No helper executed.",
+  "scope": "Same complete static PE audit and prior case-insensitive Windows /FI check. Future actual CLI/PE/source/artifact identities required; no execution or runtime authority."
+}

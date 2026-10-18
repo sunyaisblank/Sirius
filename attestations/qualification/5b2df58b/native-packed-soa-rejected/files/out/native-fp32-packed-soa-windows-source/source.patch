@@ -1,0 +1,47 @@
+--- originals/matched-producer.cmake
++++ matched-producer.cmake
+@@ -17,7 +17,7 @@
+             message(FATAL_ERROR "Missing canonical producer dependency: ${required}")
+         endif()
+     endforeach()
+-    set(inputs "${CMAKE_SOURCE_DIR}/out/native-fp32-packed-scratch-producer-inputs")
++    set(inputs "${CMAKE_SOURCE_DIR}/out/native-fp32-packed-soa-producer-inputs")
+     set(observer "${inputs}/observer/audited-observer.cpp")
+     if(NOT EXISTS "${observer}")
+         message(FATAL_ERROR "ROOT must first materialize the admitted unchanged observer")
+--- originals/build-and-stage.ps1
++++ build-and-stage.ps1
+@@ -74,11 +74,8 @@
+     $Names = ((@(& $Git -c core.quotepath=false ls-files -z) -join "`n") -split "`0") | Where-Object { $_ -ne '' }
+     if ($LASTEXITCODE -ne 0) { throw 'Cannot enumerate tracked source' }
+     $Paths = @($Names | ForEach-Object { Join-Path $Root $_ })
+-    foreach ($Relative in @('out/native-fp32-packed-scratch-producer-inputs',
+-                           'out/native-fp32-packed-scratch-windows-producer-source',
+-                           'out/native-fp32-packed-scratch-ci-source',
+-                           'out/native-fp32-packed-scratch-ci-source-git-resolution',
+-                           'out/native-fp32-packed-scratch-ci-source-cache-type')) {
++    foreach ($Relative in @('out/native-fp32-packed-soa-producer-inputs',
++                           'out/native-fp32-packed-soa-windows-source')) {
+         $Directory = Join-Path $Root $Relative
+         if (-not (Test-Path -LiteralPath $Directory -PathType Container)) { throw "Missing private input tree: $Relative" }
+         $Paths += @(Get-ChildItem -LiteralPath $Directory -Recurse -File -Force | ForEach-Object FullName)
+@@ -109,7 +106,7 @@
+         selection = 'First normal PATH Application entry as an explicit scalar string; PATH unchanged'
+     }) 'command-resolution.json'
+     $CTest = Join-Path (Split-Path -Parent $CMake) 'ctest.exe'
+-    $Fragment = Join-Path $Root 'out/native-fp32-packed-scratch-windows-producer-source/matched-producer.cmake'
++    $Fragment = Join-Path $Root 'out/native-fp32-packed-soa-windows-source/matched-producer.cmake'
+     $Result.source_revision = Clean-Revision
+     if ($env:GITHUB_REF -cne 'refs/heads/development/native-fp32-packed-scratch-diagnostic-2026-10-18') { throw 'Wrong private diagnostic branch' }
+     $SourceBeforeConfigure = Snapshot (Source-Paths)
+--- originals/native-packed-diagnostic.yml
++++ native-packed-diagnostic.yml
+@@ -28,7 +28,7 @@
+           github_token: ${{ secrets.GITHUB_TOKEN }}
+       - name: Compile and stage the two matched private producers
+         shell: pwsh
+-        run: ./out/native-fp32-packed-scratch-ci-source-cache-type/build-and-stage.ps1
++        run: ./out/native-fp32-packed-soa-windows-source/build-and-stage.ps1
+       - name: Preserve producer products and failure diagnostics
+         if: always()
+         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
