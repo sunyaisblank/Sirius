@@ -1,0 +1,72 @@
+{
+  "schema": "sirius-native-packed-soa-emitted-admission-v1",
+  "created_utc": "2026-10-18T06:57:16.447417+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "passed": true,
+  "compiler_owner": {
+    "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/candidate/owner.json",
+    "bytes": 2261,
+    "sha256": "cbd263388181bded5c92fd0666b95384f9e8586bfd946faad1281935430e48ce"
+  },
+  "compiler_products": {
+    "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/candidate/products.json",
+    "bytes": 7430,
+    "sha256": "1a0d3699644a48c84a08ed09d95b77605f157f6d1c37cfc675521acd1b494829"
+  },
+  "command_results": {
+    "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/candidate/command-results.json",
+    "bytes": 27097,
+    "sha256": "c6954c5b8a7afa8d18b740aa946e7fdab0ab0aa91335b9b91b062c9fbcb6232b"
+  },
+  "modules": {
+    "retained_transport.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/candidate/retained_transport.spv",
+      "bytes": 86096,
+      "sha256": "239d106c4bb67f4dc8e7f671f828576424d99da9011b0924e78c0868cb724d64"
+    },
+    "retained_endpoint.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/candidate/retained_endpoint.spv",
+      "bytes": 100032,
+      "sha256": "b4d9b7d69ed432ebd42197d8e5a40b24eeb087161aeb2f625a6a7ec382486005"
+    },
+    "retained_dense.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/candidate/retained_dense.spv",
+      "bytes": 78684,
+      "sha256": "3fc06d89f5543fb4f1efc610a11d526b90b9784742a101e1d1177b4e0e07b4c4"
+    },
+    "retained_initialize.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/candidate/retained_initialize.spv",
+      "bytes": 57840,
+      "sha256": "b12eb4f12aa8f1c25fa9fc7678f2f178d737bce09ff8b1a950e336b22c5e267d"
+    },
+    "retained_dopri_phase.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/candidate/retained_dopri_phase.spv",
+      "bytes": 59472,
+      "sha256": "a9415f2c0eae55d2aa940f34b343fec79693d77ceeaf4df7f602fe6b86c34b90"
+    }
+  },
+  "outside_helper_functions_alpha_exact": true,
+  "outside_helper_text_byte_exact": true,
+  "public_ABI_equal": true,
+  "packed_component_major_address_validated": true,
+  "independent_review": {
+    "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-publication/independent-emitted-and-compiler-review.json",
+    "bytes": 21695,
+    "sha256": "3f21d8399e22c89831631b939b9968bad61125156ebb2d38820c9b2286e79b45"
+  },
+  "root_actual_compiler_check": {
+    "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-publication/root-actual-compiler-check.json",
+    "bytes": 656,
+    "sha256": "72f4202b49989019bb7b3944b023e800a9613fb38b88c4334d7ba9e5ac61ca02"
+  },
+  "composer_source": {
+    "path": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-producer-source/compose_inputs.py",
+    "bytes": 12202,
+    "sha256": "71c8080460961b12834c0adb25b4a8607647117bd7db1d4cf0160015eb74b323"
+  },
+  "review": "ROOT full-read independent review and composer source, independently rechecked all five whole-ASM outside-helper equalities and full-read all five changed helper graphs. Exact current compiler inputs/25commands/products/retired births independently checked. No opaque equivalence inference.",
+  "composition_released": true,
+  "runtime_admitted": false,
+  "production_adopted": false,
+  "scope": "Fresh diagnostic input composition using only five actual address-permuted native FP32 SPVs; unchanged cached remaining products and observer must be verified. No native execution, benefit, full science or release result."
+}
